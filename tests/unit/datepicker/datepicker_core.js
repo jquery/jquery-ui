@@ -59,7 +59,7 @@ test('baseStructure', function() {
 	var header, title, table, thead, week, panel, inl, child,
 		inp = init('#inp').focus(),
 		dp = $('#ui-datepicker-div'),
-		iframe = ($.browser.msie && parseInt($.browser.version, 10) < 7);
+		iframe = ($.ui.ie6);
 	ok(dp.is(':visible'), 'Structure - datepicker visible');
 	ok(!dp.is('.ui-datepicker-rtl'), 'Structure - not right-to-left');
 	ok(!dp.is('.ui-datepicker-multi'), 'Structure - not multi-month');
@@ -186,7 +186,7 @@ test('customStructure', function() {
 		inp = init('#inp', $.datepicker.regional.he);
 	inp.data('showButtonPanel.datepicker',true);
 	inp.focus();
-	iframe = ($.browser.msie && parseInt($.browser.version, 10) < 7);
+	iframe = ($.ui.ie6);
 	ok(dp.is('.ui-datepicker-rtl'), 'Structure RTL - right-to-left');
 	header = dp.children(':first');
 	ok(header.is('div.ui-datepicker-header'), 'Structure RTL - header division');

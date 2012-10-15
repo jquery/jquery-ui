@@ -105,9 +105,9 @@ asyncTest( "{ animate: Number }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, undefined, "default easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, undefined, "default easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -129,9 +129,9 @@ asyncTest( "{ animate: String }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, undefined, "default duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, undefined, "default duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -153,9 +153,9 @@ asyncTest( "{ animate: {} }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, undefined, "default duration" );
-		equal( easing, undefined, "default easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, undefined, "default duration" );
+		equal( options.easing, undefined, "default easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -177,9 +177,9 @@ asyncTest( "{ animate: { duration, easing } }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -202,9 +202,9 @@ asyncTest( "{ animate: { duration, easing } }, animate down", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -233,9 +233,9 @@ asyncTest( "{ animate: { duration, easing, down } }, animate down", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "swing", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "swing", "correct easing" );
 		animate.apply( this, arguments );
 	};
 

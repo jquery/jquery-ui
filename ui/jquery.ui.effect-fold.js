@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Fold
+ * http://api.jqueryui.com/fold-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

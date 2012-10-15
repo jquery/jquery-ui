@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Button
+ * http://api.jqueryui.com/button/
  *
  * Depends:
  *	jquery.ui.core.js

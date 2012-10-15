@@ -44,6 +44,15 @@ test( "disconnected from DOM", function() {
 	equal( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
 });
 
+test( "non-tab list items", function() {
+	expect( 2 );
+
+	var element = $( "#tabs9" ).tabs();
+	equal( element.tabs( "option", "active" ), 0, "defaults to first tab" );
+	equal( element.find( ".ui-tabs-nav li.ui-state-active" ).index(), 1,
+		"first actual tab is active" );
+});
+
 test( "aria-controls", function() {
 	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),

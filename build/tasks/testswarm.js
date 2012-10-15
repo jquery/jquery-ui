@@ -3,7 +3,7 @@ module.exports = function( grunt ) {
 
 var versions = {
 		"git": "git",
-		"1.8": "1.8.0",
+		"1.8": "1.8.0 1.8.1 1.8.2",
 		"1.7": "1.7 1.7.1 1.7.2",
 		"1.6": "1.6 1.6.1 1.6.2 1.6.3 1.6.4"
 	},
@@ -44,6 +44,7 @@ function submit( commit, tests, configFile, version, done ) {
 	for ( test in tests ) {
 		testUrls.push( testBase + tests[ test ] );
 	}
+	version = version ? ( version + " " ) : "";
 	testswarm({
 		url: config.swarmUrl,
 		pollInterval: 10000,
@@ -52,7 +53,7 @@ function submit( commit, tests, configFile, version, done ) {
 	}, {
 		authUsername: config.authUsername,
 		authToken: config.authToken,
-		jobName: 'jQuery UI ' + version + '<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 7 ) + '</a>',
+		jobName: 'jQuery UI ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
 		runMax: config.runMax,
 		"runNames[]": Object.keys(tests),
 		"runUrls[]": testUrls,
@@ -76,7 +77,7 @@ grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, mino
 			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
 		}
 	});
-	submit( commit, allTests, configFile, minor + " core ", this.async() );
+	submit( commit, allTests, configFile, minor + " core", this.async() );
 });
 
 };

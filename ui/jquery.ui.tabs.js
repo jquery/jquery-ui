@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Tabs
+ * http://api.jqueryui.com/tabs/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -51,7 +51,8 @@ $.widget( "ui.tabs", {
 		var panel,
 			that = this,
 			options = this.options,
-			active = options.active;
+			active = options.active,
+			locationHash = location.hash.substring( 1 );
 
 		this.running = false;
 
@@ -80,9 +81,9 @@ $.widget( "ui.tabs", {
 
 		if ( active === null ) {
 			// check the fragment identifier in the URL
-			if ( location.hash ) {
-				this.anchors.each(function( i, anchor ) {
-					if ( anchor.hash === location.hash ) {
+			if ( locationHash ) {
+				this.tabs.each(function( i, tab ) {
+					if ( $( tab ).attr( "aria-controls" ) === locationHash ) {
 						active = i;
 						return false;
 					}
@@ -91,7 +92,7 @@ $.widget( "ui.tabs", {
 
 			// check for a tab marked active via a class
 			if ( active === null ) {
-				active = this.tabs.filter( ".ui-tabs-active" ).index();
+				active = this.tabs.index( this.tabs.filter( ".ui-tabs-active" ) );
 			}
 
 			// no active tab, set to false
@@ -102,7 +103,7 @@ $.widget( "ui.tabs", {
 
 		// handle numbers: negative, out of range
 		if ( active !== false ) {
-			active = this.tabs.eq( active ).index();
+			active = this.tabs.index( this.tabs.eq( active ) );
 			if ( active === -1 ) {
 				active = options.collapsible ? false : 0;
 			}
