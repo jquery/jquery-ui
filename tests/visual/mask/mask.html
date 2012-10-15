@@ -13,22 +13,27 @@
 	$(function() {
 		$( "#mask1" ).mask({ mask: "99/99/9999" });
 		$( "#mask2" ).mask({ mask: "(999) 999-9999" });
-		$( "#mask3" ).mask({ mask: "(999) 999-9999?x999999" });
-		$( "#mask4" ).mask({ mask: "99-9999999", clearEmpty: false });
-		$( "#mask5" ).mask({ mask: "999-99-9999", clearEmpty: false });
-		$( "#mask6" ).mask({ mask: "a*-999-a999" });
-		$( "#mask7" ).mask({
+		$( "#mask3" ).mask({ mask: "(999) 999-9999" }).change(function(event) {
+                        if (!$(event.target).mask("valid")) {
+                                $(event.target).val("")
+                        }
+                });;
+		$( "#mask4" ).mask({ mask: "(999) 999-9999?x999999" });
+		$( "#mask5" ).mask({ mask: "99-9999999", clearEmpty: false });
+		$( "#mask6" ).mask({ mask: "999-99-9999", clearEmpty: false });
+		$( "#mask7" ).mask({ mask: "a*-999-a999" });
+		$( "#mask8" ).mask({
 			mask: "~9.99 ~9.99 999",
 			definitions: {
 				"~": /\+|-/
 			}
 		});
-		$( "#mask8" ).mask({
+		$( "#mask9" ).mask({
 			mask: "hh:mm:ss pp",
 			definitions: {
 				hh: function( value ) {
 					value = parseInt( value, 10 );
-					if ( value >= 1 || value <= 12 ) {
+					if ( value >= 1 && value <= 12 ) {
 						return ( value < 10 ? "0" : "" ) + value;
 					}
 				},
@@ -50,9 +55,19 @@
 			}
 		});
 
+		$("input").each(function( index, value ) {
+			var span = $("<span></span>");
+
+			value = $(value);			
+			value.after(span);
+			value.keyup(function(event) {
+				span.text("Value: " + $(event.target).mask('value') + " Valid: " + $(event.target).mask('valid'));
+			});
+		});
+
 		function sixty( value ) {
 			value = parseInt( value, 10 );
-			if ( value >= 0 || value <= 59 ) {
+			if ( value >= 0 && value <= 59 ) {
 				return ( value < 10 ? "0" : "" ) + value;
 			}
 		}
@@ -71,18 +86,20 @@
 		<input type="text" class="masked" id="mask1">
 		<label for="mask2">Phone - <code>{ mask: "(999) 999-9999" }</code></label>
 		<input type="text" class="masked" id="mask2">
-		<label for="mask3">Phone - <code>{ mask: "(999) 999-9999?x999999" }</code></label>
+		<label for="mask3">Phone - <code>{ mask: "(999) 999-9999" }</code> (remove incomplete values by binding to blur)</label>
 		<input type="text" class="masked" id="mask3">
-		<label for="mask4">TaxID - <code>{ mask: "99-9999999", clearEmpty: false }</code></label>
+		<label for="mask4">Phone - <code>{ mask: "(999) 999-9999?x999999" }</code></label>
 		<input type="text" class="masked" id="mask4">
-		<label for="mask5">SSN - <code>{ mask: "999-99-9999", clearEmpty: false }</code></label>
+		<label for="mask5">TaxID - <code>{ mask: "99-9999999", clearEmpty: false }</code></label>
 		<input type="text" class="masked" id="mask5">
-		<label for="mask6">Product Key - <code>{ mask: "a*-999-a999" }</code></label>
+		<label for="mask6">SSN - <code>{ mask: "999-99-9999", clearEmpty: false }</code></label>
 		<input type="text" class="masked" id="mask6">
-		<label for="mask7">Eye Script - <code>{ mask: "~9.99 ~9.99 999", definitions: { "~": /\+|-/ } }</code></label>
+		<label for="mask7">Product Key - <code>{ mask: "a*-999-a999" }</code></label>
 		<input type="text" class="masked" id="mask7">
-		<label for="mask8">Time - <code>{ mask: "hh:mm:ss pp", definitions: .... }</code></label>
+		<label for="mask8">Eye Script - <code>{ mask: "~9.99 ~9.99 999", definitions: { "~": /\+|-/ } }</code></label>
 		<input type="text" class="masked" id="mask8">
+		<label for="mask9">Time - <code>{ mask: "hh:mm:ss pp", definitions: .... }</code></label>
+		<input type="text" class="masked" id="mask9">
 	</form>
 </body>
 </html>

@@ -124,8 +124,8 @@ $.widget( "ui.mask", {
 		this.isEmpty = this.isValid = true;
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
-			if ( bufferObject.literal && !raw ) {
-				if ( bufferPosition < this.optionalPosition || this.isValid ) {
+			if ( bufferObject.literal ) {
+				if ( !raw && bufferPosition < this.optionalPosition || this.isValid ) {
 					value += bufferObject.literal;
 				}
 			} else if ( bufferObject.value ) {
@@ -135,9 +135,11 @@ $.widget( "ui.mask", {
 				for ( counter = bufferObject.value.length; counter < bufferObject.length; counter++ ) {
 					value += this.options.placeholder;
 				}
-			} else if ( !raw ) {
-				for ( counter = bufferObject.length ; counter; counter-- ) {
-					value += this.options.placeholder;
+			} else {
+				if ( !raw ) {
+					for ( counter = bufferObject.length ; counter; counter-- ) {
+						value += this.options.placeholder;
+					}
 				}
 				if ( bufferPosition < this.optionalPosition ) {
 					this.isValid = false;
