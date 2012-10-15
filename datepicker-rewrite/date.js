@@ -13,7 +13,7 @@ $.date = function ( datestring, formatstring ) {
 		date = datestring ? Globalize.parseDate(datestring, format) : new Date();
 
 	if ( !date ) {
-		date = new Date()
+		date = new Date();
 	}
 
 	return {
@@ -51,18 +51,18 @@ $.date = function ( datestring, formatstring ) {
 			return this;
 		},
 		setYear: function( year ) {
-            // Leap year example: Going from a leap year (February 29, 2012) to a non leap year, keep the day as the last day in February
-            var isLeap = new Date(date.getYear(), 1, 29).getMonth() == 1, day = date.getDate(), month = date.getMonth();
+            var day = date.getDate(),
+                month = date.getMonth();
             //Check if Leap, and February and day is 29th
-            if(isLeap && month == 1 && day == 29){
+            if(this.isLeapYear( year ) && month == 1 && day == 29){
                 //set day to last day of February
                 day = this.daysInMonth(year, month);
             }
 			date = new Date( year, month, day, date.getHours(), date.getMinutes(), date.getSeconds() );
 			return this;
 		},
-		setFullDate: function( year, month, day, hour, minute, second ) {
-			date = new Date( year, month, day, hour, minute, second );
+		setFullDate: function( year, month, day ) {
+			date = new Date( year, month, day );
 			return this;
 		},
 		adjust: function( period, offset ) {
@@ -73,7 +73,7 @@ $.date = function ( datestring, formatstring ) {
 			if ( period != "D" ) {
 				day = Math.max(1, Math.min( day, this.daysInMonth( year, month ) ) );
 			}
-			date = new Date( year, month, day );
+			date = new Date( year, month, day, date.getHours(), date.getMinutes(), date.getSeconds() );
 			return this;
 		},
 		daysInMonth: function( year, month ) {
@@ -93,6 +93,11 @@ $.date = function ( datestring, formatstring ) {
 		year: function() {
 			return date.getFullYear();
 		},
+        isLeapYear: function( year ){
+            year = year || date.getFullYear();
+            return new Date( year, 1, 29 ).getMonth() == 1;
+
+        },
 		weekdays: function() {
 			// TODO take firstDay into account
 			var result = [];
@@ -148,7 +153,6 @@ $.date = function ( datestring, formatstring ) {
 			return result;
 		},
 		iso8601Week: function( date ) {
-            // TODO Not sure what the first few lines are for
 			var checkDate = new Date( date.getTime() );
 			// Find Thursday of this week starting on Monday
 			checkDate.setDate( checkDate.getDate() + 4 - ( checkDate.getDay() || 7 ) );
@@ -163,9 +167,9 @@ $.date = function ( datestring, formatstring ) {
 		},
 		// TODO create new Date with year, month, day instead
 		clone: function() {
-			var result = $.date( this.format(), format );
-			result.eachDay = this.eachDay;
-			return result;
+			return new Date(date.getYear(), date.getMonth(),
+                date.getDate(), date.getHours(),
+                date.getMinutes(), date.getSeconds());
 		},
 		// TODO compare year, month, day each for better performance
 		equal: function( other ) {
