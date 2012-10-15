@@ -19,7 +19,7 @@
  */
 (function( $, undefined ) {
 
-var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
+var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ",
 	sizeRelatedOptions = {
 		buttons: true,
 		height: true,
@@ -39,6 +39,7 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 $.widget("ui.dialog", {
 	version: "@VERSION",
 	options: {
+		appendTo: null,
 		autoOpen: true,
 		buttons: {},
 		closeOnEscape: true,
@@ -89,12 +90,26 @@ $.widget("ui.dialog", {
 
 			title = options.title || "&#160;",
 
+			// Figure out where to append the dialog
+			appendToTarget = function() {
+				if ( options.appendTo ) {
+					return $( options.appendTo );
+				} else {
+					var uiFront = that.element.closest(".ui-front");
+
+					if (uiFront.length) {
+						return uiFront;
+					} else {
+						return document.body;
+					}
+				}
+			},
+
 			uiDialog = ( this.uiDialog = $( "<div>" ) )
 				.addClass( uiDialogClasses + options.dialogClass )
 				.css({
 					display: "none",
-					outline: 0, // TODO: move to stylesheet
-					zIndex: options.zIndex
+					outline: 0 // TODO: move to stylesheet
 				})
 				// setting tabIndex makes the div focusable
 				.attr( "tabIndex", -1)
@@ -105,10 +120,7 @@ $.widget("ui.dialog", {
 						event.preventDefault();
 					}
 				})
-				.mousedown(function( event ) {
-					that.moveToTop( false, event );
-				})
-				.appendTo( "body" ),
+				.appendTo( appendToTarget() ),
 
 			uiDialogContent = this.element
 				.show()
@@ -257,60 +269,11 @@ $.widget("ui.dialog", {
 
 		$.ui.dialog.overlay.resize();
 
-		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
-		if ( this.options.modal ) {
-			maxZ = 0;
-			$( ".ui-dialog" ).each(function() {
-				if ( this !== that.uiDialog[0] ) {
-					thisZ = $( this ).css( "z-index" );
-					if ( !isNaN( thisZ ) ) {
-						maxZ = Math.max( maxZ, thisZ );
-					}
-				}
-			});
-			$.ui.dialog.maxZ = maxZ;
-		}
-
 		return this;
 	},
 
 	isOpen: function() {
 		return this._isOpen;
-	},
-
-	// the force parameter allows us to move modal dialogs to their correct
-	// position on open
-	moveToTop: function( force, event ) {
-		var options = this.options,
-			saveScroll;
-
-		if ( ( options.modal && !force ) ||
-				( !options.stack && !options.modal ) ) {
-			return this._trigger( "focus", event );
-		}
-
-		if ( options.zIndex > $.ui.dialog.maxZ ) {
-			$.ui.dialog.maxZ = options.zIndex;
-		}
-		if ( this.overlay ) {
-			$.ui.dialog.maxZ += 1;
-			$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
-			this.overlay.$el.css( "z-index", $.ui.dialog.overlay.maxZ );
-		}
-
-		// Save and then restore scroll
-		// Opera 9.5+ resets when parent z-index is changed.
-		// http://bugs.jqueryui.com/ticket/3193
-		saveScroll = {
-			scrollTop: this.element.scrollTop(),
-			scrollLeft: this.element.scrollLeft()
-		};
-		$.ui.dialog.maxZ += 1;
-		this.uiDialog.css( "z-index", $.ui.dialog.maxZ );
-		this.element.attr( saveScroll );
-		this._trigger( "focus", event );
-
-		return this;
 	},
 
 	open: function() {
@@ -326,7 +289,6 @@ $.widget("ui.dialog", {
 		this._position( options.position );
 		uiDialog.show( options.show );
 		this.overlay = options.modal ? new $.ui.dialog.overlay( this ) : null;
-		this.moveToTop( true );
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
@@ -694,22 +656,10 @@ $.extend( $.ui.dialog.overlay, {
 		}
 	).join( " " ),
 	create: function( dialog ) {
+
 		if ( this.instances.length === 0 ) {
-			// prevent use of anchors and inputs
-			// we use a setTimeout in case the overlay is created from an
-			// event that we're going to be cancelling (see #2804)
-			setTimeout(function() {
-				// handle $(el).dialog().dialog('close') (see #4065)
-				if ( $.ui.dialog.overlay.instances.length ) {
-					$( document ).bind( $.ui.dialog.overlay.events, function( event ) {
-						// stop events if the z-index of the target is < the z-index of the overlay
-						// we cannot return true when we don't want to cancel the event (#3523)
-						if ( $( event.target ).zIndex() < $.ui.dialog.overlay.maxZ ) {
-							return false;
-						}
-					});
-				}
-			}, 1 );
+			// TODO: Do we need to write new logic to prevent use of anchors
+			// and inputs using the .ui-front system?
 
 			// handle window resize
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
@@ -756,12 +706,6 @@ $.extend( $.ui.dialog.overlay, {
 		}
 
 		$el.height( 0 ).width( 0 ).remove();
-
-		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
-		$.each( this.instances, function() {
-			maxZ = Math.max( maxZ, this.css( "z-index" ) );
-		});
-		this.maxZ = maxZ;
 	},
 
 	height: function() {
