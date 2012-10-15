@@ -125,7 +125,7 @@ $.widget( "ui.mask", {
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
 			if ( bufferObject.literal ) {
-				if ( !raw && bufferPosition < this.optionalPosition || this.isValid ) {
+				if ( !raw && ( bufferPosition < this.optionalPosition || this.isValid ) ) {
 					value += bufferObject.literal;
 				}
 			} else if ( bufferObject.value ) {
