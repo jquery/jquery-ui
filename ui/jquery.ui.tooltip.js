@@ -180,7 +180,9 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
-		var tooltip, positionOption;
+		var tooltip, positionOption, id,
+			that = this;
+
 		if ( !content ) {
 			return;
 		}
@@ -209,7 +211,8 @@ $.widget( "ui.tooltip", {
 		}
 
 		tooltip = this._tooltip( target );
-		addDescribedBy( target, tooltip.attr( "id" ) );
+		id = tooltip.attr( "id" );
+		addDescribedBy( target, id );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 
 		function position( event ) {
@@ -244,6 +247,10 @@ $.widget( "ui.tooltip", {
 					fakeEvent.currentTarget = target[0];
 					this.close( fakeEvent, true );
 				}
+			},
+			remove: function( event ) {
+				tooltip.remove();
+				delete that.tooltips[ id ];
 			}
 		});
 	},
