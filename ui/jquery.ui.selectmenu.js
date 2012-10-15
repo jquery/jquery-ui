@@ -73,6 +73,10 @@ $.widget( "ui.selectmenu", {
 
 	_drawButton: function() {
 		var tabindex = this.element.attr( 'tabindex' );
+		var labelSelector = "label[for='" + this.element.attr("id") + "']";
+
+		// Find existing label
+		this.labelElement = $( labelSelector ).uniqueId();
 
 		// hide original select tag
 		this.element.hide();
@@ -85,6 +89,7 @@ $.widget( "ui.selectmenu", {
 			id: this.ids.button,
 			width: this.element.outerWidth(),
 			role: 'combobox',
+			'aria-labelledby': this.labelElement.attr("id"),
 			'aria-expanded': false,
 			'aria-autocomplete': 'list',
 			'aria-owns': this.ids.menu,
@@ -150,6 +155,10 @@ $.widget( "ui.selectmenu", {
 					}
 				}
 				that.focus = item.index;
+
+				// Set ARIA active decendent
+			    that.button.attr( "aria-activedescendant", item.element.uniqueId().attr( "id" ) );
+
 			},
 			// set ARIA role
 			role: 'listbox'
@@ -330,6 +339,9 @@ $.widget( "ui.selectmenu", {
 						this._move( "next", event );
 					}
 					break;
+				case $.ui.keyCode.SPACE:
+					this._toggle( event );
+					break;
 				case $.ui.keyCode.LEFT:
 					this._move( "previous", event );
 					break;
@@ -372,6 +384,7 @@ $.widget( "ui.selectmenu", {
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
+		this.button.attr( "aria-activedescendant", item.element.uniqueId().attr( "id" ) );
 	},
 
 	_setOption: function( key, value ) {
@@ -427,6 +440,7 @@ $.widget( "ui.selectmenu", {
 		this.menuWrap.remove();
 		this.buttonWrap.remove();
 		this.element.show();
+		this.labelElement.removeUniqueId();
 	}
 });
 
