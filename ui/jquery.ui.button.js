@@ -25,7 +25,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 		}, 1 );
 	},
 	radioGroup = function( radio ) {
-		var name = radio.name,
+		var name = radio.name.replace( /'/g, "\\'" ),
 			form = radio.form,
 			radios = $( [] );
 		if ( name ) {
