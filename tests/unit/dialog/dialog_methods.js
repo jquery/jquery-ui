@@ -106,24 +106,30 @@ test("isOpen", function() {
 });
 
 test("moveToTop", function() {
-	expect( 3 );
-
-	var d1, d2, dlg1, dlg2,
-		expected = $('<div></div>').dialog(),
-		actual = expected.dialog('moveToTop');
-	equal(actual, expected, 'moveToTop is chainable');
-
-	d1 = $('<div></div>').dialog();
-	dlg1 = d1.parents('.ui-dialog');
-	d1.dialog('close');
-	d1.dialog('open');
-	d2 = $('<div></div>').dialog();
-	dlg2 = d2.parents('.ui-dialog');
-	d2.dialog('close');
-	d2.dialog('open');
-	ok(dlg1.css('zIndex') < dlg2.css('zIndex'), 'dialog 1 under dialog 2 before moveToTop method called');
-	d1.dialog('moveToTop');
-	ok(dlg1.css('zIndex') > dlg2.css('zIndex'), 'dialog 1 above dialog 2 after moveToTop method called');
+	expect( 5 );
+	function order() {
+		var actual = $( ".ui-dialog" ).map(function() {
+			return +$( this ).find( ".ui-dialog-content" ).attr( "id" ).replace( /\D+/, "" );
+		}).get().reverse();
+		deepEqual( actual, $.makeArray( arguments ) );
+	}
+	var dialog1, dialog2,
+		focusOn = "dialog1";
+	dialog1 = $( "#dialog1" ).dialog({
+		focus: function() {
+			equal( focusOn, "dialog1" );
+		}
+	});
+	focusOn = "dialog2";
+	dialog2 = $( "#dialog2" ).dialog({
+		focus: function() {
+			equal( focusOn, "dialog2" );
+		}
+	});
+	order( 2, 1 );
+	focusOn = "dialog1";
+	dialog1.dialog( "moveToTop" );
+	order( 1, 2 );
 });
 
 test("open", function() {
