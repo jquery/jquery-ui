@@ -19,7 +19,7 @@ test( "_caret() can move and read the text cursor", 4, function() {
 		}),
 		instance = input.data( "mask" );
 
-	focus( input );
+	input.focus();
 	instance._caret( 0 );
 	deepEqual( instance._caret(), {
 		begin: 0,
