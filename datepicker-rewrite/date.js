@@ -167,9 +167,9 @@ $.date = function ( datestring, formatstring ) {
 		},
 		// TODO create new Date with year, month, day instead
 		clone: function() {
-			return new Date(date.getYear(), date.getMonth(),
+			return $.date(new Date(date.getFullYear(), date.getMonth(),
                 date.getDate(), date.getHours(),
-                date.getMinutes(), date.getSeconds());
+                date.getMinutes(), date.getSeconds()),formatstring);
 		},
 		// TODO compare year, month, day each for better performance
 		equal: function( other ) {

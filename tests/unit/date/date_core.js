@@ -106,6 +106,6 @@ test('Clone',function(){
     var date2 = date.clone();
 
     ok(date2, 'Created cloned object');
-    ok(date.adjust('Y',1).year()!=date.year(), 'Object manipulated independently');
+    notEqual(date.adjust('Y',1).year(), date2.year(), 'Object manipulated independently');
 
 })
