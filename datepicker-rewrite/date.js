@@ -35,29 +35,41 @@ $.date = function ( datestring, formatstring ) {
 			return this;
 		},
 		setDay: function( day ) {
-			date = new Date( date.getFullYear(), date.getMonth(), day );
+			date = new Date( date.getFullYear(), date.getMonth(), day, date.getHours(), date.getMinutes(), date.getSeconds());
 			return this;
 		},
 		setMonth: function( month ) {
-			//TODO: Should update this to keep the time component (hour, min, sec) intact. Same for setYear and setFullDate.
-			//TODO: Do we want to do any special handling when switching to a month that causes the days to overflow?
-			date = new Date( date.getFullYear(), month, date.getDate());
+            // Overflow example:  Month is October 31 (yeah Halloween) and month is changed to April with 30 days,
+            // the new date will me May 1.  We will honor the month the user wants to set and if and overflow
+            // occurs, set to last day of month.
+            var days = date.getDay(), year = date.getFullYear();
+            if(days > this.daysInMonth( year, month)){
+                // Overflow
+                days = this.daysInMonth( year, month);
+            }
+			date = new Date( year, month, days, date.getHours(), date.getMinutes(), date.getSeconds());
 			return this;
 		},
 		setYear: function( year ) {
-			//TODO: Same question as setMonth, but I suppose only for leap years.
-			date = new Date( year, date.getMonth(), date.getDate() );
+            // Leap year example: Going from a leap year (February 29, 2012) to a non leap year, keep the day as the last day in February
+            var isLeap = new Date(date.getYear(), 1, 29).getMonth() == 1, day = date.getDate(), month = date.getMonth();
+            //Check if Leap, and February and day is 29th
+            if(isLeap && month == 1 && day == 29){
+                //set day to last day of February
+                day = this.daysInMonth(year, month);
+            }
+			date = new Date( year, month, day, date.getHours(), date.getMinutes(), date.getSeconds() );
 			return this;
 		},
-		setFullDate: function( year, month, day ) {
-			date = new Date( year, month, day );
+		setFullDate: function( year, month, day, hour, minute, second ) {
+			date = new Date( year, month, day, hour, minute, second );
 			return this;
 		},
 		adjust: function( period, offset ) {
 			var day = period == "D" ? date.getDate() + offset : date.getDate(),
 				month = period == "M" ? date.getMonth() + offset : date.getMonth(),
 				year = period == "Y" ? date.getFullYear() + offset : date.getFullYear();
-
+            //If not day, update the day to the new month and year
 			if ( period != "D" ) {
 				day = Math.max(1, Math.min( day, this.daysInMonth( year, month ) ) );
 			}
@@ -69,7 +81,7 @@ $.date = function ( datestring, formatstring ) {
 			month = month || date.getMonth();
 			return 32 - new Date( year, month, 32 ).getDate();
 		},
-		monthname: function() {
+		monthName: function() {
 			return calendar.months.names[ date.getMonth() ];
 		},
 		day: function() {
@@ -136,6 +148,7 @@ $.date = function ( datestring, formatstring ) {
 			return result;
 		},
 		iso8601Week: function( date ) {
+            // TODO Not sure what the first few lines are for
 			var checkDate = new Date( date.getTime() );
 			// Find Thursday of this week starting on Monday
 			checkDate.setDate( checkDate.getDate() + 4 - ( checkDate.getDay() || 7 ) );
