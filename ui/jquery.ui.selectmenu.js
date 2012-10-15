@@ -337,18 +337,22 @@ $.widget("ui.selectmenu", {
 					.bind("click.selectmenu", function() {
 						return false;
 					})
-					.bind('mouseover.selectmenu', function() {
+					.bind('mouseover.selectmenu', function(e) {
 						// no hover if diabled
 						if (!$(this).hasClass(self.namespace + '-state-disabled') && !$(this).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
+							e.optionValue = self.element[0].options[$(this).data('index')].value;
+							self._trigger("hover", e, self._uiHash());
 							self._selectedOptionLi().addClass(activeClass);
 							self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 							$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 						}
 					})
-					.bind('mouseout.selectmenu', function() {
+					.bind('mouseout.selectmenu', function(e) {
 						if ($(this).is(self._selectedOptionLi())) {
 							$(this).addClass(activeClass);
 						}
+						e.optionValue = self.element[0].options[$(this).data('index')].value;
+						self._trigger("blur", e, self._uiHash());
 						$(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 					});
 
