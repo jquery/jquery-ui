@@ -90,10 +90,11 @@ $.widget("ui.selectmenu", {
 					self._safemouseup = false;
 					setTimeout(function() { self._safemouseup = true; }, 300);
 				}
-				return false;
+				
+				event.preventDefault();
 			})
 			.bind('click.selectmenu', function() {
-				return false;
+				event.preventDefault();
 			})
 			.bind("keydown.selectmenu", function(event) {
 				var ret = false;
@@ -161,7 +162,8 @@ $.widget("ui.selectmenu", {
 
 		// document click closes menu
 		$(document).bind("mousedown.selectmenu-" + this.ids[0], function(event) {
-			if ( self.isOpen ) {
+			//check if open and if the clicket targes parent is the same
+			if ( self.isOpen && self.ids[1] != event.target.offsetParent.id) {
 				self.close( event );
 			}
 		});
