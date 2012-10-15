@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Dialog - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.8.2.js"></script>
+	<script src="../../external/jquery.bgiframe-2.1.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.resizable.js"></script>
+	<script src="../../ui/jquery.ui.dialog.js"></script>
+
+	<!-- stuff needed to make things complex -->
+	<script src="../../ui/jquery.ui.datepicker.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../../ui/jquery.ui.tooltip.js"></script>
+
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#dialog" ).dialog({
+			modal: true,
+			height: 300,
+			width: 500
+		});
+
+		var $datepicker = $( "#dialog-datepicker" ).dialog({
+			//appendTo: '.demo-description',
+			//appendTo: $('.demo-description'),
+			autoOpen: false,
+			modal: true,
+		});
+
+		var $autocomplete = $( "#dialog-autocomplete" ).dialog({
+			//appendTo: '.demo-description',
+			//appendTo: $('.demo-description'),
+			autoOpen: false,
+			modal: true,
+			width: 600
+		});
+
+		$('#open-datepicker').click(function(event) {
+			event.preventDefault();
+			$datepicker.dialog('open');
+		});
+
+		$('#open-autocomplete').click(function(event) {
+			event.preventDefault();
+			$autocomplete.dialog('open');
+		});
+
+		$( "#datepicker" ).datepicker();
+
+		var availableTags = [
+			"ActionScript",
+			"AppleScript",
+			"Asp",
+			"BASIC",
+			"C",
+			"C++",
+			"Clojure",
+			"COBOL",
+			"ColdFusion",
+			"Erlang",
+			"Fortran",
+			"Groovy",
+			"Haskell",
+			"Java",
+			"JavaScript",
+			"Lisp",
+			"Perl",
+			"PHP",
+			"Python",
+			"Ruby",
+			"Scala",
+			"Scheme"
+		];
+		$( "#tags" ).autocomplete({
+				source: availableTags
+		});
+
+		$( document ).tooltip();
+	});
+	</script>
+</head>
+<body>
+
+<div id="dialog" title="Basic dialog">
+	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+	<p><a href="#" id="open-datepicker">Open another window with a datepicker.</a></p>
+</div>
+
+<div id="dialog-datepicker" title="A dialog with a datepicker">
+	<p>Date: <input type="text" id="datepicker" /></p>
+	<p><a href="#" id="open-autocomplete">Open another window with an autocomplete and a tooltip.</a></p>
+</div>
+
+<div id="dialog-autocomplete">
+	<label for="tags">Tags: </label>
+	<input id="tags" title="Try typing something!" />
+</div>
+<div class="demo-description">
+<p>The basic dialog window is an overlay positioned within the viewport and is protected from page content (like select elements) shining through with an iframe.  It has a title bar and a content area, and can be moved, resized and closed with the 'x' icon by default.</p>
+
+</div>
+</body>
+</html>
