@@ -174,9 +174,9 @@ $.widget("ui.dialog", {
 			uiDialog.bgiframe();
 		}
 
-		// prevent tabbing out of modal dialogs
+		// prevent tabbing out of dialogs
 		this._on( uiDialog, { keydown: function( event ) {
-			if ( !options.modal || event.keyCode !== $.ui.keyCode.TAB ) {
+			if ( event.keyCode !== $.ui.keyCode.TAB ) {
 				return;
 			}
 
