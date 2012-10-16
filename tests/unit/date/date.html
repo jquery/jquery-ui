@@ -5,9 +5,12 @@
     <title>jQuery UI Date Test Suite</title>
 
     <script src="../../jquery.js"></script>
-    <script src="../../resource_loader.js"></script>
+    <link rel="stylesheet" href="../../../external/qunit.css">
+    <script src="../../../external/qunit.js"></script>
+    <script src="../../jquery.simulate.js"></script>
+    <script src="../testsuite.js"></script>
     <script>
-        loadResources({
+        TestHelpers.loadResources({
             js: [
                 "datepicker-rewrite/date.js",
                 "external/globalize.js",
@@ -15,11 +18,6 @@
             ]
         });
     </script>
-
-    <link rel="stylesheet" href="../../../external/qunit.css">
-    <script src="../../../external/qunit.js"></script>
-    <script src="../../jquery.simulate.js"></script>
-    <script src="../testsuite.js"></script>
 
     <script src="date_core.js"></script>
 
