@@ -7,7 +7,7 @@ var disabled = TestHelpers.tabs.disabled,
 module( "tabs: options" );
 
 test( "{ active: default }", function() {
-	expect( 4 );
+	expect( 6 );
 
 	var element = $( "#tabs1" ).tabs();
 	equal( element.tabs( "option", "active" ), 0, "should be 0 by default" );
@@ -18,6 +18,12 @@ test( "{ active: default }", function() {
 	element = $( "#tabs1" ).tabs();
 	equal( element.tabs( "option", "active" ), 2, "should be 2 based on URL" );
 	state( element, 0, 0, 1 );
+	element.tabs( "destroy" );
+
+	location.hash = "#custom-id";
+	element = $( "#tabs2" ).tabs();
+	equal( element.tabs( "option", "active" ), 3, "should be 3 based on URL" );
+	state( element, 0, 0, 0, 1, 0 );
 	element.tabs( "destroy" );
 	location.hash = "#";
 });

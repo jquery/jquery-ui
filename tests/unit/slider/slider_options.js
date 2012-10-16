@@ -12,6 +12,7 @@ function handle() {
 module("slider: options");
 
 test("max", function() {
+	expect( 2 );
 	el = $('<div></div>');
 
 	options = {
@@ -30,6 +31,7 @@ test("max", function() {
 });
 
 test("min", function() {
+	expect( 2 );
 	el = $('<div></div>');
 
 	options = {
@@ -48,7 +50,8 @@ test("min", function() {
 });
 
 test("orientation", function() {
-	el = $('<div></div>');
+	expect( 6 );
+	el = $('#slider1');
 
 	options = {
 		max: 2,
@@ -62,7 +65,7 @@ test("orientation", function() {
 	el.slider(options).slider("option", "orientation", "horizontal");
 	ok(el.is('.ui-slider-horizontal'), "horizontal slider has class .ui-slider-horizontal");
 	ok(!el.is('.ui-slider-vertical'), "horizontal slider does not have class .ui-slider-vertical");
-	equal(handle().css('left'), percentVal + '%', "horizontal slider handle is positioned with left: %");
+	equal(handle()[0].style.left, percentVal + '%', "horizontal slider handle is positioned with left: %");
 
 	el.slider('destroy');
 
@@ -78,7 +81,7 @@ test("orientation", function() {
 	el.slider(options).slider("option", "orientation", "vertical");
 	ok(el.is('.ui-slider-vertical'), "vertical slider has class .ui-slider-vertical");
 	ok(!el.is('.ui-slider-horizontal'), "vertical slider does not have class .ui-slider-horizontal");
-	equal(handle().css('bottom'), percentVal + '%', "vertical slider handle is positioned with bottom: %");
+	equal(handle()[0].style.bottom, percentVal + '%', "vertical slider handle is positioned with bottom: %");
 
 	el.slider('destroy');
 
@@ -92,6 +95,7 @@ test("orientation", function() {
 // value option/method: the value option is not restricted by min/max/step.
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 test("step", function() {
+	expect( 9 );
 	var el = $('<div></div>').slider({
 		min: 0,
 		value: 0,
@@ -112,7 +116,7 @@ test("step", function() {
 	el.slider("value", 19);
 	equal( el.slider("value"), 20 );
 
-el = $('<div></div>').slider({
+	el = $('<div></div>').slider({
 		min: 0,
 		value: 0,
 		step: 20,

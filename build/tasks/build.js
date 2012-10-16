@@ -2,6 +2,85 @@ module.exports = function( grunt ) {
 
 var path = require( "path" );
 
+grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
+	var pkg = grunt.config( "pkg" ),
+		base = {
+			core: {
+				name: "ui.{plugin}",
+				title: "jQuery UI {Plugin}"
+			},
+			widget: {
+				name: "ui.{plugin}",
+				title: "jQuery UI {Plugin}",
+				dependencies: [ "core", "widget" ]
+			},
+			interaction: {
+				name: "ui.{plugin}",
+				title: "jQuery UI {Plugin}",
+				dependencies: [ "core", "widget", "mouse" ]
+			},
+			effect: {
+				name: "ui.effect-{plugin}",
+				title: "jQuery UI {Plugin} Effect",
+				keywords: [ "effect", "show", "hide" ],
+				homepage: "http://jqueryui.com/{plugin}-effect/",
+				demo: "http://jqueryui.com/{plugin}-effect/",
+				docs: "http://api.jqueryui.com/{plugin}-effect/",
+				dependencies: [ "effect" ]
+			}
+		};
+
+	Object.keys( base ).forEach(function( type ) {
+		var baseManifest = base[ type ],
+			plugins = grunt.file.readJSON( "build/" + type + ".json" );
+
+		Object.keys( plugins ).forEach(function( plugin ) {
+			var manifest,
+				data = plugins[ plugin ],
+				name = plugin.charAt( 0 ).toUpperCase() + plugin.substr( 1 );
+
+			function replace( str ) {
+				return str.replace( "{plugin}", plugin ).replace( "{Plugin}", name );
+			}
+
+			manifest = {
+				name: data.name || replace( baseManifest.name ),
+				title: data.title || replace( baseManifest.title ),
+				description: data.description,
+				keywords: [ "ui", plugin ]
+					.concat( baseManifest.keywords || [] )
+					.concat( data.keywords || [] ),
+				version: pkg.version,
+				author: pkg.author,
+				maintainers: pkg.maintainers,
+				licenses: pkg.licenses,
+				bugs: pkg.bugs,
+				homepage: data.homepage || replace( baseManifest.homepage ||
+					"http://jqueryui.com/{plugin}/" ),
+				demo: data.demo || replace( baseManifest.demo ||
+					"http://jqueryui.com/{plugin}/" ),
+				docs: data.docs || replace( baseManifest.docs ||
+					"http://api.jqueryui.com/{plugin}/" ),
+				download: "http://jqueryui.com/download/",
+				dependencies: {
+					jquery: ">=1.6"
+				},
+				// custom
+				category: data.category || type
+			};
+
+			(baseManifest.dependencies || [])
+				.concat(data.dependencies || [])
+				.forEach(function( dependency ) {
+					manifest.dependencies[ "ui." + dependency ] = pkg.version;
+				});
+
+			grunt.file.write( manifest.name + ".jquery.json",
+				JSON.stringify( manifest, null, "\t" ) + "\n" );
+		});
+	});
+});
+
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
 		return source.replace( /@VERSION/g, grunt.config( "pkg.version" ) );
@@ -92,92 +171,63 @@ grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", fun
 	grunt.log.writeln( "Wrote " + this.file.dest + " with " + hashes.length + " hashes" );
 });
 
-// only needed for 1.8
-grunt.registerTask( "download_docs", function() {
-	function capitalize(value) {
-		return value[0].toUpperCase() + value.slice(1);
-	}
-	// should be grunt.config("pkg.version")?
-	var version = "1.8",
-		docsDir = "dist/docs",
-		files = "draggable droppable resizable selectable sortable accordion autocomplete button datepicker dialog progressbar slider tabs position"
-		.split(" ").map(function(widget) {
-			return {
-				url: "http://docs.jquery.com/action/render/UI/API/" + version + "/" + capitalize(widget),
-				dest: docsDir + '/' + widget + '.html'
-			};
-		});
-	files = files.concat("animate addClass effect hide removeClass show switchClass toggle toggleClass".split(" ").map(function(widget) {
-		return {
-			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
-			dest: docsDir + '/' + widget + '.html'
-		};
-	}));
-	files = files.concat("Blind Clip Drop Explode Fade Fold Puff Slide Scale Bounce Highlight Pulsate Shake Size Transfer".split(" ").map(function(widget) {
-		return {
-			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
-			dest: docsDir + '/effect-' + widget.toLowerCase() + '.html'
-		};
-	}));
-	grunt.file.mkdir( "dist/docs" );
-	grunt.utils.async.forEach( files, function( file, done ) {
-		var out = fs.createWriteStream( file.dest );
-		out.on( "close", done );
-		request( file.url ).pipe( out );
-	}, this.async() );
-});
-
-grunt.registerTask( "download_themes", function() {
-	// var AdmZip = require('adm-zip');
-	var done = this.async(),
-		themes = grunt.file.read( "build/themes" ).split(","),
-		requests = 0;
-	grunt.file.mkdir( "dist/tmp" );
-	themes.forEach(function( theme, index ) {
-		requests += 1;
-		grunt.file.mkdir( "dist/tmp/" + index );
-		var zipFileName = "dist/tmp/" + index + ".zip",
-			out = fs.createWriteStream( zipFileName );
-		out.on( "close", function() {
-			grunt.log.writeln( "done downloading " + zipFileName );
-			// TODO AdmZip produces "crc32 checksum failed", need to figure out why
-			// var zip = new AdmZip(zipFileName);
-			// zip.extractAllTo('dist/tmp/' + index + '/');
-			// until then, using cli unzip...
-			grunt.utils.spawn({
-				cmd: "unzip",
-				args: [ "-d", "dist/tmp/" + index, zipFileName ]
-			}, function( err, result ) {
-				grunt.log.writeln( "Unzipped " + zipFileName + ", deleting it now" );
-				fs.unlinkSync( zipFileName );
-				requests -= 1;
-				if (requests === 0) {
-					done();
-				}
-			});
-		});
-		request( "http://ui-dev.jquery.com/download/?" + theme ).pipe( out );
-	});
-});
-
-grunt.registerTask( "copy_themes", function() {
-	// each package includes the base theme, ignore that
-	var filter = /themes\/base/,
-		files = grunt.file.expandFiles( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
-			return !filter.test( file );
-		}),
-		// TODO the grunt.template.process call shouldn't be necessary
+grunt.registerTask( "generate_themes", function() {
+	var download, files, done,
 		target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/",
 		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() );
-	files.forEach(function( fileName ) {
-		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui" );
-		grunt.file.copy( fileName, target + targetFile );
+	try {
+		require.resolve( "download.jqueryui.com" );
+	} catch( error ) {
+		throw new Error( "You need to manually install download.jqueryui.com for this task to work" );
+	}
+
+	// copy release files into download builder to avoid cloning again
+	grunt.file.expandFiles( distFolder + "/**" ).forEach(function( file ) {
+		grunt.file.copy( file, "node_modules/download.jqueryui.com/release/" + file.replace(/^dist/, "") );
 	});
 
-	// copy minified base theme from regular release
+	download = new ( require( "download.jqueryui.com" ) )();
+
 	files = grunt.file.expandFiles( distFolder + "/themes/base/**/*" );
 	files.forEach(function( fileName ) {
 		grunt.file.copy( fileName, target + fileName.replace( distFolder, "" ) );
+	});
+
+	done = this.async();
+	grunt.utils.async.forEach( download.themeroller.gallery(), function( theme, done ) {
+		var folderName = theme.folderName(),
+			concatTarget = "css-" + folderName,
+			cssContent = theme.css(),
+			cssFolderName = target + "themes/" + folderName + "/",
+			cssFileName = cssFolderName + "jquery.ui.theme.css",
+			cssFiles = grunt.config.get( "concat.css.src" )[ 1 ].slice();
+
+		grunt.file.write( cssFileName, cssContent );
+
+		// get css components, replace the last file with the current theme
+		cssFiles.splice(-1);
+		cssFiles.push( "<strip_all_banners:" + cssFileName + ">" );
+		grunt.config.get( "concat" )[ concatTarget ] = {
+			src: [ "<banner:meta.bannerCSS>", cssFiles ],
+			dest: cssFolderName + "jquery-ui.css"
+		};
+		grunt.task.run( "concat:" + concatTarget );
+
+		theme.fetchImages(function( err, files ) {
+			if ( err ) {
+				done( err );
+				return;
+			}
+			files.forEach(function( file ) {
+				grunt.file.write( cssFolderName + "images/" + file.path, file.data );
+			});
+			done();
+		});
+	}, function( err ) {
+		if ( err ) {
+			grunt.log.error( err );
+		}
+		done( !err );
 	});
 });
 
