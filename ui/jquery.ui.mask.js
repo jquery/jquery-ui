@@ -80,7 +80,16 @@ $.widget( "ui.mask", {
 		if ( begin !== undefined ) {
 			end = ( end === undefined ) ? begin : end;
 			if ( dom.setSelectionRange ) {
-				dom.setSelectionRange( begin, end );
+				/* Chrome fires off the focus events before positioning the
+				   cursor based on where the user clicked. This is annoying
+				   because, in the case of tyring to position the cursor at
+				   the beginning of an empty input, the eventual positioning
+				   based on the user's click overrides whatever we do here.
+				   There's no good fix for this except to wait until the
+				   click processesing resolves and _then_ reposition things. */
+				setTimeout(function(){
+					dom.setSelectionRange( begin, end );
+				}, /* yes, zero is long enough */ 0);
 			} else if ( dom.createTextRange ) {
 				range = dom.createTextRange();
 				range.collapse( true );
