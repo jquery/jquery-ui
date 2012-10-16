@@ -80,16 +80,7 @@ $.widget( "ui.mask", {
 		if ( begin !== undefined ) {
 			end = ( end === undefined ) ? begin : end;
 			if ( dom.setSelectionRange ) {
-				/* Chrome fires off the focus events before positioning the
-				   cursor based on where the user clicked. This is annoying
-				   because, in the case of tyring to position the cursor at
-				   the beginning of an empty input, the eventual positioning
-				   based on the user's click overrides whatever we do here.
-				   There's no good fix for this except to wait until the
-				   click processesing resolves and _then_ reposition things. */
-				setTimeout(function(){
-					dom.setSelectionRange( begin, end );
-				}, /* yes, zero is long enough */ 0);
+				dom.setSelectionRange( begin, end );
 			} else if ( dom.createTextRange ) {
 				range = dom.createTextRange();
 				range.collapse( true );
@@ -174,8 +165,25 @@ $.widget( "ui.mask", {
 			this.lastUnsavedValue = this.element.val();
 			this._paint( true );
 			this._caretSelect( this._seekRight( this._parseValue() ) );
+
+			this._justFocused = true;
+			this._delay(function(){
+				this._justFocused = false;
+			}, 100);
+		},
+		click: function( event ) {
+			/* Normally, the call to handle this in the focus event handler would be
+			   sufficient, but Chrome fires the focus events before positioning the
+			   cursor based on where the user clicked (and then fires the click event). */
+
+			// We only want to move the caret on clicks that resulted in focus
+			if ( this._justFocused ) {
+				this._caretSelect( this._seekRight( this._parseValue() ) );
+				this._justFocused = false;
+			}
 		},
 		blur: function( event ) {
+			this._justFocused = false;
 
 			// because we are constantly setting the value of the input, the change event
 			// never fires - we re-introduce the change event here
