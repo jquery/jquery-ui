@@ -206,7 +206,8 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
-		var tooltip, positionOption, events;
+		var tooltip, events, delayedShow,
+			positionOption = $.extend( {}, this.options.position );
 
 		if ( !content ) {
 			return;
@@ -241,10 +242,12 @@ $.widget( "ui.tooltip", {
 
 		function position( event ) {
 			positionOption.of = event;
+			if ( tooltip.is( ":hidden" ) ) {
+				return;
+			}
 			tooltip.position( positionOption );
 		}
 		if ( this.options.track && event && /^mouse/.test( event.originalEvent.type ) ) {
-			positionOption = $.extend( {}, this.options.position );
 			this._on( this.document, {
 				mousemove: position
 			});
@@ -259,6 +262,17 @@ $.widget( "ui.tooltip", {
 		tooltip.hide();
 
 		this._show( tooltip, this.options.show );
+		// Handle tracking tooltips that are shown with a delay (#8644). As soon
+		// as the tooltip is visible, position the tooltip using the most recent
+		// event.
+		if ( this.options.show && this.options.show.delay ) {
+			delayedShow = setInterval(function() {
+				if ( tooltip.is( ":visible" ) ) {
+					position( positionOption.of );
+					clearInterval( delayedShow );
+				}
+			}, $.fx.interval );
+		}
 
 		this._trigger( "open", event, { tooltip: tooltip } );
 

@@ -91,7 +91,12 @@
 			}
 		});
 
-		$( "#blurs-on-click" ).tooltip().click(function() {
+		$( "#blurs-on-click" ).tooltip({
+			track: true,
+			show: {
+				delay: 500
+			}
+		}).click(function() {
 			$( "#focus-on-me" ).focus();
 		});
 	});
