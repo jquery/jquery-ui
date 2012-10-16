@@ -70,8 +70,19 @@ $.widget("ui.dialog", {
 		show: null,
 		stack: true,
 		title: "",
-		width: 300,
-		zIndex: 1000
+		width: 300
+	},
+
+	_appendToTarget: function() {
+		var uiFront;
+
+		if ( this.options.appendTo ) {
+			return this.document.find( this.options.appendTo );
+		} else {
+			uiFront = this.element.closest(".ui-front");
+
+			return uiFront.length ? uiFront : $( this.document[0].body );
+		}
 	},
 
 	_create: function() {
@@ -90,21 +101,6 @@ $.widget("ui.dialog", {
 
 			title = options.title || "&#160;",
 
-			// Figure out where to append the dialog
-			appendToTarget = function() {
-				if ( options.appendTo ) {
-					return $( options.appendTo );
-				} else {
-					var uiFront = that.element.closest(".ui-front");
-
-					if (uiFront.length) {
-						return uiFront;
-					} else {
-						return document.body;
-					}
-				}
-			},
-
 			uiDialog = ( this.uiDialog = $( "<div>" ) )
 				.addClass( uiDialogClasses + options.dialogClass )
 				.css({
@@ -120,7 +116,10 @@ $.widget("ui.dialog", {
 						event.preventDefault();
 					}
 				})
-				.appendTo( appendToTarget() ),
+				.mousedown(function( event ) {
+					that.moveToTop( event );
+				})
+			.appendTo( this._appendToTarget() ),
 
 			uiDialogContent = this.element
 				.show()
@@ -274,6 +273,19 @@ $.widget("ui.dialog", {
 
 	isOpen: function() {
 		return this._isOpen;
+	},
+
+	moveToTop: function( event ) {
+		var dialogParent = this.uiDialog.parent();
+		// If this dialog is already on top, no need to move it
+		if ( !this.uiDialog.nextAll( ".ui-front:visible" ).length ) {
+			return;
+		}
+		this._trigger( "focus", event );
+		// Note: this detaching kills all events
+		this.uiDialog.detach().appendTo( dialogParent );
+
+		return this;
 	},
 
 	open: function() {
@@ -658,9 +670,6 @@ $.extend( $.ui.dialog.overlay, {
 	create: function( dialog ) {
 
 		if ( this.instances.length === 0 ) {
-			// TODO: Do we need to write new logic to prevent use of anchors
-			// and inputs using the .ui-front system?
-
 			// handle window resize
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
 		}
