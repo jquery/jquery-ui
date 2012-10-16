@@ -10,70 +10,68 @@ Move all commit notes to the appropriate section.
 - If there is no ticket number, search Trac for the relevant ticket.
   - If there is no ticket, create one (if needed), or leave just the commit link.
 
-Double check that "XXXX" does not appear anywhere in the changelog.
+Double check that "TICKETREF" does not appear anywhere in the changelog.
 
-Post this changelog at: CHANGELOG_URL
+Add this changelog to jqueryui.com.
 
 
 
 DELETE EVERYTHING ABOVE THE FOLLOWING LINE
 ------------------------------------------
+<script>{
+	"title": "{title}"
+}</script>
 
-= Summary =
-This is the final release of jQuery UI 1.8.
--- OR --
-This is the second maintenance release for [[UI/Changelog/1.8|jQuery UI 1.8]].
+## Build
 
-= Build =
+## Core &amp; Utilities
 
-= Core &amp; Utilities =
+### UI Core
 
-=== UI Core ===
+### Mouse
 
-=== Mouse ===
+### Widget Factory
 
-=== Widget Factory ===
+### Position
 
-=== Position ===
+## Interactions
 
-= Interactions =
+### Draggable
 
-=== Draggable ===
+### Droppable
 
-=== Droppable ===
+### Resizable
 
-=== Resizable ===
+### Selectable
 
-=== Selectable ===
+### Sortable
 
-=== Sortable ===
+## Widgets
 
-= Widgets =
+### Accordion
 
-=== Accordion ===
+### Autocomplete
 
-=== Autocomplete ===
+### Button
 
-=== Button ===
+### Datepicker
 
-=== Datepicker ===
+### Dialog
 
-=== Dialog ===
+### Progressbar
 
-=== Progressbar ===
+### Slider
 
-=== Slider ===
+### Tabs
 
-=== Tabs ===
+## Effects
 
-= Effects =
+### Individual effects
 
-=== Individual effects ===
+## CSS Framework
 
-= CSS Framework =
+## Demos
 
-= Demos =
+## Website
 
-= Website =
-
-=== Download Builder ===
+### Download Builder

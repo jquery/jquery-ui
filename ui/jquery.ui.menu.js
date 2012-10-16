@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Menu
+ * http://api.jqueryui.com/menu/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -15,7 +15,7 @@
  */
 (function( $, undefined ) {
 
-var currentEventTarget = null;
+var mouseHandled = false;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -72,24 +72,23 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
-				var target = $( event.target );
-				if ( target[0] !== currentEventTarget ) {
-					currentEventTarget = target[0];
-					// TODO: What are we trying to accomplish with this check?
-					// Clicking a menu item twice results in a select event with
-					// an empty ui.item.
-					target.one( "click" + this.eventNamespace, function( event ) {
-						currentEventTarget = null;
-					});
-					// Don't select disabled menu items
-					if ( !target.closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
-						this.select( event );
-						// Redirect focus to the menu with a delay for firefox
-						this._delay(function() {
-							if ( !this.element.is(":focus") ) {
-								this.element.focus();
-							}
-						}, 20 );
+				var target = $( event.target ).closest( ".ui-menu-item" );
+				if ( !mouseHandled && target.not( ".ui-state-disabled" ).length ) {
+					mouseHandled = true;
+
+					this.select( event );
+					// Open submenu on click
+					if ( target.has( ".ui-menu" ).length ) {
+						this.expand( event );
+					} else if ( !this.element.is( ":focus" ) ) {
+						// Redirect focus to the menu
+						this.element.trigger( "focus", [ true ] );
+
+						// If the active item is on the top level, let it stay active.
+						// Otherwise, blur the active item since it is no longer visible.
+						if ( this.active && this.active.parents( ".ui-menu" ).length === 1 ) {
+							clearTimeout( this.timer );
+						}
 					}
 				}
 			},
@@ -102,12 +101,14 @@ $.widget( "ui.menu", {
 			},
 			mouseleave: "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
-			focus: function( event ) {
+			focus: function( event, keepActiveItem ) {
 				// If there's already an active item, keep it active
 				// If not, activate the first item
 				var item = this.active || this.element.children( ".ui-menu-item" ).eq( 0 );
 
-				this.focus( event, item );
+				if ( !keepActiveItem ) {
+					this.focus( event, item );
+				}
 			},
 			blur: function( event ) {
 				this._delay(function() {
@@ -127,6 +128,9 @@ $.widget( "ui.menu", {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
 					this.collapseAll( event );
 				}
+
+				// Reset the mouseHandled flag
+				mouseHandled = false;
 			}
 		});
 
@@ -181,9 +185,6 @@ $.widget( "ui.menu", {
 
 		// Destroy menu dividers
 		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
-
-		// Unbind currentEventTarget click event handler
-		this._off( $( currentEventTarget ), "click" );
 	},
 
 	_keydown: function( event ) {
@@ -217,7 +218,7 @@ $.widget( "ui.menu", {
 			this.collapse( event );
 			break;
 		case $.ui.keyCode.RIGHT:
-			if ( !this.active.is( ".ui-state-disabled" ) ) {
+			if ( this.active && !this.active.is( ".ui-state-disabled" ) ) {
 				this.expand( event );
 			}
 			break;
@@ -341,6 +342,11 @@ $.widget( "ui.menu", {
 				.prepend( submenuCarat );
 			menu.attr( "aria-labelledby", item.attr( "id" ) );
 		});
+
+		// If the active item has been removed, blur the menu
+		if ( this.active && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
+			this.blur();
+		}
 	},
 
 	_itemRole: function() {
@@ -511,7 +517,7 @@ $.widget( "ui.menu", {
 			// Delay so Firefox will not hide activedescendant change in expanding submenu from AT
 			this._delay(function() {
 				this.focus( event, newItem );
-			}, 20 );
+			});
 		}
 	},
 
@@ -604,11 +610,13 @@ $.widget( "ui.menu", {
 	},
 
 	select: function( event ) {
-		// Save active reference before collapseAll triggers blur
-		var ui = {
-			item: this.active
-		};
-		this.collapseAll( event, true );
+		// TODO: It should never be possible to not have an active item at this
+		// point, but the tests don't trigger mouseenter before click.
+		this.active = this.active || $( event.target ).closest( ".ui-menu-item" );
+		var ui = { item: this.active };
+		if ( !this.active.has( ".ui-menu" ).length ) {
+			this.collapseAll( event, true );
+		}
 		if ( this.options.trigger ) {
 			$( this.options.trigger ).focus( 1 );
 			this.element.popup( "close" );

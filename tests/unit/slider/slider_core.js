@@ -16,6 +16,7 @@ function handle() {
 module("slider: core");
 
 test("keydown HOME on handle sets value to min", function() {
+	expect( 2 );
 	el = $('<div></div>');
 	options = {
 		max: 5,
@@ -50,6 +51,7 @@ test("keydown HOME on handle sets value to min", function() {
 });
 
 test("keydown END on handle sets value to max", function() {
+	expect( 2 );
 	el = $('<div></div>');
 	options = {
 		max: 5,
@@ -84,6 +86,7 @@ test("keydown END on handle sets value to max", function() {
 });
 
 test("keydown PAGE_UP on handle increases value by 1/5 range, not greater than max", function() {
+	expect( 4 );
 	$.each(['horizontal', 'vertical'], function(i, orientation) {
 		el = $('<div></div>');
 		options = {
@@ -107,6 +110,7 @@ test("keydown PAGE_UP on handle increases value by 1/5 range, not greater than m
 });
 
 test("keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than min", function() {
+	expect( 4 );
 	$.each(['horizontal', 'vertical'], function(i, orientation) {
 		el = $('<div></div>');
 		options = {
@@ -130,6 +134,7 @@ test("keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than mi
 });
 
 test("keydown UP on handle increases value by step, not greater than max", function() {
+	expect( 4 );
 	el = $('<div></div>');
 	options = {
 		max: 5,
@@ -170,6 +175,7 @@ test("keydown UP on handle increases value by step, not greater than max", funct
 });
 
 test("keydown RIGHT on handle increases value by step, not greater than max", function() {
+	expect( 4 );
 	el = $('<div></div>');
 	options = {
 		max: 5,
@@ -210,6 +216,7 @@ test("keydown RIGHT on handle increases value by step, not greater than max", fu
 });
 
 test("keydown DOWN on handle decreases value by step, not less than min", function() {
+	expect( 4 );
 	el = $('<div></div>');
 	options = {
 		max: 5,
@@ -250,6 +257,7 @@ test("keydown DOWN on handle decreases value by step, not less than min", functi
 });
 
 test("keydown LEFT on handle decreases value by step, not less than min", function() {
+	expect( 4 );
 	el = $('<div></div>');
 	options = {
 		max: 5,

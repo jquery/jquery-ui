@@ -25,16 +25,20 @@ test( "panel ids", function() {
 module( "tabs (deprecated): options" );
 
 asyncTest( "ajaxOptions", function() {
-	expect( 1 );
+	expect( 2 );
 
 	var element = $( "#tabs2" ).tabs({
 		ajaxOptions: {
+			data: "foo=bar",
 			converters: {
 				"text html": function() {
 					return "test";
 				}
 			}
 		}
+	});
+	element.one( "tabsbeforeload", function( event, ui ) {
+		equal( ui.ajaxSettings.url.replace( /^[^\?]+/, "" ), "?foo=bar", "ajaxOptions.data" );
 	});
 	element.one( "tabsload", function( event, ui ) {
 		equal( $( ui.panel ).html(), "test" );
