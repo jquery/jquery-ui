@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Slide
+ * http://api.jqueryui.com/slide-effect/
  *
  * Depends:
  *	jquery.ui.effect.js
@@ -29,9 +29,7 @@ $.effects.effect.slide = function( o, done ) {
 	// Adjust
 	$.effects.save( el, props );
 	el.show();
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({
-		margin: true
-	});
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
 
 	$.effects.createWrapper( el ).css({
 		overflow: "hidden"

@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Autocomplete
+ * http://api.jqueryui.com/autocomplete/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -154,7 +154,7 @@ $.widget( "ui.autocomplete", {
 					break;
 				}
 			},
-			input: function( event ) {
+			input: function( event ) {
 				if ( suppressInput ) {
 					suppressInput = false;
 					event.preventDefault();
@@ -482,8 +482,6 @@ $.widget( "ui.autocomplete", {
 			.empty()
 			.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
-		// TODO refresh should check if the active item is still in the dom, removing the need for a manual blur
-		this.menu.blur();
 		this.menu.refresh();
 
 		// size and position menu
@@ -577,7 +575,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	options: {
 		messages: {
 			noResults: "No search results.",
-			results: function(amount) {
+			results: function( amount ) {
 				return amount + ( amount > 1 ? " results are" : " result is" ) +
 					" available, use up and down arrow keys to navigate.";
 			}
@@ -587,7 +585,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	__response: function( content ) {
 		var message;
 		this._superApply( arguments );
-		if ( this.options.disabled || this.cancelSearch) {
+		if ( this.options.disabled || this.cancelSearch ) {
 			return;
 		}
 		if ( content && content.length ) {

@@ -1,11 +1,7 @@
 /*jshint node: true */
 module.exports = function( grunt ) {
 
-var // modules
-	fs = require( "fs" ),
-	path = require( "path" ),
-	request = require( "request" ),
-
+var
 	// files
 	coreFiles = [
 		"jquery.ui.core.js",
@@ -116,7 +112,7 @@ function createBanner( files ) {
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\n' : '' %>" +
 		"* Includes: " + (files ? fileNames.join(", ") : "<%= stripDirectory(grunt.task.current.file.src[1]) %>") + "\n" +
-		"* Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
+		"* Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */";
 }
 
@@ -160,12 +156,12 @@ grunt.initConfig({
 		dist: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"jquery-*.js",
 				"MIT-LICENSE.txt",
 				"README.md",
 				"grunt.js",
 				"package.json",
+				"*.jquery.json",
 				"ui/**/*",
 				"demos/**/*",
 				"themes/**/*",
@@ -205,7 +201,6 @@ grunt.initConfig({
 		cdn: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"MIT-LICENSE.txt",
 				"ui/*.js",
 				"package.json"
@@ -248,7 +243,6 @@ grunt.initConfig({
 		themes: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"MIT-LICENSE.txt",
 				"package.json"
 			],
@@ -295,7 +289,7 @@ grunt.initConfig({
 			// TODO remove items from this list once rewritten
 			return !( /(mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
 		}),
-		grunt: [ "grunt.js", "build/tasks/*.js" ],
+		grunt: [ "grunt.js", "build/**/*.js" ],
 		tests: "tests/unit/**/*.js"
 	},
 	csslint: {
@@ -349,7 +343,7 @@ grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size:a
 grunt.registerTask( "sizer_all", "concat:ui min compare_size" );
 grunt.registerTask( "build", "concat min cssmin copy:dist_units_images" );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
-grunt.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
+grunt.registerTask( "release_themes", "release generate_themes copy:themes md5:themes zip:themes" );
 grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
 
 };

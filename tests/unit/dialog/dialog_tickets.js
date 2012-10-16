@@ -10,7 +10,7 @@ asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
 
 	var el = $( "<div><input id='t3123-first'><input id='t3123-last'></div>" ).dialog({ modal: true }),
 		inputs = el.find( "input" ),
-		widget = el.dialog( "widget" );
+		widget = el.dialog( "widget" )[ 0 ];
 
 	function checkTab() {
 		ok( $.contains( widget, document.activeElement ), "Tab key event moved focus within the modal" );

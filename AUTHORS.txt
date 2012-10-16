@@ -4,14 +4,14 @@ A list of current team members is available at http://jqueryui.com/about
 Paul Bakaus <paul.bakaus@googlemail.com>
 Richard Worth <rdworth@gmail.com>
 Yehuda Katz <wycats@gmail.com>
-Sean Catchpole <littlecooldude@gmail.com>
+Sean Catchpole <sean@sunsean.com>
 John Resig <jeresig@gmail.com>
-Tane Piper <tane@tanepiper.com>
+Tane Piper <piper.tane@gmail.com>
 Dmitri Gaskin <dmitrig01@gmail.com>
 Klaus Hartl <klaus.hartl@googlemail.com>
 Stefan Petre <stefan.petre@gmail.com>
 Gilles van den Hoven <gilles@webunity.nl>
-Micheil Smith <micheil@brandedcode.com>
+Micheil Bryan Smith <micheil@brandedcode.com>
 Jörn Zaefferer <joern.zaefferer@gmail.com>
 Marc Grabanski <m@marcgrabanski.com>
 Keith Wood <kbwood.au@gmail.com>
@@ -81,9 +81,9 @@ Khaled AlHourani <me@khaledalhourani.com>
 Marian Rudzynski <mr@impaled.org>
 Jean-Francois Remy <jfremy@virtuoz.com>
 Doug Blood <dougblood@gmail.com>
-Filippo Cavallarin <poplix@papuasia.org>
+Filippo Cavallarin <filippo.cavallarin@codseq.it>
 Heiko Henning <h.henning@educa.ch>
-Aliaxandr Rahalevich <saksmlz@gmail.com>
+Aliaksandr Rahalevich <saksmlz@gmail.com>
 Mario Visic <mario@mariovisic.com>
 Xavi Ramirez <xavi.rmz@gmail.com>
 Max Schnur <max.schnur@gmail.com>
@@ -92,7 +92,7 @@ Corey Frang <gnarf@gnarf.net>
 Aaron Peterson <aaronp123@yahoo.com>
 Ivan Peters <ivan@ivanpeters.com>
 Mohamed Cherif Bouchelaghem <cherifbouchelaghem@yahoo.fr>
-Marcos Sousa <marcos.sousa@corp.globo.com>
+Marcos Sousa <falecomigo@marcossousa.com>
 Michael DellaNoce <mdellanoce@mailtrust.com>
 George Marshall <echosx@gmail.com>
 Tobias Brunner <tobias@strongswan.org>
@@ -114,8 +114,8 @@ Hans Hillen <hans.hillen@gmail.com>
 Mark Johnson <virgofx@live.com>
 Trey Hunner <treyhunner@gmail.com>
 Shane Whittet <whittet@gmail.com>
-Edward Faulkner <ef@alum.mit.edu>
-Adam Baratz <adam.baratz@gmail.com>
+Edward A Faulkner <ef@alum.mit.edu>
+Adam Baratz <adam@adambaratz.com>
 Kato Kazuyoshi <kato.kazuyoshi@gmail.com>
 Eike Send <eike.send@gmail.com>
 Kris Borchers <kris.borchers@gmail.com>
@@ -125,27 +125,27 @@ Carson McDonald <carson@ioncannon.net>
 Jason Davies <jason@jasondavies.com>
 Garrison Locke <gplocke@gmail.com>
 David Murdoch <musicisair@yahoo.com>
-Ben Boyle <benjamins.boyle@gmail.com>
+Benjamin Scott Boyle <benjamins.boyle@gmail.com>
 Jesse Baird <jebaird@gmail.com>
 Jonathan Vingiano <jvingiano@gmail.com>
 Dylan Just <dev@ephox.com>
-Tomy Kaira <tomykaira@gmail.com>
+Hiroshi Tomita <tomykaira@gmail.com>
 Glenn Goodrich <glenn.goodrich@gmail.com>
-Ashek Elahi <mail.ashek@gmail.com>
+Tarafder Ashek-E-Elahi <mail.ashek@gmail.com>
 Ryan Neufeld <ryan@neufeldmail.com>
 Marc Neuwirth <marc.neuwirth@gmail.com>
 Philip Graham <philip.robert.graham@gmail.com>
 Benjamin Sterling <benjamin.sterling@kenzomedia.com>
-Wesley Walser <wwalser@atlassian.com>
+Wesley Walser <waw325@gmail.com>
 Kouhei Sutou <kou@clear-code.com>
-Karl Kirch <karl.ctr.kirch@faa.gov>
+Karl Kirch <karlkrch@gmail.com>
 Chris Kelly <ckdake@ckdake.com>
 Jay Oster <jay@loyalize.com>
-Alex Polomoshnov <alex.polomoshnov@gmail.com>
+Alexander Polomoshnov <alex.polomoshnov@gmail.com>
 David Leal <dgleal@gmail.com>
-igor milla <igor.fsp.milla@gmail.com>
+Igor Milla <igor.fsp.milla@gmail.com>
 Dave Methvin <dave.methvin@gmail.com>
-Florian Gutmann <blackfeet@gmx.at>
+Florian Gutmann <f.gutmann@chronimo.com>
 Marwan Al Jubeh <marwan.aljubeh@gmail.com>
 Milan Broum <midlis@googlemail.com>
 Sebastian Sauer <info@dynpages.de>
@@ -157,7 +157,7 @@ David Soms <david.soms@gmail.com>
 David De Sloovere <david.desloovere@hotmail.com>
 Michael P. Jung <michael.jung@terreon.de>
 Shannon Pekary <spekary@gmail.com>
-Matthew Hutton <meh@corefiling.co.uk>
+Matthew Edward Hutton <meh@corefiling.co.uk>
 James Khoury <james@jameskhoury.com>
 Rob Loach <robloach@gmail.com>
 Alberto Monteiro <betimbrasil@gmail.com>
@@ -168,7 +168,7 @@ Genie <386@mail.com>
 Rick Waldron <waldron.rick@gmail.com>
 Ian Simpson <spoonlikesham@gmail.com>
 Lev Kitsis <spam4lev@gmail.com>
-TJ VanToll <tj.vantoll@gmail.com>
+Ted VanToll <tj.vantoll@gmail.com>
 Justin Domnitz <jdomnitz@gmail.com>
 Douglas Cerna <douglascerna@yahoo.com>
 Bert ter Heide <bertjh@hotmail.com>
@@ -189,8 +189,22 @@ Eneko Illarramendi <eneko@illarra.com>
 EungJun Yi <semtlenori@gmail.com>
 Courtland Allen <courtlandallen@gmail.com>
 Viktar Varvanovich <non4eg@gmail.com>
-Danny Trunk <dtrunk90@googlemail.com>
+Danny Trunk <dtrunk90@gmail.com>
 Pavel Stetina <pavel.stetina@nangu.tv>
-Mike Stay <metaweta@gmail.com>
+Michael Stay <metaweta@gmail.com>
 Steven Roussey <sroussey@gmail.com>
-Mike Hollis <hollis21@gmail.com>
+Michael Hollis <hollis21@gmail.com>
+Lee Rowlands <lee.rowlands@previousnext.com.au>
+Timmy Willison <timmywillisn@gmail.com>
+Karl Swedberg <kswedberg@gmail.com>
+Baoju Yuan <the_guy_1987@hotmail.com>
+Maciej Mroziński <mrozik87@gmail.com>
+Luis Dalmolin <luis.nh@gmail.com>
+Mark Aaron Shirley <maspwr@gmail.com>
+Martin Hoch <martin@fidion.de>
+Jiayi Yang <tr870829@gmail.com>
+Philipp Benjamin Köppchen <xgxtpbk@gws.ms>
+Sindre Sorhus <sindresorhus@gmail.com>
+Bernhard Sirlinger <bernhard.sirlinger@tele2.de>
+Jared A. Scheel <jared@jaredscheel.com>
+Rafael Xavier de Souza <rxaviers@gmail.com>

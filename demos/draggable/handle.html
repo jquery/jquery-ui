@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Draggable - Handles</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../jquery-1.8.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.mouse.js"></script>
@@ -24,8 +24,6 @@
 </head>
 <body>
 
-<div class="demo">
-	
 <div id="draggable" class="ui-widget-content">
 	<p class="ui-widget-header">I can be dragged only by this handle</p>
 </div>
@@ -35,16 +33,9 @@
 	<p class="ui-widget-header">&hellip;but you can't drag me by this handle.</p>
 </div>
 
-<!-- ADD CANCEL DEMO -->
-
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Allow dragging only when the cursor is over a specific part of the draggable.  Use the <code>handle</code> option to specify the jQuery selector of an element (or group of elements) used to drag the object.</p>
 <p>Or prevent dragging when the cursor is over a specific element (or group of elements) within the draggable.  Use the <code>cancel</code> option to specify a jQuery selector over which to "cancel" draggable functionality.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

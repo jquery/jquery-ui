@@ -28,7 +28,7 @@ test( "enable", function() {
 });
 
 test( "enable( index )", function() {
-    expect( 10 );
+	expect( 10 );
 
 	var element = $( "#tabs1" ).tabs({ disabled: true });
 	disabled( element, true );
@@ -62,7 +62,7 @@ test( "disable", function() {
 });
 
 test( "disable( index )", function() {
-    expect( 10 );
+	expect( 10 );
 
 	var element = $( "#tabs1" ).tabs({ disabled: false });
 	disabled( element, false );
@@ -262,6 +262,14 @@ asyncTest( "load", function() {
 		element.tabs( "load", 3 );
 		state( element, 0, 0, 0, 1, 0 );
 	}
+});
+
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#tabs1" ).tabs(),
+		widgetElement = element.tabs( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
 }( jQuery ) );

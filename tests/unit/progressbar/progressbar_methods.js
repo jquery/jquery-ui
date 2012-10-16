@@ -15,3 +15,11 @@ test( "value", function() {
 	equal( element.progressbar( "value", 30), element, "chainable as setter" );
 	equal( element.progressbar( "option", "value" ), 30, "correct value after setter" );
 });
+
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#progressbar" ).progressbar(),
+		widgetElement = element.progressbar( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+});

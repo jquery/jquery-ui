@@ -57,13 +57,15 @@ asyncTest( "handle blur", function() {
 		});
 
 	click( element, "1" );
-	setTimeout( function() {
+	setTimeout(function() {
 		element.blur();
-		start();
-	}, 350 );
+		setTimeout(function() {
+			start();
+		}, 350 );
+	});
 });
 
-asyncTest( "handle blur on click", function() {
+asyncTest( "handle blur via click outside", function() {
 	expect( 1 );
 	var blurHandled = false,
 		element = $( "#menu1" ).menu({
@@ -77,10 +79,12 @@ asyncTest( "handle blur on click", function() {
 		});
 
 	click( element, "1" );
-	setTimeout( function() {
+	setTimeout(function() {
 		$( "<a>", { id: "remove"} ).appendTo( "body" ).trigger( "click" );
-		start();
-	}, 350 );
+		setTimeout(function() {
+			start();
+		}, 350 );
+	});
 });
 
 test( "handle focus of menu with active item", function() {
@@ -575,24 +579,6 @@ test( "handle keyboard navigation with spelling of menu items", function() {
 		equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
 	});
 	element.focus();
-});
-
-asyncTest( "handle page up and page down before the menu has focus", function() {
-	expect( 1 );
-	var element = $( "#menu1" ).menu({
-		focus: function( event, ui ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
-		}
-	});
-
-	log( "keydown", true );
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	element.blur();
-	setTimeout( function() {
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,0,0", "Page Up and Page Down bring initial focus to first item" );
-		start();
-	}, 500 );
 });
 
 })( jQuery );

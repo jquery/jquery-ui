@@ -45,4 +45,12 @@ test( "refresh", function() {
 	equalHeight( element, 455 );
 });
 
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#list1" ).accordion(),
+		widgetElement = element.accordion( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+});
+
 }( jQuery ) );

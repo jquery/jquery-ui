@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Dialog
+ * http://api.jqueryui.com/dialog/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -170,6 +170,25 @@ $.widget("ui.dialog", {
 		if ( $.fn.bgiframe ) {
 			uiDialog.bgiframe();
 		}
+
+		// prevent tabbing out of modal dialogs
+		this._on( uiDialog, { keydown: function( event ) {
+			if ( !options.modal || event.keyCode !== $.ui.keyCode.TAB ) {
+				return;
+			}
+
+			var tabbables = $( ":tabbable", uiDialog ),
+				first = tabbables.filter( ":first" ),
+				last  = tabbables.filter( ":last" );
+
+			if ( event.target === last[0] && !event.shiftKey ) {
+				first.focus( 1 );
+				return false;
+			} else if ( event.target === first[0] && event.shiftKey ) {
+				last.focus( 1 );
+				return false;
+			}
+		}});
 	},
 
 	_init: function() {
@@ -197,7 +216,8 @@ $.widget("ui.dialog", {
 		}
 
 		next = oldPosition.parent.children().eq( oldPosition.index );
-		if ( next.length ) {
+		// Don't try to place the dialog next to itself (#8613)
+		if ( next.length && next[ 0 ] !== this.element[ 0 ] ) {
 			next.before( this.element );
 		} else {
 			oldPosition.parent.append( this.element );
@@ -225,7 +245,6 @@ $.widget("ui.dialog", {
 		if ( this.overlay ) {
 			this.overlay.destroy();
 		}
-		this._off( this.uiDialog, "keypress" );
 
 		if ( this.options.hide ) {
 			this.uiDialog.hide( this.options.hide, function() {
@@ -309,27 +328,6 @@ $.widget("ui.dialog", {
 		this.overlay = options.modal ? new $.ui.dialog.overlay( this ) : null;
 		this.moveToTop( true );
 
-		// prevent tabbing out of modal dialogs
-		if ( options.modal ) {
-			this._on( uiDialog, { keydown: function( event ) {
-				if ( event.keyCode !== $.ui.keyCode.TAB ) {
-					return;
-				}
-
-				var tabbables = $( ":tabbable", uiDialog ),
-					first = tabbables.filter( ":first" ),
-					last  = tabbables.filter( ":last" );
-
-				if ( event.target === last[0] && !event.shiftKey ) {
-					first.focus( 1 );
-					return false;
-				} else if ( event.target === first[0] && event.shiftKey ) {
-					last.focus( 1 );
-					return false;
-				}
-			}});
-		}
-
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
 		hasFocus = this.element.find( ":tabbable" );
@@ -366,7 +364,7 @@ $.widget("ui.dialog", {
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
 					props;
-				var button = $( "<button type='button'>" )
+				var button = $( "<button type='button'></button>" )
 					.attr( props, true )
 					.unbind( "click" )
 					.click(function() {
@@ -770,7 +768,7 @@ $.extend( $.ui.dialog.overlay, {
 		var scrollHeight,
 			offsetHeight;
 		// handle IE
-		if ( $.browser.msie ) {
+		if ( $.ui.ie ) {
 			scrollHeight = Math.max(
 				document.documentElement.scrollHeight,
 				document.body.scrollHeight
@@ -795,7 +793,7 @@ $.extend( $.ui.dialog.overlay, {
 		var scrollWidth,
 			offsetWidth;
 		// handle IE
-		if ( $.browser.msie ) {
+		if ( $.ui.ie ) {
 			scrollWidth = Math.max(
 				document.documentElement.scrollWidth,
 				document.body.scrollWidth
