@@ -61,4 +61,14 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
 
+test( "#8237 - Anchor tags lose disabled state when refreshed", function() {
+	expect(1);
+	$( '#qunit-fixture' ).append( '<a id="a8237"></a>' );
+
+	$( 'a' ).button( { disabled: true } );
+	$( 'a' ).button( 'refresh' );
+
+	ok( $('a').button('option', 'disabled'), "Anchor button should remain disabled after refresh" );
+});
+
 })( jQuery );
