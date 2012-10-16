@@ -73,10 +73,9 @@ $.widget( "ui.selectmenu", {
 
 	_drawButton: function() {
 		var tabindex = this.element.attr( 'tabindex' );
-		var labelSelector = "label[for='" + this.element.attr("id") + "']";
 
 		// Find existing label
-		this.labelElement = $( labelSelector ).uniqueId();
+		this.labelElement = $( "label[for='" + this.element.attr("id") + "']" ).uniqueId();
 
 		// hide original select tag
 		this.element.hide();
@@ -89,7 +88,7 @@ $.widget( "ui.selectmenu", {
 			id: this.ids.button,
 			width: this.element.outerWidth(),
 			role: 'combobox',
-			'aria-labelledby': this.labelElement.attr("id"),
+			'aria-labelledby': this.labelElement.attr( "id" ),
 			'aria-expanded': false,
 			'aria-autocomplete': 'list',
 			'aria-owns': this.ids.menu,
@@ -157,7 +156,7 @@ $.widget( "ui.selectmenu", {
 				that.focus = item.index;
 
 				// Set ARIA active decendent
-			    that.button.attr( "aria-activedescendant", item.element.uniqueId().attr( "id" ) );
+				that.button.attr( "aria-activedescendant", item.element.attr( "id" ) );
 
 			},
 			// set ARIA role
@@ -384,7 +383,7 @@ $.widget( "ui.selectmenu", {
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
-		this.button.attr( "aria-activedescendant", item.element.uniqueId().attr( "id" ) );
+		this.button.attr( "aria-activedescendant", item.element.attr( "id" ) );
 	},
 
 	_setOption: function( key, value ) {
