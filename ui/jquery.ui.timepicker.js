@@ -174,8 +174,8 @@ $.widget( "ui.timepicker", {
 			// minimal calendar object for timepicker
 			return {
 				patterns: {
-					t: "h:mm tt",
-					T: "h:mm:ss tt"
+					t: "<h>:<mm> <tt>",
+					T: "<h>:<mm>:<ss> <tt>"
 				},
 				AM: [ "AM", "am" ],
 				PM: [ "PM", "pm" ]
@@ -188,7 +188,7 @@ $.widget( "ui.timepicker", {
 		mask = mask.replace( formatNonPaddedHours, "_$1" );
 
 		if ( !this.options.ampm ) {
-			mask = mask.replace( format12Hour, "H" ).replace( " tt", "" );
+			mask = mask.replace( format12Hour, "H" ).replace( / <?tt>?/, "" );
 		}
 
 		return mask;
