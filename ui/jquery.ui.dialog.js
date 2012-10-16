@@ -70,7 +70,8 @@ $.widget("ui.dialog", {
 		stack: true,
 		title: "",
 		width: 300,
-		zIndex: 1000
+		zIndex: 1000,
+		escapeTitle: false
 	},
 
 	_create: function() {
@@ -86,11 +87,9 @@ $.widget("ui.dialog", {
 		this.options.title = this.options.title || this.originalTitle;
 		var that = this,
 			options = this.options,
-			title = options.title;
-		// If title passed is jquery object bypass escaping of html
-		if ( title == "" ) {
-			title = "&#160;";
-		} else if ( typeof title !== "object" ) {
+			title = options.title || "&#160;";
+		// If escapeTitle is true escape the title to prevent XSS
+		if ( this.options.escapeTitle ) {
 			title = escapeHtml( title );
 		}
 
@@ -586,6 +585,9 @@ $.widget("ui.dialog", {
 					this._makeDraggable();
 				}
 				break;
+			case "escapeTitle":
+				uiDialog.escapeTitle = value;
+				break;
 			case "position":
 				this._position( value );
 				break;
@@ -607,7 +609,7 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "title":
-				var escapedTitle = typeof value === "object" ?  value.html() : escapeHtml( value );
+				var escapedTitle = this.options.escapeTitle ?  escapeHtml( value ) : value;
 				// convert whatever was passed in o a string, for html() to not throw up
 				$( ".ui-dialog-title", this.uiDialogTitlebar )
 					.html( "" + ( escapedTitle || "&#160;" ) );
