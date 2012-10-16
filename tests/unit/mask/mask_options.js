@@ -54,6 +54,41 @@ test( "mask with optional input", function() {
 	equal( input.val(), "(123) 4__-____", "Initial value" );
 });
 
+test( "custom mask with wrapper", function() {
+	expect( 1 );
+	var input = $( "#mask1" ).val("monA0").mask({
+		mask: "<day>:a:<d>",
+		definitions: {
+			day: function ( value ) {
+				if ( $.inArray(value, ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]) ) {
+					return value;
+				} else if ($.inArray(value, ["m", "mo"])) {
+				    return "mon";
+				} else if (value === "t") {
+				    return "t";
+				} else if (value === "tu") {
+				    return "tue";
+				} else if (value === "thu") {
+				    return "thu";
+				} else if ($.inArray(value, ["w", "we"])) {
+				    return "wed";
+				} else if ($.inArray(value, ["f", "fr"])) {
+				    return "fri";
+				} else if (value === "s") {
+				    return "s";
+				} else if (value === "sa") {
+				    return "sat";
+				} else if (value === "su") {
+				    return "sun";
+				}
+			},
+			d: /[0-9]/
+		}
+	});
+
+	equal( input.val(), "mon:A:0", "Initial value" );
+});
+
 test( "mask option parser", 1, function() {
 	var defs = {
 			hh: function( value ) {

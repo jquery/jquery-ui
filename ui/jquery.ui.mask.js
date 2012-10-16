@@ -325,7 +325,7 @@ $.widget( "ui.mask", {
 		this.element.val( this._getValue( false, focused ) );
 	},
 	_parseMask: function() {
-		var key, x, bufferObject, optionalPosition,
+		var key, x, bufferObject, optionalPosition, builder,
 			index = -1,
 			options = this.options,
 			mask = options.mask;
@@ -344,6 +344,38 @@ $.widget( "ui.mask", {
 			// remove the ? from the mask
 			mask = mask.substr( 0, optionalPosition ) + mask.substr( optionalPosition + 1 );
 		}
+
+		// search for strictly definied "masks"
+		for ( x = 0 ; x < mask.length ; x++ ) {
+			if ( mask.charAt(x) === "<" ) {
+				index = x;
+				for ( ; x < mask.length ; x++ ) {
+					if ( mask.charAt(x) === ">" ) {
+						key = mask.substring( index + 1 , x );
+						if ( $.inArray( key, options.definitions ) ) {
+							bufferObject = {
+								start: index,
+								length: key.length,
+								valid: options.definitions[ key ]
+							};
+							for ( x = index ; x < index + key.length ; x++ ) {
+								this.buffer[ x ] = bufferObject;
+							}
+						}
+						// "zero" the range
+						builder = mask.substring( 0, index );
+						index++;
+						for ( x = index; x < index + key.length; x++ ) {
+							builder += " ";
+						}
+						mask = builder + mask.substring( x + 1 );
+						x--;
+						break;
+					}
+				}
+			}
+		}
+
 		// search for definied "masks"
 		for ( key in options.definitions ) {
 			while ( ( index = mask.indexOf( key, index + 1 ) ) > -1 ) {
