@@ -208,8 +208,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 			wrapper.after(
 				this.originalElement.css({
 					position: wrapper.css('position'),
-					width: wrapper.outerWidth(),
-					height: wrapper.outerHeight(),
+					width: this.originalElement.width(),
+					height: this.originalElement.height(),
 					top: wrapper.css('top'),
 					left: wrapper.css('left')
 				})
