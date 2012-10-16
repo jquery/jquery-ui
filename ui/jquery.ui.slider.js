@@ -40,7 +40,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			o = this.options,
 			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
 			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
-			handleCount = ( o.values && o.values.length ) || 1,
+			handleCount,
 			handles = [];
 
 		this._keySliding = false;
@@ -78,6 +78,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-widget-header" +
 				( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
 		}
+
+		handleCount = ( o.values && o.values.length ) || 1;
 
 		for ( i = existingHandles.length; i < handleCount; i++ ) {
 			handles.push( handle );
