@@ -180,8 +180,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
-		var tooltip, positionOption,
-			that = this;
+		var tooltip, positionOption;
 
 		if ( !content ) {
 			return;
@@ -248,7 +247,7 @@ $.widget( "ui.tooltip", {
 				}
 			},
 			remove: function( event ) {
-				that._removeTooltip( tooltip );
+				this._removeTooltip( tooltip );
 			}
 		});
 	},
