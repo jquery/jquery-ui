@@ -8,7 +8,7 @@ module("selectable: options");
 test("autoRefresh", function() {
 	expect(3);
 	el = $("#selectable1");
-	var actual, sel = $("*", el), selected = function() { actual += 1 };
+	var actual, sel = $("*", el), selected = function() { actual += 1; };
 
 	actual = 0;
 	el = $("#selectable1").selectable({ autoRefresh: false,	selected: selected });
@@ -33,12 +33,12 @@ test("autoRefresh", function() {
 test("filter", function() {
 	expect(2);
 	el = $("#selectable1");
-	var actual, sel = $("*", el), selected = function() { actual += 1 };
+	var actual, sel = $("*", el), selected = function() { actual += 1; };
 
 	actual = 0;
 	el = $("#selectable1").selectable({ filter: '.special', selected: selected });
 	drag(1000, 1000);
-	ok(sel.length != 1, "this test assumes more than 1 selectee");
+	ok(sel.length !== 1, "this test assumes more than 1 selectee");
 	equal(actual, 1);
 	el.selectable("destroy");
 });

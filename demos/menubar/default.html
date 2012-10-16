@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>jQuery UI Menubar - Default demo</title>
-	<link rel="stylesheet" href="../demos.css" type="text/css" />
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" />
-	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../jquery-1.8.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -54,13 +54,14 @@
 
 <div class="demo">
 <ul id="bar1" class="menubar">
+	<li><a href="#About">About</a></li>
 	<li>
 		<a href="#File">File</a>
 		<ul>
 			<li><a href="#Open...">Open...</a></li>
-			<li class="ui-state-disabled">Open recent...</li>
+			<li class="ui-state-disabled"><a href="#">Open recent...</a></li>
 			<li><a href="#Save">Save</a></li>
-			<li><a href="#Save as...">Save as...</a></li>
+			<li><a href="#Save%20as...">Save as...</a></li>
 			<li><a href="#Close">Close</a></li>
 			<li><a href="#Quit">Quit</a></li>
 		</ul>
@@ -70,14 +71,14 @@
 		<ul>
 			<li><a href="#Copy">Copy</a></li>
 			<li><a href="#Cut">Cut</a></li>
-			<li class="ui-state-disabled">Paste</li>
+			<li class="ui-state-disabled"><a href="#">Paste</a></li>
 		</ul>
 	</li>
 	<li>
 		<a href="#View">View</a>
 		<ul>
 			<li><a href="#Fullscreen">Fullscreen</a></li>
-			<li><a href="#Fit into view">Fit into view</a></li>
+			<li><a href="#Fit%20into%20view">Fit into view</a></li>
 			<li>
 				<a href="#Encoding">Encoding</a>
 				<ul>
@@ -86,10 +87,10 @@
 					<li>
 					  <a href="#UTF-16">UTF-16</a>
 				      <ul>
-				         <li><a href="#Option 1">Option 1</a></li>
-				         <li><a href="#Option 2">Option 2</a></li>
-				         <li><a href="#Option 3">Option 3</a></li>
-				         <li><a href="#Option 4">Option 4</a></li>
+				         <li><a href="#Option%201">Option 1</a></li>
+				         <li><a href="#Option%202">Option 2</a></li>
+				         <li><a href="#Option%203">Option 3</a></li>
+				         <li><a href="#Option%204">Option 4</a></li>
 				      </ul>
 				   </li>
 				</ul>
@@ -100,13 +101,14 @@
 </ul>
 
 <ul id="bar2" class="menubar-icons">
+	<li><a href="#About">About</a></li>
 	<li>
 		<a href="#File">File</a>
 		<ul>
 			<li><a href="#Open...">Open...</a></li>
-			<li class="ui-state-disabled">Open recent...</li>
+			<li class="ui-state-disabled"><a href="#">Open recent...</a></li>
 			<li><a href="#Save">Save</a></li>
-			<li><a href="#Save as...">Save as...</a></li>
+			<li><a href="#Save%20as...">Save as...</a></li>
 			<li><a href="#Close">Close</a></li>
 			<li><a href="#Quit">Quit</a></li>
 		</ul>
@@ -116,14 +118,14 @@
 		<ul>
 			<li><a href="#Copy">Copy</a></li>
 			<li><a href="#Cut">Cut</a></li>
-			<li class="ui-state-disabled">Paste</li>
+			<li class="ui-state-disabled"><a href="#">Paste</a></li>
 		</ul>
 	</li>
 	<li>
 		<a href="#View">View</a>
 		<ul>
 			<li><a href="#Fullscreen">Fullscreen</a></li>
-			<li><a href="#Fit into view">Fit into view</a></li>
+			<li><a href="#Fit%20into%20view">Fit into view</a></li>
 			<li>
 				<a href="#Encoding">Encoding</a>
 				<ul>
@@ -132,10 +134,10 @@
 					<li>
 					  <a href="#UTF-16">UTF-16</a>
 				      <ul>
-				         <li><a href="#Option 1">Option 1</a></li>
-				         <li><a href="#Option 2">Option 2</a></li>
-				         <li><a href="#Option 3">Option 3</a></li>
-				         <li><a href="#Option 4">Option 4</a></li>
+				         <li><a href="#Option%201">Option 1</a></li>
+				         <li><a href="#Option%202">Option 2</a></li>
+				         <li><a href="#Option%203">Option 3</a></li>
+				         <li><a href="#Option%204">Option 4</a></li>
 				      </ul>
 				   </li>
 				</ul>
@@ -146,13 +148,14 @@
 </ul>
 
 <div id="bar3" class="menubar">
+	<div class="menubarItem"><a href="#About">About</a></div>
 	<div class="menubarItem">
 		<a href="#File">File</a>
 		<div class="menuElement">
 			<div><a href="#Open...">Open...</a></div>
-			<div class="ui-state-disabled">Open recent...</div>
+			<div class="ui-state-disabled"><a href="#">Open recent...</a></div>
 			<div><a href="#Save">Save</a></div>
-			<div><a href="#Save as...">Save as...</a></div>
+			<div><a href="#Save%20as...">Save as...</a></div>
 			<div><a href="#Close">Close</a></div>
 			<div><a href="#Quit">Quit</a></div>
 		</div>
@@ -162,26 +165,26 @@
 		<div class="menuElement">
 			<div><a href="#Copy">Copy</a></div>
 			<div><a href="#Cut">Cut</a></div>
-			<div class="ui-state-disabled">Paste</div>
+			<div class="ui-state-disabled"><a href="#">Paste</a></div>
 		</div>
 	</div>
 	<div class="menubarItem">
 		<a href="#View">View</a>
 		<div class="menuElement">
 			<div><a href="#Fullscreen">Fullscreen</a></div>
-			<div><a href="#Fit into view">Fit into view</a></div>
+			<div><a href="#Fit%20into%20view">Fit into view</a></div>
 			<div>
 				<a href="#Encoding">Encoding</a>
 				<div class="menuElement">
-					<div class="ui-state-disabled">Auto-detect</div>
+					<div class="ui-state-disabled"><a href="#">Auto-detect</a></div>
 					<div><a href="#UTF-8">UTF-8</a></div>
 					<div>
 					  <a href="#UTF-16">UTF-16</a>
 				      <div class="menuElement">
-				         <div><a href="#Option 1">Option 1</a></div>
-				         <div><a href="#Option 2">Option 2</a></div>
-				         <div class="ui-state-disabled">Option 3</div>
-				         <div><a href="#Option 4">Option 4</a></div>
+				         <div><a href="#Option%201">Option 1</a></div>
+				         <div><a href="#Option%202">Option 2</a></div>
+				         <div class="ui-state-disabled"><a href="#">Option 3</a></div>
+				         <div><a href="#Option%204">Option 4</a></div>
 				      </div>
 				   </div>
 				</div>

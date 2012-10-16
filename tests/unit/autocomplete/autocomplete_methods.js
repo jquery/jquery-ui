@@ -34,4 +34,12 @@ test( "search, close", function() {
 	ok( menu.is( ":hidden" ), "menu is hidden after close" );
 });
 
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete(),
+		widgetElement = element.autocomplete( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	ok( widgetElement.is( ".ui-menu" ), "menu element" );
+});
+
 }( jQuery ) );

@@ -1,6 +1,7 @@
 (function( $ ) {
 
 test( "offset", function() {
+	expect( 3 );
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left bottom",

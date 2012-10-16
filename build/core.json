@@ -1,0 +1,68 @@
+{
+	"core": {
+		"description": "The core of jQuery UI, required for all interactions and widgets.",
+		"homepage": "http://jqueryui.com/",
+		"demo": "http://jqueryui.com/",
+		"docs": "http://api.jqueryui.com/category/ui-core/"
+	},
+	"datepicker": {
+		"description": "Displays a calendar from an input or inline for selecting dates.",
+		"dependencies": [ "core" ],
+		"keywords": [
+			"form",
+			"calendar",
+			"date",
+			"i18n"
+		],
+		"category": "widget"
+	},
+	"effect": {
+		"title": "jQuery UI Effects Core",
+		"description": "Extends the internal jQuery effects. Includes morphing and easing. Required by all other effects.",
+		"keywords": [
+			"animation",
+			"show",
+			"hide",
+			"color",
+			"class",
+			"transition",
+			"easing"
+		],
+		"category": "effect",
+		"homepage": "http://jqueryui.com/",
+		"demo": "http://jqueryui.com/effects/",
+		"docs": "http://api.jqueryui.com/category/effects-core/"
+	},
+	"position": {
+		"description": "Positions elements relative to other elements.",
+		"keywords": [
+			"offset",
+			"relative",
+			"absolute",
+			"fixed",
+			"collision"
+		]
+	},
+	"transfer": {
+		"name": "ui.effect-transfer",
+		"title": "jQuery UI Transfer Effect",
+		"description": "Displays a transfer effect from one element to another.",
+		"keywords": [
+			"effect"
+		],
+		"homepage": "http://jqueryui.com/transfer-effect/",
+		"demo": "http://jqueryui.com/transfer-effect/",
+		"docs": "http://api.jqueryui.com/transfer-effect/",
+		"dependencies": [ "effect" ],
+		"category": "effect"
+	},
+	"widget": {
+		"description": "Provides a factory for creating stateful widgets with a common API.",
+		"keywords": [
+			"abstraction",
+			"state",
+			"factory"
+		],
+		"docs": "http://api.jqueryui.com/jQuery.widget/"
+	}
+}

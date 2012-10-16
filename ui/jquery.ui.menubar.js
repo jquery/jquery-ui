@@ -67,8 +67,9 @@ $.widget( "ui.menubar", {
 			})
 			.bind( "keydown.menubar", function( event ) {
 				var menu = $( this );
-				if ( menu.is( ":hidden" ) )
+				if ( menu.is( ":hidden" ) ) {
 					return;
+				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
 					that.previous( event );
@@ -78,71 +79,74 @@ $.widget( "ui.menubar", {
 					that.next( event );
 					event.preventDefault();
 					break;
-				};
+				}
 			});
 		this.items.each(function() {
 			var input = $(this),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
 				menu = input.next( that.options.menuElement );
 
-			input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
-				// ignore triggered focus event
-				if ( event.type == "focus" && !event.originalEvent ) {
-					return;
-				}
-				event.preventDefault();
-				// TODO can we simplify or extractthis check? especially the last two expressions
-				// there's a similar active[0] == menu[0] check in _open
-				if ( event.type == "click" && menu.is( ":visible" ) && that.active && that.active[0] == menu[0] ) {
-					that._close();
-					return;
-				}
-				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
-					if( that.options.autoExpand ) {
-						clearTimeout( that.closeTimer );
+			// might be a non-menu button
+			if ( menu.length ) {
+				input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
+					// ignore triggered focus event
+					if ( event.type === "focus" && !event.originalEvent ) {
+						return;
 					}
+					event.preventDefault();
+					// TODO can we simplify or extractthis check? especially the last two expressions
+					// there's a similar active[0] == menu[0] check in _open
+					if ( event.type === "click" && menu.is( ":visible" ) && that.active && that.active[0] === menu[0] ) {
+						that._close();
+						return;
+					}
+					if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" || that.options.autoExpand ) {
+						if( that.options.autoExpand ) {
+							clearTimeout( that.closeTimer );
+						}
 
-					that._open( event, menu );
-				}
-			})
-			.bind( "keydown", function( event ) {
-				switch ( event.keyCode ) {
-				case $.ui.keyCode.SPACE:
-				case $.ui.keyCode.UP:
-				case $.ui.keyCode.DOWN:
-					that._open( event, $( this ).next() );
-					event.preventDefault();
-					break;
-				case $.ui.keyCode.LEFT:
-					that.previous( event );
-					event.preventDefault();
-					break;
-				case $.ui.keyCode.RIGHT:
-					that.next( event );
-					event.preventDefault();
-					break;
-				}
-			})
-			.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
-			.attr( "role", "menuitem" )
-			.attr( "aria-haspopup", "true" )
-			.wrapInner( "<span class='ui-button-text'></span>" );
+						that._open( event, menu );
+					}
+				})
+				.bind( "keydown", function( event ) {
+					switch ( event.keyCode ) {
+					case $.ui.keyCode.SPACE:
+					case $.ui.keyCode.UP:
+					case $.ui.keyCode.DOWN:
+						that._open( event, $( this ).next() );
+						event.preventDefault();
+						break;
+					case $.ui.keyCode.LEFT:
+						that.previous( event );
+						event.preventDefault();
+						break;
+					case $.ui.keyCode.RIGHT:
+						that.next( event );
+						event.preventDefault();
+						break;
+					}
+				})
+				.attr( "aria-haspopup", "true" );
 
-			// TODO review if these options are a good choice, maybe they can be merged
-			if ( that.options.menuIcon ) {
-				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
-				input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
+				// TODO review if these options (menuIcon and buttons) are a good choice, maybe they can be merged
+				if ( that.options.menuIcon ) {
+					input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
+					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
+				}
 			}
 
-			if ( !that.options.buttons ) {
-				// TODO ui-menubar-link is added above, not needed here?
-				input.addClass( "ui-menubar-link" ).removeClass( "ui-state-default" );
-			};
+			input
+				.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
+				.attr( "role", "menuitem" )
+				.wrapInner( "<span class='ui-button-text'></span>" );
 
+			if ( that.options.buttons ) {
+				input.removeClass( "ui-menubar-link" ).addClass( "ui-state-default" );
+			}
 		});
-		that._bind( {
+		that._on( {
 			keydown: function( event ) {
-				if ( event.keyCode == $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
+				if ( event.keyCode === $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
 					var active = that.active;
 					that.active.blur();
 					that._close( event );
@@ -168,6 +172,9 @@ $.widget( "ui.menubar", {
 				clearTimeout( that.closeTimer );
 			}
 		});
+
+		// Keep track of open submenus
+		this.openSubmenus = 0;
 	},
 
 	_destroy : function() {
@@ -203,8 +210,9 @@ $.widget( "ui.menubar", {
 	},
 
 	_close: function() {
-		if ( !this.active || !this.active.length )
+		if ( !this.active || !this.active.length ) {
 			return;
+		}
 		this.active
 			.menu( "collapseAll" )
 			.hide()
@@ -218,11 +226,12 @@ $.widget( "ui.menubar", {
 			.removeAttr( "tabIndex" );
 		this.active = null;
 		this.open = false;
+		this.openSubmenus = 0;
 	},
 
 	_open: function( event, menu ) {
 		// on a single-button menubar, ignore reopening the same menu
-		if ( this.active && this.active[0] == menu[0] ) {
+		if ( this.active && this.active[0] === menu[0] ) {
 			return;
 		}
 		// TODO refactor, almost the same as _close above, but don't remove tabIndex
@@ -255,10 +264,22 @@ $.widget( "ui.menubar", {
 	},
 
 	next: function( event ) {
+		if ( this.open && this.active.data( "menu" ).active.has( ".ui-menu" ).length ) {
+			// Track number of open submenus and prevent moving to next menubar item
+			this.openSubmenus++;
+			return;
+		}
+		this.openSubmenus = 0;
 		this._move( "next", "first", event );
 	},
 
 	previous: function( event ) {
+		if ( this.open && this.openSubmenus ) {
+			// Track number of open submenus and prevent moving to previous menubar item
+			this.openSubmenus--;
+			return;
+		}
+		this.openSubmenus = 0;
 		this._move( "prev", "last", event );
 	},
 
