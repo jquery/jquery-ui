@@ -45,6 +45,15 @@ test( "mask", function() {
 	equal( input.val(), "(123)4__-____", "Mask changed" );
 });
 
+test( "mask with optional input", function() {
+	expect( 1 );
+	var input = $( "#mask1" ).val("1234").mask({
+		mask: "(999) 999-9999?x9999",
+	});
+
+	equal( input.val(), "(123) 4__-____", "Initial value" );
+});
+
 test( "mask option parser", 1, function() {
 	var defs = {
 			hh: function( value ) {
