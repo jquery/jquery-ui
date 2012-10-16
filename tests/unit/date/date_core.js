@@ -19,7 +19,7 @@ test('Check Sets and Gets', 6, function(){
 	equal(date.day(), 15, 'Set full date and retrieve day');
 });
 test('Date Adjustments - Normal Use Cases', 10, function(){
-	var date = new $.date();
+	var date = $.date();
 	//Use October 15, 2012
 	date.setFullDate(2012,9,15);
 	equal(date.adjust('D',1).day(),16,'Add 1 day');
@@ -41,7 +41,7 @@ test('Date Adjustments - Normal Use Cases', 10, function(){
 });
 
 test('Date Adjustments - Month Overflow Edge Cases', 2, function(){
-	var date = new $.date();
+	var date = $.date();
 	//Use May 31 2012
 	date.setFullDate(2012,4,31);
 	equal(date.adjust('M',1).day(),30,'Add 1 month from May to June sets days to 30, last day in June (prevent Overflow)');
@@ -49,14 +49,14 @@ test('Date Adjustments - Month Overflow Edge Cases', 2, function(){
 });
 
 test('Date Adjustments - Leap Year Edge Cases', 1, function(){
-	var date = new $.date();
+	var date = $.date();
 	//Use February 29 2012 a Leap year
 	date.setFullDate(2012,1,29);
 	equal(date.adjust('Y',1).day(),28,'Feb 29 2012, add a year to convert to Feb 28, 2013');
 });
 
 test('List days of Week', 2, function(){
-	var date = new $.date();
+	var date = $.date();
 	var offset0 = [
 		{ 'fullname': 'Sunday', 'shortname': 'Su' },
 		{ 'fullname': 'Monday', 'shortname': 'Mo' },
@@ -116,4 +116,107 @@ test('Clone', 2, function(){
 	var date2 = date.clone();
 	ok(date2, 'Created cloned object');
 	notEqual(date.adjust('Y',1).year(), date2.year(), 'Object manipulated independently');
+});
+
+test('Days', 1, function(){
+	//TODO needs work
+	var date = $.date();
+	date.eachDay = function( day ) {
+		if ( day.lead && day.date > 20 ) {
+			day.selectable = false;
+			day.render = true;
+			day.title = "These are the days of last month";
+			day.extraClasses = "ui-state-disabled";
+		}
+		if ( day.lead && day.date < 3 ) {
+			day.selectable = true;
+			day.render = true;
+			day.extraClasses = "ui-state-disabled";
+		}
+		if ( day.date == 1 ) {
+			day.extraClasses = "ui-state-error";
+			day.title = "Something bad explaining the error highlight";
+		}
+		if ( day.today ) {
+			day.title = "A good day!";
+		}
+	};
+	ok(date.days(), 'Date days() returns');
+});
+
+test('Months', 1, function(){
+	var date = $.date();
+	ok(date.months(1), 'Months returns')
+
+	var dateMonth1 = date.clone();
+	dateMonth1.first = true;
+	var dateMonth2 = date.clone().adjust('M',1);
+	dateMonth2.last = true;
+	//TODO compare objects
+	//deepEqual(date.months(1), [ dateMonth1, dateMonth2 ], 'Months returned correctly');
+});
+
+test('iso8601Week', 2, function(){
+	var date = $.date();
+	//date.setFullDate(2012, 0, 8);
+	equal(date.iso8601Week(new Date(2012, 0, 8)), 1, 'Test first week is 1');
+	equal(date.iso8601Week(new Date(2012, 11, 31)), 1, 'Test last week is 1 in next year');
+});
+
+test('Equal', 4, function(){
+	var date = $.date();
+	date.setFullDate(2012, 9, 16);
+	ok(date.equal(new Date(2012, 9, 16)), 'Does date equal provide date');
+	ok(!date.equal(new Date(2011, 9, 16)), 'Does date year not equal provide date');
+	ok(!date.equal(new Date(2012, 8, 16)), 'Does date month not equal provide date');
+	ok(!date.equal(new Date(2012, 9, 15)), 'Does date day not equal provide date');
+});
+
+test('Date', 1, function(){
+	var date = $.date();
+	ok(date.date() instanceof Date, 'Date returned');
+});
+
+test('Format', 4, function(){
+	var date = $.date();
+	date.setFullDate(2012, 9, 16);
+	equal(date.format(), '10/16/2012', 'Checking default US format');
+	equal(date.format('yyyy/MM/dd'), '2012/10/16', 'Checking yyyy/MM/dd format');
+	equal(date.format('yy/dd/MM'), '12/16/10', 'Checking yy/dd/MM format');
+	equal(date.format('MMMM dd, yyyy'), 'October 16, 2012', 'Checking MMMM dd, yyyy format');
+});
+
+test('Calendar', 3, function(){
+	var date = $.date();
+	ok(date.calendar(), 'Calendar type returned')
+	var de_cal = {calendars: {
+		standard: {
+			"/": ".",
+			firstDay: 1,
+			days: {
+				names: ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],
+				namesAbbr: ["So","Mo","Di","Mi","Do","Fr","Sa"],
+				namesShort: ["So","Mo","Di","Mi","Do","Fr","Sa"]
+			},
+			months: {
+				names: ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember",""],
+				namesAbbr: ["Jan","Feb","Mrz","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez",""]
+			},
+			AM: null,
+			PM: null,
+			eras: [{"name":"n. Chr.","start":null,"offset":0}],
+			patterns: {
+				d: "dd.MM.yyyy",
+				D: "dddd, d. MMMM yyyy",
+				t: "HH:mm",
+				T: "HH:mm:ss",
+				f: "dddd, d. MMMM yyyy HH:mm",
+				F: "dddd, d. MMMM yyyy HH:mm:ss",
+				M: "dd MMMM",
+				Y: "MMMM yyyy"
+			}
+		}
+	}};
+	ok(date.calendar(de_cal), 'Calendar type changed');
+	deepEqual(date.calendar(), de_cal, 'Calendar change verified');
 });

@@ -141,8 +141,7 @@
 			// specialized for multi-month template, could be used in general
 			months:function (add) {
 				var result = [],
-					current = date.getMonth(),
-					self = this;
+					current = date.getMonth();
 				for (var i = 0; i < add + 1; i++) {
 					result.push(this.clone());
 					this.adjust("M", 1);
@@ -172,7 +171,6 @@
 			},
 			// TODO compare year, month, day each for better performance
 			equal:function (other) {
-
 				function format(date) {
 					return Globalize.format(date, "d");
 				}
