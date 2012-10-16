@@ -86,10 +86,15 @@ $.widget("ui.dialog", {
 		this.options.title = this.options.title || this.originalTitle;
 		var that = this,
 			options = this.options,
+			title = options.title;
+		// If title passed is jquery object bypass escaping of html
+		if ( title == "" ) {
+			title = "&#160;";
+		} else if ( typeof title !== "object" ) {
+			title = escapeHtml( title );
+		}
 
-			title = options.title || "&#160;",
-
-			uiDialog = ( this.uiDialog = $( "<div>" ) )
+		var uiDialog = ( this.uiDialog = $( "<div>" ) )
 				.addClass( uiDialogClasses + options.dialogClass )
 				.css({
 					display: "none",
@@ -602,9 +607,10 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "title":
+				var escapedTitle = typeof value === "object" ?  value.html() : escapeHtml( value );
 				// convert whatever was passed in o a string, for html() to not throw up
 				$( ".ui-dialog-title", this.uiDialogTitlebar )
-					.html( "" + ( value || "&#160;" ) );
+					.html( "" + ( escapedTitle || "&#160;" ) );
 				break;
 		}
 
@@ -843,5 +849,11 @@ $.extend( $.ui.dialog.overlay.prototype, {
 		$.ui.dialog.overlay.destroy( this.$el );
 	}
 });
+// Method to escape html to prevent XSS
+function escapeHtml( str ) {
+	var div = $( '<div/>' );
+	div.text( str );
+	return div.html();
+}
 
 }( jQuery ) );
