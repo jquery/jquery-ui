@@ -13,7 +13,7 @@
 	$(function() {
 		$( "#mask1" ).mask({ mask: "99/99/9999" });
 		$( "#mask2" ).mask({ mask: "(999) 999-9999" });
-		$( "#mask3" ).mask({ mask: "(999) 999-9999" }).change(function(event) {
+		$( "#mask3" ).mask({ mask: "(999) 999-9999" }).blur(function(event) {
                         if (!$(event.target).mask("valid")) {
                                 $(event.target).val("")
                         }
