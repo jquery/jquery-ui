@@ -213,7 +213,7 @@ $.widget( "ui.button", {
 	},
 
 	_determineButtonType: function() {
-		var ancestor, labelSelector, checked;
+		var ancestor, labelSelector, checked, tempElement;
 
 		if ( this.element.is("[type=checkbox]") ) {
 			this.type = "checkbox";
@@ -236,6 +236,17 @@ $.widget( "ui.button", {
 				this.buttonElement = ancestor.filter( labelSelector );
 				if ( !this.buttonElement.length ) {
 					this.buttonElement = ancestor.find( labelSelector );
+					if ( !this.buttonElement.length ) {
+						ancestor = this.element.parents('label:first');
+						if (ancestor.length){
+							this.element.detach();
+							tempElement = this.element;
+							setTimeout(function(){
+								ancestor.prepend(tempElement);
+							},1);
+							this.buttonElement = ancestor;
+						}
+					}
 				}
 			}
 			this.element.addClass( "ui-helper-hidden-accessible" );
