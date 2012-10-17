@@ -347,10 +347,13 @@ $.Widget.prototype = {
 	},
 
 	_on: function( element, handlers ) {
+		var element_passed = true;
+
 		// no element argument, shuffle and use this.element
 		if ( !handlers ) {
 			handlers = element;
 			element = this.element;
+			element_passed = false;
 		} else {
 			// accept selectors, DOM elements
 			element = $( element );
@@ -381,7 +384,8 @@ $.Widget.prototype = {
 				eventName = match[1] + instance.eventNamespace,
 				selector = match[2];
 			if ( selector ) {
-				instance.widget().delegate( selector, eventName, handlerProxy );
+				( element_passed ? element : instance.widget() )
+					.delegate( selector, eventName, handlerProxy );
 			} else {
 				element.bind( eventName, handlerProxy );
 			}
