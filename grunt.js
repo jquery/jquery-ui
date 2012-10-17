@@ -161,6 +161,7 @@ grunt.initConfig({
 				"package.json",
 				"*.jquery.json",
 				"ui/**/*",
+				"ui/.jshintrc",
 				"demos/**/*",
 				"themes/**/*",
 				"external/**/*",
