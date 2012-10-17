@@ -251,7 +251,7 @@ $.widget("ui.dialog", {
 		}
 
 		if ( this.options.hide ) {
-			this.uiDialog.hide( this.options.hide, function() {
+			this._hide( this.uiDialog, this.options.hide, function() {
 				that._trigger( "close", event );
 			});
 		} else {
