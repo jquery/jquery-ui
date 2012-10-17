@@ -59,8 +59,8 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" )
 			.hide();
 
-		// don't allow collapsible: false and active: false
-		if ( !options.collapsible && options.active === false ) {
+		// don't allow collapsible: false and active: false / null
+		if ( !options.collapsible && ( !options.active || typeof options.active !== "number" ) ) {
 			options.active = 0;
 		}
 		// handle negative values
