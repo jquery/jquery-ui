@@ -13,6 +13,15 @@ test( "{ active: default }", function() {
 	state( element, 1, 0, 0 );
 });
 
+test( "{ active: null }", function() {
+	expect( 2 );
+	var element = $( "#list1" ).accordion({
+		active: null
+	});
+	equal( element.accordion( "option", "active" ), 0 );
+	state( element, 1, 0, 0 );
+});
+
 test( "{ active: false }", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
