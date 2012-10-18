@@ -251,8 +251,11 @@ $.widget("ui.dialog", {
 				that._trigger( "close", event );
 			});
 		} else {
-			this.uiDialog.hide();
-			this._trigger( "close", event );
+			this.uiDialog.hide({
+				complete: function() {
+					that._trigger( "close", event );
+				}
+			});
 		}
 
 		$.ui.dialog.overlay.resize();
