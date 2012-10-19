@@ -58,9 +58,9 @@
 			mask: "day",
 			definitions: {
 				day: function ( value ) {
-					if ( $.inArray(value, ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]) !== -1 ) {
+					if ( $.inArray(value, [ "mon", "tue", "wed", "thu", "fri", "sat", "sun" ]) !== -1 ) {
 						return value;
-					} else if ( $.inArray(value, ["m", "mo"]) !== -1 ) {
+					} else if ( $.inArray(value, [ "m", "mo" ]) !== -1 ) {
 						return "mon";
 					} else if ( value === "t" ) {
 						return "t";
@@ -68,9 +68,9 @@
 						return "tue";
 					} else if ( value === "thu" ) {
 						    return "thu";
-					} else if ( $.inArray(value, ["w", "we"]) !== -1 ) {
+					} else if ( $.inArray(value, [ "w", "we" ]) !== -1 ) {
 						return "wed";
-					} else if ( $.inArray(value, ["f", "fr"]) !== -1 ) {
+					} else if ( $.inArray(value, [ "f", "fr" ]) !== -1 ) {
 						return "fri";
 					} else if ( value === "s" ) {
 						return "s";
@@ -84,13 +84,14 @@
 			}
 		});
 
-		$("input").each(function( index, value ) {
-			var span = $("<span></span>");
+		$( "input" ).each(function( index, value ) {
+			var span = $( "<span></span>" );
 
-			value = $(value);			
-			value.after(span);
-			value.keyup(function(event) {
-				span.text("Value: " + $(event.target).mask('value') + " Valid: " + $(event.target).mask('valid'));
+			value = $( value );
+			value.after( span );
+			value.keyup(function( event ) {
+				span.text( "Value: " + $( event.target ).mask("value") +
+					" Valid: " + $( event.target ).mask("valid") );
 			});
 		});
 
