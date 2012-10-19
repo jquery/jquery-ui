@@ -761,8 +761,17 @@ $.ui.plugin.add("draggable", "snap", {
 			var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width,
 				t = inst.snapElements[i].top, b = t + inst.snapElements[i].height;
 
-			//Yes, I know, this is insane ;)
-			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) {
+			//This checks if any of the corners or sides are within snap distance.
+			if(!(
+				(l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || // Check the left top corner
+				(l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || // Check the left bottom corner
+				(l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || // Check the right top corner
+				(l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d) || // Check the right bottom corner
+				(l > x1 && x2 > r && t-d < y1 && y1 < b+d)     || // Check the top side
+				(l > x1 && x2 > r && t-d < y2 && y2 < b+d)     || // Check the bottom side
+				(l-d < x1 && x1 < r+d && t > y1 && y2 > b)     || // Check the right side
+				(l-d < x2 && x2 < r+d && t > y1 && y2 > b)        // Check the left side
+			)) {
 				if(inst.snapElements[i].snapping) (inst.options.snap.release && inst.options.snap.release.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
 				inst.snapElements[i].snapping = false;
 				continue;
