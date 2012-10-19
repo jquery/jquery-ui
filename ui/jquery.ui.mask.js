@@ -20,9 +20,9 @@ $.widget( "ui.mask", {
 	options: {
 		clearEmpty: true,
 		definitions: {
-			'9': /[0-9]/,
-			'a': /[A-Za-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/,
-			'*': /[A-Za-z0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/
+			"9": /[0-9]/,
+			"a": /[A-Za-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/,
+			"*": /[A-Za-z0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/
 		},
 		mask: null,
 		placeholder: "_"
@@ -324,25 +324,83 @@ $.widget( "ui.mask", {
 		}
 		this.element.val( this._getValue( false, focused ) );
 	},
+	_addBuffer: function( bufferObject ) {
+		var x,
+		begin = bufferObject.start,
+		end = bufferObject.start + bufferObject.length;
+
+		for ( x = begin; x < end; x++ ) {
+			if ( this.buffer[ x ] !== undefined ) {
+				return false;
+			}
+		}
+
+		for ( x = begin; x < end; x++ ) {
+			this.buffer[ x ] = bufferObject;
+		}
+
+		return true;
+	},
+	_removeCharacter: function( mask, index ) {
+	    var x, bufferObject;
+
+		for ( x = index ; x < mask.length - 1 ; x++ ) {
+			bufferObject = this.buffer[ x + 1 ];
+			this.buffer[ x ] = bufferObject;
+			if ( bufferObject !== undefined ) {
+				bufferObject.start = bufferObject.start - 1;
+				x += bufferObject.length - 1;
+			}
+		}
+		this.buffer.splice( x, 1 );
+
+		if ( this.optionalPosition > index ) {
+			this.optionalPosition--;
+		}
+
+		return mask.substring( 0, index ) + mask.substring( index + 1 );
+	},
 	_parseMask: function() {
 		var key, x, bufferObject, optionalPosition, builder,
 			index = -1,
 			options = this.options,
-			mask = options.mask;
+			mask = options.mask,
+			reservedChars = [ "a", "9", "*", "?", "<", ">", "\\" ];
 
 		this.buffer = [];
 		if ( !mask ) {
 			return;
 		}
 
-		optionalPosition = mask.indexOf( "?" );
-		if ( optionalPosition === -1 ) {
-			this.optionalPosition = mask.length;
-		} else {
-			this.optionalPosition = optionalPosition;
+		// search for escaped reserved characters
+		for ( index = 0 ; index < mask.length - 1 ; index++ ) {
+			if ( mask.charAt( index ) === "\\" &&
+				 $.inArray( mask.charAt( index + 1 ), reservedChars ) !== -1 ) {
+				// remove escape character
+				mask = mask.substring( 0, index ) + mask.substring( index + 1 );
 
-			// remove the ? from the mask
-			mask = mask.substr( 0, optionalPosition ) + mask.substr( optionalPosition + 1 );
+				this._addBuffer({
+					start: index,
+					literal: mask.charAt( index ),
+					length: 1
+				});
+			}
+		}
+		// locate unescaped optional markers ; use attention to the first, remove all others
+		optionalPosition = -1;
+		this.optionalPosition = undefined;
+		while ( ( optionalPosition = mask.indexOf( "?", optionalPosition + 1 ) ) > -1 ) {
+			if ( this.buffer[ optionalPosition ] === undefined ) {
+				if ( this.optionalPosition === undefined ) {
+					this.optionalPosition = optionalPosition;
+				}
+
+				// remove the ? from the mask
+				mask = this._removeCharacter( mask, optionalPosition );
+			}
+		}
+		if ( this.optionalPosition === undefined ) {
+			this.optionalPosition = mask.length;
 		}
 
 		// search for strictly definied "masks"
@@ -352,24 +410,19 @@ $.widget( "ui.mask", {
 				for ( ; x < mask.length ; x++ ) {
 					if ( mask.charAt(x) === ">" ) {
 						key = mask.substring( index + 1 , x );
-						if ( $.inArray( key, options.definitions ) ) {
-							bufferObject = {
-								start: index,
+						if ( options.definitions[key] !== undefined ) {
+							if (this._addBuffer({
+								start: index + 1,
 								length: key.length,
 								valid: options.definitions[ key ]
-							};
-							for ( x = index ; x < index + key.length ; x++ ) {
-								this.buffer[ x ] = bufferObject;
+							})) {
+								mask = this._removeCharacter( mask, x );
+								mask = this._removeCharacter( mask, index );
+								for ( x = index ; x < index + key.length ; x++ ) {
+									mask[x] = " ";
+								}
 							}
 						}
-						// "zero" the range
-						builder = mask.substring( 0, index );
-						index++;
-						for ( x = index; x < index + key.length; x++ ) {
-							builder += " ";
-						}
-						mask = builder + mask.substring( x + 1 );
-						x--;
 						break;
 					}
 				}
@@ -377,28 +430,24 @@ $.widget( "ui.mask", {
 		}
 
 		// search for definied "masks"
+		index = -1;
 		for ( key in options.definitions ) {
 			while ( ( index = mask.indexOf( key, index + 1 ) ) > -1 ) {
-				bufferObject = {
+				this._addBuffer({
 					start: index,
 					length: key.length,
 					valid: options.definitions[ key ]
-				};
-				for ( x = index ; x < index + key.length ; x++ ) {
-					this.buffer[ x ] = bufferObject;
-				}
+				});
 			}
 		}
 
 		// anything we didn't find is a literal
 		for ( index = 0 ; index < mask.length ; index++ ) {
-			if ( !this.buffer[ index ] ) {
-				this.buffer[ index ] = {
-					start: index,
-					literal: mask.charAt( index ),
-					length: 1
-				};
-			}
+			this._addBuffer({
+				start: index,
+				literal: mask.charAt( index ),
+				length: 1
+			});
 		}
 	},
 
