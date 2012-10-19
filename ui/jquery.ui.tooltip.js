@@ -206,7 +206,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
-		var tooltip, positionOption;
+		var tooltip, positionOption, events;
 		if ( !content ) {
 			return;
 		}
@@ -261,9 +261,7 @@ $.widget( "ui.tooltip", {
 
 		this._trigger( "open", event, { tooltip: tooltip } );
 
-		this._on( target, {
-			mouseleave: "close",
-			focusout: "close",
+		events = {
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
 					var fakeEvent = $.Event(event);
@@ -271,7 +269,14 @@ $.widget( "ui.tooltip", {
 					this.close( fakeEvent, true );
 				}
 			}
-		});
+		};
+		if ( !event || event.type === "mouseover" ) {
+			events.mouseleave = "close";
+		}
+		if ( !event || event.type === "focusin" ) {
+			events.focusout = "close";
+		}
+		this._on( target, events );
 	},
 
 	close: function( event, force ) {
@@ -282,16 +287,6 @@ $.widget( "ui.tooltip", {
 		// disabling closes the tooltip, so we need to track when we're closing
 		// to avoid an infinite loop in case the tooltip becomes disabled on close
 		if ( this.closing ) {
-			return;
-		}
-
-		// don't close if the element has focus
-		// this prevents the tooltip from closing if you hover while focused
-		//
-		// we have to check the event type because tabbing out of the document
-		// may leave the element as the activeElement
-		if ( !force && event && event.type !== "focusout" &&
-				this.document[0].activeElement === target[0] ) {
 			return;
 		}
 

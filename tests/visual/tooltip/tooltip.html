@@ -90,6 +90,10 @@
 				offset: "0 -5"
 			}
 		});
+
+		$( "#blurs-on-click" ).tooltip().click(function() {
+			$( "#focus-on-me" ).focus();
+		});
 	});
 	</script>
 </head>
@@ -153,6 +157,9 @@
 			Text in <strong>bold</strong>.
 		</div>
 	</div>
+
+	<button id="blurs-on-click" title="button title text">click me to focus something else</button>
+	<input id="focus-on-me">
 
 	<div class="group">
 		<p>Play around with focusing and hovering of form elements.</p>
