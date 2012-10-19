@@ -44,4 +44,18 @@ test( "accessibility", function() {
 	equal( element.attr( "title" ), "...", "title restored when closed" );
 });
 
+test( "delegated removal", function() {
+       expect( 2 );
+
+       var tooltip,
+               container = $( "#contains-tooltipped" ).tooltip(),
+               element = $( "#contained-tooltipped" );
+
+       element.trigger( "mouseover" );
+       equal( $( ".ui-tooltip" ).length, 1 );
+
+       container.empty();
+       equal( $( ".ui-tooltip" ).length, 0 );
+});
+
 }( jQuery ) );

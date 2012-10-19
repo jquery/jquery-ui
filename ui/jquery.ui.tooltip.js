@@ -182,6 +182,7 @@ $.widget( "ui.tooltip", {
 
 	_open: function( event, target, content ) {
 		var tooltip, positionOption;
+
 		if ( !content ) {
 			return;
 		}
@@ -245,6 +246,9 @@ $.widget( "ui.tooltip", {
 					fakeEvent.currentTarget = target[0];
 					this.close( fakeEvent, true );
 				}
+			},
+			remove: function( event ) {
+				this._removeTooltip( tooltip );
 			}
 		});
 	},
@@ -279,8 +283,7 @@ $.widget( "ui.tooltip", {
 
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
-			$( this ).remove();
-			delete that.tooltips[ this.id ];
+			that._removeTooltip( $( this ) );
 		});
 
 		target.removeData( "tooltip-open" );
@@ -315,6 +318,11 @@ $.widget( "ui.tooltip", {
 	_find: function( target ) {
 		var id = target.data( "ui-tooltip-id" );
 		return id ? $( "#" + id ) : $();
+	},
+
+	_removeTooltip: function( tooltip ) {
+		tooltip.remove();
+		delete this.tooltips[ tooltip.attr( "id" ) ];
 	},
 
 	_destroy: function() {
