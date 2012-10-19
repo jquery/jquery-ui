@@ -133,7 +133,7 @@ $.widget( "ui.selectmenu", {
 		// init menu widget
 		menuInstance = this.menu.menu({
 			select: function( event, ui ) {
-				var item = ui.item.data( "item.selectmenu" );
+				var item = ui.item.data( "ui-selectmenu-item" );
 
 				that._select( item, event );
 
@@ -143,7 +143,7 @@ $.widget( "ui.selectmenu", {
 				}
 			},
 			focus: function( event, ui ) {
-				var item = ui.item.data( "item.selectmenu" );
+				var item = ui.item.data( "ui-selectmenu-item" );
 
 				if ( that.focus !== undefined ) {
 					if ( item.index !== that.focus ) {
@@ -188,7 +188,7 @@ $.widget( "ui.selectmenu", {
 			// select current item
 			item = this._getSelectedItem();
 			this.menu.menu( "focus", null, item );
-			this._setSelected( item.data( "item.selectmenu" ) );
+			this._setSelected( item.data( "ui-selectmenu-item" ) );
 
 			// set disabled state
 			this._setOption( "disabled", this._getCreateOptions().disabled );
@@ -263,8 +263,8 @@ $.widget( "ui.selectmenu", {
 		});
 	},
 
-	_renderItem: function( ul, item) {
-		var li = $( "<li />" ).data( "item.selectmenu", item );
+	_renderItem: function( ul, item ) {
+		var li = $( "<li />" ).data( "ui-selectmenu-item", item );
 		if ( item.disabled ) {
 			li.addClass( 'ui-state-disabled' );
 		}
