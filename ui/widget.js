@@ -382,6 +382,19 @@ $.Widget.prototype = {
 		return this;
 	},
 
+	_classes: function( key ) {
+		var out = [],
+			parts = key.split( " " ),
+			i = parts.length;
+
+		while ( i-- ) {
+			out.push( parts[ i ] );
+			out.push( this.options.classes[ parts[ i ] ] );
+		}
+
+		return out.join( " " );
+	},
+
 	enable: function() {
 		return this._setOptions({ disabled: false });
 	},

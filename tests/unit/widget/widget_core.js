@@ -601,6 +601,24 @@ test( ".option() - deep option setter", function() {
 	div.testWidget( "option", "foo.qux.newOpt", "newVal" );
 });
 
+test( "_classes", function(){
+	expect( 3 );
+	$.widget( "ui.testWidget", {
+		options: {
+			classes: {
+				"test": "class1 class2",
+				"test2": "class3"
+			}
+		},
+		_create: function() {
+			equal( this._classes( "test" ), "test class1 class2" );
+			equal( this._classes( "test2" ), "test2 class3" );
+			equal( this._classes( "test test2" ), "test2 class3 test class1 class2" );
+		}
+	});
+	$( "<div>" ).testWidget();
+});
+
 test( ".enable()", function() {
 	expect( 2 );
 	$.widget( "ui.testWidget", {
