@@ -127,7 +127,9 @@ $.widget( "ui.tooltip", {
 
 	open: function( event ) {
 		var target = $( event ? event.target : this.element )
-				.closest( this.options.items );
+			// we need closest here due to mouseover bubbling,
+			// but always pointing at the same event target
+			.closest( this.options.items );
 
 		// No element to show a tooltip for
 		if ( !target.length ) {
