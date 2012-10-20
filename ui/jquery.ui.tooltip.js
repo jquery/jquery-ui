@@ -73,6 +73,8 @@ $.widget( "ui.tooltip", {
 
 		// IDs of generated tooltips, needed for destroy
 		this.tooltips = {};
+		// IDs of parent tooltips where we removed the title attribute
+		this.parents = {};
 	},
 
 	_setOption: function( key, value ) {
@@ -126,10 +128,11 @@ $.widget( "ui.tooltip", {
 	},
 
 	open: function( event ) {
-		var target = $( event ? event.target : this.element )
-			// we need closest here due to mouseover bubbling,
-			// but always pointing at the same event target
-			.closest( this.options.items );
+		var that = this,
+			target = $( event ? event.target : this.element )
+				// we need closest here due to mouseover bubbling,
+				// but always pointing at the same event target
+				.closest( this.options.items );
 
 		// No element to show a tooltip for
 		if ( !target.length ) {
@@ -153,6 +156,26 @@ $.widget( "ui.tooltip", {
 		}
 
 		target.data( "tooltip-open", true );
+
+		// kill parent tooltips, custom or native, for hover
+		if ( event && event.type === "mouseover" ) {
+			target.parents().each(function() {
+				var blurEvent;
+				if ( $( this ).data( "tooltip-open" ) ) {
+					blurEvent = $.Event( "blur" );
+					blurEvent.target = blurEvent.currentTarget = this;
+					that.close( blurEvent, true );
+				}
+				if ( this.title ) {
+					$( this ).uniqueId();
+					that.parents[ this.id ] = {
+						element: this,
+						title: this.title
+					};
+					this.title = "";
+				}
+			});
+		}
 
 		this._updateContent( target, event );
 	},
@@ -288,6 +311,13 @@ $.widget( "ui.tooltip", {
 		target.removeData( "tooltip-open" );
 		this._off( target, "mouseleave focusout keyup" );
 		this._off( this.document, "mousemove" );
+
+		if ( event && event.type === "mouseleave" ) {
+			$.each( this.parents, function( id, parent ) {
+				parent.element.title = parent.title;
+				delete that.parents[ id ];
+			});
+		}
 
 		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
