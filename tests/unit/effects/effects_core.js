@@ -31,6 +31,17 @@ test( "Immediate Return Conditions", function() {
 	equal( ++count, 3, "Both Functions worked properly" );
 });
 
+asyncTest( "Parse of null for options", function() {
+	var hidden = $( "div.hidden" ),
+		count = 0;
+	expect( 1 );
+	hidden.show( "blind", null, 1, function() {
+		equal( ++count, 1, "null for options still works" );
+		start();
+	});
+});
+
+
 /* TODO: Disabled - Can't figure out why this is failing in IE 6/7
 test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
 	expect( 2 );
