@@ -60,7 +60,7 @@ $.widget( "ui.accordion", {
 			.hide();
 
 		// don't allow collapsible: false and active: false / null
-		if ( !options.collapsible && ( !options.active || typeof options.active !== "number" ) ) {
+		if ( !options.collapsible && (options.active === false || options.active == null) ) {
 			options.active = 0;
 		}
 		// handle negative values
