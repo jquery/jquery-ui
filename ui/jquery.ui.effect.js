@@ -1055,7 +1055,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	effect = { effect: effect };
 
 	// catch (effect)
-	if ( options === undefined ) {
+	if ( !$.isPlainObject( options ) ) {
 		options = {};
 	}
 
