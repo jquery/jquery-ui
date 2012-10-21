@@ -241,6 +241,9 @@ $.widget( "ui.tooltip", {
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 
 		function position( event ) {
+			if ( tooltip.is( ":hidden" ) ){
+				return;
+			}
 			positionOption.of = event;
 			if ( tooltip.is( ":hidden" ) ) {
 				return;
