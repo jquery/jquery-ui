@@ -895,16 +895,16 @@ if ( $.uiBackCompat !== false ) {
 		_ajaxSettings: function( anchor, event, ui ) {
 			var ajaxOptions = this.options.ajaxOptions;
 			return $.extend( {}, ajaxOptions, {
-				error: function( xhr, s, e ) {
+				error: function( xhr, status ) {
 					try {
 						// Passing index avoid a race condition when this method is
 						// called after the user has selected another tab.
 						// Pass the anchor that initiated this request allows
 						// loadError to manipulate the tab content panel via $(a.hash)
 						ajaxOptions.error(
-							xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
+							xhr, status, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
 					}
-					catch ( e ) {}
+					catch ( error ) {}
 				}
 			}, this._superApply( arguments ) );
 		},

@@ -619,7 +619,7 @@ each( stepHooks, function( i, hook ) {
 			}
 			try {
 				elem.style[ hook ] = value;
-			} catch( value ) {
+			} catch( error ) {
 				// wrapped to prevent IE from throwing errors on "invalid" values like 'auto' or 'inherit'
 			}
 		}
