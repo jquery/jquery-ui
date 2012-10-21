@@ -44,4 +44,33 @@ test( "accessibility", function() {
 	equal( element.attr( "title" ), "...", "title restored when closed" );
 });
 
+test( "delegated removal", function() {
+	expect( 2 );
+
+	var container = $( "#contains-tooltipped" ).tooltip(),
+		element = $( "#contained-tooltipped" );
+
+	element.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).length, 1 );
+
+	container.empty();
+	equal( $( ".ui-tooltip" ).length, 0 );
+});
+
+test( "nested tooltips", function() {
+	expect( 2 );
+
+	var child = $( "#contained-tooltipped" ),
+		parent = $( "#contains-tooltipped" ).tooltip({
+			show: null,
+			hide: null
+		});
+
+	parent.trigger( "mouseover" );
+	equal( $( ".ui-tooltip:visible" ).text(), "parent" );
+
+	child.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).text(), "child" );
+});
+
 }( jQuery ) );

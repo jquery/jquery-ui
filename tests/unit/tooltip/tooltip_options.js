@@ -103,4 +103,39 @@ test( "tooltipClass", function() {
 	ok( $( "#" + element.data( "ui-tooltip-id" ) ).hasClass( "custom" ) );
 });
 
+test( "track + show delay", function() {
+	expect( 2 );
+	var event,
+		leftVal = 314,
+		topVal = 159,
+		offsetVal = 26,
+		element = $( "#tooltipped1" ).tooltip({
+			track: true,
+			show: {
+				delay: 1
+			},
+			position: {
+				my: "left+" + offsetVal + " top+" + offsetVal,
+				at: "right bottom"
+			}
+		});
+
+	event = $.Event( "mouseover" );
+	event.target = $( "#tooltipped1" )[ 0 ];
+	event.originalEvent = { type: "mouseover" };
+	event.pageX = leftVal;
+	event.pageY = topVal;
+	element.trigger( event );
+
+	event = $.Event( "mousemove" );
+	event.target = $( "#tooltipped1" )[ 0 ];
+	event.originalEvent = { type: "mousemove" };
+	event.pageX = leftVal;
+	event.pageY = topVal;
+	element.trigger( event );
+
+	equal( $( ".ui-tooltip" ).css( "left" ), leftVal + offsetVal + "px" );
+	equal( $( ".ui-tooltip" ).css( "top" ), topVal + offsetVal + "px" );
+});
+
 }( jQuery ) );
