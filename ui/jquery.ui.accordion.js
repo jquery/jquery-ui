@@ -733,6 +733,21 @@ if ( $.uiBackCompat !== false ) {
 			_create.call( this );
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
+	
+	// active option === false, without collapsible option
+	// allows all panels to be collapsed at first, without setting collapsible option to true
+	(function( $, prototype ) {
+		var _create = prototype._create;
+		prototype._create = function() {
+			var options = this.options,
+				collapsibleOption = options.collapsible;
+			if ( options.active === false ) {
+				options.collapsible = true;
+			}
+			_create.call( this );
+			options.collapsible = collapsibleOption;
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
 
 })( jQuery );
