@@ -57,4 +57,20 @@ test( "delegated removal", function() {
 	equal( $( ".ui-tooltip" ).length, 0 );
 });
 
+test( "nested tooltips", function() {
+	expect( 2 );
+
+	var child = $( "#contained-tooltipped" ),
+		parent = $( "#contains-tooltipped" ).tooltip({
+			show: null,
+			hide: null
+		});
+
+	parent.trigger( "mouseover" );
+	equal( $( ".ui-tooltip:visible" ).text(), "parent" );
+
+	child.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).text(), "child" );
+});
+
 }( jQuery ) );
