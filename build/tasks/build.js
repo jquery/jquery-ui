@@ -1,6 +1,9 @@
 module.exports = function( grunt ) {
 
-var path = require( "path" );
+"use strict";
+
+var path = require( "path" ),
+	fs = require( "fs" );
 
 grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
 	var pkg = grunt.config( "pkg" ),
