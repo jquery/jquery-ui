@@ -12,6 +12,10 @@ function includeScript( url ) {
 	document.write( "<script src='../../../" + url + "'></script>" );
 }
 
+function url( value ) {
+	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
+}
+
 reset = QUnit.reset;
 QUnit.reset = function() {
 	// Ensure jQuery events and data on the fixture are properly removed
@@ -65,11 +69,11 @@ TestHelpers.testJshint = function( module ) {
 
 		$.when(
 			$.ajax({
-				url: "../../../ui/.jshintrc",
+				url: url("../../../ui/.jshintrc"),
 				dataType: "json"
 			}),
 			$.ajax({
-				url: "../../../ui/jquery.ui." + module + ".js",
+				url: url("../../../ui/jquery.ui." + module + ".js"),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {

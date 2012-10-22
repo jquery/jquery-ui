@@ -1,5 +1,6 @@
-/*jshint node: true */
 module.exports = function( grunt ) {
+
+"use strict";
 
 var versions = {
 		"git": "git",
