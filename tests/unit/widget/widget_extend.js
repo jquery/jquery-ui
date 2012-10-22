@@ -79,7 +79,7 @@ test( "$.widget.extend()", function() {
 	ret = $.widget.extend( { foo: "1,2,3" }, { foo: [1, 2, 3] } );
 	strictEqual( typeof ret.foo, "object", "Check to make sure values equal with coersion (but not actually equal) overwrite correctly" );
 
-	ret = $.widget.extend( { foo:"bar" }, { foo:null } );
+	ret = $.widget.extend( { foo: "bar" }, { foo: null } );
 	strictEqual( typeof ret.foo, "object", "Make sure a null value doesn't crash with deep extend, for #1908" );
 
 	obj = { foo:null };
