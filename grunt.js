@@ -306,7 +306,8 @@ grunt.initConfig({
 				"important": false,
 				"outline-none": false,
 				// especially this one
-				"overqualified-elements": false
+				"overqualified-elements": false,
+				"compatible-vendor-prefixes": false
 			}
 		}
 	},
