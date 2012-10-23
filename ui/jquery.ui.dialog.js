@@ -248,6 +248,13 @@ $.widget("ui.dialog", {
 			this.overlay.destroy();
 		}
 
+		if ( !this.opener.filter( ":focusable" ).focus().length ) {
+			// Hiding a focused element doesn't trigger blur in WebKit
+			// so in case we have nothing to focus on, explicitly blur the active element
+			// https://bugs.webkit.org/show_bug.cgi?id=47182
+			$( this.document[ 0 ].activeElement ).blur();
+		}
+
 		if ( this.options.hide ) {
 			this._hide( this.uiDialog, this.options.hide, function() {
 				that._trigger( "close", event );
@@ -277,6 +284,8 @@ $.widget("ui.dialog", {
 		var hasFocus,
 			options = this.options,
 			uiDialog = this.uiDialog;
+
+		this.opener = $( this.document[ 0 ].activeElement );
 
 		this._size();
 		this._position( options.position );
