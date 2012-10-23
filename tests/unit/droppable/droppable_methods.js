@@ -48,16 +48,16 @@ test("destroy", function() {
 test("enable", function() {
 	expect(7);
 	el = $("#droppable1").droppable({ disabled: true });
-	shouldNotBeDroppable();
+	TestHelpers.shouldNotBeDroppable();
 	el.droppable("enable");
-	shouldBeDroppable();
+	TestHelpers.shouldBeDroppable();
 	equal(el.droppable("option", "disabled"), false, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: true });
-	shouldNotBeDroppable();
+	TestHelpers.shouldNotBeDroppable();
 	el.droppable("option", "disabled", false);
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
-	shouldBeDroppable();
+	TestHelpers.shouldBeDroppable();
 
 	var expected = $('<div></div>').droppable(),
 		actual = expected.droppable('enable');
@@ -67,16 +67,16 @@ test("enable", function() {
 test("disable", function() {
 	expect(7);
 	el = $("#droppable1").droppable({ disabled: false });
-	shouldBeDroppable();
+	TestHelpers.shouldBeDroppable();
 	el.droppable("disable");
-	shouldNotBeDroppable();
+	TestHelpers.shouldNotBeDroppable();
 	equal(el.droppable("option", "disabled"), true, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: false });
-	shouldBeDroppable();
+	TestHelpers.shouldBeDroppable();
 	el.droppable("option", "disabled", true);
 	equal(el.droppable("option", "disabled"), true, "disabled option setter");
-	shouldNotBeDroppable();
+	TestHelpers.shouldNotBeDroppable();
 
 	var expected = $('<div></div>').droppable(),
 		actual = expected.droppable('disable');

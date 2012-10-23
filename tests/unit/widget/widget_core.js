@@ -313,7 +313,7 @@ test( "re-init", function() {
 		_init: function() {
 			actions.push( "init" );
 		},
-		_setOption: function( key, value ) {
+		_setOption: function( key ) {
 			actions.push( "option" + key );
 		}
 	});
@@ -959,11 +959,11 @@ test( "._trigger() - cancelled event", function() {
 	});
 
 	$( "#widget" ).testWidget({
-		foo: function( event, ui ) {
+		foo: function() {
 			ok( true, "callback invoked even if event is cancelled" );
 		}
 	})
-	.bind( "testwidgetfoo", function( event, ui ) {
+	.bind( "testwidgetfoo", function() {
 		ok( true, "event was triggered" );
 		return false;
 	});
@@ -978,7 +978,7 @@ test( "._trigger() - cancelled callback", function() {
 	});
 
 	$( "#widget" ).testWidget({
-		foo: function( event, ui ) {
+		foo: function() {
 			return false;
 		}
 	});

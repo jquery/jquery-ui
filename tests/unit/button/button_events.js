@@ -1,7 +1,7 @@
 /*
  * button_events.js
  */
-(function($) {
+(function() {
 
 module("button: events");
 

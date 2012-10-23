@@ -9,7 +9,7 @@ test("start", function() {
 	expect(2);
 	el = $("#selectable1");
 	el.selectable({
-		start: function(ev, ui) {
+		start: function() {
 			ok(true, "drag fired start callback");
 			equal(this, el[0], "context of callback");
 		}
@@ -21,7 +21,7 @@ test("stop", function() {
 	expect(2);
 	el = $("#selectable1");
 	el.selectable({
-		start: function(ev, ui) {
+		start: function() {
 			ok(true, "drag fired stop callback");
 			equal(this, el[0], "context of callback");
 		}

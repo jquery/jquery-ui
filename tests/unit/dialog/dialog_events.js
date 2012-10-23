@@ -244,7 +244,7 @@ test("beforeClose", function() {
 		}
 	});
 	el.dialog('close');
-	isOpen('beforeClose callback should prevent dialog from closing');
+	TestHelpers.isOpen('beforeClose callback should prevent dialog from closing');
 	el.remove();
 
 	el = $('<div></div>').dialog();
@@ -256,7 +256,7 @@ test("beforeClose", function() {
 		return false;
 	});
 	el.dialog('close');
-	isOpen('beforeClose callback should prevent dialog from closing');
+	TestHelpers.isOpen('beforeClose callback should prevent dialog from closing');
 	el.remove();
 
 	el = $('<div></div>').dialog().bind('dialogbeforeclose', function(ev, ui) {
@@ -266,7 +266,7 @@ test("beforeClose", function() {
 		return false;
 	});
 	el.dialog('close');
-	isOpen('dialogbeforeclose event should prevent dialog from closing');
+	TestHelpers.isOpen('dialogbeforeclose event should prevent dialog from closing');
 	el.remove();
 });
 

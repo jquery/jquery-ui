@@ -359,7 +359,7 @@ $.widget( "ui.autocomplete", {
 					url: url,
 					data: request,
 					dataType: "json",
-					success: function( data, status ) {
+					success: function( data ) {
 						response( data );
 					},
 					error: function() {
@@ -541,7 +541,7 @@ $.widget( "ui.autocomplete", {
 		return this.menu.element;
 	},
 
-	_value: function( value ) {
+	_value: function() {
 		return this.valueMethod.apply( this.element, arguments );
 	},
 

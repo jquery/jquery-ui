@@ -12,13 +12,13 @@ function dlg() {
 	return el.dialog('widget');
 }
 
-function isOpen(why) {
+TestHelpers.isOpen = function(why) {
 	ok(dlg().is(":visible"), why);
-}
+};
 
-function isNotOpen(why) {
+TestHelpers.isNotOpen = function(why) {
 	ok(!dlg().is(":visible"), why);
-}
+};
 
 function drag(handle, dx, dy) {
 	var d = dlg();
@@ -38,51 +38,43 @@ function drag(handle, dx, dy) {
 	widthAfter = d.width();
 }
 
-function moved(dx, dy, msg) {
+TestHelpers.dialogMoved = function(dx, dy, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { left: Math.round(offsetAfter.left), top: Math.round(offsetAfter.top) },
 		expected = { left: Math.round(offsetBefore.left + dx), top: Math.round(offsetBefore.top + dy) };
 	deepEqual(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
-}
+};
 
-function shouldmove(why) {
+TestHelpers.shouldmove = function(why) {
 	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, -50);
-	moved(50, -50, why);
-}
+	TestHelpers.dialogMoved(50, -50, why);
+};
 
-function shouldnotmove(why) {
+TestHelpers.shouldnotmove = function(why) {
 	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, -50);
-	moved(0, 0, why);
-}
+	TestHelpers.dialogMoved(0, 0, why);
+};
 
-function resized(dw, dh, msg) {
+TestHelpers.resized = function(dw, dh, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { width: widthAfter, height: heightAfter },
 		expected = { width: widthBefore + dw, height: heightBefore + dh };
 	deepEqual(actual, expected, 'resized[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
-}
+};
 
-function shouldresize(why) {
+TestHelpers.shouldresize = function(why) {
 	var handle = $(".ui-resizable-se", dlg());
 	drag(handle, 50, 50);
-	resized(50, 50, why);
-}
+	TestHelpers.resized(50, 50, why);
+};
 
-function shouldnotresize(why) {
+TestHelpers.shouldnotresize = function(why) {
 	var handle = $(".ui-resizable-se", dlg());
 	drag(handle, 50, 50);
-	resized(0, 0, why);
-}
-
-function broder(el, side){
-	return parseInt(el.css('border-' + side + '-width'), 10);
-}
-
-function margin(el, side) {
-	return parseInt(el.css('margin-' + side), 10);
-}
+	TestHelpers.resized(0, 0, why);
+};
 
 (function($) {
 

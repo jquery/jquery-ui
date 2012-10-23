@@ -9,11 +9,11 @@ test("autoOpen", function() {
 	expect(2);
 
 	el = $('<div></div>').dialog({ autoOpen: false });
-		isNotOpen('.dialog({ autoOpen: false })');
+	TestHelpers.isNotOpen('.dialog({ autoOpen: false })');
 	el.remove();
 
 	el = $('<div></div>').dialog({ autoOpen: true });
-		isOpen('.dialog({ autoOpen: true })');
+	TestHelpers.isOpen('.dialog({ autoOpen: true })');
 	el.remove();
 });
 
@@ -22,12 +22,12 @@ test("buttons", function() {
 
 	var btn, i, newButtons,
 		buttons = {
-		"Ok": function(ev, ui) {
+		"Ok": function( ev ) {
 			ok(true, "button click fires callback");
 			equal(this, el[0], "context of callback");
 			equal(ev.target, btn[0], "event target");
 		},
-		"Cancel": function(ev, ui) {
+		"Cancel": function( ev ) {
 			ok(true, "button click fires callback");
 			equal(this, el[0], "context of callback");
 			equal(ev.target, btn[1], "event target");
@@ -39,7 +39,7 @@ test("buttons", function() {
 	equal(btn.length, 2, "number of buttons");
 
 	i = 0;
-	$.each(buttons, function(key, val) {
+	$.each(buttons, function( key ) {
 		equal(btn.eq(i).text(), key, "text of button " + (i+1));
 		i++;
 	});
@@ -50,7 +50,7 @@ test("buttons", function() {
 	btn.trigger("click");
 
 	newButtons = {
-		"Close": function(ev, ui) {
+		"Close": function( ev ) {
 			ok(true, "button click fires callback");
 			equal(this, el[0], "context of callback");
 			equal(ev.target, btn[0], "event target");
@@ -66,7 +66,7 @@ test("buttons", function() {
 	btn.trigger('click');
 
 	i = 0;
-	$.each(newButtons, function(key, val) {
+	$.each(newButtons, function( key ) {
 		equal(btn.eq(i).text(), key, "text of button " + (i+1));
 		i += 1;
 	});
@@ -166,15 +166,15 @@ test("draggable", function() {
 	expect(4);
 
 	el = $('<div></div>').dialog({ draggable: false });
-		shouldnotmove();
+		TestHelpers.shouldnotmove();
 		el.dialog('option', 'draggable', true);
-		shouldmove();
+		TestHelpers.shouldmove();
 	el.remove();
 
 	el = $('<div></div>').dialog({ draggable: true });
-		shouldmove();
+		TestHelpers.shouldmove();
 		el.dialog('option', 'draggable', false);
-		shouldnotmove();
+		TestHelpers.shouldnotmove();
 	el.remove();
 });
 
@@ -395,15 +395,15 @@ test("resizable", function() {
 	expect(4);
 
 	el = $('<div></div>').dialog();
-		shouldresize("[default]");
+		TestHelpers.shouldresize("[default]");
 		el.dialog('option', 'resizable', false);
-		shouldnotresize('disabled after init');
+		TestHelpers.shouldnotresize('disabled after init');
 	el.remove();
 
 	el = $('<div></div>').dialog({ resizable: false });
-		shouldnotresize("disabled in init options");
+		TestHelpers.shouldnotresize("disabled in init options");
 		el.dialog('option', 'resizable', true);
-		shouldresize('enabled after init');
+		TestHelpers.shouldresize('enabled after init');
 	el.remove();
 });
 

@@ -5,7 +5,6 @@
 var el, offsetBefore, offsetAfter, dragged;
 
 function drag(handle, dx, dy) {
-	var element = el.data("draggable").element;
 	offsetBefore = el.offset();
 	$(handle).simulate("drag", {
 		dx: dx || 0,
@@ -22,8 +21,8 @@ function moved(dx, dy, msg) {
 	deepEqual(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
-function restoreScroll(what) {
-	if(what) {
+TestHelpers.restoreScroll = function( what ) {
+	if( what ) {
 		$(document).scrollTop(0); $(document).scrollLeft(0);
 	} else {
 		$("#main")[0].scrollTop = 0; $("#main")[0].scrollLeft = 0;

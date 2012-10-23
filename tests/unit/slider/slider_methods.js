@@ -17,8 +17,8 @@ test("init", function() {
 	$('<div></div>').slider().remove();
 	ok(true, '.slider() called on disconnected DOMElement');
 
-	var el = $('<div></div>').slider(),
-		foo = el.slider("option", "foo");
+	var el = $('<div></div>').slider();
+	el.slider("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
