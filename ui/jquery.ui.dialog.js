@@ -255,14 +255,9 @@ $.widget("ui.dialog", {
 			$( this.document[ 0 ].activeElement ).blur();
 		}
 
-		if ( this.options.hide ) {
-			this._hide( this.uiDialog, this.options.hide, function() {
-				that._trigger( "close", event );
-			});
-		} else {
-			this.uiDialog.hide();
-			this._trigger( "close", event );
-		}
+		this._hide( this.uiDialog, this.options.hide, function() {
+			that._trigger( "close", event );
+		});
 	},
 
 	isOpen: function() {
@@ -289,10 +284,9 @@ $.widget("ui.dialog", {
 
 		this._size();
 		this._position( options.position );
-		uiDialog.show( options.show );
 		this.overlay = options.modal ? new $.ui.dialog.overlay( this ) : null;
-
 		this.moveToTop( null, true );
+		this._show( uiDialog, options.show );
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
