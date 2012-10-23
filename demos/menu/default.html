@@ -7,6 +7,7 @@
 	<script src="../../jquery-1.8.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.menu.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
@@ -14,29 +15,53 @@
 		$( "#menu" ).menu();
 	});
 	</script>
+	<style>
+	.ui-menu { width: 150px; }
+	</style>
 </head>
 <body>
 
 <ul id="menu">
-	<li><a href="#Aberdeen">Aberdeen</a></li>
-	<li><a href="#Ada">Ada</a></li>
-	<li><a href="#Adamsville">Adamsville</a></li>
-	<li><a href="#Addyston">Addyston</a></li>
-	<li><a href="#Adelphi">Adelphi</a></li>
-	<li><a href="#Adena">Adena</a></li>
-	<li><a href="#Adrian">Adrian</a></li>
-	<li><a href="#Akron">Akron</a></li>
-	<li><a href="#Albany">Albany</a></li>
-	<li><a href="#Alexandria">Alexandria</a></li>
-	<li><a href="#Alger">Alger</a></li>
-	<li><a href="#Alledonia">Alledonia</a></li>
-	<li><a href="#Alliance">Alliance</a></li>
-	<li><a href="#Alpha">Alpha</a></li>
-	<li><a href="#Alvada">Alvada</a></li>
+	<li class="ui-state-disabled"><a href="#">Aberdeen</a></li>
+	<li><a href="#">Ada</a></li>
+	<li><a href="#">Adamsville</a></li>
+	<li><a href="#">Addyston</a></li>
+	<li>
+		<a href="#">Delphi</a>
+		<ul>
+			<li class="ui-state-disabled"><a href="#">Ada</a></li>
+			<li><a href="#">Saarland</a></li>
+			<li><a href="#">Salzburg</a></li>
+		</ul>
+	</li>
+	<li><a href="#">Saarland</a></li>
+	<li>
+		<a href="#">Salzburg</a>
+		<ul>
+			<li>
+				<a href="#">Delphi</a>
+				<ul>
+					<li><a href="#">Ada</a></li>
+					<li><a href="#">Saarland</a></li>
+					<li><a href="#">Salzburg</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Delphi</a>
+				<ul>
+					<li><a href="#">Ada</a></li>
+					<li><a href="#">Saarland</a></li>
+					<li><a href="#">Salzburg</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Perch</a></li>
+		</ul>
+	</li>
+	<li class="ui-state-disabled"><a href="#">Amesville</a></li>
 </ul>
 
 <div class="demo-description">
-<p>A menu with the default configuration. A list is transformed, adding theming, mouse and keyboard navigation support. Try to tab to the menu then use the cursor keys to navigate.</p>
+<p>A menu with the default configuration, disabled items and nested menus. A list is transformed, adding theming, mouse and keyboard navigation support. Try to tab to the menu then use the cursor keys to navigate.</p>
 </div>
 </body>
 </html>
