@@ -7,12 +7,10 @@
  * http://jquery.org/license
  */
 .ui-tooltip {
-	padding:8px;
-	position:absolute;
-	z-index:9999;
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
 	max-width: 300px;
-	-o-box-shadow: 0 0 5px #aaa;
-	-moz-box-shadow: 0 0 5px #aaa;
 	-webkit-box-shadow: 0 0 5px #aaa;
 	box-shadow: 0 0 5px #aaa;
 }
@@ -20,4 +18,4 @@
 * html .ui-tooltip {
 	background-image: none;
 }
-body .ui-tooltip { border-width:2px; }
+body .ui-tooltip { border-width: 2px; }
