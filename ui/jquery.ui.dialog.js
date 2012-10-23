@@ -256,8 +256,6 @@ $.widget("ui.dialog", {
 			this.uiDialog.hide();
 			this._trigger( "close", event );
 		}
-
-		return this;
 	},
 
 	isOpen: function() {
@@ -303,6 +301,23 @@ $.widget("ui.dialog", {
 		this._trigger( "focus" );
 
 		return this;
+	},
+
+	_keepFocus: function( event ) {
+		function checkFocus() {
+			var activeElement = this.document[ 0 ].activeElement,
+				isActive = this.uiDialog[ 0 ] === activeElement ||
+					$.contains( this.uiDialog[ 0 ], activeElement );
+			if ( !isActive ) {
+				this.uiDialog.focus();
+			}
+		}
+		event.preventDefault();
+		checkFocus.call( this );
+		// support: IE
+		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
+		// so we check again later
+		this._delay( checkFocus );
 	},
 
 	_createButtons: function( buttons ) {
@@ -647,6 +662,10 @@ $.extend( $.ui.dialog.overlay, {
 		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay ui-front" ) );
 
 		$el.appendTo( document.body );
+
+		$el.bind( "mousedown", function( event ) {
+			dialog._keepFocus( event );
+		});
 
 		if ( $.fn.bgiframe ) {
 			$el.bgiframe();
