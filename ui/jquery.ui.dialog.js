@@ -184,10 +184,10 @@ $.widget("ui.dialog", {
 				first = tabbables.filter( ":first" ),
 				last  = tabbables.filter( ":last" );
 
-			if ( event.target === last[0] && !event.shiftKey ) {
+			if ( ( event.target === last[ 0 ] || event.target === uiDialog[ 0 ] ) && !event.shiftKey ) {
 				first.focus( 1 );
 				return false;
-			} else if ( event.target === first[0] && event.shiftKey ) {
+			} else if ( ( event.target === first[ 0 ] || event.target === uiDialog[ 0 ] ) && event.shiftKey ) {
 				last.focus( 1 );
 				return false;
 			}
