@@ -10,6 +10,7 @@
 	"onevar": true,
 	"trailing": true,
 	"undef": true,
+	"unused": true,
 	"predef": [
 		"Globalize"
 	]

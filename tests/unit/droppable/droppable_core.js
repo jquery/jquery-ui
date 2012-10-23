@@ -2,15 +2,15 @@
  * droppable_core.js
  */
 
-var el, drg;
+var el;
 
-function shouldBeDroppable() {
+TestHelpers.shouldBeDroppable = function() {
 	ok(false, 'missing test - untested code is broken code');
-}
+};
 
-function shouldNotBeDroppable() {
+TestHelpers.shouldNotBeDroppable = function() {
 	ok(false, 'missing test - untested code is broken code');
-}
+};
 
 (function($) {
 
@@ -27,7 +27,7 @@ test("element types", function() {
 		el = $(document.createElement(typeName)).appendTo('body');
 		(typeName === 'table' && el.append("<tr><td>content</td></tr>"));
 		el.droppable();
-		shouldBeDroppable();
+		TestHelpers.shouldBeDroppable();
 		el.droppable("destroy");
 		el.remove();
 	});

@@ -21,7 +21,7 @@ test("init", function() {
 	ok(true, 'arbitrary method called after init');
 
 	el = $("<div></div>").selectable();
-	var foo = el.selectable("option", "foo");
+	el.selectable("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 

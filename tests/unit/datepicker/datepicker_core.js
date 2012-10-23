@@ -12,31 +12,19 @@ function equalsDate(d1, d2, message) {
 	equal(d1.toString(), d2.toString(), message);
 }
 
-function equalsDateArray(a1, a2, message) {
-	if (!a1 || !a2) {
-		ok(false, message + ' - missing dates');
-		return;
-	}
-	a1[0] = (a1[0] ? new Date(a1[0].getFullYear(), a1[0].getMonth(), a1[0].getDate()) : '');
-	a1[1] = (a1[1] ? new Date(a1[1].getFullYear(), a1[1].getMonth(), a1[1].getDate()) : '');
-	a2[0] = (a2[0] ? new Date(a2[0].getFullYear(), a2[0].getMonth(), a2[0].getDate()) : '');
-	a2[1] = (a2[1] ? new Date(a2[1].getFullYear(), a2[1].getMonth(), a2[1].getDate()) : '');
-	deepEqual(a1, a2, message);
-}
-
-function addMonths(date, offset) {
+TestHelpers.addMonths = function(date, offset) {
 	var maxDay = 32 - new Date(date.getFullYear(), date.getMonth() + offset, 32).getDate();
 	date.setDate(Math.min(date.getDate(), maxDay));
 	date.setMonth(date.getMonth() + offset);
 	return date;
-}
+};
 
 function init(id, options) {
 	$.datepicker.setDefaults($.datepicker.regional['']);
 	return $(id).datepicker($.extend({showAnim: ''}, options || {}));
 }
 
-var PROP_NAME = 'datepicker';
+TestHelpers.PROP_NAME = 'datepicker';
 
 (function($) {
 

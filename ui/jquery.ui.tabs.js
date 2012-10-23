@@ -45,8 +45,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_create: function() {
-		var panel,
-			that = this,
+		var that = this,
 			options = this.options,
 			active = options.active,
 			locationHash = location.hash.substring( 1 );
@@ -295,8 +294,7 @@ $.widget( "ui.tabs", {
 	},
 
 	refresh: function() {
-		var next,
-			options = this.options,
+		var options = this.options,
 			lis = this.tablist.children( ":has(a[href])" );
 
 		// get disabled tabs from class attribute from HTML
@@ -922,7 +920,7 @@ if ( $.uiBackCompat !== false ) {
 			this._super();
 		},
 
-		url: function( index, url ){
+		url: function( index ){
 			this.anchors.eq( index ).removeData( "cache.tabs" );
 			this._superApply( arguments );
 		}
@@ -1158,7 +1156,7 @@ if ( $.uiBackCompat !== false ) {
 			}
 		},
 
-		_eventHandler: function( event ) {
+		_eventHandler: function() {
 			this._superApply( arguments );
 			this.options.selected = this.options.active;
 			if ( this.options.selected === false ) {
@@ -1254,7 +1252,7 @@ if ( $.uiBackCompat !== false ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
 		},
-		_eventHandler: function( event ) {
+		_eventHandler: function() {
 			this._superApply( arguments );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );

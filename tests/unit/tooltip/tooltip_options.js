@@ -67,7 +67,7 @@ test( "content: change while open", function() {
 
 test( "content: string", function() {
 	expect( 1 );
-	var element = $( "#tooltipped1" ).tooltip({
+	$( "#tooltipped1" ).tooltip({
 		content: "just a string",
 		open: function( event, ui ) {
 			equal( ui.tooltip.text(), "just a string" );

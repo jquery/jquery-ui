@@ -33,7 +33,7 @@ function autoFocusTest( afValue, focusedLength ) {
 		autoFocus: afValue,
 		delay: 0,
 		source: data,
-		open: function( event, ui ) {
+		open: function() {
 			equal( element.autocomplete( "widget" ).children( ".ui-menu-item:first" ).find( ".ui-state-focus" ).length,
 				focusedLength, "first item is " + (afValue ? "" : "not") + " auto focused" );
 			start();

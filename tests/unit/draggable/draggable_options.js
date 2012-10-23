@@ -210,7 +210,7 @@ test("{ cursor: 'auto' }, default", function() {
 
 	el = $("#draggable2").draggable({
 		cursor: expected,
-		start: function(event, ui) {
+		start: function() {
 			actual = getCursor();
 		}
 	});
@@ -234,7 +234,7 @@ test("{ cursor: 'move' }", function() {
 
 	el = $("#draggable2").draggable({
 		cursor: expected,
-		start: function(event, ui) {
+		start: function() {
 			actual = getCursor();
 		}
 	});
@@ -449,7 +449,7 @@ test("{ helper: 'original' }, relative, with scroll offset on parent", function(
 	setScroll();
 	testScroll('absolute');
 
-	restoreScroll();
+	TestHelpers.restoreScroll();
 
 });
 
@@ -466,7 +466,7 @@ test("{ helper: 'original' }, relative, with scroll offset on root", function() 
 	setScroll('root');
 	testScroll('absolute');
 
-	restoreScroll('root');
+	TestHelpers.restoreScroll('root');
 
 });
 
@@ -486,8 +486,8 @@ test("{ helper: 'original' }, relative, with scroll offset on root and parent", 
 	setScroll('root');
 	testScroll('absolute');
 
-	restoreScroll();
-	restoreScroll('root');
+	TestHelpers.restoreScroll();
+	TestHelpers.restoreScroll('root');
 
 });
 
@@ -504,7 +504,7 @@ test("{ helper: 'original' }, absolute, with scroll offset on parent", function(
 	setScroll();
 	testScroll('absolute');
 
-	restoreScroll();
+	TestHelpers.restoreScroll();
 
 });
 
@@ -521,7 +521,7 @@ test("{ helper: 'original' }, absolute, with scroll offset on root", function() 
 	setScroll('root');
 	testScroll('absolute');
 
-	restoreScroll('root');
+	TestHelpers.restoreScroll('root');
 
 });
 
@@ -541,8 +541,8 @@ test("{ helper: 'original' }, absolute, with scroll offset on root and parent", 
 	setScroll('root');
 	testScroll('absolute');
 
-	restoreScroll();
-	restoreScroll('root');
+	TestHelpers.restoreScroll();
+	TestHelpers.restoreScroll('root');
 
 });
 
@@ -559,7 +559,7 @@ test("{ helper: 'original' }, fixed, with scroll offset on parent", function() {
 	setScroll();
 	testScroll('absolute');
 
-	restoreScroll();
+	TestHelpers.restoreScroll();
 
 });
 
@@ -576,7 +576,7 @@ test("{ helper: 'original' }, fixed, with scroll offset on root", function() {
 	setScroll('root');
 	testScroll('absolute');
 
-	restoreScroll('root');
+	TestHelpers.restoreScroll('root');
 });
 
 test("{ helper: 'original' }, fixed, with scroll offset on root and parent", function() {
@@ -595,8 +595,8 @@ test("{ helper: 'original' }, fixed, with scroll offset on root and parent", fun
 	setScroll('root');
 	testScroll('absolute');
 
-	restoreScroll();
-	restoreScroll('root');
+	TestHelpers.restoreScroll();
+	TestHelpers.restoreScroll('root');
 
 });
 
@@ -639,7 +639,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on parent", function() {
 	drag(el, 1, 1);
 	deepEqual({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
-	restoreScroll();
+	TestHelpers.restoreScroll();
 
 });
 
@@ -668,7 +668,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on root", function() {
 	drag(el, 1, 1);
 	deepEqual({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
-	restoreScroll('root');
+	TestHelpers.restoreScroll('root');
 
 });
 
@@ -698,8 +698,8 @@ test("{ helper: 'clone' }, absolute with scroll offset on root and parent", func
 	drag(el, 1, 1);
 	deepEqual({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
-	restoreScroll('root');
-	restoreScroll();
+	TestHelpers.restoreScroll('root');
+	TestHelpers.restoreScroll();
 
 });
 
@@ -710,7 +710,7 @@ test("{ opacity: 0.5 }", function() {
 	var opacity = null;
 	el = $("#draggable2").draggable({
 		opacity: 0.5,
-		start: function(event, ui) {
+		start: function() {
 			opacity = $(this).css("opacity");
 		}
 	});
@@ -726,11 +726,11 @@ test("{ zIndex: 10 }", function() {
 	expect(1);
 
 	var actual,
-		expected = 10,
-		zIndex = null;
+		expected = 10;
+
 	el = $("#draggable2").draggable({
 		zIndex: expected,
-		start: function(event, ui) {
+		start: function() {
 			actual = $(this).css("zIndex");
 		}
 	});

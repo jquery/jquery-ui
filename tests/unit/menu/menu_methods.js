@@ -29,7 +29,7 @@ test( "destroy", function() {
 test( "enable/disable", function() {
 	expect( 3 );
 	var element = $( "#menu1" ).menu({
-		select: function( event, ui ) {
+		select: function() {
 			log();
 		}
 	});

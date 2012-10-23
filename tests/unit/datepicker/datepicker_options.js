@@ -8,7 +8,7 @@ module("datepicker: options");
 
 test('setDefaults', function() {
 	expect( 3 );
-	var inp = init('#inp');
+	init('#inp');
 	equal($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
 	$.datepicker.setDefaults({showOn: 'button'});
 	equal($.datepicker._defaults.showOn, 'button', 'Change default showOn');
@@ -19,7 +19,7 @@ test('setDefaults', function() {
 test('option', function() {
 	expect( 17 );
 	var inp = init('#inp'),
-	inst = $.data(inp[0], PROP_NAME);
+	inst = $.data(inp[0], TestHelpers.PROP_NAME);
 	// Set option
 	equal(inst.settings.showOn, null, 'Initial setting showOn');
 	equal($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
@@ -51,7 +51,7 @@ test('option', function() {
 test('change', function() {
 	expect( 12 );
 	var inp = init('#inp'),
-	inst = $.data(inp[0], PROP_NAME);
+	inst = $.data(inp[0], TestHelpers.PROP_NAME);
 	equal(inst.settings.showOn, null, 'Initial setting showOn');
 	equal($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
 	equal($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
@@ -215,12 +215,12 @@ test('defaultDate', function() {
 	inp.datepicker('option', {defaultDate: ' -1 m '}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
-	date = addMonths(new Date(), -1);
+	date = TestHelpers.addMonths(new Date(), -1);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date -1 m');
 	inp.datepicker('option', {defaultDate: '+2M'}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
-	date = addMonths(new Date(), 2);
+	date = TestHelpers.addMonths(new Date(), 2);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +2M');
 	inp.datepicker('option', {defaultDate: '-2y'}).
 		datepicker('hide').val('').datepicker('show').
@@ -236,7 +236,7 @@ test('defaultDate', function() {
 	inp.datepicker('option', {defaultDate: '+1M +10d'}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
-	date = addMonths(new Date(), 1);
+	date = TestHelpers.addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +1M +10d');
 	// String date values
@@ -380,7 +380,7 @@ test('minMax', function() {
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), date,
 		'Min/max - -1w, +1 M +10 D - ctrl+pgup');
-	date = addMonths(new Date(), 1);
+	date = TestHelpers.addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	inp.val('').datepicker('show');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
@@ -663,16 +663,6 @@ function beforeDay(date) {
 		date < new Date(2008, 3 - 1, 6));
 	return [(date.getDate() % 2 === 0), (date.getDate() % 10 === 0 ? 'day10' : ''),
 		(date.getDate() % 3 === 0 ? 'Divisble by 3' : '')];
-}
-
-function calcWeek(date) {
-	var doy = date.getDate() + 6,
-		m = date.getMonth() - 1;
-	for (; m >= 0; m--) {
-		doy += $.datepicker._getDaysInMonth(date.getFullYear(), m);
-	}
-	// Simple count from 01/01 starting at week 1
-	return Math.floor(doy / 7);
 }
 
 test('callbacks', function() {

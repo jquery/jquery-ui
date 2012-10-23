@@ -2,9 +2,7 @@
  * resizable_core.js
  */
 
-var el;
-
-var drag = function(el, dx, dy, complete) {
+TestHelpers.resizableDrag = function(el, dx, dy, complete) {
 
 	// speed = sync -> Drag syncrhonously.
 	// speed = fast|slow -> Drag asyncrhonously - animated.
@@ -46,10 +44,10 @@ test("n", function() {
 
 	var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, 0, -50);
+	TestHelpers.resizableDrag(handle, 0, -50);
 	equal( target.height(), 150, "compare height" );
 
-	drag(handle, 0, 50);
+	TestHelpers.resizableDrag(handle, 0, 50);
 	equal( target.height(), 100, "compare height" );
 });
 
@@ -58,10 +56,10 @@ test("s", function() {
 
 	var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, 0, 50);
+	TestHelpers.resizableDrag(handle, 0, 50);
 	equal( target.height(), 150, "compare height" );
 
-	drag(handle, 0, -50);
+	TestHelpers.resizableDrag(handle, 0, -50);
 	equal( target.height(), 100, "compare height" );
 });
 
@@ -70,10 +68,10 @@ test("e", function() {
 
 	var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, 50);
+	TestHelpers.resizableDrag(handle, 50);
 	equal( target.width(), 150, "compare width");
 
-	drag(handle, -50);
+	TestHelpers.resizableDrag(handle, -50);
 	equal( target.width(), 100, "compare width" );
 });
 
@@ -82,10 +80,10 @@ test("w", function() {
 
 	var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, -50);
+	TestHelpers.resizableDrag(handle, -50);
 	equal( target.width(), 150, "compare width" );
 
-	drag(handle, 50);
+	TestHelpers.resizableDrag(handle, 50);
 	equal( target.width(), 100, "compare width" );
 });
 
@@ -94,11 +92,11 @@ test("ne", function() {
 
 	var handle = '.ui-resizable-ne', target = $('#resizable1').css({ overflow: 'hidden' }).resizable({ handles: 'all' });
 
-	drag(handle, -50, -50);
+	TestHelpers.resizableDrag(handle, -50, -50);
 	equal( target.width(), 50, "compare width" );
 	equal( target.height(), 150, "compare height" );
 
-	drag(handle, 50, 50);
+	TestHelpers.resizableDrag(handle, 50, 50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 });
@@ -108,11 +106,11 @@ test("se", function() {
 
 	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, 50, 50);
+	TestHelpers.resizableDrag(handle, 50, 50);
 	equal( target.width(), 150, "compare width" );
 	equal( target.height(), 150, "compare height" );
 
-	drag(handle, -50, -50);
+	TestHelpers.resizableDrag(handle, -50, -50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 });
@@ -122,11 +120,11 @@ test("sw", function() {
 
 	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, -50, -50);
+	TestHelpers.resizableDrag(handle, -50, -50);
 	equal( target.width(), 150, "compare width" );
 	equal( target.height(), 50, "compare height" );
 
-	drag(handle, 50, 50);
+	TestHelpers.resizableDrag(handle, 50, 50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 });
@@ -136,11 +134,11 @@ test("nw", function() {
 
 	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all' });
 
-	drag(handle, -50, -50);
+	TestHelpers.resizableDrag(handle, -50, -50);
 	equal( target.width(), 150, "compare width" );
 	equal( target.height(), 150, "compare height" );
 
-	drag(handle, 50, 50);
+	TestHelpers.resizableDrag(handle, 50, 50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 });

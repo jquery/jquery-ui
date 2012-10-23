@@ -8,7 +8,7 @@ module("datepicker: tickets");
 // http://forum.jquery.com/topic/several-breaking-changes-in-jquery-ui-1-8rc1
 test('beforeShowDay-getDate', function() {
 	expect( 3 );
-	var inp = init('#inp', {beforeShowDay: function(date) { inp.datepicker('getDate'); return [true, '']; }}),
+	var inp = init('#inp', {beforeShowDay: function() { inp.datepicker('getDate'); return [true, '']; }}),
 		dp = $('#ui-datepicker-div');
 	inp.val('01/01/2010').datepicker('show');
 	// contains non-breaking space

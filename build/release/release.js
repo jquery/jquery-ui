@@ -425,7 +425,7 @@ function abort( msg ) {
 function walk( methods ) {
 	var method = methods.shift();
 
-	function next( error ) {
+	function next() {
 		if ( methods.length ) {
 			walk( methods );
 		}

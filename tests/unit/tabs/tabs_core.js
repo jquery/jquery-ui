@@ -132,7 +132,6 @@ test( "accessibility", function() {
 asyncTest( "accessibility - ajax", function() {
 	expect( 4 );
 	var element = $( "#tabs2" ).tabs(),
-		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 		panel = $( "#custom-id" );
 
 	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
@@ -588,7 +587,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
 	expect( 1 );
 
-	var element = $( "#tabs2" ).tabs({
+	$( "#tabs2" ).tabs({
 		active: 2,
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
@@ -603,7 +602,7 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 	var element = $( "<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>" );
 	element.appendTo( "#main" );
 	element.tabs({
-		beforeLoad: function( event, ui ) {
+		beforeLoad: function() {
 			event.preventDefault();
 			ok( false, "should not be an ajax tab" );
 		}
