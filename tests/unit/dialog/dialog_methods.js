@@ -25,7 +25,7 @@ test("init", function() {
 	ok(true, '.dialog() called on disconnected DOMElement - removed');
 
 	el = $('<div></div>').dialog();
-	var foo = el.dialog("option", "foo");
+	el.dialog("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 

@@ -39,18 +39,18 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 	var i;
 
 	el = $('<div></div>').dialog({ resizable: false });
-	shouldnotresize("[default]");
+	TestHelpers.shouldnotresize("[default]");
 	for (i=0; i<2; i++) {
 		el.dialog('close').dialog('open');
-		shouldnotresize('initialized with resizable false toggle ('+ (i+1) +')');
+		TestHelpers.shouldnotresize('initialized with resizable false toggle ('+ (i+1) +')');
 	}
 	el.remove();
 
 	el = $('<div></div>').dialog({ resizable: true });
-	shouldresize("[default]");
+	TestHelpers.shouldresize("[default]");
 	for (i=0; i<2; i++) {
 		el.dialog('close').dialog('option', 'resizable', false).dialog('open');
-		shouldnotresize('set option resizable false toggle ('+ (i+1) +')');
+		TestHelpers.shouldnotresize('set option resizable false toggle ('+ (i+1) +')');
 	}
 	el.remove();
 

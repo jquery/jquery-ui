@@ -146,7 +146,7 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 		opts: {
 			cwd: 'dist'
 		}
-	}, function( err, result ) {
+	}, function( err ) {
 		if ( err ) {
 			grunt.log.error( err );
 			done();

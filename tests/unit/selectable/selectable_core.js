@@ -4,7 +4,7 @@
 
 var el;
 
-var drag = function(dx, dy) {
+TestHelpers.selectableDrag = function drag(dx, dy) {
 	var off = el.offset(), pos = { clientX: off.left, clientY: off.top };
 	el.simulate("mousedown", pos);
 	$(document).simulate("mousemove", pos);

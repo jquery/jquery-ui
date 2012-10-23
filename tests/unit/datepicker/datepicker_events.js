@@ -30,7 +30,7 @@ test('events', function() {
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equal(selectedThis, inp[0], 'Callback selected this');
-	equal(selectedInst, $.data(inp[0], PROP_NAME), 'Callback selected inst');
+	equal(selectedInst, $.data(inp[0], TestHelpers.PROP_NAME), 'Callback selected inst');
 	equal(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
 		'Callback selected date');
 	inp.val('').datepicker('show').
@@ -59,7 +59,7 @@ test('events', function() {
 	inp.simulate('keydown', {keyCode: $.ui.keyCode.PAGE_UP});
 	date.setMonth(date.getMonth() - 1);
 	equal(selectedThis, inp[0], 'Callback change month/year this');
-	equal(selectedInst, $.data(inp[0], PROP_NAME), 'Callback change month/year inst');
+	equal(selectedInst, $.data(inp[0], TestHelpers.PROP_NAME), 'Callback change month/year inst');
 	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year date - pgup');
 	inp.simulate('keydown', {keyCode: $.ui.keyCode.PAGE_DOWN});
@@ -107,7 +107,7 @@ test('events', function() {
 		val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
 	equal(selectedThis, inp[0], 'Callback close this');
-	equal(selectedInst, $.data(inp[0], PROP_NAME), 'Callback close inst');
+	equal(selectedInst, $.data(inp[0], TestHelpers.PROP_NAME), 'Callback close inst');
 	equal(selectedDate, '', 'Callback close date - esc');
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});

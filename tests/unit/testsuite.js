@@ -116,7 +116,7 @@ function testWidgetDefaults( widget, defaults ) {
 	// ensure that all defaults were tested
 	test( "tested defaults", function() {
 		var count = 0;
-		$.each( pluginDefaults, function( key, val ) {
+		$.each( pluginDefaults, function( key ) {
 			expect( ++count );
 			ok( key in defaults, key );
 		});
@@ -227,7 +227,7 @@ window.domEqual = function( selector, modifier, message ) {
 		delete result.data[ $.expando ];
 		children = elem.children();
 		if ( children.length ) {
-			result.children = elem.children().map(function( ind ) {
+			result.children = elem.children().map(function() {
 				return extract( $( this ) );
 			}).get();
 		} else {

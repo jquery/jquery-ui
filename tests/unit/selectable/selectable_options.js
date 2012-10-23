@@ -13,7 +13,7 @@ test("autoRefresh", function() {
 	actual = 0;
 	el = $("#selectable1").selectable({ autoRefresh: false,	selected: selected });
 	sel.hide();
-	drag(1000, 1000);
+	TestHelpers.selectableDrag(1000, 1000);
 	equal(actual, sel.length);
 	el.selectable("destroy");
 
@@ -21,10 +21,10 @@ test("autoRefresh", function() {
 	sel.show();
 	el = $("#selectable1").selectable({ autoRefresh: true,	selected: selected });
 	sel.hide();
-	drag(1000, 1000);
+	TestHelpers.selectableDrag(1000, 1000);
 	equal(actual, 0);
 	sel.show();
-	drag(1000, 1000);
+	TestHelpers.selectableDrag(1000, 1000);
 	equal(actual, sel.length);
 	el.selectable("destroy");
 	sel.show();
@@ -37,7 +37,7 @@ test("filter", function() {
 
 	actual = 0;
 	el = $("#selectable1").selectable({ filter: '.special', selected: selected });
-	drag(1000, 1000);
+	TestHelpers.selectableDrag(1000, 1000);
 	ok(sel.length !== 1, "this test assumes more than 1 selectee");
 	equal(actual, 1);
 	el.selectable("destroy");

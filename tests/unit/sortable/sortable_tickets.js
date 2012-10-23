@@ -44,13 +44,13 @@ test('#4752: link event firing on sortable with connect list', function () {
 
     $('#main ul').sortable({
         connectWith: '#main ul',
-        change: function (e, ui) {
+        change: function () {
             fired.change = true;
         },
-        receive: function (e, ui) {
+        receive: function () {
             fired.receive = true;
         },
-        remove: function (e, ui) {
+        remove: function () {
             fired.remove = true;
         }
     });
