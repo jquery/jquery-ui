@@ -1111,7 +1111,7 @@ function standardSpeed( speed ) {
 }
 
 $.fn.extend({
-	effect: function() {
+	effect: function( /* effect, options, speed, callback */ ) {
 		var args = _normalizeArguments.apply( this, arguments ),
 			mode = args.mode,
 			queue = args.queue,
