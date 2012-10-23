@@ -5,7 +5,6 @@
 var el, offsetBefore, offsetAfter, dragged;
 
 function drag(handle, dx, dy) {
-	el.data("draggable").element;
 	offsetBefore = el.offset();
 	$(handle).simulate("drag", {
 		dx: dx || 0,
