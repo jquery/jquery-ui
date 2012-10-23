@@ -200,7 +200,7 @@ $.widget.bridge = function( name, object ) {
 	};
 };
 
-$.Widget = function( options, element ) {};
+$.Widget = function() {};
 $.Widget._childConstructors = [];
 
 $.Widget.prototype = {

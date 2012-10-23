@@ -284,7 +284,7 @@ $.widget( "ui.tooltip", {
 					this.close( fakeEvent, true );
 				}
 			},
-			remove: function( event ) {
+			remove: function() {
 				this._removeTooltip( tooltip );
 			}
 		};
@@ -297,7 +297,7 @@ $.widget( "ui.tooltip", {
 		this._on( target, events );
 	},
 
-	close: function( event, force ) {
+	close: function( event ) {
 		var that = this,
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
