@@ -64,7 +64,7 @@ $.widget( "ui.autocomplete", {
 			.addClass( "ui-autocomplete-input" )
 			.attr( "autocomplete", "off" );
 
-		this._on({
+		this._on( this.element, {
 			keydown: function( event ) {
 				if ( this.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
@@ -191,6 +191,7 @@ $.widget( "ui.autocomplete", {
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
 			.data( "menu" );
+
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
 				// prevent moving focus out of the text field
