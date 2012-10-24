@@ -75,6 +75,10 @@ $.widget( "ui.tooltip", {
 		this.tooltips = {};
 		// IDs of parent tooltips where we removed the title attribute
 		this.parents = {};
+
+		if ( this.options.disabled ) {
+			this._disable();
+		}
 	},
 
 	_setOption: function( key, value ) {

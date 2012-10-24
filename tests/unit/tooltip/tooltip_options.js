@@ -2,6 +2,14 @@
 
 module( "tooltip: options" );
 
+test( "disabled: true", function() {
+	expect( 1 );
+	$( "#tooltipped1" ).tooltip({
+		disabled: true
+	}).tooltip( "open" );
+	equal( $( ".ui-tooltip" ).length, 0 );
+});
+
 test( "content: default", function() {
 	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
