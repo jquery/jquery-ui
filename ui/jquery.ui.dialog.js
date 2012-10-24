@@ -581,6 +581,25 @@ $.widget("ui.dialog", {
 				$( ".ui-dialog-title", this.uiDialogTitlebar )
 					.html( "" + ( value || "&#160;" ) );
 				break;
+			case "zIndex":
+				if ( value > $.ui.dialog.maxZ ) {
+					// Increment the 'maxZ' counters when this dialog is currently visible
+					if ( self.isOpen() ) {
+						$.ui.dialog.maxZ = value;
+						
+						if ( self.overlay ) {
+							$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
+							$.ui.dialog.maxZ += 1;
+						}
+					}
+					
+					value = $.ui.dialog.maxZ;
+				}
+				
+				self.overlay && self.overlay.$el.css( "z-index", value - 1 );
+				uiDialog.css( "z-index", value );
+				
+				break;
 		}
 
 		this._super( key, value );

@@ -455,4 +455,36 @@ test("width", function() {
 	el.remove();
 });
 
+test("zIndex", function() {
+	expect(9);
+
+	el = $('<div></div>').dialog( { autoOpen: false } );
+		equals(dlg().css( 'zIndex' ), 1000, "default zIndex");
+		el.dialog("open");
+		equals(dlg().css( 'zIndex' ), $.ui.dialog.maxZ, "default zIndex");
+	el.remove();
+
+	el = $('<div></div>').dialog();
+		equals(dlg().css( 'zIndex' ), $.ui.dialog.maxZ, "default zIndex");
+	el.remove();
+
+	// The z-index will be 1 higher than requested if 'moveToTop' gets called, such as when 'autoOpen' is true.
+	newZIndex = $.ui.dialog.maxZ + 2932;
+	el = $('<div></div>').dialog({zIndex: newZIndex });
+		equals(dlg().css('zIndex'), newZIndex + 1, "explicit zIndex");
+		equals( el.dialog( 'option', 'zIndex' ), newZIndex, 'get works for zIndex' );
+		equals( newZIndex + 1, $.ui.dialog.maxZ, '$.ui.dialog.maxZ is updated to the new value' );
+		
+		el.dialog('option', 'zIndex', 1748);
+		equals(dlg().css('zIndex'), 1748, 'explicit zIndex after init');
+		equals( el.dialog( 'option', 'zIndex' ), 1748 );
+	el.remove();
+	
+	// At the moment, an explicit zIndex option lower than $.ui.dialog.maxZ will be ignored since 'open' calls
+	// 'moveToTop'. Is this the desired behavior?
+	el = $('<div></div>').dialog({zIndex: 1584 });
+		equals(dlg().css('zIndex'), $.ui.dialog.maxZ, "explicit zIndex at instantiation below $.ui.dialog.maxZ is ignored");
+	el.remove();
+});
+
 })(jQuery);
