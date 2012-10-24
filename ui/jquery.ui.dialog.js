@@ -67,7 +67,6 @@ $.widget("ui.dialog", {
 		},
 		resizable: true,
 		show: null,
-		stack: true,
 		title: "",
 		width: 300,
 		zIndex: 1000
@@ -293,8 +292,7 @@ $.widget("ui.dialog", {
 		var options = this.options,
 			saveScroll;
 
-		if ( ( options.modal && !force ) ||
-				( !options.stack && !options.modal ) ) {
+		if ( ( options.modal && !force ) ) {
 			return this._trigger( "focus", event );
 		}
 
