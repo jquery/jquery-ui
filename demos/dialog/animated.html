@@ -18,18 +18,21 @@
 	<script src="../../ui/jquery.ui.effect-explode.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
-	// increase the default animation speed to exaggerate the effect
-	$.fx.speeds._default = 1000;
 	$(function() {
 		$( "#dialog" ).dialog({
 			autoOpen: false,
-			show: "blind",
-			hide: "explode"
+			show: {
+				effect: "blind",
+				duration: 1000
+			},
+			hide: {
+				effect: "explode",
+				duration: 1000
+			}
 		});
 
 		$( "#opener" ).click(function() {
 			$( "#dialog" ).dialog( "open" );
-			return false;
 		});
 	});
 	</script>

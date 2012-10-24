@@ -26,7 +26,6 @@ TestHelpers.commonWidgetTests( "dialog", {
 		stack: true,
 		title: '',
 		width: 300,
-		zIndex: 1000,
 
 		// callbacks
 		create: null
