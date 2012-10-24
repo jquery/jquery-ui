@@ -102,8 +102,9 @@ $.effects.effect.scale = function( o, done ) {
 $.effects.effect.size = function( o, done ) {
 
 	// Create element
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "width", "height", "overflow", "opacity" ],
+	var original, baseline, factor,
+		el = $( this ),
+		props0 = [ "position", "top", "bottom", "left", "right", "width", "height", "overflow", "opacity" ],
 
 		// Always restore
 		props1 = [ "position", "top", "bottom", "left", "right", "overflow", "opacity" ],
@@ -119,8 +120,12 @@ $.effects.effect.size = function( o, done ) {
 		restore = o.restore || mode !== "effect",
 		scale = o.scale || "both",
 		origin = o.origin || [ "middle", "center" ],
-		original, baseline, factor,
-		position = el.css( "position" );
+		position = el.css( "position" ),
+		props = restore ? props0 : props1,
+		zero = {
+			height: 0,
+			width: 0
+		};
 
 	if ( mode === "show" ) {
 		el.show();
@@ -132,8 +137,13 @@ $.effects.effect.size = function( o, done ) {
 		outerWidth: el.outerWidth()
 	};
 
-	el.from = o.from || original;
-	el.to = o.to || original;
+	if ( o.mode === "toggle" && mode === "show" ) {
+		el.from = o.to || zero;
+		el.to = o.from || original;
+	} else {
+		el.from = o.from || ( mode === "show" ? zero : original );
+		el.to = o.to || ( mode === "hide" ? zero : original );
+	}
 
 	// Set scaling factor
 	factor = {
@@ -170,13 +180,13 @@ $.effects.effect.size = function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			props = props.concat( cProps );
+			props = props.concat( cProps ).concat( props2 );
 			el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
 		}
 	}
 
-	$.effects.save( el, restore ? props : props1 );
+	$.effects.save( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 	el.css( "overflow", "hidden" ).css( el.from );
@@ -197,7 +207,7 @@ $.effects.effect.size = function( o, done ) {
 		// Add margins/font-size
 		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat(cProps);
 		hProps = hProps.concat([ "marginLeft", "marginRight" ]);
-		props2 = props.concat(vProps).concat(hProps);
+		props2 = props0.concat(vProps).concat(hProps);
 
 		el.find( "*[width]" ).each( function(){
 			var child = $( this ),
@@ -254,7 +264,7 @@ $.effects.effect.size = function( o, done ) {
 			if( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, restore ? props : props1 );
+			$.effects.restore( el, props );
 			if ( !restore ) {
 
 				// we need to calculate our new positioning based on the scaling
