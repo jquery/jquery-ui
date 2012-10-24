@@ -544,23 +544,6 @@ $.widget( "ui.accordion", {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
-	// icon options
-	(function( $, prototype ) {
-		$.extend( prototype.options.icons, {
-			activeHeader: null, // remove default so we fall back to old values
-			headerSelected: "ui-icon-triangle-1-s"
-		});
-
-		var _createIcons = prototype._createIcons;
-		prototype._createIcons = function() {
-			if ( this.options.icons ) {
-				this.options.icons.activeHeader = this.options.icons.activeHeader ||
-					this.options.icons.headerSelected;
-			}
-			_createIcons.call( this );
-		};
-	}( jQuery, jQuery.ui.accordion.prototype ) );
-
 	// expanded active option, activate method
 	(function( $, prototype ) {
 		prototype.activate = prototype._activate;

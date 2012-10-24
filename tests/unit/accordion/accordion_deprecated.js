@@ -104,22 +104,6 @@ test( "{ active: jQuery Object }", function() {
 
 
 
-module( "accordion (deprecated) - icons", setupTeardown() );
-
-test( "icons, headerSelected", function() {
-	expect( 3 );
-	var element = $( "#list1" ).accordion({
-		icons: { headerSelected: "a1", header: "h1" }
-	});
-	ok( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
-	element.accordion( "option", "icons", { headerSelected: "a2", header: "h2" } );
-	ok( !element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
-	ok( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a2" ) );
-});
-
-
-
-
 
 module( "accordion (deprecated) - resize", setupTeardown() );
 
