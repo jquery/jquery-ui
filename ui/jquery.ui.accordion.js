@@ -544,25 +544,6 @@ $.widget( "ui.accordion", {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
-	// expanded active option, activate method
-	(function( $, prototype ) {
-		prototype.activate = prototype._activate;
-
-		var _findActive = prototype._findActive;
-		prototype._findActive = function( index ) {
-			if ( index === -1 ) {
-				index = false;
-			}
-			if ( index && typeof index !== "number" ) {
-				index = this.headers.index( this.headers.filter( index ) );
-				if ( index === -1 ) {
-					index = false;
-				}
-			}
-			return _findActive.call( this, index );
-		};
-	}( jQuery, jQuery.ui.accordion.prototype ) );
-
 	// resize method
 	jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
 
