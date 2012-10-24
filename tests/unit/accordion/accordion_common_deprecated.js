@@ -13,8 +13,6 @@ TestHelpers.commonWidgetTests( "accordion", {
 			"header": "ui-icon-triangle-1-e",
 			"headerSelected": "ui-icon-triangle-1-s"
 		},
-		navigation: false,
-		navigationFilter: function() {},
 
 		// callbacks
 		activate: null,

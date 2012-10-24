@@ -143,36 +143,6 @@ test( "resize", function() {
 
 
 
-module( "accordion (deprecated) - navigation", setupTeardown() );
-
-test( "{ navigation: true, navigationFilter: header }", function() {
-	expect( 2 );
-	var element = $( "#navigation" ).accordion({
-		navigation: true,
-		navigationFilter: function() {
-			return (/\?p=1\.1\.3$/).test( this.href );
-		}
-	});
-	equal( element.accordion( "option", "active" ), 2 );
-	state( element, 0, 0, 1 );
-});
-
-test( "{ navigation: true, navigationFilter: content }", function() {
-	expect( 2 );
-	var element = $( "#navigation" ).accordion({
-		navigation: true,
-		navigationFilter: function() {
-			return (/\?p=1\.1\.3\.2$/).test( this.href );
-		}
-	});
-	equal( element.accordion( "option", "active" ), 2 );
-	state( element, 0, 0, 1 );
-});
-
-
-
-
-
 module( "accordion (deprecated) - changestart/change events", setupTeardown() );
 
 test( "changestart", function() {
