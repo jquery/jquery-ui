@@ -1240,6 +1240,21 @@ test( "redefine deep prototype chain", function() {
 	delete $.ui.testWidget2;
 });
 
+test( "redefine - widgetEventPrefix", function() {
+	expect( 2 );
+
+	$.widget( "ui.testWidget", {
+		widgetEventPrefix: "test"
+	});
+	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
+		"cusotm prefix in original" );
+
+	$.widget( "ui.testWidget", $.ui.testWidget, {} );
+	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
+		"cusotm prefix in extension" );
+
+});
+
 asyncTest( "_delay", function() {
 	expect( 6 );
 	var order = 0,
