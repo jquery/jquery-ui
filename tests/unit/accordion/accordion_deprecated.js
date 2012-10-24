@@ -4,28 +4,6 @@ var equalHeight = TestHelpers.accordion.equalHeight,
 	setupTeardown = TestHelpers.accordion.setupTeardown,
 	state = TestHelpers.accordion.state;
 
-module( "accordion (deprecated) - resize", setupTeardown() );
-
-test( "resize", function() {
-	expect( 6 );
-	var element = $( "#navigation" )
-		.parent()
-			.height( 300 )
-		.end()
-		.accordion({
-			heightStyle: "fill"
-		});
-	equalHeight( element, 255 );
-
-	element.parent().height( 500 );
-	element.accordion( "resize" );
-	equalHeight( element, 455 );
-});
-
-
-
-
-
 module( "accordion (deprecated) - changestart/change events", setupTeardown() );
 
 test( "changestart", function() {

@@ -544,9 +544,6 @@ $.widget( "ui.accordion", {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
-	// resize method
-	jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
-
 	// change events
 	(function( $, prototype ) {
 		$.extend( prototype.options, {
