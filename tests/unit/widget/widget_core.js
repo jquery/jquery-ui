@@ -760,6 +760,30 @@ test( "_on() with delegate", function() {
 	$.ui.testWidget();
 });
 
+test( "_on() with delegate to descendent", function() {
+	expect( 4 );
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			this.target = $( "<p><strong>hello</strong> world</p>" );
+			this.child = this.target.children();
+			this._on( this.target, {
+				"keyup": "handlerDirect",
+				"keyup strong": "handlerDelegated"
+			});
+			this.child.trigger( "keyup" );
+		},
+		handlerDirect: function( event ) {
+			deepEqual( event.currentTarget, this.target[ 0 ] );
+			deepEqual( event.target, this.child[ 0 ] );
+		},
+		handlerDelegated: function( event ) {
+			deepEqual( event.currentTarget, this.child[ 0 ] );
+			deepEqual( event.target, this.child[ 0 ] );
+		}
+	});
+	$.ui.testWidget();
+});
+
 test( "_on() to common element", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
