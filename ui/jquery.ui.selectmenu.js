@@ -42,14 +42,6 @@ $.widget( "ui.selectmenu", {
 		// array of button and menu id's
 		this.ids = { id: selectmenuId, button: selectmenuId + '-button', menu: selectmenuId + '-menu' };
 
-		// catch click event of the label
-		this._on({
-			'click':  function( event ) {
-				this.button.focus();
-				event.preventDefault();
-			}
-		});
-
 		this._drawButton();
 		this._on( this.button, this._buttonEvents );
 		this._hoverable( this.button );
@@ -74,8 +66,15 @@ $.widget( "ui.selectmenu", {
 	_drawButton: function() {
 		var tabindex = this.element.attr( 'tabindex' );
 
-		// Find existing label
-		this.labelElement = $( "label[for='" + this.ids.id + "']" ).uniqueId();
+		// fix existing label
+		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
+		// catch click event of the label
+		this._on( this.label, {
+			'click':  function( event ) {
+				this.button.focus();
+				event.preventDefault();
+			}
+		});
 
 		// hide original select tag
 		this.element.hide();
@@ -88,7 +87,6 @@ $.widget( "ui.selectmenu", {
 			id: this.ids.button,
 			width: this.element.outerWidth(),
 			role: 'combobox',
-			'aria-labelledby': this.labelElement.attr( "id" ),
 			'aria-expanded': false,
 			'aria-autocomplete': 'list',
 			'aria-owns': this.ids.menu,
@@ -378,12 +376,16 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
+		var itemId = this.menuItems.eq( item.index ).find( "a" ).attr( "id" );
 		// update button text
 		this.buttonText.html( item.label );
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
-		this.button.attr( "aria-activedescendant", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
+		this.button.attr({
+			"aria-activedescendant": itemId,
+			"aria-labelledby": itemId
+		});
 	},
 
 	_setOption: function( key, value ) {
@@ -440,7 +442,7 @@ $.widget( "ui.selectmenu", {
 		this.buttonWrap.remove();
 		this.element.show();
 		this.element.removeUniqueId();
-		this.labelElement.removeUniqueId();
+		this.label.attr( "for", this.ids.id );
 	}
 });
 
