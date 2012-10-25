@@ -863,32 +863,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// spinner
-	$.widget( "ui.tabs", $.ui.tabs, {
-		options: {
-			spinner: "<em>Loading&#8230;</em>"
-		},
-		_create: function() {
-			this._super();
-			this._on({
-				tabsbeforeload: function( event, ui ) {
-					// Don't react to nested tabs or tabs that don't use a spinner
-					if ( event.target !== this.element[ 0 ] ||
-							!this.options.spinner ) {
-						return;
-					}
-
-					var span = ui.tab.find( "span" ),
-						html = span.html();
-					span.html( this.options.spinner );
-					ui.jqXHR.complete(function() {
-						span.html( html );
-					});
-				}
-			});
-		}
-	});
-
 	// add/remove methods and events
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {

@@ -66,24 +66,6 @@ test( "tabTemplate + panelTemplate", function() {
 	ok( element.find( "#new" ).hasClass( "customPanel" ), "panel custom class" );
 });
 
-asyncTest( "spinner", function() {
-	expect( 2 );
-
-	var element = $( "#tabs2" ).tabs();
-
-	element.one( "tabsbeforeload", function() {
-		equal( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 1, "beforeload" );
-	});
-	element.one( "tabsload", function() {
-		// wait until after the load finishes before checking for the spinner to be removed
-		setTimeout(function() {
-			equal( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 0, "load" );
-			start();
-		}, 1 );
-	});
-	element.tabs( "option", "active", 2 );
-});
-
 module( "tabs (deprecated): events" );
 
 asyncTest( "load", function() {

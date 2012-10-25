@@ -9,7 +9,6 @@ TestHelpers.commonWidgetTests( "tabs", {
 		idPrefix: "ui-tabs-",
 		panelTemplate: "<div></div>",
 		show: null,
-		spinner: "<em>Loading&#8230;</em>",
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>",
 
 		// callbacks
