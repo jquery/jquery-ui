@@ -10,9 +10,7 @@
  */
 ;(jQuery.effects || (function($, undefined) {
 
-var backCompat = $.uiBackCompat !== false,
-	// prefix used for storing data on .data()
-	dataSpace = "ui-effects-";
+var dataSpace = "ui-effects-";
 
 $.effects = {
 	effect: {}
@@ -1099,15 +1097,7 @@ function standardSpeed( speed ) {
 	}
 
 	// invalid strings - treat as "normal" speed
-	if ( typeof speed === "string" && !$.effects.effect[ speed ] ) {
-		// TODO: remove in 2.0 (#7115)
-		if ( backCompat && $.effects[ speed ] ) {
-			return false;
-		}
-		return true;
-	}
-
-	return false;
+	return typeof speed === "string" && !$.effects.effect[ speed ];
 }
 
 $.fn.extend({
@@ -1115,12 +1105,9 @@ $.fn.extend({
 		var args = _normalizeArguments.apply( this, arguments ),
 			mode = args.mode,
 			queue = args.queue,
-			effectMethod = $.effects.effect[ args.effect ],
+			effectMethod = $.effects.effect[ args.effect ];
 
-			// DEPRECATED: remove in 2.0 (#7115)
-			oldEffectMethod = !effectMethod && backCompat && $.effects[ args.effect ];
-
-		if ( $.fx.off || !( effectMethod || oldEffectMethod ) ) {
+		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
 				return this[ mode ]( args.duration, args.complete );
@@ -1156,18 +1143,7 @@ $.fn.extend({
 			}
 		}
 
-		// TODO: remove this check in 2.0, effectMethod will always be true
-		if ( effectMethod ) {
-			return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
-		} else {
-			// DEPRECATED: remove in 2.0 (#7115)
-			return oldEffectMethod.call(this, {
-				options: args,
-				duration: args.duration,
-				callback: args.complete,
-				mode: args.mode
-			});
-		}
+		return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
 	},
 
 	_show: $.fn.show,

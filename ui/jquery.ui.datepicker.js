@@ -693,8 +693,7 @@ $.extend(Datepicker.prototype, {
 			inst.dpDiv.zIndex($(input).zIndex()+1);
 			$.datepicker._datepickerShowing = true;
 
-			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ( $.effects && $.effects.effect[ showAnim ] )
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
