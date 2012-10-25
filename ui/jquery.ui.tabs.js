@@ -1021,13 +1021,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// length method
-	$.widget( "ui.tabs", $.ui.tabs, {
-		length: function() {
-			return this.anchors.length;
-		}
-	});
-
 	// panel ids (idPrefix option + title attribute)
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {

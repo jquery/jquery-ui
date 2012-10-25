@@ -468,13 +468,6 @@ test( "select", function() {
 	equal( element.tabs( "option", "selected" ), 1, "selected" );
 });
 
-test( "length", function() {
-	expect( 2 );
-
-	equal( $( "#tabs1" ).tabs().tabs( "length" ), 3, "basic tabs" );
-	equal( $( "#tabs2" ).tabs().tabs( "length" ), 5, "ajax tabs with missing panels" );
-});
-
 asyncTest( "abort", function() {
 	expect( 1 );
 
