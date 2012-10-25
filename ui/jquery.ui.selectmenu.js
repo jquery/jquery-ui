@@ -230,9 +230,11 @@ $.widget( "ui.selectmenu", {
 
 	close: function( event ) {
 		if ( this.isOpen ) {
+			var id = this._getSelectedItem().find( "a" ).attr( "id" );
 			this.isOpen = false;
 			this._toggleAttr();
-			this.button.attr( "aria-activedescendant", this._getSelectedItem().find( "a" ).attr( "id" ) );
+			this.button.attr( "aria-activedescendant", id );
+			this.menu.attr( "aria-activedescendant", id );
 			this._trigger( "close", event );
 		}
 	},
