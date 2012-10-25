@@ -7,7 +7,6 @@ TestHelpers.commonWidgetTests( "tabs", {
 		event: "click",
 		heightStyle: "content",
 		hide: null,
-		fx: null,
 		idPrefix: "ui-tabs-",
 		panelTemplate: "<div></div>",
 		// show: null, // conflicts with old show callback
