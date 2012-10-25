@@ -439,6 +439,7 @@ $.widget( "ui.selectmenu", {
 		this.menuWrap.remove();
 		this.buttonWrap.remove();
 		this.element.show();
+		this.element.removeUniqueId();
 		this.labelElement.removeUniqueId();
 	}
 });
