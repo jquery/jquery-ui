@@ -1046,19 +1046,10 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// show and select event
+	// select event
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
-			show: null,
 			select: null
-		},
-		_create: function() {
-			this._super();
-			if ( this.options.active !== false ) {
-				this._trigger( "show", null, this._ui(
-					this.active.find( ".ui-tabs-anchor" )[ 0 ],
-					this._getPanelForTab( this.active )[ 0 ] ) );
-			}
 		},
 		_trigger: function( type, event, data ) {
 			var ret = this._superApply( arguments );
@@ -1068,12 +1059,6 @@ if ( $.uiBackCompat !== false ) {
 			if ( type === "beforeActivate" && data.newTab.length ) {
 				ret = this._super( "select", event, {
 					tab: data.newTab.find( ".ui-tabs-anchor" )[ 0],
-					panel: data.newPanel[ 0 ],
-					index: data.newTab.closest( "li" ).index()
-				});
-			} else if ( type === "activate" && data.newTab.length ) {
-				ret = this._super( "show", event, {
-					tab: data.newTab.find( ".ui-tabs-anchor" )[ 0 ],
 					panel: data.newPanel[ 0 ],
 					index: data.newTab.closest( "li" ).index()
 				});

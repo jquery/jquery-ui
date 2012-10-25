@@ -8,7 +8,7 @@ TestHelpers.commonWidgetTests( "tabs", {
 		hide: null,
 		idPrefix: "ui-tabs-",
 		panelTemplate: "<div></div>",
-		// show: null, // conflicts with old show callback
+		show: null,
 		spinner: "<em>Loading&#8230;</em>",
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>",
 
@@ -20,7 +20,6 @@ TestHelpers.commonWidgetTests( "tabs", {
 		create: null,
 		load: null,
 		remove: null,
-		select: null,
-		show: null
+		select: null
 	}
 });
