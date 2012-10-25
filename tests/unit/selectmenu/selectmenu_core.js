@@ -12,13 +12,14 @@ test("accessibility", function () {
 	button.simulate( "focus" );
 	links = menu.find("li.ui-menu-item a");
 
-	expect(12 + links.length * 2);
+	expect(13 + links.length * 2);
 
 	equal( button.attr("role"), "combobox", "button link role" );
 	equal( button.attr("aria-haspopup"), "true", "button link aria-haspopup" );
 	equal( button.attr("aria-expanded"), "false", "button link  aria-expanded" );
 	equal( button.attr("aria-autocomplete"), "list", "button link  aria-autocomplete" );
 	equal( button.attr("aria-owns"), menu.attr("id"), "button link aria-owns" );
+	equal( button.attr("aria-labelledby"), element.prev("label").attr("id"), "button link aria-labelledby" );
 	equal( button.attr("tabindex"), 0, "button link tabindex" );
 
 	equal( menu.attr("role"), "listbox", "menu role" );
