@@ -24,59 +24,6 @@ test( "panel ids", function() {
 
 module( "tabs (deprecated): options" );
 
-asyncTest( "ajaxOptions", function() {
-	expect( 2 );
-
-	var element = $( "#tabs2" ).tabs({
-		ajaxOptions: {
-			data: "foo=bar",
-			converters: {
-				"text html": function() {
-					return "test";
-				}
-			}
-		}
-	});
-	element.one( "tabsbeforeload", function( event, ui ) {
-		equal( ui.ajaxSettings.url.replace( /^[^\?]+/, "" ), "?foo=bar", "ajaxOptions.data" );
-	});
-	element.one( "tabsload", function( event, ui ) {
-		equal( $( ui.panel ).html(), "test" );
-		start();
-	});
-	element.tabs( "option", "active", 2 );
-});
-
-asyncTest( "cache", function() {
-	expect( 5 );
-
-	var element = $( "#tabs2" ).tabs({
-		cache: true
-	});
-	element.one( "tabsshow", function() {
-		state( element, 0, 0, 1, 0, 0 );
-	});
-	element.one( "tabsload", function() {
-		ok( true, "tabsload" );
-
-		setTimeout(function() {
-			element.tabs( "option", "active", 0 );
-			state( element, 1, 0, 0, 0, 0 );
-
-			element.one( "tabsshow", function() {
-				state( element, 0, 0, 1, 0, 0 );
-			});
-			element.one( "tabsload", function() {
-				ok( false, "should be cached" );
-			});
-			element.tabs( "option", "active", 2 );
-			start();
-		}, 1 );
-	});
-	element.tabs( "option", "active", 2 );
-	state( element, 0, 0, 1, 0, 0 );
-});
-
 test( "idPrefix", function() {
 	expect( 1 );
 

@@ -825,7 +825,6 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	// TODO: Remove this function in 1.10 when ajaxOptions is removed
 	_ajaxSettings: function( anchor, event, eventData ) {
 		var that = this;
 		return {
@@ -859,70 +858,6 @@ if ( $.uiBackCompat !== false ) {
 	$.widget( "ui.tabs", $.ui.tabs, {
 		url: function( index, url ) {
 			this.anchors.eq( index ).attr( "href", url );
-		}
-	});
-
-	// TODO: Remove _ajaxSettings() method when removing this extension
-	// ajaxOptions and cache options
-	$.widget( "ui.tabs", $.ui.tabs, {
-		options: {
-			ajaxOptions: null,
-			cache: false
-		},
-
-		_create: function() {
-			this._super();
-
-			var that = this;
-
-			this._on({ tabsbeforeload: function( event, ui ) {
-				// tab is already cached
-				if ( $.data( ui.tab[ 0 ], "cache.tabs" ) ) {
-					event.preventDefault();
-					return;
-				}
-
-				ui.jqXHR.success(function() {
-					if ( that.options.cache ) {
-						$.data( ui.tab[ 0 ], "cache.tabs", true );
-					}
-				});
-			}});
-		},
-
-		_ajaxSettings: function( anchor, event, ui ) {
-			var ajaxOptions = this.options.ajaxOptions;
-			return $.extend( {}, ajaxOptions, {
-				error: function( xhr, status ) {
-					try {
-						// Passing index avoid a race condition when this method is
-						// called after the user has selected another tab.
-						// Pass the anchor that initiated this request allows
-						// loadError to manipulate the tab content panel via $(a.hash)
-						ajaxOptions.error(
-							xhr, status, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
-					}
-					catch ( error ) {}
-				}
-			}, this._superApply( arguments ) );
-		},
-
-		_setOption: function( key, value ) {
-			// reset cache if switching from cached to not cached
-			if ( key === "cache" && value === false ) {
-				this.anchors.removeData( "cache.tabs" );
-			}
-			this._super( key, value );
-		},
-
-		_destroy: function() {
-			this.anchors.removeData( "cache.tabs" );
-			this._super();
-		},
-
-		url: function( index ){
-			this.anchors.eq( index ).removeData( "cache.tabs" );
-			this._superApply( arguments );
 		}
 	});
 

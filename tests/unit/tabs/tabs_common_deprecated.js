@@ -1,8 +1,6 @@
 TestHelpers.commonWidgetTests( "tabs", {
 	defaults: {
 		active: null,
-		ajaxOptions: null,
-		cache: false,
 		collapsible: false,
 		cookie: null,
 		disabled: false,
