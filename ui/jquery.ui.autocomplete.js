@@ -237,9 +237,7 @@ $.widget( "ui.autocomplete", {
 					}
 				}
 
-				// back compat for _renderItem using item.autocomplete, via #7810
-				// TODO remove the fallback, see #8156
-				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
+				var item = ui.item.data( "ui-autocomplete-item" );
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
 					// use value to match what will end up in the input, if it was a key event
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
@@ -255,9 +253,7 @@ $.widget( "ui.autocomplete", {
 				}
 			},
 			menuselect: function( event, ui ) {
-				// back compat for _renderItem using item.autocomplete, via #7810
-				// TODO remove the fallback, see #8156
-				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" ),
+				var item = ui.item.data( "ui-autocomplete-item" ),
 					previous = this.previous;
 
 				// only trigger when focus was lost (click on menu)
