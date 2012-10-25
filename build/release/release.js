@@ -10,7 +10,7 @@ var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
 	existsSync = fs.existsSync || path.existsSync,
 	rnewline = /\r?\n/,
 	repo = "git@github.com:jquery/jquery-ui.git",
-	branch = "master";
+	branch = "1-9-stable";
 
 walk([
 	bootstrap,
