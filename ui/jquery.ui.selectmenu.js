@@ -155,7 +155,6 @@ $.widget( "ui.selectmenu", {
 
 				// Set ARIA active decendent
 				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
-
 			},
 			// set ARIA role
 			role: 'listbox'
@@ -233,6 +232,7 @@ $.widget( "ui.selectmenu", {
 		if ( this.isOpen ) {
 			this.isOpen = false;
 			this._toggleAttr();
+			this.button.attr( "aria-activedescendant", this._getSelectedItem().find( "a" ).attr( "id" ) );
 			this._trigger( "close", event );
 		}
 	},
@@ -376,16 +376,12 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		var itemId = this.menuItems.eq( item.index ).find( "a" ).attr( "id" );
 		// update button text
 		this.buttonText.html( item.label );
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
-		this.button.attr({
-			"aria-activedescendant": itemId,
-			"aria-labelledby": itemId
-		});
+		this.button.attr( "aria-labelledby", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 	},
 
 	_setOption: function( key, value ) {
