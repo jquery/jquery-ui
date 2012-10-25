@@ -889,46 +889,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// enable/disable events
-	$.widget( "ui.tabs", $.ui.tabs, {
-		options: {
-			enable: null,
-			disable: null
-		},
-
-		enable: function( index ) {
-			var options = this.options,
-				trigger;
-
-			if ( index && options.disabled === true ||
-					( $.isArray( options.disabled ) && $.inArray( index, options.disabled ) !== -1 ) ) {
-				trigger = true;
-			}
-
-			this._superApply( arguments );
-
-			if ( trigger ) {
-				this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
-			}
-		},
-
-		disable: function( index ) {
-			var options = this.options,
-				trigger;
-
-			if ( index && options.disabled === false ||
-					( $.isArray( options.disabled ) && $.inArray( index, options.disabled ) === -1 ) ) {
-				trigger = true;
-			}
-
-			this._superApply( arguments );
-
-			if ( trigger ) {
-				this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
-			}
-		}
-	});
-
 	// add/remove methods and events
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {

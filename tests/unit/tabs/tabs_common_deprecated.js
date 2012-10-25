@@ -18,8 +18,6 @@ TestHelpers.commonWidgetTests( "tabs", {
 		beforeActivate: null,
 		beforeLoad: null,
 		create: null,
-		disable: null,
-		enable: null,
 		load: null,
 		remove: null,
 		select: null,

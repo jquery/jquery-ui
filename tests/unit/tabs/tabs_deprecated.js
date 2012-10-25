@@ -198,38 +198,6 @@ asyncTest( "load", function() {
 	}
 });
 
-test( "enable", function() {
-	expect( 3 );
-
-	var element = $( "#tabs1" ).tabs({
-		disabled: [ 0, 1 ],
-		enable: function( event, ui ) {
-			equal( ui.tab, element.find( ".ui-tabs-nav .ui-tabs-anchor" )[ 1 ], "ui.tab" );
-			equal( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
-			equal( ui.index, 1, "ui.index" );
-		}
-	});
-	element.tabs( "enable", 1 );
-	// shouldn't trigger event
-	element.tabs( "enable", 2 );
-});
-
-test( "disable", function() {
-	expect( 3 );
-
-	var element = $( "#tabs1" ).tabs({
-		disable: function( event, ui ) {
-			equal( ui.tab, element.find( ".ui-tabs-nav .ui-tabs-anchor" )[ 1 ], "ui.tab" );
-			equal( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
-			equal( ui.index, 1, "ui.index" );
-		}
-	});
-	element.tabs( "disable", 1 );
-	// shouldn't trigger event
-	element.tabs( "disable", 1 );
-});
-
-
 test( "show", function() {
 	expect( 13 );
 
