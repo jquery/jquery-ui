@@ -75,7 +75,7 @@ $.widget( "ui.selectmenu", {
 		var tabindex = this.element.attr( 'tabindex' );
 
 		// Find existing label
-		this.labelElement = $( "label[for='" + this.element.attr("id") + "']" ).uniqueId();
+		this.labelElement = $( "label[for='" + this.ids.id + "']" ).uniqueId();
 
 		// hide original select tag
 		this.element.hide();
