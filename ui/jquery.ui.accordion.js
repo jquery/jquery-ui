@@ -576,40 +576,6 @@ if ( $.uiBackCompat !== false ) {
 			return ret;
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
-
-	// animated option
-	// NOTE: this only provides support for "slide", "bounceslide", and easings
-	// not the full $.ui.accordion.animations API
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
-			animate: null,
-			animated: "slide"
-		});
-
-		var _create = prototype._create;
-		prototype._create = function() {
-			var options = this.options;
-			if ( options.animate === null ) {
-				if ( !options.animated ) {
-					options.animate = false;
-				} else if ( options.animated === "slide" ) {
-					options.animate = 300;
-				} else if ( options.animated === "bounceslide" ) {
-					options.animate = {
-						duration: 200,
-						down: {
-							easing: "easeOutBounce",
-							duration: 1000
-						}
-					};
-				} else {
-					options.animate = options.animated;
-				}
-			}
-
-			_create.call( this );
-		};
-	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
 
 })( jQuery );

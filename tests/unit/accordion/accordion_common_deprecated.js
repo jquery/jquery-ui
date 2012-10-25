@@ -1,8 +1,7 @@
 TestHelpers.commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
-		animate: null,
-		animated: "slide",
+		animate: {},
 		collapsible: false,
 		disabled: false,
 		event: "click",
