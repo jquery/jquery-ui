@@ -8,8 +8,7 @@ var versions = [
 	],
 	additionalTests = {
 		accordion: [ "accordion_deprecated.html" ],
-		position: [ "position_deprecated.html" ],
-		tabs: [ "tabs_deprecated.html" ]
+		position: [ "position_deprecated.html" ]
 	};
 
 window.testAllVersions = function( widget ) {

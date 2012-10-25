@@ -29,7 +29,6 @@ var versions = {
 		//"sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
 		"Tabs": "tabs/tabs.html",
-		"Tabs_deprecated": "tabs/tabs_deprecated.html",
 		"Tooltip": "tooltip/tooltip.html",
 		"Widget": "widget/widget.html"
 	};
