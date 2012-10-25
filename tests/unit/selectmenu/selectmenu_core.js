@@ -46,7 +46,7 @@ $.each([
 	}
 ], function( i, settings ) {
 	test("state synchronization - after keydown - " + settings.type, function () {
-		expect(4);
+		expect(5);
 
 		var links,
 			element = $(settings.selector).selectmenu(),
@@ -60,12 +60,13 @@ $.each([
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
 		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
+		equal( button.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "button aria-activedescendant" );
 		equal( element.find("option:selected").val(), selected.next("option").val() , "original select state" );
 		equal( button.text(), selected.next("option").text(), "button text" );
 	});
 
 	test("state synchronization - after click - " + settings.type, function () {
-		expect(4);
+		expect(5);
 
 		var links,
 			element = $(settings.selector).selectmenu(),
@@ -80,6 +81,7 @@ $.each([
 		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
 		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
 		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
+		equal( button.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "button aria-activedescendant" );
 		equal( element.find("option:selected").val(), element.find("option").last().val(), "original select state" );
 		equal( button.text(), element.find("option").last().text(), "button text" );
 	});
