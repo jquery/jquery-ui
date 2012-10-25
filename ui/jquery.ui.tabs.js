@@ -1010,42 +1010,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// selected option
-	$.widget( "ui.tabs", $.ui.tabs, {
-		_create: function() {
-			var options = this.options;
-			if ( options.active === null && options.selected !== undefined ) {
-				options.active = options.selected === -1 ? false : options.selected;
-			}
-			this._super();
-			options.selected = options.active;
-			if ( options.selected === false ) {
-				options.selected = -1;
-			}
-		},
-
-		_setOption: function( key, value ) {
-			if ( key !== "selected" ) {
-				return this._super( key, value );
-			}
-
-			var options = this.options;
-			this._super( "active", value === -1 ? false : value );
-			options.selected = options.active;
-			if ( options.selected === false ) {
-				options.selected = -1;
-			}
-		},
-
-		_eventHandler: function() {
-			this._superApply( arguments );
-			this.options.selected = this.options.active;
-			if ( this.options.selected === false ) {
-				this.options.selected = -1;
-			}
-		}
-	});
-
 	// load event
 	$.widget( "ui.tabs", $.ui.tabs, {
 		_trigger: function( type, event, data ) {

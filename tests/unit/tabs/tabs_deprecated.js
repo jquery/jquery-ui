@@ -84,59 +84,6 @@ asyncTest( "spinner", function() {
 	element.tabs( "option", "active", 2 );
 });
 
-test( "selected", function() {
-	expect( 19 );
-
-	var element = $( "#tabs1" ).tabs();
-	equal( element.tabs( "option", "selected" ), 0, "should be 0 by default" );
-	state( element, 1, 0, 0 );
-	element.tabs( "destroy" );
-
-	location.hash = "#fragment-3";
-	element = $( "#tabs1" ).tabs();
-	equal( element.tabs( "option", "selected" ), 2, "should be 2 based on URL" );
-	state( element, 0, 0, 1 );
-	element.tabs( "destroy" );
-
-	el = $('#tabs1').tabs({
-		selected: -1,
-		collapsible: true
-	});
-	state( element, 0, 0, 0 );
-	equal( element.find( ".ui-tabs-nav .ui-state-active" ).length, 0, "no tabs selected" );
-	strictEqual( element.tabs( "option", "selected" ), -1 );
-
-	element.tabs( "option", "collapsible", false );
-	state( element, 1, 0, 0 );
-	equal( element.tabs( "option", "selected" ), 0 );
-	element.tabs( "destroy" );
-
-	element.tabs({
-		selected: -1
-	});
-	state( element, 1, 0, 0 );
-	strictEqual( element.tabs( "option", "selected" ), 0 );
-	element.tabs( "destroy" );
-
-	element.tabs({ selected: 2 });
-	equal( element.tabs( "option", "selected" ), 2 );
-	state( element, 0, 0, 1 );
-
-	element.tabs( "option", "selected", 0 );
-	equal( element.tabs( "option", "selected" ), 0 );
-	state( element, 1, 0, 0 );
-
-	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 1 ).click();
-	equal( element.tabs( "option", "selected" ), 1 );
-	state( element, 0, 1, 0 );
-
-	element.tabs( "option", "selected", 10 );
-	equal( element.tabs( "option", "selected" ), 1 );
-	state( element, 0, 1, 0 );
-
-	location.hash = "#";
-});
-
 module( "tabs (deprecated): events" );
 
 asyncTest( "load", function() {
