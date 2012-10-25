@@ -7,7 +7,6 @@ var versions = [
 		"git"
 	],
 	additionalTests = {
-		accordion: [ "accordion_deprecated.html" ],
 		position: [ "position_deprecated.html" ]
 	};
 

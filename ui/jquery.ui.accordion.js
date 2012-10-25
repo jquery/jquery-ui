@@ -540,42 +540,4 @@ $.widget( "ui.accordion", {
 	}
 });
 
-
-
-// DEPRECATED
-if ( $.uiBackCompat !== false ) {
-	// change events
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
-			change: null,
-			changestart: null
-		});
-
-		var _trigger = prototype._trigger;
-		prototype._trigger = function( type, event, data ) {
-			var ret = _trigger.apply( this, arguments );
-			if ( !ret ) {
-				return false;
-			}
-
-			if ( type === "beforeActivate" ) {
-				ret = _trigger.call( this, "changestart", event, {
-					oldHeader: data.oldHeader,
-					oldContent: data.oldPanel,
-					newHeader: data.newHeader,
-					newContent: data.newPanel
-				});
-			} else if ( type === "activate" ) {
-				ret = _trigger.call( this, "change", event, {
-					oldHeader: data.oldHeader,
-					oldContent: data.oldPanel,
-					newHeader: data.newHeader,
-					newContent: data.newPanel
-				});
-			}
-			return ret;
-		};
-	}( jQuery, jQuery.ui.accordion.prototype ) );
-}
-
 })( jQuery );

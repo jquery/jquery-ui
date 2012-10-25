@@ -10,7 +10,6 @@ var versions = {
 	},
 	tests = {
 		"Accordion": "accordion/accordion.html",
-		"Accordion_deprecated": "accordion/accordion_deprecated.html",
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Core": "core/core.html",
