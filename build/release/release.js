@@ -43,9 +43,6 @@ walk([
 	section( "gathering contributors" ),
 	gatherContributors,
 
-	section( "generating quick download" ),
-	generateQuickDownload,
-
 	section( "updating trac" ),
 	updateTrac,
 	confirm
@@ -261,34 +258,6 @@ function gatherContributors() {
 
 	fs.writeFileSync( contributorsPath, contributors.join( "\n" ) );
 	echo( "Stored contributors in " + contributorsPath.cyan + "." );
-}
-
-function generateQuickDownload() {
-	var config,
-		downloadDir = repoDir + "/node_modules/download.jqueryui.com",
-		filename = "jquery-ui-" + newVersion + ".custom.zip",
-		destination = baseDir + "/" + filename;
-
-	cd( downloadDir );
-
-	// Update jQuery UI version for download builder
-	config = JSON.parse( cat( "config.json" ) );
-	config.jqueryUi = newVersion;
-	JSON.stringify( config ).to( "config.json" );
-
-	// Generate quick download
-	// TODO: Find a way to avoid having to clone jquery-ui inside download builder
-	if ( exec( "grunt prepare build" ).code !== 0 ) {
-		abort( "Error generating quick download." );
-	}
-	cp( downloadDir + "/release/" + filename, destination );
-	// cp() doesn't have error handling, so check for the file
-	if ( ls( destination ).length !== 1 ) {
-		abort( "Error copying quick download." );
-	}
-
-	// Go back to repo directory for consistency
-	cd( repoDir );
 }
 
 function updateTrac() {
