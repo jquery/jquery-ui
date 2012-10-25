@@ -66,41 +66,6 @@ test( "tabTemplate + panelTemplate", function() {
 	ok( element.find( "#new" ).hasClass( "customPanel" ), "panel custom class" );
 });
 
-test( "cookie", function() {
-	expect( 6 );
-
-	var element = $( "#tabs1" ),
-		cookieName = "tabs_test",
-		cookieObj = { name: cookieName };
-	$.cookie( cookieName, null );
-	function cookie() {
-		return parseInt( $.cookie( cookieName ), 10 );
-	}
-
-	element.tabs({ cookie: cookieObj });
-	equal( cookie(), 0, "initial cookie value" );
-
-	element.tabs( "destroy" );
-	element.tabs({ active: 1, cookie: cookieObj });
-	equal( cookie(), 1, "initial cookie value, from active property" );
-
-	element.tabs( "option", "active", 2 );
-	equal( cookie(), 2, "cookie value updated after activating" );
-
-	element.tabs( "destroy" );
-	$.cookie( cookieName, 1 );
-	element.tabs({ cookie: cookieObj });
-	equal( cookie(), 1, "initial cookie value, from existing cookie" );
-
-	element.tabs( "destroy" );
-	element.tabs({ cookie: cookieObj, collapsible: true });
-	element.tabs( "option", "active", false );
-	equal( cookie(), -1, "cookie value for all tabs unselected" );
-
-	element.tabs( "destroy" );
-	ok( $.cookie( cookieName ) === null, "erase cookie after destroy" );
-});
-
 asyncTest( "spinner", function() {
 	expect( 2 );
 

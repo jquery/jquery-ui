@@ -2,7 +2,6 @@ TestHelpers.commonWidgetTests( "tabs", {
 	defaults: {
 		active: null,
 		collapsible: false,
-		cookie: null,
 		disabled: false,
 		event: "click",
 		heightStyle: "content",

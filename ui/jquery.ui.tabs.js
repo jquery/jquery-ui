@@ -1144,58 +1144,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// cookie option
-	(function() {
-
-	var listId = 0;
-
-	$.widget( "ui.tabs", $.ui.tabs, {
-		options: {
-			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-		},
-		_create: function() {
-			var options = this.options,
-				active;
-			if ( options.active == null && options.cookie ) {
-				active = parseInt( this._cookie(), 10 );
-				if ( active === -1 ) {
-					active = false;
-				}
-				options.active = active;
-			}
-			this._super();
-		},
-		_cookie: function( active ) {
-			var cookie = [ this.cookie ||
-				( this.cookie = this.options.cookie.name || "ui-tabs-" + (++listId) ) ];
-			if ( arguments.length ) {
-				cookie.push( active === false ? -1 : active );
-				cookie.push( this.options.cookie );
-			}
-			return $.cookie.apply( null, cookie );
-		},
-		_refresh: function() {
-			this._super();
-			if ( this.options.cookie ) {
-				this._cookie( this.options.active, this.options.cookie );
-			}
-		},
-		_eventHandler: function() {
-			this._superApply( arguments );
-			if ( this.options.cookie ) {
-				this._cookie( this.options.active, this.options.cookie );
-			}
-		},
-		_destroy: function() {
-			this._super();
-			if ( this.options.cookie ) {
-				this._cookie( null, this.options.cookie );
-			}
-		}
-	});
-
-	})();
-
 	// load event
 	$.widget( "ui.tabs", $.ui.tabs, {
 		_trigger: function( type, event, data ) {
