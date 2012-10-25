@@ -974,18 +974,6 @@ if ( $.uiBackCompat !== false ) {
 				.data( "ui-tabs-destroy", true );
 		}
 	});
-
-	// load event
-	$.widget( "ui.tabs", $.ui.tabs, {
-		_trigger: function( type, event, data ) {
-			var _data = $.extend( {}, data );
-			if ( type === "load" ) {
-				_data.panel = _data.panel[ 0 ];
-				_data.tab = _data.tab.find( ".ui-tabs-anchor" )[ 0 ];
-			}
-			return this._super( type, event, _data );
-		}
-	});
 }
 
 })( jQuery );

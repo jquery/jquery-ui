@@ -66,67 +66,6 @@ test( "tabTemplate + panelTemplate", function() {
 	ok( element.find( "#new" ).hasClass( "customPanel" ), "panel custom class" );
 });
 
-module( "tabs (deprecated): events" );
-
-asyncTest( "load", function() {
-	expect( 15 );
-
-	var tab, anchor, panelId, panel,
-		element = $( "#tabs2" );
-
-	// init
-	element.one( "tabsload", function( event, ui ) {
-		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
-		anchor = tab.find( ".ui-tabs-anchor" );
-		panelId = tab.attr( "aria-controls" );
-		panel = $( "#" + panelId );
-
-		ok( !( "originalEvent" in event ), "originalEvent" );
-		strictEqual( ui.tab, anchor[ 0 ], "tab" );
-		strictEqual( ui.panel, panel[ 0 ], "panel" );
-		equal( $( ui.panel ).find( "p" ).length, 1, "panel html" );
-		state( element, 0, 0, 1, 0, 0 );
-		tabsload1();
-	});
-	element.tabs({ active: 2 });
-
-	function tabsload1() {
-		// .option()
-		element.one( "tabsload", function( event, ui ) {
-			tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
-			anchor = tab.find( ".ui-tabs-anchor" );
-			panelId = tab.attr( "aria-controls" );
-			panel = $( "#" + panelId );
-
-			ok( !( "originalEvent" in event ), "originalEvent" );
-			strictEqual( ui.tab, anchor[ 0 ], "tab" );
-			strictEqual( ui.panel, panel[ 0 ], "panel" );
-			equal( $( ui.panel ).find( "p" ).length, 1, "panel html" );
-			state( element, 0, 0, 0, 1, 0 );
-			tabsload2();
-		});
-		element.tabs( "option", "active", 3 );
-	}
-
-	function tabsload2() {
-		// click, change panel content
-		element.one( "tabsload", function( event, ui ) {
-			tab = element.find( ".ui-tabs-nav li" ).eq( 4 );
-			anchor = tab.find( ".ui-tabs-anchor" );
-			panelId = tab.attr( "aria-controls" );
-			panel = $( "#" + panelId );
-
-			equal( event.originalEvent.type, "click", "originalEvent" );
-			strictEqual( ui.tab, anchor[ 0 ], "tab" );
-			strictEqual( ui.panel, panel[ 0 ], "panel" );
-			equal( $( ui.panel ).find( "p" ).length, 1, "panel html" );
-			state( element, 0, 0, 0, 0, 1 );
-			start();
-		});
-		element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 4 ).click();
-	}
-});
-
 module( "tabs (deprecated): methods" );
 
 test( "add", function() {
