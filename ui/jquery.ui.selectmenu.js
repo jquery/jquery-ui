@@ -156,7 +156,7 @@ $.widget( "ui.selectmenu", {
 				that.focus = item.index;
 
 				// Set ARIA active decendent
-				that.button.attr( "aria-activedescendant", item.element.attr( "id" ) );
+				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 
 			},
 			// set ARIA role
@@ -383,7 +383,7 @@ $.widget( "ui.selectmenu", {
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
-		this.button.attr( "aria-activedescendant", item.element.attr( "id" ) );
+		this.button.attr( "aria-activedescendant", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 	},
 
 	_setOption: function( key, value ) {
