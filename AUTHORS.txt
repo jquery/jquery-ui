@@ -208,3 +208,8 @@ Sindre Sorhus <sindresorhus@gmail.com>
 Bernhard Sirlinger <bernhard.sirlinger@tele2.de>
 Jared A. Scheel <jared@jaredscheel.com>
 Rafael Xavier de Souza <rxaviers@gmail.com>
+John Chen <zhang.z.chen@intel.com>
+Dale Kocian <dale.kocian@gmail.com>
+Mike Sherov <mike.sherov@gmail.com>
+Andrew Couch <andy@couchand.com>
+Marc-Andre Lafortune <github@marc-andre.ca>
