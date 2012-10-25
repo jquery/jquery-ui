@@ -7,7 +7,7 @@ var versions = [
 		"git"
 	],
 	additionalTests = {
-		position: [ "position_deprecated.html" ]
+		// component: [ "other_test.html" ]
 	};
 
 window.testAllVersions = function( widget ) {

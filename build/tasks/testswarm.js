@@ -20,7 +20,6 @@ var versions = {
 		"Effects": "effects/effects.html",
 		"Menu": "menu/menu.html",
 		"Position": "position/position.html",
-		"Position_deprecated": "position/position_deprecated.html",
 		"Progressbar": "progressbar/progressbar.html",
 		//"resizable/resizable.html",
 		//"selectable/selectable.html",
