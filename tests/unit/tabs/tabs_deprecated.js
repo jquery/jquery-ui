@@ -240,22 +240,4 @@ test( "remove", function() {
 	equal( element.tabs( "option", "active" ), false );
 });
 
-asyncTest( "abort", function() {
-	expect( 1 );
-
-	var element = $( "#tabs2" ).tabs();
-	element.one( "tabsbeforeload", function( event, ui ) {
-		ui.jqXHR.error(function( jqXHR, status ) {
-			equal( status, "abort", "aborted" );
-			start();
-		});
-	});
-	// prevent IE from caching the request, so that it won't resolve before we call abort
-	element.find( ".ui-tabs-nav li:eq(2) .ui-tabs-anchor" ).attr( "href", function( href ) {
-		return href + "?" + (+ new Date());
-	});
-	element.tabs( "option", "active", 2 );
-	element.tabs( "abort" );
-});
-
 }( jQuery ) );

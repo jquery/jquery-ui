@@ -854,15 +854,6 @@ if ( $.uiBackCompat !== false ) {
 		};
 	};
 
-	// abort method
-	$.widget( "ui.tabs", $.ui.tabs, {
-		abort: function() {
-			if ( this.xhr ) {
-				this.xhr.abort();
-			}
-		}
-	});
-
 	// add/remove methods and events
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
