@@ -391,51 +391,6 @@ test( "remove", function() {
 	equal( element.tabs( "option", "active" ), false );
 });
 
-test( "select", function() {
-	expect( 23 );
-
-	var element = $( "#tabs1" ).tabs();
-	state( element, 1, 0, 0 );
-	element.tabs( "select", 1 );
-	state( element, 0, 1, 0 );
-	equal( element.tabs( "option", "active" ), 1, "active" );
-	equal( element.tabs( "option", "selected" ), 1, "selected" );
-	element.tabs( "destroy" );
-
-	element.tabs({ collapsible: true });
-	state( element, 1, 0, 0 );
-	element.tabs( "select", 0 );
-	state( element, 0, 0, 0 );
-	equal( element.tabs( "option", "active" ), false, "active" );
-	equal( element.tabs( "option", "selected" ), -1, "selected" );
-	element.tabs( "destroy" );
-
-	element.tabs({ collapsible: true });
-	element.tabs( "select", -1 );
-	state( element, 0, 0, 0 );
-	equal( element.tabs( "option", "active" ), false, "active" );
-	equal( element.tabs( "option", "selected" ), -1, "selected" );
-	element.tabs( "destroy" );
-
-	element.tabs();
-	state( element, 1, 0, 0 );
-	equal( element.tabs( "option", "active" ), 0, "active" );
-	equal( element.tabs( "option", "selected" ), 0, "selected" );
-	element.tabs( "select", 0 );
-	state( element, 1, 0, 0 );
-	equal( element.tabs( "option", "active" ), 0, "active" );
-	equal( element.tabs( "option", "selected" ), 0, "selected" );
-	element.tabs( "select", -1 );
-	state( element, 1, 0, 0 );
-	equal( element.tabs( "option", "active" ), 0, "active" );
-	equal( element.tabs( "option", "selected" ), 0, "selected" );
-
-	element.tabs( "select", "#fragment-2" );
-	state( element, 0, 1, 0 );
-	equal( element.tabs( "option", "active" ), 1, "active" );
-	equal( element.tabs( "option", "selected" ), 1, "selected" );
-});
-
 asyncTest( "abort", function() {
 	expect( 1 );
 

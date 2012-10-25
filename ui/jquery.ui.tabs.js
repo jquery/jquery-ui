@@ -1082,21 +1082,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// select method
-	$.widget( "ui.tabs", $.ui.tabs, {
-		select: function( index ) {
-			index = this._getIndex( index );
-			if ( index === -1 ) {
-				if ( this.options.collapsible && this.options.selected !== -1 ) {
-					index = this.options.selected;
-				} else {
-					return;
-				}
-			}
-			this.anchors.eq( index ).trigger( this.options.event + this.eventNamespace );
-		}
-	});
-
 	// load event
 	$.widget( "ui.tabs", $.ui.tabs, {
 		_trigger: function( type, event, data ) {
