@@ -510,21 +510,6 @@ test( "length", function() {
 	equal( $( "#tabs2" ).tabs().tabs( "length" ), 5, "ajax tabs with missing panels" );
 });
 
-test( "url", function() {
-	expect( 2 );
-
-	var element = $( "#tabs2" ).tabs(),
-		anchor = element.find( ".ui-tabs-anchor" ).eq( 3 );
-
-	element.tabs( "url", 3, "data/test2.html" );
-	equal( anchor.attr( "href" ), "data/test2.html", "href was updated" );
-	element.one( "tabsbeforeload", function( event, ui ) {
-		equal( ui.ajaxSettings.url, "data/test2.html", "ajaxSettings.url" );
-		event.preventDefault();
-	});
-	element.tabs( "option", "active", 3 );
-});
-
 asyncTest( "abort", function() {
 	expect( 1 );
 

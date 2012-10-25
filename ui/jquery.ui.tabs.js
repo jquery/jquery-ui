@@ -854,13 +854,6 @@ if ( $.uiBackCompat !== false ) {
 		};
 	};
 
-	// url method
-	$.widget( "ui.tabs", $.ui.tabs, {
-		url: function( index, url ) {
-			this.anchors.eq( index ).attr( "href", url );
-		}
-	});
-
 	// abort method
 	$.widget( "ui.tabs", $.ui.tabs, {
 		abort: function() {
