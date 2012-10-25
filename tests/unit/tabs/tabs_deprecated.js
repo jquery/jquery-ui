@@ -198,46 +198,6 @@ asyncTest( "load", function() {
 	}
 });
 
-test( "select", function() {
-	expect( 13 );
-
-	var element = $( "#tabs1" ).tabs({
-			active: false,
-			collapsible: true
-		}),
-		anchors = element.find( ".ui-tabs-nav .ui-tabs-anchor" ),
-		panels = element.find( ".ui-tabs-panel" );
-
-	// from collapsed
-	element.one( "tabsselect", function( event, ui ) {
-		ok( !( "originalEvent" in event ), "originalEvent" );
-		strictEqual( ui.tab, anchors[ 0 ], "ui.tab" );
-		strictEqual( ui.panel, panels[ 0 ], "ui.panel" );
-		equal( ui.index, 0, "ui.index" );
-		state( element, 0, 0, 0 );
-	});
-	element.tabs( "option", "active", 0 );
-	state( element, 1, 0, 0 );
-
-	// switching tabs
-	element.one( "tabsselect", function( event, ui ) {
-		equal( event.originalEvent.type, "click", "originalEvent" );
-		strictEqual( ui.tab, anchors[ 1 ], "ui.tab" );
-		strictEqual( ui.panel, panels[ 1 ], "ui.panel" );
-		equal( ui.index, 1, "ui.index" );
-		state( element, 1, 0, 0 );
-	});
-	anchors.eq( 1 ).click();
-	state( element, 0, 1, 0 );
-
-	// collapsing
-	element.one( "tabsselect", function() {
-		ok( false, "collapsing" );
-	});
-	element.tabs( "option", "active", false );
-	state( element, 0, 0, 0 );
-});
-
 module( "tabs (deprecated): methods" );
 
 test( "add", function() {

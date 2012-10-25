@@ -1046,27 +1046,6 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
-	// select event
-	$.widget( "ui.tabs", $.ui.tabs, {
-		options: {
-			select: null
-		},
-		_trigger: function( type, event, data ) {
-			var ret = this._superApply( arguments );
-			if ( !ret ) {
-				return false;
-			}
-			if ( type === "beforeActivate" && data.newTab.length ) {
-				ret = this._super( "select", event, {
-					tab: data.newTab.find( ".ui-tabs-anchor" )[ 0],
-					panel: data.newPanel[ 0 ],
-					index: data.newTab.closest( "li" ).index()
-				});
-			}
-			return ret;
-		}
-	});
-
 	// load event
 	$.widget( "ui.tabs", $.ui.tabs, {
 		_trigger: function( type, event, data ) {
