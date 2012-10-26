@@ -14,8 +14,4 @@
 	-webkit-box-shadow: 0 0 5px #aaa;
 	box-shadow: 0 0 5px #aaa;
 }
-/* Fades and background-images don't work well together in IE6, drop the image */
-* html .ui-tooltip {
-	background-image: none;
-}
 body .ui-tooltip { border-width: 2px; }
