@@ -487,18 +487,10 @@ $.widget( "ui.tabs", {
 	},
 
 	_setupHeightStyle: function( heightStyle ) {
-		var maxHeight, overflow,
+		var maxHeight,
 			parent = this.element.parent();
 
 		if ( heightStyle === "fill" ) {
-			// IE 6 treats height like minHeight, so we need to turn off overflow
-			// in order to get a reliable height
-			// we use the minHeight support test because we assume that only
-			// browsers that don't support minHeight will treat height as minHeight
-			if ( !$.support.minHeight ) {
-				overflow = parent.css( "overflow" );
-				parent.css( "overflow", "hidden");
-			}
 			maxHeight = parent.height();
 			this.element.siblings( ":visible" ).each(function() {
 				var elem = $( this ),
@@ -509,9 +501,6 @@ $.widget( "ui.tabs", {
 				}
 				maxHeight -= elem.outerHeight( true );
 			});
-			if ( overflow ) {
-				parent.css( "overflow", overflow );
-			}
 
 			this.element.children().not( this.panels ).each(function() {
 				maxHeight -= $( this ).outerHeight( true );
