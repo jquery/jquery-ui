@@ -586,9 +586,8 @@ $.widget("ui.dialog", {
 		/* If the user has resized the dialog, the .ui-dialog and .ui-dialog-content
 		 * divs will both have width and height set, so we need to reset them
 		 */
-		var nonContentHeight, minContentHeight, autoHeight,
-			options = this.options,
-			isVisible = this.uiDialog.is( ":visible" );
+		var nonContentHeight, minContentHeight,
+			options = this.options;
 
 		// reset content sizing
 		this.element.show().css({
@@ -611,20 +610,10 @@ $.widget("ui.dialog", {
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
 
 		if ( options.height === "auto" ) {
-			// only needed for IE6 support
-			if ( $.support.minHeight ) {
-				this.element.css({
-					minHeight: minContentHeight,
-					height: "auto"
-				});
-			} else {
-				this.uiDialog.show();
-				autoHeight = this.element.css( "height", "auto" ).height();
-				if ( !isVisible ) {
-					this.uiDialog.hide();
-				}
-				this.element.height( Math.max( autoHeight, minContentHeight ) );
-			}
+			this.element.css({
+				minHeight: minContentHeight,
+				height: "auto"
+			});
 		} else {
 			this.element.height( Math.max( options.height - nonContentHeight, 0 ) );
 		}
