@@ -464,16 +464,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
 
-			// fix ie6 offset TODO: This seems broken
-			var ie6offset = ($.ui.ie6 ? 1 : 0),
-			pxyoffset = ( $.ui.ie6 ? 2 : -1 );
-
 			this.helper.addClass(this._helper).css({
-				width: this.element.outerWidth() + pxyoffset,
-				height: this.element.outerHeight() + pxyoffset,
+				width: this.element.outerWidth() - 1,
+				height: this.element.outerHeight() - 1,
 				position: 'absolute',
-				left: this.elementOffset.left - ie6offset +'px',
-				top: this.elementOffset.top - ie6offset +'px',
+				left: this.elementOffset.left +'px',
+				top: this.elementOffset.top +'px',
 				zIndex: ++o.zIndex //TODO: Don't modify option
 			});
 
