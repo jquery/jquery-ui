@@ -279,6 +279,8 @@ $.widget("ui.dialog", {
 
 	open: function() {
 		if ( this._isOpen ) {
+			this.moveToTop( null, true );
+			this._focusTabbable();
 			return;
 		}
 
