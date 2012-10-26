@@ -51,9 +51,9 @@ function submit( commit, tests, configFile, version, done ) {
 		authToken: config.authToken,
 		jobName: 'jQuery UI ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
 		runMax: config.runMax,
-		"runNames[]": Object.keys(tests),
+		"runNames[]": Object.keys( tests ),
 		"runUrls[]": testUrls,
-		"browserSets[]": ["popular"]
+		"browserSets[]": [ "popular-no-ie6" ]
 	});
 }
 
