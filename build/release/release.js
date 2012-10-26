@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*global cat:true cd:true cp:true echo:true exec:true exit:true ls:true*/
+/*global cat:true cd:true echo:true exec:true exit:true*/
 
 "use strict";
 
