@@ -230,10 +230,6 @@ $.fn.position = function( options ) {
 			}
 		});
 
-		if ( $.fn.bgiframe ) {
-			elem.bgiframe();
-		}
-
 		if ( options.using ) {
 			// adds feedback as second argument to using callback, if present
 			using = function( props ) {

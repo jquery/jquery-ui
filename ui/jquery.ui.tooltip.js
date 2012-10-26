@@ -357,9 +357,6 @@ $.widget( "ui.tooltip", {
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
 		tooltip.appendTo( this.document[0].body );
-		if ( $.fn.bgiframe ) {
-			tooltip.bgiframe();
-		}
 		this.tooltips[ id ] = element;
 		return tooltip;
 	},

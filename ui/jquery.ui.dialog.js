@@ -170,10 +170,6 @@ $.widget("ui.dialog", {
 		this._createButtons( options.buttons );
 		this._isOpen = false;
 
-		if ( $.fn.bgiframe ) {
-			uiDialog.bgiframe();
-		}
-
 		// prevent tabbing out of dialogs
 		this._on( uiDialog, { keydown: function( event ) {
 			if ( event.keyCode !== $.ui.keyCode.TAB ) {
@@ -669,10 +665,6 @@ $.extend( $.ui.dialog.overlay, {
 		$el.bind( "mousedown", function( event ) {
 			dialog._keepFocus( event );
 		});
-
-		if ( $.fn.bgiframe ) {
-			$el.bgiframe();
-		}
 
 		this.instances.push( $el );
 		return $el;
