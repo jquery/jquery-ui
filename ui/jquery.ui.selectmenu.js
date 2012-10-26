@@ -304,6 +304,7 @@ $.widget( "ui.selectmenu", {
 			// init Menu on first focus
 			this.refresh();
 			this._off( this.button, "focus" );
+			event.preventDefault();
 		},
 		click: function( event ) {
 			this._toggle( event );
