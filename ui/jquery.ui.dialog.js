@@ -282,8 +282,7 @@ $.widget("ui.dialog", {
 			return;
 		}
 
-		var hasFocus,
-			options = this.options,
+		var options = this.options,
 			uiDialog = this.uiDialog;
 
 		this.opener = $( this.document[ 0 ].activeElement );
@@ -294,16 +293,7 @@ $.widget("ui.dialog", {
 		this.moveToTop( null, true );
 		this._show( uiDialog, options.show );
 
-		// set focus to the first tabbable element in the content area or the first button
-		// if there are no tabbable elements, set focus on the dialog itself
-		hasFocus = this.element.find( ":tabbable" );
-		if ( !hasFocus.length ) {
-			hasFocus = this.uiDialogButtonPane.find( ":tabbable" );
-			if ( !hasFocus.length ) {
-				hasFocus = uiDialog;
-			}
-		}
-		hasFocus.eq( 0 ).focus();
+		this._focusTabbable();
 
 		this._isOpen = true;
 		this._trigger( "open" );
@@ -312,13 +302,26 @@ $.widget("ui.dialog", {
 		return this;
 	},
 
+	_focusTabbable: function() {
+		// set focus to the first tabbable element in the content area or the first button
+		// if there are no tabbable elements, set focus on the dialog itself
+		var hasFocus = this.element.find( ":tabbable" );
+		if ( !hasFocus.length ) {
+			hasFocus = this.uiDialogButtonPane.find( ":tabbable" );
+			if ( !hasFocus.length ) {
+				hasFocus = this.uiDialog;
+			}
+		}
+		hasFocus.eq( 0 ).focus();
+	},
+
 	_keepFocus: function( event ) {
 		function checkFocus() {
 			var activeElement = this.document[ 0 ].activeElement,
 				isActive = this.uiDialog[ 0 ] === activeElement ||
 					$.contains( this.uiDialog[ 0 ], activeElement );
 			if ( !isActive ) {
-				this.uiDialog.focus();
+				this._focusTabbable();
 			}
 		}
 		event.preventDefault();
@@ -659,6 +662,22 @@ $.extend( $.ui.dialog.overlay, {
 	// reuse old instances due to IE memory leak with alpha transparency (see #5185)
 	oldInstances: [],
 	create: function( dialog ) {
+		if ( this.instances.length === 0 ) {
+			// prevent use of anchors and inputs
+			// we use a setTimeout in case the overlay is created from an
+			// event that we're going to be cancelling (see #2804)
+			setTimeout(function() {
+				// handle $(el).dialog().dialog('close') (see #4065)
+				if ( $.ui.dialog.overlay.instances.length ) {
+					$( document ).bind( "focusin.dialog-overlay", function( event ) {
+						if ( !$( event.target ).closest( ".ui-dialog").length ) {
+							event.preventDefault();
+							$( ".ui-dialog:visible:last .ui-dialog-content" ).data( "ui-dialog" )._focusTabbable();
+						}
+					});
+				}
+			}, 1 );
+		}
 
 		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay ui-front" ) );
 
