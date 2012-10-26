@@ -239,7 +239,6 @@ $.support.selectstart = "onselectstart" in document.createElement( "div" );
 (function() {
 	var uaMatch = /msie ([\w.]+)/.exec( navigator.userAgent.toLowerCase() ) || [];
 	$.ui.ie = uaMatch.length ? true : false;
-	$.ui.ie6 = parseFloat( uaMatch[ 1 ], 10 ) === 6;
 })();
 
 $.fn.extend({
