@@ -156,6 +156,15 @@ $.widget("ui.dialog", {
 			"aria-labelledby": uiDialogTitle.attr( "id" )
 		});
 
+		// We assume that any existing aria-describedby attribute means
+		// that the dialog content is marked up properly
+		// otherwise we brute force the content as the description
+		if ( !this.element.find( "[aria-describedby]" ).length ) {
+			uiDialog.attr({
+				"aria-describedby": this.element.uniqueId().attr( "id" )
+			});
+		}
+
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
@@ -205,6 +214,7 @@ $.widget("ui.dialog", {
 		}
 		this.uiDialog.hide();
 		this.element
+			.removeUniqueId()
 			.removeClass( "ui-dialog-content ui-widget-content" )
 			.hide()
 			.appendTo( "body" );
