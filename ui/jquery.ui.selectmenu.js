@@ -303,8 +303,9 @@ $.widget( "ui.selectmenu", {
 		focus: function( event ) {
 			// init Menu on first focus
 			this.refresh();
+			// reset focus class as its removed by ui.widget._setOption
+			this.button.addClass( "ui-state-focus" );
 			this._off( this.button, "focus" );
-			event.preventDefault();
 		},
 		click: function( event ) {
 			this._toggle( event );
