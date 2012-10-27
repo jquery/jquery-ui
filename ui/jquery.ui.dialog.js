@@ -68,12 +68,25 @@ $.widget("ui.dialog", {
 		resizable: true,
 		show: null,
 		title: "",
-		width: 300
+		width: 300,
+
+		// callbacks
+		beforeClose: null,
+		close: null,
+		drag: null,
+		dragStart: null,
+		dragStop: null,
+		focus: null,
+		open: null,
+		resize: null,
+		resizeStart: null,
+		resizeStop: null
 	},
 
 	_create: function() {
 		this.originalTitle = this.element.attr( "title" );
 		// #5742 - .attr() might return a DOMElement
+		// TODO WTF?
 		if ( typeof this.originalTitle !== "string" ) {
 			this.originalTitle = "";
 		}
@@ -81,17 +94,22 @@ $.widget("ui.dialog", {
 			parent: this.element.parent(),
 			index: this.element.parent().children().index( this.element )
 		};
+		// TODO don't overwrite options
 		this.options.title = this.options.title || this.originalTitle;
 		var that = this,
 			options = this.options,
 
+			// TODO make this the default for the title option?
 			title = options.title || "&#160;",
+			// TODO should use this.uiDialog instead
 			uiDialog,
+			// TODO should use this.uiDialogTitlebar instead
 			uiDialogTitlebar,
 			uiDialogTitlebarClose,
 			uiDialogTitle,
 			uiDialogButtonPane;
 
+			// TODO extract into _createWrapper
 			uiDialog = ( this.uiDialog = $( "<div>" ) )
 				.addClass( uiDialogClasses + options.dialogClass )
 				.hide()
@@ -115,9 +133,10 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-content ui-widget-content" )
 				.appendTo( uiDialog );
 
+			// TODO extract this and the next three into a _createTitlebar method
 			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
-				.addClass( "ui-dialog-titlebar  ui-widget-header  " +
-					"ui-corner-all  ui-helper-clearfix" )
+				.addClass( "ui-dialog-titlebar  ui-widget-header ui-corner-all  ui-helper-clearfix" )
+				// TODO use _on, call _focusTabbable or _keepFocus
 				.bind( "mousedown", function() {
 					// Dialog isn't getting focus when dragging (#8063)
 					uiDialog.focus();
@@ -144,6 +163,7 @@ $.widget("ui.dialog", {
 				.html( title )
 				.prependTo( uiDialogTitlebar );
 
+			// TODO extract this one and the next into a _createButtonPane method
 			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
 				.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
 
@@ -151,11 +171,13 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-buttonset" )
 				.appendTo( uiDialogButtonPane );
 
+		// TODO move into _createWrapper
 		uiDialog.attr({
 			role: "dialog",
 			"aria-labelledby": uiDialogTitle.attr( "id" )
 		});
 
+		// TODO move into _createWrapper
 		// We assume that any existing aria-describedby attribute means
 		// that the dialog content is marked up properly
 		// otherwise we brute force the content as the description
@@ -165,7 +187,11 @@ $.widget("ui.dialog", {
 			});
 		}
 
+		// TODO use andSelf()
+		// TODO get rid of this?! why do we need to disable selection anyway?
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
+
+		// TODO use button? or at least a button element, so that SPACE works?
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
 
@@ -176,10 +202,14 @@ $.widget("ui.dialog", {
 			this._makeResizable();
 		}
 
+		// TODO merge with _createButtonPane?
 		this._createButtons( options.buttons );
+
 		this._isOpen = false;
 
 		// prevent tabbing out of dialogs
+		// TODO move into _createWrapper
+		// TODO fix formatting
 		this._on( uiDialog, { keydown: function( event ) {
 			if ( event.keyCode !== $.ui.keyCode.TAB ) {
 				return;
@@ -217,6 +247,7 @@ $.widget("ui.dialog", {
 			.removeUniqueId()
 			.removeClass( "ui-dialog-content ui-widget-content" )
 			.hide()
+			// TODO restore old position directly, instead of appending to body first
 			.appendTo( "body" );
 		this.uiDialog.remove();
 
@@ -224,6 +255,7 @@ $.widget("ui.dialog", {
 			this.element.attr( "title", this.originalTitle );
 		}
 
+		// TODO do this before removing the wrapper
 		next = oldPosition.parent.children().eq( oldPosition.index );
 		// Don't try to place the dialog next to itself (#8613)
 		if ( next.length && next[ 0 ] !== this.element[ 0 ] ) {
@@ -244,6 +276,7 @@ $.widget("ui.dialog", {
 			return;
 		}
 
+		// TODO fix yoda-if
 		if ( false === this._trigger( "beforeClose", event ) ) {
 			return;
 		}
@@ -261,6 +294,7 @@ $.widget("ui.dialog", {
 			$( this.document[ 0 ].activeElement ).blur();
 		}
 
+		// TODO shouldn't _hide restore `this` to the instance? would also help tooltip
 		this._hide( this.uiDialog, this.options.hide, function() {
 			that._trigger( "close", event );
 		});
@@ -279,11 +313,14 @@ $.widget("ui.dialog", {
 
 	open: function() {
 		if ( this._isOpen ) {
+			// TODO don't pass silent flag? should probably trigger focus when moving to top again
 			this.moveToTop( null, true );
+			// TODO run this only when dialog wasn't focused?
 			this._focusTabbable();
 			return;
 		}
 
+		// TODO remove useless tmp vars
 		var options = this.options,
 			uiDialog = this.uiDialog;
 
@@ -304,6 +341,7 @@ $.widget("ui.dialog", {
 		return this;
 	},
 
+	// TODO check if dialog already has focus, merge with _keepFocus
 	_focusTabbable: function() {
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
@@ -342,6 +380,7 @@ $.widget("ui.dialog", {
 		this.uiDialogButtonPane.remove();
 		this.uiButtonSet.empty();
 
+		// TODO use jQuery.isEmptyObject()
 		if ( typeof buttons === "object" && buttons !== null ) {
 			$.each( buttons, function() {
 				return !(hasButtons = true);
@@ -363,6 +402,7 @@ $.widget("ui.dialog", {
 				button = $( "<button></button>", props )
 					.appendTo( that.uiButtonSet );
 				if ( $.fn.button ) {
+					// TODO allow passing through button options
 					button.button();
 				}
 			});
@@ -408,6 +448,7 @@ $.widget("ui.dialog", {
 		});
 	},
 
+	// TODO why are handles passed by _setOption??
 	_makeResizable: function( handles ) {
 		handles = (handles === undefined ? this.options.resizable : handles);
 		var that = this,
@@ -472,6 +513,7 @@ $.widget("ui.dialog", {
 			isVisible;
 
 		if ( position ) {
+			// TODO we don't support 1.3.2 anymore, clean this mess up
 			// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
 	//		if (typeof position == 'string' || $.isArray(position)) {
 	//			myAt = $.isArray(position) ? position : position.split(' ');
@@ -551,9 +593,11 @@ $.widget("ui.dialog", {
 			case "dialogClass":
 				uiDialog
 					.removeClass( this.options.dialogClass )
+					// TODO why adding uiDialogClasses again? we didn't remove those
 					.addClass( uiDialogClasses + value );
 				break;
 			case "disabled":
+				// TODO use toggleClass( "ui-dialog-disabled", value )
 				if ( value ) {
 					uiDialog.addClass( "ui-dialog-disabled" );
 				} else {
@@ -591,7 +635,8 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "title":
-				// convert whatever was passed in o a string, for html() to not throw up
+				// convert whatever was passed in to a string, for html() to not throw up
+				// TODO deduplicate this (see _create)
 				$( ".ui-dialog-title", this.uiDialogTitlebar )
 					.html( "" + ( value || "&#160;" ) );
 				break;
@@ -643,8 +688,8 @@ $.widget("ui.dialog", {
 });
 
 $.extend($.ui.dialog, {
+	// TODO remove these
 	uuid: 0,
-
 	getTitleId: function($el) {
 		var id = $el.attr( "id" );
 		if ( !id ) {
@@ -654,17 +699,20 @@ $.extend($.ui.dialog, {
 		return "ui-dialog-title-" + id;
 	},
 
+	// TODO move to dialog instance method
 	overlay: function( dialog ) {
 		this.$el = $.ui.dialog.overlay.create( dialog );
 	}
 });
 
+// TODO get rid of instance list, at least the oldInstance stuff, and inline as dialog methods
 $.extend( $.ui.dialog.overlay, {
 	instances: [],
 	// reuse old instances due to IE memory leak with alpha transparency (see #5185)
 	oldInstances: [],
 	create: function( dialog ) {
 		if ( this.instances.length === 0 ) {
+			// TODO get rid of the timeout, which should remove the need for the #4065 workaround as well
 			// prevent use of anchors and inputs
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
