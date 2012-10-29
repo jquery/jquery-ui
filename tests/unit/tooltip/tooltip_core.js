@@ -73,4 +73,25 @@ test( "nested tooltips", function() {
 	equal( $( ".ui-tooltip" ).text(), "child" );
 });
 
+// #8742
+test( "form containing an input with name title", function() {
+	expect( 4 );
+
+	var form = $( "#tooltip-form" ).tooltip({
+			show: null,
+			hide: null
+		}),
+		input = form.find( "[name=title]" );
+
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltips on init" );
+
+	input.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).length, 1, "tooltip for input" );
+	input.trigger( "mouseleave" );
+	equal( $( ".ui-tooltip" ).length, 0, "tooltip for input closed" );
+
+	form.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip for form" );
+});
+
 }( jQuery ) );
