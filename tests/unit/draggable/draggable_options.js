@@ -1257,6 +1257,43 @@ test( "snap, snapMode, and snapTolerance", function() {
 	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap on the inner snapTolerance area when snapMode is outer" );
 });
 
+test( "#8165: Snapping large rectangles to small rectangles doesn't snap properly", function() {
+	expect( 1 );
+
+	var snapTolerance = 20,
+		y = 1,
+		element = $( "#draggable1" )
+			.css({
+				width: "50px",
+				height: "200px"
+			}).offset({
+				top: y,
+				left: 1
+			}),
+		element2 = $( "#draggable2" )
+			.css({
+				width: "50px",
+				height: "50px"
+			}).offset({
+				top: y + snapTolerance + 1,
+				left: 200
+			}),
+		newX = element2.offset().left - element.outerWidth() - snapTolerance + 1;
+
+	$( "#draggable1, #draggable2" ).draggable({
+		snap: true,
+		snapTolerance: snapTolerance
+	});
+
+	element.simulate( "drag", {
+		handle: "corner",
+		x: newX,
+		moves: 1
+	});
+
+	notDeepEqual( element.offset(), { top: y, left: newX }, "snaps even if only a side (not a corner) is inside the snapTolerance" );
+});
+
 test( "stack", function() {
 	expect( 2 );
 
