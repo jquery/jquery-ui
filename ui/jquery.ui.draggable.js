@@ -15,6 +15,7 @@
  */
 (function( $, undefined ) {
 
+/*jshint onevar: false, curly: false, eqeqeq: false, laxbreak: true, shadow: true, funcscope: true */
 $.widget("ui.draggable", $.ui.mouse, {
 	version: "@VERSION",
 	widgetEventPrefix: "drag",
@@ -372,7 +373,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
 			var c = $(o.containment);
 			var ce = c[0]; if(!ce) return;
-			var co = c.offset();
 			var over = ($(ce).css("overflow") != 'hidden');
 
 			this.containment = [
@@ -393,7 +393,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
-		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		return {
 			top: (
@@ -446,10 +446,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 			if(o.grid) {
 				//Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
 				var top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
-				pageY = containment ? (!(top - this.offset.click.top < containment[1] || top - this.offset.click.top > containment[3]) ? top : (!(top - this.offset.click.top < containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
 
 				var left = o.grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
-				pageX = containment ? (!(left - this.offset.click.left < containment[0] || left - this.offset.click.left > containment[2]) ? left : (!(left - this.offset.click.left < containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
 			}
 
 		}
@@ -492,7 +492,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	plugins: {},
 
-	_uiHash: function(event) {
+	_uiHash: function() {
 		return {
 			helper: this.helper,
 			position: this.position,
@@ -560,16 +560,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 		var inst = $(this).data("draggable"), that = this;
 
-		var checkPos = function(o) {
-			var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
-			var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
-			var itemHeight = o.height, itemWidth = o.width;
-			var itemTop = o.top, itemLeft = o.left;
-
-			return $.ui.isOver(helperTop + dyClick, helperLeft + dxClick, itemTop, itemLeft, itemHeight, itemWidth);
-		};
-
-		$.each(inst.sortables, function(i) {
+		$.each(inst.sortables, function() {
 
 			var innermostIntersecting = false;
 			var thisSortable = this;
@@ -652,7 +643,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					inst.dropped = false; //draggable revert needs that
 				}
 
-			};
+			}
 
 		});
 
@@ -660,12 +651,12 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 });
 
 $.ui.plugin.add("draggable", "cursor", {
-	start: function(event, ui) {
+	start: function() {
 		var t = $('body'), o = $(this).data('draggable').options;
 		if (t.css("cursor")) o._cursor = t.css("cursor");
 		t.css("cursor", o.cursor);
 	},
-	stop: function(event, ui) {
+	stop: function() {
 		var o = $(this).data('draggable').options;
 		if (o._cursor) $('body').css("cursor", o._cursor);
 	}
@@ -684,11 +675,11 @@ $.ui.plugin.add("draggable", "opacity", {
 });
 
 $.ui.plugin.add("draggable", "scroll", {
-	start: function(event, ui) {
+	start: function() {
 		var i = $(this).data("draggable");
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 	},
-	drag: function(event, ui) {
+	drag: function( event ) {
 
 		var i = $(this).data("draggable"), o = i.options, scrolled = false;
 
@@ -733,7 +724,7 @@ $.ui.plugin.add("draggable", "scroll", {
 });
 
 $.ui.plugin.add("draggable", "snap", {
-	start: function(event, ui) {
+	start: function() {
 
 		var i = $(this).data("draggable"), o = i.options;
 		i.snapElements = [];
@@ -796,13 +787,13 @@ $.ui.plugin.add("draggable", "snap", {
 				(inst.options.snap.snap && inst.options.snap.snap.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
 			inst.snapElements[i].snapping = (ts || bs || ls || rs || first);
 
-		};
+		}
 
 	}
 });
 
 $.ui.plugin.add("draggable", "stack", {
-	start: function(event, ui) {
+	start: function() {
 
 		var o = $(this).data("draggable").options;
 
@@ -811,7 +802,7 @@ $.ui.plugin.add("draggable", "stack", {
 		});
 		if (!group.length) { return; }
 
-		var min = parseInt(group[0].style.zIndex) || 0;
+		var min = parseInt(group[0].style.zIndex, 10) || 0;
 		$(group).each(function(i) {
 			this.style.zIndex = min + i;
 		});
