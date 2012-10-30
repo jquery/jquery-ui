@@ -10,7 +10,8 @@
  */
 .ui-autocomplete {
 	position: absolute;
-	top: 0; /* #8656 */
+	top: 0;
+	left: 0;
 	cursor: default;
 }
 
