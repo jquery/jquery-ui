@@ -7,7 +7,7 @@ module("selectable: events");
 
 test("start", function() {
 	expect(2);
-	el = $("#selectable1");
+	var el = $("#selectable1");
 	el.selectable({
 		start: function() {
 			ok(true, "drag fired start callback");
@@ -19,7 +19,7 @@ test("start", function() {
 
 test("stop", function() {
 	expect(2);
-	el = $("#selectable1");
+	var el = $("#selectable1");
 	el.selectable({
 		start: function() {
 			ok(true, "drag fired stop callback");
