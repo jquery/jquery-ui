@@ -281,8 +281,8 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 			clientY: before.top + offsetY
 		};
 		expected = {
-			left: before.left + offsetX - cursorAtX + deltaX,
-			top: before.top + offsetY - cursorAtY + deltaY
+			left: before.left + offsetX - cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
+			top: before.top + offsetY - cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
 		};
 
 		el.simulate("mousedown", pos);
@@ -315,8 +315,8 @@ test("{ cursorAt: { right: 10, bottom: 20 } }", function() {
 			clientY: before.top + offsetY
 		};
 		expected = {
-			left: before.left + offsetX - el.width() + cursorAtX + deltaX,
-			top: before.top + offsetY - el.height() + cursorAtY + deltaY
+			left: before.left + offsetX - el.width() + cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
+			top: before.top + offsetY - el.height() + cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
 		};
 
 		el.simulate("mousedown", pos);
@@ -349,8 +349,8 @@ test("{ cursorAt: [10, 20] }", function() {
 			clientY: before.top + offsetY
 		};
 		expected = {
-			left: before.left + offsetX - cursorAtX + deltaX,
-			top: before.top + offsetY - cursorAtY + deltaY
+			left: before.left + offsetX - cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
+			top: before.top + offsetY - cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
 		};
 
 		el.simulate("mousedown", pos);
@@ -383,8 +383,8 @@ test("{ cursorAt: '20, 40' }", function() {
 			clientY: before.top + offsetY
 		};
 		expected = {
-			left: before.left + offsetX - cursorAtX + deltaX,
-			top: before.top + offsetY - cursorAtY + deltaY
+			left: before.left + offsetX - cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
+			top: before.top + offsetY - cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
 		};
 
 		el.simulate("mousedown", pos);

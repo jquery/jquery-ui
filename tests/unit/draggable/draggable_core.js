@@ -4,6 +4,9 @@
 
 TestHelpers.draggable = {};
 
+// todo: remove these hacks
+TestHelpers.draggable.unreliableOffset = $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0;
+
 TestHelpers.draggable.drag = function(handle, dx, dy) {
 	$(handle).simulate("drag", {
 		dx: dx || 0,
@@ -57,10 +60,10 @@ TestHelpers.draggable.setScroll = function( what ) {
 };
 
 TestHelpers.draggable.border = function(el, side) {
-	return parseInt(el.css('border-' + side + '-width'), 10);
+	return parseInt(el.css('border-' + side + '-width'), 10) || 0;
 };
 TestHelpers.draggable.margin = function(el, side) {
-	return parseInt(el.css('margin-' + side), 10);
+	return parseInt(el.css('margin-' + side), 10) || 0;
 };
 
 (function($) {
