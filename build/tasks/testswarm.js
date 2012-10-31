@@ -21,7 +21,7 @@ var versions = {
 		"Menu": "menu/menu.html",
 		"Position": "position/position.html",
 		"Progressbar": "progressbar/progressbar.html",
-		//"Resizable": "resizable/resizable.html",
+		"Resizable": "resizable/resizable.html",
 		"Selectable": "selectable/selectable.html",
 		//"Slider": "slider/slider.html",
 		//"Sortable": "sortable/sortable.html",
