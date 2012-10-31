@@ -1003,7 +1003,11 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		// We first have to update the dom position of the actual currentItem
 		// Note: don't do it if the current item is already removed (by a user), or it gets reappended (see #4088)
-		if(!this._noFinalSort && this.currentItem.parent().length) this.placeholder.before(this.currentItem);
+		if(!this._noFinalSort && this.currentItem.parent().length)
+		
+		// We use javascript instead of jquery to insert item, because jquery before() first execute the script and then remove the <script> tag, and for sorting we dont need the js to be evaluated (see #6951)
+		this.placeholder[0].parentNode.insertBefore(this.currentItem[0], this.placeholder[0]);
+		
 		this._noFinalSort = null;
 
 		if(this.helper[0] == this.currentItem[0]) {
