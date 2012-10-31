@@ -14,8 +14,6 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.draggable.js
  */
-
-
 (function( $, undefined ) {
 
 /*jshint onevar: false, curly: false, eqeqeq: false, laxbreak: true */
