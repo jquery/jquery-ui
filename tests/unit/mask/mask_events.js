@@ -114,9 +114,9 @@ test( "keypress: Typing with multiple values higlighted", function() {
 test( "keypress: Typing with multi-character fields", function() {
 	expect( 5 );
 	var input = $( "#mask1" ).val("").mask({
-			mask: "aa-aa-aa",
+			mask: "xx-xx-xx",
 			definitions: {
-				aa: function( value ) {
+				xx: function( value ) {
 					return value;
 				}
 			}
@@ -138,9 +138,9 @@ test( "keypress: Typing with multi-character fields", function() {
 test( "keypress: Typing with multi-character only accepts valid values", function() {
 	expect( 12 );
 	var input = $( "#mask1" ).val( "" ).mask({
-			mask: "aa-aa-aa",
+			mask: "xx-xx-xx",
 			definitions: {
-				aa: function( value ) {
+				xx: function( value ) {
 					if ( !value.length ) {
 						return;
 					}
@@ -186,9 +186,9 @@ test( "keypress: Typing with multi-character only accepts valid values", functio
 
 test( "keypress: Backspace with multi-character ", 6, function() {
 	var input = $( "#mask1" ).val( "aa-bb-cc" ).mask({
-			mask: "aa-aa-aa",
+			mask: "xx-xx-xx",
 			definitions: {
-				aa: function( value ) {
+				xx: function( value ) {
 					if ( !value.length ) {
 						return;
 					}

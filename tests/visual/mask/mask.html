@@ -54,14 +54,44 @@
 				}
 			}
 		});
+		var input = $( "#mask10" ).mask({
+			mask: "day",
+			definitions: {
+				day: function ( value ) {
+					if ( $.inArray(value, [ "mon", "tue", "wed", "thu", "fri", "sat", "sun" ]) !== -1 ) {
+						return value;
+					} else if ( $.inArray(value, [ "m", "mo" ]) !== -1 ) {
+						return "mon";
+					} else if ( value === "t" ) {
+						return "t";
+					} else if ( value === "tu" ) {
+						return "tue";
+					} else if ( value === "thu" ) {
+						    return "thu";
+					} else if ( $.inArray(value, [ "w", "we" ]) !== -1 ) {
+						return "wed";
+					} else if ( $.inArray(value, [ "f", "fr" ]) !== -1 ) {
+						return "fri";
+					} else if ( value === "s" ) {
+						return "s";
+					} else if ( value === "sa" ) {
+						return "sat";
+					} else if ( value === "su" ) {
+						return "sun";
+					}
+				},
+				d: /[0-9]/
+			}
+		});
 
-		$("input").each(function( index, value ) {
-			var span = $("<span></span>");
+		$( "input" ).each(function( index, value ) {
+			var span = $( "<span></span>" );
 
-			value = $(value);			
-			value.after(span);
-			value.keyup(function(event) {
-				span.text("Value: " + $(event.target).mask('value') + " Valid: " + $(event.target).mask('valid'));
+			value = $( value );
+			value.after( span );
+			value.keyup(function( event ) {
+				span.text( "Value: " + $( event.target ).mask("value") +
+					" Valid: " + $( event.target ).mask("valid") );
 			});
 		});
 
@@ -100,6 +130,8 @@
 		<input type="text" class="masked" id="mask8">
 		<label for="mask9">Time - <code>{ mask: "hh:mm:ss pp", definitions: .... }</code></label>
 		<input type="text" class="masked" id="mask9">
+		<label for="mask10">Weekday</label>
+		<input type="text" class="masked" id="mask10">
 	</form>
 </body>
 </html>
