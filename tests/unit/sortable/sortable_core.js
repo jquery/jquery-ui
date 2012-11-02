@@ -4,10 +4,16 @@
 
 (function($) {
 
-module("sortable: core");
+TestHelpers.sortable = {
+	sort: function(handle, dx, dy, index, msg) {
+		$(handle).simulate("drag", {
+			dx: dx || 0,
+			dy: dy || 0
+		});
+		equal($(handle).parent().children().index(handle), index, msg);
+	}
+};
 
-// this is here to make JSHint pass "unused", and we don't want to
-// remove the parameter for when we finally implement
-$.noop();
+module("sortable: core");
 
 })(jQuery);
