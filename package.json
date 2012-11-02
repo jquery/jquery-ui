@@ -52,5 +52,12 @@
 		"rimraf": "2.0.1",
 		"testswarm": "0.2.3"
 	},
-	"keywords": []
+	"keywords": [],
+	"jam": {
+		"dependencies": {
+			"jquery": ">=1.6.0"
+		},
+		"main": "dist/jquery-ui.min.js",
+		"include": ["dist", "README.md"]
+	}
 }
