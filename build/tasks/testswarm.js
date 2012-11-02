@@ -24,7 +24,7 @@ var versions = {
 		"Resizable": "resizable/resizable.html",
 		"Selectable": "selectable/selectable.html",
 		//"Slider": "slider/slider.html",
-		//"Sortable": "sortable/sortable.html",
+		"Sortable": "sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
 		"Tabs": "tabs/tabs.html",
 		"Tooltip": "tooltip/tooltip.html",
