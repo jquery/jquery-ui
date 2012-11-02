@@ -231,14 +231,15 @@ $.widget("ui.resizable", $.ui.mouse, {
 	},
 
 	_mouseCapture: function(event) {
-		var handle = false;
+		var capture = false;
 		for (var i in this.handles) {
-			if ($(this.handles[i])[0] == event.target) {
-				handle = true;
+			var handle = $(this.handles[i])[0];
+			if (handle == event.target || $.contains(handle, event.target)) {
+				capture = true;
 			}
 		}
 
-		return !this.options.disabled && handle;
+		return !this.options.disabled && capture;
 	},
 
 	_mouseStart: function(event) {
