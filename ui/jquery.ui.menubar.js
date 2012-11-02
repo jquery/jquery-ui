@@ -133,7 +133,13 @@ $.widget( "ui.menubar", {
 					input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
 					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 				}
-			}
+        } else {
+          input.bind( "click.menubar mouseenter.menubar", function( event ) {
+            if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" ) {
+              that._close();
+          }
+        });
+      }
 
 			input
 				.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
