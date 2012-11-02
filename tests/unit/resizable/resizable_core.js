@@ -165,4 +165,24 @@ test("handle with complex markup (#8756)", function() {
 	equal( target.width(), 100, "compare width" );
 });
 
+test("handle with complex markup, and draggable (#8757)", function() {
+	expect(2);
+
+	$('#resizable1')
+		.append(
+			$('<div>')
+				.addClass("ui-resizable-handle")
+				.addClass("ui-resizable-w")
+				.append($('<div>'))
+		);
+
+	var handle = '.ui-resizable-w div', target = $('#resizable1').draggable().resizable({ handles: 'all' });
+	
+	TestHelpers.resizable.drag(handle, -50);
+	equal( target.width(), 150, "compare width" );
+
+	TestHelpers.resizable.drag(handle, 50);
+	equal( target.width(), 100, "compare width" );
+});
+
 })(jQuery);
