@@ -42,6 +42,9 @@ test("destroy", function() {
 
 test("enable", function() {
 	expect(5);
+
+	var el, actual, expected;
+
 	el = $("#sortable").sortable({ disabled: true });
 
 	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 0, '.sortable({ disabled: true })');
@@ -56,13 +59,16 @@ test("enable", function() {
 
 	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, '.sortable("option", "disabled", false)');
 
-	var expected = $('<div></div>').sortable(),
-		actual = expected.sortable('enable');
+	expected = $('<div></div>').sortable(),
+	actual = expected.sortable('enable');
 	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
 	expect(7);
+
+	var el, actual, expected;
+
 	el = $("#sortable").sortable({ disabled: false });
 	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, '.sortable({ disabled: false })');
 
@@ -78,8 +84,8 @@ test("disable", function() {
 	ok(el.sortable("widget").is(":not(.ui-state-disabled)"), "sortable element does not get ui-state-disabled since it's an interaction");
 	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 0, '.sortable("option", "disabled", true)');
 
-	var expected = $('<div></div>').sortable(),
-		actual = expected.sortable('disable');
+	expected = $('<div></div>').sortable(),
+	actual = expected.sortable('disable');
 	equal(actual, expected, 'disable is chainable');
 });
 
