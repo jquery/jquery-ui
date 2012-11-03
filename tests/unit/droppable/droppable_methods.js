@@ -43,6 +43,9 @@ test("destroy", function() {
 
 test("enable", function() {
 	expect(7);
+
+	var el, expected, actual;
+
 	el = $("#droppable1").droppable({ disabled: true });
 	TestHelpers.droppable.shouldNotDrop();
 	el.droppable("enable");
@@ -55,13 +58,16 @@ test("enable", function() {
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
 	TestHelpers.droppable.shouldDrop();
 
-	var expected = $('<div></div>').droppable(),
-		actual = expected.droppable('enable');
+	expected = $('<div></div>').droppable(),
+	actual = expected.droppable('enable');
 	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
 	expect(7);
+
+	var el, actual, expected;
+
 	el = $("#droppable1").droppable({ disabled: false });
 	TestHelpers.droppable.shouldDrop();
 	el.droppable("disable");
@@ -74,8 +80,8 @@ test("disable", function() {
 	equal(el.droppable("option", "disabled"), true, "disabled option setter");
 	TestHelpers.droppable.shouldNotDrop();
 
-	var expected = $('<div></div>').droppable(),
-		actual = expected.droppable('disable');
+	expected = $('<div></div>').droppable(),
+	actual = expected.droppable('disable');
 	equal(actual, expected, 'disable is chainable');
 });
 

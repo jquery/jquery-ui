@@ -9,12 +9,14 @@ test("callbacks occurrence count", function() {
 
 	expect(3);
 
-	var start = 0, stop = 0, dragc = 0;
-	el = $("#draggable2").draggable({
-		start: function() { start++; },
-		drag: function() { dragc++; },
-		stop: function() { stop++; }
-	});
+	var start = 0,
+		stop = 0,
+		dragc = 0,
+		el = $("#draggable2").draggable({
+			start: function() { start++; },
+			drag: function() { dragc++; },
+			stop: function() { stop++; }
+		});
 
 	TestHelpers.draggable.drag(el, 10, 10);
 
@@ -28,12 +30,14 @@ test("stopping the start callback", function() {
 
 	expect(3);
 
-	var start = 0, stop = 0, dragc = 0;
-	el = $("#draggable2").draggable({
-		start: function() { start++; return false; },
-		drag: function() { dragc++; },
-		stop: function() { stop++; }
-	});
+	var start = 0,
+		stop = 0,
+		dragc = 0,
+		el = $("#draggable2").draggable({
+			start: function() { start++; return false; },
+			drag: function() { dragc++; },
+			stop: function() { stop++; }
+		});
 
 	TestHelpers.draggable.drag(el, 10, 10);
 
@@ -47,12 +51,14 @@ test("stopping the drag callback", function() {
 
 	expect(3);
 
-	var start = 0, stop = 0, dragc = 0;
-	el = $("#draggable2").draggable({
-		start: function() { start++;},
-		drag: function() { dragc++; return false;  },
-		stop: function() { stop++; }
-	});
+	var start = 0,
+		stop = 0,
+		dragc = 0,
+		el = $("#draggable2").draggable({
+			start: function() { start++;},
+			drag: function() { dragc++; return false;  },
+			stop: function() { stop++; }
+		});
 
 	TestHelpers.draggable.drag(el, 10, 10);
 
@@ -66,7 +72,7 @@ test("stopping the stop callback", function() {
 
 	expect(1);
 
-	el = $("#draggable2").draggable({
+	var el = $("#draggable2").draggable({
 		helper: 'clone',
 		stop: function() { return false; }
 	});
