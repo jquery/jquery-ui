@@ -36,21 +36,21 @@ asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
 
 test("#4826: setting resizable false toggles resizable on dialog", function() {
 	expect(6);
-	var i;
+	var i,
+		el = $('<div></div>').dialog({ resizable: false });
 
-	el = $('<div></div>').dialog({ resizable: false });
-	TestHelpers.shouldnotresize("[default]");
+	TestHelpers.dialog.shouldResize(el, 0, 0, "[default]");
 	for (i=0; i<2; i++) {
 		el.dialog('close').dialog('open');
-		TestHelpers.shouldnotresize('initialized with resizable false toggle ('+ (i+1) +')');
+		TestHelpers.dialog.shouldResize(el, 0, 0, 'initialized with resizable false toggle ('+ (i+1) +')');
 	}
 	el.remove();
 
 	el = $('<div></div>').dialog({ resizable: true });
-	TestHelpers.shouldresize("[default]");
+	TestHelpers.dialog.shouldResize(el, 50, 50, "[default]");
 	for (i=0; i<2; i++) {
 		el.dialog('close').dialog('option', 'resizable', false).dialog('open');
-		TestHelpers.shouldnotresize('set option resizable false toggle ('+ (i+1) +')');
+		TestHelpers.dialog.shouldResize(el, 0, 0, 'set option resizable false toggle ('+ (i+1) +')');
 	}
 	el.remove();
 
@@ -59,11 +59,11 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 test("#5184: isOpen in dialogclose event is true", function() {
 	expect( 3 );
 
-	el = $( "<div></div>" ).dialog({
-		close: function() {
-			ok( !el.dialog("isOpen"), "dialog is not open during close" );
-		}
-	});
+	var el = $( "<div></div>" ).dialog({
+			close: function() {
+				ok( !el.dialog("isOpen"), "dialog is not open during close" );
+			}
+		});
 	ok( el.dialog("isOpen"), "dialog is open after init" );
 	el.dialog( "close" );
 	ok( !el.dialog("isOpen"), "dialog is not open after close" );
@@ -72,7 +72,7 @@ test("#5184: isOpen in dialogclose event is true", function() {
 
 test("#5531: dialog width should be at least minWidth on creation", function () {
     expect( 4 );
-    el = $('<div></div>').dialog({
+    var el = $('<div></div>').dialog({
             width: 200,
             minWidth: 300
         });
@@ -95,7 +95,7 @@ test("#5531: dialog width should be at least minWidth on creation", function () 
 test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 	expect(2);
 
-	d1 = $('<form><input type="radio" name="radio" id="a" value="a" checked="checked"></input>' +
+	var d1 = $('<form><input type="radio" name="radio" id="a" value="a" checked="checked"></input>' +
 				'<input type="radio" name="radio" id="b" value="b">b</input></form>').appendTo( "body" ).dialog({autoOpen: false});
 
 	d1.find('#b').prop( "checked", true );
@@ -109,8 +109,9 @@ test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 
 test("#6645: Missing element not found check in overlay", function(){
     expect(2);
-    d1 = $('<div title="dialog 1">Dialog 1</div>').dialog({modal: true});
-    d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true, close: function(){ d2.remove(); }});
+    var d1 = $('<div title="dialog 1">Dialog 1</div>').dialog({modal: true}),
+        d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true, close: function(){ d2.remove(); }});
+
     equal($.ui.dialog.overlay.instances.length, 2, 'two overlays created');
     d2.dialog('close');
     equal($.ui.dialog.overlay.instances.length, 1, 'one overlay remains after closing the 2nd overlay');
@@ -119,8 +120,8 @@ test("#6645: Missing element not found check in overlay", function(){
 
 test("#4980: Destroy should place element back in original DOM position", function(){
     expect( 2 );
-    container = $('<div id="container"><div id="modal">Content</div></div>');
-	modal = container.find('#modal');
+    var container = $('<div id="container"><div id="modal">Content</div></div>'),
+        modal = container.find('#modal');
 	modal.dialog();
 	ok(!$.contains(container[0], modal[0]), 'dialog should move modal element to outside container element');
 	modal.dialog('destroy');
