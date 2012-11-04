@@ -24,8 +24,8 @@ test("element types", function() {
 		offsetBefore = el.offset();
 		TestHelpers.draggable.drag(el, 50, 50);
 		offsetAfter = el.offset();
-		//there are some rounding errors in FF and Chrome, so we can't say equal, we have to settle for close enough
-		ok(offsetAfter.left - offsetBefore.left - 50 < 1 && offsetAfter.top - offsetBefore.top - 50 < 1, 'dragged[50, 50] ' + "&lt;" + typeName + "&gt;");
+		// there are some rounding errors in FF, Chrome, and IE9, so we can't say equal, we have to settle for close enough
+		ok( offsetAfter.left - offsetBefore.left - 50 <= 1 && offsetAfter.top - offsetBefore.top - 50 <= 1, "dragged[50, 50] " + "&lt;" + typeName + "&gt;" );
 		el.draggable("destroy");
 		el.remove();
 	});
