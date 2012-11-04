@@ -26,7 +26,7 @@ test("autoRefresh", function() {
 	TestHelpers.selectable.drag(el, 1000, 1000);
 	equal(actual, 0);
 	sel.show();
-	TestHelpers.selectable.drag(el, 1000, 1000);
+	TestHelpers.selectable.drag( sel[ 0 ], 1000, 1000 );
 	equal(actual, sel.length);
 	el.selectable("destroy");
 	sel.show();

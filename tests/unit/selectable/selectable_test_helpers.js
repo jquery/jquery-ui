@@ -1,12 +1,8 @@
 TestHelpers.selectable = {
-	drag: function(el, dx, dy) {
-		var off = el.offset(),
-			pos = { clientX: off.left, clientY: off.top };
-		el.simulate("mousedown", pos);
-		$(document).simulate("mousemove", pos);
-		pos.clientX += dx;
-		pos.clientY += dy;
-		$(document).simulate("mousemove", pos);
-		$(document).simulate("mouseup", pos);
+	drag: function( el, dx, dy ) {
+		$( el ).simulate( "drag", {
+			dx: dx || 0,
+			dy: dy || 0
+		});
 	}
 };
