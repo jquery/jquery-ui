@@ -65,6 +65,7 @@ $.widget( "ui.menubar", {
 				"aria-hidden": "true",
 				"aria-expanded": "false"
 			})
+			// TODO use _on
 			.bind( "keydown.menubar", function( event ) {
 				var menu = $( this );
 				if ( menu.is( ":hidden" ) ) {
@@ -88,6 +89,7 @@ $.widget( "ui.menubar", {
 
 			// might be a non-menu button
 			if ( menu.length ) {
+				// TODO use _on
 				input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
 					// ignore triggered focus event
 					if ( event.type === "focus" && !event.originalEvent ) {
@@ -108,6 +110,7 @@ $.widget( "ui.menubar", {
 						that._open( event, menu );
 					}
 				})
+				// TODO use _on
 				.bind( "keydown", function( event ) {
 					switch ( event.keyCode ) {
 					case $.ui.keyCode.SPACE:
@@ -134,6 +137,7 @@ $.widget( "ui.menubar", {
 					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 				}
 			} else {
+				// TODO use _on
 				input.bind( "click.menubar mouseenter.menubar", function( event ) {
 					if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" ) {
 						that._close();
