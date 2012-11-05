@@ -1305,4 +1305,150 @@ asyncTest( "_delay", function() {
 	$( "#widget" ).testWidget();
 });
 
+test( "bridge - widget-creation", function() {
+	expect( 2 );
+	
+	function MyPrototype(option, element) {}
+	
+	MyPrototype.prototype = {
+		_create: function() {},
+		creationTest: function() {}
+	};
+	$.widget.bridge( "testWidget", MyPrototype );
+	
+	ok( $.isFunction( $.fn.testWidget ), "constructor was created" );
+	equal( "object", typeof $.fn.testWidget.prototype, "prototype was created" );
+});
+
+// test for #8775
+test( "bridge - jQuery usage", function() {
+	expect( 13 );
+
+	var elem, instance, ret,
+		shouldCreate = false;
+
+	function MyPrototype( options, element ) {
+		this.element = $( element );
+		this.options = options;
+		ok( shouldCreate, "create called on instantiation" );
+	}
+	
+	MyPrototype.prototype = {
+		getterSetterVal: 5,
+		methodWithParams: function( param1, param2 ) {
+			ok( true, "method called via .pluginName(methodName)" );
+			equal( param1, "value1",
+				"parameter passed via .pluginName(methodName, param)" );
+			equal( param2, "value2",
+				"multiple parameters passed via .pluginName(methodName, param, param)" );
+
+			return this;
+		},
+		getterSetterMethod: function( val ) {
+			if ( val ) {
+				this.getterSetterVal = val;
+			} else {
+				return this.getterSetterVal;
+			}
+		},
+		jQueryObject: function() {
+			return $( "body" );
+		},
+		destroy: function() {
+			this.element.removeData( "testWidget" );
+			delete this.element;
+			delete this.options;
+		}
+	};
+	$.widget.bridge( "testWidget", MyPrototype );
+
+	shouldCreate = true;
+	elem = $( "<div>" ).testWidget();
+	shouldCreate = false;
+
+	instance = elem.data( "testWidget" );
+	equal( typeof instance, "object", "instance stored in .data(pluginName)" );
+	equal( instance.element[0], elem[0], "element stored on widget" );
+	ret = elem.testWidget( "methodWithParams", "value1", "value2" );
+	equal( ret, elem, "jQuery object returned from method call" );
+
+	ret = elem.testWidget( "getterSetterMethod" );
+	equal( ret, 5, "getter/setter can act as getter" );
+	ret = elem.testWidget( "getterSetterMethod", 30 );
+	equal( ret, elem, "getter/setter method can be chainable" );
+	equal( instance.getterSetterVal, 30, "getter/setter can act as setter" );
+	ret = elem.testWidget( "jQueryObject" );
+	equal( ret[ 0 ], document.body, "returned jQuery object" );
+	equal( ret.end(), elem, "stack preserved" );
+
+	elem.testWidget( "destroy" );
+	equal( elem.data( "testWidget" ), null, "completely destroyed" );
+});
+
+test( "bridge - jQuery usage fullname", function() {
+	expect( 14 );
+
+	var elem, instance, ret,
+		shouldCreate = false;
+
+	function MyPrototype( options, element ) {
+		this.element = $( element );
+		this.options = options;
+		ok( shouldCreate, "create called on instantiation" );
+	}
+	
+	MyPrototype.prototype = {
+		widgetFullName: "testWidgetFullName",
+		getterSetterVal: 5,
+		methodWithParams: function( param1, param2 ) {
+			ok( true, "method called via .pluginName(methodName)" );
+			equal( param1, "value1",
+				"parameter passed via .pluginName(methodName, param)" );
+			equal( param2, "value2",
+				"multiple parameters passed via .pluginName(methodName, param, param)" );
+
+			return this;
+		},
+		getterSetterMethod: function( val ) {
+			if ( val ) {
+				this.getterSetterVal = val;
+			} else {
+				return this.getterSetterVal;
+			}
+		},
+		jQueryObject: function() {
+			return $( "body" );
+		},
+		destroy: function() {
+			this.element.removeData( MyPrototype.prototype.widgetFullName );
+			delete this.element;
+			delete this.options;
+		}
+	};
+	$.widget.bridge( "testWidget", MyPrototype );
+
+	shouldCreate = true;
+	elem = $( "<div>" ).testWidget();
+	shouldCreate = false;
+
+	instance = elem.data( "testWidgetFullName" );
+	equal( typeof instance, "object", "instance stored in .data(pluginFullName)" );
+	equal( typeof elem.data( "testWidget" ), "undefined", "instance not stored in .data(pluginName)" );
+	equal( instance.element[0], elem[0], "element stored on widget" );
+	ret = elem.testWidget( "methodWithParams", "value1", "value2" );
+	equal( ret, elem, "jQuery object returned from method call" );
+
+	ret = elem.testWidget( "getterSetterMethod" );
+	equal( ret, 5, "getter/setter can act as getter" );
+	ret = elem.testWidget( "getterSetterMethod", 30 );
+	equal( ret, elem, "getter/setter method can be chainable" );
+	equal( instance.getterSetterVal, 30, "getter/setter can act as setter" );
+	ret = elem.testWidget( "jQueryObject" );
+	equal( ret[ 0 ], document.body, "returned jQuery object" );
+	equal( ret.end(), elem, "stack preserved" );
+
+	elem.testWidget( "destroy" );
+	equal( elem.data( "testWidgetFullName" ), null, "completely destroyed" );
+});
+
 }( jQuery ) );
