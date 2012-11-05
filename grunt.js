@@ -1,11 +1,8 @@
-/*jshint node: true */
 module.exports = function( grunt ) {
 
-var // modules
-	fs = require( "fs" ),
-	path = require( "path" ),
-	request = require( "request" ),
+"use strict";
 
+var
 	// files
 	coreFiles = [
 		"jquery.ui.core.js",
@@ -114,7 +111,7 @@ function createBanner( files ) {
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\n' : '' %>" +
 		"* Includes: " + (files ? fileNames.join(", ") : "<%= stripDirectory(grunt.task.current.file.src[1]) %>") + "\n" +
-		"* Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
+		"* Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */";
 }
 
@@ -158,13 +155,14 @@ grunt.initConfig({
 		dist: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"jquery-*.js",
 				"MIT-LICENSE.txt",
 				"README.md",
 				"grunt.js",
 				"package.json",
+				"*.jquery.json",
 				"ui/**/*",
+				"ui/.jshintrc",
 				"demos/**/*",
 				"themes/**/*",
 				"external/**/*",
@@ -203,7 +201,6 @@ grunt.initConfig({
 		cdn: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"MIT-LICENSE.txt",
 				"ui/*.js",
 				"package.json"
@@ -246,7 +243,6 @@ grunt.initConfig({
 		themes: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"MIT-LICENSE.txt",
 				"package.json"
 			],
@@ -285,15 +281,15 @@ grunt.initConfig({
 		files: grunt.file.expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|all-active|index|test|draggable|droppable|selectable|resizable|sortable|dialog|slider|datepicker|tabs|tabs_deprecated)\.html$/ ).test( file );
+			return !( /(all|all-active|index|test|dialog|slider|datepicker|tabs|tooltip)\.html$/ ).test( file );
 		})
 	},
 	lint: {
 		ui: grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
 			// TODO remove items from this list once rewritten
-			return !( /(mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
+			return !( /(mouse|datepicker)\.js$/ ).test( file );
 		}),
-		grunt: [ "grunt.js", "build/tasks/*.js" ],
+		grunt: [ "grunt.js", "build/**/*.js" ],
 		tests: "tests/unit/**/*.js"
 	},
 	csslint: {
@@ -310,7 +306,8 @@ grunt.initConfig({
 				"important": false,
 				"outline-none": false,
 				// especially this one
-				"overqualified-elements": false
+				"overqualified-elements": false,
+				"compatible-vendor-prefixes": false
 			}
 		}
 	},
@@ -331,9 +328,7 @@ grunt.initConfig({
 		}
 
 		return {
-			// TODO: use "faux strict mode" https://github.com/jshint/jshint/issues/504
-			// TODO: limit `smarttabs` to multi-line comments https://github.com/jshint/jshint/issues/503
-			options: parserc(),
+			grunt: parserc(),
 			ui: parserc( "ui/" ),
 			// TODO: `evil: true` is only for document.write() https://github.com/jshint/jshint/issues/519
 			// TODO: don't create so many globals in tests
@@ -347,7 +342,7 @@ grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size:a
 grunt.registerTask( "sizer_all", "concat:ui min compare_size" );
 grunt.registerTask( "build", "concat min cssmin copy:dist_units_images" );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
-grunt.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
+grunt.registerTask( "release_themes", "release generate_themes copy:themes md5:themes zip:themes" );
 grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
 
 };

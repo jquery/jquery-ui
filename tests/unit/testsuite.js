@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var reset, jshintLoaded;
+
 window.TestHelpers = {};
 
 function includeStyle( url ) {
@@ -9,6 +11,19 @@ function includeStyle( url ) {
 function includeScript( url ) {
 	document.write( "<script src='../../../" + url + "'></script>" );
 }
+
+function url( value ) {
+	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
+}
+
+reset = QUnit.reset;
+QUnit.reset = function() {
+	// Ensure jQuery events and data on the fixture are properly removed
+	jQuery("#qunit-fixture").empty();
+	// Let QUnit reset the fixture
+	reset.apply( this, arguments );
+};
+
 
 QUnit.config.requireExpects = true;
 
@@ -20,7 +35,6 @@ QUnit.config.urlConfig.push({
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
-		// TODO: proper include with theme images
 		includeStyle( "dist/jquery-ui.min.css" );
 		includeScript( "dist/jquery-ui.min.js" );
 	} :
@@ -39,7 +53,7 @@ QUnit.config.urlConfig.push({
 	tooltip: "Skip running JSHint, e.g. within TestSwarm, where Jenkins runs it already"
 });
 
-var jshintLoaded = false;
+jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
 	if ( QUnit.urlParams.nojshint ) {
 		return;
@@ -55,11 +69,11 @@ TestHelpers.testJshint = function( module ) {
 
 		$.when(
 			$.ajax({
-				url: "../../../ui/.jshintrc",
+				url: url("../../../ui/.jshintrc"),
 				dataType: "json"
 			}),
 			$.ajax({
-				url: "../../../ui/jquery.ui." + module + ".js",
+				url: url("../../../ui/jquery.ui." + module + ".js"),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
@@ -102,7 +116,7 @@ function testWidgetDefaults( widget, defaults ) {
 	// ensure that all defaults were tested
 	test( "tested defaults", function() {
 		var count = 0;
-		$.each( pluginDefaults, function( key, val ) {
+		$.each( pluginDefaults, function( key ) {
 			expect( ++count );
 			ok( key in defaults, key );
 		});
@@ -213,7 +227,7 @@ window.domEqual = function( selector, modifier, message ) {
 		delete result.data[ $.expando ];
 		children = elem.children();
 		if ( children.length ) {
-			result.children = elem.children().map(function( ind ) {
+			result.children = elem.children().map(function() {
 				return extract( $( this ) );
 			}).get();
 		} else {

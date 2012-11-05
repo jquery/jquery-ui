@@ -3,28 +3,28 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/
+ * http://api.jqueryui.com/category/effects-core/
  */
 ;(jQuery.effects || (function($, undefined) {
 
-var backCompat = $.uiBackCompat !== false,
-	// prefix used for storing data on .data()
-	dataSpace = "ui-effects-";
+var dataSpace = "ui-effects-";
 
 $.effects = {
 	effect: {}
 };
 
 /*!
- * jQuery Color Animations
+ * jQuery Color Animations v2.0.0
  * http://jquery.com/
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
+ *
+ * Date: Mon Aug 13 13:41:02 2012 -0500
  */
 (function( jQuery, undefined ) {
 
@@ -243,8 +243,7 @@ color.fn = jQuery.extend( color.prototype, {
 
 		var inst = this,
 			type = jQuery.type( red ),
-			rgba = this._rgba = [],
-			source;
+			rgba = this._rgba = [];
 
 		// more than 1 argument specified - assume ( red, green, blue, alpha )
 		if ( green !== undefined ) {
@@ -272,8 +271,8 @@ color.fn = jQuery.extend( color.prototype, {
 				});
 			} else {
 				each( spaces, function( spaceName, space ) {
+					var cache = space.cache;
 					each( space.props, function( key, prop ) {
-						var cache = space.cache;
 
 						// if the cache doesn't exist, and we know how to convert
 						if ( !inst[ cache ] && space.to ) {
@@ -290,6 +289,15 @@ color.fn = jQuery.extend( color.prototype, {
 						// call clamp with alwaysAllowEmpty
 						inst[ cache ][ prop.idx ] = clamp( red[ key ], prop, true );
 					});
+
+					// everything defined but alpha?
+					if ( inst[ cache ] && $.inArray( null, inst[ cache ].slice( 0, 3 ) ) < 0 ) {
+						// use the default of 1
+						inst[ cache ][ 3 ] = 1;
+						if ( space.from ) {
+							inst._rgba = space.from( inst[ cache ] );
+						}
+					}
 				});
 			}
 			return this;
@@ -416,7 +424,7 @@ color.fn = jQuery.extend( color.prototype, {
 			rgba.push( ~~( alpha * 255 ) );
 		}
 
-		return "#" + jQuery.map( rgba, function( v, i ) {
+		return "#" + jQuery.map( rgba, function( v ) {
 
 			// default to 0 when nulls exist
 			v = ( v || 0 ).toString( 16 );
@@ -490,8 +498,7 @@ spaces.hsla.from = function ( hsla ) {
 		l = hsla[ 2 ],
 		a = hsla[ 3 ],
 		q = l <= 0.5 ? l * ( 1 + s ) : l + s - l * s,
-		p = 2 * l - q,
-		r, g, b;
+		p = 2 * l - q;
 
 	return [
 		Math.round( hue2rgb( p, q, h + ( 1 / 3 ) ) * 255 ),
@@ -581,19 +588,23 @@ each( spaces, function( spaceName, space ) {
 each( stepHooks, function( i, hook ) {
 	jQuery.cssHooks[ hook ] = {
 		set: function( elem, value ) {
-			var parsed, backgroundColor, curElem;
+			var parsed, curElem,
+				backgroundColor = "";
 
 			if ( jQuery.type( value ) !== "string" || ( parsed = stringParse( value ) ) ) {
 				value = color( parsed || value );
 				if ( !support.rgba && value._rgba[ 3 ] !== 1 ) {
 					curElem = hook === "backgroundColor" ? elem.parentNode : elem;
-					do {
-						backgroundColor = jQuery.css( curElem, "backgroundColor" );
-					} while (
-						( backgroundColor === "" || backgroundColor === "transparent" ) &&
-						( curElem = curElem.parentNode ) &&
-						curElem.style
-					);
+					while (
+						(backgroundColor === "" || backgroundColor === "transparent") &&
+						curElem && curElem.style
+					) {
+						try {
+							backgroundColor = jQuery.css( curElem, "backgroundColor" );
+							curElem = curElem.parentNode;
+						} catch ( e ) {
+						}
+					}
 
 					value = value.blend( backgroundColor && backgroundColor !== "transparent" ?
 						backgroundColor :
@@ -604,7 +615,7 @@ each( stepHooks, function( i, hook ) {
 			}
 			try {
 				elem.style[ hook ] = value;
-			} catch( value ) {
+			} catch( error ) {
 				// wrapped to prevent IE from throwing errors on "invalid" values like 'auto' or 'inherit'
 			}
 		}
@@ -618,6 +629,17 @@ each( stepHooks, function( i, hook ) {
 		jQuery.cssHooks[ hook ].set( fx.elem, fx.start.transition( fx.end, fx.pos ) );
 	};
 });
+
+jQuery.cssHooks.borderColor = {
+	expand: function( value ) {
+		var expanded = {};
+
+		each( [ "Top", "Right", "Bottom", "Left" ], function( i, part ) {
+			expanded[ "border" + part + "Color" ] = value;
+		});
+		return expanded;
+	}
+};
 
 // Basic color names only.
 // Usage of any of the other color names requires adding yourself or including
@@ -641,7 +663,7 @@ colors = jQuery.Color.names = {
 	white: "#ffffff",
 	yellow: "#ffff00",
 
-	// 4.2.3. ‘transparent’ color keyword
+	// 4.2.3. "transparent" color keyword
 	transparent: [ null, null, null, 0 ],
 
 	_default: "#ffffff"
@@ -684,7 +706,6 @@ function getElementStyles() {
 			this.currentStyle,
 		newStyle = {},
 		key,
-		camelCase,
 		len;
 
 	// webkit enumerates style porperties
@@ -805,37 +826,42 @@ $.fn.extend({
 	_addClass: $.fn.addClass,
 	addClass: function( classNames, speed, easing, callback ) {
 		return speed ?
-			$.effects.animateClass.apply( this, [{ add: classNames }, speed, easing, callback ]) :
-			this._addClass(classNames);
+			$.effects.animateClass.call( this,
+				{ add: classNames }, speed, easing, callback ) :
+			this._addClass( classNames );
 	},
 
 	_removeClass: $.fn.removeClass,
 	removeClass: function( classNames, speed, easing, callback ) {
 		return speed ?
-			$.effects.animateClass.apply( this, [{ remove: classNames }, speed, easing, callback ]) :
-			this._removeClass(classNames);
+			$.effects.animateClass.call( this,
+				{ remove: classNames }, speed, easing, callback ) :
+			this._removeClass( classNames );
 	},
 
 	_toggleClass: $.fn.toggleClass,
 	toggleClass: function( classNames, force, speed, easing, callback ) {
 		if ( typeof force === "boolean" || force === undefined ) {
 			if ( !speed ) {
-				// without speed parameter;
+				// without speed parameter
 				return this._toggleClass( classNames, force );
 			} else {
-				return $.effects.animateClass.apply( this, [( force ? { add:classNames } : { remove:classNames }), speed, easing, callback ]);
+				return $.effects.animateClass.call( this,
+					(force ? { add: classNames } : { remove: classNames }),
+					speed, easing, callback );
 			}
 		} else {
-			// without force parameter;
-			return $.effects.animateClass.apply( this, [{ toggle: classNames }, force, speed, easing ]);
+			// without force parameter
+			return $.effects.animateClass.call( this,
+				{ toggle: classNames }, force, speed, easing );
 		}
 	},
 
 	switchClass: function( remove, add, speed, easing, callback) {
-		return $.effects.animateClass.apply( this, [{
-				add: add,
-				remove: remove
-			}, speed, easing, callback ]);
+		return $.effects.animateClass.call( this, {
+			add: add,
+			remove: remove
+		}, speed, easing, callback );
 	}
 });
 
@@ -1014,7 +1040,7 @@ $.extend( $.effects, {
 // return an effect options object for the given parameters:
 function _normalizeArguments( effect, options, speed, callback ) {
 
-	// allow passing all optinos as the first parameter
+	// allow passing all options as the first parameter
 	if ( $.isPlainObject( effect ) ) {
 		options = effect;
 		effect = effect.effect;
@@ -1023,8 +1049,8 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	// convert to an object
 	effect = { effect: effect };
 
-	// catch (effect)
-	if ( options === undefined ) {
+	// catch (effect, null, ...)
+	if ( options == null ) {
 		options = {};
 	}
 
@@ -1071,28 +1097,17 @@ function standardSpeed( speed ) {
 	}
 
 	// invalid strings - treat as "normal" speed
-	if ( typeof speed === "string" && !$.effects.effect[ speed ] ) {
-		// TODO: remove in 2.0 (#7115)
-		if ( backCompat && $.effects[ speed ] ) {
-			return false;
-		}
-		return true;
-	}
-
-	return false;
+	return typeof speed === "string" && !$.effects.effect[ speed ];
 }
 
 $.fn.extend({
-	effect: function( effect, options, speed, callback ) {
+	effect: function( /* effect, options, speed, callback */ ) {
 		var args = _normalizeArguments.apply( this, arguments ),
 			mode = args.mode,
 			queue = args.queue,
-			effectMethod = $.effects.effect[ args.effect ],
+			effectMethod = $.effects.effect[ args.effect ];
 
-			// DEPRECATED: remove in 2.0 (#7115)
-			oldEffectMethod = !effectMethod && backCompat && $.effects[ args.effect ];
-
-		if ( $.fx.off || !( effectMethod || oldEffectMethod ) ) {
+		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
 				return this[ mode ]( args.duration, args.complete );
@@ -1128,18 +1143,7 @@ $.fn.extend({
 			}
 		}
 
-		// TODO: remove this check in 2.0, effectMethod will always be true
-		if ( effectMethod ) {
-			return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
-		} else {
-			// DEPRECATED: remove in 2.0 (#7115)
-			return oldEffectMethod.call(this, {
-				options: args,
-				duration: args.duration,
-				callback: args.complete,
-				mode: args.mode
-			});
-		}
+		return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
 	},
 
 	_show: $.fn.show,

@@ -313,7 +313,7 @@ test( "re-init", function() {
 		_init: function() {
 			actions.push( "init" );
 		},
-		_setOption: function( key, value ) {
+		_setOption: function( key ) {
 			actions.push( "option" + key );
 		}
 	});
@@ -760,6 +760,30 @@ test( "_on() with delegate", function() {
 	$.ui.testWidget();
 });
 
+test( "_on() with delegate to descendent", function() {
+	expect( 4 );
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			this.target = $( "<p><strong>hello</strong> world</p>" );
+			this.child = this.target.children();
+			this._on( this.target, {
+				"keyup": "handlerDirect",
+				"keyup strong": "handlerDelegated"
+			});
+			this.child.trigger( "keyup" );
+		},
+		handlerDirect: function( event ) {
+			deepEqual( event.currentTarget, this.target[ 0 ] );
+			deepEqual( event.target, this.child[ 0 ] );
+		},
+		handlerDelegated: function( event ) {
+			deepEqual( event.currentTarget, this.child[ 0 ] );
+			deepEqual( event.target, this.child[ 0 ] );
+		}
+	});
+	$.ui.testWidget();
+});
+
 test( "_on() to common element", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
@@ -959,11 +983,11 @@ test( "._trigger() - cancelled event", function() {
 	});
 
 	$( "#widget" ).testWidget({
-		foo: function( event, ui ) {
+		foo: function() {
 			ok( true, "callback invoked even if event is cancelled" );
 		}
 	})
-	.bind( "testwidgetfoo", function( event, ui ) {
+	.bind( "testwidgetfoo", function() {
 		ok( true, "event was triggered" );
 		return false;
 	});
@@ -978,7 +1002,7 @@ test( "._trigger() - cancelled callback", function() {
 	});
 
 	$( "#widget" ).testWidget({
-		foo: function( event, ui ) {
+		foo: function() {
 			return false;
 		}
 	});
@@ -1167,6 +1191,13 @@ test( "._trigger() - instance as element", function() {
 			$( "#widget" ).testWidget().detach();
 		});
 	});
+
+	test( "destroy - remove event bubbling", function() {
+		shouldDestroy( false, function() {
+			$( "<div>child</div>" ).appendTo( $( "#widget" ).testWidget() )
+				.trigger( "remove" );
+		});
+	});
 }());
 
 test( "redefine", function() {
@@ -1231,6 +1262,21 @@ test( "redefine deep prototype chain", function() {
 
 	delete $.ui.testWidget3;
 	delete $.ui.testWidget2;
+});
+
+test( "redefine - widgetEventPrefix", function() {
+	expect( 2 );
+
+	$.widget( "ui.testWidget", {
+		widgetEventPrefix: "test"
+	});
+	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
+		"cusotm prefix in original" );
+
+	$.widget( "ui.testWidget", $.ui.testWidget, {} );
+	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
+		"cusotm prefix in extension" );
+
 });
 
 asyncTest( "_delay", function() {

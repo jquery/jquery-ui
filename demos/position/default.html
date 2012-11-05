@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Position - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../jquery-1.8.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.mouse.js"></script>
@@ -48,7 +48,6 @@
 				of: $( "#parent" ),
 				my: $( "#my_horizontal" ).val() + " " + $( "#my_vertical" ).val(),
 				at: $( "#at_horizontal" ).val() + " " + $( "#at_vertical" ).val(),
-				offset: $( "#offset" ).val(),
 				collision: $( "#collision_horizontal" ).val() + " " + $( "#collision_vertical" ).val()
 			});
 		}
@@ -66,8 +65,6 @@
 	</script>
 </head>
 <body>
-
-<div class="demo">
 
 <div id="parent">
 	<p>
@@ -116,10 +113,6 @@
 		</select>
 	</div>
 	<div style="padding-bottom: 20px;">
-		<b>offset:</b>
-		<input id="offset">
-	</div>
-	<div style="padding-bottom: 20px;">
 		<b>collision:</b>
 		<select id="collision_horizontal">
 			<option value="flip">flip</option>
@@ -136,14 +129,9 @@
 	</div>
 </div>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Use the form controls to configure the positioning, or drag the positioned element to modify its offset.
-<br/>Drag around the parent element to see collision detection in action.</p>
-</div><!-- End demo-description -->
-
+<br>Drag around the parent element to see collision detection in action.</p>
+</div>
 </body>
 </html>

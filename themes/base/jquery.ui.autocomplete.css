@@ -3,12 +3,14 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Autocomplete#theming
  */
-.ui-autocomplete { position: absolute; cursor: default; }	
-
-/* workarounds */
-* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
+.ui-autocomplete {
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: default;
+}

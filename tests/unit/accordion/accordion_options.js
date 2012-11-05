@@ -13,6 +13,15 @@ test( "{ active: default }", function() {
 	state( element, 1, 0, 0 );
 });
 
+test( "{ active: null }", function() {
+	expect( 2 );
+	var element = $( "#list1" ).accordion({
+		active: null
+	});
+	equal( element.accordion( "option", "active" ), 0 );
+	state( element, 1, 0, 0 );
+});
+
 test( "{ active: false }", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
@@ -56,28 +65,26 @@ test( "{ active: Number }", function() {
 	state( element, 0, 1, 0 );
 });
 
-if ( $.uiBackCompat === false ) {
-	test( "{ active: -Number }", function() {
-		expect( 8 );
-		var element = $( "#list1" ).accordion({
-			active: -1
-		});
-		equal( element.accordion( "option", "active" ), 2 );
-		state( element, 0, 0, 1 );
-
-		element.accordion( "option", "active", -2 );
-		equal( element.accordion( "option", "active" ), 1 );
-		state( element, 0, 1, 0 );
-
-		element.accordion( "option", "active", -10 );
-		equal( element.accordion( "option", "active" ), 1 );
-		state( element, 0, 1, 0 );
-
-		element.accordion( "option", "active", -3 );
-		equal( element.accordion( "option", "active" ), 0 );
-		state( element, 1, 0, 0 );
+test( "{ active: -Number }", function() {
+	expect( 8 );
+	var element = $( "#list1" ).accordion({
+		active: -1
 	});
-}
+	equal( element.accordion( "option", "active" ), 2 );
+	state( element, 0, 0, 1 );
+
+	element.accordion( "option", "active", -2 );
+	equal( element.accordion( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.accordion( "option", "active", -10 );
+	equal( element.accordion( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.accordion( "option", "active", -3 );
+	equal( element.accordion( "option", "active" ), 0 );
+	state( element, 1, 0, 0 );
+});
 
 test( "{ animate: false }", function() {
 	expect( 3 );
@@ -105,9 +112,9 @@ asyncTest( "{ animate: Number }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, undefined, "default easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, undefined, "default easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -129,9 +136,9 @@ asyncTest( "{ animate: String }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, undefined, "default duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, undefined, "default duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -153,9 +160,9 @@ asyncTest( "{ animate: {} }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, undefined, "default duration" );
-		equal( easing, undefined, "default easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, undefined, "default duration" );
+		equal( options.easing, undefined, "default easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -177,9 +184,9 @@ asyncTest( "{ animate: { duration, easing } }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -202,9 +209,9 @@ asyncTest( "{ animate: { duration, easing } }, animate down", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -233,9 +240,9 @@ asyncTest( "{ animate: { duration, easing, down } }, animate down", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "swing", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "swing", "correct easing" );
 		animate.apply( this, arguments );
 	};
 

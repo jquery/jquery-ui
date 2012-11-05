@@ -44,6 +44,15 @@ test( "disconnected from DOM", function() {
 	equal( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
 });
 
+test( "non-tab list items", function() {
+	expect( 2 );
+
+	var element = $( "#tabs9" ).tabs();
+	equal( element.tabs( "option", "active" ), 0, "defaults to first tab" );
+	equal( element.find( ".ui-tabs-nav li.ui-state-active" ).index(), 1,
+		"first actual tab is active" );
+});
+
 test( "aria-controls", function() {
 	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),
@@ -123,7 +132,6 @@ test( "accessibility", function() {
 asyncTest( "accessibility - ajax", function() {
 	expect( 4 );
 	var element = $( "#tabs2" ).tabs(),
-		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 		panel = $( "#custom-id" );
 
 	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
@@ -285,11 +293,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
-		// support: Firefox 12
-		// Firefox <13 passes arguments so we can't use setTimeout( start, 1 )
-		setTimeout(function() {
-			start();
-		}, 1 );
+		setTimeout( start, 1 );
 	}
 
 	setTimeout( step1, 1 );
@@ -482,11 +486,7 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
-		// support: Firefox 12
-		// Firefox <13 passes arguments so we can't use setTimeout( start, 1 )
-		setTimeout(function() {
-			start();
-		}, 1 );
+		setTimeout( start, 1 );
 	}
 
 	setTimeout( step1, 1 );
@@ -578,11 +578,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		panels.eq( 1 ).simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
 		strictEqual( document.activeElement, tabs[ 1 ], "second tab is activeElement" );
 
-		// support: Firefox 12
-		// Firefox <13 passes arguments so we can't use setTimeout( start, 1 )
-		setTimeout(function() {
-			start();
-		}, 1 );
+		setTimeout( start, 1 );
 	}
 
 	setTimeout( step1, 1 );
@@ -591,7 +587,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
 	expect( 1 );
 
-	var element = $( "#tabs2" ).tabs({
+	$( "#tabs2" ).tabs({
 		active: 2,
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
@@ -606,7 +602,7 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 	var element = $( "<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>" );
 	element.appendTo( "#main" );
 	element.tabs({
-		beforeLoad: function( event, ui ) {
+		beforeLoad: function() {
 			event.preventDefault();
 			ok( false, "should not be an ajax tab" );
 		}

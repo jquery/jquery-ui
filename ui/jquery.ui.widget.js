@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Widget
+ * http://api.jqueryui.com/jQuery.widget/
  */
 (function( $, undefined ) {
 
@@ -101,13 +101,11 @@ $.widget = function( name, base, prototype ) {
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
-		widgetEventPrefix: name
+		widgetEventPrefix: basePrototype.widgetEventPrefix || name
 	}, prototype, {
 		constructor: constructor,
 		namespace: namespace,
 		widgetName: name,
-		// TODO remove widgetBaseClass, see #8155
-		widgetBaseClass: fullName,
 		widgetFullName: fullName
 	});
 
@@ -142,8 +140,17 @@ $.widget.extend = function( target ) {
 	for ( ; inputIndex < inputLength; inputIndex++ ) {
 		for ( key in input[ inputIndex ] ) {
 			value = input[ inputIndex ][ key ];
-			if (input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
-				target[ key ] = $.isPlainObject( value ) ? $.widget.extend( {}, target[ key ], value ) : value;
+			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+				// Clone objects
+				if ( $.isPlainObject( value ) ) {
+					target[ key ] = $.isPlainObject( target[ key ] ) ?
+						$.widget.extend( {}, target[ key ], value ) :
+						// Don't extend strings, arrays, etc. with objects
+						$.widget.extend( {}, value );
+				// Copy everything else by reference
+				} else {
+					target[ key ] = value;
+				}
 			}
 		}
 	}
@@ -196,7 +203,7 @@ $.widget.bridge = function( name, object ) {
 	};
 };
 
-$.Widget = function( options, element ) {};
+$.Widget = function( /* options, element */ ) {};
 $.Widget._childConstructors = [];
 
 $.Widget.prototype = {
@@ -228,7 +235,13 @@ $.Widget.prototype = {
 			// TODO remove dual storage
 			$.data( element, this.widgetName, this );
 			$.data( element, this.widgetFullName, this );
-			this._on({ remove: "destroy" });
+			this._on( this.element, {
+				remove: function( event ) {
+					if ( event.target === element ) {
+						this.destroy();
+					}
+				}
+			});
 			this.document = $( element.style ?
 				// element within the document
 				element.ownerDocument :
@@ -347,17 +360,19 @@ $.Widget.prototype = {
 	},
 
 	_on: function( element, handlers ) {
+		var delegateElement,
+			instance = this;
 		// no element argument, shuffle and use this.element
 		if ( !handlers ) {
 			handlers = element;
 			element = this.element;
+			delegateElement = this.widget();
 		} else {
 			// accept selectors, DOM elements
-			element = $( element );
+			element = delegateElement = $( element );
 			this.bindings = this.bindings.add( element );
 		}
 
-		var instance = this;
 		$.each( handlers, function( event, handler ) {
 			function handlerProxy() {
 				// allow widgets to customize the disabled handling
@@ -381,7 +396,7 @@ $.Widget.prototype = {
 				eventName = match[1] + instance.eventNamespace,
 				selector = match[2];
 			if ( selector ) {
-				instance.widget().delegate( selector, eventName, handlerProxy );
+				delegateElement.delegate( selector, eventName, handlerProxy );
 			} else {
 				element.bind( eventName, handlerProxy );
 			}
@@ -476,7 +491,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		if ( options.delay ) {
 			element.delay( options.delay );
 		}
-		if ( hasOptions && $.effects && ( $.effects.effect[ effectName ] || $.uiBackCompat !== false && $.effects[ effectName ] ) ) {
+		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
 			element[ method ]( options );
 		} else if ( effectName !== method && element[ effectName ] ) {
 			element[ effectName ]( options.duration, options.easing, callback );
@@ -491,12 +506,5 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		}
 	};
 });
-
-// DEPRECATED
-if ( $.uiBackCompat !== false ) {
-	$.Widget.prototype._getCreateOptions = function() {
-		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
-	};
-}
 
 })( jQuery );

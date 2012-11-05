@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Blind
+ * http://api.jqueryui.com/blind-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

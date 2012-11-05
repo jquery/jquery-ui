@@ -1,7 +1,5 @@
 (function( $ ) {
 
-var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
-
 module( "spinner: options" );
 
 // culture is tested after numberFormat, since it depends on numberFormat
@@ -28,7 +26,7 @@ test( "icons: custom ", function() {
 test( "incremental, false", function() {
 	expect( 100 );
 
-	var i, diff,
+	var i,
 		prev = 0,
 		element = $( "#spin" ).val( prev ).spinner({
 			incremental: false,
@@ -53,7 +51,7 @@ test( "incremental, true", function() {
 		});
 	}
 
-	var i, diff,
+	var i,
 		prev = 0,
 		expected = [].concat( fill( 18, 1 ), fill( 37, 2 ), fill( 14, 3 ),
 			fill( 9, 4 ), fill( 6, 5 ), fill( 5, 6 ), fill ( 5, 7 ),

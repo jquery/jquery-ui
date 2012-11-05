@@ -1,13 +1,16 @@
-; This file is for unifying the coding style for different editors and IDEs.
-; More information at http://EditorConfig.org
+# This file is for unifying the coding style for different editors and IDEs
+# editorconfig.org
 
 root = true
 
-[grunt.js]
+[*]
 indent_style = tab
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
 
-[ui/**.js]
-indent_style = tab
-
-[tests/unit/**.js]
-indent_style = tab
+[external/**]
+trim_trailing_whitespace = false
+insert_final_newline = varies
+end_of_line = varies

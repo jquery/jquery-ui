@@ -403,11 +403,11 @@ $.widget( "ui.draggable", $.ui.draggable, {
 
 		offset = container.offset(),
 		left = offset.left +
-			(parseFloat( $.curCSS( container[0], "borderLeftWidth", true ) ) || 0) +
-			(parseFloat( $.curCSS( container[0], "paddingLeft", true ) ) || 0);
+			(parseFloat( $.css( container[0], "borderLeftWidth", true ) ) || 0) +
+			(parseFloat( $.css( container[0], "paddingLeft", true ) ) || 0);
 		top = offset.top +
-			(parseFloat( $.curCSS( container[0], "borderTopWidth", true ) ) || 0) +
-			(parseFloat( $.curCSS( container[0], "paddingTop", true ) ) || 0);
+			(parseFloat( $.css( container[0], "borderTopWidth", true ) ) || 0) +
+			(parseFloat( $.css( container[0], "paddingTop", true ) ) || 0);
 
 		this.containment = {
 			left: left,

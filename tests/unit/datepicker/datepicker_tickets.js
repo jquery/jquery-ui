@@ -7,9 +7,9 @@ module("datepicker: tickets");
 
 // http://forum.jquery.com/topic/several-breaking-changes-in-jquery-ui-1-8rc1
 test('beforeShowDay-getDate', function() {
-    expect( 3 );
-	var inp = init('#inp', {beforeShowDay: function(date) { inp.datepicker('getDate'); return [true, '']; }}),
-	   dp = $('#ui-datepicker-div');
+	expect( 3 );
+	var inp = TestHelpers.datepicker.init('#inp', {beforeShowDay: function() { inp.datepicker('getDate'); return [true, '']; }}),
+		dp = $('#ui-datepicker-div');
 	inp.val('01/01/2010').datepicker('show');
 	// contains non-breaking space
 	equal($('div.ui-datepicker-title').text(), 'January 2010', 'Initial month');
@@ -26,63 +26,63 @@ test('beforeShowDay-getDate', function() {
 });
 
 test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler', function(){
-    expect( 3 );
-    var inp = init('#inp',{
-            beforeShow: function(){
-                return false;
-            }
-        }),
-        dp = $('#ui-datepicker-div');
-    inp.datepicker('show');
-    equal(dp.css('display'), 'none',"beforeShow returns false");
-    inp.datepicker('destroy');
+	expect( 3 );
+	var inp = TestHelpers.datepicker.init('#inp',{
+			beforeShow: function(){
+				return false;
+			}
+		}),
+		dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'none',"beforeShow returns false");
+	inp.datepicker('destroy');
 
-    inp = init('#inp',{
-        beforeShow: function(){
-        }
-    });
-    dp = $('#ui-datepicker-div');
-    inp.datepicker('show');
-    equal(dp.css('display'), 'block',"beforeShow returns nothing");
+	inp = TestHelpers.datepicker.init('#inp',{
+		beforeShow: function(){
+		}
+	});
+	dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'block',"beforeShow returns nothing");
 	inp.datepicker('hide');
-    inp.datepicker('destroy');
+	inp.datepicker('destroy');
 
-    inp = init('#inp',{
-        beforeShow: function(){
-            return true;
-        }
-    });
-    dp = $('#ui-datepicker-div');
-    inp.datepicker('show');
-    equal(dp.css('display'), 'block',"beforeShow returns true");
+	inp = TestHelpers.datepicker.init('#inp',{
+		beforeShow: function(){
+			return true;
+		}
+	});
+	dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'block',"beforeShow returns true");
 	inp.datepicker('hide');
-    inp.datepicker('destroy');
+	inp.datepicker('destroy');
 });
 
 test('Ticket 6827: formatDate day of year calculation is wrong during day lights savings time', function(){
-    expect( 1 );
-    var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT"));
-    equal(time, "089");
+	expect( 1 );
+	var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT"));
+	equal(time, "089");
 });
 
 test('Ticket #7244: date parser does not fail when too many numbers are passed into the date function', function() {
-    expect( 4 );
-    var date;
-    try{
-        date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
-        ok(false, "Did not properly detect an invalid date");
-    }catch(e){
-        ok("invalid date detected");
-    }
+	expect( 4 );
+	var date;
+	try{
+		date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
+		ok(false, "Did not properly detect an invalid date");
+	}catch(e){
+		ok("invalid date detected");
+	}
 
-    try {
-      date = $.datepicker.parseDate('dd/mm/yy', '18/04/1988 @ 2:43 pm');
-      equal(date.getDate(), 18);
-      equal(date.getMonth(), 3);
-      equal(date.getFullYear(), 1988);
-    } catch(e) {
-      ok(false, "Did not properly parse date with extra text separated by whitespace");
-    }
+	try {
+		date = $.datepicker.parseDate('dd/mm/yy', '18/04/1988 @ 2:43 pm');
+		equal(date.getDate(), 18);
+		equal(date.getMonth(), 3);
+		equal(date.getFullYear(), 1988);
+	} catch(e) {
+		ok(false, "Did not properly parse date with extra text separated by whitespace");
+	}
 });
 
 })(jQuery);

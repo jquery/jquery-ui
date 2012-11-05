@@ -14,16 +14,16 @@ test( "mouse based interaction", function() {
 
 	var el = $( "#slider1" )
 		.slider({
-			start: function(event, ui) {
+			start: function( event ) {
 				equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
 			},
-			slide: function(event, ui) {
+			slide: function( event) {
 				equal( event.originalEvent.type, "mousemove", "slider triggered by mousemove" );
 			},
-			stop: function(event, ui) {
+			stop: function( event ) {
 				equal( event.originalEvent.type, "mouseup", "stop triggered by mouseup" );
 			},
-			change: function(event, ui) {
+			change: function( event ) {
 				equal( event.originalEvent.type, "mouseup", "change triggered by mouseup" );
 			}
 		});
@@ -38,16 +38,16 @@ test( "keyboard based interaction", function() {
 	// Test keyup at end of handle slide (keyboard)
 	var el = $( "#slider1" )
 		.slider({
-			start: function(event, ui) {
+			start: function( event ) {
 				equal( event.originalEvent.type, "keydown", "start triggered by keydown" );
 			},
-			slide: function(event, ui) {
+			slide: function() {
 				ok( false, "Slider never triggered by keys" );
 			},
-			stop: function(event, ui) {
+			stop: function( event ) {
 				equal( event.originalEvent.type, "keyup", "stop triggered by keyup" );
 			},
-			change: function(event, ui) {
+			change: function( event ) {
 				equal( event.originalEvent.type, "keyup", "change triggered by keyup" );
 			}
 		});
@@ -64,7 +64,7 @@ test( "programmatic event triggers", function() {
 	// Test value method
 	var el = $( "<div></div>" )
 		.slider({
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by value method" );
 			}
 		})
@@ -75,7 +75,7 @@ test( "programmatic event triggers", function() {
 	el = $( "<div></div>" )
 		.slider({
 			values: [ 10, 20 ],
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by values method" );
 			}
 		})
@@ -85,7 +85,7 @@ test( "programmatic event triggers", function() {
 	// Test value option
 	el = $( "<div></div>" )
 		.slider({
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by value option" );
 			}
 		})
@@ -96,7 +96,7 @@ test( "programmatic event triggers", function() {
 	el = $( "<div></div>" )
 		.slider({
 			values: [ 10, 20 ],
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by values option" );
 			}
 		})

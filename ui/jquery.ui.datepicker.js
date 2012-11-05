@@ -3,10 +3,10 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Datepicker
+ * http://api.jqueryui.com/datepicker/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -116,7 +116,7 @@ function Datepicker() {
 $.extend(Datepicker.prototype, {
 	/* Class name added to elements to indicate already configured with a date picker. */
 	markerClassName: 'hasDatepicker',
-	
+
 	//Keep track of the maximum number of rows displayed (see #7043)
 	maxRows: 4,
 
@@ -125,7 +125,7 @@ $.extend(Datepicker.prototype, {
 		if (this.debug)
 			console.log.apply('', arguments);
 	},
-	
+
 	// TODO rename to "widget" when switching to widget factory
 	_widgetDatepicker: function() {
 		return this.dpDiv;
@@ -235,7 +235,7 @@ $.extend(Datepicker.prototype, {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == input[0])
 					$.datepicker._hideDatepicker();
 				else if ($.datepicker._datepickerShowing && $.datepicker._lastInput != input[0]) {
-					$.datepicker._hideDatepicker(); 
+					$.datepicker._hideDatepicker();
 					$.datepicker._showDatepicker(input[0]);
 				} else
 					$.datepicker._showDatepicker(input[0]);
@@ -531,7 +531,7 @@ $.extend(Datepicker.prototype, {
 				case 9: $.datepicker._hideDatepicker();
 						handled = false;
 						break; // hide on tab out
-				case 13: var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' + 
+				case 13: var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
 									$.datepicker._currentClass + ')', inst.dpDiv);
 						if (sel[0])
 							$.datepicker._selectDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
@@ -629,7 +629,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker for a given input field.
-	   If false returned from beforeShow event handler do not show. 
+	   If false returned from beforeShow event handler do not show.
 	   @param  input  element - the input field attached to the date picker or
 	                  event - if triggered by focus */
 	_showDatepicker: function(input) {
@@ -682,24 +682,13 @@ $.extend(Datepicker.prototype, {
 		if (!inst.inline) {
 			var showAnim = $.datepicker._get(inst, 'showAnim');
 			var duration = $.datepicker._get(inst, 'duration');
-			var postProcess = function() {
-				var cover = inst.dpDiv.find('iframe.ui-datepicker-cover'); // IE6- only
-				if( !! cover.length ){
-					var borders = $.datepicker._getBorders(inst.dpDiv);
-					cover.css({left: -borders[0], top: -borders[1],
-						width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
-				}
-			};
 			inst.dpDiv.zIndex($(input).zIndex()+1);
 			$.datepicker._datepickerShowing = true;
 
-			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
-				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
+			if ( $.effects && $.effects.effect[ showAnim ] )
+				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration);
 			else
-				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
-			if (!showAnim || !duration)
-				postProcess();
+				inst.dpDiv[showAnim || 'show'](showAnim ? duration : null);
 			if (inst.input.is(':visible') && !inst.input.is(':disabled'))
 				inst.input.focus();
 			$.datepicker._curInst = inst;
@@ -708,18 +697,11 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-		if ($.datepicker._curInst && inst != $.datepicker._curInst) {
-			return;
-		}
 		this.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
 		var borders = $.datepicker._getBorders(inst.dpDiv);
 		instActive = inst; // for delegate hover events
 		inst.dpDiv.empty().append(this._generateHTML(inst));
 		this._attachHandlers(inst);
-		var cover = inst.dpDiv.find('iframe.ui-datepicker-cover'); // IE6- only
-		if( !!cover.length ){ //avoid call to outerXXXX() when not in IE6
-			cover.css({left: -borders[0], top: -borders[1], width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()})
-		}
 		inst.dpDiv.find('.' + this._dayOverClass + ' a').mouseover();
 		var numMonths = this._getNumberOfMonths(inst);
 		var cols = numMonths[1];
@@ -736,7 +718,7 @@ $.extend(Datepicker.prototype, {
 				// this breaks the change event in IE
 				inst.input.is(':visible') && !inst.input.is(':disabled') && inst.input[0] != document.activeElement)
 			inst.input.focus();
-		// deffered render of the years select (to avoid flashes on Firefox) 
+		// deffered render of the years select (to avoid flashes on Firefox)
 		if( inst.yearshtml ){
 			var origyearshtml = inst.yearshtml;
 			setTimeout(function(){
@@ -1414,7 +1396,7 @@ $.extend(Datepicker.prototype, {
 	 */
 	_attachHandlers: function(inst) {
 		var stepMonths = this._get(inst, 'stepMonths');
-		var id = '#' + inst.id;
+		var id = '#' + inst.id.replace( /\\\\/g, "\\" );
 		inst.dpDiv.find('[data-handler]').map(function () {
 			var handler = {
 				prev: function () {
@@ -1445,7 +1427,7 @@ $.extend(Datepicker.prototype, {
 			$(this).bind(this.getAttribute('data-event'), handler[this.getAttribute('data-handler')]);
 		});
 	},
-	
+
 	/* Generate the HTML for the current state of the date picker. */
 	_generateHTML: function(inst) {
 		var today = new Date();
@@ -1602,14 +1584,13 @@ $.extend(Datepicker.prototype, {
 					drawMonth = 0;
 					drawYear++;
 				}
-				calender += '</tbody></table>' + (isMultiMonth ? '</div>' + 
+				calender += '</tbody></table>' + (isMultiMonth ? '</div>' +
 							((numMonths[0] > 0 && col == numMonths[1]-1) ? '<div class="ui-datepicker-row-break"></div>' : '') : '');
 				group += calender;
 			}
 			html += group;
 		}
-		html += buttonPanel + ($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ?
-			'<iframe src="javascript:false;" class="ui-datepicker-cover" frameborder="0"></iframe>' : '');
+		html += buttonPanel;
 		inst._keyEvent = false;
 		return html;
 	},
@@ -1666,7 +1647,7 @@ $.extend(Datepicker.prototype, {
 						'>' + year + '</option>';
 				}
 				inst.yearshtml += '</select>';
-				
+
 				html += inst.yearshtml;
 				inst.yearshtml = null;
 			}
@@ -1777,7 +1758,7 @@ $.extend(Datepicker.prototype, {
  * Bind hover events for datepicker elements.
  * Done via delegate so the binding only occurs once in the lifetime of the parent div.
  * Global instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
- */ 
+ */
 function bindHover(dpDiv) {
 	var selector = 'button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a';
 	return dpDiv.delegate(selector, 'mouseout', function() {
@@ -1809,16 +1790,16 @@ function extendRemove(target, props) {
 	                Object - settings for attaching new datepicker functionality
    @return  jQuery object */
 $.fn.datepicker = function(options){
-	
+
 	/* Verify an empty collection wasn't passed - Fixes #6976 */
 	if ( !this.length ) {
 		return this;
 	}
-	
+
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
 		$(document).mousedown($.datepicker._checkExternalClick).
-			find('body').append($.datepicker.dpDiv);
+			find(document.body).append($.datepicker.dpDiv);
 		$.datepicker.initialized = true;
 	}
 

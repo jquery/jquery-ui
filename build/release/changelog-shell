@@ -10,70 +10,100 @@ Move all commit notes to the appropriate section.
 - If there is no ticket number, search Trac for the relevant ticket.
   - If there is no ticket, create one (if needed), or leave just the commit link.
 
-Double check that "XXXX" does not appear anywhere in the changelog.
+Double check that "TICKETREF" does not appear anywhere in the changelog.
 
-Post this changelog at: CHANGELOG_URL
+Add this changelog to jqueryui.com.
 
 
 
 DELETE EVERYTHING ABOVE THE FOLLOWING LINE
 ------------------------------------------
+<script>{
+	"title": "{title}"
+}</script>
 
-= Summary =
-This is the final release of jQuery UI 1.8.
--- OR --
-This is the second maintenance release for [[UI/Changelog/1.8|jQuery UI 1.8]].
+## Build
 
-= Build =
 
-= Core &amp; Utilities =
+## Core &amp; Utilities
 
-=== UI Core ===
+### UI Core
 
-=== Mouse ===
 
-=== Widget Factory ===
+### Mouse
 
-=== Position ===
 
-= Interactions =
+### Widget Factory
 
-=== Draggable ===
 
-=== Droppable ===
+### Position
 
-=== Resizable ===
 
-=== Selectable ===
+## Interactions
 
-=== Sortable ===
+### Draggable
 
-= Widgets =
 
-=== Accordion ===
+### Droppable
 
-=== Autocomplete ===
 
-=== Button ===
+### Resizable
 
-=== Datepicker ===
 
-=== Dialog ===
+### Selectable
 
-=== Progressbar ===
 
-=== Slider ===
+### Sortable
 
-=== Tabs ===
 
-= Effects =
+## Widgets
 
-=== Individual effects ===
+### Accordion
 
-= CSS Framework =
 
-= Demos =
+### Autocomplete
 
-= Website =
 
-=== Download Builder ===
+### Button
+
+
+### Datepicker
+
+
+### Dialog
+
+
+### Menu
+
+
+### Progressbar
+
+
+### Slider
+
+
+### Spinner
+
+
+### Tabs
+
+
+### Tooltip
+
+
+## Effects
+
+
+### Individual effects
+
+
+## CSS Framework
+
+
+## Demos
+
+
+## Website
+
+
+### Download Builder
