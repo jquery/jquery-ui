@@ -252,7 +252,7 @@ $.widget( "ui.tooltip", {
 			}
 			tooltip.position( positionOption );
 		}
-		if ( this.options.track && event && /^mouse/.test( event.originalEvent.type ) ) {
+		if ( this.options.track && event && /^mouse/.test( event.type ) ) {
 			this._on( this.document, {
 				mousemove: position
 			});
