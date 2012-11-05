@@ -159,14 +159,14 @@ $.widget( "ui.tooltip", {
 			target.data( "ui-tooltip-title", target.attr( "title" ) );
 		}
 
-		target.data( "tooltip-open", true );
+		target.data( "ui-tooltip-open", true );
 
 		// kill parent tooltips, custom or native, for hover
 		if ( event && event.type === "mouseover" ) {
 			target.parents().each(function() {
 				var parent = $( this ),
 					blurEvent;
-				if ( parent.data( "tooltip-open" ) ) {
+				if ( parent.data( "ui-tooltip-open" ) ) {
 					blurEvent = $.Event( "blur" );
 					blurEvent.target = blurEvent.currentTarget = this;
 					that.close( blurEvent, true );
@@ -196,7 +196,7 @@ $.widget( "ui.tooltip", {
 
 		content = contentOption.call( target[0], function( response ) {
 			// ignore async response if tooltip was closed already
-			if ( !target.data( "tooltip-open" ) ) {
+			if ( !target.data( "ui-tooltip-open" ) ) {
 				return;
 			}
 			// IE may instantly serve a cached response for ajax requests
@@ -325,7 +325,7 @@ $.widget( "ui.tooltip", {
 			that._removeTooltip( $( this ) );
 		});
 
-		target.removeData( "tooltip-open" );
+		target.removeData( "ui-tooltip-open" );
 		this._off( target, "mouseleave focusout keyup" );
 		// Remove 'remove' binding only on delegated targets
 		if ( target[0] !== this.element[0] ) {
