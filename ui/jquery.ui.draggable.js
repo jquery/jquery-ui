@@ -332,10 +332,17 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_getRelativeOffset: function() {
 
 		if(this.cssPosition == "relative") {
-			var p = this.element.position();
+			var p = this.element.position(),
+			e = this.helper[0],
+			inpx = /px$/,
+			top = e.style.top,
+			left = e.style.left;			
+			//for #6980, avoid css if px
+			top = top.match( inpx ) ? top : this.helper.css( "top" );
+			left = left.match( inpx ) ? left : this.helper.css( "left" );
 			return {
-				top: p.top - (parseInt(this.helper.css("top"),10) || 0) + this.scrollParent.scrollTop(),
-				left: p.left - (parseInt(this.helper.css("left"),10) || 0) + this.scrollParent.scrollLeft()
+				top: p.top - (parseInt(top, 10) || 0) + this.scrollParent.scrollTop(),
+				left: p.left - (parseInt(left, 10) || 0) + this.scrollParent.scrollLeft()
 			};
 		} else {
 			return { top: 0, left: 0 };
