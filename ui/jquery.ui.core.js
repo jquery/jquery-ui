@@ -235,11 +235,7 @@ $.support.selectstart = "onselectstart" in document.createElement( "div" );
 
 
 // deprecated
-
-(function() {
-	var uaMatch = /msie ([\w.]+)/.exec( navigator.userAgent.toLowerCase() ) || [];
-	$.ui.ie = uaMatch.length ? true : false;
-})();
+$.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 $.fn.extend({
 	disableSelection: function() {
