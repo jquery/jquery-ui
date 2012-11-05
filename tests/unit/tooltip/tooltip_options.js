@@ -146,4 +146,12 @@ test( "track + show delay", function() {
 	equal( $( ".ui-tooltip" ).css( "top" ), topVal + offsetVal + "px" );
 });
 
+test( "track and programmatic focus", function() {
+	expect( 1 );
+	$( "#qunit-fixture div input" ).tooltip({
+		track: true
+	}).focus();
+	equal( "inputtitle", $( ".ui-tooltip" ).text() );
+});
+
 }( jQuery ) );
