@@ -54,7 +54,7 @@ $.widget( "ui.tooltip", {
 		position: {
 			my: "left top+15",
 			at: "left bottom",
-			collision: "flipfit flipfit"
+			collision: "flipfit flip"
 		},
 		show: true,
 		tooltipClass: null,
