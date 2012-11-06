@@ -24,7 +24,7 @@ test("init", function() {
 	$('<div></div>').appendTo('body').remove().dialog().remove();
 	ok(true, '.dialog() called on disconnected DOMElement - removed');
 
-	el = $('<div></div>').dialog();
+	var el = $('<div></div>').dialog();
 	el.dialog("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
@@ -53,46 +53,49 @@ test("destroy", function() {
 test("enable", function() {
 	expect( 3 );
 
-	var expected = $('<div></div>').dialog(),
+	var el,
+		expected = $('<div></div>').dialog(),
 		actual = expected.dialog('enable');
 	equal(actual, expected, 'enable is chainable');
 
 	el = $('<div></div>').dialog({ disabled: true });
 	el.dialog('enable');
 	equal(el.dialog('option', 'disabled'), false, 'enable method sets disabled option to false');
-	ok(!dlg().hasClass('ui-dialog-disabled'), 'enable method removes ui-dialog-disabled class from ui-dialog element');
+	ok(!el.dialog('widget').hasClass('ui-dialog-disabled'), 'enable method removes ui-dialog-disabled class from ui-dialog element');
 });
 
 test("disable", function() {
 	expect( 3 );
 
-	var expected = $('<div></div>').dialog(),
+	var el,
+		expected = $('<div></div>').dialog(),
 		actual = expected.dialog('disable');
 	equal(actual, expected, 'disable is chainable');
 
 	el = $('<div></div>').dialog({ disabled: false });
 	el.dialog('disable');
 	equal(el.dialog('option', 'disabled'), true, 'disable method sets disabled option to true');
-	ok(dlg().hasClass('ui-dialog-disabled'), 'disable method adds ui-dialog-disabled class to ui-dialog element');
+	ok(el.dialog('widget').hasClass('ui-dialog-disabled'), 'disable method adds ui-dialog-disabled class to ui-dialog element');
 });
 
 test("close", function() {
 	expect( 3 );
 
-	var expected = $('<div></div>').dialog(),
+	var el,
+		expected = $('<div></div>').dialog(),
 		actual = expected.dialog('close');
 	equal(actual, expected, 'close is chainable');
 
 	el = $('<div></div>').dialog();
-	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog visible before close method called');
+	ok(el.dialog('widget').is(':visible') && !el.dialog('widget').is(':hidden'), 'dialog visible before close method called');
 	el.dialog('close');
-	ok(dlg().is(':hidden') && !dlg().is(':visible'), 'dialog hidden after close method called');
+	ok(el.dialog('widget').is(':hidden') && !el.dialog('widget').is(':visible'), 'dialog hidden after close method called');
 });
 
 test("isOpen", function() {
 	expect(4);
 
-	el = $('<div></div>').dialog();
+	var el = $('<div></div>').dialog();
 	equal(el.dialog('isOpen'), true, "dialog is open after init");
 	el.dialog('close');
 	equal(el.dialog('isOpen'), false, "dialog is closed");
@@ -134,14 +137,15 @@ test("moveToTop", function() {
 
 test("open", function() {
 	expect( 3 );
-	var expected = $('<div></div>').dialog(),
+	var el,
+		expected = $('<div></div>').dialog(),
 		actual = expected.dialog('open');
 	equal(actual, expected, 'open is chainable');
 
 	el = $('<div></div>').dialog({ autoOpen: false });
-	ok(dlg().is(':hidden') && !dlg().is(':visible'), 'dialog hidden before open method called');
+	ok(el.dialog('widget').is(':hidden') && !el.dialog('widget').is(':visible'), 'dialog hidden before open method called');
 	el.dialog('open');
-	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog visible after open method called');
+	ok(el.dialog('widget').is(':visible') && !el.dialog('widget').is(':hidden'), 'dialog visible after open method called');
 });
 
 })(jQuery);

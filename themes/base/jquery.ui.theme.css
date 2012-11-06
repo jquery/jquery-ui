@@ -47,7 +47,7 @@
 ----------------------------------*/
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png)/*{iconsContent}*/; }
+.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png)/*{iconsContent}*/; background-position: 16px 16px; }
 .ui-widget-content .ui-icon {background-image: url(images/ui-icons_222222_256x240.png)/*{iconsContent}*/; }
 .ui-widget-header .ui-icon {background-image: url(images/ui-icons_222222_256x240.png)/*{iconsHeader}*/; }
 .ui-state-default .ui-icon { background-image: url(images/ui-icons_888888_256x240.png)/*{iconsDefault}*/; }
