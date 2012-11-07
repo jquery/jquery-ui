@@ -4,6 +4,7 @@ module( "widget factory", {
 	teardown: function() {
 		if ( $.ui ) {
 			delete $.ui.testWidget;
+			delete $.fn.testWidget;
 		}
 	}
 });
@@ -1303,6 +1304,58 @@ asyncTest( "_delay", function() {
 		}
 	});
 	$( "#widget" ).testWidget();
+});
+
+test( "$.widget.bridge()", function() {
+	expect( 9 );
+
+	var instance, ret,
+		elem = $( "<div>" );
+
+	function TestWidget( options, element ) {
+		deepEqual( options, { foo: "bar" }, "options passed" );
+		strictEqual( element, elem[ 0 ], "element passed" );
+	}
+
+	$.extend( TestWidget.prototype, {
+		method: function( param ) {
+			ok( true, "method called via .pluginName(methodName)" );
+			equal( param, "value1",
+				"parameter passed via .pluginName(methodName, param)" );
+		},
+		getter: function() {
+			return "qux";
+		}
+	});
+
+	$.widget.bridge( "testWidget", TestWidget );
+
+	ok( $.isFunction( $.fn.testWidget ), "jQuery plugin was created" );
+
+	strictEqual( elem.testWidget({ foo: "bar" }), elem, "plugin returns original jQuery object" );
+	instance = elem.data( "testWidget" );
+	equal( typeof instance, "object", "instance stored in .data(pluginName)" );
+
+	ret = elem.testWidget( "method", "value1" );
+	equal( ret, elem, "jQuery object returned from method call" );
+
+	ret = elem.testWidget( "getter" );
+	equal( ret, "qux", "getter returns value" );
+});
+
+test( "$.widget.bridge() - widgetFullName", function() {
+	expect( 1 );
+
+	var instance,
+		elem = $( "<div>" );
+
+	function TestWidget() {}
+	TestWidget.prototype.widgetFullName = "custom-widget";
+	$.widget.bridge( "testWidget", TestWidget );
+
+	elem.testWidget();
+	instance = elem.data( "custom-widget" );
+	equal( typeof instance, "object", "instance stored in .data(widgetFullName)" );
 });
 
 }( jQuery ) );
