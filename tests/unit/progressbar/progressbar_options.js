@@ -60,3 +60,21 @@ test( "{ max : 5, value : 10 }", function() {
 	});
 	deepEqual( 5, $( "#progressbar" ).progressbar( "value" ) );
 });
+
+test( "{ value : 10, max : 5 }", function() {
+	expect( 1 );
+	$("#progressbar").progressbar({
+		max: 5,
+		value: 10
+	});
+	deepEqual( 5, $( "#progressbar" ).progressbar( "value" ) );
+});
+
+test( "{ max : 5 }", function() {
+	expect( 1 );
+	$("#progressbar").progressbar({
+		max: 10,
+		value: 10
+	}).progressbar( "option", "max", 5 );
+	deepEqual( 5, $( "#progressbar" ).progressbar( "value" ) );
+});
