@@ -31,6 +31,7 @@ $.widget( "ui.menu", {
 			at: "right top"
 		},
 		role: "menu",
+		keyboard_shortcuts: 1,
 
 		// callbacks
 		blur: null,
@@ -175,7 +176,9 @@ $.widget( "ui.menu", {
 	_keydown: function( event ) {
 		var match, prev, character, skip, regex,
 			preventDefault = true;
-
+			
+		if( this.options.keyboard_shortcuts == 0 ) return;
+		
 		function escape( value ) {
 			return value.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" );
 		}
