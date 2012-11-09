@@ -737,7 +737,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.containers.length === 1) {
 			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
 			this.containers[innermostIndex].containerCache.over = 1;
-		} else {
+		} else if(this.currentContainer != this.containers[innermostIndex]) {
 
 			//When entering a new container, we will find the item with the least distance and append our item near it
 			var dist = 10000; var itemWithLeastDistance = null;
