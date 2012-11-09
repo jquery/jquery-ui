@@ -516,7 +516,7 @@ $.widget("ui.dialog", {
 		if ( resize ) {
 			this._size();
 		}
-		if ( this.uiDialog.is( ":data(resizable)" ) ) {
+		if ( this.uiDialog.is( ":data(ui-resizable)" ) ) {
 			this.uiDialog.resizable( "option", resizableOptions );
 		}
 	},
@@ -546,7 +546,7 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "draggable":
-				isDraggable = uiDialog.is( ":data(draggable)" );
+				isDraggable = uiDialog.is( ":data(ui-draggable)" );
 				if ( isDraggable && !value ) {
 					uiDialog.draggable( "destroy" );
 				}
@@ -560,7 +560,7 @@ $.widget("ui.dialog", {
 				break;
 			case "resizable":
 				// currently resizable, becoming non-resizable
-				isResizable = uiDialog.is( ":data(resizable)" );
+				isResizable = uiDialog.is( ":data(ui-resizable)" );
 				if ( isResizable && !value ) {
 					uiDialog.resizable( "destroy" );
 				}
@@ -621,7 +621,7 @@ $.widget("ui.dialog", {
 			this.element.height( Math.max( options.height - nonContentHeight, 0 ) );
 		}
 
-		if (this.uiDialog.is( ":data(resizable)" ) ) {
+		if (this.uiDialog.is( ":data(ui-resizable)" ) ) {
 			this.uiDialog.resizable( "option", "minHeight", this._minHeight() );
 		}
 	}
