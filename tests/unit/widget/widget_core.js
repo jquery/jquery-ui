@@ -662,6 +662,46 @@ test( "._on() to element (default)", function() {
 		.trigger( "keydown" );
 });
 
+test( "._on() to element with suppressDisabledCheck", function() {
+	expect( 18 );
+	var that, widget;
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			that = this;
+			this._on( true, {
+				keyup: this.keyup,
+				keydown: "keydown"
+			});
+		},
+		keyup: function( event ) {
+			equal( that, this );
+			equal( that.element[0], event.currentTarget );
+			equal( "keyup", event.type );
+		},
+		keydown: function( event ) {
+			equal( that, this );
+			equal( that.element[0], event.currentTarget );
+			equal( "keydown", event.type );
+		}
+	});
+	widget = $( "<div></div>" )
+		.testWidget()
+		.trigger( "keyup" )
+		.trigger( "keydown" );
+	widget
+		.testWidget( "disable" )
+		.trigger( "keyup" )
+		.trigger( "keydown" );
+	widget
+		.testWidget( "enable" )
+		.trigger( "keyup" )
+		.trigger( "keydown" );
+	widget
+		.testWidget( "destroy" )
+		.trigger( "keyup" )
+		.trigger( "keydown" );
+});
+
 test( "._on() to descendent", function() {
 	expect( 12 );
 	var that, widget, descendant;
