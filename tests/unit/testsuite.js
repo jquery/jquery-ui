@@ -205,6 +205,33 @@ window.domEqual = function( selector, modifier, message ) {
 			"title"
 		];
 
+	function getElementStyles( elem ) {
+		var key, len,
+			style = elem.ownerDocument.defaultView ?
+				elem.ownerDocument.defaultView.getComputedStyle( elem, null ) :
+				elem.currentStyle,
+			styles = {};
+
+		if ( style && style.length && style[ 0 ] && style[ style[ 0 ] ] ) {
+			len = style.length;
+			while ( len-- ) {
+				key = style[ len ];
+				if ( typeof style[ key ] === "string" ) {
+					styles[ $.camelCase( key ) ] = style[ key ];
+				}
+			}
+		// support: Opera, IE <9
+		} else {
+			for ( key in style ) {
+				if ( typeof style[ key ] === "string" ) {
+					styles[ key ] = style[ key ];
+				}
+			}
+		}
+
+		return styles;
+	}
+
 	function extract( elem ) {
 		if ( !elem || !elem.length ) {
 			QUnit.push( false, actual, expected,
@@ -222,6 +249,7 @@ window.domEqual = function( selector, modifier, message ) {
 			var value = elem.attr( attr );
 			result[ attr ] = value !== undefined ? value : "";
 		});
+		result.style = getElementStyles( elem[ 0 ] );
 		result.events = $._data( elem[ 0 ], "events" );
 		result.data = $.extend( {}, elem.data() );
 		delete result.data[ $.expando ];
