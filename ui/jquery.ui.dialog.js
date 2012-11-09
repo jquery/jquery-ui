@@ -186,10 +186,6 @@ $.widget("ui.dialog", {
 			});
 		}
 
-		// TODO use andSelf()
-		// TODO get rid of this?! why do we need to disable selection anyway?
-		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
-
 		// TODO use button? or at least a button element, so that SPACE works?
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
