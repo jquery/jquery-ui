@@ -117,7 +117,9 @@ $.widget("ui.dialog", {
 					}
 				})
 				.mousedown(function( event ) {
-					that.moveToTop( event );
+					if ( that._moveToTop( event ) ) {
+						that._focusTabbable();
+					}
 				})
 				.appendTo( this.document[ 0 ].body );
 
@@ -292,18 +294,23 @@ $.widget("ui.dialog", {
 		return this._isOpen;
 	},
 
-	moveToTop: function( event, silent ) {
-		var moved = this.uiDialog.nextAll( ":visible" ).insertBefore( this.uiDialog );
-		if ( !silent && moved.length ) {
+	moveToTop: function() {
+		this._moveToTop();
+	},
+
+	_moveToTop: function( event, silent ) {
+		var moved = !!this.uiDialog.nextAll( ":visible" ).insertBefore( this.uiDialog ).length;
+		if ( !silent && moved ) {
 			this._trigger( "focus", event );
 		}
+		return moved;
 	},
 
 	open: function() {
 		if ( this._isOpen ) {
-			this.moveToTop( null );
-			// TODO run this only when dialog wasn't focused?
-			this._focusTabbable();
+			if ( this._moveToTop() ) {
+				this._focusTabbable();
+			}
 			return;
 		}
 
@@ -316,7 +323,7 @@ $.widget("ui.dialog", {
 		this._size();
 		this._position( options.position );
 		this.overlay = options.modal ? new $.ui.dialog.overlay( this ) : null;
-		this.moveToTop( null, true );
+		this._moveToTop( null, true );
 		this._show( uiDialog, options.show );
 
 		this._focusTabbable();
