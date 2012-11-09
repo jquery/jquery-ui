@@ -43,7 +43,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		snapMode: "both",
 		snapTolerance: 20,
 		stack: false,
-		zIndex: false
+		zIndex: false,
+		updatePosition: true
 	},
 	_create: function() {
 
@@ -182,9 +183,12 @@ $.widget("ui.draggable", $.ui.mouse, {
 			}
 			this.position = ui.position;
 		}
-
-		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
-		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
+		if (this.options.updatePosition) {
+			if (!this.options.axis || this.options.axis != "y")
+				this.helper[0].style.left = this.position.left + 'px';
+			if (!this.options.axis || this.options.axis != "x")
+				this.helper[0].style.top = this.position.top + 'px';
+		}
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
 
 		return false;
