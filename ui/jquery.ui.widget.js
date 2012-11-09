@@ -231,9 +231,6 @@ $.Widget.prototype = {
 		this.focusable = $();
 
 		if ( element !== this ) {
-			// 1.9 BC for #7810
-			// TODO remove dual storage
-			$.data( element, this.widgetName, this );
 			$.data( element, this.widgetFullName, this );
 			this._on( this.element, {
 				remove: function( event ) {
