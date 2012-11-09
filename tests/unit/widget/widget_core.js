@@ -332,8 +332,8 @@ test( "re-init", function() {
 	deepEqual( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
 });
 
-test( "inheritance - options", function() {
-	expect( 4 );
+test( "inheritance", function() {
+	expect( 6 );
 	// #5830 - Widget: Using inheritance overwrites the base classes options
 	$.widget( "ui.testWidgetBase", {
 		options: {
@@ -354,6 +354,8 @@ test( "inheritance - options", function() {
 		}
 	});
 
+	equal( $.ui.testWidgetBase.prototype.widgetEventPrefix, "testWidgetBase",
+		"base class event prefix" );
 	deepEqual( $.ui.testWidgetBase.prototype.options.obj, {
 		key1: "foo",
 		key2: "bar"
@@ -361,6 +363,8 @@ test( "inheritance - options", function() {
 	deepEqual( $.ui.testWidgetBase.prototype.options.arr, [ "testing" ],
 		"base class option array not overridden");
 
+	equal( $.ui.testWidgetExtension.prototype.widgetEventPrefix, "testWidgetExtension",
+		"extension class event prefix" );
 	deepEqual( $.ui.testWidgetExtension.prototype.options.obj, {
 		key1: "baz",
 		key2: "bar"
