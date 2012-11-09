@@ -89,9 +89,9 @@ test( "custom selector expression", function() {
 });
 
 test( "jQuery usage", function() {
-	expect( 16 );
+	expect( 14 );
 
-	var elem, instance, ret, bcInstance,
+	var elem, instance, ret,
 		shouldCreate = false;
 
 	$.widget( "ui.testWidget", {
@@ -133,12 +133,6 @@ test( "jQuery usage", function() {
 	equal( instance.element[0], elem[0], "element stored on widget" );
 	ret = elem.testWidget( "methodWithParams", "value1", "value2" );
 	equal( ret, elem, "jQuery object returned from method call" );
-
-	// 1.9 BC for #7810
-	// TODO remove
-	bcInstance = elem.data("testWidget");
-	equal( typeof bcInstance, "object", "instance stored in .data(pluginName)" );
-	equal( bcInstance.element[0], elem[0], "element stored on widget" );
 
 	ret = elem.testWidget( "getterSetterMethod" );
 	equal( ret, 5, "getter/setter can act as getter" );
@@ -837,7 +831,7 @@ test( "_on() to common element", function() {
 			ok( true, "handler triggered" );
 		}
 	});
-	var widget = $( "#widget" ).testWidget().data( "testWidget" );
+	var widget = $( "#widget" ).testWidget().data( "ui-testWidget" );
 	$( "#widget-wrapper" ).testWidget();
 	widget.destroy();
 	$( document ).trigger( "customevent" );
@@ -849,7 +843,7 @@ test( "_off() - single event", function() {
 	$.widget( "ui.testWidget", {} );
 	var shouldTriggerWidget, shouldTriggerOther,
 		element = $( "#widget" ),
-		widget = element.testWidget().data( "testWidget" );
+		widget = element.testWidget().data( "ui-testWidget" );
 	widget._on( element, { foo: function() {
 		ok( shouldTriggerWidget, "foo called from _on" );
 	}});
@@ -870,7 +864,7 @@ test( "_off() - multiple events", function() {
 	$.widget( "ui.testWidget", {} );
 	var shouldTriggerWidget, shouldTriggerOther,
 		element = $( "#widget" ),
-		widget = element.testWidget().data( "testWidget" );
+		widget = element.testWidget().data( "ui-testWidget" );
 	widget._on( element, {
 		foo: function() {
 			ok( shouldTriggerWidget, "foo called from _on" );
@@ -898,7 +892,7 @@ test( "_off() - all events", function() {
 	$.widget( "ui.testWidget", {} );
 	var shouldTriggerWidget, shouldTriggerOther,
 		element = $( "#widget" ),
-		widget = element.testWidget().data( "testWidget" );
+		widget = element.testWidget().data( "ui-testWidget" );
 	widget._on( element, {
 		foo: function() {
 			ok( shouldTriggerWidget, "foo called from _on" );
