@@ -415,37 +415,45 @@ test("resizable", function() {
 	el.remove();
 });
 
-test("title", function() {
-	expect(9);
+test( "title", function() {
+	expect( 11 );
 
 	function titleText() {
-		return el.dialog('widget').find(".ui-dialog-title").html();
+		return el.dialog('widget').find( ".ui-dialog-title" ).html();
 	}
 
-	var el = $('<div></div>').dialog();
+	var el = $( '<div></div>' ).dialog();
 		// some browsers return a non-breaking space and some return "&nbsp;"
 		// so we generate a non-breaking space for comparison
-		equal(titleText(), $( "<span>&#160;</span>" ).html(), "[default]");
-		equal(el.dialog("option", "title"), "", "option not changed");
+		equal( titleText(), $( "<span>&#160;</span>" ).html(), "[default]" );
+		equal( el.dialog( "option", "title" ), null, "option not changed" );
 	el.remove();
 
-	el = $('<div title="foo">').dialog();
-		equal(titleText(), "foo", "title in element attribute");
-		equal(el.dialog("option", "title"), "foo", "option updated from attribute");
+	el = $( '<div title="foo">' ).dialog();
+		equal( titleText(), "foo", "title in element attribute" );
+		equal( el.dialog( "option", "title"), "foo", "option updated from attribute" );
 	el.remove();
 
-	el = $('<div></div>').dialog({ title: 'foo' });
-		equal(titleText(), "foo", "title in init options");
-		equal(el.dialog("option", "title"), "foo", "opiton set from options hash");
+	el = $( '<div></div>' ).dialog({ title: 'foo' });
+		equal( titleText(), "foo", "title in init options" );
+		equal( el.dialog("option", "title"), "foo", "opiton set from options hash" );
 	el.remove();
 
-	el = $('<div title="foo">').dialog({ title: 'bar' });
-		equal(titleText(), "bar", "title in init options should override title in element attribute");
-		equal(el.dialog("option", "title"), "bar", "opiton set from options hash");
+	el = $( '<div title="foo">' ).dialog({ title: 'bar' });
+		equal( titleText(), "bar", "title in init options should override title in element attribute" );
+		equal( el.dialog("option", "title"), "bar", "opiton set from options hash" );
 	el.remove();
 
-	el = $('<div></div>').dialog().dialog('option', 'title', 'foo');
-		equal(titleText(), 'foo', 'title after init');
+	el = $( '<div></div>' ).dialog().dialog( 'option', 'title', 'foo' );
+		equal( titleText(), 'foo', 'title after init' );
+	el.remove();
+
+	// make sure attroperties are properly ignored - #5742 - .attr() might return a DOMElement
+	el = $( '<form><input name="title"></form>' ).dialog();
+		// some browsers return a non-breaking space and some return "&nbsp;"
+		// so we get the text to normalize to the actual non-breaking space
+		equal( titleText(), $( "<span>&#160;</span>" ).html(), "[default]" );
+		equal( el.dialog( "option", "title" ), null, "option not changed" );
 	el.remove();
 });
 

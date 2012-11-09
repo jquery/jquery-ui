@@ -67,7 +67,7 @@ $.widget("ui.dialog", {
 		},
 		resizable: true,
 		show: null,
-		title: "",
+		title: null,
 		width: 300,
 
 		// callbacks
@@ -85,16 +85,11 @@ $.widget("ui.dialog", {
 
 	_create: function() {
 		this.originalTitle = this.element.attr( "title" );
-		// #5742 - .attr() might return a DOMElement
-		// TODO WTF?
-		if ( typeof this.originalTitle !== "string" ) {
-			this.originalTitle = "";
-		}
+		this.options.title = this.options.title || this.originalTitle;
 		this.oldPosition = {
 			parent: this.element.parent(),
 			index: this.element.parent().children().index( this.element )
 		};
-		this.options.title = this.options.title || this.originalTitle;
 		var that = this,
 			options = this.options,
 
