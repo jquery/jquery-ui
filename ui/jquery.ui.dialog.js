@@ -365,20 +365,13 @@ $.widget("ui.dialog", {
 	},
 
 	_createButtons: function( buttons ) {
-		var that = this,
-			hasButtons = false;
+		var that = this;
 
 		// if we already have a button pane, remove it
 		this.uiDialogButtonPane.remove();
 		this.uiButtonSet.empty();
 
-		// TODO use jQuery.isEmptyObject()
-		if ( typeof buttons === "object" && buttons !== null ) {
-			$.each( buttons, function() {
-				return !(hasButtons = true);
-			});
-		}
-		if ( hasButtons ) {
+		if ( !$.isEmptyObject( buttons ) ) {
 			$.each( buttons, function( name, props ) {
 				var button, click;
 				props = $.isFunction( props ) ?
