@@ -299,7 +299,7 @@ $.widget( "ui.tooltip", {
 		if ( !event || event.type === "focusin" ) {
 			events.focusout = "close";
 		}
-		this._on( target, events );
+		this._on( true, target, events );
 	},
 
 	close: function( event ) {
