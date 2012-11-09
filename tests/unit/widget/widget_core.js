@@ -1203,6 +1203,12 @@ test( "._trigger() - instance as element", function() {
 		});
 	});
 
+	test( "auto-destroy - .remove() when disabled", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget({ disabled: true }).remove();
+		});
+	});
+
 	test( "auto-destroy - .remove() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().remove();
