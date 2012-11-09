@@ -810,6 +810,7 @@ test('parseDate', function() {
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('@', '981158400000'), gmtDate, 'Parse date @');
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('!', '631167552000000000'), gmtDate, 'Parse date !');
+
 	fr = $.datepicker.regional.fr;
 	settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
@@ -819,12 +820,11 @@ test('parseDate', function() {
 		new Date(2001, 4 - 1, 9), 'Parse date d MM DD yy with settings');
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('DD, MM d, yy', 'Lundi, Avril 9, 2001', settings),
 		new Date(2001, 4 - 1, 9), 'Parse date DD, MM d, yy with settings');
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
-		'jour 9 de Avril (\'Lundi\'), 2001', settings), new Date(2001, 4 - 1, 9),
-		'Parse date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("'jour' d 'de' MM (''DD''), yy", "jour 9 de Avril ('Lundi'), 2001", settings),
+		new Date(2001, 4 - 1, 9), "Parse date 'jour' d 'de' MM (''DD''), yy with settings");
 
 	zh = $.datepicker.regional['zh-CN'];
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('yy M d', '2011 十一 22', zh),
+	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('yy M d', '2011 十一月 22', zh),
 		new Date(2011, 11 - 1, 22), 'Parse date yy M d with zh-CN');
 });
 
@@ -881,6 +881,26 @@ test('parseDateErrors', function() {
 		'Lun. 9 Apr 01 - D d M y', 'Unknown name at position 7');
 });
 
+test('Ticket #7244: date parser does not fail when too many numbers are passed into the date function', function() {
+	expect( 4 );
+	var date;
+	try{
+		date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
+		ok(false, "Did not properly detect an invalid date");
+	}catch(e){
+		ok("invalid date detected");
+	}
+
+	try {
+		date = $.datepicker.parseDate('dd/mm/yy', '18/04/1988 @ 2:43 pm');
+		equal(date.getDate(), 18);
+		equal(date.getMonth(), 3);
+		equal(date.getFullYear(), 1988);
+	} catch(e) {
+		ok(false, "Did not properly parse date with extra text separated by whitespace");
+	}
+});
+
 test('formatDate', function() {
 	expect( 16 );
 	TestHelpers.datepicker.init('#inp');
@@ -922,6 +942,46 @@ test('formatDate', function() {
 	equal($.datepicker.formatDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
 		new Date(2001, 4 - 1, 9), settings), 'jour 9 de Avril (\'Lundi\'), 2001',
 		'Format date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+});
+
+test('Ticket 6827: formatDate day of year calculation is wrong during day lights savings time', function(){
+	expect( 1 );
+	var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT"));
+	equal(time, "089");
+});
+
+test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler', function(){
+	expect( 3 );
+	var inp = TestHelpers.datepicker.init('#inp',{
+			beforeShow: function(){
+				return false;
+			}
+		}),
+		dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'none',"beforeShow returns false");
+	inp.datepicker('destroy');
+
+	inp = TestHelpers.datepicker.init('#inp',{
+		beforeShow: function(){
+		}
+	});
+	dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'block',"beforeShow returns nothing");
+	inp.datepicker('hide');
+	inp.datepicker('destroy');
+
+	inp = TestHelpers.datepicker.init('#inp',{
+		beforeShow: function(){
+			return true;
+		}
+	});
+	dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'block',"beforeShow returns true");
+	inp.datepicker('hide');
+	inp.datepicker('destroy');
 });
 
 })(jQuery);

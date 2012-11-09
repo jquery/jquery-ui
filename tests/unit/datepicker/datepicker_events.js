@@ -126,4 +126,23 @@ test('events', function() {
 	equal(selectedThis, inp2[0], 'Callback close this');
 });
 
+test('beforeShowDay-getDate', function() {
+	expect( 3 );
+	var inp = TestHelpers.datepicker.init('#inp', {beforeShowDay: function() { inp.datepicker('getDate'); return [true, '']; }}),
+		dp = $('#ui-datepicker-div');
+	inp.val('01/01/2010').datepicker('show');
+	// contains non-breaking space
+	equal($('div.ui-datepicker-title').text(), 'January 2010', 'Initial month');
+	$('a.ui-datepicker-next', dp).click();
+	$('a.ui-datepicker-next', dp).click();
+	// contains non-breaking space
+	equal($('div.ui-datepicker-title').text(), 'March 2010', 'After next clicks');
+	inp.datepicker('hide').datepicker('show');
+	$('a.ui-datepicker-prev', dp).click();
+	$('a.ui-datepicker-prev', dp).click();
+	// contains non-breaking space
+	equal($('div.ui-datepicker-title').text(), 'November 2009', 'After prev clicks');
+	inp.datepicker('hide');
+});
+
 })(jQuery);
