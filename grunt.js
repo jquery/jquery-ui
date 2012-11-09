@@ -281,13 +281,13 @@ grunt.initConfig({
 		files: grunt.file.expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|all-active|index|test|dialog|slider|datepicker|tabs|tooltip)\.html$/ ).test( file );
+			return !( /(all|all-active|index|test|dialog|slider|tabs|tooltip)\.html$/ ).test( file );
 		})
 	},
 	lint: {
 		ui: grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
 			// TODO remove items from this list once rewritten
-			return !( /(mouse|datepicker)\.js$/ ).test( file );
+			return !( /(mouse)\.js$/ ).test( file );
 		}),
 		grunt: [ "grunt.js", "build/**/*.js" ],
 		tests: "tests/unit/**/*.js"
