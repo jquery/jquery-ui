@@ -23,7 +23,7 @@ var versions = {
 		"Progressbar": "progressbar/progressbar.html",
 		"Resizable": "resizable/resizable.html",
 		"Selectable": "selectable/selectable.html",
-		//"Slider": "slider/slider.html",
+		"Slider": "slider/slider.html",
 		"Sortable": "sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
 		"Tabs": "tabs/tabs.html",
