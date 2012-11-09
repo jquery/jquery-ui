@@ -94,7 +94,6 @@ $.widget("ui.dialog", {
 			parent: this.element.parent(),
 			index: this.element.parent().children().index( this.element )
 		};
-		// TODO don't overwrite options
 		this.options.title = this.options.title || this.originalTitle;
 		var that = this,
 			options = this.options,
@@ -276,8 +275,7 @@ $.widget("ui.dialog", {
 			return;
 		}
 
-		// TODO fix yoda-if
-		if ( false === this._trigger( "beforeClose", event ) ) {
+		if ( this._trigger( "beforeClose", event ) === false ) {
 			return;
 		}
 
@@ -294,7 +292,6 @@ $.widget("ui.dialog", {
 			$( this.document[ 0 ].activeElement ).blur();
 		}
 
-		// TODO shouldn't _hide restore `this` to the instance? would also help tooltip
 		this._hide( this.uiDialog, this.options.hide, function() {
 			that._trigger( "close", event );
 		});

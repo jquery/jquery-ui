@@ -27,6 +27,16 @@ TestHelpers.commonWidgetTests( "dialog", {
 		width: 300,
 
 		// callbacks
-		create: null
+		beforeClose: null,
+		close: null,
+		create: null,
+		drag: null,
+		dragStart: null,
+		dragStop: null,
+		focus: null,
+		open: null,
+		resize: null,
+		resizeStart: null,
+		resizeStop: null
 	}
 });
