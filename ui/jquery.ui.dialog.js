@@ -578,8 +578,7 @@ $.widget("ui.dialog", {
 			case "dialogClass":
 				uiDialog
 					.removeClass( this.options.dialogClass )
-					// TODO why adding uiDialogClasses again? we didn't remove those
-					.addClass( uiDialogClasses + value );
+					.addClass( value );
 				break;
 			case "disabled":
 				// TODO use toggleClass( "ui-dialog-disabled", value )
