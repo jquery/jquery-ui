@@ -232,7 +232,7 @@ $.Widget.prototype = {
 
 		if ( element !== this ) {
 			$.data( element, this.widgetFullName, this );
-			this._on( this.element, {
+			this._on( true, this.element, {
 				remove: function( event ) {
 					if ( event.target === element ) {
 						this.destroy();
