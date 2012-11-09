@@ -27,7 +27,7 @@ function isNumber(value) {
 
 $.widget("ui.resizable", $.ui.mouse, {
 	version: "@VERSION",
-	widgetEventPrefix: "resize"	,
+	widgetEventPrefix: "resize",
 	options: {
 		alsoResize: false,
 		animate: false,
@@ -775,26 +775,31 @@ $.ui.plugin.add("resizable", "grid", {
 			isMaxWidth = o.maxWidth && (o.maxWidth < newWidth), isMaxHeight = o.maxHeight && (o.maxHeight < newHeight),
 			isMinWidth = o.minWidth && (o.minWidth > newWidth), isMinHeight = o.minHeight && (o.minHeight > newHeight);
 
-		if (isMinWidth) newWidth = newWidth + gridX;
-		if (isMinHeight) newHeight = newHeight + gridY;
-		if (isMaxWidth) newWidth = newWidth - gridX;
-		if (isMaxHeight) newHeight = newHeight - gridY;
+		if (isMinWidth) {
+			newWidth = newWidth + gridX;
+		}
+		if (isMinHeight) {
+			newHeight = newHeight + gridY;
+		}
+		if (isMaxWidth) {
+			newWidth = newWidth - gridX;
+		}
+		if (isMaxHeight) {
+			newHeight = newHeight - gridY;
+		}
 
 		if (/^(se|s|e)$/.test(a)) {
 			that.size.width = newWidth;
 			that.size.height = newHeight;
-		}
-		else if (/^(ne)$/.test(a)) {
+		} else if (/^(ne)$/.test(a)) {
 			that.size.width = newWidth;
 			that.size.height = newHeight;
 			that.position.top = op.top - oy;
-		}
-		else if (/^(sw)$/.test(a)) {
+		} else if (/^(sw)$/.test(a)) {
 			that.size.width = newWidth;
 			that.size.height = newHeight;
 			that.position.left = op.left - ox;
-		}
-		else {
+		} else {
 			that.size.width = newWidth;
 			that.size.height = newHeight;
 			that.position.top = op.top - oy;
