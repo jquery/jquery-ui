@@ -459,7 +459,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		var dyClick = this.offset.click.top,
 			dxClick = this.offset.click.left;
 
-		var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
+		var isOverElement = ((this.options.axis === 'x') || ((y1 + dyClick) > t && (y1 + dyClick) < b)) && ((this.options.axis === 'y') || ((x1 + dxClick) > l && (x1 + dxClick) < r));
 
 		if (this.options.tolerance == "pointer"
 			|| this.options.forcePointerForContainers
