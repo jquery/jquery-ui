@@ -110,8 +110,8 @@ $.widget("ui.droppable", {
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
 
 		var childrenIntersection = false;
-		this.element.find(":data(droppable)").not(".ui-draggable-dragging").each(function() {
-			var inst = $.data(this, 'droppable');
+		this.element.find(":data(ui-droppable)").not(".ui-draggable-dragging").each(function() {
+			var inst = $.data(this, 'ui-droppable');
 			if(
 				inst.options.greedy
 				&& !inst.options.disabled
@@ -193,7 +193,7 @@ $.ui.ddmanager = {
 
 		var m = $.ui.ddmanager.droppables[t.options.scope] || [];
 		var type = event ? event.type : null; // workaround for #2317
-		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();
+		var list = (t.currentItem || t.element).find(":data(ui-droppable)").andSelf();
 
 		droppablesLoop: for (var i = 0; i < m.length; i++) {
 
@@ -257,12 +257,12 @@ $.ui.ddmanager = {
 			if (this.options.greedy) {
 				// find droppable parents with same scope
 				var scope = this.options.scope;
-				var parent = this.element.parents(':data(droppable)').filter(function () {
-					return $.data(this, 'droppable').options.scope === scope;
+				var parent = this.element.parents(':data(ui-droppable)').filter(function () {
+					return $.data(this, 'ui-droppable').options.scope === scope;
 				});
 
 				if (parent.length) {
-					parentInstance = $.data(parent[0], 'droppable');
+					parentInstance = $.data(parent[0], 'ui-droppable');
 					parentInstance.greedyChild = (c == 'isover' ? 1 : 0);
 				}
 			}
