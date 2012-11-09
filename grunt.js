@@ -285,10 +285,7 @@ grunt.initConfig({
 		})
 	},
 	lint: {
-		ui: grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
-			// TODO remove items from this list once rewritten
-			return !( /(mouse)\.js$/ ).test( file );
-		}),
+		ui: "ui/*.js",
 		grunt: [ "grunt.js", "build/**/*.js" ],
 		tests: "tests/unit/**/*.js"
 	},
