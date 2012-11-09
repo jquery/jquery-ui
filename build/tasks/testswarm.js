@@ -14,7 +14,7 @@ var versions = {
 		"Button": "button/button.html",
 		"Core": "core/core.html",
 		//"Datepicker": "datepicker/datepicker.html",
-		//"Dialog": "dialog/dialog.html",
+		"Dialog": "dialog/dialog.html",
 		"Draggable": "draggable/draggable.html",
 		"Droppable": "droppable/droppable.html",
 		"Effects": "effects/effects.html",

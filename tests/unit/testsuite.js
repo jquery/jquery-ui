@@ -170,6 +170,14 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 };
 
 /*
+ * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
+ */
+window.closeEnough = function( actual, expected, maxDifference, message ) {
+	var passes = (actual === expected) || Math.abs(actual - expected) <= maxDifference;
+	QUnit.push(passes, actual, expected, message);
+};
+
+/*
  * Experimental assertion for comparing DOM objects.
  *
  * Serializes an element and some properties and attributes and it's children if any, otherwise the text.
