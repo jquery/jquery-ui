@@ -10,10 +10,11 @@ test("start", function() {
 	expect(5);
 
 	var count = 0,
-		handle = '.ui-resizable-se';
-	el = $("#resizable1").resizable({
-		handles: 'all',
-		start: function(event, ui) { 
+		handle = ".ui-resizable-se";
+
+	$("#resizable1").resizable({
+		handles: "all",
+		start: function(event, ui) {
 			equal( ui.size.width, 100, "compare width" );
 			equal( ui.size.height, 100, "compare height" );
 			equal( ui.originalSize.width, 100, "compare original width" );
@@ -33,17 +34,17 @@ test("resize", function() {
 	expect(9);
 
 	var count = 0,
-		handle = '.ui-resizable-se';
-	el = $("#resizable1").resizable({
-		handles: 'all',
-		resize: function(event, ui) { 
+		handle = ".ui-resizable-se";
+
+	$("#resizable1").resizable({
+		handles: "all",
+		resize: function(event, ui) {
 			if (count === 0) {
 				equal( ui.size.width, 101, "compare width" );
 				equal( ui.size.height, 101, "compare height" );
 				equal( ui.originalSize.width, 100, "compare original width" );
 				equal( ui.originalSize.height, 100, "compare original height" );
-			}
-			else {
+			} else {
 				equal( ui.size.width, 150, "compare width" );
 				equal( ui.size.height, 150, "compare height" );
 				equal( ui.originalSize.width, 100, "compare original width" );
@@ -64,9 +65,10 @@ test("resize (min/max dimensions)", function() {
 	expect(5);
 
 	var count = 0,
-		handle = '.ui-resizable-se';
-	el = $("#resizable1").resizable({
-		handles: 'all',
+		handle = ".ui-resizable-se";
+
+	$("#resizable1").resizable({
+		handles: "all",
 		minWidth: 60,
 		minHeight: 60,
 		maxWidth: 100,
@@ -91,14 +93,14 @@ test("resize (containment)", function() {
 	expect(5);
 
 	var count = 0,
-		handle = '.ui-resizable-se',
-		container = $('#resizable1').wrap('<div>').parent().css({
-			height: '100px',
-			width: '100px'
+		handle = ".ui-resizable-se",
+		container = $("#resizable1").wrap("<div>").parent().css({
+			height: "100px",
+			width: "100px"
 		});
 
-	el = $("#resizable1").resizable({
-		handles: 'all',
+	$("#resizable1").resizable({
+		handles: "all",
 		containment: container,
 		resize: function(event, ui) {
 			equal( ui.size.width, 50, "compare width" );
@@ -120,9 +122,10 @@ test("resize (grid)", function() {
 	expect(5);
 
 	var count = 0,
-		handle = '.ui-resizable-se';
-	el = $("#resizable1").resizable({
-		handles: 'all',
+		handle = ".ui-resizable-se";
+
+	$("#resizable1").resizable({
+		handles: "all",
 		grid: 50,
 		resize: function(event, ui) {
 			equal( ui.size.width, 150, "compare width" );
@@ -130,7 +133,7 @@ test("resize (grid)", function() {
 			equal( ui.originalSize.width, 100, "compare original width" );
 			equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
-		},
+		}
 	});
 
 	TestHelpers.resizable.drag(handle, 50, 50);
@@ -144,10 +147,11 @@ test("stop", function() {
 	expect(5);
 
 	var count = 0,
-		handle = '.ui-resizable-se';
-	el = $("#resizable1").resizable({
-		handles: 'all',
-		stop: function(event, ui) { 
+		handle = ".ui-resizable-se";
+		
+	$("#resizable1").resizable({
+		handles: "all",
+		stop: function(event, ui) {
 			equal( ui.size.width, 150, "compare width" );
 			equal( ui.size.height, 150, "compare height" );
 			equal( ui.originalSize.width, 100, "compare original width" );
