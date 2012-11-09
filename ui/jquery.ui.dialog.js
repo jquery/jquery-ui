@@ -306,8 +306,7 @@ $.widget("ui.dialog", {
 
 	open: function() {
 		if ( this._isOpen ) {
-			// TODO don't pass silent flag? should probably trigger focus when moving to top again
-			this.moveToTop( null, true );
+			this.moveToTop( null );
 			// TODO run this only when dialog wasn't focused?
 			this._focusTabbable();
 			return;
