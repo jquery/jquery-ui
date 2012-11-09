@@ -13,7 +13,7 @@ var versions = {
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Core": "core/core.html",
-		//"Datepicker": "datepicker/datepicker.html",
+		"Datepicker": "datepicker/datepicker.html",
 		"Dialog": "dialog/dialog.html",
 		"Draggable": "draggable/draggable.html",
 		"Droppable": "droppable/droppable.html",
