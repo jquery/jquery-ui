@@ -94,4 +94,17 @@ test( "form containing an input with name title", function() {
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip for form" );
 });
 
+test( "tooltip on .ui-state-disabled element", function() {
+	expect( 2 );
+
+	var container = $( "#contains-tooltipped" ).tooltip(),
+		element = $( "#contained-tooltipped" ).addClass( "ui-state-disabled" );
+
+	element.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).length, 1 );
+
+	container.empty();
+	equal( $( ".ui-tooltip" ).length, 0 );
+});
+
 }( jQuery ) );
