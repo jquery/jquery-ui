@@ -900,8 +900,8 @@ $.extend(Datepicker.prototype, {
 		}
 		var inst = this._getInst(target[0]);
 		inst.selectedDay = inst.currentDay = $('a', td).html();
-		inst.selectedMonth = inst.currentMonth = month;
-		inst.selectedYear = inst.currentYear = year;
+		inst.drawMonth = inst.selectedMonth = inst.currentMonth = month;
+		inst.drawYear = inst.selectedYear = inst.currentYear = year;
 		this._selectDate(id, this._formatDate(inst,
 			inst.currentDay, inst.currentMonth, inst.currentYear));
 	},
