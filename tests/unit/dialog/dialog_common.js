@@ -23,7 +23,7 @@ TestHelpers.commonWidgetTests( "dialog", {
 		},
 		resizable: true,
 		show: null,
-		title: '',
+		title: null,
 		width: 300,
 
 		// callbacks
