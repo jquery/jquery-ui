@@ -358,7 +358,7 @@ $.widget( "ui.button", {
 $.widget( "ui.buttonset", {
 	version: "@VERSION",
 	options: {
-		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(button)"
+		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(ui-button)"
 	},
 
 	_create: function() {

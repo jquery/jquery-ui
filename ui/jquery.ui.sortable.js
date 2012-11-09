@@ -541,7 +541,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			for (var i = connectWith.length - 1; i >= 0; i--){
 				var cur = $(connectWith[i]);
 				for (var j = cur.length - 1; j >= 0; j--){
-					var inst = $.data(cur[j], this.widgetName);
+					var inst = $.data(cur[j], this.widgetFullName);
 					if(inst && inst != this && !inst.options.disabled) {
 						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper").not('.ui-sortable-placeholder'), inst]);
 					}
@@ -587,7 +587,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			for (var i = connectWith.length - 1; i >= 0; i--){
 				var cur = $(connectWith[i]);
 				for (var j = cur.length - 1; j >= 0; j--){
-					var inst = $.data(cur[j], this.widgetName);
+					var inst = $.data(cur[j], this.widgetFullName);
 					if(inst && inst != this && !inst.options.disabled) {
 						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element[0], event, { item: this.currentItem }) : $(inst.options.items, inst.element), inst]);
 						this.containers.push(inst);
