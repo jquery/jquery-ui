@@ -166,6 +166,8 @@ $.widget( "ui.selectmenu", {
 			this.menu.addClass( 'ui-corner-bottom' ).removeClass( 'ui-corner-all' );
 		}
 
+		// make sure focus stays on selected item
+		menuInstance.delay = 999999999;
 		// unbind uneeded Menu events
 		menuInstance._off( this.menu, "mouseleave" );
 	},
