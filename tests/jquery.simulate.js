@@ -228,7 +228,7 @@ function findCenter( elem ) {
 		document = $( elem.ownerDocument );
 	elem = $( elem );
 	offset = elem.offset();
-	
+
 	return {
 		x: offset.left + elem.outerWidth() / 2 - document.scrollLeft(),
 		y: offset.top + elem.outerHeight() / 2 - document.scrollTop()
@@ -241,7 +241,7 @@ $.extend( $.simulate.prototype, {
 			options = this.options,
 			center = findCenter( target ),
 			x = Math.floor( center.x ),
-			y = Math.floor( center.y ), 
+			y = Math.floor( center.y ),
 			dx = options.dx || 0,
 			dy = options.dy || 0,
 			coord = { clientX: x, clientY: y };

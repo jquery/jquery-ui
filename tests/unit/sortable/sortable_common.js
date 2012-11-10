@@ -5,6 +5,7 @@ TestHelpers.commonWidgetTests( "sortable", {
 		cancel: "input,textarea,button,select,option",
 		connectWith: false,
 		containment: false,
+		create: null,
 		cursor: "auto",
 		cursorAt: false,
 		delay: 0,

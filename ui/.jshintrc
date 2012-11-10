@@ -8,9 +8,9 @@
 	"latedef": true,
 	"noarg": true,
 	"onevar": true,
-	"smarttabs": true,
 	"trailing": true,
 	"undef": true,
+	"unused": true,
 	"predef": [
 		"Globalize"
 	]

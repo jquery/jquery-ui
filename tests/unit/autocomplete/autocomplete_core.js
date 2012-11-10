@@ -99,7 +99,7 @@ test( "allow form submit on enter when menu is not active", function() {
 				delay: 0,
 				minLength: 0
 			});
-		element.data( "autocomplete" )._move = function() {
+		element.data( "ui-autocomplete" )._move = function() {
 			didMove = true;
 		};
 		element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
@@ -109,13 +109,12 @@ test( "allow form submit on enter when menu is not active", function() {
 	function arrowsMoveFocus( id, isKeyUp ) {
 		expect( 1 );
 
-		var didMove = false,
-			element = $( id ).autocomplete({
+		var element = $( id ).autocomplete({
 				source: [ "a" ],
 				delay: 0,
 				minLength: 0
 			});
-		element.data( "autocomplete" )._move = function() {
+		element.data( "ui-autocomplete" )._move = function() {
 			ok( true, "repsond to arrow" );
 		};
 		element.autocomplete( "search" );

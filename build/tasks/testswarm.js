@@ -1,5 +1,6 @@
-/*jshint node: true */
 module.exports = function( grunt ) {
+
+"use strict";
 
 var versions = {
 		"git": "git",
@@ -9,26 +10,23 @@ var versions = {
 	},
 	tests = {
 		"Accordion": "accordion/accordion.html",
-		"Accordion_deprecated": "accordion/accordion_deprecated.html",
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Core": "core/core.html",
-		//"datepicker/datepicker.html",
-		//"dialog/dialog.html",
-		//"draggable/draggable.html",
-		//"droppable/droppable.html",
+		"Datepicker": "datepicker/datepicker.html",
+		"Dialog": "dialog/dialog.html",
+		"Draggable": "draggable/draggable.html",
+		"Droppable": "droppable/droppable.html",
 		"Effects": "effects/effects.html",
 		"Menu": "menu/menu.html",
 		"Position": "position/position.html",
-		"Position_deprecated": "position/position_deprecated.html",
 		"Progressbar": "progressbar/progressbar.html",
-		//"resizable/resizable.html",
-		//"selectable/selectable.html",
-		//"slider/slider.html",
-		//"sortable/sortable.html",
+		"Resizable": "resizable/resizable.html",
+		"Selectable": "selectable/selectable.html",
+		"Slider": "slider/slider.html",
+		"Sortable": "sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
 		"Tabs": "tabs/tabs.html",
-		"Tabs_deprecated": "tabs/tabs_deprecated.html",
 		"Tooltip": "tooltip/tooltip.html",
 		"Widget": "widget/widget.html"
 	};
@@ -53,9 +51,9 @@ function submit( commit, tests, configFile, version, done ) {
 		authToken: config.authToken,
 		jobName: 'jQuery UI ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
 		runMax: config.runMax,
-		"runNames[]": Object.keys(tests),
+		"runNames[]": Object.keys( tests ),
 		"runUrls[]": testUrls,
-		"browserSets[]": ["popular"]
+		"browserSets[]": [ "popular-no-ie6" ]
 	});
 }
 

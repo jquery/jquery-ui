@@ -6,7 +6,7 @@
 module("droppable: methods");
 
 test("init", function() {
-	expect(6);
+	expect( 5 );
 
 	$("<div></div>").appendTo('body').droppable().remove();
 	ok(true, '.droppable() called on element');
@@ -17,9 +17,6 @@ test("init", function() {
 	$("<div></div>").droppable();
 	ok(true, '.droppable() called on disconnected DOMElement');
 
-	$("<div></div>").droppable().droppable("foo");
-	ok(true, 'arbitrary method called after init');
-
 	$("<div></div>").droppable().droppable("option", "foo");
 	ok(true, 'arbitrary option getter after init');
 
@@ -28,6 +25,8 @@ test("init", function() {
 });
 
 test("destroy", function() {
+	expect( 4 );
+
 	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();
 	ok(true, '.droppable("destroy") called on element');
 
@@ -37,9 +36,6 @@ test("destroy", function() {
 	$("<div></div>").droppable().droppable("destroy");
 	ok(true, '.droppable("destroy") called on disconnected DOMElement');
 
-	$("<div></div>").droppable().droppable("destroy").droppable("foo");
-	ok(true, 'arbitrary method called after destroy');
-
 	var expected = $('<div></div>').droppable(),
 		actual = expected.droppable('destroy');
 	equal(actual, expected, 'destroy is chainable');
@@ -47,39 +43,45 @@ test("destroy", function() {
 
 test("enable", function() {
 	expect(7);
+
+	var el, expected, actual;
+
 	el = $("#droppable1").droppable({ disabled: true });
-	shouldNotBeDroppable();
+	TestHelpers.droppable.shouldNotDrop();
 	el.droppable("enable");
-	shouldBeDroppable();
+	TestHelpers.droppable.shouldDrop();
 	equal(el.droppable("option", "disabled"), false, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: true });
-	shouldNotBeDroppable();
+	TestHelpers.droppable.shouldNotDrop();
 	el.droppable("option", "disabled", false);
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
-	shouldBeDroppable();
+	TestHelpers.droppable.shouldDrop();
 
-	var expected = $('<div></div>').droppable(),
-		actual = expected.droppable('enable');
+	expected = $('<div></div>').droppable(),
+	actual = expected.droppable('enable');
 	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
 	expect(7);
+
+	var el, actual, expected;
+
 	el = $("#droppable1").droppable({ disabled: false });
-	shouldBeDroppable();
+	TestHelpers.droppable.shouldDrop();
 	el.droppable("disable");
-	shouldNotBeDroppable();
+	TestHelpers.droppable.shouldNotDrop();
 	equal(el.droppable("option", "disabled"), true, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: false });
-	shouldBeDroppable();
+	TestHelpers.droppable.shouldDrop();
 	el.droppable("option", "disabled", true);
 	equal(el.droppable("option", "disabled"), true, "disabled option setter");
-	shouldNotBeDroppable();
+	TestHelpers.droppable.shouldNotDrop();
 
-	var expected = $('<div></div>').droppable(),
-		actual = expected.droppable('disable');
+	expected = $('<div></div>').droppable(),
+	actual = expected.droppable('disable');
 	equal(actual, expected, 'disable is chainable');
 });
 

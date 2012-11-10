@@ -55,25 +55,24 @@
 		});
 
 		element.width( 150 );
-		$( document ).on( "mousemove", function( event ) {
-			var base = {
+		function positionWithOffset( horizontal, vertical ) {
+			return {
 				my: "left top",
-				at: "left top",
+				at: "left" + (horizontal < 0 ? horizontal : "+" + horizontal) + " " +
+					"top" + (vertical < 0 ? vertical : "+" + vertical),
 				of: target,
 				using: using
 			};
-			element.position( $.extend({
-				offset: (event.pageX - targetOffset.left) + " " + (event.pageY - targetOffset.top)
-			}, base ));
-			oppositeElement.position( $.extend({
-				offset: (-1 * (event.pageX - targetOffset.left)) + " " + (-1 * (event.pageY - targetOffset.top))
-			}, base ));
-			leftElement.position( $.extend({
-				offset: (-0.9 * (event.pageX - targetOffset.left)) + " " + (0.9 * (event.pageY - targetOffset.top))
-			}, base ));
-			rightElement.position( $.extend({
-				offset: (0.9 * (event.pageX - targetOffset.left)) + " " + (-0.9 * (event.pageY - targetOffset.top))
-			}, base) );
+		};
+		$( document ).on( "mousemove", function( event ) {
+			element.position( positionWithOffset(
+				event.pageX - targetOffset.left, event.pageY - targetOffset.top ) );
+			oppositeElement.position( positionWithOffset(
+				-1 * (event.pageX - targetOffset.left), -1 * (event.pageY - targetOffset.top) ) );
+			leftElement.position( positionWithOffset(
+				-0.9 * (event.pageX - targetOffset.left), 0.9 * (event.pageY - targetOffset.top) ) );
+			rightElement.position( positionWithOffset(
+				0.9 * (event.pageX - targetOffset.left), -0.9 * (event.pageY - targetOffset.top) ) );
 		});
 	});
 	</script>

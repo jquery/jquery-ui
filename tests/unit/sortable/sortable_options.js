@@ -5,6 +5,11 @@
 
 module("sortable: options");
 
+// this is here to make JSHint pass "unused", and we don't want to
+// remove the parameter for when we finally implement
+$.noop();
+
+/*
 test("{ appendTo: 'parent' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
@@ -252,5 +257,5 @@ test("{ zIndex: 1 }", function() {
 test("{ zIndex: false }", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
-
+*/
 })(jQuery);

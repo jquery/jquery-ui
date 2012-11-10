@@ -16,6 +16,7 @@
  */
 (function( $, undefined ) {
 
+/*jshint onevar: false, curly: false, eqeqeq: false, laxbreak: true */
 $.widget("ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
@@ -109,8 +110,8 @@ $.widget("ui.droppable", {
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
 
 		var childrenIntersection = false;
-		this.element.find(":data(droppable)").not(".ui-draggable-dragging").each(function() {
-			var inst = $.data(this, 'droppable');
+		this.element.find(":data(ui-droppable)").not(".ui-draggable-dragging").each(function() {
+			var inst = $.data(this, 'ui-droppable');
 			if(
 				inst.options.greedy
 				&& !inst.options.disabled
@@ -156,33 +157,28 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 		case 'fit':
 			return (l <= x1 && x2 <= r
 				&& t <= y1 && y2 <= b);
-			break;
 		case 'intersect':
 			return (l < x1 + (draggable.helperProportions.width / 2) // Right Half
 				&& x2 - (draggable.helperProportions.width / 2) < r // Left Half
 				&& t < y1 + (draggable.helperProportions.height / 2) // Bottom Half
 				&& y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
-			break;
 		case 'pointer':
 			var draggableLeft = ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left),
 				draggableTop = ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top),
 				isOver = $.ui.isOver(draggableTop, draggableLeft, t, l, droppable.proportions.height, droppable.proportions.width);
 			return isOver;
-			break;
 		case 'touch':
 			return (
-					(y1 >= t && y1 <= b) ||	// Top edge touching
-					(y2 >= t && y2 <= b) ||	// Bottom edge touching
-					(y1 < t && y2 > b)		// Surrounded vertically
-				) && (
-					(x1 >= l && x1 <= r) ||	// Left edge touching
-					(x2 >= l && x2 <= r) ||	// Right edge touching
-					(x1 < l && x2 > r)		// Surrounded horizontally
-				);
-			break;
+				(y1 >= t && y1 <= b) ||	// Top edge touching
+				(y2 >= t && y2 <= b) ||	// Bottom edge touching
+				(y1 < t && y2 > b)		// Surrounded vertically
+			) && (
+				(x1 >= l && x1 <= r) ||	// Left edge touching
+				(x2 >= l && x2 <= r) ||	// Right edge touching
+				(x1 < l && x2 > r)		// Surrounded horizontally
+			);
 		default:
 			return false;
-			break;
 		}
 
 };
@@ -197,13 +193,19 @@ $.ui.ddmanager = {
 
 		var m = $.ui.ddmanager.droppables[t.options.scope] || [];
 		var type = event ? event.type : null; // workaround for #2317
-		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();
+		var list = (t.currentItem || t.element).find(":data(ui-droppable)").andSelf();
 
 		droppablesLoop: for (var i = 0; i < m.length; i++) {
 
 			if(m[i].options.disabled || (t && !m[i].accept.call(m[i].element[0],(t.currentItem || t.element)))) continue;	//No disabled and non-accepted
-			for (var j=0; j < list.length; j++) { if(list[j] == m[i].element[0]) { m[i].proportions.height = 0; continue droppablesLoop; } }; //Filter out elements in the current dragged item
-			m[i].visible = m[i].element.css("display") != "none"; if(!m[i].visible) continue; 									//If the element is not visible, continue
+			// Filter out elements in the current dragged item
+			for (var j=0; j < list.length; j++) {
+				if(list[j] == m[i].element[0]) {
+					m[i].proportions.height = 0;
+					continue droppablesLoop;
+				}
+			}
+			m[i].visible = m[i].element.css("display") != "none"; if(!m[i].visible) continue; //If the element is not visible, continue
 
 			if(type == "mousedown") m[i]._activate.call(m[i], event); //Activate the droppable if used directly from draggables
 
@@ -248,27 +250,27 @@ $.ui.ddmanager = {
 			if(this.options.disabled || this.greedyChild || !this.visible) return;
 			var intersects = $.ui.intersect(draggable, this, this.options.tolerance);
 
-			var c = !intersects && this.isover == 1 ? 'isout' : (intersects && this.isover == 0 ? 'isover' : null);
+			var c = !intersects && this.isover == 1 ? 'isout' : (intersects && this.isover === 0 ? 'isover' : null);
 			if(!c) return;
 
 			var parentInstance;
 			if (this.options.greedy) {
 				// find droppable parents with same scope
 				var scope = this.options.scope;
-				var parent = this.element.parents(':data(droppable)').filter(function () {
-					return $.data(this, 'droppable').options.scope === scope;
+				var parent = this.element.parents(':data(ui-droppable)').filter(function () {
+					return $.data(this, 'ui-droppable').options.scope === scope;
 				});
 
 				if (parent.length) {
-					parentInstance = $.data(parent[0], 'droppable');
+					parentInstance = $.data(parent[0], 'ui-droppable');
 					parentInstance.greedyChild = (c == 'isover' ? 1 : 0);
 				}
 			}
 
 			// we just moved into a greedy child
 			if (parentInstance && c == 'isover') {
-				parentInstance['isover'] = 0;
-				parentInstance['isout'] = 1;
+				parentInstance.isover = 0;
+				parentInstance.isout = 1;
 				parentInstance._out.call(parentInstance, event);
 			}
 
@@ -277,8 +279,8 @@ $.ui.ddmanager = {
 
 			// we just moved out of a greedy child
 			if (parentInstance && c == 'isout') {
-				parentInstance['isout'] = 0;
-				parentInstance['isover'] = 1;
+				parentInstance.isout = 0;
+				parentInstance.isover = 1;
 				parentInstance._over.call(parentInstance, event);
 			}
 		});

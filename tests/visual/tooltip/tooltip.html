@@ -66,8 +66,7 @@
 			tooltipClass: "ui-state-highlight",
 			position: {
 				my: "center top",
-				at: "center bottom",
-				offset: "0 10"
+				at: "center bottom+10"
 			}
 		});
 
@@ -86,9 +85,17 @@
 		$( "#buttons" ).tooltip({
 			position: {
 				my: "center bottom",
-				at: "center top",
-				offset: "0 -5"
+				at: "center top-5"
 			}
+		});
+
+		$( "#blurs-on-click" ).tooltip({
+			track: true,
+			show: {
+				delay: 500
+			}
+		}).click(function() {
+			$( "#focus-on-me" ).focus();
 		});
 	});
 	</script>
@@ -140,15 +147,22 @@
 	<div class="group" style="width: 300px;">
 		<p>Nested elements.</p>
 		<div id="context2">
-			<div title="something else" style="border:1px solid red;">
+			<div title="nested parent" style="border:1px solid red;">
 				tooltipped
-				<span title="something more" style="border:1px solid green; padding-left: 50px;">nested tooltipped</span>
+				<span title="nested child" style="border:1px solid green; padding-left: 25px;">
+					nested tooltipped
+					<span title="nested nested child" style="border:1px solid blue; padding-left: 25px;">third level</span>
+				</span>
 			</div>
+			<input title="nested input title">
 		</div>
 		<div id="childish" style="border: 1px solid black;" title="element with child elements">
 			Text in <strong>bold</strong>.
 		</div>
 	</div>
+
+	<button id="blurs-on-click" title="button title text">click me to focus something else</button>
+	<input id="focus-on-me">
 
 	<div class="group">
 		<p>Play around with focusing and hovering of form elements.</p>

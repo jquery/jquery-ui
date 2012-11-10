@@ -3,11 +3,11 @@ TestHelpers.commonWidgetTests( "tooltip", {
 		content: function() {},
 		disabled: false,
 		hide: true,
-		items: "[title]",
+		items: "[title]:not([disabled])",
 		position: {
-			my: "left+15 center",
-			at: "right center",
-			collision: "flipfit flipfit"
+			my: "left top+15",
+			at: "left bottom",
+			collision: "flipfit flip"
 		},
 		show: true,
 		tooltipClass: null,

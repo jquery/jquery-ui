@@ -12,10 +12,7 @@ function notPresent( value, array, message ) {
 var minDuration = 15,
 
 	// duration is used for "long" animates where we plan on testing properties during animation
-	duration = 200,
-
-	// mid is used for testing in the "middle" of the "duration" animations
-	mid = duration / 2;
+	duration = 200;
 
 module( "effects.core" );
 
@@ -30,6 +27,17 @@ test( "Immediate Return Conditions", function() {
 	});
 	equal( ++count, 3, "Both Functions worked properly" );
 });
+
+asyncTest( "Parse of null for options", function() {
+	var hidden = $( "div.hidden" ),
+		count = 0;
+	expect( 1 );
+	hidden.show( "blind", null, 1, function() {
+		equal( ++count, 1, "null for options still works" );
+		start();
+	});
+});
+
 
 /* TODO: Disabled - Can't figure out why this is failing in IE 6/7
 test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
@@ -47,8 +55,7 @@ test( "createWrapper and removeWrapper retain focused elements (#7595)", functio
 module( "effects.core: animateClass" );
 
 asyncTest( "animateClass works with borderStyle", function() {
-	var test = $("div.animateClass"),
-		count = 0;
+	var test = $("div.animateClass");
 	expect(3);
 	test.toggleClass("testAddBorder", minDuration, function() {
 		test.toggleClass("testAddBorder", minDuration, function() {
@@ -62,8 +69,8 @@ asyncTest( "animateClass works with borderStyle", function() {
 
 asyncTest( "animateClass works with colors", function() {
 	var test = $("div.animateClass"),
-		count = 0,
 		oldStep = jQuery.fx.step.backgroundColor;
+
 	expect(2);
 
 	// we want to catch the first frame of animation
@@ -91,7 +98,7 @@ asyncTest( "animateClass works with colors", function() {
 
 asyncTest( "animateClass calls step option", 1, function() {
 	var test = jQuery( "div.animateClass" ),
-		step = function( fx ) {
+		step = function() {
 			ok( true, "Step Function Called" );
 			test.stop();
 			start();
@@ -205,7 +212,7 @@ $.each( $.effects.effect, function( effect ) {
 			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" +effect+ "\", time)" );
 		})).queue( queueTest() ).hide( effect, minDuration, queueTest(function() {
 			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" +effect+ "\", time)" );
-		})).queue( queueTest(function(next) {
+		})).queue( queueTest(function() {
 			deepEqual( hidden.queue(), ["inprogress"], "Only the inprogress sentinel remains");
 			start();
 		}));
