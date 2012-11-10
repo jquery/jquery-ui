@@ -201,6 +201,7 @@ $.widget( "ui.selectmenu", {
 
 			this.isOpen = true;
 			this._toggleAttr();
+			this.menu.menu( "focus", event, this._getSelectedItem() );
 
 			if ( this.items && !this.options.dropdown ) {
 				var currentItem = this._getSelectedItem();
