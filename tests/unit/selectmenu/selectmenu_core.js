@@ -19,7 +19,7 @@ test("accessibility", function () {
 	equal( button.attr("aria-expanded"), "false", "button link  aria-expanded" );
 	equal( button.attr("aria-autocomplete"), "list", "button link  aria-autocomplete" );
 	equal( button.attr("aria-owns"), menu.attr("id"), "button link aria-owns" );
-	equal( button.attr("aria-labelledby"), element.prev("label").attr("id"), "button link aria-labelledby" );
+	equal( button.attr("aria-labelledby"), links.eq( element[0].selectedIndex ).attr( "id" ), "button link aria-labelledby" );
 	equal( button.attr("tabindex"), 0, "button link tabindex" );
 
 	equal( menu.attr("role"), "listbox", "menu role" );
