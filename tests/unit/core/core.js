@@ -1,157 +1,186 @@
-/*
- * core unit tests
- */
-(function($) {
+(function( $ ) {
 
-module('core - jQuery extensions');
+module( "core - jQuery extensions" );
 
-test('focus - original functionality', function() {
-	expect(1);
-	
-	$('#inputTabindex0')
+TestHelpers.testJshint( "core" );
+
+test( "focus - original functionality", function() {
+	expect( 1 );
+	$( "#inputTabindex0" )
 		.focus(function() {
-			ok(true, 'event triggered');
+			ok( true, "event triggered" );
 		})
 		.focus();
 });
 
-asyncTest('focus', function() {
-	expect(2);
-	$('#inputTabindex0')
+asyncTest( "focus", function() {
+	expect( 2 );
+	$( "#inputTabindex0" )
 		.focus(function() {
-			ok(true, 'event triggered');
+			ok( true, "event triggered" );
 		})
-		.focus(500, function() {
-			ok(true, 'callback triggered');
-			$(this).unbind('focus');
+		.focus( 500, function() {
+			// prevent double focus event in IE
+			$( this ).unbind( "focus" );
+			ok( true, "callback triggered" );
 			start();
 		});
 });
 
-test('zIndex', function() {
-	var el = $('#zIndexAutoWithParent'),
+test( "zIndex", function() {
+	expect( 7 );
+	var el = $( "#zIndexAutoWithParent" ),
 		parent = el.parent();
-	equals(el.zIndex(), 100, 'zIndex traverses up to find value');
-	equals(parent.zIndex(200), parent, 'zIndex setter is chainable');
-	equals(el.zIndex(), 200, 'zIndex setter changed zIndex');
-	
-	el = $('#zIndexAutoWithParentViaCSS');
-	equals(el.zIndex(), 0, 'zIndex traverses up to find CSS value, not found because not positioned');
-	
-	el = $('#zIndexAutoWithParentViaCSSPositioned');
-	equals(el.zIndex(), 100, 'zIndex traverses up to find CSS value');
-	el.parent().zIndex(200);
-	equals(el.zIndex(), 200, 'zIndex setter changed zIndex, overriding CSS');
-	
-	equals($('#zIndexAutoNoParent').zIndex(), 0, 'zIndex never explicitly set in hierarchy');
+	equal( el.zIndex(), 100, "zIndex traverses up to find value" );
+	equal( parent.zIndex(200 ), parent, "zIndex setter is chainable" );
+	equal( el.zIndex(), 200, "zIndex setter changed zIndex" );
+
+	el = $( "#zIndexAutoWithParentViaCSS" );
+	equal( el.zIndex(), 0, "zIndex traverses up to find CSS value, not found because not positioned" );
+
+	el = $( "#zIndexAutoWithParentViaCSSPositioned" );
+	equal( el.zIndex(), 100, "zIndex traverses up to find CSS value" );
+	el.parent().zIndex( 200 );
+	equal( el.zIndex(), 200, "zIndex setter changed zIndex, overriding CSS" );
+
+	equal( $( "#zIndexAutoNoParent" ).zIndex(), 0, "zIndex never explicitly set in hierarchy" );
 });
 
 test( "innerWidth - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equals( el.innerWidth(), 122, "getter passthru" );
+	equal( el.innerWidth(), 122, "getter passthru" );
 	el.hide();
-	equals( el.innerWidth(), 122, "getter passthru when hidden" );
+	equal( el.innerWidth(), 122, "getter passthru when hidden" );
 });
 
 test( "innerWidth - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.innerWidth( 120 );
-	equals( el.width(), 98, "width set properly" );
+	equal( el.width(), 98, "width set properly" );
 	el.hide();
 	el.innerWidth( 100 );
-	equals( el.width(), 78, "width set properly when hidden" );
+	equal( el.width(), 78, "width set properly when hidden" );
 });
 
 test( "innerHeight - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equals( el.innerHeight(), 70, "getter passthru" );
+	equal( el.innerHeight(), 70, "getter passthru" );
 	el.hide();
-	equals( el.innerHeight(), 70, "getter passthru when hidden" );
+	equal( el.innerHeight(), 70, "getter passthru when hidden" );
 });
 
 test( "innerHeight - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.innerHeight( 60 );
-	equals( el.height(), 40, "height set properly" );
+	equal( el.height(), 40, "height set properly" );
 	el.hide();
 	el.innerHeight( 50 );
-	equals( el.height(), 30, "height set properly when hidden" );
+	equal( el.height(), 30, "height set properly when hidden" );
 });
 
 test( "outerWidth - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equals( el.outerWidth(), 140, "getter passthru" );
+	equal( el.outerWidth(), 140, "getter passthru" );
 	el.hide();
-	equals( el.outerWidth(), 140, "getter passthru when hidden" );
+	equal( el.outerWidth(), 140, "getter passthru when hidden" );
 });
 
 test( "outerWidth - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerWidth( 130 );
-	equals( el.width(), 90, "width set properly" );
+	equal( el.width(), 90, "width set properly" );
 	el.hide();
 	el.outerWidth( 120 );
-	equals( el.width(), 80, "width set properly when hidden" );
+	equal( el.width(), 80, "width set properly when hidden" );
 });
 
 test( "outerWidth(true) - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equals( el.outerWidth(true), 154, "getter passthru w/ margin" );
+	equal( el.outerWidth(true), 154, "getter passthru w/ margin" );
 	el.hide();
-	equals( el.outerWidth(true), 154, "getter passthru w/ margin when hidden" );
+	equal( el.outerWidth(true), 154, "getter passthru w/ margin when hidden" );
 });
 
 test( "outerWidth(true) - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerWidth( 130, true );
-	equals( el.width(), 76, "width set properly" );
+	equal( el.width(), 76, "width set properly" );
 	el.hide();
 	el.outerWidth( 120, true );
-	equals( el.width(), 66, "width set properly when hidden" );
+	equal( el.width(), 66, "width set properly when hidden" );
 });
 
 test( "outerHeight - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equals( el.outerHeight(), 86, "getter passthru" );
+	equal( el.outerHeight(), 86, "getter passthru" );
 	el.hide();
-	equals( el.outerHeight(), 86, "getter passthru when hidden" );
+	equal( el.outerHeight(), 86, "getter passthru when hidden" );
 });
 
 test( "outerHeight - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerHeight( 80 );
-	equals( el.height(), 44, "height set properly" );
+	equal( el.height(), 44, "height set properly" );
 	el.hide();
 	el.outerHeight( 70 );
-	equals( el.height(), 34, "height set properly when hidden" );
+	equal( el.height(), 34, "height set properly when hidden" );
 });
 
 test( "outerHeight(true) - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equals( el.outerHeight(true), 98, "getter passthru w/ margin" );
+	equal( el.outerHeight(true), 98, "getter passthru w/ margin" );
 	el.hide();
-	equals( el.outerHeight(true), 98, "getter passthru w/ margin when hidden" );
+	equal( el.outerHeight(true), 98, "getter passthru w/ margin when hidden" );
 });
 
 test( "outerHeight(true) - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerHeight( 90, true );
-	equals( el.height(), 42, "height set properly" );
+	equal( el.height(), 42, "height set properly" );
 	el.hide();
 	el.outerHeight( 80, true );
-	equals( el.height(), 32, "height set properly when hidden" );
+	equal( el.height(), 32, "height set properly when hidden" );
 });
 
-})(jQuery);
+test( "uniqueId / removeUniqueId", function() {
+	expect( 3 );
+	var el = $( "img" ).eq( 0 );
+
+	// support: jQuery <1.6.2
+	// support: IE <8
+	// We should use strictEqual( id, undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
+	ok( !el.attr( "id" ), "element has no initial id" );
+	el.uniqueId();
+	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
+	el.removeUniqueId();
+	// support: jQuery <1.6.2
+	// support: IE <8
+	// see above
+	ok( !el.attr( "id" ), "unique id has been removed from element" );
+});
+
+})( jQuery );

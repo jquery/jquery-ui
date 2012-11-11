@@ -1,20 +1,33 @@
 (function( $ ) {
 
-function scrollTopSupport() {
-	$( window ).scrollTop( 1 );
-	return $( window ).scrollTop() === 1;
-}
+var win = $( window ),
+	scrollTopSupport = function() {
+		var support = win.scrollTop( 1 ).scrollTop() === 1;
+		win.scrollTop( 0 );
+		scrollTopSupport = function() {
+			return support;
+		};
+		return support;
+	};
 
-module( "position" );
+module( "position", {
+	setup: function() {
+		win.scrollTop( 0 ).scrollLeft( 0 );
+	}
+});
+
+TestHelpers.testJshint( "position" );
 
 test( "my, at, of", function() {
+	expect( 4 );
+
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left top",
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 40, left: 40 }, "left top, left top" );
+	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "left top, left top" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -22,7 +35,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 60, left: 40 }, "left top, left bottom" );
+	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "left top, left bottom" );
 
 	$( "#elx" ).position({
 		my: "left",
@@ -30,7 +43,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 55, left: 50 }, "left, bottom" );
+	deepEqual( $( "#elx" ).offset(), { top: 55, left: 50 }, "left, bottom" );
 
 	$( "#elx" ).position({
 		my: "left foo",
@@ -38,70 +51,72 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 45, left: 50 }, "left foo, bar baz" );
+	deepEqual( $( "#elx" ).offset(), { top: 45, left: 50 }, "left foo, bar baz" );
 });
 
 test( "multiple elements", function() {
-	var elements = $( "#el1, #el2" );
-	var result = elements.position({
-		my: "left top",
-		at: "left bottom",
-		of: "#parent",
-		collision: "none"
-	});
+	expect( 3 );
 
-	same( result, elements );
-	var expected = { top: 10, left: 4 };
+	var elements = $( "#el1, #el2" ),
+		result = elements.position({
+			my: "left top",
+			at: "left bottom",
+			of: "#parent",
+			collision: "none"
+		}),
+		expected = { top: 10, left: 4 };
+
+	deepEqual( result, elements );
 	elements.each(function() {
-		same( $( this ).offset(), expected );
+		deepEqual( $( this ).offset(), expected );
 	});
 });
 
 test( "positions", function() {
-	var definitions = [];
+	expect( 18 );
+
 	var offsets = {
-		left: 0,
-		center: 3,
-		right: 6,
-		top: 0,
-		bottom: 6
-	};
-	var start = { left: 4, top: 4 };
+			left: 0,
+			center: 3,
+			right: 6,
+			top: 0,
+			bottom: 6
+		},
+		start = { left: 4, top: 4 },
+		el = $( "#el1" );
+
 	$.each( [ 0, 1 ], function( my ) {
 		$.each( [ "top", "center", "bottom" ], function( vindex, vertical ) {
 			$.each( [ "left", "center", "right" ], function( hindex, horizontal ) {
-				definitions.push({
-					my: my ? horizontal + " " + vertical : "left top",
-					at: !my ? horizontal + " " + vertical : "left top",
-					result: {
-						top: my ? start.top - offsets[ vertical ] : start.top + offsets[ vertical ],
-						left: my ? start.left - offsets[ horizontal ] : start.left + offsets[ horizontal ]
-					}
+				var _my = my ? horizontal + " " + vertical : "left top",
+					_at = !my ? horizontal + " " + vertical : "left top";
+				el.position({
+					my: _my,
+					at: _at,
+					of: "#parent",
+					collision: "none"
 				});
+				deepEqual( el.offset(), {
+					top: start.top + offsets[ vertical ] * (my ? -1 : 1),
+					left: start.left + offsets[ horizontal ] * (my ? -1 : 1)
+				}, "Position via " + QUnit.jsDump.parse({ my: _my, at: _at }) );
 			});
 		});
-	});
-	var el = $( "#el1" );
-	$.each( definitions, function( index, definition ) {
-		el.position({
-			my: definition.my,
-			at: definition.at,
-			of: "#parent",
-			collision: "none"
-		});
-		same( el.offset(), definition.result,
-			"Position via " + QUnit.jsDump.parse({ my:definition.my, at:definition.at }) );
 	});
 });
 
 test( "of", function() {
+	expect( 9 + (scrollTopSupport() ? 1 : 0) );
+
+	var event;
+
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left top",
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 40, left: 40 }, "selector" );
+	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "selector" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -109,7 +124,7 @@ test( "of", function() {
 		of: $( "#parentx"),
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 60, left: 40 }, "jQuery object" );
+	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "jQuery object" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -117,7 +132,7 @@ test( "of", function() {
 		of: $( "#parentx" )[ 0 ],
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 40, left: 40 }, "DOM element" );
+	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "DOM element" );
 
 	$( "#elx" ).position({
 		my: "right bottom",
@@ -125,7 +140,7 @@ test( "of", function() {
 		of: document,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: $( document ).height() - 10,
 		left: $( document ).width() - 10
 	}, "document" );
@@ -136,12 +151,12 @@ test( "of", function() {
 		of: $( document ),
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: $( document ).height() - 10,
 		left: $( document ).width() - 10
 	}, "document as jQuery object" );
 
-	$( window ).scrollTop( 0 );
+	win.scrollTop( 0 );
 
 	$( "#elx" ).position({
 		my: "right bottom",
@@ -149,45 +164,45 @@ test( "of", function() {
 		of: window,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
-		top: $( window ).height() - 10,
-		left: $( window ).width() - 10
+	deepEqual( $( "#elx" ).offset(), {
+		top: win.height() - 10,
+		left: win.width() - 10
 	}, "window" );
 
 	$( "#elx" ).position({
 		my: "right bottom",
 		at: "right bottom",
-		of: $( window ),
+		of: win,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
-		top: $( window ).height() - 10,
-		left: $( window ).width() - 10
+	deepEqual( $( "#elx" ).offset(), {
+		top: win.height() - 10,
+		left: win.width() - 10
 	}, "window as jQuery object" );
 
 	if ( scrollTopSupport() ) {
-		$( window ).scrollTop( 500 ).scrollLeft( 200 );
+		win.scrollTop( 500 ).scrollLeft( 200 );
 		$( "#elx" ).position({
 			my: "right bottom",
 			at: "right bottom",
 			of: window,
 			collision: "none"
 		});
-		same( $( "#elx" ).offset(), {
-			top: $( window ).height() + 500 - 10,
-			left: $( window ).width() + 200 - 10
+		deepEqual( $( "#elx" ).offset(), {
+			top: win.height() + 500 - 10,
+			left: win.width() + 200 - 10
 		}, "window, scrolled" );
-		$( window ).scrollTop( 0 ).scrollLeft( 0 );
+		win.scrollTop( 0 ).scrollLeft( 0 );
 	}
 
-	var event = $.extend( $.Event( "someEvent" ), { pageX: 200, pageY: 300 } );
+	event = $.extend( $.Event( "someEvent" ), { pageX: 200, pageY: 300 } );
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left top",
 		of: event,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: 300,
 		left: 200
 	}, "event - left top, left top" );
@@ -199,20 +214,22 @@ test( "of", function() {
 		of: event,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: 600,
 		left: 400
 	}, "event - left top, right bottom" );
 });
 
 test( "offsets", function() {
+	expect( 4 );
+
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left+10 bottom+10",
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 70, left: 50 }, "offsets in at" );
+	deepEqual( $( "#elx" ).offset(), { top: 70, left: 50 }, "offsets in at" );
 
 	$( "#elx" ).position({
 		my: "left+10 top-10",
@@ -220,7 +237,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 50, left: 50 }, "offsets in my" );
+	deepEqual( $( "#elx" ).offset(), { top: 50, left: 50 }, "offsets in my" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -228,7 +245,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 58, left: 50 }, "percentage offsets in at" );
+	deepEqual( $( "#elx" ).offset(), { top: 58, left: 50 }, "percentage offsets in at" );
 
 	$( "#elx" ).position({
 		my: "left-30% top+50%",
@@ -236,15 +253,34 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
+	deepEqual( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
 });
 
 test( "using", function() {
-	expect( 6 );
+	expect( 10 );
 
 	var count = 0,
 		elems = $( "#el1, #el2" ),
-		expectedPosition = { top: 40, left: 40 },
+		of = $( "#parentx" ),
+		expectedPosition = { top: 60, left: 60 },
+		expectedFeedback = {
+			target: {
+				element: of,
+				width: 20,
+				height: 20,
+				left: 40,
+				top: 40
+			},
+			element: {
+				width: 6,
+				height: 6,
+				left: 60,
+				top: 60
+			},
+			horizontal: "left",
+			vertical: "top",
+			important: "vertical"
+		},
 		originalPosition = elems.position({
 			my: "right bottom",
 			at: "rigt bottom",
@@ -254,17 +290,20 @@ test( "using", function() {
 
 	elems.position({
 		my: "left top",
-		at: "left top",
+		at: "center+10 bottom",
 		of: "#parentx",
-		using: function( position ) {
-			same( this, elems[ count ], "correct context for call #" + count );
-			same( position, expectedPosition, "correct position for call #" + count );
+		using: function( position, feedback ) {
+			deepEqual( this, elems[ count ], "correct context for call #" + count );
+			deepEqual( position, expectedPosition, "correct position for call #" + count );
+			deepEqual( feedback.element.element[ 0 ], elems[ count ] );
+			delete feedback.element.element;
+			deepEqual( feedback, expectedFeedback );
 			count++;
 		}
 	});
 
 	elems.each(function() {
-		same( $( this ).offset(), originalPosition, "elements not moved" );
+		deepEqual( $( this ).offset(), originalPosition, "elements not moved" );
 	});
 });
 
@@ -272,9 +311,9 @@ function collisionTest( config, result, msg ) {
 	var elem = $( "#elx" ).position( $.extend({
 		my: "left top",
 		at: "right bottom",
-		of: window
+		of: "#parent"
 	}, config ) );
-	same( elem.offset(), result, msg );
+	deepEqual( elem.offset(), result, msg );
 }
 
 function collisionTest2( config, result, msg ) {
@@ -284,249 +323,355 @@ function collisionTest2( config, result, msg ) {
 	}, config ), result, msg );
 }
 
-test( "collision: fit, no offset", function() {
+test( "collision: fit, no collision", function() {
+	expect( 2 );
+
 	collisionTest({
 		collision: "fit"
-	}, { top: $( window ).height() - 10, left: $( window ).width() - 10 }, "right bottom" );
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
 
-	collisionTest2({
-		collision: "fit"
-	}, { top: 0, left: 0 }, "left top" );
-});
-
-test( "collision: fit, with offset", function() {
 	collisionTest({
 		collision: "fit",
 		at: "right+2 bottom+3"
-	}, { top: $(window).height() - 10, left: $(window).width() - 10 }, "right bottom");
+	}, {
+		top: 13,
+		left: 12
+	}, "with offset" );
+});
+
+// Currently failing in IE8 due to the iframe used by TestSwarm
+if ( !/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() ) ) {
+test( "collision: fit, collision", function() {
+	expect( 2 + (scrollTopSupport() ? 1 : 0) );
+
+	collisionTest2({
+		collision: "fit"
+	}, {
+		top: 0,
+		left: 0
+	}, "no offset" );
 
 	collisionTest2({
 		collision: "fit",
 		at: "left+2 top+3"
-	}, { top: 0, left: 0 }, "left top, positive offset" );
+	}, {
+		top: 0,
+		left: 0
+	}, "with offset" );
 
-	collisionTest2({
-		collision: "fit",
-		at: "left-2 top-3"
-	}, { top: 0, left: 0 }, "left top, negative offset" );
-});
-
-test( "collision: fit, window scrolled", function() {
 	if ( scrollTopSupport() ) {
-		var win = $( window );
 		win.scrollTop( 300 ).scrollLeft( 200 );
-
 		collisionTest({
-			collision: "fit",
-			at: "left-100 top-100"
-		}, { top: 300, left: 200 }, "top left" );
-		collisionTest2({
-			collision: "fit",
-			at: "right+100 bottom+100"
-		}, { top: 300 + win.height() - 10, left: 200 + win.width() - 10 }, "right bottom" );
+			collision: "fit"
+		}, {
+			top: 300,
+			left: 200
+		}, "window scrolled" );
 
 		win.scrollTop( 0 ).scrollLeft( 0 );
 	}
 });
+}
 
-test( "collision: flip, no offset", function() {
+test( "collision: flip, no collision", function() {
+	expect( 2 );
+
 	collisionTest({
 		collision: "flip"
-	}, { top: $( window ).height(), left: $( window ).width() }, "left top" );
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
 
-	collisionTest2({
-		collision: "flip"
-	}, { top: -10, left: -10 }, "right bottom" );
-});
-
-test( "collision: flip, with offset", function() {
 	collisionTest({
 		collision: "flip",
 		at: "right+2 bottom+3"
-	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "left top, with offset added" );
+	}, {
+		top: 13,
+		left: 12
+	}, "with offset" );
+});
+
+test( "collision: flip, collision", function() {
+	expect( 2 );
+
+	collisionTest2({
+		collision: "flip"
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left+2 top+3"
-	}, { top: -7, left: -8 }, "bottom, positive offset" );
-
-	collisionTest2({
-		collision: "flip",
-		at: "left-2 top-3"
-	}, { top: -13, left: -12 }, "right bottom, negative offset" );
+	}, {
+		top: 7,
+		left: 8
+	}, "with offset" );
 });
 
-test( "collision: none, no offset", function() {
+test( "collision: flipfit, no collision", function() {
+	expect( 2 );
+
+	collisionTest({
+		collision: "flipfit"
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
+
+	collisionTest({
+		collision: "flipfit",
+		at: "right+2 bottom+3"
+	}, {
+		top: 13,
+		left: 12
+	}, "with offset" );
+});
+
+test( "collision: flipfit, collision", function() {
+	expect( 2 );
+
+	collisionTest2({
+		collision: "flipfit"
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
+
+	collisionTest2({
+		collision: "flipfit",
+		at: "left+2 top+3"
+	}, {
+		top: 7,
+		left: 8
+	}, "with offset" );
+});
+
+test( "collision: none, no collision", function() {
+	expect( 2 );
+
 	collisionTest({
 		collision: "none"
-	}, { top: $( window ).height(), left: $( window ).width() }, "left top" );
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
 
-	collisionTest2({
-		collision: "none"
-	}, { top: -10, left: -10 }, "moved to the right bottom" );
-});
-
-test( "collision: none, with offset", function() {
 	collisionTest({
 		collision: "none",
 		at: "right+2 bottom+3"
-	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "right bottom, with offset added" );
+	}, {
+		top: 13,
+		left: 12
+	}, "with offset" );
+});
+
+test( "collision: none, collision", function() {
+	expect( 2 );
+
+	collisionTest2({
+		collision: "none"
+	}, {
+		top: -6,
+		left: -6
+	}, "no offset" );
 
 	collisionTest2({
 		collision: "none",
 		at: "left+2 top+3"
-	}, { top: -7, left: -8 }, "left top, positive offset" );
-
-	collisionTest2({
-		collision: "none",
-		at: "left-2 top-3"
-	}, { top: -13, left: -12 }, "left top, negative offset" );
+	}, {
+		top: -3,
+		left: -4
+	}, "with offset" );
 });
 
 test( "collision: fit, with margin", function() {
-	$( "#elx" ).css( "margin", 10 );
-
-	collisionTest({
-		collision: "fit"
-	}, { top: $( window ).height() - 20, left: $( window ).width() - 20 }, "right bottom" );
-
-	collisionTest2({
-		collision: "fit"
-	}, { top: 10, left: 10 }, "left top" );
+	expect( 2 );
 
 	$( "#elx" ).css({
-		"margin-left": 5,
-		"margin-top": 5
+		marginTop: 6,
+		marginLeft: 4
 	});
 
 	collisionTest({
 		collision: "fit"
-	}, { top: $( window ).height() - 20, left: $( window ).width() - 20 }, "right bottom" );
+	}, {
+		top: 10,
+		left: 10
+	}, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
-	}, { top: 5, left: 5 }, "left top" );
-
-	$( "#elx" ).css({
-		"margin-right": 15,
-		"margin-bottom": 15
-	});
-
-	collisionTest({
-		collision: "fit"
-	}, { top: $( window ).height() - 25, left: $( window ).width() - 25 }, "right bottom" );
-
-	collisionTest2({
-		collision: "fit"
-	}, { top: 5, left: 5 }, "left top" );
+	}, {
+		top: 6,
+		left: 4
+	}, "left top" );
 });
 
 test( "collision: flip, with margin", function() {
-	$( "#elx" ).css( "margin", 10 );
+	expect( 3 );
+
+	$( "#elx" ).css({
+		marginTop: 6,
+		marginLeft: 4
+	});
 
 	collisionTest({
-		collision: "flip",
-		at: "left top"
-	}, { top: 0, left: 0 }, "left top" );
+		collision: "flip"
+	}, {
+		top: 10,
+		left: 10
+	}, "left top" );
+
+	collisionTest2({
+		collision: "flip"
+	}, {
+		top: 10,
+		left: 10
+	}, "right bottom" );
 
 	collisionTest2({
 		collision: "flip",
-		at: "right bottom"
-	}, { top: $( window ).height() - 10, left: $( window ).width() - 10 }, "right bottom" );
+		my: "left top"
+	}, {
+		top: 0,
+		left: 4
+	}, "right bottom" );
 });
 
-test( "addClass: flipped left", function() {
-	var elem = $( "#elx" ).position( {
-		my: "left center",
-		of: window,
-		collision: "flip",
-		at: "right center"
-	});
+test( "within", function() {
+	expect( 6 );
 
-	same( elem.hasClass( 'ui-flipped-left' ), false, 'Has ui-flipped-left class' );
+	collisionTest({
+		within: "#within",
+		collision: "fit"
+	}, {
+		top: 4,
+		left: 2
+	}, "fit - right bottom" );
 
-	elem.position( {
-		my: "right center",
-		of: window,
-		collision: "flip",
-		at: "left center"
-	})
+	collisionTest2({
+		within: "#within",
+		collision: "fit"
+	}, {
+		top: 2,
+		left: 0
+	}, "fit - left top" );
 
-	same( elem.hasClass( 'ui-flipped-left' ), false, 'Removed ui-flipped-left class' );
+	collisionTest({
+		within: "#within",
+		collision: "flip"
+	}, {
+		top: 10,
+		left: -6
+	}, "flip - right bottom" );
+
+	collisionTest2({
+		within: "#within",
+		collision: "flip"
+	}, {
+		top: 10,
+		left: -6
+	}, "flip - left top" );
+
+	collisionTest({
+		within: "#within",
+		collision: "flipfit"
+	}, {
+		top: 4,
+		left: 0
+	}, "flipfit - right bottom" );
+
+	collisionTest2({
+		within: "#within",
+		collision: "flipfit"
+	}, {
+		top: 4,
+		left: 0
+	}, "flipfit - left top" );
 });
 
-test( "addClass: flipped top", function() {
-	var elem = $( "#elx" ).position( {
-		my: "left top",
-		of: window,
-		collision: "flip",
-		at: "right bottom"
+test( "with scrollbars", function() {
+	expect( 4 );
+
+	$( "#scrollx" ).css({
+		width: 100,
+		height: 100,
+		left: 0,
+		top: 0
 	});
 
-	same( elem.hasClass( 'ui-flipped-top' ), false, 'Has ui-flipped-top class' );
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90,
+		left: 90
+	}, "visible" );
 
-	elem.position( {
-		my: "left bottom",
-		of: window,
-		collision: "flip",
-		at: "right top"
+	$( "#scrollx" ).css({
+		overflow: "scroll"
 	});
 
-	same( elem.hasClass( 'ui-flipped-top' ), false, 'Removed ui-flipped-top class' );
-});
+	var scrollbarInfo = $.position.getScrollInfo( $.position.getWithinInfo( $( "#scrollx" ) ) );
 
-test( "addClass: flipped right", function() {
-	var elem = $( "#elx" ).position( {
-		my: "right center",
-		of: window,
-		collision: "flip",
-		at: "left center"
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90 - scrollbarInfo.height,
+		left: 90 - scrollbarInfo.width
+	}, "scroll" );
+
+	$( "#scrollx" ).css({
+		overflow: "auto"
 	});
 
-	same( elem.hasClass( 'ui-flipped-right' ), false, 'Has ui-flipped-right class' );
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90,
+		left: 90
+	}, "auto, no scroll" );
 
-	elem.position( {
-		my: "left center",
-		of: window,
-		collision: "flip",
-		at: "right center"
-	});
+	$( "#scrollx" ).css({
+		overflow: "auto"
+	}).append( $("<div>").height(300).width(300) );
 
-	same( elem.hasClass( 'ui-flipped-right' ), false, 'Removed ui-flipped-right class' );
-
-});
-
-test( "addClass: flipped bottom", function() {
-	var elem = $( "#elx" ).position( {
-		my: "left bottom",
-		of: window,
-		collision: "flip",
-		at: "right top"
-	});
-
-	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Has ui-flipped-bottom class' );
-
-	elem.position( {
-		my: "left top",
-		of: window,
-		collision: "flip",
-		at: "right bottom"
-	});
-
-	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Removed ui-flipped-bottom class' );
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90 - scrollbarInfo.height,
+		left: 90 - scrollbarInfo.width
+	}, "auto, with scroll" );
 });
 
 test( "fractions", function() {
+	expect( 1 );
+
 	$( "#fractions-element" ).position({
 		my: "left top",
 		at: "left top",
 		of: "#fractions-parent",
 		collision: "none"
 	});
-	same( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
+	deepEqual( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
 });
 
 test( "bug #5280: consistent results (avoid fractional values)", function() {
+	expect( 1 );
+
 	var wrapper = $( "#bug-5280" ),
 		elem = wrapper.children(),
 		offset1 = elem.position({
@@ -541,7 +686,7 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 			of: wrapper,
 			collision: "none"
 		}).offset();
-	same( offset1, offset2 );
+	deepEqual( offset1, offset2 );
 });
 
 }( jQuery ) );

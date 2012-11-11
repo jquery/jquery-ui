@@ -6,13 +6,15 @@
 module( "button: tickets" );
 
 test( "#5946 - buttonset should ignore buttons that are not :visible", function() {
+	expect( 2 );
 	$( "#radio01" ).next().andSelf().hide();
-	var set = $( "#radio0" ).buttonset({ items: ":radio:visible" });
+	var set = $( "#radio0" ).buttonset({ items: "input[type=radio]:visible" });
 	ok( set.find( "label:eq(0)" ).is( ":not(.ui-button):not(.ui-corner-left)" ) );
 	ok( set.find( "label:eq(1)" ).is( ".ui-button.ui-corner-left" ) );
 });
 
 test( "#6262 - buttonset not applying ui-corner to invisible elements", function() {
+	expect( 3 );
 	$( "#radio0" ).hide();
 	var set = $( "#radio0" ).buttonset();
 	ok( set.find( "label:eq(0)" ).is( ".ui-button.ui-corner-left" ) );
@@ -21,6 +23,7 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 });
 
 test( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+	expect( 2 );
 	var check = $( "#check" ).button(),
 		label = $( "label[for='check']" );
 	ok( !label.is( ".ui-state-focus" ) );
@@ -29,31 +32,41 @@ test( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard 
 });
 
 test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
+	expect( 5 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
-	group.find( "input:checkbox" ).button();
+	group.find( "input[type=checkbox]" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ) );
 
 	group = $( "<input type='checkbox' id='t7092b'><label for='t7092b'></label>" );
-	group.filter( "input:checkbox" ).button();
+	group.filter( "input[type=checkbox]" ).button();
 	ok( group.filter( "label" ).is( ".ui-button" ) );
 
 	group = $( "<span><input type='checkbox' id='t7092c'></span><label for='t7092c'></label>" );
-	group.find( "input:checkbox" ).button();
+	group.find( "input[type=checkbox]" ).button();
 	ok( group.filter( "label" ).is( ".ui-button" ) );
 
 	group = $( "<span><input type='checkbox' id='t7092d'></span><span><label for='t7092d'></label></span>" );
-	group.find( "input:checkbox" ).button();
+	group.find( "input[type=checkbox]" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ) );
 
 	group = $( "<input type='checkbox' id='t7092e'><span><label for='t7092e'></label></span>" );
-	group.filter( "input:checkbox" ).button();
+	group.filter( "input[type=checkbox]" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ) );
 });
 
 test( "#7534 - Button label selector works for ids with \":\"", function() {
+	expect( 1 );
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
+});
+
+test( "#8237 - Anchor tags lose disabled state when refreshed", function() {
+	expect( 1 );
+	var element = $( "<a id='a8237'></a>" ).appendTo( "#qunit-fixture" );
+
+	element.button({ disabled: true }).button( "refresh" );
+	ok( element.button( "option", "disabled" ), "Anchor button should remain disabled after refresh" );
 });
 
 })( jQuery );

@@ -5,10 +5,12 @@
 	<title>jQuery UI Dialog Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../../external/jquery.bgiframe-2.1.2.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.dialog" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -22,28 +24,14 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
+	<script src="dialog_common.js"></script>
 	<script src="dialog_core.js"></script>
-	<script src="dialog_defaults.js"></script>
 	<script src="dialog_events.js"></script>
 	<script src="dialog_methods.js"></script>
 	<script src="dialog_options.js"></script>
+	<script src="dialog_test_helpers.js"></script>
 	<script src="dialog_tickets.js"></script>
 
-	<script>
-	// disable this testsuite for testswarm only - until we fix it from freezing IE6
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("dialog", function() { ok(true, "disabled dialog testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>
@@ -54,7 +42,8 @@
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-
+	<div id="dialog1"></div>
+	<div id="dialog2"></div>
 </div>
 </body>
 </html>

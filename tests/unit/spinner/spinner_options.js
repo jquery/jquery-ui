@@ -4,10 +4,29 @@ module( "spinner: options" );
 
 // culture is tested after numberFormat, since it depends on numberFormat
 
+test( "icons: default ", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( 0 ).spinner().spinner( "widget" );
+	equal( element.find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-triangle-1-n" );
+	equal( element.find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
+});
+
+test( "icons: custom ", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( 0 ).spinner({
+		icons: {
+			down: "custom-down",
+			up: "custom-up"
+		}
+	}).spinner( "widget" );
+	equal( element.find( ".ui-icon:first" ).attr( "class" ), "ui-icon custom-up" );
+	equal( element.find( ".ui-icon:last" ).attr( "class" ), "ui-icon custom-down" );
+});
+
 test( "incremental, false", function() {
 	expect( 100 );
 
-	var i, diff,
+	var i,
 		prev = 0,
 		element = $( "#spin" ).val( prev ).spinner({
 			incremental: false,
@@ -32,7 +51,7 @@ test( "incremental, true", function() {
 		});
 	}
 
-	var i, diff,
+	var i,
 		prev = 0,
 		expected = [].concat( fill( 18, 1 ), fill( 37, 2 ), fill( 14, 3 ),
 			fill( 9, 4 ), fill( 6, 5 ), fill( 5, 6 ), fill ( 5, 7 ),
@@ -141,25 +160,57 @@ test( "currency, change", function() {
 test( "max", function() {
 	expect( 3 );
 	var element = $( "#spin" ).val( 1000 ).spinner({ max: 100 });
-	equals( element.val(), 1000, "value not constrained on init" );
+	equal( element.val(), 1000, "value not constrained on init" );
 
 	element.spinner( "value", 1000 );
-	equals( element.val(), 100, "max constrained if value method is greater" );
+	equal( element.val(), 100, "max constrained in value method" );
 
 	element.val( 1000 ).blur();
-	equals( element.val(), 1000, "max not constrained if manual entry" );
+	equal( element.val(), 1000, "max not constrained if manual entry" );
+});
+
+test( "max, string", function() {
+	expect( 3 );
+	var element = $( "#spin" )
+		.val( 1000 )
+		.spinner({
+			max: "$100.00",
+			numberFormat: "C",
+			culture: "en"
+		});
+	equal( element.val(), "$1,000.00", "value not constrained on init" );
+	equal( element.spinner( "option", "max" ), 100, "option converted to number" );
+
+	element.spinner( "value", 1000 );
+	equal( element.val(), "$100.00", "max constrained in value method" );
 });
 
 test( "min", function() {
 	expect( 3 );
 	var element = $( "#spin" ).val( -1000 ).spinner({ min: -100 });
-	equals( element.val(), -1000, "value not constrained on init" );
+	equal( element.val(), -1000, "value not constrained on init" );
 
 	element.spinner( "value", -1000 );
-	equals( element.val(), -100, "min constrained if value method is greater" );
+	equal( element.val(), -100, "min constrained in value method" );
 
 	element.val( -1000 ).blur();
-	equals( element.val(), -1000, "min not constrained if manual entry" );
+	equal( element.val(), -1000, "min not constrained if manual entry" );
+});
+
+test( "min, string", function() {
+	expect( 3 );
+	var element = $( "#spin" )
+		.val( -1000 )
+		.spinner({
+			min: "-$100.00",
+			numberFormat: "C",
+			culture: "en"
+		});
+	equal( element.val(), "($1,000.00)", "value not constrained on init" );
+	equal( element.spinner( "option", "min" ), -100, "option converted to number" );
+
+	element.spinner( "value", -1000 );
+	equal( element.val(), "($100.00)", "min constrained in value method" );
 });
 
 test( "step, 2", function() {
@@ -167,14 +218,14 @@ test( "step, 2", function() {
 	var element = $( "#spin" ).val( 0 ).spinner({ step: 2 });
 
 	element.spinner( "stepUp" );
-	equals( element.val(), "2", "stepUp" );
+	equal( element.val(), "2", "stepUp" );
 
 	element.spinner( "value", "10.5" );
-	equals( element.val(), "10", "value reset to 10" );
+	equal( element.val(), "10", "value reset to 10" );
 
 	element.val( "4.5" );
 	element.spinner( "stepUp" );
-	equals( element.val(), "6", "stepUp" );
+	equal( element.val(), "6", "stepUp" );
 });
 
 test( "step, 0.7", function() {
@@ -184,7 +235,21 @@ test( "step, 0.7", function() {
 	});
 
 	element.spinner( "stepUp" );
-	equals( element.val(), "0.7", "stepUp" );
+	equal( element.val(), "0.7", "stepUp" );
+});
+
+test( "step, string", function() {
+	expect( 2 );
+	var element = $("#spin").val( 0 ).spinner({
+		step: "$0.70",
+		numberFormat: "C",
+		culture: "en"
+	});
+
+	equal( element.spinner( "option", "step" ), 0.7, "option converted to number" );
+
+	element.spinner( "stepUp" );
+	equal( element.val(), "$0.70", "stepUp" );
 });
 
 })( jQuery );

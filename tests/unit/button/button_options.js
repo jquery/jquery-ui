@@ -6,39 +6,43 @@
 module("button: options");
 
 test("disabled, explicit value", function() {
+	expect( 4 );
 	$("#radio01").button({ disabled: false });
-	same(false, $("#radio01").button("option", "disabled"),
+	deepEqual(false, $("#radio01").button("option", "disabled"),
 		"disabled option set to false");
-	same(false, $("#radio01").prop("disabled"), "element is disabled");
-	
+	deepEqual(false, $("#radio01").prop("disabled"), "element is disabled");
+
 	$("#radio02").button({ disabled: true });
-	same(true, $("#radio02").button("option", "disabled"),
+	deepEqual(true, $("#radio02").button("option", "disabled"),
 		"disabled option set to true");
-	same(true, $("#radio02").prop("disabled"), "element is not disabled");
+	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
 test("disabled, null", function() {
+	expect( 4 );
 	$("#radio01").button({ disabled: null });
-	same(false, $("#radio01").button("option", "disabled"),
+	deepEqual(false, $("#radio01").button("option", "disabled"),
 		"disabled option set to false");
-	same(false, $("#radio01").prop("disabled"), "element is disabled");
-	
+	deepEqual(false, $("#radio01").prop("disabled"), "element is disabled");
+
 	$("#radio02").prop("disabled", true).button({ disabled: null });
-	same(true, $("#radio02").button("option", "disabled"),
+	deepEqual(true, $("#radio02").button("option", "disabled"),
 		"disabled option set to true");
-	same(true, $("#radio02").prop("disabled"), "element is not disabled");
+	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
 test("text false without icon", function() {
+	expect( 1 );
 	$("#button").button({
 		text: false
 	});
 	ok( $("#button").is(".ui-button-text-only:not(.ui-button-icon-only)") );
-	
+
 	$("#button").button("destroy");
 });
 
 test("text false with icon", function() {
+	expect( 1 );
 	$("#button").button({
 		text: false,
 		icons: {
@@ -46,38 +50,47 @@ test("text false with icon", function() {
 		}
 	});
 	ok( $("#button").is(".ui-button-icon-only:not(.ui-button-text):has(span.ui-icon.iconclass)") );
-	
+
 	$("#button").button("destroy");
 });
 
 test("label, default", function() {
+	expect( 2 );
 	$("#button").button();
-	same( $("#button").text(), "Label" );
-	
+	deepEqual( $("#button").text(), "Label" );
+	deepEqual( $( "#button").button( "option", "label" ), "Label" );
+
 	$("#button").button("destroy");
 });
 
 test("label", function() {
+	expect( 2 );
 	$("#button").button({
 		label: "xxx"
 	});
-	same( $("#button").text(), "xxx" );
-	
+	deepEqual( $("#button").text(), "xxx" );
+	deepEqual( $("#button").button( "option", "label" ), "xxx" );
+
 	$("#button").button("destroy");
 });
 
 test("label default with input type submit", function() {
-	same( $("#submit").button().val(), "Label" );
+	expect( 2 );
+	deepEqual( $("#submit").button().val(), "Label" );
+	deepEqual( $("#submit").button( "option", "label" ), "Label" );
 });
 
 test("label with input type submit", function() {
+	expect( 2 );
 	var label = $("#submit").button({
 		label: "xxx"
 	}).val();
-	same( label, "xxx" );
+	deepEqual( label, "xxx" );
+	deepEqual( $("#submit").button( "option", "label" ), "xxx" );
 });
 
 test("icons", function() {
+	expect( 1 );
 	$("#button").button({
 		text: false,
 		icons: {
@@ -86,7 +99,7 @@ test("icons", function() {
 		}
 	});
 	ok( $("#button").is(":has(span.ui-icon.ui-button-icon-primary.iconclass):has(span.ui-icon.ui-button-icon-secondary.iconclass2)") );
-	
+
 	$("#button").button("destroy");
 });
 

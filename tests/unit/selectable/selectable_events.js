@@ -7,11 +7,11 @@ module("selectable: events");
 
 test("start", function() {
 	expect(2);
-	el = $("#selectable1");
+	var el = $("#selectable1");
 	el.selectable({
-		start: function(ev, ui) {
+		start: function() {
 			ok(true, "drag fired start callback");
-			equals(this, el[0], "context of callback");
+			equal(this, el[0], "context of callback");
 		}
 	});
 	el.simulate("drag", 20, 20);
@@ -19,11 +19,11 @@ test("start", function() {
 
 test("stop", function() {
 	expect(2);
-	el = $("#selectable1");
+	var el = $("#selectable1");
 	el.selectable({
-		start: function(ev, ui) {
+		start: function() {
 			ok(true, "drag fired stop callback");
-			equals(this, el[0], "context of callback");
+			equal(this, el[0], "context of callback");
 		}
 	});
 	el.simulate("drag", 20, 20);

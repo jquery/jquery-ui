@@ -2,7 +2,7 @@
  * slider_events.js
  */
 (function($) {
-	
+
 module( "slider: events" );
 
 //Specs from http://wiki.jqueryui.com/Slider#specs
@@ -11,21 +11,20 @@ module( "slider: events" );
 // or value method/option"
 test( "mouse based interaction", function() {
 	expect(4);
-	
-	var el = $( "<div></div>" )
-		.appendTo( "body" )
+
+	var el = $( "#slider1" )
 		.slider({
-			start: function(event, ui) {
-				equals( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
+			start: function( event ) {
+				equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
 			},
-			slide: function(event, ui) {
-				equals( event.originalEvent.type, "mousemove", "slider triggered by mousemove" );
+			slide: function( event) {
+				equal( event.originalEvent.type, "mousemove", "slider triggered by mousemove" );
 			},
-			stop: function(event, ui) {
-				equals( event.originalEvent.type, "mouseup", "stop triggered by mouseup" );
+			stop: function( event ) {
+				equal( event.originalEvent.type, "mouseup", "stop triggered by mouseup" );
 			},
-			change: function(event, ui) {
-				equals( event.originalEvent.type, "mouseup", "change triggered by mouseup" );
+			change: function( event ) {
+				equal( event.originalEvent.type, "mouseup", "change triggered by mouseup" );
 			}
 		});
 
@@ -35,22 +34,21 @@ test( "mouse based interaction", function() {
 });
 test( "keyboard based interaction", function() {
 	expect(3);
-	
+
 	// Test keyup at end of handle slide (keyboard)
-	var el = $( "<div></div>" )
-		.appendTo( "body" )
+	var el = $( "#slider1" )
 		.slider({
-			start: function(event, ui) {
-				equals( event.originalEvent.type, "keydown", "start triggered by keydown" );
+			start: function( event ) {
+				equal( event.originalEvent.type, "keydown", "start triggered by keydown" );
 			},
-			slide: function(event, ui) {
+			slide: function() {
 				ok( false, "Slider never triggered by keys" );
 			},
-			stop: function(event, ui) {
-				equals( event.originalEvent.type, "keyup", "stop triggered by keyup" );
+			stop: function( event ) {
+				equal( event.originalEvent.type, "keyup", "stop triggered by keyup" );
 			},
-			change: function(event, ui) {
-				equals( event.originalEvent.type, "keyup", "change triggered by keyup" );
+			change: function( event ) {
+				equal( event.originalEvent.type, "keyup", "change triggered by keyup" );
 			}
 		});
 
@@ -62,11 +60,11 @@ test( "keyboard based interaction", function() {
 });
 test( "programmatic event triggers", function() {
 	expect(6);
-	
+
 	// Test value method
 	var el = $( "<div></div>" )
 		.slider({
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by value method" );
 			}
 		})
@@ -77,7 +75,7 @@ test( "programmatic event triggers", function() {
 	el = $( "<div></div>" )
 		.slider({
 			values: [ 10, 20 ],
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by values method" );
 			}
 		})
@@ -87,7 +85,7 @@ test( "programmatic event triggers", function() {
 	// Test value option
 	el = $( "<div></div>" )
 		.slider({
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by value option" );
 			}
 		})
@@ -98,7 +96,7 @@ test( "programmatic event triggers", function() {
 	el = $( "<div></div>" )
 		.slider({
 			values: [ 10, 20 ],
-			change: function(event, ui) {
+			change: function() {
 				ok( true, "change triggered by values option" );
 			}
 		})

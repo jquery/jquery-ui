@@ -1,17 +1,19 @@
-/*
+/*!
  * jQuery UI Datepicker @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2012 jQuery Foundation and other contributors
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Datepicker
+ * http://api.jqueryui.com/datepicker/
  *
  * Depends:
  *	jquery.ui.core.js
  */
 (function( $, undefined ) {
 
+/*jshint onevar: false, curly: false, eqeqeq: false, shadow: true, devel: true, evil: true */
 $.extend($.ui, { datepicker: { version: "@VERSION" } });
 
 var PROP_NAME = 'datepicker';
@@ -115,7 +117,7 @@ function Datepicker() {
 $.extend(Datepicker.prototype, {
 	/* Class name added to elements to indicate already configured with a date picker. */
 	markerClassName: 'hasDatepicker',
-	
+
 	//Keep track of the maximum number of rows displayed (see #7043)
 	maxRows: 4,
 
@@ -124,23 +126,25 @@ $.extend(Datepicker.prototype, {
 		if (this.debug)
 			console.log.apply('', arguments);
 	},
-	
+
 	// TODO rename to "widget" when switching to widget factory
 	_widgetDatepicker: function() {
 		return this.dpDiv;
 	},
 
 	/* Override the default settings for all instances of the date picker.
-	   @param  settings  object - the new settings to use as defaults (anonymous object)
-	   @return the manager object */
+	 * @param  settings  object - the new settings to use as defaults (anonymous object)
+	 * @return the manager object
+	 */
 	setDefaults: function(settings) {
 		extendRemove(this._defaults, settings || {});
 		return this;
 	},
 
 	/* Attach the date picker to a jQuery selection.
-	   @param  target    element - the target input field or division or span
-	   @param  settings  object - the new settings to use for this date picker instance (anonymous) */
+	 * @param  target	element - the target input field or division or span
+	 * @param  settings  object - the new settings to use for this date picker instance (anonymous)
+	 */
 	_attachDatepicker: function(target, settings) {
 		// check for settings on the control itself - in namespace 'date:'
 		var inlineSettings = null;
@@ -172,7 +176,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Create a new instance object. */
 	_newInst: function(target, inline) {
-		var id = target[0].id.replace(/([^A-Za-z0-9_-])/g, '\\\\$1'); // escape jQuery meta chars
+		var id = target[0].id.replace(/([^A-Za-z0-9_\-])/g, '\\\\$1'); // escape jQuery meta chars
 		return {id: id, input: target, // associated target
 			selectedDay: 0, selectedMonth: 0, selectedYear: 0, // current selection
 			drawMonth: 0, drawYear: 0, // month being drawn
@@ -227,13 +231,16 @@ $.extend(Datepicker.prototype, {
 				$('<img/>').addClass(this._triggerClass).
 					attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
 				$('<button type="button"></button>').addClass(this._triggerClass).
-					html(buttonImage == '' ? buttonText : $('<img/>').attr(
+					html(!buttonImage ? buttonText : $('<img/>').attr(
 					{ src:buttonImage, alt:buttonText, title:buttonText })));
 			input[isRTL ? 'before' : 'after'](inst.trigger);
 			inst.trigger.click(function() {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == input[0])
 					$.datepicker._hideDatepicker();
-				else
+				else if ($.datepicker._datepickerShowing && $.datepicker._lastInput != input[0]) {
+					$.datepicker._hideDatepicker();
+					$.datepicker._showDatepicker(input[0]);
+				} else
 					$.datepicker._showDatepicker(input[0]);
 				return false;
 			});
@@ -291,21 +298,22 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker in a "dialog" box.
-	   @param  input     element - ignored
-	   @param  date      string or Date - the initial date to display
-	   @param  onSelect  function - the function to call when a date is selected
-	   @param  settings  object - update the dialog date picker instance's settings (anonymous object)
-	   @param  pos       int[2] - coordinates for the dialog's position within the screen or
-	                     event - with x/y coordinates or
-	                     leave empty for default (screen centre)
-	   @return the manager object */
+	 * @param  input element - ignored
+	 * @param  date	string or Date - the initial date to display
+	 * @param  onSelect  function - the function to call when a date is selected
+	 * @param  settings  object - update the dialog date picker instance's settings (anonymous object)
+	 * @param  pos int[2] - coordinates for the dialog's position within the screen or
+	 *					event - with x/y coordinates or
+	 *                 leave empty for default (screen centre)
+	 * @return the manager object
+	 */
 	_dialogDatepicker: function(input, date, onSelect, settings, pos) {
 		var inst = this._dialogInst; // internal instance
 		if (!inst) {
 			this.uuid += 1;
 			var id = 'dp' + this.uuid;
 			this._dialogInput = $('<input type="text" id="' + id +
-				'" style="position: absolute; top: -100px; width: 0px; z-index: -10;"/>');
+				'" style="position: absolute; top: -100px; width: 0px;"/>');
 			this._dialogInput.keydown(this._doKeyDown);
 			$('body').append(this._dialogInput);
 			inst = this._dialogInst = this._newInst(this._dialogInput, false);
@@ -339,7 +347,8 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Detach a datepicker from its control.
-	   @param  target    element - the target input field or division or span */
+	 * @param  target	element - the target input field or division or span
+	 */
 	_destroyDatepicker: function(target) {
 		var $target = $(target);
 		var inst = $.data(target, PROP_NAME);
@@ -361,7 +370,8 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Enable the date picker to a jQuery selection.
-	   @param  target    element - the target input field or division or span */
+	 * @param  target	element - the target input field or division or span
+	 */
 	_enableDatepicker: function(target) {
 		var $target = $(target);
 		var inst = $.data(target, PROP_NAME);
@@ -386,7 +396,8 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Disable the date picker to a jQuery selection.
-	   @param  target    element - the target input field or division or span */
+	 * @param  target	element - the target input field or division or span
+	 */
 	_disableDatepicker: function(target) {
 		var $target = $(target);
 		var inst = $.data(target, PROP_NAME);
@@ -412,8 +423,9 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Is the first field in a jQuery collection disabled as a datepicker?
-	   @param  target    element - the target input field or division or span
-	   @return boolean - true if disabled, false if enabled */
+	 * @param  target	element - the target input field or division or span
+	 * @return boolean - true if disabled, false if enabled
+	 */
 	_isDisabledDatepicker: function(target) {
 		if (!target) {
 			return false;
@@ -426,9 +438,10 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Retrieve the instance data for the target control.
-	   @param  target  element - the target input field or division or span
-	   @return  object - the associated instance data
-	   @throws  error if a jQuery problem getting data */
+	 * @param  target  element - the target input field or division or span
+	 * @return  object - the associated instance data
+	 * @throws  error if a jQuery problem getting data
+	 */
 	_getInst: function(target) {
 		try {
 			return $.data(target, PROP_NAME);
@@ -439,13 +452,14 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Update or retrieve the settings for a date picker attached to an input field or division.
-	   @param  target  element - the target input field or division or span
-	   @param  name    object - the new settings to update or
-	                   string - the name of the setting to change or retrieve,
-	                   when retrieving also 'all' for all instance settings or
-	                   'defaults' for all global defaults
-	   @param  value   any - the new value for the setting
-	                   (omit if above is an object or to retrieve a value) */
+	 * @param  target  element - the target input field or division or span
+	 * @param  name	object - the new settings to update or
+	 *				string - the name of the setting to change or retrieve,
+	 *				when retrieving also 'all' for all instance settings or
+	 *				'defaults' for all global defaults
+	 * @param  value   any - the new value for the setting
+	 *				(omit if above is an object or to retrieve a value)
+	 */
 	_optionDatepicker: function(target, name, value) {
 		var inst = this._getInst(target);
 		if (arguments.length == 2 && typeof name == 'string') {
@@ -467,9 +481,9 @@ $.extend(Datepicker.prototype, {
 			var maxDate = this._getMinMaxDate(inst, 'max');
 			extendRemove(inst.settings, settings);
 			// reformat the old minDate/maxDate values if dateFormat changes and a new minDate/maxDate isn't provided
-			if (minDate !== null && settings['dateFormat'] !== undefined && settings['minDate'] === undefined)
+			if (minDate !== null && settings.dateFormat !== undefined && settings.minDate === undefined)
 				inst.settings.minDate = this._formatDate(inst, minDate);
-			if (maxDate !== null && settings['dateFormat'] !== undefined && settings['maxDate'] === undefined)
+			if (maxDate !== null && settings.dateFormat !== undefined && settings.maxDate === undefined)
 				inst.settings.maxDate = this._formatDate(inst, maxDate);
 			this._attachments($(target), inst);
 			this._autoSize(inst);
@@ -485,7 +499,8 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Redraw the date picker attached to an input field or division.
-	   @param  target  element - the target input field or division or span */
+	 * @param  target  element - the target input field or division or span
+	 */
 	_refreshDatepicker: function(target) {
 		var inst = this._getInst(target);
 		if (inst) {
@@ -494,8 +509,9 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Set the dates for a jQuery selection.
-	   @param  target   element - the target input field or division or span
-	   @param  date     Date - the new date */
+	 * @param  target element - the target input field or division or span
+	 * @param  date	Date - the new date
+	 */
 	_setDateDatepicker: function(target, date) {
 		var inst = this._getInst(target);
 		if (inst) {
@@ -506,9 +522,10 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Get the date(s) for the first entry in a jQuery selection.
-	   @param  target     element - the target input field or division or span
-	   @param  noDefault  boolean - true if no default date is to be used
-	   @return Date - the current date */
+	 * @param  target element - the target input field or division or span
+	 * @param  noDefault boolean - true if no default date is to be used
+	 * @return Date - the current date
+	 */
 	_getDateDatepicker: function(target, noDefault) {
 		var inst = this._getInst(target);
 		if (inst && !inst.inline)
@@ -527,7 +544,7 @@ $.extend(Datepicker.prototype, {
 				case 9: $.datepicker._hideDatepicker();
 						handled = false;
 						break; // hide on tab out
-				case 13: var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' + 
+				case 13: var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
 									$.datepicker._currentClass + ')', inst.dpDiv);
 						if (sel[0])
 							$.datepicker._selectDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
@@ -541,7 +558,6 @@ $.extend(Datepicker.prototype, {
 						else
 							$.datepicker._hideDatepicker();
 						return false; // don't submit the form
-						break; // select the value on enter
 				case 27: $.datepicker._hideDatepicker();
 						break; // hide on escape
 				case 33: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
@@ -598,7 +614,7 @@ $.extend(Datepicker.prototype, {
 		var inst = $.datepicker._getInst(event.target);
 		if ($.datepicker._get(inst, 'constrainInput')) {
 			var chars = $.datepicker._possibleChars($.datepicker._get(inst, 'dateFormat'));
-			var chr = String.fromCharCode(event.charCode == undefined ? event.keyCode : event.charCode);
+			var chr = String.fromCharCode(event.charCode == null ? event.keyCode : event.charCode);
 			return event.ctrlKey || event.metaKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
 		}
 	},
@@ -617,17 +633,18 @@ $.extend(Datepicker.prototype, {
 					$.datepicker._updateDatepicker(inst);
 				}
 			}
-			catch (event) {
-				$.datepicker.log(event);
+			catch (err) {
+				$.datepicker.log(err);
 			}
 		}
 		return true;
 	},
 
 	/* Pop-up the date picker for a given input field.
-       If false returned from beforeShow event handler do not show. 
-	   @param  input  element - the input field attached to the date picker or
-	                  event - if triggered by focus */
+	 * If false returned from beforeShow event handler do not show.
+	 * @param  input  element - the input field attached to the date picker or
+	 *					event - if triggered by focus
+	 */
 	_showDatepicker: function(input) {
 		input = input.target || input;
 		if (input.nodeName.toLowerCase() != 'input') // find from button/image trigger
@@ -644,7 +661,7 @@ $.extend(Datepicker.prototype, {
 		var beforeShow = $.datepicker._get(inst, 'beforeShow');
 		var beforeShowSettings = beforeShow ? beforeShow.apply(input, [input, inst]) : {};
 		if(beforeShowSettings === false){
-            //false
+			//false
 			return;
 		}
 		extendRemove(inst.settings, beforeShowSettings);
@@ -662,10 +679,6 @@ $.extend(Datepicker.prototype, {
 			isFixed |= $(this).css('position') == 'fixed';
 			return !isFixed;
 		});
-		if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
-			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
-			$.datepicker._pos[1] -= document.documentElement.scrollTop;
-		}
 		var offset = {left: $.datepicker._pos[0], top: $.datepicker._pos[1]};
 		$.datepicker._pos = null;
 		//to avoid flashes on Firefox
@@ -682,24 +695,13 @@ $.extend(Datepicker.prototype, {
 		if (!inst.inline) {
 			var showAnim = $.datepicker._get(inst, 'showAnim');
 			var duration = $.datepicker._get(inst, 'duration');
-			var postProcess = function() {
-				var cover = inst.dpDiv.find('iframe.ui-datepicker-cover'); // IE6- only
-				if( !! cover.length ){
-					var borders = $.datepicker._getBorders(inst.dpDiv);
-					cover.css({left: -borders[0], top: -borders[1],
-						width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
-				}
-			};
 			inst.dpDiv.zIndex($(input).zIndex()+1);
 			$.datepicker._datepickerShowing = true;
 
-			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
-				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
+			if ( $.effects && $.effects.effect[ showAnim ] )
+				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration);
 			else
-				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
-			if (!showAnim || !duration)
-				postProcess();
+				inst.dpDiv[showAnim || 'show'](showAnim ? duration : null);
 			if (inst.input.is(':visible') && !inst.input.is(':disabled'))
 				inst.input.focus();
 			$.datepicker._curInst = inst;
@@ -708,15 +710,10 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-		var self = this;
-		self.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
-		var borders = $.datepicker._getBorders(inst.dpDiv);
+		this.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
 		instActive = inst; // for delegate hover events
 		inst.dpDiv.empty().append(this._generateHTML(inst));
-		var cover = inst.dpDiv.find('iframe.ui-datepicker-cover'); // IE6- only
-		if( !!cover.length ){ //avoid call to outerXXXX() when not in IE6
-			cover.css({left: -borders[0], top: -borders[1], width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()})
-		}
+		this._attachHandlers(inst);
 		inst.dpDiv.find('.' + this._dayOverClass + ' a').mouseover();
 		var numMonths = this._getNumberOfMonths(inst);
 		var cols = numMonths[1];
@@ -733,7 +730,7 @@ $.extend(Datepicker.prototype, {
 				// this breaks the change event in IE
 				inst.input.is(':visible') && !inst.input.is(':disabled') && inst.input[0] != document.activeElement)
 			inst.input.focus();
-		// deffered render of the years select (to avoid flashes on Firefox) 
+		// deffered render of the years select (to avoid flashes on Firefox)
 		if( inst.yearshtml ){
 			var origyearshtml = inst.yearshtml;
 			setTimeout(function(){
@@ -747,8 +744,9 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Retrieve the size of left and top borders for an element.
-	   @param  elem  (jQuery object) the element of interest
-	   @return  (number[2]) the left and top borders */
+	 * @param  elem  (jQuery object) the element of interest
+	 * @return  (number[2]) the left and top borders
+	 */
 	_getBorders: function(elem) {
 		var convert = function(value) {
 			return {thin: 1, medium: 2, thick: 3}[value] || value;
@@ -763,8 +761,8 @@ $.extend(Datepicker.prototype, {
 		var dpHeight = inst.dpDiv.outerHeight();
 		var inputWidth = inst.input ? inst.input.outerWidth() : 0;
 		var inputHeight = inst.input ? inst.input.outerHeight() : 0;
-		var viewWidth = document.documentElement.clientWidth + $(document).scrollLeft();
-		var viewHeight = document.documentElement.clientHeight + $(document).scrollTop();
+		var viewWidth = document.documentElement.clientWidth + (isFixed ? 0 : $(document).scrollLeft());
+		var viewHeight = document.documentElement.clientHeight + (isFixed ? 0 : $(document).scrollTop());
 
 		offset.left -= (this._get(inst, 'isRTL') ? (dpWidth - inputWidth) : 0);
 		offset.left -= (isFixed && offset.left == inst.input.offset().left) ? $(document).scrollLeft() : 0;
@@ -783,15 +781,16 @@ $.extend(Datepicker.prototype, {
 	_findPos: function(obj) {
 		var inst = this._getInst(obj);
 		var isRTL = this._get(inst, 'isRTL');
-        while (obj && (obj.type == 'hidden' || obj.nodeType != 1 || $.expr.filters.hidden(obj))) {
-            obj = obj[isRTL ? 'previousSibling' : 'nextSibling'];
-        }
-        var position = $(obj).offset();
-	    return [position.left, position.top];
+		while (obj && (obj.type == 'hidden' || obj.nodeType != 1 || $.expr.filters.hidden(obj))) {
+			obj = obj[isRTL ? 'previousSibling' : 'nextSibling'];
+		}
+		var position = $(obj).offset();
+		return [position.left, position.top];
 	},
 
 	/* Hide the date picker from view.
-	   @param  input  element - the input field attached to the date picker */
+	 * @param  input  element - the input field attached to the date picker
+	 */
 	_hideDatepicker: function(input) {
 		var inst = this._curInst;
 		if (!inst || (input && inst != $.data(input, PROP_NAME)))
@@ -799,10 +798,8 @@ $.extend(Datepicker.prototype, {
 		if (this._datepickerShowing) {
 			var showAnim = this._get(inst, 'showAnim');
 			var duration = this._get(inst, 'duration');
-			var self = this;
 			var postProcess = function() {
 				$.datepicker._tidyDialog(inst);
-				self._curInst = null;
 			};
 
 			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
@@ -844,9 +841,9 @@ $.extend(Datepicker.prototype, {
 			inst = $.datepicker._getInst($target[0]);
 
 		if ( ( ( $target[0].id != $.datepicker._mainDivId &&
-				$target.parents('#' + $.datepicker._mainDivId).length == 0 &&
+				$target.parents('#' + $.datepicker._mainDivId).length === 0 &&
 				!$target.hasClass($.datepicker.markerClassName) &&
-				!$target.hasClass($.datepicker._triggerClass) &&
+				!$target.closest("." + $.datepicker._triggerClass).length &&
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI) ) ) ||
 			( $target.hasClass($.datepicker.markerClassName) && $.datepicker._curInst != inst ) )
 			$.datepicker._hideDatepicker();
@@ -912,7 +909,6 @@ $.extend(Datepicker.prototype, {
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
 		var target = $(id);
-		var inst = this._getInst(target[0]);
 		this._selectDate(target, '');
 	},
 
@@ -952,16 +948,18 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Set as beforeShowDay function to prevent selection of weekends.
-	   @param  date  Date - the date to customise
-	   @return [boolean, string] - is this date selectable?, what is its CSS class? */
+	 * @param  date  Date - the date to customise
+	 * @return [boolean, string] - is this date selectable?, what is its CSS class?
+	 */
 	noWeekends: function(date) {
 		var day = date.getDay();
 		return [(day > 0 && day < 6), ''];
 	},
 
 	/* Set as calculateWeek to determine the week of the year based on the ISO 8601 definition.
-	   @param  date  Date - the date to get the week for
-	   @return  number - the number of the week within the year that contains this date */
+	 * @param  date  Date - the date to get the week for
+	 * @return  number - the number of the week within the year that contains this date
+	 */
 	iso8601Week: function(date) {
 		var checkDate = new Date(date.getTime());
 		// Find Thursday of this week starting on Monday
@@ -973,22 +971,23 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Parse a string value into a date object.
-	   See formatDate below for the possible formats.
-
-	   @param  format    string - the expected format of the date
-	   @param  value     string - the date in the above format
-	   @param  settings  Object - attributes include:
-	                     shortYearCutoff  number - the cutoff year for determining the century (optional)
-	                     dayNamesShort    string[7] - abbreviated names of the days from Sunday (optional)
-	                     dayNames         string[7] - names of the days from Sunday (optional)
-	                     monthNamesShort  string[12] - abbreviated names of the months (optional)
-	                     monthNames       string[12] - names of the months (optional)
-	   @return  Date - the extracted date value or null if value is blank */
+	 * See formatDate below for the possible formats.
+	 *
+	 * @param  format string - the expected format of the date
+	 * @param  value string - the date in the above format
+	 * @param  settings Object - attributes include:
+	 *					shortYearCutoff  number - the cutoff year for determining the century (optional)
+	 *					dayNamesShort	string[7] - abbreviated names of the days from Sunday (optional)
+	 *					dayNames		string[7] - names of the days from Sunday (optional)
+	 *					monthNamesShort string[12] - abbreviated names of the months (optional)
+	 *					monthNames		string[12] - names of the months (optional)
+	 * @return  Date - the extracted date value or null if value is blank
+	 */
 	parseDate: function (format, value, settings) {
 		if (format == null || value == null)
 			throw 'Invalid arguments';
 		value = (typeof value == 'object' ? value.toString() : value + '');
-		if (value == '')
+		if (value === '')
 			return null;
 		var shortYearCutoff = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff;
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
@@ -1143,32 +1142,33 @@ $.extend(Datepicker.prototype, {
 		Math.floor(1970 / 400)) * 24 * 60 * 60 * 10000000),
 
 	/* Format a date object into a string value.
-	   The format can be combinations of the following:
-	   d  - day of month (no leading zero)
-	   dd - day of month (two digit)
-	   o  - day of year (no leading zeros)
-	   oo - day of year (three digit)
-	   D  - day name short
-	   DD - day name long
-	   m  - month of year (no leading zero)
-	   mm - month of year (two digit)
-	   M  - month name short
-	   MM - month name long
-	   y  - year (two digit)
-	   yy - year (four digit)
-	   @ - Unix timestamp (ms since 01/01/1970)
-	   ! - Windows ticks (100ns since 01/01/0001)
-	   '...' - literal text
-	   '' - single quote
-
-	   @param  format    string - the desired format of the date
-	   @param  date      Date - the date value to format
-	   @param  settings  Object - attributes include:
-	                     dayNamesShort    string[7] - abbreviated names of the days from Sunday (optional)
-	                     dayNames         string[7] - names of the days from Sunday (optional)
-	                     monthNamesShort  string[12] - abbreviated names of the months (optional)
-	                     monthNames       string[12] - names of the months (optional)
-	   @return  string - the date in the above format */
+	 * The format can be combinations of the following:
+	 * d  - day of month (no leading zero)
+	 * dd - day of month (two digit)
+	 * o  - day of year (no leading zeros)
+	 * oo - day of year (three digit)
+	 * D  - day name short
+	 * DD - day name long
+	 * m  - month of year (no leading zero)
+	 * mm - month of year (two digit)
+	 * M  - month name short
+	 * MM - month name long
+	 * y  - year (two digit)
+	 * yy - year (four digit)
+	 * @ - Unix timestamp (ms since 01/01/1970)
+	 * ! - Windows ticks (100ns since 01/01/0001)
+	 * '...' - literal text
+	 * '' - single quote
+	 *
+	 * @param  format string - the desired format of the date
+	 * @param  date Date - the date value to format
+	 * @param  settings Object - attributes include:
+	 *					dayNamesShort	string[7] - abbreviated names of the days from Sunday (optional)
+	 *					dayNames		string[7] - names of the days from Sunday (optional)
+	 *					monthNamesShort string[12] - abbreviated names of the months (optional)
+	 *					monthNames		string[12] - names of the months (optional)
+	 * @return  string - the date in the above format
+	 */
 	formatDate: function (format, date, settings) {
 		if (!date)
 			return '';
@@ -1338,7 +1338,7 @@ $.extend(Datepicker.prototype, {
 			var year = date.getFullYear();
 			var month = date.getMonth();
 			var day = date.getDate();
-			var pattern = /([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g;
+			var pattern = /([+\-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g;
 			var matches = pattern.exec(offset);
 			while (matches) {
 				switch (matches[2] || 'd') {
@@ -1372,11 +1372,12 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Handle switch to/from daylight saving.
-	   Hours may be non-zero on daylight saving cut-over:
-	   > 12 when midnight changeover, but then cannot generate
-	   midnight datetime, so jump to 1AM, otherwise reset.
-	   @param  date  (Date) the date to check
-	   @return  (Date) the corrected date */
+	 * Hours may be non-zero on daylight saving cut-over:
+	 * > 12 when midnight changeover, but then cannot generate
+	 * midnight datetime, so jump to 1AM, otherwise reset.
+	 * @param  date  (Date) the date to check
+	 * @return  (Date) the corrected date
+	 */
 	_daylightSavingAdjust: function(date) {
 		if (!date) return null;
 		date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
@@ -1402,10 +1403,47 @@ $.extend(Datepicker.prototype, {
 
 	/* Retrieve the date(s) directly. */
 	_getDate: function(inst) {
-		var startDate = (!inst.currentYear || (inst.input && inst.input.val() == '') ? null :
+		var startDate = (!inst.currentYear || (inst.input && inst.input.val() === '') ? null :
 			this._daylightSavingAdjust(new Date(
 			inst.currentYear, inst.currentMonth, inst.currentDay)));
 			return startDate;
+	},
+
+	/* Attach the onxxx handlers.  These are declared statically so
+	 * they work with static code transformers like Caja.
+	 */
+	_attachHandlers: function(inst) {
+		var stepMonths = this._get(inst, 'stepMonths');
+		var id = '#' + inst.id.replace( /\\\\/g, "\\" );
+		inst.dpDiv.find('[data-handler]').map(function () {
+			var handler = {
+				prev: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._adjustDate(id, -stepMonths, 'M');
+				},
+				next: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._adjustDate(id, +stepMonths, 'M');
+				},
+				hide: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._hideDatepicker();
+				},
+				today: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._gotoToday(id);
+				},
+				selectDay: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._selectDay(id, +this.getAttribute('data-month'), +this.getAttribute('data-year'), this);
+					return false;
+				},
+				selectMonth: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._selectMonthYear(id, this, 'M');
+					return false;
+				},
+				selectYear: function () {
+					window['DP_jQuery_' + dpuuid].datepicker._selectMonthYear(id, this, 'Y');
+					return false;
+				}
+			};
+			$(this).bind(this.getAttribute('data-event'), handler[this.getAttribute('data-handler')]);
+		});
 	},
 
 	/* Generate the HTML for the current state of the date picker. */
@@ -1450,8 +1488,7 @@ $.extend(Datepicker.prototype, {
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
 			this._getFormatConfig(inst)));
 		var prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
-			'<a class="ui-datepicker-prev ui-corner-all" onclick="DP_jQuery_' + dpuuid +
-			'.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
+			'<a class="ui-datepicker-prev ui-corner-all" data-handler="prev" data-event="click"' +
 			' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>' :
 			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="'+ prevText +'"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>'));
 		var nextText = this._get(inst, 'nextText');
@@ -1459,32 +1496,28 @@ $.extend(Datepicker.prototype, {
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
 			this._getFormatConfig(inst)));
 		var next = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
-			'<a class="ui-datepicker-next ui-corner-all" onclick="DP_jQuery_' + dpuuid +
-			'.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
+			'<a class="ui-datepicker-next ui-corner-all" data-handler="next" data-event="click"' +
 			' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'w' : 'e') + '">' + nextText + '</span></a>' :
 			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-next ui-corner-all ui-state-disabled" title="'+ nextText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'w' : 'e') + '">' + nextText + '</span></a>'));
 		var currentText = this._get(inst, 'currentText');
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today);
 		currentText = (!navigationAsDateFormat ? currentText :
 			this.formatDate(currentText, gotoDate, this._getFormatConfig(inst)));
-		var controls = (!inst.inline ? '<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" onclick="DP_jQuery_' + dpuuid +
-			'.datepicker._hideDatepicker();">' + this._get(inst, 'closeText') + '</button>' : '');
+		var controls = (!inst.inline ? '<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" data-handler="hide" data-event="click">' +
+			this._get(inst, 'closeText') + '</button>' : '');
 		var buttonPanel = (showButtonPanel) ? '<div class="ui-datepicker-buttonpane ui-widget-content">' + (isRTL ? controls : '') +
-			(this._isInRange(inst, gotoDate) ? '<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" onclick="DP_jQuery_' + dpuuid +
-			'.datepicker._gotoToday(\'#' + inst.id + '\');"' +
+			(this._isInRange(inst, gotoDate) ? '<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" data-handler="today" data-event="click"' +
 			'>' + currentText + '</button>' : '') + (isRTL ? '' : controls) + '</div>' : '';
 		var firstDay = parseInt(this._get(inst, 'firstDay'),10);
 		firstDay = (isNaN(firstDay) ? 0 : firstDay);
 		var showWeek = this._get(inst, 'showWeek');
 		var dayNames = this._get(inst, 'dayNames');
-		var dayNamesShort = this._get(inst, 'dayNamesShort');
 		var dayNamesMin = this._get(inst, 'dayNamesMin');
 		var monthNames = this._get(inst, 'monthNames');
 		var monthNamesShort = this._get(inst, 'monthNamesShort');
 		var beforeShowDay = this._get(inst, 'beforeShowDay');
 		var showOtherMonths = this._get(inst, 'showOtherMonths');
 		var selectOtherMonths = this._get(inst, 'selectOtherMonths');
-		var calculateWeek = this._get(inst, 'calculateWeek') || this.iso8601Week;
 		var defaultDate = this._getDefaultDate(inst);
 		var html = '';
 		for (var row = 0; row < numMonths[0]; row++) {
@@ -1507,8 +1540,8 @@ $.extend(Datepicker.prototype, {
 					calender += '">';
 				}
 				calender += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' +
-					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next : prev) : '') +
-					(/all|right/.test(cornerClass) && row == 0 ? (isRTL ? prev : next) : '') +
+					(/all|left/.test(cornerClass) && row === 0 ? (isRTL ? next : prev) : '') +
+					(/all|right/.test(cornerClass) && row === 0 ? (isRTL ? prev : next) : '') +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
 					row > 0 || col > 0, monthNames, monthNamesShort) + // draw month headers
 					'</div><table class="ui-datepicker-calendar"><thead>' +
@@ -1550,8 +1583,7 @@ $.extend(Datepicker.prototype, {
 							(printDate.getTime() == currentDate.getTime() ? ' ' + this._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
-							(unselectable ? '' : ' onclick="DP_jQuery_' + dpuuid + '.datepicker._selectDay(\'#' +
-							inst.id + '\',' + printDate.getMonth() + ',' + printDate.getFullYear() + ', this);return false;"') + '>' + // actions
+							(unselectable ? '' : ' data-handler="selectDay" data-event="click" data-month="' + printDate.getMonth() + '" data-year="' + printDate.getFullYear() + '"') + '>' + // actions
 							(otherMonth && !showOtherMonths ? '&#xa0;' : // display for other months
 							(unselectable ? '<span class="ui-state-default">' + printDate.getDate() + '</span>' : '<a class="ui-state-default' +
 							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') +
@@ -1568,14 +1600,13 @@ $.extend(Datepicker.prototype, {
 					drawMonth = 0;
 					drawYear++;
 				}
-				calender += '</tbody></table>' + (isMultiMonth ? '</div>' + 
+				calender += '</tbody></table>' + (isMultiMonth ? '</div>' +
 							((numMonths[0] > 0 && col == numMonths[1]-1) ? '<div class="ui-datepicker-row-break"></div>' : '') : '');
 				group += calender;
 			}
 			html += group;
 		}
-		html += buttonPanel + ($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ?
-			'<iframe src="javascript:false;" class="ui-datepicker-cover" frameborder="0"></iframe>' : '');
+		html += buttonPanel;
 		inst._keyEvent = false;
 		return html;
 	},
@@ -1594,9 +1625,7 @@ $.extend(Datepicker.prototype, {
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
-			monthHtml += '<select class="ui-datepicker-month" ' +
-				'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'M\');" ' +
-			 	'>';
+			monthHtml += '<select class="ui-datepicker-month" data-handler="selectMonth" data-event="change">';
 			for (var month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) &&
 						(!inMaxYear || month <= maxDate.getMonth()))
@@ -1618,8 +1647,8 @@ $.extend(Datepicker.prototype, {
 				var years = this._get(inst, 'yearRange').split(':');
 				var thisYear = new Date().getFullYear();
 				var determineYear = function(value) {
-					var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
-						(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
+					var year = (value.match(/c[+\-].*/) ? drawYear + parseInt(value.substring(1), 10) :
+						(value.match(/[+\-].*/) ? thisYear + parseInt(value, 10) :
 						parseInt(value, 10)));
 					return (isNaN(year) ? thisYear : year);
 				};
@@ -1627,16 +1656,14 @@ $.extend(Datepicker.prototype, {
 				var endYear = Math.max(year, determineYear(years[1] || ''));
 				year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 				endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
-				inst.yearshtml += '<select class="ui-datepicker-year" ' +
-					'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
-					'>';
+				inst.yearshtml += '<select class="ui-datepicker-year" data-handler="selectYear" data-event="change">';
 				for (; year <= endYear; year++) {
 					inst.yearshtml += '<option value="' + year + '"' +
 						(year == drawYear ? ' selected="selected"' : '') +
 						'>' + year + '</option>';
 				}
 				inst.yearshtml += '</select>';
-				
+
 				html += inst.yearshtml;
 				inst.yearshtml = null;
 			}
@@ -1747,7 +1774,7 @@ $.extend(Datepicker.prototype, {
  * Bind hover events for datepicker elements.
  * Done via delegate so the binding only occurs once in the lifetime of the parent div.
  * Global instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
- */ 
+ */
 function bindHover(dpDiv) {
 	var selector = 'button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a';
 	return dpDiv.delegate(selector, 'mouseout', function() {
@@ -1769,32 +1796,26 @@ function bindHover(dpDiv) {
 function extendRemove(target, props) {
 	$.extend(target, props);
 	for (var name in props)
-		if (props[name] == null || props[name] == undefined)
+		if (props[name] == null)
 			target[name] = props[name];
 	return target;
-};
-
-/* Determine whether an object is an array. */
-function isArray(a) {
-	return (a && (($.browser.safari && typeof a == 'object' && a.length) ||
-		(a.constructor && a.constructor.toString().match(/\Array\(\)/))));
-};
+}
 
 /* Invoke the datepicker functionality.
    @param  options  string - a command, optionally followed by additional parameters or
-                    Object - settings for attaching new datepicker functionality
+					Object - settings for attaching new datepicker functionality
    @return  jQuery object */
 $.fn.datepicker = function(options){
-	
+
 	/* Verify an empty collection wasn't passed - Fixes #6976 */
 	if ( !this.length ) {
 		return this;
 	}
-	
+
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
 		$(document).mousedown($.datepicker._checkExternalClick).
-			find('body').append($.datepicker.dpDiv);
+			find(document.body).append($.datepicker.dpDiv);
 		$.datepicker.initialized = true;
 	}
 

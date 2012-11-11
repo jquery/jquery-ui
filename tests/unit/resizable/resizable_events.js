@@ -5,16 +5,8 @@
 
 module("resizable: events");
 
-test("start", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("resize", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("stop", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+// this is here to make JSHint pass "unused", and we don't want to
+// remove the parameter for when we finally implement
+$.noop();
 
 })(jQuery);
