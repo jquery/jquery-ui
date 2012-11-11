@@ -79,16 +79,10 @@ $.widget( "ui.progressbar", {
 	},
 
 	_setOptions: function( options ) {
-		var key, val;
+		var val = options.value;
 
-		for ( key in options ) {
-			if ( key === "value" ) {
-				// Store value to update last in case max is being updated at the same time
-				val = options[ key ];
-			} else {
-				this._setOption( key, options[ key ] );
-			}
-		}
+		delete options.value;
+		this._super( options );
 
 		if ( val !== undefined ) {
 			this._setOption( "value", val );
