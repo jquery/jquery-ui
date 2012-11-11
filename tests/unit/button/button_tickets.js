@@ -5,6 +5,17 @@
 
 module( "button: tickets" );
 
+test( "#5295 - button does not remove hoverstate if disabled" , function() {
+	expect( 1 );
+	var btn = $("#button").button();
+	btn.hover( function() {
+		btn.button( "disable" );
+	});
+	btn.trigger( "mouseenter" );
+	btn.trigger( "mouseleave" );
+	ok( !btn.is( ".ui-state-hover") );
+});
+
 test( "#5946 - buttonset should ignore buttons that are not :visible", function() {
 	expect( 2 );
 	$( "#radio01" ).next().andSelf().hide();
