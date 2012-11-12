@@ -1,13 +1,13 @@
 /*!
  * jQuery UI Selectmenu @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2012 jQuery Foundation and other contributors
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Selectmenu#theming
  */
-
 .ui-selectmenu-menu { padding: 0; margin: 0; position:absolute; top: 0; display: none; }
 .ui-selectmenu-menu  ul.ui-menu { overflow: auto; overflow-y: auto ; overflow-x: hidden; }
 .ui-selectmenu-menu .ui-menu .ui-menu-item a { padding: 0.3em 1em 0.3em 1em; }
