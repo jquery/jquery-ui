@@ -271,11 +271,22 @@ window.domEqual = function( selector, modifier, message ) {
 		}
 		return result;
 	}
-	expected = extract( $( selector ) );
-	modifier( $( selector ) );
 
-	actual = extract( $( selector ) );
-	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
+	function done() {
+		actual = extract( $( selector ) );
+		QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
+	}
+
+	// Get current state prior to modifier
+	expected = extract( $( selector ) );
+
+	// Run modifier (async or sync), then compare state via done()
+	if ( modifier.length ) {
+		modifier( done );
+	} else {
+		modifier();
+		done();
+	}
 };
 
 }( jQuery ));
