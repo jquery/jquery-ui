@@ -286,8 +286,11 @@ $.widget("ui.resizable", $.ui.mouse, {
 	_mouseDrag: function(event) {
 
 		//Increase performance, avoid regex
-		var el = this.helper,
-			smp = this.originalMousePosition, a = this.axis;
+		var el = this.helper, props = {},
+			smp = this.originalMousePosition, a = this.axis,
+			prevTop = this.position.top, prevLeft = this.position.left,
+			prevWidth = this.size.width, prevHeight = this.size.height,
+			elemResized = false;
 
 		var dx = (event.pageX-smp.left)||0, dy = (event.pageY-smp.top)||0;
 		var trigger = this._change[a];
@@ -303,21 +306,36 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		data = this._respectSize(data, event);
 
+		this._updateCache(data);
+
 		// plugins callbacks need to be called first
 		this._propagate("resize", event);
 
-		el.css({
-			top: this.position.top + "px", left: this.position.left + "px",
-			width: this.size.width + "px", height: this.size.height + "px"
-		});
+		if (this.position.top !== prevTop) {
+			props.top = this.position.top + "px";
+			elemResized = true;
+		}
+		if (this.position.left !== prevLeft) {
+			props.left = this.position.left + "px";
+			elemResized = true;
+		}
+		if (this.size.width !== prevWidth) {
+			props.width = this.size.width + "px";
+			elemResized = true;
+		}
+		if (this.size.height !== prevHeight) {
+			props.height = this.size.height + "px";
+			elemResized = true;
+		}
+		el.css(props);
 
 		if (!this._helper && this._proportionallyResizeElements.length)
 			this._proportionallyResize();
 
-		this._updateCache(data);
-
-		// calling the user callback at the end
-		this._trigger('resize', event, this.ui());
+		// Call the user callback if the element was resized
+		if (elemResized) {
+			this._trigger('resize', event, this.ui());
+		}
 
 		return false;
 	},
