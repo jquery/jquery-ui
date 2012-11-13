@@ -6,8 +6,7 @@ test("accessibility", function () {
 	var links,
 		element = $('#speed').selectmenu(),
 		button = element.selectmenu("widget"),
-		menu = element.selectmenu("menuWidget"),
-		selected = element.find("option:selected");
+		menu = element.selectmenu("menuWidget");
 
 	button.simulate( "focus" );
 	links = menu.find("li.ui-menu-item a");
@@ -71,8 +70,7 @@ $.each([
 		var links,
 			element = $(settings.selector).selectmenu(),
 			button = element.selectmenu("widget"),
-			menu = element.selectmenu("menuWidget"),
-			selected = element.find("option:selected");
+			menu = element.selectmenu("menuWidget");
 
 		button.simulate( "focus" );
 		links = menu.find("li.ui-menu-item a");
