@@ -204,7 +204,7 @@ window.domEqual = function( selector, modifier, message ) {
 			"tabIndex",
 			"title"
 		];
-
+/*
 	function getElementStyles( elem ) {
 		var key, len,
 			style = elem.ownerDocument.defaultView ?
@@ -231,7 +231,7 @@ window.domEqual = function( selector, modifier, message ) {
 
 		return styles;
 	}
-
+*/
 	function extract( elem ) {
 		if ( !elem || !elem.length ) {
 			QUnit.push( false, actual, expected,
