@@ -407,9 +407,9 @@ test('minMax', function() {
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), maxDate, 'Min/max - setDate > max');
 
     inp.datepicker('option', {yearRange: '-0:+1'}).val('01/01/' + new Date().getFullYear());
-    ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "previous button disabled");
+    ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/1/minYear");
     inp.datepicker("setDate", "12/30/" + new Date().getFullYear());
-    ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "next button disabled");
+    ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled at 12/30/maxYear");
 });
 
 test('setDate', function() {
