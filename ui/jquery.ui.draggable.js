@@ -415,7 +415,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			return;
 		}
 
-		offset = container.offset(),
+		offset = container.offset();
 		left = offset.left +
 			(parseFloat( $.css( container[0], "borderLeftWidth", true ) ) || 0) +
 			(parseFloat( $.css( container[0], "paddingLeft", true ) ) || 0);
