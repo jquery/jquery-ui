@@ -146,7 +146,7 @@ test('customStructure', function() {
 		dp = $('#ui-datepicker-div'),
 		// Check right-to-left localisation
 		inp = TestHelpers.datepicker.init('#inp', $.datepicker.regional.he);
-	inp.data('showButtonPanel.datepicker',true);
+	inp.datepicker( 'option', 'showButtonPanel', true);
 	inp.focus();
 	ok(dp.is('.ui-datepicker-rtl'), 'Structure RTL - right-to-left');
 	header = dp.children(':first');
