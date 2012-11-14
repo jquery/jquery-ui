@@ -107,4 +107,31 @@ test( "tooltip on .ui-state-disabled element", function() {
 	equal( $( ".ui-tooltip" ).length, 0 );
 });
 
+// http://bugs.jqueryui.com/ticket/8740
+asyncTest( "programmatic focus with async content", function() {
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function( response ) {
+			setTimeout(function() {
+				response( "test" );
+			});
+		}
+	});
+
+	element.bind( "tooltipopen", function( event ) {
+		deepEqual( event.originalEvent.type, "focusin" );
+
+		element.bind( "tooltipclose", function( event ) {
+			deepEqual( event.originalEvent.type, "focusout" );
+			start();
+		});
+
+		setTimeout(function() {
+			element.blur();
+		});
+	});
+
+	element.focus();
+});
+
 }( jQuery ) );
