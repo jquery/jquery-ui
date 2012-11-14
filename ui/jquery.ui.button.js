@@ -341,6 +341,14 @@ $.widget( "ui.button", {
 			if ( icons.secondary ) {
 				buttonElement.append( "<span class='ui-button-icon-secondary ui-icon " + icons.secondary + "'></span>" );
 			}
+			
+			//Firefox does not follow the standard box model when displaying buttons
+			//so the icon position must be recalculated (see ticket #5603)
+			buttonElement.find( ".ui-icon" ).each( function() {
+				if( buttonElement.height() / parseInt( buttonElement.css( "line-height" ) ) > 2 ) {
+					$( this ).css( "margin-top", ( 0 - ( parseInt( buttonElement.css("line-height") ) * ( ( buttonElement.height() / parseInt( buttonElement.css("line-height") ) / 2 ) ) ) + 8 ) + "px" );
+				}
+			});
 
 			if ( !this.options.text ) {
 				buttonClasses.push( multipleIcons ? "ui-button-icons-only" : "ui-button-icon-only" );
