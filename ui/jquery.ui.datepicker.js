@@ -1742,8 +1742,20 @@ $.extend(Datepicker.prototype, {
 	_isInRange: function(inst, date) {
 		var minDate = this._getMinMaxDate(inst, 'min');
 		var maxDate = this._getMinMaxDate(inst, 'max');
+        var minYear = null;
+        var maxYear = null;
+        var years = this._get(inst, 'yearRange');
+        if (years){
+            var yearSplit = years.split(':');
+            var currentYear = new Date().getFullYear();
+            minYear = parseInt(yearSplit[0], 10) + currentYear;
+            maxYear = parseInt(yearSplit[1], 10) + currentYear;
+        }
+
 		return ((!minDate || date.getTime() >= minDate.getTime()) &&
-			(!maxDate || date.getTime() <= maxDate.getTime()));
+			(!maxDate || date.getTime() <= maxDate.getTime()) &&
+            (!minYear || date.getFullYear() >= minYear) &&
+            (!maxYear || date.getFullYear() <= maxYear));
 	},
 
 	/* Provide the configuration settings for formatting/parsing. */
