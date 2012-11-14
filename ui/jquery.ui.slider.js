@@ -233,20 +233,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 		distance = this._valueMax() - this._valueMin() + 1;
 		this.handles.each(function( i ) {
 			var thisDistance = Math.abs( normValue - that.values(i) );
-			if ( distance > thisDistance ) {
+			if (( distance > thisDistance ) ||
+				( distance === thisDistance &&
+					(i === that._lastChangedValue || that.values(i) === o.min ))) {
 				distance = thisDistance;
 				closestHandle = $( this );
 				index = i;
 			}
 		});
-
-		// workaround for bug #3736 (if both handles of a range are at 0,
-		// the first is always used as the one with least distance,
-		// and moving it is obviously prevented by preventing negative ranges)
-		if( o.range === true && this.values(1) === o.min ) {
-			index += 1;
-			closestHandle = $( this.handles[index] );
-		}
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
@@ -418,6 +412,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 				uiHash.value = this.values( index );
 				uiHash.values = this.values();
 			}
+
+			//store the last changed value index for reference when handles overlap
+			this._lastChangedValue = index;
 
 			this._trigger( "change", event, uiHash );
 		}
