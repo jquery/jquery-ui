@@ -359,7 +359,7 @@ test( "show", function() {
 });
 
 test( "select", function() {
-	expect( 13 );
+	expect( 18 );
 
 	var element = $( "#tabs1" ).tabs({
 			active: false,
@@ -391,8 +391,12 @@ test( "select", function() {
 	state( element, 0, 1, 0 );
 
 	// collapsing
-	element.one( "tabsselect", function() {
-		ok( false, "collapsing" );
+	element.one( "tabsselect", function( event, ui ) {
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		strictEqual( ui.tab, anchors[ 1 ], "ui.tab" );
+		strictEqual( ui.panel, panels[ 1 ], "ui.panel" );
+		equal( ui.index, 1, "ui.index" );
+		state( element, 0, 1, 0 );
 	});
 	element.tabs( "option", "active", false );
 	state( element, 0, 0, 0 );

@@ -1187,15 +1187,20 @@ if ( $.uiBackCompat !== false ) {
 			}
 		},
 		_trigger: function( type, event, data ) {
-			var ret = this._superApply( arguments );
+			var tab, panel,
+				ret = this._superApply( arguments );
+
 			if ( !ret ) {
 				return false;
 			}
-			if ( type === "beforeActivate" && data.newTab.length ) {
+
+			if ( type === "beforeActivate" ) {
+				tab = data.newTab.length ? data.newTab : data.oldTab;
+				panel = data.newPanel.length ? data.newPanel : data.oldPanel;
 				ret = this._super( "select", event, {
-					tab: data.newTab.find( ".ui-tabs-anchor" )[ 0],
-					panel: data.newPanel[ 0 ],
-					index: data.newTab.closest( "li" ).index()
+					tab: tab.find( ".ui-tabs-anchor" )[ 0],
+					panel: panel[ 0 ],
+					index: tab.closest( "li" ).index()
 				});
 			} else if ( type === "activate" && data.newTab.length ) {
 				ret = this._super( "show", event, {
