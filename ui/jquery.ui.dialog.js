@@ -205,17 +205,13 @@ $.widget("ui.dialog", {
 			return;
 		}
 
-		// TODO remove useless tmp vars
-		var options = this.options,
-			uiDialog = this.uiDialog;
-
 		this.opener = $( this.document[ 0 ].activeElement );
 
 		this._size();
-		this._position( options.position );
-		this.overlay = options.modal ? new $.ui.dialog.overlay( this ) : null;
+		this._position( this.options.position );
+		this.overlay = this.options.modal ? new $.ui.dialog.overlay( this ) : null;
 		this._moveToTop( null, true );
-		this._show( uiDialog, options.show );
+		this._show( this.uiDialog, this.options.show );
 
 		this._focusTabbable();
 
