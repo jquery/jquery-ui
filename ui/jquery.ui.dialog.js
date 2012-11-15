@@ -90,81 +90,26 @@ $.widget("ui.dialog", {
 			parent: this.element.parent(),
 			index: this.element.parent().children().index( this.element )
 		};
-		var that = this,
-			options = this.options,
-			uiDialogButtonPane;
 
-			// TODO extract into _createWrapper
-			this.uiDialog = $( "<div>" )
-				.addClass( uiDialogClasses + options.dialogClass )
-				.hide()
-				.attr({
-					// setting tabIndex makes the div focusable
-					tabIndex: -1,
-					role: "dialog"
-				})
-				.keydown(function( event ) {
-					if ( options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
-							event.keyCode === $.ui.keyCode.ESCAPE ) {
-						that.close( event );
-						event.preventDefault();
-					}
-				})
-				.mousedown(function( event ) {
-					if ( that._moveToTop( event ) ) {
-						that._focusTabbable();
-					}
-				})
-				.appendTo( this.document[ 0 ].body );
+		this._createWrapper();
 
-			this.element
-				.show()
-				.removeAttr( "title" )
-				.addClass( "ui-dialog-content ui-widget-content" )
-				.appendTo( this.uiDialog );
+		this.element
+			.show()
+			.removeAttr( "title" )
+			.addClass( "ui-dialog-content ui-widget-content" )
+			.appendTo( this.uiDialog );
 
 		this._createTitlebar();
 		this._createButtonPane();
 
-		// TODO move into _createWrapper
-		// We assume that any existing aria-describedby attribute means
-		// that the dialog content is marked up properly
-		// otherwise we brute force the content as the description
-		if ( !this.element.find( "[aria-describedby]" ).length ) {
-			this.uiDialog.attr({
-				"aria-describedby": this.element.uniqueId().attr( "id" )
-			});
-		}
-
-		if ( options.draggable && $.fn.draggable ) {
+		if ( this.options.draggable && $.fn.draggable ) {
 			this._makeDraggable();
 		}
-		if ( options.resizable && $.fn.resizable ) {
+		if ( this.options.resizable && $.fn.resizable ) {
 			this._makeResizable();
 		}
 
 		this._isOpen = false;
-
-		// prevent tabbing out of dialogs
-		// TODO move into _createWrapper
-		// TODO fix formatting
-		this._on( this.uiDialog, { keydown: function( event ) {
-			if ( event.keyCode !== $.ui.keyCode.TAB ) {
-				return;
-			}
-
-			var tabbables = $( ":tabbable", this.uiDialog ),
-				first = tabbables.filter( ":first" ),
-				last  = tabbables.filter( ":last" );
-
-			if ( ( event.target === last[ 0 ] || event.target === this.uiDialog[ 0 ] ) && !event.shiftKey ) {
-				first.focus( 1 );
-				return false;
-			} else if ( ( event.target === first[ 0 ] || event.target === this.uiDialog[ 0 ] ) && event.shiftKey ) {
-				last.focus( 1 );
-				return false;
-			}
-		}});
 	},
 
 	_init: function() {
@@ -310,6 +255,59 @@ $.widget("ui.dialog", {
 		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
 		// so we check again later
 		this._delay( checkFocus );
+	},
+
+	_createWrapper: function() {
+		this.uiDialog = $( "<div>" )
+			.addClass( uiDialogClasses + this.options.dialogClass )
+			.hide()
+			.attr({
+				// setting tabIndex makes the div focusable
+				tabIndex: -1,
+				role: "dialog"
+			})
+			.appendTo( this.document[ 0 ].body );
+
+		this._on( this.uiDialog, {
+			keydown: function( event ) {
+				if ( this.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
+						event.keyCode === $.ui.keyCode.ESCAPE ) {
+					event.preventDefault();
+					this.close( event );
+					return;
+				}
+
+				// prevent tabbing out of dialogs
+				if ( event.keyCode !== $.ui.keyCode.TAB ) {
+					return;
+				}
+				var tabbables = $( ":tabbable", this.uiDialog ),
+					first = tabbables.filter( ":first" ),
+					last  = tabbables.filter( ":last" );
+
+				if ( ( event.target === last[ 0 ] || event.target === this.uiDialog[ 0 ] ) && !event.shiftKey ) {
+					first.focus( 1 );
+					return false;
+				} else if ( ( event.target === first[ 0 ] || event.target === this.uiDialog[ 0 ] ) && event.shiftKey ) {
+					last.focus( 1 );
+					return false;
+				}
+			},
+			mousedown: function( event ) {
+				if ( this._moveToTop( event ) ) {
+					this._focusTabbable();
+				}
+			}
+		});
+
+		// We assume that any existing aria-describedby attribute means
+		// that the dialog content is marked up properly
+		// otherwise we brute force the content as the description
+		if ( !this.element.find( "[aria-describedby]" ).length ) {
+			this.uiDialog.attr({
+				"aria-describedby": this.element.uniqueId().attr( "id" )
+			});
+		}
 	},
 
 	_createTitlebar: function() {
