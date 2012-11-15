@@ -427,7 +427,6 @@ $.widget("ui.dialog", {
 		});
 	},
 
-	// TODO why are handles passed by _setOption??
 	_makeResizable: function() {
 		var that = this,
 			options = this.options,
@@ -580,15 +579,6 @@ $.widget("ui.dialog", {
 			});
 		}
 
-		if ( key === "disabled" ) {
-			// TODO use toggleClass( "ui-dialog-disabled", value )
-			if ( value ) {
-				uiDialog.addClass( "ui-dialog-disabled" );
-			} else {
-				uiDialog.removeClass( "ui-dialog-disabled" );
-			}
-		}
-
 		if ( key === "draggable" ) {
 			isDraggable = uiDialog.is( ":data(ui-draggable)" );
 			if ( isDraggable && !value ) {
@@ -624,7 +614,6 @@ $.widget("ui.dialog", {
 
 		if ( key === "title" ) {
 			// convert whatever was passed in to a string, for html() to not throw up
-			// TODO deduplicate this (see _create)
 			$( ".ui-dialog-title", this.uiDialogTitlebar )
 				.html( "" + ( value || "&#160;" ) );
 		}
