@@ -191,7 +191,7 @@ $.widget("ui.dialog", {
 		}
 
 		// TODO merge with _createButtonPane?
-		this._createButtons( options.buttons );
+		this._createButtons();
 
 		this._isOpen = false;
 
@@ -362,8 +362,9 @@ $.widget("ui.dialog", {
 		this._delay( checkFocus );
 	},
 
-	_createButtons: function( buttons ) {
-		var that = this;
+	_createButtons: function() {
+		var that = this,
+			buttons = this.options.buttons;
 
 		// if we already have a button pane, remove it
 		this.uiDialogButtonPane.remove();
@@ -573,10 +574,11 @@ $.widget("ui.dialog", {
 
 		this._super( key, value );
 
+		if ( key === "buttons" ) {
+			this._createButtons();
+		}
+
 		switch ( key ) {
-			case "buttons":
-				this._createButtons( value );
-				break;
 			case "closeText":
 				// ensure that we always pass a string
 				this.uiDialogTitlebarClose.button({
