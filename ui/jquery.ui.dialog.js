@@ -662,17 +662,6 @@ $.widget("ui.dialog", {
 });
 
 $.extend($.ui.dialog, {
-	// TODO remove these
-	uuid: 0,
-	getTitleId: function($el) {
-		var id = $el.attr( "id" );
-		if ( !id ) {
-			this.uuid += 1;
-			id = this.uuid;
-		}
-		return "ui-dialog-title-" + id;
-	},
-
 	// TODO move to dialog instance method
 	overlay: function( dialog ) {
 		this.$el = $.ui.dialog.overlay.create( dialog );
