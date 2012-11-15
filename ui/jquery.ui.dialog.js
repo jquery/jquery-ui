@@ -123,16 +123,8 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-content ui-widget-content" )
 				.appendTo( this.uiDialog );
 
-			this._createTitlebar();
-
-			// TODO extract this one and the next into a _createButtonPane method
-			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
-				.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
-
-			( this.uiButtonSet = $( "<div>" ) )
-				.addClass( "ui-dialog-buttonset" )
-				.appendTo( uiDialogButtonPane );
-
+		this._createTitlebar();
+		this._createButtonPane();
 
 		// TODO move into _createWrapper
 		// We assume that any existing aria-describedby attribute means
@@ -150,9 +142,6 @@ $.widget("ui.dialog", {
 		if ( options.resizable && $.fn.resizable ) {
 			this._makeResizable();
 		}
-
-		// TODO merge with _createButtonPane?
-		this._createButtons();
 
 		this._isOpen = false;
 
@@ -363,6 +352,17 @@ $.widget("ui.dialog", {
 		this.uiDialog.attr({
 			"aria-labelledby": uiDialogTitle.attr( "id" )
 		});
+	},
+
+	_createButtonPane: function() {
+		var uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
+			.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
+
+		this.uiButtonSet = $( "<div>" )
+			.addClass( "ui-dialog-buttonset" )
+			.appendTo( uiDialogButtonPane );
+
+		this._createButtons();
 	},
 
 	_createButtons: function() {

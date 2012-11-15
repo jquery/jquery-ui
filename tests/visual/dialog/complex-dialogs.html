@@ -25,7 +25,15 @@
 		var dialog = $( "#dialog" ).dialog({
 				modal: true,
 				height: 300,
-				width: 500
+				width: 500,
+				buttons: [
+					{
+						text: "Ok"
+					},
+					{
+						text: "Cancel"
+					}
+				]
 			}),
 
 			datepickerDialog = $( "#dialog-datepicker" ).dialog({
