@@ -148,7 +148,7 @@ test("closeText", function() {
 });
 
 test("dialogClass", function() {
-	expect(4);
+	expect( 6 );
 
 	var el = $('<div></div>').dialog();
 		equal(el.dialog('widget').is(".foo"), false, 'dialogClass not specified. foo class added');
@@ -156,6 +156,9 @@ test("dialogClass", function() {
 
 	el = $('<div></div>').dialog({ dialogClass: "foo" });
 		equal(el.dialog('widget').is(".foo"), true, 'dialogClass in init. foo class added');
+	el.dialog( "option", "dialogClass", "foobar" );
+		equal( el.dialog('widget').is(".foo"), false, "dialogClass changed, previous one was removed" );
+		equal( el.dialog('widget').is(".foobar"), true, "dialogClass changed, new one was added" );
 	el.remove();
 
 	el = $('<div></div>').dialog({ dialogClass: "foo bar" });
