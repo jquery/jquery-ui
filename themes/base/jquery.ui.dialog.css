@@ -29,18 +29,10 @@
 	position: absolute;
 	right: .3em;
 	top: 50%;
-	width: 19px;
+	width: 21px;
 	margin: -10px 0 0 0;
 	padding: 1px;
-	height: 18px;
-}
-.ui-dialog .ui-dialog-titlebar-close span {
-	display: block;
-	margin: 1px;
-}
-.ui-dialog .ui-dialog-titlebar-close:hover,
-.ui-dialog .ui-dialog-titlebar-close:focus {
-	padding: 0;
+	height: 20px;
 }
 .ui-dialog .ui-dialog-content {
 	position: relative;
