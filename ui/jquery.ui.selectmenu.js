@@ -93,7 +93,7 @@ $.widget("ui.selectmenu", {
 				
 				event.preventDefault();
 			})
-			.bind('click.selectmenu', function() {
+			.bind('click.selectmenu', function(event) {
 				event.preventDefault();
 			})
 			.bind("keydown.selectmenu", function(event) {
