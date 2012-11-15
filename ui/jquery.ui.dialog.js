@@ -99,7 +99,6 @@ $.widget("ui.dialog", {
 			uiDialog,
 			// TODO should use this.uiDialogTitlebar instead
 			uiDialogTitlebar,
-			uiDialogTitlebarClose,
 			uiDialogTitle,
 			uiDialogButtonPane;
 
@@ -139,19 +138,20 @@ $.widget("ui.dialog", {
 				})
 				.prependTo( uiDialog );
 
-			uiDialogTitlebarClose = $( "<a href='#'></a>" )
-				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
-				.attr( "role", "button" )
+			this.uiDialogTitlebarClose = $( "<button></button>" )
+				.button({
+					label: options.closeText,
+					icons: {
+						primary: "ui-icon-closethick"
+					},
+					text: false
+				})
+				.addClass( "ui-dialog-titlebar-close" )
 				.click(function( event ) {
 					event.preventDefault();
 					that.close( event );
 				})
 				.appendTo( uiDialogTitlebar );
-
-			( this.uiDialogTitlebarCloseText = $( "<span>" ) )
-				.addClass( "ui-icon ui-icon-closethick" )
-				.text( options.closeText )
-				.appendTo( uiDialogTitlebarClose );
 
 			uiDialogTitle = $( "<span>" )
 				.uniqueId()
@@ -182,10 +182,6 @@ $.widget("ui.dialog", {
 				"aria-describedby": this.element.uniqueId().attr( "id" )
 			});
 		}
-
-		// TODO use button? or at least a button element, so that SPACE works?
-		this._hoverable( uiDialogTitlebarClose );
-		this._focusable( uiDialogTitlebarClose );
 
 		if ( options.draggable && $.fn.draggable ) {
 			this._makeDraggable();
@@ -575,7 +571,9 @@ $.widget("ui.dialog", {
 				break;
 			case "closeText":
 				// ensure that we always pass a string
-				this.uiDialogTitlebarCloseText.text( "" + value );
+				this.uiDialogTitlebarClose.button({
+					label: "" + value
+				});
 				break;
 			case "dialogClass":
 				uiDialog
