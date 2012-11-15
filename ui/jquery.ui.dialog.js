@@ -92,16 +92,17 @@ $.widget("ui.dialog", {
 		};
 		var that = this,
 			options = this.options,
-			title = options.title || "&#160;",
-			uiDialogTitle,
 			uiDialogButtonPane;
 
 			// TODO extract into _createWrapper
 			this.uiDialog = $( "<div>" )
 				.addClass( uiDialogClasses + options.dialogClass )
 				.hide()
-				// setting tabIndex makes the div focusable
-				.attr( "tabIndex", -1)
+				.attr({
+					// setting tabIndex makes the div focusable
+					tabIndex: -1,
+					role: "dialog"
+				})
 				.keydown(function( event ) {
 					if ( options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 							event.keyCode === $.ui.keyCode.ESCAPE ) {
@@ -122,38 +123,7 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-content ui-widget-content" )
 				.appendTo( this.uiDialog );
 
-			// TODO extract this and the next two into a _createTitlebar method
-			this.uiDialogTitlebar = $( "<div>" )
-				.addClass( "ui-dialog-titlebar  ui-widget-header ui-corner-all  ui-helper-clearfix" )
-				.prependTo( this.uiDialog );
-			this._on( this.uiDialogTitlebar, {
-				mousedown: function() {
-					// TODO call _focusTabbable or _keepFocus
-					// Dialog isn't getting focus when dragging (#8063)
-					this.uiDialog.focus();
-				}
-			});
-
-			this.uiDialogTitlebarClose = $( "<button></button>" )
-				.button({
-					label: options.closeText,
-					icons: {
-						primary: "ui-icon-closethick"
-					},
-					text: false
-				})
-				.addClass( "ui-dialog-titlebar-close" )
-				.click(function( event ) {
-					event.preventDefault();
-					that.close( event );
-				})
-				.appendTo( this.uiDialogTitlebar );
-
-			uiDialogTitle = $( "<span>" )
-				.uniqueId()
-				.addClass( "ui-dialog-title" )
-				.html( title )
-				.prependTo( this.uiDialogTitlebar );
+			this._createTitlebar();
 
 			// TODO extract this one and the next into a _createButtonPane method
 			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
@@ -163,11 +133,6 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-buttonset" )
 				.appendTo( uiDialogButtonPane );
 
-		// TODO move into _createWrapper
-		this.uiDialog.attr({
-			role: "dialog",
-			"aria-labelledby": uiDialogTitle.attr( "id" )
-		});
 
 		// TODO move into _createWrapper
 		// We assume that any existing aria-describedby attribute means
@@ -356,6 +321,48 @@ $.widget("ui.dialog", {
 		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
 		// so we check again later
 		this._delay( checkFocus );
+	},
+
+	_createTitlebar: function() {
+		var uiDialogTitle;
+
+		this.uiDialogTitlebar = $( "<div>" )
+			.addClass( "ui-dialog-titlebar  ui-widget-header ui-corner-all  ui-helper-clearfix" )
+			.prependTo( this.uiDialog );
+		this._on( this.uiDialogTitlebar, {
+			mousedown: function() {
+				// TODO call _focusTabbable or _keepFocus
+				// Dialog isn't getting focus when dragging (#8063)
+				this.uiDialog.focus();
+			}
+		});
+
+		this.uiDialogTitlebarClose = $( "<button></button>" )
+			.button({
+				label: this.options.closeText,
+				icons: {
+					primary: "ui-icon-closethick"
+				},
+				text: false
+			})
+			.addClass( "ui-dialog-titlebar-close" )
+			.appendTo( this.uiDialogTitlebar );
+		this._on( this.uiDialogTitlebarClose, {
+			"click": function( event ) {
+				event.preventDefault();
+				this.close( event );
+			}
+		});
+
+		uiDialogTitle = $( "<span>" )
+			.uniqueId()
+			.addClass( "ui-dialog-title" )
+			.html( this.options.title || "&#160;" )
+			.prependTo( this.uiDialogTitlebar );
+
+		this.uiDialog.attr({
+			"aria-labelledby": uiDialogTitle.attr( "id" )
+		});
 	},
 
 	_createButtons: function() {
