@@ -93,8 +93,6 @@ $.widget("ui.dialog", {
 		var that = this,
 			options = this.options,
 			title = options.title || "&#160;",
-			// TODO should use this.uiDialogTitlebar instead
-			uiDialogTitlebar,
 			uiDialogTitle,
 			uiDialogButtonPane;
 
@@ -124,11 +122,11 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-content ui-widget-content" )
 				.appendTo( this.uiDialog );
 
-			// TODO extract this and the next three into a _createTitlebar method
-			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
+			// TODO extract this and the next two into a _createTitlebar method
+			this.uiDialogTitlebar = $( "<div>" )
 				.addClass( "ui-dialog-titlebar  ui-widget-header ui-corner-all  ui-helper-clearfix" )
 				.prependTo( this.uiDialog );
-			this._on( uiDialogTitlebar, {
+			this._on( this.uiDialogTitlebar, {
 				mousedown: function() {
 					// TODO call _focusTabbable or _keepFocus
 					// Dialog isn't getting focus when dragging (#8063)
@@ -149,13 +147,13 @@ $.widget("ui.dialog", {
 					event.preventDefault();
 					that.close( event );
 				})
-				.appendTo( uiDialogTitlebar );
+				.appendTo( this.uiDialogTitlebar );
 
 			uiDialogTitle = $( "<span>" )
 				.uniqueId()
 				.addClass( "ui-dialog-title" )
 				.html( title )
-				.prependTo( uiDialogTitlebar );
+				.prependTo( this.uiDialogTitlebar );
 
 			// TODO extract this one and the next into a _createButtonPane method
 			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
