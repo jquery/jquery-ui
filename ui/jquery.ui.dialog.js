@@ -92,8 +92,6 @@ $.widget("ui.dialog", {
 		};
 		var that = this,
 			options = this.options,
-
-			// TODO make this the default for the title option?
 			title = options.title || "&#160;",
 			// TODO should use this.uiDialog instead
 			uiDialog,
