@@ -369,7 +369,7 @@ $.widget("ui.dialog", {
 
 		if ( !$.isEmptyObject( buttons ) ) {
 			$.each( buttons, function( name, props ) {
-				var button, click;
+				var click;
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
 					props;
@@ -380,12 +380,10 @@ $.widget("ui.dialog", {
 				props.click = function() {
 					click.apply( that.element[0], arguments );
 				};
-				button = $( "<button></button>", props )
-					.appendTo( that.uiButtonSet );
-				if ( $.fn.button ) {
+				$( "<button></button>", props )
 					// TODO allow passing through button options
-					button.button();
-				}
+					.button()
+					.appendTo( that.uiButtonSet );
 			});
 			this.uiDialog.addClass( "ui-dialog-buttons" );
 			this.uiDialogButtonPane.appendTo( this.uiDialog );
