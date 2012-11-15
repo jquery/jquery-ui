@@ -578,57 +578,60 @@ $.widget("ui.dialog", {
 			this._createButtons();
 		}
 
-		switch ( key ) {
-			case "closeText":
+		if ( key === "closeText" ) {
+			this.uiDialogTitlebarClose.button({
 				// ensure that we always pass a string
-				this.uiDialogTitlebarClose.button({
-					label: "" + value
-				});
-				break;
-			case "disabled":
-				// TODO use toggleClass( "ui-dialog-disabled", value )
-				if ( value ) {
-					uiDialog.addClass( "ui-dialog-disabled" );
-				} else {
-					uiDialog.removeClass( "ui-dialog-disabled" );
-				}
-				break;
-			case "draggable":
-				isDraggable = uiDialog.is( ":data(ui-draggable)" );
-				if ( isDraggable && !value ) {
-					uiDialog.draggable( "destroy" );
-				}
+				label: "" + value
+			});
+		}
 
-				if ( !isDraggable && value ) {
-					this._makeDraggable();
-				}
-				break;
-			case "position":
-				this._position( value );
-				break;
-			case "resizable":
-				// currently resizable, becoming non-resizable
-				isResizable = uiDialog.is( ":data(ui-resizable)" );
-				if ( isResizable && !value ) {
-					uiDialog.resizable( "destroy" );
-				}
+		if ( key === "disabled" ) {
+			// TODO use toggleClass( "ui-dialog-disabled", value )
+			if ( value ) {
+				uiDialog.addClass( "ui-dialog-disabled" );
+			} else {
+				uiDialog.removeClass( "ui-dialog-disabled" );
+			}
+		}
 
-				// currently resizable, changing handles
-				if ( isResizable && typeof value === "string" ) {
-					uiDialog.resizable( "option", "handles", value );
-				}
+		if ( key === "draggable" ) {
+			isDraggable = uiDialog.is( ":data(ui-draggable)" );
+			if ( isDraggable && !value ) {
+				uiDialog.draggable( "destroy" );
+			}
 
-				// currently non-resizable, becoming resizable
-				if ( !isResizable && value !== false ) {
-					this._makeResizable( value );
-				}
-				break;
-			case "title":
-				// convert whatever was passed in to a string, for html() to not throw up
-				// TODO deduplicate this (see _create)
-				$( ".ui-dialog-title", this.uiDialogTitlebar )
-					.html( "" + ( value || "&#160;" ) );
-				break;
+			if ( !isDraggable && value ) {
+				this._makeDraggable();
+			}
+		}
+
+		if ( key === "position" ) {
+			this._position( value );
+		}
+
+		if ( key === "resizable" ) {
+			// currently resizable, becoming non-resizable
+			isResizable = uiDialog.is( ":data(ui-resizable)" );
+			if ( isResizable && !value ) {
+				uiDialog.resizable( "destroy" );
+			}
+
+			// currently resizable, changing handles
+			if ( isResizable && typeof value === "string" ) {
+				uiDialog.resizable( "option", "handles", value );
+			}
+
+			// currently non-resizable, becoming resizable
+			if ( !isResizable && value !== false ) {
+				this._makeResizable( value );
+			}
+		}
+
+		if ( key === "title" ) {
+			// convert whatever was passed in to a string, for html() to not throw up
+			// TODO deduplicate this (see _create)
+			$( ".ui-dialog-title", this.uiDialogTitlebar )
+				.html( "" + ( value || "&#160;" ) );
 		}
 	},
 
