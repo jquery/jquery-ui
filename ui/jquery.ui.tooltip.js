@@ -138,20 +138,8 @@ $.widget( "ui.tooltip", {
 				// but always pointing at the same event target
 				.closest( this.options.items );
 
-		// No element to show a tooltip for
-		if ( !target.length ) {
-			return;
-		}
-
-		// If the tooltip is open and we're tracking then reposition the tooltip.
-		// This makes sure that a tracking tooltip doesn't obscure a focused element
-		// if the user was hovering when the element gained focused.
-		if ( this.options.track && target.data( "ui-tooltip-id" ) ) {
-			this._find( target ).position( $.extend({
-				of: target
-			}, this.options.position ) );
-			// Stop tracking (#8622)
-			this._off( this.document, "mousemove" );
+		// No element to show a tooltip for or the tooltip is already open
+		if ( !target.length || target.data( "ui-tooltip-id" ) ) {
 			return;
 		}
 
@@ -188,7 +176,8 @@ $.widget( "ui.tooltip", {
 	_updateContent: function( target, event ) {
 		var content,
 			contentOption = this.options.content,
-			that = this;
+			that = this,
+			eventType = event ? event.type : null;
 
 		if ( typeof contentOption === "string" ) {
 			return this._open( event, target, contentOption );
@@ -202,6 +191,14 @@ $.widget( "ui.tooltip", {
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			that._delay(function() {
+				// jQuery creates a special event for focusin when it doesn't
+				// exist natively. To improve performance, the native event
+				// object is reused and the type is changed. Therefore, we can't
+				// rely on the type being correct after the event finished
+				// bubbling, so we set it back to the previous value. (#8740)
+				if ( event ) {
+					event.type = eventType;
+				}
 				this._open( event, target, response );
 			});
 		});
