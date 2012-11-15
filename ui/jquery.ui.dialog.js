@@ -93,15 +93,13 @@ $.widget("ui.dialog", {
 		var that = this,
 			options = this.options,
 			title = options.title || "&#160;",
-			// TODO should use this.uiDialog instead
-			uiDialog,
 			// TODO should use this.uiDialogTitlebar instead
 			uiDialogTitlebar,
 			uiDialogTitle,
 			uiDialogButtonPane;
 
 			// TODO extract into _createWrapper
-			uiDialog = ( this.uiDialog = $( "<div>" ) )
+			this.uiDialog = $( "<div>" )
 				.addClass( uiDialogClasses + options.dialogClass )
 				.hide()
 				// setting tabIndex makes the div focusable
@@ -124,17 +122,19 @@ $.widget("ui.dialog", {
 				.show()
 				.removeAttr( "title" )
 				.addClass( "ui-dialog-content ui-widget-content" )
-				.appendTo( uiDialog );
+				.appendTo( this.uiDialog );
 
 			// TODO extract this and the next three into a _createTitlebar method
 			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
 				.addClass( "ui-dialog-titlebar  ui-widget-header ui-corner-all  ui-helper-clearfix" )
-				// TODO use _on, call _focusTabbable or _keepFocus
-				.bind( "mousedown", function() {
+				.prependTo( this.uiDialog );
+			this._on( uiDialogTitlebar, {
+				mousedown: function() {
+					// TODO call _focusTabbable or _keepFocus
 					// Dialog isn't getting focus when dragging (#8063)
-					uiDialog.focus();
-				})
-				.prependTo( uiDialog );
+					this.uiDialog.focus();
+				}
+			});
 
 			this.uiDialogTitlebarClose = $( "<button></button>" )
 				.button({
@@ -166,7 +166,7 @@ $.widget("ui.dialog", {
 				.appendTo( uiDialogButtonPane );
 
 		// TODO move into _createWrapper
-		uiDialog.attr({
+		this.uiDialog.attr({
 			role: "dialog",
 			"aria-labelledby": uiDialogTitle.attr( "id" )
 		});
@@ -176,7 +176,7 @@ $.widget("ui.dialog", {
 		// that the dialog content is marked up properly
 		// otherwise we brute force the content as the description
 		if ( !this.element.find( "[aria-describedby]" ).length ) {
-			uiDialog.attr({
+			this.uiDialog.attr({
 				"aria-describedby": this.element.uniqueId().attr( "id" )
 			});
 		}
@@ -196,19 +196,19 @@ $.widget("ui.dialog", {
 		// prevent tabbing out of dialogs
 		// TODO move into _createWrapper
 		// TODO fix formatting
-		this._on( uiDialog, { keydown: function( event ) {
+		this._on( this.uiDialog, { keydown: function( event ) {
 			if ( event.keyCode !== $.ui.keyCode.TAB ) {
 				return;
 			}
 
-			var tabbables = $( ":tabbable", uiDialog ),
+			var tabbables = $( ":tabbable", this.uiDialog ),
 				first = tabbables.filter( ":first" ),
 				last  = tabbables.filter( ":last" );
 
-			if ( ( event.target === last[ 0 ] || event.target === uiDialog[ 0 ] ) && !event.shiftKey ) {
+			if ( ( event.target === last[ 0 ] || event.target === this.uiDialog[ 0 ] ) && !event.shiftKey ) {
 				first.focus( 1 );
 				return false;
-			} else if ( ( event.target === first[ 0 ] || event.target === uiDialog[ 0 ] ) && event.shiftKey ) {
+			} else if ( ( event.target === first[ 0 ] || event.target === this.uiDialog[ 0 ] ) && event.shiftKey ) {
 				last.focus( 1 );
 				return false;
 			}
