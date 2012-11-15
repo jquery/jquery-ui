@@ -433,10 +433,10 @@ $.widget("ui.dialog", {
 	},
 
 	// TODO why are handles passed by _setOption??
-	_makeResizable: function( handles ) {
-		handles = (handles === undefined ? this.options.resizable : handles);
+	_makeResizable: function() {
 		var that = this,
 			options = this.options,
+			handles = options.resizable,
 			// .ui-resizable has position: relative defined in the stylesheet
 			// but dialogs have to use absolute or fixed positioning
 			position = this.uiDialog.css( "position" ),
@@ -623,7 +623,7 @@ $.widget("ui.dialog", {
 
 			// currently non-resizable, becoming resizable
 			if ( !isResizable && value !== false ) {
-				this._makeResizable( value );
+				this._makeResizable();
 			}
 		}
 
