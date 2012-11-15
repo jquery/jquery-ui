@@ -565,6 +565,14 @@ $.widget("ui.dialog", {
 		var isDraggable, isResizable,
 			uiDialog = this.uiDialog;
 
+		if ( key === "dialogClass" ) {
+			uiDialog
+				.removeClass( this.options.dialogClass )
+				.addClass( value );
+		}
+
+		this._super( key, value );
+
 		switch ( key ) {
 			case "buttons":
 				this._createButtons( value );
@@ -574,11 +582,6 @@ $.widget("ui.dialog", {
 				this.uiDialogTitlebarClose.button({
 					label: "" + value
 				});
-				break;
-			case "dialogClass":
-				uiDialog
-					.removeClass( this.options.dialogClass )
-					.addClass( value );
 				break;
 			case "disabled":
 				// TODO use toggleClass( "ui-dialog-disabled", value )
@@ -625,8 +628,6 @@ $.widget("ui.dialog", {
 					.html( "" + ( value || "&#160;" ) );
 				break;
 		}
-
-		this._super( key, value );
 	},
 
 	_size: function() {
