@@ -35,7 +35,7 @@ test("buttons", function() {
 		},
 		el = $('<div></div>').dialog({ buttons: buttons });
 
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 2, "number of buttons");
 
 	i = 0;
@@ -61,7 +61,7 @@ test("buttons", function() {
 	el.dialog("option", "buttons", newButtons);
 	deepEqual(el.dialog("option", "buttons"), newButtons, '.dialog("option", "buttons", ...) setter');
 
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 1, "number of buttons after setter");
 	btn.trigger('click');
 
@@ -72,7 +72,7 @@ test("buttons", function() {
 	});
 
 	el.dialog("option", "buttons", null);
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 0, "all buttons have been removed");
 	equal(el.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
 	equal(el.parent().hasClass('ui-dialog-buttons'), false, "dialog wrapper removes class about having buttons");
@@ -97,7 +97,7 @@ test("buttons - advanced", function() {
 			]
 		});
 
-	buttons = el.dialog('widget').find("button");
+	buttons = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(buttons.length, 1, "correct number of buttons");
 	equal(buttons.attr("id"), "my-button-id", "correct id");
 	equal(buttons.text(), "a button", "correct label");
