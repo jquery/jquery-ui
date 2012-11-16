@@ -144,6 +144,16 @@ $.widget("ui.dialog", {
 				.html( title )
 				.prependTo( uiDialogTitlebar );
 
+			if (options.icon) {
+				(this.uiDialogTitleIconSpacer = $( "<span>" ))
+					.addClass( "ui-dialog-titlebar-icon-spacer" )
+					.prependTo( uiDialogTitlebar );
+				(this.uiDialogTitleIcon = $( "<span>" ))
+					.addClass( "ui-dialog-titlebar-icon ui-icon")
+					.addClass( options.icon )
+					.prependTo( uiDialogTitlebar );
+			}
+
 			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
 				.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
 
@@ -580,6 +590,23 @@ $.widget("ui.dialog", {
 				$( ".ui-dialog-title", this.uiDialogTitlebar )
 					.html( "" + ( value || "&#160;" ) );
 				break;
+			case "icon":
+				if (typeof value === "string")
+				{
+					if (!this.uiDialogTitleIcon)
+					{
+						(this.uiDialogTitleIconSpacer = $( "<span>" ))
+							.addClass( "ui-dialog-titlebar-icon-spacer" )
+							.prependTo( uiDialogTitlebar );
+						(this.uiDialogTitleIcon = $( "<span>" ))
+							.prependTo( uiDialogTitlebar );
+					}
+					this.uiDialogTitleIcon
+						.removeClass()
+						.addClass( "ui-dialog-titlebar-icon ui-icon")
+						.addClass( value )
+				}
+				break;				
 		}
 
 		this._super( key, value );
