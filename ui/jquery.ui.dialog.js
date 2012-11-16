@@ -209,7 +209,9 @@ $.widget("ui.dialog", {
 
 		this._size();
 		this._position( this.options.position );
-		this.overlay = this.options.modal ? new $.ui.dialog.overlay( this ) : null;
+		if ( this.options.modal ) {
+			this.overlay = new $.ui.dialog.overlay( this );
+		}
 		this._moveToTop( null, true );
 		this._show( this.uiDialog, this.options.show );
 
@@ -277,7 +279,7 @@ $.widget("ui.dialog", {
 				if ( event.keyCode !== $.ui.keyCode.TAB ) {
 					return;
 				}
-				var tabbables = $( ":tabbable", this.uiDialog ),
+				var tabbables = this.uiDialog.find( ":tabbable" ),
 					first = tabbables.filter( ":first" ),
 					last  = tabbables.filter( ":last" );
 
