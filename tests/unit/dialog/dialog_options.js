@@ -81,7 +81,7 @@ test("buttons", function() {
 });
 
 test("buttons - advanced", function() {
-	expect(5);
+	expect( 7 );
 
 	var buttons,
 		el = $("<div></div>").dialog({
@@ -92,7 +92,11 @@ test("buttons - advanced", function() {
 					id: "my-button-id",
 					click: function() {
 						equal(this, el[0], "correct context");
-					}
+					},
+					icons: {
+						primary: "ui-icon-cancel"
+					},
+					showText: false
 				}
 			]
 		});
@@ -102,6 +106,8 @@ test("buttons - advanced", function() {
 	equal(buttons.attr("id"), "my-button-id", "correct id");
 	equal(buttons.text(), "a button", "correct label");
 	ok(buttons.hasClass("additional-class"), "additional classes added");
+	deepEqual( buttons.button("option", "icons"), { primary: "ui-icon-cancel", secondary: null } );
+	equal( buttons.button( "option", "text" ), false );
 	buttons.click();
 
 	el.remove();
