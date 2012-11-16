@@ -684,8 +684,6 @@ $.widget( "ui.tabs", {
 			.removeClass( "ui-tabs-anchor" )
 			.removeAttr( "role" )
 			.removeAttr( "tabIndex" )
-			.removeData( "href.tabs" )
-			.removeData( "load.tabs" )
 			.removeUniqueId();
 
 		this.tabs.add( this.panels ).each(function() {
