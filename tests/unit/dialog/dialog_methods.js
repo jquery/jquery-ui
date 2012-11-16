@@ -34,20 +34,17 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect( 4 );
-
-	$("<div></div>").appendTo('body').dialog().dialog("destroy").remove();
-	ok(true, '.dialog("destroy") called on element');
-
-	$([]).dialog().dialog("destroy").remove();
-	ok(true, '.dialog("destroy") called on empty collection');
-
-	$('<div></div>').dialog().dialog("destroy").remove();
-	ok(true, '.dialog("destroy") called on disconnected DOMElement');
-
-	var expected = $('<div></div>').dialog(),
-		actual = expected.dialog('destroy');
-	equal(actual, expected, 'destroy is chainable');
+	expect( 6 );
+	domEqual( "#dialog1", function() {
+		var dialog = $( "#dialog1" ).dialog().dialog( "destroy" );
+		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
+		equal( dialog.index(), 0 );
+	});
+	domEqual( "#form-dialog", function() {
+		var dialog = $( "#form-dialog" ).dialog().dialog( "destroy" );
+		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
+		equal( dialog.index(), 2 );
+	});
 });
 
 test("enable", function() {
