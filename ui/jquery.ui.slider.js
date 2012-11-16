@@ -54,8 +54,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-slider-" + this.orientation +
 				" ui-widget" +
 				" ui-widget-content" +
-				" ui-corner-all" +
-				( o.disabled ? " ui-slider-disabled ui-disabled" : "" ) );
+				" ui-corner-all");
 
 		this.range = $([]);
 
@@ -115,6 +114,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this.handles.each(function( i ) {
 			$( this ).data( "ui-slider-handle-index", i );
 		});
+
+		this._setOption( "disabled", o.disabled );
 
 		this._on( this.handles, {
 			keydown: function( event ) {
@@ -205,7 +206,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 			.removeClass( "ui-slider" +
 				" ui-slider-horizontal" +
 				" ui-slider-vertical" +
-				" ui-slider-disabled" +
 				" ui-widget" +
 				" ui-widget-content" +
 				" ui-corner-all" );
@@ -480,10 +480,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 					this.handles.filter( ".ui-state-focus" ).blur();
 					this.handles.removeClass( "ui-state-hover" );
 					this.handles.prop( "disabled", true );
-					this.element.addClass( "ui-disabled" );
 				} else {
 					this.handles.prop( "disabled", false );
-					this.element.removeClass( "ui-disabled" );
 				}
 				break;
 			case "orientation":
