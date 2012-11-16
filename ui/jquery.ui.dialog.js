@@ -334,7 +334,7 @@ $.widget("ui.dialog", {
 		}
 		if ( hasButtons ) {
 			$.each( buttons, function( name, props ) {
-				var button, click;
+				var button, click, options;
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
 					props;
@@ -345,10 +345,25 @@ $.widget("ui.dialog", {
 				props.click = function() {
 					click.apply( that.element[0], arguments );
 				};
+				// Copy allowed button options from given properties
+				options = {};
+				optionsList = ["icons","disabled","label"];
+				for ( var i in optionsList) {
+					if (props[optionsList[i]]) {
+						options[optionsList[i]] = props[optionsList[i]];						
+						delete props[optionsList[i]];
+					}
+				}				
+				// if no text specified
+				if (!props.text || props.text == "") {
+					options.text = false;
+					props.text = false;
+				}
+				
 				button = $( "<button></button>", props )
 					.appendTo( that.uiButtonSet );
 				if ( $.fn.button ) {
-					button.button();
+					button.button(options);
 				}
 			});
 			this.uiDialog.addClass( "ui-dialog-buttons" );
