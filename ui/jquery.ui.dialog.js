@@ -383,8 +383,10 @@ $.widget("ui.dialog", {
 					click.apply( that.element[0], arguments );
 				};
 				$( "<button></button>", props )
-					// TODO allow passing through button options
-					.button()
+					.button({
+						icons: props.icons,
+						text: props.showText
+					})
 					.appendTo( that.uiButtonSet );
 			});
 			this.uiDialog.addClass( "ui-dialog-buttons" );
