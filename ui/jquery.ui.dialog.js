@@ -224,15 +224,24 @@ $.widget("ui.dialog", {
 		return this;
 	},
 
-	// TODO check if dialog already has focus, merge with _keepFocus
 	_focusTabbable: function() {
-		// set focus to the first tabbable element in the content area or the first button
-		// if there are no tabbable elements, set focus on the dialog itself
-		var hasFocus = this.element.find( ":tabbable" );
+		// set focus to the first match:
+		// 1. first element inside the dialog matching [autofocus]
+		// 2. tabbable element inside the content element
+		// 3. tabbable element inside the buttonpane
+		// 4. the close button
+		// 5. the dialog itself
+		var hasFocus = this.element.find( "[autofocus]" );
 		if ( !hasFocus.length ) {
-			hasFocus = this.uiDialogButtonPane.find( ":tabbable" );
+			hasFocus = this.element.find( ":tabbable" );
 			if ( !hasFocus.length ) {
-				hasFocus = this.uiDialog;
+				hasFocus = this.uiDialogButtonPane.find( ":tabbable" );
+				if ( !hasFocus.length ) {
+					hasFocus = this.uiDialogTitlebarClose.filter( ":tabbable" );
+					if ( !hasFocus.length ) {
+						hasFocus = this.uiDialog;
+					}
+				}
 			}
 		}
 		hasFocus.eq( 0 ).focus();
@@ -316,7 +325,6 @@ $.widget("ui.dialog", {
 			.prependTo( this.uiDialog );
 		this._on( this.uiDialogTitlebar, {
 			mousedown: function() {
-				// TODO call _focusTabbable or _keepFocus
 				// Dialog isn't getting focus when dragging (#8063)
 				this.uiDialog.focus();
 			}
