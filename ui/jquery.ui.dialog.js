@@ -334,7 +334,7 @@ $.widget("ui.dialog", {
 		}
 		if ( hasButtons ) {
 			$.each( buttons, function( name, props ) {
-				var button, click, opts;
+				var button, click, options;
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
 					props;
@@ -345,11 +345,14 @@ $.widget("ui.dialog", {
 				props.click = function() {
 					click.apply( that.element[0], arguments );
 				};
-				opts = {};
-				if (props.icons) {
-					opts.icons = props.icons;
-					delete props.icons;
+				options = {};
+				optionsList = ["icons","disabled","showText", "label"];
+				for ( var i in optionsList) {
+					if (props[optionsList[i]]) {
+						options[optionsList[i]] = props[optionsList[i]];
+						delete props[optionsList[i]];
 					}
+				}
 				button = $( "<button></button>", props )
 					.appendTo( that.uiButtonSet );
 				if ( $.fn.button ) {
