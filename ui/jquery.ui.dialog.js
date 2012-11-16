@@ -144,6 +144,16 @@ $.widget("ui.dialog", {
 				.html( title )
 				.prependTo( uiDialogTitlebar );
 
+			if (options.icon) {
+				(this.uiDialogTitleIconSpacer = $( "<span>" ))
+					.addClass( "ui-dialog-titlebar-icon-spacer" )
+					.prependTo( uiDialogTitlebar );
+				(this.uiDialogTitleIcon = $( "<span>" ))
+					.addClass( "ui-dialog-titlebar-icon ui-icon")
+					.addClass( options.icon )
+					.prependTo( uiDialogTitlebar );
+			}
+
 			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
 				.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
 
