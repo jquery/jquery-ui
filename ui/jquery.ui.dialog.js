@@ -151,7 +151,7 @@ $.widget("ui.dialog", {
 				(this.uiDialogTitleIcon = $( "<span>" ))
 					.addClass( "ui-dialog-titlebar-icon ui-icon")
 					.addClass( options.icon )
-					.appendTo( uiDialogTitlebar );
+					.prependTo( uiDialogTitlebar );
 			}
                         
 			uiDialogButtonPane = ( this.uiDialogButtonPane = $( "<div>" ) )
