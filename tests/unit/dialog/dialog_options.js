@@ -35,7 +35,7 @@ test("buttons", function() {
 		},
 		el = $('<div></div>').dialog({ buttons: buttons });
 
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 2, "number of buttons");
 
 	i = 0;
@@ -61,7 +61,7 @@ test("buttons", function() {
 	el.dialog("option", "buttons", newButtons);
 	deepEqual(el.dialog("option", "buttons"), newButtons, '.dialog("option", "buttons", ...) setter');
 
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 1, "number of buttons after setter");
 	btn.trigger('click');
 
@@ -72,7 +72,7 @@ test("buttons", function() {
 	});
 
 	el.dialog("option", "buttons", null);
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 0, "all buttons have been removed");
 	equal(el.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
 	equal(el.parent().hasClass('ui-dialog-buttons'), false, "dialog wrapper removes class about having buttons");
@@ -97,7 +97,7 @@ test("buttons - advanced", function() {
 			]
 		});
 
-	buttons = el.dialog('widget').find("button");
+	buttons = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(buttons.length, 1, "correct number of buttons");
 	equal(buttons.attr("id"), "my-button-id", "correct id");
 	equal(buttons.text(), "a button", "correct label");
@@ -148,7 +148,7 @@ test("closeText", function() {
 });
 
 test("dialogClass", function() {
-	expect(4);
+	expect( 6 );
 
 	var el = $('<div></div>').dialog();
 		equal(el.dialog('widget').is(".foo"), false, 'dialogClass not specified. foo class added');
@@ -156,6 +156,9 @@ test("dialogClass", function() {
 
 	el = $('<div></div>').dialog({ dialogClass: "foo" });
 		equal(el.dialog('widget').is(".foo"), true, 'dialogClass in init. foo class added');
+	el.dialog( "option", "dialogClass", "foobar" );
+		equal( el.dialog('widget').is(".foo"), false, "dialogClass changed, previous one was removed" );
+		equal( el.dialog('widget').is(".foobar"), true, "dialogClass changed, new one was added" );
 	el.remove();
 
 	el = $('<div></div>').dialog({ dialogClass: "foo bar" });
@@ -415,37 +418,45 @@ test("resizable", function() {
 	el.remove();
 });
 
-test("title", function() {
-	expect(9);
+test( "title", function() {
+	expect( 11 );
 
 	function titleText() {
-		return el.dialog('widget').find(".ui-dialog-title").html();
+		return el.dialog('widget').find( ".ui-dialog-title" ).html();
 	}
 
-	var el = $('<div></div>').dialog();
+	var el = $( '<div></div>' ).dialog();
 		// some browsers return a non-breaking space and some return "&nbsp;"
 		// so we generate a non-breaking space for comparison
-		equal(titleText(), $( "<span>&#160;</span>" ).html(), "[default]");
-		equal(el.dialog("option", "title"), "", "option not changed");
+		equal( titleText(), $( "<span>&#160;</span>" ).html(), "[default]" );
+		equal( el.dialog( "option", "title" ), null, "option not changed" );
 	el.remove();
 
-	el = $('<div title="foo">').dialog();
-		equal(titleText(), "foo", "title in element attribute");
-		equal(el.dialog("option", "title"), "foo", "option updated from attribute");
+	el = $( '<div title="foo">' ).dialog();
+		equal( titleText(), "foo", "title in element attribute" );
+		equal( el.dialog( "option", "title"), "foo", "option updated from attribute" );
 	el.remove();
 
-	el = $('<div></div>').dialog({ title: 'foo' });
-		equal(titleText(), "foo", "title in init options");
-		equal(el.dialog("option", "title"), "foo", "opiton set from options hash");
+	el = $( '<div></div>' ).dialog({ title: 'foo' });
+		equal( titleText(), "foo", "title in init options" );
+		equal( el.dialog("option", "title"), "foo", "opiton set from options hash" );
 	el.remove();
 
-	el = $('<div title="foo">').dialog({ title: 'bar' });
-		equal(titleText(), "bar", "title in init options should override title in element attribute");
-		equal(el.dialog("option", "title"), "bar", "opiton set from options hash");
+	el = $( '<div title="foo">' ).dialog({ title: 'bar' });
+		equal( titleText(), "bar", "title in init options should override title in element attribute" );
+		equal( el.dialog("option", "title"), "bar", "opiton set from options hash" );
 	el.remove();
 
-	el = $('<div></div>').dialog().dialog('option', 'title', 'foo');
-		equal(titleText(), 'foo', 'title after init');
+	el = $( '<div></div>' ).dialog().dialog( 'option', 'title', 'foo' );
+		equal( titleText(), 'foo', 'title after init' );
+	el.remove();
+
+	// make sure attroperties are properly ignored - #5742 - .attr() might return a DOMElement
+	el = $( '<form><input name="title"></form>' ).dialog();
+		// some browsers return a non-breaking space and some return "&nbsp;"
+		// so we get the text to normalize to the actual non-breaking space
+		equal( titleText(), $( "<span>&#160;</span>" ).html(), "[default]" );
+		equal( el.dialog( "option", "title" ), null, "option not changed" );
 	el.remove();
 });
 
