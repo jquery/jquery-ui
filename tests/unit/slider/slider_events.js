@@ -70,7 +70,6 @@ test( "programmatic event triggers", function() {
 		})
 		.slider( "value", 0 );
 
-	QUnit.reset();
 	// Test values method
 	el = $( "<div></div>" )
 		.slider({
@@ -81,7 +80,6 @@ test( "programmatic event triggers", function() {
 		})
 		.slider( "values", [80, 90] );
 
-	QUnit.reset();
 	// Test value option
 	el = $( "<div></div>" )
 		.slider({
@@ -91,7 +89,6 @@ test( "programmatic event triggers", function() {
 		})
 		.slider( "option", "value", 0 );
 
-	QUnit.reset();
 	// Test values option
 	el = $( "<div></div>" )
 		.slider({
@@ -116,8 +113,8 @@ test( "mouse based interaction part two: when handles overlap", function() {
 		}),
 		handles = el.find( ".ui-slider-handle" );
 	handles.eq(0).simulate( "drag", { dx: 10 } );
+	el.slider( "destroy" );
 
-	QUnit.reset();
 	el = $( "#slider1" )
 		.slider({
 			values: [ 10, 10, 10 ],
@@ -128,27 +125,27 @@ test( "mouse based interaction part two: when handles overlap", function() {
 		}),
 		handles = el.find( ".ui-slider-handle" );
 	handles.eq(0).simulate( "drag", { dx: -10 } );
+	el.slider( "destroy" );
 
-	QUnit.reset();
 	el = $( "#slider1" )
 		.slider({
 			values: [ 19, 20 ]
 		}),
 		handles = el.find( ".ui-slider-handle" );
 	handles.eq(0).simulate( "drag", { dx: 10 } );
-	el.on("slidestart", function(event, ui) {
+	el.one("slidestart", function(event, ui) {
 		equal(handles.index(ui.handle), 0, "left handle activated if left was moved last");
 	});
 	handles.eq(0).simulate( "drag", { dx: 10 } );
+	el.slider( "destroy" );
 
-	QUnit.reset();
 	el = $( "#slider1" )
 		.slider({
 			values: [ 19, 20 ]
 		}),
 		handles = el.find( ".ui-slider-handle" );
 	handles.eq(1).simulate( "drag", { dx: -10 } );
-	el.on("slidestart", function(event, ui) {
+	el.one("slidestart", function(event, ui) {
 		equal(handles.index(ui.handle), 1, "right handle activated if right was moved last (#3467)");
 	});
 	handles.eq(0).simulate( "drag", { dx: 10 } );
