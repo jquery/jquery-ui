@@ -24,7 +24,7 @@
 	$(function() {
 		var dialog = $( "#dialog" ).dialog({
 				modal: true,
-				height: 300,
+				height: 350,
 				width: 500,
 				buttons: [
 					{
@@ -82,6 +82,11 @@
 			]
 		});
 
+		$( "#destroy-dialog" ).click(function() {
+			dialog.dialog( "destroy" ).show();
+			$( this ).remove();
+		});
+
 		$( document ).tooltip();
 	});
 	</script>
@@ -91,13 +96,13 @@
 <p>WHAT: A modal dialog opening another modal dialog (including a datepicker), opening a non-modal dialog (including an autocomplete with tooltip applied). A regular link on the page, outside of the dialogs.</p>
 <p>EXPECTED: As long as a modal dialog is open, focus stays within the dialogs. Both mouse and keyboard interactions are captured and restricted to the dialog. When the nested modal dialog is open, the first modal dialog can't be interacted with, until the nested dialog is closed. When the third dialog is open (not modal), switching between the two dialogs is possible, both can be interacted with.</p>
 
-<a href="#">Outside link</a>
 
 <button id="open-dialog">Reopen dialog</button>
 
 <div id="dialog" title="Basic dialog">
 	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 	<p><button id="open-datepicker">Open another window with a datepicker.</button></p>
+	<p><button id="destroy-dialog">Self destruct</button></p>
 </div>
 
 <div id="dialog-datepicker" title="A dialog with a datepicker">
@@ -109,6 +114,8 @@
 	<label for="autocomplete">Tags: </label>
 	<input id="autocomplete" title="Try typing something!">
 </div>
+
+<a href="#">Outside link</a>
 
 </body>
 </html>
