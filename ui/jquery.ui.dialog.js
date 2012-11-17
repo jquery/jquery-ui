@@ -122,9 +122,7 @@ $.widget("ui.dialog", {
 		var next,
 			oldPosition = this.oldPosition;
 
-		if ( this.overlay ) {
-			this.overlay.destroy();
-		}
+		this._destroyOverlay();
 		this.uiDialog.hide();
 		this.element
 			.removeUniqueId()
@@ -168,9 +166,7 @@ $.widget("ui.dialog", {
 
 		this._isOpen = false;
 
-		if ( this.overlay ) {
-			this.overlay.destroy();
-		}
+		this._destroyOverlay();
 
 		if ( !this.opener.filter( ":focusable" ).focus().length ) {
 			// Hiding a focused element doesn't trigger blur in WebKit
@@ -212,9 +208,7 @@ $.widget("ui.dialog", {
 
 		this._size();
 		this._position();
-		if ( this.options.modal ) {
-			this.overlay = new $.ui.dialog.overlay( this );
-		}
+		this._createOverlay();
 		this._moveToTop( null, true );
 		this._show( this.uiDialog, this.options.show );
 
@@ -663,24 +657,13 @@ $.widget("ui.dialog", {
 		if (this.uiDialog.is( ":data(ui-resizable)" ) ) {
 			this.uiDialog.resizable( "option", "minHeight", this._minHeight() );
 		}
-	}
-});
+	},
 
-$.extend($.ui.dialog, {
-	// TODO move to dialog instance method
-	overlay: function( dialog ) {
-		this.$el = $.ui.dialog.overlay.create( dialog );
-	}
-});
-
-// TODO get rid of instance list, at least the oldInstance stuff, and inline as dialog methods
-$.extend( $.ui.dialog.overlay, {
-	instances: [],
-	// reuse old instances due to IE memory leak with alpha transparency (see #5185)
-	oldInstances: [],
-	create: function( dialog ) {
-		if ( this.instances.length === 0 ) {
-			// TODO get rid of the timeout, which should remove the need for the #4065 workaround as well
+	_createOverlay: function() {
+		if ( !this.options.modal ) {
+			return;
+		}
+		if ( $.ui.dialog.overlay.instances.length === 0 ) {
 			// prevent use of anchors and inputs
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
@@ -697,38 +680,40 @@ $.extend( $.ui.dialog.overlay, {
 			}, 1 );
 		}
 
-		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay ui-front" ) );
+		// reuse old instances due to IE memory leak with alpha transparency (see #5185)
+		var $el = this.overlay = ( $.ui.dialog.overlay.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay ui-front" ) );
 
 		$el.appendTo( document.body );
 
-		$el.bind( "mousedown", function( event ) {
-			dialog._keepFocus( event );
+		this._on( $el, {
+			mousedown: "_keepFocus"
 		});
 
-		this.instances.push( $el );
-		return $el;
+		$.ui.dialog.overlay.instances.push( $el );
 	},
 
-	destroy: function( $el ) {
-		var indexOf = $.inArray( $el, this.instances );
+	_destroyOverlay: function() {
+		if ( !this.options.modal ) {
+			return;
+		}
+		var indexOf = $.inArray( this.overlay, $.ui.dialog.overlay.instances );
 
 		if ( indexOf !== -1 ) {
-			this.oldInstances.push( this.instances.splice( indexOf, 1 )[ 0 ] );
+			$.ui.dialog.overlay.oldInstances.push( $.ui.dialog.overlay.instances.splice( indexOf, 1 )[ 0 ] );
 		}
 
-		if ( this.instances.length === 0 ) {
+		if ( $.ui.dialog.overlay.instances.length === 0 ) {
 			$( [ document, window ] ).unbind( ".dialog-overlay" );
 		}
 
-		$el.remove();
+		this.overlay.remove();
 	}
 });
 
-$.extend( $.ui.dialog.overlay.prototype, {
-	destroy: function() {
-		$.ui.dialog.overlay.destroy( this.$el );
-	}
-});
+$.ui.dialog.overlay = {
+	instances: [],
+	oldInstances: []
+};
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
