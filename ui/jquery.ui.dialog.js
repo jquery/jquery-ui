@@ -211,7 +211,7 @@ $.widget("ui.dialog", {
 		this.opener = $( this.document[ 0 ].activeElement );
 
 		this._size();
-		this._position( this.options.position );
+		this._position();
 		if ( this.options.modal ) {
 			this.overlay = new $.ui.dialog.overlay( this );
 		}
@@ -500,38 +500,24 @@ $.widget("ui.dialog", {
 		}
 	},
 
-	_position: function( position ) {
-		var myAt = [],
-			offset = [ 0, 0 ],
+	_position: function() {
+		var position = this.options.position,
+			myAt = [],
 			isVisible;
 
 		if ( position ) {
-			// TODO we don't support 1.3.2 anymore, clean this mess up
-			// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
-	//		if (typeof position == 'string' || $.isArray(position)) {
-	//			myAt = $.isArray(position) ? position : position.split(' ');
-
-			if ( typeof position === "string" || (typeof position === "object" && "0" in position ) ) {
-				myAt = position.split ? position.split( " " ) : [ position[ 0 ], position[ 1 ] ];
+			if ( typeof position === "string" ) {
+				myAt = position.split( " " );
 				if ( myAt.length === 1 ) {
 					myAt[ 1 ] = myAt[ 0 ];
 				}
-
-				$.each( [ "left", "top" ], function( i, offsetPosition ) {
-					if ( +myAt[ i ] === myAt[ i ] ) {
-						offset[ i ] = myAt[ i ];
-						myAt[ i ] = offsetPosition;
-					}
-				});
-
 				position = {
-					my: myAt[0] + (offset[0] < 0 ? offset[0] : "+" + offset[0]) + " " +
-						myAt[1] + (offset[1] < 0 ? offset[1] : "+" + offset[1]),
+					my: myAt[0] + " " + myAt[1],
 					at: myAt.join( " " )
 				};
+				position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
 			}
 
-			position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
 		} else {
 			position = $.ui.dialog.prototype.options.position;
 		}
@@ -610,7 +596,7 @@ $.widget("ui.dialog", {
 		}
 
 		if ( key === "position" ) {
-			this._position( value );
+			this._position();
 		}
 
 		if ( key === "resizable" ) {
@@ -743,5 +729,53 @@ $.extend( $.ui.dialog.overlay.prototype, {
 		$.ui.dialog.overlay.destroy( this.$el );
 	}
 });
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+	// position option with array notation
+	// just override with old implementation
+	$.ui.dialog.prototype._position = function() {
+		var position = this.options.position,
+			myAt = [],
+			offset = [ 0, 0 ],
+			isVisible;
+
+		if ( position ) {
+			if ( typeof position === "string" || (typeof position === "object" && "0" in position ) ) {
+				myAt = position.split ? position.split( " " ) : [ position[ 0 ], position[ 1 ] ];
+				if ( myAt.length === 1 ) {
+					myAt[ 1 ] = myAt[ 0 ];
+				}
+
+				$.each( [ "left", "top" ], function( i, offsetPosition ) {
+					if ( +myAt[ i ] === myAt[ i ] ) {
+						offset[ i ] = myAt[ i ];
+						myAt[ i ] = offsetPosition;
+					}
+				});
+
+				position = {
+					my: myAt[0] + (offset[0] < 0 ? offset[0] : "+" + offset[0]) + " " +
+						myAt[1] + (offset[1] < 0 ? offset[1] : "+" + offset[1]),
+					at: myAt.join( " " )
+				};
+			}
+
+			position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
+		} else {
+			position = $.ui.dialog.prototype.options.position;
+		}
+
+		// need to show the dialog to get the actual offset in the position plugin
+		isVisible = this.uiDialog.is( ":visible" );
+		if ( !isVisible ) {
+			this.uiDialog.show();
+		}
+		this.uiDialog.position( position );
+		if ( !isVisible ) {
+			this.uiDialog.hide();
+		}
+	};
+}
 
 }( jQuery ) );
