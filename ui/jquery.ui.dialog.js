@@ -152,6 +152,9 @@ $.widget("ui.dialog", {
 		return this.uiDialog;
 	},
 
+	disable: $.noop,
+	enable: $.noop,
+
 	close: function( event ) {
 		var that = this;
 
@@ -576,6 +579,10 @@ $.widget("ui.dialog", {
 			uiDialog
 				.removeClass( this.options.dialogClass )
 				.addClass( value );
+		}
+
+		if ( key === "disabled" ) {
+			return;
 		}
 
 		this._super( key, value );
