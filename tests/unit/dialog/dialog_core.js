@@ -48,34 +48,36 @@ test( "focus tabbable", function() {
 			}]
 		};
 
-	// 1. first element inside the dialog matching [autofocus]
 	el = $( "<div><input><input autofocus></div>" ).dialog( options );
-	equal( document.activeElement, el.find( "input" )[ 1 ] );
+	equal( document.activeElement, el.find( "input" )[ 1 ], "1. first element inside the dialog matching [autofocus]" );
 	el.remove();
 
-	// 2. tabbable element inside the content element
-	el = $( "<div><input><input></div>" ).dialog( options );
-	equal( document.activeElement, el.find( "input" )[ 0 ] );
-	el.remove();
+	// IE8 fails to focus the input, <body> ends up being the activeElement
+	// so wait for that stupid browser
+	stop();
+	setTimeout(function() {
+		el = $( "<div><input><input></div>" ).dialog( options );
+		equal( document.activeElement, el.find( "input" )[ 0 ], "2. tabbable element inside the content element" );
+		el.remove();
 
-	// 3. tabbable element inside the buttonpane
-	el = $( "<div>text</div>" ).dialog( options );
-	equal( document.activeElement, el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ] );
-	el.remove();
+		el = $( "<div>text</div>" ).dialog( options );
+		equal( document.activeElement, el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ], "3. tabbable element inside the buttonpane" );
+		el.remove();
 
-	// 4. the close button
-	el = $( "<div>text</div>" ).dialog();
-	equal( document.activeElement, el.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ] );
-	el.remove();
+		el = $( "<div>text</div>" ).dialog();
+		equal( document.activeElement, el.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ], "4. the close button" );
+		el.remove();
 
-	// 5. the dialog itself
-	el = $( "<div>text</div>" ).dialog({
-		autoOpen: false
-	});
-	el.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
-	el.dialog( "open" );
-	equal( document.activeElement, el.parent()[ 0 ] );
-	el.remove();
+		el = $( "<div>text</div>" ).dialog({
+			autoOpen: false
+		});
+		el.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
+		el.dialog( "open" );
+		equal( document.activeElement, el.parent()[ 0 ], "5. the dialog itself" );
+		el.remove();
+
+		start();
+	}, 13);
 });
 
 })(jQuery);
