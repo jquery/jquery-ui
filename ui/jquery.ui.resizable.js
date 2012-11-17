@@ -266,10 +266,11 @@ $.widget("ui.resizable", $.ui.mouse, {
 			el = this.element;
 
 		this.resizing = true;
-		this.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
 
 		// bugfix for http://dev.jquery.com/ticket/1749
-		if (el.is('.ui-draggable') || (/absolute/).test(el.css('position'))) {
+		if ( (/absolute/).test( el.css('position') ) ) {
+			el.css({ position: 'absolute', top: el.css('top'), left: el.css('left') });
+		} else if (el.is('.ui-draggable')) {
 			el.css({ position: 'absolute', top: iniPos.top, left: iniPos.left });
 		}
 
