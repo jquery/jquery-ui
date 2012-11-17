@@ -350,7 +350,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				top = (parseInt(that.element.css('top'), 10) + (that.position.top - that.originalPosition.top)) || null;
 
 			if (!o.animate)
-				this.element.css($.extend(s, { top: top, left: left }));
+				this.element.css($.extend(s, { top: self.position.top, left: self.position.left }));
 
 			that.helper.height(that.size.height);
 			that.helper.width(that.size.width);
