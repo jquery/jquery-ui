@@ -348,7 +348,7 @@ $.widget("ui.dialog", {
 				button = $( "<button></button>", props )
 					.appendTo( that.uiButtonSet );
 				if ( $.fn.button ) {
-					button.button();
+					button.button({icons: props.icons, text: props.showText});
 				}
 			});
 			this.uiDialog.addClass( "ui-dialog-buttons" );
