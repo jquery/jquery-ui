@@ -5,11 +5,10 @@ module( "mask: options" );
 test( "clearEmpty", function() {
 	expect( 4 );
 	var input = $( "#mask1" ).val( "" ).mask({
-			mask: "99/99/99",
-			placeholder: "_",
-			clearEmpty: true
-		}),
-		mask = input.data( "mask" );
+		mask: "99/99/99",
+		placeholder: "_",
+		clearEmpty: true
+	});
 
 	equal( input.val(), "", "Empty value with clearEmpty displays no mask" );
 	TestHelpers.focus( input );
@@ -48,7 +47,7 @@ test( "mask", function() {
 test( "mask with optional input", function() {
 	expect( 1 );
 	var input = $( "#mask1" ).val( "1234" ).mask({
-		mask: "(999) 999-9999?x9999",
+		mask: "(999) 999-9999?x9999"
 	});
 
 	equal( input.val(), "(123) 4__-____", "Initial value" );
@@ -57,7 +56,7 @@ test( "mask with optional input", function() {
 test( "mask with multiple optional inputs", function() {
 	expect( 1 );
 	var input = $( "#mask1" ).val( "1234" ).mask({
-		mask: "(999) 999-9999?x9?9?9?9",
+		mask: "(999) 999-9999?x9?9?9?9"
 	});
 
 	equal( input.val(), "(123) 4__-____", "Initial value" );
@@ -66,7 +65,7 @@ test( "mask with multiple optional inputs", function() {
 test( "mask with escaped characters", function() {
 	expect( 1 );
 	var input = $( "#mask1" ).val( "1234" ).mask({
-		mask: "(\\9\\9\\9)\\\\ 999-99\\a\\*\\?x9999",
+		mask: "(\\9\\9\\9)\\\\ 999-99\\a\\*\\?x9999"
 	});
 
 	equal( input.val(), "(999)\\ 123-4_a*?x____", "Initial value" );
@@ -75,7 +74,7 @@ test( "mask with escaped characters", function() {
 test( "escaped use of custom mask with wrapper ", function() {
 	expect( 1 );
 	var input = $( "#mask1" ).val( "1" ).mask({
-		mask: "9\\<xyz\\>",
+		mask: "9\\<xyz\\>"
 	});
 
 	equal( input.val(), "1<xyz>", "Initial value" );
@@ -90,23 +89,23 @@ test( "custom mask with wrapper and escape", function() {
 				if ( $.inArray(value, [ "mon", "tue", "wed", "thu", "fri", "sat", "sun" ]) ) {
 					return value;
 				} else if ( $.inArray(value, [ "m", "mo" ])) {
-				    return "mon";
+					return "mon";
 				} else if ( value === "t" ) {
-				    return "t";
+					return "t";
 				} else if ( value === "tu" ) {
-				    return "tue";
+					return "tue";
 				} else if ( value === "thu" ) {
-				    return "thu";
+					return "thu";
 				} else if ( $.inArray(value, [ "w", "we" ]) ) {
-				    return "wed";
+					return "wed";
 				} else if ( $.inArray(value, [ "f", "fr" ]) ) {
-				    return "fri";
+					return "fri";
 				} else if ( value === "s" ) {
-				    return "s";
+					return "s";
 				} else if ( value === "sa" ) {
-				    return "sat";
+					return "sat";
 				} else if ( value === "su" ) {
-				    return "sun";
+					return "sun";
 				}
 			},
 			d: /[0-9]/

@@ -193,7 +193,7 @@ $.widget( "ui.timepicker", {
 
 		return mask;
 	},
-	_highlightField: function( field ) {
+	_highlightField: function() {
 		this.mask._caretSelect( this.currentField * 3 );
 	},
 	_setField: function( field ) {

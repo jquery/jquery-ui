@@ -28,7 +28,7 @@ test( "value: able to get (and set) raw values", function() {
 test( "value: able to get (and set) raw values with optional section", function() {
 	expect( 5 );
 	var input = $( "#mask1" ).val("1234").mask({
-		mask: "(999) 999-9999?x9999",
+		mask: "(999) 999-9999?x9999"
 	});
 
 	equal( input.mask('value'), "1234", "Reading initial value" );

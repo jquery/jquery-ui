@@ -161,7 +161,7 @@ $.widget( "ui.mask", {
 		return value;
 	},
 	_events: {
-		focus: function( event ) {
+		focus: function() {
 			this.lastUnsavedValue = this.element.val();
 			this._paint( true );
 			this._caretSelect( this._seekRight( this._parseValue() ) );
@@ -171,10 +171,10 @@ $.widget( "ui.mask", {
 				this._justFocused = false;
 			}, 100);
 		},
-		click: function( event ) {
-			/* Normally, the call to handle this in the focus event handler would be
-			   sufficient, but Chrome fires the focus events before positioning the
-			   cursor based on where the user clicked (and then fires the click event). */
+		click: function() {
+			// Normally, the call to handle this in the focus event handler would be
+			// sufficient, but Chrome fires the focus events before positioning the
+			// cursor based on where the user clicked (and then fires the click event).
 
 			// We only want to move the caret on clicks that resulted in focus
 			if ( this._justFocused ) {
@@ -182,7 +182,7 @@ $.widget( "ui.mask", {
 				this._justFocused = false;
 			}
 		},
-		blur: function( event ) {
+		blur: function() {
 			this._justFocused = false;
 
 			// because we are constantly setting the value of the input, the change event
@@ -311,7 +311,7 @@ $.widget( "ui.mask", {
 		}
 		return true;
 	},
-	_paste: function(event) {
+	_paste: function() {
 		this._delay( function() {
 			var position = this._parseValue();
 			this._paint();
@@ -342,7 +342,7 @@ $.widget( "ui.mask", {
 		return true;
 	},
 	_removeCharacter: function( mask, index ) {
-	    var x, bufferObject;
+		var x, bufferObject;
 
 		for ( x = index ; x < mask.length - 1 ; x++ ) {
 			bufferObject = this.buffer[ x + 1 ];
@@ -361,7 +361,7 @@ $.widget( "ui.mask", {
 		return mask.substring( 0, index ) + mask.substring( index + 1 );
 	},
 	_parseMask: function() {
-		var key, x, bufferObject, optionalPosition, builder,
+		var key, x, optionalPosition,
 			index = -1,
 			options = this.options,
 			mask = options.mask,
@@ -375,7 +375,7 @@ $.widget( "ui.mask", {
 		// search for escaped reserved characters
 		for ( index = 0 ; index < mask.length - 1 ; index++ ) {
 			if ( mask.charAt( index ) === "\\" &&
-				 $.inArray( mask.charAt( index + 1 ), reservedChars ) !== -1 ) {
+				$.inArray( mask.charAt( index + 1 ), reservedChars ) !== -1 ) {
 				// remove escape character
 				mask = mask.substring( 0, index ) + mask.substring( index + 1 );
 
