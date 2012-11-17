@@ -123,20 +123,20 @@ $.widget("ui.dialog", {
 			oldPosition = this.oldPosition;
 
 		this._destroyOverlay();
-		this.uiDialog.hide();
+
 		this.element
 			.removeUniqueId()
 			.removeClass( "ui-dialog-content ui-widget-content" )
 			.hide()
-			// TODO restore old position directly, instead of appending to body first
-			.appendTo( "body" );
+			// without detaching first, the following becomes really slow
+			.detach();
+
 		this.uiDialog.remove();
 
 		if ( this.originalTitle ) {
 			this.element.attr( "title", this.originalTitle );
 		}
 
-		// TODO do this before removing the wrapper
 		next = oldPosition.parent.children().eq( oldPosition.index );
 		// Don't try to place the dialog next to itself (#8613)
 		if ( next.length && next[ 0 ] !== this.element[ 0 ] ) {
