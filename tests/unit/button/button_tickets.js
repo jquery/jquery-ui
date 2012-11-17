@@ -5,6 +5,17 @@
 
 module( "button: tickets" );
 
+test( "#5295 - button does not remove hoverstate if disabled" , function() {
+	expect( 1 );
+	var btn = $("#button").button();
+	btn.hover( function() {
+		btn.button( "disable" );
+	});
+	btn.trigger( "mouseenter" );
+	btn.trigger( "mouseleave" );
+	ok( !btn.is( ".ui-state-hover") );
+});
+
 test( "#5946 - buttonset should ignore buttons that are not :visible", function() {
 	expect( 2 );
 	$( "#radio01" ).next().andSelf().hide();
@@ -59,6 +70,14 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
+});
+
+test( "#8237 - Anchor tags lose disabled state when refreshed", function() {
+	expect( 1 );
+	var element = $( "<a id='a8237'></a>" ).appendTo( "#qunit-fixture" );
+
+	element.button({ disabled: true }).button( "refresh" );
+	ok( element.button( "option", "disabled" ), "Anchor button should remain disabled after refresh" );
 });
 
 })( jQuery );

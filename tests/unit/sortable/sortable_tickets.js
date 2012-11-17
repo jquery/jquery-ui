@@ -3,59 +3,45 @@
  */
 (function($) {
 
-var el, offsetBefore, offsetAfter, dragged;
-
-function drag(handle, dx, dy) {
-	offsetBefore = $(handle).offset();
-	$(handle).simulate("drag", {
-		dx: dx || 0,
-		dy: dy || 0
-	});
-	dragged = { dx: dx, dy: dy };
-	offsetAfter = $(handle).offset();
-}
-
-function sort(handle, dx, dy, index, msg) {
-	drag(handle, dx, dy);
-	equal($(handle).parent().children().index(handle), index, msg);
-}
-
 module("sortable: tickets");
 
 test("#3019: Stop fires too early", function() {
+    expect(2);
 
-	var helper = null;
-	el = $("#sortable").sortable({
-		stop: function(event, ui) {
-			helper = ui.helper;
-		}
-	});
+	var helper = null,
+        el = $("#sortable").sortable({
+            stop: function(event, ui) {
+                helper = ui.helper;
+            }
+        });
 
-	sort($("li", el)[0], 0, 40, 2, 'Dragging the sortable');
+	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, 'Dragging the sortable');
 	equal(helper, null, "helper should be false");
 
 });
 
 test('#4752: link event firing on sortable with connect list', function () {
+    expect( 10 );
+
     var fired = {},
         hasFired = function (type) { return (type in fired) && (true === fired[type]); };
 
     $('#sortable').clone().attr('id', 'sortable2').insertAfter('#sortable');
 
-    $('#main ul').sortable({
-        connectWith: '#main ul',
-        change: function (e, ui) {
+    $('#qunit-fixture ul').sortable({
+        connectWith: '#qunit-fixture ul',
+        change: function () {
             fired.change = true;
         },
-        receive: function (e, ui) {
+        receive: function () {
             fired.receive = true;
         },
-        remove: function (e, ui) {
+        remove: function () {
             fired.remove = true;
         }
     });
 
-    $('#main ul li').live('click.ui-sortable-test', function () {
+    $('#qunit-fixture ul').bind('click.ui-sortable-test', function () {
         fired.click = true;
     });
 

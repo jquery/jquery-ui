@@ -26,17 +26,8 @@
 	<script src="selectable_events.js"></script>
 	<script src="selectable_methods.js"></script>
 	<script src="selectable_options.js"></script>
+	<script src="selectable_test_helpers.js"></script>
 
-	<script>
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("selectable", function() { ok(true, "disabled selectable testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>

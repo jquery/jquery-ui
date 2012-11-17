@@ -29,7 +29,7 @@ test( "destroy", function() {
 test( "enable/disable", function() {
 	expect( 3 );
 	var element = $( "#menu1" ).menu({
-		select: function( event, ui ) {
+		select: function() {
 			log();
 		}
 	});
@@ -58,6 +58,15 @@ test( "refresh", function() {
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.children( ":last" ).remove().end().menu( "refresh" );
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+});
+
+test( "refresh submenu", function() {
+	expect( 2 );
+	var element = $( "#menu2" ).menu();
+	equal( element.find( "ul:first .ui-menu-item" ).length, 3 );
+	element.find( "ul" ).andSelf().append( "<li><a href=\"#\">New Item</a></li>" );
+	element.menu("refresh");
+	equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
 });
 
 test( "widget", function() {

@@ -5,9 +5,9 @@ TestHelpers.commonWidgetTests( "tooltip", {
 		hide: true,
 		items: "[title]:not([disabled])",
 		position: {
-			my: "left+15 center",
-			at: "right center",
-			collision: "flipfit flipfit"
+			my: "left top+15",
+			at: "left bottom",
+			collision: "flipfit flip"
 		},
 		show: true,
 		tooltipClass: null,

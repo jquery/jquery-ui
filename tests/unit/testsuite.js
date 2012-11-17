@@ -12,6 +12,10 @@ function includeScript( url ) {
 	document.write( "<script src='../../../" + url + "'></script>" );
 }
 
+function url( value ) {
+	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
+}
+
 reset = QUnit.reset;
 QUnit.reset = function() {
 	// Ensure jQuery events and data on the fixture are properly removed
@@ -65,11 +69,11 @@ TestHelpers.testJshint = function( module ) {
 
 		$.when(
 			$.ajax({
-				url: "../../../ui/.jshintrc",
+				url: url("../../../ui/.jshintrc"),
 				dataType: "json"
 			}),
 			$.ajax({
-				url: "../../../ui/jquery.ui." + module + ".js",
+				url: url("../../../ui/jquery.ui." + module + ".js"),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
@@ -112,7 +116,7 @@ function testWidgetDefaults( widget, defaults ) {
 	// ensure that all defaults were tested
 	test( "tested defaults", function() {
 		var count = 0;
-		$.each( pluginDefaults, function( key, val ) {
+		$.each( pluginDefaults, function( key ) {
 			expect( ++count );
 			ok( key in defaults, key );
 		});
@@ -166,6 +170,14 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 };
 
 /*
+ * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
+ */
+window.closeEnough = function( actual, expected, maxDifference, message ) {
+	var passes = (actual === expected) || Math.abs(actual - expected) <= maxDifference;
+	QUnit.push(passes, actual, expected, message);
+};
+
+/*
  * Experimental assertion for comparing DOM objects.
  *
  * Serializes an element and some properties and attributes and it's children if any, otherwise the text.
@@ -200,7 +212,34 @@ window.domEqual = function( selector, modifier, message ) {
 			"tabIndex",
 			"title"
 		];
+/*
+	function getElementStyles( elem ) {
+		var key, len,
+			style = elem.ownerDocument.defaultView ?
+				elem.ownerDocument.defaultView.getComputedStyle( elem, null ) :
+				elem.currentStyle,
+			styles = {};
 
+		if ( style && style.length && style[ 0 ] && style[ style[ 0 ] ] ) {
+			len = style.length;
+			while ( len-- ) {
+				key = style[ len ];
+				if ( typeof style[ key ] === "string" ) {
+					styles[ $.camelCase( key ) ] = style[ key ];
+				}
+			}
+		// support: Opera, IE <9
+		} else {
+			for ( key in style ) {
+				if ( typeof style[ key ] === "string" ) {
+					styles[ key ] = style[ key ];
+				}
+			}
+		}
+
+		return styles;
+	}
+*/
 	function extract( elem ) {
 		if ( !elem || !elem.length ) {
 			QUnit.push( false, actual, expected,
@@ -218,12 +257,14 @@ window.domEqual = function( selector, modifier, message ) {
 			var value = elem.attr( attr );
 			result[ attr ] = value !== undefined ? value : "";
 		});
+		// TODO: Enable when we can figure out what's happening with accordion
+		//result.style = getElementStyles( elem[ 0 ] );
 		result.events = $._data( elem[ 0 ], "events" );
 		result.data = $.extend( {}, elem.data() );
 		delete result.data[ $.expando ];
 		children = elem.children();
 		if ( children.length ) {
-			result.children = elem.children().map(function( ind ) {
+			result.children = elem.children().map(function() {
 				return extract( $( this ) );
 			}).get();
 		} else {
@@ -231,11 +272,22 @@ window.domEqual = function( selector, modifier, message ) {
 		}
 		return result;
 	}
-	expected = extract( $( selector ) );
-	modifier( $( selector ) );
 
-	actual = extract( $( selector ) );
-	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
+	function done() {
+		actual = extract( $( selector ) );
+		QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
+	}
+
+	// Get current state prior to modifier
+	expected = extract( $( selector ) );
+
+	// Run modifier (async or sync), then compare state via done()
+	if ( modifier.length ) {
+		modifier( done );
+	} else {
+		modifier();
+		done();
+	}
 };
 
 }( jQuery ));

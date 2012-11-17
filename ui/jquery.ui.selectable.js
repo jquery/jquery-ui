@@ -25,20 +25,20 @@ $.widget("ui.selectable", $.ui.mouse, {
 		tolerance: 'touch'
 	},
 	_create: function() {
-		var that = this;
+		var selectees,
+			that = this;
 
 		this.element.addClass("ui-selectable");
 
 		this.dragged = false;
 
 		// cache selectee children based on filter
-		var selectees;
 		this.refresh = function() {
 			selectees = $(that.options.filter, that.element[0]);
 			selectees.addClass("ui-selectee");
 			selectees.each(function() {
-				var $this = $(this);
-				var pos = $this.offset();
+				var $this = $(this),
+					pos = $this.offset();
 				$.data(this, "selectable-item", {
 					element: this,
 					$element: $this,
@@ -72,14 +72,14 @@ $.widget("ui.selectable", $.ui.mouse, {
 	},
 
 	_mouseStart: function(event) {
-		var that = this;
+		var that = this,
+			options = this.options;
 
 		this.opos = [event.pageX, event.pageY];
 
-		if (this.options.disabled)
+		if (this.options.disabled) {
 			return;
-
-		var options = this.options;
+		}
 
 		this.selectees = $(options.filter, this.element[0]);
 
@@ -114,9 +114,10 @@ $.widget("ui.selectable", $.ui.mouse, {
 		});
 
 		$(event.target).parents().andSelf().each(function() {
-			var selectee = $.data(this, "selectable-item");
+			var doSelect,
+				selectee = $.data(this, "selectable-item");
 			if (selectee) {
-				var doSelect = (!event.metaKey && !event.ctrlKey) || !selectee.$element.hasClass('ui-selected');
+				doSelect = (!event.metaKey && !event.ctrlKey) || !selectee.$element.hasClass('ui-selected');
 				selectee.$element
 					.removeClass(doSelect ? "ui-unselecting" : "ui-selected")
 					.addClass(doSelect ? "ui-selecting" : "ui-unselecting");
@@ -140,28 +141,37 @@ $.widget("ui.selectable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		var that = this;
+
 		this.dragged = true;
 
-		if (this.options.disabled)
+		if (this.options.disabled) {
 			return;
+		}
 
-		var options = this.options;
+		var tmp,
+			that = this,
+			options = this.options,
+			x1 = this.opos[0],
+			y1 = this.opos[1],
+			x2 = event.pageX,
+			y2 = event.pageY;
 
-		var x1 = this.opos[0], y1 = this.opos[1], x2 = event.pageX, y2 = event.pageY;
-		if (x1 > x2) { var tmp = x2; x2 = x1; x1 = tmp; }
-		if (y1 > y2) { var tmp = y2; y2 = y1; y1 = tmp; }
+		if (x1 > x2) { tmp = x2; x2 = x1; x1 = tmp; }
+		if (y1 > y2) { tmp = y2; y2 = y1; y1 = tmp; }
 		this.helper.css({left: x1, top: y1, width: x2-x1, height: y2-y1});
 
 		this.selectees.each(function() {
-			var selectee = $.data(this, "selectable-item");
+			var selectee = $.data(this, "selectable-item"),
+				hit = false;
+
 			//prevent helper from being selected if appendTo: selectable
-			if (!selectee || selectee.element == that.element[0])
+			if (!selectee || selectee.element === that.element[0]) {
 				return;
-			var hit = false;
-			if (options.tolerance == 'touch') {
+			}
+
+			if (options.tolerance === 'touch') {
 				hit = ( !(selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1) );
-			} else if (options.tolerance == 'fit') {
+			} else if (options.tolerance === 'fit') {
 				hit = (selectee.left > x1 && selectee.right < x2 && selectee.top > y1 && selectee.bottom < y2);
 			}
 
@@ -227,8 +237,6 @@ $.widget("ui.selectable", $.ui.mouse, {
 		var that = this;
 
 		this.dragged = false;
-
-		var options = this.options;
 
 		$('.ui-unselecting', this.element[0]).each(function() {
 			var selectee = $.data(this, "selectable-item");

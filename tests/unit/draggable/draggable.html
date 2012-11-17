@@ -26,17 +26,8 @@
 	<script src="draggable_events.js"></script>
 	<script src="draggable_methods.js"></script>
 	<script src="draggable_options.js"></script>
+	<script src="draggable_test_helpers.js"></script>
 
-	<script>
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("draggable", function() { ok(true, "disabled draggable testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>
@@ -48,11 +39,14 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
 
+<div id="main"></div>
+
 <div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>
 <div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span>Absolute</span></div>
 <div style='width: 1px; height: 1000px;'></div>
 <div style="position: absolute; width: 1px; height: 2000px;"></div>
 
 </div>
+
 </body>
 </html>

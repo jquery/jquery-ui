@@ -2,6 +2,14 @@
 
 module( "tooltip: options" );
 
+test( "disabled: true", function() {
+	expect( 1 );
+	$( "#tooltipped1" ).tooltip({
+		disabled: true
+	}).tooltip( "open" );
+	equal( $( ".ui-tooltip" ).length, 0 );
+});
+
 test( "content: default", function() {
 	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
@@ -67,7 +75,7 @@ test( "content: change while open", function() {
 
 test( "content: string", function() {
 	expect( 1 );
-	var element = $( "#tooltipped1" ).tooltip({
+	$( "#tooltipped1" ).tooltip({
 		content: "just a string",
 		open: function( event, ui ) {
 			equal( ui.tooltip.text(), "just a string" );
@@ -101,6 +109,49 @@ test( "tooltipClass", function() {
 		tooltipClass: "custom"
 	}).tooltip( "open" );
 	ok( $( "#" + element.data( "ui-tooltip-id" ) ).hasClass( "custom" ) );
+});
+
+test( "track + show delay", function() {
+	expect( 2 );
+	var event,
+		leftVal = 314,
+		topVal = 159,
+		offsetVal = 26,
+		element = $( "#tooltipped1" ).tooltip({
+			track: true,
+			show: {
+				delay: 1
+			},
+			position: {
+				my: "left+" + offsetVal + " top+" + offsetVal,
+				at: "right bottom"
+			}
+		});
+
+	event = $.Event( "mouseover" );
+	event.target = $( "#tooltipped1" )[ 0 ];
+	event.originalEvent = { type: "mouseover" };
+	event.pageX = leftVal;
+	event.pageY = topVal;
+	element.trigger( event );
+
+	event = $.Event( "mousemove" );
+	event.target = $( "#tooltipped1" )[ 0 ];
+	event.originalEvent = { type: "mousemove" };
+	event.pageX = leftVal;
+	event.pageY = topVal;
+	element.trigger( event );
+
+	equal( $( ".ui-tooltip" ).css( "left" ), leftVal + offsetVal + "px" );
+	equal( $( ".ui-tooltip" ).css( "top" ), topVal + offsetVal + "px" );
+});
+
+test( "track and programmatic focus", function() {
+	expect( 1 );
+	$( "#qunit-fixture div input" ).tooltip({
+		track: true
+	}).focus();
+	equal( "inputtitle", $( ".ui-tooltip" ).text() );
 });
 
 }( jQuery ) );

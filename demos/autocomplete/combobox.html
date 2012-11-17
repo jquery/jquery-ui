@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Combobox</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.8.2.js"></script>
+	<script src="../../jquery-1.8.3.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
@@ -111,7 +111,6 @@
 
 				input.data( "autocomplete" )._renderItem = function( ul, item ) {
 					return $( "<li>" )
-						.data( "item.autocomplete", item )
 						.append( "<a>" + item.label + "</a>" )
 						.appendTo( ul );
 				};

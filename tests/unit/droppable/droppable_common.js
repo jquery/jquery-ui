@@ -3,6 +3,7 @@ TestHelpers.commonWidgetTests( "droppable", {
 		accept: "*",
 		activeClass: false,
 		addClasses: true,
+		create: null,
 		disabled: false,
 		greedy: false,
 		hoverClass: false,

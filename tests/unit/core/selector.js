@@ -157,6 +157,12 @@ test("focusable - area elements", function() {
 	isNotFocusable('#areaNoImg', 'not associated with an image');
 });
 
+test( "focusable - dimensionless parent with overflow", function() {
+	expect( 1 );
+
+	isFocusable( "#dimensionlessParent", "input" );
+});
+
 test("tabbable - visible, enabled elements", function() {
 	expect(18);
 
@@ -234,6 +240,12 @@ test("tabbable - area elements", function() {
 	isTabbable('#areaCoordsHref', 'coords and href');
 	isTabbable('#areaNoCoordsHref', 'href but no coords');
 	isNotTabbable('#areaNoImg', 'not associated with an image');
+});
+
+test( "tabbable - dimensionless parent with overflow", function() {
+	expect( 1 );
+
+	isTabbable( "#dimensionlessParent", "input" );
 });
 
 })(jQuery);

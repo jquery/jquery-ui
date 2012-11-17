@@ -26,19 +26,26 @@
 	<script src="sortable_events.js"></script>
 	<script src="sortable_methods.js"></script>
 	<script src="sortable_options.js"></script>
+	<script src="sortable_test_helpers.js"></script>
 	<script src="sortable_tickets.js"></script>
 
-	<script>
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("sortable", function() { ok(true, "disabled sortable testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
+	<style>
+	#sortable, #sortable2 {
+		position:relative;
+		top:0;
+		left:0;
+		padding: 0;
+		margin: 1px;
+		border-width: 0;
+	}
+	#sortable li{
+		padding: 0;
+		margin: 0;
+		border-width: 0;
+		height:19px;
+	}
+	</style>
 </head>
 <body>
 

@@ -6,9 +6,12 @@ var disabled = TestHelpers.tabs.disabled,
 module( "tabs: methods" );
 
 test( "destroy", function() {
-	expect( 1 );
+	expect( 2 );
 	domEqual( "#tabs1", function() {
 		$( "#tabs1" ).tabs().tabs( "destroy" );
+	});
+	domEqual( "#tabs2", function() {
+		$( "#tabs2" ).tabs().tabs( "destroy" );
 	});
 });
 
@@ -198,11 +201,7 @@ asyncTest( "load", function() {
 
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( uiTab.length, 1, "tab length" );
-		if ( $.uiBackCompat === false ) {
-			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-		} else {
-			strictEqual( uiTab[ 0 ], tab.find( ".ui-tabs-anchor" )[ 0 ], "tab" );
-		}
+		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
 		equal( uiPanel.length, 1, "panel length" );
 		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 		equal( uiPanel.find( "p" ).length, 1, "panel html" );
@@ -249,11 +248,7 @@ asyncTest( "load", function() {
 
 			ok( !( "originalEvent" in event ), "originalEvent" );
 			equal( uiTab.length, 1, "tab length" );
-			if ( $.uiBackCompat === false ) {
-				strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-			} else {
-				strictEqual( uiTab[ 0 ], tab.find( ".ui-tabs-anchor" )[ 0 ], "tab" );
-			}
+			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
 			equal( uiPanel.length, 1, "panel length" );
 			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 			state( element, 0, 0, 0, 1, 0 );

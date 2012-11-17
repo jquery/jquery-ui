@@ -14,7 +14,7 @@ test( "{ disabled: true }", function() {
 	expect( 2 );
 	var element = $( "#menu1" ).menu({
 		disabled: true,
-		select: function(event, ui) {
+		select: function() {
 			log();
 		}
 	});
@@ -29,7 +29,7 @@ test( "{ disabled: false }", function() {
 	expect( 2 );
 	var element = $( "#menu1" ).menu({
 		disabled: false,
-		select: function( event, ui ) {
+		select: function() {
 			log();
 		}
 	});
