@@ -753,7 +753,7 @@ $.ui.plugin.add("draggable", "snap", {
 				t = inst.snapElements[i].top, b = t + inst.snapElements[i].height;
 
 			//Yes, I know, this is insane ;)
-			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) {
+			if(x2 < l - d || x1 > r + d || y2 < t - d || y1 > b + d) {
 				if(inst.snapElements[i].snapping) (inst.options.snap.release && inst.options.snap.release.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
 				inst.snapElements[i].snapping = false;
 				continue;
