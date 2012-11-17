@@ -53,7 +53,7 @@ function submit( commit, tests, configFile, version, done ) {
 		runMax: config.runMax,
 		"runNames[]": Object.keys( tests ),
 		"runUrls[]": testUrls,
-		"browserSets[]": [ "popular-no-ie6" ]
+		"browserSets[]": config.browserSets
 	});
 }
 
