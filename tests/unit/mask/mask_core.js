@@ -17,7 +17,7 @@ test( "_caret() can move and read the text cursor", 4, function() {
 	var input = $( "#mask1" ).val("1234").mask({
 			mask: "9999"
 		}),
-		instance = input.data( "mask" );
+		instance = input.data( "ui-mask" );
 
 	input.focus();
 	instance._caret( 0 );
@@ -102,7 +102,7 @@ test( "Default values provided by function", function() {
 		definitions: defs
 	});
 	equal( input.val(), "11", "No value was accepted, so the 'default' from the mask was provided" );
-	
+
 });
 
 }( jQuery ) );

@@ -7,7 +7,7 @@ test( "focus: Initial Caret Positioning", 4, function() {
 			mask: "9",
 			clearEmpty: false
 		}),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	equal( input.val(), "_", "Initial Value Expected" );
 	TestHelpers.focus( input );
@@ -24,7 +24,7 @@ test( "focus: Initial Caret Positioning", 4, function() {
 test( "keydown: Backspace pulls values from right", function() {
 	expect( 12 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "999" }),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 
 	TestHelpers.focus( input );
@@ -64,7 +64,7 @@ test( "keydown: Backspace pulls values from right", function() {
 test( "keydown: Backspace with the cursor to the right of a mask literal", function() {
 	expect( 6 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "1-23", "Initial Value Expected" );
@@ -86,7 +86,7 @@ test( "keydown: Backspace with the cursor to the right of a mask literal", funct
 test( "keydown: Backspace with multiple values higlighted", function() {
 	expect( 3 );
 	var input = $( "#mask1" ).val("1234567890").mask({ mask: "(999)999-9999" }),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "(123)456-7890", "Initial Value Expected" );
@@ -100,7 +100,7 @@ test( "keydown: Backspace with multiple values higlighted", function() {
 test( "keypress: Typing with multiple values higlighted", function() {
 	expect( 3 );
 	var input = $( "#mask1" ).val("1234567890").mask({ mask: "(999)999-9999" }),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "(123)456-7890", "Initial Value Expected" );
@@ -121,7 +121,7 @@ test( "keypress: Typing with multi-character fields", function() {
 				}
 			}
 		}),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "__-__-__", "Initial Value Expected" );
@@ -156,7 +156,7 @@ test( "keypress: Typing with multi-character only accepts valid values", functio
 				}
 			}
 		}),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "__-__-__", "Initial Value Expected" );
@@ -204,7 +204,7 @@ test( "keypress: Backspace with multi-character ", 6, function() {
 				}
 			}
 		}),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "aa-bb-cc", "Initial Value Expected" );
@@ -225,7 +225,7 @@ test( "keypress: Backspace with multi-character ", 6, function() {
 test( "keydown: Delete pulling values", function() {
 	expect( 18 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "1-23", "Initial value expected" );
@@ -280,7 +280,7 @@ test( "keydown: Delete pulling values", function() {
 test( "keydown: escape returns to original value", function() {
 	expect( 3 );
 	var input = $( "#mask1" ).val("6").mask({ mask: "9" }),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	equal( input.val(), "6", "Initial value expected" );
 	TestHelpers.focus( input );
@@ -300,7 +300,7 @@ test( "keypress: typing behaviors", function() {
 			mask: "9-9",
 			clearEmpty: false
 		}),
-		mask = input.data( "mask" );
+		mask = input.data( "ui-mask" );
 
 	TestHelpers.focus( input );
 	equal( input.val(), "_-_", "Initial value expected" );

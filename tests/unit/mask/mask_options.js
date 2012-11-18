@@ -134,7 +134,7 @@ test( "mask option parser", 1, function() {
 			mask: "hh:ss:ss.999",
 			definitions: defs
 		}),
-		instance = input.data( "mask" );
+		instance = input.data( "ui-mask" );
 	deepEqual( instance.buffer, [
 		{
 			valid: defs.hh,
