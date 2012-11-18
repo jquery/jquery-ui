@@ -71,6 +71,8 @@ $.widget( "ui.progressbar", {
 			val = newValue;
 		}
 
+		this.indeterminate = val === false;
+
 		// sanitize value
 		if ( typeof val !== "number" ) {
 			val = 0;
@@ -107,26 +109,33 @@ $.widget( "ui.progressbar", {
 	},
 
 	_percentage: function() {
-		return 100 * this.options.value / this.options.max;
+		return this.indeterminate ? 100 : 100 * this.options.value / this.options.max;
 	},
 
 	_refreshValue: function() {
-		var percentage = this._percentage();
+		var value = this.value(),
+			percentage = this._percentage(),
+			overlay = this.valueDiv.children().eq( 0 );
 
-		if ( this.oldValue !== this.options.value ) {
-			this.oldValue = this.options.value;
+		overlay.toggleClass( "ui-progressbar-overlay", this.indeterminate );
+		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
+
+		if ( this.oldValue !== value ) {
+			this.oldValue = value;
 			this._trigger( "change" );
-		}
-		if ( this.options.value === this.options.max ) {
-			this._trigger( "complete" );
 		}
 
 		this.valueDiv
-			.toggle( this.options.value > this.min )
-			.toggleClass( "ui-corner-right", this.options.value === this.options.max )
+			.toggle( this.indeterminate || value > this.min )
+			.toggleClass( "ui-corner-right", value === this.options.max )
 			.width( percentage.toFixed(0) + "%" );
-		this.element.attr( "aria-valuemax", this.options.max );
-		this.element.attr( "aria-valuenow", this.options.value );
+		if ( this.indeterminate ) {
+			this.element.removeAttr( "aria-valuemax" );
+			this.element.removeAttr( "aria-valuenow" );
+		} else {
+			this.element.attr( "aria-valuemax", this.options.max );
+			this.element.attr( "aria-valuenow", value );
+		}
 	}
 });
 
