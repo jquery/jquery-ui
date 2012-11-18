@@ -42,6 +42,9 @@ test("destroy", function() {
 
 test("enable", function() {
 	expect(7);
+
+	var expected, actual, el;
+
 	el = $("#draggable2").draggable({ disabled: true });
 	TestHelpers.draggable.shouldNotMove(el, '.draggable({ disabled: true })');
 
@@ -57,13 +60,16 @@ test("enable", function() {
 	equal(el.draggable("option", "disabled"), false, "disabled option setter");
 	TestHelpers.draggable.shouldMove(el, '.draggable("option", "disabled", false)');
 
-	var expected = $('<div></div>').draggable(),
-		actual = expected.draggable('enable');
+	expected = $('<div></div>').draggable(),
+	actual = expected.draggable('enable');
 	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
 	expect(7);
+
+	var expected, actual, el;
+
 	el = $("#draggable2").draggable({ disabled: false });
 	TestHelpers.draggable.shouldMove(el, '.draggable({ disabled: false })');
 
@@ -80,8 +86,8 @@ test("disable", function() {
 	equal(el.draggable("option", "disabled"), true, "disabled option setter");
 	TestHelpers.draggable.shouldNotMove(el, '.draggable("option", "disabled", true)');
 
-	var expected = $('<div></div>').draggable(),
-		actual = expected.draggable('disable');
+	expected = $('<div></div>').draggable(),
+	actual = expected.draggable('disable');
 	equal(actual, expected, 'disable is chainable');
 });
 

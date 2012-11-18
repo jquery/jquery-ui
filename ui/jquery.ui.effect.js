@@ -700,32 +700,31 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 	};
 });
 
-function getElementStyles() {
-	var style = this.ownerDocument.defaultView ?
-			this.ownerDocument.defaultView.getComputedStyle( this, null ) :
-			this.currentStyle,
-		newStyle = {},
-		key,
-		len;
+function getElementStyles( elem ) {
+	var key, len,
+		style = elem.ownerDocument.defaultView ?
+			elem.ownerDocument.defaultView.getComputedStyle( elem, null ) :
+			elem.currentStyle,
+		styles = {};
 
-	// webkit enumerates style porperties
 	if ( style && style.length && style[ 0 ] && style[ style[ 0 ] ] ) {
 		len = style.length;
 		while ( len-- ) {
 			key = style[ len ];
 			if ( typeof style[ key ] === "string" ) {
-				newStyle[ $.camelCase( key ) ] = style[ key ];
+				styles[ $.camelCase( key ) ] = style[ key ];
 			}
 		}
+	// support: Opera, IE <9
 	} else {
 		for ( key in style ) {
 			if ( typeof style[ key ] === "string" ) {
-				newStyle[ key ] = style[ key ];
+				styles[ key ] = style[ key ];
 			}
 		}
 	}
 
-	return newStyle;
+	return styles;
 }
 
 
@@ -761,7 +760,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 			var el = $( this );
 			return {
 				el: el,
-				start: getElementStyles.call( this )
+				start: getElementStyles( this )
 			};
 		});
 
@@ -777,7 +776,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 		// map all animated objects again - calculate new styles and diff
 		allAnimations = allAnimations.map(function() {
-			this.end = getElementStyles.call( this.el[ 0 ] );
+			this.end = getElementStyles( this.el[ 0 ] );
 			this.diff = styleDifference( this.start, this.end );
 			return this;
 		});

@@ -190,7 +190,7 @@ $.widget( "ui.autocomplete", {
 			})
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
-			.data( "menu" );
+			.data( "ui-menu" );
 
 		this._on( this.menu.element, {
 			mousedown: function( event ) {

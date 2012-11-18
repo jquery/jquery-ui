@@ -24,14 +24,14 @@ test("activeClass", function() {
 */
 test("{ addClasses: true }, default", function() {
 	expect( 1 );
-	el = $("<div></div>").droppable({ addClasses: true });
+	var el = $("<div></div>").droppable({ addClasses: true });
 	ok(el.is(".ui-droppable"), "'ui-droppable' class added");
 	el.droppable("destroy");
 });
 
 test("{ addClasses: false }", function() {
 	expect( 1 );
-	el = $("<div></div>").droppable({ addClasses: false });
+	var el = $("<div></div>").droppable({ addClasses: false });
 	ok(!el.is(".ui-droppable"), "'ui-droppable' class not added");
 	el.droppable("destroy");
 });

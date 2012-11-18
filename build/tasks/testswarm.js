@@ -4,7 +4,7 @@ module.exports = function( grunt ) {
 
 var versions = {
 		"git": "git",
-		"1.8": "1.8.0 1.8.1 1.8.2",
+		"1.8": "1.8.0 1.8.1 1.8.2 1.8.3",
 		"1.7": "1.7 1.7.1 1.7.2",
 		"1.6": "1.6 1.6.1 1.6.2 1.6.3 1.6.4"
 	},
@@ -13,8 +13,8 @@ var versions = {
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Core": "core/core.html",
-		//"Datepicker": "datepicker/datepicker.html",
-		//"Dialog": "dialog/dialog.html",
+		"Datepicker": "datepicker/datepicker.html",
+		"Dialog": "dialog/dialog.html",
 		"Draggable": "draggable/draggable.html",
 		"Droppable": "droppable/droppable.html",
 		"Effects": "effects/effects.html",
@@ -23,8 +23,8 @@ var versions = {
 		"Progressbar": "progressbar/progressbar.html",
 		"Resizable": "resizable/resizable.html",
 		"Selectable": "selectable/selectable.html",
-		//"Slider": "slider/slider.html",
-		//"Sortable": "sortable/sortable.html",
+		"Slider": "slider/slider.html",
+		"Sortable": "sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
 		"Tabs": "tabs/tabs.html",
 		"Tooltip": "tooltip/tooltip.html",
