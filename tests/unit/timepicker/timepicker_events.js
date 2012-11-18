@@ -7,7 +7,7 @@ test( "keydown: Up/Down/Left/Right behaviors", function() {
 
 	var i,
 		input = $( "#timepicker1" ).val( "12:00:00 PM" ).timepicker(),
-		timepicker = input.data( "timepicker" ),
+		timepicker = input.data( "ui-timepicker" ),
 		mask = timepicker.mask;
 
 	mask._caret( 0, 0 );
@@ -43,7 +43,7 @@ test( "keydown: Up/Down/Left/Right behaviors", function() {
 	equal( input.val(), "11:50:00 AM", "After down keypress in am/pm field, value went to proper value" );
 
 	input.timepicker( "destroy" ).val( "23:00:00" ).timepicker({ ampm: false });
-	timepicker = input.data( "timepicker" );
+	timepicker = input.data( "ui-timepicker" );
 	timepicker._setField( 0 );
 	equal( input.val(), "23:00:00", "Sanity Check" );
 

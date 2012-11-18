@@ -54,9 +54,9 @@ $.widget( "ui.timepicker", {
 				tt: $.proxy( this, "_validAmPm" )
 			}, maskDefinitions )
 		});
-		this.mask = this.element.data( "mask" );
+		this.mask = this.element.data( "ui-mask" );
 		this.element.spinner();
-		this.spinner = this.element.data( "spinner" );
+		this.spinner = this.element.data( "ui-spinner" );
 		$.extend( this.spinner, {
 			_parse: $.proxy( this, "_spinnerParse" ),
 			_value: $.proxy( this, "_spinnerValue" ),
