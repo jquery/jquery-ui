@@ -191,4 +191,24 @@ test("resizable accounts for scroll position correctly (#3815)", function() {
 	equal( el.css("top"), top, "css('top') stays the same when resized" );
 });
 
+test("handle with complex markup (#8756)", function() {
+	expect(2);
+
+	$('#resizable1')
+		.append(
+			$('<div>')
+				.addClass("ui-resizable-handle")
+				.addClass("ui-resizable-w")
+				.append($('<div>'))
+		);
+
+	var handle = '.ui-resizable-w div', target = $('#resizable1').resizable({ handles: 'all' });
+	
+	TestHelpers.resizable.drag(handle, -50);
+	equal( target.width(), 150, "compare width" );
+
+	TestHelpers.resizable.drag(handle, 50);
+	equal( target.width(), 100, "compare width" );
+});
+
 })(jQuery);
