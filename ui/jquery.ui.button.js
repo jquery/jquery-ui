@@ -284,7 +284,9 @@ $.widget( "ui.button", {
 	},
 
 	refresh: function() {
-		var isDisabled = this.element.is( ":disabled" ) || this.element.hasClass( "ui-button-disabled" );
+		//See #8237 & #8828
+		var isDisabled = this.element.is( "input, button" ) ? this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
+
 		if ( isDisabled !== this.options.disabled ) {
 			this._setOption( "disabled", isDisabled );
 		}
