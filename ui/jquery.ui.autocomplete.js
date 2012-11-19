@@ -590,5 +590,4 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	}
 });
 
-
 }( jQuery ));
