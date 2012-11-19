@@ -138,11 +138,11 @@ $.widget( "ui.menubar", {
 				}
 			} else {
 				// TODO use _on
-				input.bind( "click.menubar mouseenter.menubar", function( event ) {
-					if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" ) {
-						that._close();
-					}
-				});
+        input.bind( "click mouseenter", function( event ) {
+          if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" ) {
+            that._close();
+          }
+        });
 			}
 
 			input
