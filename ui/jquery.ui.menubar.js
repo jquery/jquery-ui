@@ -137,10 +137,13 @@ $.widget( "ui.menubar", {
 					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 				}
 			} else {
-				// TODO use _on
-        input.bind( "click mouseenter", function( event ) {
-          if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" ) {
-            that._close();
+        that._on( input, {
+          click:  function( event ) {
+            if ( that.open ){ that._close(); }
+          },
+
+          mouseenter:  function( event ) {
+            if ( that.open ){ that._close(); }
           }
         });
 			}
