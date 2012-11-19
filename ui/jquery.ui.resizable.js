@@ -245,9 +245,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 	},
 
 	_mouseCapture: function(event) {
-		var i, handle,
-			capture = false;
-
+		var i, handle, capture = false;
+		
 		for (i in this.handles) {
 			handle = $(this.handles[i])[0];
 			if (handle === event.target || $.contains(handle, event.target)) {
