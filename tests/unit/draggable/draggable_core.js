@@ -44,4 +44,33 @@ test("No options, absolute", function() {
 	TestHelpers.draggable.shouldMove(el);
 });
 
+test("resizable handle with complex markup (#8756 / #8757)", function() {
+	expect( 2 );
+
+	$('#draggable1')
+		.append(
+			$('<div>')
+				.addClass("ui-resizable-handle")
+				.addClass("ui-resizable-w")
+				.append($('<div>'))
+		);
+
+	var handle = '.ui-resizable-w div',
+		target = $('#draggable1').draggable().resizable({ handles: 'all' }),
+		drag = function(el, dx) {
+			$(el)
+				.simulate("mouseover")
+				.simulate("drag", {
+					dx: dx || 0,
+					speed: 'sync'
+				});
+		};
+
+	drag(handle, -50);
+	equal( target.width(), 250, "compare width" );
+
+	drag(handle, 50);
+	equal( target.width(), 200, "compare width" );
+});
+
 })(jQuery);
