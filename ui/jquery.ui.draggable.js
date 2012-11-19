@@ -70,7 +70,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		var o = this.options;
 
 		// among others, prevent a drag on a resizable-handle
-		if (this.helper || o.disabled || $(event.target).is('.ui-resizable-handle') || $(event.target).closest('.ui-resizable-handle').length > 0) {
+		if (this.helper || o.disabled || $(event.target).closest('.ui-resizable-handle').length > 0) {
 			return false;
 		}
 
