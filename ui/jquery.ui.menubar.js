@@ -31,7 +31,7 @@ $.widget( "ui.menubar", {
 		}
 	},
 	_create: function() {
-		var that = this;
+		var that = this, subMenus;
 		this.menuItems = this.element.children( this.options.items );
 		this.items = this.menuItems.children( "button, a" );
 
@@ -46,7 +46,7 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menubar" );
 		this._focusable( this.items );
 		this._hoverable( this.items );
-		this.items.siblings( this.options.menuElement )
+		subMenus = this.items.siblings( this.options.menuElement )
 			.menu({
 				position: {
 					within: this.options.position.within
@@ -58,78 +58,89 @@ $.widget( "ui.menubar", {
 					$(event.target).prev().focus();
 					that._trigger( "select", event, ui );
 				},
-				menus: that.options.menuElement
+				menus: this.options.menuElement
 			})
 			.hide()
 			.attr({
 				"aria-hidden": "true",
 				"aria-expanded": "false"
-			})
-			// TODO use _on
-			.bind( "keydown.menubar", function( event ) {
+			});
+		this._on( subMenus, {
+			"keydown.menubar": function(event) {
 				var menu = $( this );
 				if ( menu.is( ":hidden" ) ) {
 					return;
 				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
-					that.previous( event );
+					this.previous( event );
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.RIGHT:
-					that.next( event );
+					this.next( event );
 					event.preventDefault();
 					break;
 				}
-			});
+			}
+		});
+		if ( this.items.length > 0 ) {
+		}
 		this.items.each(function() {
 			var input = $(this),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
-				menu = input.next( that.options.menuElement );
+				menu = input.next( that.options.menuElement ),
+				mouseBehaviorCallback, keyboardBehaviorCallback;
+
+			mouseBehaviorCallback = function( event ) {
+				// ignore triggered focus event
+				if ( event.type === "focus" && !event.originalEvent ) {
+					return;
+				}
+				event.preventDefault();
+				// TODO can we simplify or extractthis check? especially the last two expressions
+				// there's a similar active[0] == menu[0] check in _open
+				if ( event.type === "click" && menu.is( ":visible" ) && this.active && this.active[0] === menu[0] ) {
+					this._close();
+					return;
+				}
+				if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
+					if( this.options.autoExpand ) {
+						clearTimeout( this.closeTimer );
+					}
+
+					this._open( event, menu );
+				}
+			};
+
+			keyboardBehaviorCallback = function( event ) {
+				switch ( event.keyCode ) {
+				case $.ui.keyCode.SPACE:
+				case $.ui.keyCode.UP:
+				case $.ui.keyCode.DOWN:
+					this._open( event, $( this ).next() );
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.LEFT:
+					this.previous( event );
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.RIGHT:
+					this.next( event );
+					event.preventDefault();
+					break;
+				}
+			};
 
 			// might be a non-menu button
 			if ( menu.length ) {
-				// TODO use _on
-				input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
-					// ignore triggered focus event
-					if ( event.type === "focus" && !event.originalEvent ) {
-						return;
-					}
-					event.preventDefault();
-					// TODO can we simplify or extractthis check? especially the last two expressions
-					// there's a similar active[0] == menu[0] check in _open
-					if ( event.type === "click" && menu.is( ":visible" ) && that.active && that.active[0] === menu[0] ) {
-						that._close();
-						return;
-					}
-					if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" || that.options.autoExpand ) {
-						if( that.options.autoExpand ) {
-							clearTimeout( that.closeTimer );
-						}
+				that._on(input, {
+					"click.menubar": mouseBehaviorCallback,
+					"focus.menubar": mouseBehaviorCallback,
+					"mouseenter.menubar": mouseBehaviorCallback,
+					"keydown": keyboardBehaviorCallback
+				});
 
-						that._open( event, menu );
-					}
-				})
-				// TODO use _on
-				.bind( "keydown", function( event ) {
-					switch ( event.keyCode ) {
-					case $.ui.keyCode.SPACE:
-					case $.ui.keyCode.UP:
-					case $.ui.keyCode.DOWN:
-						that._open( event, $( this ).next() );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.LEFT:
-						that.previous( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.RIGHT:
-						that.next( event );
-						event.preventDefault();
-						break;
-					}
-				})
-				.attr( "aria-haspopup", "true" );
+				input.attr( "aria-haspopup", "true" );
 
 				// TODO review if these options (menuIcon and buttons) are a good choice, maybe they can be merged
 				if ( that.options.menuIcon ) {
@@ -137,15 +148,17 @@ $.widget( "ui.menubar", {
 					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 				}
 			} else {
-        that._on( input, {
-          click:  function( event ) {
-            if ( that.open ){ that._close(); }
-          },
+				that._on(input, {
+					click: function(event) {
+						this._close();
+					},
 
-          mouseenter:  function( event ) {
-            if ( that.open ){ that._close(); }
-          }
-        });
+					mouseenter: function(event) {
+						if (this.open){
+							this._close();
+						}
+					}
+				});
 			}
 
 			input
