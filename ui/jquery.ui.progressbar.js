@@ -113,7 +113,7 @@ $.widget( "ui.progressbar", {
 	},
 
 	_refreshValue: function() {
-		var value = this.value(),
+		var value = this.options.value,
 			percentage = this._percentage(),
 			overlay = this.valueDiv.children().eq( 0 );
 
@@ -123,6 +123,9 @@ $.widget( "ui.progressbar", {
 		if ( this.oldValue !== value ) {
 			this.oldValue = value;
 			this._trigger( "change" );
+		}
+		if ( value === this.options.max ) {
+			this._trigger( "complete" );
 		}
 
 		this.valueDiv
