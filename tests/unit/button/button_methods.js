@@ -14,11 +14,15 @@ test("destroy", function() {
 });
 
 test( "refresh: Ensure disabled state is preserved correctly.", function() {
-	expect( 7 );
+	expect( 8 );
 	
 	var element = $( "<a href='#'></a>" );
 	element.button({ disabled: true }).button( "refresh" );
 	ok( element.button( "option", "disabled" ), "Anchor button should remain disabled after refresh" ); //See #8237
+
+	element = $( "<div></div>" );
+	element.button({ disabled: true }).button( "refresh" );
+	ok( element.button( "option", "disabled" ), "<div> buttons should remain disabled after refresh" );
 
 	element = $( "<button></button>" );
 	element.button( { disabled: true} ).button( "refresh" );
