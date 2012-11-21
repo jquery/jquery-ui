@@ -495,33 +495,12 @@ $.widget("ui.dialog", {
 	},
 
 	_position: function() {
-		var position = this.options.position,
-			myAt = [],
-			isVisible;
-
-		if ( position ) {
-			if ( typeof position === "string" ) {
-				myAt = position.split( " " );
-				if ( myAt.length === 1 ) {
-					myAt[ 1 ] = myAt[ 0 ];
-				}
-				position = {
-					my: myAt[0] + " " + myAt[1],
-					at: myAt.join( " " )
-				};
-				position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
-			}
-
-		} else {
-			position = $.ui.dialog.prototype.options.position;
-		}
-
 		// need to show the dialog to get the actual offset in the position plugin
-		isVisible = this.uiDialog.is( ":visible" );
+		var isVisible = this.uiDialog.is( ":visible" );
 		if ( !isVisible ) {
 			this.uiDialog.show();
 		}
-		this.uiDialog.position( position );
+		this.uiDialog.position( this.options.position );
 		if ( !isVisible ) {
 			this.uiDialog.hide();
 		}
@@ -719,48 +698,50 @@ $.ui.dialog.overlay = {
 if ( $.uiBackCompat !== false ) {
 	// position option with array notation
 	// just override with old implementation
-	$.ui.dialog.prototype._position = function() {
-		var position = this.options.position,
-			myAt = [],
-			offset = [ 0, 0 ],
-			isVisible;
+	$.widget( "ui.dialog", $.ui.dialog, {
+		_position: function() {
+			var position = this.options.position,
+				myAt = [],
+				offset = [ 0, 0 ],
+				isVisible;
 
-		if ( position ) {
-			if ( typeof position === "string" || (typeof position === "object" && "0" in position ) ) {
-				myAt = position.split ? position.split( " " ) : [ position[ 0 ], position[ 1 ] ];
-				if ( myAt.length === 1 ) {
-					myAt[ 1 ] = myAt[ 0 ];
+			if ( position ) {
+				if ( typeof position === "string" || (typeof position === "object" && "0" in position ) ) {
+					myAt = position.split ? position.split( " " ) : [ position[ 0 ], position[ 1 ] ];
+					if ( myAt.length === 1 ) {
+						myAt[ 1 ] = myAt[ 0 ];
+					}
+
+					$.each( [ "left", "top" ], function( i, offsetPosition ) {
+						if ( +myAt[ i ] === myAt[ i ] ) {
+							offset[ i ] = myAt[ i ];
+							myAt[ i ] = offsetPosition;
+						}
+					});
+
+					position = {
+						my: myAt[0] + (offset[0] < 0 ? offset[0] : "+" + offset[0]) + " " +
+							myAt[1] + (offset[1] < 0 ? offset[1] : "+" + offset[1]),
+						at: myAt.join( " " )
+					};
 				}
 
-				$.each( [ "left", "top" ], function( i, offsetPosition ) {
-					if ( +myAt[ i ] === myAt[ i ] ) {
-						offset[ i ] = myAt[ i ];
-						myAt[ i ] = offsetPosition;
-					}
-				});
-
-				position = {
-					my: myAt[0] + (offset[0] < 0 ? offset[0] : "+" + offset[0]) + " " +
-						myAt[1] + (offset[1] < 0 ? offset[1] : "+" + offset[1]),
-					at: myAt.join( " " )
-				};
+				position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
+			} else {
+				position = $.ui.dialog.prototype.options.position;
 			}
 
-			position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
-		} else {
-			position = $.ui.dialog.prototype.options.position;
+			// need to show the dialog to get the actual offset in the position plugin
+			isVisible = this.uiDialog.is( ":visible" );
+			if ( !isVisible ) {
+				this.uiDialog.show();
+			}
+			this.uiDialog.position( position );
+			if ( !isVisible ) {
+				this.uiDialog.hide();
+			}
 		}
-
-		// need to show the dialog to get the actual offset in the position plugin
-		isVisible = this.uiDialog.is( ":visible" );
-		if ( !isVisible ) {
-			this.uiDialog.show();
-		}
-		this.uiDialog.position( position );
-		if ( !isVisible ) {
-			this.uiDialog.hide();
-		}
-	};
+	});
 }
 
 }( jQuery ) );
