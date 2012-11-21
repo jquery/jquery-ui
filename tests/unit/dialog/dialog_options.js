@@ -298,39 +298,8 @@ test("position, default center on window", function() {
 	el.remove();
 });
 
-test("position, top on window", function() {
-	expect( 2 );
-	var el = $('<div></div>').dialog({ position: "top" }),
-		dialog = el.dialog('widget'),
-		offset = dialog.offset();
-	closeEnough(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft(), 1);
-	closeEnough(offset.top, $(window).scrollTop(), 1);
-	el.remove();
-});
-
-test("position, left on window", function() {
-	expect( 2 );
-	var el = $('<div></div>').dialog({ position: "left" }),
-		dialog = el.dialog('widget'),
-		offset = dialog.offset();
-	closeEnough(offset.left, 0, 1);
-	closeEnough(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop(), 1);
-	el.remove();
-});
-
 // todo: figure out these fails in IE7
 if ( !$.ui.ie ) {
-
-	test("position, right bottom on window", function() {
-		expect( 2 );
-		var el = $('<div></div>').dialog({ position: "right bottom" }),
-			dialog = el.dialog('widget'),
-			offset = dialog.offset();
-		closeEnough(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft(), 1);
-		closeEnough(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop(), 1);
-		el.remove();
-	});
-
 	test("position, right bottom at right bottom via ui.position args", function() {
 		expect( 2 );
 		var el = $('<div></div>').dialog({
@@ -346,7 +315,6 @@ if ( !$.ui.ie ) {
 		closeEnough(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop(), 1);
 		el.remove();
 	});
-
 }
 
 test("position, at another element", function() {
