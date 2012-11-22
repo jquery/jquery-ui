@@ -42,6 +42,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 		maxWidth: null,
 		minHeight: 10,
 		minWidth: 10,
+		wrapper: '<div class="ui-wrapper" style="overflow: hidden;"></div>',
+		handle: '<div class="ui-resizable-handle"></div>',
 		zIndex: 1000
 	},
 	_create: function() {
@@ -64,7 +66,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			//Create a wrapper element and set the wrapper to the new current internal element
 			this.element.wrap(
-				$('<div class="ui-wrapper" style="overflow: hidden;"></div>').css({
+				$(this.options.wrapper).css({
 					position: this.element.css('position'),
 					width: this.element.outerWidth(),
 					height: this.element.outerHeight(),
@@ -113,7 +115,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 				handle = $.trim(n[i]);
 				hname = 'ui-resizable-'+handle;
-				axis = $('<div class="ui-resizable-handle ' + hname + '"></div>');
+				axis = $(this.options.handle).addClass(hname);
 
 				// Apply zIndex to all handles - see #7960
 				axis.css({ zIndex: o.zIndex });
