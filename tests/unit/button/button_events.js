@@ -17,7 +17,7 @@ test( "when button loses focus, ensure active state is removed (#8559)", functio
 	expect( 1 );
 
 	$("#button").button().keypress( function() {
-		$("#button").blur( function() {
+		$("#button").one( "blur", function() {
 			ok( !$("#button").is(".ui-state-active"), "button loses active state appropriately" );
 		}).blur();
 	}).focus().simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } ).simulate( "keypress", { keyCode: $.ui.keyCode.ENTER } );
