@@ -193,6 +193,8 @@ $.widget( "ui.button", {
 						$( this ).addClass( "ui-state-active" );
 					}
 				})
+				// see #8559, we bind to blur here in case the button element loses
+				// focus between keydown and keyup, it would be left in an "active" state
 				.bind( "keyup" + this.eventNamespace + " blur" + this.eventNamespace, function() {
 					$( this ).removeClass( "ui-state-active" );
 				});
