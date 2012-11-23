@@ -15,11 +15,7 @@ $.widget("ui.selectmenu", {
 		appendTo: "body",
 		typeAhead: 1000,
 		style: 'dropdown',
-		positionOptions: {
-			my: "left top",
-			at: "left bottom",
-			offset: null
-		},
+		positionOptions: null,
 		width: null,
 		menuWidth: null,
 		handleWidth: 26,
@@ -852,24 +848,25 @@ $.widget("ui.selectmenu", {
 	},
 
 	_refreshPosition: function() {
-		var o = this.options;
+		var o = this.options,
+			positionDefault = {
+				of: this.newelement,
+				my: "left top",
+				at: "left bottom",
+				collision: 'flip'
+			};
 
 		// if its a pop-up we need to calculate the position of the selected li
-		if ( o.style == "popup" && !o.positionOptions.offset ) {
+		if ( o.style == "popup" ) {
 			var selected = this._selectedOptionLi();
-			var _offset = "0 " + ( this.list.offset().top  - selected.offset().top - ( this.newelement.outerHeight() + selected.outerHeight() ) / 2);
+			positionDefault.my = "left top" + (this.list.offset().top  - selected.offset().top - 1 - ( this.newelement.outerHeight(true) + selected.outerHeight(true) ) / 2);
+			positionDefault.collision = "fit";
 		}
+		
 		this.listWrap
 			.removeAttr('style')
 			.zIndex( this.element.zIndex() + 1 )
-			.position({
-				// set options for position plugin
-				of: o.positionOptions.of || this.newelement,
-				my: o.positionOptions.my,
-				at: o.positionOptions.at,
-				offset: o.positionOptions.offset || _offset,
-				collision: o.positionOptions.collision || (o.style == "popup" ? 'fit' :'flip')
-			});
+			.position($.extend(positionDefault, o.positionOptions));
 	}
 });
 
