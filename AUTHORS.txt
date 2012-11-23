@@ -212,6 +212,19 @@ John Chen <zhang.z.chen@intel.com>
 Dale Kocian <dale.kocian@gmail.com>
 Mike Sherov <mike.sherov@gmail.com>
 Andrew Couch <andy@couchand.com>
+Andrew Couch <acouch@bluewolf.com>
 Marc-Andre Lafortune <github@marc-andre.ca>
+Nate Eagle <nate.eagle@teamaol.com>
+David Souther <davidsouther@gmail.com>
+Mathias Stenbom <mathias@stenbom.com>
+elisy <ebishkek@yandex.ru>
 Avinash R <nashpapa@gmail.com>
+Sergey Kartashov <ebishkek@yandex.ru>
+Ethan Romba <ethan.romba@parivedasolutions.com>
 Cory Gackenheimer <cory.gack@gmail.com>
+Ethan Romba <ethanromba@gmail.com>
+Juan Pablo Kaniefsky <jpkaniefsky@gmail.com>
+mathias.stenbom <mathias@stenbom.com>
+Roman Salnikov <bardt.dz@gmail.com>
+Anika Henke <anika@selfthinker.org>
+Samuel Bovée <samycookie2000@yahoo.fr>
