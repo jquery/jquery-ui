@@ -1,9 +1,14 @@
 {
-	"name": "jquery-ui",
-	"title": "jQuery UI",
-	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
+	"name": "ui.sortable",
+	"title": "jQuery UI Sortable",
+	"description": "Enables items in a list to be sorted using the mouse.",
+	"keywords": [
+		"ui",
+		"sortable",
+		"sort",
+		"list"
+	],
 	"version": "1.9.2",
-	"homepage": "http://jqueryui.com",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
 		"url": "https://github.com/jquery/jquery-ui/blob/1.9.2/AUTHORS.txt"
@@ -30,27 +35,22 @@
 			"url": "http://gnarf.net"
 		}
 	],
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/jquery/jquery-ui.git"
-	},
-	"bugs": "http://bugs.jqueryui.com/",
 	"licenses": [
 		{
 			"type": "MIT",
 			"url": "https://github.com/jquery/jquery-ui/blob/1.9.2/MIT-LICENSE.txt"
 		}
 	],
-	"dependencies": {},
-	"devDependencies": {
-		"grunt": "~0.3.17",
-		"grunt-css": "0.2.0",
-		"grunt-compare-size": "0.1.4",
-		"grunt-html": "0.1.1",
-		"grunt-junit": "0.1.4",
-		"grunt-git-authors": "1.0.0",
-		"rimraf": "2.0.1",
-		"testswarm": "0.2.3"
+	"bugs": "http://bugs.jqueryui.com/",
+	"homepage": "http://jqueryui.com/sortable/",
+	"demo": "http://jqueryui.com/sortable/",
+	"docs": "http://api.jqueryui.com/sortable/",
+	"download": "http://jqueryui.com/download/",
+	"dependencies": {
+		"jquery": ">=1.6",
+		"ui.core": "1.9.2",
+		"ui.widget": "1.9.2",
+		"ui.mouse": "1.9.2"
 	},
-	"keywords": []
+	"category": "interaction"
 }
