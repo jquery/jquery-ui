@@ -41,10 +41,10 @@ test("enable", function() {
 	equal(actual, expected, 'enable is chainable');
 
 	el = $('<div></div>').slider({ disabled: true });
-	ok(el.hasClass('ui-disabled'), 'slider has ui-disabled class before enable method call');
+	ok(el.hasClass('ui-state-disabled'), 'slider has ui-state-disabled class before enable method call');
 	ok(el.hasClass('ui-slider-disabled'), 'slider has ui-slider-disabled class before enable method call');
 	el.slider('enable');
-	ok(!el.hasClass('ui-disabled'), 'slider does not have ui-disabled class after enable method call');
+	ok(!el.hasClass('ui-state-disabled'), 'slider does not have ui-state-disabled class after enable method call');
 	ok(!el.hasClass('ui-slider-disabled'), 'slider does not have ui-slider-disabled class after enable method call');
 });
 
@@ -56,10 +56,10 @@ test("disable", function() {
 	equal(actual, expected, 'disable is chainable');
 
 	el = $('<div></div>').slider({ disabled: false });
-	ok(!el.hasClass('ui-disabled'), 'slider does not have ui-disabled class before disabled method call');
+	ok(!el.hasClass('ui-state-disabled'), 'slider does not have ui-state-disabled class before disabled method call');
 	ok(!el.hasClass('ui-slider-disabled'), 'slider does not have ui-slider-disabled class before disable method call');
 	el.slider('disable');
-	ok(el.hasClass('ui-disabled'), 'slider has ui-disabled class after disable method call');
+	ok(el.hasClass('ui-state-disabled'), 'slider has ui-state-disabled class after disable method call');
 	ok(el.hasClass('ui-slider-disabled'), 'slider has ui-slider-disabled class after disable method call');
 });
 

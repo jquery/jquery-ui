@@ -684,8 +684,6 @@ $.widget( "ui.tabs", {
 			.removeClass( "ui-tabs-anchor" )
 			.removeAttr( "role" )
 			.removeAttr( "tabIndex" )
-			.removeData( "href.tabs" )
-			.removeData( "load.tabs" )
 			.removeUniqueId();
 
 		this.tabs.add( this.panels ).each(function() {
@@ -710,7 +708,9 @@ $.widget( "ui.tabs", {
 			var li = $( this ),
 				prev = li.data( "ui-tabs-aria-controls" );
 			if ( prev ) {
-				li.attr( "aria-controls", prev );
+				li
+					.attr( "aria-controls", prev )
+					.removeData( "ui-tabs-aria-controls" );
 			} else {
 				li.removeAttr( "aria-controls" );
 			}

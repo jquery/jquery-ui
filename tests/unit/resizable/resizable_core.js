@@ -162,12 +162,33 @@ test("handle with complex markup (#8756)", function() {
 		);
 
 	var handle = '.ui-resizable-w div', target = $('#resizable1').resizable({ handles: 'all' });
-	
+
 	TestHelpers.resizable.drag(handle, -50);
 	equal( target.width(), 150, "compare width" );
 
 	TestHelpers.resizable.drag(handle, 50);
 	equal( target.width(), 100, "compare width" );
+});
+
+test("resizable accounts for scroll position correctly (#3815)", function() {
+	expect( 3 );
+
+	var position, top, left,
+		container = $("<div style='overflow:scroll;height:300px;width:300px;position:relative;'></div>").appendTo("#qunit-fixture"),
+		overflowed = $("<div style='width: 1000px; height: 1000px;'></div>").appendTo( container ),
+		el = $("<div style='height:100px;width:100px;position:absolute;top:10px;left:10px;'></div>").appendTo( overflowed ).resizable({ handles: 'all' }),
+		handle = ".ui-resizable-e";
+
+	container.scrollLeft( 100 ).scrollTop( 100 );
+
+	position = el.position();
+	left = el.css("left");
+	top = el.css("top");
+
+	TestHelpers.resizable.drag(handle, 50, 50);
+	deepEqual( el.position(), position, "position stays the same when resized" );
+	equal( el.css("left"), left, "css('left') stays the same when resized" );
+	equal( el.css("top"), top, "css('top') stays the same when resized" );
 });
 
 })(jQuery);

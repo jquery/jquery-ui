@@ -424,8 +424,8 @@ test("title", function() {
 
 	var el = $('<div></div>').dialog();
 		// some browsers return a non-breaking space and some return "&nbsp;"
-		// so we get the text to normalize to the actual non-breaking space
-		equal(el.dialog('widget').find(".ui-dialog-title").text(), " ", "[default]");
+		// so we generate a non-breaking space for comparison
+		equal(titleText(), $( "<span>&#160;</span>" ).html(), "[default]");
 		equal(el.dialog("option", "title"), "", "option not changed");
 	el.remove();
 

@@ -23,7 +23,7 @@ test( "change", function() {
 });
 
 test( "complete", function() {
-	expect( 3 );
+	expect( 4 );
 	var value,
 		changes = 0,
 		element = $( "#progressbar" ).progressbar({
@@ -32,11 +32,13 @@ test( "complete", function() {
 				deepEqual( element.progressbar( "value" ), value, "change at " + value );
 			},
 			complete: function() {
-				equal( changes, 2, "complete triggered after change" );
+				equal( changes, 3, "complete triggered after change and not on indeterminate" );
 			}
 		});
 
 	value = 5;
+	element.progressbar( "value", value );
+	value = false;
 	element.progressbar( "value", value );
 	value = 100;
 	element.progressbar( "value", value );
