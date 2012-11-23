@@ -1,4 +1,4 @@
-﻿Authors ordered by first contribution
+Authors ordered by first contribution
 A list of current team members is available at http://jqueryui.com/about
 
 Paul Bakaus <paul.bakaus@googlemail.com>
@@ -213,3 +213,5 @@ Dale Kocian <dale.kocian@gmail.com>
 Mike Sherov <mike.sherov@gmail.com>
 Andrew Couch <andy@couchand.com>
 Marc-Andre Lafortune <github@marc-andre.ca>
+Avinash R <nashpapa@gmail.com>
+Cory Gackenheimer <cory.gack@gmail.com>
