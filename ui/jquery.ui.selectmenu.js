@@ -744,7 +744,7 @@ $.widget("ui.selectmenu", {
 	_disabled: function( elem ) {
 			return $( elem ).hasClass( 'ui-state-disabled' );
 	},
-	
+
 	_toggleOption: function( index, flag ) {
 		var optionElem = this._optionLis.eq( index );
 		if ( optionElem ) {
@@ -762,7 +762,7 @@ $.widget("ui.selectmenu", {
 	// true = enabled, false = disabled
 	_toggleOptgroup: function( index, flag ) {
 			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
-			if ( optGroupElem ) {				
+			if ( optGroupElem ) {
 				optGroupElem
 					.toggleClass( 'ui-state-disabled', flag )
 					.attr( "aria-disabled", !flag );
