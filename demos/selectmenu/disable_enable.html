@@ -58,10 +58,10 @@
 			var speedB2 = $('select#speedB2').selectmenu();			
 			$("#optionSwitch").toggle(
 				function(){
-					speedB2.selectmenu("disable", 2);
+					speedB2.selectmenu("enable", 2);
 				}, 
 				function(){
-					speedB2.selectmenu("enable", 2);
+					speedB2.selectmenu("disable", 2);
 				}
 			);			
 			
@@ -74,10 +74,10 @@
 			var speedD2 = $('select#speedD2').selectmenu();				
 			$("#optgroupSwitch").toggle(
 				function(){
-					speedD2.selectmenu("disable", 1, "optgroup");
+					speedD2.selectmenu("enable", 1, "optgroup");
 				}, 
 				function(){
-					speedD2.selectmenu("enable", 1, "optgroup");
+					speedD2.selectmenu("disable", 1, "optgroup");
 				}
 			);			
 
