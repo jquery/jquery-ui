@@ -297,7 +297,7 @@ $.widget("ui.selectmenu", {
 			for ( var i = 0; i < selectOptionData.length; i++ ) {
 				var thisLiAttr = { role : 'presentation' };
 				if ( selectOptionData[ i ].disabled ) {
-					thisLiAttr[ 'class' ] = this.namespace + '-state-disabled';
+					thisLiAttr[ 'class' ] = 'ui-state-disabled';
 				}
 				var thisAAttr = {
 					html: selectOptionData[i].text || '&nbsp;',
@@ -360,7 +360,7 @@ $.widget("ui.selectmenu", {
 					if ( this.list.find( 'li.' + optGroupName ).length ) {
 						this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
 					} else {
-						$( '<li role="presentation" class="ui-selectmenu-group ' + optGroupName + (selectOptionData[ i ].parentOptGroup.attr( "disabled" ) ? ' ' + this.namespace + '-state-disabled" aria-disabled="true"' : '"' ) + '><span class="ui-selectmenu-group-label">' + selectOptionData[ i ].parentOptGroup.attr( 'label' ) + '</span><ul></ul></li> ')
+						$( '<li role="presentation" class="ui-selectmenu-group ' + optGroupName + (selectOptionData[ i ].parentOptGroup.attr( "disabled" ) ? ' ' + 'ui-state-disabled" aria-disabled="true"' : '"' ) + '><span class="ui-selectmenu-group-label">' + selectOptionData[ i ].parentOptGroup.attr( 'label' ) + '</span><ul></ul></li> ')
 							.appendTo( this.list )
 							.find( 'ul' )
 							.append( thisLi );
@@ -447,7 +447,7 @@ $.widget("ui.selectmenu", {
 
 	destroy: function() {
 		this.element.removeData( this.widgetName )
-			.removeClass( 'ui-selectmenu-disabled' + ' ' + this.namespace + '-state-disabled' )
+			.removeClass( 'ui-selectmenu-disabled' + ' ' + 'ui-state-disabled' )
 			.removeAttr( 'aria-disabled' )
 			.unbind( ".selectmenu" );
 
@@ -652,7 +652,7 @@ $.widget("ui.selectmenu", {
 				return false;
 			}
 
-			if ( this._optionLis.eq( newIndex ).hasClass( this.namespace + '-state-disabled' ) ) {
+			if ( this._optionLis.eq( newIndex ).hasClass( 'ui-state-disabled' ) ) {
 				// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
 				( amt > 0 ) ? ++amt : --amt;
 				this._moveSelection( amt, newIndex );
@@ -686,7 +686,7 @@ $.widget("ui.selectmenu", {
 
 		this._focusedOptionLi().find( 'a:eq(0)' ).attr( 'id', '' );
 
-		if ( this._optionLis.eq( newIndex ).hasClass( this.namespace + '-state-disabled' ) ) {
+		if ( this._optionLis.eq( newIndex ).hasClass( 'ui-state-disabled' ) ) {
 			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
 			( amt > 0 ) ? ++amt : --amt;
 			this._moveFocus( amt, newIndex );
@@ -710,7 +710,7 @@ $.widget("ui.selectmenu", {
 			if ( value ) this.close();
 			this.element
 				.add( this.newelement )
-				.add( this.list )[ value ? 'addClass' : 'removeClass' ]( 'ui-selectmenu-disabled ' + this.namespace + '-state-disabled' )
+				.add( this.list )[ value ? 'addClass' : 'removeClass' ]( 'ui-selectmenu-disabled ' + 'ui-state-disabled' )
 				.attr( "aria-disabled" , value );
 		}
 	},
@@ -742,14 +742,14 @@ $.widget("ui.selectmenu", {
 	},
 
 	_disabled: function( elem ) {
-			return $( elem ).hasClass( this.namespace + '-state-disabled' );
+			return $( elem ).hasClass( 'ui-state-disabled' );
 	},
 	
 	_toggleOption: function( index, flag ) {
 		var optionElem = this._optionLis.eq( index );
 		if ( optionElem ) {
 				optionElem
-					.toggleClass( this.namespace + '-state-disabled', flag )
+					.toggleClass( 'ui-state-disabled', flag )
 					.find( "a" ).attr( "aria-disabled", !flag );
 			if ( flag ) {
 				this.element.find( "option" ).eq( index ).attr( "disabled", "disabled" );
@@ -764,7 +764,7 @@ $.widget("ui.selectmenu", {
 			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
 			if ( optGroupElem ) {				
 				optGroupElem
-					.toggleClass( this.namespace + '-state-disabled', flag )
+					.toggleClass( 'ui-state-disabled', flag )
 					.attr( "aria-disabled", !flag );
 				if ( flag ) {
 					this.element.find( "optgroup" ).eq( index ).attr( "disabled", "disabled" );
