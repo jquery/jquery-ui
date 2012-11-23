@@ -30,7 +30,7 @@ $.widget("ui.selectmenu", {
 		var self = this, o = this.options;
 
 		// set a default id value, generate a new random one if not set by developer
-		var selectmenuId = ( this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 )).replace( /(:|\.)/g, '' )
+		var selectmenuId = ( this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 ) ).replace( /(:|\.)/g, '' )
 
 		// quick array of button and menu id's
 		this.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
@@ -256,7 +256,7 @@ $.widget("ui.selectmenu", {
 			})
 			.bind( 'keypress.selectmenu', function( event ) {
 				if ( event.which > 0 ) {
-					self._typeAhead(event.which, 'focus' );
+					self._typeAhead( event.which, 'focus' );
 				}
 				return true;
 			})
@@ -273,7 +273,7 @@ $.widget("ui.selectmenu", {
 		// serialize selectmenu element options
 		var selectOptionData = [];
 		this.element.find( 'option' ).each( function() {
-			var opt = $(this);
+			var opt = $( this );
 			selectOptionData.push({
 				value: opt.attr( 'value' ),
 				text: self._formatText( opt.text(), opt ),
@@ -293,17 +293,17 @@ $.widget("ui.selectmenu", {
 		this.list.html( "" );
 
 		// write li's
-		if (selectOptionData.length) {
+		if ( selectOptionData.length ) {
 			for ( var i = 0; i < selectOptionData.length; i++ ) {
 				var thisLiAttr = { role : 'presentation' };
 				if ( selectOptionData[ i ].disabled ) {
 					thisLiAttr[ 'class' ] = 'ui-state-disabled';
 				}
 				var thisAAttr = {
-					html: selectOptionData[i].text || '&nbsp;',
-					href : '#nogo',
+					html: selectOptionData[ i ].text || '&nbsp;',
+					href: '#nogo',
 					tabindex : -1,
-					role : 'option',
+					role: 'option',
 					'aria-selected' : false
 				};
 				if ( selectOptionData[ i ].disabled ) {
@@ -313,19 +313,19 @@ $.widget("ui.selectmenu", {
 					thisAAttr[ 'typeahead' ] = selectOptionData[ i ].typeahead;
 				}
 				var thisA = $( '<a/>', thisAAttr )
-					.bind('focus.selectmenu', function() {
+					.bind( 'focus.selectmenu', function() {
 						$( this ).parent().mouseover();
 					})
 					.bind( 'blur.selectmenu', function() {
 						$( this ).parent().mouseout();
 					});
 				var thisLi = $( '<li/>', thisLiAttr )
-					.append(thisA)
+					.append( thisA )
 					.data( 'index', i )
-					.addClass( selectOptionData[i].classes )
+					.addClass( selectOptionData[ i ].classes )
 					.data( 'optionClasses', selectOptionData[ i ].classes || '' )
 					.bind( "mouseup.selectmenu", function( event ) {
-						if ( self._safemouseup && !self._disabled( event.currentTarget ) && !self._disabled($( event.currentTarget ).parents( "ul>li.ui-selectmenu-group " )) ) {
+						if ( self._safemouseup && !self._disabled( event.currentTarget ) && !self._disabled( $( event.currentTarget ).parents( "ul > li.ui-selectmenu-group " ) ) ) {
 							self.index( $( this ).data( 'index' ) );
 							self.select( event );
 							self.close( event, true );
@@ -335,9 +335,9 @@ $.widget("ui.selectmenu", {
 					.bind( "click.selectmenu", function() {
 						return false;
 					})
-					.bind('mouseover.selectmenu', function(e) {
+					.bind('mouseover.selectmenu', function( e ) {
 						// no hover if diabled
-						if ( !$( this ).hasClass( self.namespace + '-state-disabled' ) && !$( this ).parent( "ul" ).parent( "li" ).hasClass( self.namespace + '-state-disabled' ) ) {
+						if ( !$( this ).hasClass( 'ui-state-disabled' ) && !$( this ).parent( "ul" ).parent( "li" ).hasClass( 'ui-state-disabled' ) ) {
 							e.optionValue = self.element[ 0 ].options[ $( this ).data( 'index' ) ].value;
 							self._trigger( "hover", e, self._uiHash() );
 							self._selectedOptionLi().addClass( activeClass );
@@ -346,11 +346,11 @@ $.widget("ui.selectmenu", {
 						}
 					})
 					.bind( 'mouseout.selectmenu', function( e ) {
-						if ($( this ).is(self._selectedOptionLi())) {
+						if ( $( this ).is( self._selectedOptionLi() ) ) {
 							$( this ).addClass( activeClass );
 						}
-						e.optionValue = self.element[ 0 ].options[ $(this).data( 'index' ) ].value;
-						self._trigger( "blur", e, self._uiHash());
+						e.optionValue = self.element[ 0 ].options[ $( this ).data( 'index' ) ].value;
+						self._trigger( "blur", e, self._uiHash() );
 						$( this ).removeClass( 'ui-selectmenu-item-focus ui-state-hover' );
 					});
 
@@ -360,7 +360,7 @@ $.widget("ui.selectmenu", {
 					if ( this.list.find( 'li.' + optGroupName ).length ) {
 						this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
 					} else {
-						$( '<li role="presentation" class="ui-selectmenu-group ' + optGroupName + (selectOptionData[ i ].parentOptGroup.attr( "disabled" ) ? ' ' + 'ui-state-disabled" aria-disabled="true"' : '"' ) + '><span class="ui-selectmenu-group-label">' + selectOptionData[ i ].parentOptGroup.attr( 'label' ) + '</span><ul></ul></li> ')
+						$( '<li role="presentation" class="ui-selectmenu-group ' + optGroupName + ( selectOptionData[ i ].parentOptGroup.attr( "disabled" ) ? ' ' + 'ui-state-disabled" aria-disabled="true"' : '"' ) + '><span class="ui-selectmenu-group-label">' + selectOptionData[ i ].parentOptGroup.attr( 'label' ) + '</span><ul></ul></li>' )
 							.appendTo( this.list )
 							.find( 'ul' )
 							.append( thisLi );
@@ -372,7 +372,7 @@ $.widget("ui.selectmenu", {
 				// append icon if option is specified
 				if ( o.icons ) {
 					for ( var j in o.icons ) {
-						if (thisLi.is(o.icons[j].find)) {
+						if (thisLi.is(o.icons[ j ].find)) {
 							thisLi
 								.data( 'optionClasses', selectOptionData[ i ].classes + ' ui-selectmenu-hasIcon' )
 								.addClass( 'ui-selectmenu-hasIcon' );
@@ -494,8 +494,6 @@ $.widget("ui.selectmenu", {
 		// We need to determine the currently active index, but it depends on
 		// the used context: if it's in the element, we want the actual
 		// selected index, if it's in the menu, just the focused one
-		// I copied this code from _moveSelection() and _moveFocus()
-		// respectively --thg2k
 		var selectedIndex = ( eventType !== 'focus' ? this._selectedOptionLi().data( 'index' ) : this._focusedOptionLi().data( 'index' )) || 0;
 		for ( var i = 0; i < this._optionLis.length; i++ ) {
 			var thisText = this._optionLis.eq( i ).text().substr( 0, matchee.length ).toLowerCase();
@@ -516,7 +514,7 @@ $.widget("ui.selectmenu", {
 		if ( nextIndex !== null ) {
 			// Why using trigger() instead of a direct method to select the index? Because we don't what is the exact action to do,
 			// it depends if the user is typing on the element or on the popped up menu
-			this._optionLis.eq(nextIndex).find("a").trigger( eventType );
+			this._optionLis.eq( nextIndex ).find( "a" ).trigger( eventType );
 		}
 
 		self._typeAhead_timer = window.setTimeout( function() {
@@ -553,7 +551,7 @@ $.widget("ui.selectmenu", {
 			} else {
 				// center overflow and avoid flickering
 				this.list
-					.css("left", -5000)
+					.css( "left", -5000 )
 					.scrollTop( this.list.scrollTop() + selected.position().top - this.list.outerHeight() / 2 + selected.outerHeight() / 2 )
 					.css( "left", "auto" );
 			}
@@ -624,7 +622,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_selectedIndex: function() {
-		return this.element[0].selectedIndex;
+		return this.element[ 0 ].selectedIndex;
 	},
 
 	_selectedOptionLi: function() {
@@ -774,9 +772,9 @@ $.widget("ui.selectmenu", {
 			}
 	},
 
-	index: function(newIndex) {
+	index: function( newIndex ) {
 		if ( arguments.length ) {
-			if (!this._disabled( $( this._optionLis[ newIndex ] ) ) && newIndex != this._selectedIndex() ) {
+			if ( !this._disabled( $( this._optionLis[ newIndex ] ) ) && newIndex != this._selectedIndex() ) {
 				this.element[ 0 ].selectedIndex = newIndex;
 				this._refreshValue();
 				this.change();
