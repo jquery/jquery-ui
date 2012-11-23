@@ -217,10 +217,8 @@ $.widget( "ui.selectmenu", {
 				}
 
 				$.extend( this.options.position, {
-					my: "left top",
-					at: "left top",
-					// calculate offset
-					offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
+					my: "left top" + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 ),
+					at: "left top"
 				});
 			}
 
