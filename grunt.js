@@ -299,8 +299,8 @@ grunt.initConfig({
 			}),
 			// TODO consider reenabling some of these rules
 			rules: {
+				"adjoining-classes": false,
 				"import": false,
-				"important": false,
 				"outline-none": false,
 				// especially this one
 				"overqualified-elements": false,
