@@ -721,9 +721,9 @@ $.widget("ui.selectmenu", {
 				this._setOption( 'disabled', true );
 			} else {
 				if ( type == "optgroup" ) {
-					this._disableOptgroup( index );
+					this._toggleOptgroup( index, false );
 				} else {
-					this._disableOption( index );
+					this._toggleOption( index, false );
 				}
 			}
 	},
@@ -734,9 +734,9 @@ $.widget("ui.selectmenu", {
 				this._setOption( 'disabled', false );
 			} else {
 				if ( type == "optgroup" ) {
-					this._enableOptgroup( index );
+					this._toggleOptgroup( index, true );
 				} else {
-					this._enableOption( index );
+					this._toggleOption( index, true );
 				}
 			}
 	},
@@ -744,42 +744,33 @@ $.widget("ui.selectmenu", {
 	_disabled: function( elem ) {
 			return $( elem ).hasClass( this.namespace + '-state-disabled' );
 	},
-
-	_disableOption: function( index ) {
-			var optionElem = this._optionLis.eq( index );
-			if (optionElem) {
-				optionElem.addClass( this.namespace + '-state-disabled' )
-					.find( "a" ).attr( "aria-disabled", true );
-				this.element.find( "option" ).eq( index ).attr( "disabled", "disabled" );
-			}
-	},
-
-	_enableOption: function( index ) {
-			var optionElem = this._optionLis.eq( index );
-			if ( optionElem ) {
+	
+	_toggleOption: function( index, flag ) {
+		var optionElem = this._optionLis.eq( index );
+		if ( optionElem ) {
 				optionElem
-					.removeClass( this.namespace + '-state-disabled' )
-					.find( "a" ).attr( "aria-disabled", false);
+					.toggleClass( this.namespace + '-state-disabled', flag )
+					.find( "a" ).attr( "aria-disabled", !flag );
+			if ( flag ) {
+				this.element.find( "option" ).eq( index ).attr( "disabled", "disabled" );
+			} else {
 				this.element.find( "option" ).eq( index ).removeAttr( "disabled" );
 			}
+		}
 	},
 
-	_disableOptgroup: function( index ) {
+	// true = enabled, false = disabled
+	_toggleOptgroup: function( index, flag ) {
 			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
-			if ( optGroupElem ) {
+			if ( optGroupElem ) {				
 				optGroupElem
-					.addClass( this.namespace + '-state-disabled' )
-					.attr( "aria-disabled", true );
-				this.element.find( "optgroup" ).eq( index ).attr( "disabled", "disabled" );
-			}
-	},
-
-	_enableOptgroup: function( index ) {
-			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
-			if ( optGroupElem ) {
-				optGroupElem.removeClass( this.namespace + '-state-disabled' )
-					.attr( "aria-disabled", false);
-				this.element.find( "optgroup" ).eq( index ).removeAttr( "disabled" );
+					.toggleClass( this.namespace + '-state-disabled', flag )
+					.attr( "aria-disabled", !flag );
+				if ( flag ) {
+					this.element.find( "optgroup" ).eq( index ).attr( "disabled", "disabled" );
+				} else {
+					this.element.find( "optgroup" ).eq( index ).removeAttr( "disabled" );
+				}
 			}
 	},
 
