@@ -42,10 +42,10 @@ $.widget("ui.selectmenu", {
 		// define safe mouseup for future toggling
 		this._safemouseup = true;
 		this.isOpen = false;
-
+		
 		// create menu button wrapper
 		this.newelement = $( '<a />', {
-			'class': this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all',
+			'class': 'ui-selectmenu ui-widget ui-state-default ui-corner-all',
 			'id' : this.ids[ 1 ],
 			'role': 'button',
 			'href': '#nogo',
@@ -67,11 +67,11 @@ $.widget("ui.selectmenu", {
 		this.newelement.data( 'selectelement', this.element );
 
 		// menu icon
-		this.selectmenuIcon = $( '<span class="' + this.widgetBaseClass + '-icon ui-icon"></span>' )
+		this.selectmenuIcon = $( '<span class="ui-selectmenu-icon ui-icon"></span>' )
 			.prependTo( this.newelement );
 
 		// append status span to button
-		this.newelement.prepend( '<span class="' + self.widgetBaseClass + '-status" />' );
+		this.newelement.prepend( '<span class="ui-selectmenu-status" />' );
 
 		// make associated form label trigger focus
 		this.element.bind({
@@ -200,7 +200,7 @@ $.widget("ui.selectmenu", {
 			'id': this.ids[2]
 		});
 		this.listWrap = $( "<div />", {
-			'class': self.widgetBaseClass + '-menu'
+			'class': 'ui-selectmenu-menu'
 		}).append( this.list ).appendTo( o.appendTo );
 
 		// transfer menu click to menu button
@@ -329,7 +329,7 @@ $.widget("ui.selectmenu", {
 					.addClass(selectOptionData[i].classes)
 					.data('optionClasses', selectOptionData[i].classes || '')
 					.bind("mouseup.selectmenu", function(event) {
-						if (self._safemouseup && !self._disabled(event.currentTarget) && !self._disabled($( event.currentTarget ).parents( "ul>li." + self.widgetBaseClass + "-group " )) ) {
+						if (self._safemouseup && !self._disabled(event.currentTarget) && !self._disabled($( event.currentTarget ).parents( "ul>li.ui-selectmenu-group " )) ) {
 							self.index($(this).data('index'));
 							self.select(event);
 							self.close(event, true);
@@ -345,8 +345,8 @@ $.widget("ui.selectmenu", {
 							e.optionValue = self.element[0].options[$(this).data('index')].value;
 							self._trigger("hover", e, self._uiHash());
 							self._selectedOptionLi().addClass(activeClass);
-							self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
-							$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
+							self._focusedOptionLi().removeClass('ui-selectmenu-item-focus ui-state-hover');
+							$(this).removeClass('ui-state-active').addClass('ui-selectmenu-item-focus ui-state-hover');
 						}
 					})
 					.bind('mouseout.selectmenu', function(e) {
@@ -355,16 +355,16 @@ $.widget("ui.selectmenu", {
 						}
 						e.optionValue = self.element[0].options[$(this).data('index')].value;
 						self._trigger("blur", e, self._uiHash());
-						$(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
+						$(this).removeClass('ui-selectmenu-item-focus ui-state-hover');
 					});
 
 				// optgroup or not...
 				if ( selectOptionData[i].parentOptGroup.length ) {
-					var optGroupName = self.widgetBaseClass + '-group-' + this.element.find( 'optgroup' ).index( selectOptionData[i].parentOptGroup );
+					var optGroupName = 'ui-selectmenu-group-' + this.element.find( 'optgroup' ).index( selectOptionData[i].parentOptGroup );
 					if (this.list.find( 'li.' + optGroupName ).length ) {
 						this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
 					} else {
-						$(' <li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + (selectOptionData[i].parentOptGroup.attr("disabled") ? ' ' + this.namespace + '-state-disabled" aria-disabled="true"' : '"' ) + '><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
+						$('<li role="presentation" class="ui-selectmenu-group ' + optGroupName + (selectOptionData[i].parentOptGroup.attr("disabled") ? ' ' + this.namespace + '-state-disabled" aria-disabled="true"' : '"' ) + '><span class="ui-selectmenu-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
 							.appendTo( this.list )
 							.find( 'ul' )
 							.append( thisLi );
@@ -378,12 +378,12 @@ $.widget("ui.selectmenu", {
 					for (var j in o.icons) {
 						if (thisLi.is(o.icons[j].find)) {
 							thisLi
-								.data('optionClasses', selectOptionData[i].classes + ' ' + self.widgetBaseClass + '-hasIcon')
-								.addClass(self.widgetBaseClass + '-hasIcon');
+								.data('optionClasses', selectOptionData[i].classes + ' ui-selectmenu-hasIcon')
+								.addClass('ui-selectmenu-hasIcon');
 							var iconClass = o.icons[j].icon || "";
 							thisLi
 								.find('a:eq(0)')
-								.prepend('<span class="' + self.widgetBaseClass + '-item-icon ui-icon ' + iconClass + '"></span>');
+								.prepend('<span class="ui-selectmenu-item-icon ui-icon ' + iconClass + '"></span>');
 							if (selectOptionData[i].bgImage) {
 								thisLi.find('span').css('background-image', selectOptionData[i].bgImage);
 							}
@@ -397,11 +397,11 @@ $.widget("ui.selectmenu", {
 		// we need to set and unset the CSS classes for dropdown and popup style
 		var isDropDown = ( o.style == 'dropdown' );
 		this.newelement
-			.toggleClass( self.widgetBaseClass + '-dropdown', isDropDown )
-			.toggleClass( self.widgetBaseClass + '-popup', !isDropDown );
+			.toggleClass( 'ui-selectmenu-dropdown', isDropDown )
+			.toggleClass( 'ui-selectmenu-popup', !isDropDown );
 		this.list
-			.toggleClass( self.widgetBaseClass + '-menu-dropdown ui-corner-bottom', isDropDown )
-			.toggleClass( self.widgetBaseClass + '-menu-popup ui-corner-all', !isDropDown )
+			.toggleClass( 'ui-selectmenu-menu-dropdown ui-corner-bottom', isDropDown )
+			.toggleClass( 'ui-selectmenu-menu-popup ui-corner-all', !isDropDown )
 			// add corners to top and bottom menu items
 			.find( 'li:first' )
 			.toggleClass( 'ui-corner-top', !isDropDown )
@@ -427,7 +427,7 @@ $.widget("ui.selectmenu", {
 		if ( listH > maxH ) this.list.height( maxH );
 
 		// save reference to actionable li's (not group label li's)
-		this._optionLis = this.list.find( 'li:not(.' + self.widgetBaseClass + '-group)' );
+		this._optionLis = this.list.find( 'li:not(.ui-selectmenu-group)' );
 
 		// transfer disabled state
 		if ( this.element.attr( 'disabled' ) ) {
@@ -440,7 +440,7 @@ $.widget("ui.selectmenu", {
 		this._refreshValue();
 
 		// set selected item so movefocus has intial state
-		this._selectedOptionLi().addClass(this.widgetBaseClass + '-item-focus');
+		this._selectedOptionLi().addClass('ui-selectmenu-item-focus');
 
 		// needed when selectmenu is placed at the very bottom / top of the page
 		clearTimeout(this.refreshTimeout);
@@ -451,7 +451,7 @@ $.widget("ui.selectmenu", {
 
 	destroy: function() {
 		this.element.removeData( this.widgetName )
-			.removeClass( this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled' )
+			.removeClass( 'ui-selectmenu-disabled' + ' ' + this.namespace + '-state-disabled' )
 			.removeAttr( 'aria-disabled' )
 			.unbind( ".selectmenu" );
 
@@ -560,7 +560,7 @@ $.widget("ui.selectmenu", {
 			self.newelement.addClass('ui-state-active');
 
 			self.list.attr('aria-hidden', false);
-			self.listWrap.addClass( self.widgetBaseClass + '-open' );
+			self.listWrap.addClass( 'ui-selectmenu-open' );
 
 			var selected = this._selectedOptionLi();
 			if ( o.style == "dropdown" ) {
@@ -587,7 +587,7 @@ $.widget("ui.selectmenu", {
 		if ( this.newelement.is('.ui-state-active') ) {
 			this.newelement
 				.removeClass('ui-state-active');
-			this.listWrap.removeClass(this.widgetBaseClass + '-open');
+			this.listWrap.removeClass('ui-selectmenu-open');
 			this.list.attr('aria-hidden', true);
 			if ( this.options.style == "dropdown" ) {
 				this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all');
@@ -615,10 +615,10 @@ $.widget("ui.selectmenu", {
 	},
 
 	_closeOthers: function(event) {
-		$('.' + this.widgetBaseClass + '.ui-state-active').not(this.newelement).each(function() {
+		$('.ui-selectmenu.ui-state-active').not(this.newelement).each(function() {
 			$(this).data('selectelement').selectmenu('close', event);
 		});
-		$('.' + this.widgetBaseClass + '.ui-state-hover').trigger('mouseout');
+		$('.ui-selectmenu.ui-state-hover').trigger('mouseout');
 	},
 
 	_toggle: function(event, retainFocus) {
@@ -647,7 +647,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_focusedOptionLi: function() {
-		return this.list.find('.' + this.widgetBaseClass + '-item-focus');
+		return this.list.find('.ui-selectmenu-item-focus');
 	},
 
 	_moveSelection: function(amt, recIndex) {
@@ -694,7 +694,7 @@ $.widget("ui.selectmenu", {
 		//Occurs when a full loop has been made
 		if (newIndex === recIndex) { return false; }
 
-		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
+		var activeID = 'ui-selectmenu-item-' + Math.round(Math.random() * 1000);
 
 		this._focusedOptionLi().find('a:eq(0)').attr('id', '');
 
@@ -722,9 +722,7 @@ $.widget("ui.selectmenu", {
 			if (value) this.close();
 			this.element
 				.add(this.newelement)
-				.add(this.list)[value ? 'addClass' : 'removeClass'](
-					this.widgetBaseClass + '-disabled' + ' ' +
-					this.namespace + '-state-disabled')
+				.add(this.list)[value ? 'addClass' : 'removeClass']('ui-selectmenu-disabled ' + this.namespace + '-state-disabled')
 				.attr("aria-disabled", value);
 		}
 	},
@@ -778,7 +776,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_disableOptgroup: function(index) {
-			var optGroupElem = this.list.find( 'li.' + this.widgetBaseClass + '-group-' + index );
+			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
 			if (optGroupElem) {
 				optGroupElem.addClass(this.namespace + '-state-disabled')
 					.attr("aria-disabled", true);
@@ -787,7 +785,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_enableOptgroup: function(index) {
-			var optGroupElem = this.list.find( 'li.' + this.widgetBaseClass + '-group-' + index );
+			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
 			if (optGroupElem) {
 				optGroupElem.removeClass(this.namespace + '-state-disabled')
 					.attr("aria-disabled", false);
@@ -821,17 +819,17 @@ $.widget("ui.selectmenu", {
 
 	_refreshValue: function() {
 		var activeClass = (this.options.style == "popup") ? " ui-state-active" : "";
-		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
+		var activeID = 'ui-selectmenu-item-' + Math.round(Math.random() * 1000);
 		// deselect previous
 		this.list
-			.find('.' + this.widgetBaseClass + '-item-selected')
-			.removeClass(this.widgetBaseClass + "-item-selected" + activeClass)
+			.find('.ui-selectmenu-item-selected')
+			.removeClass("ui-selectmenu-item-selected" + activeClass)
 			.find('a')
 			.attr('aria-selected', 'false')
 			.attr('id', '');
 		// select new
 		this._selectedOptionLi()
-			.addClass(this.widgetBaseClass + "-item-selected" + activeClass)
+			.addClass("ui-selectmenu-item-selected" + activeClass)
 			.find('a')
 			.attr('aria-selected', 'true')
 			.attr('id', activeID);
@@ -843,7 +841,7 @@ $.widget("ui.selectmenu", {
 			.removeClass(currentOptionClasses)
 			.data('optionClasses', newOptionClasses)
 			.addClass( newOptionClasses )
-			.find('.' + this.widgetBaseClass + '-status')
+			.find('.ui-selectmenu-status')
 			.html(
 				this._selectedOptionLi()
 					.find('a:eq(0)')

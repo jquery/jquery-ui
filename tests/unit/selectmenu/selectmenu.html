@@ -3,31 +3,30 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>jQuery UI Selectmenu Test Suite</title>
-
-	<link type="text/css" href="../../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
-
-	<script src="../../jquery.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.selectmenu.js"></script>
-
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
-
-	<script type="text/javascript" src="selectmenu_tickets.js"></script>
 	
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="../../jquery.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		css: [ "ui.core", "ui.selectmenu" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.selectmenu.js"
+		]
+	});
+	</script>
+
+	<script src="selectmenu_tickets.js"></script>
+
+	<script src="../swarminject.js"></script>
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Selectmenu Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
-
+<div id="qunit">jQuery UI Menu Test Suite</div>
 <div id="qunit-fixture">
 	<select id="selectmenu">
 	  <option value="AL">Alabama</option>
