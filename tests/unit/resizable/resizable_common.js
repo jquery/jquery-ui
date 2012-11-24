@@ -19,7 +19,7 @@ TestHelpers.commonWidgetTests('resizable', {
 		maxWidth: null,
 		minHeight: 10,
 		minWidth: 10,
-		zIndex: 1000,
+		zIndex: 90,
 
 		// callbacks
 		create: null
