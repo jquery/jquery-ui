@@ -42,7 +42,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 		maxWidth: null,
 		minHeight: 10,
 		minWidth: 10,
-		zIndex: 1000
+		// See #7960
+		zIndex: 90
 	},
 	_create: function() {
 
