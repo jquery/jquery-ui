@@ -15,21 +15,24 @@
 (function( $, undefined ) {
 
 var tabId = 0,
-	rhash = /#.*$/;
+	rhash = /#.*$/,
+	base = $('base').prop('href');
 
 function getNextTabId() {
 	return ++tabId;
 }
 
-function isLocal( anchor ) {
-	return anchor.hash.length > 1 &&
-		anchor.href.replace( rhash, "" ) ===
-			location.href.replace( rhash, "" )
-				// support: Safari 5.1
-				// Safari 5.1 doesn't encode spaces in window.location
-				// but it does encode spaces from anchors (#8777)
-				.replace( /\s/g, "%20" );
+
+function isLocal(anchor) {
+	if(anchor.hash.length > 1)
+	{
+		var href = anchor.href.replace( rhash, "");	
+		return (href === location.href.replace(rhash, "").replace( /\s/g, "%20" ) || href === base );
+	}
+	
+	return false;
 }
+
 
 $.widget( "ui.tabs", {
 	version: "@VERSION",
