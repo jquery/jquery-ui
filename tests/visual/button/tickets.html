@@ -10,17 +10,17 @@
 	<script src="../../../ui/jquery.ui.button.js"></script>
 	<script>
 	$(function() {
-		$( "#ch" ).button().on( "click change", function() {
-			$( "#checked" ).text( this.checked );
-			$( "#aria" ).text( $( this ).button( "widget" ).attr( "aria-pressed" ) );
+		$( "#t5518ch" ).button().on( "click change", function() {
+			$( "#t5518checked" ).text( this.checked );
+			$( "#t5518aria" ).text( $( this ).button( "widget" ).attr( "aria-pressed" ) );
 		}).change();
 	});
 	</script>
 </head>
 <body>
 	<h1>#5518 - Incorrect state after double click in Firefox</h1>
-	<input type="checkbox" id="ch"><label for="ch">Double click this button and check if its checked and aria state correspond to the current display</label>
-	<p>Checked state: <span id="checked"></span></p>
-	<p>Aria state: <span id="aria"></span></p>
+	<input type="checkbox" id="t5518ch"><label for="t5518ch">Double click this button and check if its checked and aria state correspond to the current display</label>
+	<p>Checked state: <span id="t5518checked"></span></p>
+	<p>Aria state: <span id="t5518aria"></span></p>
 </body>
 </html>
