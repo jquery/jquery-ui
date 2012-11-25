@@ -1,0 +1,5 @@
+(function() {
+
+module( "timepicker: core" );
+
+}());

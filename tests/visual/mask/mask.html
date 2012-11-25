@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mask Visual Test: Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
+	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.mask.js"></script>
+	<script>
+	$(function() {
+		$( "#mask1" ).mask({ mask: "99/99/9999" });
+		$( "#mask2" ).mask({ mask: "(999) 999-9999" });
+		$( "#mask3" ).mask({ mask: "(999) 999-9999" }).blur(function(event) {
+                        if (!$(event.target).mask("valid")) {
+                                $(event.target).val("")
+                        }
+                });;
+		$( "#mask4" ).mask({ mask: "(999) 999-9999?x999999" });
+		$( "#mask5" ).mask({ mask: "99-9999999", clearEmpty: false });
+		$( "#mask6" ).mask({ mask: "999-99-9999", clearEmpty: false });
+		$( "#mask7" ).mask({ mask: "a*-999-a999" });
+		$( "#mask8" ).mask({
+			mask: "~9.99 ~9.99 999",
+			definitions: {
+				"~": /\+|-/
+			}
+		});
+		$( "#mask9" ).mask({
+			mask: "hh:mm:ss pp",
+			definitions: {
+				hh: function( value ) {
+					value = parseInt( value, 10 );
+					if ( value >= 1 && value <= 12 ) {
+						return ( value < 10 ? "0" : "" ) + value;
+					}
+				},
+				mm: sixty,
+				ss: sixty,
+				pp: function( value ) {
+					var lower = value.toLowerCase(),
+						character = lower.charAt( 0 );
+					if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
+						return false;
+					}
+					switch ( character ) {
+					case "a":
+						return "am";
+					case "p":
+						return "pm";
+					}
+				}
+			}
+		});
+		var input = $( "#mask10" ).mask({
+			mask: "day",
+			definitions: {
+				day: function ( value ) {
+					if ( $.inArray(value, [ "mon", "tue", "wed", "thu", "fri", "sat", "sun" ]) !== -1 ) {
+						return value;
+					} else if ( $.inArray(value, [ "m", "mo" ]) !== -1 ) {
+						return "mon";
+					} else if ( value === "t" ) {
+						return "t";
+					} else if ( value === "tu" ) {
+						return "tue";
+					} else if ( value === "thu" ) {
+						    return "thu";
+					} else if ( $.inArray(value, [ "w", "we" ]) !== -1 ) {
+						return "wed";
+					} else if ( $.inArray(value, [ "f", "fr" ]) !== -1 ) {
+						return "fri";
+					} else if ( value === "s" ) {
+						return "s";
+					} else if ( value === "sa" ) {
+						return "sat";
+					} else if ( value === "su" ) {
+						return "sun";
+					}
+				},
+				d: /[0-9]/
+			}
+		});
+
+		$( "input" ).each(function( index, value ) {
+			var span = $( "<span></span>" );
+
+			value = $( value );
+			value.after( span );
+			value.keyup(function( event ) {
+				span.text( "Value: " + $( event.target ).mask("value") +
+					" Valid: " + $( event.target ).mask("valid") );
+			});
+		});
+
+		function sixty( value ) {
+			value = parseInt( value, 10 );
+			if ( value >= 0 && value <= 59 ) {
+				return ( value < 10 ? "0" : "" ) + value;
+			}
+		}
+	});
+	</script>
+	<style>
+		label {
+			font-size: 14px;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<label for="mask1">Date - <code>{ mask: "99/99/9999" }</code></label>
+		<input type="text" class="masked" id="mask1">
+		<label for="mask2">Phone - <code>{ mask: "(999) 999-9999" }</code></label>
+		<input type="text" class="masked" id="mask2">
+		<label for="mask3">Phone - <code>{ mask: "(999) 999-9999" }</code> (remove incomplete values by binding to blur)</label>
+		<input type="text" class="masked" id="mask3">
+		<label for="mask4">Phone - <code>{ mask: "(999) 999-9999?x999999" }</code></label>
+		<input type="text" class="masked" id="mask4">
+		<label for="mask5">TaxID - <code>{ mask: "99-9999999", clearEmpty: false }</code></label>
+		<input type="text" class="masked" id="mask5">
+		<label for="mask6">SSN - <code>{ mask: "999-99-9999", clearEmpty: false }</code></label>
+		<input type="text" class="masked" id="mask6">
+		<label for="mask7">Product Key - <code>{ mask: "a*-999-a999" }</code></label>
+		<input type="text" class="masked" id="mask7">
+		<label for="mask8">Eye Script - <code>{ mask: "~9.99 ~9.99 999", definitions: { "~": /\+|-/ } }</code></label>
+		<input type="text" class="masked" id="mask8">
+		<label for="mask9">Time - <code>{ mask: "hh:mm:ss pp", definitions: .... }</code></label>
+		<input type="text" class="masked" id="mask9">
+		<label for="mask10">Weekday</label>
+		<input type="text" class="masked" id="mask10">
+	</form>
+</body>
+</html>
