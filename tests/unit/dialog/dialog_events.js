@@ -325,4 +325,20 @@ test("beforeClose", function() {
 	el.remove();
 });
 
+// #8789 and #8838
+asyncTest("ensure dialog's container doesn't scroll on resize and focus", function() {
+	expect(2);
+
+	var el = $('#dialog1').dialog(),
+		initialScroll = $(window).scrollTop();
+	el.dialog('option', 'height', 600);
+	equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after height change");
+	setTimeout( function(){
+		$(".ui-dialog-titlebar-close").simulate('mousedown');
+		equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after focus moved to dialog");
+		el.dialog('destroy');
+		start();
+	}, 500);
+});
+
 })(jQuery);
