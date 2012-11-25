@@ -38,6 +38,7 @@
 		$.widget( "ui.combobox", {
 			_create: function() {
 				var input,
+					button,
 					that = this,
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
@@ -115,7 +116,7 @@
 						.appendTo( ul );
 				};
 
-				$( "<a>" )
+				button = $( "<a>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
 					.tooltip()
@@ -147,7 +148,7 @@
 				input
 					.tooltip({
 						position: {
-							of: this.button
+							of: button
 						},
 						tooltipClass: "ui-state-highlight"
 					});
