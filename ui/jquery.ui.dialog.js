@@ -524,6 +524,7 @@ $.widget("ui.dialog", {
 
 		if ( resize ) {
 			this._size();
+			this._position();
 		}
 		if ( this.uiDialog.is( ":data(ui-resizable)" ) ) {
 			this.uiDialog.resizable( "option", resizableOptions );
