@@ -24,7 +24,6 @@
 	$(function() {
 		var dialog = $( "#dialog" ).dialog({
 				modal: true,
-				height: 350,
 				width: 500,
 				buttons: [
 					{
@@ -45,7 +44,7 @@
 						showText: false
 					}
 				]
-			}),
+			}).dialog("option", "height", 600),
 
 			datepickerDialog = $( "#dialog-datepicker" ).dialog({
 				autoOpen: false,
