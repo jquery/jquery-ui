@@ -10,10 +10,9 @@
 	<script src="../../../ui/jquery.ui.button.js"></script>
 	<script>
 	$(function() {
-		start = $.now();
 		$( "#ch" ).button().on( "click change", function() {
 			$( "#checked" ).text( this.checked );
-			$( "#aria" ).text( $(this).button( "widget" ).attr( "aria-pressed" ) );
+			$( "#aria" ).text( $( this ).button( "widget" ).attr( "aria-pressed" ) );
 		}).change();
 	});
 	</script>
