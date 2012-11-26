@@ -352,12 +352,19 @@ $.widget("ui.dialog", {
 		uiDialogTitle = $( "<span>" )
 			.uniqueId()
 			.addClass( "ui-dialog-title" )
-			.html( this.options.title || "&#160;" )
 			.prependTo( this.uiDialogTitlebar );
+		this._title( uiDialogTitle );
 
 		this.uiDialog.attr({
 			"aria-labelledby": uiDialogTitle.attr( "id" )
 		});
+	},
+
+	_title: function( title ) {
+		if ( !this.options.title ) {
+			title.html( "&#160;" );
+		}
+		title.text( this.options.title );
 	},
 
 	_createButtonPane: function() {
@@ -600,9 +607,7 @@ $.widget("ui.dialog", {
 		}
 
 		if ( key === "title" ) {
-			// convert whatever was passed in to a string, for html() to not throw up
-			$( ".ui-dialog-title", this.uiDialogTitlebar )
-				.html( "" + ( value || "&#160;" ) );
+			this._title( this.uiDialogTitlebar.find( ".ui-dialog-title" ) );
 		}
 	},
 
