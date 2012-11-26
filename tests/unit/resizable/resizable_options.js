@@ -210,18 +210,4 @@ test("zIndex, applied to all handles", function() {
 	});
 });
 
-test( "zIndex, less than a modal dialog's overlay by default", function() {
-	expect(1);
-
-	var resizable = $( '<div></div>' ).resizable();
-	var dialog = $( '<div></div>' ).dialog( { modal: true });
-
-	var resizableZIndex = resizable.resizable( 'option', 'zIndex' );
-	var overlayZIndex = $( '.ui-widget-overlay' ).css( 'zIndex' );
-	overlayZIndex = parseInt( overlayZIndex, 10 );
-
-	ok( resizableZIndex < overlayZIndex, "Resizables behind a modal dialog must have a smaller z-index than the overlay so that they're not resizable.  See #7960." );
-	dialog.dialog( 'destroy' );
-});
-
 })(jQuery);
