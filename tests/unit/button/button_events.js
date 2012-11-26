@@ -23,4 +23,16 @@ test( "when button loses focus, ensure active state is removed (#8559)", functio
 	}).focus().simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } ).simulate( "keypress", { keyCode: $.ui.keyCode.ENTER } );
 });
 
+test( "ensure checked and aria after single click on checkbox label button", function() {
+	expect( 3 );
+
+	$( "#check2" ).button().change( function() {
+		var lbl = $( this ).button( "widget" );
+		ok( this.checked, "checked ok" );
+		ok( lbl.attr( "aria-pressed" ) === "true", "aria ok" );
+		ok( lbl.hasClass( "ui-state-active" ), "ui-state-active ok" );
+	}).button( "widget" ).simulate( "click" );
+
+});
+
 })(jQuery);
