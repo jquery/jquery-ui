@@ -80,4 +80,17 @@ test( "focus tabbable", function() {
 	}, 13);
 });
 
+// #7960
+test( "resizable handles below modal overlays", function() {
+	expect( 1 );
+
+	var resizable = $( "<div>" ).resizable(),
+		dialog = $( "<div>" ).dialog({ modal: true }),
+		resizableZindex = parseInt( resizable.find( ".ui-resizable-handle" ).css( "zIndex" ), 10 ),
+		overlayZindex = parseInt( $( ".ui-widget-overlay" ).css( "zIndex" ), 10 );
+
+	ok( resizableZindex < overlayZindex, "Resizable handles have lower z-index than modal overlay" );
+	dialog.dialog( "destroy" );
+});
+
 })(jQuery);
