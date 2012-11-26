@@ -216,10 +216,10 @@ Marc-Andre Lafortune <github@marc-andre.ca>
 Nate Eagle <nate.eagle@teamaol.com>
 David Souther <davidsouther@gmail.com>
 Mathias Stenbom <mathias@stenbom.com>
-Sergey Kartashov <ebishkek@yandex.ru>
 Avinash R <nashpapa@gmail.com>
-Cory Gackenheimer <cory.gack@gmail.com>
+Sergey Kartashov <ebishkek@yandex.ru>
 Ethan Romba <ethanromba@gmail.com>
+Cory Gackenheimer <cory.gack@gmail.com>
 Juan Pablo Kaniefsky <jpkaniefsky@gmail.com>
 Roman Salnikov <bardt.dz@gmail.com>
 Anika Henke <anika@selfthinker.org>
