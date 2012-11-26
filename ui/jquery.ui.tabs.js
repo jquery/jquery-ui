@@ -497,6 +497,8 @@ $.widget( "ui.tabs", {
 
 		if ( heightStyle === "fill" ) {
 			maxHeight = parent.height();
+			maxHeight -= this.element.outerHeight() - this.element.height();
+
 			this.element.siblings( ":visible" ).each(function() {
 				var elem = $( this ),
 					position = elem.css( "position" );
