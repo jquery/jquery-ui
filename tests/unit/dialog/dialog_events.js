@@ -39,6 +39,51 @@ test("open", function() {
 	el.remove();
 });
 
+
+test( "focus", function() {
+	expect( 5 );
+	var el, other;
+	el = $("#dialog1").dialog({
+		autoOpen: false
+	});
+	other = $("#dialog2").dialog({
+		autoOpen: false
+	});
+
+	el.one( "dialogopen", function() {
+		ok( true, "open, just once" );
+	});
+	el.one( "dialogfocus", function() {
+		ok( true, "focus on open" );
+	});
+	other.dialog( "open" );
+
+	el.one( "dialogfocus", function() {
+		ok( true, "when opening and already open and wasn't on top" );
+	});
+	other.dialog( "open" );
+	el.dialog( "open" );
+
+	el.one( "dialogfocus", function() {
+		ok( true, "when calling moveToTop and wasn't on top" );
+	});
+	other.dialog( "moveToTop" );
+	el.dialog( "moveToTop" );
+
+	el.bind( "dialogfocus", function() {
+		ok( true, "when mousedown anywhere on the dialog and it wasn't on top" );
+	});
+	other.dialog( "moveToTop" );
+	el.trigger( "mousedown" );
+
+	// triggers just once when already on top
+	el.dialog( "open" );
+	el.dialog( "moveToTop" );
+	el.trigger( "mousedown" );
+
+	el.add( other ).remove();
+});
+
 test("dragStart", function() {
 	expect(9);
 

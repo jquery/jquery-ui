@@ -17,22 +17,18 @@ test("title id", function() {
 	el.remove();
 });
 
-test("ARIA", function() {
-	expect(4);
+test( "ARIA", function() {
+	expect( 4 );
 
-	var labelledBy,
-		el = $('<div></div>').dialog();
+	var el = $( "<div></div>" ).dialog(),
+		wrapper = el.dialog( "widget" );
+	equal( wrapper.attr( "role" ), "dialog", "dialog role" );
+	equal( wrapper.attr( "aria-labelledby" ), wrapper.find( ".ui-dialog-title" ).attr( "id" ) );
+	equal( wrapper.attr( "aria-describedby" ), el.attr( "id" ), "aria-describedby added" );
+	el.remove();
 
-	equal(el.dialog('widget').attr('role'), 'dialog', 'dialog role');
-
-	labelledBy = el.dialog('widget').attr('aria-labelledby');
-	ok(labelledBy.length > 0, 'has aria-labelledby attribute');
-	equal(el.dialog('widget').find('.ui-dialog-title').attr('id'), labelledBy,
-		'proper aria-labelledby attribute');
-
-	equal(el.dialog('widget').find('.ui-dialog-titlebar-close').attr('role'), 'button',
-		'close link role');
-
+	el = $( '<div><div aria-describedby="section2"><p id="section2">descriotion</p></div></div>' ).dialog();
+	strictEqual( el.dialog( "widget" ).attr( "aria-describedby" ), undefined, "no aria-describedby added, as already present in markup" );
 	el.remove();
 });
 
@@ -40,6 +36,48 @@ test("widget method", function() {
 	expect( 1 );
 	var dialog = $("<div>").appendTo("#main").dialog();
 	deepEqual(dialog.parent()[0], dialog.dialog("widget")[0]);
+});
+
+test( "focus tabbable", function() {
+	expect( 5 );
+	var el,
+		options = {
+			buttons: [{
+				text: "Ok",
+				click: $.noop
+			}]
+		};
+
+	el = $( "<div><input><input autofocus></div>" ).dialog( options );
+	equal( document.activeElement, el.find( "input" )[ 1 ], "1. first element inside the dialog matching [autofocus]" );
+	el.remove();
+
+	// IE8 fails to focus the input, <body> ends up being the activeElement
+	// so wait for that stupid browser
+	stop();
+	setTimeout(function() {
+		el = $( "<div><input><input></div>" ).dialog( options );
+		equal( document.activeElement, el.find( "input" )[ 0 ], "2. tabbable element inside the content element" );
+		el.remove();
+
+		el = $( "<div>text</div>" ).dialog( options );
+		equal( document.activeElement, el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ], "3. tabbable element inside the buttonpane" );
+		el.remove();
+
+		el = $( "<div>text</div>" ).dialog();
+		equal( document.activeElement, el.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ], "4. the close button" );
+		el.remove();
+
+		el = $( "<div>text</div>" ).dialog({
+			autoOpen: false
+		});
+		el.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
+		el.dialog( "open" );
+		equal( document.activeElement, el.parent()[ 0 ], "5. the dialog itself" );
+		el.remove();
+
+		start();
+	}, 13);
 });
 
 })(jQuery);

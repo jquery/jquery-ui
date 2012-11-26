@@ -35,7 +35,7 @@ test("buttons", function() {
 		},
 		el = $('<div></div>').dialog({ buttons: buttons });
 
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 2, "number of buttons");
 
 	i = 0;
@@ -61,7 +61,7 @@ test("buttons", function() {
 	el.dialog("option", "buttons", newButtons);
 	deepEqual(el.dialog("option", "buttons"), newButtons, '.dialog("option", "buttons", ...) setter');
 
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 1, "number of buttons after setter");
 	btn.trigger('click');
 
@@ -72,7 +72,7 @@ test("buttons", function() {
 	});
 
 	el.dialog("option", "buttons", null);
-	btn = $("button", el.dialog('widget'));
+	btn = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 0, "all buttons have been removed");
 	equal(el.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
 	equal(el.parent().hasClass('ui-dialog-buttons'), false, "dialog wrapper removes class about having buttons");
@@ -81,7 +81,7 @@ test("buttons", function() {
 });
 
 test("buttons - advanced", function() {
-	expect(5);
+	expect( 7 );
 
 	var buttons,
 		el = $("<div></div>").dialog({
@@ -92,16 +92,22 @@ test("buttons - advanced", function() {
 					id: "my-button-id",
 					click: function() {
 						equal(this, el[0], "correct context");
-					}
+					},
+					icons: {
+						primary: "ui-icon-cancel"
+					},
+					showText: false
 				}
 			]
 		});
 
-	buttons = el.dialog('widget').find("button");
+	buttons = el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(buttons.length, 1, "correct number of buttons");
 	equal(buttons.attr("id"), "my-button-id", "correct id");
 	equal(buttons.text(), "a button", "correct label");
 	ok(buttons.hasClass("additional-class"), "additional classes added");
+	deepEqual( buttons.button("option", "icons"), { primary: "ui-icon-cancel", secondary: null } );
+	equal( buttons.button( "option", "text" ), false );
 	buttons.click();
 
 	el.remove();
@@ -148,7 +154,7 @@ test("closeText", function() {
 });
 
 test("dialogClass", function() {
-	expect(4);
+	expect( 6 );
 
 	var el = $('<div></div>').dialog();
 		equal(el.dialog('widget').is(".foo"), false, 'dialogClass not specified. foo class added');
@@ -156,6 +162,9 @@ test("dialogClass", function() {
 
 	el = $('<div></div>').dialog({ dialogClass: "foo" });
 		equal(el.dialog('widget').is(".foo"), true, 'dialogClass in init. foo class added');
+	el.dialog( "option", "dialogClass", "foobar" );
+		equal( el.dialog('widget').is(".foo"), false, "dialogClass changed, previous one was removed" );
+		equal( el.dialog('widget').is(".foobar"), true, "dialogClass changed, new one was added" );
 	el.remove();
 
 	el = $('<div></div>').dialog({ dialogClass: "foo bar" });
@@ -289,49 +298,8 @@ test("position, default center on window", function() {
 	el.remove();
 });
 
-test("position, top on window", function() {
-	expect( 2 );
-	var el = $('<div></div>').dialog({ position: "top" }),
-		dialog = el.dialog('widget'),
-		offset = dialog.offset();
-	closeEnough(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft(), 1);
-	closeEnough(offset.top, $(window).scrollTop(), 1);
-	el.remove();
-});
-
-test("position, left on window", function() {
-	expect( 2 );
-	var el = $('<div></div>').dialog({ position: "left" }),
-		dialog = el.dialog('widget'),
-		offset = dialog.offset();
-	closeEnough(offset.left, 0, 1);
-	closeEnough(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop(), 1);
-	el.remove();
-});
-
 // todo: figure out these fails in IE7
 if ( !$.ui.ie ) {
-
-	test("position, right bottom on window", function() {
-		expect( 2 );
-		var el = $('<div></div>').dialog({ position: "right bottom" }),
-			dialog = el.dialog('widget'),
-			offset = dialog.offset();
-		closeEnough(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft(), 1);
-		closeEnough(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop(), 1);
-		el.remove();
-	});
-
-	test("position, right bottom on window w/array", function() {
-		expect( 2 );
-		var el = $('<div></div>').dialog({ position: ["right", "bottom"] }),
-			dialog = el.dialog('widget'),
-			offset = dialog.offset();
-		closeEnough(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft(), 1);
-		closeEnough(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop(), 1);
-		el.remove();
-	});
-
 	test("position, right bottom at right bottom via ui.position args", function() {
 		expect( 2 );
 		var el = $('<div></div>').dialog({
@@ -347,18 +315,7 @@ if ( !$.ui.ie ) {
 		closeEnough(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop(), 1);
 		el.remove();
 	});
-
 }
-
-test("position, offset from top left w/array", function() {
-	expect( 2 );
-	var el = $('<div></div>').dialog({ position: [10, 10] }),
-		dialog = el.dialog('widget'),
-		offset = dialog.offset();
-	closeEnough(offset.left, 10 + $(window).scrollLeft(), 1);
-	closeEnough(offset.top, 10 + $(window).scrollTop(), 1);
-	el.remove();
-});
 
 test("position, at another element", function() {
 	expect( 4 );
@@ -415,37 +372,45 @@ test("resizable", function() {
 	el.remove();
 });
 
-test("title", function() {
-	expect(9);
+test( "title", function() {
+	expect( 11 );
 
 	function titleText() {
-		return el.dialog('widget').find(".ui-dialog-title").html();
+		return el.dialog('widget').find( ".ui-dialog-title" ).html();
 	}
 
-	var el = $('<div></div>').dialog();
+	var el = $( '<div></div>' ).dialog();
 		// some browsers return a non-breaking space and some return "&nbsp;"
 		// so we generate a non-breaking space for comparison
-		equal(titleText(), $( "<span>&#160;</span>" ).html(), "[default]");
-		equal(el.dialog("option", "title"), "", "option not changed");
+		equal( titleText(), $( "<span>&#160;</span>" ).html(), "[default]" );
+		equal( el.dialog( "option", "title" ), null, "option not changed" );
 	el.remove();
 
-	el = $('<div title="foo">').dialog();
-		equal(titleText(), "foo", "title in element attribute");
-		equal(el.dialog("option", "title"), "foo", "option updated from attribute");
+	el = $( '<div title="foo">' ).dialog();
+		equal( titleText(), "foo", "title in element attribute" );
+		equal( el.dialog( "option", "title"), "foo", "option updated from attribute" );
 	el.remove();
 
-	el = $('<div></div>').dialog({ title: 'foo' });
-		equal(titleText(), "foo", "title in init options");
-		equal(el.dialog("option", "title"), "foo", "opiton set from options hash");
+	el = $( '<div></div>' ).dialog({ title: 'foo' });
+		equal( titleText(), "foo", "title in init options" );
+		equal( el.dialog("option", "title"), "foo", "opiton set from options hash" );
 	el.remove();
 
-	el = $('<div title="foo">').dialog({ title: 'bar' });
-		equal(titleText(), "bar", "title in init options should override title in element attribute");
-		equal(el.dialog("option", "title"), "bar", "opiton set from options hash");
+	el = $( '<div title="foo">' ).dialog({ title: 'bar' });
+		equal( titleText(), "bar", "title in init options should override title in element attribute" );
+		equal( el.dialog("option", "title"), "bar", "opiton set from options hash" );
 	el.remove();
 
-	el = $('<div></div>').dialog().dialog('option', 'title', 'foo');
-		equal(titleText(), 'foo', 'title after init');
+	el = $( '<div></div>' ).dialog().dialog( 'option', 'title', 'foo' );
+		equal( titleText(), 'foo', 'title after init' );
+	el.remove();
+
+	// make sure attroperties are properly ignored - #5742 - .attr() might return a DOMElement
+	el = $( '<form><input name="title"></form>' ).dialog();
+		// some browsers return a non-breaking space and some return "&nbsp;"
+		// so we get the text to normalize to the actual non-breaking space
+		equal( titleText(), $( "<span>&#160;</span>" ).html(), "[default]" );
+		equal( el.dialog( "option", "title" ), null, "option not changed" );
 	el.remove();
 });
 
