@@ -796,7 +796,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		allAnimations = allAnimations.map(function() {
 			var styleInfo = this,
 				dfd = $.Deferred(),
-				opts = jQuery.extend({}, o, {
+				opts = $.extend({}, o, {
 					queue: false,
 					complete: function() {
 						dfd.resolve( styleInfo );
