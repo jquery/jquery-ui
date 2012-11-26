@@ -235,10 +235,18 @@ test( "{ heightStyle: 'content' }", function() {
 });
 
 test( "{ heightStyle: 'fill' }", function() {
-	expect( 2 );
+	expect( 4 );
 	$( "#tabs8Wrapper" ).height( 500 );
 	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
 	equalHeight( element, 485 );
+	element.tabs( "destroy" );
+
+	element = $( "#tabs8" ).css({
+		"border": "1px solid black",
+		"padding": "1px 0"
+	});
+	element.tabs({ heightStyle: "fill" });
+	equalHeight( element, 481 );
 });
 
 test( "{ heightStyle: 'fill' } with sibling", function() {
