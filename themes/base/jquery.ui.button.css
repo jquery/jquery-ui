@@ -42,7 +42,7 @@ button.ui-button-icons-only {
 
 /* button text element */
 .ui-button .ui-button-text {
-	display: block;
+	display: inline-block;
 	line-height: 1.4;
 }
 .ui-button-text-only .ui-button-text {
