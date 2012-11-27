@@ -262,8 +262,9 @@ function gatherContributors() {
 
 function updateTrac() {
 	echo( newVersion.cyan + " was tagged at " + tagTime.cyan + "." );
-	echo( "Close the " + newVersion.cyan + " Milestone with the above date and time." );
-	echo( "Create the " + newVersion.cyan + " Version with the above date and time." );
+	echo( "Close the " + newVersion.cyan + " Milestone." );
+	echo( "Create the " + newVersion.cyan + " Version." );
+	echo( "When Trac asks for date and time, match the above. Should only change minutes and seconds." );
 	echo( "Create a Milestone for the next minor release." );
 }
 
@@ -342,9 +343,7 @@ function bootstrap( fn ) {
 	fs.mkdirSync( baseDir );
 
 	console.log( "Installing dependencies..." );
-	require( "child_process" ).exec( "npm install shelljs colors", {
-		cwd: baseDir
-	}, function( error ) {
+	require( "child_process" ).exec( "npm install shelljs colors", function( error ) {
 		if ( error ) {
 			console.log( error );
 			return process.exit( 1 );

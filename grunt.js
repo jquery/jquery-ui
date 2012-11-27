@@ -281,7 +281,7 @@ grunt.initConfig({
 		files: grunt.file.expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|index|test|dialog|tabs|tooltip)\.html$/ ).test( file );
+			return !( /(all|index|test|dialog|dialog_deprecated|tabs|tooltip)\.html$/ ).test( file );
 		})
 	},
 	lint: {
@@ -299,8 +299,8 @@ grunt.initConfig({
 			}),
 			// TODO consider reenabling some of these rules
 			rules: {
+				"adjoining-classes": false,
 				"import": false,
-				"important": false,
 				"outline-none": false,
 				// especially this one
 				"overqualified-elements": false,
