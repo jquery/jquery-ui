@@ -154,9 +154,9 @@
 .ui-icon {
 	width: 16px;
 	height: 16px;
-	background-image: url(images/ui-icons_222222_256x240.png)/*{iconsContent}*/;
 	background-position: 16px 16px;
 }
+.ui-icon,
 .ui-widget-content .ui-icon {
 	background-image: url(images/ui-icons_222222_256x240.png)/*{iconsContent}*/;
 }
