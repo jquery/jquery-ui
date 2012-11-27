@@ -61,7 +61,7 @@
 						// remove invalid value, as it didn't match anything
 						$( element )
 							.val( "" )
-							.attr( "title", value + " didn't match any item" )
+							.attr( "title", $( "<a>" ).text( value ).html() + " didn't match any item" )
 							.tooltip( "open" );
 						select.val( "" );
 						setTimeout(function() {
