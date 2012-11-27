@@ -94,10 +94,6 @@ input.ui-button {
 .ui-button-icons-only .ui-button-icon-secondary {
 	right: .5em;
 }
-.ui-button-text-icons .ui-button-icon-secondary,
-.ui-button-icons-only .ui-button-icon-secondary {
-	right: .5em;
-}
 
 /* button sets */
 .ui-buttonset {
