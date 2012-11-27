@@ -114,6 +114,9 @@ $.widget("ui.mouse", {
 		if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
 			return this._mouseUp(event);
 		}
+		
+		// Prevent ghost event
+		if (event.which === 0) return;
 
 		if (this._mouseStarted) {
 			this._mouseDrag(event);
