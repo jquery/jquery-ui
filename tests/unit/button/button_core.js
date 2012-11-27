@@ -88,4 +88,15 @@ test("buttonset (rtl)", function() {
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
 });
 
+test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+	expect( 3 );
+
+	$("#check2").button().change( function() {
+		var lbl = $( this ).button("widget");
+		ok( this.checked, "checked ok" );
+		ok( lbl.attr("aria-pressed") === "true", "aria ok" );
+		ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+	}).button("widget").simulate("click");
+});
+
 })(jQuery);
