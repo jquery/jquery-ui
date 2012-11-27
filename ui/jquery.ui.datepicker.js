@@ -13,7 +13,6 @@
  */
 (function( $, undefined ) {
 
-/*jshint evil: true */
 $.extend($.ui, { datepicker: { version: "@VERSION" } });
 
 var PROP_NAME = 'datepicker',
