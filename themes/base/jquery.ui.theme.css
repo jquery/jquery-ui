@@ -41,6 +41,7 @@
 	background: #cccccc/*{bgColorHeader}*/ url(images/ui-bg_highlight-soft_75_cccccc_1x100.png)/*{bgImgUrlHeader}*/ 50%/*{bgHeaderXPos}*/ 50%/*{bgHeaderYPos}*/ repeat-x/*{bgHeaderRepeat}*/;
 	color: #222222/*{fcHeader}*/;
 	font-weight: bold;
+	zoom: 1;
 }
 .ui-widget-header a { color: #222222/*{fcHeader}*/; }
 
