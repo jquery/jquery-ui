@@ -16,6 +16,20 @@ test( "content: default", function() {
 	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "anchortitle" );
 });
 
+test( "content: default; HTML escaping", function() {
+	expect( 2 );
+	var scriptText = "<script>$.ui.tooltip.hacked = true;</script>",
+		element = $( "#tooltipped1" );
+
+	$.ui.tooltip.hacked = false;
+	element.attr( "title", scriptText )
+		.tooltip()
+		.tooltip( "open" );
+	equal( $.ui.tooltip.hacked, false, "script did not execute" );
+	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), scriptText,
+		"correct tooltip text" );
+});
+
 test( "content: return string", function() {
 	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip({
