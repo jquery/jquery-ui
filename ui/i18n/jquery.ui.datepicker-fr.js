@@ -5,13 +5,13 @@
 jQuery(function($){
 	$.datepicker.regional['fr'] = {
 		closeText: 'Fermer',
-		prevText: 'Précédent',
+		prevText: 'Pr&eacute;c&eacute;dent',
 		nextText: 'Suivant',
 		currentText: 'Aujourd\'hui',
-		monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
-		'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-		monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin',
-		'Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+		monthNames: ['Janvier','F&eacute;vrier','Mars','Avril','Mai','Juin',
+		'Juillet','Août','Septembre','Octobre','Novembre','D&eacute;cembre'],
+		monthNamesShort: ['Janv.','F&eacute;vr.','Mars','Avril','Mai','Juin',
+		'Juil.','Ao&ucirc;t','Sept.','Oct.','Nov.','D&eacute;c.'],
 		dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
 		dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
 		dayNamesMin: ['D','L','M','M','J','V','S'],
