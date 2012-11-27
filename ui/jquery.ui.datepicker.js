@@ -139,20 +139,7 @@ $.extend(Datepicker.prototype, {
 	 * @param  settings  object - the new settings to use for this date picker instance (anonymous)
 	 */
 	_attachDatepicker: function(target, settings) {
-		// check for settings on the control itself - in namespace 'date:'
-		var attrName, attrValue, nodeName, inline, inst,
-			inlineSettings = null;
-		for (attrName in this._defaults) {
-			attrValue = target.getAttribute('date:' + attrName);
-			if (attrValue) {
-				inlineSettings = inlineSettings || {};
-				try {
-					inlineSettings[attrName] = eval(attrValue);
-				} catch (err) {
-					inlineSettings[attrName] = attrValue;
-				}
-			}
-		}
+		var nodeName, inline, inst;
 		nodeName = target.nodeName.toLowerCase();
 		inline = (nodeName === 'div' || nodeName === 'span');
 		if (!target.id) {
@@ -160,7 +147,7 @@ $.extend(Datepicker.prototype, {
 			target.id = 'dp' + this.uuid;
 		}
 		inst = this._newInst($(target), inline);
-		inst.settings = $.extend({}, settings || {}, inlineSettings || {});
+		inst.settings = $.extend({}, settings || {});
 		if (nodeName === 'input') {
 			this._connectDatepicker(target, inst);
 		} else if (inline) {
