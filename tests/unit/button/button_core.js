@@ -88,15 +88,20 @@ test("buttonset (rtl)", function() {
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
 });
 
-test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
-	expect( 3 );
+// TODO: simulated click events don't behave like real click events in IE
+// remove this when simulate properly simulates this
+// see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
+if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
+	test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+		expect( 3 );
 
-	$("#check2").button().change( function() {
-		var lbl = $( this ).button("widget");
-		ok( this.checked, "checked ok" );
-		ok( lbl.attr("aria-pressed") === "true", "aria ok" );
-		ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
-	}).button("widget").simulate("click");
-});
+		$("#check2").button().change( function() {
+			var lbl = $( this ).button("widget");
+			ok( this.checked, "checked ok" );
+			ok( lbl.attr("aria-pressed") === "true", "aria ok" );
+			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+		}).button("widget").simulate("mousedown").simulate("click").simulate("mouseup");
+	});
+}
 
 })(jQuery);
