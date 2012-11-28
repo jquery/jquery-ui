@@ -181,7 +181,7 @@ $.widget( "ui.autocomplete", {
 		this._initSource();
 		this.menu = $( "<ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( this.document.find( this.options.appendTo || "body" )[ 0 ] )
+			.appendTo( this._appendTo() )
 			.menu({
 				// custom key handling for now
 				input: $(),
@@ -318,6 +318,14 @@ $.widget( "ui.autocomplete", {
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
 		}
+	},
+
+	_appendTo: function() {
+		var element = this.options.appendTo;
+		if ( element && (element.jquery || element.nodeType) ) {
+			return $( element );
+		}
+		return this.document.find( element || "body" ).eq( 0 );
 	},
 
 	_isMultiLine: function() {

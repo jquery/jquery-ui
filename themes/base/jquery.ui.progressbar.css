@@ -15,7 +15,7 @@
 }
 .ui-progressbar .ui-progressbar-value {
 	margin: -1px;
-	height:100%;
+	height: 100%;
 }
 .ui-progressbar .ui-progressbar-value .ui-progressbar-overlay {
 	background: url("images/animated-overlay.gif");

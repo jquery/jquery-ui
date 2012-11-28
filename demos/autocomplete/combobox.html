@@ -24,7 +24,7 @@
 		bottom: 0;
 		margin-left: -1px;
 		padding: 0;
-		/* adjust styles for IE 6/7 */
+		/* support: IE7 */
 		*height: 1.7em;
 		*top: 0.1em;
 	}
@@ -46,7 +46,7 @@
 						.addClass( "ui-combobox" )
 						.insertAfter( select );
 
-				function removeIfInvalid(element) {
+				function removeIfInvalid( element ) {
 					var value = $( element ).val(),
 						matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
 						valid = false;
@@ -56,6 +56,7 @@
 							return false;
 						}
 					});
+
 					if ( !valid ) {
 						// remove invalid value, as it didn't match anything
 						$( element )
@@ -66,8 +67,7 @@
 						setTimeout(function() {
 							input.tooltip( "close" ).attr( "title", "" );
 						}, 2500 );
-						input.data( "autocomplete" ).term = "";
-						return false;
+						input.data( "ui-autocomplete" ).term = "";
 					}
 				}
 
@@ -103,13 +103,14 @@
 							});
 						},
 						change: function( event, ui ) {
-							if ( !ui.item )
-								return removeIfInvalid( this );
+							if ( !ui.item ) {
+								removeIfInvalid( this );
+							}
 						}
 					})
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
 
-				input.data( "autocomplete" )._renderItem = function( ul, item ) {
+				input.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 					return $( "<li>" )
 						.append( "<a>" + item.label + "</a>" )
 						.appendTo( ul );
@@ -144,19 +145,14 @@
 						input.focus();
 					});
 
-					input
-						.tooltip({
-							position: {
-								of: this.button
-							},
-							tooltipClass: "ui-state-highlight"
-						});
+				input.tooltip({
+					tooltipClass: "ui-state-highlight"
+				});
 			},
 
-			destroy: function() {
+			_destroy: function() {
 				this.wrapper.remove();
 				this.element.show();
-				$.Widget.prototype.destroy.call( this );
 			}
 		});
 	})( jQuery );

@@ -42,7 +42,7 @@ button.ui-button-icons-only {
 
 /* button text element */
 .ui-button .ui-button-text {
-	display: block;
+	display: inline-block;
 	line-height: 1.4;
 }
 .ui-button-text-only .ui-button-text {
@@ -90,10 +90,6 @@ input.ui-button {
 	left: .5em;
 }
 .ui-button-text-icon-secondary .ui-button-icon-secondary,
-.ui-button-text-icons .ui-button-icon-secondary,
-.ui-button-icons-only .ui-button-icon-secondary {
-	right: .5em;
-}
 .ui-button-text-icons .ui-button-icon-secondary,
 .ui-button-icons-only .ui-button-icon-secondary {
 	right: .5em;

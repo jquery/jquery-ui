@@ -15,7 +15,7 @@
 }
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
-	padding:.2em 0;
+	padding: .2em 0;
 }
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
@@ -128,9 +128,7 @@
 .ui-datepicker-multi-4 .ui-datepicker-group {
 	width: 25%;
 }
-.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header {
-	border-left-width: 0;
-}
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header,
 .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
 	border-left-width: 0;
 }
@@ -140,7 +138,7 @@
 .ui-datepicker-row-break {
 	clear: both;
 	width: 100%;
-	font-size: 0em;
+	font-size: 0;
 }
 
 /* RTL support */
@@ -169,16 +167,11 @@
 .ui-datepicker-rtl .ui-datepicker-buttonpane button {
 	float: left;
 }
-.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current {
-	float:right;
-}
+.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current,
 .ui-datepicker-rtl .ui-datepicker-group {
 	float: right;
 }
-.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header {
-	border-right-width: 0;
-	border-left-width: 1px;
-}
+.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header,
 .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header {
 	border-right-width: 0;
 	border-left-width: 1px;
