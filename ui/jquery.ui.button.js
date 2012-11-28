@@ -342,7 +342,7 @@ $.widget( "ui.button", {
 			}
 
 			if ( icons.secondary ) {
-				buttonElement.append( "<span class='ui-button-icon-secondary ui-icon " + icons.secondary + "'></span>" );
+				buttonElement.prepend( "<span class='ui-button-icon-secondary ui-icon " + icons.secondary + "'></span>" );
 			}
 
 			if ( !this.options.text ) {
