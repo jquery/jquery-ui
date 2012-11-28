@@ -198,6 +198,10 @@ $.widget( "ui.selectmenu", {
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
+			var _position = {
+				of: this.button
+			};
+
 			// make sure menu is refreshed on first init (needed at least for IE9)
 			if ( this.isOpen === undefined ) {
 				this.button.trigger( "focus" );
@@ -207,7 +211,7 @@ $.widget( "ui.selectmenu", {
 			this._toggleAttr();
 			this.menu.menu( "focus", event, this._getSelectedItem() );
 
-			if ( this.items && !this.options.dropdown ) {
+			if ( this.items && !this.options.dropdown && this.options.position.my == "left top" && this.options.position.at == "left bottom" ) {
 				var currentItem = this._getSelectedItem();
 				// center current item
 				if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
@@ -215,17 +219,13 @@ $.widget( "ui.selectmenu", {
 					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight() / 2 + currentItem.outerHeight() / 2 );
 					this.menuWrap.css( "left" , "auto" );
 				}
-
-				$.extend( this.options.position, {
-					my: "left top" + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 ),
-					at: "left top"
-				});
+				_position.my = "left top" + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 );
+				_position.at = "left top";
 			}
 
-			this.options.position.of = this.button;
 			this.menuWrap
 				.zIndex( this.element.zIndex() + 1 )
-				.position( this.options.position );
+				.position( $.extend( {}, this.options.position, _position ) );
 
 			this._trigger( "open", event );
 		}
