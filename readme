@@ -7,10 +7,9 @@ INFO
 This is an improved version of the jQuery UI selectmenu widget originally developed by Scott (filament group):
 http://filamentgroup.com/lab/jquery_ui_selectmenu_an_aria_accessible_plugin_for_styling_a_html_select/
 
-There is a new UI 1.9.x compatible, built from scratch version, please see issue #140.
 
 DOWNLOAD
-Latest: https://github.com/fnagel/jquery-ui/zipball/selectmenu (jQuery 1.8.x / UI 1.8.x)
+Latest: https://github.com/fnagel/jquery-ui/zipball/selectmenu (jQuery 1.8.x / UI 1.9.x)
 Current stable: https://github.com/fnagel/jquery-ui/zipball/selectmenu_v1.3.0 (jQuery 1.8.2 / UI 1.8.24)
 Old stable: https://github.com/fnagel/jquery-ui/zipball/selectmenu_v1.2.2 (jQuery 1.7.2 / UI 1.8.20)
 Old stable: https://github.com/fnagel/jquery-ui/zipball/selectmenu_v1.2.1 (jQuery 1.6.4 / UI 1.8.17)
