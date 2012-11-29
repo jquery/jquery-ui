@@ -11,12 +11,12 @@
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#toolbar {
-		padding: 11px 4px 9px 4px;
+		padding: 4px;
+		display: inline-block;
 	}
-
 	/* support: IE7 */
-	*:first-child+html #toolbar {
-		padding: 4px 0px 4px 5px;
+	*+html #toolbar {
+		display: inline;
 	}
 	</style>
 	<script>
@@ -91,7 +91,7 @@
 </head>
 <body>
 
-<span id="toolbar" class="ui-widget-header ui-corner-all">
+<div id="toolbar" class="ui-widget-header ui-corner-all">
 	<button id="beginning">go to beginning</button>
 	<button id="rewind">rewind</button>
 	<button id="play">play</button>
@@ -106,12 +106,12 @@
 		<input type="radio" id="repeat1" name="repeat" /><label for="repeat1">Once</label>
 		<input type="radio" id="repeatall" name="repeat" /><label for="repeatall">All</label>
 	</span>
-</span>
+</div>
 
 <div class="demo-description">
 <p>
 	A mediaplayer toolbar. Take a look at the underlying markup: A few button elements,
-	an input of type checkbox for the Shuffle button, and three inputs of type radio for the Repeat options. 
+	an input of type checkbox for the Shuffle button, and three inputs of type radio for the Repeat options.
 </p>
 </div>
 </body>

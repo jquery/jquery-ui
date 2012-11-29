@@ -14,7 +14,7 @@
 	position: relative;
 	margin-top: 2px;
 	padding: .5em .5em .5em .7em;
-	zoom: 1;
+	min-height: 0; /* support: IE7 */
 }
 .ui-accordion .ui-accordion-icons {
 	padding-left: 2.2em;
@@ -35,5 +35,4 @@
 	padding: 1em 2.2em;
 	border-top: 0;
 	overflow: auto;
-	zoom: 1;
 }

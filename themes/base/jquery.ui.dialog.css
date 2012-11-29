@@ -40,7 +40,6 @@
 	padding: .5em 1em;
 	background: none;
 	overflow: auto;
-	zoom: 1;
 }
 .ui-dialog .ui-dialog-buttonpane {
 	text-align: left;

@@ -43,7 +43,7 @@
 	clear: both;
 }
 .ui-helper-clearfix {
-	zoom: 1;
+	min-height: 0; /* support: IE7 */
 }
 .ui-helper-zfix {
 	width: 100%;
