@@ -41,15 +41,15 @@ test("radio groups", function() {
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
 	// click outside of forms
-	$("#radio0 .ui-button:eq(1)").click();
+	$("#radio0 .ui-button:eq(1)").simulate( "click" );
 	assert(":eq(1)", ":eq(1)", ":eq(2)");
 
 	// click in first form
-	$("#radio1 .ui-button:eq(0)").click();
+	$("#radio1 .ui-button:eq(0)").simulate( "click" );
 	assert(":eq(1)", ":eq(0)", ":eq(2)");
 
 	// click in second form
-	$("#radio2 .ui-button:eq(0)").click();
+	$("#radio2 .ui-button:eq(0)").simulate( "click" );
 	assert(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
