@@ -73,7 +73,7 @@ $.widget( "ui.selectmenu", {
 		this.element.hide();
 
 		// create button
-		this.button = $( "<a />", {
+		this.button = $( "<a>", {
 			"class": "ui-button ui-widget ui-state-default ui-corner-all",
 			href: "#" + this.ids.id,
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
@@ -86,18 +86,18 @@ $.widget( "ui.selectmenu", {
 			"aria-haspopup": true
 		});
 
-		this.button.prepend( $( "<span />", {
+		this.button.prepend( $( "<span>", {
 			"class": "ui-icon " + ( ( this.options.dropdown ) ? "ui-icon-triangle-1-s" : "ui-icon-triangle-2-n-s" )
 		}));
 
-		this.buttonText = $( "<span />", {
+		this.buttonText = $( "<span>", {
 				"class": "ui-selectmenu-text" ,
 				html: this.element.find( "option:selected" ).text() || "&nbsp;"
 			})
 			.appendTo( this.button );
 
 		// wrap and insert new button
-		this.buttonWrap = $( "<span />", {
+		this.buttonWrap = $( "<span>", {
 				"class": "ui-selectmenu-button"
 			})
 			.append( this.button )
@@ -113,14 +113,14 @@ $.widget( "ui.selectmenu", {
 			that = this;
 
 		// create menu portion, append to body
-		this.menu = $( "<ul />", {
+		this.menu = $( "<ul>", {
 			"aria-hidden": true,
 			"aria-labelledby": this.ids.button,
 			id: this.ids.menu
 		});
 
 		// wrap menu
-		this.menuWrap = $( "<div />", {
+		this.menuWrap = $( "<div>", {
 				"class": "ui-selectmenu-menu",
 				width: ( this.options.dropdown ) ? this.button.outerWidth() : this.buttonText.width() + parseFloat( this.buttonText.css( "padding-left" ) ) || 0 + parseFloat( this.buttonText.css( "margin-left") ) || 0
 			})
