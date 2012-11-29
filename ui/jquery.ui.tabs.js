@@ -22,13 +22,13 @@ function getNextTabId() {
 }
 
 function isLocal( anchor ) {
-	return anchor.hash.length > 1 &&
+	return $(anchor).data('localid') || (anchor.hash.length > 1 &&
 		anchor.href.replace( rhash, "" ) ===
 			location.href.replace( rhash, "" )
 				// support: Safari 5.1
 				// Safari 5.1 doesn't encode spaces in window.location
 				// but it does encode spaces from anchors (#8777)
-				.replace( /\s/g, "%20" );
+				.replace( /\s/g, "%20" ));
 }
 
 $.widget( "ui.tabs", {
@@ -400,8 +400,8 @@ $.widget( "ui.tabs", {
 				originalAriaControls = tab.attr( "aria-controls" );
 
 			// inline tab
-			if ( isLocal( anchor ) ) {
-				selector = anchor.hash;
+			if (isLocal(anchor)) {
+				selector = $(anchor).data('localid') || anchor.hash;
 				panel = that.element.find( that._sanitizeSelector( selector ) );
 			// remote tab
 			} else {
