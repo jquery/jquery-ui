@@ -106,6 +106,9 @@
 							if ( !ui.item ) {
 								removeIfInvalid( this );
 							}
+							that._trigger( "change", event, {
+								item: ui.item.option
+							});
 						}
 					})
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
