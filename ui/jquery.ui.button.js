@@ -55,7 +55,6 @@ $.widget( "ui.button", {
 		}
 	},
 	_create: function() {
-
 		this.element.closest( "form" )
 			.unbind( "reset" + this.eventNamespace )
 			.bind( "reset" + this.eventNamespace, formResetHandler );
