@@ -41,10 +41,6 @@ $.widget( "ui.selectmenu", {
 		this.ids = { id: selectmenuId, button: selectmenuId + "-button", menu: selectmenuId + "-menu" };
 
 		this._drawButton();
-		this._on( this.button, this._buttonEvents );
-		this._hoverable( this.button );
-		this._focusable( this.button );
-
 		this._drawMenu();
 
 		// document click closes menu
@@ -106,7 +102,11 @@ $.widget( "ui.selectmenu", {
 				"class": "ui-selectmenu-button"
 			})
 			.append( this.button )
-			.insertAfter( this.element );
+			.insertAfter( this.element );			
+		
+		this._on( this.button, this._buttonEvents );
+		this._hoverable( this.button );
+		this._focusable( this.button );
 	},
 
 	_drawMenu: function() {
