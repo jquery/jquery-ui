@@ -14,6 +14,10 @@
 		padding: 4px;
 		display: inline-block;
 	}
+	/* support: IE7 */
+	*+html #toolbar {
+		display: inline;
+	}
 	</style>
 	<script>
 	$(function() {
@@ -87,7 +91,7 @@
 </head>
 <body>
 
-<span id="toolbar" class="ui-widget-header ui-corner-all">
+<div id="toolbar" class="ui-widget-header ui-corner-all">
 	<button id="beginning">go to beginning</button>
 	<button id="rewind">rewind</button>
 	<button id="play">play</button>
@@ -102,7 +106,7 @@
 		<input type="radio" id="repeat1" name="repeat" /><label for="repeat1">Once</label>
 		<input type="radio" id="repeatall" name="repeat" /><label for="repeatall">All</label>
 	</span>
-</span>
+</div>
 
 <div class="demo-description">
 <p>
