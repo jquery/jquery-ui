@@ -27,7 +27,7 @@ $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
-		
+
 		// callbacks
 		change: null,
 		close: null,
@@ -101,8 +101,8 @@ $.widget( "ui.selectmenu", {
 				"class": "ui-selectmenu-button"
 			})
 			.append( this.button )
-			.insertAfter( this.element );			
-		
+			.insertAfter( this.element );
+
 		this._on( this.button, this._buttonEvents );
 		this._hoverable( this.button );
 		this._focusable( this.button );
@@ -194,38 +194,40 @@ $.widget( "ui.selectmenu", {
 	},
 
 	open: function( event ) {
-		if ( !this.options.disabled ) {
-			var _position = {
-				of: this.button
-			};
-
-			// make sure menu is refreshed on first init (needed at least for IE9)
-			if ( this.isOpen === undefined ) {
-				this.button.trigger( "focus" );
-			}
-
-			this.isOpen = true;
-			this._toggleAttr();
-			this.menu.menu( "focus", event, this._getSelectedItem() );
-
-			if ( this.items && !this.options.dropdown && this.options.position.my == "left top" && this.options.position.at == "left bottom" ) {
-				var currentItem = this._getSelectedItem();
-				// center current item
-				if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
-					this.menuWrap.css( "left" , -10000 );
-					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight() / 2 + currentItem.outerHeight() / 2 );
-					this.menuWrap.css( "left" , "auto" );
-				}
-				_position.my = "left top" + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 );
-				_position.at = "left top";
-			}
-
-			this.menuWrap
-				.zIndex( this.element.zIndex() + 1 )
-				.position( $.extend( {}, this.options.position, _position ) );
-
-			this._trigger( "open", event );
+		if ( this.options.disabled ) {
+			return;
 		}
+
+		var _position = {
+			of: this.button
+		};
+
+		// make sure menu is refreshed on first init (needed at least for IE9)
+		if ( this.isOpen === undefined ) {
+			this.button.trigger( "focus" );
+		}
+
+		this.isOpen = true;
+		this._toggleAttr();
+		this.menu.menu( "focus", event, this._getSelectedItem() );
+
+		if ( this.items && !this.options.dropdown && this.options.position.my == "left top" && this.options.position.at == "left bottom" ) {
+			var currentItem = this._getSelectedItem();
+			// center current item
+			if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
+				this.menuWrap.css( "left" , -10000 );
+				this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight() / 2 + currentItem.outerHeight() / 2 );
+				this.menuWrap.css( "left" , "auto" );
+			}
+			_position.my = "left top" + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 );
+			_position.at = "left top";
+		}
+
+		this.menuWrap
+			.zIndex( this.element.zIndex() + 1 )
+			.position( $.extend( {}, this.options.position, _position ) );
+
+		this._trigger( "open", event );
 	},
 
 	close: function( event ) {
