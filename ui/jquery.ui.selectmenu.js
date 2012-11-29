@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Selectmenu
+ * http://api.jqueryui.com/selectmenu
  *
  * Depends:
  *	jquery.ui.core.js
