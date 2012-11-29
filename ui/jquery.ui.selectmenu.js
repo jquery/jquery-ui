@@ -160,7 +160,7 @@ $.widget( "ui.selectmenu", {
 		})
 		.data( "ui-menu" );
 
-		// change menu styles?
+		// dropdown style needs border on bottom only
 		if ( this.options.dropdown ) {
 			this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 		}
