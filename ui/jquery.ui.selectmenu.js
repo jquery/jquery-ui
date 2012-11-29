@@ -62,7 +62,6 @@ $.widget( "ui.selectmenu", {
 
 		// fix existing label
 		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
-		// catch click event of the label
 		this._on( this.label, {
 			"click":  function( event ) {
 				this.button.focus();
