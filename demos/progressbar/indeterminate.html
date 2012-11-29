@@ -16,27 +16,27 @@
 		});
 		$( "button" ).on( "click", function( event ) {
 			var target = $( event.target ),
-				pbar = $( "#progressbar" ),
-				pbarValue = pbar.find( ".ui-progressbar-value" );
+				progressbar = $( "#progressbar" ),
+				progressbarValue = progressbar.find( ".ui-progressbar-value" );
 
 			if ( target.is( "#numButton" ) ) {
-				pbar.progressbar( "option", {
+				progressbar.progressbar( "option", {
 					value: Math.floor( Math.random() * 100 )
 				});
 			} else if ( target.is( "#colorButton" ) ) {
-				pbarValue.css({
+				progressbarValue.css({
 					"background": '#' + Math.floor( Math.random() * 16777215 ).toString( 16 )
 				});
 			} else if ( target.is( "#falseButton" ) ) {
-				pbar.progressbar( "option", "value", false );
+				progressbar.progressbar( "option", "value", false );
 			}
 		});
 	});
 	</script>
 	<style>
-		#progressbar .ui-progressbar-value {
-			background-color: #CCCCCC;
-		}
+	#progressbar .ui-progressbar-value {
+		background-color: #ccc;
+	}
 	</style>
 </head>
 <body>
