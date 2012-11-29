@@ -22,7 +22,6 @@
 .ui-menu .ui-menu-item {
 	margin: 0;
 	padding: 0;
-	zoom: 1;
 	width: 100%;
 }
 .ui-menu .ui-menu-divider {
@@ -37,7 +36,7 @@
 	display: block;
 	padding: 2px .4em;
 	line-height: 1.5;
-	zoom: 1;
+	min-height: 0; /* support: IE7 */
 	font-weight: normal;
 }
 .ui-menu .ui-menu-item a.ui-state-focus,
