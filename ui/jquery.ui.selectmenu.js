@@ -92,7 +92,7 @@ $.widget( "ui.selectmenu", {
 
 		this.buttonText = $( "<span>", {
 				"class": "ui-selectmenu-text" ,
-				html: this.element.find( "option:selected" ).text() || "&nbsp;"
+				html: this.element.find( "option:selected" ).text() || "&#160;"
 			})
 			.appendTo( this.button );
 
