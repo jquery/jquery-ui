@@ -14,7 +14,7 @@
  */
 (function( $, undefined ) {
 
-var lastActive, startXPos, startYPos, clickDragged,
+var lastActive, lastToggleActive, clickFired,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
@@ -55,6 +55,7 @@ $.widget( "ui.button", {
 		}
 	},
 	_create: function() {
+
 		this.element.closest( "form" )
 			.unbind( "reset" + this.eventNamespace )
 			.bind( "reset" + this.eventNamespace, formResetHandler );
@@ -115,55 +116,40 @@ $.widget( "ui.button", {
 
 		if ( toggleButton ) {
 			this.element.bind( "change" + this.eventNamespace, function() {
-				if ( clickDragged ) {
+				that.refresh();
+			}).bind( "click" + this.eventNamespace, function() {
+				// clicking on a label, even after dragging, always triggers the click
+				// handler for the label, but does not trigger the click for the input if
+				// the mouse has been dragged
+				clickFired = true;
+				setTimeout( function() {
+				// as the click handler fires after the mouseup one, this setTimeout will
+				// clean up the clickFired flag after the mouseup's timeout executes
+					clickFired = false;
+				}, 0 );
+			});
+
+			this.buttonElement.bind( "mousedown" + this.eventNamespace, function() {
+				if ( options.disabled ) {
 					return;
 				}
-				that.refresh();
-			});
-			// if mouse moves between mousedown and mouseup (drag) set clickDragged flag
-			// prevents issue where button state changes but checkbox/radio checked state
-			// does not in Firefox (see ticket #6970)
-			this.buttonElement
-				.bind( "mousedown" + this.eventNamespace, function( event ) {
-					if ( options.disabled ) {
-						return;
-					}
-					clickDragged = false;
-					startXPos = event.pageX;
-					startYPos = event.pageY;
-				})
-				.bind( "mouseup" + this.eventNamespace, function( event ) {
-					if ( options.disabled ) {
-						return;
-					}
-					if ( startXPos !== event.pageX || startYPos !== event.pageY ) {
-						clickDragged = true;
-					}
-			});
-		}
-
-		if ( this.type === "checkbox" ) {
-			this.buttonElement.bind( "click" + this.eventNamespace, function() {
-				if ( options.disabled || clickDragged ) {
-					return false;
+				lastToggleActive = this;
+				that.document.one( "mouseup", function() {
+					lastToggleActive = null;
+				});
+			}).bind( "mouseup" + this.eventNamespace, function() {
+				if ( this === lastToggleActive ) {
+				// the click handler fires after the mouseup, hence we need a timeout
+				// to check if the click event fired at all
+					setTimeout( function() {
+						if ( !clickFired ) {
+				// Calling .click() on the input triggers both its click and change
+				// handlers. Already checked radios will not have its change event
+				// fired, as expected.
+							that.element.click();
+						}
+					}, 0 );
 				}
-			});
-		} else if ( this.type === "radio" ) {
-			this.buttonElement.bind( "click" + this.eventNamespace, function() {
-				if ( options.disabled || clickDragged ) {
-					return false;
-				}
-				$( this ).addClass( "ui-state-active" );
-				that.buttonElement.attr( "aria-pressed", "true" );
-
-				var radio = that.element[ 0 ];
-				radioGroup( radio )
-					.not( radio )
-					.map(function() {
-						return $( this ).button( "widget" )[ 0 ];
-					})
-					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", "false" );
 			});
 		} else {
 			this.buttonElement
