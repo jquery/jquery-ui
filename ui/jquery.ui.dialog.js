@@ -676,7 +676,7 @@ $.widget("ui.dialog", {
 		// reuse old instances due to IE memory leak with alpha transparency (see #5185)
 		var $el = this.overlay = ( $.ui.dialog.overlay.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay ui-front" ) );
 
-		$el.appendTo( document.body );
+		$el.appendTo( this.document[ 0 ].body );
 
 		this._on( $el, {
 			mousedown: "_keepFocus"
