@@ -60,7 +60,7 @@ test("radio groups", function() {
 		assert(":eq(1)", ":eq(0)", ":eq(0)");
 	} else {
 		// simulate does not simulate actual clicks for old IE,
-		// plus $('label').click() does not trigger the change handler for inputs
+		// plus $('label').click() does not trigger the change handler for inputs in IE<9
 
 		// click outside of forms
 		$("#radio0 .ui-button:eq(1)").click();
