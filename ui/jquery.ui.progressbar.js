@@ -36,7 +36,7 @@ $.widget( "ui.progressbar", {
 				"aria-valuenow": this.options.value
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'><div></div></div>" )
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
 		this.oldValue = this.options.value;
@@ -114,11 +114,29 @@ $.widget( "ui.progressbar", {
 
 	_refreshValue: function() {
 		var value = this.options.value,
-			percentage = this._percentage(),
-			overlay = this.valueDiv.children().eq( 0 );
+			percentage = this._percentage();
 
-		overlay.toggleClass( "ui-progressbar-overlay", this.indeterminate );
-		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
+		this.valueDiv
+			.toggle( this.indeterminate || value > this.min )
+			.toggleClass( "ui-corner-right", value === this.options.max )
+			.toggleClass( "ui-progressbar-indeterminate", this.indeterminate )
+			.width( percentage.toFixed(0) + "%" );
+
+		if ( this.indeterminate ) {
+			this.element.removeAttr( "aria-valuemax" ).removeAttr( "aria-valuenow" );
+			if ( !this.overlayDiv ) {
+				this.overlayDiv = $( "<div class='ui-progressbar-overlay'></div>" ).appendTo( this.valueDiv );
+			}
+		} else {
+			this.element.attr({
+				"aria-valuemax": this.options.max,
+				"aria-valuenow": value
+			});
+			if ( this.overlayDiv ) {
+				this.overlayDiv.remove();
+				this.overlayDiv = null;
+			}
+		}
 
 		if ( this.oldValue !== value ) {
 			this.oldValue = value;
@@ -126,18 +144,6 @@ $.widget( "ui.progressbar", {
 		}
 		if ( value === this.options.max ) {
 			this._trigger( "complete" );
-		}
-
-		this.valueDiv
-			.toggle( this.indeterminate || value > this.min )
-			.toggleClass( "ui-corner-right", value === this.options.max )
-			.width( percentage.toFixed(0) + "%" );
-		if ( this.indeterminate ) {
-			this.element.removeAttr( "aria-valuemax" );
-			this.element.removeAttr( "aria-valuenow" );
-		} else {
-			this.element.attr( "aria-valuemax", this.options.max );
-			this.element.attr( "aria-valuenow", value );
 		}
 	}
 });
