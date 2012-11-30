@@ -231,7 +231,8 @@ $.widget( "ui.button", {
 			if ( checked ) {
 				this.buttonElement.addClass( "ui-state-active" );
 			}
-			this.buttonElement.prop( "aria-pressed", checked );
+			//needs .attr() instead of .prop() to set aria-pressed, check unit tests
+			this.buttonElement.attr( "aria-pressed", checked );
 		} else {
 			this.buttonElement = this.element;
 		}

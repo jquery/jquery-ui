@@ -33,16 +33,29 @@ function assert(noForm, form1, form2) {
 	ok( $("#radio0 input" + noForm).is(":checked") );
 	ok( $("#radio1 input" + form1).is(":checked") );
 	ok( $("#radio2 input" + form2).is(":checked") );
-	ok( $("#radio0 .ui-button" + noForm).is(".ui-state-active") );
-	ok( $("#radio1 .ui-button" + form1).is(".ui-state-active") );
-	ok( $("#radio2 .ui-button" + form2).is(".ui-state-active") );
-	ok( $("#radio0 .ui-button:not(" + noForm + "):not(.ui-state-active)").length === 2 );
-	ok( $("#radio1 .ui-button:not(" + form1 + "):not(.ui-state-active)").length === 2 );
-	ok( $("#radio2 .ui-button:not(" + form2 + "):not(.ui-state-active)").length === 2 );
+	var buttons0 = $("#radio0 .ui-button"),
+		buttons1 = $("#radio1 .ui-button"),
+		buttons2 = $("#radio2 .ui-button");
+	//active class
+	ok( buttons0.filter(noForm).is(".ui-state-active") );
+	ok( buttons1.filter(form1).is(".ui-state-active") );
+	ok( buttons2.filter(form2).is(".ui-state-active") );
+	//aria-pressed
+	ok( buttons0.filter(noForm).attr("aria-pressed") === "true" );
+	ok( buttons1.filter(form1).attr("aria-pressed") === "true" );
+	ok( buttons2.filter(form2).attr("aria-pressed") === "true" );
+	//check if ui-state-active class was removed from previously checked radios
+	ok( buttons0.not(noForm + ", .ui-state-active").length === 2 );
+	ok( buttons1.not(form1 + ", .ui-state-active").length === 2 );
+	ok( buttons2.not(form2 + ", .ui-state-active").length === 2 );
+	//check if aria-pressed is set to false for previously checked radios
+	ok( buttons0.not(noForm).filter('[aria-pressed=false]').length === 2 );
+	ok( buttons1.not(form1).filter('[aria-pressed=false]').length === 2 );
+	ok( buttons2.not(form2).filter('[aria-pressed=false]').length === 2 );
 }
 
 test("radio groups", function() {
-	expect( 36 );
+	expect( 60 );
 	$("input[type=radio]").button();
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
