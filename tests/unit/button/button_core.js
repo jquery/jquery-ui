@@ -30,27 +30,53 @@ test("radios", function() {
 });
 
 function assert(noForm, form1, form2) {
+	ok( $("#radio0 input" + noForm).is(":checked") );
+	ok( $("#radio1 input" + form1).is(":checked") );
+	ok( $("#radio2 input" + form2).is(":checked") );
 	ok( $("#radio0 .ui-button" + noForm).is(".ui-state-active") );
 	ok( $("#radio1 .ui-button" + form1).is(".ui-state-active") );
 	ok( $("#radio2 .ui-button" + form2).is(".ui-state-active") );
+	ok( $("#radio0 .ui-button:not(" + noForm + "):not(.ui-state-active)").length === 2 );
+	ok( $("#radio1 .ui-button:not(" + form1 + "):not(.ui-state-active)").length === 2 );
+	ok( $("#radio2 .ui-button:not(" + form2 + "):not(.ui-state-active)").length === 2 );
 }
 
 test("radio groups", function() {
-	expect( 12 );
+	expect( 36 );
 	$("input[type=radio]").button();
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
-	// click outside of forms
-	$("#radio0 .ui-button:eq(1)").simulate( "click" );
-	assert(":eq(1)", ":eq(1)", ":eq(2)");
+	if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
+		// click outside of forms
+		$("#radio0 .ui-button:eq(1)").simulate( "click" );
+		assert(":eq(1)", ":eq(1)", ":eq(2)");
 
-	// click in first form
-	$("#radio1 .ui-button:eq(0)").simulate( "click" );
-	assert(":eq(1)", ":eq(0)", ":eq(2)");
+		// click in first form
+		$("#radio1 .ui-button:eq(0)").simulate( "click" );
+		assert(":eq(1)", ":eq(0)", ":eq(2)");
 
-	// click in second form
-	$("#radio2 .ui-button:eq(0)").simulate( "click" );
-	assert(":eq(1)", ":eq(0)", ":eq(0)");
+		// click in second form
+		$("#radio2 .ui-button:eq(0)").simulate( "click" );
+		assert(":eq(1)", ":eq(0)", ":eq(0)");
+	} else {
+		// simulate does not simulate actual clicks for old IE,
+		// plus $('label').click() does not trigger the change handler for inputs
+
+		// click outside of forms
+		$("#radio0 .ui-button:eq(1)").click();
+		$("#radio0 input").button( "refresh" );
+		assert(":eq(1)", ":eq(1)", ":eq(2)");
+
+		// click in first form
+		$("#radio1 .ui-button:eq(0)").click();
+		$("#radio1 input").button( "refresh" );
+		assert(":eq(1)", ":eq(0)", ":eq(2)");
+
+		// click in second form
+		$("#radio2 .ui-button:eq(0)").click();
+		$("#radio2 input").button( "refresh" );
+		assert(":eq(1)", ":eq(0)", ":eq(0)");
+	}
 });
 
 test("input type submit, don't create child elements", function() {

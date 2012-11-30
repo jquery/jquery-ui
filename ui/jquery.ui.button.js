@@ -122,8 +122,8 @@ $.widget( "ui.button", {
 				// the mouse has been dragged
 				clickFired = true;
 				setTimeout( function() {
-				// as the click handler fires after the mouseup one, this setTimeout will
-				// clean up the clickFired flag after the mouseup's timeout executes
+					// as the click handler fires after the mouseup one, this setTimeout will
+					// clean up the clickFired flag after the mouseup's timeout executes
 					clickFired = false;
 				}, 0 );
 			});
@@ -138,13 +138,13 @@ $.widget( "ui.button", {
 				});
 			}).bind( "mouseup" + this.eventNamespace, function() {
 				if ( this === lastToggleActive ) {
-				// the click handler fires after the mouseup, hence we need a timeout
-				// to check if the click event fired at all
+					// the click handler fires after the mouseup, hence we need a timeout
+					// to check if the click event fired at all
 					setTimeout( function() {
 						if ( !clickFired ) {
-				// Calling .click() on the input triggers both its click and change
-				// handlers. Already checked radios will not have its change event
-				// fired, as expected.
+							// Calling .click() on the input triggers both its click and change
+							// handlers. Already checked radios will not have its change event
+							// fired, as expected.
 							that.element.click();
 						}
 					}, 0 );
