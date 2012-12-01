@@ -83,8 +83,6 @@ $.widget( "ui.menubar", {
 				}
 			}
 		});
-		if ( this.items.length > 0 ) {
-		}
 		this.items.each(function() {
 			var input = $(this),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
