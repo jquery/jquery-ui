@@ -59,37 +59,17 @@ test("radio groups", function() {
 	$("input[type=radio]").button();
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
-	if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-		// click outside of forms
-		$("#radio0 .ui-button:eq(1)").simulate( "click" );
-		assert(":eq(1)", ":eq(1)", ":eq(2)");
+	// click outside of forms
+	$("#radio0 .ui-button:eq(1)").click();
+	assert(":eq(1)", ":eq(1)", ":eq(2)");
 
-		// click in first form
-		$("#radio1 .ui-button:eq(0)").simulate( "click" );
-		assert(":eq(1)", ":eq(0)", ":eq(2)");
+	// click in first form
+	$("#radio1 .ui-button:eq(0)").click();
+	assert(":eq(1)", ":eq(0)", ":eq(2)");
 
-		// click in second form
-		$("#radio2 .ui-button:eq(0)").simulate( "click" );
-		assert(":eq(1)", ":eq(0)", ":eq(0)");
-	} else {
-		// simulate does not simulate actual clicks for old IE,
-		// plus $('label').click() does not trigger the change handler for inputs in IE<9
-
-		// click outside of forms
-		$("#radio0 .ui-button:eq(1)").click();
-		$("#radio0 input").button( "refresh" );
-		assert(":eq(1)", ":eq(1)", ":eq(2)");
-
-		// click in first form
-		$("#radio1 .ui-button:eq(0)").click();
-		$("#radio1 input").button( "refresh" );
-		assert(":eq(1)", ":eq(0)", ":eq(2)");
-
-		// click in second form
-		$("#radio2 .ui-button:eq(0)").click();
-		$("#radio2 input").button( "refresh" );
-		assert(":eq(1)", ":eq(0)", ":eq(0)");
-	}
+	// click in second form
+	$("#radio2 .ui-button:eq(0)").click();
+	assert(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
 test("input type submit, don't create child elements", function() {
@@ -130,8 +110,8 @@ test("buttonset (rtl)", function() {
 // TODO: simulated click events don't behave like real click events in IE
 // remove this when simulate properly simulates this
 // see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
-if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+//if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
+	test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
 		expect( 3 );
 
 		$("#check2").button().change( function() {
@@ -139,17 +119,17 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 			ok( this.checked, "checked ok" );
 			ok( lbl.attr("aria-pressed") === "true", "aria ok" );
 			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
-		});
+		}).button("widget").click();
 
 		// support: Opera
 		// Opera doesn't trigger a change event when this is done synchronously.
 		// This seems to be a side effect of another test, but until that can be
 		// tracked down, this delay will have to do.
-		setTimeout(function() {
-			$("#check2").button("widget").simulate("click");
-			start();
-		}, 1 );
+		//setTimeout(function() {
+		//	$("#check2").button("widget").mousedown().mouseup()/*.simulate("click")*/;
+		//	start();
+		//}, 1 );
 	});
-}
+//}
 
 })(jQuery);

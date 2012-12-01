@@ -14,7 +14,7 @@
  */
 (function( $, undefined ) {
 
-var lastActive, lastToggleActive, clickFired,
+var lastActive, lastToggleActive,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
@@ -72,7 +72,8 @@ $.widget( "ui.button", {
 			options = this.options,
 			toggleButton = this.type === "checkbox" || this.type === "radio",
 			activeClass = !toggleButton ? "ui-state-active" : "",
-			focusClass = "ui-state-focus";
+			focusClass = "ui-state-focus",
+			mouseUpFired;
 
 		if ( options.label === null ) {
 			options.label = (this.type === "input" ? this.buttonElement.val() : this.buttonElement.html());
@@ -116,16 +117,6 @@ $.widget( "ui.button", {
 		if ( toggleButton ) {
 			this.element.bind( "change" + this.eventNamespace, function() {
 				that.refresh();
-			}).bind( "click" + this.eventNamespace, function() {
-				// clicking on a label, even after dragging, always triggers the click
-				// handler for the label, but does not trigger the click for the input if
-				// the mouse has been dragged
-				clickFired = true;
-				setTimeout( function() {
-					// as the click handler fires after the mouseup one, this setTimeout will
-					// clean up the clickFired flag after the mouseup's timeout executes
-					clickFired = false;
-				}, 0 );
 			});
 
 			this.buttonElement.bind( "mousedown" + this.eventNamespace, function() {
@@ -138,16 +129,25 @@ $.widget( "ui.button", {
 				});
 			}).bind( "mouseup" + this.eventNamespace, function() {
 				if ( this === lastToggleActive ) {
-					// the click handler fires after the mouseup, hence we need a timeout
-					// to check if the click event fired at all
+					that._toggleToggleButton();
+					// the mouseUpFired flag tells the click handler that the mousedown-mouseup
+					// sequence fired naturally and the toggling has been already handled.
+					// If this flag is not set, it means .click() was called on the label,
+					// in this case the click handler will still prevent the default action and
+					// call the _toggleToggleButton() function fixing its behavior cross-browser
+					mouseUpFired = true;
 					setTimeout( function() {
-						if ( !clickFired ) {
-							// Calling .click() on the input triggers both its click and change
-							// handlers. Already checked radios will not have its change event
-							// fired, as expected.
-							that.element.click();
-						}
+						mouseUpFired = false;
 					}, 0 );
+				}
+			}).bind( "click" + this.eventNamespace, function( event ) {
+				if ( options.disabled ) {
+					return;
+				}
+				//see comment on mouseup handler above
+				event.preventDefault();
+				if ( !mouseUpFired ) {
+					that._toggleToggleButton();
 				}
 			});
 		} else {
@@ -342,6 +342,16 @@ $.widget( "ui.button", {
 			buttonClasses.push( "ui-button-text-only" );
 		}
 		buttonElement.addClass( buttonClasses.join( " " ) );
+	},
+
+	_toggleToggleButton: function() {
+		if ( this.type === "checkbox" ) {
+			this.element[ 0 ].checked = !this.element[ 0 ].checked;
+			this.element.change();
+		} else if ( !this.element[0].checked ) {
+			this.element[ 0 ].checked = true;
+			this.element.change();
+		}
 	}
 });
 
