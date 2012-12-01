@@ -348,7 +348,7 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" ) {
 			this.element[ 0 ].checked = !this.element[ 0 ].checked;
 			this.element.change();
-		} else if ( !this.element[0].checked ) {
+		} else if ( !this.element[ 0 ].checked ) {
 			this.element[ 0 ].checked = true;
 			this.element.change();
 		}
