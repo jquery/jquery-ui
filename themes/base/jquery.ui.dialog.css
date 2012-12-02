@@ -24,6 +24,10 @@
 .ui-dialog .ui-dialog-title {
 	float: left;
 	margin: .1em 16px .1em 0;
+	white-space: nowrap;
+	width: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .ui-dialog .ui-dialog-titlebar-close {
 	position: absolute;
