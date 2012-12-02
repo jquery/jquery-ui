@@ -20,6 +20,11 @@
 	<script src="../../../ui/jquery.ui.autocomplete.js"></script>
 	<script src="../../../ui/jquery.ui.tooltip.js"></script>
 
+	<style>
+	body {
+		font-size: 62.5%;
+	}
+	</style>
 	<script>
 	$(function() {
 		var dialog = $( "#dialog" ).dialog({
@@ -98,7 +103,7 @@
 
 <button id="open-dialog">Reopen dialog</button>
 
-<div id="dialog" title="Basic dialog">
+<div id="dialog" title="Basic dialog, but with a really long title that doesn't quite fit.">
 	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 	<p><button id="open-datepicker">Open another window with a datepicker.</button></p>
 	<p><button id="destroy-dialog">Self destruct</button></p>
