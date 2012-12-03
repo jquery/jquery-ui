@@ -72,8 +72,7 @@ $.widget( "ui.button", {
 			options = this.options,
 			toggleButton = this.type === "checkbox" || this.type === "radio",
 			activeClass = !toggleButton ? "ui-state-active" : "",
-			focusClass = "ui-state-focus",
-			mouseUpFired;
+			focusClass = "ui-state-focus";
 
 		if ( options.label === null ) {
 			options.label = (this.type === "input" ? this.buttonElement.val() : this.buttonElement.html());
@@ -128,26 +127,22 @@ $.widget( "ui.button", {
 					lastToggleActive = null;
 				});
 			}).bind( "mouseup" + this.eventNamespace, function() {
+				if ( options.disabled ) {
+					return;
+				}
 				if ( this === lastToggleActive ) {
 					that._toggleToggleButton();
-					// the mouseUpFired flag tells the click handler that the mousedown-mouseup
-					// sequence fired naturally and the toggling has been already handled.
-					// If this flag is not set, it means .click() was called on the label,
-					// in this case the click handler will still prevent the default action and
-					// call the _toggleToggleButton() function fixing its behavior cross-browser
-					mouseUpFired = true;
-					setTimeout( function() {
-						mouseUpFired = false;
-					}, 0 );
 				}
 			}).bind( "click" + this.eventNamespace, function( event ) {
 				if ( options.disabled ) {
 					return;
 				}
-				//see comment on mouseup handler above
-				event.preventDefault();
-				if ( !mouseUpFired ) {
-					that._toggleToggleButton();
+				if ( !event.isDefaultPrevented() ) {
+					event.preventDefault();
+					// !e.originalEvent as fallback for jQuery < 1.7
+					if ( event.isTrigger || !event.originalEvent ) {
+						that._toggleToggleButton();
+					}
 				}
 			});
 		} else {
