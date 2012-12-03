@@ -427,7 +427,7 @@ $.widget( "ui.selectmenu", {
 
 	_readOptions: function( options ) {
 		var data = [];
-		$.each( options, function( index, item ) {
+		options.each( function( index, item ) {
 			var option = $( item ),
 				optgroup = option.parent( "optgroup" );
 			data.push({
