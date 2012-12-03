@@ -139,7 +139,7 @@ $.widget( "ui.button", {
 				}
 				if ( !event.isDefaultPrevented() ) {
 					event.preventDefault();
-					// !e.originalEvent as fallback for jQuery < 1.7
+					// !event.originalEvent as fallback for jQuery < 1.7
 					if ( event.isTrigger || !event.originalEvent ) {
 						that._toggleToggleButton();
 					}
