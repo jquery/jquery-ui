@@ -66,7 +66,8 @@ $.widget( "ui.menubar", {
 				"aria-expanded": "false"
 			});
 		this._on( subMenus, {
-			"keydown.menubar": function(event) {
+
+			"keydown": function(event) {
 				var menu = $( this );
 				if ( menu.is( ":hidden" ) ) {
 					return;
@@ -132,9 +133,9 @@ $.widget( "ui.menubar", {
 			// might be a non-menu button
 			if ( menu.length ) {
 				that._on(input, {
-					"click.menubar": mouseBehaviorCallback,
-					"focus.menubar": mouseBehaviorCallback,
-					"mouseenter.menubar": mouseBehaviorCallback,
+					"click": mouseBehaviorCallback,
+					"focus": mouseBehaviorCallback,
+					"mouseenter": mouseBehaviorCallback,
 					"keydown": keyboardBehaviorCallback
 				});
 
