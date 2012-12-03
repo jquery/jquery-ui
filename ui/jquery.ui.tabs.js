@@ -718,7 +718,9 @@ $.widget( "ui.tabs", {
 			}
 		});
 
-		this.panels.show();
+		this.panels.css({
+			display: ""
+		});
 
 		if ( this.options.heightStyle !== "content" ) {
 			this.panels.css( "height", "" );
