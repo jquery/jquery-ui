@@ -72,19 +72,18 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
 
-//if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-	test( "#7665 - Radio button & checkboxes ignore mouseclicks for minor mouse movements", function() {
-		expect( 3 );
-		$( "#checkdrag" ).button().change( function() {
-			var lbl = $(this).button( "widget" );
-			ok( this.checked );
-			ok( lbl.hasClass( "ui-state-active" ) );
-			ok( lbl.attr( "aria-pressed" ) === "true" );
-		}).button( "widget" ).simulate( "drag", {
-			dx: 10,
-			dy: 10
-		});
+test( "#7665 - Radio button & checkboxes ignore mouseclicks for minor mouse movements", function() {
+	expect( 3 );
+	$( "#checkdrag" ).button().change( function() {
+		var lbl = $(this).button( "widget" );
+		ok( this.checked );
+		ok( lbl.hasClass( "ui-state-active" ) );
+		ok( lbl.attr( "aria-pressed" ) === "true" );
+	}).button( "widget" ).simulate( "drag", {
+		dx: 10,
+		dy: 10
 	});
-//}
+});
+
 
 })( jQuery );

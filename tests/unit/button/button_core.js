@@ -110,26 +110,15 @@ test("buttonset (rtl)", function() {
 // TODO: simulated click events don't behave like real click events in IE
 // remove this when simulate properly simulates this
 // see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
-//if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-	test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
-		expect( 3 );
+test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+	expect( 3 );
+	$("#check2").button().change( function() {
+		var lbl = $( this ).button("widget");
+		ok( this.checked, "checked ok" );
+		ok( lbl.attr("aria-pressed") === "true", "aria ok" );
+		ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+	}).button("widget").click();
+});
 
-		$("#check2").button().change( function() {
-			var lbl = $( this ).button("widget");
-			ok( this.checked, "checked ok" );
-			ok( lbl.attr("aria-pressed") === "true", "aria ok" );
-			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
-		}).button("widget").click();
-
-		// support: Opera
-		// Opera doesn't trigger a change event when this is done synchronously.
-		// This seems to be a side effect of another test, but until that can be
-		// tracked down, this delay will have to do.
-		//setTimeout(function() {
-		//	$("#check2").button("widget").mousedown().mouseup()/*.simulate("click")*/;
-		//	start();
-		//}, 1 );
-	});
-//}
 
 })(jQuery);
