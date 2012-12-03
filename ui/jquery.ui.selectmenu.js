@@ -233,7 +233,7 @@ $.widget( "ui.selectmenu", {
 
 	close: function( event ) {
 		if ( !this.isOpen ) {
-			return false;
+			return;
 		}
 		
 		var id = this._getSelectedItem().find( "a" ).attr( "id" );
