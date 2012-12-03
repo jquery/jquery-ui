@@ -5,6 +5,26 @@
 
 module("resizable: options");
 
+test( "alsoResize", function() {
+	expect( 2 );
+
+	var other = $( "<div>" )
+			.css({
+				width: 50,
+				height: 50
+			})
+			.appendTo( "body" ),
+		element = $( "#resizable1" ).resizable({
+			alsoResize: other
+		}),
+		handle = ".ui-resizable-e";
+
+	TestHelpers.resizable.drag( handle, 80 );
+	equal( element.width(), 180, "resizable width" );
+	equal( other.width(), 130, "alsoResize width" );
+});
+
+
 test("aspectRatio: 'preserve' (e)", function() {
 	expect(4);
 
@@ -101,6 +121,21 @@ test("aspectRatio: 'preserve' (ne)", function() {
 	TestHelpers.resizable.drag(handle, -80, 80);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
+});
+
+test( "containment", function() {
+	expect( 4 );
+	var element = $( "#resizable1" ).resizable({
+		containment: "#container"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 20, 30 );
+	equal( element.width(), 120, "unconstrained width within container" );
+	equal( element.height(), 130, "unconstrained height within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	equal( element.width(), 300, "constrained width at containment edge" );
+	equal( element.height(), 200, "constrained height at containment edge" );
 });
 
 test("grid", function() {
@@ -208,6 +243,26 @@ test("zIndex, applied to all handles", function() {
 	target.children( '.ui-resizable-handle' ).each( function( index, handle ) {
 		equal( $( handle ).css( 'zIndex' ), 100, 'compare zIndex' );
 	});
+});
+
+test( "alsoResize + containment", function() {
+	expect( 4 );
+	var other = $( "<div>" )
+			.css({
+				width: 50,
+				height: 50
+			})
+			.appendTo( "body" ),
+		element = $( "#resizable1" ).resizable({
+			alsoResize: other,
+			containment: "#container"
+		});
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	equal( element.width(), 300, "resizable constrained width at containment edge" );
+	equal( element.height(), 200, "resizable constrained height at containment edge" );
+	equal( other.width(), 250, "alsoResize constrained width at containment edge" );
+	equal( other.height(), 150, "alsoResize constrained height at containment edge" );
 });
 
 })(jQuery);
