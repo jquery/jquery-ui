@@ -232,7 +232,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	close: function( event ) {
-		if ( this.isOpen ) {
+		if ( !this.isOpen ) {
 			return false;
 		}
 		
