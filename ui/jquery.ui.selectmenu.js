@@ -389,7 +389,7 @@ $.widget( "ui.selectmenu", {
 		this.buttonText.html( item.label );
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
-		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
+		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
 		this.button.attr( "aria-labelledby", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 	},
 
