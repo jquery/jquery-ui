@@ -20,7 +20,7 @@ test( "widget creation", function() {
 
 	$.widget( "ui.testWidget", myPrototype );
 	ok( $.isFunction( $.ui.testWidget ), "constructor was created" );
-	equal( "object", typeof $.ui.testWidget.prototype, "prototype was created" );
+	equal( typeof $.ui.testWidget.prototype, "object", "prototype was created" );
 	equal( $.ui.testWidget.prototype._create, myPrototype._create,
 		"create function is copied over" );
 	equal( $.ui.testWidget.prototype.creationTest, myPrototype.creationTest,
