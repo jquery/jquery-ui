@@ -107,17 +107,6 @@ test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 	d1.remove();
 });
 
-test("#6645: Missing element not found check in overlay", function(){
-	expect(2);
-	var d1 = $('<div title="dialog 1">Dialog 1</div>').dialog({modal: true}),
-		d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true, close: function(){ d2.remove(); }});
-
-	equal($.ui.dialog.overlay.instances.length, 2, 'two overlays created');
-	d2.dialog('close');
-	equal($.ui.dialog.overlay.instances.length, 1, 'one overlay remains after closing the 2nd overlay');
-	d1.add(d2).remove();
-});
-
 // TODO merge this with the main destroy test
 test("#4980: Destroy should place element back in original DOM position", function(){
 	expect( 2 );

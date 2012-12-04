@@ -661,13 +661,13 @@ $.widget("ui.dialog", {
 		if ( !this.options.modal ) {
 			return;
 		}
-		if ( $.ui.dialog.overlay.instances.length === 0 ) {
+		if ( $.ui.dialog.overlayInstances === 0 ) {
 			// prevent use of anchors and inputs
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
 			setTimeout(function() {
 				// handle $(el).dialog().dialog('close') (see #4065)
-				if ( $.ui.dialog.overlay.instances.length ) {
+				if ( $.ui.dialog.overlayInstances ) {
 					$( document ).bind( "focusin.dialog-overlay", function( event ) {
 						if ( !$( event.target ).closest( ".ui-dialog").length ) {
 							event.preventDefault();
@@ -678,40 +678,27 @@ $.widget("ui.dialog", {
 			}, 1 );
 		}
 
-		// reuse old instances due to IE memory leak with alpha transparency (see #5185)
-		var $el = this.overlay = ( $.ui.dialog.overlay.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay ui-front" ) );
-
+		var $el = this.overlay = $( "<div>" ).addClass( "ui-widget-overlay ui-front" );
 		$el.appendTo( this.document[ 0 ].body );
-
 		this._on( $el, {
 			mousedown: "_keepFocus"
 		});
-
-		$.ui.dialog.overlay.instances.push( $el );
+		$.ui.dialog.overlayInstances += 1;
 	},
 
 	_destroyOverlay: function() {
 		if ( !this.options.modal ) {
 			return;
 		}
-		var indexOf = $.inArray( this.overlay, $.ui.dialog.overlay.instances );
-
-		if ( indexOf !== -1 ) {
-			$.ui.dialog.overlay.oldInstances.push( $.ui.dialog.overlay.instances.splice( indexOf, 1 )[ 0 ] );
-		}
-
-		if ( $.ui.dialog.overlay.instances.length === 0 ) {
+		$.ui.dialog.overlayInstances -= 1;
+		if ( $.ui.dialog.overlayInstances === 0 ) {
 			$( [ document, window ] ).unbind( ".dialog-overlay" );
 		}
-
 		this.overlay.remove();
 	}
 });
 
-$.ui.dialog.overlay = {
-	instances: [],
-	oldInstances: []
-};
+$.ui.dialog.overlayInstances = 0;
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
