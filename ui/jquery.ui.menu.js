@@ -148,9 +148,7 @@ $.widget( "ui.menu", {
 				.removeAttr( "aria-hidden" )
 				.removeAttr( "aria-disabled" )
 				.removeUniqueId()
-				.css({
-					display: ""
-				});
+				.show();
 
 		// Destroy menu items
 		this.element.find( ".ui-menu-item" )
