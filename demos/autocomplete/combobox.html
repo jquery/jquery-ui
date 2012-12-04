@@ -50,7 +50,7 @@
 					var value = $( element ).val(),
 						matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
 						valid = false;
-					select.children( "option" ).each(function() {
+					select.children( "option:enabled" ).each(function() {
 						if ( $( this ).text().match( matcher ) ) {
 							this.selected = valid = true;
 							return false;
@@ -108,7 +108,12 @@
 							}
 						}
 					})
-					.addClass( "ui-widget ui-widget-content ui-corner-left" );
+					.addClass( "ui-widget ui-widget-content ui-corner-left" )
+					.click(function() {
+						// select all text in input allowing users to 
+						// immediately start typing auto-complete query
+						j$(this).select();
+					});
 
 				input.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 					return $( "<li>" )
