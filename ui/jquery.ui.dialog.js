@@ -127,11 +127,6 @@ $.widget("ui.dialog", {
 		this.element
 			.removeUniqueId()
 			.removeClass( "ui-dialog-content ui-widget-content" )
-			.css({
-				"width": "",
-				"min-height": "",
-				"height": ""
-			})
 			.hide()
 			// without detaching first, the following becomes really slow
 			.detach();
