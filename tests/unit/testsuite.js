@@ -212,7 +212,7 @@ window.domEqual = function( selector, modifier, message ) {
 			"tabIndex",
 			"title"
 		];
-/*
+
 	function getElementStyles( elem ) {
 		var key, len,
 			style = elem.ownerDocument.defaultView ?
@@ -239,7 +239,7 @@ window.domEqual = function( selector, modifier, message ) {
 
 		return styles;
 	}
-*/
+
 	function extract( elem ) {
 		if ( !elem || !elem.length ) {
 			QUnit.push( false, actual, expected,
@@ -257,8 +257,7 @@ window.domEqual = function( selector, modifier, message ) {
 			var value = elem.attr( attr );
 			result[ attr ] = value !== undefined ? value : "";
 		});
-		// TODO: Enable when we can figure out what's happening with accordion
-		//result.style = getElementStyles( elem[ 0 ] );
+		result.style = getElementStyles( elem[ 0 ] );
 		result.events = $._data( elem[ 0 ], "events" );
 		result.data = $.extend( {}, elem.data() );
 		delete result.data[ $.expando ];

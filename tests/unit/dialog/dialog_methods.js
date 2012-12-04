@@ -35,6 +35,11 @@ test("init", function() {
 
 test("destroy", function() {
 	expect( 6 );
+
+	// Dialogs are expected to be hidden on destroy, so make sure they're hidden
+	// before the test
+	$( "#dialog1, #form-dialog" ).hide();
+
 	domEqual( "#dialog1", function() {
 		var dialog = $( "#dialog1" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
