@@ -665,17 +665,19 @@ $.widget("ui.dialog", {
 			// prevent use of anchors and inputs
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
-			setTimeout(function() {
+			this._delay(function() {
 				// handle $(el).dialog().dialog('close') (see #4065)
 				if ( $.ui.dialog.overlayInstances ) {
-					$( document ).bind( "focusin.dialog-overlay", function( event ) {
-						if ( !$( event.target ).closest( ".ui-dialog").length ) {
-							event.preventDefault();
-							$( ".ui-dialog:visible:last .ui-dialog-content" ).data( "ui-dialog" )._focusTabbable();
+					this._on( this.document, {
+						focusin: function( event ) {
+							if ( !$( event.target ).closest( ".ui-dialog").length ) {
+								event.preventDefault();
+								$( ".ui-dialog:visible:last .ui-dialog-content" ).data( "ui-dialog" )._focusTabbable();
+							}
 						}
 					});
 				}
-			}, 1 );
+			});
 		}
 
 		var $el = this.overlay = $( "<div>" ).addClass( "ui-widget-overlay ui-front" );
@@ -692,7 +694,7 @@ $.widget("ui.dialog", {
 		}
 		$.ui.dialog.overlayInstances -= 1;
 		if ( $.ui.dialog.overlayInstances === 0 ) {
-			$( [ document, window ] ).unbind( ".dialog-overlay" );
+			this._off( this.document, "focusin" );
 		}
 		this.overlay.remove();
 	}
