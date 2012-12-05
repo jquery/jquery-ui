@@ -4,7 +4,7 @@
 
 (function($) {
 
-module("draggable");
+module("draggable: core");
 
 test("element types", function() {
 	var typeNames = ('p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form' +

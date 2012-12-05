@@ -32,7 +32,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	options: {
 		appendTo: null,
 		handle: null,
-		helper: null
+		helper: false
 	},
 
 	// dragEl: element being dragged (original or helper)
@@ -116,12 +116,12 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// If user cancels beforeStart, don't allow dragging
 		if ( this._trigger( "beforeStart", event,
 				this._originalHash( pointerPosition ) ) === false ) {
-			
+
 			// domPosition needs to be undone even if beforeStart is stopped
 			// Otherwise this.dragEl will remain in the element appendTo is set to
 			this._resetDomPosition();
 			return false;
-			
+
 		}
 
 		this._setCss();
@@ -131,16 +131,16 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._trigger( "start", event, this._fullHash( pointerPosition ) );
 		this._blockFrames();
 	},
-	
+
 	_resetDomPosition : function() {
-	
+
 		// Nothing to do in this case
 		if ( !this.domPosition ) {
 			return;
 		}
-		
-		parent = this.domPosition.parent;
-		next = parent.children().eq( this.domPosition.index );
+
+		var parent = this.domPosition.parent,
+			next = parent.children().eq( this.domPosition.index );
 		if ( next.length ) {
 			next.before( this.element );
 		} else {
@@ -148,7 +148,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 		this.element.offset( this.offset );
 		this.domPosition = null;
-	
+
 	},
 
 	_move: function( event, pointerPosition ) {
@@ -166,8 +166,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_stop: function( event, pointerPosition ) {
-		var parent, next;
-
 		this._preparePosition( pointerPosition );
 
 		// If user cancels stop, leave helper there
