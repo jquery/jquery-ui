@@ -497,6 +497,13 @@ $.extend(Datepicker.prototype, {
 			if (maxDate !== null && settings.dateFormat !== undefined && settings.maxDate === undefined) {
 				inst.settings.maxDate = this._formatDate(inst, maxDate);
 			}
+			if ( "disabled" in settings ) {
+				if ( settings.disabled ) {
+					this._disableDatepicker(target);
+				} else {
+					this._enableDatepicker(target);
+				}
+			}
 			this._attachments($(target), inst);
 			this._autoSize(inst);
 			this._setDate(inst, date);
