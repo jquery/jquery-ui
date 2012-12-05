@@ -34,12 +34,9 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect( 6 );
+	expect( 7 );
 
-	// Dialogs are expected to be hidden on destroy, so make sure they're hidden
-	// before the test
 	$( "#dialog1, #form-dialog" ).hide();
-
 	domEqual( "#dialog1", function() {
 		var dialog = $( "#dialog1" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
@@ -49,6 +46,16 @@ test("destroy", function() {
 		var dialog = $( "#form-dialog" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
 		equal( dialog.index(), 2 );
+	});
+
+	// Ensure dimensions are restored (#8119)
+	$( "#dialog1" ).show().css({
+		width: "400px",
+		minHeight: "100px",
+		height: "200px"
+	});
+	domEqual( "#dialog1", function() {
+		$( "#dialog1" ).dialog().dialog( "destroy" );
 	});
 });
 

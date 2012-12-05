@@ -84,6 +84,12 @@ $.widget("ui.dialog", {
 	},
 
 	_create: function() {
+		this.originalCss = {
+			display: this.element[0].style.display,
+			width: this.element[0].style.width,
+			minHeight: this.element[0].style.minHeight,
+			height: this.element[0].style.height
+		};
 		this.originalTitle = this.element.attr( "title" );
 		this.options.title = this.options.title || this.originalTitle;
 		this.oldPosition = {
@@ -127,12 +133,7 @@ $.widget("ui.dialog", {
 		this.element
 			.removeUniqueId()
 			.removeClass( "ui-dialog-content ui-widget-content" )
-			.css({
-				width: "",
-				minHeight: "",
-				height: ""
-			})
-			.hide()
+			.css( this.originalCss )
 			// without detaching first, the following becomes really slow
 			.detach();
 
