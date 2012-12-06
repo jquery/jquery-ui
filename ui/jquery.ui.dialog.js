@@ -553,6 +553,7 @@ $.widget("ui.dialog", {
 	},
 
 	_setOption: function( key, value ) {
+		/*jshint maxcomplexity:15*/
 		var isDraggable, isResizable,
 			uiDialog = this.uiDialog;
 
