@@ -59,12 +59,12 @@ $.widget("ui.dialog", {
 			collision: "fit",
 			// ensure that the titlebar is never outside the document
 			using: function( pos ) {
-				var offset = $(this).css(pos).offset();
-				if (offset.top < 0) {
-					$(this).css('top', pos.top - offset.top);
+				var offset = $( this ).css( pos ).offset();
+				if ( offset.top < 0 ) {
+					$( this ).css( 'top', pos.top - offset.top );
 				}
-				if (offset.left < 0) {
-					$(this).css('left', pos.left - offset.left);
+				if ( offset.left < 0 ) {
+					$( this ).css( 'left', pos.left - offset.left );
 				}
 			}
 		},
