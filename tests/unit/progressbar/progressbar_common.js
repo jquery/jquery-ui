@@ -5,6 +5,8 @@ TestHelpers.commonWidgetTests( "progressbar", {
 		max: 100,
 
 		//callbacks
+		change: null,
+		complete: null,
 		create: null
 	}
 });

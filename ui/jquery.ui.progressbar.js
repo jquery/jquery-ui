@@ -17,8 +17,11 @@
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
+		max: 100,
 		value: 0,
-		max: 100
+
+		change: null,
+		complete: null
 	},
 
 	min: 0,
