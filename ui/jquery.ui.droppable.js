@@ -16,6 +16,10 @@
  */
 (function( $, undefined ) {
 
+function isOverAxis( x, reference, size ) {
+	return ( x > reference ) && ( x < ( reference + size ) );
+}
+
 $.widget("ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
@@ -203,7 +207,7 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 		case 'pointer':
 			draggableLeft = ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left);
 			draggableTop = ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top);
-			return $.ui.isOver(draggableTop, draggableLeft, t, l, droppable.proportions.height, droppable.proportions.width);
+			return isOverAxis( draggableTop, t, droppable.proportions.height ) && isOverAxis( draggableLeft, l, droppable.proportions.width )
 		case 'touch':
 			return (
 				(y1 >= t && y1 <= b) ||	// Top edge touching
