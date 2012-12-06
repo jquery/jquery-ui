@@ -6,6 +6,8 @@
 
 module("datepicker: core");
 
+TestHelpers.testJshint( "datepicker" );
+
 test("initialization - Reinitialization after body had been emptied.", function() {
 	expect( 1 );
 	var bodyContent = $('body').children(), inp = $("#inp");

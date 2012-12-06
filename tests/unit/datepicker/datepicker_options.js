@@ -64,7 +64,8 @@ test( "disabled", function() {
 	inp = TestHelpers.datepicker.init('#inp', { disabled: true });
 	ok(inp.datepicker('isDisabled'), 'Initially marked as disabled');
 	ok(inp[0].disabled, 'Field initially disabled');
-})
+});
+
 test('change', function() {
 	expect( 12 );
 	var inp = TestHelpers.datepicker.init('#inp'),
