@@ -143,8 +143,33 @@ test("step", function() {
 //	ok(false, "missing test - untested code is broken code.");
 //});
 
-//test("values", function() {
-//	ok(false, "missing test - untested code is broken code.");
-//});
+test("values", function() {
+	expect( 2 );
+
+	// testing multiple ranges on the same page, the object reference to the values
+	// property is preserved via multiple range elements, so updating options.values
+	// of 1 slider updates options.values of all the others
+	var ranges = $([
+		document.createElement("div"),
+		document.createElement("div")
+	]).slider({
+		range:  true,
+		values: [ 25, 75 ]
+	});
+
+	notStrictEqual(
+		ranges.eq(0).data("uiSlider").options.values,
+		ranges.eq(1).data("uiSlider").options.values,
+		"multiple range sliders should not have a reference to the same options.values array"
+	);
+
+	ranges.eq(0).slider("values", 0, 10);
+
+	notEqual(
+		ranges.eq(0).slider("values", 0),
+		ranges.eq(1).slider("values", 0),
+		"the values for multiple sliders should be different"
+	);
+});
 
 })(jQuery);
