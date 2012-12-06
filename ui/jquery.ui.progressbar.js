@@ -28,7 +28,7 @@ $.widget( "ui.progressbar", {
 
 	_create: function() {
 		// Constrain initial value
-		this.options.value = this._constrainedValue();
+		this.oldValue = this.options.value = this._constrainedValue();
 
 		this.element
 			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
@@ -42,7 +42,6 @@ $.widget( "ui.progressbar", {
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
-		this.oldValue = this.options.value;
 		this._refreshValue();
 	},
 
@@ -62,53 +61,44 @@ $.widget( "ui.progressbar", {
 			return this.options.value;
 		}
 
-		this._setOption( "value", this._constrainedValue( newValue ) );
-		return this;
+		this.options.value = this._constrainedValue( newValue );
+		this._refreshValue();
 	},
 
 	_constrainedValue: function( newValue ) {
-		var val;
 		if ( newValue === undefined ) {
-			val = this.options.value;
-		} else {
-			val = newValue;
+			newValue = this.options.value;
 		}
 
-		this.indeterminate = val === false;
+		this.indeterminate = newValue === false;
 
 		// sanitize value
-		if ( typeof val !== "number" ) {
-			val = 0;
+		if ( typeof newValue !== "number" ) {
+			newValue = 0;
 		}
-		return this.indeterminate ? false : Math.min( this.options.max, Math.max( this.min, val ) );
+
+		return this.indeterminate ? false :
+			Math.min( this.options.max, Math.max( this.min, newValue ) );
 	},
 
 	_setOptions: function( options ) {
-		var val = options.value;
-
 		// Ensure "value" option is set after other values (like max)
+		var value = options.value;
 		delete options.value;
+
 		this._super( options );
 
-		if ( val !== undefined ) {
-			this._setOption( "value", val );
-		}
+		this.options.value = this._constrainedValue( value );
+		this._refreshValue();
 	},
 
 	_setOption: function( key, value ) {
 		if ( key === "max" ) {
 			// Don't allow a max less than min
-			this.options.max = Math.max( this.min, value );
-			this.options.value = this._constrainedValue();
-		}
-		if ( key === "value" ) {
-			this.options.value = this._constrainedValue( value );
-		}
-		else {
-			this._super( key, value );
+			value = Math.max( this.min, value );
 		}
 
-		this._refreshValue();
+		this._super( key, value );
 	},
 
 	_percentage: function() {

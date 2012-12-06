@@ -24,5 +24,5 @@ test( "accessibility", function() {
 	element.progressbar( "option", "value", false );
 	equal( element.attr( "aria-valuemin" ), 0, "aria-valuemin" );
 	equal( element.attr( "aria-valuemax" ), 150, "aria-valuemax" );
-	strictEqual( element.attr( "aria-valuenow" ), undefined, "aria-valuenow initially" );
+	strictEqual( element.attr( "aria-valuenow" ), undefined, "aria-valuenow" );
 });
