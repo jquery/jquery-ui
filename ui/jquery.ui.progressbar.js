@@ -33,10 +33,10 @@ $.widget( "ui.progressbar", {
 		this.element
 			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
 			.attr({
+				// Only set static values, aria-valuenow and aria-valuemax are
+				// set inside _refreshValue()
 				role: "progressbar",
-				"aria-valuemin": this.min,
-				"aria-valuemax": this.options.max,
-				"aria-valuenow": this.options.value
+				"aria-valuemin": this.min
 			});
 
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
@@ -126,7 +126,7 @@ $.widget( "ui.progressbar", {
 			.width( percentage.toFixed(0) + "%" );
 
 		if ( this.indeterminate ) {
-			this.element.removeAttr( "aria-valuemax" ).removeAttr( "aria-valuenow" );
+			this.element.removeAttr( "aria-valuenow" );
 			if ( !this.overlayDiv ) {
 				this.overlayDiv = $( "<div class='ui-progressbar-overlay'></div>" ).appendTo( this.valueDiv );
 			}
