@@ -39,6 +39,7 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ui-fr
 $.widget("ui.dialog", {
 	version: "@VERSION",
 	options: {
+		appendTo: "body",
 		autoOpen: true,
 		buttons: {},
 		closeOnEscape: true,
@@ -122,6 +123,14 @@ $.widget("ui.dialog", {
 		if ( this.options.autoOpen ) {
 			this.open();
 		}
+	},
+
+	_appendTo: function() {
+		var element = this.options.appendTo;
+		if ( element && (element.jquery || element.nodeType) ) {
+			return $( element );
+		}
+		return this.document.find( element || "body" ).eq( 0 );
 	},
 
 	_destroy: function() {
@@ -276,7 +285,7 @@ $.widget("ui.dialog", {
 				tabIndex: -1,
 				role: "dialog"
 			})
-			.appendTo( this.document[ 0 ].body );
+			.appendTo( this._appendTo() );
 
 		this._on( this.uiDialog, {
 			keydown: function( event ) {
@@ -568,6 +577,10 @@ $.widget("ui.dialog", {
 		}
 
 		this._super( key, value );
+
+		if ( key === "appendTo" ) {
+			this.uiDialog.appendTo( this._appendTo() );
+		}
 
 		if ( key === "buttons" ) {
 			this._createButtons();

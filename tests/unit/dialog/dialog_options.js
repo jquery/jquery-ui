@@ -5,6 +5,47 @@
 
 module("dialog: options");
 
+test( "appendTo", function() {
+	expect( 8 );
+	var detached = $( "<div>" ),
+		element = $( "#dialog1" ).dialog();
+	equal( element.dialog( "widget" ).parent()[0], document.body, "defaults to body" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: ".wrap"
+	});
+	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "first found element" );
+	equal( $( "#wrap2 .ui-dialog" ).length, 0, "only appends to one element" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: null
+	});
+	equal( element.dialog( "widget" ).parent()[0], document.body, "null" );
+	element.dialog( "destroy" );
+
+	element.dialog({ autoOpen: false }).dialog( "option", "appendTo", "#wrap1" ).dialog( "open" );
+	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "modified after init" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: detached
+	});
+	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached jQuery object" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: detached[0]
+	});
+	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached DOM element" );
+	element.dialog( "destroy" );
+
+	element.dialog({ autoOpen: false }).dialog( "option", "appendTo", detached );
+	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached DOM element via option()" );
+	element.dialog( "destroy" );
+});
+
 test("autoOpen", function() {
 	expect(2);
 
