@@ -5,7 +5,7 @@ module( "autocomplete: options" );
 var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl" ];
 
 test( "appendTo", function() {
-	expect( 7 );
+	expect( 8 );
 	var detached = $( "<div>" ),
 		element = $( "#autocomplete" ).autocomplete();
 	equal( element.autocomplete( "widget" ).parent()[0], document.body, "defaults to body" );
@@ -38,6 +38,10 @@ test( "appendTo", function() {
 		appendTo: detached[0]
 	});
 	equal( element.autocomplete( "widget" ).parent()[0], detached[0], "detached DOM element" );
+	element.autocomplete( "destroy" );
+
+	element.autocomplete().autocomplete( "option", "appendTo", detached );
+	equal( element.autocomplete( "widget" ).parent()[0], detached[0], "detached DOM element via option()" );
 	element.autocomplete( "destroy" );
 });
 
