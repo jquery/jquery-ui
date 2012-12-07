@@ -48,8 +48,8 @@ $.widget("ui.dialog", {
 		draggable: true,
 		hide: null,
 		height: "auto",
-		maxHeight: false,
-		maxWidth: false,
+		maxHeight: null,
+		maxWidth: null,
 		minHeight: 150,
 		minWidth: 150,
 		modal: false,
@@ -89,6 +89,7 @@ $.widget("ui.dialog", {
 			display: this.element[0].style.display,
 			width: this.element[0].style.width,
 			minHeight: this.element[0].style.minHeight,
+			maxHeight: this.element[0].style.maxHeight,
 			height: this.element[0].style.height
 		};
 		this.originalTitle = this.element.attr( "title" );
@@ -632,16 +633,16 @@ $.widget("ui.dialog", {
 	},
 
 	_size: function() {
-
 		// If the user has resized the dialog, the .ui-dialog and .ui-dialog-content
 		// divs will both have width and height set, so we need to reset them
-		var nonContentHeight, minContentHeight,
+		var nonContentHeight, minContentHeight, maxContentHeight,
 			options = this.options;
 
 		// reset content sizing
 		this.element.show().css({
 			width: "auto",
 			minHeight: 0,
+			maxHeight: "none",
 			height: 0
 		});
 
@@ -657,14 +658,18 @@ $.widget("ui.dialog", {
 			})
 			.outerHeight();
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
+		maxContentHeight = typeof options.maxHeight === "number" ?
+			Math.max( 0, options.maxHeight - nonContentHeight ) :
+			"none";
 
 		if ( options.height === "auto" ) {
 			this.element.css({
 				minHeight: minContentHeight,
+				maxHeight: maxContentHeight,
 				height: "auto"
 			});
 		} else {
-			this.element.height( Math.max( options.height - nonContentHeight, 0 ) );
+			this.element.height( Math.max( 0, options.height - nonContentHeight ) );
 		}
 
 		if (this.uiDialog.is( ":data(ui-resizable)" ) ) {
