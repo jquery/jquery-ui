@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "dialog", {
 	defaults: {
+		appendTo: "body",
 		autoOpen: true,
 		buttons: {},
 		closeOnEscape: true,
