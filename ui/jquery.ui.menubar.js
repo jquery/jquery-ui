@@ -101,6 +101,9 @@ $.widget( "ui.menubar", {
 					this._close();
 					return;
 				}
+				if ( event.type === "mouseenter" ) {
+					this.element.find(":focus").focusout();
+				}
 				if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
 					if ( this.options.autoExpand ) {
 						clearTimeout( this.closeTimer );
