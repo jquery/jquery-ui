@@ -55,7 +55,7 @@ $.widget( "ui.menubar", {
 					ui.item.parents( "ul.ui-menu:last" ).hide();
 					that._close();
 					// TODO what is this targetting? there's probably a better way to access it
-					$(event.target).prev().focus();
+					$( event.target ).prev().focus();
 					that._trigger( "select", event, ui );
 				},
 				menus: this.options.menuElement
@@ -83,9 +83,9 @@ $.widget( "ui.menubar", {
 				}
 			}
 		});
-		this.items.each(function() {
+		this.items.each( function() {
 			var mouseBehaviorCallback, keyboardBehaviorCallback,
-				input = $(this),
+				input = $( this ),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
 				menu = input.next( that.options.menuElement );
 
@@ -118,7 +118,7 @@ $.widget( "ui.menubar", {
 				case $.ui.keyCode.SPACE:
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.DOWN:
-					that._open( event, $(event.target).next() );
+					that._open( event, $( event.target ).next() );
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.LEFT:
@@ -232,7 +232,7 @@ $.widget( "ui.menubar", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-haspopup" )
 			// TODO unwrap?
-			.children( "span.ui-button-text" ).each(function( i, e ) {
+			.children( "span.ui-button-text" ).each( function( i, e ) {
 				var item = $( this );
 				item.parent().html( item.html() );
 			})
