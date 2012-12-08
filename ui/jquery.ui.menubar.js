@@ -66,8 +66,7 @@ $.widget( "ui.menubar", {
 				"aria-expanded": "false"
 			});
 		this._on( subMenus, {
-
-			"keydown": function(event) {
+			keydown: function( event ) {
 				var menu = $( this );
 				if ( menu.is( ":hidden" ) ) {
 					return;
@@ -85,10 +84,10 @@ $.widget( "ui.menubar", {
 			}
 		});
 		this.items.each(function() {
-			var input = $(this),
+			var mouseBehaviorCallback, keyboardBehaviorCallback,
+				input = $(this),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
-				menu = input.next( that.options.menuElement ),
-				mouseBehaviorCallback, keyboardBehaviorCallback;
+				menu = input.next( that.options.menuElement );
 
 			mouseBehaviorCallback = function( event ) {
 				// ignore triggered focus event
@@ -96,14 +95,14 @@ $.widget( "ui.menubar", {
 					return;
 				}
 				event.preventDefault();
-				// TODO can we simplify or extractthis check? especially the last two expressions
+				// TODO can we simplify or extract this check? especially the last two expressions
 				// there's a similar active[0] == menu[0] check in _open
 				if ( event.type === "click" && menu.is( ":visible" ) && this.active && this.active[0] === menu[0] ) {
 					this._close();
 					return;
 				}
 				if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
-					if( this.options.autoExpand ) {
+					if ( this.options.autoExpand ) {
 						clearTimeout( this.closeTimer );
 					}
 
@@ -132,11 +131,11 @@ $.widget( "ui.menubar", {
 
 			// might be a non-menu button
 			if ( menu.length ) {
-				that._on(input, {
-					"click": mouseBehaviorCallback,
-					"focus": mouseBehaviorCallback,
-					"mouseenter": mouseBehaviorCallback,
-					"keydown": keyboardBehaviorCallback
+				that._on( input, {
+					click: mouseBehaviorCallback,
+					focus: mouseBehaviorCallback,
+					mouseenter: mouseBehaviorCallback,
+					keydown: keyboardBehaviorCallback
 				});
 
 				input.attr( "aria-haspopup", "true" );
@@ -147,13 +146,13 @@ $.widget( "ui.menubar", {
 					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 				}
 			} else {
-				that._on(input, {
-					click: function(event) {
+				that._on( input, {
+					click: function( event ) {
 						this._close();
 					},
 
-					mouseenter: function(event) {
-						if (this.open){
+					mouseenter: function( event ) {
+						if ( this.open ) {
 							this._close();
 						}
 					}
