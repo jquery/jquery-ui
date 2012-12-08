@@ -599,8 +599,8 @@ test( "#3627 - Ajax tab with url containing a fragment identifier fails to load"
 test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", function() {
 	expect( 2 );
 
-	var element = $( "<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>" );
-	element.appendTo( "#main" );
+	var element = $("<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>");
+	element.appendTo("#qunit-fixture");
 	element.tabs({
 		beforeLoad: function() {
 			event.preventDefault();
@@ -608,7 +608,7 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 		}
 	});
 
-	equal( element.find( ".ui-tabs-nav li" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
+	equal( element.find(".ui-tabs-nav li").attr("aria-controls"), "tab", "aria-contorls attribute is correct" );
 	state( element, 1 );
 });
 

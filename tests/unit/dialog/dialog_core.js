@@ -34,8 +34,9 @@ test( "ARIA", function() {
 
 test("widget method", function() {
 	expect( 1 );
-	var dialog = $("<div>").appendTo("#main").dialog();
+	var dialog = $("<div>").appendTo("#qunit-fixture").dialog();
 	deepEqual(dialog.parent()[0], dialog.dialog("widget")[0]);
+	dialog.remove();
 });
 
 test( "focus tabbable", function() {
