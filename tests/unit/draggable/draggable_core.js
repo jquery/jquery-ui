@@ -17,7 +17,7 @@ test("element types", function() {
 	$.each(typeNames, function(i) {
 		var offsetBefore, offsetAfter,
 			typeName = typeNames[i],
-			el = $(document.createElement(typeName)).appendTo('#main');
+			el = $(document.createElement(typeName)).appendTo('#qunit-fixture');
 
 		(typeName === 'table' && el.append("<tr><td>content</td></tr>"));
 		el.draggable({ cancel: '' });
