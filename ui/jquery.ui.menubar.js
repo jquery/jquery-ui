@@ -32,8 +32,8 @@ $.widget( "ui.menubar", {
 	},
 	_create: function() {
 		var that = this, subMenus;
-		this.menuItems = this.element.children( this.options.items );
-		this.items = this.menuItems.children( "button, a" );
+		this.menuItems = this.element.children( this.options.items ); // Top-level <li>s
+		this.items = this.menuItems.children( "button, a" ); // Links in those top-level <li>s
 
 		this.menuItems
 			.addClass( "ui-menubar-item" )
@@ -46,7 +46,7 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menubar" );
 		this._focusable( this.items );
 		this._hoverable( this.items );
-		subMenus = this.items.siblings( this.options.menuElement )
+		subMenus = this.items.siblings( this.options.menuElement ) // sub-contained <ul>
 			.menu({
 				position: {
 					within: this.options.position.within
@@ -115,7 +115,7 @@ $.widget( "ui.menubar", {
 				case $.ui.keyCode.SPACE:
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.DOWN:
-					this._open( event, $( this ).next() );
+					that._open( event, $(event.target).next() );
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.LEFT:
@@ -130,35 +130,47 @@ $.widget( "ui.menubar", {
 			};
 
 			// might be a non-menu button
-			if ( menu.length ) {
-				that._on( input, {
-					click: mouseBehaviorCallback,
-					focus: mouseBehaviorCallback,
-					mouseenter: mouseBehaviorCallback,
-					keydown: keyboardBehaviorCallback
-				});
+			that._on( input, {
+				click: mouseBehaviorCallback,
+				focus: mouseBehaviorCallback,
+				mouseenter: mouseBehaviorCallback,
+				keydown: keyboardBehaviorCallback
+			});
 
-				input.attr( "aria-haspopup", "true" );
+			input.attr( "aria-haspopup", "true" );
 
-				// TODO review if these options (menuIcon and buttons) are a good choice, maybe they can be merged
-				if ( that.options.menuIcon ) {
-					input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
-					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
-				}
-			} else {
+			// TODO review if these options (menuIcon and buttons) are a good choice, maybe they can be merged
+			if ( that.options.menuIcon ) {
+				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
+				input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
+			}
+
+			if ( !menu.length ) {
+				that._off( input, "click mouseenter keydown");
+				that._hoverable( input );
 				that._on( input, {
 					click: function( event ) {
 						this._close();
 					},
-
 					mouseenter: function( event ) {
 						if ( this.open ) {
 							this._close();
 						}
+					},
+					keydown: function( event ) {
+						switch ( event.keyCode ) {
+						case $.ui.keyCode.LEFT:
+							this.previous( event );
+							event.preventDefault();
+							break;
+						case $.ui.keyCode.RIGHT:
+							this.next( event );
+							event.preventDefault();
+							break;
+						}
 					}
 				});
 			}
-
 			input
 				.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
 				.attr( "role", "menuitem" )
