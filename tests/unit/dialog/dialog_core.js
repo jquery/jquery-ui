@@ -80,8 +80,7 @@ test( "focus tabbable", function() {
 	}, 13);
 });
 
-// #7960
-test( "resizable handles below modal overlays", function() {
+test( "#7960: resizable handles below modal overlays", function() {
 	expect( 1 );
 
 	var resizable = $( "<div>" ).resizable(),
@@ -91,6 +90,35 @@ test( "resizable handles below modal overlays", function() {
 
 	ok( resizableZindex < overlayZindex, "Resizable handles have lower z-index than modal overlay" );
 	dialog.dialog( "destroy" );
+});
+
+asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
+	expect( 3 );
+
+	var el = $( "<div><input id='t3123-first'><input id='t3123-last'></div>" ).dialog({ modal: true }),
+		inputs = el.find( "input" ),
+		widget = el.dialog( "widget" )[ 0 ];
+
+	function checkTab() {
+		ok( $.contains( widget, document.activeElement ), "Tab key event moved focus within the modal" );
+
+		// check shift tab
+		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB, shiftKey: true });
+		setTimeout( checkShiftTab, 2 );
+	}
+
+	function checkShiftTab() {
+		ok( $.contains( widget, document.activeElement ), "Shift-Tab key event moved focus within the modal" );
+
+		el.remove();
+		start();
+	}
+
+	inputs.eq( 1 ).focus();
+	equal( document.activeElement, inputs[1], "Focus set on second input" );
+	inputs.eq( 1 ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
+
+	setTimeout( checkTab, 2 );
 });
 
 })(jQuery);

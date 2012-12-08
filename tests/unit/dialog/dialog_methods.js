@@ -137,4 +137,52 @@ test("open", function() {
 	ok(el.dialog('widget').is(':visible') && !el.dialog('widget').is(':hidden'), 'dialog visible after open method called');
 });
 
+// TODO merge this with the main destroy test
+test("#4980: Destroy should place element back in original DOM position", function(){
+	expect( 2 );
+	var container = $('<div id="container"><div id="modal">Content</div></div>'),
+		modal = container.find('#modal');
+	modal.dialog();
+	ok(!$.contains(container[0], modal[0]), 'dialog should move modal element to outside container element');
+	modal.dialog('destroy');
+	ok($.contains(container[0], modal[0]), 'dialog(destroy) should place element back in original DOM position');
+});
+
+test("#6137: dialog('open') causes form elements to reset on IE7", function() {
+	expect(2);
+
+	var d1 = $('<form><input type="radio" name="radio" id="a" value="a" checked="checked"></input>' +
+				'<input type="radio" name="radio" id="b" value="b">b</input></form>').appendTo( "body" ).dialog({autoOpen: false});
+
+	d1.find('#b').prop( "checked", true );
+	equal(d1.find('input:checked').val(), 'b', "checkbox b is checked");
+
+	d1.dialog('open');
+	equal(d1.find('input:checked').val(), 'b', "checkbox b is checked");
+
+	d1.remove();
+});
+
+test("#5531: dialog width should be at least minWidth on creation", function () {
+	expect( 4 );
+	var el = $('<div></div>').dialog({
+			width: 200,
+			minWidth: 300
+		});
+
+	equal(el.dialog('option', 'width'), 300, "width is minWidth");
+	el.dialog('option', 'width', 200);
+	equal(el.dialog('option', 'width'), 300, "width unchanged when set to < minWidth");
+	el.dialog('option', 'width', 320);
+	equal(el.dialog('option', 'width'), 320, "width changed if set to > minWidth");
+	el.remove();
+
+	el = $('<div></div>').dialog({
+			minWidth: 300
+		});
+	ok(el.dialog('option', 'width') >=  300, "width is at least 300");
+	el.remove();
+
+});
+
 })(jQuery);
