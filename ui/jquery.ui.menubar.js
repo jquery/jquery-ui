@@ -189,6 +189,7 @@ $.widget( "ui.menubar", {
 					var active = that.active;
 					that.active.blur();
 					that._close( event );
+					$(event.target).blur().mouseleave();
 					active.prev().focus();
 				}
 			},
