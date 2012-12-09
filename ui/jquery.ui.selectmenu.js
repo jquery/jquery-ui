@@ -235,7 +235,7 @@ $.widget( "ui.selectmenu", {
 		if ( !this.isOpen ) {
 			return;
 		}
-		
+
 		var id = this._getSelectedItem().find( "a" ).attr( "id" );
 		this.isOpen = false;
 		this._toggleAttr();
