@@ -57,18 +57,12 @@ $.widget( "ui.selectmenu", {
 
 		// fix existing label
 		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
-		this._on( this.label, {
-			"click":  function( event ) {
-				this.button.focus();
-				event.preventDefault();
-			}
-		});
 
 		// hide original select tag
 		this.element.hide();
 
 		// create button
-		this.button = $( "<a>", {
+		this.button = $( "<button>", {
 			"class": "ui-button ui-widget ui-state-default ui-corner-all",
 			href: "#" + this.ids.id,
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
@@ -78,7 +72,8 @@ $.widget( "ui.selectmenu", {
 			"aria-expanded": false,
 			"aria-autocomplete": "list",
 			"aria-owns": this.ids.menu,
-			"aria-haspopup": true
+			"aria-haspopup": true,
+			"aria-live": "assertive"
 		});
 
 		this.button.prepend( $( "<span>", {
@@ -378,7 +373,6 @@ $.widget( "ui.selectmenu", {
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
-		this.button.attr( "aria-labelledby", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 	},
 
 	_setOption: function( key, value ) {
