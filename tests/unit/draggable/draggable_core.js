@@ -22,7 +22,10 @@ test("element types", function() {
 		(typeName === 'table' && el.append("<tr><td>content</td></tr>"));
 		el.draggable({ cancel: '' });
 		offsetBefore = el.offset();
-		TestHelpers.draggable.drag(el, 50, 50);
+		el.simulate( "drag", {
+			dx: 50,
+			dy: 50
+		});
 		offsetAfter = el.offset();
 		// there are some rounding errors in FF, Chrome, and IE9, so we can't say equal, we have to settle for close enough
 		closeEnough(offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + ">");
@@ -55,21 +58,15 @@ test("resizable handle with complex markup (#8756 / #8757)", function() {
 				.append($('<div>'))
 		);
 
-	var handle = '.ui-resizable-w div',
-		target = $('#draggable1').draggable().resizable({ handles: 'all' }),
-		drag = function(el, dx) {
-			$(el)
-				.simulate("mouseover")
-				.simulate("drag", {
-					dx: dx || 0,
-					speed: 'sync'
-				});
-		};
+	var handle = $('.ui-resizable-w div'),
+		target = $('#draggable1').draggable().resizable({ handles: 'all' });
 
-	drag(handle, -50);
+	// todo: fix resizable so it doesn't require a mouseover
+	handle.simulate("mouseover").simulate( "drag", { dx: -50 } );
 	equal( target.width(), 250, "compare width" );
 
-	drag(handle, 50);
+	// todo: fix resizable so it doesn't require a mouseover
+	handle.simulate("mouseover").simulate( "drag", { dx: 50 } );
 	equal( target.width(), 200, "compare width" );
 });
 
