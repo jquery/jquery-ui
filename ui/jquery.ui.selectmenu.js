@@ -346,7 +346,11 @@ $.widget( "ui.selectmenu", {
 					}
 					break;
 				case $.ui.keyCode.SPACE:
-					this._toggle( event );
+					if ( this.isOpen ) {
+						this.menu.menu( "select", event );
+					} else {
+						this._toggle( event );
+					}
 					break;
 				case $.ui.keyCode.LEFT:
 					this._move( "previous", event );
