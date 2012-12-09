@@ -473,8 +473,8 @@ $.widget( "ui.autocomplete", {
 				};
 			}
 			return $.extend({
-				label: item.label || item.value,
-				value: item.value || item.label
+				label: item.label || item.value || "invalid data format",
+				value: item.value || item.label || "invalid data format"
 			}, item );
 		});
 	},
