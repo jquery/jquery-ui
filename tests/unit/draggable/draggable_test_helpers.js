@@ -1,17 +1,14 @@
 TestHelpers.draggable = {
 	// todo: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
-	drag: function(handle, dx, dy) {
-		$(handle).simulate("drag", {
-			dx: dx || 0,
-			dy: dy || 0
-		});
-	},
 	testDrag: function(el, handle, dx, dy, expectedDX, expectedDY, msg) {
 		var offsetAfter, actual, expected,
 			offsetBefore = el.offset();
 
-		TestHelpers.draggable.drag(handle, dx, dy);
+		$( handle ).simulate( "drag", {
+			dx: dx,
+			dy: dy
+		});
 		offsetAfter = el.offset();
 
 		actual = { left: offsetAfter.left, top: offsetAfter.top },
