@@ -474,3 +474,52 @@ $.widget( "ui.draggable", $.ui.draggable, {
 });
 
 })( jQuery );
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+
+	// axis option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			axis: false
+		},
+		
+		_create : function() {
+			
+			var start_left, start_top;
+		
+			this._super();
+			
+			// If movement should only move left/right
+			if ( this.options.axis === 'x' ) {
+
+				// Cache starting top position to keep it from moving
+				this.element.on( 'dragbeforestart', function( e, ui ) {
+					start_top = ui.position.top;
+				});
+				
+				// On drag, make sure top does not change so axis is locked
+				this.element.on( 'drag', function( e, ui ) {
+					ui.position.top = start_top;
+				});
+				
+			}
+			// If movement should only move up/down
+			else if ( this.options.axis === 'y' ) {
+			
+				// Cache starting left position to keep it from moving
+				this.element.on( 'dragbeforestart', function( e, ui ) {
+					start_left = ui.position.left;
+				});
+				
+				// On drag, make sure top does not change so axis is locked
+				this.element.on( 'drag', function( e, ui ) {
+					ui.position.left = start_left;
+				});
+			
+			}
+		
+		}
+	});
+	
+}
