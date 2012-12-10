@@ -33,7 +33,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		appendTo: null,
 		handle: null,
 		helper: false,
-    exclude: "input,textarea,button,select,option"
+    exclude: "input,textarea,button,select,option",
+    disabled: false
 	},
 
 	// dragEl: element being dragged (original or helper)
@@ -73,6 +74,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	_start: function( event, pointerPosition ) {
 		var offset;
+    
+    // Stop drag if option says disabled
+    if ( this.options.disabled === true ) {
+      return;
+    }
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.options.helper ?
