@@ -86,7 +86,7 @@ $.widget( "ui.menubar", {
 				}
 			}
 		});
-		this.items.each( function() {
+		this.items.each(function() {
 			var mouseBehaviorCallback, keyboardBehaviorCallback,
 				input = $( this ),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
