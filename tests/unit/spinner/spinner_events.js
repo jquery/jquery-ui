@@ -253,7 +253,7 @@ asyncTest( "change", function() {
 		start();
 	}
 
-	step1();
+	setTimeout( step1 );
 });
 
 })( jQuery );
