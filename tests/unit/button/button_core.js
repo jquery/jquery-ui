@@ -153,13 +153,16 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 	ok( set.find( "label:eq(2)" ).is( ".ui-button.ui-corner-right" ) );
 });
 
-test( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
 	expect( 2 );
 	var check = $( "#check" ).button(),
 		label = $( "label[for='check']" );
 	ok( !label.is( ".ui-state-focus" ) );
 	check.focus();
-	ok( label.is( ".ui-state-focus" ) );
+	setTimeout(function() {
+		ok( label.is( ".ui-state-focus" ) );
+		start();
+	});
 });
 
 test( "#7534 - Button label selector works for ids with \":\"", function() {
