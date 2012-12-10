@@ -4,11 +4,12 @@ module( "core - jQuery extensions" );
 
 TestHelpers.testJshint( "core" );
 
-test( "focus - original functionality", function() {
+asyncTest( "focus - original functionality", function() {
 	expect( 1 );
 	$( "#inputTabindex0" )
-		.focus(function() {
+		.one( "focus", function() {
 			ok( true, "event triggered" );
+			start();
 		})
 		.focus();
 });
@@ -16,12 +17,10 @@ test( "focus - original functionality", function() {
 asyncTest( "focus", function() {
 	expect( 2 );
 	$( "#inputTabindex0" )
-		.focus(function() {
+		.one( "focus", function() {
 			ok( true, "event triggered" );
 		})
 		.focus( 500, function() {
-			// prevent double focus event in IE
-			$( this ).unbind( "focus" );
 			ok( true, "callback triggered" );
 			start();
 		});
