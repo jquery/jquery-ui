@@ -522,4 +522,47 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 	
+	// cursor option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			cursor: 'auto'
+		},
+		
+		_create : function() {
+		
+			var start_cursor, self, body;
+			
+			this._super();
+			
+			if ( this.options.cursor ) {
+			
+				self = this;
+				body = $( document.body );
+			
+				// Cache original cursor to set back
+				this.element.on( 'dragbeforestart', function( e, ui ) {
+					start_cursor = body.css( 'cursor' );
+				});
+				
+				// Set cursor to what user wants during drag
+				this.element.on( 'drag', function( e, ui ) {
+					body.css( 'cursor', self.options.cursor );
+				});
+				
+				// Set back cursor to whatever default was
+				this.element.on( 'dragstop', function( e, ui ) {
+				
+					// Make sure something was actually reported back before setting body
+					if ( start_cursor ) {
+						body.css( 'cursor', start_cursor );
+					}
+
+				});
+			
+			}
+		
+		}
+		
+	});
+	
 }
