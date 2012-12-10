@@ -32,8 +32,10 @@ $.widget( "ui.menubar", {
 	},
 	_create: function() {
 		var that = this, subMenus;
-		this.menuItems = this.element.children( this.options.items ); // Top-level <li>s
-		this.items = this.menuItems.children( "button, a" ); // Links in those top-level <li>s
+		// Top-level elements containing the submenu-triggering elem
+		this.menuItems = this.element.children( this.options.items );
+		// Links or buttons in menuItems, triggers of the submenus
+		this.items = this.menuItems.children( "button, a" );
 
 		this.menuItems
 			.addClass( "ui-menubar-item" )
@@ -46,7 +48,8 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menubar" );
 		this._focusable( this.items );
 		this._hoverable( this.items );
-		subMenus = this.items.siblings( this.options.menuElement ) // sub-contained <ul>
+		// Sub-contained container, typically a <ul>
+		subMenus = this.items.siblings( this.options.menuElement )
 			.menu({
 				position: {
 					within: this.options.position.within
@@ -149,7 +152,7 @@ $.widget( "ui.menubar", {
 			}
 
 			if ( !menu.length ) {
-				that._off( input, "click mouseenter keydown");
+				that._off( input, "click mouseenter keydown" );
 				that._hoverable( input );
 				that._on( input, {
 					click: function( event ) {
@@ -161,15 +164,12 @@ $.widget( "ui.menubar", {
 						}
 					},
 					keydown: function( event ) {
-						switch ( event.keyCode ) {
-						case $.ui.keyCode.LEFT:
+						if ( event.keyCode === $.ui.keyCode.LEFT ) {
 							this.previous( event );
 							event.preventDefault();
-							break;
-						case $.ui.keyCode.RIGHT:
+						} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
 							this.next( event );
 							event.preventDefault();
-							break;
 						}
 					}
 				});
@@ -189,7 +189,7 @@ $.widget( "ui.menubar", {
 					var active = that.active;
 					that.active.blur();
 					that._close( event );
-					$(event.target).blur().mouseleave();
+					$( event.target ).blur().mouseleave();
 					active.prev().focus();
 				}
 			},
@@ -233,7 +233,7 @@ $.widget( "ui.menubar", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-haspopup" )
 			// TODO unwrap?
-			.children( "span.ui-button-text" ).each( function( i, e ) {
+			.children( "span.ui-button-text" ).each(function( i, e ) {
 				var item = $( this );
 				item.parent().html( item.html() );
 			})
