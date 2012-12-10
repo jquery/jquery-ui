@@ -33,8 +33,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		appendTo: null,
 		handle: null,
 		helper: false,
-    exclude: "input,textarea,button,select,option",
-    disabled: false
+		exclude: "input,textarea,button,select,option"
 	},
 
 	// dragEl: element being dragged (original or helper)
@@ -49,7 +48,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
 	// domPosition: object containing original parent and index when using
-	//   appendTo option without a helper
+	// appendTo option without a helper
 
 	_create: function() {
 		this._super();
@@ -65,20 +64,14 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-    
-    var handle = this.options.handle ? element.is( this.options.handle ) : true,
-      exclude = this.options.exclude ? element.is( this.options.exclude ) : false;
-      
-    return ( handle && !exclude );
+		var handle = this.options.handle ? element.is( this.options.handle ) : true,
+			exclude = this.options.exclude ? element.is( this.options.exclude ) : false;
+
+		return ( handle && !exclude );
 	},
 
 	_start: function( event, pointerPosition ) {
 		var offset;
-    
-    // Stop drag if option says disabled
-    if ( this.options.disabled === true ) {
-      return;
-    }
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.options.helper ?
