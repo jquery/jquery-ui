@@ -32,7 +32,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	options: {
 		appendTo: null,
 		handle: null,
-		helper: false
+		helper: false,
+    exclude: "input,textarea,button,select,option"
 	},
 
 	// dragEl: element being dragged (original or helper)
@@ -63,7 +64,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-		return this.options.handle ? element.is( this.options.handle ) : true;
+    
+    var handle = this.options.handle ? element.is( this.options.handle ) : true,
+      exclude = this.options.exclude ? element.is( this.options.exclude ) : false;
+      
+    return ( handle && !exclude );
 	},
 
 	_start: function( event, pointerPosition ) {
