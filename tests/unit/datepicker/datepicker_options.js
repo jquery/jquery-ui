@@ -87,76 +87,114 @@ test('change', function() {
 	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 });
 
-test('invocation', function() {
+asyncTest('invocation', function() {
 	expect( 29 );
 	var button, image,
 		inp = TestHelpers.datepicker.init('#inp'),
 		dp = $('#ui-datepicker-div'),
 		body = $('body');
-	// On focus
-	button = inp.siblings('button');
-	ok(button.length === 0, 'Focus - button absent');
-	image = inp.siblings('img');
-	ok(image.length === 0, 'Focus - image absent');
-	inp.focus();
-	ok(dp.is(':visible'), 'Focus - rendered on focus');
-	inp.simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
-	ok(!dp.is(':visible'), 'Focus - hidden on exit');
-	inp.focus();
-	ok(dp.is(':visible'), 'Focus - rendered on focus');
-	body.simulate('mousedown', {});
-	ok(!dp.is(':visible'), 'Focus - hidden on external click');
-	inp.datepicker('hide').datepicker('destroy');
-	// On button
-	inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonText: 'Popup'});
-	ok(!dp.is(':visible'), 'Button - initially hidden');
-	button = inp.siblings('button');
-	image = inp.siblings('img');
-	ok(button.length === 1, 'Button - button present');
-	ok(image.length === 0, 'Button - image absent');
-	equal(button.text(), 'Popup', 'Button - button text');
-	inp.focus();
-	ok(!dp.is(':visible'), 'Button - not rendered on focus');
-	button.click();
-	ok(dp.is(':visible'), 'Button - rendered on button click');
-	button.click();
-	ok(!dp.is(':visible'), 'Button - hidden on second button click');
-	inp.datepicker('hide').datepicker('destroy');
-	// On image button
-	inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonImageOnly: true,
-		buttonImage: 'img/calendar.gif', buttonText: 'Cal'});
-	ok(!dp.is(':visible'), 'Image button - initially hidden');
-	button = inp.siblings('button');
-	ok(button.length === 0, 'Image button - button absent');
-	image = inp.siblings('img');
-	ok(image.length === 1, 'Image button - image present');
-	equal(image.attr('src'), 'img/calendar.gif', 'Image button - image source');
-	equal(image.attr('title'), 'Cal', 'Image button - image text');
-	inp.focus();
-	ok(!dp.is(':visible'), 'Image button - not rendered on focus');
-	image.click();
-	ok(dp.is(':visible'), 'Image button - rendered on image click');
-	image.click();
-	ok(!dp.is(':visible'), 'Image button - hidden on second image click');
-	inp.datepicker('hide').datepicker('destroy');
-	// On both
-	inp = TestHelpers.datepicker.init('#inp', {showOn: 'both', buttonImage: 'img/calendar.gif'});
-	ok(!dp.is(':visible'), 'Both - initially hidden');
-	button = inp.siblings('button');
-	ok(button.length === 1, 'Both - button present');
-	image = inp.siblings('img');
-	ok(image.length === 0, 'Both - image absent');
-	image = button.children('img');
-	ok(image.length === 1, 'Both - button image present');
-	inp.focus();
-	ok(dp.is(':visible'), 'Both - rendered on focus');
-	body.simulate('mousedown', {});
-	ok(!dp.is(':visible'), 'Both - hidden on external click');
-	button.click();
-	ok(dp.is(':visible'), 'Both - rendered on button click');
-	button.click();
-	ok(!dp.is(':visible'), 'Both - hidden on second button click');
-	inp.datepicker('hide').datepicker('destroy');
+
+	function step1() {
+		// On focus
+		button = inp.siblings('button');
+		ok(button.length === 0, 'Focus - button absent');
+		image = inp.siblings('img');
+		ok(image.length === 0, 'Focus - image absent');
+		inp[0].focus();
+		setTimeout(function() {
+			ok(dp.is(':visible'), 'Focus - rendered on focus');
+			inp.simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
+			ok(!dp.is(':visible'), 'Focus - hidden on exit');
+			inp[0].blur();
+			setTimeout(function() {
+				inp[0].focus();
+				setTimeout(function() {
+					ok(dp.is(':visible'), 'Focus - rendered on focus');
+					body.simulate('mousedown', {});
+					ok(!dp.is(':visible'), 'Focus - hidden on external click');
+					inp.datepicker('hide').datepicker('destroy');
+
+					step2();
+				});
+			});
+		});
+	}
+
+	function step2() {
+		// On button
+		inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonText: 'Popup'});
+		ok(!dp.is(':visible'), 'Button - initially hidden');
+		button = inp.siblings('button');
+		image = inp.siblings('img');
+		ok(button.length === 1, 'Button - button present');
+		ok(image.length === 0, 'Button - image absent');
+		equal(button.text(), 'Popup', 'Button - button text');
+		inp[0].focus();
+		setTimeout(function() {
+			ok(!dp.is(':visible'), 'Button - not rendered on focus');
+			button.click();
+			ok(dp.is(':visible'), 'Button - rendered on button click');
+			button.click();
+			ok(!dp.is(':visible'), 'Button - hidden on second button click');
+			inp.datepicker('hide').datepicker('destroy');
+
+			step3();
+		});
+	}
+
+	function step3() {
+		// On image button
+		inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonImageOnly: true,
+			buttonImage: 'img/calendar.gif', buttonText: 'Cal'});
+		ok(!dp.is(':visible'), 'Image button - initially hidden');
+		button = inp.siblings('button');
+		ok(button.length === 0, 'Image button - button absent');
+		image = inp.siblings('img');
+		ok(image.length === 1, 'Image button - image present');
+		equal(image.attr('src'), 'img/calendar.gif', 'Image button - image source');
+		equal(image.attr('title'), 'Cal', 'Image button - image text');
+		inp[0].focus();
+		setTimeout(function() {
+			ok(!dp.is(':visible'), 'Image button - not rendered on focus');
+			image.click();
+			ok(dp.is(':visible'), 'Image button - rendered on image click');
+			image.click();
+			ok(!dp.is(':visible'), 'Image button - hidden on second image click');
+			inp.datepicker('hide').datepicker('destroy');
+
+			step4();
+		});
+	}
+
+	function step4() {
+		// On both
+		inp = TestHelpers.datepicker.init('#inp', {showOn: 'both', buttonImage: 'img/calendar.gif'});
+		ok(!dp.is(':visible'), 'Both - initially hidden');
+		button = inp.siblings('button');
+		ok(button.length === 1, 'Both - button present');
+		image = inp.siblings('img');
+		ok(image.length === 0, 'Both - image absent');
+		image = button.children('img');
+		ok(image.length === 1, 'Both - button image present');
+		inp[0].blur();
+		setTimeout(function() {
+			inp[0].focus();
+			setTimeout(function() {
+				ok(dp.is(':visible'), 'Both - rendered on focus');
+				body.simulate('mousedown', {});
+				ok(!dp.is(':visible'), 'Both - hidden on external click');
+				button.click();
+				ok(dp.is(':visible'), 'Both - rendered on button click');
+				button.click();
+				ok(!dp.is(':visible'), 'Both - hidden on second button click');
+				inp.datepicker('hide').datepicker('destroy');
+
+				start();
+			});
+		});
+	}
+
+	step1();
 });
 
 test('otherMonths', function() {
