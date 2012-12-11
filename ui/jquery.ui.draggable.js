@@ -486,7 +486,7 @@ if ( $.uiBackCompat !== false ) {
 		
 		_create : function() {
 			
-			var start_left, start_top;
+			var startLeft, startTop;
 		
 			this._super();
 			
@@ -495,12 +495,12 @@ if ( $.uiBackCompat !== false ) {
 
 				// Cache starting top position to keep it from moving
 				this.element.on( 'dragbeforestart', function( e, ui ) {
-					start_top = ui.position.top;
+					startTop = ui.position.top;
 				});
 				
 				// On drag, make sure top does not change so axis is locked
 				this.element.on( 'drag', function( e, ui ) {
-					ui.position.top = start_top;
+					ui.position.top = startTop;
 				});
 				
 			}
@@ -509,12 +509,12 @@ if ( $.uiBackCompat !== false ) {
 			
 				// Cache starting left position to keep it from moving
 				this.element.on( 'dragbeforestart', function( e, ui ) {
-					start_left = ui.position.left;
+					startLeft = ui.position.left;
 				});
 				
 				// On drag, make sure top does not change so axis is locked
 				this.element.on( 'drag', function( e, ui ) {
-					ui.position.left = start_left;
+					ui.position.left = startLeft;
 				});
 			
 			}
@@ -530,7 +530,7 @@ if ( $.uiBackCompat !== false ) {
 		
 		_create : function() {
 		
-			var start_cursor, self, body;
+			var startCursor, self, body;
 			
 			this._super();
 			
@@ -541,7 +541,7 @@ if ( $.uiBackCompat !== false ) {
 			
 				// Cache original cursor to set back
 				this.element.on( 'dragbeforestart', function( e, ui ) {
-					start_cursor = body.css( 'cursor' );
+					startCursor = body.css( 'cursor' );
 				});
 				
 				// Set cursor to what user wants during drag
@@ -553,13 +553,52 @@ if ( $.uiBackCompat !== false ) {
 				this.element.on( 'dragstop', function( e, ui ) {
 				
 					// Make sure something was actually reported back before setting body
-					if ( start_cursor ) {
-						body.css( 'cursor', start_cursor );
+					if ( startCursor ) {
+						body.css( 'cursor', startCursor );
 					}
 
 				});
 			
 			}
+		
+		}
+		
+	});
+	
+	// cursorAt option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			cursorAt: false
+		},
+		
+		_create : function() {
+		
+			var cursorAt, elem;
+			
+			this._super();
+			
+			
+			if ( !this.options.cursorAt ) {
+				return;
+			}
+			
+			elem = this.dragEl;
+			cursorAt = this.options.cursorAt;
+			
+			this.element.on( 'dragbeforestart', function( e, ui ) {
+				if ( "top" in cursorAt ) {
+					ui.position.top += ui.pointer.y - ui.offset.top - cursorAt.top;
+				}
+				if ( "left" in cursorAt ) {
+					ui.position.left += ui.pointer.x - ui.offset.left - cursorAt.left;
+				}
+				if ( "bottom" in cursorAt ) {
+					ui.position.top += ui.pointer.y - ui.offset.top - elem.outerHeight() + cursorAt.bottom;
+				}
+				if ( "right" in cursorAt ) {
+					ui.position.left += ui.pointer.x - ui.offset.left - elem.outerWidth() + cursorAt.right;
+				}
+			});
 		
 		}
 		
