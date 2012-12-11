@@ -491,29 +491,29 @@ if ( $.uiBackCompat !== false ) {
 			this._super();
 			
 			// If movement should only move left/right
-			if ( this.options.axis === 'x' ) {
+			if ( this.options.axis === "x" ) {
 
 				// Cache starting top position to keep it from moving
-				this.element.on( 'dragbeforestart', function( e, ui ) {
+				this.element.on( "dragbeforestart", function( e, ui ) {
 					startTop = ui.position.top;
 				});
 				
 				// On drag, make sure top does not change so axis is locked
-				this.element.on( 'drag', function( e, ui ) {
+				this.element.on( "drag", function( e, ui ) {
 					ui.position.top = startTop;
 				});
 				
 			}
 			// If movement should only move up/down
-			else if ( this.options.axis === 'y' ) {
+			else if ( this.options.axis === "y" ) {
 			
 				// Cache starting left position to keep it from moving
-				this.element.on( 'dragbeforestart', function( e, ui ) {
+				this.element.on( "dragbeforestart", function( e, ui ) {
 					startLeft = ui.position.left;
 				});
 				
 				// On drag, make sure top does not change so axis is locked
-				this.element.on( 'drag', function( e, ui ) {
+				this.element.on( "drag", function( e, ui ) {
 					ui.position.left = startLeft;
 				});
 			
@@ -525,7 +525,7 @@ if ( $.uiBackCompat !== false ) {
 	// cursor option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
-			cursor: 'auto'
+			cursor: "auto"
 		},
 		
 		_create : function() {
@@ -540,21 +540,21 @@ if ( $.uiBackCompat !== false ) {
 				body = $( document.body );
 			
 				// Cache original cursor to set back
-				this.element.on( 'dragbeforestart', function( e, ui ) {
-					startCursor = body.css( 'cursor' );
+				this.element.on( "dragbeforestart", function( e, ui ) {
+					startCursor = body.css( "cursor" );
 				});
 				
 				// Set cursor to what user wants during drag
-				this.element.on( 'drag', function( e, ui ) {
-					body.css( 'cursor', self.options.cursor );
+				this.element.on( "drag", function( e, ui ) {
+					body.css( "cursor", self.options.cursor );
 				});
 				
 				// Set back cursor to whatever default was
-				this.element.on( 'dragstop', function( e, ui ) {
+				this.element.on( "dragstop", function( e, ui ) {
 				
 					// Make sure something was actually reported back before setting body
 					if ( startCursor ) {
-						body.css( 'cursor', startCursor );
+						body.css( "cursor", startCursor );
 					}
 
 				});
@@ -585,7 +585,7 @@ if ( $.uiBackCompat !== false ) {
 			
 			cursorAt = this.options.cursorAt;
 			
-			this.element.on( 'dragbeforestart', function( e, ui ) {
+			this.element.on( "dragbeforestart", function( e, ui ) {
 			
 				var elem = self.dragEl;
 			
@@ -603,6 +603,63 @@ if ( $.uiBackCompat !== false ) {
 				}
 			});
 		
+		}
+		
+	});
+	
+	// grid option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			grid: false
+		},
+		
+		_create : function() {
+		
+			var x, y, currentX, currentY;
+		
+			this._super();
+			
+			if ( !this.options.grid ) {
+				return;
+			}
+			
+			x = this.options.grid[0];
+			y = this.options.grid[1];
+			
+			this.element.on( "dragbeforestart", function( e, ui ) {
+			
+				currentX = ui.position.left;
+				currentY = ui.position.top;
+			
+			});
+			
+			this.element.on( "drag", function( e, ui ) {
+			
+				if ( x ) {
+					if ( ui.position.left - currentX > x/2 ) {
+						currentX = currentX + x;
+					}
+					else if ( currentX - ui.position.left > x/2 ) {
+						currentX = currentX - x;
+					}
+				}
+				
+				if ( y ) {
+					if ( ui.position.top - currentY > y/2 ) {
+						currentY = currentY + y;
+					}
+					else if ( currentY - ui.position.top > y/2 ) {
+						currentY = currentY - y;
+					}
+				}
+				
+				
+				ui.position.left = currentX;
+				ui.position.top = currentY;
+				
+				
+			});
+			
 		}
 		
 	});
