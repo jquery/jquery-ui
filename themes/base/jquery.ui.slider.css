@@ -18,6 +18,7 @@
 	width: 1.2em;
 	height: 1.2em;
 	cursor: default;
+	outline: none;
 }
 .ui-slider .ui-slider-range {
 	position: absolute;
