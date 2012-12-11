@@ -39,7 +39,7 @@ TestHelpers.commonWidgetTests( "draggable", {
 
 		// callbacks
 		beforeStart: null,
-		create: null
+		create: null,
 		drag: null,
 		start: null,
 		stop: null
