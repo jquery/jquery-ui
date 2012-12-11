@@ -573,7 +573,8 @@ if ( $.uiBackCompat !== false ) {
 		
 		_create : function() {
 		
-			var cursorAt, elem;
+			var self = this,
+				cursorAt;
 			
 			this._super();
 			
@@ -582,10 +583,12 @@ if ( $.uiBackCompat !== false ) {
 				return;
 			}
 			
-			elem = this.dragEl;
 			cursorAt = this.options.cursorAt;
 			
 			this.element.on( 'dragbeforestart', function( e, ui ) {
+			
+				var elem = self.dragEl;
+			
 				if ( "top" in cursorAt ) {
 					ui.position.top += ui.pointer.y - ui.offset.top - cursorAt.top;
 				}
