@@ -112,8 +112,9 @@ $.widget( "ui.progressbar", {
 		this.valueDiv
 			.toggle( this.indeterminate || value > this.min )
 			.toggleClass( "ui-corner-right", value === this.options.max )
-			.toggleClass( "ui-progressbar-indeterminate", this.indeterminate )
 			.width( percentage.toFixed(0) + "%" );
+
+		this.element.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
 
 		if ( this.indeterminate ) {
 			this.element.removeAttr( "aria-valuenow" );
