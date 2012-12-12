@@ -709,10 +709,11 @@ if ( $.uiBackCompat !== false ) {
 	});
 	
 	// TODO: handle droppables
-	// revert option
+	// revert + revertDuration options
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
-			revert: false
+			revert: false,
+			revertDuration: 500
 		},
 		
 		_create : function() {
@@ -739,11 +740,11 @@ if ( $.uiBackCompat !== false ) {
 			this.element.on( "dragstop", function( e, ui ) {
 			
 				// Reset to before drag
-				self.dragEl.css({
+				self.dragEl.animate({
 					left: originalLeft, 
 					top: originalTop, 
 					position: originalPosition 
-				});
+				}, self.options.revertDuration );
 				
 			});
 			
