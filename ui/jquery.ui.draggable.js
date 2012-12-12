@@ -708,4 +708,47 @@ if ( $.uiBackCompat !== false ) {
 		
 	});
 	
+	// TODO: handle droppables
+	// revert option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			revert: false
+		},
+		
+		_create : function() {
+		
+			var self = this,
+				originalLeft, originalTop, originalPosition;
+		
+			this._super();
+			
+			// No need to continue
+			if ( !this.options.revert ) {
+				return;
+			}
+			
+			this.element.on( "dragbeforestart", function( e, ui ) {
+			
+				// Cache the original css of draggable element to reset later
+				originalLeft = self.dragEl.css( 'left' );
+				originalTop = self.dragEl.css( 'top' );
+				originalPosition = self.dragEl.css( 'position' );
+				
+			});
+			
+			this.element.on( "dragstop", function( e, ui ) {
+			
+				// Reset to before drag
+				self.dragEl.css({
+					left: originalLeft, 
+					top: originalTop, 
+					position: originalPosition 
+				});
+				
+			});
+			
+		}
+		
+	});
+	
 }
