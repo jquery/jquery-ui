@@ -578,7 +578,7 @@ if ( $.uiBackCompat !== false ) {
 			
 			this._super();
 			
-			
+			// No need to continue
 			if ( !this.options.cursorAt ) {
 				return;
 			}
@@ -619,15 +619,18 @@ if ( $.uiBackCompat !== false ) {
 		
 			this._super();
 			
+			// No need to continue
 			if ( !this.options.grid ) {
 				return;
 			}
 			
+			// Save off the intended intervals
 			x = this.options.grid[0];
 			y = this.options.grid[1];
 			
 			this.element.on( "dragbeforestart", function( e, ui ) {
 			
+				// Save off the start position
 				currentX = ui.position.left;
 				currentY = ui.position.top;
 			
@@ -635,6 +638,7 @@ if ( $.uiBackCompat !== false ) {
 			
 			this.element.on( "drag", function( e, ui ) {
 			
+				// If x is actually something, check that user is at least half way to next point
 				if ( x ) {
 					if ( ui.position.left - currentX > x/2 ) {
 						currentX = currentX + x;
@@ -644,6 +648,7 @@ if ( $.uiBackCompat !== false ) {
 					}
 				}
 				
+				// If y is actually something, check that user is at least half way to next point
 				if ( y ) {
 					if ( ui.position.top - currentY > y/2 ) {
 						currentY = currentY + y;
@@ -653,10 +658,49 @@ if ( $.uiBackCompat !== false ) {
 					}
 				}
 				
-				
+				// If there threshold wasn't crossed these variables wouldn't be changed
+				// Otherwise this will now bump the draggable to the next spot on grid
 				ui.position.left = currentX;
 				ui.position.top = currentY;
 				
+			});
+			
+		}
+		
+	});
+	
+	// opacity option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			opacity: false
+		},
+		
+		_create : function() {
+		
+			var self = this,
+				originalOpacity;
+		
+			this._super();
+			
+			// No need to continue
+			if ( !this.options.opacity ) {
+				return;
+			}
+			
+			this.element.on( "dragbeforestart", function( e, ui ) {
+			
+				// Cache the original opacity of draggable element to reset later
+				originalOpacity = self.dragEl.css( 'opacity' );
+				
+				// Set draggable element to new opacity
+				self.dragEl.css( 'opacity', self.options.opacity );
+			
+			});
+			
+			this.element.on( "dragstop", function( e, ui ) {
+			
+				// Reset opacity
+				self.dragEl.css( 'opacity', originalOpacity );
 				
 			});
 			
