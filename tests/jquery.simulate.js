@@ -1,13 +1,15 @@
-/*
- * jquery.simulate - simulate browser mouse and keyboard events
- * http://jqueryui.com
+ /*!
+ * jQuery Simulate v0.0.1 - simulate browser mouse and keyboard events
+ * https://github.com/jquery/jquery-simulate
  *
  * Copyright 2012 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
+ *
+ * Date: Sun Dec 9 12:15:33 2012 -0500
  */
 
-;(function( $ ) {
+;(function( $, undefined ) {
 
 var rkeyEvent = /^key/,
 	rmouseEvent = /^(?:mouse|contextmenu)|click/;
@@ -31,7 +33,42 @@ $.simulate = function( elem, type, options ) {
 	}
 };
 
+$.extend( $.simulate, {
+
+	keyCode: {
+		BACKSPACE: 8,
+		COMMA: 188,
+		DELETE: 46,
+		DOWN: 40,
+		END: 35,
+		ENTER: 13,
+		ESCAPE: 27,
+		HOME: 36,
+		LEFT: 37,
+		NUMPAD_ADD: 107,
+		NUMPAD_DECIMAL: 110,
+		NUMPAD_DIVIDE: 111,
+		NUMPAD_ENTER: 108,
+		NUMPAD_MULTIPLY: 106,
+		NUMPAD_SUBTRACT: 109,
+		PAGE_DOWN: 34,
+		PAGE_UP: 33,
+		PERIOD: 190,
+		RIGHT: 39,
+		SPACE: 32,
+		TAB: 9,
+		UP: 38
+	},
+
+	buttonCode: {
+		LEFT: 0,
+		MIDDLE: 1,
+		RIGHT: 2
+	}
+});
+
 $.extend( $.simulate.prototype, {
+
 	simulateEvent: function( elem, type, options ) {
 		var event = this.createEvent( type, options );
 		this.dispatchEvent( elem, type, event, options );
@@ -56,7 +93,6 @@ $.extend( $.simulate.prototype, {
 			detail: 0,
 			screenX: 0,
 			screenY: 0,
-			// TODO: default clientX/Y to a position within the target element
 			clientX: 1,
 			clientY: 1,
 			ctrlKey: false,
@@ -101,8 +137,14 @@ $.extend( $.simulate.prototype, {
 		} else if ( document.createEventObject ) {
 			event = document.createEventObject();
 			$.extend( event, options );
-			// TODO: what is this mapping for?
-			event.button = { 0:1, 1:4, 2:2 }[ event.button ] || event.button;
+			// standards event.button uses constants defined here: http://msdn.microsoft.com/en-us/library/ie/ff974877(v=vs.85).aspx
+			// old IE event.button uses constants defined here: http://msdn.microsoft.com/en-us/library/ie/ms533544(v=vs.85).aspx
+			// so we actually need to map the standard back to oldIE
+			event.button = {
+				0: 1,
+				1: 4,
+				2: 2
+			}[ event.button ] || event.button;
 		}
 
 		return event;
@@ -128,7 +170,10 @@ $.extend( $.simulate.prototype, {
 				event.initKeyEvent( type, options.bubbles, options.cancelable, options.view,
 					options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
 					options.keyCode, options.charCode );
-			// TODO: what is this supporting?
+			// initKeyEvent throws an exception in WebKit
+			// see: http://stackoverflow.com/questions/6406784/initkeyevent-keypress-only-works-in-firefox-need-a-cross-browser-solution
+			// and also https://bugs.webkit.org/show_bug.cgi?id=13368
+			// fall back to a generic event until we decide to implement initKeyboardEvent
 			} catch( err ) {
 				event = document.createEvent( "Events" );
 				event.initEvent( type, options.bubbles, options.cancelable );
@@ -147,9 +192,7 @@ $.extend( $.simulate.prototype, {
 			$.extend( event, options );
 		}
 
-		// TODO: can we hook into core's logic?
-		if ( $.ui.ie || (({}).toString.call( window.opera ) === "[object Opera]") ) {
-			// TODO: is charCode ever <0 ? Can we just use charCode || keyCode?
+		if ( !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() ) || (({}).toString.call( window.opera ) === "[object Opera]") ) {
 			event.keyCode = (options.charCode > 0) ? options.charCode : options.keyCode;
 			event.charCode = undefined;
 		}
@@ -157,7 +200,6 @@ $.extend( $.simulate.prototype, {
 		return event;
 	},
 
-	// TODO: does this need type? Can't we just check event.type?
 	dispatchEvent: function( elem, type, event ) {
 		if ( elem.dispatchEvent ) {
 			elem.dispatchEvent( event );
@@ -237,20 +279,31 @@ function findCenter( elem ) {
 
 $.extend( $.simulate.prototype, {
 	simulateDrag: function() {
-		var target = this.target,
+		var i = 0,
+			target = this.target,
 			options = this.options,
 			center = findCenter( target ),
 			x = Math.floor( center.x ),
 			y = Math.floor( center.y ),
 			dx = options.dx || 0,
 			dy = options.dy || 0,
+			moves = options.moves || 3,
 			coord = { clientX: x, clientY: y };
+
 		this.simulateEvent( target, "mousedown", coord );
-		coord = { clientX: x + 1, clientY: y + 1 };
-		this.simulateEvent( document, "mousemove", coord );
-		coord = { clientX: x + dx, clientY: y + dy };
-		this.simulateEvent( document, "mousemove", coord );
-		this.simulateEvent( document, "mousemove", coord );
+
+		for ( ; i < moves ; i++ ) {
+			x += dx / moves;
+			y += dy / moves;
+
+			coord = {
+				clientX: Math.round( x ),
+				clientY: Math.round( y )
+			};
+
+			this.simulateEvent( document, "mousemove", coord );
+		}
+
 		this.simulateEvent( target, "mouseup", coord );
 		this.simulateEvent( target, "click", coord );
 	}
