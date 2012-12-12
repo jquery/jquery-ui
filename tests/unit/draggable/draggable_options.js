@@ -391,18 +391,6 @@ test("{ cursorAt: '20, 40' }", function() {
 	});
 });
 
-test("{ distance: 10 }", function() {
-	expect( 3 );
-
-	var el = $("#draggable2").draggable({ distance: 10 });
-	TestHelpers.draggable.testDrag(el, el, -9, -9, 0, 0, 'distance not met');
-
-	TestHelpers.draggable.testDrag(el, el, -10, -10, -10, -10, 'distance met');
-
-	TestHelpers.draggable.testDrag(el, el, 9, 9, 0, 0, 'distance not met');
-
-});
-
 test("{ grid: [50, 50] }, relative", function() {
 	expect( 2 );
 
