@@ -594,10 +594,9 @@ test('altField', function() {
 });
 
 test('autoSize', function() {
-	expect( 14 );
+	expect( 15 );
 	var inp = TestHelpers.datepicker.init('#inp');
-	// todo: figure out why this test fails in Opera 11.6
-	//equal(inp.prop('size'), 20, 'Auto size - default');
+	equal(inp.prop('size'), 20, 'Auto size - default');
 	inp.datepicker('option', 'autoSize', true);
 	equal(inp.prop('size'), 10, 'Auto size - mm/dd/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
