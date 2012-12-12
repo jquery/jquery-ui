@@ -145,7 +145,7 @@ $.widget( "ui.selectmenu", {
 				}
 				that.focus = item.index;
 
-				// Set ARIA active decendent
+				// Set ARIA active descendant
 				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 			},
 			// set ARIA role
