@@ -23,7 +23,11 @@
 }
 .ui-dialog .ui-dialog-title {
 	float: left;
-	margin: .1em 16px .1em 0;
+	margin: .1em 0;
+	white-space: nowrap;
+	width: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .ui-dialog .ui-dialog-titlebar-close {
 	position: absolute;
@@ -40,7 +44,6 @@
 	padding: .5em 1em;
 	background: none;
 	overflow: auto;
-	zoom: 1;
 }
 .ui-dialog .ui-dialog-buttonpane {
 	text-align: left;
@@ -57,10 +60,10 @@
 	cursor: pointer;
 }
 .ui-dialog .ui-resizable-se {
-	width: 14px;
-	height: 14px;
-	right: 3px;
-	bottom: 3px;
+	width: 12px;
+	height: 12px;
+	right: -5px;
+	bottom: -5px;
 }
 .ui-draggable .ui-dialog-titlebar {
 	cursor: move;

@@ -5,6 +5,47 @@
 
 module("dialog: options");
 
+test( "appendTo", function() {
+	expect( 8 );
+	var detached = $( "<div>" ),
+		element = $( "#dialog1" ).dialog();
+	equal( element.dialog( "widget" ).parent()[0], document.body, "defaults to body" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: ".wrap"
+	});
+	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "first found element" );
+	equal( $( "#wrap2 .ui-dialog" ).length, 0, "only appends to one element" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: null
+	});
+	equal( element.dialog( "widget" ).parent()[0], document.body, "null" );
+	element.dialog( "destroy" );
+
+	element.dialog({ autoOpen: false }).dialog( "option", "appendTo", "#wrap1" ).dialog( "open" );
+	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "modified after init" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: detached
+	});
+	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached jQuery object" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: detached[0]
+	});
+	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached DOM element" );
+	element.dialog( "destroy" );
+
+	element.dialog({ autoOpen: false }).dialog( "option", "appendTo", detached );
+	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached DOM element via option()" );
+	element.dialog( "destroy" );
+});
+
 test("autoOpen", function() {
 	expect(2);
 
@@ -210,6 +251,15 @@ test("height", function() {
 		.dialog({ height: 240 });
 		equal(el.dialog('widget').outerHeight(), 240, "explicit height with padding");
 	el.remove();
+});
+
+asyncTest( "hide, #5860 - don't leave effects wrapper behind", function() {
+	expect( 1 );
+	$( "#dialog1" ).dialog({ hide: "clip" }).dialog( "close" ).dialog( "destroy" );
+	setTimeout(function() {
+		equal( $( ".ui-effects-wrapper" ).length, 0 );
+		start();
+	}, 500);
 });
 
 test("maxHeight", function() {
@@ -426,6 +476,28 @@ test("width", function() {
 		el.dialog('option', 'width', 438);
 		closeEnough(el.dialog('widget').width(), 438, 1, 'explicit width after init');
 	el.remove();
+});
+
+test("#4826: setting resizable false toggles resizable on dialog", function() {
+	expect(6);
+	var i,
+		el = $('<div></div>').dialog({ resizable: false });
+
+	TestHelpers.dialog.shouldResize(el, 0, 0, "[default]");
+	for (i=0; i<2; i++) {
+		el.dialog('close').dialog('open');
+		TestHelpers.dialog.shouldResize(el, 0, 0, 'initialized with resizable false toggle ('+ (i+1) +')');
+	}
+	el.remove();
+
+	el = $('<div></div>').dialog({ resizable: true });
+	TestHelpers.dialog.shouldResize(el, 50, 50, "[default]");
+	for (i=0; i<2; i++) {
+		el.dialog('close').dialog('option', 'resizable', false).dialog('open');
+		TestHelpers.dialog.shouldResize(el, 0, 0, 'set option resizable false toggle ('+ (i+1) +')');
+	}
+	el.remove();
+
 });
 
 })(jQuery);

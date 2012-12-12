@@ -13,18 +13,23 @@ TestHelpers.testJshint( "widget" );
 
 test( "widget creation", function() {
 	expect( 5 );
-	var myPrototype = {
-		_create: function() {},
-		creationTest: function() {}
-	};
+	var method,
+		myPrototype = {
+			_create: function() {
+				equal( method, "_create", "create function is copied over" );
+			},
+			creationTest: function() {
+				equal( method, "creationTest", "random function is copied over" );
+			}
+		};
 
 	$.widget( "ui.testWidget", myPrototype );
 	ok( $.isFunction( $.ui.testWidget ), "constructor was created" );
-	equal( "object", typeof $.ui.testWidget.prototype, "prototype was created" );
-	equal( $.ui.testWidget.prototype._create, myPrototype._create,
-		"create function is copied over" );
-	equal( $.ui.testWidget.prototype.creationTest, myPrototype.creationTest,
-		"random function is copied over" );
+	equal( typeof $.ui.testWidget.prototype, "object", "prototype was created" );
+	method = "_create";
+	$.ui.testWidget.prototype._create();
+	method = "creationTest";
+	$.ui.testWidget.prototype.creationTest();
 	equal( $.ui.testWidget.prototype.option, $.Widget.prototype.option,
 		"option method copied over from base widget" );
 });
@@ -1322,6 +1327,34 @@ test( "redefine - widgetEventPrefix", function() {
 	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
 		"cusotm prefix in extension" );
 
+});
+
+test( "mixins", function() {
+	expect( 2 );
+
+	var mixin = {
+		method: function() {
+			return "mixed " + this._super();
+		}
+	};
+
+	$.widget( "ui.testWidget1", {
+		method: function() {
+			return "testWidget1";
+		}
+	});
+	$.widget( "ui.testWidget2", {
+		method: function() {
+			return "testWidget2";
+		}
+	});
+	$.widget( "ui.testWidget1", $.ui.testWidget1, mixin );
+	$.widget( "ui.testWidget2", $.ui.testWidget2, mixin );
+
+	equal( $( "<div>" ).testWidget1().testWidget1( "method" ),
+		"mixed testWidget1", "testWidget1 mixin successful" );
+	equal( $( "<div>" ).testWidget2().testWidget2( "method" ),
+		"mixed testWidget2", "testWidget2 mixin successful" );
 });
 
 asyncTest( "_delay", function() {

@@ -1,7 +1,8 @@
 TestHelpers.commonWidgetTests( "dialog", {
 	defaults: {
+		appendTo: "body",
 		autoOpen: true,
-		buttons: {},
+		buttons: [],
 		closeOnEscape: true,
 		closeText: 'close',
 		disabled: false,
@@ -9,8 +10,8 @@ TestHelpers.commonWidgetTests( "dialog", {
 		draggable: true,
 		height: 'auto',
 		hide: null,
-		maxHeight: false,
-		maxWidth: false,
+		maxHeight: null,
+		maxWidth: null,
 		minHeight: 150,
 		minWidth: 150,
 		modal: false,

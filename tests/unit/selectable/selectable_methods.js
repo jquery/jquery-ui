@@ -53,10 +53,16 @@ test("enable", function() {
 		disabled: true,
 		start: function() { fired = true; }
 	});
-	el.simulate("drag", 20, 20);
+	el.simulate( "drag", {
+		dx: 20,
+		dy: 20
+	});
 	equal(fired, false, "start fired");
 	el.selectable("enable");
-	el.simulate("drag", 20, 20);
+	el.simulate( "drag", {
+		dx: 20,
+		dy: 20
+	});
 	equal(fired, true, "start fired");
 	el.selectable("destroy");
 
@@ -75,11 +81,18 @@ test("disable", function() {
 		disabled: false,
 		start: function() { fired = true; }
 	});
-	el.simulate("drag", 20, 20);
+	el.simulate( "drag", {
+		dx: 20,
+		dy: 20
+	});
 	equal(fired, true, "start fired");
 	el.selectable("disable");
 	fired = false;
-	el.simulate("drag", 20, 20);
+
+	el.simulate( "drag", {
+		dx: 20,
+		dy: 20
+	});
 	equal(fired, false, "start fired");
 	el.selectable("destroy");
 

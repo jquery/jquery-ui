@@ -3,10 +3,9 @@ TestHelpers.dialog = {
 		var d = el.dialog('widget');
 		//this mouseover is to work around a limitation in resizable
 		//TODO: fix resizable so handle doesn't require mouseover in order to be used
-		$(handle, d).simulate("mouseover");
-		$(handle, d).simulate("drag", {
-			dx: dx || 0,
-			dy: dy || 0
+		$( handle, d ).simulate("mouseover").simulate( "drag", {
+			dx: dx,
+			dy: dy
 		});
 	},
 	testDrag: function(el, dx, dy, expectedDX, expectedDY, msg) {

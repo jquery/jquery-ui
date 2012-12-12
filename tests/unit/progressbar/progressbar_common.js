@@ -1,10 +1,12 @@
 TestHelpers.commonWidgetTests( "progressbar", {
 	defaults: {
 		disabled: false,
-		value: 0,
 		max: 100,
+		value: 0,
 
 		//callbacks
+		change: null,
+		complete: null,
 		create: null
 	}
 });

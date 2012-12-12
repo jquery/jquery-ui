@@ -119,6 +119,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 		this._on( this.handles, {
 			keydown: function( event ) {
+				/*jshint maxcomplexity:25*/
 				var allowed, curVal, newVal, step,
 					index = $( event.target ).data( "ui-slider-handle-index" );
 

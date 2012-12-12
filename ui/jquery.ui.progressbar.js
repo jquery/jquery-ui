@@ -17,29 +17,31 @@
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
+		max: 100,
 		value: 0,
-		max: 100
+
+		change: null,
+		complete: null
 	},
 
 	min: 0,
 
 	_create: function() {
 		// Constrain initial value
-		this.options.value = this._constrainedValue();
+		this.oldValue = this.options.value = this._constrainedValue();
 
 		this.element
 			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
 			.attr({
+				// Only set static values, aria-valuenow and aria-valuemax are
+				// set inside _refreshValue()
 				role: "progressbar",
-				"aria-valuemin": this.min,
-				"aria-valuemax": this.options.max,
-				"aria-valuenow": this.options.value
+				"aria-valuemin": this.min
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'><div></div></div>" )
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
-		this.oldValue = this.options.value;
 		this._refreshValue();
 	},
 
@@ -59,66 +61,75 @@ $.widget( "ui.progressbar", {
 			return this.options.value;
 		}
 
-		this._setOption( "value", this._constrainedValue( newValue ) );
-		return this;
+		this.options.value = this._constrainedValue( newValue );
+		this._refreshValue();
 	},
 
 	_constrainedValue: function( newValue ) {
-		var val;
 		if ( newValue === undefined ) {
-			val = this.options.value;
-		} else {
-			val = newValue;
+			newValue = this.options.value;
 		}
 
-		this.indeterminate = val === false;
+		this.indeterminate = newValue === false;
 
 		// sanitize value
-		if ( typeof val !== "number" ) {
-			val = 0;
+		if ( typeof newValue !== "number" ) {
+			newValue = 0;
 		}
-		return this.indeterminate ? false : Math.min( this.options.max, Math.max( this.min, val ) );
+
+		return this.indeterminate ? false :
+			Math.min( this.options.max, Math.max( this.min, newValue ) );
 	},
 
 	_setOptions: function( options ) {
-		var val = options.value;
-
 		// Ensure "value" option is set after other values (like max)
+		var value = options.value;
 		delete options.value;
+
 		this._super( options );
 
-		if ( val !== undefined ) {
-			this._setOption( "value", val );
-		}
+		this.options.value = this._constrainedValue( value );
+		this._refreshValue();
 	},
 
 	_setOption: function( key, value ) {
 		if ( key === "max" ) {
 			// Don't allow a max less than min
-			this.options.max = Math.max( this.min, value );
-			this.options.value = this._constrainedValue();
-		}
-		if ( key === "value" ) {
-			this.options.value = this._constrainedValue( value );
-		}
-		else {
-			this._super( key, value );
+			value = Math.max( this.min, value );
 		}
 
-		this._refreshValue();
+		this._super( key, value );
 	},
 
 	_percentage: function() {
-		return this.indeterminate ? 100 : 100 * this.options.value / this.options.max;
+		return this.indeterminate ? 100 : 100 * ( this.options.value - this.min ) / ( this.options.max - this.min );
 	},
 
 	_refreshValue: function() {
 		var value = this.options.value,
-			percentage = this._percentage(),
-			overlay = this.valueDiv.children().eq( 0 );
+			percentage = this._percentage();
 
-		overlay.toggleClass( "ui-progressbar-overlay", this.indeterminate );
-		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
+		this.valueDiv
+			.toggle( this.indeterminate || value > this.min )
+			.toggleClass( "ui-corner-right", value === this.options.max )
+			.toggleClass( "ui-progressbar-indeterminate", this.indeterminate )
+			.width( percentage.toFixed(0) + "%" );
+
+		if ( this.indeterminate ) {
+			this.element.removeAttr( "aria-valuenow" );
+			if ( !this.overlayDiv ) {
+				this.overlayDiv = $( "<div class='ui-progressbar-overlay'></div>" ).appendTo( this.valueDiv );
+			}
+		} else {
+			this.element.attr({
+				"aria-valuemax": this.options.max,
+				"aria-valuenow": value
+			});
+			if ( this.overlayDiv ) {
+				this.overlayDiv.remove();
+				this.overlayDiv = null;
+			}
+		}
 
 		if ( this.oldValue !== value ) {
 			this.oldValue = value;
@@ -126,18 +137,6 @@ $.widget( "ui.progressbar", {
 		}
 		if ( value === this.options.max ) {
 			this._trigger( "complete" );
-		}
-
-		this.valueDiv
-			.toggle( this.indeterminate || value > this.min )
-			.toggleClass( "ui-corner-right", value === this.options.max )
-			.width( percentage.toFixed(0) + "%" );
-		if ( this.indeterminate ) {
-			this.element.removeAttr( "aria-valuemax" );
-			this.element.removeAttr( "aria-valuenow" );
-		} else {
-			this.element.attr( "aria-valuemax", this.options.max );
-			this.element.attr( "aria-valuenow", value );
 		}
 	}
 });
