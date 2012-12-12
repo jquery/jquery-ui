@@ -260,7 +260,7 @@ $.widget( "ui.selectmenu", {
 			li.addClass( "ui-state-disabled" );
 		}
 		li.append( $( "<a />", {
-				text: item.label,
+				html: item.label,
 				href: "#"
 			})
 		);
