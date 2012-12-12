@@ -432,7 +432,7 @@ $.widget( "ui.selectmenu", {
 				element: option,
 				index: index,
 				value: option.attr( "value" ),
-				label: option.text() || "&nbsp;",
+				label: option.text() || "&#160;",
 				optgroup: optgroup.attr( "label" ) || "",
 				disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 			});
