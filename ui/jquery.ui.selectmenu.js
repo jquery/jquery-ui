@@ -134,13 +134,11 @@ $.widget( "ui.selectmenu", {
 			},
 			focus: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
-
-				if ( that.focus !== undefined ) {
-					if ( item.index !== that.focus ) {
-						that._trigger( "focus", event, { item: item } );
-						if ( !that.isOpen ) {
-							that._select( item, event );
-						}
+				// prevent inital focus from firing and checks if its a newly focused item
+				if ( that.focus !== undefined && item.index !== that.focus ) {
+					that._trigger( "focus", event, { item: item } );
+					if ( !that.isOpen ) {
+						that._select( item, event );
 					}
 				}
 				that.focus = item.index;
@@ -178,6 +176,7 @@ $.widget( "ui.selectmenu", {
 
 			// select current item
 			item = this._getSelectedItem();
+			// make sure menu is selected item aware
 			this.menu.menu( "focus", null, item );
 			this._setSelected( item.data( "ui-selectmenu-item" ) );
 
@@ -202,7 +201,6 @@ $.widget( "ui.selectmenu", {
 
 		this.isOpen = true;
 		this._toggleAttr();
-		this.menu.menu( "focus", event, this._getSelectedItem() );
 
 		// do not change position if non default position options are set (needed for custom positioned popup menus)
 		if ( this.items && !this.options.dropdown && this.options.position.my == "left top" && this.options.position.at == "left bottom" ) {
