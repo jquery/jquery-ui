@@ -194,11 +194,6 @@ $.widget( "ui.selectmenu", {
 			of: this.button
 		};
 
-		// make sure menu is refreshed on first init (needed at least for IE9)
-		if ( this.isOpen === undefined ) {
-			this.button.trigger( "focus" );
-		}
-
 		this.isOpen = true;
 		this._toggleAttr();
 
