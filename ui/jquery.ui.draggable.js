@@ -752,4 +752,43 @@ if ( $.uiBackCompat !== false ) {
 		
 	});
 	
+	// zIndex option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			zIndex: false
+		},
+		
+		_create : function() {
+		
+			var self = this,
+				originalZIndex;
+		
+			this._super();
+			
+			// No need to continue
+			if ( !this.options.zIndex ) {
+				return;
+			}
+			
+			this.element.on( "dragbeforestart", function( e, ui ) {
+			
+				// Cache the original zIndex of draggable element to reset later
+				originalZIndex = self.dragEl.css( 'z-index' );
+				
+				// Set draggable element to new zIndex
+				self.dragEl.css( 'z-index', self.options.zIndex );
+			
+			});
+			
+			this.element.on( "dragstop", function( e, ui ) {
+			
+				// Reset zIndex
+				self.dragEl.css( 'z-index', originalZIndex );
+				
+			});
+			
+		}
+		
+	});
+	
 }
