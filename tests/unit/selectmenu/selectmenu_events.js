@@ -46,27 +46,28 @@ test("close", function () {
 test("focus", function () {
 	expect(4);
 
-	var counter = 0,
-		button,
-		menu;
+	var button,
+		menu,
+		links;
 
 	this.element.selectmenu({
 		focus: function (event, ui) {
-			counter++;
-			if (counter === 1) {
-				ok(event, "focus event fired on mouseover");
-				equal(event.type, "selectmenufocus", "event type set to selectmenufocus");
-				ok(ui, "ui object is passed as second argument to event handler");
-				equal(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
-			}
+			ok(event, "focus event fired on mouseover");
+			equal(event.type, "selectmenufocus", "event type set to selectmenufocus");
+			ok(ui, "ui object is passed as second argument to event handler");
+			equal(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
 		}
 	});
+	
+	button = this.element.selectmenu("widget"),
+	menu = this.element.selectmenu("menuWidget");
 
-	button = this.element.selectmenu("widget").parent();
-	menu = this.element.selectmenu("menuWidget").parent();
-
-	button.find("a").simulate( "focus" ).simulate( "click" );
-	menu.find(".ui-menu-item").simulate("mouseover");
+	button.simulate( "focus" );
+	links = menu.find("li.ui-menu-item a");
+	
+	button.simulate( "click" );
+	
+	menu.find("a").last().simulate( "mouseover" );
 });
 
 
