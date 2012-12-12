@@ -43,14 +43,7 @@ $.widget( "ui.selectmenu", {
 		this._drawButton();
 		this._drawMenu();
 
-		// document click closes menu
-		this._on( document, {
-			click: function( event ) {
-				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
-					this.close( event );
-				}
-			}
-		});
+		this._on( document, this._documentClick );
 
 		if ( this.options.disabled ) {
 			this.disable();
@@ -301,6 +294,14 @@ $.widget( "ui.selectmenu", {
 			this.close( event );
 		} else {
 			this.open( event );
+		}
+	},
+
+	_documentClick: {
+		click: function( event ) {
+			if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
+				this.close( event );
+			}
 		}
 	},
 
