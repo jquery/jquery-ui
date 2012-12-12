@@ -401,7 +401,7 @@ $.widget( "ui.selectmenu", {
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
-			this.menuWrap.appendTo( $( value || "body", this.element[ 0 ].ownerDocument )[ 0 ] );
+			this.menuWrap.appendTo( this.document.find( value || "body" )[0] );
 		}
 		if ( key === "disabled" ) {
 			this.menu.menu( "option", "disabled", value );
