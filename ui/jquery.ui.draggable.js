@@ -540,7 +540,7 @@ if ( $.uiBackCompat !== false ) {
 				body = $( document.body );
 			
 				// Cache original cursor to set back
-				this.element.on( "dragbeforestart", function( e, ui ) {
+				this.element.on( "dragstart", function( e, ui ) {
 					startCursor = body.css( "cursor" );
 				});
 				
@@ -687,7 +687,7 @@ if ( $.uiBackCompat !== false ) {
 				return;
 			}
 			
-			this.element.on( "dragbeforestart", function( e, ui ) {
+			this.element.on( "dragstart", function( e, ui ) {
 			
 				// Cache the original opacity of draggable element to reset later
 				originalOpacity = self.dragEl.css( 'opacity' );
@@ -770,7 +770,7 @@ if ( $.uiBackCompat !== false ) {
 				return;
 			}
 			
-			this.element.on( "dragbeforestart", function( e, ui ) {
+			this.element.on( "dragstart", function( e, ui ) {
 			
 				// Cache the original zIndex of draggable element to reset later
 				originalZIndex = self.dragEl.css( 'z-index' );
