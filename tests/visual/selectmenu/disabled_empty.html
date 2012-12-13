@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Selectmenu - Disable functionality</title>
+	<title>jQuery UI Selectmenu - Disabled & empty elements functionality</title>
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
 	<script src="../../jquery-1.8.3.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
@@ -13,40 +13,43 @@
 	<link rel="stylesheet" href="../../../demos/demos.css">
 	<script>
 	$(function() {
-		$('select#speed').selectmenu({
+		/* disabled */
+		$('select#disabled1').selectmenu({
 			dropdown: false
 		});
-		var withOverflow = $('select#number').selectmenu({
+		var withOverflow = $('select#disabled2').selectmenu({
 			dropdown: false
 		});
 		withOverflow.selectmenu("menuWidget").addClass("overflow");
-		$('select#files').selectmenu();
-		var files2 = $('select#files2').selectmenu();
+		$('select#disabled3').selectmenu();
+		var disabled4 = $('select#disabled4').selectmenu();
 
 		$("#disable_select").toggle( function() {
-			files2.selectmenu("disable");
+			disabled4.selectmenu("disable");
 		}, function() {
-			files2.removeAttr("disabled");
-			files2.selectmenu("refresh");
+			disabled4.removeAttr("disabled");
+			disabled4.selectmenu("refresh");
 		});
 		$("#disable_option").toggle( function() {
-			files2.find("option:eq(0)").attr("disabled", "disabled");
-			files2.selectmenu("refresh");
+			disabled4.find("option:eq(0)").attr("disabled", "disabled");
+			disabled4.selectmenu("refresh");
 		}, function() {
-			files2.find("option:eq(0)").removeAttr("disabled");
-			files2.selectmenu("refresh");
+			disabled4.find("option:eq(0)").removeAttr("disabled");
+			disabled4.selectmenu("refresh");
 		});
 		$("#disable_optgroup").toggle( function() {
-			files2.find("optgroup:eq(0)").attr("disabled", "disabled");
-			files2.selectmenu("refresh");
+			disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");
+			disabled4.selectmenu("refresh");
 		}, function() {
-			files2.find("optgroup:eq(0)").removeAttr("disabled");
-			files2.selectmenu("refresh");
+			disabled4.find("optgroup:eq(0)").removeAttr("disabled");
+			disabled4.selectmenu("refresh");
 		});
+
+		/* empty */
+		$('select.empty').selectmenu();
 	});
 	</script>
 	<style>
-		form { margin: 100px 0 0 0 }
 		fieldset { border: 0; }
 		label { display: block; }
 		select { width: 200px; }
@@ -58,9 +61,10 @@
 <div class="demo">
 
 <form action="#">
+	<h2>Disabled Tests</h2>
 	<fieldset>
-		<label for="speed">Select a speed:</label>
-		<select disabled="disabled" name="speed" id="speed">
+		<label for="disabled1">Select a speed:</label>
+		<select disabled="disabled" name="disabled1" id="disabled1">
 			<option value="Slower">Slower</option>
 			<option value="Slow">Slow</option>
 			<option value="Medium" selected="selected">Medium</option>
@@ -69,9 +73,8 @@
 		</select>
 		<br />
 		<br />
-		<br />
-		<label for="number">Select a number:</label>
-		<select name="number" id="number">
+		<label for="disabled2">Select a number:</label>
+		<select name="disabled2" id="disabled2">
 			<option value="1">1</option>
 			<option value="2" selected="selected">2</option>
 			<option value="3">3</option>
@@ -94,9 +97,8 @@
 		</select>
 		<br />
 		<br />
-		<br />
-		<label for="files">Select a file:</label>
-		<select name="files" id="files">
+		<label for="disabled3">Select a file:</label>
+		<select name="disabled3" id="disabled3">
 			<optgroup disabled="disabled" label="Scripts">
 				<option value="jquery">jQuery.js</option>
 				<option value="jqueryui">ui.jQuery.js</option>
@@ -108,9 +110,8 @@
 		</select>
 		<br />
 		<br />
-		<br />
-		<label for="files2">Select a file:</label>
-		<select name="files2" id="files2">
+		<label for="disabled4">Select a file:</label>
+		<select name="disabled4" id="disabled4">
 			<optgroup label="Scripts">
 				<option value="jquery">jQuery.js</option>
 				<option value="jqueryui">ui.jQuery.js</option>
@@ -120,12 +121,44 @@
 				<option value="someotherfile">Some other file</option>
 			</optgroup>
 		</select>
+		<button id="disable_select">Toggle disable select</button>
+		<button id="disable_option">Toggle disable option</button>
+		<button id="disable_optgroup">Toggle disable optgroup</button>
+	</fieldset>
+	<br />
+	<h2>Disabled Tests</h2>
+	<fieldset>
+		<select name="speed1" class="empty"></select>
+		<br />
+		<br />
+		<select name="speed2" class="empty">
+			<option value=""></option>
+		</select>
+		<br />
+		<br />
+		<select name="number" class="empty">
+			<option value="1">1</option>
+			<option value="2" selected="selected">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value=""></option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value=""></option>
+			<option value="9">9</option>
+		</select>
+		<br />
+		<br />
+		<select name="files" class="empty">
+			<optgroup label="Scripts"></optgroup>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
+		</select>
 	</fieldset>
 </form>
 <br />
-<button id="disable_select">Toggle disable select</button>
-<button id="disable_option">Toggle disable option</button>
-<button id="disable_optgroup">Toggle disable optgroup</button>
 
 </div><!-- End demo -->
 
