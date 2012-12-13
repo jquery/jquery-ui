@@ -222,11 +222,16 @@ $.widget( "ui.selectmenu", {
 			return;
 		}
 
-		var id = this._getSelectedItem().find( "a" ).attr( "id" );
 		this.isOpen = false;
 		this._toggleAttr();
-		this.button.attr( "aria-activedescendant", id );
-		this.menu.attr( "aria-activedescendant", id );
+
+		// check if we have an item to select
+		if ( this.menuItems ) {
+			var id = this._getSelectedItem().find( "a" ).attr( "id" );
+			this.button.attr( "aria-activedescendant", id );
+			this.menu.attr( "aria-activedescendant", id );
+		}
+
 		this._trigger( "close", event );
 	},
 
