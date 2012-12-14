@@ -510,16 +510,13 @@ $.widget( "ui.autocomplete", {
 	_renderMenu: function( ul, items ) {
 		var that = this;
 		$.each( items, function( index, item ) {
-			that._renderItemData( ul, item );
+			that._renderItem( ul, item );
 		});
-	},
-
-	_renderItemData: function( ul, item ) {
-		return this._renderItem( ul, item ).data( "ui-autocomplete-item", item );
 	},
 
 	_renderItem: function( ul, item ) {
 		return $( "<li>" )
+			.data( "ui-autocomplete-item", item )
 			.append( $( "<a>" ).text( item.label ) )
 			.appendTo( ul );
 	},
