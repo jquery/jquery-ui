@@ -84,10 +84,10 @@ $.widget( "ui.selectmenu", {
 		}));
 
 		this.buttonText = $( "<span>", {
-				"class": "ui-selectmenu-text" ,
-				html: this.element.find( "option:selected" ).text() || "&#160;"
+				"class": "ui-selectmenu-text"
 			})
 			.appendTo( this.button );
+		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
 
 		// wrap and insert new button
 		this.buttonWrap = $( "<span>", {
@@ -260,17 +260,23 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_renderItem: function( ul, item ) {
-		var li = $( "<li />" ).data( "ui-selectmenu-item", item );
+		var li = $( "<li />" ).data( "ui-selectmenu-item", item ),
+			a = $( "<a />", { href: "#" });
+
 		if ( item.disabled ) {
 			li.addClass( "ui-state-disabled" );
 		}
-		li.append( $( "<a />", {
-				html: item.label,
-				href: "#"
-			})
-		);
+		this._setText( a, item.label );
 
-		return li.appendTo( ul );
+		return li.append( a ).appendTo( ul );
+	},
+
+	_setText: function( element, value ) {
+		if ( value ) {
+			element.text( value );
+		} else {
+			element.html( "&#160;" );
+		}
 	},
 
 	_move: function( direction, event ) {
@@ -388,8 +394,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		// update button text
-		this.buttonText.html( item.label );
+		this._setText( this.buttonText, item.label );
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
@@ -437,7 +442,7 @@ $.widget( "ui.selectmenu", {
 				element: option,
 				index: index,
 				value: option.attr( "value" ),
-				label: option.text() || "&#160;",
+				label: option.text(),
 				optgroup: optgroup.attr( "label" ) || "",
 				disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 			});
