@@ -18,11 +18,11 @@ test( "appendTo", function() {
 	equal( $( "#ac-wrap2 .ui-autocomplete" ).length, 0, "only appends to one element" );
 	element.autocomplete( "destroy" );
 
-	element.autocomplete({
-		appendTo: null
-	});
-	equal( element.autocomplete( "widget" ).parent()[0], document.body, "null" );
+	$( "#ac-wrap2" ).addClass( "ui-front" );
+	element.autocomplete();
+	equal( element.autocomplete( "widget" ).parent()[0], $( "#ac-wrap2" )[0], "null, inside .ui-front" );
 	element.autocomplete( "destroy" );
+	$( "#ac-wrap2" ).removeClass( "ui-front" );
 
 	element.autocomplete().autocomplete( "option", "appendTo", "#ac-wrap1" );
 	equal( element.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "modified after init" );
