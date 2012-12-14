@@ -280,7 +280,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		var handle = !this.options.handle || !$(this.options.handle, this.element).length ? true : false;
 		$(this.options.handle, this.element)
 			.find("*")
-			.andSelf()
+			.addBack()
 			.each(function() {
 				if(this === event.target) {
 					handle = true;

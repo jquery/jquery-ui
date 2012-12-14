@@ -235,7 +235,7 @@ $.ui.ddmanager = {
 		var i, j,
 			m = $.ui.ddmanager.droppables[t.options.scope] || [],
 			type = event ? event.type : null, // workaround for #2317
-			list = (t.currentItem || t.element).find(":data(ui-droppable)").andSelf();
+			list = (t.currentItem || t.element).find(":data(ui-droppable)").addBack();
 
 		droppablesLoop: for (i = 0; i < m.length; i++) {
 
