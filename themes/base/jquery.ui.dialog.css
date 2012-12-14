@@ -13,8 +13,6 @@
 	top: 0;
 	left: 0;
 	padding: .2em;
-	width: 300px;
-	overflow: hidden;
 	outline: 0;
 }
 .ui-dialog .ui-dialog-titlebar {
@@ -49,7 +47,7 @@
 	text-align: left;
 	border-width: 1px 0 0 0;
 	background-image: none;
-	margin: .5em 0 0 0;
+	margin-top: .5em;
 	padding: .3em 1em .5em .4em;
 }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
@@ -64,6 +62,7 @@
 	height: 12px;
 	right: -5px;
 	bottom: -5px;
+	background-position: 16px 16px;
 }
 .ui-draggable .ui-dialog-titlebar {
 	cursor: move;
