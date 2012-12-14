@@ -113,7 +113,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 			}
 		});
 
-		$(event.target).parents().andSelf().each(function() {
+		$(event.target).parents().addBack().each(function() {
 			var doSelect,
 				selectee = $.data(this, "selectable-item");
 			if (selectee) {

@@ -113,7 +113,7 @@ $.widget( "ui.tooltip", {
 		});
 
 		// remove title attributes to prevent native tooltips
-		this.element.find( this.options.items ).andSelf().each(function() {
+		this.element.find( this.options.items ).addBack().each(function() {
 			var element = $( this );
 			if ( element.is( "[title]" ) ) {
 				element
@@ -125,7 +125,7 @@ $.widget( "ui.tooltip", {
 
 	_enable: function() {
 		// restore title attributes
-		this.element.find( this.options.items ).andSelf().each(function() {
+		this.element.find( this.options.items ).addBack().each(function() {
 			var element = $( this );
 			if ( element.data( "ui-tooltip-title" ) ) {
 				element.attr( "title", element.data( "ui-tooltip-title" ) );

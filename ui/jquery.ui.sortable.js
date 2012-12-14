@@ -126,7 +126,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			return false;
 		}
 		if(this.options.handle && !overrideHandle) {
-			$(this.options.handle, currentItem).find("*").andSelf().each(function() {
+			$(this.options.handle, currentItem).find("*").addBack().each(function() {
 				if(this === event.target) {
 					validHandle = true;
 				}
