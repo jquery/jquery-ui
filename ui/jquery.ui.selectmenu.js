@@ -20,7 +20,7 @@ $.widget( "ui.selectmenu", {
 	version: "@VERSION",
 	defaultElement: "<select>",
 	options: {
-		appendTo: "body",
+		appendTo: null,
 		dropdown: true,
 		position: {
 			my: "left top",
@@ -118,7 +118,7 @@ $.widget( "ui.selectmenu", {
 				width: ( this.options.dropdown ) ? this.button.outerWidth() : this.buttonText.width() + parseFloat( this.buttonText.css( "padding-left" ) ) || 0 + parseFloat( this.buttonText.css( "margin-left") ) || 0
 			})
 			.append( this.menu )
-			.appendTo( this.options.appendTo );
+			.appendTo( this._appendTo() );
 
 		// init menu widget
 		menuInstance = this.menu.menu({
@@ -405,7 +405,7 @@ $.widget( "ui.selectmenu", {
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
-			this.menuWrap.appendTo( this.document.find( value || "body" )[0] );
+			this.menuWrap.appendTo( this._appendTo() );
 		}
 		if ( key === "disabled" ) {
 			this.menu.menu( "option", "disabled", value );
@@ -418,6 +418,26 @@ $.widget( "ui.selectmenu", {
 				this.button.attr( "tabindex", 0 );
 			}
 		}
+	},
+
+	_appendTo: function() {
+		var element = this.options.appendTo;
+
+		if ( element ) {
+			element = element.jquery || element.nodeType ?
+				$( element ) :
+				this.document.find( element ).eq( 0 );
+		}
+
+		if ( !element ) {
+			element = this.element.closest( ".ui-front" );
+		}
+
+		if ( !element.length ) {
+			element = this.document[0].body;
+		}
+
+		return element;
 	},
 
 	_toggleAttr: function(){
