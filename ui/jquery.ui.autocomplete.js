@@ -23,7 +23,7 @@ $.widget( "ui.autocomplete", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
-		appendTo: "body",
+		appendTo: null,
 		autoFocus: false,
 		delay: 300,
 		minLength: 1,
@@ -323,10 +323,22 @@ $.widget( "ui.autocomplete", {
 
 	_appendTo: function() {
 		var element = this.options.appendTo;
-		if ( element && (element.jquery || element.nodeType) ) {
-			return $( element );
+
+		if ( element ) {
+			element = element.jquery || element.nodeType ?
+				$( element ) :
+				this.document.find( element ).eq( 0 );
 		}
-		return this.document.find( element || "body" ).eq( 0 );
+
+		if ( !element ) {
+			element = this.element.closest( ".ui-front" );
+		}
+
+		if ( !element.length ) {
+			element = this.document[0].body;
+		}
+
+		return element;
 	},
 
 	_isMultiLine: function() {

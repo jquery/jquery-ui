@@ -138,7 +138,7 @@ test( "#7092 - button creation that requires a matching label does not find labe
 
 test( "#5946 - buttonset should ignore buttons that are not :visible", function() {
 	expect( 2 );
-	$( "#radio01" ).next().andSelf().hide();
+	$( "#radio01" ).next().addBack().hide();
 	var set = $( "#radio0" ).buttonset({ items: "input[type=radio]:visible" });
 	ok( set.find( "label:eq(0)" ).is( ":not(.ui-button):not(.ui-corner-left)" ) );
 	ok( set.find( "label:eq(1)" ).is( ".ui-button.ui-corner-left" ) );
