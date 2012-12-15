@@ -1,6 +1,6 @@
 TestHelpers.commonWidgetTests( "selectmenu", {
 	defaults: {
-		appendTo: "body",
+		appendTo: null,
 		disabled: false,
 		dropdown: true,
 		position: {
