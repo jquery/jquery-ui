@@ -190,7 +190,8 @@ $.widget( "ui.selectmenu", {
 			return;
 		}
 
-		var _position = {
+		var currentItem,
+			_position = {
 			of: this.button
 		};
 
@@ -198,8 +199,8 @@ $.widget( "ui.selectmenu", {
 		this._toggleAttr();
 
 		// do not change position if non default position options are set (needed for custom positioned popup menus)
-		if ( this.items && !this.options.dropdown && this.options.position.my == "left top" && this.options.position.at == "left bottom" ) {
-			var currentItem = this._getSelectedItem();
+		if ( this.items && !this.options.dropdown && this.options.position.my === "left top" && this.options.position.at === "left bottom" ) {
+			currentItem = this._getSelectedItem();
 			// center current item
 			if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
 				this.menuWrap.css( "left" , -10000 );
