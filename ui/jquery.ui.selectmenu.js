@@ -211,9 +211,7 @@ $.widget( "ui.selectmenu", {
 			_position.at = "left top";
 		}
 
-		this.menuWrap
-			.zIndex( this.element.zIndex() + 1 )
-			.position( $.extend( {}, this.options.position, _position ) );
+		this.menuWrap.position( $.extend( {}, this.options.position, _position ) );
 
 		this._trigger( "open", event );
 	},
