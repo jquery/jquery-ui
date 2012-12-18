@@ -24,6 +24,7 @@ var versions = {
 		"Progressbar": "progressbar/progressbar.html",
 		"Resizable": "resizable/resizable.html",
 		"Selectable": "selectable/selectable.html",
+		"Selectmenu": "selectmenu/selectmenu.html",
 		"Slider": "slider/slider.html",
 		"Sortable": "sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
@@ -50,7 +51,8 @@ function submit( commit, tests, configFile, version, done ) {
 	}, {
 		authUsername: config.authUsername,
 		authToken: config.authToken,
-		jobName: 'jQuery UI ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
+		// TODO don't merge this to master, or undo it
+		jobName: 'jQuery UI / Selectmenu ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
 		runMax: config.runMax,
 		"runNames[]": Object.keys( tests ),
 		"runUrls[]": testUrls,
