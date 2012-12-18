@@ -27,6 +27,10 @@ $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
+		icons: {
+			dropdown: "ui-icon-triangle-1-s",
+			popup: "ui-icon-triangle-2-n-s"
+		},
 
 		// callbacks
 		change: null,
@@ -80,7 +84,7 @@ $.widget( "ui.selectmenu", {
 		});
 
 		this.button.prepend( $( "<span>", {
-			"class": "ui-icon " + ( ( this.options.dropdown ) ? "ui-icon-triangle-1-s" : "ui-icon-triangle-2-n-s" )
+			"class": "ui-icon " + ( this.options.dropdown ? this.options.icons.dropdown : this.options.icons.popup )
 		}));
 
 		this.buttonText = $( "<span>", {
