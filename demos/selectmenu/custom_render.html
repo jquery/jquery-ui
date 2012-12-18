@@ -16,33 +16,40 @@
 
 		$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
 			_renderItem: function( ul, item ) {
-				var li = $( "<li />" ).data( "ui-selectmenu-item", item );
+				var li = $( "<li>" ).data( "ui-selectmenu-item", item ),
+					element,
+					span;
+
 				if ( item.disabled ) {
-					li.addClass( 'ui-state-disabled' ).text( item.label );
+					li.addClass( "ui-state-disabled" ).text( item.label );
 				} else {
-					el = item.element;
-					$( "<a />", {
-							html: icon = '<span style="' + el.attr("style") + '" class="ui-icon ' + el.attr("class") + '"></span>' + item.label,
+					element = item.element;
+					span = $( "<span>", {
+						style: element.attr( "style" ),
+						'class': "ui-icon " + element.attr( "class" )
+					});
+					$( "<a>", {
+							text: item.label,
 							href: '#'
-					}).appendTo( li );
+					}).append( span ).appendTo( li );
 				}
 
 				return li.appendTo( ul );
 			}
 		});
 
-		var files = $('select#files').iconselectmenu({
+		var files = $( "select#files" ).iconselectmenu({
 			dropdown: false
 		});
-		files.iconselectmenu("menuWidget").addClass("ui-menu-icons");
+		files.iconselectmenu( "menuWidget" ).addClass( "ui-menu-icons" );
 
-		var filesB = $('select#filesB').iconselectmenu({
+		var filesB = $( "select#filesB" ).iconselectmenu({
 			dropdown: false
 		});
-		filesB.iconselectmenu("menuWidget").addClass("ui-menu-icons customicons");
+		filesB.iconselectmenu( "menuWidget" ).addClass( "ui-menu-icons customicons" );
 
-		var peopleA = $('select#peopleA').iconselectmenu();
-		peopleA.iconselectmenu("menuWidget").addClass("ui-menu-icons avatar");
+		var peopleA = $( "select#peopleA" ).iconselectmenu();
+		peopleA.iconselectmenu( "menuWidget").addClass( "ui-menu-icons avatar" );
 	});
 	</script>
 	<style>
