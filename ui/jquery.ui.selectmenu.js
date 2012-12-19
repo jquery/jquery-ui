@@ -382,6 +382,12 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setOption: function( key, value ) {
+		if ( key === "icons" ) {
+			this.button.find( "span.ui-icon" )
+				.removeClass( this.options.icons.button )
+				.addClass( value.button );
+		}
+
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
