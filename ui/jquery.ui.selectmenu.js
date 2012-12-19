@@ -21,15 +21,13 @@ $.widget( "ui.selectmenu", {
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,
-		dropdown: true,
+		icons: {
+			button: "ui-icon-triangle-1-s"
+		},
 		position: {
 			my: "left top",
 			at: "left bottom",
 			collision: "none"
-		},
-		icons: {
-			dropdown: "ui-icon-triangle-1-s",
-			popup: "ui-icon-triangle-2-n-s"
 		},
 
 		// callbacks
@@ -84,7 +82,7 @@ $.widget( "ui.selectmenu", {
 		});
 
 		this.button.prepend( $( "<span>", {
-			"class": "ui-icon " + ( this.options.dropdown ? this.options.icons.dropdown : this.options.icons.popup )
+			"class": "ui-icon " + this.options.icons.button
 		}));
 
 		this.buttonText = $( "<span>", {
@@ -119,7 +117,7 @@ $.widget( "ui.selectmenu", {
 		// wrap menu
 		this.menuWrap = $( "<div>", {
 				"class": "ui-selectmenu-menu",
-				width: ( this.options.dropdown ) ? this.button.outerWidth() : this.buttonText.width() + parseFloat( this.buttonText.css( "padding-left" ) ) || 0 + parseFloat( this.buttonText.css( "margin-left") ) || 0
+				width: this.button.outerWidth()
 			})
 			.append( this.menu )
 			.appendTo( this._appendTo() );
@@ -155,10 +153,8 @@ $.widget( "ui.selectmenu", {
 		})
 		.data( "ui-menu" );
 
-		// dropdown style needs border on bottom only
-		if ( this.options.dropdown ) {
-			this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
-		}
+		// adjust border radius
+		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
 		// make sure focus stays on selected item
 		menuInstance.delay = 999999999;
@@ -194,28 +190,9 @@ $.widget( "ui.selectmenu", {
 			return;
 		}
 
-		var currentItem,
-			_position = {
-			of: this.button
-		};
-
 		this.isOpen = true;
 		this._toggleAttr();
-
-		// do not change position if non default position options are set (needed for custom positioned popup menus)
-		if ( this.items && !this.options.dropdown && this.options.position.my === "left top" && this.options.position.at === "left bottom" ) {
-			currentItem = this._getSelectedItem();
-			// center current item
-			if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
-				this.menuWrap.css( "left" , -10000 );
-				this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight() / 2 + currentItem.outerHeight() / 2 );
-				this.menuWrap.css( "left" , "auto" );
-			}
-			_position.my = "left top" + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 );
-			_position.at = "left top";
-		}
-
-		this.menuWrap.position( $.extend( {}, this.options.position, _position ) );
+		this.menuWrap.position( $.extend( {}, this.options.position, { of: this.button } ) );
 
 		this._trigger( "open", event );
 	},
@@ -444,9 +421,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_toggleAttr: function(){
-		if ( this.options.dropdown ) {
-			this.button.toggleClass( "ui-corner-top", this.isOpen ).toggleClass( "ui-corner-all", !this.isOpen );
-		}
+		this.button.toggleClass( "ui-corner-top", this.isOpen ).toggleClass( "ui-corner-all", !this.isOpen );
 		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
 		this.menu.attr( "aria-hidden", !this.isOpen);
 		this.button.attr( "aria-expanded", this.isOpen);
