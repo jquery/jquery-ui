@@ -2,18 +2,20 @@ TestHelpers.commonWidgetTests( "selectmenu", {
 	defaults: {
 		appendTo: null,
 		disabled: false,
-		dropdown: true,
+		icons: {
+			button: "ui-icon-triangle-1-s"
+		},
 		position: {
 			my: "left top",
 			at: "left bottom",
 			collision: "none"
 		},
-		// callbacks,
+		// callbacks
 		create: null,
-		open: null,
-		focus: null,
-		select: null,
+		change: null,
 		close: null,
-		change: null
+		focus: null,
+		open: null,
+		select: null
 	}
 });

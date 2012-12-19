@@ -14,12 +14,8 @@
 	<script>
 	$(function() {
 		/* disabled */
-		$('select#disabled1').selectmenu({
-			dropdown: false
-		});
-		var withOverflow = $('select#disabled2').selectmenu({
-			dropdown: false
-		});
+		$('select#disabled1').selectmenu();
+		var withOverflow = $('select#disabled2').selectmenu();
 		withOverflow.selectmenu("menuWidget").addClass("overflow");
 		$('select#disabled3').selectmenu();
 		var disabled4 = $('select#disabled4').selectmenu();
