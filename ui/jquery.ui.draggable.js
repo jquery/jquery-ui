@@ -252,8 +252,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( pointerPosition ) {
-		var self = this,
-			scrollTop = this.scrollParent.scrollTop(),
+		var scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = this.scrollSensitivity,
 			// overflowOffset is only set when scrollParent is not doc/html
@@ -877,6 +876,54 @@ if ( $.uiBackCompat !== false ) {
 				handleScroll.call( self, pointerPosition );
 
 			};
+
+		}
+
+	});
+
+	// stack option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			stack: false
+		},
+
+		_create: function() {
+
+			var self = this;
+
+			this._super();
+
+			this.element.on( "dragbeforestart", function( event, ui ) {
+
+				var stack = self.options.stack,
+					group, min;
+
+				if ( !self.options.stack ) {
+					return;
+				}
+
+				group = $.makeArray( $(stack) ).sort(function(a,b) {
+
+					var aZIndex = parseInt( $(a).css("zIndex"), 10 ),
+						bZIndex = parseInt( $(b).css("zIndex"), 10 ),
+						min;
+
+					return ( aZIndex || 0) -  ( bZIndex|| 0);
+				});
+
+				if (!group.length) {
+					return;
+				}
+
+				min = parseInt(group[0].style.zIndex, 10) || 0;
+
+				$(group).each(function(i) {
+					this.style.zIndex = min + i;
+				});
+
+				self.element[0].style.zIndex = min + group.length;
+
+			});
 
 		}
 
