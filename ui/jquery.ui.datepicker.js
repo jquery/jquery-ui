@@ -175,12 +175,7 @@ $.extend(Datepicker.prototype, {
 		}
 		this._attachments(input, inst);
 		input.addClass(this.markerClassName).keydown(this._doKeyDown).
-			keypress(this._doKeyPress).keyup(this._doKeyUp).
-			bind("setData.datepicker", function(event, key, value) {
-				inst.settings[key] = value;
-			}).bind("getData.datepicker", function(event, key) {
-				return this._get(inst, key);
-			});
+			keypress(this._doKeyPress).keyup(this._doKeyUp);
 		this._autoSize(inst);
 		$.data(target, PROP_NAME, inst);
 		//If disabled option is true, disable the datepicker once it has been attached to the input (see ticket #5665)
@@ -271,12 +266,7 @@ $.extend(Datepicker.prototype, {
 		if (divSpan.hasClass(this.markerClassName)) {
 			return;
 		}
-		divSpan.addClass(this.markerClassName).append(inst.dpDiv).
-			bind("setData.datepicker", function(event, key, value){
-				inst.settings[key] = value;
-			}).bind("getData.datepicker", function(event, key){
-				return this._get(inst, key);
-			});
+		divSpan.addClass(this.markerClassName).append(inst.dpDiv);
 		$.data(target, PROP_NAME, inst);
 		this._setDate(inst, this._getDefaultDate(inst), true);
 		this._updateDatepicker(inst);
