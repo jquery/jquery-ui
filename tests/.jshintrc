@@ -22,6 +22,7 @@
 		"Globalize",
 		"module",
 		"notEqual",
+		"notStrictEqual",
 		"ok",
 		"QUnit",
 		"start",
