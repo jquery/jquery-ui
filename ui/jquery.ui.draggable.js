@@ -483,109 +483,94 @@ if ( $.uiBackCompat !== false ) {
 		options: {
 			axis: false
 		},
-		
-		_create : function() {
-			
-			var startLeft, startTop;
-		
-			this._super();
-			
-			// If movement should only move left/right
-			if ( this.options.axis === "x" ) {
 
-				// Cache starting top position to keep it from moving
-				this.element.on( "dragbeforestart", function( event, ui ) {
-					startTop = ui.position.top;
-				});
-				
-				// On drag, make sure top does not change so axis is locked
-				this.element.on( "drag", function( event, ui ) {
-					ui.position.top = startTop;
-				});
-				
-			}
-			// If movement should only move up/down
-			else if ( this.options.axis === "y" ) {
-			
-				// Cache starting left position to keep it from moving
-				this.element.on( "dragbeforestart", function( event, ui ) {
-					startLeft = ui.position.left;
-				});
-				
-				// On drag, make sure top does not change so axis is locked
-				this.element.on( "drag", function( event, ui ) {
-					ui.position.left = startLeft;
-				});
-			
-			}
+		_create : function() {
 		
+			var self = this;
+
+			this._super();
+
+			// On drag, make sure top does not change so axis is locked
+			this.element.on( "drag", function( event, ui ) {
+
+				if ( self.options.axis === "x" ) {
+					ui.position.top = ui.originalPosition.top;
+				}
+
+				if ( self.options.axis === "y" ) {
+					ui.position.left = ui.originalPosition.left;
+				}
+
+			});
+			
 		}
+
 	});
-	
+
 	// cursor option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			cursor: "auto"
 		},
-		
+
 		_create : function() {
-		
+
 			var startCursor, self, body;
-			
+
 			this._super();
-			
+
 			if ( this.options.cursor ) {
-			
+
 				self = this;
 				body = $( this.document[0].body );
-			
+
 				// Cache original cursor to set back
 				this.element.on( "dragstart", function( event, ui ) {
-					startCursor = body.style.cursor;
+					startCursor = body[0].style.cursor;
 				});
-				
+
 				// Set cursor to what user wants during drag
 				this.element.on( "drag", function( event, ui ) {
 					body.css( "cursor", self.options.cursor );
 				});
-				
+
 				// Set back cursor to whatever default was
 				this.element.on( "dragstop", function( event, ui ) {
-				
+
 					body.css( "cursor", startCursor );
 
 				});
-			
+
 			}
-		
+
 		}
-		
+
 	});
-	
+
 	// cursorAt option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			cursorAt: false
 		},
-		
+
 		_create : function() {
-		
+
 			var self = this,
 				cursorAt;
-			
+
 			this._super();
-			
+
 			// No need to continue
 			if ( !this.options.cursorAt ) {
 				return;
 			}
-			
+
 			cursorAt = this.options.cursorAt;
-			
+
 			this.element.on( "dragbeforestart", function( event, ui ) {
-			
+
 				var elem = self.dragEl;
-			
+
 				if ( "top" in cursorAt ) {
 					ui.position.top += ui.pointer.y - ui.offset.top - cursorAt.top;
 				}
@@ -599,42 +584,42 @@ if ( $.uiBackCompat !== false ) {
 					ui.position.left += ui.pointer.x - ui.offset.left - elem.outerWidth() + cursorAt.right;
 				}
 			});
-		
+
 		}
-		
+
 	});
-	
+
 	// grid option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			grid: false
 		},
-		
+
 		_create : function() {
-		
+
 			var x, y, currentX, currentY;
-		
+
 			this._super();
-			
+
 			// No need to continue
 			if ( !this.options.grid ) {
 				return;
 			}
-			
+
 			// Save off the intended intervals
 			x = this.options.grid[0];
 			y = this.options.grid[1];
-			
+
 			this.element.on( "dragbeforestart", function( event, ui ) {
-			
+
 				// Save off the start position
 				currentX = ui.position.left;
 				currentY = ui.position.top;
-			
+
 			});
-			
+
 			this.element.on( "drag", function( event, ui ) {
-			
+
 				// If x is actually something, check that user is at least half way to next point
 				if ( x ) {
 					if ( ui.position.left - currentX > x/2 ) {
@@ -643,7 +628,7 @@ if ( $.uiBackCompat !== false ) {
 						currentX = currentX - x;
 					}
 				}
-				
+
 				// If y is actually something, check that user is at least half way to next point
 				if ( y ) {
 					if ( ui.position.top - currentY > y/2 ) {
@@ -652,57 +637,57 @@ if ( $.uiBackCompat !== false ) {
 						currentY = currentY - y;
 					}
 				}
-				
+
 				// If there threshold wasn't crossed these variables wouldn't be changed
 				// Otherwise this will now bump the draggable to the next spot on grid
 				ui.position.left = currentX;
 				ui.position.top = currentY;
-				
+
 			});
-			
+
 		}
-		
+
 	});
-	
+
 	// opacity option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			opacity: false
 		},
-		
+
 		_create : function() {
-		
+
 			var self = this,
 				originalOpacity;
-		
+
 			this._super();
-			
+
 			// No need to continue
 			if ( !this.options.opacity ) {
 				return;
 			}
-			
+
 			this.element.on( "dragstart", function( event, ui ) {
-			
+
 				// Cache the original opacity of draggable element to reset later
 				originalOpacity = self.dragEl.css( 'opacity' );
-				
+
 				// Set draggable element to new opacity
 				self.dragEl.css( 'opacity', self.options.opacity );
-			
+
 			});
-			
+
 			this.element.on( "dragstop", function( event, ui ) {
-			
+
 				// Reset opacity
 				self.dragEl.css( 'opacity', originalOpacity );
-				
+
 			});
-			
+
 		}
-		
+
 	});
-	
+
 	// TODO: handle droppables
 	// revert + revertDuration options
 	$.widget( "ui.draggable", $.ui.draggable, {
@@ -710,80 +695,80 @@ if ( $.uiBackCompat !== false ) {
 			revert: false,
 			revertDuration: 500
 		},
-		
+
 		_create : function() {
-		
+
 			var self = this,
 				originalLeft, originalTop, originalPosition;
-		
+
 			this._super();
-			
+
 			// No need to continue
 			if ( !this.options.revert ) {
 				return;
 			}
-			
+
 			this.element.on( "dragbeforestart", function( event, ui ) {
-			
+
 				// Cache the original css of draggable element to reset later
 				originalLeft = self.dragEl.css( 'left' );
 				originalTop = self.dragEl.css( 'top' );
 				originalPosition = self.dragEl.css( 'position' );
-				
+
 			});
-			
+
 			this.element.on( "dragstop", function( event, ui ) {
-			
+
 				// Reset to before drag
 				self.dragEl.animate({
-					left: originalLeft, 
-					top: originalTop, 
-					position: originalPosition 
+					left: originalLeft,
+					top: originalTop,
+					position: originalPosition
 				}, self.options.revertDuration );
-				
+
 			});
-			
+
 		}
-		
+
 	});
-	
+
 	// zIndex option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			zIndex: false
 		},
-		
+
 		_create : function() {
-		
+
 			var self = this,
 				originalZIndex;
-		
+
 			this._super();
-			
+
 			// No need to continue
 			if ( !this.options.zIndex ) {
 				return;
 			}
-			
+
 			this.element.on( "dragstart", function( event, ui ) {
-			
+
 				// Cache the original zIndex of draggable element to reset later
 				originalZIndex = self.dragEl.css( 'z-index' );
-				
+
 				// Set draggable element to new zIndex
 				self.dragEl.css( 'z-index', self.options.zIndex );
-			
+
 			});
-			
+
 			this.element.on( "dragstop", function( event, ui ) {
-			
+
 				// Reset zIndex
 				self.dragEl.css( 'z-index', originalZIndex );
-				
+
 			});
-			
+
 		}
-		
+
 	});
-	
+
 }
