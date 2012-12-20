@@ -14,34 +14,33 @@ TestHelpers.commonWidgetTests( "draggable", {
 		cursor: "auto",
 		cursorAt: false,
 		grid: false,
-		iframeFix: false,
 		opacity: false,
 		refreshPositions: false,
 		revert: false,
 		revertDuration: 500,
 		scroll: true,
-		scrollSensitivity: 20,
-		scrollSpeed: 20,
+		scrollSensitivity: null,
+		scrollSpeed: null,
 		scope: "default",
 		snap: false,
 		snapMode: "both",
 		snapTolerance: 20,
 		stack: false,
 		zIndex: false,
-		cancel: "input,textarea,button,select,option",
+		cancel: null,
 
-		// methods
-		destroy: null,
-		disable: null,
-		enable: null,
-		option: null,
-		widget: null,
+		// // methods
+		// destroy: null,
+		// disable: null,
+		// enable: null,
+		// option: null,
+		// widget: null,
 
-		// callbacks
-		beforeStart: null,
-		create: null,
-		drag: null,
-		start: null,
-		stop: null
+		// // callbacks
+		// beforeStart: null,
+		// create: null,
+		// drag: null,
+		// start: null,
+		// stop: null
 	}
 });
