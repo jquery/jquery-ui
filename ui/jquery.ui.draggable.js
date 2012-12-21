@@ -74,7 +74,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_start: function( event, pointerPosition ) {
-		var offset;
+		var offset, startCssLeft, startCssTop, startPosition, startOffset;
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = ( this.options.helper === true || typeof this.options.helper === 'function' ) ?
@@ -131,11 +131,32 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		}
 
+		// Save off the usual properties locally, so they can be reverted from start
+		startCssLeft = this.dragEl.css("left");
+		startCssTop = this.dragEl.css("top");
+		startPosition = copy( this._getPosition() );
+		startOffset = copy( this.offset );
+
 		this._setCss();
 		this.startPosition = this._getPosition();
 		this.startOffset = this.dragEl.offset();
 
-		this._trigger( "start", event, this._fullHash( pointerPosition ) );
+		// If user cancels on start, don't allow dragging
+		if ( this._trigger( "start", event,
+				this._fullHash( pointerPosition ) ) === false ) {
+				// domPosition needs to be undone even if start is stopped
+				// Otherwise this.dragEl will remain in the element appendTo is set to
+
+				this.startPosition = startPosition;
+				this.startOffset = startOffset;
+				this.dragEl.css({
+					left: startCssLeft,
+					top: startCssTop
+				});
+
+				this._resetDomPosition();
+				return false;
+		}
 		this._blockFrames();
 	},
 
@@ -163,7 +184,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// If user cancels drag, don't move the element
 		if ( this._trigger( "drag", event, this._fullHash( pointerPosition ) ) === false ) {
-			return;
+			return false;
 		}
 
 		this._setCss();
@@ -490,26 +511,26 @@ if ( $.uiBackCompat !== false ) {
 	$.widget( "ui.draggable", $.ui.draggable, {
 
 		_appendToEl: function() {
-		
+
 			var el = this.options.appendTo;
-			
+
 			if ( el === 'parent' ) {
 				el = this.dragEl.parent();
 			}
-		
+
 			return el;
-		
+
 		}
 
 	});
-	
+
 	// helper 'original' or 'clone' value
 	$.widget( "ui.draggable", $.ui.draggable, {
 
 		_create: function() {
 
 			this._super();
-			
+
 			if ( this.options.helper === 'original' ) {
 				this.options.helper = false;
 			}
@@ -525,11 +546,11 @@ if ( $.uiBackCompat !== false ) {
 			if ( key !== 'helper' ) {
 				return this._super( key, value );
 			}
-			
+
 			if ( value === 'clone' ) {
 				value = true;
 			}
-			
+
 			if ( value === 'original' ) {
 				value = false;
 			}
