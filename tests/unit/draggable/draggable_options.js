@@ -106,13 +106,10 @@ test("{ cancel: ? }, unexpected", function() {
 			"{}": {},
 			"[]": [],
 			"null": null,
-			"undefined": undefined,
-			"function() {return '';}": function() {return '';},
-			"function() {return true;}": function() {return true;},
-			"function() {return false;}": function() {return false;}
+			"undefined": undefined
 		};
 
-	expect( 9 );
+	expect( 6 );
 
 	$.each(unexpected, function(key, val) {
 		el = $("#draggable2").draggable({ cancel: val });

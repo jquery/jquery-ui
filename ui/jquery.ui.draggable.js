@@ -77,7 +77,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		var offset;
 
 		// The actual dragging element, should always be a jQuery object
-		this.dragEl = this.options.helper ?
+		this.dragEl = ( this.options.helper === true || typeof this.options.helper === 'function' ) ?
 			this._createHelper( pointerPosition ) :
 			this.element;
 
@@ -90,7 +90,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			};
 			offset = this.dragEl.offset();
 			this.dragEl
-				.appendTo( this.options.appendTo )
+				.appendTo( this._appendToEl() )
 				.offset( offset );
 		}
 
@@ -208,7 +208,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// Ensure the helper is in the DOM; obey the appendTo option if it exists
 		if ( this.options.appendTo || !helper.closest( "body" ).length ) {
-			helper.appendTo( this.options.appendTo || this.document[0].body );
+			helper.appendTo( this._appendToEl() || this.document[0].body );
 		}
 
 		return helper
@@ -218,6 +218,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				left: pointerPosition.x - helper.outerWidth() * xPos,
 				top: pointerPosition.y - helper.outerHeight() * yPos
 			});
+	},
+
+	// TODO: Remove after 2.0, only used for backCompat
+	_appendToEl: function() {
+		return this.options.appendTo;
 	},
 
 	_getPosition: function() {
@@ -480,6 +485,60 @@ $.widget( "ui.draggable", $.ui.draggable, {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
+
+	// appendTo 'parent' value
+	$.widget( "ui.draggable", $.ui.draggable, {
+
+		_appendToEl: function() {
+		
+			var el = this.options.appendTo;
+			
+			if ( el === 'parent' ) {
+				el = this.dragEl.parent();
+			}
+		
+			return el;
+		
+		}
+
+	});
+	
+	// helper 'original' or 'clone' value
+	$.widget( "ui.draggable", $.ui.draggable, {
+
+		_create: function() {
+
+			this._super();
+			
+			if ( this.options.helper === 'original' ) {
+				this.options.helper = false;
+			}
+
+			if ( this.options.helper === 'clone' ) {
+				this.options.helper = true;
+			}
+
+		},
+
+		_setOption: function( key, value ) {
+
+			if ( key !== 'helper' ) {
+				return this._super( key, value );
+			}
+			
+			if ( value === 'clone' ) {
+				value = true;
+			}
+			
+			if ( value === 'original' ) {
+				value = false;
+			}
+
+			this._super( key, value );
+
+		}
+
+	});
 
 	// axis option
 	$.widget( "ui.draggable", $.ui.draggable, {
