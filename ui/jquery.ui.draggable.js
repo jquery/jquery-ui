@@ -614,19 +614,13 @@ if ( $.uiBackCompat !== false ) {
 			body = $( this.document[0].body );
 
 			// Cache original cursor to set back
-			this.element.on( "dragstart", function() {
+			this.element.on( "dragbeforestart", function() {
 
 				if ( self.options.cursor ) {
 					startCursor = body[0].style.cursor;
-				}
-
-			});
-
-			// Set cursor to what user wants during drag
-			this.element.on( "drag", function() {
-				if ( self.options.cursor ) {
 					body.css( "cursor", self.options.cursor );
 				}
+
 			});
 
 			// Set back cursor to whatever default was
