@@ -555,7 +555,7 @@ if ( $.uiBackCompat !== false ) {
 			body = $( this.document[0].body );
 
 			// Cache original cursor to set back
-			this.element.on( "dragstart", function( event, ui ) {
+			this.element.on( "dragstart", function() {
 
 				if ( self.options.cursor ) {
 					startCursor = body[0].style.cursor;
@@ -564,14 +564,14 @@ if ( $.uiBackCompat !== false ) {
 			});
 
 			// Set cursor to what user wants during drag
-			this.element.on( "drag", function( event, ui ) {
+			this.element.on( "drag", function() {
 				if ( self.options.cursor ) {
 					body.css( "cursor", self.options.cursor );
 				}
 			});
 
 			// Set back cursor to whatever default was
-			this.element.on( "dragstop", function( event, ui ) {
+			this.element.on( "dragstop", function() {
 
 				if ( self.options.cursor ) {
 					body.css( "cursor", startCursor );
@@ -701,7 +701,7 @@ if ( $.uiBackCompat !== false ) {
 
 			this._super();
 
-			this.element.on( "dragstart", function( event, ui ) {
+			this.element.on( "dragstart", function() {
 
 				// No need to continue
 				if ( !self.options.opacity ) {
@@ -716,7 +716,7 @@ if ( $.uiBackCompat !== false ) {
 
 			});
 
-			this.element.on( "dragstop", function( event, ui ) {
+			this.element.on( "dragstop", function() {
 
 				// No need to continue
 				if ( !self.options.opacity ) {
@@ -747,7 +747,7 @@ if ( $.uiBackCompat !== false ) {
 
 			this._super();
 
-			this.element.on( "dragbeforestart", function( event, ui ) {
+			this.element.on( "dragbeforestart", function() {
 
 				// No need to continue
 				if ( !self.options.revert ) {
@@ -761,7 +761,7 @@ if ( $.uiBackCompat !== false ) {
 
 			});
 
-			this.element.on( "dragstop", function( event, ui ) {
+			this.element.on( "dragstop", function() {
 
 				// No need to continue
 				if ( !self.options.revert ) {
@@ -794,7 +794,7 @@ if ( $.uiBackCompat !== false ) {
 
 			this._super();
 
-			this.element.on( "dragstart", function( event, ui ) {
+			this.element.on( "dragstart", function() {
 
 				// No need to continue
 				if ( !self.options.zIndex ) {
@@ -809,7 +809,7 @@ if ( $.uiBackCompat !== false ) {
 
 			});
 
-			this.element.on( "dragstop", function( event, ui ) {
+			this.element.on( "dragstop", function() {
 
 				// No need to continue
 				if ( !self.options.zIndex ) {
@@ -893,7 +893,7 @@ if ( $.uiBackCompat !== false ) {
 
 			this._super();
 
-			this.element.on( "dragbeforestart", function( event, ui ) {
+			this.element.on( "dragbeforestart", function() {
 
 				var stack = self.options.stack,
 					group, min;
@@ -905,8 +905,7 @@ if ( $.uiBackCompat !== false ) {
 				group = $.makeArray( $(stack) ).sort(function(a,b) {
 
 					var aZIndex = parseInt( $(a).css("zIndex"), 10 ),
-						bZIndex = parseInt( $(b).css("zIndex"), 10 ),
-						min;
+						bZIndex = parseInt( $(b).css("zIndex"), 10 );
 
 					return ( aZIndex || 0) -  ( bZIndex|| 0);
 				});

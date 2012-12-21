@@ -29,7 +29,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
 	items: 'li', // TODO: move to options when API is ready
-	
+
 	// dragEl: element being dragged (original or helper)
 	// position: final CSS position of dragEl
 	// offset: offset of dragEl
@@ -49,56 +49,54 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	},
 
 	_create: function() {
-	
+
 		this._super();
 
 		this.element.addClass( "ui-sortable" );
-		
+
 		this._setSortablePositions();
-		
+
 	},
-	
+
 	_setSortablePositions: function() {
-	
+
 		var sortablePositions = this.sortablePositions = [];
-		
+
 		this.element.find( this.items ).each( function() {
-		
+
 			var el = $(this);
-		
+
 			sortablePositions.push([{
 				el: el,
 				offset: el.offset()
 			}]);
 		});
-	
-	}, 
+
+	},
 
 	/** interaction interface **/
-	
+
 	_isValidTarget: function( element ) {
-	
+
 		// TODO: options for what is actually valid
 		return element.is( this.items );
 	},
 
 	_start: function( event, pointerPosition ) {
-	
-		var offset;
 
 		// The actual dragging element, should always be a jQuery object
 		// this.dragEl = this.options.helper ?
 			// this._createHelper( pointerPosition ) :
 			// this.element;
-			
+
 		this.dragEl = $(event.target);
-		
+
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
 		if ( this.dragEl[0].style.position ) {
 			this.originalCssPosition = this.dragEl[0].style.position;
 		}
-		
+
 		// Create placeholder for while element is dragging
 		// TODO: what do we do about IDs?
 		// TODO: possibly use CSS for visibility portion
@@ -108,7 +106,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		});
 
 		this.dragEl.after( this.placeholder );
-		
+
 		this.dragEl.css( 'position', 'absolute' );
 
 		// // _createHelper() ensures that helpers are in the correct position
@@ -154,7 +152,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		if ( this._trigger( "beforeStart", event,
 				this._originalHash( pointerPosition ) ) === false ) {
 			return false;
-			
+
 		}
 
 		this._setCss();
@@ -164,13 +162,13 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		this._trigger( "start", event, this._fullHash( pointerPosition ) );
 		this._blockFrames();
 	},
-	
+
 	_move: function( event, pointerPosition ) {
-	
-		var sort, sortItem, top, left, sortIndex, 
+
+		var sort, sortItem, sortIndex,
 			len = this.sortablePositions.length;
-			
-			
+
+
 		this._preparePosition( pointerPosition );
 
 		// // If user cancels drag, don't move the element
@@ -182,23 +180,23 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// Scroll the scrollParent, if needed
 		this._handleScrolling( pointerPosition );
-		
+
 		for ( sortIndex=0; sortIndex<len; ++sortIndex ) {
-		
+
 			for ( sort in this.sortablePositions[sortIndex] ) {
-			
+
 				sortItem = this.sortablePositions[sortIndex][sort];
-				
+
 				// Don't bother checking against self
 				if ( sortItem.el[0] === this.dragEl[0] ) {
 					continue;
 				}
-				
+
 				if ( this._over( sortItem ) )  {
-				
+
 					// TODO: cache height of element
 					if ( ( this.offset.top + this.dragEl.height() )	> ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
-					
+
 						sortItem.el.after( this.dragEl );
 						this.dragEl.after( this.placeholder );
 						this._setSortablePositions();
@@ -208,18 +206,18 @@ $.widget( "ui.sortable", $.ui.interaction, {
 						this.dragEl.before( this.placeholder );
 						this._setSortablePositions();
 					}
-				
+
 				}
-				
-				
+
+
 			}
 		}
-		
+
 	},
-	
+
 	// TODO: swap out for real tolerance options
 	_over: function( sortItem ) {
-	
+
 		// TODO: use same cache from _move for height and width of element
 		var edges = {
 			droppableRight: sortItem.offset.left + sortItem.el.width(),
@@ -227,17 +225,15 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			draggableRight: this.offset.left + this.dragEl.width(),
 			draggableBottom: this.offset.top + this.dragEl.height()
 		};
-		
+
 		return sortItem.offset.left < edges.draggableRight &&
 				edges.droppableRight > this.offset.left &&
 				sortItem.offset.top < edges.draggableBottom &&
 				edges.droppableBottom > sortItem.offset.top;
-	
+
 	},
 
 	_stop: function( event, pointerPosition ) {
-		
-		var parent, next;
 
 		this._preparePosition( pointerPosition );
 
@@ -257,11 +253,11 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		else {
 			this.dragEl.css( 'position', '' );
 		}
-		
+
 		// TODO: should same thing be done here as is done for position or is there better way altogether
 		this.dragEl.css( 'left', '' );
 		this.dragEl.css( 'top', '' );
-		
+
 		this.placeholder.remove();
 
 		// Unset properties only needed during draggin/sorting

@@ -27,7 +27,7 @@ TestHelpers.commonWidgetTests( "draggable", {
 		snapTolerance: 20,
 		stack: false,
 		zIndex: false,
-		cancel: null,
+		cancel: null
 
 		// // methods
 		// destroy: null,

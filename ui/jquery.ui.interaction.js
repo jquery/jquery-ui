@@ -35,7 +35,7 @@ $.widget( "ui.interaction", {
 
 	/** protected **/
 
-	_isValidTarget: function( target ) {
+	_isValidTarget: function() {
 		return true;
 	},
 
@@ -138,8 +138,7 @@ interaction.hooks.mouse = {
 
 // WebKit doesn't support TouchList.identifiedTouch()
 function getTouch( event ) {
-	var touch,
-		touches = event.originalEvent.changedTouches,
+	var touches = event.originalEvent.changedTouches,
 		i = 0, length = touches.length;
 
 	for ( ; i < length; i++ ) {
