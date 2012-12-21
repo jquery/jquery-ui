@@ -199,6 +199,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// If user cancels stop, leave helper there
 		if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
 			if ( this.options.helper ) {
+				delete this.element.data( 'draggable' ).helper;
 				this.dragEl.remove();
 			}
 			this._resetDomPosition();
@@ -231,6 +232,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		if ( this.options.appendTo || !helper.closest( "body" ).length ) {
 			helper.appendTo( this._appendToEl() || this.document[0].body );
 		}
+		
+		this.element.data( 'draggable' ).helper = helper;
 
 		return helper
 			// Helper must be absolute to function properly
