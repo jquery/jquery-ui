@@ -281,7 +281,8 @@ test("{ cursorAt: false}, default", function() {
 test( "{ cursorAt: left, top }", function() {
 	expect( 16 );
 
-	var deltaX = -3, deltaY = -3,
+	var deltaX = -3,
+		deltaY = -3,
 		tests = {
 			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
 			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
@@ -295,11 +296,11 @@ test( "{ cursorAt: left, top }", function() {
 					cursorAt: testData.cursorAt,
 					drag: function( event, ui ) {
 						if( testData.cursorAt.right ) {
-							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x, testName + " " + position + " left" );
-							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y, testName + position + " top" );
+							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y + TestHelpers.draggable.unreliableOffset, testName + position + " top" );
 						} else {
-							equal( event.clientX - ui.offset.left, testData.x, testName + " " + position + " left" );
-							equal( event.clientY - ui.offset.top, testData.y, testName + " " + position + " top" );
+							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
+							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
 						}
 					}
 			});
