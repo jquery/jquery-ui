@@ -278,146 +278,38 @@ test("{ cursorAt: false}, default", function() {
 });
 */
 
-test("{ cursorAt: { left: -5, top: -5 } }", function() {
-	expect(4);
+test( "{ cursorAt: left, top }", function() {
+	expect( 16 );
 
 	var deltaX = -3, deltaY = -3,
-		offsetX = 5, offsetY = 5,
-		cursorAtX = -5, cursorAtY = -5;
+		tests = {
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+		};
 
-	$.each(['relative', 'absolute'], function(i, position) {
-		var before, pos, expected,
-			el = $('#draggable' + (i + 1)).draggable({
-					cursorAt: { left: cursorAtX, top: cursorAtY },
-					drag: function(event, ui) {
-						equal(ui.offset.left, expected.left, position + ' left');
-						equal(ui.offset.top, expected.top, position + ' top');
+	$.each( tests, function( testName, testData ) {
+		$.each( [ "relative", "absolute" ], function( i, position ) {
+			var el = $( "#draggable" + ( i + 1 ) ).draggable({
+					cursorAt: testData.cursorAt,
+					drag: function( event, ui ) {
+						if( testData.cursorAt.right ) {
+							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x, testName + " " + position + " left" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y, testName + position + " top" );
+						} else {
+							equal( event.clientX - ui.offset.left, testData.x, testName + " " + position + " left" );
+							equal( event.clientY - ui.offset.top, testData.y, testName + " " + position + " top" );
+						}
 					}
 			});
 
-		before = el.offset();
-		pos = {
-			clientX: before.left + offsetX,
-			clientY: before.top + offsetY
-		};
-		expected = {
-			left: before.left + offsetX - cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
-			top: before.top + offsetY - cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
-		};
-
-		// todo: replace this with simulated drag event
-		el.simulate("mousedown", pos);
-		pos.clientX += deltaX;
-		pos.clientY += deltaY;
-		$(document).simulate("mousemove", pos);
-		el.simulate("mouseup", pos);
-	});
-});
-
-test("{ cursorAt: { right: 10, bottom: 20 } }", function() {
-	expect(4);
-
-	var deltaX = -3, deltaY = -3,
-		offsetX = 5, offsetY = 5,
-		cursorAtX = 10, cursorAtY = 20;
-
-	$.each(['relative', 'absolute'], function(i, position) {
-		var before, pos, expected,
-			el = $('#draggable' + (i + 1)).draggable({
-				cursorAt: { right: cursorAtX, bottom: cursorAtY },
-				drag: function(event, ui) {
-					equal(ui.offset.left, expected.left, position + ' left');
-					equal(ui.offset.top, expected.top, position + ' top');
-				}
+			el.simulate( "drag", {
+				moves: 1,
+				dx: deltaX,
+				dy: deltaY
 			});
-		before = el.offset();
-		pos = {
-			clientX: before.left + offsetX,
-			clientY: before.top + offsetY
-		};
-		expected = {
-			left: before.left + offsetX - el.width() + cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
-			top: before.top + offsetY - el.height() + cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
-		};
-
-		// todo: replace this with simulated drag event
-		el.simulate("mousedown", pos);
-		pos.clientX += deltaX;
-		pos.clientY += deltaY;
-		$(document).simulate("mousemove", pos);
-		el.simulate("mouseup", pos);
-	});
-});
-
-test("{ cursorAt: [10, 20] }", function() {
-	expect(4);
-
-	var deltaX = -3, deltaY = -3,
-		offsetX = 5, offsetY = 5,
-		cursorAtX = 10, cursorAtY = 20;
-
-	$.each(['relative', 'absolute'], function(i, position) {
-		var before, pos, expected,
-			el = $('#draggable' + (i + 1)).draggable({
-				cursorAt: { left: cursorAtX, top: cursorAtY },
-				drag: function(event, ui) {
-					equal(ui.offset.left, expected.left, position + ' left');
-					equal(ui.offset.top, expected.top, position + ' top');
-				}
-			});
-
-		before = el.offset();
-		pos = {
-			clientX: before.left + offsetX,
-			clientY: before.top + offsetY
-		};
-		expected = {
-			left: before.left + offsetX - cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
-			top: before.top + offsetY - cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
-		};
-
-		// todo: replace this with simulated drag event
-		el.simulate("mousedown", pos);
-		pos.clientX += deltaX;
-		pos.clientY += deltaY;
-		$(document).simulate("mousemove", pos);
-		el.simulate("mouseup", pos);
-	});
-});
-
-test("{ cursorAt: '20, 40' }", function() {
-	expect(4);
-
-	var deltaX = -3, deltaY = -3,
-		offsetX = 5, offsetY = 5,
-		cursorAtX = 20, cursorAtY = 40;
-
-	$.each(['relative', 'absolute'], function(i, position) {
-		var before, pos, expected,
-			el = $('#draggable' + (i + 1)).draggable({
-				cursorAt: { left: cursorAtX, top: cursorAtY },
-				drag: function(event, ui) {
-					equal(ui.offset.left, expected.left, position + ' left');
-					equal(ui.offset.top, expected.top, position + ' top');
-				}
-			});
-
-		before = el.offset();
-		pos = {
-			clientX: before.left + offsetX,
-			clientY: before.top + offsetY
-		};
-		expected = {
-			left: before.left + offsetX - cursorAtX + deltaX - TestHelpers.draggable.unreliableOffset,
-			top: before.top + offsetY - cursorAtY + deltaY - TestHelpers.draggable.unreliableOffset
-		};
-
-		// todo: replace this with simulated drag event
-		el.simulate("mousedown", pos);
-		pos.clientX += deltaX;
-		pos.clientY += deltaY;
-		$(document).simulate("mousemove", pos);
-		el.simulate("mouseup", pos);
+		});
 	});
 });
 
