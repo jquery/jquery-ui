@@ -693,8 +693,7 @@ if ( $.uiBackCompat !== false ) {
 
 			this.element.on( "dragbeforestart", function( event, ui ) {
 
-				var elem = self.dragEl,
-					cursorAt = self.options.cursorAt;
+				var cursorAt = self.options.cursorAt;
 
 				// No need to continue
 				if ( !cursorAt ) {
@@ -1167,7 +1166,7 @@ if ( $.uiBackCompat !== false ) {
 			}
 
 			var mod = d === "absolute" ? 1 : -1,
-			  offset = {},
+				offset = {},
 				scroll = this.cssPosition === 'absolute' && !(this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 			$.extend(offset, {
@@ -1237,4 +1236,40 @@ if ( $.uiBackCompat !== false ) {
 
 	});
 
+	// refreshPositions option
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			refreshPositions: false
+		},
+
+		_create: function() {
+
+			var self = this,
+				drops;
+
+			this._super();
+			
+			this.element.on( "dragstart", function() {
+				drops = $(':data(ui-sortable)');
+			});
+
+			// On drag, make sure top does not change so axis is locked
+			this.element.on( "drag", function() {
+
+				if ( self.options.refreshPositions !== true ) {
+					return;
+				}
+
+				drops.each( function() {
+					$(this).sortable('refreshPositions');
+				});
+				
+
+			});
+
+		}
+
+	});
+
+	
 }
