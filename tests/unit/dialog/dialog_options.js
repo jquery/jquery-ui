@@ -338,36 +338,45 @@ test("minWidth", function() {
 	el.remove();
 });
 
-test("position, default center on window", function() {
+test( "position, default center on window", function() {
 	expect( 2 );
-	var el = $('<div></div>').dialog(),
-		dialog = el.dialog('widget'),
+
+	// dialogs alter the window width and height in FF and IE7
+	// so we collect that information before creating the dialog
+	// Support: FF, IE7
+	var winWidth = $( window ).width(),
+		winHeight = $( window ).height(),
+		el = $("<div></div>").dialog(),
+		dialog = el.dialog("widget"),
 		offset = dialog.offset();
-	closeEnough(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft(), 1);
-	closeEnough(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop(), 1);
+	closeEnough( offset.left, Math.round( winWidth / 2 - dialog.outerWidth() / 2 ) + $( window ).scrollLeft(), 1, "dialog left position of center on window on initilization" );
+	closeEnough( offset.top, Math.round( winHeight / 2 - dialog.outerHeight() / 2 ) + $( window ).scrollTop(), 1, "dialog top position of center on window on initilization" );
 	el.remove();
 });
 
-// todo: figure out these fails in IE7
-if ( !$.ui.ie ) {
-	test("position, right bottom at right bottom via ui.position args", function() {
-		expect( 2 );
-		var el = $('<div></div>').dialog({
-				position: {
-					my: "right bottom",
-					at: "right bottom"
-				}
-			}),
-			dialog = el.dialog('widget'),
-			offset = dialog.offset();
+test( "position, right bottom at right bottom via ui.position args", function() {
+	expect( 2 );
 
-		closeEnough(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft(), 1);
-		closeEnough(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop(), 1);
-		el.remove();
-	});
-}
+	// dialogs alter the window width and height in FF and IE7
+	// so we collect that information before creating the dialog
+	// Support: FF, IE7
+	var winWidth = $( window ).width(),
+		winHeight = $( window ).height(),
+		el = $("<div></div>").dialog({
+			position: {
+				my: "right bottom",
+				at: "right bottom"
+			}
+		}),
+		dialog = el.dialog("widget"),
+		offset = dialog.offset();
 
-test("position, at another element", function() {
+	closeEnough( offset.left, winWidth - dialog.outerWidth() + $( window ).scrollLeft(), 1, "dialog left position of right bottom at right bottom on initilization" );
+	closeEnough( offset.top, winHeight - dialog.outerHeight() + $( window ).scrollTop(), 1, "dialog top position of right bottom at right bottom on initilization" );
+	el.remove();
+});
+
+test( "position, at another element", function() {
 	expect( 4 );
 	var parent = $('<div></div>').css({
 			position: 'absolute',
@@ -375,32 +384,34 @@ test("position, at another element", function() {
 			left: 600,
 			height: 10,
 			width: 10
-		}).appendTo('body'),
+		}).appendTo("body"),
 
-		el = $('<div></div>').dialog({
+		el = $("<div></div>").dialog({
 			position: {
 				my: "left top",
 				at: "left top",
-				of: parent
+				of: parent,
+				collision: "none"
 			}
 		}),
 
-		dialog = el.dialog('widget'),
+		dialog = el.dialog("widget"),
 		offset = dialog.offset();
 
-	deepEqual(offset.left, 600);
-	deepEqual(offset.top, 400);
+	closeEnough( offset.left, 600, 1, "dialog left position at another element on initilization" );
+	closeEnough( offset.top, 400, 1, "dialog top position at another element on initilization" );
 
-	el.dialog('option', 'position', {
+	el.dialog("option", "position", {
 			my: "left top",
 			at: "right bottom",
-			of: parent
+			of: parent,
+			collision: "none"
 	});
 
 	offset = dialog.offset();
 
-	deepEqual(offset.left, 610);
-	deepEqual(offset.top, 410);
+	closeEnough( offset.left, 610, 1, "dialog left position at another element via setting option" );
+	closeEnough( offset.top, 410, 1, "dialog top position at another element via setting option" );
 
 	el.remove();
 	parent.remove();
