@@ -47,10 +47,10 @@
 		"grunt-css": "0.2.0",
 		"grunt-compare-size": "0.1.4",
 		"grunt-html": "0.1.1",
-		"grunt-junit": "0.1.4",
+		"grunt-junit": "0.1.5",
 		"grunt-git-authors": "1.0.0",
 		"rimraf": "2.0.1",
-		"testswarm": "0.2.3"
+		"testswarm": "0.3.0"
 	},
 	"keywords": []
 }

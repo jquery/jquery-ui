@@ -103,4 +103,15 @@ test("icons", function() {
 	$("#button").button("destroy");
 });
 
+test( "#5295 - button does not remove hoverstate if disabled" , function() {
+	expect( 1 );
+	var btn = $("#button").button();
+	btn.hover( function() {
+		btn.button( "disable" );
+	});
+	btn.trigger( "mouseenter" );
+	btn.trigger( "mouseleave" );
+	ok( !btn.is( ".ui-state-hover") );
+});
+
 })(jQuery);

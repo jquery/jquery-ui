@@ -23,7 +23,8 @@ function getNextTabId() {
 
 function isLocal( anchor ) {
 	return anchor.hash.length > 1 &&
-		anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
+		decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
+			decodeURIComponent( location.href.replace( rhash, "" ) );
 }
 
 $.widget( "ui.tabs", {
@@ -46,9 +47,7 @@ $.widget( "ui.tabs", {
 
 	_create: function() {
 		var that = this,
-			options = this.options,
-			active = options.active,
-			locationHash = location.hash.substring( 1 );
+			options = this.options;
 
 		this.running = false;
 
@@ -74,6 +73,36 @@ $.widget( "ui.tabs", {
 			});
 
 		this._processTabs();
+		options.active = this._initialActive();
+
+		// Take disabling tabs via class attribute from HTML
+		// into account and update option properly.
+		if ( $.isArray( options.disabled ) ) {
+			options.disabled = $.unique( options.disabled.concat(
+				$.map( this.tabs.filter( ".ui-state-disabled" ), function( li ) {
+					return that.tabs.index( li );
+				})
+			) ).sort();
+		}
+
+		// check for length avoids error when initializing empty list
+		if ( this.options.active !== false && this.anchors.length ) {
+			this.active = this._findActive( options.active );
+		} else {
+			this.active = $();
+		}
+
+		this._refresh();
+
+		if ( this.active.length ) {
+			this.load( options.active );
+		}
+	},
+
+	_initialActive: function() {
+		var active = this.options.active,
+			collapsible = this.options.collapsible,
+			locationHash = location.hash.substring( 1 );
 
 		if ( active === null ) {
 			// check the fragment identifier in the URL
@@ -101,38 +130,16 @@ $.widget( "ui.tabs", {
 		if ( active !== false ) {
 			active = this.tabs.index( this.tabs.eq( active ) );
 			if ( active === -1 ) {
-				active = options.collapsible ? false : 0;
+				active = collapsible ? false : 0;
 			}
 		}
-		options.active = active;
 
 		// don't allow collapsible: false and active: false
-		if ( !options.collapsible && options.active === false && this.anchors.length ) {
-			options.active = 0;
+		if ( !collapsible && active === false && this.anchors.length ) {
+			active = 0;
 		}
 
-		// Take disabling tabs via class attribute from HTML
-		// into account and update option properly.
-		if ( $.isArray( options.disabled ) ) {
-			options.disabled = $.unique( options.disabled.concat(
-				$.map( this.tabs.filter( ".ui-state-disabled" ), function( li ) {
-					return that.tabs.index( li );
-				})
-			) ).sort();
-		}
-
-		// check for length avoids error when initializing empty list
-		if ( this.options.active !== false && this.anchors.length ) {
-			this.active = this._findActive( this.options.active );
-		} else {
-			this.active = $();
-		}
-
-		this._refresh();
-
-		if ( this.active.length ) {
-			this.load( options.active );
-		}
+		return active;
 	},
 
 	_getCreateEventData: function() {
@@ -143,6 +150,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabKeydown: function( event ) {
+		/*jshint maxcomplexity:15*/
 		var focusedTab = $( this.document[0].activeElement ).closest( "li" ),
 			selectedIndex = this.tabs.index( focusedTab ),
 			goingForward = true;
@@ -492,6 +500,8 @@ $.widget( "ui.tabs", {
 
 		if ( heightStyle === "fill" ) {
 			maxHeight = parent.height();
+			maxHeight -= this.element.outerHeight() - this.element.height();
+
 			this.element.siblings( ":visible" ).each(function() {
 				var elem = $( this ),
 					position = elem.css( "position" );
@@ -679,8 +689,6 @@ $.widget( "ui.tabs", {
 			.removeClass( "ui-tabs-anchor" )
 			.removeAttr( "role" )
 			.removeAttr( "tabIndex" )
-			.removeData( "href.tabs" )
-			.removeData( "load.tabs" )
 			.removeUniqueId();
 
 		this.tabs.add( this.panels ).each(function() {
@@ -705,11 +713,15 @@ $.widget( "ui.tabs", {
 			var li = $( this ),
 				prev = li.data( "ui-tabs-aria-controls" );
 			if ( prev ) {
-				li.attr( "aria-controls", prev );
+				li
+					.attr( "aria-controls", prev )
+					.removeData( "ui-tabs-aria-controls" );
 			} else {
 				li.removeAttr( "aria-controls" );
 			}
 		});
+
+		this.panels.show();
 
 		if ( this.options.heightStyle !== "content" ) {
 			this.panels.css( "height", "" );

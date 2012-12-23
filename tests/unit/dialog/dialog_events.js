@@ -11,7 +11,7 @@ test("open", function() {
 	var el = $("<div></div>");
 	el.dialog({
 		open: function(ev, ui) {
-			ok(el.data("dialog")._isOpen, "interal _isOpen flag is set");
+			ok(el.data("ui-dialog")._isOpen, "interal _isOpen flag is set");
 			ok(true, 'autoOpen: true fires open callback');
 			equal(this, el[0], "context of callback");
 			equal(ev.type, 'dialogopen', 'event type in callback');
@@ -30,13 +30,58 @@ test("open", function() {
 			deepEqual(ui, {}, 'ui hash in callback');
 		}
 	}).bind('dialogopen', function(ev, ui) {
-		ok(el.data("dialog")._isOpen, "interal _isOpen flag is set");
+		ok(el.data("ui-dialog")._isOpen, "interal _isOpen flag is set");
 		ok(true, 'dialog("open") fires open event');
 		equal(this, el[0], 'context of event');
 		deepEqual(ui, {}, 'ui hash in event');
 	});
 	el.dialog("open");
 	el.remove();
+});
+
+
+test( "focus", function() {
+	expect( 5 );
+	var el, other;
+	el = $("#dialog1").dialog({
+		autoOpen: false
+	});
+	other = $("#dialog2").dialog({
+		autoOpen: false
+	});
+
+	el.one( "dialogopen", function() {
+		ok( true, "open, just once" );
+	});
+	el.one( "dialogfocus", function() {
+		ok( true, "focus on open" );
+	});
+	other.dialog( "open" );
+
+	el.one( "dialogfocus", function() {
+		ok( true, "when opening and already open and wasn't on top" );
+	});
+	other.dialog( "open" );
+	el.dialog( "open" );
+
+	el.one( "dialogfocus", function() {
+		ok( true, "when calling moveToTop and wasn't on top" );
+	});
+	other.dialog( "moveToTop" );
+	el.dialog( "moveToTop" );
+
+	el.bind( "dialogfocus", function() {
+		ok( true, "when mousedown anywhere on the dialog and it wasn't on top" );
+	});
+	other.dialog( "moveToTop" );
+	el.trigger( "mousedown" );
+
+	// triggers just once when already on top
+	el.dialog( "open" );
+	el.dialog( "moveToTop" );
+	el.trigger( "mousedown" );
+
+	el.add( other ).remove();
 });
 
 test("dragStart", function() {
@@ -277,6 +322,36 @@ test("beforeClose", function() {
 	});
 	el.dialog('close');
 	ok( el.dialog("widget").is(":visible"), 'dialogbeforeclose event should prevent dialog from closing');
+	el.remove();
+});
+
+// #8789 and #8838
+asyncTest("ensure dialog's container doesn't scroll on resize and focus", function() {
+	expect(2);
+
+	var el = $('#dialog1').dialog(),
+		initialScroll = $(window).scrollTop();
+	el.dialog('option', 'height', 600);
+	equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after height change");
+	setTimeout( function(){
+		$(".ui-dialog-titlebar-close").simulate('mousedown');
+		equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after focus moved to dialog");
+		el.dialog('destroy');
+		start();
+	}, 500);
+});
+
+test("#5184: isOpen in dialogclose event is true", function() {
+	expect( 3 );
+
+	var el = $( "<div></div>" ).dialog({
+			close: function() {
+				ok( !el.dialog("isOpen"), "dialog is not open during close" );
+			}
+		});
+	ok( el.dialog("isOpen"), "dialog is open after init" );
+	el.dialog( "close" );
+	ok( !el.dialog("isOpen"), "dialog is not open after close" );
 	el.remove();
 });
 

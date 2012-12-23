@@ -94,4 +94,44 @@ test( "form containing an input with name title", function() {
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip for form" );
 });
 
+test( "tooltip on .ui-state-disabled element", function() {
+	expect( 2 );
+
+	var container = $( "#contains-tooltipped" ).tooltip(),
+		element = $( "#contained-tooltipped" ).addClass( "ui-state-disabled" );
+
+	element.trigger( "mouseover" );
+	equal( $( ".ui-tooltip" ).length, 1 );
+
+	container.empty();
+	equal( $( ".ui-tooltip" ).length, 0 );
+});
+
+// http://bugs.jqueryui.com/ticket/8740
+asyncTest( "programmatic focus with async content", function() {
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function( response ) {
+			setTimeout(function() {
+				response( "test" );
+			});
+		}
+	});
+
+	element.bind( "tooltipopen", function( event ) {
+		deepEqual( event.originalEvent.type, "focusin" );
+
+		element.bind( "tooltipclose", function( event ) {
+			deepEqual( event.originalEvent.type, "focusout" );
+			start();
+		});
+
+		setTimeout(function() {
+			element.blur();
+		});
+	});
+
+	element.focus();
+});
+
 }( jQuery ) );

@@ -18,7 +18,10 @@ test("callbacks occurrence count", function() {
 			stop: function() { stop++; }
 		});
 
-	TestHelpers.draggable.drag(el, 10, 10);
+	el.simulate( "drag", {
+		dx: 10,
+		dy: 10
+	});
 
 	equal(start, 1, "start callback should happen exactly once");
 	equal(dragc, 3, "drag callback should happen exactly once per mousemove");
@@ -39,7 +42,10 @@ test("stopping the start callback", function() {
 			stop: function() { stop++; }
 		});
 
-	TestHelpers.draggable.drag(el, 10, 10);
+	el.simulate( "drag", {
+		dx: 10,
+		dy: 10
+	});
 
 	equal(start, 1, "start callback should happen exactly once");
 	equal(dragc, 0, "drag callback should not happen at all");
@@ -60,7 +66,10 @@ test("stopping the drag callback", function() {
 			stop: function() { stop++; }
 		});
 
-	TestHelpers.draggable.drag(el, 10, 10);
+	el.simulate( "drag", {
+		dx: 10,
+		dy: 10
+	});
 
 	equal(start, 1, "start callback should happen exactly once");
 	equal(dragc, 1, "drag callback should happen exactly once");
@@ -77,9 +86,12 @@ test("stopping the stop callback", function() {
 		stop: function() { return false; }
 	});
 
-	TestHelpers.draggable.drag(el, 10, 10);
+	el.simulate( "drag", {
+		dx: 10,
+		dy: 10
+	});
 
-	ok($("#draggable2").data('draggable').helper, "the clone should not be deleted if the stop callback is stopped");
+	ok($("#draggable2").data('ui-draggable').helper, "the clone should not be deleted if the stop callback is stopped");
 
 
 });

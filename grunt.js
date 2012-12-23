@@ -281,14 +281,11 @@ grunt.initConfig({
 		files: grunt.file.expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|all-active|index|test|dialog|slider|datepicker|tabs|tooltip)\.html$/ ).test( file );
+			return !( /(all|index|test|dialog|dialog_deprecated|tabs|tooltip)\.html$/ ).test( file );
 		})
 	},
 	lint: {
-		ui: grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
-			// TODO remove items from this list once rewritten
-			return !( /(mouse|datepicker)\.js$/ ).test( file );
-		}),
+		ui: "ui/*.js",
 		grunt: [ "grunt.js", "build/**/*.js" ],
 		tests: "tests/unit/**/*.js"
 	},
@@ -302,8 +299,8 @@ grunt.initConfig({
 			}),
 			// TODO consider reenabling some of these rules
 			rules: {
+				"adjoining-classes": false,
 				"import": false,
-				"important": false,
 				"outline-none": false,
 				// especially this one
 				"overqualified-elements": false,

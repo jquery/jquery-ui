@@ -17,24 +17,24 @@ $.effects = {
 };
 
 /*!
- * jQuery Color Animations v2.0.0
- * http://jquery.com/
+ * jQuery Color Animations v2.1.1
+ * https://github.com/jquery/jquery-color
  *
  * Copyright 2012 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * Date: Mon Aug 13 13:41:02 2012 -0500
+ * Date: Sun Oct 28 15:08:06 2012 -0400
  */
 (function( jQuery, undefined ) {
 
-	var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightColor borderTopColor color columnRuleColor outlineColor textDecorationColor textEmphasisColor".split(" "),
+	var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightColor borderTopColor color columnRuleColor outlineColor textDecorationColor textEmphasisColor",
 
 	// plusequals test for += 100 -= 100
 	rplusequals = /^([\-+])=\s*(\d+\.?\d*)/,
 	// a set of RE's that can match strings and generate color tuples.
 	stringParsers = [{
-			re: /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
+			re: /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,
 			parse: function( execResult ) {
 				return [
 					execResult[ 1 ],
@@ -44,7 +44,7 @@ $.effects = {
 				];
 			}
 		}, {
-			re: /rgba?\(\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
+			re: /rgba?\(\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,
 			parse: function( execResult ) {
 				return [
 					execResult[ 1 ] * 2.55,
@@ -74,7 +74,7 @@ $.effects = {
 				];
 			}
 		}, {
-			re: /hsla?\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
+			re: /hsla?\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,
 			space: "hsla",
 			parse: function( execResult ) {
 				return [
@@ -291,7 +291,7 @@ color.fn = jQuery.extend( color.prototype, {
 					});
 
 					// everything defined but alpha?
-					if ( inst[ cache ] && $.inArray( null, inst[ cache ].slice( 0, 3 ) ) < 0 ) {
+					if ( inst[ cache ] && jQuery.inArray( null, inst[ cache ].slice( 0, 3 ) ) < 0 ) {
 						// use the default of 1
 						inst[ cache ][ 3 ] = 1;
 						if ( space.from ) {
@@ -479,8 +479,10 @@ spaces.hsla.to = function ( rgba ) {
 		h = ( 60 * ( r - g ) / diff ) + 240;
 	}
 
-	if ( l === 0 || l === 1 ) {
-		s = l;
+	// chroma (diff) == 0 means greyscale which, by definition, saturation = 0%
+	// otherwise, saturation is based on the ratio of chroma (diff) to lightness (add)
+	if ( diff === 0 ) {
+		s = 0;
 	} else if ( l <= 0.5 ) {
 		s = diff / add;
 	} else {
@@ -584,51 +586,58 @@ each( spaces, function( spaceName, space ) {
 	});
 });
 
-// add .fx.step functions
-each( stepHooks, function( i, hook ) {
-	jQuery.cssHooks[ hook ] = {
-		set: function( elem, value ) {
-			var parsed, curElem,
-				backgroundColor = "";
+// add cssHook and .fx.step function for each named hook.
+// accept a space separated string of properties
+color.hook = function( hook ) {
+	var hooks = hook.split( " " );
+	each( hooks, function( i, hook ) {
+		jQuery.cssHooks[ hook ] = {
+			set: function( elem, value ) {
+				var parsed, curElem,
+					backgroundColor = "";
 
-			if ( jQuery.type( value ) !== "string" || ( parsed = stringParse( value ) ) ) {
-				value = color( parsed || value );
-				if ( !support.rgba && value._rgba[ 3 ] !== 1 ) {
-					curElem = hook === "backgroundColor" ? elem.parentNode : elem;
-					while (
-						(backgroundColor === "" || backgroundColor === "transparent") &&
-						curElem && curElem.style
-					) {
-						try {
-							backgroundColor = jQuery.css( curElem, "backgroundColor" );
-							curElem = curElem.parentNode;
-						} catch ( e ) {
+				if ( jQuery.type( value ) !== "string" || ( parsed = stringParse( value ) ) ) {
+					value = color( parsed || value );
+					if ( !support.rgba && value._rgba[ 3 ] !== 1 ) {
+						curElem = hook === "backgroundColor" ? elem.parentNode : elem;
+						while (
+							(backgroundColor === "" || backgroundColor === "transparent") &&
+							curElem && curElem.style
+						) {
+							try {
+								backgroundColor = jQuery.css( curElem, "backgroundColor" );
+								curElem = curElem.parentNode;
+							} catch ( e ) {
+							}
 						}
+
+						value = value.blend( backgroundColor && backgroundColor !== "transparent" ?
+							backgroundColor :
+							"_default" );
 					}
 
-					value = value.blend( backgroundColor && backgroundColor !== "transparent" ?
-						backgroundColor :
-						"_default" );
+					value = value.toRgbaString();
 				}
+				try {
+					elem.style[ hook ] = value;
+				} catch( e ) {
+					// wrapped to prevent IE from throwing errors on "invalid" values like 'auto' or 'inherit'
+				}
+			}
+		};
+		jQuery.fx.step[ hook ] = function( fx ) {
+			if ( !fx.colorInit ) {
+				fx.start = color( fx.elem, hook );
+				fx.end = color( fx.end );
+				fx.colorInit = true;
+			}
+			jQuery.cssHooks[ hook ].set( fx.elem, fx.start.transition( fx.end, fx.pos ) );
+		};
+	});
 
-				value = value.toRgbaString();
-			}
-			try {
-				elem.style[ hook ] = value;
-			} catch( error ) {
-				// wrapped to prevent IE from throwing errors on "invalid" values like 'auto' or 'inherit'
-			}
-		}
-	};
-	jQuery.fx.step[ hook ] = function( fx ) {
-		if ( !fx.colorInit ) {
-			fx.start = color( fx.elem, hook );
-			fx.end = color( fx.end );
-			fx.colorInit = true;
-		}
-		jQuery.cssHooks[ hook ].set( fx.elem, fx.start.transition( fx.end, fx.pos ) );
-	};
-});
+};
+
+color.hook( stepHooks );
 
 jQuery.cssHooks.borderColor = {
 	expand: function( value ) {
@@ -672,7 +681,6 @@ colors = jQuery.Color.names = {
 })( jQuery );
 
 
-
 /******************************************************************************/
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
@@ -700,32 +708,31 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 	};
 });
 
-function getElementStyles() {
-	var style = this.ownerDocument.defaultView ?
-			this.ownerDocument.defaultView.getComputedStyle( this, null ) :
-			this.currentStyle,
-		newStyle = {},
-		key,
-		len;
+function getElementStyles( elem ) {
+	var key, len,
+		style = elem.ownerDocument.defaultView ?
+			elem.ownerDocument.defaultView.getComputedStyle( elem, null ) :
+			elem.currentStyle,
+		styles = {};
 
-	// webkit enumerates style porperties
 	if ( style && style.length && style[ 0 ] && style[ style[ 0 ] ] ) {
 		len = style.length;
 		while ( len-- ) {
 			key = style[ len ];
 			if ( typeof style[ key ] === "string" ) {
-				newStyle[ $.camelCase( key ) ] = style[ key ];
+				styles[ $.camelCase( key ) ] = style[ key ];
 			}
 		}
+	// support: Opera, IE <9
 	} else {
 		for ( key in style ) {
 			if ( typeof style[ key ] === "string" ) {
-				newStyle[ key ] = style[ key ];
+				styles[ key ] = style[ key ];
 			}
 		}
 	}
 
-	return newStyle;
+	return styles;
 }
 
 
@@ -754,14 +761,14 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		var animated = $( this ),
 			baseClass = animated.attr( "class" ) || "",
 			applyClassChange,
-			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
+			allAnimations = o.children ? animated.find( "*" ).addBack() : animated;
 
 		// map the animated objects to store the original styles.
 		allAnimations = allAnimations.map(function() {
 			var el = $( this );
 			return {
 				el: el,
-				start: getElementStyles.call( this )
+				start: getElementStyles( this )
 			};
 		});
 
@@ -777,7 +784,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 		// map all animated objects again - calculate new styles and diff
 		allAnimations = allAnimations.map(function() {
-			this.end = getElementStyles.call( this.el[ 0 ] );
+			this.end = getElementStyles( this.el[ 0 ] );
 			this.diff = styleDifference( this.start, this.end );
 			return this;
 		});
@@ -789,7 +796,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		allAnimations = allAnimations.map(function() {
 			var styleInfo = this,
 				dfd = $.Deferred(),
-				opts = jQuery.extend({}, o, {
+				opts = $.extend({}, o, {
 					queue: false,
 					complete: function() {
 						dfd.resolve( styleInfo );

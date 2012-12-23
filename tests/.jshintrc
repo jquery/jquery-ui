@@ -14,6 +14,7 @@
 	"unused": true,
 	"predef": [
 		"asyncTest",
+		"closeEnough",
 		"deepEqual",
 		"domEqual",
 		"equal",
@@ -21,6 +22,7 @@
 		"Globalize",
 		"module",
 		"notEqual",
+		"notStrictEqual",
 		"ok",
 		"QUnit",
 		"start",

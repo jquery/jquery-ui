@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 /*global cat:true cd:true echo:true exec:true exit:true*/
 
+// Usage:
+// stable release: node release.js
+// pre-release: node release.js --pre-release {version}
+
 "use strict";
 
-var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
+var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime, preRelease,
 	fs = require( "fs" ),
 	path = require( "path" ),
 	// support: node <0.8
@@ -67,8 +71,12 @@ function cloneRepo() {
 	if ( exec( "npm install" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
 	}
-	if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
-		abort( "Error installing dependencies." );
+	// We need download.jqueryui.com in order to generate themes.
+	// We only generate themes for stable releases.
+	if ( !preRelease ) {
+		if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
+			abort( "Error installing dependencies." );
+		}
 	}
 	echo();
 }
@@ -104,32 +112,37 @@ function getVersions() {
 		abort( "The version must be a pre version." );
 	}
 
-	newVersion = currentVersion.substr( 0, currentVersion.length - 3 );
-	parts = newVersion.split( "." );
-	major = parseInt( parts[ 0 ], 10 );
-	minor = parseInt( parts[ 1 ], 10 );
-	patch = parseInt( parts[ 2 ], 10 );
+	if ( preRelease ) {
+		newVersion = preRelease;
+		// Note: prevVersion is not currently used for pre-releases. The TODO
+		// below about 1.10.0 applies here as well.
+		prevVersion = nextVersion = currentVersion;
+	} else {
+		newVersion = currentVersion.substr( 0, currentVersion.length - 3 );
+		parts = newVersion.split( "." );
+		major = parseInt( parts[ 0 ], 10 );
+		minor = parseInt( parts[ 1 ], 10 );
+		patch = parseInt( parts[ 2 ], 10 );
 
-	// TODO: handle 2.0.0
-	if ( minor === 0 ) {
-		abort( "This script is not smart enough to handle the 2.0.0 release." );
-	}
+		// TODO: handle 1.10.0
+		// Also see comment above about pre-releases
+		if ( minor === 0 ) {
+			abort( "This script is not smart enough to handle the 1.10.0 release." );
+		}
 
-	prevVersion = patch === 0 ?
-		[ major, minor - 1, 0 ].join( "." ) :
-		[ major, minor, patch - 1 ].join( "." );
-	// TODO: Remove version hack after 1.9.0 release
-	if ( prevVersion === "1.8.0" ) {
-		prevVersion = "1.8";
+		prevVersion = patch === 0 ?
+			[ major, minor - 1, 0 ].join( "." ) :
+			[ major, minor, patch - 1 ].join( "." );
+		nextVersion = [ major, minor, patch + 1 ].join( "." ) + "pre";
 	}
-	nextVersion = [ major, minor, patch + 1 ].join( "." ) + "pre";
 
 	echo( "We are going from " + prevVersion.cyan + " to " + newVersion.cyan + "." );
 	echo( "After the release, the version will be " + nextVersion.cyan + "." );
 }
 
 function buildRelease() {
-	var pkg;
+	var pkg,
+		releaseTask = preRelease ? "release" : "release_cdn";
 
 	echo( "Creating " + "release".cyan + " branch..." );
 	git( "checkout -b release", "Error creating release branch." );
@@ -151,7 +164,7 @@ function buildRelease() {
 	echo();
 
 	echo( "Building release..." );
-	if ( exec( "grunt release_cdn" ).code !== 0 ) {
+	if ( exec( "grunt " + releaseTask ).code !== 0 ) {
 		abort( "Error building release." );
 	}
 	echo();
@@ -173,6 +186,11 @@ function pushRelease() {
 }
 
 function updateBranchVersion() {
+	// Pre-releases don't change the master version
+	if ( preRelease ) {
+		return;
+	}
+
 	var pkg;
 
 	echo( "Checking out " + branch.cyan + " branch..." );
@@ -189,11 +207,20 @@ function updateBranchVersion() {
 }
 
 function pushBranch() {
+	// Pre-releases don't change the master version
+	if ( preRelease ) {
+		return;
+	}
+
 	echo( "Pushing " + branch.cyan + " to GitHub..." );
 	git( "push", "Error pushing to GitHub." );
 }
 
 function generateChangelog() {
+	if ( preRelease ) {
+		return;
+	}
+
 	var commits,
 		changelogPath = baseDir + "/changelog",
 		changelog = cat( "build/release/changelog-shell" ) + "\n",
@@ -232,6 +259,10 @@ function generateChangelog() {
 }
 
 function gatherContributors() {
+	if ( preRelease ) {
+		return;
+	}
+
 	var contributors,
 		contributorsPath = baseDir + "/contributors";
 
@@ -262,8 +293,11 @@ function gatherContributors() {
 
 function updateTrac() {
 	echo( newVersion.cyan + " was tagged at " + tagTime.cyan + "." );
-	echo( "Close the " + newVersion.cyan + " Milestone with the above date and time." );
-	echo( "Create the " + newVersion.cyan + " Version with the above date and time." );
+	if ( !preRelease ) {
+		echo( "Close the " + newVersion.cyan + " Milestone." );
+	}
+	echo( "Create the " + newVersion.cyan + " Version." );
+	echo( "When Trac asks for date and time, match the above. Should only change minutes and seconds." );
 	echo( "Create a Milestone for the next minor release." );
 }
 
@@ -328,6 +362,16 @@ function writePackage( pkg ) {
 }
 
 function bootstrap( fn ) {
+	console.log( "Determining release type..." );
+	preRelease = process.argv.indexOf( "--pre-release" );
+	if ( preRelease !== -1 ) {
+		preRelease = process.argv[ preRelease + 1 ];
+		console.log( "pre-release" );
+	} else {
+		preRelease = null;
+		console.log( "stable release" );
+	}
+
 	console.log( "Determining directories..." );
 	baseDir = process.cwd() + "/__release";
 	repoDir = baseDir + "/repo";
@@ -342,9 +386,7 @@ function bootstrap( fn ) {
 	fs.mkdirSync( baseDir );
 
 	console.log( "Installing dependencies..." );
-	require( "child_process" ).exec( "npm install shelljs colors", {
-		cwd: baseDir
-	}, function( error ) {
+	require( "child_process" ).exec( "npm install shelljs colors", function( error ) {
 		if ( error ) {
 			console.log( error );
 			return process.exit( 1 );

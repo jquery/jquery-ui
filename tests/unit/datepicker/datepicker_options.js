@@ -48,6 +48,24 @@ test('option', function() {
 		'Get default settings');
 });
 
+test( "disabled", function() {
+	expect(8);
+	var inp = TestHelpers.datepicker.init('#inp');
+	ok(!inp.datepicker('isDisabled'), 'Initially marked as enabled');
+	ok(!inp[0].disabled, 'Field initially enabled');
+	inp.datepicker('option', 'disabled', true);
+	ok(inp.datepicker('isDisabled'), 'Marked as disabled');
+	ok(inp[0].disabled, 'Field now disabled');
+	inp.datepicker('option', 'disabled', false);
+	ok(!inp.datepicker('isDisabled'), 'Marked as enabled');
+	ok(!inp[0].disabled, 'Field now enabled');
+	inp.datepicker('destroy');
+
+	inp = TestHelpers.datepicker.init('#inp', { disabled: true });
+	ok(inp.datepicker('isDisabled'), 'Initially marked as disabled');
+	ok(inp[0].disabled, 'Field initially disabled');
+});
+
 test('change', function() {
 	expect( 12 );
 	var inp = TestHelpers.datepicker.init('#inp'),
@@ -69,76 +87,114 @@ test('change', function() {
 	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 });
 
-test('invocation', function() {
+asyncTest('invocation', function() {
 	expect( 29 );
 	var button, image,
 		inp = TestHelpers.datepicker.init('#inp'),
 		dp = $('#ui-datepicker-div'),
 		body = $('body');
-	// On focus
-	button = inp.siblings('button');
-	ok(button.length === 0, 'Focus - button absent');
-	image = inp.siblings('img');
-	ok(image.length === 0, 'Focus - image absent');
-	inp.focus();
-	ok(dp.is(':visible'), 'Focus - rendered on focus');
-	inp.simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
-	ok(!dp.is(':visible'), 'Focus - hidden on exit');
-	inp.focus();
-	ok(dp.is(':visible'), 'Focus - rendered on focus');
-	body.simulate('mousedown', {});
-	ok(!dp.is(':visible'), 'Focus - hidden on external click');
-	inp.datepicker('hide').datepicker('destroy');
-	// On button
-	inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonText: 'Popup'});
-	ok(!dp.is(':visible'), 'Button - initially hidden');
-	button = inp.siblings('button');
-	image = inp.siblings('img');
-	ok(button.length === 1, 'Button - button present');
-	ok(image.length === 0, 'Button - image absent');
-	equal(button.text(), 'Popup', 'Button - button text');
-	inp.focus();
-	ok(!dp.is(':visible'), 'Button - not rendered on focus');
-	button.click();
-	ok(dp.is(':visible'), 'Button - rendered on button click');
-	button.click();
-	ok(!dp.is(':visible'), 'Button - hidden on second button click');
-	inp.datepicker('hide').datepicker('destroy');
-	// On image button
-	inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonImageOnly: true,
-		buttonImage: 'img/calendar.gif', buttonText: 'Cal'});
-	ok(!dp.is(':visible'), 'Image button - initially hidden');
-	button = inp.siblings('button');
-	ok(button.length === 0, 'Image button - button absent');
-	image = inp.siblings('img');
-	ok(image.length === 1, 'Image button - image present');
-	equal(image.attr('src'), 'img/calendar.gif', 'Image button - image source');
-	equal(image.attr('title'), 'Cal', 'Image button - image text');
-	inp.focus();
-	ok(!dp.is(':visible'), 'Image button - not rendered on focus');
-	image.click();
-	ok(dp.is(':visible'), 'Image button - rendered on image click');
-	image.click();
-	ok(!dp.is(':visible'), 'Image button - hidden on second image click');
-	inp.datepicker('hide').datepicker('destroy');
-	// On both
-	inp = TestHelpers.datepicker.init('#inp', {showOn: 'both', buttonImage: 'img/calendar.gif'});
-	ok(!dp.is(':visible'), 'Both - initially hidden');
-	button = inp.siblings('button');
-	ok(button.length === 1, 'Both - button present');
-	image = inp.siblings('img');
-	ok(image.length === 0, 'Both - image absent');
-	image = button.children('img');
-	ok(image.length === 1, 'Both - button image present');
-	inp.focus();
-	ok(dp.is(':visible'), 'Both - rendered on focus');
-	body.simulate('mousedown', {});
-	ok(!dp.is(':visible'), 'Both - hidden on external click');
-	button.click();
-	ok(dp.is(':visible'), 'Both - rendered on button click');
-	button.click();
-	ok(!dp.is(':visible'), 'Both - hidden on second button click');
-	inp.datepicker('hide').datepicker('destroy');
+
+	function step1() {
+		// On focus
+		button = inp.siblings('button');
+		ok(button.length === 0, 'Focus - button absent');
+		image = inp.siblings('img');
+		ok(image.length === 0, 'Focus - image absent');
+		inp[0].focus();
+		setTimeout(function() {
+			ok(dp.is(':visible'), 'Focus - rendered on focus');
+			inp.simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
+			ok(!dp.is(':visible'), 'Focus - hidden on exit');
+			inp[0].blur();
+			setTimeout(function() {
+				inp[0].focus();
+				setTimeout(function() {
+					ok(dp.is(':visible'), 'Focus - rendered on focus');
+					body.simulate('mousedown', {});
+					ok(!dp.is(':visible'), 'Focus - hidden on external click');
+					inp.datepicker('hide').datepicker('destroy');
+
+					step2();
+				});
+			});
+		});
+	}
+
+	function step2() {
+		// On button
+		inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonText: 'Popup'});
+		ok(!dp.is(':visible'), 'Button - initially hidden');
+		button = inp.siblings('button');
+		image = inp.siblings('img');
+		ok(button.length === 1, 'Button - button present');
+		ok(image.length === 0, 'Button - image absent');
+		equal(button.text(), 'Popup', 'Button - button text');
+		inp[0].focus();
+		setTimeout(function() {
+			ok(!dp.is(':visible'), 'Button - not rendered on focus');
+			button.click();
+			ok(dp.is(':visible'), 'Button - rendered on button click');
+			button.click();
+			ok(!dp.is(':visible'), 'Button - hidden on second button click');
+			inp.datepicker('hide').datepicker('destroy');
+
+			step3();
+		});
+	}
+
+	function step3() {
+		// On image button
+		inp = TestHelpers.datepicker.init('#inp', {showOn: 'button', buttonImageOnly: true,
+			buttonImage: 'img/calendar.gif', buttonText: 'Cal'});
+		ok(!dp.is(':visible'), 'Image button - initially hidden');
+		button = inp.siblings('button');
+		ok(button.length === 0, 'Image button - button absent');
+		image = inp.siblings('img');
+		ok(image.length === 1, 'Image button - image present');
+		equal(image.attr('src'), 'img/calendar.gif', 'Image button - image source');
+		equal(image.attr('title'), 'Cal', 'Image button - image text');
+		inp[0].focus();
+		setTimeout(function() {
+			ok(!dp.is(':visible'), 'Image button - not rendered on focus');
+			image.click();
+			ok(dp.is(':visible'), 'Image button - rendered on image click');
+			image.click();
+			ok(!dp.is(':visible'), 'Image button - hidden on second image click');
+			inp.datepicker('hide').datepicker('destroy');
+
+			step4();
+		});
+	}
+
+	function step4() {
+		// On both
+		inp = TestHelpers.datepicker.init('#inp', {showOn: 'both', buttonImage: 'img/calendar.gif'});
+		ok(!dp.is(':visible'), 'Both - initially hidden');
+		button = inp.siblings('button');
+		ok(button.length === 1, 'Both - button present');
+		image = inp.siblings('img');
+		ok(image.length === 0, 'Both - image absent');
+		image = button.children('img');
+		ok(image.length === 1, 'Both - button image present');
+		inp[0].blur();
+		setTimeout(function() {
+			inp[0].focus();
+			setTimeout(function() {
+				ok(dp.is(':visible'), 'Both - rendered on focus');
+				body.simulate('mousedown', {});
+				ok(!dp.is(':visible'), 'Both - hidden on external click');
+				button.click();
+				ok(dp.is(':visible'), 'Both - rendered on button click');
+				button.click();
+				ok(!dp.is(':visible'), 'Both - hidden on second button click');
+				inp.datepicker('hide').datepicker('destroy');
+
+				start();
+			});
+		});
+	}
+
+	step1();
 });
 
 test('otherMonths', function() {
@@ -146,7 +202,10 @@ test('otherMonths', function() {
 	var inp = TestHelpers.datepicker.init('#inp'),
 		pop = $('#ui-datepicker-div');
 	inp.val('06/01/2009').datepicker('show');
-	equal(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
+	equal(pop.find('tbody').text(),
+		// support: IE <9, jQuery <1.8
+		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
+		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		'Other months - none');
 	ok(pop.find('td:last *').length === 0, 'Other months - no content');
 	inp.datepicker('hide').datepicker('option', 'showOtherMonths', true).datepicker('show');
@@ -158,38 +217,42 @@ test('otherMonths', function() {
 		'Other months - select');
 	ok(pop.find('td:last a').length === 1, 'Other months - link content');
 	inp.datepicker('hide').datepicker('option', 'showOtherMonths', false).datepicker('show');
-	equal(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
+	equal(pop.find('tbody').text(),
+		// support: IE <9, jQuery <1.8
+		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
+		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		'Other months - none');
 	ok(pop.find('td:last *').length === 0, 'Other months - no content');
 });
 
 test('defaultDate', function() {
-	expect( 17 );
+	expect( 16 );
 	var inp = TestHelpers.datepicker.init('#inp'),
 		date = new Date();
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), date, 'Default date null');
+
 	// Numeric values
 	inp.datepicker('option', {defaultDate: -2}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 2);
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), date, 'Default date -2');
+
+	date = new Date();
 	inp.datepicker('option', {defaultDate: 3}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
-	date.setDate(date.getDate() + 5);
+	date.setDate(date.getDate() + 3);
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), date, 'Default date 3');
-	inp.datepicker('option', {defaultDate: 1 / 0}).
-		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
-	date.setDate(date.getDate() - 3);
-	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), date, 'Default date Infinity');
+
+	date = new Date();
 	inp.datepicker('option', {defaultDate: 1 / 'a'}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), date, 'Default date NaN');
+
 	// String offset values
 	inp.datepicker('option', {defaultDate: '-1d'}).
 		datepicker('hide').val('').datepicker('show').
@@ -321,9 +384,10 @@ test('miscellaneous', function() {
 });
 
 test('minMax', function() {
-	expect( 17 );
+	expect( 19 );
 	var date,
 		inp = TestHelpers.datepicker.init('#inp'),
+		dp = $('#ui-datepicker-div'),
 		lastYear = new Date(2007, 6 - 1, 4),
 		nextYear = new Date(2009, 6 - 1, 4),
 		minDate = new Date(2008, 2 - 1, 29),
@@ -403,6 +467,11 @@ test('minMax', function() {
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), new Date(2008, 6 - 1, 4), 'Min/max - setDate > min, < max');
 	inp.datepicker('option', {maxDate: null}).val('01/04/2009').datepicker('option', {minDate: minDate, maxDate: maxDate});
 	TestHelpers.datepicker.equalsDate(inp.datepicker('getDate'), maxDate, 'Min/max - setDate > max');
+
+	inp.datepicker('option', {yearRange: '-0:+1'}).val('01/01/' + new Date().getFullYear());
+	ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/1/minYear");
+	inp.datepicker("setDate", "12/30/" + new Date().getFullYear());
+	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled at 12/30/maxYear");
 });
 
 test('setDate', function() {
@@ -536,6 +605,7 @@ test('autoSize', function() {
 	equal(inp.prop('size'), 15, 'Auto size - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
 	equal(inp.prop('size'), 29, 'Auto size - DD, MM dd, yy');
+
 	// French
 	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional.fr));
 	equal(inp.prop('size'), 29, 'Auto size - fr - default');
@@ -547,6 +617,7 @@ test('autoSize', function() {
 	equal(inp.prop('size'), 18, 'Auto size - fr - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
 	equal(inp.prop('size'), 28, 'Auto size - fr - DD, MM dd, yy');
+
 	// Hebrew
 	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional.he));
 	equal(inp.prop('size'), 28, 'Auto size - he - default');
@@ -810,6 +881,7 @@ test('parseDate', function() {
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('@', '981158400000'), gmtDate, 'Parse date @');
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('!', '631167552000000000'), gmtDate, 'Parse date !');
+
 	fr = $.datepicker.regional.fr;
 	settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
@@ -819,12 +891,11 @@ test('parseDate', function() {
 		new Date(2001, 4 - 1, 9), 'Parse date d MM DD yy with settings');
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('DD, MM d, yy', 'Lundi, Avril 9, 2001', settings),
 		new Date(2001, 4 - 1, 9), 'Parse date DD, MM d, yy with settings');
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
-		'jour 9 de Avril (\'Lundi\'), 2001', settings), new Date(2001, 4 - 1, 9),
-		'Parse date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("'jour' d 'de' MM (''DD''), yy", "jour 9 de Avril ('Lundi'), 2001", settings),
+		new Date(2001, 4 - 1, 9), "Parse date 'jour' d 'de' MM (''DD''), yy with settings");
 
 	zh = $.datepicker.regional['zh-CN'];
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('yy M d', '2011 十一 22', zh),
+	TestHelpers.datepicker.equalsDate($.datepicker.parseDate('yy M d', '2011 十一月 22', zh),
 		new Date(2011, 11 - 1, 22), 'Parse date yy M d with zh-CN');
 });
 
@@ -881,6 +952,26 @@ test('parseDateErrors', function() {
 		'Lun. 9 Apr 01 - D d M y', 'Unknown name at position 7');
 });
 
+test('Ticket #7244: date parser does not fail when too many numbers are passed into the date function', function() {
+	expect( 4 );
+	var date;
+	try{
+		date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
+		ok(false, "Did not properly detect an invalid date");
+	}catch(e){
+		ok("invalid date detected");
+	}
+
+	try {
+		date = $.datepicker.parseDate('dd/mm/yy', '18/04/1988 @ 2:43 pm');
+		equal(date.getDate(), 18);
+		equal(date.getMonth(), 3);
+		equal(date.getFullYear(), 1988);
+	} catch(e) {
+		ok(false, "Did not properly parse date with extra text separated by whitespace");
+	}
+});
+
 test('formatDate', function() {
 	expect( 16 );
 	TestHelpers.datepicker.init('#inp');
@@ -922,6 +1013,46 @@ test('formatDate', function() {
 	equal($.datepicker.formatDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
 		new Date(2001, 4 - 1, 9), settings), 'jour 9 de Avril (\'Lundi\'), 2001',
 		'Format date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+});
+
+test('Ticket 6827: formatDate day of year calculation is wrong during day lights savings time', function(){
+	expect( 1 );
+	var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT"));
+	equal(time, "089");
+});
+
+test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler', function(){
+	expect( 3 );
+	var inp = TestHelpers.datepicker.init('#inp',{
+			beforeShow: function(){
+				return false;
+			}
+		}),
+		dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'none',"beforeShow returns false");
+	inp.datepicker('destroy');
+
+	inp = TestHelpers.datepicker.init('#inp',{
+		beforeShow: function(){
+		}
+	});
+	dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'block',"beforeShow returns nothing");
+	inp.datepicker('hide');
+	inp.datepicker('destroy');
+
+	inp = TestHelpers.datepicker.init('#inp',{
+		beforeShow: function(){
+			return true;
+		}
+	});
+	dp = $('#ui-datepicker-div');
+	inp.datepicker('show');
+	equal(dp.css('display'), 'block',"beforeShow returns true");
+	inp.datepicker('hide');
+	inp.datepicker('destroy');
 });
 
 })(jQuery);

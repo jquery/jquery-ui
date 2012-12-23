@@ -5,6 +5,9 @@
 	<title>jQuery UI Dialog Test Suite</title>
 
 	<script src="../../jquery.js"></script>
+	<script>
+	$.uiBackCompat = false;
+	</script>
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
@@ -19,6 +22,9 @@
 			"ui/jquery.ui.mouse.js",
 			"ui/jquery.ui.draggable.js",
 			"ui/jquery.ui.resizable.js",
+			"ui/jquery.ui.button.js",
+			"ui/jquery.ui.effect.js",
+			"ui/jquery.ui.effect-clip.js",
 			"ui/jquery.ui.dialog.js"
 		]
 	});
@@ -30,7 +36,6 @@
 	<script src="dialog_methods.js"></script>
 	<script src="dialog_options.js"></script>
 	<script src="dialog_test_helpers.js"></script>
-	<script src="dialog_tickets.js"></script>
 
 	<script src="../swarminject.js"></script>
 </head>
@@ -44,6 +49,19 @@
 <div id="qunit-fixture">
 	<div id="dialog1"></div>
 	<div id="dialog2"></div>
+	<div id="form-dialog" title="Profile Information">
+		<fieldset>
+			<legend>Please share some personal information</legend>
+			<label for="favorite-animal">Your favorite animal</label><input id="favorite-animal">
+			<label for="favorite-color">Your favorite color</label><input id="favorite-color">
+		</fieldset>
+		<div role="group" aria-describedby="section2">
+			<p id="section2">Some more (optional) information</p>
+			<label for="favorite-food">Favorite food</label><input id="favorite-food">
+		</div>
+	</div>
+	<div class="wrap" id="wrap1"></div>
+	<div class="wrap" id="wrap2"></div>
 </div>
 </body>
 </html>

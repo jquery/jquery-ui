@@ -139,7 +139,7 @@ $.widget( "ui.menu", {
 		// Destroy (sub)menus
 		this.element
 			.removeAttr( "aria-activedescendant" )
-			.find( ".ui-menu" ).andSelf()
+			.find( ".ui-menu" ).addBack()
 				.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all ui-menu-icons" )
 				.removeAttr( "role" )
 				.removeAttr( "tabIndex" )
@@ -173,6 +173,7 @@ $.widget( "ui.menu", {
 	},
 
 	_keydown: function( event ) {
+		/*jshint maxcomplexity:20*/
 		var match, prev, character, skip, regex,
 			preventDefault = true;
 

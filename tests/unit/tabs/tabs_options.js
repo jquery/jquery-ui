@@ -235,10 +235,18 @@ test( "{ heightStyle: 'content' }", function() {
 });
 
 test( "{ heightStyle: 'fill' }", function() {
-	expect( 2 );
+	expect( 4 );
 	$( "#tabs8Wrapper" ).height( 500 );
 	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
 	equalHeight( element, 485 );
+	element.tabs( "destroy" );
+
+	element = $( "#tabs8" ).css({
+		"border": "1px solid black",
+		"padding": "1px 0"
+	});
+	element.tabs({ heightStyle: "fill" });
+	equalHeight( element, 481 );
 });
 
 test( "{ heightStyle: 'fill' } with sibling", function() {
@@ -290,7 +298,7 @@ test( "hide and show: false", function() {
 			show: false,
 			hide: false
 		}),
-		widget = element.data( "tabs" ),
+		widget = element.data( "ui-tabs" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function() {
 		ok( false, "_show() called" );
@@ -311,7 +319,7 @@ asyncTest( "hide and show - animation", function() {
 			show: "drop",
 			hide: 2000
 		}),
-		widget = element.data( "tabs" ),
+		widget = element.data( "ui-tabs" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function( element, options, callback ) {
 		strictEqual( element[ 0 ], panels[ 1 ], "correct element in _show()" );

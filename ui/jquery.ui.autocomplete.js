@@ -23,7 +23,7 @@ $.widget( "ui.autocomplete", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
-		appendTo: "body",
+		appendTo: null,
 		autoFocus: false,
 		delay: 300,
 		minLength: 1,
@@ -66,6 +66,7 @@ $.widget( "ui.autocomplete", {
 
 		this._on( this.element, {
 			keydown: function( event ) {
+				/*jshint maxcomplexity:15*/
 				if ( this.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
 					suppressInput = true;
@@ -181,7 +182,7 @@ $.widget( "ui.autocomplete", {
 		this._initSource();
 		this.menu = $( "<ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( this.document.find( this.options.appendTo || "body" )[ 0 ] )
+			.appendTo( this._appendTo() )
 			.menu({
 				// custom key handling for now
 				input: $(),
@@ -190,7 +191,7 @@ $.widget( "ui.autocomplete", {
 			})
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
-			.data( "menu" );
+			.data( "ui-menu" );
 
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
@@ -313,11 +314,31 @@ $.widget( "ui.autocomplete", {
 			this._initSource();
 		}
 		if ( key === "appendTo" ) {
-			this.menu.element.appendTo( this.document.find( value || "body" )[0] );
+			this.menu.element.appendTo( this._appendTo() );
 		}
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
 		}
+	},
+
+	_appendTo: function() {
+		var element = this.options.appendTo;
+
+		if ( element ) {
+			element = element.jquery || element.nodeType ?
+				$( element ) :
+				this.document.find( element ).eq( 0 );
+		}
+
+		if ( !element ) {
+			element = this.element.closest( ".ui-front" );
+		}
+
+		if ( !element.length ) {
+			element = this.document[0].body;
+		}
+
+		return element;
 	},
 
 	_isMultiLine: function() {
@@ -589,6 +610,5 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		this.liveRegion.text( message );
 	}
 });
-
 
 }( jQuery ));

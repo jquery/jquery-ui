@@ -54,8 +54,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-slider-" + this.orientation +
 				" ui-widget" +
 				" ui-widget-content" +
-				" ui-corner-all" +
-				( o.disabled ? " ui-slider-disabled ui-disabled" : "" ) );
+				" ui-corner-all");
 
 		this.range = $([]);
 
@@ -63,9 +62,10 @@ $.widget( "ui.slider", $.ui.mouse, {
 			if ( o.range === true ) {
 				if ( !o.values ) {
 					o.values = [ this._valueMin(), this._valueMin() ];
-				}
-				if ( o.values.length && o.values.length !== 2 ) {
+				} else if ( o.values.length && o.values.length !== 2 ) {
 					o.values = [ o.values[0], o.values[0] ];
+				} else if ( $.isArray( o.values ) ) {
+					o.values = o.values.slice(0);
 				}
 			}
 
@@ -116,8 +116,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 			$( this ).data( "ui-slider-handle-index", i );
 		});
 
+		this._setOption( "disabled", o.disabled );
+
 		this._on( this.handles, {
 			keydown: function( event ) {
+				/*jshint maxcomplexity:25*/
 				var allowed, curVal, newVal, step,
 					index = $( event.target ).data( "ui-slider-handle-index" );
 
@@ -205,7 +208,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 			.removeClass( "ui-slider" +
 				" ui-slider-horizontal" +
 				" ui-slider-vertical" +
-				" ui-slider-disabled" +
 				" ui-widget" +
 				" ui-widget-content" +
 				" ui-corner-all" );
@@ -233,20 +235,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 		distance = this._valueMax() - this._valueMin() + 1;
 		this.handles.each(function( i ) {
 			var thisDistance = Math.abs( normValue - that.values(i) );
-			if ( distance > thisDistance ) {
+			if (( distance > thisDistance ) ||
+				( distance === thisDistance &&
+					(i === that._lastChangedValue || that.values(i) === o.min ))) {
 				distance = thisDistance;
 				closestHandle = $( this );
 				index = i;
 			}
 		});
-
-		// workaround for bug #3736 (if both handles of a range are at 0,
-		// the first is always used as the one with least distance,
-		// and moving it is obviously prevented by preventing negative ranges)
-		if( o.range === true && this.values(1) === o.min ) {
-			index += 1;
-			closestHandle = $( this.handles[index] );
-		}
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
@@ -261,7 +257,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			.focus();
 
 		offset = closestHandle.offset();
-		mouseOverHandle = !$( event.target ).parents().andSelf().is( ".ui-slider-handle" );
+		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
 			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
 			top: event.pageY - offset.top -
@@ -419,6 +415,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 				uiHash.values = this.values();
 			}
 
+			//store the last changed value index for reference when handles overlap
+			this._lastChangedValue = index;
+
 			this._trigger( "change", event, uiHash );
 		}
 	},
@@ -483,10 +482,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 					this.handles.filter( ".ui-state-focus" ).blur();
 					this.handles.removeClass( "ui-state-hover" );
 					this.handles.prop( "disabled", true );
-					this.element.addClass( "ui-disabled" );
 				} else {
 					this.handles.prop( "disabled", false );
-					this.element.removeClass( "ui-disabled" );
 				}
 				break;
 			case "orientation":

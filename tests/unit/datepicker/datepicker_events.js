@@ -126,4 +126,28 @@ test('events', function() {
 	equal(selectedThis, inp2[0], 'Callback close this');
 });
 
+test('beforeShowDay-getDate', function() {
+	expect( 3 );
+	var inp = TestHelpers.datepicker.init('#inp', {beforeShowDay: function() { inp.datepicker('getDate'); return [true, '']; }}),
+		dp = $('#ui-datepicker-div');
+	inp.val('01/01/2010').datepicker('show');
+	// contains non-breaking space
+	equal($('div.ui-datepicker-title').text(),
+		// support: IE <9, jQuery <1.8
+		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
+		$( "<span>January&#xa0;2010</span>" ).text(), 'Initial month');
+	$('a.ui-datepicker-next', dp).click();
+	$('a.ui-datepicker-next', dp).click();
+	// contains non-breaking space
+	equal($('div.ui-datepicker-title').text(),
+		$( "<span>March&#xa0;2010</span>" ).text(), 'After next clicks');
+	inp.datepicker('hide').datepicker('show');
+	$('a.ui-datepicker-prev', dp).click();
+	$('a.ui-datepicker-prev', dp).click();
+	// contains non-breaking space
+	equal($('div.ui-datepicker-title').text(),
+		$( "<span>November&#xa0;2009</span>" ).text(), 'After prev clicks');
+	inp.datepicker('hide');
+});
+
 })(jQuery);

@@ -3,14 +3,13 @@ TestHelpers.dialog = {
 		var d = el.dialog('widget');
 		//this mouseover is to work around a limitation in resizable
 		//TODO: fix resizable so handle doesn't require mouseover in order to be used
-		$(handle, d).simulate("mouseover");
-		$(handle, d).simulate("drag", {
-			dx: dx || 0,
-			dy: dy || 0
+		$( handle, d ).simulate("mouseover").simulate( "drag", {
+			dx: dx,
+			dy: dy
 		});
 	},
 	testDrag: function(el, dx, dy, expectedDX, expectedDY, msg) {
-		var actual, expected, offsetAfter,
+		var actualDX, actualDY, offsetAfter,
 			d = el.dialog('widget'),
 			handle = $(".ui-dialog-titlebar", d),
 			offsetBefore = d.offset();
@@ -21,9 +20,9 @@ TestHelpers.dialog = {
 
 		msg = msg ? msg + "." : "";
 
-		actual = { left: Math.round(offsetAfter.left), top: Math.round(offsetAfter.top) },
-		expected = { left: Math.round(offsetBefore.left + expectedDX), top: Math.round(offsetBefore.top + expectedDY) };
-		deepEqual(actual, expected, 'dragged[' + expectedDX + ', ' + expectedDY + '] ' + msg);
+		actualDX = offsetAfter.left - offsetBefore.left;
+		actualDY = offsetAfter.top - offsetBefore.top;
+		ok( expectedDX - actualDX <= 1 && expectedDY - actualDY <= 1, 'dragged[' + expectedDX + ', ' + expectedDY + '] ' + msg);
 	},
 	shouldResize: function(el, dw, dh, msg) {
 		var heightAfter, widthAfter, actual, expected,
