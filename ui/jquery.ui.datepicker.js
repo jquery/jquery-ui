@@ -287,7 +287,7 @@ $.extend(Datepicker.prototype, {
 	 * @param  settings  object - update the dialog date picker instance's settings (anonymous object)
 	 * @param  pos int[2] - coordinates for the dialog's position within the screen or
 	 *					event - with x/y coordinates or
-	 *                 leave empty for default (screen centre)
+	 *					leave empty for default (screen centre)
 	 * @return the manager object
 	 */
 	_dialogDatepicker: function(input, date, onSelect, settings, pos) {
@@ -1915,17 +1915,17 @@ $.extend(Datepicker.prototype, {
 			minYear = null,
 			maxYear = null,
 			years = this._get(inst, 'yearRange');
-        if (years){
-            yearSplit = years.split(':');
-            currentYear = new Date().getFullYear();
-            minYear = parseInt(yearSplit[0], 10) + currentYear;
-            maxYear = parseInt(yearSplit[1], 10) + currentYear;
-        }
+			if (years){
+				yearSplit = years.split(':');
+				currentYear = new Date().getFullYear();
+				minYear = parseInt(yearSplit[0], 10) + currentYear;
+				maxYear = parseInt(yearSplit[1], 10) + currentYear;
+			}
 
 		return ((!minDate || date.getTime() >= minDate.getTime()) &&
 			(!maxDate || date.getTime() <= maxDate.getTime()) &&
-            (!minYear || date.getFullYear() >= minYear) &&
-            (!maxYear || date.getFullYear() <= maxYear));
+			(!minYear || date.getFullYear() >= minYear) &&
+			(!maxYear || date.getFullYear() <= maxYear));
 	},
 
 	/* Provide the configuration settings for formatting/parsing. */
