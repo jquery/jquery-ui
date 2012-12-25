@@ -8,6 +8,7 @@
 	"latedef": true,
 	"noarg": true,
 	"onevar": true,
+	"quotmark": "double",
 	"trailing": true,
 	"undef": true,
 	"unused": true,
