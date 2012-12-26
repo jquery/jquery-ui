@@ -28,45 +28,39 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.size = function( o, done ) {
+$.effects.define( "size", function( o, done ) {
 
 	// Create element
-	var original, baseline, factor,
+	var baseline, factor,
 		el = $( this ),
-		props0 = [ "position", "top", "bottom", "left", "right", "width", "height", "overflow", "opacity" ],
-
-		// Always restore
-		props1 = [ "position", "top", "bottom", "left", "right", "overflow", "opacity" ],
 
 		// Copy for children
-		props2 = [ "width", "height", "overflow" ],
 		cProps = [ "fontSize" ],
 		vProps = [ "borderTopWidth", "borderBottomWidth", "paddingTop", "paddingBottom" ],
 		hProps = [ "borderLeftWidth", "borderRightWidth", "paddingLeft", "paddingRight" ],
 
 		// Set options
-		mode = $.effects.setMode( el, o.mode || "effect" ),
+		mode = o.mode,
 		restore = o.restore || mode !== "effect",
 		scale = o.scale || "both",
-		origin = o.origin || [ "middle", "center" ],
+		origin = o.origin || [ "top", "left" ],
 		position = el.css( "position" ),
-		props = restore ? props0 : props1,
+		pos = el.position(),
 		zero = {
 			height: 0,
 			width: 0,
 			outerHeight: 0,
 			outerWidth: 0
-		};
+		},
 
-	if ( mode === "show" ) {
-		el.show();
-	}
-	original = {
-		height: el.height(),
-		width: el.width(),
-		outerHeight: el.outerHeight(),
-		outerWidth: el.outerWidth()
-	};
+		placeholder = $.effects.createPlaceholder( el ),
+
+		original = {
+			height: el.height(),
+			width: el.width(),
+			outerHeight: el.outerHeight(),
+			outerWidth: el.outerWidth()
+		};
 
 	if ( o.mode === "toggle" && mode === "show" ) {
 		el.from = o.to || zero;
@@ -93,14 +87,12 @@ return $.effects.effect.size = function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			props = props.concat( vProps );
 			el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
 		}
 
 		// Horizontal props scaling
 		if ( factor.from.x !== factor.to.x ) {
-			props = props.concat( hProps );
 			el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
 			el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
 		}
@@ -111,35 +103,29 @@ return $.effects.effect.size = function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			props = props.concat( cProps ).concat( props2 );
 			el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
 		}
 	}
 
-	$.effects.save( el, props );
-	el.show();
-	$.effects.createWrapper( el );
-	el.css( "overflow", "hidden" ).css( el.from );
-
-	// Adjust
-	if (origin) { // Calculate baseline shifts
+	// Adjust the position properties based on the provided origin points
+	if ( origin ) {
 		baseline = $.effects.getBaseline( origin, original );
-		el.from.top = ( original.outerHeight - el.outerHeight() ) * baseline.y;
-		el.from.left = ( original.outerWidth - el.outerWidth() ) * baseline.x;
-		el.to.top = ( original.outerHeight - el.to.outerHeight ) * baseline.y;
-		el.to.left = ( original.outerWidth - el.to.outerWidth ) * baseline.x;
+		el.from.top = ( original.outerHeight - el.from.outerHeight ) * baseline.y + pos.top;
+		el.from.left = ( original.outerWidth - el.from.outerWidth ) * baseline.x + pos.left;
+		el.to.top = ( original.outerHeight - el.to.outerHeight ) * baseline.y + pos.top;
+		el.to.left = ( original.outerWidth - el.to.outerWidth ) * baseline.x + pos.left;
 	}
-	el.css( el.from ); // set top & left
+	el.css( el.from );
 
-	// Animate
-	if ( scale === "content" || scale === "both" ) { // Scale the children
+	// Animate the children if desired
+	if ( scale === "content" || scale === "both" ) {
 
-		// Add margins/font-size
-		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat(cProps);
+		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat( cProps );
 		hProps = hProps.concat([ "marginLeft", "marginRight" ]);
-		props2 = props0.concat(vProps).concat(hProps);
 
+		// only animate children with width attributes specified
+		// TODO: is this right? should we include anything with css width specified as well
 		el.find( "*[width]" ).each( function() {
 			var child = $( this ),
 				c_original = {
@@ -149,7 +135,7 @@ return $.effects.effect.size = function( o, done ) {
 					outerWidth: child.outerWidth()
 				};
 			if (restore) {
-				$.effects.save(child, props2);
+				$.effects.saveStyle( child );
 			}
 
 			child.from = {
@@ -183,7 +169,7 @@ return $.effects.effect.size = function( o, done ) {
 
 				// Restore children
 				if ( restore ) {
-					$.effects.restore( child, props2 );
+					$.effects.restoreStyle( child );
 				}
 			});
 		});
@@ -195,13 +181,15 @@ return $.effects.effect.size = function( o, done ) {
 		duration: o.duration,
 		easing: o.easing,
 		complete: function() {
+			$.effects.removePlaceholder( placeholder, el );
+
 			if ( el.to.opacity === 0 ) {
 				el.css( "opacity", el.from.opacity );
 			}
 			if ( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
+
 			if ( !restore ) {
 
 				// we need to calculate our new positioning based on the scaling
@@ -228,11 +216,10 @@ return $.effects.effect.size = function( o, done ) {
 				}
 			}
 
-			$.effects.removeWrapper( el );
 			done();
 		}
 	});
 
-};
+});
 
 }));

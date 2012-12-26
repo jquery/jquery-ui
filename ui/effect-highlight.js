@@ -28,22 +28,20 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.highlight = function( o, done ) {
+$.effects.define( "highlight", "show", function( o, done ) {
 	var elem = $( this ),
-		props = [ "backgroundImage", "backgroundColor", "opacity" ],
-		mode = $.effects.setMode( elem, o.mode || "show" ),
+		mode = o.mode,
 		animation = {
-			backgroundColor: elem.css( "backgroundColor" )
+			backgroundColor: elem.css("backgroundColor")
 		};
 
-	if (mode === "hide") {
+	if ( mode === "hide" ) {
 		animation.opacity = 0;
 	}
 
-	$.effects.save( elem, props );
+	$.effects.saveStyle( elem );
 
 	elem
-		.show()
 		.css({
 			backgroundImage: "none",
 			backgroundColor: o.color || "#ffff99"
@@ -53,13 +51,15 @@ return $.effects.effect.highlight = function( o, done ) {
 			duration: o.duration,
 			easing: o.easing,
 			complete: function() {
+				$.effects.restoreStyle( elem );
+
 				if ( mode === "hide" ) {
 					elem.hide();
 				}
-				$.effects.restore( elem, props );
+
 				done();
 			}
 		});
-};
+});
 
 }));

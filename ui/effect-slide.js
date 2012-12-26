@@ -28,52 +28,52 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.slide = function( o, done ) {
-
-	// Create element
+$.effects.define( "slide", "show", function( o, done ) {
 	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "width", "height" ],
-		mode = $.effects.setMode( el, o.mode || "show" ),
-		show = mode === "show",
+		map = {
+			up: [ "bottom", "top" ],
+			down: [ "top", "bottom" ],
+			left: [ "right", "left" ],
+			right: [ "left", "right" ]
+		},
+		mode = o.mode,
 		direction = o.direction || "left",
-		ref = (direction === "up" || direction === "down") ? "top" : "left",
-		positiveMotion = (direction === "up" || direction === "left"),
-		distance,
-		animation = {};
+		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
+		positiveMotion = ( direction === "up" || direction === "left" ),
+		distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ),
+		animation = {},
+		placeholder = $.effects.createPlaceholder( el ),
+		startClip = el.cssClip(),
+		startRef = el.position()[ ref ];
 
-	// Adjust
-	$.effects.save( el, props );
-	el.show();
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
+	// define hide animation
+	animation[ ref ] = ( positiveMotion ? -1 : 1 ) * distance + startRef;
+	animation.clip = el.cssClip();
+	animation.clip[ map[ direction ][ 1 ] ] = animation.clip[ map[ direction ][ 0 ] ];
 
-	$.effects.createWrapper( el ).css({
-		overflow: "hidden"
-	});
-
-	if ( show ) {
-		el.css( ref, positiveMotion ? (isNaN(distance) ? "-" + distance : -distance) : distance );
+	// reverse the animation if we're showing
+	if ( mode === "show" ) {
+		el.cssClip( animation.clip );
+		el.css( ref, animation[ ref ] );
+		animation.clip = startClip;
+		animation[ ref ] = startRef;
 	}
 
-	// Animation
-	animation[ ref ] = ( show ?
-		( positiveMotion ? "+=" : "-=") :
-		( positiveMotion ? "-=" : "+=")) +
-		distance;
-
-	// Animate
+	// actually animate
 	el.animate( animation, {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
 		complete: function() {
+			$.effects.removePlaceholder( placeholder, el );
+
 			if ( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
+
 			done();
 		}
 	});
-};
+});
 
 }));

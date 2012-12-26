@@ -75,20 +75,6 @@ test( "removeClass", function() {
 	equal( "", element[ 0 ].className );
 });
 
-
-/* TODO: Disabled - Can't figure out why this is failing in IE 6/7
-test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
-	expect( 2 );
-	var test = $( "div.hidden" ).show(),
-		input = $( "<input type='text'>" ).appendTo( test ).focus();
-
-	$.effects.createWrapper( test );
-	equal( document.activeElement, input[ 0 ], "Active element is still input after createWrapper" );
-	$.effects.removeWrapper( test );
-	equal( document.activeElement, input[ 0 ], "Active element is still input after removeWrapper" );
-});
-*/
-
 module( "effects.core: animateClass" );
 
 asyncTest( "animateClass works with borderStyle", function() {

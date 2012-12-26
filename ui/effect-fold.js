@@ -28,64 +28,68 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.fold = function( o, done ) {
+$.effects.define( "fold", "hide", function( o, done ) {
 
 	// Create element
 	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "hide" ),
+		mode = o.mode,
 		show = mode === "show",
 		hide = mode === "hide",
 		size = o.size || 15,
 		percent = /([0-9]+)%/.exec( size ),
 		horizFirst = !!o.horizFirst,
-		widthFirst = show !== horizFirst,
-		ref = widthFirst ? [ "width", "height" ] : [ "height", "width" ],
+		ref = horizFirst ? [ "right", "bottom" ] : [ "bottom", "right" ],
 		duration = o.duration / 2,
-		wrapper, distance,
-		animation1 = {},
-		animation2 = {};
 
-	$.effects.save( el, props );
-	el.show();
+		placeholder = $.effects.createPlaceholder( el ),
 
-	// Create Wrapper
-	wrapper = $.effects.createWrapper( el ).css({
-		overflow: "hidden"
-	});
-	distance = widthFirst ?
-		[ wrapper.width(), wrapper.height() ] :
-		[ wrapper.height(), wrapper.width() ];
+		start = el.cssClip(),
+		animation1 = {
+			clip: el.cssClip()
+		},
+		animation2 = {
+			clip: el.cssClip()
+		},
 
+		distance = [ start[ref[0]], start[ref[1]] ],
+
+		// we will need to re-assemble the queue to stack our animations in place
+		queue = el.queue(),
+		queuelen = queue.length;
+
+	// define animations
 	if ( percent ) {
 		size = parseInt( percent[ 1 ], 10 ) / 100 * distance[ hide ? 0 : 1 ];
 	}
+	animation1.clip[ ref[ 0 ] ] = size;
+	animation2.clip[ ref[ 0 ] ] = size;
+	animation2.clip[ ref[ 1 ] ] = 0;
+
 	if ( show ) {
-		wrapper.css( horizFirst ? {
-			height: 0,
-			width: size
-		} : {
-			height: size,
-			width: 0
-		});
+		el.cssClip( animation2.clip );
+		animation2.clip = start;
 	}
 
-	// Animation
-	animation1[ ref[ 0 ] ] = show ? distance[ 0 ] : size;
-	animation2[ ref[ 1 ] ] = show ? distance[ 1 ] : 0;
-
 	// Animate
-	wrapper
+	el
 		.animate( animation1, duration, o.easing )
-		.animate( animation2, duration, o.easing, function() {
+		.animate( animation2, duration, o.easing )
+		.queue(function() {
+			$.effects.removePlaceholder( placeholder, el );
+
 			if ( hide ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
+
 			done();
 		});
 
-};
+	// inject all the animations we just queued to be first in line (after "inprogress")
+	if ( queuelen > 1) {
+		queue.splice.apply( queue,
+			[ 1, 0 ].concat( queue.splice( queuelen, 3 ) ) );
+	}
+	el.dequeue();
+});
 
 }));

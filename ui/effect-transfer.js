@@ -28,10 +28,10 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.transfer = function( o, done ) {
+$.effects.define( "transfer", function( o, done ) {
 	var elem = $( this ),
 		target = $( o.to ),
-		targetFixed = target.css( "position" ) === "fixed",
+		targetFixed = target.css("position") === "fixed",
 		body = $("body"),
 		fixTop = targetFixed ? body.scrollTop() : 0,
 		fixLeft = targetFixed ? body.scrollLeft() : 0,
@@ -43,8 +43,8 @@ return $.effects.effect.transfer = function( o, done ) {
 			width: target.innerWidth()
 		},
 		startPosition = elem.offset(),
-		transfer = $( "<div class='ui-effects-transfer'></div>" )
-			.appendTo( document.body )
+		transfer = $("<div class='ui-effects-transfer'></div>")
+			.appendTo("body")
 			.addClass( o.className )
 			.css({
 				top: startPosition.top - fixTop,
@@ -57,6 +57,6 @@ return $.effects.effect.transfer = function( o, done ) {
 				transfer.remove();
 				done();
 			});
-};
+});
 
 }));

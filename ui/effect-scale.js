@@ -29,66 +29,57 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.scale = function( o, done ) {
+$.effects.define( "scale", function( o, done ) {
 
 	// Create element
-	var el = $( this ),
+	var temp,
+		el = $( this ),
+		mode = o.mode,
+
+		// this copies the "scale" option, which is normalized in $.effects.effect.size
+		// and the "fade" option, which isn't documented, but supports $.effects.effect.puff
 		options = $.extend( true, {}, o ),
-		mode = $.effects.setMode( el, o.mode || "effect" ),
+
 		percent = parseInt( o.percent, 10 ) ||
-			( parseInt( o.percent, 10 ) === 0 ? 0 : ( mode === "hide" ? 0 : 100 ) ),
+			( parseInt( o.percent, 10 ) === 0 ? 0 : ( mode !== "effect" ? 0 : 100 ) ),
 		direction = o.direction || "both",
-		origin = o.origin,
-		original = {
-			height: el.height(),
-			width: el.width(),
-			outerHeight: el.outerHeight(),
-			outerWidth: el.outerWidth()
-		},
 		factor = {
-			y: direction !== "horizontal" ? (percent / 100) : 1,
-			x: direction !== "vertical" ? (percent / 100) : 1
+			y: direction !== "horizontal" ? ( percent / 100 ) : 1,
+			x: direction !== "vertical" ? ( percent / 100 ) : 1
 		};
 
-	// We are going to pass this effect to the size effect:
-	options.effect = "size";
-	options.queue = false;
-	options.complete = done;
+	options.from = {
+		height: el.height(),
+		width: el.width(),
+		outerHeight: el.outerHeight(),
+		outerWidth: el.outerWidth()
+	};
+	options.to = {
+		height: options.from.height * factor.y,
+		width: options.from.width * factor.x,
+		outerHeight: options.from.outerHeight * factor.y,
+		outerWidth: options.from.outerWidth * factor.x
+	};
 
 	// Set default origin and restore for show/hide
 	if ( mode !== "effect" ) {
-		options.origin = origin || [ "middle", "center" ];
+		options.origin = o.origin || [ "middle", "center" ];
 		options.restore = true;
-	}
 
-	options.from = o.from || ( mode === "show" ? {
-		height: 0,
-		width: 0,
-		outerHeight: 0,
-		outerWidth: 0
-	} : original );
-	options.to = {
-		height: original.height * factor.y,
-		width: original.width * factor.x,
-		outerHeight: original.outerHeight * factor.y,
-		outerWidth: original.outerWidth * factor.x
-	};
-
-	// Fade option to support puff
-	if ( options.fade ) {
-		if ( mode === "show" ) {
-			options.from.opacity = 0;
-			options.to.opacity = 1;
-		}
-		if ( mode === "hide" ) {
+		// Fade option to support puff
+		if ( options.fade ) {
 			options.from.opacity = 1;
 			options.to.opacity = 0;
 		}
 	}
 
-	// Animate
-	el.effect( options );
+	if ( mode === "show" ) {
+		temp = options.from;
+		options.from = options.to;
+		options.to = temp;
+	}
 
-};
+	$.effects.effect.size.call( this, options, done );
+});
 
 }));

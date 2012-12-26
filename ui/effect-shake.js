@@ -28,11 +28,10 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.shake = function( o, done ) {
+$.effects.define( "shake", function( o, done ) {
 
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "effect" ),
+	var i = 1,
+		el = $( this ),
 		direction = o.direction || "left",
 		distance = o.distance || 20,
 		times = o.times || 3,
@@ -43,15 +42,10 @@ return $.effects.effect.shake = function( o, done ) {
 		animation = {},
 		animation1 = {},
 		animation2 = {},
-		i,
-
 		// we will need to re-assemble the queue to stack our animations in place
 		queue = el.queue(),
-		queuelen = queue.length;
-
-	$.effects.save( el, props );
-	el.show();
-	$.effects.createWrapper( el );
+		queuelen = queue.length,
+		placeholder = $.effects.createPlaceholder( el );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -62,18 +56,20 @@ return $.effects.effect.shake = function( o, done ) {
 	el.animate( animation, speed, o.easing );
 
 	// Shakes
-	for ( i = 1; i < times; i++ ) {
+	for ( ; i < times; i++ ) {
 		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
 	}
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
 		.queue(function() {
-			if ( mode === "hide" ) {
+
+			$.effects.removePlaceholder( placeholder, el );
+
+			if ( o.mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
+
 			done();
 		});
 
@@ -84,6 +80,6 @@ return $.effects.effect.shake = function( o, done ) {
 	}
 	el.dequeue();
 
-};
+});
 
 }));

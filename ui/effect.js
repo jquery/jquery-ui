@@ -908,40 +908,166 @@ $.fn.extend({
 
 (function() {
 
+if ( $.uiBackCompat !== false ) {
+	$.extend( $.effects, {
+		// Saves a set of properties in a data storage
+		save: function( element, set ) {
+			var i = 0, length = set.length;
+			for ( ; i < length; i++ ) {
+				if ( set[ i ] !== null ) {
+					element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
+				}
+			}
+		},
+
+		// Restores a set of previously saved properties from a data storage
+		restore: function( element, set ) {
+			var val, i = 0, length = set.length;
+			for ( ; i < length; i++ ) {
+				if ( set[ i ] !== null ) {
+					val = element.data( dataSpace + set[ i ] );
+					// support: jQuery 1.6.2
+					// http://bugs.jquery.com/ticket/9917
+					// jQuery 1.6.2 incorrectly returns undefined for any falsy value.
+					// We can't differentiate between "" and 0 here, so we just assume
+					// empty string since it's likely to be a more common value...
+					if ( val === undefined ) {
+						val = "";
+					}
+					element.css( set[ i ], val );
+				}
+			}
+		},
+
+		setMode: function( el, mode ) {
+			if ( mode === "toggle" ) {
+				mode = el.is( ":hidden" ) ? "show" : "hide";
+			}
+			return mode;
+		},
+
+		// Wraps the element around a wrapper that copies position properties
+		createWrapper: function( element ) {
+
+			// if the element is already wrapped, return it
+			if ( element.parent().is( ".ui-effects-wrapper" ) ) {
+				return element.parent();
+			}
+
+			// wrap the element
+			var props = {
+					width: element.outerWidth( true ),
+					height: element.outerHeight( true ),
+					"float": element.css( "float" )
+				},
+				wrapper = $( "<div></div>" )
+					.addClass( "ui-effects-wrapper" )
+					.css({
+						fontSize: "100%",
+						background: "transparent",
+						border: "none",
+						margin: 0,
+						padding: 0
+					}),
+				// Store the size in case width/height are defined in % - Fixes #5245
+				size = {
+					width: element.width(),
+					height: element.height()
+				},
+				active = document.activeElement;
+
+			// support: Firefox
+			// Firefox incorrectly exposes anonymous content
+			// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
+			try {
+				active.id;
+			} catch ( e ) {
+				active = document.body;
+			}
+
+			element.wrap( wrapper );
+
+			// Fixes #7595 - Elements lose focus when wrapped.
+			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+				$( active ).focus();
+			}
+
+			wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually lose the reference to the wrapped element
+
+			// transfer positioning properties to the wrapper
+			if ( element.css( "position" ) === "static" ) {
+				wrapper.css({ position: "relative" });
+				element.css({ position: "relative" });
+			} else {
+				$.extend( props, {
+					position: element.css( "position" ),
+					zIndex: element.css( "z-index" )
+				});
+				$.each([ "top", "left", "bottom", "right" ], function(i, pos) {
+					props[ pos ] = element.css( pos );
+					if ( isNaN( parseInt( props[ pos ], 10 ) ) ) {
+						props[ pos ] = "auto";
+					}
+				});
+				element.css({
+					position: "relative",
+					top: 0,
+					left: 0,
+					right: "auto",
+					bottom: "auto"
+				});
+			}
+			element.css(size);
+
+			return wrapper.css( props ).show();
+		},
+
+		removeWrapper: function( element ) {
+			var active = document.activeElement;
+
+			if ( element.parent().is( ".ui-effects-wrapper" ) ) {
+				element.parent().replaceWith( element );
+
+				// Fixes #7595 - Elements lose focus when wrapped.
+				if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+					$( active ).focus();
+				}
+			}
+
+			return element;
+		}
+	});
+}
+
 $.extend( $.effects, {
 	version: "@VERSION",
 
-	// Saves a set of properties in a data storage
-	save: function( element, set ) {
-		for ( var i = 0; i < set.length; i++ ) {
-			if ( set[ i ] !== null ) {
-				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
-			}
+	define: function( name, mode, effect ) {
+		if ( !effect ) {
+			effect = mode;
+			mode = "effect";
 		}
+
+		$.effects.effect[ name ] = effect;
+		$.effects.effect[ name ].mode = mode;
 	},
 
-	// Restores a set of previously saved properties from a data storage
-	restore: function( element, set ) {
-		var val, i;
-		for ( i = 0; i < set.length; i++ ) {
-			if ( set[ i ] !== null ) {
-				val = element.data( dataSpace + set[ i ] );
-				// support: jQuery 1.6.2
-				// http://bugs.jquery.com/ticket/9917
-				// jQuery 1.6.2 incorrectly returns undefined for any falsy value.
-				// We can't differentiate between "" and 0 here, so we just assume
-				// empty string since it's likely to be a more common value...
-				if ( val === undefined ) {
-					val = "";
-				}
-				element.css( set[ i ], val );
-			}
-		}
+	saveStyle: function( element ) {
+		element.data( dataSpace + "style", element[ 0 ].style.cssText );
 	},
 
-	setMode: function( el, mode ) {
-		if (mode === "toggle") {
-			mode = el.is( ":hidden" ) ? "show" : "hide";
+	restoreStyle: function( element ) {
+		element[ 0 ].style.cssText = element.data( dataSpace + "style" ) || "";
+	},
+
+	mode: function( el, mode ) {
+		var hidden = el.is( ":hidden" );
+
+		if ( mode === "toggle" ) {
+			mode = hidden ? "show" : "hide";
+		}
+		if ( hidden ? mode === "hide" : mode === "show" ) {
+			mode = "none";
 		}
 		return mode;
 	},
@@ -968,95 +1094,62 @@ $.extend( $.effects, {
 		};
 	},
 
-	// Wraps the element around a wrapper that copies position properties
-	createWrapper: function( element ) {
+	// Creates a placeholder element so that the original element can be made absolute
+	// also stores all modified properties on the element so they can be restored later
+	createPlaceholder: function( element ) {
 
-		// if the element is already wrapped, return it
-		if ( element.parent().is( ".ui-effects-wrapper" )) {
-			return element.parent();
+		var placeholder,
+			cssPosition = element.css("position"),
+			position = element.position();
+
+		// lock in margins first to account for form elements, which
+		// will change margin if you explicitly set height
+		// see: http://jsfiddle.net/JZSMt/3/ https://bugs.webkit.org/show_bug.cgi?id=107380
+		// Support: Chrome
+		element.css({
+			marginTop: element.css("marginTop"),
+			marginBottom: element.css("marginBottom"),
+			marginLeft: element.css("marginLeft"),
+			marginRight: element.css("marginRight")
+		})
+		.outerWidth( element.outerWidth() )
+		.outerHeight( element.outerHeight() );
+
+		if ( /^(static|relative)/.test( cssPosition ) ) {
+			cssPosition = "absolute";
+
+			placeholder = $( "<" + element[ 0 ].nodeName + ">" ).insertAfter( element ).css({
+				// convert inline to inline block to account for inline elements
+				// that turn to inline block based on content (like img)
+				display: /^(inline|ruby)/.test( element.css("display") ) ? "inline-block" : "block",
+				visibility: "hidden",
+				// margins need to be set to account for margin collapse
+				marginTop: element.css( "marginTop" ),
+				marginBottom: element.css( "marginBottom" ),
+				marginLeft: element.css( "marginLeft" ),
+				marginRight: element.css( "marginRight" )
+			})
+			.outerWidth( element.outerWidth() )
+			.outerHeight( element.outerHeight() );
 		}
 
-		// wrap the element
-		var props = {
-				width: element.outerWidth(true),
-				height: element.outerHeight(true),
-				"float": element.css( "float" )
-			},
-			wrapper = $( "<div></div>" )
-				.addClass( "ui-effects-wrapper" )
-				.css({
-					fontSize: "100%",
-					background: "transparent",
-					border: "none",
-					margin: 0,
-					padding: 0
-				}),
-			// Store the size in case width/height are defined in % - Fixes #5245
-			size = {
-				width: element.width(),
-				height: element.height()
-			},
-			active = document.activeElement;
+		element.css({
+			position: cssPosition,
+			left: position.left,
+			top: position.top
+		});
 
-		// support: Firefox
-		// Firefox incorrectly exposes anonymous content
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
-		try {
-			active.id;
-		} catch ( e ) {
-			active = document.body;
-		}
-
-		element.wrap( wrapper );
-
-		// Fixes #7595 - Elements lose focus when wrapped.
-		if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
-			$( active ).focus();
-		}
-
-		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually lose the reference to the wrapped element
-
-		// transfer positioning properties to the wrapper
-		if ( element.css( "position" ) === "static" ) {
-			wrapper.css({ position: "relative" });
-			element.css({ position: "relative" });
-		} else {
-			$.extend( props, {
-				position: element.css( "position" ),
-				zIndex: element.css( "z-index" )
-			});
-			$.each([ "top", "left", "bottom", "right" ], function(i, pos) {
-				props[ pos ] = element.css( pos );
-				if ( isNaN( parseInt( props[ pos ], 10 ) ) ) {
-					props[ pos ] = "auto";
-				}
-			});
-			element.css({
-				position: "relative",
-				top: 0,
-				left: 0,
-				right: "auto",
-				bottom: "auto"
-			});
-		}
-		element.css(size);
-
-		return wrapper.css( props ).show();
+		return placeholder;
 	},
 
-	removeWrapper: function( element ) {
-		var active = document.activeElement;
+	// removes a placeholder if it exists and restores
+	// properties that were modified during placeholder creation
+	removePlaceholder: function( placeholder, el ) {
+		$.effects.restoreStyle( el );
 
-		if ( element.parent().is( ".ui-effects-wrapper" ) ) {
-			element.parent().replaceWith( element );
-
-			// Fixes #7595 - Elements lose focus when wrapped.
-			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
-				$( active ).focus();
-			}
+		if ( placeholder ) {
+			placeholder.remove();
 		}
-
-		return element;
 	},
 
 	setTransition: function( element, list, factor, value ) {
@@ -1152,27 +1245,48 @@ function standardAnimationOption( option ) {
 $.fn.extend({
 	effect: function( /* effect, options, speed, callback */ ) {
 		var args = _normalizeArguments.apply( this, arguments ),
-			mode = args.mode,
+			effectMethod = $.effects.effect[ args.effect ],
+			defaultMode = effectMethod.mode,
+			modes = [],
+			effectPrefilter = function() {
+
+				var el = $( this ),
+					normalizedMode = $.effects.mode( el, mode );
+
+				// save effect mode for later use,
+				// we can't just call $.effects.mode again later,
+				// as the .show() below destroys the initial state
+				modes.push( normalizedMode );
+
+				if ( normalizedMode === "none" ) {
+					return;
+				}
+
+				if ( normalizedMode === "show" ) {
+					el.show();
+				}
+
+				$.effects.saveStyle( el );
+			},
 			queue = args.queue,
-			effectMethod = $.effects.effect[ args.effect ];
+			complete = args.complete,
+			mode = args.mode || defaultMode;
 
 		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
-				return this[ mode ]( args.duration, args.complete );
+				return this[ mode ]( args.duration, complete );
 			} else {
 				return this.each( function() {
-					if ( args.complete ) {
-						args.complete.call( this );
+					if ( complete ) {
+						complete.call( this );
 					}
 				});
 			}
 		}
 
 		function run( next ) {
-			var elem = $( this ),
-				complete = args.complete,
-				mode = args.mode;
+			var elem = $( this );
 
 			function done() {
 				if ( $.isFunction( complete ) ) {
@@ -1183,9 +1297,12 @@ $.fn.extend({
 				}
 			}
 
-			// If the element already has the correct final state, delegate to
-			// the core methods so the internal tracking of "olddisplay" works.
-			if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+			// override mode option on a per element basis,
+			// as toggle can be show, or hide depending on element state
+			args.mode = modes.shift();
+
+			if ( args.mode === "none" ) {
+				// call the core method to track "olddisplay" properly
 				elem[ mode ]();
 				done();
 			} else {
@@ -1193,7 +1310,16 @@ $.fn.extend({
 			}
 		}
 
-		return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
+		function prefilter( next ) {
+			effectPrefilter.call( this );
+			if ( $.isFunction( next ) ) {
+				next();
+			}
+		}
+
+		return queue === false ?
+			this.each( prefilter ).each( run ) :
+			this.queue( queue || "fx", prefilter ).queue( queue || "fx", run );
 	},
 
 	show: (function( orig ) {
@@ -1243,8 +1369,46 @@ $.fn.extend({
 			}
 		});
 		return val;
+	},
+
+	// getter/setter for an object representing clip values
+	cssClip: function( clipObj ) {
+		return clipObj ?
+			this.css( "clip", "rect(" + clipObj.top + "px " + clipObj.right + "px " + clipObj.bottom + "px " + clipObj.left + "px)" ) :
+			parseClip( this.css("clip"), this );
 	}
 });
+
+function parseClip( str, element ) {
+		var outerWidth = element.outerWidth(),
+			outerHeight = element.outerHeight(),
+			clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto)\)$/,
+			values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
+
+		return {
+			top: parseFloat( values[ 1 ] ) || 0,
+			right: values[ 2 ] === "auto" ? outerWidth : parseFloat( values[ 2 ] ),
+			bottom: values[ 3 ] === "auto" ? outerHeight : parseFloat( values[ 3 ] ),
+			left: parseFloat( values[ 4 ] ) || 0
+		};
+}
+
+$.fx.step.clip = function( fx ) {
+	if ( !fx.clipInit ) {
+		fx.start = $( fx.elem ).cssClip();
+		if ( typeof fx.end === "string" ) {
+			fx.end = parseClip( fx.end, fx.elem );
+		}
+		fx.clipInit = true;
+	}
+
+	$( fx.elem ).cssClip({
+		top: fx.pos * (fx.end.top - fx.start.top) + fx.start.top,
+		right: fx.pos * (fx.end.right - fx.start.right) + fx.start.right,
+		bottom: fx.pos * (fx.end.bottom - fx.start.bottom) + fx.start.bottom,
+		left: fx.pos * (fx.end.left - fx.start.left) + fx.start.left
+	});
+};
 
 })();
 

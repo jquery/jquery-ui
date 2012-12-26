@@ -28,12 +28,12 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.pulsate = function( o, done ) {
+$.effects.define( "pulsate", "show", function( o, done ) {
 	var elem = $( this ),
-		mode = $.effects.setMode( elem, o.mode || "show" ),
+		mode = o.mode,
 		show = mode === "show",
 		hide = mode === "hide",
-		showhide = ( show || mode === "hide" ),
+		showhide = ( show || hide ),
 
 		// showing or hiding leaves of the "last" animation
 		anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
@@ -41,7 +41,7 @@ return $.effects.effect.pulsate = function( o, done ) {
 		animateTo = 0,
 		queue = elem.queue(),
 		queuelen = queue.length,
-		i;
+		i = 1;
 
 	if ( show || !elem.is(":visible")) {
 		elem.css( "opacity", 0 ).show();
@@ -49,7 +49,7 @@ return $.effects.effect.pulsate = function( o, done ) {
 	}
 
 	// anims - 1 opacity "toggles"
-	for ( i = 1; i < anims; i++ ) {
+	for ( ; i < anims; i++ ) {
 		elem.animate({
 			opacity: animateTo
 		}, duration, o.easing );
@@ -64,6 +64,7 @@ return $.effects.effect.pulsate = function( o, done ) {
 		if ( hide ) {
 			elem.hide();
 		}
+
 		done();
 	});
 
@@ -73,6 +74,6 @@ return $.effects.effect.pulsate = function( o, done ) {
 			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 	}
 	elem.dequeue();
-};
+});
 
 }));

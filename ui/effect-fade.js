@@ -28,18 +28,15 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.fade = function( o, done ) {
-	var el = $( this ),
-		mode = $.effects.setMode( el, o.mode || "toggle" );
-
-	el.animate({
-		opacity: mode
+$.effects.define( "fade", "toggle", function( o, done ) {
+	$( this ).animate({
+		opacity: o.mode
 	}, {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
 		complete: done
 	});
-};
+});
 
 }));
