@@ -17,7 +17,7 @@ $.effects.effect.clip = function( o, done ) {
 	// Create element
 	var end, delta,
 		el = $( this ),
-		props = [ "display", "position", "clip" ],
+		props = [ "display", "position", "left", "right", "clip" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
 		show = mode === "show",
 		direction = o.direction || "vertical",
@@ -35,10 +35,13 @@ $.effects.effect.clip = function( o, done ) {
 	$.effects.save( el, props );
 
 	start = {
+		// Webkit getComputedStyle incorrectly returns 0px for "auto" values,
+		// so the ternary below won't work
+		// https://bugs.webkit.org/show_bug.cgi?id=20454
 		top: start[ 1 ] === "auto" ? 0 : parseInt( start[ 1 ], 10 ),
 		right: start[ 2 ] === "auto" ? width : parseInt( start[ 2 ], 10 ),
 		bottom: start[ 3 ] === "auto" ? height : parseInt( start[ 3 ], 10 ),
-		left: start[ 4 ] === "auto" ? 0 : parseInt( start[ 4 ], 10 ),
+		left: start[ 4 ] === "auto" ? 0 : parseInt( start[ 4 ], 10 )
 	};
 
 	end = {
@@ -48,17 +51,9 @@ $.effects.effect.clip = function( o, done ) {
 		left: (start.right - start.left) / 2
 	};
 
-	delta = {
-		top: end.top - start.top,
-		right: end.right - start.right,
-		bottom: end.bottom - start.bottom,
-		left: end.left - start.left,
-	};
-
 	if (
 		display === "inline" || display === "inline-block" || 
-		display === "inline-table" || display === "ruby" || 
-		display === "run-in" || display === "compact"
+		display === "inline-table" || display === "ruby"
 	) {
 		display = "inline-block";
 	} else {
@@ -81,17 +76,12 @@ $.effects.effect.clip = function( o, done ) {
 	});
 
 	// Animate
-	$({ a : 0 }).animate( { a : 1 }, {
+	$( start ).animate( end, {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
 		step: function( now ) {
-			var top = start.top + (now * delta.top),
-				right = start.right + (now * delta.right),
-				bottom = start.bottom + (now * delta.bottom),
-				left = start.left + (now * delta.left);
-			
-			el.css( "clip", "rect(" + top + "px " + right + "px " + bottom + "px " + left + "px)" );
+			el.css( "clip", "rect(" + this.top + "px " + this.right + "px " + this.bottom + "px " + this.left + "px)" );
 		},
 		complete: function() {
 			if ( !show ) {
