@@ -28,24 +28,22 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.explode = function( o, done ) {
+return $.effects.define( "explode", "hide", function( options, done ) {
 
-	var rows = o.pieces ? Math.round( Math.sqrt( o.pieces ) ) : 3,
+	var i, j, left, top, mx, my,
+		rows = options.pieces ? Math.round( Math.sqrt( options.pieces ) ) : 3,
 		cells = rows,
-		el = $( this ),
-		mode = $.effects.setMode( el, o.mode || "hide" ),
+		element = $( this ),
+		mode = options.mode,
 		show = mode === "show",
 
 		// show and then visibility:hidden the element before calculating offset
-		offset = el.show().css( "visibility", "hidden" ).offset(),
+		offset = element.show().css( "visibility", "hidden" ).offset(),
 
 		// width and height of a piece
-		width = Math.ceil( el.outerWidth() / cells ),
-		height = Math.ceil( el.outerHeight() / rows ),
-		pieces = [],
-
-		// loop
-		i, j, left, top, mx, my;
+		width = Math.ceil( element.outerWidth() / cells ),
+		height = Math.ceil( element.outerHeight() / rows ),
+		pieces = [];
 
 	// children animate complete:
 	function childComplete() {
@@ -66,7 +64,7 @@ return $.effects.effect.explode = function( o, done ) {
 
 			// Create a clone of the now hidden main element that will be absolute positioned
 			// within a wrapper div off the -left and -top equal to size of our pieces
-			el
+			element
 				.clone()
 				.appendTo( "body" )
 				.wrap( "<div></div>" )
@@ -93,20 +91,17 @@ return $.effects.effect.explode = function( o, done ) {
 					left: left + ( show ? 0 : mx * width ),
 					top: top + ( show ? 0 : my * height ),
 					opacity: show ? 1 : 0
-				}, o.duration || 500, o.easing, childComplete );
+				}, options.duration || 500, options.easing, childComplete );
 		}
 	}
 
 	function animComplete() {
-		el.css({
+		element.css({
 			visibility: "visible"
 		});
 		$( pieces ).remove();
-		if ( !show ) {
-			el.hide();
-		}
 		done();
 	}
-};
+});
 
 }));

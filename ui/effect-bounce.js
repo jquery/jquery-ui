@@ -28,55 +28,47 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.bounce = function( o, done ) {
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
+return $.effects.define( "bounce", function( options, done ) {
+	var upAnim, downAnim, refValue,
+		element = $( this ),
 
 		// defaults:
-		mode = $.effects.setMode( el, o.mode || "effect" ),
+		mode = options.mode,
 		hide = mode === "hide",
 		show = mode === "show",
-		direction = o.direction || "up",
-		distance = o.distance,
-		times = o.times || 5,
+		direction = options.direction || "up",
+		distance = options.distance,
+		times = options.times || 5,
 
 		// number of internal animations
 		anims = times * 2 + ( show || hide ? 1 : 0 ),
-		speed = o.duration / anims,
-		easing = o.easing,
+		speed = options.duration / anims,
+		easing = options.easing,
 
 		// utility:
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
 		motion = ( direction === "up" || direction === "left" ),
-		i,
-		upAnim,
-		downAnim,
+		i = 0,
 
-		// we will need to re-assemble the queue to stack our animations in place
-		queue = el.queue(),
-		queuelen = queue.length;
+		queuelen = element.queue().length;
 
-	// Avoid touching opacity to prevent clearType and PNG issues in IE
-	if ( show || hide ) {
-		props.push( "opacity" );
-	}
+	$.effects.createPlaceholder( element );
 
-	$.effects.save( el, props );
-	el.show();
-	$.effects.createWrapper( el ); // Create Wrapper
+	refValue = element.css( ref );
 
 	// default distance for the BIGGEST bounce is the outer Distance / 3
 	if ( !distance ) {
-		distance = el[ ref === "top" ? "outerHeight" : "outerWidth" ]() / 3;
+		distance = element[ ref === "top" ? "outerHeight" : "outerWidth" ]() / 3;
 	}
 
 	if ( show ) {
 		downAnim = { opacity: 1 };
-		downAnim[ ref ] = 0;
+		downAnim[ ref ] = refValue;
 
 		// if we are showing, force opacity 0 and set the initial position
 		// then do the "first" animation
-		el.css( "opacity", 0 )
+		element
+			.css( "opacity", 0 )
 			.css( ref, motion ? -distance * 2 : distance * 2 )
 			.animate( downAnim, speed, easing );
 	}
@@ -87,13 +79,14 @@ return $.effects.effect.bounce = function( o, done ) {
 	}
 
 	downAnim = {};
-	downAnim[ ref ] = 0;
+	downAnim[ ref ] = refValue;
 	// Bounces up/down/left/right then back to 0 -- times * 2 animations happen here
-	for ( i = 0; i < times; i++ ) {
+	for ( ; i < times; i++ ) {
 		upAnim = {};
 		upAnim[ ref ] = ( motion ? "-=" : "+=" ) + distance;
 
-		el.animate( upAnim, speed, easing )
+		element
+			.animate( upAnim, speed, easing )
 			.animate( downAnim, speed, easing );
 
 		distance = hide ? distance * 2 : distance / 2;
@@ -104,25 +97,12 @@ return $.effects.effect.bounce = function( o, done ) {
 		upAnim = { opacity: 0 };
 		upAnim[ ref ] = ( motion ? "-=" : "+=" ) + distance;
 
-		el.animate( upAnim, speed, easing );
+		element.animate( upAnim, speed, easing );
 	}
 
-	el.queue(function() {
-		if ( hide ) {
-			el.hide();
-		}
-		$.effects.restore( el, props );
-		$.effects.removeWrapper( el );
-		done();
-	});
+	element.queue( done );
 
-	// inject all the animations we just queued to be first in line (after "inprogress")
-	if ( queuelen > 1) {
-		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
-	}
-	el.dequeue();
-
-};
+	$.effects.unshift( element, queuelen, anims + 1 );
+});
 
 }));

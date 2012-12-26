@@ -57,7 +57,7 @@ effect( "#highlight", "highlight", {} );
 
 effect( "#pulsate", "pulsate", { times: 2 } );
 
-effect( "#puff", "puff", { times: 2 } );
+effect( "#puff", "puff", {} );
 effect( "#scale", "scale", {} );
 effect( "#size", "size", {} );
 $( "#sizeToggle" ).click(function() {
