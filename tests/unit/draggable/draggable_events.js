@@ -82,7 +82,7 @@ test("stopping the stop callback", function() {
 	expect(1);
 
 	var el = $("#draggable2").draggable({
-		helper: 'clone',
+		helper: "clone",
 		stop: function() { return false; }
 	});
 
@@ -91,7 +91,7 @@ test("stopping the stop callback", function() {
 		dy: 10
 	});
 
-	ok($("#draggable2").data('ui-draggable').helper, "the clone should not be deleted if the stop callback is stopped");
+	ok($("#draggable2").data("ui-draggable").helper, "the clone should not be deleted if the stop callback is stopped");
 
 
 });
