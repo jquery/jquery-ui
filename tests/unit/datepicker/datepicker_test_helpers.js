@@ -7,7 +7,7 @@ TestHelpers.datepicker = {
 	},
 	equalsDate: function(d1, d2, message) {
 		if (!d1 || !d2) {
-			ok(false, message + ' - missing date');
+			ok(false, message + " - missing date");
 			return;
 		}
 		d1 = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
@@ -15,8 +15,8 @@ TestHelpers.datepicker = {
 		equal(d1.toString(), d2.toString(), message);
 	},
 	init: function(id, options) {
-		$.datepicker.setDefaults($.datepicker.regional['']);
-		return $(id).datepicker($.extend({showAnim: ''}, options || {}));
+		$.datepicker.setDefaults($.datepicker.regional[""]);
+		return $(id).datepicker($.extend({showAnim: ""}, options || {}));
 	},
-	PROP_NAME: 'datepicker'
+	PROP_NAME: "datepicker"
 };

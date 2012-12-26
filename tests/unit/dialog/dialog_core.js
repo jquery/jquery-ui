@@ -10,10 +10,10 @@ test("title id", function() {
 	expect(1);
 
 	var titleId,
-		el = $('<div></div>').dialog();
+		el = $("<div></div>").dialog();
 
-	titleId = el.dialog('widget').find('.ui-dialog-title').attr('id');
-	ok( /ui-id-\d+$/.test( titleId ), 'auto-numbered title id');
+	titleId = el.dialog("widget").find(".ui-dialog-title").attr("id");
+	ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id");
 	el.remove();
 });
 
@@ -27,7 +27,7 @@ test( "ARIA", function() {
 	equal( wrapper.attr( "aria-describedby" ), el.attr( "id" ), "aria-describedby added" );
 	el.remove();
 
-	el = $( '<div><div aria-describedby="section2"><p id="section2">descriotion</p></div></div>' ).dialog();
+	el = $("<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>").dialog();
 	strictEqual( el.dialog( "widget" ).attr( "aria-describedby" ), undefined, "no aria-describedby added, as already present in markup" );
 	el.remove();
 });

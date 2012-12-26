@@ -13,12 +13,12 @@ module("slider: options");
 
 test("max", function() {
 	expect( 2 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 
 	options = {
 		max: 37,
 		min: 6,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1,
 		value: 50
 	};
@@ -26,18 +26,18 @@ test("max", function() {
 	el.slider(options);
 	ok(el.slider("option", "value") === options.value, "value option is not contained by max");
 	ok(el.slider("value") === options.max, "value method is contained by max");
-	el.slider('destroy');
+	el.slider("destroy");
 
 });
 
 test("min", function() {
 	expect( 2 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 
 	options = {
 		max: 37,
 		min: 6,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1,
 		value: 2
 	};
@@ -45,45 +45,45 @@ test("min", function() {
 	el.slider(options);
 	ok(el.slider("option", "value") === options.value, "value option is not contained by min");
 	ok(el.slider("value") === options.min, "value method is contained by min");
-	el.slider('destroy');
+	el.slider("destroy");
 
 });
 
 test("orientation", function() {
 	expect( 6 );
-	el = $('#slider1');
+	el = $("#slider1");
 
 	options = {
 		max: 2,
 		min: -2,
-		orientation: 'vertical',
+		orientation: "vertical",
 		value: 1
 	};
 
 	var percentVal = (options.value - options.min) / (options.max - options.min) * 100;
 
 	el.slider(options).slider("option", "orientation", "horizontal");
-	ok(el.is('.ui-slider-horizontal'), "horizontal slider has class .ui-slider-horizontal");
-	ok(!el.is('.ui-slider-vertical'), "horizontal slider does not have class .ui-slider-vertical");
-	equal(handle()[0].style.left, percentVal + '%', "horizontal slider handle is positioned with left: %");
+	ok(el.is(".ui-slider-horizontal"), "horizontal slider has class .ui-slider-horizontal");
+	ok(!el.is(".ui-slider-vertical"), "horizontal slider does not have class .ui-slider-vertical");
+	equal(handle()[0].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %");
 
-	el.slider('destroy');
+	el.slider("destroy");
 
 	options = {
 		max: 2,
 		min: -2,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		value: -1
 	};
 
 	percentVal = (options.value - options.min) / (options.max - options.min) * 100;
 
 	el.slider(options).slider("option", "orientation", "vertical");
-	ok(el.is('.ui-slider-vertical'), "vertical slider has class .ui-slider-vertical");
-	ok(!el.is('.ui-slider-horizontal'), "vertical slider does not have class .ui-slider-horizontal");
-	equal(handle()[0].style.bottom, percentVal + '%', "vertical slider handle is positioned with bottom: %");
+	ok(el.is(".ui-slider-vertical"), "vertical slider has class .ui-slider-vertical");
+	ok(!el.is(".ui-slider-horizontal"), "vertical slider does not have class .ui-slider-horizontal");
+	equal(handle()[0].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %");
 
-	el.slider('destroy');
+	el.slider("destroy");
 
 });
 
@@ -96,7 +96,7 @@ test("orientation", function() {
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 test("step", function() {
 	expect( 9 );
-	var el = $('<div></div>').slider({
+	var el = $("<div></div>").slider({
 		min: 0,
 		value: 0,
 		step: 10,
@@ -116,7 +116,7 @@ test("step", function() {
 	el.slider("value", 19);
 	equal( el.slider("value"), 20 );
 
-	el = $('<div></div>').slider({
+	el = $("<div></div>").slider({
 		min: 0,
 		value: 0,
 		step: 20,
@@ -136,7 +136,7 @@ test("step", function() {
 	el.slider("option", "value", 19);
 	equal( el.slider("value"), 20 );
 
-	el.slider('destroy');
+	el.slider("destroy");
 });
 
 //test("value", function() {

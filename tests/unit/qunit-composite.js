@@ -96,7 +96,7 @@ QUnit.testDone(function() {
 		}
 	});
 
-	current.getElementsByTagName('a')[0].href = src;
+	current.getElementsByTagName("a")[0].href = src;
 });
 
 }( QUnit ) );

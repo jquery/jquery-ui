@@ -12,25 +12,25 @@ module("dialog: methods", {
 test("init", function() {
 	expect(6);
 
-	$("<div></div>").appendTo('body').dialog().remove();
-	ok(true, '.dialog() called on element');
+	$("<div></div>").appendTo("body").dialog().remove();
+	ok(true, ".dialog() called on element");
 
 	$([]).dialog().remove();
-	ok(true, '.dialog() called on empty collection');
+	ok(true, ".dialog() called on empty collection");
 
-	$('<div></div>').dialog().remove();
-	ok(true, '.dialog() called on disconnected DOMElement - never connected');
+	$("<div></div>").dialog().remove();
+	ok(true, ".dialog() called on disconnected DOMElement - never connected");
 
-	$('<div></div>').appendTo('body').remove().dialog().remove();
-	ok(true, '.dialog() called on disconnected DOMElement - removed');
+	$("<div></div>").appendTo("body").remove().dialog().remove();
+	ok(true, ".dialog() called on disconnected DOMElement - removed");
 
-	var el = $('<div></div>').dialog();
+	var el = $("<div></div>").dialog();
 	el.dialog("option", "foo");
 	el.remove();
-	ok(true, 'arbitrary option getter after init');
+	ok(true, "arbitrary option getter after init");
 
-	$('<div></div>').dialog().dialog("option", "foo", "bar").remove();
-	ok(true, 'arbitrary option setter after init');
+	$("<div></div>").dialog().dialog("option", "foo", "bar").remove();
+	ok(true, "arbitrary option setter after init");
 });
 
 test("destroy", function() {
@@ -61,12 +61,12 @@ test("destroy", function() {
 
 test("#4980: Destroy should place element back in original DOM position", function(){
 	expect( 2 );
-	var container = $('<div id="container"><div id="modal">Content</div></div>'),
-		modal = container.find('#modal');
+	var container = $("<div id='container'><div id='modal'>Content</div></div>"),
+		modal = container.find("#modal");
 	modal.dialog();
-	ok(!$.contains(container[0], modal[0]), 'dialog should move modal element to outside container element');
-	modal.dialog('destroy');
-	ok($.contains(container[0], modal[0]), 'dialog(destroy) should place element back in original DOM position');
+	ok(!$.contains(container[0], modal[0]), "dialog should move modal element to outside container element");
+	modal.dialog("destroy");
+	ok($.contains(container[0], modal[0]), "dialog(destroy) should place element back in original DOM position");
 });
 
 test( "enable/disable disabled", function() {
@@ -81,29 +81,29 @@ test("close", function() {
 	expect( 3 );
 
 	var el,
-		expected = $('<div></div>').dialog(),
-		actual = expected.dialog('close');
-	equal(actual, expected, 'close is chainable');
+		expected = $("<div></div>").dialog(),
+		actual = expected.dialog("close");
+	equal(actual, expected, "close is chainable");
 
-	el = $('<div></div>').dialog();
-	ok(el.dialog('widget').is(':visible') && !el.dialog('widget').is(':hidden'), 'dialog visible before close method called');
-	el.dialog('close');
-	ok(el.dialog('widget').is(':hidden') && !el.dialog('widget').is(':visible'), 'dialog hidden after close method called');
+	el = $("<div></div>").dialog();
+	ok(el.dialog("widget").is(":visible") && !el.dialog("widget").is(":hidden"), "dialog visible before close method called");
+	el.dialog("close");
+	ok(el.dialog("widget").is(":hidden") && !el.dialog("widget").is(":visible"), "dialog hidden after close method called");
 });
 
 test("isOpen", function() {
 	expect(4);
 
-	var el = $('<div></div>').dialog();
-	equal(el.dialog('isOpen'), true, "dialog is open after init");
-	el.dialog('close');
-	equal(el.dialog('isOpen'), false, "dialog is closed");
+	var el = $("<div></div>").dialog();
+	equal(el.dialog("isOpen"), true, "dialog is open after init");
+	el.dialog("close");
+	equal(el.dialog("isOpen"), false, "dialog is closed");
 	el.remove();
 
-	el = $('<div></div>').dialog({autoOpen: false});
-	equal(el.dialog('isOpen'), false, "dialog is closed after init");
-	el.dialog('open');
-	equal(el.dialog('isOpen'), true, "dialog is open");
+	el = $("<div></div>").dialog({autoOpen: false});
+	equal(el.dialog("isOpen"), false, "dialog is closed after init");
+	el.dialog("open");
+	equal(el.dialog("isOpen"), true, "dialog is open");
 	el.remove();
 });
 
@@ -137,49 +137,49 @@ test("moveToTop", function() {
 test("open", function() {
 	expect( 3 );
 	var el,
-		expected = $('<div></div>').dialog(),
-		actual = expected.dialog('open');
-	equal(actual, expected, 'open is chainable');
+		expected = $("<div></div>").dialog(),
+		actual = expected.dialog("open");
+	equal(actual, expected, "open is chainable");
 
-	el = $('<div></div>').dialog({ autoOpen: false });
-	ok(el.dialog('widget').is(':hidden') && !el.dialog('widget').is(':visible'), 'dialog hidden before open method called');
-	el.dialog('open');
-	ok(el.dialog('widget').is(':visible') && !el.dialog('widget').is(':hidden'), 'dialog visible after open method called');
+	el = $("<div></div>").dialog({ autoOpen: false });
+	ok(el.dialog("widget").is(":hidden") && !el.dialog("widget").is(":visible"), "dialog hidden before open method called");
+	el.dialog("open");
+	ok(el.dialog("widget").is(":visible") && !el.dialog("widget").is(":hidden"), "dialog visible after open method called");
 });
 
 test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 	expect(2);
 
-	var d1 = $('<form><input type="radio" name="radio" id="a" value="a" checked="checked"></input>' +
-				'<input type="radio" name="radio" id="b" value="b">b</input></form>').appendTo( "body" ).dialog({autoOpen: false});
+	var d1 = $("<form><input type='radio' name='radio' id='a' value='a' checked='checked'></input>" +
+				"<input type='radio' name='radio' id='b' value='b'>b</input></form>").appendTo( "body" ).dialog({autoOpen: false});
 
-	d1.find('#b').prop( "checked", true );
-	equal(d1.find('input:checked').val(), 'b', "checkbox b is checked");
+	d1.find("#b").prop( "checked", true );
+	equal(d1.find("input:checked").val(), "b", "checkbox b is checked");
 
-	d1.dialog('open');
-	equal(d1.find('input:checked').val(), 'b', "checkbox b is checked");
+	d1.dialog("open");
+	equal(d1.find("input:checked").val(), "b", "checkbox b is checked");
 
 	d1.remove();
 });
 
 test("#5531: dialog width should be at least minWidth on creation", function () {
 	expect( 4 );
-	var el = $('<div></div>').dialog({
+	var el = $("<div></div>").dialog({
 			width: 200,
 			minWidth: 300
 		});
 
-	equal(el.dialog('option', 'width'), 300, "width is minWidth");
-	el.dialog('option', 'width', 200);
-	equal(el.dialog('option', 'width'), 300, "width unchanged when set to < minWidth");
-	el.dialog('option', 'width', 320);
-	equal(el.dialog('option', 'width'), 320, "width changed if set to > minWidth");
+	equal(el.dialog("option", "width"), 300, "width is minWidth");
+	el.dialog("option", "width", 200);
+	equal(el.dialog("option", "width"), 300, "width unchanged when set to < minWidth");
+	el.dialog("option", "width", 320);
+	equal(el.dialog("option", "width"), 320, "width changed if set to > minWidth");
 	el.remove();
 
-	el = $('<div></div>').dialog({
+	el = $("<div></div>").dialog({
 			minWidth: 300
 		});
-	ok(el.dialog('option', 'width') >=  300, "width is at least 300");
+	ok(el.dialog("option", "width") >=  300, "width is at least 300");
 	el.remove();
 
 });

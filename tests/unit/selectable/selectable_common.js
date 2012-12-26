@@ -1,13 +1,13 @@
-TestHelpers.commonWidgetTests('selectable', {
+TestHelpers.commonWidgetTests("selectable", {
 	defaults: {
-		appendTo: 'body',
+		appendTo: "body",
 		autoRefresh: true,
-		cancel: 'input,textarea,button,select,option',
+		cancel: "input,textarea,button,select,option",
 		create: null,
 		delay: 0,
 		disabled: false,
 		distance: 0,
-		filter: '*',
-		tolerance: 'touch'
+		filter: "*",
+		tolerance: "touch"
 	}
 });
