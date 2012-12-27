@@ -368,6 +368,14 @@ $.widget( "ui.spinner", {
 				value = this._parse( value );
 			}
 		}
+		if ( key === "icons" ) {
+			this.buttons.first().find( ".ui-icon" )
+				.removeClass( this.options.icons.up )
+				.addClass( value.up );
+			this.buttons.last().find( ".ui-icon" )
+				.removeClass( this.options.icons.down )
+				.addClass( value.down );
+		}
 
 		this._super( key, value );
 
