@@ -343,6 +343,15 @@ $.widget( "ui.menu", {
 		}[ this.options.role ];
 	},
 
+	_setOption: function( key, value ) {
+		if ( key === "icons" ) {
+			this.element.find( ".ui-menu-icon" )
+				.removeClass( this.options.icons.submenu )
+				.addClass( value.submenu );
+		}
+		this._super( key, value );
+	},
+
 	focus: function( event, item ) {
 		var nested, focused;
 		this.blur( event, event && event.type === "focus" );
