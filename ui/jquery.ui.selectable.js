@@ -88,8 +88,8 @@ $.widget("ui.selectable", $.ui.mouse, {
 		$(options.appendTo).append(this.helper);
 		// position helper (lasso)
 		this.helper.css({
-			"left": event.clientX,
-			"top": event.clientY,
+			"left": event.clientX + this.window.scrollLeft(),
+			"top": event.clientY + this.window.scrollTop(),
 			"width": 0,
 			"height": 0
 		});
