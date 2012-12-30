@@ -38,9 +38,8 @@ test( "stop", function() {
 test( "mousedown: initial position of helper", function() {
 	expect( 2 );
 
-	var el = $("#selectable1").selectable(),
-		contentToForceScroll,
-		helper;
+	var contentToForceScroll, helper,
+		el = $("#selectable1").selectable();
 
 	contentToForceScroll = $("<div></div>").css({
 		height: "10000px",
@@ -55,8 +54,8 @@ test( "mousedown: initial position of helper", function() {
 	});
 
 	helper = $(".ui-selectable-helper");
-	equal( helper.css( "top" ), "11px", "Scrolling should be accounted for, see #8915." );
-	equal( helper.css( "left" ), "11px", "Scrolling left should also be accounted for." );
+	equal( helper.css("top"), "11px", "Scrolling should be accounted for, see #8915." );
+	equal( helper.css("left"), "11px", "Scrolling left should also be accounted for." );
 
 	// Cleanup
 	el.simulate("mouseup");
