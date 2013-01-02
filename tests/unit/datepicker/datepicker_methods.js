@@ -39,7 +39,7 @@ test("destroy", function() {
 	ok(inp.next().is("#alt"), "Append - append text removed");
 	// With both
 	inp= TestHelpers.datepicker.init("#inp", {showOn: "both", buttonImageOnly: true,
-		buttonImage: "img/calendar.gif", appendText: "Testing"});
+		buttonImage: "images/calendar.gif", appendText: "Testing"});
 	ok(inp.is(".hasDatepicker"), "Both - marker class set");
 	ok($.data(inp[0], TestHelpers.datepicker.PROP_NAME), "Both - instance present");
 	ok(inp.next()[0].nodeName.toLowerCase() === "img", "Both - button added");
@@ -92,7 +92,7 @@ test("enableDisable", function() {
 	inp.datepicker("destroy");
 	// With an image button
 	inp = TestHelpers.datepicker.init("#inp", {showOn: "button", buttonImageOnly: true,
-		buttonImage: "img/calendar.gif"});
+		buttonImage: "images/calendar.gif"});
 	ok(!inp.datepicker("isDisabled"), "Enable/disable image - initially marked as enabled");
 	ok(!inp[0].disabled, "Enable/disable image - field initially enabled");
 	ok(parseFloat(inp.next("img").css("opacity")) === 1, "Enable/disable image - image initially enabled");

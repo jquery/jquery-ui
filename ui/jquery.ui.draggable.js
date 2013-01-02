@@ -33,7 +33,13 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		appendTo: null,
 		exclude: "input,textarea,button,select,option",
 		handle: null,
-		helper: false
+		helper: false,
+
+		// callbacks
+		beforeStart: null,
+		drag: null,
+		start: null,
+		stop: null
 	},
 
 	// dragEl: element being dragged (original or helper)

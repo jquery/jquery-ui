@@ -145,13 +145,13 @@ asyncTest("invocation", function() {
 	function step3() {
 		// On image button
 		inp = TestHelpers.datepicker.init("#inp", {showOn: "button", buttonImageOnly: true,
-			buttonImage: "img/calendar.gif", buttonText: "Cal"});
+			buttonImage: "images/calendar.gif", buttonText: "Cal"});
 		ok(!dp.is(":visible"), "Image button - initially hidden");
 		button = inp.siblings("button");
 		ok(button.length === 0, "Image button - button absent");
 		image = inp.siblings("img");
 		ok(image.length === 1, "Image button - image present");
-		equal(image.attr("src"), "img/calendar.gif", "Image button - image source");
+		equal(image.attr("src"), "images/calendar.gif", "Image button - image source");
 		equal(image.attr("title"), "Cal", "Image button - image text");
 		inp[0].focus();
 		setTimeout(function() {
@@ -168,7 +168,7 @@ asyncTest("invocation", function() {
 
 	function step4() {
 		// On both
-		inp = TestHelpers.datepicker.init("#inp", {showOn: "both", buttonImage: "img/calendar.gif"});
+		inp = TestHelpers.datepicker.init("#inp", {showOn: "both", buttonImage: "images/calendar.gif"});
 		ok(!dp.is(":visible"), "Both - initially hidden");
 		button = inp.siblings("button");
 		ok(button.length === 1, "Both - button present");
