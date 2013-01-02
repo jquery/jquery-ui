@@ -266,6 +266,7 @@ test( "{ cursorAt: left, top }", function() {
 		deltaY = -3,
 		tests = {
 			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
 			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
 			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
 		};
