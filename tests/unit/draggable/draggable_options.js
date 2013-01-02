@@ -270,22 +270,16 @@ test("{ cursor: 'move' }", function() {
 
 });
 
-/*
-test("{ cursorAt: false}, default", function() {
-	expect( 1 );
-
-	ok(false, "missing test - untested code is broken code");
-});
-*/
-
-test( "{ cursorAt: left, top }", function() {
-	expect( 16 );
+test( "cursorAt", function() {
+	expect( 24 );
 
 	var deltaX = -3,
 		deltaY = -3,
 		tests = {
+			"false": { cursorAt : false },
 			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
 			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
 			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
 			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
 		};
@@ -295,9 +289,12 @@ test( "{ cursorAt: left, top }", function() {
 			var el = $( "#draggable" + ( i + 1 ) ).draggable({
 					cursorAt: testData.cursorAt,
 					drag: function( event, ui ) {
-						if( testData.cursorAt.right ) {
+						if( !testData.cursorAt ) {
+							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
+							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
+						} else if( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
-							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + position + " top" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
 						} else {
 							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
