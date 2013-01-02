@@ -6,7 +6,6 @@ TestHelpers.commonWidgetTests( "draggable", {
 		cancel: "input,textarea,button,select,option",
 		connectToSortable: false,
 		containment: false,
-		create: null,
 		cursor: "auto",
 		cursorAt: false,
 		delay: 0,
@@ -28,6 +27,12 @@ TestHelpers.commonWidgetTests( "draggable", {
 		snapMode: "both",
 		snapTolerance: 20,
 		stack: false,
-		zIndex: false
+		zIndex: false,
+
+		// callbacks
+		create: null,
+		drag: null,
+		start: null,
+		stop: null
 	}
 });

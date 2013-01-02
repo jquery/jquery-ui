@@ -3,11 +3,19 @@ TestHelpers.commonWidgetTests("selectable", {
 		appendTo: "body",
 		autoRefresh: true,
 		cancel: "input,textarea,button,select,option",
-		create: null,
 		delay: 0,
 		disabled: false,
 		distance: 0,
 		filter: "*",
-		tolerance: "touch"
+		tolerance: "touch",
+
+		// callbacks
+		create: null,
+		selected: null,
+		selecting: null,
+		start: null,
+		stop: null,
+		unselected: null,
+		unselecting: null
 	}
 });
