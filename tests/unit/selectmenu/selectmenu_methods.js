@@ -13,7 +13,7 @@ test( "destroy", function() {
 test( "open / close", function() {
 	expect( 4 );
 
-	var element = $('#speed').selectmenu(),
+	var element = $("#speed").selectmenu(),
 		menu = element.selectmenu("menuWidget");
 
 	element.selectmenu("open");
@@ -29,7 +29,7 @@ test( "open / close", function() {
 test("enable / disable", function () {
 	expect(10);
 
-	var element = $('#speed').selectmenu(),
+	var element = $("#speed").selectmenu(),
 		button = element.selectmenu("widget"),
 		menu = element.selectmenu("menuWidget");
 
@@ -52,12 +52,12 @@ test("enable / disable", function () {
 test("refresh - structure", function () {
 	expect(3);
 
-	var element = $('#speed').selectmenu(),
+	var element = $("#speed").selectmenu(),
 		menu = element.selectmenu("menuWidget").parent();
 
 	element.find("option").eq(2).remove();
 	element.find("option").eq(3).remove();
-	element.append('<option value="added_option">Added option</option>');
+	element.append("<option value=\"added_option\">Added option</option>");
 	element.find("option").first()
 		.attr("value", "changed_value")
 		.text("Changed value");
@@ -72,7 +72,7 @@ test("refresh - structure", function () {
 test("refresh - disabled select", function () {
 	expect(4);
 
-	var element = $('#speed').selectmenu(),
+	var element = $("#speed").selectmenu(),
 		button = element.selectmenu("widget"),
 		menu = element.selectmenu("menuWidget");
 
@@ -90,7 +90,7 @@ test("refresh - disabled option", function () {
 	expect(1);
 
 	var disabledItem,
-		element = $('#speed').selectmenu(),
+		element = $("#speed").selectmenu(),
 		menu = element.selectmenu("menuWidget").parent();
 
 	element.attr("disabled", "disabled");
@@ -106,7 +106,7 @@ test("refresh - disabled optgroup", function () {
 
 	var i,
 		item,
-		element = $('#files').selectmenu(),
+		element = $("#files").selectmenu(),
 		menu = element.selectmenu("menuWidget").parent(),
 		originalDisabledOptgroup = element.find("optgroup").first(),
 		originalDisabledOptions = originalDisabledOptgroup.find("option");
@@ -128,7 +128,7 @@ test("refresh - disabled optgroup", function () {
 
 test( "widget", function() {
 	expect( 4 );
-	var element = $('#speed').selectmenu(),
+	var element = $("#speed").selectmenu(),
 		widgetElement = element.selectmenu( "widget" ),
 		menuWidgetElement = element.selectmenu( "menuWidget" );
 

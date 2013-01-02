@@ -4,7 +4,7 @@ module( "selectmenu: core" );
 
 test("accessibility", function () {
 	var links,
-		element = $('#speed').selectmenu(),
+		element = $("#speed").selectmenu(),
 		button = element.selectmenu("widget"),
 		menu = element.selectmenu("menuWidget");
 
