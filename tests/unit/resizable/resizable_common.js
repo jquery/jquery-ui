@@ -1,4 +1,4 @@
-TestHelpers.commonWidgetTests("resizable", {
+TestHelpers.commonWidgetTests( "resizable", {
 	defaults: {
 		alsoResize: false,
 		animate: false,
@@ -22,6 +22,9 @@ TestHelpers.commonWidgetTests("resizable", {
 		zIndex: 90,
 
 		// callbacks
-		create: null
+		create: null,
+		resize: null,
+		start: null,
+		stop: null
 	}
 });

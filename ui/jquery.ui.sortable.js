@@ -47,7 +47,21 @@ $.widget("ui.sortable", $.ui.mouse, {
 		scrollSpeed: 20,
 		scope: "default",
 		tolerance: "intersect",
-		zIndex: 1000
+		zIndex: 1000,
+
+		// callbacks
+		activate: null,
+		beforeStop: null,
+		change: null,
+		deactivate: null,
+		out: null,
+		over: null,
+		receive: null,
+		remove: null,
+		sort: null,
+		start: null,
+		stop: null,
+		update: null
 	},
 	_create: function() {
 
