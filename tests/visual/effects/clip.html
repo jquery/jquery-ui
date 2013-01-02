@@ -9,8 +9,19 @@
 	<script src="../../../ui/jquery.ui.effect-clip.js"></script>
 	<script>
 	$(function() {
-		$(".target").click(function() {
-			$(this).toggle("clip", 1000);
+		$("a[href$='#toggle']").click(function(event) {
+			event.preventDefault();
+			$(".target").toggle("clip", {
+				direction: "horizontal"
+				// to: "rect(40px -40px -40px 40px)"
+			}, 1000);
+		});
+		$("a[href$='#effect']").click(function(event) {
+			event.preventDefault();
+			$(".target").effect("clip", {
+				// direction: "horizontal"
+				to: "rect(20% -20% -20% 20%)"
+			}, 1000);
 		});
 	});
 	</script>
@@ -21,6 +32,8 @@
 		background: green;
 	}
 	.column {
+		position: relative;
+		top: 40px;
 		float: left;
 		width: 600px;
 	}
@@ -29,13 +42,15 @@
 	}
 	p.target {
 		overflow: hidden;
+		background: lightgreen;
 	}
 	</style>
 </head>
 <body>
-	<!-- <div class="target box"></div> -->
+	<a href="#toggle">Toggle</a>
+	<a href="#effect">Effect</a>
 	<p>Bacon ipsum dolor sit amet chuck cow ground round, ham hock short loin tail jowl sausage flank. Venison andouille turducken sausage. Boudin filet mignon shoulder, prosciutto sirloin tail cow pastrami. Salami jerky flank rump, sirloin spare ribs pork belly. Biltong brisket boudin ground round, venison chicken shankle short ribs meatball corned beef. Swine short ribs shoulder, short loin turducken biltong prosciutto ball tip. Biltong beef bresaola sausage prosciutto spare ribs, short loin swine pork chop cow flank pork turkey shankle.</p>
-	<img class="target" style="position: absolute; clip: rect(10px 200px 100px 20px);" src="image.png" alt="">
+	<img class="target" style="position: absolute; clip: rect(10px, auto, 100px, 20px);" src="image.png" alt="">
 	<p>Jerky corned beef short loin fatback jowl tail. Rump spare ribs shoulder pork belly. Sausage cow ground round bacon. Bresaola kielbasa pastrami brisket ham hock. Andouille kielbasa ham, pork beef tenderloin ground round beef ribs flank turkey pancetta tri-tip.</p>
 	<div class="column">
 		<p>Shankle filet mignon ribeye chicken, bacon jowl drumstick frankfurter swine short loin capicola leberkas tenderloin pig. Shankle bacon shank pork loin, shoulder ham drumstick biltong. Shankle ham pastrami ball tip turkey leberkas pork loin ground round. Chicken strip steak venison shoulder biltong ham. Bacon pork loin tenderloin kielbasa, prosciutto sausage leberkas jowl ribeye turducken. Flank short loin venison tenderloin spare ribs boudin, tongue pork chop shank sirloin. Ground round ham pork belly, corned beef jowl strip steak short ribs prosciutto pig bresaola spare ribs.</p>
