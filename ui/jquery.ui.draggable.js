@@ -388,7 +388,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_originalHash: function( pointerPosition ) {
-	
+
 		var ret = {
 			position: this.position,
 			offset: copy( this.offset ),
@@ -550,7 +550,7 @@ if ( $.uiBackCompat !== false ) {
 	$.widget( "ui.draggable", $.ui.draggable, {
 
 		_create: function() {
-		
+
 			var self = this,
 				orig = this._originalHash;
 
@@ -563,17 +563,17 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.helper === 'clone' ) {
 				this.options.helper = true;
 			}
-			
+
 			this._originalHash = function() {
-			
+
 				var ret = orig.apply( self, arguments );
-				
+
 				if ( !ret.helper ) {
 					ret.helper = self.element;
 				}
-				
+
 				return ret;
-			
+
 			};
 
 		},
@@ -714,6 +714,18 @@ if ( $.uiBackCompat !== false ) {
 				// No need to continue
 				if ( !cursorAt ) {
 					return;
+				}
+
+				// support array and string position notation
+				// TODO: Remove after 2.0, only used for backCompat
+				if ( typeof cursorAt === "string" ) {
+					cursorAt = cursorAt.split(" ");
+				}
+				if ( $.isArray( cursorAt ) ) {
+					cursorAt = {
+						left: +cursorAt[ 0 ],
+						top: +cursorAt[ 1 ] || 0
+					};
 				}
 
 				if ( "top" in cursorAt ) {
@@ -1085,7 +1097,7 @@ if ( $.uiBackCompat !== false ) {
 					});
 
 				});
-				
+
 				inst.margins = {
 					left: (parseInt(inst.element.css("marginLeft"),10) || 0),
 					top: (parseInt(inst.element.css("marginTop"),10) || 0),
@@ -1096,7 +1108,7 @@ if ( $.uiBackCompat !== false ) {
 			});
 
 			this.element.on( 'drag', function( event, ui ) {
-			
+
 				// Nothing to do
 				if ( !inst.options.snap ) {
 					return;
@@ -1264,7 +1276,7 @@ if ( $.uiBackCompat !== false ) {
 				drops;
 
 			this._super();
-			
+
 			this.element.on( "dragstart", function() {
 				drops = $(':data(ui-sortable)');
 			});
@@ -1279,7 +1291,7 @@ if ( $.uiBackCompat !== false ) {
 				drops.each( function() {
 					$(this).sortable('refreshPositions');
 				});
-				
+
 
 			});
 
@@ -1287,5 +1299,5 @@ if ( $.uiBackCompat !== false ) {
 
 	});
 
-	
+
 }
