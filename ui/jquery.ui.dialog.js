@@ -466,7 +466,7 @@ $.widget( "ui.dialog", {
 			// .ui-resizable has position: relative defined in the stylesheet
 			// but dialogs have to use absolute or fixed positioning
 			position = this.uiDialog.css("position"),
-			resizeHandles = typeof handles === 'string' ?
+			resizeHandles = typeof handles === "string" ?
 				handles	:
 				"n,e,s,w,se,sw,ne,nw";
 

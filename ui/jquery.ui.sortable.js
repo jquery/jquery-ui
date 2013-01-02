@@ -28,7 +28,7 @@ function copy( obj ) {
 $.widget( "ui.sortable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
-	items: 'li', // TODO: move to options when API is ready
+	items: "li", // TODO: move to options when API is ready
 
 	// dragEl: element being dragged (original or helper)
 	// position: final CSS position of dragEl
@@ -100,14 +100,14 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// Create placeholder for while element is dragging
 		// TODO: what do we do about IDs?
 		// TODO: possibly use CSS for visibility portion
-		this.placeholder = this.dragEl.clone().removeAttr('id').css({
-			visibility : 'hidden',
-			position : this.originalCssPosition || ''
+		this.placeholder = this.dragEl.clone().removeAttr("id").css({
+			visibility : "hidden",
+			position : this.originalCssPosition || ""
 		});
 
 		this.dragEl.after( this.placeholder );
 
-		this.dragEl.css( 'position', 'absolute' );
+		this.dragEl.css( "position", "absolute" );
 
 		// // _createHelper() ensures that helpers are in the correct position
 		// // in the DOM, but we need to handle appendTo when there is no helper
@@ -247,16 +247,16 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// If there were inline styles before drag, set them back
 		if ( this.originalCssPosition ) {
-			this.dragEl.css( 'position', this.originalCssPosition );
+			this.dragEl.css( "position", this.originalCssPosition );
 		}
 		// If there were no inline styles, let CSS take over again by removing inline absolute
 		else {
-			this.dragEl.css( 'position', '' );
+			this.dragEl.css( "position", "" );
 		}
 
 		// TODO: should same thing be done here as is done for position or is there better way altogether
-		this.dragEl.css( 'left', '' );
-		this.dragEl.css( 'top', '' );
+		this.dragEl.css( "left", "" );
+		this.dragEl.css( "top", "" );
 
 		this.placeholder.remove();
 

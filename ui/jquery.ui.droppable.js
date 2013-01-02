@@ -123,11 +123,11 @@ $.extend( $.ui.droppable, {
 			var draggableProportions = $.ui.droppable.draggableProportions,
 				xHalf = ui.offset.left + draggableProportions.width / 2,
 				yHalf = ui.offset.top + draggableProportions.height / 2;
-	
+
 			return this.offset.left < xHalf && edges.right > xHalf &&
 				this.offset.top < yHalf && edges.bottom > yHalf;
 		},
-	
+
 		// Draggable overlaps droppable by at least one pixel
 		touch: function( event, edges, ui ) {
 			return this.offset.left < edges.draggableRight &&
@@ -135,7 +135,7 @@ $.extend( $.ui.droppable, {
 				this.offset.top < edges.draggableBottom &&
 				edges.bottom > ui.offset.top;
 		},
-	
+
 		// Pointer overlaps droppable
 		pointer: function( event, edges, ui ) {
 			return ui.pointer.x >= this.offset.left && ui.pointer.x <= edges.right &&

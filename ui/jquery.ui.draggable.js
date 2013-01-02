@@ -81,7 +81,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.dragDimensions = null;
 
 		// The actual dragging element, should always be a jQuery object
-		this.dragEl = ( this.options.helper === true || typeof this.options.helper === 'function' ) ?
+		this.dragEl = ( this.options.helper === true || typeof this.options.helper === "function" ) ?
 			this._createHelper( pointerPosition ) :
 			this.element;
 
@@ -208,7 +208,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// If user cancels stop, leave helper there
 		if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
 			if ( this.options.helper ) {
-				delete this.element.data( 'uiDraggable' ).helper;
+				delete this.element.data( "uiDraggable" ).helper;
 				this.dragEl.remove();
 			}
 			this._resetDomPosition();
@@ -242,7 +242,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			helper.appendTo( this._appendToEl() || this.document[0].body );
 		}
 
-		this.element.data( 'uiDraggable' ).helper = helper;
+		this.element.data( "uiDraggable" ).helper = helper;
 
 		this._cacheDragDimensions( helper );
 
@@ -536,7 +536,7 @@ if ( $.uiBackCompat !== false ) {
 
 			var el = this.options.appendTo;
 
-			if ( el === 'parent' ) {
+			if ( el === "parent" ) {
 				el = this.dragEl.parent();
 			}
 
@@ -556,11 +556,11 @@ if ( $.uiBackCompat !== false ) {
 
 			this._super();
 
-			if ( this.options.helper === 'original' ) {
+			if ( this.options.helper === "original" ) {
 				this.options.helper = false;
 			}
 
-			if ( this.options.helper === 'clone' ) {
+			if ( this.options.helper === "clone" ) {
 				this.options.helper = true;
 			}
 
@@ -580,15 +580,15 @@ if ( $.uiBackCompat !== false ) {
 
 		_setOption: function( key, value ) {
 
-			if ( key !== 'helper' ) {
+			if ( key !== "helper" ) {
 				return this._super( key, value );
 			}
 
-			if ( value === 'clone' ) {
+			if ( value === "clone" ) {
 				value = true;
 			}
 
-			if ( value === 'original' ) {
+			if ( value === "original" ) {
 				value = false;
 			}
 
@@ -645,7 +645,7 @@ if ( $.uiBackCompat !== false ) {
 
 		_setOption: function( key, value ) {
 
-			if ( key !== 'cancel' ) {
+			if ( key !== "cancel" ) {
 				return this._super( key, value );
 			}
 
@@ -831,10 +831,10 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				// Cache the original opacity of draggable element to reset later
-				originalOpacity = self.dragEl.css( 'opacity' );
+				originalOpacity = self.dragEl.css( "opacity" );
 
 				// Set draggable element to new opacity
-				self.dragEl.css( 'opacity', self.options.opacity );
+				self.dragEl.css( "opacity", self.options.opacity );
 
 			});
 
@@ -846,7 +846,7 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				// Reset opacity
-				self.dragEl.css( 'opacity', originalOpacity );
+				self.dragEl.css( "opacity", originalOpacity );
 
 			});
 
@@ -877,9 +877,9 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				// Cache the original css of draggable element to reset later
-				originalLeft = self.dragEl.css( 'left' );
-				originalTop = self.dragEl.css( 'top' );
-				originalPosition = self.dragEl.css( 'position' );
+				originalLeft = self.dragEl.css( "left" );
+				originalTop = self.dragEl.css( "top" );
+				originalPosition = self.dragEl.css( "position" );
 
 			});
 
@@ -924,10 +924,10 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				// Cache the original zIndex of draggable element to reset later
-				originalZIndex = self.dragEl.css( 'z-index' );
+				originalZIndex = self.dragEl.css( "z-index" );
 
 				// Set draggable element to new zIndex
-				self.dragEl.css( 'z-index', self.options.zIndex );
+				self.dragEl.css( "z-index", self.options.zIndex );
 
 			});
 
@@ -939,7 +939,7 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				// Reset zIndex
-				self.dragEl.css( 'z-index', originalZIndex );
+				self.dragEl.css( "z-index", originalZIndex );
 
 			});
 
@@ -1055,7 +1055,7 @@ if ( $.uiBackCompat !== false ) {
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			snap: false,
-			snapMode: 'both',
+			snapMode: "both",
 			snapTolerance: 20
 		},
 
@@ -1066,7 +1066,7 @@ if ( $.uiBackCompat !== false ) {
 
 			this._super();
 
-			this.element.on( 'dragstart', function() {
+			this.element.on( "dragstart", function() {
 
 				// Nothing to do
 				if ( !inst.options.snap ) {
@@ -1077,7 +1077,7 @@ if ( $.uiBackCompat !== false ) {
 				snapElements = [];
 
 				// Select either all draggable elements, or the selector that was passed in
-				$( inst.options.snap === true ? ':data(ui-draggable)' : inst.options.snap ).each(function() {
+				$( inst.options.snap === true ? ":data(ui-draggable)" : inst.options.snap ).each(function() {
 
 					var el = $(this),
 						offset = el.offset();
@@ -1107,7 +1107,7 @@ if ( $.uiBackCompat !== false ) {
 
 			});
 
-			this.element.on( 'drag', function( event, ui ) {
+			this.element.on( "drag", function( event, ui ) {
 
 				// Nothing to do
 				if ( !inst.options.snap ) {
@@ -1136,7 +1136,7 @@ if ( $.uiBackCompat !== false ) {
 						continue;
 					}
 
-					if(o.snapMode !== 'inner') {
+					if(o.snapMode !== "inner") {
 						ts = Math.abs(t - y2) <= d;
 						bs = Math.abs(b - y1) <= d;
 						ls = Math.abs(l - x2) <= d;
@@ -1157,7 +1157,7 @@ if ( $.uiBackCompat !== false ) {
 
 					first = (ts || bs || ls || rs);
 
-					if(o.snapMode !== 'outer') {
+					if(o.snapMode !== "outer") {
 						ts = Math.abs(t - y1) <= d;
 						bs = Math.abs(b - y2) <= d;
 						ls = Math.abs(l - x1) <= d;
@@ -1195,7 +1195,7 @@ if ( $.uiBackCompat !== false ) {
 
 			var mod = d === "absolute" ? 1 : -1,
 				offset = {},
-				scroll = this.cssPosition === 'absolute' && !(this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+				scroll = this.cssPosition === "absolute" && !(this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 			$.extend(offset, {
 				parent: this._getParentOffset(),
@@ -1207,13 +1207,13 @@ if ( $.uiBackCompat !== false ) {
 					pos.top	+																// The absolute mouse position
 					offset.relative.top * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
 					offset.parent.top * mod -										// The offsetParent's offset without borders (offset + border)
-					( ( this.cssPosition === 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod)
+					( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod)
 				),
 				left: (
 					pos.left +																// The absolute mouse position
 					offset.relative.left * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
 					offset.parent.left * mod	-										// The offsetParent's offset without borders (offset + border)
-					( ( this.cssPosition === 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
+					( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
 				)
 			};
 
@@ -1229,7 +1229,7 @@ if ( $.uiBackCompat !== false ) {
 			// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 			// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
 			//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
-			if(this.cssPosition === 'absolute' && this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) {
+			if(this.cssPosition === "absolute" && this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) {
 				po.left += this.scrollParent.scrollLeft();
 				po.top += this.scrollParent.scrollTop();
 			}
@@ -1237,7 +1237,7 @@ if ( $.uiBackCompat !== false ) {
 			//This needs to be actually done for all browsers, since pageX/pageY includes this information
 			//Ugly IE fix
 			if((this.offsetParent[0] === document.body) ||
-				(this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() === 'html' && $.ui.ie)) {
+				(this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() === "html" && $.ui.ie)) {
 				po = { top: 0, left: 0 };
 			}
 
@@ -1278,7 +1278,7 @@ if ( $.uiBackCompat !== false ) {
 			this._super();
 
 			this.element.on( "dragstart", function() {
-				drops = $(':data(ui-sortable)');
+				drops = $(":data(ui-sortable)");
 			});
 
 			// On drag, make sure top does not change so axis is locked
@@ -1289,7 +1289,7 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				drops.each( function() {
-					$(this).sortable('refreshPositions');
+					$(this).sortable("refreshPositions");
 				});
 
 
