@@ -229,7 +229,7 @@ $.widget( "ui.selectmenu", {
 
 		$.each( items, function( index, item ) {
 			if ( item.optgroup !== currentOptgroup ) {
-				$( "<li />", {
+				$( "<li>", {
 					"class": "ui-selectmenu-optgroup" + ( item.element.parent( "optgroup" ).attr( "disabled" ) ? " ui-state-disabled" : "" ),
 					text: item.optgroup
 				}).appendTo( ul );
@@ -240,8 +240,8 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_renderItem: function( ul, item ) {
-		var li = $( "<li />" ).data( "ui-selectmenu-item", item ),
-			a = $( "<a />", { href: "#" });
+		var li = $( "<li>" ).data( "ui-selectmenu-item", item ),
+			a = $( "<a>", { href: "#" });
 
 		if ( item.disabled ) {
 			li.addClass( "ui-state-disabled" );
