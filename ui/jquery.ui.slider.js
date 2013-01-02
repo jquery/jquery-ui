@@ -32,7 +32,13 @@ $.widget( "ui.slider", $.ui.mouse, {
 		range: false,
 		step: 1,
 		value: 0,
-		values: null
+		values: null,
+
+		// callbacks
+		change: null,
+		slide: null,
+		start: null,
+		stop: null
 	},
 
 	_create: function() {
