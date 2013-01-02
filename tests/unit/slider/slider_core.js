@@ -17,11 +17,11 @@ module("slider: core");
 
 test("keydown HOME on handle sets value to min", function() {
 	expect( 2 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1
 	};
 	el.slider(options);
@@ -31,13 +31,13 @@ test("keydown HOME on handle sets value to min", function() {
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.HOME });
 	equal(el.slider("value"), options.min);
 
-	el.slider('destroy');
+	el.slider("destroy");
 
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1
 	};
 	el.slider(options);
@@ -47,16 +47,16 @@ test("keydown HOME on handle sets value to min", function() {
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.HOME });
 	equal(el.slider("value"), options.min);
 
-	el.slider('destroy');
+	el.slider("destroy");
 });
 
 test("keydown END on handle sets value to max", function() {
 	expect( 2 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1
 	};
 	el.slider(options);
@@ -66,13 +66,13 @@ test("keydown END on handle sets value to max", function() {
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.END });
 	equal(el.slider("value"), options.max);
 
-	el.slider('destroy');
+	el.slider("destroy");
 
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1
 	};
 	el.slider(options);
@@ -82,13 +82,13 @@ test("keydown END on handle sets value to max", function() {
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.END });
 	equal(el.slider("value"), options.max);
 
-	el.slider('destroy');
+	el.slider("destroy");
 });
 
 test("keydown PAGE_UP on handle increases value by 1/5 range, not greater than max", function() {
 	expect( 4 );
-	$.each(['horizontal', 'vertical'], function(i, orientation) {
-		el = $('<div></div>');
+	$.each(["horizontal", "vertical"], function(i, orientation) {
+		el = $("<div></div>");
 		options = {
 			max: 100,
 			min: 0,
@@ -111,8 +111,8 @@ test("keydown PAGE_UP on handle increases value by 1/5 range, not greater than m
 
 test("keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than min", function() {
 	expect( 4 );
-	$.each(['horizontal', 'vertical'], function(i, orientation) {
-		el = $('<div></div>');
+	$.each(["horizontal", "vertical"], function(i, orientation) {
+		el = $("<div></div>");
 		options = {
 			max: 100,
 			min: 0,
@@ -135,11 +135,11 @@ test("keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than mi
 
 test("keydown UP on handle increases value by step, not greater than max", function() {
 	expect( 4 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1
 	};
 	el.slider(options);
@@ -154,11 +154,11 @@ test("keydown UP on handle increases value by step, not greater than max", funct
 
 	el.slider("destroy");
 
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1
 	};
 	el.slider(options);
@@ -176,11 +176,11 @@ test("keydown UP on handle increases value by step, not greater than max", funct
 
 test("keydown RIGHT on handle increases value by step, not greater than max", function() {
 	expect( 4 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1
 	};
 	el.slider(options);
@@ -195,11 +195,11 @@ test("keydown RIGHT on handle increases value by step, not greater than max", fu
 
 	el.slider("destroy");
 
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1
 	};
 	el.slider(options);
@@ -217,11 +217,11 @@ test("keydown RIGHT on handle increases value by step, not greater than max", fu
 
 test("keydown DOWN on handle decreases value by step, not less than min", function() {
 	expect( 4 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1
 	};
 	el.slider(options);
@@ -236,11 +236,11 @@ test("keydown DOWN on handle decreases value by step, not less than min", functi
 
 	el.slider("destroy");
 
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1
 	};
 	el.slider(options);
@@ -258,11 +258,11 @@ test("keydown DOWN on handle decreases value by step, not less than min", functi
 
 test("keydown LEFT on handle decreases value by step, not less than min", function() {
 	expect( 4 );
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'horizontal',
+		orientation: "horizontal",
 		step: 1
 	};
 	el.slider(options);
@@ -277,11 +277,11 @@ test("keydown LEFT on handle decreases value by step, not less than min", functi
 
 	el.slider("destroy");
 
-	el = $('<div></div>');
+	el = $("<div></div>");
 	options = {
 		max: 5,
 		min: -5,
-		orientation: 'vertical',
+		orientation: "vertical",
 		step: 1
 	};
 	el.slider(options);

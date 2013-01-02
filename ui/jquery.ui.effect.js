@@ -818,7 +818,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 			$.each( arguments, function() {
 				var el = this.el;
 				$.each( this.diff, function(key) {
-					el.css( key, '' );
+					el.css( key, "" );
 				});
 			});
 

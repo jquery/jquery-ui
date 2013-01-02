@@ -5,7 +5,7 @@ var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
 module( "spinner: events" );
 
 test( "start", function() {
-	expect( 6 );
+	expect( 10 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldStart( expectation, msg ) {
@@ -29,14 +29,14 @@ test( "start", function() {
 	shouldStart( true, "button down" );
 	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
 
-	shouldStart( false, "stepUp" );
+	shouldStart( true, "stepUp" );
 	element.spinner( "stepUp" );
-	shouldStart( false, "stepDown" );
+	shouldStart( true, "stepDown" );
 	element.spinner( "stepDown" );
 
-	shouldStart( false, "pageUp" );
+	shouldStart( true, "pageUp" );
 	element.spinner( "pageUp" );
-	shouldStart( false, "pageDown" );
+	shouldStart( true, "pageDown" );
 	element.spinner( "pageDown" );
 
 	shouldStart( false, "value" );
@@ -44,7 +44,7 @@ test( "start", function() {
 });
 
 test( "spin", function() {
-	expect( 6 );
+	expect( 10 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldSpin( expectation, msg ) {
@@ -68,14 +68,14 @@ test( "spin", function() {
 	shouldSpin( true, "button down" );
 	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
 
-	shouldSpin( false, "stepUp" );
+	shouldSpin( true, "stepUp" );
 	element.spinner( "stepUp" );
-	shouldSpin( false, "stepDown" );
+	shouldSpin( true, "stepDown" );
 	element.spinner( "stepDown" );
 
-	shouldSpin( false, "pageUp" );
+	shouldSpin( true, "pageUp" );
 	element.spinner( "pageUp" );
-	shouldSpin( false, "pageDown" );
+	shouldSpin( true, "pageDown" );
 	element.spinner( "pageDown" );
 
 	shouldSpin( false, "value" );
@@ -83,7 +83,7 @@ test( "spin", function() {
 });
 
 test( "stop", function() {
-	expect( 6 );
+	expect( 10 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldStop( expectation, msg ) {
@@ -107,14 +107,14 @@ test( "stop", function() {
 	shouldStop( true, "button down" );
 	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
 
-	shouldStop( false, "stepUp" );
+	shouldStop( true, "stepUp" );
 	element.spinner( "stepUp" );
-	shouldStop( false, "stepDown" );
+	shouldStop( true, "stepDown" );
 	element.spinner( "stepDown" );
 
-	shouldStop( false, "pageUp" );
+	shouldStop( true, "pageUp" );
 	element.spinner( "pageUp" );
-	shouldStop( false, "pageDown" );
+	shouldStop( true, "pageDown" );
 	element.spinner( "pageDown" );
 
 	shouldStop( false, "value" );

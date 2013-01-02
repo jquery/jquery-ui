@@ -52,7 +52,7 @@ test("filter", function() {
 		selected = function() { actual += 1; };
 
 
-	el = $("#selectable1").selectable({ filter: '.special', selected: selected });
+	el = $("#selectable1").selectable({ filter: ".special", selected: selected });
 	el.simulate( "drag", {
 		dx: 1000,
 		dy: 1000
