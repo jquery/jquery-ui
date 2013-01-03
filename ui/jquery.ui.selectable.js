@@ -22,7 +22,15 @@ $.widget("ui.selectable", $.ui.mouse, {
 		autoRefresh: true,
 		distance: 0,
 		filter: "*",
-		tolerance: "touch"
+		tolerance: "touch",
+
+		// callbacks
+		selected: null,
+		selecting: null,
+		start: null,
+		stop: null,
+		unselected: null,
+		unselecting: null
 	},
 	_create: function() {
 		var selectees,

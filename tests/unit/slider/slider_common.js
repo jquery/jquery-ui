@@ -14,6 +14,10 @@ TestHelpers.commonWidgetTests( "slider", {
 		values: null,
 
 		// callbacks
-		create: null
+		create: null,
+		change: null,
+		slide: null,
+		start: null,
+		stop: null
 	}
 });
