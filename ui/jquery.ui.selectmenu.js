@@ -279,11 +279,18 @@ $.widget( "ui.selectmenu", {
 
 	_buttonEvents: {
 		focus: function() {
-			// init Menu on first focus
-			this.refresh();
-			// reset focus class as its removed by ui.widget._setOption
-			this.button.addClass( "ui-state-focus" );
-			this._off( this.button, "focus" );
+			// cause the button live region to update on focus, triggering screenreaders to read its value
+			// would be nice to find a less hacky solution in the future
+			this.buttonText.html( this.buttonText.text() + "&#160;" );
+
+			// run this just once; _off can't unbind a specific handler
+			if ( !this.wasFocused ) {
+				// init Menu on first focus
+				this.refresh();
+				// reset focus class as its removed by ui.widget._setOption
+				this.button.addClass( "ui-state-focus" );
+				this.wasFocused = true;
+			}
 		},
 		click: function( event ) {
 			this._toggle( event );
