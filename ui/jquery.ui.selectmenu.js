@@ -57,6 +57,12 @@ $.widget( "ui.selectmenu", {
 
 		// fix existing label
 		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
+		this._on( this.label, {
+			"click":  function( event ) {
+				event.preventDefault();
+				this.button.focus();
+			}
+		});
 
 		// hide original select tag
 		this.element.hide();
