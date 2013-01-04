@@ -8,21 +8,28 @@
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.progressbar.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.dialog.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		var progressbar = $( "#progressbar" ),
+		var progressTimer,
+			progressbar = $( "#progressbar" ),
 			progressLabel = $( ".progress-label" ),
+			dialogButtons = [{
+				text: "Cancel Download",
+				click: closeDownload
+			}],
 			dialog = $( "#dialog" ).dialog({
 				autoOpen: false,
 				closeOnEscape: false,
-				draggable: false,
 				resizable: false,
+				buttons: dialogButtons,
 				open: function() {
-					setTimeout( progress, 2000 );
+					progressTimer = setTimeout( progress, 2000 );
 				}
 			}),
 			downloadButton = $( "#downloadButton" )
@@ -38,73 +45,48 @@
 		progressbar.progressbar({
 			value: false,
 			change: function() {
-				progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+				progressLabel.text( "Current Progress: " + progressbar.progressbar( "value" ) + "%" );
 			},
 			complete: function() {
-				progressLabel
-					.prependTo( "#progressbar" )
-					.css({
-						"position": "absolute",
-						"left": "50%",
-						"float": "none",
-						"margin-left": "-30px",
-						"margin-right": 0
-					})
-					.text( "Complete!" );
-				dialog.dialog( "option", "buttons", [
-					{
-						text: "Close",
-						click: function() {
-							dialog
-								.dialog( "close" )
-								.dialog( "option", "buttons", false );
-							progressbar.progressbar( "value", false );
-							progressLabel
-								.text( "Starting download..." )
-								.css( "margin-left", "-55px" );
-							downloadButton.button( "option", {
-								disabled: false,
-								label: "Start Download"
-							});
-						}
-					}
-				]);
+				progressLabel.text( "Complete!" );
+				dialog.dialog( "option", "buttons", [{
+					text: "Close",
+					click: closeDownload
+				}]);
 			}
 		});
 
 		function progress() {
 			var val = progressbar.progressbar( "value" ) || 0;
 
-			if ( !val ) {
-				progressLabel
-					.appendTo( ".ui-progressbar-value" )
-					.css({
-						"position": "relative",
-						"left": "auto",
-						"float": "right",
-						"margin-left": 0,
-						"margin-right": 5
-					});
-			}
-
 			progressbar.progressbar( "value", val + Math.floor( Math.random() * 3 ) );
 
 			if ( val < 99 ) {
-				setTimeout( progress, 100 );
+				progressTimer = setTimeout( progress, 100 );
 			}
+		}
+
+		function closeDownload() {
+			clearTimeout( progressTimer );
+			dialog
+				.dialog( "option", "buttons", dialogButtons )
+				.dialog( "close" );
+			progressbar.progressbar( "value", false );
+			progressLabel
+				.text( "Starting download..." );
+			downloadButton.button( "option", {
+				disabled: false,
+				label: "Start Download"
+			});
 		}
 	});
 	</script>
 	<style>
 	#progressbar {
-		margin-top: 30px;
+		margin-top: 20px;
 	}
 
 	.progress-label {
-		position: absolute;
-		left: 50%;
-		margin-left: -55px;
-		margin-top: 5px;
 		font-weight: bold;
 		text-shadow: 1px 1px 0 #fff;
 	}
@@ -117,7 +99,8 @@
 <body>
 
 <div id="dialog" title="File Download">
-	<div id="progressbar"><div class="progress-label">Starting download...</div></div>
+	<div class="progress-label">Starting download...</div>
+	<div id="progressbar"></div>
 </div>
 <button id="downloadButton">Start Download</button>
 
