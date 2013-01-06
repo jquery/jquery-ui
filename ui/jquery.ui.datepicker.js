@@ -1015,11 +1015,7 @@ $.extend(Datepicker.prototype, {
 			this._updateDatepicker(inst);
 		} else {
 			this._hideDatepicker();
-			this._lastInput = inst.input[0];
-			if (typeof(inst.input[0]) !== "object") {
-				inst.input.focus(); // restore focus
-			}
-			this._lastInput = null;
+			inst.input.next().focus();
 		}
 	},
 
