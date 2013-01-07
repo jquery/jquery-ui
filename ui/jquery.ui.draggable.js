@@ -305,7 +305,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( pointerPosition ) {
-		var scrollTop = this.scrollParent.scrollTop(),
+
+		var newScrollTop, newScrollLeft,
+			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = this.scrollSensitivity,
 			// overflowOffset is only set when scrollParent is not doc/html
@@ -318,24 +320,49 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			xRight = this.overflow.width + overflowLeft - pointerPosition.x,
 			xLeft = pointerPosition.x- overflowLeft,
 			yBottom = this.overflow.height + overflowTop - pointerPosition.y,
-			yTop = pointerPosition.y - overflowTop;
+			yTop = pointerPosition.y - overflowTop,
+			// accounts for change in scrollbar to modify "original" pointer so calc
+			change;
 
 		// Handle vertical scrolling
 		if ( yBottom < scrollSensitivity ) {
-			this.scrollParent.scrollTop( scrollTop +
-				this._speed( scrollSensitivity - yBottom ) );
+		
+			change = this._speed( scrollSensitivity - yBottom );
+			this.scrollParent.scrollTop( scrollTop + change );
+			this.originalPointer.y = this.originalPointer.y + change;
+				
 		} else if ( yTop < scrollSensitivity ) {
-			this.scrollParent.scrollTop( scrollTop -
-				this._speed( scrollSensitivity - yTop ) );
+
+			change = this._speed( scrollSensitivity - yTop );
+			newScrollTop = scrollTop - change;
+			
+			// Don't do anything unless new value is "real"
+			if ( newScrollTop >= 0 ) {
+				this.scrollParent.scrollTop( newScrollTop );
+				this._speed( scrollSensitivity - yTop )
+				this.originalPointer.y = this.originalPointer.y - change;
+			}
+
 		}
 
 		// Handle horizontal scrolling
 		if ( xRight < scrollSensitivity ) {
-			this.scrollParent.scrollLeft( scrollLeft +
-				this._speed( scrollSensitivity - xRight ) );
+
+			change = this._speed( scrollSensitivity - xRight );
+			this.scrollParent.scrollLeft( scrollLeft + change);
+			this.originalPointer.x = this.originalPointer.x + change;
+
 		} else if ( xLeft < scrollSensitivity ) {
-			this.scrollParent.scrollLeft( scrollLeft -
-				this._speed( scrollSensitivity - xLeft ) );
+
+			change = this._speed( scrollSensitivity - xLeft );
+			newScrollLeft = scrollLeft - change;
+
+			// Don't do anything unless new value is "real"
+			if ( newScrollLeft >= 0 ) {
+				this.scrollParent.scrollLeft( newScrollLeft );
+				this.originalPointer.x = this.originalPointer.x - change;
+			}
+			
 		}
 	},
 
@@ -370,6 +397,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
+	
 		var newLeft = this.position.left,
 			newTop = this.position.top;
 
@@ -382,11 +410,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		// TODO: does this work with nested scrollable parents?
-		if ( this.cssPosition !== "fixed" ) {
+		if ( this.cssPosition !== "fixed") {
 			newLeft += this.scrollParent.scrollLeft();
 			newTop += this.scrollParent.scrollTop();
 		}
-
+		
 		this.dragEl.css({
 			left: newLeft,
 			top: newTop

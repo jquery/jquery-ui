@@ -38,9 +38,7 @@ TestHelpers.draggable = {
 	},
 	setScroll: function( what ) {
 		if(what) {
-			// todo: currently, the draggable interaction doesn't properly account for scrolled pages,
-			// uncomment the line below to make the tests fail that should when the page is scrolled
-			// $(document).scrollTop(100); $(document).scrollLeft(100);
+			$(document).scrollTop(100); $(document).scrollLeft(100);
 		} else {
 			$("#main").scrollTop(100); $("#main").scrollLeft(100);
 		}
