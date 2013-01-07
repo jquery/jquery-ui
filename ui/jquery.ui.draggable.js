@@ -339,7 +339,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			// Don't do anything unless new value is "real"
 			if ( newScrollTop >= 0 ) {
 				this.scrollParent.scrollTop( newScrollTop );
-				this._speed( scrollSensitivity - yTop )
+				this._speed( scrollSensitivity - yTop );
 				this.originalPointer.y = this.originalPointer.y - change;
 			}
 
@@ -410,7 +410,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		// TODO: does this work with nested scrollable parents?
-		if ( this.cssPosition !== "fixed") {
+		if ( this.cssPosition !== "fixed" ) {
 			newLeft += this.scrollParent.scrollLeft();
 			newTop += this.scrollParent.scrollTop();
 		}
