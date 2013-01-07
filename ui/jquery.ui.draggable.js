@@ -789,18 +789,18 @@ if ( $.uiBackCompat !== false ) {
 
 				// If x is actually something, check that user is at least half way to next point
 				if ( x ) {
-					if ( ui.position.left - currentX > x/2 ) {
+					if ( ui.position.left - currentX >= x/2 ) {
 						currentX = currentX + x;
-					}	else if ( currentX - ui.position.left > x/2 ) {
+					}	else if ( currentX - ui.position.left >= x/2 ) {
 						currentX = currentX - x;
 					}
 				}
 
 				// If y is actually something, check that user is at least half way to next point
 				if ( y ) {
-					if ( ui.position.top - currentY > y/2 ) {
+					if ( ui.position.top - currentY >= y/2 ) {
 						currentY = currentY + y;
-					} else if ( currentY - ui.position.top > y/2 ) {
+					} else if ( currentY - ui.position.top >= y/2 ) {
 						currentY = currentY - y;
 					}
 				}
