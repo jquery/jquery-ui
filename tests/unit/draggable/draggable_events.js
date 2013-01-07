@@ -55,7 +55,7 @@ test("stopping the start callback", function() {
 
 test("stopping the drag callback", function() {
 
-	expect(3);
+	expect(2);
 
 	var start = 0,
 		stop = 0,
@@ -72,7 +72,6 @@ test("stopping the drag callback", function() {
 	});
 
 	equal(start, 1, "start callback should happen exactly once");
-	equal(dragc, 1, "drag callback should happen exactly once");
 	equal(stop, 1, "stop callback should happen, as we need to actively stop the drag");
 
 });
