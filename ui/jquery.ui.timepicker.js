@@ -17,7 +17,9 @@
 function makeBetweenMaskFunction( min, max, def, pad ) {
 	return function( value ) {
 		if ( !value ) {
-			return def;
+			if (!allowEmpty) {
+				return def;
+			}
 		}
 		value = parseInt( value, 10 );
 		if ( value >= min && value <= max ) {
@@ -28,6 +30,7 @@ function makeBetweenMaskFunction( min, max, def, pad ) {
 
 var formatNonPaddedHours = /\b(h)(?=:)/i,
 	format12Hour = /h/g,
+	allowEmpty = false,
 	maskDefinitions = {
 		_h: makeBetweenMaskFunction( 1, 12, "12", " " ),
 		hh: makeBetweenMaskFunction( 1, 12, "12", "0" ),
@@ -42,14 +45,15 @@ $.widget( "ui.timepicker", {
 	defaultElement: "<input>",
 	options: {
 		ampm: true,
-		seconds: true
+		seconds: true,
+		clearEmpty: false
 	},
 	_create: function() {
 
 		// handles globalization options
 		this.element.mask({
 			mask: this._generateMask(),
-			clearEmpty: false,
+			clearEmpty: this.options.clearEmpty,
 			definitions: $.extend({
 				tt: $.proxy( this, "_validAmPm" )
 			}, maskDefinitions )
@@ -91,7 +95,8 @@ $.widget( "ui.timepicker", {
 			buffer = this.mask.buffer,
 			bufferLength = buffer.length,
 			maskDefinitions = this.mask.options.definitions,
-			ampm = this._getCulture();
+			ampm = this._getCulture(),
+			shouldClear = true;
 
 		if ( value == null ) {
 
@@ -99,23 +104,29 @@ $.widget( "ui.timepicker", {
 			value = [ 0, "00", "00" ];
 			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
 				bufferObject = buffer[ bufferIndex ];
-				if (
-					bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ||
-					bufferObject.valid === maskDefinitions._H || bufferObject.valid === maskDefinitions.HH
-				) {
-					value[ 0 ] = parseInt( bufferObject.value, 10 );
-				} else if ( bufferObject.valid === maskDefinitions.mm ) {
-					value[ 1 ] = bufferObject.value;
-				} else if ( bufferObject.valid === maskDefinitions.ss ) {
-					value[ 2 ] = bufferObject.value;
-				} else if ( bufferObject.valid === maskDefinitions.tt ) {
-					value[ 0 ] %= 12;
-					if ( jQuery.inArray( bufferObject.value, ampm.PM ) > -1 ) {
-						value[ 0 ] += 12;
+				if (bufferObject.value) {
+					shouldClear = false;
+					if (
+						bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ||
+						bufferObject.valid === maskDefinitions._H || bufferObject.valid === maskDefinitions.HH
+					) {
+						value[ 0 ] = parseInt( bufferObject.value, 10 );
+					} else if ( bufferObject.valid === maskDefinitions.mm ) {
+						value[ 1 ] = bufferObject.value;
+					} else if ( bufferObject.valid === maskDefinitions.ss ) {
+						value[ 2 ] = bufferObject.value;
+					} else if ( bufferObject.valid === maskDefinitions.tt ) {
+						value[ 0 ] %= 12;
+						if ( jQuery.inArray( bufferObject.value, ampm.PM ) > -1 ) {
+							value[ 0 ] += 12;
+						}
 					}
 				}
 			}
 
+			if(shouldClear && this.options.clearEmpty) {
+				return "";
+			}
 			// pads with zeros
 			value[ 0 ] = maskDefinitions.HH( "" + value[ 0 ] );
 			return value.join( ":" );
@@ -147,7 +158,13 @@ $.widget( "ui.timepicker", {
 
 	_events: {
 		click: "_checkPosition",
-		keydown: "_checkPosition"
+		keydown: "_checkPosition",
+		focus: function() {
+			allowEmpty = this.options.clearEmpty;
+		},
+		blur: function() {
+			allowEmpty = false;
+		}
 	},
 	_checkPosition: function( event ) {
 		var position = this.mask._caret(),
@@ -174,8 +191,8 @@ $.widget( "ui.timepicker", {
 			// minimal calendar object for timepicker
 			return {
 				patterns: {
-					t: "<h>:<mm> <tt>",
-					T: "<h>:<mm>:<ss> <tt>"
+					t: "h:mm tt",
+					T: "h:mm:ss tt"
 				},
 				AM: [ "AM", "am" ],
 				PM: [ "PM", "pm" ]
@@ -254,7 +271,10 @@ $.widget( "ui.timepicker", {
 			valid = this._getCulture();
 
 		if ( val === "" ) {
-			return valid.PM && valid.PM[0];
+			if (!allowEmpty) {
+				return valid.PM && valid.PM[0];
+			}
+			return "";
 		}
 
 		for ( ampm in { AM: 1, PM: 1 } ) {
