@@ -47,8 +47,6 @@ walk([
 	section( "updating trac" ),
 	updateTrac,
 	confirm
-
-	// TODO: upload release zip to GitHub
 ]);
 
 
