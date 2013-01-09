@@ -229,3 +229,5 @@ Viktor Kojouharov <vkojouharov@gmail.com>
 Pawel Maruszczyk <lord_t@o2.pl>
 Pavel Selitskas <p.selitskas@gmail.com>
 Bjørn Johansen <bjorn.johansen@metronet.no>
+Matthieu Penant <thieum22@hotmail.com>
+Dominic Barnes <dominic@dbarnes.info>
