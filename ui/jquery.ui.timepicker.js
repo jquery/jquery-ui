@@ -46,7 +46,8 @@ $.widget( "ui.timepicker", {
 	options: {
 		ampm: true,
 		seconds: true,
-		clearEmpty: false
+		clearEmpty: false,
+		disabled: false
 	},
 	_create: function() {
 
@@ -59,7 +60,7 @@ $.widget( "ui.timepicker", {
 			}, maskDefinitions )
 		});
 		this.mask = this.element.data( "ui-mask" );
-		this.element.spinner();
+		this.element.spinner({ disabled: this.options.disabled });
 		this.spinner = this.element.data( "ui-spinner" );
 		$.extend( this.spinner, {
 			_parse: $.proxy( this, "_spinnerParse" ),
@@ -245,6 +246,9 @@ $.widget( "ui.timepicker", {
 
 		// update the mask, all of the option changes have a chance of changing it
 		this.element.mask( "option", "mask", this._generateMask() );
+
+		// update the spinner enabling
+		this.element.spinner("option", "disabled", options.disabled);
 
 		// restore the value from before the option changed
 		this.value( currentValue );
