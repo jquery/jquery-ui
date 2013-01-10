@@ -9,9 +9,6 @@
 
 var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime, preRelease,
 	fs = require( "fs" ),
-	path = require( "path" ),
-	// support: node <0.8
-	existsSync = fs.existsSync || path.existsSync,
 	rnewline = /\r?\n/,
 	repo = "git@github.com:jquery/jquery-ui.git",
 	branch = "master";
@@ -50,8 +47,6 @@ walk([
 	section( "updating trac" ),
 	updateTrac,
 	confirm
-
-	// TODO: upload release zip to GitHub
 ]);
 
 
@@ -376,7 +371,7 @@ function bootstrap( fn ) {
 	baseDir = process.cwd() + "/__release";
 	repoDir = baseDir + "/repo";
 
-	if ( existsSync( baseDir ) ) {
+	if ( fs.existsSync( baseDir ) ) {
 		console.log( "The directory '" + baseDir + "' already exists." );
 		console.log( "Aborting." );
 		process.exit( 1 );

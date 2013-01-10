@@ -19,10 +19,10 @@ asyncTest( "focus", function() {
 	$( "#inputTabindex0" )
 		.one( "focus", function() {
 			ok( true, "event triggered" );
+			start();
 		})
 		.focus( 500, function() {
 			ok( true, "callback triggered" );
-			start();
 		});
 });
 
