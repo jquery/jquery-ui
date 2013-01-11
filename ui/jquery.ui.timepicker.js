@@ -17,7 +17,7 @@
 function makeBetweenMaskFunction( min, max, def, pad ) {
 	return function( value ) {
 		if ( !value ) {
-			if (!allowEmpty) {
+			if ( !allowEmpty ) {
 				return def;
 			}
 		}
@@ -60,7 +60,9 @@ $.widget( "ui.timepicker", {
 			}, maskDefinitions )
 		});
 		this.mask = this.element.data( "ui-mask" );
-		this.element.spinner({ disabled: this.options.disabled });
+		this.element.spinner({
+			disabled: this.options.disabled
+			});
 		this.spinner = this.element.data( "ui-spinner" );
 		$.extend( this.spinner, {
 			_parse: $.proxy( this, "_spinnerParse" ),
@@ -105,7 +107,7 @@ $.widget( "ui.timepicker", {
 			value = [ 0, "00", "00" ];
 			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
 				bufferObject = buffer[ bufferIndex ];
-				if (bufferObject.value) {
+				if ( bufferObject.value ) {
 					shouldClear = false;
 					if (
 						bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ||
@@ -125,7 +127,7 @@ $.widget( "ui.timepicker", {
 				}
 			}
 
-			if(shouldClear && this.options.clearEmpty) {
+			if( shouldClear && this.options.clearEmpty ) {
 				return "";
 			}
 			// pads with zeros
@@ -192,8 +194,8 @@ $.widget( "ui.timepicker", {
 			// minimal calendar object for timepicker
 			return {
 				patterns: {
-					t: "h:mm tt",
-					T: "h:mm:ss tt"
+					t: "<h>:<mm> <tt>",
+					T: "<h>:<mm>:<ss> <tt>"
 				},
 				AM: [ "AM", "am" ],
 				PM: [ "PM", "pm" ]
@@ -206,7 +208,7 @@ $.widget( "ui.timepicker", {
 		mask = mask.replace( formatNonPaddedHours, "_$1" );
 
 		if ( !this.options.ampm ) {
-			mask = mask.replace( format12Hour, "H" ).replace( / <?tt>?/, "" );
+			mask = mask.replace( format12Hour, "HH" ).replace( / <?tt>?/, "" );
 		}
 
 		return mask;
@@ -248,7 +250,7 @@ $.widget( "ui.timepicker", {
 		this.element.mask( "option", "mask", this._generateMask() );
 
 		// update the spinner enabling
-		this.element.spinner("option", "disabled", options.disabled);
+		this.element.spinner( "option", "disabled", options.disabled );
 
 		// restore the value from before the option changed
 		this.value( currentValue );
