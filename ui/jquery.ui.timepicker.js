@@ -28,8 +28,8 @@ function makeBetweenMaskFunction( min, max, def, pad ) {
 	};
 }
 
-var formatNonPaddedHours = /\b(h)(?=:)/i,
-	format12Hour = /h/g,
+var formatNonPaddedHours = /\b(h)(?=>?:)/i,
+	format12Hour = /_h/g,
 	allowEmpty = false,
 	maskDefinitions = {
 		_h: makeBetweenMaskFunction( 1, 12, "12", " " ),
@@ -62,7 +62,7 @@ $.widget( "ui.timepicker", {
 		this.mask = this.element.data( "ui-mask" );
 		this.element.spinner({
 			disabled: this.options.disabled
-			});
+		});
 		this.spinner = this.element.data( "ui-spinner" );
 		$.extend( this.spinner, {
 			_parse: $.proxy( this, "_spinnerParse" ),
@@ -127,7 +127,7 @@ $.widget( "ui.timepicker", {
 				}
 			}
 
-			if( shouldClear && this.options.clearEmpty ) {
+			if ( shouldClear && this.options.clearEmpty ) {
 				return "";
 			}
 			// pads with zeros
@@ -277,8 +277,8 @@ $.widget( "ui.timepicker", {
 			valid = this._getCulture();
 
 		if ( val === "" ) {
-			if (!allowEmpty) {
-				return valid.PM && valid.PM[0];
+			if ( !allowEmpty ) {
+				return valid.PM && valid.PM[ 0 ];
 			}
 			return "";
 		}
