@@ -2,8 +2,8 @@
  * jQuery UI Draggable @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Draggable
@@ -326,16 +326,16 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// Handle vertical scrolling
 		if ( yBottom < scrollSensitivity ) {
-		
+
 			change = this._speed( scrollSensitivity - yBottom );
 			this.scrollParent.scrollTop( scrollTop + change );
 			this.originalPointer.y = this.originalPointer.y + change;
-				
+
 		} else if ( yTop < scrollSensitivity ) {
 
 			change = this._speed( scrollSensitivity - yTop );
 			newScrollTop = scrollTop - change;
-			
+
 			// Don't do anything unless new value is "real"
 			if ( newScrollTop >= 0 ) {
 				this.scrollParent.scrollTop( newScrollTop );
@@ -362,7 +362,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				this.scrollParent.scrollLeft( newScrollLeft );
 				this.originalPointer.x = this.originalPointer.x - change;
 			}
-			
+
 		}
 	},
 
@@ -397,7 +397,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-	
+
 		var newLeft = this.position.left,
 			newTop = this.position.top;
 
@@ -414,7 +414,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			newLeft += this.scrollParent.scrollLeft();
 			newTop += this.scrollParent.scrollTop();
 		}
-		
+
 		this.dragEl.css({
 			left: newLeft,
 			top: newTop

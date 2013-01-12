@@ -2,7 +2,7 @@
  * jQuery UI Tooltip @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -46,7 +46,9 @@ $.widget( "ui.tooltip", {
 	version: "@VERSION",
 	options: {
 		content: function() {
-			var title = $( this ).attr( "title" );
+			// support: IE<9, Opera in jQuery <1.7
+			// .text() can't accept undefined, so coerce to a string
+			var title = $( this ).attr( "title" ) || "";
 			// Escape title, since we're going from an attribute to raw HTML
 			return $( "<a>" ).text( title ).html();
 		},
