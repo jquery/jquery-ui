@@ -114,7 +114,9 @@ test("{ cancel: 'span' }", function() {
 	TestHelpers.draggable.testDrag(el, "#draggable2 span", 50, 50, 0, 0);
 });
 
-test("{ cancel: ? }, unexpected", function() {
+test( "{ cancel: ? }, unexpected", function() {
+	expect( 6 );
+
 	var el,
 		unexpected = {
 			"true": true,
@@ -122,17 +124,12 @@ test("{ cancel: ? }, unexpected", function() {
 			"{}": {},
 			"[]": [],
 			"null": null,
-			"undefined": undefined,
-			"function() {return '';}": function() {return "";},
-			"function() {return true;}": function() {return true;},
-			"function() {return false;}": function() {return false;}
+			"undefined": undefined
 		};
 
-	expect( 9 );
-
-	$.each(unexpected, function(key, val) {
+	$.each( unexpected, function( key, val ) {
 		el = $("#draggable2").draggable({ cancel: val });
-		TestHelpers.draggable.shouldMove(el, "cancel: " + key);
+		TestHelpers.draggable.shouldMove( el, "cancel: " + key );
 		el.draggable("destroy");
 	});
 });
@@ -309,18 +306,6 @@ test( "cursorAt", function() {
 			});
 		});
 	});
-});
-
-test("{ distance: 10 }", function() {
-	expect( 3 );
-
-	var el = $("#draggable2").draggable({ distance: 10 });
-	TestHelpers.draggable.testDrag(el, el, -9, -9, 0, 0, "distance not met");
-
-	TestHelpers.draggable.testDrag(el, el, -10, -10, -10, -10, "distance met");
-
-	TestHelpers.draggable.testDrag(el, el, 9, 9, 0, 0, "distance not met");
-
 });
 
 test("{ grid: [50, 50] }, relative", function() {
