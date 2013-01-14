@@ -175,9 +175,10 @@ grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", fun
 });
 
 grunt.registerTask( "generate_themes", function() {
-	var download, files, done,
+	var download, files, done, configContent,
 		target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/",
-		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() );
+		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() ),
+		configFile = "node_modules/download.jqueryui.com/config.json";
 	try {
 		require.resolve( "download.jqueryui.com" );
 	} catch( error ) {
@@ -186,8 +187,12 @@ grunt.registerTask( "generate_themes", function() {
 
 	// copy release files into download builder to avoid cloning again
 	grunt.file.expandFiles( distFolder + "/**" ).forEach(function( file ) {
-		grunt.file.copy( file, "node_modules/download.jqueryui.com/release/" + file.replace(/^dist/, "") );
+		grunt.file.copy( file, "node_modules/download.jqueryui.com/release/" + file.replace(/^dist\/jquery-ui-/, "") );
 	});
+	// make it look for the right version
+	configContent = grunt.file.readJSON( configFile );
+	configContent.jqueryUi.stable.version = grunt.config( "pkg.version" );
+	grunt.file.write( configFile, JSON.stringify( configContent, null, "\t" ) + "\n" );
 
 	download = new ( require( "download.jqueryui.com" ) )();
 
