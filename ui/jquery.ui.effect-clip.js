@@ -15,8 +15,7 @@
 
 var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto)\)$/,
 	parseClip = function( str, outerWidth, outerHeight ) {
-		var clip,
-			values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
+		var values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
 		
 		// Webkit getComputedStyle incorrectly returns "0px" for specified "auto" values, so we have to guess
 		// https://bugs.webkit.org/show_bug.cgi?id=20454
@@ -31,14 +30,12 @@ var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|au
 			values[ 3 ] = "auto";
 		}
 
-		clip = {
-			top: parseFloat( values[ 1 ], 10 ),
-			right: values[ 2 ] === "auto" ? outerWidth : parseFloat( values[ 2 ], 10 ),
-			bottom: values[ 3 ] === "auto" ? outerHeight : parseFloat( values[ 3 ], 10 ),
-			left: parseFloat( values[ 4 ], 10 )
+		return {
+			top: parseFloat( values[ 1 ] ) || 0 ,
+			right: values[ 2 ] === "auto" ? outerWidth : parseFloat( values[ 2 ] ) || 0,
+			bottom: values[ 3 ] === "auto" ? outerHeight : parseFloat( values[ 3 ] ) || 0,
+			left: parseFloat( values[ 4 ] ) || 0
 		};
-
-		return clip;
 	};
 
 $.effects.effect.clip = function( o, done ) {
