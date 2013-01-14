@@ -21,7 +21,8 @@ test("{ addClasses: false }", function() {
 	el.draggable("destroy");
 });
 
-test("{ appendTo: 'parent' }, default", function() {
+// TODO: This doesn't actually test whether append happened, possibly remove
+test("{ appendTo: 'parent' }, default, no clone", function() {
 	expect( 2 );
 	var el = $("#draggable2").draggable({ appendTo: "parent" });
 	TestHelpers.draggable.shouldMove(el);
@@ -31,22 +32,102 @@ test("{ appendTo: 'parent' }, default", function() {
 
 });
 
-test("{ appendTo: Element }", function() {
+// TODO: This doesn't actually test whether append happened, possibly remove
+test("{ appendTo: Element }, no clone", function() {
 	expect( 2 );
-	var el = $("#draggable2").draggable({ appendTo: $("#draggable2").parent()[0] });
+	var el = $("#draggable2").draggable({appendTo: $("#draggable2").parent()[0] });
+
 	TestHelpers.draggable.shouldMove(el);
 
 	el = $("#draggable1").draggable({ appendTo: $("#draggable2").parent()[0] });
 	TestHelpers.draggable.shouldMove(el);
 });
 
-test("{ appendTo: Selector }", function() {
+// TODO: This doesn't actually test whether append happened, possibly remove
+test("{ appendTo: Selector }, no clone", function() {
 	expect( 2 );
 	var el = $("#draggable2").draggable({ appendTo: "#main" });
 	TestHelpers.draggable.shouldMove(el);
 
 	el = $("#draggable1").draggable({ appendTo: "#main" });
 	TestHelpers.draggable.shouldMove(el);
+});
+
+test("{ appendTo: 'parent' }, default", function() {
+
+	expect(2);
+
+	var el = $("#draggable1").draggable();
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	equal( el.draggable( "option", "appendTo" ), "parent" );
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_parent"), $("#qunit-fixture")[0] );
+
+});
+
+test("{ appendTo: Element }", function() {
+
+	expect(1);
+
+	var appendTo = $("#draggable2").parent()[0],
+		el = $("#draggable1").draggable({ appendTo: appendTo });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_parent"), appendTo );
+
+});
+
+test("{ appendTo: jQuery }", function() {
+
+	expect(1);
+
+	var appendTo = $("#draggable2").parent(),
+		el = $("#draggable1").draggable({ appendTo: appendTo });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_parent"), appendTo[0] );
+
+});
+test("{ appendTo: Selector }", function() {
+
+	expect(1);
+
+
+	var appendTo = "#main",
+		el = $("#draggable1").draggable({ appendTo: appendTo });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_parent"), $(appendTo)[0] );
+
+});
+
+
+test("{ appendTo: 'parent' }, switching after initialization", function() {
+
+	expect(2);
+
+	var el = $("#draggable1").draggable({ helper : "clone" });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	// Move and make sure el was appended to fixture
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_parent"), $("#qunit-fixture")[0] );
+
+	// Move and make sure el was appended to main
+	el.draggable( "option", "appendTo", $("#main") );
+	TestHelpers.draggable.move(el, 2, 2);
+	equal( el.data("last_parent"), $("#main")[0] );
+
 });
 
 test("{ axis: false }, default", function() {
@@ -85,6 +166,26 @@ test("{ axis: ? }, unexpected", function() {
 		TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50, "axis: " + key);
 		el.draggable("destroy");
 	});
+});
+
+test("{ axis: false }, switching after initialization", function() {
+
+	expect(3);
+
+	var el;
+
+	// Any direction
+	el = $("#draggable1").draggable({ axis : false });
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50);
+
+	// Only horizontal
+	el.draggable("option", "axis", "x");
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 0);
+
+	// Vertical only
+	el.draggable("option", "axis", "y");
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 0, 50);
+
 });
 
 test("{ cancel: 'input,textarea,button,select,option' }, default", function() {

@@ -50,5 +50,24 @@ TestHelpers.draggable = {
 	},
 	margin: function(el, side) {
 		return parseInt(el.css("margin-" + side), 10) || 0;
+	},
+	move: function( el, x, y ) {
+	
+		$( el ).simulate( "drag", {
+			dx: x,
+			dy: y
+		});
+	
+	},
+	trackAppendedParent : function( el ) {
+	
+		// appendTo ignored without being clone
+		el.draggable( "option", "helper", "clone" );
+
+		el.on( "drag", function(e,ui) {
+			// Get what parent is at time of drag
+			el.data( "last_parent", ui.helper.parent()[0] );
+		});
+
 	}
 };
