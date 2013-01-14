@@ -32,8 +32,8 @@ var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|au
 
 		return {
 			top: parseFloat( values[ 1 ] ) || 0 ,
-			right: values[ 2 ] === "auto" ? outerWidth : parseFloat( values[ 2 ] ) || 0,
-			bottom: values[ 3 ] === "auto" ? outerHeight : parseFloat( values[ 3 ] ) || 0,
+			right: parseFloat( values[ 2 ] ) || outerWidth,
+			bottom: parseFloat( values[ 3 ] ) || outerHeight,
 			left: parseFloat( values[ 4 ] ) || 0
 		};
 	};
