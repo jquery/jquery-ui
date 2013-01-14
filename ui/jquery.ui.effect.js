@@ -951,8 +951,18 @@ $.extend( $.effects, {
 
 	// Creates a placeholder element so that the original element can be made absolute
 	createPlaceholder: function( element ) {
+
+		var placeholder,
+			cssPosition = element.css("position"),
+			position = element.position();
+
+		// lock in element width
+		element.outerWidth( element.outerWidth( true ), true ).outerHeight( element.outerHeight( true ), true );
+
 		if ( /^(static|relative)/.test( element.css("position") ) ) {
-			return $("<div>").css({
+			cssPosition = "absolute";
+
+			placeholder = $("<div>").css({
 				display: /^(inline|ruby)/.test( element.css("display") ) ? "inline-block" : "block",
 				visibility: "hidden",
 				// margins need to be set to account for margin collapse
@@ -965,6 +975,14 @@ $.extend( $.effects, {
 			.outerHeight( element.outerHeight() )
 			.insertAfter( element );
 		}
+
+		element.css({
+			position: cssPosition,
+			left: position.left,
+			top: position.top
+		});
+
+		return placeholder;
 	},
 
 	// Wraps the element around a wrapper that copies position properties
