@@ -20,19 +20,6 @@ var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|au
 			outerHeight = el.outerHeight(),
 			values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
 
-		// Webkit getComputedStyle incorrectly returns "0px" for specified "auto" values, so we have to guess
-		// https://bugs.webkit.org/show_bug.cgi?id=20454
-		// Support: Chrome, Safari
-		// @todo mpetrovich Determine support version numbers
-		if ( values[ 2 ] === "0px" && values[ 2 ] <= values[ 4 ] ) {
-			// right <= left
-			values[ 2 ] = "auto";
-		}
-		if ( values[ 3 ] === "0px" && values[ 3 ] <= values[ 1 ] ) {
-			// bottom <= top
-			values[ 3 ] = "auto";
-		}
-
 		return {
 			top: parseFloat( values[ 1 ] ) || 0 ,
 			right: parseFloat( values[ 2 ] ) || outerWidth,
