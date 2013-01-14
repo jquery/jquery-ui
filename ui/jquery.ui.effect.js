@@ -949,6 +949,20 @@ $.extend( $.effects, {
 		};
 	},
 
+	// Creates a placeholder element so that the original element can be made absolute
+	createPlaceholder: function( element ) {
+		if ( /^(static|relative)/.test( element.css("position") ) ) {
+
+			return $("<div>").css({
+				display: /^(inline|ruby)/.test( element.css("display") ) ? "inline-block" : "block",
+				visibility: "hidden"
+			})
+			.outerWidth( element.outerWidth(true), true )
+			.outerHeight( element.outerHeight(true), true )
+			.insertAfter( element );
+		}
+	},
+
 	// Wraps the element around a wrapper that copies position properties
 	createWrapper: function( element ) {
 

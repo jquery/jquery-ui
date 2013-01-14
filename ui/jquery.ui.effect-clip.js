@@ -14,9 +14,12 @@
 (function( $, undefined ) {
 
 var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto)\)$/,
-	parseClip = function( str, outerWidth, outerHeight ) {
-		var values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
-		
+	parseClip = function( el ) {
+		var str = el.css("clip"),
+			outerWidth = el.outerWidth(),
+			outerHeight = el.outerHeight(),
+			values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
+
 		// Webkit getComputedStyle incorrectly returns "0px" for specified "auto" values, so we have to guess
 		// https://bugs.webkit.org/show_bug.cgi?id=20454
 		// Support: Chrome, Safari
@@ -39,7 +42,7 @@ var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|au
 	};
 
 $.effects.effect.clip = function( o, done ) {
-	var width, height, outerWidth, outerHeight, offset, start, end, shadow, temp, display,
+	var start, end, shadow, temp, position,
 		el = $( this ),
 		props = [ "display", "position", "left", "right", "width", "height", "clip" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
@@ -47,20 +50,14 @@ $.effects.effect.clip = function( o, done ) {
 		direction = o.direction || "vertical",
 		both = direction === "both",
 		horizontal = both || direction === "horizontal",
-		vertical = both || direction === "vertical",
-		position = el.css("position");
+		vertical = both || direction === "vertical";
 
 	if ( show ) {
 		el.show();
 	}
 
-	display = el.css("display");
-	width = el.width();
-	height = el.height();
-	outerWidth = el.outerWidth();
-	outerHeight = el.outerHeight();
-	offset = el.position();
-	start = parseClip( el.css("clip"), outerWidth, outerHeight );
+	position = el.position();
+	start = parseClip( el );
 	end = {
 		top: vertical ? ( start.bottom - start.top ) / 2 : start.top,
 		right: horizontal ? ( start.right - start.left ) / 2 : start.right,
@@ -68,32 +65,14 @@ $.effects.effect.clip = function( o, done ) {
 		left: horizontal ? ( start.right - start.left ) / 2 : start.left
 	};
 
-	if ( /^(inline|ruby)/.test( display ) ) {
-		display = "inline-block";
-	} else {
-		display = "block";
-	}
-
-	if ( position === "static" || position === "relative" ) {
-		position = "absolute";
-
-		// Since clip can only be applied to elements with position:absolute,
-		// we need to create a stand-in for the non-absolutely positioned element being clipped
-		shadow = $("<div>").css({
-			display: display,
-			visibility: "hidden"
-		})
-		.outerWidth( el.outerWidth(true), true )
-		.outerHeight( el.outerHeight(true), true )
-		.insertAfter( el );
-	}
-
 	$.effects.save( el, props );
 
+	shadow = $.effects.createPlaceholder( el );
+
 	el.css({
-		position: position,
-		left: offset.left,
-		top: offset.top
+		position: shadow ? "absolute" : el.css("position"),
+		left: position.left,
+		top: position.top
 	})
 	.outerWidth( el.outerWidth(true), true )
 	.outerHeight( el.outerHeight(true), true );
