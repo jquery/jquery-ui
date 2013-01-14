@@ -29,7 +29,7 @@ var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|au
 	};
 
 $.effects.effect.clip = function( o, done ) {
-	var start, end, placeholder, temp, position,
+	var start, end, placeholder, temp,
 		el = $( this ),
 		props = [ "display", "position", "left", "right", "width", "height", "clip" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
@@ -43,7 +43,6 @@ $.effects.effect.clip = function( o, done ) {
 		el.show();
 	}
 
-	position = el.position();
 	start = parseClip( el );
 	end = {
 		top: vertical ? ( start.bottom - start.top ) / 2 : start.top,
@@ -55,14 +54,6 @@ $.effects.effect.clip = function( o, done ) {
 	$.effects.save( el, props );
 
 	placeholder = $.effects.createPlaceholder( el );
-
-	el.css({
-		position: placeholder ? "absolute" : el.css("position"),
-		left: position.left,
-		top: position.top
-	})
-	.outerWidth( el.outerWidth(true), true )
-	.outerHeight( el.outerHeight(true), true );
 
 	if ( show ) {
 		temp = start;
