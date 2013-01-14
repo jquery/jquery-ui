@@ -47,6 +47,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 		scrollSpeed: 20,
 		scope: "default",
 		tolerance: "intersect",
+    multipleSelect: false,
+    multipleSelectKey: 'shiftKey',
+    multipleSelectTrigger: '> *',
+    multipleSelectClass: 'ui-selected',
 		zIndex: 1000,
 
 		// callbacks
@@ -80,6 +84,16 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Initialize mouse events for interaction
 		this._mouseInit();
+
+    if(o.multipleSelect){
+      this.element.find(o.items).bind("click", function(event){
+        if(event[o.multipleSelectKey]){
+          $(this).addClass(o.multipleSelectClass);
+        } else {
+          $("."+o.multipleSelectClass).removeClass(o.multipleSelectClass);
+        }
+      });
+    }
 
 		//We're ready to go
 		this.ready = true;
@@ -248,6 +262,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 			this.helper.css("zIndex", o.zIndex);
 		}
+
+    if(o.multipleSelect)
+      this._uiHash().item.siblings("."+o.multipleSelectClass+":not(.ui-sortable-placeholder)").appendTo(this._uiHash().item);
 
 		//Prepare scrolling
 		if(this.scrollParent[0] !== document && this.scrollParent[0].tagName !== "HTML") {
@@ -1129,6 +1146,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// everything else normalized again
 		var i,
 			delayedTriggers = [];
+			o = this.options;
 
 		// We first have to update the dom position of the actual currentItem
 		// Note: don't do it if the current item is already removed (by a user), or it gets reappended (see #4088)
@@ -1187,6 +1205,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this._storedZIndex) {
 			this.helper.css("zIndex", this._storedZIndex === "auto" ? "" : this._storedZIndex);
 		}
+
+    if(o.multipleSelect)
+        this._uiHash().item.after(this._uiHash().item.find("."+o.multipleSelectClass));
 
 		this.dragging = false;
 		if(this.cancelHelperRemoval) {
