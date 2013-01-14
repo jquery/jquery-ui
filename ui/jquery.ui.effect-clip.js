@@ -29,7 +29,7 @@ var clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|au
 	};
 
 $.effects.effect.clip = function( o, done ) {
-	var start, end, shadow, temp, position,
+	var start, end, placeholder, temp, position,
 		el = $( this ),
 		props = [ "display", "position", "left", "right", "width", "height", "clip" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
@@ -54,10 +54,10 @@ $.effects.effect.clip = function( o, done ) {
 
 	$.effects.save( el, props );
 
-	shadow = $.effects.createPlaceholder( el );
+	placeholder = $.effects.createPlaceholder( el );
 
 	el.css({
-		position: shadow ? "absolute" : el.css("position"),
+		position: placeholder ? "absolute" : el.css("position"),
 		left: position.left,
 		top: position.top
 	})
@@ -80,8 +80,8 @@ $.effects.effect.clip = function( o, done ) {
 		complete: function() {
 			$.effects.restore( el, props );
 
-			if ( shadow ) {
-				shadow.remove();
+			if ( placeholder ) {
+				placeholder.remove();
 			}
 			if ( !show ) {
 				el.hide();
