@@ -245,10 +245,10 @@ test("cancel, default, switching after initialization", function() {
 		
 	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
 	
-	el.draggable('option', 'cancel', 'textarea' );
+	el.draggable("option", "cancel", "textarea" );
 	TestHelpers.draggable.testDrag(el, input, 50, 50, 50, 50);
 	
-	el.draggable('option', 'cancel', 'input' );
+	el.draggable("option", "cancel", "input" );
 	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
 	
 });
@@ -310,8 +310,7 @@ test("{ containment: 'parent' }, absolute", function() {
 test("containment, default, switching after initialization", function() {
 	expect( 2 );
 
-	var offsetAfter,
-		el = $("#draggable1").draggable({ containment: false });
+	var el = $("#draggable1").draggable({ containment: false });
 
 	TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
 	

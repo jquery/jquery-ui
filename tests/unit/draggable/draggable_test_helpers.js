@@ -60,7 +60,7 @@ TestHelpers.draggable = {
 	
 	},
 	trackMouseCss : function( el ) {
-		el.on( "drag", function(e,ui) {
+		el.on( "drag", function() {
 			el.data( "last_dragged_cursor", $("body").css("cursor") );
 		});
 	},
