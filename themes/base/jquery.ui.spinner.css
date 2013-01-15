@@ -18,6 +18,7 @@
 .ui-spinner-input {
 	border: none;
 	background: none;
+	color: inherit;
 	padding: 0;
 	margin: .2em 0;
 	vertical-align: middle;
