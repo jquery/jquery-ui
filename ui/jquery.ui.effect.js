@@ -1250,8 +1250,46 @@ $.fn.extend({
 			}
 		});
 		return val;
+	},
+
+	// getter/setter for an object representing clip values
+	cssClip: function( clipObj ) {
+		return clipObj ?
+			this.css( "clip", "rect(" + clipObj.top + "px " + clipObj.right + "px " + clipObj.bottom + "px " + clipObj.left + "px)" ) :
+			parseClip( this.css("clip"), this );
 	}
 });
+
+function parseClip( str, element ) {
+		var outerWidth = element.outerWidth(),
+			outerHeight = element.outerHeight(),
+			clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto)\)$/,
+			values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
+
+		return {
+			top: parseFloat( values[ 1 ] ) || 0 ,
+			right: parseFloat( values[ 2 ] ) || outerWidth,
+			bottom: parseFloat( values[ 3 ] ) || outerHeight,
+			left: parseFloat( values[ 4 ] ) || 0
+		};
+}
+
+$.fx.step.clip = function( fx ) {
+	if ( !fx.clipInit ) {
+		fx.start = $( fx.elem ).cssClip();
+		if ( typeof fx.end === "string" ) {
+			fx.end = parseClip( fx.end, fx.elem );
+		}
+		fx.clipInit = true;
+	}
+
+	$( fx.elem ).cssClip({
+		top: fx.pos * (fx.end.top - fx.start.top) + fx.start.top,
+		right: fx.pos * (fx.end.right - fx.start.right) + fx.start.right,
+		bottom: fx.pos * (fx.end.bottom - fx.start.bottom) + fx.start.bottom,
+		left: fx.pos * (fx.end.left - fx.start.left) + fx.start.left
+	});
+};
 
 })();
 
