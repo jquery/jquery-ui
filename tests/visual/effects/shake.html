@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo</title>
+	<script src="../../../jquery-1.8.3.js"></script>
+	<script src="../../../ui/jquery.ui.effect.js"></script>
+	<script src="../../../ui/jquery.ui.effect-shake.js"></script>
+  <style type='text/css'>
+    .pd {
+    padding:10px;
+}
+  </style>
+<script type='text/javascript'>//<![CDATA[
+$(window).load(function(){
+$("#btn").click(function() {
+    $(".pd").effect("shake", 20000);
+});
+});//]]>
+
+</script>
+
+
+</head>
+<body>
+  <button id="btn">Click</button>
+<div style="background: green;">
+		<div class="pd" style="background: blue; margin:3px;">hi</div>
+		<div class="pd" style="background: blue; margin:3px;">hi</div>
+		<div class="pd" style="background: blue; margin:3px;">hi</div>
+    <select class="pd"><option value="sherov">sherov</option></select></div><div>
+		<div class="pd" style="background: blue; margin:3px;">hi</div>
+		<div class="pd" style="background: blue; margin:3px;">hi</div>
+		<div class="pd" style="background: blue; margin:3px;">hi</div>
+    <input type="text" class="pd" />
+</div>
+
+
+</body>
+
+
+</html>
+

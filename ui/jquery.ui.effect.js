@@ -957,7 +957,14 @@ $.extend( $.effects, {
 			position = element.position();
 
 		// lock in element width
-		element.outerWidth( element.outerWidth( true ), true ).outerHeight( element.outerHeight( true ), true );
+		element.css({
+			marginTop: element.css("marginTop"),
+			marginBottom: element.css("marginBottom"),
+			marginLeft: element.css("marginLeft"),
+			marginRight: element.css("marginRight")
+		})
+		.outerWidth( element.outerWidth() )
+		.outerHeight( element.outerHeight() );
 
 		if ( /^(static|relative)/.test( element.css("position") ) ) {
 			cssPosition = "absolute";
