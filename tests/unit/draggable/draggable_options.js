@@ -64,7 +64,7 @@ test("{ appendTo: 'parent' }, default", function() {
 	equal( el.draggable( "option", "appendTo" ), "parent" );
 
 	TestHelpers.draggable.move(el, 1, 1);
-	equal( el.data("last_parent"), $("#qunit-fixture")[0] );
+	equal( el.data("last_dragged_parent"), $("#qunit-fixture")[0] );
 
 });
 
@@ -78,7 +78,7 @@ test("{ appendTo: Element }", function() {
 	TestHelpers.draggable.trackAppendedParent(el);
 
 	TestHelpers.draggable.move(el, 1, 1);
-	equal( el.data("last_parent"), appendTo );
+	equal( el.data("last_dragged_parent"), appendTo );
 
 });
 
@@ -92,7 +92,7 @@ test("{ appendTo: jQuery }", function() {
 	TestHelpers.draggable.trackAppendedParent(el);
 
 	TestHelpers.draggable.move(el, 1, 1);
-	equal( el.data("last_parent"), appendTo[0] );
+	equal( el.data("last_dragged_parent"), appendTo[0] );
 
 });
 test("{ appendTo: Selector }", function() {
@@ -106,12 +106,12 @@ test("{ appendTo: Selector }", function() {
 	TestHelpers.draggable.trackAppendedParent(el);
 
 	TestHelpers.draggable.move(el, 1, 1);
-	equal( el.data("last_parent"), $(appendTo)[0] );
+	equal( el.data("last_dragged_parent"), $(appendTo)[0] );
 
 });
 
 
-test("{ appendTo: 'parent' }, switching after initialization", function() {
+test("appendTo, default, switching after initialization", function() {
 
 	expect(2);
 
@@ -121,12 +121,12 @@ test("{ appendTo: 'parent' }, switching after initialization", function() {
 
 	// Move and make sure el was appended to fixture
 	TestHelpers.draggable.move(el, 1, 1);
-	equal( el.data("last_parent"), $("#qunit-fixture")[0] );
+	equal( el.data("last_dragged_parent"), $("#qunit-fixture")[0] );
 
 	// Move and make sure el was appended to main
 	el.draggable( "option", "appendTo", $("#main") );
 	TestHelpers.draggable.move(el, 2, 2);
-	equal( el.data("last_parent"), $("#main")[0] );
+	equal( el.data("last_dragged_parent"), $("#main")[0] );
 
 });
 
@@ -168,7 +168,7 @@ test("{ axis: ? }, unexpected", function() {
 	});
 });
 
-test("{ axis: false }, switching after initialization", function() {
+test("axis, default, switching after initialization", function() {
 
 	expect(3);
 
@@ -235,6 +235,24 @@ test( "{ cancel: ? }, unexpected", function() {
 	});
 });
 
+test("cancel, default, switching after initialization", function() {
+	expect( 3 );
+	
+	$("<div id='draggable-option-cancel-default'><input type='text'></div>").appendTo("#main");
+
+	var input = $("#draggable-option-cancel-default input"),
+		el = $("#draggable-option-cancel-default").draggable();
+		
+	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
+	
+	el.draggable('option', 'cancel', 'textarea' );
+	TestHelpers.draggable.testDrag(el, input, 50, 50, 50, 50);
+	
+	el.draggable('option', 'cancel', 'input' );
+	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
+	
+});
+
 /*
 test("{ containment: false }, default", function() {
 	expect( 1 );
@@ -287,6 +305,26 @@ test("{ containment: 'parent' }, absolute", function() {
 	});
 	offsetAfter = el.offset();
 	deepEqual(offsetAfter, expected, "compare offset to parent");
+});
+
+test("containment, default, switching after initialization", function() {
+	expect( 2 );
+
+	var offsetAfter,
+		el = $("#draggable1").draggable({ containment: false });
+
+	TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
+	
+	el.draggable( "option", "containment", "parent" )
+		.css({top:0,left:0})
+		.appendTo( $("#main") );
+		
+	TestHelpers.draggable.testDrag(el, el, -100, -100, 0, 0);
+	
+	// TODO: Switching back to false does not update to false
+	// el.draggable( "option", "containment", false );
+	// TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
+
 });
 
 /*
@@ -365,6 +403,27 @@ test("{ cursor: 'move' }", function() {
 
 	equal(actual, expected, "start callback: cursor '" + expected + "'");
 	equal(after, before, "after drag: cursor restored");
+
+});
+
+test("cursor, default, switching after initialization", function() {
+
+	expect(3);
+	
+	var el = $("#draggable1").draggable();
+	
+	TestHelpers.draggable.trackMouseCss( el );
+
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( el.data("last_dragged_cursor"), "auto" );
+	
+	el.draggable( "option", "cursor", "move" );
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( el.data("last_dragged_cursor"), "move" );
+	
+	el.draggable( "option", "cursor", "ns-resize" );
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( el.data("last_dragged_cursor"), "ns-resize" );
 
 });
 
