@@ -514,6 +514,23 @@ test( "cursorAt, switching after initialization", function() {
 
 });
 
+
+test( "disabled", function() {
+
+	expect( 3 );
+
+	var el = $("#draggable1").draggable();
+	
+	TestHelpers.draggable.shouldMove(el);
+	
+	el.draggable( "option", "disabled", true );
+	TestHelpers.draggable.shouldNotMove(el);
+	
+	el.draggable( "option", "disabled", false );
+	TestHelpers.draggable.shouldMove(el);
+	
+});
+
 test("{ grid: [50, 50] }, relative", function() {
 	expect( 2 );
 
