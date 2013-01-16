@@ -942,6 +942,30 @@ test("{ opacity: 0.5 }", function() {
 
 });
 
+test("opacity, default, switching after initialization", function() {
+
+	expect(3);
+
+	var opacity = null,
+		el = $("#draggable2").draggable({
+			start: function() {
+				opacity = $(this).css("opacity");
+			}
+		});
+
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( opacity, 1 );
+	
+	el.draggable( "option", "opacity", 0.5 );
+	TestHelpers.draggable.move( el, 2, 1 );
+	equal( opacity, 0.5 );
+	
+	el.draggable( "option", "opacity", false );
+	TestHelpers.draggable.move( el, 3, 1 );
+	equal( opacity, 1 );
+
+});
+
 test("{ zIndex: 10 }", function() {
 
 	expect(1);
@@ -961,6 +985,32 @@ test("{ zIndex: 10 }", function() {
 	});
 
 	equal(actual, expected, "start callback: zIndex is");
+
+});
+
+test("zIndex, default, switching after initialization", function() {
+
+	expect(3);
+
+	var zindex = null,
+		el = $("#draggable2").draggable({
+			start: function() {
+				zindex = $(this).css("z-index");
+			}
+		});
+		
+	el.css( "z-index", 1 );
+
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( zindex, 1 );
+	
+	el.draggable( "option", "zIndex", 5 );
+	TestHelpers.draggable.move( el, 2, 1 );
+	equal( zindex, 5 );
+	
+	el.draggable( "option", "zIndex", false );
+	TestHelpers.draggable.move( el, 3, 1 );
+	equal( zindex, 1 );
 
 });
 
