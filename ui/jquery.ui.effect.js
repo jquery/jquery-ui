@@ -17,14 +17,14 @@ $.effects = {
 };
 
 /*!
- * jQuery Color Animations v2.1.2pre@b11ed286205199b8db74220cd237c4f045050e63
+ * jQuery Color Animations v2.1.2
  * https://github.com/jquery/jquery-color
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * Date: Thu Jan 3 14:21:32 2013 -0500
+ * Date: Wed Jan 16 08:47:09 2013 -0600
  */
 (function( jQuery, undefined ) {
 
