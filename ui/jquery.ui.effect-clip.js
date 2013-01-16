@@ -17,7 +17,6 @@ $.effects.effect.clip = function( o, done ) {
 	var start, placeholder,
 		animate = {},
 		el = $( this ),
-		props = [ "display", "position", "left", "right", "width", "height", "clip" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
 		show = mode === "show",
 		direction = o.direction || "vertical",
@@ -37,8 +36,6 @@ $.effects.effect.clip = function( o, done ) {
 		left: horizontal ? ( start.right - start.left ) / 2 : start.left
 	};
 
-	$.effects.save( el, props );
-
 	placeholder = $.effects.createPlaceholder( el );
 
 	if ( show ) {
@@ -51,11 +48,9 @@ $.effects.effect.clip = function( o, done ) {
 		duration: o.duration,
 		easing: o.easing,
 		complete: function() {
-			$.effects.restore( el, props );
 
-			if ( placeholder ) {
-				placeholder.remove();
-			}
+			$.effects.removePlaceholder( placeholder, el );
+
 			if ( !show ) {
 				el.hide();
 			}

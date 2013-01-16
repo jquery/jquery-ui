@@ -950,13 +950,30 @@ $.extend( $.effects, {
 	},
 
 	// Creates a placeholder element so that the original element can be made absolute
+	// also stores all modified properties on the element so they can be restored later
 	createPlaceholder: function( element ) {
+		$.effects.save( element, [
+			"display",
+			"position",
+			"left",
+			"right",
+			"top",
+			"bottom",
+			"width",
+			"height",
+			"clip",
+			"marginTop",
+			"marginLeft",
+			"marginBottom",
+			"marginRight"
+		] );
 
 		var placeholder,
 			cssPosition = element.css("position"),
 			position = element.position();
 
-		// lock in element width
+		// this is needed to avoid changes in visible width
+		// when an element goes from static to absolute
 		element.css({
 			marginTop: element.css("marginTop"),
 			marginBottom: element.css("marginBottom"),
@@ -966,7 +983,7 @@ $.extend( $.effects, {
 		.outerWidth( element.outerWidth() )
 		.outerHeight( element.outerHeight() );
 
-		if ( /^(static|relative)/.test( element.css("position") ) ) {
+		if ( /^(static|relative)/.test( cssPosition ) ) {
 			cssPosition = "absolute";
 
 			placeholder = $("<div>").css({
@@ -990,6 +1007,30 @@ $.extend( $.effects, {
 		});
 
 		return placeholder;
+	},
+
+	// removes a placeholder if it exists and restores
+	// properties that were modified during placeholder creation
+	removePlaceholder: function ( placeholder, el ) {
+		$.effects.restore( el, [
+			"display",
+			"position",
+			"left",
+			"right",
+			"top",
+			"bottom",
+			"width",
+			"height",
+			"clip",
+			"marginTop",
+			"marginLeft",
+			"marginBottom",
+			"marginRight"
+		] );
+
+		if ( placeholder ) {
+			placeholder.remove();
+		}
 	},
 
 	// Wraps the element around a wrapper that copies position properties

@@ -17,7 +17,6 @@ $.effects.effect.shake = function( o, done ) {
 
 	var placeholder, i,
 		el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 		mode = $.effects.setMode( el, o.mode || "effect" ),
 		direction = o.direction || "left",
 		distance = o.distance || 20,
@@ -33,8 +32,9 @@ $.effects.effect.shake = function( o, done ) {
 		queue = el.queue(),
 		queuelen = queue.length;
 
-	$.effects.save( el, props );
-	el.show();
+	if ( mode === "show" ) {
+		el.show();
+	}
 
 	placeholder = $.effects.createPlaceholder( el );
 
@@ -54,13 +54,13 @@ $.effects.effect.shake = function( o, done ) {
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
 		.queue(function() {
+
+			$.effects.removePlaceholder( placeholder, el );
+
 			if ( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
-			if ( placeholder ) {
-				placeholder.remove();
-			}
+
 			done();
 		});
 
