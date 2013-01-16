@@ -15,7 +15,8 @@
 
 $.effects.effect.shake = function( o, done ) {
 
-	var el = $( this ),
+	var placeholder, i,
+		el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 		mode = $.effects.setMode( el, o.mode || "effect" ),
 		direction = o.direction || "left",
@@ -28,15 +29,14 @@ $.effects.effect.shake = function( o, done ) {
 		animation = {},
 		animation1 = {},
 		animation2 = {},
-		i,
-
 		// we will need to re-assemble the queue to stack our animations in place
 		queue = el.queue(),
 		queuelen = queue.length;
 
 	$.effects.save( el, props );
 	el.show();
-	$.effects.createWrapper( el );
+
+	placeholder = $.effects.createPlaceholder( el );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -58,7 +58,9 @@ $.effects.effect.shake = function( o, done ) {
 				el.hide();
 			}
 			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
+			if ( placeholder ) {
+				placeholder.remove();
+			}
 			done();
 		});
 
