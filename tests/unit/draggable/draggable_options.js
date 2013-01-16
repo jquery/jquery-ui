@@ -237,20 +237,20 @@ test( "{ cancel: ? }, unexpected", function() {
 
 test("cancel, default, switching after initialization", function() {
 	expect( 3 );
-	
+
 	$("<div id='draggable-option-cancel-default'><input type='text'></div>").appendTo("#main");
 
 	var input = $("#draggable-option-cancel-default input"),
 		el = $("#draggable-option-cancel-default").draggable();
-		
+
 	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
-	
+
 	el.draggable("option", "cancel", "textarea" );
 	TestHelpers.draggable.testDrag(el, input, 50, 50, 50, 50);
-	
+
 	el.draggable("option", "cancel", "input" );
 	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
-	
+
 });
 
 /*
@@ -313,13 +313,13 @@ test("containment, default, switching after initialization", function() {
 	var el = $("#draggable1").draggable({ containment: false });
 
 	TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
-	
+
 	el.draggable( "option", "containment", "parent" )
 		.css({top:0,left:0})
 		.appendTo( $("#main") );
-		
+
 	TestHelpers.draggable.testDrag(el, el, -100, -100, 0, 0);
-	
+
 	// TODO: Switching back to false does not update to false
 	// el.draggable( "option", "containment", false );
 	// TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
@@ -408,18 +408,18 @@ test("{ cursor: 'move' }", function() {
 test("cursor, default, switching after initialization", function() {
 
 	expect(3);
-	
+
 	var el = $("#draggable1").draggable();
-	
+
 	TestHelpers.draggable.trackMouseCss( el );
 
 	TestHelpers.draggable.move( el, 1, 1 );
 	equal( el.data("last_dragged_cursor"), "auto" );
-	
+
 	el.draggable( "option", "cursor", "move" );
 	TestHelpers.draggable.move( el, 1, 1 );
 	equal( el.data("last_dragged_cursor"), "move" );
-	
+
 	el.draggable( "option", "cursor", "ns-resize" );
 	TestHelpers.draggable.move( el, 1, 1 );
 	equal( el.data("last_dragged_cursor"), "ns-resize" );
@@ -485,7 +485,7 @@ test( "cursorAt, switching after initialization", function() {
 	$.each( tests, function( testName, testData ) {
 		$.each( [ "relative", "absolute" ], function( i, position ) {
 			var el = $( "#draggable" + ( i + 1 ) );
-			
+
 			el.draggable({
 					drag: function( event, ui ) {
 						if( !testData.cursorAt ) {
@@ -500,7 +500,7 @@ test( "cursorAt, switching after initialization", function() {
 						}
 					}
 			});
-			
+
 			el.draggable( "option", "cursorAt", false );
 			el.draggable( "option", "cursorAt", testData.cursorAt );
 
@@ -538,12 +538,12 @@ test("grid, switching after initialization", function() {
 	// Forward
 	TestHelpers.draggable.testDrag(el, el, 24, 24, 24, 24);
 	TestHelpers.draggable.testDrag(el, el, 0, 0, 0, 0);
-	
+
 	el.draggable( "option", "grid", [50,50] );
-	
+
 	TestHelpers.draggable.testDrag(el, el, 24, 24, 0, 0);
 	TestHelpers.draggable.testDrag(el, el, 26, 25, 50, 50);
-	
+
 });
 
 test("{ handle: 'span' }", function() {
@@ -553,6 +553,40 @@ test("{ handle: 'span' }", function() {
 
 	TestHelpers.draggable.testDrag(el, "#draggable2 span", 50, 50, 50, 50, "drag span");
 	TestHelpers.draggable.shouldNotMove(el, "drag element");
+});
+
+test("handle, default, switching after initialization", function() {
+	expect( 6 );
+
+	var el = $("#draggable2").draggable();
+
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50);
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 100, 100, 100, 100);
+
+	// Switch
+	el.draggable( "option", "handle", "span" );
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 0, 0);
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 100, 100, 100, 100);
+
+	// And back
+	el.draggable( "option", "handle", false );
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50);
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 100, 100, 100, 100);
+
+});
+
+test("helper, default, switching after initialization", function() {
+	expect( 3 );
+
+	var el = $("#draggable1").draggable();
+	TestHelpers.draggable.shouldMove(el);
+
+	el.draggable( "option", "helper", "clone" );
+	TestHelpers.draggable.shouldNotMove(el);
+
+	el.draggable( "option", "helper", "original" );
+	TestHelpers.draggable.shouldMove(el);
+
 });
 
 test("{ helper: 'clone' }, relative", function() {
