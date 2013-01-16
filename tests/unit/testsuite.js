@@ -28,9 +28,9 @@ QUnit.reset = function() {
 QUnit.config.requireExpects = true;
 
 QUnit.config.urlConfig.push({
-  id: "min",
-  label: "Minified source",
-  tooltip: "Load minified source files instead of the regular unminified ones."
+	id: "min",
+	label: "Minified source",
+	tooltip: "Load minified source files instead of the regular unminified ones."
 });
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
