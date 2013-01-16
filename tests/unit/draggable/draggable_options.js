@@ -467,6 +467,53 @@ test( "cursorAt", function() {
 	});
 });
 
+test( "cursorAt, switching after initialization", function() {
+
+	expect( 24 );
+
+	var deltaX = -3,
+		deltaY = -3,
+		tests = {
+			"false": { cursorAt : false },
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+		};
+
+	$.each( tests, function( testName, testData ) {
+		$.each( [ "relative", "absolute" ], function( i, position ) {
+			var el = $( "#draggable" + ( i + 1 ) );
+			
+			el.draggable({
+					drag: function( event, ui ) {
+						if( !testData.cursorAt ) {
+							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
+							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
+						} else if( testData.cursorAt.right ) {
+							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
+						} else {
+							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
+							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
+						}
+					}
+			});
+			
+			el.draggable( "option", "cursorAt", false );
+			el.draggable( "option", "cursorAt", testData.cursorAt );
+
+			el.simulate( "drag", {
+				moves: 1,
+				dx: deltaX,
+				dy: deltaY
+			});
+		});
+	});
+
+});
+
 test("{ grid: [50, 50] }, relative", function() {
 	expect( 2 );
 
@@ -481,6 +528,22 @@ test("{ grid: [50, 50] }, absolute", function() {
 	var el = $("#draggable2").draggable({ grid: [50, 50] });
 	TestHelpers.draggable.testDrag(el, el, 24, 24, 0, 0);
 	TestHelpers.draggable.testDrag(el, el, 26, 25, 50, 50);
+});
+
+test("grid, switching after initialization", function() {
+
+	expect( 4 );
+
+	var el = $("#draggable1").draggable();
+	// Forward
+	TestHelpers.draggable.testDrag(el, el, 24, 24, 24, 24);
+	TestHelpers.draggable.testDrag(el, el, 0, 0, 0, 0);
+	
+	el.draggable( "option", "grid", [50,50] );
+	
+	TestHelpers.draggable.testDrag(el, el, 24, 24, 0, 0);
+	TestHelpers.draggable.testDrag(el, el, 26, 25, 50, 50);
+	
 });
 
 test("{ handle: 'span' }", function() {
