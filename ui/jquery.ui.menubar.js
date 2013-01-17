@@ -47,7 +47,7 @@ $.widget( "ui.menubar", {
 
 	_initializeMenubarsBoundElement: function() {
 		this.element
-			.addClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
+			.addClass("ui-menubar ui-widget-header ui-helper-clearfix")
 			.attr( "role", "menubar" );
 	},
 
@@ -68,15 +68,15 @@ $.widget( "ui.menubar", {
 				clearTimeout( menubar.closeTimer );
 			},
 			focusout: function( event ) {
-				menubar.closeTimer = setTimeout( function() {
+				menubar.closeTimer = setTimeout (function() {
 					menubar._close( event );
-				}, 150);
+				}, 150 );
 			},
 			"mouseleave .ui-menubar-item": function( event ) {
 				if ( menubar.options.autoExpand ) {
 					menubar.closeTimer = setTimeout( function() {
 						menubar._close( event );
-					}, 150);
+					}, 150 );
 				}
 			},
 			"mouseenter .ui-menubar-item": function( event ) {
@@ -91,12 +91,12 @@ $.widget( "ui.menubar", {
 			seenFirstItem = false;
 
 		this.menuItems
-			.addClass( "ui-menubar-item" )
+			.addClass("ui-menubar-item")
 			.attr( "role", "presentation" );
 
 		$.each( this.menuItems, function( index, menuItem ){
 			menubar._initializeMenuItem( $( menuItem ), menubar, seenFirstItem );
-		});
+		} );
 	},
 
 	_initializeMenuItem: function( $menuItem, menubar ) {
@@ -122,29 +122,29 @@ $.widget( "ui.menubar", {
 		var subMenus = $menuItem.children( menubar.options.menuElement );
 
 		subMenus
-		.menu({
-			position: {
-				within: this.options.position.within
-			},
-			select: function( event, ui ) {
-				ui.item.parents( "ul.ui-menu:last" ).hide();
-				menubar._close();
-				// TODO what is this targetting? there's probably a better way to access it
-				$( event.target ).prev().focus();
-				menubar._trigger( "select", event, ui );
-			},
-			menus: this.options.menuElement
-		})
-		.hide()
-		.attr({
-			"aria-hidden": "true",
-			"aria-expanded": "false"
-		});
+			.menu({
+				position: {
+					within: this.options.position.within
+				},
+				select: function( event, ui ) {
+					ui.item.parents("ul.ui-menu:last").hide();
+					menubar._close();
+					// TODO what is this targetting? there's probably a better way to access it
+					$( event.target ).prev().focus();
+					menubar._trigger( "select", event, ui );
+				},
+				menus: this.options.menuElement
+			})
+			.hide()
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
+			});
 
 		this._on( subMenus, {
 			keydown: function( event ) {
 				var menu = $( this );
-				if ( menu.is( ":hidden" ) ) {
+				if ( menu.is(":hidden") ) {
 					return;
 				}
 				switch ( event.keyCode ) {
@@ -187,19 +187,19 @@ $.widget( "ui.menubar", {
 		}
 
 		if ( menubar.options.menuIcon ) {
-			$anItem.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
-			$anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
+			$anItem.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
+			$anItem.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
 		}
 	},
 
 	_applyDOMPropertiesOnItem: function( $item, menubar) {
 		$item
-			.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
+			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
 			.attr( "role", "menuitem" )
-			.wrapInner( "<span class='ui-button-text'></span>" );
+			.wrapInner("<span class='ui-button-text'></span>");
 
 		if ( menubar.options.buttons ) {
-			$item.removeClass( "ui-menubar-link" ).addClass( "ui-state-default" );
+			$item.removeClass("ui-menubar-link").addClass("ui-state-default");
 		}
 	},
 
@@ -213,7 +213,7 @@ $.widget( "ui.menubar", {
 				event.preventDefault();
 				// TODO can we simplify or extract this check? especially the last two expressions
 				// there's a similar active[0] == menu[0] check in _open
-				if ( event.type === "click" && menu.is( ":visible" ) && this.active && this.active[0] === menu[0] ) {
+				if ( event.type === "click" && menu.is(":visible") && this.active && this.active[0] === menu[0] ) {
 					this._close();
 					return;
 				}
@@ -296,34 +296,34 @@ $.widget( "ui.menubar", {
 
 	_destroy : function() {
 		this.menuItems
-			.removeClass( "ui-menubar-item" )
-			.removeAttr( "role" );
+			.removeClass("ui-menubar-item")
+			.removeAttr("role");
 
 		this.element
-			.removeClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
-			.removeAttr( "role" )
-			.unbind( ".menubar" );
+			.removeClass("ui-menubar ui-widget-header ui-helper-clearfix")
+			.removeAttr("role")
+			.unbind(".menubar");
 
 		this.items
-			.unbind( ".menubar" )
-			.removeClass( "ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-haspopup" )
+			.unbind(".menubar")
+			.removeClass("ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default")
+			.removeAttr("role")
+			.removeAttr("aria-haspopup")
 			// TODO unwrap?
-			.children( "span.ui-button-text" ).each(function( i, e ) {
+			.children("span.ui-button-text").each(function( i, e ) {
 				var item = $( this );
 				item.parent().html( item.html() );
 			})
 			.end()
-			.children( ".ui-icon" ).remove();
+			.children(".ui-icon").remove();
 
-		this.element.find( ":ui-menu" )
-			.menu( "destroy" )
+		this.element.find(":ui-menu")
+			.menu("destroy")
 			.show()
-			.removeAttr( "aria-hidden" )
-			.removeAttr( "aria-expanded" )
-			.removeAttr( "tabindex" )
-			.unbind( ".menubar" );
+			.removeAttr("aria-hidden")
+			.removeAttr("aria-expanded")
+			.removeAttr("tabindex")
+			.unbind(".menubar");
 	},
 
 	_close: function() {
@@ -341,8 +341,8 @@ $.widget( "ui.menubar", {
 				});
 			this.active
 				.prev()
-				.removeClass( "ui-state-active" )
-				.removeAttr( "tabIndex" );
+				.removeClass("ui-state-active")
+				.removeAttr("tabIndex");
 			this.active.closest( this.options.items ).removeClass("ui-state-active");
 		} else {
 			this.active
@@ -365,30 +365,30 @@ $.widget( "ui.menubar", {
 		// TODO refactor, almost the same as _close above, but don't remove tabIndex
 			if ( this.active.closest( this.options.items ).data("hasSubMenu")  ) {
 				this.active
-					.menu( "collapseAll" )
+					.menu("collapseAll")
 					.hide()
 					.attr({
 						"aria-hidden": "true",
 						"aria-expanded": "false"
 					});
 				this.active.closest(this.options.items)
-					.removeClass( "ui-state-active" );
+					.removeClass("ui-state-active");
 			} else {
-				this.active.removeClass( "ui-state-active" );
+				this.active.removeClass("ui-state-active");
 			}
 		}
 
 		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
-		button = menuItem.addClass( "ui-state-active" ).attr( "tabIndex", -1 );
+		button = menuItem.addClass("ui-state-active").attr( "tabIndex", -1 );
 
 		this.active = menu
 			.show()
 			.position( $.extend({
 				of: button
 			}, this.options.position ) )
-			.removeAttr( "aria-hidden" )
-			.attr( "aria-expanded", "true" )
-			.menu("focus", event, menu.children( ".ui-menu-item" ).first() )
+			.removeAttr("aria-hidden")
+			.attr("aria-expanded", "true")
+			.menu("focus", event, menu.children(".ui-menu-item").first() )
 			// TODO need a comment here why both events are triggered
 			.focus()
 			.focusin();
@@ -400,7 +400,7 @@ $.widget( "ui.menubar", {
 		if ( this.open &&
 				 this.active.closest( this.options.items ).data("hasSubMenu") &&
 				 this.active.data("menu").active &&
-				 this.active.data( "menu" ).active.has( ".ui-menu" ).length ) {
+				 this.active.data("menu").active.has(".ui-menu").length ) {
 			// Track number of open submenus and prevent moving to next menubar item
 			this.openSubmenus++;
 			return;
@@ -426,15 +426,15 @@ $.widget( "ui.menubar", {
 
 		if ( this.open ) {
 			next = this.active.
-				closest( ".ui-menubar-item" )[ direction + "All" ]( this.options.items )
-				.first();
+				closest(".ui-menubar-item")[ direction + "All" ]( this.options.items )
+					.first();
 			wrapItem = this.menuItems[ filter ]();
 		} else {
 			if ( event ) {
-				next = $( event.target ).closest( ".ui-menubar-item" )[ direction + "All" ]( this.options.items ).children( ".ui-menubar-link" ).eq( 0 );
-				wrapItem = this.menuItems[ filter ]().children( ".ui-menubar-link" ).eq( 0 );
+				next = $( event.target ).closest(".ui-menubar-item")[ direction + "All" ]( this.options.items ).children(".ui-menubar-link").eq( 0 );
+				wrapItem = this.menuItems[ filter ]().children(".ui-menubar-link").eq( 0 );
 			} else {
-				next = wrapItem = this.menuItems.children( "a" ).eq( 0 );
+				next = wrapItem = this.menuItems.children("a").eq( 0 );
 			}
 		}
 
@@ -449,9 +449,8 @@ $.widget( "ui.menubar", {
 				this._submenuless_open( event, next );
 			}
 		} else {
-			next.removeAttr( "tabIndex")[0].focus();
+			next.removeAttr("tabIndex")[0].focus();
 		}
-
 	},
 
 	_submenuless_open: function( event, next ) {
@@ -462,7 +461,7 @@ $.widget( "ui.menubar", {
 		// TODO refactor, almost the same as _close above, but don't remove tabIndex
 			if ( this.active.closest( this.options.items ) ) {
 				this.active
-					.menu( "collapseAll" )
+					.menu("collapseAll")
 					.hide()
 					.attr({
 						"aria-hidden": "true",
@@ -470,7 +469,7 @@ $.widget( "ui.menubar", {
 					});
 			}
 			this.active.closest(this.options.items)
-				.removeClass( "ui-state-active" );
+				.removeClass("ui-state-active");
 		}
 
 		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
