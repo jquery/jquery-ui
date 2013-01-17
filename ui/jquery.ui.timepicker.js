@@ -137,10 +137,17 @@ $.widget( "ui.timepicker", {
 			return value.join( ":" );
 		} else {
 
+			if ( value !== "" ) {
+				shouldClear = false;
+			}
 			// setter for values
 			value = value.split( ":" );
 			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
 				bufferObject = buffer[ bufferIndex ];
+				if ( shouldClear && this.options.clearEmpty ) {
+					bufferObject.value = "";
+                        		continue;
+                    		}
 				if ( bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ) {
 
 					// 12 hr mode
