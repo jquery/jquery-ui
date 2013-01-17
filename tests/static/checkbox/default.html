@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Checkbox Static Test : Default</title>
+	<link rel="stylesheet" href="../static.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.base.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.theme.css" type="text/css" title="ui-theme" />
+	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../static.js"></script>
+</head>
+<body>
+	
+<div class="ui-checkbox">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check1">
+	</div>
+	<label for="check1">Unchecked</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon"></span>
+	</div>
+</div>
+
+<div class="ui-checkbox">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check2" checked="checked">
+	</div>
+	<label for="check2">Checked</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon ui-icon ui-icon-check"></span>
+	</div>
+</div>
+
+<div class="ui-checkbox ui-state-disabled">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check3" disabled="disabled">
+	</div>
+	<label for="check3">Disabled</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon"></span>
+	</div>
+</div>
+
+<div class="ui-checkbox ui-state-disabled">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check4" checked="checked" disabled="disabled">
+	</div>
+	<label for="check4">Checked and disabled</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon ui-icon ui-icon-check"></span>
+	</div>
+</div>
+
+<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+<script>
+	$('<div/>').css({
+		position: "absolute",
+		right: 10,
+		top: 10
+	}).appendTo(document.body).themeswitcher();
+</script>
+</body>
+</html>

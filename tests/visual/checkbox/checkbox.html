@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Checkbox Visual Test : Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.checkbox.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$(":checkbox").checkbox();
+	});
+	</script>
+</head>
+<body>
+
+<form>
+
+<label><input type="checkbox" />Check 1</label>
+
+<label><input type="checkbox" id="check2" />Check 2</label>
+
+<input type="checkbox" id="check3" /><label for="check3">Check 3</label>
+
+<input type="checkbox" id="check4" /><span><label for="check4">Check 4</label></span>
+
+<table>
+<tr>
+<td><input type="checkbox" id="check5" /></td>
+<td><label for="check5">Check 5</label></td>
+</tr>
+</table>
+
+</form>
+
+</body>
+</html>

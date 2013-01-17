@@ -1,0 +1,6 @@
+/* Checkbox
+----------------------------------*/
+.ui-checkbox { position: relative; }
+.ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
+.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; padding: .5em 0 .5em 30px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
+.ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 1.5em; height: 1.6em; }
