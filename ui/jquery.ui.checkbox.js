@@ -53,7 +53,7 @@ $.widget( "ui.checkbox", {
 
 		this.boxElement = $("<div class='ui-checkbox-box ui-widget ui-state-active ui-corner-all'><span class='ui-checkbox-icon'></span></div>");
 		this.iconElement = this.boxElement.children( ".ui-checkbox-icon" );
-		this.checkboxElement.append(this.boxElement);
+		this.labelElement.append(this.boxElement);
 
 		this.element.bind("click.checkbox", function() {
 			that._refresh();
