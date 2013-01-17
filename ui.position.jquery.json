@@ -1,9 +1,17 @@
 {
-	"name": "jquery-ui",
-	"title": "jQuery UI",
-	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
+	"name": "ui.position",
+	"title": "jQuery UI Position",
+	"description": "Positions elements relative to other elements.",
+	"keywords": [
+		"ui",
+		"position",
+		"offset",
+		"relative",
+		"absolute",
+		"fixed",
+		"collision"
+	],
 	"version": "1.10.0",
-	"homepage": "http://jqueryui.com",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
 		"url": "https://github.com/jquery/jquery-ui/blob/1.10.0/AUTHORS.txt"
@@ -40,27 +48,19 @@
 			"url": "http://tjvantoll.com"
 		}
 	],
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/jquery/jquery-ui.git"
-	},
-	"bugs": "http://bugs.jqueryui.com/",
 	"licenses": [
 		{
 			"type": "MIT",
 			"url": "https://github.com/jquery/jquery-ui/blob/1.10.0/MIT-LICENSE.txt"
 		}
 	],
-	"dependencies": {},
-	"devDependencies": {
-		"grunt": "~0.3.17",
-		"grunt-css": "0.2.0",
-		"grunt-compare-size": "0.1.4",
-		"grunt-html": "0.1.1",
-		"grunt-junit": "0.1.5",
-		"grunt-git-authors": "1.0.0",
-		"rimraf": "2.0.1",
-		"testswarm": "0.3.0"
+	"bugs": "http://bugs.jqueryui.com/",
+	"homepage": "http://jqueryui.com/position/",
+	"demo": "http://jqueryui.com/position/",
+	"docs": "http://api.jqueryui.com/position/",
+	"download": "http://jqueryui.com/download/",
+	"dependencies": {
+		"jquery": ">=1.6"
 	},
-	"keywords": []
+	"category": "core"
 }
