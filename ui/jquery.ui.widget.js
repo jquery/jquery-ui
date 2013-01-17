@@ -11,16 +11,11 @@
 (function( $, undefined ) {
 
 var uuid = 0,
-	slice = Array.prototype.slice,
-	_cleanData = $.cleanData;
-$.cleanData = function( elems ) {
-	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
-		try {
-			$( elem ).triggerHandler( "remove" );
-		// http://bugs.jquery.com/ticket/8235
-		} catch( e ) {}
+	slice = Array.prototype.slice;
+$.event.special.remove = {
+	remove: function( o ) {
+		o.handler.call( this, new $.Event( "remove", { target: this } ) );
 	}
-	_cleanData( elems );
 };
 
 $.widget = function( name, base, prototype ) {
