@@ -47,7 +47,8 @@ $.widget( "ui.timepicker", {
 		ampm: true,
 		seconds: true,
 		clearEmpty: false,
-		disabled: false
+		disabled: false,
+		page: 1
 	},
 	_create: function() {
 
@@ -61,7 +62,8 @@ $.widget( "ui.timepicker", {
 		});
 		this.mask = this.element.data( "ui-mask" );
 		this.element.spinner({
-			disabled: this.options.disabled
+			disabled: this.options.disabled,
+			page: this.options.page
 		});
 		this.spinner = this.element.data( "ui-spinner" );
 		$.extend( this.spinner, {
