@@ -103,6 +103,7 @@ $.widget( "ui.menubar", {
 			var $item = $menuItem.children("button, a");
 
 			menubar._determineSubmenuStatus( $menuItem, menubar );
+			menubar._styleMenuItem( $menuItem, menubar );
 			if ( $menuItem.data("hasSubMenu") ) {
 				menubar._initializeSubMenu( $menuItem, menubar );
 			}
@@ -116,6 +117,13 @@ $.widget( "ui.menubar", {
 		var subMenus = $menuItem.children( menubar.options.menuElement ),
 			hasSubMenu = subMenus.length > 0;
 		$menuItem.data( "hasSubMenu", hasSubMenu );
+	},
+
+	_styleMenuItem: function( $menuItem, menubar ) {
+		$menuItem.css({
+			"border-width" : "1px",
+			"border-style" : "hidden"
+		});
 	},
 
 	_initializeSubMenu: function( $menuItem, menubar ){
