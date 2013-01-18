@@ -176,6 +176,8 @@ $.widget( "ui.menubar", {
 		this._hoverable( this.items );
 		this._applyDOMPropertiesOnItem( $anItem, menubar);
 
+		this.__applyMouseAndKeyboardBehaviorForMenuItem ( $anItem, menubar );
+
 		if ( menuItemHasSubMenu ) {
 			this.__applyMouseBehaviorForSubmenuHavingMenuItem( $anItem, menubar );
 			this.__applyKeyboardBehaviorForSubmenuHavingMenuItem( $anItem, menubar );
@@ -190,6 +192,17 @@ $.widget( "ui.menubar", {
 			$anItem.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
 			$anItem.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
 		}
+	},
+
+	__applyMouseAndKeyboardBehaviorForMenuItem: function( $anItem, menubar ) {
+		menubar._on( $anItem, {
+			focus:  function( event ){
+				$anItem.closest( this.options.items ).addClass("ui-state-focus");
+			},
+			focusout:  function( event ){
+				$anItem.closest( this.options.items ).removeClass("ui-state-focus");
+			}
+		} );
 	},
 
 	_applyDOMPropertiesOnItem: function( $item, menubar) {
