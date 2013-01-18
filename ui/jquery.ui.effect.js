@@ -1258,7 +1258,9 @@ $.fn.extend({
 		}
 
 		function prefilter( next ) {
-			effectPrefilter.call( this, args );
+			if ( effectPrefilter ) {
+				effectPrefilter.call( this, args );
+			}
 			if ( $.isFunction( next ) ) {
 				next();
 			}
