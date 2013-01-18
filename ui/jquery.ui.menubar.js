@@ -232,6 +232,10 @@ $.widget( "ui.menubar", {
 				}
 				if ( event.type === "mouseenter" ) {
 					this.element.find(":focus").focusout();
+					if ( this.stashedOpenMenu ) {
+						this._open( event, menu);
+					}
+					this.stashedOpenMenu = undefined;
 				}
 				if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
 					if ( this.options.autoExpand ) {
@@ -287,6 +291,7 @@ $.widget( "ui.menubar", {
 			},
 			mouseenter: function( event ) {
 				if ( this.open ) {
+					this.stashedOpenMenu = this.active;
 					this._close();
 				}
 			}
