@@ -197,10 +197,10 @@ $.widget( "ui.menubar", {
 	__applyMouseAndKeyboardBehaviorForMenuItem: function( $anItem, menubar ) {
 		menubar._on( $anItem, {
 			focus:  function( event ){
-				$anItem.closest( this.options.items ).addClass("ui-state-focus");
+				$anItem.addClass("ui-state-focus");
 			},
 			focusout:  function( event ){
-				$anItem.closest( this.options.items ).removeClass("ui-state-focus");
+				$anItem.removeClass("ui-state-focus");
 			}
 		} );
 	},
