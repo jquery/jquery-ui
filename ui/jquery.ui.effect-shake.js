@@ -13,11 +13,19 @@
  */
 (function( $, undefined ) {
 
+$.effects.prefilter.shake = function( o ) {
+	var el = $( this ),
+		mode = $.effects.effectsMode( el, o.mode || "effect" );
+
+	if ( mode === "show" ) {
+		el.show();
+	}
+};
+
 $.effects.effect.shake = function( o, done ) {
 
 	var placeholder, i,
 		el = $( this ),
-		mode = $.effects.setMode( el, o.mode || "effect" ),
 		direction = o.direction || "left",
 		distance = o.distance || 20,
 		times = o.times || 3,
@@ -31,10 +39,6 @@ $.effects.effect.shake = function( o, done ) {
 		// we will need to re-assemble the queue to stack our animations in place
 		queue = el.queue(),
 		queuelen = queue.length;
-
-	if ( mode === "show" ) {
-		el.show();
-	}
 
 	placeholder = $.effects.createPlaceholder( el );
 
@@ -57,7 +61,7 @@ $.effects.effect.shake = function( o, done ) {
 
 			$.effects.removePlaceholder( placeholder, el );
 
-			if ( mode === "hide" ) {
+			if ( $.effects.effectsMode( el ) === "hide" ) {
 				el.hide();
 			}
 

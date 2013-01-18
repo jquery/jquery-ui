@@ -13,7 +13,8 @@
 var dataSpace = "ui-effects-";
 
 $.effects = {
-	effect: {}
+	effect: {},
+	prefilter: {}
 };
 
 /*!
@@ -927,6 +928,18 @@ $.extend( $.effects, {
 		return mode;
 	},
 
+	effectsMode: function( el, mode ) {
+		var dataKey = dataSpace + "mode";
+
+		if ( mode ) {
+			mode = $.effects.setMode( el, mode );
+			el.data( dataKey, mode );
+			return mode;
+		}
+
+		return el.data( dataKey );
+	},
+
 	// Translates a [top,left] array into a baseline value
 	// this should be a little more flexible in the future to handle a string & hash
 	getBaseline: function( origin, original ) {
@@ -1205,7 +1218,8 @@ $.fn.extend({
 		var args = _normalizeArguments.apply( this, arguments ),
 			mode = args.mode,
 			queue = args.queue,
-			effectMethod = $.effects.effect[ args.effect ];
+			effectMethod = $.effects.effect[ args.effect ],
+			effectPrefilter = $.effects.prefilter[ args.effect ];
 
 		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
@@ -1243,7 +1257,16 @@ $.fn.extend({
 			}
 		}
 
-		return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
+		function prefilter( next ) {
+			effectPrefilter.call( this, args );
+			if ( $.isFunction( next ) ) {
+				next();
+			}
+		}
+
+		return queue === false ?
+			this.each( prefilter ).each( run ) :
+			this.queue( queue || "fx", prefilter ).queue( queue || "fx", run );
 	},
 
 	_show: $.fn.show,

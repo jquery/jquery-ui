@@ -13,20 +13,24 @@
  */
 (function( $, undefined ) {
 
+$.effects.prefilter.clip = function( o ) {
+	var el = $( this ),
+		mode = $.effects.effectsMode( el, o.mode || "hide" );
+
+	if ( mode === "show" ) {
+		el.show();
+	}
+};
+
 $.effects.effect.clip = function( o, done ) {
 	var start, placeholder,
 		animate = {},
 		el = $( this ),
-		mode = $.effects.setMode( el, o.mode || "hide" ),
-		show = mode === "show",
+		show = $.effects.effectsMode( el ) === "show",
 		direction = o.direction || "vertical",
 		both = direction === "both",
 		horizontal = both || direction === "horizontal",
 		vertical = both || direction === "vertical";
-
-	if ( show ) {
-		el.show();
-	}
 
 	start = el.cssClip();
 	animate.clip = {
