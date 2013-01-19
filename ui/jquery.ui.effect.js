@@ -978,11 +978,16 @@ $.extend( $.effects, {
 			cssPosition = element.css("position"),
 			position = element.position();
 
-		element.parent().outerWidth(element.parent().outerWidth(true), true);
-		element.parent().outerHeight(element.parent().outerHeight(true), true);
+		// lock in parent dimensions to account for margin-collapse on children
+		// changing visual height/width of the container
+		element.parent()
+			.outerWidth( element.parent().outerWidth( true ), true )
+			.outerHeight( element.parent().outerHeight( true ), true );
 
-		// this is needed to avoid changes in visible width
-		// when an element goes from static to absolute
+		// lock in margins first to account for form elements, which
+		// will change margin if you explicitly set height
+		// see: http://jsfiddle.net/JZSMt/3/ https://bugs.webkit.org/show_bug.cgi?id=107380
+		// Support: Chrome
 		element.css({
 			marginTop: element.css("marginTop"),
 			marginBottom: element.css("marginBottom"),
