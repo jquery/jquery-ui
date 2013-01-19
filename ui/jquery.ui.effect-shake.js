@@ -20,6 +20,9 @@ $.effects.prefilter.shake = function( o ) {
 	if ( mode === "show" ) {
 		el.show();
 	}
+
+	$.effects.saveStyle( el );
+	$.effects.saveStyle( el.parent() );
 };
 
 $.effects.effect.shake = function( o, done ) {

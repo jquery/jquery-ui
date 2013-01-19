@@ -921,6 +921,14 @@ $.extend( $.effects, {
 		}
 	},
 
+	saveStyle: function( element ) {
+		element.data( dataSpace + "style", element[ 0 ].style.cssText );
+	},
+
+	restoreStyle: function( element ) {
+		element[ 0 ].style.cssText = element.data( dataSpace + "style" );
+	},
+
 	setMode: function( el, mode ) {
 		if (mode === "toggle") {
 			mode = el.is( ":hidden" ) ? "show" : "hide";
@@ -965,25 +973,13 @@ $.extend( $.effects, {
 	// Creates a placeholder element so that the original element can be made absolute
 	// also stores all modified properties on the element so they can be restored later
 	createPlaceholder: function( element ) {
-		$.effects.save( element, [
-			"display",
-			"position",
-			"left",
-			"right",
-			"top",
-			"bottom",
-			"width",
-			"height",
-			"clip",
-			"marginTop",
-			"marginLeft",
-			"marginBottom",
-			"marginRight"
-		] );
 
 		var placeholder,
 			cssPosition = element.css("position"),
 			position = element.position();
+
+		element.parent().outerWidth(element.parent().outerWidth(true), true);
+		element.parent().outerHeight(element.parent().outerHeight(true), true);
 
 		// this is needed to avoid changes in visible width
 		// when an element goes from static to absolute
@@ -1025,21 +1021,8 @@ $.extend( $.effects, {
 	// removes a placeholder if it exists and restores
 	// properties that were modified during placeholder creation
 	removePlaceholder: function ( placeholder, el ) {
-		$.effects.restore( el, [
-			"display",
-			"position",
-			"left",
-			"right",
-			"top",
-			"bottom",
-			"width",
-			"height",
-			"clip",
-			"marginTop",
-			"marginLeft",
-			"marginBottom",
-			"marginRight"
-		] );
+		$.effects.restoreStyle( el );
+		$.effects.restoreStyle( el.parent() );
 
 		if ( placeholder ) {
 			placeholder.remove();
