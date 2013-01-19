@@ -24,7 +24,7 @@ $.effects.prefilter.shake = function( o ) {
 
 $.effects.effect.shake = function( o, done ) {
 
-	var placeholder, i,
+	var i = 1,
 		el = $( this ),
 		direction = o.direction || "left",
 		distance = o.distance || 20,
@@ -38,9 +38,8 @@ $.effects.effect.shake = function( o, done ) {
 		animation2 = {},
 		// we will need to re-assemble the queue to stack our animations in place
 		queue = el.queue(),
-		queuelen = queue.length;
-
-	placeholder = $.effects.createPlaceholder( el );
+		queuelen = queue.length,
+		placeholder = $.effects.createPlaceholder( el );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -51,7 +50,7 @@ $.effects.effect.shake = function( o, done ) {
 	el.animate( animation, speed, o.easing );
 
 	// Shakes
-	for ( i = 1; i < times; i++ ) {
+	for ( ; i < times; i++ ) {
 		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
 	}
 	el

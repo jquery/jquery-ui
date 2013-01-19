@@ -18,7 +18,8 @@
 		$("a[href$='#effect']").click(function(event) {
 			event.preventDefault();
 			$(this).closest(".container").find(".target").effect("clip", {
-				direction: "vertical"
+				direction: "vertical",
+				mode: "toggle"
 			}, 2000);
 		});
 	});
