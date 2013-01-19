@@ -20,6 +20,9 @@ $.effects.prefilter.clip = function( o ) {
 	if ( mode === "show" ) {
 		el.show();
 	}
+
+	$.effects.saveStyle( el );
+	$.effects.saveStyle( el.parent() );
 };
 
 $.effects.effect.clip = function( o, done ) {
