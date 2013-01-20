@@ -941,6 +941,9 @@ $.extend( $.effects, {
 
 		if ( mode ) {
 			mode = $.effects.setMode( el, mode );
+			if ( el.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+				mode = "none";
+			}
 			el.data( dataKey, mode );
 			return mode;
 		}
@@ -1207,7 +1210,22 @@ $.fn.extend({
 			mode = args.mode,
 			queue = args.queue,
 			effectMethod = $.effects.effect[ args.effect ],
-			effectPrefilter = $.effects.prefilter[ args.effect ];
+			effectPrefilter = function( o ) {
+
+				var el = $( this ),
+					mode = $.effects.effectsMode( el, o.mode || "effect" );
+
+				if ( mode === "none" ) {
+					return;
+				}
+
+				if ( mode === "show" ) {
+					el.show();
+				}
+
+				$.effects.saveStyle( el );
+				$.effects.saveStyle( el.parent() );
+			};
 
 		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
@@ -1223,13 +1241,11 @@ $.fn.extend({
 		}
 
 		function run( next ) {
-			var elem = $( this ),
-				complete = args.complete,
-				mode = args.mode;
+			var elem = $( this );
 
 			function done() {
-				if ( $.isFunction( complete ) ) {
-					complete.call( elem[0] );
+				if ( $.isFunction( args.complete ) ) {
+					args.complete.call( elem[0] );
 				}
 				if ( $.isFunction( next ) ) {
 					next();
@@ -1238,7 +1254,7 @@ $.fn.extend({
 
 			// if the element is hiddden and mode is hide,
 			// or element is visible and mode is show
-			if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+			if ( $.effects.effectsMode( elem ) === "none" ) {
 				done();
 			} else {
 				effectMethod.call( elem[0], args, done );
@@ -1246,9 +1262,7 @@ $.fn.extend({
 		}
 
 		function prefilter( next ) {
-			if ( effectPrefilter ) {
-				effectPrefilter.call( this, args );
-			}
+			effectPrefilter.call( this, args );
 			if ( $.isFunction( next ) ) {
 				next();
 			}
@@ -1322,8 +1336,8 @@ function parseClip( str, element ) {
 
 		return {
 			top: parseFloat( values[ 1 ] ) || 0 ,
-			right: parseFloat( values[ 2 ] ) || outerWidth,
-			bottom: parseFloat( values[ 3 ] ) || outerHeight,
+			right: values[ 2 ] === "auto" ? outerWidth : parseFloat( values[ 2 ] ),
+			bottom: values[ 3 ] === "auto" ? outerHeight : parseFloat( values[ 3 ] ),
 			left: parseFloat( values[ 4 ] ) || 0
 		};
 }

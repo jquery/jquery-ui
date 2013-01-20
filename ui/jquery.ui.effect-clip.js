@@ -13,18 +13,6 @@
  */
 (function( $, undefined ) {
 
-$.effects.prefilter.clip = function( o ) {
-	var el = $( this ),
-		mode = $.effects.effectsMode( el, o.mode || "hide" );
-
-	if ( mode === "show" ) {
-		el.show();
-	}
-
-	$.effects.saveStyle( el );
-	$.effects.saveStyle( el.parent() );
-};
-
 $.effects.effect.clip = function( o, done ) {
 	var start, placeholder,
 		animate = {},
