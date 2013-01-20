@@ -293,11 +293,13 @@ $.widget( "ui.button", {
 		if ( this.type === "radio" ) {
 			radioGroup( this.element[0] ).each(function() {
 				if ( $( this ).is( ":checked" ) ) {
-					$( this ).button( "widget" )
+					$( this ).button()
+						.button( "widget" )
 						.addClass( "ui-state-active" )
 						.attr( "aria-pressed", "true" );
 				} else {
-					$( this ).button( "widget" )
+					$( this ).button()
+						.button( "widget" )
 						.removeClass( "ui-state-active" )
 						.attr( "aria-pressed", "false" );
 				}
