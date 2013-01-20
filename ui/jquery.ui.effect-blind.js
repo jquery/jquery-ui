@@ -13,66 +13,56 @@
  */
 (function( $, undefined ) {
 
-var rvertical = /up|down|vertical/,
-	rpositivemotion = /up|left|vertical|horizontal/;
+$.effects.prefilter.blind = function( o ) {
+	var el = $( this ),
+		mode = $.effects.effectsMode( el, o.mode || "hide" );
+
+	if ( mode === "show" ) {
+		el.show();
+	}
+
+	$.effects.saveStyle( el );
+	$.effects.saveStyle( el.parent() );
+};
 
 $.effects.effect.blind = function( o, done ) {
-	// Create element
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "hide" ),
-		direction = o.direction || "up",
-		vertical = rvertical.test( direction ),
-		ref = vertical ? "height" : "width",
-		ref2 = vertical ? "top" : "left",
-		motion = rpositivemotion.test( direction ),
-		animation = {},
-		show = mode === "show",
-		wrapper, distance, margin;
+	var start, placeholder,
+		animate = {},
+		map = {
+			up: [ "bottom", "top" ],
+			vertical: [ "bottom", "top" ],
+			down: [ "top", "bottom" ],
+			left: [ "right", "left" ],
+			horizontal: [ "right", "left" ],
+			right: [ "left", "right" ]
+		},
+		el = $( this ),
+		show = $.effects.effectsMode( el ) === "show",
+		direction = o.direction || "up";
 
-	// if already wrapped, the wrapper's properties are my property. #6245
-	if ( el.parent().is( ".ui-effects-wrapper" ) ) {
-		$.effects.save( el.parent(), props );
-	} else {
-		$.effects.save( el, props );
-	}
-	el.show();
-	wrapper = $.effects.createWrapper( el ).css({
-		overflow: "hidden"
-	});
+	start = el.cssClip();
+	animate.clip = el.cssClip();
+	animate.clip[ map[ direction ][ 0 ] ] = animate.clip[ map[ direction ][ 1 ] ];
 
-	distance = wrapper[ ref ]();
-	margin = parseFloat( wrapper.css( ref2 ) ) || 0;
+	placeholder = $.effects.createPlaceholder( el );
 
-	animation[ ref ] = show ? distance : 0;
-	if ( !motion ) {
-		el
-			.css( vertical ? "bottom" : "right", 0 )
-			.css( vertical ? "top" : "left", "auto" )
-			.css({ position: "absolute" });
-
-		animation[ ref2 ] = show ? margin : distance + margin;
-	}
-
-	// start at 0 if we are showing
 	if ( show ) {
-		wrapper.css( ref, 0 );
-		if ( ! motion ) {
-			wrapper.css( ref2, margin + distance );
-		}
+		el.cssClip( animate.clip );
+		animate.clip = start;
 	}
 
-	// Animate
-	wrapper.animate( animation, {
+	el.animate( animate, {
+		queue: false,
 		duration: o.duration,
 		easing: o.easing,
-		queue: false,
 		complete: function() {
-			if ( mode === "hide" ) {
+
+			$.effects.removePlaceholder( placeholder, el );
+
+			if ( !show ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
+
 			done();
 		}
 	});
