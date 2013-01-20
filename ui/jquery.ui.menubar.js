@@ -191,14 +191,13 @@ $.widget( "ui.menubar", {
 			this.__applyKeyboardBehaviorForSubmenuHavingMenuItem( $anItem, menubar );
 
 			$anItem.attr( "aria-haspopup", "true" );
+			if ( menubar.options.menuIcon ) {
+				$anItem.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
+				$anItem.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
+			}
 		} else {
 			this.__applyMouseBehaviorForSubmenulessMenuItem( $anItem, menubar );
 			this.__applyKeyboardBehaviorForSubmenulessMenuItem( $anItem, menubar );
-		}
-
-		if ( menubar.options.menuIcon ) {
-			$anItem.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
-			$anItem.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
 		}
 	},
 
