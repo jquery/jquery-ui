@@ -10,7 +10,10 @@
 	<script>
 	$(function(){
 		$("#btn").click(function() {
-			$(".pd").effect("shake", +$("#speed").val());
+			$(".pd").effect("shake", {
+				duration: +$("#duration").val(),
+				mode: "toggle"
+			});
 		});
 	});
 	</script>
@@ -52,11 +55,11 @@
 		</style>
 </head>
 <body>
-	<button id="btn">Click</button><input id="speed" value="2000">
+	<button id="btn">Click</button><input id="duration" value="1000">
 	<div id="divbox">
 		<div class="pd m">hi</div>
-		<div class="pd m b">hi</div>
-		<div class="pd p">hi</div>
+		<div class="pd b">hi</div>
+		<div class="pd p m">hi</div>
 	</div>
 	<div id="inputbox" class="m">
 		<div class="pd m">hi</div>

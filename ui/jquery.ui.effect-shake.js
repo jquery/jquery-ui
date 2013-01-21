@@ -13,12 +13,22 @@
  */
 (function( $, undefined ) {
 
+$.effects.prefilter.shake = function( o ) {
+	var el = $( this ),
+		mode = $.effects.effectsMode( el, o.mode || "effect" );
+
+	if ( mode === "show" ) {
+		el.show();
+	}
+
+	$.effects.saveStyle( el );
+	$.effects.saveStyle( el.parent() );
+};
+
 $.effects.effect.shake = function( o, done ) {
 
-	var placeholder, i,
+	var i = 1,
 		el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "effect" ),
 		direction = o.direction || "left",
 		distance = o.distance || 20,
 		times = o.times || 3,
@@ -31,12 +41,8 @@ $.effects.effect.shake = function( o, done ) {
 		animation2 = {},
 		// we will need to re-assemble the queue to stack our animations in place
 		queue = el.queue(),
-		queuelen = queue.length;
-
-	$.effects.save( el, props );
-	el.show();
-
-	placeholder = $.effects.createPlaceholder( el );
+		queuelen = queue.length,
+		placeholder = $.effects.createPlaceholder( el );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -47,20 +53,20 @@ $.effects.effect.shake = function( o, done ) {
 	el.animate( animation, speed, o.easing );
 
 	// Shakes
-	for ( i = 1; i < times; i++ ) {
+	for ( ; i < times; i++ ) {
 		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
 	}
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
 		.queue(function() {
-			if ( mode === "hide" ) {
+
+			$.effects.removePlaceholder( placeholder, el );
+
+			if ( $.effects.effectsMode( el ) === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props );
-			if ( placeholder ) {
-				placeholder.remove();
-			}
+
 			done();
 		});
 
