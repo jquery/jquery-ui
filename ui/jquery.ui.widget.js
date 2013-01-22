@@ -28,6 +28,7 @@ $.widget = function( name, base, prototype ) {
 		// proxiedPrototype allows the provided prototype to remain unmodified
 		// so that it can be used as a mixin for multiple widgets (#8876)
 		proxiedPrototype = {},
+		privatePrototype = {},
 		namespace = name.split( "." )[ 0 ];
 
 	name = name.split( "." )[ 1 ];
@@ -78,29 +79,40 @@ $.widget = function( name, base, prototype ) {
 			proxiedPrototype[ prop ] = value;
 			return;
 		}
-		proxiedPrototype[ prop ] = (function() {
+		var func = (function() {
 			var _super = function() {
 					return base.prototype[ prop ].apply( this, arguments );
 				},
 				_superApply = function( args ) {
 					return base.prototype[ prop ].apply( this, args );
+				},
+				_private = function(prop) {
+					return privatePrototype[ prop ].apply(this, slice.call(arguments, 1));
 				};
 			return function() {
 				var __super = this._super,
 					__superApply = this._superApply,
+					__private = this._private,
 					returnValue;
 
 				this._super = _super;
 				this._superApply = _superApply;
+				this._private = _private;
 
 				returnValue = value.apply( this, arguments );
 
 				this._super = __super;
 				this._superApply = __superApply;
+				this._private = __private;
 
 				return returnValue;
 			};
 		})();
+		if (prop.indexOf("__") === 0) {
+			privatePrototype[prop] = func;
+		} else {
+			proxiedPrototype[ prop ] = func;
+		}
 	});
 	constructor.prototype = $.widget.extend( basePrototype, {
 		// TODO: remove support for widgetEventPrefix
