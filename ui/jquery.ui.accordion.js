@@ -262,8 +262,8 @@ $.widget( "ui.accordion", {
 				(this.element.attr( "id" ) || ++uid);
 
 		this.active = this._findActive( options.active )
-			.addClass( "ui-accordion-header-active ui-state-active" )
-			.toggleClass( "ui-corner-all ui-corner-top" );
+			.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
+			.removeClass( "ui-corner-all" );
 		this.active.next()
 			.addClass( "ui-accordion-content-active" )
 			.show();
