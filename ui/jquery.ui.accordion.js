@@ -65,6 +65,7 @@ $.widget( "ui.accordion", {
 	_getCreateEventData: function() {
 		return {
 			header: this.active,
+			panel: !this.active.length ? $() : this.active.next(),
 			content: !this.active.length ? $() : this.active.next()
 		};
 	},
