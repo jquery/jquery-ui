@@ -375,6 +375,37 @@ test( "inheritance", function() {
 	delete $.ui.testWidgetExtension;
 });
 
+test( "private methods", function() {
+	expect( 4 );
+
+	$.widget( "ui.testWidgetBase", {
+		publicBase: function()  {
+			deepEqual("a", this._private("__private"), "private method call");
+			deepEqual("b", this._protected(), "protected method call");
+		},
+		_protected: function() { return "a"; },
+		__private: function() { return "a"; }
+	});
+
+	$.widget( "ui.testWidgetExtension", $.ui.testWidgetBase, {
+		publicExt: function() {
+			deepEqual("b", this._private("__private"), "private method call");
+			deepEqual("b", this._protected(), "protected method call");
+		},
+		_protected: function() { return "b"; },
+		__private: function() { return "b"; }
+	});
+
+	var instance = $( "<div>" ).testWidgetExtension();
+	instance.testWidgetExtension("publicBase");
+	instance.testWidgetExtension("publicExt");
+
+	delete $.ui.testWidgetBase;
+	delete $.ui.testWidgetExtension;
+	delete $.fn.testWidgetBase;
+	delete $.fn.testWidgetExtension;
+});
+
 test( "._super()", function() {
 	expect( 9 );
 	var instance;

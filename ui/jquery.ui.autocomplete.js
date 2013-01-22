@@ -428,7 +428,7 @@ $.widget( "ui.autocomplete", {
 
 		return function( content ) {
 			if ( index === requestIndex ) {
-				that.__response( content );
+				that._real_response( content );
 			}
 
 			that.pending--;
@@ -438,7 +438,7 @@ $.widget( "ui.autocomplete", {
 		};
 	},
 
-	__response: function( content ) {
+	_real_response: function( content ) {
 		if ( content ) {
 			content = this._normalize( content );
 		}
@@ -596,7 +596,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		}
 	},
 
-	__response: function( content ) {
+	_real_response: function( content ) {
 		var message;
 		this._superApply( arguments );
 		if ( this.options.disabled || this.cancelSearch ) {
