@@ -1918,8 +1918,14 @@ $.extend(Datepicker.prototype, {
 			if (years){
 				yearSplit = years.split(":");
 				currentYear = new Date().getFullYear();
-				minYear = parseInt(yearSplit[0], 10) + currentYear;
-				maxYear = parseInt(yearSplit[1], 10) + currentYear;
+				minYear = parseInt(yearSplit[0], 10);
+				maxYear = parseInt(yearSplit[1], 10);
+				if ( yearSplit[0].match(/[+\-].*/) ) {
+					minYear += currentYear;
+				}
+				if ( yearSplit[1].match(/[+\-].*/) ) {
+					maxYear += currentYear;
+				}
 			}
 
 		return ((!minDate || date.getTime() >= minDate.getTime()) &&
