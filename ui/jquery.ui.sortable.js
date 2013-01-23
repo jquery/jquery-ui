@@ -18,7 +18,7 @@
 /*jshint loopfunc: true */
 
 function isOverAxis( x, reference, size ) {
-	return ( x > reference ) && ( x < ( reference + size ) );
+	return ( x >= reference ) && ( x < ( reference + size ) );
 }
 
 $.widget("ui.sortable", $.ui.mouse, {
