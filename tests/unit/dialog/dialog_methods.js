@@ -34,7 +34,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect( 7 );
+	expect( 9 );
 
 	$( "#dialog1, #form-dialog" ).hide();
 	domEqual( "#dialog1", function() {
@@ -57,6 +57,13 @@ test("destroy", function() {
 	domEqual( "#dialog1", function() {
 		$( "#dialog1" ).dialog().dialog( "destroy" );
 	});
+
+	// Don't throw errors when destroying a never opened modal dialog (#9004)
+	$( "#dialog1" ).dialog({ autoOpen: false, modal: true }).dialog( "destroy" );
+	ok(true, "destory never opened modal dialog");
+
+	$( "#dialog1" ).dialog({ modal: true }).dialog( "destroy" );
+	equal( $( ".ui-widget-overlay" ).length, 0, "overlay removed when dialog is destroyed" );
 });
 
 test("#4980: Destroy should place element back in original DOM position", function(){
