@@ -704,11 +704,15 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
-		$.ui.dialog.overlayInstances--;
-		if ( !$.ui.dialog.overlayInstances ) {
-			this._off( this.document, "focusin" );
+		if ( this.overlay ) {
+			$.ui.dialog.overlayInstances--;
+
+			if ( !$.ui.dialog.overlayInstances ) {
+				this._off( this.document, "focusin" );
+			}
+			this.overlay.remove();
+			this.overlay = null;
 		}
-		this.overlay.remove();
 	}
 });
 
