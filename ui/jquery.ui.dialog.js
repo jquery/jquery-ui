@@ -708,7 +708,9 @@ $.widget( "ui.dialog", {
 		if ( !$.ui.dialog.overlayInstances ) {
 			this._off( this.document, "focusin" );
 		}
-		this.overlay.remove();
+		if ( this.overlay ) {
+			this.overlay.remove();
+		}
 	}
 });
 
