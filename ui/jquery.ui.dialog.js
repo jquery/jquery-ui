@@ -679,7 +679,10 @@ $.widget( "ui.dialog", {
 				if ( $.ui.dialog.overlayInstances ) {
 					this._on( this.document, {
 						focusin: function( event ) {
-							if ( !$( event.target ).closest(".ui-dialog").length ) {
+							if ( !$( event.target ).closest(".ui-dialog").length &&
+									// TODO: Remove hack when datepicker implements
+									// the .ui-front logic (#8989)
+									!$( event.target ).closest(".ui-datepicker").length ) {
 								event.preventDefault();
 								$(".ui-dialog:visible:last .ui-dialog-content")
 									.data("ui-dialog")._focusTabbable();
