@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Effects Test Suite</title>
+	<link rel="stylesheet" href="effects.css">
+	<script src="../../../jquery-1.8.3.js"></script>
+	<script src="../../../ui/jquery.ui.effect.js"></script>
+	<script src="../../../ui/jquery.ui.effect-shake.js"></script>
+	<script>
+	$(function(){
+		$("#btn").click(function() {
+			$(".pd").effect("shake", {
+				duration: +$("#duration").val(),
+				mode: "toggle"
+			});
+		});
+	});
+	</script>
+	<style>
+		#inputbox {
+			background: green;
+		}
+		#selectbox {
+			background: red;
+		}
+		#divbox {
+			background: yellow;
+		}
+		#inputbox_abs {
+			background: orange;
+			position: absolute;
+			top: 400px;
+			left: 300px;
+		}
+		#divbox_abs {
+			background: purple;
+			position: absolute;
+			top: 400px;
+			left: 500px;
+		}
+		div.pd {
+			background: blue;
+		}
+
+		.m {
+			margin: 3px;
+		}
+		.b {
+			border: 1px solid black;
+		}
+		.p {
+			padding: 10px;
+		}
+		</style>
+</head>
+<body>
+	<button id="btn">Click</button><input id="duration" value="1000">
+	<div id="divbox">
+		<div class="pd m">hi</div>
+		<div class="pd b">hi</div>
+		<div class="pd p m">hi</div>
+	</div>
+	<div id="inputbox" class="m">
+		<div class="pd m">hi</div>
+		<div class="pd m b">hi</div>
+		<div class="pd p">hi</div>
+		<input type="text" class="pd" />
+	</div>
+	<div id="selectbox">
+		<div class="pd">hi</div>
+		<div class="pd">hi</div>
+		<div class="pd">hi</div>
+		<select class="pd">
+			<option value="a">a</option>
+			<option value="abcdef">abcdef</option>
+		</select>
+	</div>
+	<div id="inputbox_abs" class="m">
+		<div class="pd m">hi</div>
+		<div class="pd m b">hi</div>
+		<div class="pd p">hi</div>
+		<input type="text" class="pd" />
+	</div>
+	<div id="divbox_abs" class="m">
+		<div class="pd m">hi</div>
+		<div class="pd m b">hi</div>
+		<div class="pd p">hi</div>
+	</div>
+
+</body>
