@@ -695,7 +695,7 @@ $.widget( "ui.dialog", {
 
 		this.overlay = $("<div>")
 			.addClass("ui-widget-overlay ui-front")
-			.appendTo( this.document[0].body );
+			.appendTo( this._appendTo() );
 		this._on( this.overlay, {
 			mousedown: "_keepFocus"
 		});
