@@ -194,7 +194,7 @@ test("{ containment: 'parent' }, absolute", function() {
 test("containment, account for border", function() {
 	expect( 2 );
 
-	var el = $('#draggable1').appendTo('#main'),
+	var el = $("#draggable1").appendTo("#main"),
 		parent = el.parent().css({
 			height: "100px",
 			width: "100px",
