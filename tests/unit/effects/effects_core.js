@@ -38,6 +38,17 @@ asyncTest( "Parse of null for options", function() {
 	});
 });
 
+test( "removeClass", function() {
+	expect( 3 );
+
+	var element = $( "<div>" );
+	equal( "", element[ 0 ].className );
+	element.addClass( "destroyed" );
+	equal( "destroyed", element[ 0 ].className );
+	element.removeClass();
+	equal( "", element[ 0 ].className );
+});
+
 
 /* TODO: Disabled - Can't figure out why this is failing in IE 6/7
 test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
