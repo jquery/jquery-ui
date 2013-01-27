@@ -202,7 +202,9 @@ test( "containment, account for border", function() {
 			borderWidth: "5px 10px 15px 20px"
 		}),
 		parentBottom = parent.offset().top + parent.outerHeight(),
-		parentRight = parent.offset().left + parent.outerWidth();
+		parentRight = parent.offset().left + parent.outerWidth(),
+		parentBorderBottom = TestHelpers.draggable.border( parent, "bottom" ),
+		parentBorderRight = TestHelpers.draggable.border( parent, "right" );
 
 	el.css({
 		height: "5px",
@@ -214,9 +216,9 @@ test( "containment, account for border", function() {
 		dy: 100
 	});
 
-	equal( el.offset().top, parentBottom - /* border-bottom */ 15 - /* height of draggable */ 5,
+	equal( el.offset().top, parentBottom - parentBorderBottom - el.height(),
 		"The draggable should be on top of its parent's bottom border" );
-	equal( el.offset().left, parentRight - /* border-right */ 10 - /* width of draggable */ 5,
+	equal( el.offset().left, parentRight - parentBorderRight - el.width(),
 		"The draggable should be to the right of its parent's right border" );
 });
 
