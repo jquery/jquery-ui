@@ -81,8 +81,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				// note: this isn't the most fittingly semantic framework class for this element,
 				// but worked best visually with a variety of themes
 				" ui-widget-header" +
-				( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) +
-				" ui-corner-all");
+				( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
 		}
 
 		handleCount = ( o.values && o.values.length ) || 1;
