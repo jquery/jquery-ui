@@ -240,12 +240,36 @@ test( "source, url string with remote json object array, only label properties",
 	sourceTest( "remote_object_array_labels.txt", true );
 });
 
-test( "source, custom", function() {
+test( "source, function that runs response callback", function() {
 	expect( 2 );
 	sourceTest(function( request, response ) {
 		equal( request.term, "ja" );
 		response( ["java", "javascript"] );
 	});
+});
+
+test( "source, function that returns a promise", function() {
+	expect( 2 );
+	sourceTest(function( request ) {
+		equal( request.term, "ja" );
+		return $.Deferred(function( dfr ) {
+			dfr.resolve( ["java", "javascript"] );
+		}).promise();
+	});
+});
+
+test( "source, function that returns a promise, promise rejection", function() {
+	expect( 1 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: function( request ) {
+				return $.Deferred(function( dfr ) {
+					dfr.reject();
+				}).promise();
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).autocomplete( "search" );
+	equal( menu.find( ".ui-menu-item" ).text(), "" );
 });
 
 test( "source, update after init", function() {

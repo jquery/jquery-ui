@@ -365,21 +365,16 @@ $.widget( "ui.autocomplete", {
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
-			this.source = function( request, response ) {
+			this.source = function( request ) {
 				if ( that.xhr ) {
 					that.xhr.abort();
 				}
 				that.xhr = $.ajax({
 					url: url,
 					data: request,
-					dataType: "json",
-					success: function( data ) {
-						response( data );
-					},
-					error: function() {
-						response( [] );
-					}
+					dataType: "json"
 				});
+				return that.xhr;
 			};
 		} else {
 			this.source = this.options.source;
@@ -415,11 +410,18 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_search: function( value ) {
+		var response, result;
+
 		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
 		this.cancelSearch = false;
 
-		this.source( { term: value }, this._response() );
+		response = this._response();
+		result = this.source( { term: value }, response );
+
+		if ( result && $.isFunction( result.then ) ) {
+			result.then( response, function() { response( [] ); });
+		}
 	},
 
 	_response: function() {
