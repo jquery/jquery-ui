@@ -626,7 +626,7 @@ test( ".widget() - overriden", function() {
 });
 
 test( ".instance()", function() {
-	expect( 1 );
+	expect( 2 );
 	var div,
 		_test = function() {};
 
@@ -634,7 +634,10 @@ test( ".instance()", function() {
 		_create: function() {},
 		_test: _test
 	});
-	div = $( "<div>" ).testWidget();
+
+	div = $( "<div>" );
+	equal( div.testWidget( "instance" ), undefined );
+	div.testWidget();
 	equal( div.testWidget( "instance" ), div.data( "ui-testWidget" ) );
 });
 
