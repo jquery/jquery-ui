@@ -531,4 +531,44 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 
 });
 
+asyncTest( "#8051 - 'Explode' dialog animation causes crash in IE 6, 7 and 8", function() {
+	expect( 1 );
+	var el = $( "<div></div>" ).dialog({
+		show: "explode",
+		focus: function() {
+			ok( true, "dialog opened with animation" );
+			el.remove();
+			start();
+		}
+	});
+});
+
+asyncTest( "#4421 - Focus lost from dialog which uses show-effect", function() {
+	expect( 1 );
+	var el = $( "<div></div>" ).dialog({
+		show: "blind",
+		focus: function() {
+			equal( el.dialog( "widget" ).find( ":focus" ).length, 1, "dialog maintains focus" );
+			el.remove();
+			start();
+		}
+	});
+});
+
+asyncTest( "Open followed by close during show effect", function() {
+	expect( 1 );
+	var el = $( "<div></div>" ).dialog({
+		show: "blind",
+		close: function() {
+			ok( true, "dialog closed properly during animation" );
+			el.remove();
+			start();
+		}
+	});
+
+	setTimeout( function() {
+		el.dialog("close");
+	}, 100 );
+});
+
 })(jQuery);
