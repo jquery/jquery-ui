@@ -6,43 +6,63 @@
 module("dialog: options");
 
 test( "appendTo", function() {
-	expect( 8 );
+	expect( 16 );
 	var detached = $( "<div>" ),
-		element = $( "#dialog1" ).dialog();
+		element = $( "#dialog1" ).dialog({
+			modal: true
+		});
 	equal( element.dialog( "widget" ).parent()[0], document.body, "defaults to body" );
+	equal( $( ".ui-widget-overlay" ).parent()[0], document.body, "overlay defaults to body" );
 	element.dialog( "destroy" );
 
 	element.dialog({
-		appendTo: ".wrap"
+		appendTo: ".wrap",
+		modal: true
 	});
 	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "first found element" );
+	equal( $( ".ui-widget-overlay" ).parent()[0], $( "#wrap1" )[0], "overlay first found element" );
 	equal( $( "#wrap2 .ui-dialog" ).length, 0, "only appends to one element" );
+	equal( $( "#wrap2 .ui-widget-overlay" ).length, 0, "overlay only appends to one element" );
 	element.dialog( "destroy" );
 
 	element.dialog({
-		appendTo: null
+		appendTo: null,
+		modal: true
 	});
 	equal( element.dialog( "widget" ).parent()[0], document.body, "null" );
-	element.dialog( "destroy" );
-
-	element.dialog({ autoOpen: false }).dialog( "option", "appendTo", "#wrap1" ).dialog( "open" );
-	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "modified after init" );
+	equal( $( ".ui-widget-overlay" ).parent()[0], document.body, "overlay null" );
 	element.dialog( "destroy" );
 
 	element.dialog({
-		appendTo: detached
+		autoOpen: false,
+		modal: true
+	}).dialog( "option", "appendTo", "#wrap1" ).dialog( "open" );
+	equal( element.dialog( "widget" ).parent()[0], $( "#wrap1" )[0], "modified after init" );
+	equal( $( ".ui-widget-overlay" ).parent()[0], $( "#wrap1" )[0], "overlay modified after init" );
+	element.dialog( "destroy" );
+
+	element.dialog({
+		appendTo: detached,
+		modal: true
 	});
 	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached jQuery object" );
+	equal( detached.find( ".ui-widget-overlay" ).parent()[0], detached[0], "overlay detached jQuery object" );
 	element.dialog( "destroy" );
 
 	element.dialog({
-		appendTo: detached[0]
+		appendTo: detached[0],
+		modal: true
 	});
 	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached DOM element" );
+	equal( detached.find( ".ui-widget-overlay" ).parent()[0], detached[0], "overlay detached DOM element" );
 	element.dialog( "destroy" );
 
-	element.dialog({ autoOpen: false }).dialog( "option", "appendTo", detached );
+	element.dialog({
+		autoOpen: false,
+		modal: true
+	}).dialog( "option", "appendTo", detached );
 	equal( element.dialog( "widget" ).parent()[0], detached[0], "detached DOM element via option()" );
+	equal( detached.find( ".ui-widget-overlay" ).length, 0, "overlay detached DOM element via option()" );
 	element.dialog( "destroy" );
 });
 

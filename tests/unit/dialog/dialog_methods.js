@@ -34,7 +34,9 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect( 7 );
+	expect( 17 );
+
+	var el, el2;
 
 	$( "#dialog1, #form-dialog" ).hide();
 	domEqual( "#dialog1", function() {
@@ -57,6 +59,35 @@ test("destroy", function() {
 	domEqual( "#dialog1", function() {
 		$( "#dialog1" ).dialog().dialog( "destroy" );
 	});
+
+	// Don't throw errors when destroying a never opened modal dialog (#9004)
+	$( "#dialog1" ).dialog({ autoOpen: false, modal: true }).dialog( "destroy" );
+	equal( $( ".ui-widget-overlay" ).length, 0, "overlay does not exist" );
+	equal( $.ui.dialog.overlayInstances, 0, "overlayInstances equals the number of open overlays");
+
+	el = $( "#dialog1" ).dialog({ modal: true }),
+	el2 = $( "#dialog2" ).dialog({ modal: true });
+	equal( $( ".ui-widget-overlay" ).length, 2, "overlays created when dialogs are open" );
+	equal( $.ui.dialog.overlayInstances, 2, "overlayInstances equals the number of open overlays" );
+	el.dialog( "close" );
+	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after closing one dialog" );
+	equal( $.ui.dialog.overlayInstances, 1, "overlayInstances equals the number of open overlays" );
+	el.dialog( "destroy" );
+	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after destroying one dialog" );
+	equal( $.ui.dialog.overlayInstances, 1, "overlayInstances equals the number of open overlays" );
+	el2.dialog( "destroy" );
+	equal( $( ".ui-widget-overlay" ).length, 0, "overlays removed when all dialogs are destoryed" );
+	equal( $.ui.dialog.overlayInstances, 0, "overlayInstances equals the number of open overlays" );
+});
+
+asyncTest("#9000: Dialog leaves broken event handler after close/destroy in certain cases", function() {
+	expect( 1 );
+	$( "#dialog1" ).dialog({ modal:true }).dialog( "close" ).dialog( "destroy" );
+	setTimeout(function() {
+		$( "#favorite-animal" ).focus();
+		ok( true, "close and destroy modal dialog before its really opened" );
+		start();
+	}, 2 );
 });
 
 test("#4980: Destroy should place element back in original DOM position", function(){

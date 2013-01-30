@@ -849,10 +849,10 @@ $.fn.extend({
 
 	_removeClass: $.fn.removeClass,
 	removeClass: function( classNames, speed, easing, callback ) {
-		return speed ?
+		return arguments.length > 1 ?
 			$.effects.animateClass.call( this,
 				{ remove: classNames }, speed, easing, callback ) :
-			this._removeClass( classNames );
+			this._removeClass.apply( this, arguments );
 	},
 
 	_toggleClass: $.fn.toggleClass,
