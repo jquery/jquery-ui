@@ -355,4 +355,16 @@ test("#5184: isOpen in dialogclose event is true", function() {
 	el.remove();
 });
 
+test("ensure dialog keeps focus when clicking modal overlay", function() {
+	expect( 2 );
+
+	var el = $( "<div></div>" ).dialog({
+			modal: true
+		});
+	ok( $(":focus").closest(".ui-dialog").length, "focus is in dialog" );
+	$(".ui-widget-overlay").simulate("mousedown");
+	ok( $(":focus").closest(".ui-dialog").length, "focus is still in dialog" );
+	el.remove();
+});
+
 })(jQuery);
