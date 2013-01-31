@@ -215,6 +215,7 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
+		this._isOpen = true;
 		this.opener = $( this.document[0].activeElement );
 
 		this._size();
@@ -226,7 +227,6 @@ $.widget( "ui.dialog", {
 			that._trigger("focus");
 		});
 
-		this._isOpen = true;
 		this._trigger("open");
 	},
 

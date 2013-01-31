@@ -193,6 +193,35 @@ test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 	d1.remove();
 });
 
+asyncTest( "#8958: dialog can be opened while opening", function() {
+	expect( 1 );
+
+	var element = $( "<div>" ).dialog({
+		autoOpen: false,
+		modal: true,
+		open: function() {
+			equal( $( ".ui-widget-overlay" ).length, 1 );
+			start();
+		}
+	});
+
+	$( "#favorite-animal" )
+		// We focus the input to start the test. Once it receives focus, the
+		// dialog will open. Opening the dialog, will cause an element inside
+		// the dialog to gain focus, thus blurring the input.
+		.bind( "focus", function() {
+			element.dialog( "open" );
+		})
+		// When the input blurs, the dialog is in the process of opening. We
+		// try to open the dialog again, to make sure that dialogs properly
+		// handle a call to the open() method during the process of the dialog
+		// being opened.
+		.bind( "blur", function() {
+			element.dialog( "open" );
+		})
+		.focus();
+});
+
 test("#5531: dialog width should be at least minWidth on creation", function () {
 	expect( 4 );
 	var element = $("<div></div>").dialog({
