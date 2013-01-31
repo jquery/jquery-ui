@@ -794,7 +794,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		for (i = this.containers.length - 1; i >= 0; i--) {
 
 			// never consider a container that's located within the item itself
-			if($.contains(this.currentItem[0], this.containers[i].element[0])) {
+			if($.contains(this.containers[i].element[0]), this.currentItem[0]) {
 				continue;
 			}
 
