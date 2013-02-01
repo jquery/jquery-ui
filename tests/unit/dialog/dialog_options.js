@@ -174,6 +174,16 @@ test("buttons - advanced", function() {
 	element.remove();
 });
 
+test("#9043: buttons with Array.prototype modification", function() {
+	expect( 1 );
+	Array.prototype.test = $.noop;
+	var element = $( "<div></div>" ).dialog();
+	equal( element.dialog( "widget" ).find( ".ui-dialog-buttonpane" ).length, 0,
+		"no button pane" );
+	element.remove();
+	delete Array.prototype.test;
+});
+
 test("closeOnEscape", function() {
 	expect( 6 );
 	var element = $("<div></div>").dialog({ closeOnEscape: false });
