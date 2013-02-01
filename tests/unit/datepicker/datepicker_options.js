@@ -782,6 +782,21 @@ test("callbacks", function() {
 	inp.datepicker("hide").datepicker("destroy");
 });
 
+test("beforeShowDay - tooltips with quotes", function() {
+	expect( 1 );
+	var inp, dp;
+	inp = TestHelpers.datepicker.init("#inp", {
+		beforeShowDay: function() {
+			return [ true, "", "'" ];
+		}
+	});
+	dp = $("#ui-datepicker-div");
+
+	inp.datepicker("show");
+	equal( dp.find( ".ui-datepicker-calendar td:contains('9')").attr( "title" ), "'" );
+	inp.datepicker("hide").datepicker("destroy");
+});
+
 test("localisation", function() {
 	expect( 24 );
 	var dp, month, day, date,
