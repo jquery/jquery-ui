@@ -59,8 +59,8 @@ $.widget( "ui.selectmenu", {
 		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
 		this._on( this.label, {
 			"click":  function( event ) {
-				this.button.focus();
 				event.preventDefault();
+				this.button.focus();
 			}
 		});
 
@@ -68,17 +68,17 @@ $.widget( "ui.selectmenu", {
 		this.element.hide();
 
 		// create button
-		this.button = $( "<a>", {
+		this.button = $( "<button>", {
 			"class": "ui-button ui-widget ui-state-default ui-corner-all",
 			href: "#" + this.ids.id,
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 			id: this.ids.button,
 			width: this.element.outerWidth(),
 			role: "combobox",
-			"aria-expanded": false,
 			"aria-autocomplete": "list",
 			"aria-owns": this.ids.menu,
-			"aria-haspopup": true
+			"aria-haspopup": true,
+			"aria-live": "assertive"
 		});
 
 		this.button.prepend( $( "<span>", {
@@ -110,7 +110,6 @@ $.widget( "ui.selectmenu", {
 		// create menu portion, append to body
 		this.menu = $( "<ul>", {
 			"aria-hidden": true,
-			"aria-labelledby": this.ids.button,
 			id: this.ids.menu
 		});
 
@@ -144,9 +143,6 @@ $.widget( "ui.selectmenu", {
 					}
 				}
 				that.focus = item.index;
-
-				// Set ARIA active descendant
-				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 			},
 			// set ARIA role
 			role: "listbox"
@@ -204,14 +200,6 @@ $.widget( "ui.selectmenu", {
 
 		this.isOpen = false;
 		this._toggleAttr();
-
-		// check if we have an item to select
-		if ( this.menuItems ) {
-			var id = this._getSelectedItem().find( "a" ).attr( "id" );
-			this.button.attr( "aria-activedescendant", id );
-			this.menu.attr( "aria-activedescendant", id );
-		}
-
 		this._trigger( "close", event );
 	},
 
@@ -291,11 +279,18 @@ $.widget( "ui.selectmenu", {
 
 	_buttonEvents: {
 		focus: function() {
-			// init Menu on first focus
-			this.refresh();
-			// reset focus class as its removed by ui.widget._setOption
-			this.button.addClass( "ui-state-focus" );
-			this._off( this.button, "focus" );
+			// cause the button live region to update on focus, triggering screenreaders to read its value
+			// would be nice to find a less hacky solution in the future
+			this.buttonText.html( this.buttonText.text() + "&#160;" );
+
+			// run this just once; _off can't unbind a specific handler
+			if ( !this.wasFocused ) {
+				// init Menu on first focus
+				this.refresh();
+				// reset focus class as its removed by ui.widget._setOption
+				this.button.addClass( "ui-state-focus" );
+				this.wasFocused = true;
+			}
 		},
 		click: function( event ) {
 			this._toggle( event );
@@ -378,7 +373,6 @@ $.widget( "ui.selectmenu", {
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
-		this.button.attr( "aria-labelledby", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
 	},
 
 	_setOption: function( key, value ) {
@@ -430,7 +424,6 @@ $.widget( "ui.selectmenu", {
 		this.button.toggleClass( "ui-corner-top", this.isOpen ).toggleClass( "ui-corner-all", !this.isOpen );
 		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
 		this.menu.attr( "aria-hidden", !this.isOpen);
-		this.button.attr( "aria-expanded", this.isOpen);
 	},
 
 	_getCreateOptions: function() {
