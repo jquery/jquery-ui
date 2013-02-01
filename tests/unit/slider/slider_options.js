@@ -11,6 +11,37 @@ function handle() {
 
 module("slider: options");
 
+test( "disabled", function(){
+	expect( 8 );
+	var count = 0;
+
+	el = $( "#slider1" ).slider();
+	el.on( "slidestart", function() {
+		count++;
+	});
+
+	// enabled
+	ok( !el.hasClass( "ui-slider-disabled" ), "no disabled class" );
+	equal( el.slider( "option", "disabled" ), false , "is not disabled" );
+
+	handle().simulate( "drag", { dx: 10 } );
+	equal( count, 1, "slider moved");
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+	equal( count, 2, "slider moved");
+
+	// disabled
+	el.slider( "option", "disabled", true );
+	ok( el.hasClass( "ui-slider-disabled" ), "has disabled class" );
+	equal( el.slider( "option", "disabled" ), true, "is disabled" );
+
+	handle().simulate( "drag", { dx: 10 } );
+	equal( count, 2, "slider did not move");
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+	equal( count, 2, "slider did not move");
+});
+
 test("max", function() {
 	expect( 2 );
 	el = $("<div></div>");
