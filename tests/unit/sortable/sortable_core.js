@@ -2,6 +2,10 @@
  * sortable_core.js
  */
 
+(function($) {
+
+module("sortable: core");
+
 test("#9036: grid sort with connectWith prop, sorted error.", function () {
     expect( 2 );
 
@@ -26,3 +30,5 @@ test("#9036: grid sort with connectWith prop, sorted error.", function () {
 
     ok(containers.eq(1).find("li:eq(0)").text() === "Item 4", "cross container sort error.");
 });
+
+})(jQuery);
