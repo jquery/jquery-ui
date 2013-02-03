@@ -444,6 +444,7 @@ $.widget( "ui.dialog", {
 			containment: "document",
 			start: function( event, ui ) {
 				$( this ).addClass("ui-dialog-dragging");
+				that._blockFrames();
 				that._trigger( "dragStart", event, filteredUi( ui ) );
 			},
 			drag: function( event, ui ) {
@@ -455,6 +456,7 @@ $.widget( "ui.dialog", {
 					ui.position.top - that.document.scrollTop()
 				];
 				$( this ).removeClass("ui-dialog-dragging");
+				that._unblockFrames();
 				that._trigger( "dragStop", event, filteredUi( ui ) );
 			}
 		});
@@ -491,6 +493,7 @@ $.widget( "ui.dialog", {
 			handles: resizeHandles,
 			start: function( event, ui ) {
 				$( this ).addClass("ui-dialog-resizing");
+				that._blockFrames();
 				that._trigger( "resizeStart", event, filteredUi( ui ) );
 			},
 			resize: function( event, ui ) {
@@ -500,6 +503,7 @@ $.widget( "ui.dialog", {
 				options.height = $( this ).height();
 				options.width = $( this ).width();
 				$( this ).removeClass("ui-dialog-resizing");
+				that._unblockFrames();
 				that._trigger( "resizeStop", event, filteredUi( ui ) );
 			}
 		})
@@ -663,6 +667,28 @@ $.widget( "ui.dialog", {
 
 		if (this.uiDialog.is(":data(ui-resizable)") ) {
 			this.uiDialog.resizable( "option", "minHeight", this._minHeight() );
+		}
+	},
+
+	_blockFrames: function() {
+		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
+			var iframe = $( this );
+
+			return $( "<div>" )
+				.css({
+					position: "absolute",
+					width: iframe.outerWidth(),
+					height: iframe.outerHeight()
+				})
+				.appendTo( iframe.parent() )
+				.offset( iframe.offset() )[0];
+		});
+	},
+
+	_unblockFrames: function() {
+		if ( this.iframeBlocks ) {
+			this.iframeBlocks.remove();
+			delete this.iframeBlocks;
 		}
 	},
 
