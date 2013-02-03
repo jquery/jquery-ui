@@ -147,4 +147,17 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	});
 });
 
+asyncTest( "#9048: multiple modal dialogs opened and closed in different order", function() {
+	expect( 1 );
+	$( "#dialog1, #dialog2" ).dialog({ autoOpen: false, modal:true });
+	$( "#dialog1" ).dialog( "open" );
+	$( "#dialog2" ).dialog( "open" );
+	$( "#dialog1" ).dialog( "close" );
+	setTimeout(function() {
+		$( "#dialog2" ).dialog( "close" );
+		$( "#favorite-animal" ).focus();
+		ok( true, "event handlers cleaned up (no errors thrown)" );
+		start();
+	});
+});
 })(jQuery);

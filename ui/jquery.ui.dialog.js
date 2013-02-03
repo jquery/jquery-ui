@@ -678,16 +678,14 @@ $.widget( "ui.dialog", {
 			this._delay(function() {
 				// Handle .dialog().dialog("close") (#4065)
 				if ( $.ui.dialog.overlayInstances ) {
-					this._on( this.document, {
-						focusin: function( event ) {
-							if ( !$( event.target ).closest(".ui-dialog").length &&
-									// TODO: Remove hack when datepicker implements
-									// the .ui-front logic (#8989)
-									!$( event.target ).closest(".ui-datepicker").length ) {
-								event.preventDefault();
-								$(".ui-dialog:visible:last .ui-dialog-content")
-									.data("ui-dialog")._focusTabbable();
-							}
+					this.document.bind( "focusin.dialog", function( event ) {
+						if ( !$( event.target ).closest(".ui-dialog").length &&
+								// TODO: Remove hack when datepicker implements
+								// the .ui-front logic (#8989)
+								!$( event.target ).closest(".ui-datepicker").length ) {
+							event.preventDefault();
+							$(".ui-dialog:visible:last .ui-dialog-content")
+								.data("ui-dialog")._focusTabbable();
 						}
 					});
 				}
@@ -712,7 +710,7 @@ $.widget( "ui.dialog", {
 			$.ui.dialog.overlayInstances--;
 
 			if ( !$.ui.dialog.overlayInstances ) {
-				this._off( this.document, "focusin" );
+				this.document.unbind( "focusin.dialog" );
 			}
 			this.overlay.remove();
 			this.overlay = null;
