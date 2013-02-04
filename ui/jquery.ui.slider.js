@@ -412,9 +412,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 				if ( value ) {
 					this.handles.filter( ".ui-state-focus" ).blur();
 					this.handles.removeClass( "ui-state-hover" );
-					this.handles.prop( "disabled", true );
-				} else {
-					this.handles.prop( "disabled", false );
 				}
 				break;
 			case "orientation":
