@@ -288,7 +288,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		var i, item, itemElement, intersection,
+		var i, len, item, itemElement, intersection, currentContainer, empty = true,
 			o = this.options,
 			scrolled = false;
 
@@ -348,6 +348,30 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this.helper[0].style.top = this.position.top+"px";
 		}
 
+		// return null if currentItem in currentContainer;
+		currentContainer = this._intersectsWithContainer();
+
+		if (currentContainer) {
+			// check if currentContainer is empty
+			for (i = 0, len = this.items.length; i < len; i++) {
+				if ($.contains(currentContainer.element[0], this.items[i].item[0])) {
+					empty = false;
+					break;
+				}
+			}
+
+			if (empty) {
+
+				if (!o.dropOnEmpty) {
+					return false;
+				} else {
+					this._rearrange(event, null, currentContainer.element);
+					this._trigger("change", event, this._uiHash());
+				}
+
+			}
+		}
+		
 		//Rearrange
 		for (i = this.items.length - 1; i >= 0; i--) {
 
@@ -355,24 +379,15 @@ $.widget("ui.sortable", $.ui.mouse, {
 			item = this.items[i];
 			itemElement = item.item[0];
 			intersection = this._intersectsWithPointer(item);
-			if (!intersection) {
-				continue;
-			}
 
-			// Only put the placeholder inside the current Container, skip all
-			// items form other containers. This works because when moving
-			// an item from one container to another the
-			// currentContainer is switched before the placeholder is moved.
-			//
-			// Without this moving items in "sub-sortables" can cause the placeholder to jitter
-			// beetween the outer and inner container.
-			if (item.instance !== this.currentContainer) {
+			if (!intersection) {
 				continue;
 			}
 
 			// cannot intersect with itself
 			// no useless actions that have been done before
 			// no action if the item moved is the parent of the item checked
+			
 			if (itemElement !== this.currentItem[0] &&
 				this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
 				!$.contains(this.placeholder[0], itemElement) &&
@@ -391,9 +406,22 @@ $.widget("ui.sortable", $.ui.mouse, {
 				break;
 			}
 		}
+		
+		if (currentContainer) {
+			this.currentContainer = currentContainer;
+			this._trigger("change", event, this._uiHash());
+			currentContainer._trigger("change", event, this._uiHash(this));
 
-		//Post events to containers
-		this._contactContainers(event);
+			for (i = 0, len = this.containers; i < len; i++) {
+				if (this.containers[i] === currentContainer) {
+					this.containers[i]._trigger("over", event, this._uiHash(this));
+					this.containers[i].containerCache.over = 1;
+				} else if (this.containers[i].containerCache.over) {
+					this.containers[i]._trigger("out", event, this._uiHash(this));
+					this.containers[i].containerCache.over = 0;
+				}
+			}
+		}
 
 		//Interconnect with droppables
 		if($.ui.ddmanager) {
@@ -519,6 +547,35 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		items.each(function() { ret.push($(o.item || this).attr(o.attribute || "id") || ""); });
 		return ret;
+
+	},
+
+	_intersectsWithContainer: function() {
+
+		var i, innermostContainer = null;
+
+		// get innermost container that intersects with item
+		for (i = this.containers.length - 1; i >= 0; i--) {
+
+			// never consider a container that's located within the item itself
+			if($.contains(this.containers[i].element[0], this.currentItem[0])) {
+				continue;
+			}
+
+			if(this._intersectsWith(this.containers[i].containerCache)) {
+
+				// if we've already found a container and it's more "inner" than this, then continue
+				if(innermostContainer && $.contains(this.containers[i].element[0], innermostContainer.element[0])) {
+					continue;
+				}
+
+				innermostContainer = this.containers[i];
+
+			}
+
+		}
+
+		return innermostContainer;
 
 	},
 
@@ -690,6 +747,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 					width: 0, height: 0,
 					left: 0, top: 0
 				});
+
 			}
 		}
 
@@ -707,11 +765,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 		for (i = this.items.length - 1; i >= 0; i--){
 			item = this.items[i];
 
-			//We ignore calculating positions of all connected containers when we're not over them
-			if(item.instance !== this.currentContainer && this.currentContainer && item.item[0] !== this.currentItem[0]) {
-				continue;
-			}
-
 			t = this.options.toleranceElement ? $(this.options.toleranceElement, item.item) : item.item;
 
 			if (!fast) {
@@ -720,6 +773,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 
 			p = t.offset();
+
 			item.left = p.left;
 			item.top = p.top;
 		}
@@ -731,7 +785,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 				p = this.containers[i].element.offset();
 				this.containers[i].containerCache.left = p.left;
 				this.containers[i].containerCache.top = p.top;
-				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
+				this.containers[i].containerCache.width = this.containers[i].element.outerWidth();
 				this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
 			}
 		}
@@ -782,96 +836,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
 		o.placeholder.update(that, that.placeholder);
-
-	},
-
-	_contactContainers: function(event) {
-		var i, j, dist, itemWithLeastDistance, posProperty, sizeProperty, base, cur, nearBottom,
-			innermostContainer = null,
-			innermostIndex = null;
-
-		// get innermost container that intersects with item
-		for (i = this.containers.length - 1; i >= 0; i--) {
-
-			// never consider a container that's located within the item itself
-			if($.contains(this.currentItem[0], this.containers[i].element[0])) {
-				continue;
-			}
-
-			if(this._intersectsWith(this.containers[i].containerCache)) {
-
-				// if we've already found a container and it's more "inner" than this, then continue
-				if(innermostContainer && $.contains(this.containers[i].element[0], innermostContainer.element[0])) {
-					continue;
-				}
-
-				innermostContainer = this.containers[i];
-				innermostIndex = i;
-
-			} else {
-				// container doesn't intersect. trigger "out" event if necessary
-				if(this.containers[i].containerCache.over) {
-					this.containers[i]._trigger("out", event, this._uiHash(this));
-					this.containers[i].containerCache.over = 0;
-				}
-			}
-
-		}
-
-		// if no intersecting containers found, return
-		if(!innermostContainer) {
-			return;
-		}
-
-		// move the item into the container if it's not there already
-		if(this.containers.length === 1) {
-			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
-			this.containers[innermostIndex].containerCache.over = 1;
-		} else {
-
-			//When entering a new container, we will find the item with the least distance and append our item near it
-			dist = 10000;
-			itemWithLeastDistance = null;
-			posProperty = this.containers[innermostIndex].floating ? "left" : "top";
-			sizeProperty = this.containers[innermostIndex].floating ? "width" : "height";
-			base = this.positionAbs[posProperty] + this.offset.click[posProperty];
-			for (j = this.items.length - 1; j >= 0; j--) {
-				if(!$.contains(this.containers[innermostIndex].element[0], this.items[j].item[0])) {
-					continue;
-				}
-				if(this.items[j].item[0] === this.currentItem[0]) {
-					continue;
-				}
-				cur = this.items[j].item.offset()[posProperty];
-				nearBottom = false;
-				if(Math.abs(cur - base) > Math.abs(cur + this.items[j][sizeProperty] - base)){
-					nearBottom = true;
-					cur += this.items[j][sizeProperty];
-				}
-
-				if(Math.abs(cur - base) < dist) {
-					dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
-					this.direction = nearBottom ? "up": "down";
-				}
-			}
-
-			//Check if dropOnEmpty is enabled
-			if(!itemWithLeastDistance && !this.options.dropOnEmpty) {
-				return;
-			}
-
-			this.currentContainer = this.containers[innermostIndex];
-			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true);
-			this._trigger("change", event, this._uiHash());
-			this.containers[innermostIndex]._trigger("change", event, this._uiHash(this));
-
-			//Update the placeholder
-			this.options.placeholder.update(this.currentContainer, this.placeholder);
-
-			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
-			this.containers[innermostIndex].containerCache.over = 1;
-		}
-
 
 	},
 
@@ -931,7 +895,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// This is a special case where we need to modify a offset calculated on start, since the following happened:
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
-		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
+		//	the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
 		if(this.cssPosition === "absolute" && this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
@@ -1020,15 +984,15 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		return {
 			top: (
-				pos.top	+																// The absolute mouse position
-				this.offset.relative.top * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.top * mod -											// The offsetParent's offset without borders (offset + border)
+				pos.top +															// The absolute mouse position
+				this.offset.relative.top * mod +									// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.parent.top * mod -										// The offsetParent's offset without borders (offset + border)
 				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod)
 			),
 			left: (
-				pos.left +																// The absolute mouse position
-				this.offset.relative.left * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.left * mod	-										// The offsetParent's offset without borders (offset + border)
+				pos.left +															// The absolute mouse position
+				this.offset.relative.left * mod +									// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.parent.left * mod   -									// The offsetParent's offset without borders (offset + border)
 				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
 			)
 		};
@@ -1085,17 +1049,17 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		return {
 			top: (
-				pageY -																// The absolute mouse position
-				this.offset.click.top -													// Click offset (relative to the element)
-				this.offset.relative.top	-											// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.top +												// The offsetParent's offset without borders (offset + border)
+				pageY -															// The absolute mouse position
+				this.offset.click.top -											// Click offset (relative to the element)
+				this.offset.relative.top	-									// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.parent.top +										// The offsetParent's offset without borders (offset + border)
 				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ))
 			),
 			left: (
-				pageX -																// The absolute mouse position
-				this.offset.click.left -												// Click offset (relative to the element)
-				this.offset.relative.left	-											// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.left +												// The offsetParent's offset without borders (offset + border)
+				pageX -															// The absolute mouse position
+				this.offset.click.left -										// Click offset (relative to the element)
+				this.offset.relative.left   -									// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.parent.left +										// The offsetParent's offset without borders (offset + border)
 				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ))
 			)
 		};
