@@ -48,7 +48,7 @@ $.widget("ui.mouse", {
 	_mouseDestroy: function() {
 		this.element.unbind("."+this.widgetName);
 		if ( this._mouseMoveDelegate ) {
-			$(document)
+			$(this.document)
 				.unbind("mousemove."+this.widgetName, this._mouseMoveDelegate)
 				.unbind("mouseup."+this.widgetName, this._mouseUpDelegate);
 		}
@@ -99,7 +99,7 @@ $.widget("ui.mouse", {
 		this._mouseUpDelegate = function(event) {
 			return that._mouseUp(event);
 		};
-		$(document)
+		$(this.document)
 			.bind("mousemove."+this.widgetName, this._mouseMoveDelegate)
 			.bind("mouseup."+this.widgetName, this._mouseUpDelegate);
 
@@ -130,7 +130,7 @@ $.widget("ui.mouse", {
 	},
 
 	_mouseUp: function(event) {
-		$(document)
+		$(this.document)
 			.unbind("mousemove."+this.widgetName, this._mouseMoveDelegate)
 			.unbind("mouseup."+this.widgetName, this._mouseUpDelegate);
 
