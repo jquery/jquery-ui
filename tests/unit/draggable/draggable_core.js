@@ -80,6 +80,8 @@ test("draggable from iframe (#5727)", function() {
 		'<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>'
 	);
 
+	draggable1.draggable();
+
 	equal(draggable1.closest(iframeBody).length, 1);
 
 	TestHelpers.draggable.shouldMove(draggable1);

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Draggable Test : Draggable in iframe</title>
+    <link rel="stylesheet" href="../visual.css">
+    <link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+    <script src="../../../jquery-1.9.1.js"></script>
+    <script src="../../../ui/jquery.ui.core.js"></script>
+    <script src="../../../ui/jquery.ui.widget.js"></script>
+    <script src="../../../ui/jquery.ui.mouse.js"></script>
+    <script src="../../../ui/jquery.ui.accordion.js"></script>
+    <script src="../../../ui/jquery.ui.draggable.js"></script>
+    <style>
+    #draggable-outer { width: 200px; height: 150px; background: #eee; text-align: center; vertical-align: center; line-height: 150px; font-size: 20px; }
+    iframe { width: 80%; margin: 10px auto; height: 400px; }
+    </style>
+    <script>
+    function initDraggable() {
+        $( "#draggable-iframe" ).contents().find("#draggable-inner").draggable();
+    }
+    $(function() {
+        $( "#draggable-outer" ).draggable();
+    });
+    </script>
+</head>
+<body>
+
+<div id="draggable-outer">ON DOCUMENT</div>
+
+<iframe id="draggable-iframe" src='iframe.html' onload='initDraggable();'></iframe>
+
+</body>
+</html>
