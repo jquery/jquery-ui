@@ -70,4 +70,19 @@ test("resizable handle with complex markup (#8756 / #8757)", function() {
 	equal( target.width(), 200, "compare width" );
 });
 
+test("draggable from iframe (#5727)", function() {
+
+	expect( 2 );
+
+	var iframe = $("#iframe-draggable-container");
+	var iframeBody = iframe.contents().find("body");
+	var draggable1 = iframeBody.append(
+		'<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>'
+	);
+
+	equal(draggable1.closest(iframeBody).length, 1);
+
+	TestHelpers.draggable.shouldMove(draggable1);
+});
+
 })(jQuery);
