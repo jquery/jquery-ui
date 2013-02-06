@@ -19,6 +19,9 @@
     function initDraggable() {
         $( "#draggable-iframe" ).contents().find("#draggable-inner").draggable();
     }
+    function initNestedDraggable() {
+        $( "#draggable-iframe" ).contents().find("#nested-iframe").contents().find("#draggable-inner2").draggable();
+    }
     $(function() {
         $( "#draggable-outer" ).draggable();
     });
