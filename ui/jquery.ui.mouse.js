@@ -114,6 +114,10 @@ $.widget("ui.mouse", {
 		if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
 			return this._mouseUp(event);
 		}
+		// Iframe mouseup check - mouseup occurred in another document
+		else if (!event.which) {
+			return this._mouseUp(event);
+		}
 
 		if (this._mouseStarted) {
 			this._mouseDrag(event);
