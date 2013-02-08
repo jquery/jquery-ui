@@ -174,7 +174,6 @@ $.widget( "ui.selectmenu", {
 			this.menu.menu( "refresh" );
 			this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
 
-			// select current item
 			item = this._getSelectedItem();
 			// make sure menu is selected item aware
 			this.menu.menu( "focus", null, item );
@@ -365,6 +364,7 @@ $.widget( "ui.selectmenu", {
 		var oldIndex = this.element[ 0 ].selectedIndex;
 		// change native select element
 		this.element[ 0 ].selectedIndex = item.index;
+		this._setText( this.buttonText, item.label );
 		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
 
@@ -374,7 +374,6 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		this._setText( this.buttonText, item.label );
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
