@@ -24,9 +24,9 @@ test("init", function() {
 	$("<div></div>").appendTo("body").remove().dialog().remove();
 	ok(true, ".dialog() called on disconnected DOMElement - removed");
 
-	var el = $("<div></div>").dialog();
-	el.dialog("option", "foo");
-	el.remove();
+	var element = $("<div></div>").dialog();
+	element.dialog("option", "foo");
+	element.remove();
 	ok(true, "arbitrary option getter after init");
 
 	$("<div></div>").dialog().dialog("option", "foo", "bar").remove();
@@ -36,7 +36,7 @@ test("init", function() {
 test("destroy", function() {
 	expect( 17 );
 
-	var el, el2;
+	var element, element2;
 
 	$( "#dialog1, #form-dialog" ).hide();
 	domEqual( "#dialog1", function() {
@@ -65,17 +65,17 @@ test("destroy", function() {
 	equal( $( ".ui-widget-overlay" ).length, 0, "overlay does not exist" );
 	equal( $.ui.dialog.overlayInstances, 0, "overlayInstances equals the number of open overlays");
 
-	el = $( "#dialog1" ).dialog({ modal: true }),
-	el2 = $( "#dialog2" ).dialog({ modal: true });
+	element = $( "#dialog1" ).dialog({ modal: true }),
+	element2 = $( "#dialog2" ).dialog({ modal: true });
 	equal( $( ".ui-widget-overlay" ).length, 2, "overlays created when dialogs are open" );
 	equal( $.ui.dialog.overlayInstances, 2, "overlayInstances equals the number of open overlays" );
-	el.dialog( "close" );
+	element.dialog( "close" );
 	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after closing one dialog" );
 	equal( $.ui.dialog.overlayInstances, 1, "overlayInstances equals the number of open overlays" );
-	el.dialog( "destroy" );
+	element.dialog( "destroy" );
 	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after destroying one dialog" );
 	equal( $.ui.dialog.overlayInstances, 1, "overlayInstances equals the number of open overlays" );
-	el2.dialog( "destroy" );
+	element2.dialog( "destroy" );
 	equal( $( ".ui-widget-overlay" ).length, 0, "overlays removed when all dialogs are destoryed" );
 	equal( $.ui.dialog.overlayInstances, 0, "overlayInstances equals the number of open overlays" );
 });
@@ -102,40 +102,40 @@ test("#4980: Destroy should place element back in original DOM position", functi
 
 test( "enable/disable disabled", function() {
 	expect( 2 );
-	var el = $( "<div></div>" ).dialog();
-	el.dialog( "disable" );
-	equal(el.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
-	ok( !el.dialog( "widget" ).hasClass( "ui-dialog-disabled" ), "disable method doesn't add ui-dialog-disabled class" );
+	var element = $( "<div></div>" ).dialog();
+	element.dialog( "disable" );
+	equal(element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
+	ok( !element.dialog( "widget" ).hasClass( "ui-dialog-disabled" ), "disable method doesn't add ui-dialog-disabled class" );
 });
 
 test("close", function() {
 	expect( 3 );
 
-	var el,
+	var element,
 		expected = $("<div></div>").dialog(),
 		actual = expected.dialog("close");
 	equal(actual, expected, "close is chainable");
 
-	el = $("<div></div>").dialog();
-	ok(el.dialog("widget").is(":visible") && !el.dialog("widget").is(":hidden"), "dialog visible before close method called");
-	el.dialog("close");
-	ok(el.dialog("widget").is(":hidden") && !el.dialog("widget").is(":visible"), "dialog hidden after close method called");
+	element = $("<div></div>").dialog();
+	ok(element.dialog("widget").is(":visible") && !element.dialog("widget").is(":hidden"), "dialog visible before close method called");
+	element.dialog("close");
+	ok(element.dialog("widget").is(":hidden") && !element.dialog("widget").is(":visible"), "dialog hidden after close method called");
 });
 
 test("isOpen", function() {
 	expect(4);
 
-	var el = $("<div></div>").dialog();
-	equal(el.dialog("isOpen"), true, "dialog is open after init");
-	el.dialog("close");
-	equal(el.dialog("isOpen"), false, "dialog is closed");
-	el.remove();
+	var element = $("<div></div>").dialog();
+	equal(element.dialog("isOpen"), true, "dialog is open after init");
+	element.dialog("close");
+	equal(element.dialog("isOpen"), false, "dialog is closed");
+	element.remove();
 
-	el = $("<div></div>").dialog({autoOpen: false});
-	equal(el.dialog("isOpen"), false, "dialog is closed after init");
-	el.dialog("open");
-	equal(el.dialog("isOpen"), true, "dialog is open");
-	el.remove();
+	element = $("<div></div>").dialog({autoOpen: false});
+	equal(element.dialog("isOpen"), false, "dialog is closed after init");
+	element.dialog("open");
+	equal(element.dialog("isOpen"), true, "dialog is open");
+	element.remove();
 });
 
 test("moveToTop", function() {
@@ -167,15 +167,15 @@ test("moveToTop", function() {
 
 test("open", function() {
 	expect( 3 );
-	var el,
+	var element,
 		expected = $("<div></div>").dialog(),
 		actual = expected.dialog("open");
 	equal(actual, expected, "open is chainable");
 
-	el = $("<div></div>").dialog({ autoOpen: false });
-	ok(el.dialog("widget").is(":hidden") && !el.dialog("widget").is(":visible"), "dialog hidden before open method called");
-	el.dialog("open");
-	ok(el.dialog("widget").is(":visible") && !el.dialog("widget").is(":hidden"), "dialog visible after open method called");
+	element = $("<div></div>").dialog({ autoOpen: false });
+	ok(element.dialog("widget").is(":hidden") && !element.dialog("widget").is(":visible"), "dialog hidden before open method called");
+	element.dialog("open");
+	ok(element.dialog("widget").is(":visible") && !element.dialog("widget").is(":hidden"), "dialog visible after open method called");
 });
 
 test("#6137: dialog('open') causes form elements to reset on IE7", function() {
@@ -193,25 +193,54 @@ test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 	d1.remove();
 });
 
+asyncTest( "#8958: dialog can be opened while opening", function() {
+	expect( 1 );
+
+	var element = $( "<div>" ).dialog({
+		autoOpen: false,
+		modal: true,
+		open: function() {
+			equal( $( ".ui-widget-overlay" ).length, 1 );
+			start();
+		}
+	});
+
+	$( "#favorite-animal" )
+		// We focus the input to start the test. Once it receives focus, the
+		// dialog will open. Opening the dialog, will cause an element inside
+		// the dialog to gain focus, thus blurring the input.
+		.bind( "focus", function() {
+			element.dialog( "open" );
+		})
+		// When the input blurs, the dialog is in the process of opening. We
+		// try to open the dialog again, to make sure that dialogs properly
+		// handle a call to the open() method during the process of the dialog
+		// being opened.
+		.bind( "blur", function() {
+			element.dialog( "open" );
+		})
+		.focus();
+});
+
 test("#5531: dialog width should be at least minWidth on creation", function () {
 	expect( 4 );
-	var el = $("<div></div>").dialog({
+	var element = $("<div></div>").dialog({
 			width: 200,
 			minWidth: 300
 		});
 
-	equal(el.dialog("option", "width"), 300, "width is minWidth");
-	el.dialog("option", "width", 200);
-	equal(el.dialog("option", "width"), 300, "width unchanged when set to < minWidth");
-	el.dialog("option", "width", 320);
-	equal(el.dialog("option", "width"), 320, "width changed if set to > minWidth");
-	el.remove();
+	equal(element.dialog("option", "width"), 300, "width is minWidth");
+	element.dialog("option", "width", 200);
+	equal(element.dialog("option", "width"), 300, "width unchanged when set to < minWidth");
+	element.dialog("option", "width", 320);
+	equal(element.dialog("option", "width"), 320, "width changed if set to > minWidth");
+	element.remove();
 
-	el = $("<div></div>").dialog({
+	element = $("<div></div>").dialog({
 			minWidth: 300
 		});
-	ok(el.dialog("option", "width") >=  300, "width is at least 300");
-	el.remove();
+	ok(element.dialog("option", "width") >=  300, "width is at least 300");
+	element.remove();
 
 });
 

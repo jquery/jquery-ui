@@ -10,26 +10,26 @@ test("title id", function() {
 	expect(1);
 
 	var titleId,
-		el = $("<div></div>").dialog();
+		element = $("<div></div>").dialog();
 
-	titleId = el.dialog("widget").find(".ui-dialog-title").attr("id");
+	titleId = element.dialog("widget").find(".ui-dialog-title").attr("id");
 	ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id");
-	el.remove();
+	element.remove();
 });
 
 test( "ARIA", function() {
 	expect( 4 );
 
-	var el = $( "<div></div>" ).dialog(),
-		wrapper = el.dialog( "widget" );
+	var element = $( "<div></div>" ).dialog(),
+		wrapper = element.dialog( "widget" );
 	equal( wrapper.attr( "role" ), "dialog", "dialog role" );
 	equal( wrapper.attr( "aria-labelledby" ), wrapper.find( ".ui-dialog-title" ).attr( "id" ) );
-	equal( wrapper.attr( "aria-describedby" ), el.attr( "id" ), "aria-describedby added" );
-	el.remove();
+	equal( wrapper.attr( "aria-describedby" ), element.attr( "id" ), "aria-describedby added" );
+	element.remove();
 
-	el = $("<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>").dialog();
-	strictEqual( el.dialog( "widget" ).attr( "aria-describedby" ), undefined, "no aria-describedby added, as already present in markup" );
-	el.remove();
+	element = $("<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>").dialog();
+	strictEqual( element.dialog( "widget" ).attr( "aria-describedby" ), undefined, "no aria-describedby added, as already present in markup" );
+	element.remove();
 });
 
 test("widget method", function() {
@@ -41,7 +41,7 @@ test("widget method", function() {
 
 asyncTest( "focus tabbable", function() {
 	expect( 5 );
-	var el,
+	var element,
 		options = {
 			buttons: [{
 				text: "Ok",
@@ -50,24 +50,24 @@ asyncTest( "focus tabbable", function() {
 		};
 
 	function checkFocus( markup, options, testFn, next ) {
-		el = $( markup ).dialog( options );
+		element = $( markup ).dialog( options );
 		setTimeout(function() {
 			testFn();
-			el.remove();
+			element.remove();
 			setTimeout( next );
 		});
 	}
 
 	function step1() {
 		checkFocus( "<div><input><input autofocus></div>", options, function() {
-			equal( document.activeElement, el.find( "input" )[ 1 ],
+			equal( document.activeElement, element.find( "input" )[ 1 ],
 				"1. first element inside the dialog matching [autofocus]" );
 		}, step2 );
 	}
 
 	function step2() {
 		checkFocus( "<div><input><input></div>", options, function() {
-			equal( document.activeElement, el.find( "input" )[ 0 ],
+			equal( document.activeElement, element.find( "input" )[ 0 ],
 				"2. tabbable element inside the content element" );
 		}, step3 );
 	}
@@ -75,7 +75,7 @@ asyncTest( "focus tabbable", function() {
 	function step3() {
 		checkFocus( "<div>text</div>", options, function() {
 			equal( document.activeElement,
-				el.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ],
+				element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ],
 				"3. tabbable element inside the buttonpane" );
 		}, step4 );
 	}
@@ -83,20 +83,20 @@ asyncTest( "focus tabbable", function() {
 	function step4() {
 		checkFocus( "<div>text</div>", {}, function() {
 			equal( document.activeElement,
-				el.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ],
+				element.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ],
 				"4. the close button" );
 		}, step5 );
 	}
 
 	function step5() {
-		el = $( "<div>text</div>" ).dialog({
+		element = $( "<div>text</div>" ).dialog({
 			autoOpen: false
 		});
-		el.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
-		el.dialog( "open" );
+		element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
+		element.dialog( "open" );
 		setTimeout(function() {
-			equal( document.activeElement, el.parent()[ 0 ], "5. the dialog itself" );
-			el.remove();
+			equal( document.activeElement, element.parent()[ 0 ], "5. the dialog itself" );
+			element.remove();
 			start();
 		});
 	}
@@ -119,9 +119,9 @@ test( "#7960: resizable handles below modal overlays", function() {
 asyncTest( "Prevent tabbing out of dialogs", function() {
 	expect( 3 );
 
-	var el = $( "<div><input><input></div>" ).dialog(),
-		inputs = el.find( "input" ),
-		widget = el.dialog( "widget" )[ 0 ];
+	var element = $( "<div><input><input></div>" ).dialog(),
+		inputs = element.find( "input" ),
+		widget = element.dialog( "widget" )[ 0 ];
 
 	function checkTab() {
 		ok( $.contains( widget, document.activeElement ), "Tab key event moved focus within the modal" );
@@ -134,7 +134,7 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	function checkShiftTab() {
 		ok( $.contains( widget, document.activeElement ), "Shift-Tab key event moved focus within the modal" );
 
-		el.remove();
+		element.remove();
 		setTimeout( start );
 	}
 
@@ -147,4 +147,17 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	});
 });
 
+asyncTest( "#9048: multiple modal dialogs opened and closed in different order", function() {
+	expect( 1 );
+	$( "#dialog1, #dialog2" ).dialog({ autoOpen: false, modal:true });
+	$( "#dialog1" ).dialog( "open" );
+	$( "#dialog2" ).dialog( "open" );
+	$( "#dialog1" ).dialog( "close" );
+	setTimeout(function() {
+		$( "#dialog2" ).dialog( "close" );
+		$( "#favorite-animal" ).focus();
+		ok( true, "event handlers cleaned up (no errors thrown)" );
+		start();
+	});
+});
 })(jQuery);
