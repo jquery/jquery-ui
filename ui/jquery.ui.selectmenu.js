@@ -177,7 +177,7 @@ $.widget( "ui.selectmenu", {
 			item = this._getSelectedItem();
 			// make sure menu is selected item aware
 			this.menu.menu( "focus", null, item );
-			this._setSelected( item.data( "ui-selectmenu-item" ) );
+			this._setAria( item.data( "ui-selectmenu-item" ) );
 
 			// set disabled state
 			this._setOption( "disabled", this._getCreateOptions().disabled );
@@ -365,7 +365,7 @@ $.widget( "ui.selectmenu", {
 		// change native select element
 		this.element[ 0 ].selectedIndex = item.index;
 		this._setText( this.buttonText, item.label );
-		this._setSelected( item );
+		this._setAria( item );
 		this._trigger( "select", event, { item: item } );
 
 		if ( item.index !== oldIndex ) {
@@ -373,7 +373,7 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 
-	_setSelected: function( item ) {
+	_setAria: function( item ) {
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
