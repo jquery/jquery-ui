@@ -20,25 +20,38 @@
 		$('select#disabled3').selectmenu();
 		var disabled4 = $('select#disabled4').selectmenu();
 
-		$("#disable_select").toggle( function() {
-			disabled4.selectmenu("disable");
-		}, function() {
-			disabled4.removeAttr("disabled");
+		$("#disable_select").on("click", function() {
+			if (disable_select) {
+				disable_select = false;
+				disabled4.selectmenu("disable");
+			} else {
+				disable_select = true;
+				disabled4.removeAttr("disabled");
+			}		
 			disabled4.selectmenu("refresh");
+			return false;
 		});
-		$("#disable_option").toggle( function() {
-			disabled4.find("option:eq(0)").attr("disabled", "disabled");
+		$("#disable_option").on("click", function() {
+			if (disable_option) {
+				disable_option = false;
+				disabled4.find("option:eq(0)").attr("disabled", "disabled");
+			} else {
+				disable_option = true;
+				disabled4.find("option:eq(0)").removeAttr("disabled");
+			}		
 			disabled4.selectmenu("refresh");
-		}, function() {
-			disabled4.find("option:eq(0)").removeAttr("disabled");
-			disabled4.selectmenu("refresh");
+			return false;
 		});
-		$("#disable_optgroup").toggle( function() {
-			disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");
+		$("#disable_optgroup").on("click", function() {
+			if (disable_optgroup) {
+				disable_optgroup = false;
+				disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");
+			} else {
+				disable_optgroup = true;
+				disabled4.find("optgroup:eq(0)").removeAttr("disabled");
+			}		
 			disabled4.selectmenu("refresh");
-		}, function() {
-			disabled4.find("optgroup:eq(0)").removeAttr("disabled");
-			disabled4.selectmenu("refresh");
+			return false;
 		});
 
 		/* empty */
