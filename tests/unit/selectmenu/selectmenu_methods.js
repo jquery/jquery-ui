@@ -68,6 +68,26 @@ test("refresh - structure", function () {
 	equal( element.find("option").first().text(), menu.find("li").not(".ui-selectmenu-optgroup").first().text(), "changed item" );
 });
 
+test("refresh - change selected option", function () {
+	expect(3);
+
+	var element = $("#speed").selectmenu(),
+		menu = element.selectmenu("menuWidget").parent(),
+		button = element.selectmenu("widget");	
+	
+	equal( element.find("option:selected").text(), button.text(), "button text after init" );
+	
+	button.simulate( "focus" );	
+	
+	equal( element.find("option:selected").text(), button.text(), "button text after focus" );
+
+	element.find("option").eq(2).removeAttr("selected");	
+	element.find("option").eq(0).attr("selected", "selected");
+	element.selectmenu("refresh");
+	
+	equal( element.find("option:selected").text(), button.text(), "button text after changing selected option" );	
+});
+
 
 test("refresh - disabled select", function () {
 	expect(4);
