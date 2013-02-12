@@ -917,13 +917,12 @@ $.ui.plugin.add("draggable", "stack", {
 
 		if (!group.length) { return; }
 
-		min = parseInt(group[0].style.zIndex, 10) || 0;
+		min = parseInt($(group[0]).css("zIndex"), 10) || 0;
 		$(group).each(function(i) {
-			this.style.zIndex = min + i;
+			$(this).css("zIndex", min + i);
 		});
 
-		this[0].style.zIndex = min + group.length;
-
+		$(this[0]).css("zIndex", (min + group.length));
 	}
 });
 
