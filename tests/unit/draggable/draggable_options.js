@@ -191,6 +191,37 @@ test("{ containment: 'parent' }, absolute", function() {
 	deepEqual(offsetAfter, expected, "compare offset to parent");
 });
 
+test( "containment, account for border", function() {
+	expect( 2 );
+
+	var el = $("#draggable1").appendTo("#main"),
+		parent = el.parent().css({
+			height: "100px",
+			width: "100px",
+			borderStyle: "solid",
+			borderWidth: "5px 10px 15px 20px"
+		}),
+		parentBottom = parent.offset().top + parent.outerHeight(),
+		parentRight = parent.offset().left + parent.outerWidth(),
+		parentBorderBottom = TestHelpers.draggable.border( parent, "bottom" ),
+		parentBorderRight = TestHelpers.draggable.border( parent, "right" );
+
+	el.css({
+		height: "5px",
+		width: "5px"
+	}).draggable({ containment: "parent" });
+
+	el.simulate( "drag", {
+		dx: 100,
+		dy: 100
+	});
+
+	equal( el.offset().top, parentBottom - parentBorderBottom - el.height(),
+		"The draggable should be on top of its parent's bottom border" );
+	equal( el.offset().left, parentRight - parentBorderRight - el.width(),
+		"The draggable should be to the right of its parent's right border" );
+});
+
 /*
 test("{ containment: 'document' }", function() {
 	expect( 1 );
