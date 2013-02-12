@@ -723,4 +723,39 @@ test("{ zIndex: 10 }", function() {
 
 });
 
+test( "{ stack }", function() {
+	expect( 4 );
+
+	var draggable1 = $( "#draggable1" ),
+		draggable2 = $( "#draggable2" ),
+		draggable3 = $( "#draggable3" ),
+		draggable4 = $( "#draggable4" );
+
+	// Set z-index as an inline style.
+	$( "#draggable1, #draggable2" )
+		.css( "zIndex", 100 )
+		.draggable({
+			stack: "#draggable1, #draggable2"
+		});
+	// Have z-index applied via CSS, see #9077
+	$( "#draggable3, #draggable4" )
+		.draggable({
+			stack: "#draggable3, #draggable4"
+		});
+
+	draggable1.simulate( "drag", {
+		dx: 1,
+		dy: 1
+	});
+	draggable3.simulate( "drag", {
+		dx: 1,
+		dy: 1
+	});
+
+	equal( draggable1.css( "zIndex" ), 102);
+	equal( draggable2.css( "zIndex" ), 101);
+	equal( draggable3.css( "zIndex" ), 102);
+	equal( draggable4.css( "zIndex" ), 101);
+});
+
 })(jQuery);
