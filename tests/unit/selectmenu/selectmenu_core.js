@@ -44,7 +44,7 @@ $.each([
 		selector: "#files"
 	}
 ], function( i, settings ) {
-	test("state synchronization - after keydown - " + settings.type, function () {
+	test("state synchronization - after keydown on button - " + settings.type, function () {
 		expect(5);
 
 		var links,
@@ -64,7 +64,7 @@ $.each([
 		equal( button.text(), selected.next("option").text(), "button text" );
 	});
 
-	test("state synchronization - after click - " + settings.type, function () {
+	test("state synchronization - after click on item - " + settings.type, function () {
 		expect(5);
 
 		var links,
@@ -82,6 +82,47 @@ $.each([
 		equal( button.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "button aria-activedescendant" );
 		equal( element.find("option:selected").val(), element.find("option").last().val(), "original select state" );
 		equal( button.text(), element.find("option").last().text(), "button text" );
+	});
+	
+	test("state synchronization - after focus item and keydown on button  - " + settings.type, function () {
+		expect(5);
+
+		var links,
+			element = $(settings.selector).selectmenu({
+				select: function(){
+					console.log("selected");
+				},
+				focus: function(){
+					console.log("focused");
+				},
+				close: function(){
+					console.log("closed");
+				}
+			}),
+			button = element.selectmenu("widget"),
+			menu = element.selectmenu("menuWidget"),
+			selected = element.find("option:selected"),
+			options = element.find("option");
+
+		// init menu
+		button.simulate( "focus" );		
+		links = menu.find("li.ui-menu-item a");	
+		// open menu and click first item
+		button.simulate( "click" );		
+		links.first().simulate( "mouseover" ).trigger( "click" );
+		// open menu again and hover item
+		button.simulate( "click" );		
+		links.eq(3).simulate( "mouseover" );
+		// close and use keyboard control on button
+		button.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+		button.simulate( "focus" );
+		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+				
+		equal( menu.attr("aria-activedescendant"), links.eq(1).attr("id"), "menu aria-activedescendant" );
+		equal( links.eq(1).attr("aria-selected"), "true", "selected menu link aria-selected" );
+		equal( button.attr("aria-activedescendant"), links.eq(1).attr("id"), "button aria-activedescendant" );
+		equal( element.find("option:selected").val(), options.eq(1).val() , "original select state" );
+		equal( button.text(), options.eq(1).text(), "button text" );
 	});
 });
 
