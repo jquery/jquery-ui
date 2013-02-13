@@ -86,6 +86,20 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	},
 
+	_createCursorOverlay: function( cursor ) {
+		this.cursorOverlay = $("<div>")
+			.css({
+				cursor: cursor,
+				height: "100%",
+				left: 0,
+				position: "static",
+				top: 0,
+				width: "100%",
+				zIndex: "2147483647"
+			})
+			.appendTo( "body" );
+	},
+
 	_destroy: function() {
 		this.element
 			.removeClass("ui-sortable ui-sortable-disabled");
@@ -229,10 +243,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		if(o.cursor) { // cursor option
-			if ($("body").css("cursor")) {
-				this._storedCursor = $("body").css("cursor");
-			}
-			$("body").css("cursor", o.cursor);
+			this._createCursorOverlay(o.cursor);
 		}
 
 		if(o.opacity) { // opacity option
@@ -1178,8 +1189,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if(this._storedCursor) {
-			$("body").css("cursor", this._storedCursor);
+		if (this.options.cursor) {
+			this.cursorOverlay.remove();
 		}
 		if(this._storedOpacity) {
 			this.helper.css("opacity", this._storedOpacity);
