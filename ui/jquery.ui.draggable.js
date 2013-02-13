@@ -908,9 +908,8 @@ $.ui.plugin.add("draggable", "snap", {
 
 $.ui.plugin.add("draggable", "stack", {
 	start: function() {
-
 		var min,
-			o = $(this).data("ui-draggable").options,
+			o = this.data("ui-draggable").options,
 			group = $.makeArray($(o.stack)).sort(function(a,b) {
 				return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
 			});
@@ -921,8 +920,7 @@ $.ui.plugin.add("draggable", "stack", {
 		$(group).each(function(i) {
 			$(this).css("zIndex", min + i);
 		});
-
-		$(this[0]).css("zIndex", (min + group.length));
+		this.css("zIndex", (min + group.length));
 	}
 });
 
