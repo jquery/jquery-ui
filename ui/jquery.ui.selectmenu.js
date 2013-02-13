@@ -206,12 +206,7 @@ $.widget( "ui.selectmenu", {
 
 		// check if we have an item to select
 		if ( this.menuItems ) {
-			var item = this._getSelectedItem(),
-				id = item.find( "a" ).attr( "id" );
-
-			this.menu.menu( "focus", null, item );
-			this.button.attr( "aria-activedescendant", id );
-			this.menu.attr( "aria-activedescendant", id );
+			this.menu.menu( "focus", null, this._getSelectedItem() );
 		}
 
 		this._trigger( "close", event );
@@ -377,10 +372,17 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setAria: function( item ) {
+		var link = this.menuItems.eq( item.index ).find( "a" ),
+			id = link.attr( "id" );
+	
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
-		this.menuItems.eq( item.index ).find( "a" ).attr( "aria-selected", true );
-		this.button.attr( "aria-labelledby", this.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
+		link.attr( "aria-selected", true );
+		this.button.attr({
+			"aria-labelledby": id,
+			"aria-activedescendant": id
+		});
+		this.menu.attr( "aria-activedescendant", id );
 	},
 
 	_setOption: function( key, value ) {
