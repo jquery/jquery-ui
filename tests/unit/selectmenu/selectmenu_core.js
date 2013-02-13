@@ -88,17 +88,7 @@ $.each([
 		expect(5);
 
 		var links,
-			element = $(settings.selector).selectmenu({
-				select: function(){
-					console.log("selected");
-				},
-				focus: function(){
-					console.log("focused");
-				},
-				close: function(){
-					console.log("closed");
-				}
-			}),
+			element = $(settings.selector).selectmenu(),
 			button = element.selectmenu("widget"),
 			menu = element.selectmenu("menuWidget"),
 			selected = element.find("option:selected"),
