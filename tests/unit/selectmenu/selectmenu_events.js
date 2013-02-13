@@ -68,6 +68,8 @@ test("focus", function () {
 	button.simulate( "click" );
 	
 	menu.find("a").last().simulate( "mouseover" );
+	
+	this.element.selectmenu("close");
 });
 
 
