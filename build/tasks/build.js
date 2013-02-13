@@ -175,67 +175,42 @@ grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", fun
 });
 
 grunt.registerTask( "generate_themes", function() {
-	var download, files, done, configContent,
-		target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/",
+	var download, done,
 		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() ),
-		configFile = "node_modules/download.jqueryui.com/config.json";
+		target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/";
+		
 	try {
 		require.resolve( "download.jqueryui.com" );
 	} catch( error ) {
 		throw new Error( "You need to manually install download.jqueryui.com for this task to work" );
 	}
 
-	// copy release files into download builder to avoid cloning again
-	grunt.file.expandFiles( distFolder + "/**" ).forEach(function( file ) {
-		grunt.file.copy( file, "node_modules/download.jqueryui.com/release/" + file.replace(/^dist\/jquery-ui-/, "") );
-	});
-	// make it look for the right version
-	configContent = grunt.file.readJSON( configFile );
-	configContent.jqueryUi.stable.version = grunt.config( "pkg.version" );
-	grunt.file.write( configFile, JSON.stringify( configContent, null, "\t" ) + "\n" );
-
-	download = new ( require( "download.jqueryui.com" ) )();
-
-	files = grunt.file.expandFiles( distFolder + "/themes/base/**/*" );
-	files.forEach(function( fileName ) {
-		grunt.file.copy( fileName, target + fileName.replace( distFolder, "" ) );
+	download = require( "download.jqueryui.com" )({
+		config: {
+			"jqueryUi": {
+				"stable": { "path": path.resolve( __dirname + "/../../" + distFolder ) }
+			},
+			"jquery": "skip"
+		}
 	});
 
 	done = this.async();
-	grunt.utils.async.forEach( download.themeroller.gallery(), function( theme, done ) {
-		var folderName = theme.folderName(),
-			concatTarget = "css-" + folderName,
-			cssContent = theme.css(),
-			cssFolderName = target + "themes/" + folderName + "/",
-			cssFileName = cssFolderName + "jquery.ui.theme.css",
-			cssFiles = grunt.config.get( "concat.css.src" )[ 1 ].slice();
-
-		grunt.file.write( cssFileName, cssContent );
-
-		// get css components, replace the last file with the current theme
-		cssFiles.splice(-1);
-		cssFiles.push( "<strip_all_banners:" + cssFileName + ">" );
-		grunt.config.get( "concat" )[ concatTarget ] = {
-			src: [ "<banner:meta.bannerCSS>", cssFiles ],
-			dest: cssFolderName + "jquery-ui.css"
-		};
-		grunt.task.run( "concat:" + concatTarget );
-
-		theme.fetchImages(function( err, files ) {
-			if ( err ) {
-				done( err );
-				return;
-			}
-			files.forEach(function( file ) {
-				grunt.file.write( cssFolderName + "images/" + file.path, file.data );
-			});
-			done();
-		});
-	}, function( err ) {
+	download.buildThemesBundle(function( err, files ) {
 		if ( err ) {
 			grunt.log.error( err );
+			return done( false );
 		}
-		done( !err );
+		done(
+			files.every(function( file ) {
+				try {
+					grunt.file.write( target + file.path, file.data );
+				} catch( err ) {
+					grunt.log.error( err );
+					return false;
+				}
+				return true;
+			}) && grunt.log.writeln( "Generated at " + target )
+		);
 	});
 });
 
