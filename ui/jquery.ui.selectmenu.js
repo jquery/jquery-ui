@@ -137,7 +137,7 @@ $.widget( "ui.selectmenu", {
 			focus: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
 				// prevent inital focus from firing and checks if its a newly focused item
-				if ( that.focus !== undefined && item.index !== that.focus ) {
+				if ( !that.isOpen && that.focus !== undefined && item.index !== that.focus ) {
 					that._trigger( "focus", event, { item: item } );
 					if ( !that.isOpen ) {
 						that._select( item, event );
@@ -206,7 +206,10 @@ $.widget( "ui.selectmenu", {
 
 		// check if we have an item to select
 		if ( this.menuItems ) {
-			var id = this._getSelectedItem().find( "a" ).attr( "id" );
+			var item = this._getSelectedItem(),
+				id = item.find( "a" ).attr( "id" );
+
+			this.menu.menu( "focus", null, item );
 			this.button.attr( "aria-activedescendant", id );
 			this.menu.attr( "aria-activedescendant", id );
 		}
