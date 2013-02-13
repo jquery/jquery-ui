@@ -1,12 +1,12 @@
 (function ($) {
 
-module("selectmenu: options");
+module( "selectmenu: options" );
 
-test("appendTo another element", function () {
+test( "appendTo another element", function () {
 	expect( 8 );
-	
+
 	var detached = $( "<div>" ),
-		element = $("#speed").selectmenu();
+		element = $( "#speed" ).selectmenu();
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[0], document.body, "defaults to body" );
 	element.selectmenu( "destroy" );
 
@@ -45,16 +45,16 @@ test("appendTo another element", function () {
 });
 
 
-test("CSS styles", function () {
-	expect(2);
+test( "CSS styles", function () {
+	expect( 2 );
 
 	var element = $("#speed").selectmenu(),
 		button = element.selectmenu("widget"),
 		menu = element.selectmenu("menuWidget");
 
-	element.selectmenu("open");
-	ok( button.hasClass("ui-corner-top") && !button.hasClass("ui-corner-all") && button.find("span.ui-icon").hasClass("ui-icon-triangle-1-s"), "button styles dropdown");
-	ok( menu.hasClass("ui-corner-bottom") && !menu.hasClass("ui-corner-all"), "menu styles dropdown");
+	element.selectmenu( "open" );
+	ok( button.hasClass( "ui-corner-top" ) && !button.hasClass( "ui-corner-all" ) && button.find( "span.ui-icon" ).hasClass( "ui-icon-triangle-1-s" ), "button styles dropdown" );
+	ok( menu.hasClass( "ui-corner-bottom" ) && !menu.hasClass( "ui-corner-all" ), "menu styles dropdown" );
 });
 
-})(jQuery);
+})( jQuery );
