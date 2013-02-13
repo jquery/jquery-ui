@@ -146,7 +146,7 @@ $.widget( "ui.selectmenu", {
 				that.focus = item.index;
 
 				// Set ARIA active descendant
-				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).find( "a" ).attr( "id" ) );
+				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).attr( "id" ) );
 			},
 			// set ARIA role
 			role: "listbox"
@@ -172,7 +172,7 @@ $.widget( "ui.selectmenu", {
 			this._renderMenu( this.menu, this.items );
 
 			this.menu.menu( "refresh" );
-			this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
+			this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
 
 			item = this._getSelectedItem();
 			// make sure menu is selected item aware
@@ -372,11 +372,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setAria: function( item ) {
-		var link = this.menuItems.eq( item.index ).find( "a" ),
+		var link = this.menuItems.eq( item.index ),
 			id = link.attr( "id" );
 	
 		// change ARIA attr
-		this.menuItems.find( "a" ).attr( "aria-selected", false );
+		this.menuItems.attr( "aria-selected", false );
 		link.attr( "aria-selected", true );
 		this.button.attr({
 			"aria-labelledby": id,
