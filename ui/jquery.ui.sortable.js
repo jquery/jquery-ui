@@ -86,18 +86,14 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	},
 
-	_createCursorOverlay: function( cursor ) {
-		this.cursorOverlay = $("<div>")
-			.css({
-				cursor: cursor,
-				height: "100%",
-				left: 0,
-				position: "fixed",
-				top: 0,
-				width: "100%",
-				zIndex: "2147483647"
-			})
-			.appendTo( "body" );
+	_createCursorStylesheet: function( cursor ) {
+		$stylesheet = $("<style>");
+		$("head").append( $stylesheet );
+		stylesheet = document.styleSheets[document.styleSheets.length-1];
+		stylesheet.insertRule ?
+			stylesheet.insertRule( "*{cursor:"+cursor+" !important}", 0 ) :
+			stylesheet.addRule( "*", "cursor:"+cursor+" !important" );
+		return $stylesheet;
 	},
 
 	_destroy: function() {
@@ -243,7 +239,11 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		if(o.cursor) { // cursor option
-			this._createCursorOverlay(o.cursor);
+			if ($("body").css("cursor")) {
+				this._storedCursor = $("body").css("cursor");
+			}
+			$("body").css("cursor", o.cursor);
+			this._storedStylesheet = this._createCursorStylesheet(o.cursor);
 		}
 
 		if(o.opacity) { // opacity option
@@ -1190,7 +1190,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Do what was originally in plugins
 		if (this.options.cursor) {
-			this.cursorOverlay.remove();
+			if (this._storedCursor) {
+				$("body").css("cursor", this._storeCursor);
+			}
+			this._storedStylesheet.remove();
 		}
 		if(this._storedOpacity) {
 			this.helper.css("opacity", this._storedOpacity);
