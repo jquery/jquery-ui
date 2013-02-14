@@ -238,10 +238,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this._setContainment();
 		}
 
-		if(o.cursor) { // cursor option
-			if ($("body").css("cursor")) {
-				this._storedCursor = $("body").css("cursor");
-			}
+		if(o.cursor !== "auto") { // cursor option
+			this._storedCursor = $("body").css("cursor");
 			$("body").css("cursor", o.cursor);
 			this._storedStylesheet = this._createCursorStylesheet(o.cursor);
 		}
@@ -1189,7 +1187,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if (this.options.cursor) {
+		if (this._storedCursor !== undefined) {
 			$("body").css("cursor", this._storedCursor);
 			this._storedStylesheet.remove();
 		}
