@@ -1190,9 +1190,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Do what was originally in plugins
 		if (this.options.cursor) {
-			if (this._storedCursor) {
-				$("body").css("cursor", this._storeCursor);
-			}
+			$("body").css("cursor", this._storedCursor);
 			this._storedStylesheet.remove();
 		}
 		if(this._storedOpacity) {
