@@ -90,9 +90,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 		$stylesheet = $("<style>");
 		$("head").append( $stylesheet );
 		stylesheet = document.styleSheets[document.styleSheets.length-1];
-		stylesheet.insertRule ?
-			stylesheet.insertRule( "*{cursor:"+cursor+" !important}", 0 ) :
-			stylesheet.addRule( "*", "cursor:"+cursor+" !important" );
+		if ( stylesheet.insertRule ) {
+			stylesheet.insertRule( "*{cursor:"+cursor+" !important}", 0 );
+		}
 		return $stylesheet;
 	},
 
