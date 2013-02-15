@@ -86,16 +86,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	},
 
-	_createCursorStylesheet: function( cursor ) {
-		$stylesheet = $("<style>");
-		$("head").append( $stylesheet );
-		stylesheet = document.styleSheets[document.styleSheets.length-1];
-		if ( stylesheet.insertRule ) {
-			stylesheet.insertRule( "*{cursor:"+cursor+" !important}", 0 );
-		}
-		return $stylesheet;
-	},
-
 	_destroy: function() {
 		this.element
 			.removeClass("ui-sortable ui-sortable-disabled");
@@ -238,10 +228,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this._setContainment();
 		}
 
-		if(o.cursor !== "auto") { // cursor option
-			this._storedCursor = $("body").css("cursor");
-			$("body").css("cursor", o.cursor);
-			this._storedStylesheet = this._createCursorStylesheet(o.cursor);
+		if( o.cursor !== "auto" ) { // cursor option
+			// For IE
+			this._storedCursor = $( "body" ).css( "cursor" );
+			$( "body" ).css( "cursor", o.cursor );
+
+			// For every other browser
+			this._storedStylesheet = $( "<style>*{ cursor: "+o.cursor+" !important; }</style>" ).appendTo( "body" );
 		}
 
 		if(o.opacity) { // opacity option
@@ -1187,8 +1180,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if (this._storedCursor !== undefined) {
-			$("body").css("cursor", this._storedCursor);
+		if ( this._storedCursor ) {
+			$( "body" ).css( "cursor", this._storedCursor );
 			this._storedStylesheet.remove();
 		}
 		if(this._storedOpacity) {
