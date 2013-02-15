@@ -178,7 +178,7 @@ grunt.registerTask( "generate_themes", function() {
 	var download, done,
 		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() ),
 		target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/";
-		
+
 	try {
 		require.resolve( "download.jqueryui.com" );
 	} catch( error ) {
@@ -195,11 +195,12 @@ grunt.registerTask( "generate_themes", function() {
 	});
 
 	done = this.async();
-	download.buildThemesBundle(function( err, files ) {
-		if ( err ) {
-			grunt.log.error( err );
+	download.buildThemesBundle(function( error, files ) {
+		if ( error ) {
+			grunt.log.error( error );
 			return done( false );
 		}
+
 		done(
 			files.every(function( file ) {
 				try {
