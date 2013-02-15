@@ -159,7 +159,7 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 
 grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
 	// remove dest file before creating it, to make sure itself is not included
-	if ( path.existsSync( this.file.dest ) ) {
+	if ( fs.existsSync( this.file.dest ) ) {
 		fs.unlinkSync( this.file.dest );
 	}
 	var crypto = require( "crypto" ),
