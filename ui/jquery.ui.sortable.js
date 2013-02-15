@@ -288,7 +288,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		var i, item, itemElement, intersection,
+		var i, item, itemElement, intersection, verticalDirection, horizontalDirection, intersectionDirection,
 			o = this.options,
 			scrolled = false;
 
@@ -354,7 +354,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 			//Cache variables and intersection, continue if no intersection
 			item = this.items[i];
 			itemElement = item.item[0];
-			intersection = this._intersectsWithPointer(item);
+			if (itemElement === this.currentItem[0]) {
+				continue;
+			}
+
+			intersection = this.options.tolerance === "pointer" ?
+				this._intersectsWithPointer(item) : this._overlaps(item);
 			if (!intersection) {
 				continue;
 			}
@@ -370,23 +375,23 @@ $.widget("ui.sortable", $.ui.mouse, {
 				continue;
 			}
 
+			verticalDirection = this._getDragVerticalDirection();
+			horizontalDirection = this._getDragHorizontalDirection(),
+			intersectionDirection = this.floating ?
+				( ((horizontalDirection && horizontalDirection === "right") || verticalDirection === "down") ? 2 : 1 )
+				: ( verticalDirection && (verticalDirection === "down" ? 2 : 1) );
+
 			// cannot intersect with itself
 			// no useless actions that have been done before
 			// no action if the item moved is the parent of the item checked
-			if (itemElement !== this.currentItem[0] &&
-				this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
+			if (this.placeholder[intersectionDirection === 1 ? "next" : "prev"]()[0] !== itemElement &&
 				!$.contains(this.placeholder[0], itemElement) &&
 				(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
 			) {
 
-				this.direction = intersection === 1 ? "down" : "up";
-
-				if (this.options.tolerance === "pointer" || this._intersectsWithSides(item)) {
-					this._rearrange(event, item);
-				} else {
-					break;
-				}
-
+				// Sets the direction in which to move the item
+				this.direction = intersectionDirection === 1 ? "down" : "up";
+				this._rearrange(event, item);
 				this._trigger("change", event, this._uiHash());
 				break;
 			}
@@ -553,36 +558,35 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_intersectsWithPointer: function(item) {
-
 		var isOverElementHeight = (this.options.axis === "x") || isOverAxis(this.positionAbs.top + this.offset.click.top, item.top, item.height),
-			isOverElementWidth = (this.options.axis === "y") || isOverAxis(this.positionAbs.left + this.offset.click.left, item.left, item.width),
-			isOverElement = isOverElementHeight && isOverElementWidth,
-			verticalDirection = this._getDragVerticalDirection(),
-			horizontalDirection = this._getDragHorizontalDirection();
+			isOverElementWidth = (this.options.axis === "y") || isOverAxis(this.positionAbs.left + this.offset.click.left, item.left, item.width);
+		return isOverElementHeight && isOverElementWidth;
+	},
 
-		if (!isOverElement) {
+	// Check if item overlaps with helper by at least 50%
+	_overlaps: function( item ) {
+		var x1, x2, y1, y2,
+			helperX1 = this.positionAbs.left,
+			helperX2 = helperX1 + this.helperProportions.width,
+			helperY1 = this.positionAbs.top,
+			helperY2 = helperY1 + this.helperProportions.height,
+			itemX1 = item.left,
+			itemX2 = itemX1 + item.width,
+			itemY1 = item.top,
+			itemY2 = itemY1 + item.height,
+			intersects = helperY2 > itemY1 && helperY1 < itemY2 && helperX2 > itemX1 && helperX1 < itemX2;
+
+		if ( !intersects ) {
 			return false;
 		}
 
-		return this.floating ?
-			( ((horizontalDirection && horizontalDirection === "right") || verticalDirection === "down") ? 2 : 1 )
-			: ( verticalDirection && (verticalDirection === "down" ? 2 : 1) );
+		// Coordinates for the intersecting rectangle
+		x1 = Math.max( helperX1, itemX1 );
+		x2 = Math.min( helperX2, itemX2 );
+		y1 = Math.max( helperY1, itemY1 );
+		y2 = Math.min( helperY2, itemY2 );
 
-	},
-
-	_intersectsWithSides: function(item) {
-
-		var isOverBottomHalf = isOverAxis(this.positionAbs.top + this.offset.click.top, item.top + (item.height/2), item.height),
-			isOverRightHalf = isOverAxis(this.positionAbs.left + this.offset.click.left, item.left + (item.width/2), item.width),
-			verticalDirection = this._getDragVerticalDirection(),
-			horizontalDirection = this._getDragHorizontalDirection();
-
-		if (this.floating && horizontalDirection) {
-			return ((horizontalDirection === "right" && isOverRightHalf) || (horizontalDirection === "left" && !isOverRightHalf));
-		} else {
-			return verticalDirection && ((verticalDirection === "down" && isOverBottomHalf) || (verticalDirection === "up" && !isOverBottomHalf));
-		}
-
+		return (x2 - x1) * (y2 - y1) >= Math.min( item.width * item.height, this.helperProportions.width * this.helperProportions.height ) / 2;
 	},
 
 	_getDragVerticalDirection: function() {
