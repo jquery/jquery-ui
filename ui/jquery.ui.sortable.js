@@ -842,6 +842,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 				if(this.items[j].item[0] === this.currentItem[0]) {
 					continue;
 				}
+				if (this.containers[innermostIndex].floating && !isOverAxis(this.positionAbs.top + this.offset.click.top, this.items[j].top, this.items[j].height)) {
+					continue;
+				}
 				cur = this.items[j].item.offset()[posProperty];
 				nearBottom = false;
 				if(Math.abs(cur - base) > Math.abs(cur + this.items[j][sizeProperty] - base)){
