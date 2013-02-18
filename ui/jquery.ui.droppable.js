@@ -38,7 +38,7 @@ $.widget( "ui.droppable", {
 
 	options: {
 		accept: null,
-		// greedy: false,
+		greedy: false,
 		tolerance: "intersect"
 	},
 
@@ -94,8 +94,25 @@ $.widget( "ui.droppable", {
 	},
 
 	_stop: function( event ) {
+		
+		var greedy_child,
+			self = this;
+	
 		if ( this.over ) {
-			this._trigger( "drop", event, this._uiHash() );
+		
+			this.element.find(":data('" + this.widgetFullName + "')").each( function() {
+			
+				var drop = $(this).data( self.widgetFullName );
+			
+				if ( drop.options.greedy === true && drop.over === true ) {
+					greedy_child = true;
+					return false;
+				}
+			});
+		
+			if ( !greedy_child ) {
+				this._trigger( "drop", event, this._uiHash() );
+			}
 		}
 
 		this._trigger( "deactivate", event, this._uiHash() );
