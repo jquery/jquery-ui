@@ -697,6 +697,7 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
+		var widgetFullName = this.widgetFullName;
 		if ( !$.ui.dialog.overlayInstances ) {
 			// Prevent use of anchors and inputs.
 			// We use a delay in case the overlay is created from an
@@ -711,7 +712,7 @@ $.widget( "ui.dialog", {
 								!$( event.target ).closest(".ui-datepicker").length ) {
 							event.preventDefault();
 							$(".ui-dialog:visible:last .ui-dialog-content")
-								.data("ui-dialog")._focusTabbable();
+								.data( widgetFullName )._focusTabbable();
 						}
 					});
 				}
