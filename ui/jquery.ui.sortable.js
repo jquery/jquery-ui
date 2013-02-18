@@ -28,7 +28,6 @@ function copy( obj ) {
 $.widget( "ui.sortable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
-	items: "li", // TODO: move to options when API is ready
 
 	// dragEl: element being dragged (original or helper)
 	// position: final CSS position of dragEl
@@ -46,6 +45,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
+		items: "> *"
 	},
 
 	_create: function() {
@@ -62,7 +62,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		var sortablePositions = this.sortablePositions = [];
 
-		this.element.find( this.items ).each( function() {
+		this.element.find( this.options.items ).each( function() {
 
 			var el = $(this);
 
@@ -77,9 +77,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-
-		// TODO: options for what is actually valid
-		return element.is( this.items );
+		return element.is( this.element.find( this.options.items ) ).length === 1;
 	},
 
 	_start: function( event, pointerPosition ) {
