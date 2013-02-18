@@ -214,7 +214,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// If user cancels stop, leave helper there
 		if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
 			if ( this.options.helper ) {
-				delete this.element.data( "uiDraggable" ).helper;
+				delete this.element.data( "ui-draggable" ).helper;
 				this.dragEl.remove();
 			}
 			this._resetDomPosition();
@@ -248,7 +248,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			helper.appendTo( this._appendToEl() || this.document[0].body );
 		}
 
-		this.element.data( "uiDraggable" ).helper = helper;
+		this.element.data( "ui-draggable" ).helper = helper;
 
 		this._cacheDragDimensions( helper );
 
