@@ -64,7 +64,12 @@ $.widget( "ui.droppable", {
 	/** internal **/
 
 	_start: function( event ) {
-		if ( this.options.accept && !$( event.target ).is( this.options.accept ) ) {
+		if ( typeof this.options.accept === 'function' ) {
+			if ( this.options.accept.call( this.element, event.target ) !== true ) {
+				return false;
+			}
+		}
+		else if ( this.options.accept && !$( event.target ).is( this.options.accept ) ) {
 			return false;
 		}
 
