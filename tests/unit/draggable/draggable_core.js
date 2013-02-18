@@ -47,6 +47,87 @@ test("No options, absolute", function() {
 	TestHelpers.draggable.shouldMove(el);
 });
 
+test("_blockFrames, absolute parent", function() {
+	expect( 3 );
+	var el = $("#draggable1").draggable(),
+		parent = $("<div style='width: 600px; height: 600px; position: absolute; top: 300px; left; 400px;'>"),
+		iframe = $("<iframe src='about:blank' width='500' height='500' style='position: absolute; top: 25px; left: 30px;'>"),
+		left, top;
+
+	parent.append( iframe );
+
+	$("#qunit-fixture").prepend( parent );
+
+	el.on( "drag", function() {
+
+		var block = iframe.next();
+
+		left = block.css("left");
+		top = block.css("top");
+
+	});
+
+	TestHelpers.draggable.shouldMove(el);
+
+	equal( left, "30px" );
+	equal( top, "25px" );
+
+});
+
+test("_blockFrames, relative parent", function() {
+	expect( 3 );
+	var el = $("#draggable1").draggable(),
+		parent = $("<div style='width: 600px; height: 600px; position: relative; top: 300px; left; 400px;'>"),
+		iframe = $("<iframe src='about:blank' width='500' height='500' style='position: absolute; top: 25px; left: 30px;'>"),
+		left, top;
+
+	parent.append( iframe );
+
+	$("#qunit-fixture").prepend( parent );
+
+	el.on( "drag", function() {
+
+		var block = iframe.next();
+		
+		left = block.css("left");
+		top = block.css("top");
+
+	});
+
+	TestHelpers.draggable.shouldMove(el);
+	
+	equal( left, "30px" );
+	equal( top, "25px" );
+
+});
+
+test("_blockFrames, static parent", function() {
+	expect( 3 );
+	var el = $("#draggable1").draggable(),
+		parent = $("<div style='width: 600px; height: 600px; margin-top: 300px; margin-left: 400px;'>"),
+		iframe = $("<iframe src='about:blank' width='500' height='500' style='position: relative; top: 25px; left: 30px;'>"),
+		left, top;
+
+	parent.append( iframe );
+
+	$("#qunit-fixture").prepend( parent );
+
+	el.on( "drag", function() {
+
+		var block = iframe.next();
+		
+		left = block.css("left");
+		top = block.css("top");
+
+	});
+
+	TestHelpers.draggable.shouldMove(el);
+	
+	equal( left, "430px" );
+  equal( top, "325px" );
+
+});
+
 test("resizable handle with complex markup (#8756 / #8757)", function() {
 	expect( 2 );
 
