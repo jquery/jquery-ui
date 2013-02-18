@@ -29,15 +29,16 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
 
-	// dragEl: element being dragged (original or helper)
-	// position: final CSS position of dragEl
-	// offset: offset of dragEl
+	// sortEl: element being sorted
+	// helper: element being sorted (original or helper)
+	// position: final CSS position of helper
+	// offset: offset of helper
 	// originalPosition: CSS position before drag start
 	// originalOffset: offset before drag start
 	// originalPointer: pageX/Y at drag start (offset of pointer)
 	// startPosition: CSS position at drag start (after beforeStart)
 	// startOffset: offset at drag start (after beforeStart)
-	// tempPosition: overridable CSS position of dragEl
+	// tempPosition: overridable CSS position of helper
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
 	// sortablePositions: cache of positions of all sortable items
@@ -45,6 +46,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
+		helper: false,
 		items: "> *"
 	},
 
@@ -82,50 +84,45 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_start: function( event, pointerPosition ) {
 
-		// The actual dragging element, should always be a jQuery object
-		// this.dragEl = this.options.helper ?
-			// this._createHelper( pointerPosition ) :
-			// this.element;
-
-		this.dragEl = $(event.target);
+		this.sortEl = $( event.target );
 
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
-		if ( this.dragEl[0].style.position ) {
-			this.originalCssPosition = this.dragEl[0].style.position;
+		// TODO: also save top, right, bottom and left parameters
+		if ( this.sortEl[0].style.position ) {
+			this.originalCssPosition = this.sortEl[0].style.position;
 		}
 
 		// Create placeholder for while element is dragging
 		// TODO: what do we do about IDs?
 		// TODO: possibly use CSS for visibility portion
-		this.placeholder = this.dragEl.clone().removeAttr("id").css({
+		this.placeholder = this.sortEl.clone().removeAttr("id").css({
 			visibility : "hidden",
 			position : this.originalCssPosition || ""
 		});
 
-		this.dragEl.after( this.placeholder );
-
-		this.dragEl.css( "position", "absolute" );
+		this.helper = this._createHelper( pointerPosition );
+		this.sortEl.after( this.placeholder );
 
 		// // _createHelper() ensures that helpers are in the correct position
 		// // in the DOM, but we need to handle appendTo when there is no helper
-		// if ( this.options.appendTo && this.dragEl === this.element ) {
+		// if ( this.options.appendTo && this.helper === this.element ) {
 			// this.domPosition = {
 				// parent: this.element.parent(),
 				// index: this.element.index()
 			// };
-			// offset = this.dragEl.offset();
-			// this.dragEl
+			// offset = this.helper.offset();
+			// this.helper
 				// .appendTo( this.options.appendTo )
 				// .offset( offset );
 		// }
 
-		this.cssPosition = this.dragEl.css( "position" );
+		this.cssPosition = this.helper.css( "position" );
 		this.scrollParent = this.element.scrollParent();
 
 		// Cache starting positions
 		this.originalPosition = this.startPosition = this._getPosition();
-		this.originalOffset = this.startOffset = this.dragEl.offset();
+		this.originalOffset = this.startOffset = this.helper.offset();
 		this.originalPointer = pointerPosition;
 
 		// Cache current position and offset
@@ -155,7 +152,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		this._setCss();
 		this.startPosition = this._getPosition();
-		this.startOffset = this.dragEl.offset();
+		this.startOffset = this.helper.offset();
 
 		this._trigger( "start", event, this._fullHash( pointerPosition ) );
 		this._blockFrames();
@@ -186,22 +183,20 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				sortItem = this.sortablePositions[sortIndex][sort];
 
 				// Don't bother checking against self
-				if ( sortItem.el[0] === this.dragEl[0] ) {
+				if ( sortItem.el[0] === this.helper[0] ) {
 					continue;
 				}
 
 				if ( this._over( sortItem ) )  {
 
 					// TODO: cache height of element
-					if ( ( this.offset.top + this.dragEl.height() )	> ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+					if ( ( this.offset.top + this.helper.height() )	> ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
 
-						sortItem.el.after( this.dragEl );
-						this.dragEl.after( this.placeholder );
+						sortItem.el.after( this.placeholder );
 						this._setSortablePositions();
 					}
 					else if ( this.offset.top	< ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
-						sortItem.el.before( this.dragEl );
-						this.dragEl.before( this.placeholder );
+						sortItem.el.before( this.placeholder );
 						this._setSortablePositions();
 					}
 
@@ -220,8 +215,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		var edges = {
 			droppableRight: sortItem.offset.left + sortItem.el.width(),
 			droppableBottom: sortItem.offset.top + sortItem.el.height(),
-			draggableRight: this.offset.left + this.dragEl.width(),
-			draggableBottom: this.offset.top + this.dragEl.height()
+			draggableRight: this.offset.left + this.helper.width(),
+			draggableBottom: this.offset.top + this.helper.height()
 		};
 
 		return sortItem.offset.left < edges.draggableRight &&
@@ -238,28 +233,26 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// // If user cancels stop, leave helper there
 		// if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
 			// if ( this.options.helper ) {
-				// this.dragEl.remove();
+				// this.helper.remove();
 			// }
 			// this._resetDomPosition();
 		// }
 
-		// If there were inline styles before drag, set them back
-		if ( this.originalCssPosition ) {
-			this.dragEl.css( "position", this.originalCssPosition );
+		// If helper is a clone or user generated, remove
+		if ( this.options.helper !== false ) {
+			this.helper.remove();
 		}
-		// If there were no inline styles, let CSS take over again by removing inline absolute
-		else {
-			this.dragEl.css( "position", "" );
-		}
+
+		this.sortEl.css( "position", this.originalCssPosition ? this.originalCssPosition : "" );
 
 		// TODO: should same thing be done here as is done for position or is there better way altogether
-		this.dragEl.css( "left", "" );
-		this.dragEl.css( "top", "" );
+		this.sortEl.css( "left", "" );
+		this.sortEl.css( "top", "" );
 
-		this.placeholder.remove();
+		this.placeholder.replaceWith( this.sortEl ).remove();
 
 		// Unset properties only needed during draggin/sorting
-		this.dragEl = null;
+		this.helper = null;
 		this.originalCssPosition = null;
 		this.placeholder = null;
 
@@ -268,37 +261,42 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	// /** internal **/
 
-	// _createHelper: function( pointerPosition ) {
-		// var helper,
-			// offset = this.element.offset(),
-			// xPos = (pointerPosition.x - offset.left) / this.element.outerWidth(),
-			// yPos = (pointerPosition.y - offset.top) / this.element.outerHeight();
+	_createHelper: function( pointerPosition ) {
+		var helper,
+			body = this.document.find( "body" ),
+			offset = this.sortEl.offset(),
+			xPos = (pointerPosition.x - offset.left) / this.sortEl.outerWidth(),
+			yPos = (pointerPosition.y - offset.top) / this.sortEl.outerHeight();
 
-		// // clone
-		// if ( this.options.helper === true ) {
-			// helper = this.element.clone()
-				// .removeAttr( "id" )
-				// .find( "[id]" )
-					// .removeAttr( "id" )
-				// .end();
-		// } else {
+		// clone
+		if ( this.options.helper === false ) {
+			helper = this.sortEl;
+		}
+		else if ( this.options.helper === true ) {
+			helper = this.element.clone()
+				.removeAttr( "id" )
+				.find( "[id]" )
+					.removeAttr( "id" )
+				.end();
+		}
+		else {
 			// // TODO: figure out the signature for this; see #4957
-			// helper = $( this.options.helper() );
-		// }
+			helper = $( this.options.helper() );
+		}
 
-		// // Ensure the helper is in the DOM; obey the appendTo option if it exists
-		// if ( this.options.appendTo || !helper.closest( "body" ).length ) {
-			// helper.appendTo( this.options.appendTo || this.document[0].body );
-		// }
+		// Ensure the helper is in the DOM; obey the appendTo option if it exists
+		if ( this.options.appendTo || !helper.closest( body ).length ) {
+			helper.appendTo( this.options.appendTo || body );
+		}
 
-		// return helper
-			// // Helper must be absolute to function properly
-			// .css( "position", "absolute" )
-			// .offset({
-				// left: pointerPosition.x - helper.outerWidth() * xPos,
-				// top: pointerPosition.y - helper.outerHeight() * yPos
-			// });
-	// },
+		return helper
+			// Helper must be absolute to function properly
+			.css( "position", "absolute" )
+			.offset({
+				left: pointerPosition.x - helper.outerWidth() * xPos,
+				top: pointerPosition.y - helper.outerHeight() * yPos
+			});
+	},
 
 	_getPosition: function() {
 		var left, top, position,
@@ -307,7 +305,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// If fixed or absolute
 		if ( this.cssPosition !== "relative" ) {
-			position = this.dragEl.position();
+			position = this.helper.position();
 
 			// Take into account scrollbar
 			position.top -= scrollTop;
@@ -318,8 +316,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// When using relative, css values are checked
 		// Otherwise the position wouldn't account for padding on ancestors
-		left = this.dragEl.css( "left" );
-		top = this.dragEl.css( "top" );
+		left = this.helper.css( "left" );
+		top = this.helper.css( "top" );
 
 		// Webkit will give back auto if there is no explicit value
 		left = ( left === "auto" ) ? 0: parseInt( left, 10 );
@@ -414,7 +412,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			newTop += this.scrollParent.scrollTop();
 		}
 
-		this.dragEl.css({
+		this.helper.css({
 			left: newLeft,
 			top: newTop
 		});
@@ -428,7 +426,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		};
 
 		if ( this.options.helper ) {
-			ret.helper = this.dragEl;
+			ret.helper = this.helper;
 		}
 
 		return ret;
