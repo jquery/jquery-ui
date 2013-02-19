@@ -64,16 +64,28 @@ $.widget( "ui.droppable", {
 	/** internal **/
 
 	_start: function( event ) {
-		if ( typeof this.options.accept === "function" ) {
-			if ( this.options.accept.call( this.element, event.target ) !== true ) {
-				return false;
-			}
-		}
-		else if ( this.options.accept && !$( event.target ).is( this.options.accept ) ) {
+	
+		// If draggable is acceptable to this droppable
+		if ( !this._isAcceptable( event.target ) ) {
 			return false;
 		}
 
 		this._trigger( "activate", event, this._uiHash() );
+	},
+	
+	_isAcceptable: function( draggable ) {
+		
+		if ( $.isFunction( this.options.accept ) ) {
+			if ( this.options.accept.call( this.element, draggable ) !== true ) {
+				return false;
+			}
+		}
+		else if ( this.options.accept && !$( draggable ).is( this.options.accept ) ) {
+			return false;
+		}
+		
+		return true;
+	
 	},
 
 	_drag: function( event, ui ) {
@@ -197,3 +209,47 @@ $.extend( $.ui.droppable, {
 
 })( jQuery );
 
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+
+	// Overwriting _setOption to handle multiple backCompats
+	$.widget( "ui.droppable", $.ui.droppable, {
+
+		options: {
+			activeClass: false
+		},
+		
+		_create: function() {
+
+			var self = this,
+					added = false;
+			
+			this._super();
+
+			// On drag, make sure top does not change so axis is locked
+			$(this.document[0].body).on( "drag", ".ui-draggable", function( event, ui ) {
+			
+				if ( !added && self.options.activeClass && self._isAcceptable( event.target ) )  {
+				
+					self.element.addClass( self.options.activeClass );
+					added = true;
+				
+				}
+
+			});
+			
+			$(this.document[0].body).on( "dragstop", ".ui-draggable", function( event, ui ) {
+			
+				if ( added ) {
+					self.element.removeClass( self.options.activeClass );
+					added = false;
+				}
+
+			});
+
+		}
+
+	});
+
+}
