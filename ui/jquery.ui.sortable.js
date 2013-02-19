@@ -50,6 +50,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	options: {
 		appendTo: null,
+		exclude: "input,textarea,button,select",
 		helper: false,
 		items: "> *",
 		tolerance: "intersect"
@@ -96,14 +97,14 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	/** interaction interface **/
 
-	_getTarget: function( element ) {
-		return element.closest( this.element.find( this.options.items ) );
-	},
-
 	_isValidTarget: function( element ) {
 		// Assume this is only called once before _start()
-		this.sorting = { el: this._getTarget( element ) };
-		return this.sorting.el.length === 1;
+		this.sorting = {
+			el: element.closest( this.element.find( this.options.items ) )
+		};
+
+		return !!( this.sorting.el.length &&
+			!element.closest( this.element.find( this.options.exclude ) ).length );
 	},
 
 	_start: function( event, pointerPosition ) {
@@ -502,6 +503,7 @@ $.extend( $.ui.sortable, {
 			return helper.offset.left < xHalf && helper.edges.right > xHalf &&
 				helper.offset.top < yHalf && helper.edges.bottom > yHalf;
 		},
+
 		// Pointer overlaps droppable
 		pointer: function( helper, item, pointerPosition ) {
 			return pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
