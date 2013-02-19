@@ -608,42 +608,26 @@ if ( $.uiBackCompat !== false ) {
 
 			};
 
-		}
+		},
 
-	});
-	
-	// Overwriting _setOption to handle multiple backCompats
-	$.widget( "ui.draggable", $.ui.draggable, {
-	
 		_setOption: function( key, value ) {
 
-			if ( key !== "helper" && key !== "cancel" ) {
+			if ( key !== "helper" ) {
 				return this._super( key, value );
 			}
-			
-			// If part of helper backcompat
-			if ( key === "helper" ) {
 
-				if ( value === "clone" ) {
-					value = true;
-				}
-
-				if ( value === "original" ) {
-					value = false;
-				}
-
-				this._super( key, value );
-			
-			} else {
-			
-				// If part of cancel backcompat
-				this._super( key, value );
-				this.options.exclude = this.options.cancel;
-			
+			if ( value === "clone" ) {
+				value = true;
 			}
 
+			if ( value === "original" ) {
+				value = false;
+			}
+
+			this._super( key, value );
+
 		}
-		
+
 	});
 
 	// axis option
@@ -688,6 +672,17 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.cancel !== null ) {
 				this.options.exclude = this.options.cancel;
 			}
+
+		},
+
+		_setOption: function( key, value ) {
+
+			if ( key !== "cancel" ) {
+				return this._super( key, value );
+			}
+
+			this._super( key, value );
+			this.options.exclude = this.options.cancel;
 
 		}
 
