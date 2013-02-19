@@ -294,5 +294,26 @@ if ( $.uiBackCompat !== false ) {
 		}
 
 	});
+	
+	// scope option
+	$.widget( "ui.droppable", $.ui.droppable, {
+
+		options: {
+			scope: "default"
+		},
+		
+		_isAcceptable: function( element ) {
+		
+			var draggable = $(element).data( "ui-draggable" );
+
+			if ( this.options.scope !== "default" && draggable && draggable.options.scope === this.options.scope ) {
+				return true;
+			}
+			
+			return this._super( element );
+
+		}
+
+	});
 
 }

@@ -979,7 +979,6 @@ if ( $.uiBackCompat !== false ) {
 
 	});
 
-	// TODO: need droppable working
 	// scope option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
