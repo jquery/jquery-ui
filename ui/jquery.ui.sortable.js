@@ -49,6 +49,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
+		appendTo: null,
 		helper: false,
 		items: "> *",
 		tolerance: "intersect"
@@ -132,19 +133,6 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		if ( this.options.helper !== false ) {
 			this._refreshSortables();
 		}
-
-		// // _createHelper() ensures that helpers are in the correct position
-		// // in the DOM, but we need to handle appendTo when there is no helper
-		// if ( this.options.appendTo && this.helper === this.element ) {
-			// this.domPosition = {
-				// parent: this.element.parent(),
-				// index: this.element.index()
-			// };
-			// offset = this.helper.offset();
-			// this.helper
-				// .appendTo( this.options.appendTo )
-				// .offset( offset );
-		// }
 
 		this.helper.cssPosition = this.helper.el.css( "position" );
 		this.scrollParent = this.element.scrollParent();
