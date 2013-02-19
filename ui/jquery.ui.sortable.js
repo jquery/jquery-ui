@@ -94,7 +94,6 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 			sortables.push(sortable);
 		});
-
 	},
 
 	/** interaction interface **/
@@ -391,25 +390,21 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( pointerPosition ) {
 		var leftDiff = pointerPosition.x - this.originalPointer.x,
-			topDiff = pointerPosition.y - this.originalPointer.y,
-			newLeft = leftDiff + this.helper.startPosition.left,
-			newTop = topDiff + this.helper.startPosition.top;
+			topDiff = pointerPosition.y - this.originalPointer.y;
 
 		// Save off new values for .css() in various callbacks using this function
 		this.helper.position = {
-			left: newLeft,
-			top: newTop
+			left: leftDiff + this.helper.startPosition.left,
+			top: topDiff + this.helper.startPosition.top
 		};
 
 		// Save off values to compare user override against automatic coordinates
-		this.tempPosition = {
-			left: newLeft,
-			top: newTop
-		};
+		this.helper.tempPosition = copy( this.helper.position );
 
-		// Refresh offset cache with new positions
-		this.helper.offset.left = this.helper.startOffset.left + leftDiff;
-		this.helper.offset.top = this.helper.startOffset.top + topDiff;
+		this.helper.offset = {
+			left: leftDiff + this.helper.startOffset.left,
+			top: topDiff + this.helper.startOffset.top
+		};
 	},
 
 	// Places draggable where event, or user via event/callback, indicates
@@ -418,11 +413,11 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			newTop = this.helper.position.top;
 
 		// User overriding left/top so shortcut math is no longer valid
-		if ( this.tempPosition.left !== this.helper.position.left ||
-				this.tempPosition.top !== this.helper.position.top ) {
+		if ( this.helper.tempPosition.left !== this.helper.position.left ||
+				this.helper.tempPosition.top !== this.helper.position.top ) {
 			// Reset offset based on difference of expected and overridden values
-			this.helper.offset.left += newLeft - this.tempPosition.left;
-			this.helper.offset.top += newTop - this.tempPosition.top;
+			this.helper.offset.left += newLeft - this.helper.tempPosition.left;
+			this.helper.offset.top += newTop - this.helper.tempPosition.top;
 		}
 
 		// TODO: does this work with nested scrollable parents?
@@ -431,16 +426,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			newTop += this.scrollParent.scrollTop();
 		}
 
-		$.extend( this.helper, {
-			edges: {
-				right: newLeft + this.helper.proportions.width,
-				bottom: newTop + this.helper.proportions.height
-			},
-			offset: {
-				left: newLeft,
-				top: newTop
-			}
-		});
+		this.helper.edges = {
+			right: this.helper.offset.left + this.helper.proportions.width,
+			bottom: this.helper.offset.top + this.helper.proportions.height
+		};
 
 		this.helper.el.css({
 			left: newLeft,
