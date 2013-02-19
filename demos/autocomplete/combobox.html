@@ -48,11 +48,10 @@
 						.insertAfter( select );
 
 				function removeIfInvalid( element ) {
-					var value = $( element ).val(),
-						matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
+					var value = $( element ).val().toLowerCase(),
 						valid = false;
 					select.children( "option" ).each(function() {
-						if ( $( this ).text().match( matcher ) ) {
+						if ( $( this ).text().toLowerCase() === value ) {
 							this.selected = valid = true;
 							return false;
 						}
@@ -86,12 +85,7 @@
 								var text = $( this ).text();
 								if ( this.value && ( !request.term || matcher.test(text) ) )
 									return {
-										label: text.replace(
-											new RegExp(
-												"(?![^&;]+;)(?!<[^<>]*)(" +
-												$.ui.autocomplete.escapeRegex(request.term) +
-												")(?![^<>]*>)(?![^&;]+;)", "gi"
-											), "<strong>$1</strong>" ),
+										label: text,
 										value: text,
 										option: this
 									};
@@ -110,12 +104,6 @@
 						}
 					})
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
-
-				input.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-					return $( "<li>" )
-						.append( "<a>" + item.label + "</a>" )
-						.appendTo( ul );
-				};
 
 				$( "<a>" )
 					.attr( "tabIndex", -1 )
