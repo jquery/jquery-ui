@@ -110,8 +110,9 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			position : this.originalCss.position || ""
 		});
 
-		this.helper = this._createHelper( pointerPosition );
+		// Helper could be appended anywhere so insert the placeholder first
 		this.sortEl.after( this.placeholder );
+		this.helper = this._createHelper( pointerPosition );
 
 		// // _createHelper() ensures that helpers are in the correct position
 		// // in the DOM, but we need to handle appendTo when there is no helper
