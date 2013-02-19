@@ -447,18 +447,16 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	_blockFrames: function() {
 
 		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
-			var iframe = $( this ),
-				iframeOffset = iframe.offset();
+			var iframe = $( this );
 
 			return $( "<div>" )
 				.css({
 					position: "absolute",
 					width: iframe.outerWidth(),
-					height: iframe.outerHeight(),
-					top: iframeOffset.top,
-					left: iframeOffset.left
+					height: iframe.outerHeight()
 				})
-				.appendTo( iframe.parent() )[0];
+				.appendTo( iframe.parent() )
+				.offset( iframe.offset() )[0];
 		});
 	},
 
@@ -981,7 +979,6 @@ if ( $.uiBackCompat !== false ) {
 
 	});
 
-	// TODO: need droppable working
 	// scope option
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
