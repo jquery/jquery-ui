@@ -269,7 +269,6 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_createHelper: function( pointerPosition ) {
 		var helper,
-			body = this.document.find( "body" ),
 			offset = this.sortEl.offset(),
 			xPos = (pointerPosition.x - offset.left) / this.sortEl.outerWidth(),
 			yPos = (pointerPosition.y - offset.top) / this.sortEl.outerHeight();
@@ -278,21 +277,25 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		if ( this.options.helper === false ) {
 			helper = this.sortEl;
 		}
-		else if ( this.options.helper === true ) {
-			helper = this.element.clone()
-				.removeAttr( "id" )
-				.find( "[id]" )
-					.removeAttr( "id" )
-				.end();
-		}
 		else {
-			// // TODO: figure out the signature for this; see #4957
-			helper = $( this.options.helper() );
+			if ( this.options.helper === true ) {
+				helper = this.sortEl.clone()
+					.removeAttr( "id" )
+					.find( "[id]" )
+						.removeAttr( "id" )
+					.end();
+			}
+			else {
+				// // TODO: figure out the signature for this; see #4957
+				helper = $( this.options.helper() );
+			}
+
+			this.sortEl.remove();
 		}
 
 		// Ensure the helper is in the DOM; obey the appendTo option if it exists
-		if ( this.options.appendTo || !helper.closest( body ).length ) {
-			helper.appendTo( this.options.appendTo || body );
+		if ( this.options.appendTo || !helper.closest( this.document.find( "body" ) ).length ) {
+			helper.appendTo( this.options.appendTo || this.element );
 		}
 
 		return helper
