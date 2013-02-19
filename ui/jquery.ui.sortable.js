@@ -42,7 +42,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
 	// sortablePositions: cache of positions of all sortable items
-	// originalCssPosition: CSS position of element before being made absolute on start
+	// originalCss: CSS position of element before being made absolute on start
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
@@ -94,9 +94,12 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
-		// TODO: also save top, right, bottom and left parameters
-		if ( this.sortEl[0].style.position ) {
-			this.originalCssPosition = this.sortEl[0].style.position;
+		this.originalCss = {
+			position: this.sortEl[0].style.position,
+			bottom: this.sortEl[0].style.bottom,
+			left: this.sortEl[0].style.left,
+			right: this.sortEl[0].style.right,
+			top: this.sortEl[0].style.top
 		}
 
 		// Create placeholder for while element is dragging
@@ -104,7 +107,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// TODO: possibly use CSS for visibility portion
 		this.placeholder = this.sortEl.clone().removeAttr("id").css({
 			visibility : "hidden",
-			position : this.originalCssPosition || ""
+			position : this.originalCss.position || ""
 		});
 
 		this.helper = this._createHelper( pointerPosition );
@@ -247,19 +250,15 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// If helper is a clone or user generated, remove
 		if ( this.options.helper !== false ) {
 			this.helper.remove();
+		} else {
+			this.sortEl.css( this.originalCss );
 		}
-
-		this.sortEl.css( "position", this.originalCssPosition ? this.originalCssPosition : "" );
-
-		// TODO: should same thing be done here as is done for position or is there better way altogether
-		this.sortEl.css( "left", "" );
-		this.sortEl.css( "top", "" );
 
 		this.placeholder.replaceWith( this.sortEl ).remove();
 
 		// Unset properties only needed during draggin/sorting
 		this.helper = null;
-		this.originalCssPosition = null;
+		this.originalCss = null;
 		this.placeholder = null;
 
 		this._unblockFrames();
