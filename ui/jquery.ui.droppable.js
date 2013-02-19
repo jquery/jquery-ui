@@ -64,7 +64,7 @@ $.widget( "ui.droppable", {
 	/** internal **/
 
 	_start: function( event ) {
-		if ( typeof this.options.accept === 'function' ) {
+		if ( typeof this.options.accept === "function" ) {
 			if ( this.options.accept.call( this.element, event.target ) !== true ) {
 				return false;
 			}
@@ -99,22 +99,22 @@ $.widget( "ui.droppable", {
 	},
 
 	_stop: function( event ) {
-		
+
 		var greedy_child,
 			self = this;
-	
+
 		if ( this.over ) {
-		
+
 			this.element.find(":data('" + this.widgetFullName + "')").each( function() {
-			
+
 				var drop = $(this).data( self.widgetFullName );
-			
+
 				if ( drop.options.greedy === true && drop.over === true ) {
 					greedy_child = true;
 					return false;
 				}
 			});
-		
+
 			if ( !greedy_child ) {
 				this._trigger( "drop", event, this._uiHash() );
 			}
@@ -196,3 +196,4 @@ $.extend( $.ui.droppable, {
 });
 
 })( jQuery );
+
