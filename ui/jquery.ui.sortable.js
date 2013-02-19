@@ -51,6 +51,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	options: {
 		appendTo: null,
 		exclude: "input,textarea,button,select",
+		handle: null,
 		helper: false,
 		items: "> *",
 		tolerance: "intersect"
@@ -104,6 +105,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		};
 
 		return !!( this.sorting.el.length &&
+			( !this.options.handle || element.closest( this.element.find( this.options.handle ) ).length ) &&
 			!element.closest( this.element.find( this.options.exclude ) ).length );
 	},
 
