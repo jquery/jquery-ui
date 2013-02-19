@@ -492,11 +492,11 @@ $.extend( $.ui.sortable, {
 	tolerance: {
 		// Half of the draggable overlaps the droppable, horizontally and vertically
 		intersect: function( helper, item ) {
-			var xHalf = item.offset.left + helper.proportions.width / 2,
-				yHalf = item.offset.top + helper.proportions.height / 2;
+			var xHalf = helper.offset.left + helper.proportions.width / 2,
+				yHalf = helper.offset.top + helper.proportions.height / 2;
 
-			return helper.offset.left < xHalf && helper.edges.right > xHalf &&
-				helper.offset.top < yHalf && helper.edges.bottom > yHalf;
+			return item.offset.left < xHalf && item.edges.right > xHalf &&
+				item.offset.top < yHalf && item.edges.bottom > yHalf;
 		},
 
 		// Pointer overlaps droppable
