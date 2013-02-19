@@ -189,6 +189,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_move: function( event, pointerPosition ) {
 
 		var sort, sortItem, sortIndex,
+			beforePlaceholder = true,
 			len = this.sortables.length;
 
 
@@ -207,23 +208,28 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		for ( sortIndex=0; sortIndex<len; ++sortIndex ) {
 
 			sortItem = this.sortables[sortIndex];
-			// Don't bother checking against self or the placeholder
-			if ( sortItem.el[0] === this.helper.el[0] || sortItem.el[0] === this.placeholder[0] ) {
+
+			// Don't bother checking against self
+			if ( sortItem.el[0] === this.helper.el[0] ) {
+				continue;
+			}
+
+			// Don't bother checking against the placeholder
+			if ( sortItem.el[0] === this.placeholder[0] ) {
+				// Assume sortables are in the same order as the DOM
+				beforePlaceholder = false;
 				continue;
 			}
 
 			if ( this._over( sortItem, pointerPosition ) )  {
 
-				if ( ( this.helper.offset.top + this.helper.proportions.height ) >
-					( sortItem.offset.top + sortItem.proportions.height/2 )
-				) {
-					sortItem.el.after( this.placeholder );
-					this._refreshSortables();
-				}
-				else if ( this.helper.offset.top < ( sortItem.offset.top + sortItem.proportions.height/2 ) ) {
+				if ( beforePlaceholder ) {
 					sortItem.el.before( this.placeholder );
-					this._refreshSortables();
+				} else {
+					sortItem.el.after( this.placeholder );
 				}
+
+				this._refreshSortables();
 			}
 		}
 	},
