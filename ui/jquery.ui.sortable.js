@@ -45,7 +45,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// originalPointer: pageX/Y at drag start (offset of pointer)
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
-	// sortablePositions: cache of positions of all sortable items
+	// sortables: cache of positions of all sortable items
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
@@ -59,22 +59,35 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		this.element.addClass( "ui-sortable" );
 
-		this._setSortablePositions();
+		this._refreshSortables();
 
 	},
 
-	_setSortablePositions: function() {
+	_refreshSortables: function() {
 
-		var sortablePositions = this.sortablePositions = [];
+		var sortables = this.sortables = [];
 
 		this.element.find( this.options.items ).each( function() {
 
-			var el = $(this);
+			var el = $(this), sortable,
+				offset = el.offset(),
+				width = el.outerWidth(),
+				height = el.outerHeight();
 
-			sortablePositions.push({
+			sortable = {
+				edges: {
+					right: width + offset.left,
+					bottom: height + offset.top
+				},
 				el: el,
-				offset: el.offset()
-			});
+				offset: offset,
+				proportions: {
+					width: width,
+					height: height
+				}
+			}
+
+			sortables.push(sortable);
 		});
 
 	},
@@ -114,6 +127,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// Helper could be appended anywhere so insert the placeholder first
 		this.sorting.el.after( this.placeholder );
 		this.helper = this._createHelper( pointerPosition );
+
+		if ( this.options.helper !== false ) {
+			this._refreshSortables();
+		}
 
 		// // _createHelper() ensures that helpers are in the correct position
 		// // in the DOM, but we need to handle appendTo when there is no helper
@@ -171,7 +188,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_move: function( event, pointerPosition ) {
 
 		var sort, sortItem, sortIndex,
-			len = this.sortablePositions.length;
+			len = this.sortables.length;
 
 
 		this._preparePosition( pointerPosition );
@@ -188,10 +205,9 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		for ( sortIndex=0; sortIndex<len; ++sortIndex ) {
 
-			sortItem = this.sortablePositions[sortIndex];
-
-			// Don't bother checking against self
-			if ( sortItem.el[0] === this.helper.el[0] ) {
+			sortItem = this.sortables[sortIndex];
+			// Don't bother checking against self or the placeholder
+			if ( sortItem.el[0] === this.helper.el[0] || sortItem.el[0] === this.placeholder[0] ) {
 				continue;
 			}
 
@@ -200,12 +216,15 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				// TODO: cache height of element
 				if ( ( this.helper.offset.top + this.helper.proportions.height ) > ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
 
+				if ( ( this.helper.offset.top + this.helper.proportions.height ) >
+					( sortItem.offset.top + sortItem.proportions.height/2 )
+				) {
 					sortItem.el.after( this.placeholder );
-					this._setSortablePositions();
+					this._refreshSortables();
 				}
-				else if ( this.helper.offset.top < ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+				else if ( this.helper.offset.top < ( sortItem.offset.top + sortItem.proportions.height/2 ) ) {
 					sortItem.el.before( this.placeholder );
-					this._setSortablePositions();
+					this._refreshSortables();
 				}
 			}
 		}
@@ -245,7 +264,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		if ( this.options.helper !== false ) {
 			this.helper.el.remove();
 		} else {
-			this.sorting.el.css( this.sortEl.originalCss );
+			this.sorting.el.css( this.sorting.originalCss );
 		}
 
 		this.placeholder.replaceWith( this.sorting.el ).remove();
@@ -299,7 +318,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		helper.offset = {
 			left: pointerPosition.x - helper.proportions.width * xPos,
 			top: pointerPosition.y - helper.proportions.height * yPos
-		}
+		};
 
 		helper.el
 			// Helper must be absolute to function properly
