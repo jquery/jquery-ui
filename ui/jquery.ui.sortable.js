@@ -54,6 +54,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		handle: null,
 		helper: false,
 		items: "> *",
+		placeholder: null,
 		tolerance: "intersect"
 	},
 
@@ -121,13 +122,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			top: this.sorting.el[0].style.top
 		}
 
-		// Create placeholder for while element is dragging
-		// TODO: what do we do about IDs?
-		// TODO: possibly use CSS for visibility portion
-		this.placeholder = this.sorting.el.clone().removeAttr("id").css({
-			visibility : "hidden",
-			position : this.sorting.originalCss.position || ""
-		});
+		this.placeholder = this._createPlaceholder();
 
 		// Helper could be appended anywhere so insert the placeholder first
 		this.sorting.el.after( this.placeholder );
@@ -311,6 +306,15 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			});
 
 		return helper;
+	},
+
+	_createPlaceholder: function() {
+		return $.isFunction( this.options.placeholder ) ?
+			$( this.options.placeholder( this.sorting ) ) :
+			this.sorting.el.clone().removeAttr("id").css({
+				visibility : "hidden",
+				position : this.sorting.originalCss.position || ""
+			});
 	},
 
 	_getPosition: function() {
