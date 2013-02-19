@@ -174,6 +174,14 @@ $.extend( $.ui.droppable, {
 		pointer: function( event, edges, ui ) {
 			return ui.pointer.x >= this.offset.left && ui.pointer.x <= edges.right &&
 				ui.pointer.y >= this.offset.top && ui.pointer.y <= edges.bottom;
+		},
+		
+		// Draggable should be entirely inside droppable
+		fit: function( event, edges, ui ) {
+			return edges.draggableRight <= edges.right &&
+				ui.offset.left >= this.offset.left &&
+				edges.draggableBottom <= edges.bottom &&
+				ui.offset.top >= this.offset.top;
 		}
 	},
 
