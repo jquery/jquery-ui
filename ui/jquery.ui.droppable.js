@@ -213,7 +213,7 @@ $.extend( $.ui.droppable, {
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
 
-	// Overwriting _setOption to handle multiple backCompats
+	// activeClass option
 	$.widget( "ui.droppable", $.ui.droppable, {
 
 		options: {
@@ -227,8 +227,8 @@ if ( $.uiBackCompat !== false ) {
 			
 			this._super();
 
-			// On drag, make sure top does not change so axis is locked
-			$(this.document[0].body).on( "drag", ".ui-draggable", function( event, ui ) {
+			// On drag, see if a class should be added to droppable
+			$(this.document[0].body).on( "drag", ".ui-draggable", function( event ) {
 			
 				if ( !added && self.options.activeClass && self._isAcceptable( event.target ) )  {
 				
@@ -239,10 +239,53 @@ if ( $.uiBackCompat !== false ) {
 
 			});
 			
-			$(this.document[0].body).on( "dragstop", ".ui-draggable", function( event, ui ) {
+			
+			// On dragstop, remove class if one was added
+			$(this.document[0].body).on( "dragstop", ".ui-draggable", function() {
 			
 				if ( added ) {
 					self.element.removeClass( self.options.activeClass );
+					added = false;
+				}
+
+			});
+
+		}
+
+	});
+	
+	// hoverClass option
+	$.widget( "ui.droppable", $.ui.droppable, {
+
+		options: {
+			hoverClass: false
+		},
+		
+		_create: function() {
+
+			var self = this,
+					added = false;
+			
+			this._super();
+
+			// On over, add class if needed
+			$(this.element).on( "dropover", function() {
+			
+				if ( !added && self.options.hoverClass )  {
+				
+					self.element.addClass( self.options.hoverClass );
+					added = true;
+				
+				}
+
+			});
+			
+			
+			// On out, remove class if one was added
+			$(this.element).on( "dropout", function() {
+			
+				if ( added ) {
+					self.element.removeClass( self.options.hoverClass );
 					added = false;
 				}
 
