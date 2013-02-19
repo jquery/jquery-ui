@@ -79,7 +79,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-		return element.is( this.element.find( this.options.items ) ).length === 1;
+		return element.closest( this.element.find( this.options.items ) ).length === 1;
 	},
 
 	_start: function( event, pointerPosition ) {
