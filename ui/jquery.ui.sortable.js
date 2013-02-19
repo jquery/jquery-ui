@@ -29,20 +29,23 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
 
-	// sortEl: element being sorted
+	// sorting: element being sorted
+	// 	.el: jQuery object
+	// 	.originalCss: CSS position of element before being made absolute on start
 	// helper: element being sorted (original or helper)
-	// position: final CSS position of helper
-	// offset: offset of helper
-	// originalPosition: CSS position before drag start
-	// originalOffset: offset before drag start
+	// 	.el: jquery object
+	// 	.position: final CSS position of helper
+	// 	.offset: offset of helper
+	// 	.originalPosition: CSS position before drag start
+	// 	.originalOffset: offset before drag start
+	// 	.proportions: width and height properties
+	// 	.startPosition: CSS position at drag start (after beforeStart)
+	// 	.startOffset: offset at drag start (after beforeStart)
+	// 	.tempPosition: overridable CSS position of helper
 	// originalPointer: pageX/Y at drag start (offset of pointer)
-	// startPosition: CSS position at drag start (after beforeStart)
-	// startOffset: offset at drag start (after beforeStart)
-	// tempPosition: overridable CSS position of helper
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
 	// sortablePositions: cache of positions of all sortable items
-	// originalCss: CSS position of element before being made absolute on start
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
@@ -84,34 +87,32 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_isValidTarget: function( element ) {
 		// Assume this is only called once before _start()
-		this.sortEl = this._getTarget( element );
-		return this.sortEl.length === 1;
+		this.sorting = { el: this._getTarget( element ) };
+		return this.sorting.el.length === 1;
 	},
 
 	_start: function( event, pointerPosition ) {
 
-		// sortEL is set in _isValidTarget()
-
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
-		this.originalCss = {
-			position: this.sortEl[0].style.position,
-			bottom: this.sortEl[0].style.bottom,
-			left: this.sortEl[0].style.left,
-			right: this.sortEl[0].style.right,
-			top: this.sortEl[0].style.top
+		this.sorting.originalCss = {
+			position: this.sorting.el[0].style.position,
+			bottom: this.sorting.el[0].style.bottom,
+			left: this.sorting.el[0].style.left,
+			right: this.sorting.el[0].style.right,
+			top: this.sorting.el[0].style.top
 		}
 
 		// Create placeholder for while element is dragging
 		// TODO: what do we do about IDs?
 		// TODO: possibly use CSS for visibility portion
-		this.placeholder = this.sortEl.clone().removeAttr("id").css({
+		this.placeholder = this.sorting.el.clone().removeAttr("id").css({
 			visibility : "hidden",
-			position : this.originalCss.position || ""
+			position : this.sorting.originalCss.position || ""
 		});
 
 		// Helper could be appended anywhere so insert the placeholder first
-		this.sortEl.after( this.placeholder );
+		this.sorting.el.after( this.placeholder );
 		this.helper = this._createHelper( pointerPosition );
 
 		// // _createHelper() ensures that helpers are in the correct position
@@ -127,17 +128,16 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				// .offset( offset );
 		// }
 
-		this.cssPosition = this.helper.css( "position" );
+		this.helper.cssPosition = this.helper.el.css( "position" );
 		this.scrollParent = this.element.scrollParent();
 
-		// Cache starting positions
-		this.originalPosition = this.startPosition = this._getPosition();
-		this.originalOffset = this.startOffset = this.helper.offset();
-		this.originalPointer = pointerPosition;
+		// Cache current position (offset was cached at creation)
+		this.helper.position = this._getPosition();
 
-		// Cache current position and offset
-		this.position = copy( this.startPosition );
-		this.offset = copy( this.startOffset );
+		// Cache starting positions
+		this.helper.originalPosition = this.helper.startPosition = copy( this.helper.position );
+		this.helper.originalOffset = this.helper.startOffset = copy( this.helper.offset );
+		this.originalPointer = pointerPosition;
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
 		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
@@ -161,8 +161,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		}
 
 		this._setCss();
-		this.startPosition = this._getPosition();
-		this.startOffset = this.helper.offset();
+		this.helper.startPosition = this._getPosition();
+		this.helper.startOffset = this.helper.offset;
 
 		this._trigger( "start", event, this._fullHash( pointerPosition ) );
 		this._blockFrames();
@@ -193,19 +193,19 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				sortItem = this.sortablePositions[sortIndex][sort];
 
 				// Don't bother checking against self
-				if ( sortItem.el[0] === this.helper[0] ) {
+				if ( sortItem.el[0] === this.helper.el[0] ) {
 					continue;
 				}
 
 				if ( this._over( sortItem ) )  {
 
 					// TODO: cache height of element
-					if ( ( this.offset.top + this.helper.height() )	> ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+					if ( ( this.helper.offset.top + this.helper.proportions.height ) > ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
 
 						sortItem.el.after( this.placeholder );
 						this._setSortablePositions();
 					}
-					else if ( this.offset.top	< ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+					else if ( this.helper.offset.top < ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
 						sortItem.el.before( this.placeholder );
 						this._setSortablePositions();
 					}
@@ -225,12 +225,12 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		var edges = {
 			droppableRight: sortItem.offset.left + sortItem.el.width(),
 			droppableBottom: sortItem.offset.top + sortItem.el.height(),
-			draggableRight: this.offset.left + this.helper.width(),
-			draggableBottom: this.offset.top + this.helper.height()
+			draggableRight: this.helper.offset.left + this.helper.proportions.width,
+			draggableBottom: this.helper.offset.top + this.helper.proportions.height
 		};
 
 		return sortItem.offset.left < edges.draggableRight &&
-				edges.droppableRight > this.offset.left &&
+				edges.droppableRight > this.helper.offset.left &&
 				sortItem.offset.top < edges.draggableBottom &&
 				edges.droppableBottom > sortItem.offset.top;
 
@@ -250,16 +250,16 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// If helper is a clone or user generated, remove
 		if ( this.options.helper !== false ) {
-			this.helper.remove();
+			this.helper.el.remove();
 		} else {
-			this.sortEl.css( this.originalCss );
+			this.sorting.el.css( this.sortEl.originalCss );
 		}
 
-		this.placeholder.replaceWith( this.sortEl ).remove();
+		this.placeholder.replaceWith( this.sorting.el ).remove();
 
 		// Unset properties only needed during draggin/sorting
+		this.sorting = null;
 		this.helper = null;
-		this.originalCss = null;
 		this.placeholder = null;
 
 		this._unblockFrames();
@@ -268,18 +268,18 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// /** internal **/
 
 	_createHelper: function( pointerPosition ) {
-		var helper,
-			offset = this.sortEl.offset(),
-			xPos = (pointerPosition.x - offset.left) / this.sortEl.outerWidth(),
-			yPos = (pointerPosition.y - offset.top) / this.sortEl.outerHeight();
+		var helper = {},
+			offset = this.sorting.el.offset(),
+			xPos = (pointerPosition.x - offset.left) / this.sorting.el.outerWidth(),
+			yPos = (pointerPosition.y - offset.top) / this.sorting.el.outerHeight();
 
 		// clone
 		if ( this.options.helper === false ) {
-			helper = this.sortEl;
+			helper.el = this.sorting.el;
 		}
 		else {
 			if ( this.options.helper === true ) {
-				helper = this.sortEl.clone()
+				helper.el = this.sorting.el.clone()
 					.removeAttr( "id" )
 					.find( "[id]" )
 						.removeAttr( "id" )
@@ -287,24 +287,36 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			}
 			else {
 				// // TODO: figure out the signature for this; see #4957
-				helper = $( this.options.helper() );
+				helper.el = $( this.options.helper() );
 			}
 
-			this.sortEl.remove();
+			this.sorting.el.replaceWith( helper.el );
 		}
 
 		// Ensure the helper is in the DOM; obey the appendTo option if it exists
-		if ( this.options.appendTo || !helper.closest( this.document.find( "body" ) ).length ) {
-			helper.appendTo( this.options.appendTo || this.element );
+		if ( this.options.appendTo || !helper.el.closest( this.document.find( "body" ) ).length ) {
+			helper.el.appendTo( this.options.appendTo || this.element );
 		}
 
-		return helper
+		helper.proportions = {
+			width: helper.el.outerWidth(),
+			height: helper.el.outerHeight()
+		};
+
+		helper.offset = {
+			left: pointerPosition.x - helper.proportions.width * xPos,
+			top: pointerPosition.y - helper.proportions.height * yPos
+		}
+
+		helper.el
 			// Helper must be absolute to function properly
 			.css( "position", "absolute" )
 			.offset({
-				left: pointerPosition.x - helper.outerWidth() * xPos,
-				top: pointerPosition.y - helper.outerHeight() * yPos
+				left: helper.offset.left,
+				top: helper.offset.top
 			});
+
+		return helper;
 	},
 
 	_getPosition: function() {
@@ -313,8 +325,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			scrollLeft = this.scrollParent.scrollLeft();
 
 		// If fixed or absolute
-		if ( this.cssPosition !== "relative" ) {
-			position = this.helper.position();
+		if ( this.helper.cssPosition !== "relative" ) {
+			position = this.helper.el.position();
 
 			// Take into account scrollbar
 			position.top -= scrollTop;
@@ -325,8 +337,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// When using relative, css values are checked
 		// Otherwise the position wouldn't account for padding on ancestors
-		left = this.helper.css( "left" );
-		top = this.helper.css( "top" );
+		left = this.helper.el.css( "left" );
+		top = this.helper.el.css( "top" );
 
 		// Webkit will give back auto if there is no explicit value
 		left = ( left === "auto" ) ? 0: parseInt( left, 10 );
@@ -382,11 +394,11 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_preparePosition: function( pointerPosition ) {
 		var leftDiff = pointerPosition.x - this.originalPointer.x,
 			topDiff = pointerPosition.y - this.originalPointer.y,
-			newLeft = leftDiff + this.startPosition.left,
-			newTop = topDiff + this.startPosition.top;
+			newLeft = leftDiff + this.helper.startPosition.left,
+			newTop = topDiff + this.helper.startPosition.top;
 
 		// Save off new values for .css() in various callbacks using this function
-		this.position = {
+		this.helper.position = {
 			left: newLeft,
 			top: newTop
 		};
@@ -398,30 +410,35 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		};
 
 		// Refresh offset cache with new positions
-		this.offset.left = this.startOffset.left + leftDiff;
-		this.offset.top = this.startOffset.top + topDiff;
+		this.helper.offset.left = this.helper.startOffset.left + leftDiff;
+		this.helper.offset.top = this.helper.startOffset.top + topDiff;
 	},
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-		var newLeft = this.position.left,
-			newTop = this.position.top;
+		var newLeft = this.helper.position.left,
+			newTop = this.helper.position.top;
 
 		// User overriding left/top so shortcut math is no longer valid
-		if ( this.tempPosition.left !== this.position.left ||
-				this.tempPosition.top !== this.position.top ) {
+		if ( this.tempPosition.left !== this.helper.position.left ||
+				this.tempPosition.top !== this.helper.position.top ) {
 			// Reset offset based on difference of expected and overridden values
-			this.offset.left += newLeft - this.tempPosition.left;
-			this.offset.top += newTop - this.tempPosition.top;
+			this.helper.offset.left += newLeft - this.tempPosition.left;
+			this.helper.offset.top += newTop - this.tempPosition.top;
 		}
 
 		// TODO: does this work with nested scrollable parents?
-		if ( this.cssPosition !== "fixed" ) {
+		if ( this.helper.cssPosition !== "fixed" ) {
 			newLeft += this.scrollParent.scrollLeft();
 			newTop += this.scrollParent.scrollTop();
 		}
 
-		this.helper.css({
+		this.helper.offset = {
+			left: newLeft,
+			top: newTop
+		};
+
+		this.helper.el.css({
 			left: newLeft,
 			top: newTop
 		});
@@ -429,13 +446,13 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_originalHash: function( pointerPosition ) {
 		var ret = {
-			position: this.position,
-			offset: copy( this.offset ),
+			position: this.helper.position,
+			offset: copy( this.helper.offset ),
 			pointer: copy( pointerPosition )
 		};
 
 		if ( this.options.helper ) {
-			ret.helper = this.helper;
+			ret.helper = this.helper.el;
 		}
 
 		return ret;
@@ -443,8 +460,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_fullHash: function( pointerPosition ) {
 		return $.extend( this._originalHash( pointerPosition ), {
-			originalPosition: copy( this.originalPosition ),
-			originalOffset: copy( this.originalOffset ),
+			originalPosition: copy( this.helper.originalPosition ),
+			originalOffset: copy( this.helper.originalOffset ),
 			originalPointer: copy( this.originalPointer )
 		});
 	},
