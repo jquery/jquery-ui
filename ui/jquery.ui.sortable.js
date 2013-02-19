@@ -50,7 +50,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	options: {
 		helper: false,
-		items: "> *"
+		items: "> *",
+		tolerance: "intersect"
 	},
 
 	_create: function() {
@@ -211,10 +212,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				continue;
 			}
 
-			if ( this._over( sortItem ) )  {
-
-				// TODO: cache height of element
-				if ( ( this.helper.offset.top + this.helper.proportions.height ) > ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+			if ( this._over( sortItem, pointerPosition ) )  {
 
 				if ( ( this.helper.offset.top + this.helper.proportions.height ) >
 					( sortItem.offset.top + sortItem.proportions.height/2 )
@@ -230,22 +228,9 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		}
 	},
 
-	// TODO: swap out for real tolerance options
-	_over: function( sortItem ) {
-
-		// TODO: use same cache from _move for height and width of element
-		var edges = {
-			droppableRight: sortItem.offset.left + sortItem.el.width(),
-			droppableBottom: sortItem.offset.top + sortItem.el.height(),
-			draggableRight: this.helper.offset.left + this.helper.proportions.width,
-			draggableBottom: this.helper.offset.top + this.helper.proportions.height
-		};
-
-		return sortItem.offset.left < edges.draggableRight &&
-				edges.droppableRight > this.helper.offset.left &&
-				sortItem.offset.top < edges.draggableBottom &&
-				edges.droppableBottom > sortItem.offset.top;
-
+	_over: function( sortItem, pointerPosition ) {
+		return $.ui.sortable.tolerance[ this.options.tolerance ]
+			.call( this, this.helper, sortItem, pointerPosition );
 	},
 
 	_stop: function( event, pointerPosition ) {
@@ -445,10 +430,16 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			newTop += this.scrollParent.scrollTop();
 		}
 
-		this.helper.offset = {
-			left: newLeft,
-			top: newTop
-		};
+		$.extend( this.helper, {
+			edges: {
+				right: newLeft + this.helper.proportions.width,
+				bottom: newTop + this.helper.proportions.height
+			},
+			offset: {
+				left: newLeft,
+				top: newTop
+			}
+		});
 
 		this.helper.el.css({
 			left: newLeft,
@@ -508,4 +499,23 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		this._super();
 	}
 });
+
+$.extend( $.ui.sortable, {
+	tolerance: {
+		// Half of the draggable overlaps the droppable, horizontally and vertically
+		intersect: function( helper, item ) {
+			var xHalf = item.offset.left + helper.proportions.width / 2,
+				yHalf = item.offset.top + helper.proportions.height / 2;
+
+			return helper.offset.left < xHalf && helper.edges.right > xHalf &&
+				helper.offset.top < yHalf && helper.edges.bottom > yHalf;
+		},
+		// Pointer overlaps droppable
+		pointer: function( helper, item, pointerPosition ) {
+			return pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
+				pointerPosition.y >= item.offset.top && pointerPosition.y <= item.edges.bottom;
+		}
+	}
+});
+
 })( jQuery );
