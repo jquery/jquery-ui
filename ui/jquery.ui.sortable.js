@@ -71,10 +71,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 			var el = $(this);
 
-			sortablePositions.push([{
+			sortablePositions.push({
 				el: el,
 				offset: el.offset()
-			}]);
+			});
 		});
 
 	},
@@ -188,34 +188,27 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		for ( sortIndex=0; sortIndex<len; ++sortIndex ) {
 
-			for ( sort in this.sortablePositions[sortIndex] ) {
+			sortItem = this.sortablePositions[sortIndex];
 
-				sortItem = this.sortablePositions[sortIndex][sort];
+			// Don't bother checking against self
+			if ( sortItem.el[0] === this.helper.el[0] ) {
+				continue;
+			}
 
-				// Don't bother checking against self
-				if ( sortItem.el[0] === this.helper.el[0] ) {
-					continue;
+			if ( this._over( sortItem ) )  {
+
+				// TODO: cache height of element
+				if ( ( this.helper.offset.top + this.helper.proportions.height ) > ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+
+					sortItem.el.after( this.placeholder );
+					this._setSortablePositions();
 				}
-
-				if ( this._over( sortItem ) )  {
-
-					// TODO: cache height of element
-					if ( ( this.helper.offset.top + this.helper.proportions.height ) > ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
-
-						sortItem.el.after( this.placeholder );
-						this._setSortablePositions();
-					}
-					else if ( this.helper.offset.top < ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
-						sortItem.el.before( this.placeholder );
-						this._setSortablePositions();
-					}
-
+				else if ( this.helper.offset.top < ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
+					sortItem.el.before( this.placeholder );
+					this._setSortablePositions();
 				}
-
-
 			}
 		}
-
 	},
 
 	// TODO: swap out for real tolerance options
