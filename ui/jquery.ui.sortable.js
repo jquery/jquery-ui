@@ -199,11 +199,11 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			}
 
 			over = this._over( sortItem, pointerPosition );
-			if ( over ) {
+			if ( over && this.helper.verticalDragDirection ) {
 
-				over === 1 ?
-					sortItem.el.before( this.placeholder ) :
-					sortItem.el.after( this.placeholder );
+				this.helper.verticalDragDirection === 1 ?
+					sortItem.el.after( this.placeholder ) :
+					sortItem.el.before( this.placeholder );
 
 				this._refreshSortables();
 			}
@@ -290,6 +290,9 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			left: pointerPosition.x - helper.proportions.width * xPos,
 			top: pointerPosition.y - helper.proportions.height * yPos
 		};
+
+		// Used to determine drag direction
+		helper.lastOffset = helper.offset;
 
 		helper.el
 			// Helper must be absolute to function properly
@@ -396,6 +399,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// Save off values to compare user override against automatic coordinates
 		this.helper.tempPosition = copy( this.helper.position );
 
+		this.helper.lastOffset = this.helper.offset;
+
 		this.helper.offset = {
 			left: leftDiff + this.helper.startOffset.left,
 			top: topDiff + this.helper.startOffset.top
@@ -404,7 +409,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-		var newLeft = this.helper.position.left,
+		var verticalDelta, 
+			newLeft = this.helper.position.left,
 			newTop = this.helper.position.top;
 
 		// User overriding left/top so shortcut math is no longer valid
@@ -425,6 +431,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			right: this.helper.offset.left + this.helper.proportions.width,
 			bottom: this.helper.offset.top + this.helper.proportions.height
 		};
+
+		// -1 is up, 1 is down
+		verticalDelta = this.helper.offset.top - this.helper.lastOffset.top;
+		this.helper.verticalDragDirection = verticalDelta ? verticalDelta / Math.abs( verticalDelta ) : 0;
 
 		this.helper.el.css({
 			left: newLeft,
