@@ -42,6 +42,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// 	.startPosition: CSS position at drag start (after beforeStart)
 	// 	.startOffset: offset at drag start (after beforeStart)
 	// 	.tempPosition: overridable CSS position of helper
+	// horizontallyAlignedItems
 	// originalPointer: pageX/Y at drag start (offset of pointer)
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
@@ -60,12 +61,21 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_create: function() {
 
+		var float, inline;
+
 		this._super();
 
 		this.element.addClass( "ui-sortable" );
 
 		this._refreshSortables();
 
+		// TODO: What if there are no items yet, and they'll happen to be horizontally aligned?
+		if ( this.sortables.length ) {
+			float = ( /left|right/ ).test( this.sortables[0].el.css( "float" ) );
+			inline = ( /inline|table-cell/ ).test( this.sortables[0].el.css("display") );
+		}
+
+		this.horizontallyAlignedItems = float || inline;
 	},
 
 	_refreshSortables: function() {
@@ -175,6 +185,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		var helperMiddleY, itemMiddleY, sort, sortItem, sortIndex,
 			beforePlaceholder = true,
+			dragDirection = this.horizontallyAlignedItems ?
+				this.helper.horizontalDragDirection : this.helper.verticalDragDirection;
 			len = this.sortables.length;
 
 
@@ -206,13 +218,13 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 			// If we're still over the same item from last sort and the drag direction hasn't changed, don't resort
 			if ( this._over( sortItem, pointerPosition ) ) {
-				if ( !this.lastSortDragDirection || this.helper.verticalDragDirection === -this.lastSortDragDirection ) {
+				if ( !this.lastSortDragDirection || dragDirection === -this.lastSortDragDirection ) {
 
 					beforePlaceholder ?
 						sortItem.el.before( this.placeholder ) :
 						sortItem.el.after( this.placeholder );
 
-					this.lastSortDragDirection = this.helper.verticalDragDirection;
+					this.lastSortDragDirection = dragDirection;
 
 					this._refreshSortables();
 				}
@@ -420,7 +432,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-		var verticalDelta, 
+		var horizontalDelta, verticalDelta, 
 			newLeft = this.helper.position.left,
 			newTop = this.helper.position.top;
 
@@ -444,6 +456,9 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		};
 
 		// -1 is up, 1 is down
+		horizontalDelta = this.helper.offset.left - this.helper.lastOffset.left;
+		this.helper.horizontalDragDirection = horizontalDelta ? horizontalDelta / Math.abs( horizontalDelta ) : 0;
+
 		verticalDelta = this.helper.offset.top - this.helper.lastOffset.top;
 		this.helper.verticalDragDirection = verticalDelta ? verticalDelta / Math.abs( verticalDelta ) : 0;
 
