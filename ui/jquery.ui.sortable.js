@@ -174,6 +174,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_move: function( event, pointerPosition ) {
 
 		var helperMiddleY, itemMiddleY, sort, sortItem, sortIndex,
+			beforePlaceholder = true,
 			len = this.sortables.length;
 
 
@@ -193,28 +194,37 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 			sortItem = this.sortables[sortIndex];
 
-			// Don't bother checking against self or the placeholder
-			if ( sortItem.el[0] === this.helper.el[0] || sortItem.el[0] === this.placeholder[0] ) {
+			// Don't bother checking against self
+			if ( sortItem.el[0] === this.helper.el[0] ) {
 				continue;
 			}
 
+			if ( sortItem.el[0] === this.placeholder[0] ) {
+				beforePlaceholder = false;
+				continue;
+			}
+
+			// If we're still over the same item from last sort and the drag direction hasn't changed, don't resort
 			if ( this._over( sortItem, pointerPosition ) ) {
+				if ( !this.lastSortDragDirection || this.helper.verticalDragDirection === -this.lastSortDragDirection ) {
 
-				helperMiddleY = this.helper.offset.top + this.helper.proportions.height / 2;
-				itemMiddleY = sortItem.offset.top + sortItem.proportions.height / 2;
-				helperMiddleY <= itemMiddleY ?
-					sortItem.el.before( this.placeholder ) :
-					sortItem.el.after( this.placeholder );
+					beforePlaceholder ?
+						sortItem.el.before( this.placeholder ) :
+						sortItem.el.after( this.placeholder );
 
-				this._refreshSortables();
+					this.lastSortDragDirection = this.helper.verticalDragDirection;
+
+					this._refreshSortables();
+				}
+
+				return;
 			}
 		}
+
+		// This reset also serves to indicate we're not over the same element anymore
+		this.lastSortDragDirection = null;
 	},
 
-	// Return values:
-	// 0 - not over
-	// 1 - in the top part of the item (or perfectly in the middle)
-	// 2 - in the bottom part of the item
 	_over: function( sortItem, pointerPosition ) {
 		return $.ui.sortable.tolerance[ this.options.tolerance ]
 			.call( this, this.helper, sortItem, pointerPosition );
@@ -291,6 +301,9 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			left: pointerPosition.x - helper.proportions.width * xPos,
 			top: pointerPosition.y - helper.proportions.height * yPos
 		};
+
+		// Used to determine drag direction
+		helper.lastOffset = helper.offset;
 
 		helper.el
 			// Helper must be absolute to function properly
@@ -397,6 +410,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// Save off values to compare user override against automatic coordinates
 		this.helper.tempPosition = copy( this.helper.position );
 
+		this.helper.lastOffset = this.helper.offset;
+
 		this.helper.offset = {
 			left: leftDiff + this.helper.startOffset.left,
 			top: topDiff + this.helper.startOffset.top
@@ -405,7 +420,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-		var newLeft = this.helper.position.left,
+		var verticalDelta, 
+			newLeft = this.helper.position.left,
 			newTop = this.helper.position.top;
 
 		// User overriding left/top so shortcut math is no longer valid
@@ -426,6 +442,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			right: this.helper.offset.left + this.helper.proportions.width,
 			bottom: this.helper.offset.top + this.helper.proportions.height
 		};
+
+		// -1 is up, 1 is down
+		verticalDelta = this.helper.offset.top - this.helper.lastOffset.top;
+		this.helper.verticalDragDirection = verticalDelta ? verticalDelta / Math.abs( verticalDelta ) : 0;
 
 		this.helper.el.css({
 			left: newLeft,
