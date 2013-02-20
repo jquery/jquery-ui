@@ -43,10 +43,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// 	.startOffset: offset at drag start (after beforeStart)
 	// 	.tempPosition: overridable CSS position of helper
 	// horizontallyAlignedItems
+	// items: cache of positions of all sortable items
 	// originalPointer: pageX/Y at drag start (offset of pointer)
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
-	// sortables: cache of positions of all sortable items
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
@@ -67,29 +67,30 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		this.element.addClass( "ui-sortable" );
 
-		this._refreshSortables();
+		this._refreshItems();
 
 		// TODO: What if there are no items yet, and they'll happen to be horizontally aligned?
-		if ( this.sortables.length ) {
-			float = ( /left|right/ ).test( this.sortables[0].el.css( "float" ) );
-			inline = ( /inline|table-cell/ ).test( this.sortables[0].el.css("display") );
+		if ( this.items.length ) {
+			float = ( /left|right/ ).test( this.items[0].el.css( "float" ) );
+			inline = ( /inline|table-cell/ ).test( this.items[0].el.css("display") );
 		}
 
 		this.horizontallyAlignedItems = float || inline;
 	},
 
-	_refreshSortables: function() {
+	_refreshItems: function() {
 
-		var sortables = this.sortables = [];
+		var items = this.items = [];
 
 		this.element.find( this.options.items ).each( function() {
 
-			var el = $(this), sortable,
+			var item,
+				el = $(this),
 				offset = el.offset(),
 				width = el.outerWidth(),
 				height = el.outerHeight();
 
-			sortable = {
+			item = {
 				edges: {
 					right: width + offset.left,
 					bottom: height + offset.top
@@ -102,7 +103,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				}
 			}
 
-			sortables.push(sortable);
+			items.push( item );
 		});
 	},
 
@@ -138,7 +139,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		this.helper = this._createHelper( pointerPosition );
 
 		if ( this.options.helper !== false ) {
-			this._refreshSortables();
+			this._refreshItems();
 		}
 
 		this.helper.cssPosition = this.helper.el.css( "position" );
@@ -187,7 +188,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			beforePlaceholder = true,
 			dragDirection = this.horizontallyAlignedItems ?
 				this.helper.horizontalDragDirection : this.helper.verticalDragDirection;
-			len = this.sortables.length;
+			len = this.items.length;
 
 
 		this._preparePosition( pointerPosition );
@@ -204,7 +205,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		for ( sortIndex=0; sortIndex<len; ++sortIndex ) {
 
-			sortItem = this.sortables[sortIndex];
+			sortItem = this.items[sortIndex];
 
 			// Don't bother checking against self
 			if ( sortItem.el[0] === this.helper.el[0] ) {
@@ -226,7 +227,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 					this.lastSortDragDirection = dragDirection;
 
-					this._refreshSortables();
+					this._refreshItems();
 				}
 
 				return;
