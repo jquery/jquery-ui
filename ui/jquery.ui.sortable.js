@@ -30,10 +30,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	widgetEventPrefix: "sort",
 
 	// sorting: element being sorted
-	// 	.el: jQuery object
+	// 	.element: jQuery object
 	// 	.originalCss: CSS position of element before being made absolute on start
 	// helper: element being sorted (original or helper)
-	// 	.el: jquery object
+	// 	.element: jquery object
 	// 	.position: final CSS position of helper
 	// 	.offset: offset of helper
 	// 	.originalPosition: CSS position before drag start
@@ -71,8 +71,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// TODO: What if there are no items yet, and they'll happen to be horizontally aligned?
 		if ( this.items.length ) {
-			float = ( /left|right/ ).test( this.items[0].el.css( "float" ) );
-			inline = ( /inline|table-cell/ ).test( this.items[0].el.css("display") );
+			float = ( /left|right/ ).test( this.items[0].element.css( "float" ) );
+			inline = ( /inline|table-cell/ ).test( this.items[0].element.css("display") );
 		}
 
 		this.horizontallyAlignedItems = float || inline;
@@ -85,17 +85,17 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		this.element.find( this.options.items ).each( function() {
 
 			var item,
-				el = $(this),
-				offset = el.offset(),
-				width = el.outerWidth(),
-				height = el.outerHeight();
+				element = $(this),
+				offset = element.offset(),
+				width = element.outerWidth(),
+				height = element.outerHeight();
 
 			item = {
 				edges: {
 					right: width + offset.left,
 					bottom: height + offset.top
 				},
-				el: el,
+				element: element,
 				offset: offset,
 				proportions: {
 					width: width,
@@ -118,30 +118,30 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_start: function( event, pointerPosition ) {
 
 		this.sorting = {
-			el: $( event.target ).closest( this.element.find( this.options.items ) )
+			element: $( event.target ).closest( this.element.find( this.options.items ) )
 		};
 
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
 		this.sorting.originalCss = {
-			position: this.sorting.el[0].style.position,
-			bottom: this.sorting.el[0].style.bottom,
-			left: this.sorting.el[0].style.left,
-			right: this.sorting.el[0].style.right,
-			top: this.sorting.el[0].style.top
+			position: this.sorting.element[0].style.position,
+			bottom: this.sorting.element[0].style.bottom,
+			left: this.sorting.element[0].style.left,
+			right: this.sorting.element[0].style.right,
+			top: this.sorting.element[0].style.top
 		}
 
 		this.placeholder = this._createPlaceholder();
 
 		// Helper could be appended anywhere so insert the placeholder first
-		this.sorting.el.after( this.placeholder );
+		this.sorting.element.after( this.placeholder );
 		this.helper = this._createHelper( pointerPosition );
 
 		if ( this.options.helper !== false ) {
 			this._refreshItems();
 		}
 
-		this.helper.cssPosition = this.helper.el.css( "position" );
+		this.helper.cssPosition = this.helper.element.css( "position" );
 		this.scrollParent = this.element.scrollParent();
 
 		// Cache current position (offset was cached at creation)
@@ -207,11 +207,11 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			sortItem = this.items[sortIndex];
 
 			// Don't bother checking against self
-			if ( sortItem.el[0] === this.helper.el[0] ) {
+			if ( sortItem.element[0] === this.helper.element[0] ) {
 				continue;
 			}
 
-			if ( sortItem.el[0] === this.placeholder[0] ) {
+			if ( sortItem.element[0] === this.placeholder[0] ) {
 				beforePlaceholder = false;
 				continue;
 			}
@@ -221,8 +221,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				if ( !this.lastSortDragDirection || dragDirection === -this.lastSortDragDirection ) {
 
 					beforePlaceholder ?
-						sortItem.el.before( this.placeholder ) :
-						sortItem.el.after( this.placeholder );
+						sortItem.element.before( this.placeholder ) :
+						sortItem.element.after( this.placeholder );
 
 					this.lastSortDragDirection = dragDirection;
 
@@ -256,12 +256,12 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// If helper is a clone or user generated, remove
 		if ( this.options.helper !== false ) {
-			this.helper.el.remove();
+			this.helper.element.remove();
 		} else {
-			this.sorting.el.css( this.sorting.originalCss );
+			this.sorting.element.css( this.sorting.originalCss );
 		}
 
-		this.placeholder.replaceWith( this.sorting.el ).remove();
+		this.placeholder.replaceWith( this.sorting.element ).remove();
 
 		// Unset properties only needed during draggin/sorting
 		this.sorting = null;
@@ -275,17 +275,17 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_createHelper: function( pointerPosition ) {
 		var helper = {},
-			offset = this.sorting.el.offset(),
-			xPos = (pointerPosition.x - offset.left) / this.sorting.el.outerWidth(),
-			yPos = (pointerPosition.y - offset.top) / this.sorting.el.outerHeight();
+			offset = this.sorting.element.offset(),
+			xPos = (pointerPosition.x - offset.left) / this.sorting.element.outerWidth(),
+			yPos = (pointerPosition.y - offset.top) / this.sorting.element.outerHeight();
 
 		// clone
 		if ( this.options.helper === false ) {
-			helper.el = this.sorting.el;
+			helper.element = this.sorting.element;
 		}
 		else {
 			if ( this.options.helper === true ) {
-				helper.el = this.sorting.el.clone()
+				helper.element = this.sorting.element.clone()
 					.removeAttr( "id" )
 					.find( "[id]" )
 						.removeAttr( "id" )
@@ -293,20 +293,20 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			}
 			else {
 				// // TODO: figure out the signature for this; see #4957
-				helper.el = $( this.options.helper() );
+				helper.element = $( this.options.helper() );
 			}
 
-			this.sorting.el.replaceWith( helper.el );
+			this.sorting.element.replaceWith( helper.element );
 		}
 
 		// Ensure the helper is in the DOM; obey the appendTo option if it exists
-		if ( this.options.appendTo || !helper.el.closest( this.document.find( "body" ) ).length ) {
-			helper.el.appendTo( this.options.appendTo || this.element );
+		if ( this.options.appendTo || !helper.element.closest( this.document.find( "body" ) ).length ) {
+			helper.element.appendTo( this.options.appendTo || this.element );
 		}
 
 		helper.proportions = {
-			width: helper.el.outerWidth(),
-			height: helper.el.outerHeight()
+			width: helper.element.outerWidth(),
+			height: helper.element.outerHeight()
 		};
 
 		helper.offset = {
@@ -317,7 +317,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// Used to determine drag direction
 		helper.lastOffset = helper.offset;
 
-		helper.el
+		helper.element
 			// Helper must be absolute to function properly
 			.css( "position", "absolute" )
 			.offset({
@@ -331,7 +331,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_createPlaceholder: function() {
 		return $.isFunction( this.options.placeholder ) ?
 			$( this.options.placeholder( this.sorting ) ) :
-			this.sorting.el.clone().removeAttr("id").css({
+			this.sorting.element.clone().removeAttr("id").css({
 				visibility : "hidden",
 				position : this.sorting.originalCss.position || ""
 			});
@@ -344,7 +344,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// If fixed or absolute
 		if ( this.helper.cssPosition !== "relative" ) {
-			position = this.helper.el.position();
+			position = this.helper.element.position();
 
 			// Take into account scrollbar
 			position.top -= scrollTop;
@@ -355,8 +355,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// When using relative, css values are checked
 		// Otherwise the position wouldn't account for padding on ancestors
-		left = this.helper.el.css( "left" );
-		top = this.helper.el.css( "top" );
+		left = this.helper.element.css( "left" );
+		top = this.helper.element.css( "top" );
 
 		// Webkit will give back auto if there is no explicit value
 		left = ( left === "auto" ) ? 0: parseInt( left, 10 );
@@ -462,7 +462,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		verticalDelta = this.helper.offset.top - this.helper.lastOffset.top;
 		this.helper.verticalDragDirection = verticalDelta ? verticalDelta / Math.abs( verticalDelta ) : 0;
 
-		this.helper.el.css({
+		this.helper.element.css({
 			left: newLeft,
 			top: newTop
 		});
@@ -476,7 +476,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		};
 
 		if ( this.options.helper ) {
-			ret.helper = this.helper.el;
+			ret.helper = this.helper.element;
 		}
 
 		return ret;
