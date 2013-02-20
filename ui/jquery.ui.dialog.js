@@ -692,12 +692,23 @@ $.widget( "ui.dialog", {
 		}
 	},
 
+	_allowInteraction: function( event ) {
+		if ( $( event.target ).closest(".ui-dialog").length ) {
+			return true;
+		}
+
+		// TODO: Remove hack when datepicker implements
+		// the .ui-front logic (#8989)
+		return !!$( event.target ).closest(".ui-datepicker").length;
+	},
+
 	_createOverlay: function() {
 		if ( !this.options.modal ) {
 			return;
 		}
 
-		var widgetFullName = this.widgetFullName;
+		var that = this,
+			widgetFullName = this.widgetFullName;
 		if ( !$.ui.dialog.overlayInstances ) {
 			// Prevent use of anchors and inputs.
 			// We use a delay in case the overlay is created from an
@@ -706,10 +717,7 @@ $.widget( "ui.dialog", {
 				// Handle .dialog().dialog("close") (#4065)
 				if ( $.ui.dialog.overlayInstances ) {
 					this.document.bind( "focusin.dialog", function( event ) {
-						if ( !$( event.target ).closest(".ui-dialog").length &&
-								// TODO: Remove hack when datepicker implements
-								// the .ui-front logic (#8989)
-								!$( event.target ).closest(".ui-datepicker").length ) {
+						if ( !that._allowInteraction( event ) ) {
 							event.preventDefault();
 							$(".ui-dialog:visible:last .ui-dialog-content")
 								.data( widgetFullName )._focusTabbable();
