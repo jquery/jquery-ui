@@ -173,8 +173,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_move: function( event, pointerPosition ) {
 
-		var sort, sortItem, sortIndex,
-			beforePlaceholder = true,
+		var over, sort, sortItem, sortIndex,
 			len = this.sortables.length;
 
 
@@ -194,31 +193,27 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 			sortItem = this.sortables[sortIndex];
 
-			// Don't bother checking against self
-			if ( sortItem.el[0] === this.helper.el[0] ) {
+			// Don't bother checking against self or the placeholder
+			if ( sortItem.el[0] === this.helper.el[0] || sortItem.el[0] === this.placeholder[0] ) {
 				continue;
 			}
 
-			// Don't bother checking against the placeholder
-			if ( sortItem.el[0] === this.placeholder[0] ) {
-				// Assume sortables are in the same order as the DOM
-				beforePlaceholder = false;
-				continue;
-			}
+			over = this._over( sortItem, pointerPosition );
+			if ( over ) {
 
-			if ( this._over( sortItem, pointerPosition ) )  {
-
-				if ( beforePlaceholder ) {
-					sortItem.el.before( this.placeholder );
-				} else {
+				over === 1 ?
+					sortItem.el.before( this.placeholder ) :
 					sortItem.el.after( this.placeholder );
-				}
 
 				this._refreshSortables();
 			}
 		}
 	},
 
+	// Return values:
+	// 0 - not over
+	// 1 - in the top part of the item (or perfectly in the middle)
+	// 2 - in the bottom part of the item
 	_over: function( sortItem, pointerPosition ) {
 		return $.ui.sortable.tolerance[ this.options.tolerance ]
 			.call( this, this.helper, sortItem, pointerPosition );
@@ -490,19 +485,36 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 $.extend( $.ui.sortable, {
 	tolerance: {
-		// Half of the draggable overlaps the droppable, horizontally and vertically
+		// Half of the helper overlaps the item, horizontally and vertically
 		intersect: function( helper, item ) {
-			var xHalf = helper.offset.left + helper.proportions.width / 2,
-				yHalf = helper.offset.top + helper.proportions.height / 2;
 
-			return item.offset.left < xHalf && item.edges.right > xHalf &&
-				item.offset.top < yHalf && item.edges.bottom > yHalf;
+			var itemMiddleY,
+				helperMiddleX = helper.offset.left + helper.proportions.width / 2,
+				helperMiddleY = helper.offset.top + helper.proportions.height / 2;
+
+			if ( item.offset.left < helperMiddleX && item.edges.right > helperMiddleX &&
+				item.offset.top < helperMiddleY && item.edges.bottom > helperMiddleY
+			) {
+				itemMiddleY = item.offset.top + item.proportions.height / 2;
+				return helperMiddleY <= itemMiddleY ? 1 : 2;
+			}
+
+			return 0;
 		},
 
-		// Pointer overlaps droppable
+		// Pointer overlaps item
 		pointer: function( helper, item, pointerPosition ) {
-			return pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
-				pointerPosition.y >= item.offset.top && pointerPosition.y <= item.edges.bottom;
+
+			var itemMiddleY;
+
+			if ( pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
+				pointerPosition.y >= item.offset.top && pointerPosition.y <= item.edges.bottom
+			) {
+				itemMiddleY = item.offset.top + item.proportions.height / 2;
+				return pointerPosition.y <= itemMiddleY ? 1 : 2;
+			}
+
+			return 0;
 		}
 	}
 });
