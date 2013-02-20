@@ -173,7 +173,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_move: function( event, pointerPosition ) {
 
-		var over, sort, sortItem, sortIndex,
+		var helperMiddleY, itemMiddleY, sort, sortItem, sortIndex,
 			len = this.sortables.length;
 
 
@@ -198,10 +198,11 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				continue;
 			}
 
-			over = this._over( sortItem, pointerPosition );
-			if ( over ) {
+			if ( this._over( sortItem, pointerPosition ) ) {
 
-				over === 1 ?
+				helperMiddleY = this.helper.offset.top + this.helper.proportions.height / 2;
+				itemMiddleY = sortItem.offset.top + sortItem.proportions.height / 2;
+				helperMiddleY <= itemMiddleY ?
 					sortItem.el.before( this.placeholder ) :
 					sortItem.el.after( this.placeholder );
 
@@ -487,50 +488,23 @@ $.extend( $.ui.sortable, {
 	tolerance: {
 		// Half of the helper overlaps the item, horizontally and vertically
 		intersect: function( helper, item ) {
-
-			var itemMiddleY,
-				helperMiddleX = helper.offset.left + helper.proportions.width / 2,
+			var helperMiddleX = helper.offset.left + helper.proportions.width / 2,
 				helperMiddleY = helper.offset.top + helper.proportions.height / 2;
 
-			if ( item.offset.left < helperMiddleX && item.edges.right > helperMiddleX &&
-				item.offset.top < helperMiddleY && item.edges.bottom > helperMiddleY
-			) {
-				itemMiddleY = item.offset.top + item.proportions.height / 2;
-				return helperMiddleY <= itemMiddleY ? 1 : 2;
-			}
-
-			return 0;
+			return item.offset.left < helperMiddleX && item.edges.right > helperMiddleX &&
+				item.offset.top < helperMiddleY && item.edges.bottom > helperMiddleY;
 		},
 
 		// Pointer overlaps item
 		pointer: function( helper, item, pointerPosition ) {
-
-			var itemMiddleY;
-
-			if ( pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
-				pointerPosition.y >= item.offset.top && pointerPosition.y <= item.edges.bottom
-			) {
-				itemMiddleY = item.offset.top + item.proportions.height / 2;
-				return pointerPosition.y <= itemMiddleY ? 1 : 2;
-			}
-
-			return 0;
+			return pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
+				pointerPosition.y >= item.offset.top && pointerPosition.y <= item.edges.bottom;
 		},
 
 		// Helper overlaps item by at least one pixel
 		touch: function( helper, item, pointerPosition ) {
-
-			var helperMiddleY, itemMiddleY;
-
-			if ( item.offset.left < helper.edges.right && item.edges.right > helper.offset.left &&
-				item.offset.top < helper.edges.bottom && item.edges.bottom > helper.offset.top
-			) {
-				helperMiddleY = helper.offset.top + helper.proportions.height / 2;
-				itemMiddleY = item.offset.top + item.proportions.height / 2;
-				return helperMiddleY <= itemMiddleY ? 1 : 2;	
-			}
-
-			return 0;
+			return item.offset.left < helper.edges.right && item.edges.right > helper.offset.left &&
+				item.offset.top < helper.edges.bottom && item.edges.bottom > helper.offset.top;
 		}
 	}
 });
