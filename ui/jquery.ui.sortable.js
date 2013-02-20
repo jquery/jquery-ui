@@ -110,17 +110,16 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-		// Assume this is only called once before _start()
-		this.sorting = {
-			el: element.closest( this.element.find( this.options.items ) )
-		};
-
-		return !!( this.sorting.el.length &&
+		return !!( element.closest( this.element.find( this.options.items ) ) &&
 			( !this.options.handle || element.closest( this.element.find( this.options.handle ) ).length ) &&
 			!element.closest( this.element.find( this.options.exclude ) ).length );
 	},
 
 	_start: function( event, pointerPosition ) {
+
+		this.sorting = {
+			el: $( event.target ).closest( this.element.find( this.options.items ) )
+		};
 
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
