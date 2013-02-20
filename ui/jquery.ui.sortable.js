@@ -515,6 +515,22 @@ $.extend( $.ui.sortable, {
 			}
 
 			return 0;
+		},
+
+		// Helper overlaps item by at least one pixel
+		touch: function( helper, item, pointerPosition ) {
+
+			var helperMiddleY, itemMiddleY;
+
+			if ( item.offset.left < helper.edges.right && item.edges.right > helper.offset.left &&
+				item.offset.top < helper.edges.bottom && item.edges.bottom > helper.offset.top
+			) {
+				helperMiddleY = helper.offset.top + helper.proportions.height / 2;
+				itemMiddleY = item.offset.top + item.proportions.height / 2;
+				return helperMiddleY <= itemMiddleY ? 1 : 2;	
+			}
+
+			return 0;
 		}
 	}
 });
