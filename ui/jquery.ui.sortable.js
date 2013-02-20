@@ -259,6 +259,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			this.helper.element.remove();
 		} else {
 			this.sorting.element.css( this.sorting.originalCss );
+			this.sorting.element.removeClass( "ui-front" );
 		}
 
 		this.placeholder.replaceWith( this.sorting.element ).remove();
@@ -318,6 +319,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		helper.lastOffset = helper.offset;
 
 		helper.element
+			.addClass( "ui-front" )
 			// Helper must be absolute to function properly
 			.css( "position", "absolute" )
 			.offset({
