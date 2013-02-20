@@ -110,7 +110,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-		return !!( element.closest( this.element.find( this.options.items ) ) &&
+		return !!( element.closest( this.element.find( this.options.items ) ).length &&
 			( !this.options.handle || element.closest( this.element.find( this.options.handle ) ).length ) &&
 			!element.closest( this.element.find( this.options.exclude ) ).length );
 	},
