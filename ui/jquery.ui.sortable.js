@@ -181,7 +181,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_move: function( event, pointerPosition ) {
 
-		var helperMiddleY, itemMiddleY, sort, sortItem, sortIndex,
+		var sort, sortItem, sortIndex,
 			beforePlaceholder = true,
 			dragDirection = this.horizontallyAlignedItems ?
 				this.helper.horizontalDragDirection : this.helper.verticalDragDirection;
