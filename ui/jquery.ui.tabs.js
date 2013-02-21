@@ -37,6 +37,7 @@ $.widget( "ui.tabs", {
 		heightStyle: "content",
 		hide: null,
 		show: null,
+		ajaxContentReload: false,
 
 		// callbacks
 		activate: null,
@@ -788,41 +789,43 @@ $.widget( "ui.tabs", {
 		if ( isLocal( anchor[ 0 ] ) ) {
 			return;
 		}
+		if(this.options.ajaxContentReload || panel.html() == '')
+        {
+			this.xhr = $.ajax( this._ajaxSettings( anchor, event, eventData ) );
 
-		this.xhr = $.ajax( this._ajaxSettings( anchor, event, eventData ) );
+			// support: jQuery <1.8
+			// jQuery <1.8 returns false if the request is canceled in beforeSend,
+			// but as of 1.8, $.ajax() always returns a jqXHR object.
+			if ( this.xhr && this.xhr.statusText !== "canceled" ) {
+				tab.addClass( "ui-tabs-loading" );
+				panel.attr( "aria-busy", "true" );
 
-		// support: jQuery <1.8
-		// jQuery <1.8 returns false if the request is canceled in beforeSend,
-		// but as of 1.8, $.ajax() always returns a jqXHR object.
-		if ( this.xhr && this.xhr.statusText !== "canceled" ) {
-			tab.addClass( "ui-tabs-loading" );
-			panel.attr( "aria-busy", "true" );
+				this.xhr
+					.success(function( response ) {
+						// support: jQuery <1.8
+						// http://bugs.jquery.com/ticket/11778
+						setTimeout(function() {
+							panel.html( response );
+							that._trigger( "load", event, eventData );
+						}, 1 );
+					})
+					.complete(function( jqXHR, status ) {
+						// support: jQuery <1.8
+						// http://bugs.jquery.com/ticket/11778
+						setTimeout(function() {
+							if ( status === "abort" ) {
+								that.panels.stop( false, true );
+							}
 
-			this.xhr
-				.success(function( response ) {
-					// support: jQuery <1.8
-					// http://bugs.jquery.com/ticket/11778
-					setTimeout(function() {
-						panel.html( response );
-						that._trigger( "load", event, eventData );
-					}, 1 );
-				})
-				.complete(function( jqXHR, status ) {
-					// support: jQuery <1.8
-					// http://bugs.jquery.com/ticket/11778
-					setTimeout(function() {
-						if ( status === "abort" ) {
-							that.panels.stop( false, true );
-						}
+							tab.removeClass( "ui-tabs-loading" );
+							panel.removeAttr( "aria-busy" );
 
-						tab.removeClass( "ui-tabs-loading" );
-						panel.removeAttr( "aria-busy" );
-
-						if ( jqXHR === that.xhr ) {
-							delete that.xhr;
-						}
-					}, 1 );
-				});
+							if ( jqXHR === that.xhr ) {
+								delete that.xhr;
+							}
+						}, 1 );
+					});
+			}
 		}
 	},
 
