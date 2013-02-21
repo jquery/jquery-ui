@@ -137,9 +137,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		this.sorting.element.after( this.placeholder );
 		this.helper = this._createHelper( pointerPosition );
 
-		if ( this.options.helper !== false ) {
-			this._refreshItems();
-		}
+		this._refreshItems();
 
 		this.helper.cssPosition = this.helper.element.css( "position" );
 		this.scrollParent = this.element.scrollParent();
