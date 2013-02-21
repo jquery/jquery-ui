@@ -260,7 +260,7 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			this.sorting.element.removeClass( "ui-front" );
 		}
 
-		this.placeholder.replaceWith( this.sorting.element ).remove();
+		this.placeholder.replaceWith( this.sorting.element );
 
 		// Unset properties only needed during draggin/sorting
 		this.sorting = null;
@@ -295,7 +295,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 				helper.element = $( this.options.helper() );
 			}
 
-			this.sorting.element.replaceWith( helper.element );
+			this.sorting.element.after( helper.element );
+			this.sorting.element.detach();
 		}
 
 		// Ensure the helper is in the DOM; obey the appendTo option if it exists
