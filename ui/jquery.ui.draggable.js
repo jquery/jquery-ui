@@ -568,7 +568,7 @@ if ( $.uiBackCompat !== false ) {
 
 			var el = this.options.appendTo;
 
-			if ( el === "parent" ) {
+			if ( el === "parent" || el === null ) {
 				el = this.dragEl.parent();
 			}
 
