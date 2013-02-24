@@ -85,11 +85,13 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// Reset
 		this.dragDimensions = null;
-
+		
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = ( this.options.helper === true || typeof this.options.helper === "function" ) ?
 			this._createHelper( pointerPosition ) :
 			this.element;
+			
+			
 
 		// _createHelper() ensures that helpers are in the correct position
 		// in the DOM, but we need to handle appendTo when there is no helper
@@ -564,11 +566,17 @@ if ( $.uiBackCompat !== false ) {
 	// appendTo 'parent' value
 	$.widget( "ui.draggable", $.ui.draggable, {
 
+		// Helper passed in since _createHelper calls this before dragEl is set
 		_appendToEl: function() {
 
 			var el = this.options.appendTo;
-
-			if ( el === "parent" || el === null ) {
+			
+			// This should only happen via _createHelper
+			if ( el === null ) {
+				return this.element.parent();
+			}
+			
+			if ( el === "parent" ) {
 				el = this.dragEl.parent();
 			}
 
