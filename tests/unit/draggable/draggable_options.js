@@ -5,7 +5,8 @@
 
 module("draggable: options");
 
-test("{ appendTo: 'parent' }, default", function() {
+// TODO: This doesn't actually test whether append happened, possibly remove
+test("{ appendTo: 'parent' }, default, no clone", function() {
 	expect( 2 );
 	var el = $("#draggable2").draggable({ appendTo: "parent" });
 	TestHelpers.draggable.shouldMove(el);
@@ -15,22 +16,102 @@ test("{ appendTo: 'parent' }, default", function() {
 
 });
 
-test("{ appendTo: Element }", function() {
+// TODO: This doesn't actually test whether append happened, possibly remove
+test("{ appendTo: Element }, no clone", function() {
 	expect( 2 );
-	var el = $("#draggable2").draggable({ appendTo: $("#draggable2").parent()[0] });
+	var el = $("#draggable2").draggable({appendTo: $("#draggable2").parent()[0] });
+
 	TestHelpers.draggable.shouldMove(el);
 
 	el = $("#draggable1").draggable({ appendTo: $("#draggable2").parent()[0] });
 	TestHelpers.draggable.shouldMove(el);
 });
 
-test("{ appendTo: Selector }", function() {
+// TODO: This doesn't actually test whether append happened, possibly remove
+test("{ appendTo: Selector }, no clone", function() {
 	expect( 2 );
 	var el = $("#draggable2").draggable({ appendTo: "#main" });
 	TestHelpers.draggable.shouldMove(el);
 
 	el = $("#draggable1").draggable({ appendTo: "#main" });
 	TestHelpers.draggable.shouldMove(el);
+});
+
+test("{ appendTo: 'parent' }, default", function() {
+
+	expect(2);
+
+	var el = $("#draggable1").draggable();
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	equal( el.draggable( "option", "appendTo" ), "parent" );
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_dragged_parent"), $("#qunit-fixture")[0] );
+
+});
+
+test("{ appendTo: Element }", function() {
+
+	expect(1);
+
+	var appendTo = $("#draggable2").parent()[0],
+		el = $("#draggable1").draggable({ appendTo: appendTo });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_dragged_parent"), appendTo );
+
+});
+
+test("{ appendTo: jQuery }", function() {
+
+	expect(1);
+
+	var appendTo = $("#draggable2").parent(),
+		el = $("#draggable1").draggable({ appendTo: appendTo });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_dragged_parent"), appendTo[0] );
+
+});
+test("{ appendTo: Selector }", function() {
+
+	expect(1);
+
+
+	var appendTo = "#main",
+		el = $("#draggable1").draggable({ appendTo: appendTo });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_dragged_parent"), $(appendTo)[0] );
+
+});
+
+
+test("appendTo, default, switching after initialization", function() {
+
+	expect(2);
+
+	var el = $("#draggable1").draggable({ helper : "clone" });
+
+	TestHelpers.draggable.trackAppendedParent(el);
+
+	// Move and make sure el was appended to fixture
+	TestHelpers.draggable.move(el, 1, 1);
+	equal( el.data("last_dragged_parent"), $("#qunit-fixture")[0] );
+
+	// Move and make sure el was appended to main
+	el.draggable( "option", "appendTo", $("#main") );
+	TestHelpers.draggable.move(el, 2, 2);
+	equal( el.data("last_dragged_parent"), $("#main")[0] );
+
 });
 
 test("{ axis: false }, default", function() {
@@ -71,6 +152,26 @@ test("{ axis: ? }, unexpected", function() {
 	});
 });
 
+test("axis, default, switching after initialization", function() {
+
+	expect(3);
+
+	var el;
+
+	// Any direction
+	el = $("#draggable1").draggable({ axis : false });
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50);
+
+	// Only horizontal
+	el.draggable("option", "axis", "x");
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 0);
+
+	// Vertical only
+	el.draggable("option", "axis", "y");
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 0, 50);
+
+});
+
 test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
 	expect( 2 );
 
@@ -98,7 +199,9 @@ test("{ cancel: 'span' }", function() {
 	TestHelpers.draggable.testDrag(el, "#draggable2 span", 50, 50, 0, 0);
 });
 
-test("{ cancel: ? }, unexpected", function() {
+test( "{ cancel: ? }, unexpected", function() {
+	expect( 6 );
+
 	var el,
 		unexpected = {
 			"true": true,
@@ -109,13 +212,29 @@ test("{ cancel: ? }, unexpected", function() {
 			"undefined": undefined
 		};
 
-	expect( 6 );
-
-	$.each(unexpected, function(key, val) {
+	$.each( unexpected, function( key, val ) {
 		el = $("#draggable2").draggable({ cancel: val });
-		TestHelpers.draggable.shouldMove(el, "cancel: " + key);
+		TestHelpers.draggable.shouldMove( el, "cancel: " + key );
 		el.draggable("destroy");
 	});
+});
+
+test("cancel, default, switching after initialization", function() {
+	expect( 3 );
+
+	$("<div id='draggable-option-cancel-default'><input type='text'></div>").appendTo("#main");
+
+	var input = $("#draggable-option-cancel-default input"),
+		el = $("#draggable-option-cancel-default").draggable();
+
+	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
+
+	el.draggable("option", "cancel", "textarea" );
+	TestHelpers.draggable.testDrag(el, input, 50, 50, 50, 50);
+
+	el.draggable("option", "cancel", "input" );
+	TestHelpers.draggable.testDrag(el, input, 50, 50, 0, 0);
+
 });
 
 /*
@@ -170,6 +289,25 @@ test("{ containment: 'parent' }, absolute", function() {
 	});
 	offsetAfter = el.offset();
 	deepEqual(offsetAfter, expected, "compare offset to parent");
+});
+
+test("containment, default, switching after initialization", function() {
+	expect( 2 );
+
+	var el = $("#draggable1").draggable({ containment: false });
+
+	TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
+
+	el.draggable( "option", "containment", "parent" )
+		.css({top:0,left:0})
+		.appendTo( $("#main") );
+
+	TestHelpers.draggable.testDrag(el, el, -100, -100, 0, 0);
+
+	// TODO: Switching back to false does not update to false
+	// el.draggable( "option", "containment", false );
+	// TestHelpers.draggable.testDrag(el, el, -100, -100, -100, -100);
+
 });
 
 /*
@@ -251,6 +389,27 @@ test("{ cursor: 'move' }", function() {
 
 });
 
+test("cursor, default, switching after initialization", function() {
+
+	expect(3);
+
+	var el = $("#draggable1").draggable();
+
+	TestHelpers.draggable.trackMouseCss( el );
+
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( el.data("last_dragged_cursor"), "auto" );
+
+	el.draggable( "option", "cursor", "move" );
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( el.data("last_dragged_cursor"), "move" );
+
+	el.draggable( "option", "cursor", "ns-resize" );
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( el.data("last_dragged_cursor"), "ns-resize" );
+
+});
+
 test( "cursorAt", function() {
 	expect( 24 );
 
@@ -292,6 +451,70 @@ test( "cursorAt", function() {
 	});
 });
 
+test( "cursorAt, switching after initialization", function() {
+
+	expect( 24 );
+
+	var deltaX = -3,
+		deltaY = -3,
+		tests = {
+			"false": { cursorAt : false },
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+		};
+
+	$.each( tests, function( testName, testData ) {
+		$.each( [ "relative", "absolute" ], function( i, position ) {
+			var el = $( "#draggable" + ( i + 1 ) );
+
+			el.draggable({
+					drag: function( event, ui ) {
+						if( !testData.cursorAt ) {
+							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
+							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
+						} else if( testData.cursorAt.right ) {
+							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
+						} else {
+							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
+							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
+						}
+					}
+			});
+
+			el.draggable( "option", "cursorAt", false );
+			el.draggable( "option", "cursorAt", testData.cursorAt );
+
+			el.simulate( "drag", {
+				moves: 1,
+				dx: deltaX,
+				dy: deltaY
+			});
+		});
+	});
+
+});
+
+
+test( "disabled", function() {
+
+	expect( 3 );
+
+	var el = $("#draggable1").draggable();
+	
+	TestHelpers.draggable.shouldMove(el);
+	
+	el.draggable( "option", "disabled", true );
+	TestHelpers.draggable.shouldNotMove(el);
+	
+	el.draggable( "option", "disabled", false );
+	TestHelpers.draggable.shouldMove(el);
+	
+});
+
 test("{ grid: [50, 50] }, relative", function() {
 	expect( 2 );
 
@@ -308,6 +531,22 @@ test("{ grid: [50, 50] }, absolute", function() {
 	TestHelpers.draggable.testDrag(el, el, 26, 25, 50, 50);
 });
 
+test("grid, switching after initialization", function() {
+
+	expect( 4 );
+
+	var el = $("#draggable1").draggable();
+	// Forward
+	TestHelpers.draggable.testDrag(el, el, 24, 24, 24, 24);
+	TestHelpers.draggable.testDrag(el, el, 0, 0, 0, 0);
+
+	el.draggable( "option", "grid", [50,50] );
+
+	TestHelpers.draggable.testDrag(el, el, 24, 24, 0, 0);
+	TestHelpers.draggable.testDrag(el, el, 26, 25, 50, 50);
+
+});
+
 test("{ handle: 'span' }", function() {
 	expect( 2 );
 
@@ -315,6 +554,40 @@ test("{ handle: 'span' }", function() {
 
 	TestHelpers.draggable.testDrag(el, "#draggable2 span", 50, 50, 50, 50, "drag span");
 	TestHelpers.draggable.shouldNotMove(el, "drag element");
+});
+
+test("handle, default, switching after initialization", function() {
+	expect( 6 );
+
+	var el = $("#draggable2").draggable();
+
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50);
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 100, 100, 100, 100);
+
+	// Switch
+	el.draggable( "option", "handle", "span" );
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 0, 0);
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 100, 100, 100, 100);
+
+	// And back
+	el.draggable( "option", "handle", false );
+	TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50);
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 100, 100, 100, 100);
+
+});
+
+test("helper, default, switching after initialization", function() {
+	expect( 3 );
+
+	var el = $("#draggable1").draggable();
+	TestHelpers.draggable.shouldMove(el);
+
+	el.draggable( "option", "helper", "clone" );
+	TestHelpers.draggable.shouldNotMove(el);
+
+	el.draggable( "option", "helper", "original" );
+	TestHelpers.draggable.shouldMove(el);
+
 });
 
 test("{ helper: 'clone' }, relative", function() {
@@ -670,6 +943,30 @@ test("{ opacity: 0.5 }", function() {
 
 });
 
+test("opacity, default, switching after initialization", function() {
+
+	expect(3);
+
+	var opacity = null,
+		el = $("#draggable2").draggable({
+			start: function() {
+				opacity = $(this).css("opacity");
+			}
+		});
+
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( opacity, 1 );
+	
+	el.draggable( "option", "opacity", 0.5 );
+	TestHelpers.draggable.move( el, 2, 1 );
+	equal( opacity, 0.5 );
+	
+	el.draggable( "option", "opacity", false );
+	TestHelpers.draggable.move( el, 3, 1 );
+	equal( opacity, 1 );
+
+});
+
 test("{ zIndex: 10 }", function() {
 
 	expect(1);
@@ -689,6 +986,32 @@ test("{ zIndex: 10 }", function() {
 	});
 
 	equal(actual, expected, "start callback: zIndex is");
+
+});
+
+test("zIndex, default, switching after initialization", function() {
+
+	expect(3);
+
+	var zindex = null,
+		el = $("#draggable2").draggable({
+			start: function() {
+				zindex = $(this).css("z-index");
+			}
+		});
+		
+	el.css( "z-index", 1 );
+
+	TestHelpers.draggable.move( el, 1, 1 );
+	equal( zindex, 1 );
+	
+	el.draggable( "option", "zIndex", 5 );
+	TestHelpers.draggable.move( el, 2, 1 );
+	equal( zindex, 5 );
+	
+	el.draggable( "option", "zIndex", false );
+	TestHelpers.draggable.move( el, 3, 1 );
+	equal( zindex, 1 );
 
 });
 
