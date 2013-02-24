@@ -77,7 +77,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		var handle = this.options.handle ? element.closest( this.options.handle ).length : true,
 			exclude = this.options.exclude ? element.closest( this.options.exclude ).length : false;
 
-		return ( handle && !exclude );
+		// Enforce boolean
+		return !!( handle && !exclude );
 	},
 
 	_start: function( event, pointerPosition ) {
