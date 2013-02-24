@@ -99,6 +99,12 @@ $.widget( "ui.dialog", {
 		this.options.title = this.options.title || this.originalTitle;
 
 		this._createWrapper();
+		
+		var that=this;
+		$('<div/>').insertBefore(this.element).on('remove',function(){
+			that.element.remove();
+		});
+
 
 		this.element
 			.show()
