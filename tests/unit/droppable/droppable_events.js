@@ -5,6 +5,41 @@
 
 module("droppable: events");
 
+test("droppable destruction/recreation on drop event", function() {
+
+	expect(1);
+
+	var config = {
+		activeClass: "active",
+		drop: function() {
+			var $this = $(this),
+				$newDroppable = $("<div/>")
+					.css({ width: 100, height: 100 })
+					.text("Droppable");
+			$this.after($newDroppable);
+			$this.remove();
+			$newDroppable.droppable(config);
+		}
+	};
+
+	var draggable = $("#draggable1").draggable(),
+		droppable1 = $("#droppable1").droppable(config),
+		droppable2 = $("#droppable2").droppable(config),
+
+		droppableOffset = droppable1.offset(),
+		draggableOffset = draggable.offset(),
+		dx = droppableOffset.left - draggableOffset.left,
+		dy = droppableOffset.top - draggableOffset.top;
+
+	draggable.simulate("drag", {
+		dx: dx,
+		dy: dy
+	});
+
+	ok(!droppable2.hasClass("active"), "subsequent droppable no longer active");
+
+});
+
 // this is here to make JSHint pass "unused", and we don't want to
 // remove the parameter for when we finally implement
 $.noop();
