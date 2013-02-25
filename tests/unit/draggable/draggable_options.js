@@ -219,6 +219,32 @@ test( "{ cancel: ? }, unexpected", function() {
 	});
 });
 
+test("{ cancel: Selectors }, matching parent selector", function() {
+
+	expect( 5 );
+
+	var el = $("#draggable2").draggable({ cancel: "span a" });
+	
+	$("#qunit-fixture").append( "<span id='wrapping'><a></a></span>" );
+	
+	el.find( "span" ).append( "<a>" );
+	
+	$("#wrapping a").append( el );
+	
+	TestHelpers.draggable.testDrag(el, "#draggable2 span", 50, 50, 50, 50, "drag span child");
+	TestHelpers.draggable.shouldNotMove( $("#draggable2 span a") );
+	TestHelpers.draggable.shouldNotMove( $("#wrapping a") );
+	
+	$("#draggable2").draggable( "option", "cancel", "span > a" );
+	$("#draggable2").find( "a" ).append( "<a>" );
+	
+	
+	TestHelpers.draggable.testDrag(el, $("#draggable2 span a").last(), 50, 50, 50, 50, "drag span child");
+	TestHelpers.draggable.shouldNotMove( $("#draggable2 span a").first() );
+	
+});
+
+
 test("cancel, default, switching after initialization", function() {
 	expect( 3 );
 
@@ -554,6 +580,30 @@ test("{ handle: 'span' }", function() {
 
 	TestHelpers.draggable.testDrag(el, "#draggable2 span", 50, 50, 50, 50, "drag span");
 	TestHelpers.draggable.shouldNotMove(el, "drag element");
+});
+
+test("{ handle: Selectors }, matching parent selector", function() {
+
+	expect( 4 );
+
+	var el = $("#draggable2").draggable({ handle: "span a" });
+	
+	$("#qunit-fixture").append( "<span id='wrapping'><a></a></span>" );
+	
+	el.find( "span" ).append( "<a>" );
+	
+	$("#wrapping a").append( el );
+	
+	TestHelpers.draggable.testDrag(el, "#draggable2 span a", 50, 50, 50, 50, "drag span child");
+	TestHelpers.draggable.shouldNotMove( $("#wrapping a") );
+	
+	$("#draggable2").draggable( "option", "handle", "span > a" );
+	$("#draggable2").find( "a" ).append( "<a>" );
+	
+	
+	TestHelpers.draggable.testDrag(el, $("#draggable2 span a").first(), 50, 50, 50, 50, "drag span child");
+	TestHelpers.draggable.shouldNotMove( $("#draggable2 span a").last() );
+	
 });
 
 test("handle, default, switching after initialization", function() {
