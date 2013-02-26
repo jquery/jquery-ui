@@ -28,6 +28,14 @@ test( "Immediate Return Conditions", function() {
 	equal( ++count, 3, "Both Functions worked properly" );
 });
 
+test( ".hide() with hidden parent", function() {
+	expect( 1 );
+	var element = $( "div.hidden" ).children();
+	element.hide( "blind", function() {
+		equal( element.css( "display" ), "none", "display: none" );
+	});
+});
+
 asyncTest( "Parse of null for options", function() {
 	var hidden = $( "div.hidden" ),
 		count = 0;
