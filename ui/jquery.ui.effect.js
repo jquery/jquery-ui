@@ -1150,9 +1150,10 @@ $.fn.extend({
 				}
 			}
 
-			// if the element is hiddden and mode is hide,
-			// or element is visible and mode is show
+			// If the element already has the correct final state, delegate to
+			// the core methods so the internal tracking of "olddisplay" works.
 			if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+				elem[ mode ]();
 				done();
 			} else {
 				effectMethod.call( elem[0], args, done );
