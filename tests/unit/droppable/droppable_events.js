@@ -1,9 +1,6 @@
-/*
- * droppable_events.js
- */
-(function($) {
+(function( $ ) {
 
-module("droppable: events");
+module( "droppable: events" );
 
 test( "droppable destruction/recreation on drop event", function() {
 	expect( 1 );
@@ -38,9 +35,7 @@ test( "droppable destruction/recreation on drop event", function() {
 	ok( !droppable2.hasClass( "active" ), "subsequent droppable no longer active" );
 });
 
-// this is here to make JSHint pass "unused", and we don't want to
-// remove the parameter for when we finally implement
-$.noop();
+
 
 // todo: comment the following in when ready to actually test
 /*
@@ -65,4 +60,4 @@ test("drop", function() {
 });
 */
 
-})(jQuery);
+})( jQuery );
