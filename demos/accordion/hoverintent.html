@@ -54,7 +54,7 @@
 					// is fired asynchronously and the old event is no longer
 					// usable (#6028)
 					event.originalEvent = {};
-					jQuery.event.handle.apply( that, args );
+					jQuery.event.dispatch.apply( that, args );
 				} else {
 					pX = cX;
 					pY = cY;
