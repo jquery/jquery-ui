@@ -16,6 +16,24 @@ var minDuration = 15,
 
 module( "effects.core" );
 
+// TODO: test all signatures of .show(), .hide(), .toggle().
+// Look at core's signatures and UI's signatures.
+asyncTest( ".hide() with step", function() {
+	expect( 1 );
+	var element = $( "#elem" ),
+		step = function() {
+			ok( true, "step callback invoked" );
+			step = $.noop;
+		};
+
+	element.hide({
+		step: function() {
+			step();
+		},
+		complete: start
+	});
+});
+
 test( "Immediate Return Conditions", function() {
 	var hidden = $( "div.hidden" ),
 		count = 0;
