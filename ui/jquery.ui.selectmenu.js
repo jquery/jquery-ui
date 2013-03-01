@@ -374,7 +374,7 @@ $.widget( "ui.selectmenu", {
 	_setAria: function( item ) {
 		var link = this.menuItems.eq( item.index ),
 			id = link.attr( "id" );
-	
+
 		// change ARIA attr
 		this.menuItems.attr( "aria-selected", false );
 		link.attr( "aria-selected", true );

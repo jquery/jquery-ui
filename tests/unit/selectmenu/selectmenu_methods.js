@@ -72,7 +72,6 @@ test( "refresh - change selected option", function () {
 	expect( 3 );
 
 	var element = $( "#speed" ).selectmenu(),
-		menu = element.selectmenu( "menuWidget" ).parent(),
 		button = element.selectmenu( "widget" );
 
 	equal( element.find( "option:selected" ).text(), button.text(), "button text after init" );

@@ -91,7 +91,6 @@ $.each([
 			element = $( settings.selector ).selectmenu(),
 			button = element.selectmenu( "widget" ),
 			menu = element.selectmenu( "menuWidget" ),
-			selected = element.find( "option:selected" ),
 			options = element.find( "option" );
 
 		// init menu
