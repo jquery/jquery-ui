@@ -16,7 +16,7 @@ test( "disabled", function(){
 	var count = 0;
 
 	element = $( "#slider1" ).slider();
-	element.on( "slidestart", function() {
+	element.bind( "slidestart", function() {
 		count++;
 	});
 
