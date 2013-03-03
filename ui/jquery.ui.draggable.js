@@ -600,7 +600,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert: "valid/invalid"
 				if(this.shouldRevert) {
-					this.instance.options.revert = true;
+					this.instance.options.revert = this.shouldRevert;
 				}
 
 				//Trigger the stop of the sortable
@@ -908,22 +908,19 @@ $.ui.plugin.add("draggable", "snap", {
 
 $.ui.plugin.add("draggable", "stack", {
 	start: function() {
-
 		var min,
-			o = $(this).data("ui-draggable").options,
+			o = this.data("ui-draggable").options,
 			group = $.makeArray($(o.stack)).sort(function(a,b) {
 				return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
 			});
 
 		if (!group.length) { return; }
 
-		min = parseInt(group[0].style.zIndex, 10) || 0;
+		min = parseInt($(group[0]).css("zIndex"), 10) || 0;
 		$(group).each(function(i) {
-			this.style.zIndex = min + i;
+			$(this).css("zIndex", min + i);
 		});
-
-		this[0].style.zIndex = min + group.length;
-
+		this.css("zIndex", (min + group.length));
 	}
 });
 

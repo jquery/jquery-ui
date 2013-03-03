@@ -234,7 +234,8 @@ $.widget( "ui.autocomplete", {
 				}
 			},
 			menufocus: function( event, ui ) {
-				// #7024 - Prevent accidental activation of menu items in Firefox
+				// support: Firefox
+				// Prevent accidental activation of menu items in Firefox (#7024 #9118)
 				if ( this.isNewMenu ) {
 					this.isNewMenu = false;
 					if ( event.originalEvent && /^mouse/.test( event.originalEvent.type ) ) {
@@ -490,6 +491,7 @@ $.widget( "ui.autocomplete", {
 	_suggest: function( items ) {
 		var ul = this.menu.element.empty();
 		this._renderMenu( ul, items );
+		this.isNewMenu = true;
 		this.menu.refresh();
 
 		// size and position menu

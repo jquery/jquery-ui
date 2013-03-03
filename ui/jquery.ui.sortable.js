@@ -158,7 +158,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_mouseStart: function(event, overrideHandle, noActivation) {
 
-		var i,
+		var i, body,
 			o = this.options;
 
 		this.currentContainer = this;
@@ -228,11 +228,14 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this._setContainment();
 		}
 
-		if(o.cursor) { // cursor option
-			if ($("body").css("cursor")) {
-				this._storedCursor = $("body").css("cursor");
-			}
-			$("body").css("cursor", o.cursor);
+		if( o.cursor && o.cursor !== "auto" ) { // cursor option
+			body = this.document.find( "body" );
+
+			// support: IE
+			this.storedCursor = body.css( "cursor" );
+			body.css( "cursor", o.cursor );
+
+			this.storedStylesheet = $( "<style>*{ cursor: "+o.cursor+" !important; }</style>" ).appendTo( body );
 		}
 
 		if(o.opacity) { // opacity option
@@ -749,15 +752,23 @@ $.widget("ui.sortable", $.ui.mouse, {
 			o.placeholder = {
 				element: function() {
 
-					var el = $(document.createElement(that.currentItem[0].nodeName))
-						.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
-						.removeClass("ui-sortable-helper")[0];
+					var nodeName = that.currentItem[0].nodeName.toLowerCase(),
+						element = $( that.document[0].createElement( nodeName ) )
+							.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
+							.removeClass("ui-sortable-helper");
 
-					if(!className) {
-						el.style.visibility = "hidden";
+					if ( nodeName === "tr" ) {
+						// Use a high colspan to force the td to expand the full
+						// width of the table (browsers are smart enough to
+						// handle this properly)
+						element.append( "<td colspan='99'>&#160;</td>" );
 					}
 
-					return el;
+					if ( !className ) {
+						element.css( "visibility", "hidden" );
+					}
+
+					return element;
 				},
 				update: function(container, p) {
 
@@ -1178,8 +1189,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if(this._storedCursor) {
-			$("body").css("cursor", this._storedCursor);
+		if ( this.storedCursor ) {
+			this.document.find( "body" ).css( "cursor", this.storedCursor );
+			this.storedStylesheet.remove();
 		}
 		if(this._storedOpacity) {
 			this.helper.css("opacity", this._storedOpacity);

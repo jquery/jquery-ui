@@ -16,11 +16,11 @@
 		});
 	});
 
-	var cfg = ($.hoverintent = {
-		sensitivity: 7,
-		interval: 100
-	});
-
+	/*
+	 * hoverIntent | Copyright 2011 Brian Cherne
+	 * http://cherne.net/brian/resources/jquery.hoverIntent.html
+	 * modified by the jQuery UI team
+	 */
 	$.event.special.hoverintent = {
 		setup: function() {
 			$( this ).bind( "mouseover", jQuery.event.special.hoverintent.handler );
@@ -29,41 +29,56 @@
 			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		handler: function( event ) {
-			var that = this,
+			var currentX, currentY, timeout,
 				args = arguments,
 				target = $( event.target ),
-				cX, cY, pX, pY;
+				previousX = event.pageX,
+				previousY = event.pageY;
 
 			function track( event ) {
-				cX = event.pageX;
-				cY = event.pageY;
+				currentX = event.pageX;
+				currentY = event.pageY;
 			};
-			pX = event.pageX;
-			pY = event.pageY;
+
 			function clear() {
 				target
 					.unbind( "mousemove", track )
-					.unbind( "mouseout", arguments.callee );
+					.unbind( "mouseout", clear );
 				clearTimeout( timeout );
 			}
+
 			function handler() {
-				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
+				var prop,
+					orig = event;
+
+				if ( ( Math.abs( previousX - currentX ) +
+						Math.abs( previousY - currentY ) ) < 7 ) {
 					clear();
-					event.type = "hoverintent";
-					// prevent accessing the original event since the new event
+
+					event = $.Event( "hoverintent" );
+					for ( prop in orig ) {
+						if ( !( prop in event ) ) {
+							event[ prop ] = orig[ prop ];
+						}
+					}
+					// Prevent accessing the original event since the new event
 					// is fired asynchronously and the old event is no longer
 					// usable (#6028)
-					event.originalEvent = {};
-					jQuery.event.handle.apply( that, args );
+					delete event.originalEvent;
+
+					target.trigger( event );
 				} else {
-					pX = cX;
-					pY = cY;
-					timeout = setTimeout( handler, cfg.interval );
+					previousX = currentX;
+					previousY = currentY;
+					timeout = setTimeout( handler, 100 );
 				}
 			}
-			var timeout = setTimeout( handler, cfg.interval );
-			target.mousemove( track ).mouseout( clear );
-			return true;
+
+			timeout = setTimeout( handler, 100 );
+			target.bind({
+				mousemove: track,
+				mouseout: clear
+			});
 		}
 	};
 	</script>

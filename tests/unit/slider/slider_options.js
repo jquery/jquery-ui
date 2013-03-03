@@ -16,7 +16,7 @@ test( "disabled", function(){
 	var count = 0;
 
 	element = $( "#slider1" ).slider();
-	element.on( "slidestart", function() {
+	element.bind( "slidestart", function() {
 		count++;
 	});
 
@@ -180,13 +180,13 @@ test( "values", function() {
 		document.createElement( "div" ),
 		document.createElement( "div" )
 	]).slider({
-		range:  true,
+		range: true,
 		values: [ 25, 75 ]
 	});
 
 	notStrictEqual(
-		ranges.eq( 0 ).data( "uiSlider" ).options.values,
-		ranges.eq( 1 ).data( "uiSlider" ).options.values,
+		ranges.eq( 0 ).data( "ui-slider" ).options.values,
+		ranges.eq( 1 ).data( "ui-slider" ).options.values,
 		"multiple range sliders should not have a reference to the same options.values array"
 	);
 
