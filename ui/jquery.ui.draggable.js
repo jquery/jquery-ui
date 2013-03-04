@@ -74,10 +74,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-	
 		var handle = this.options.handle ? element.is( this.element.find( this.options.handle ) ) : true,
 			exclude = this.options.exclude ? element.is( this.element.find( this.options.exclude ) ) : false;
-			
 
 		// Enforce boolean
 		return !!( handle && !exclude );
@@ -88,13 +86,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// Reset
 		this.dragDimensions = null;
-		
+
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = ( this.options.helper === true || typeof this.options.helper === "function" ) ?
 			this._createHelper( pointerPosition ) :
 			this.element;
-			
-			
 
 		// _createHelper() ensures that helpers are in the correct position
 		// in the DOM, but we need to handle appendTo when there is no helper
@@ -148,7 +144,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			// Otherwise this.dragEl will remain in the element appendTo is set to
 			this._resetDomPosition();
 			return false;
-
 		}
 
 		// Save off the usual properties locally, so they can be reverted from start
@@ -196,7 +191,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 		this.element.offset( this.offset );
 		this.domPosition = null;
-
 	},
 
 	_move: function( event, pointerPosition ) {
@@ -310,11 +304,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( pointerPosition ) {
-
 		var newScrollTop, newScrollLeft,
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = this.scrollSensitivity,
+
 			// overflowOffset is only set when scrollParent is not doc/html
 			overflowLeft = this.overflowOffset ?
 				this.overflowOffset.left :
@@ -326,18 +320,16 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			xLeft = pointerPosition.x- overflowLeft,
 			yBottom = this.overflow.height + overflowTop - pointerPosition.y,
 			yTop = pointerPosition.y - overflowTop,
+
 			// accounts for change in scrollbar to modify "original" pointer so calc
 			change;
 
 		// Handle vertical scrolling
 		if ( yBottom < scrollSensitivity ) {
-
 			change = this._speed( scrollSensitivity - yBottom );
 			this.scrollParent.scrollTop( scrollTop + change );
 			this.originalPointer.y = this.originalPointer.y + change;
-
 		} else if ( yTop < scrollSensitivity ) {
-
 			change = this._speed( scrollSensitivity - yTop );
 			newScrollTop = scrollTop - change;
 
@@ -347,18 +339,14 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				this._speed( scrollSensitivity - yTop );
 				this.originalPointer.y = this.originalPointer.y - change;
 			}
-
 		}
 
 		// Handle horizontal scrolling
 		if ( xRight < scrollSensitivity ) {
-
 			change = this._speed( scrollSensitivity - xRight );
 			this.scrollParent.scrollLeft( scrollLeft + change);
 			this.originalPointer.x = this.originalPointer.x + change;
-
 		} else if ( xLeft < scrollSensitivity ) {
-
 			change = this._speed( scrollSensitivity - xLeft );
 			newScrollLeft = scrollLeft - change;
 
@@ -367,7 +355,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				this.scrollParent.scrollLeft( newScrollLeft );
 				this.originalPointer.x = this.originalPointer.x - change;
 			}
-
 		}
 	},
 
@@ -402,7 +389,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-
 		var newLeft = this.position.left,
 			newTop = this.position.top;
 
@@ -427,7 +413,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_originalHash: function( pointerPosition ) {
-
 		var ret = {
 			position: this.position,
 			offset: copy( this.offset ),
@@ -450,7 +435,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_blockFrames: function() {
-
 		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
 			var iframe = $( this );
 
@@ -479,6 +463,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 });
 
 $.widget( "ui.draggable", $.ui.draggable, {
+
 	// $.widget doesn't know how to handle redefinitions with a custom prefix
 	// custom prefixes are going away anyway, so it's not worth fixing right now
 	widgetEventPrefix: "drag",
@@ -571,29 +556,25 @@ if ( $.uiBackCompat !== false ) {
 
 		// Helper passed in since _createHelper calls this before dragEl is set
 		_appendToEl: function() {
-
 			var el = this.options.appendTo;
-			
+
 			// This should only happen via _createHelper
 			if ( el === null ) {
 				return this.element.parent();
 			}
-			
+
 			if ( el === "parent" ) {
 				el = this.dragEl.parent();
 			}
 
 			return el;
-
 		}
-
 	});
 
 	// helper 'original' or 'clone' value + helper return value
 	$.widget( "ui.draggable", $.ui.draggable, {
 
 		_create: function() {
-
 			var self = this,
 				orig = this._originalHash;
 
@@ -608,7 +589,6 @@ if ( $.uiBackCompat !== false ) {
 			}
 
 			this._originalHash = function() {
-
 				var ret = orig.apply( self, arguments );
 
 				if ( !ret.helper ) {
@@ -616,13 +596,10 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				return ret;
-
 			};
-
 		},
 
 		_setOption: function( key, value ) {
-
 			if ( key !== "helper" ) {
 				return this._super( key, value );
 			}
@@ -636,9 +613,7 @@ if ( $.uiBackCompat !== false ) {
 			}
 
 			this._super( key, value );
-
 		}
-
 	});
 
 	// axis option
@@ -648,7 +623,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this;
 
 			this._super();
@@ -663,11 +637,8 @@ if ( $.uiBackCompat !== false ) {
 				if ( self.options.axis === "y" ) {
 					ui.position.left = ui.originalPosition.left;
 				}
-
 			});
-
 		}
-
 	});
 
 	// cancel option
@@ -677,26 +648,21 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			this._super();
 
 			if ( this.options.cancel !== null ) {
 				this.options.exclude = this.options.cancel;
 			}
-
 		},
 
 		_setOption: function( key, value ) {
-
 			if ( key !== "cancel" ) {
 				return this._super( key, value );
 			}
 
 			this._super( key, value );
 			this.options.exclude = this.options.cancel;
-
 		}
-
 	});
 
 	// cursor option
@@ -706,7 +672,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var startCursor, self, body;
 
 			this._super();
@@ -730,12 +695,8 @@ if ( $.uiBackCompat !== false ) {
 				if ( self.options.cursor ) {
 					body.css( "cursor", startCursor );
 				}
-
 			});
-
-
 		}
-
 	});
 
 	// cursorAt option
@@ -745,13 +706,11 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this;
 
 			this._super();
 
 			this.element.on( "dragbeforestart", function( event, ui ) {
-
 				var cursorAt = self.options.cursorAt;
 
 				// No need to continue
@@ -784,9 +743,7 @@ if ( $.uiBackCompat !== false ) {
 					ui.position.left += ui.pointer.x - ui.offset.left - self.dragDimensions.width + cursorAt.right;
 				}
 			});
-
 		}
-
 	});
 
 	// grid option
@@ -796,14 +753,12 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this,
 				currentX, currentY;
 
 			this._super();
 
 			this.element.on( "dragbeforestart", function( event, ui ) {
-
 				if ( !self.options.grid ) {
 					return;
 				}
@@ -811,11 +766,9 @@ if ( $.uiBackCompat !== false ) {
 				// Save off the start position, which may be overwritten during drag
 				currentX = ui.position.left;
 				currentY = ui.position.top;
-
 			});
 
 			this.element.on( "drag", function( event, ui ) {
-
 				if ( !self.options.grid ) {
 					return;
 				}
@@ -846,11 +799,8 @@ if ( $.uiBackCompat !== false ) {
 				// Otherwise this will now bump the draggable to the next spot on grid
 				ui.position.left = currentX;
 				ui.position.top = currentY;
-
 			});
-
 		}
-
 	});
 
 	// opacity option
@@ -860,7 +810,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this,
 				originalOpacity;
 
@@ -878,7 +827,6 @@ if ( $.uiBackCompat !== false ) {
 
 				// Set draggable element to new opacity
 				self.dragEl.css( "opacity", self.options.opacity );
-
 			});
 
 			this.element.on( "dragstop", function() {
@@ -890,11 +838,8 @@ if ( $.uiBackCompat !== false ) {
 
 				// Reset opacity
 				self.dragEl.css( "opacity", originalOpacity );
-
 			});
-
 		}
-
 	});
 
 	// TODO: handle droppables
@@ -906,7 +851,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this,
 				originalLeft, originalTop, originalPosition;
 
@@ -939,11 +883,8 @@ if ( $.uiBackCompat !== false ) {
 					top: originalTop,
 					position: originalPosition
 				}, self.options.revertDuration );
-
 			});
-
 		}
-
 	});
 
 	// zIndex option
@@ -953,7 +894,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this,
 				originalZIndex;
 
@@ -971,7 +911,6 @@ if ( $.uiBackCompat !== false ) {
 
 				// Set draggable element to new zIndex
 				self.dragEl.css( "z-index", self.options.zIndex );
-
 			});
 
 			this.element.on( "dragstop", function() {
@@ -983,11 +922,8 @@ if ( $.uiBackCompat !== false ) {
 
 				// Reset zIndex
 				self.dragEl.css( "z-index", originalZIndex );
-
 			});
-
 		}
-
 	});
 
 	// scope option
@@ -1005,7 +941,6 @@ if ( $.uiBackCompat !== false ) {
 			scrollSensitivity: null
 		},
 		_create : function() {
-
 			var self = this,
 				handleScroll = this._handleScrolling,
 				speed = this._speed;
@@ -1013,7 +948,6 @@ if ( $.uiBackCompat !== false ) {
 			this._super();
 
 			this._speed = function( distance ) {
-
 				if ( self.options.scrollSpeed !== null ) {
 
 					self.scrollSpeed = self.options.scrollSpeed;
@@ -1023,7 +957,6 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				return speed.call( self, distance );
-
 			};
 
 			// Wrap member function to check for ability to scroll
@@ -1038,11 +971,8 @@ if ( $.uiBackCompat !== false ) {
 				}
 
 				handleScroll.call( self, pointerPosition );
-
 			};
-
 		}
-
 	});
 
 	// stack option
@@ -1052,7 +982,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this;
 
 			this._super();
@@ -1085,11 +1014,8 @@ if ( $.uiBackCompat !== false ) {
 				});
 
 				self.element[0].style.zIndex = min + group.length;
-
 			});
-
 		}
-
 	});
 
 	// snap snapMode snapTolerance options
@@ -1102,7 +1028,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var inst = this,
 				snapElements;
 
@@ -1163,7 +1088,6 @@ if ( $.uiBackCompat !== false ) {
 					y1 = ui.offset.top, y2 = y1 + inst.dragDimensions.height;
 
 				for (i = snapElements.length - 1; i >= 0; i--){
-
 					l = snapElements[i].left;
 					r = l + snapElements[i].width;
 					t = snapElements[i].top;
@@ -1222,15 +1146,11 @@ if ( $.uiBackCompat !== false ) {
 						(inst.options.snap.snap && inst.options.snap.snap.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: snapElements[i].item })));
 					}
 					snapElements[i].snapping = (ts || bs || ls || rs || first);
-
 				}
 			});
-
-
 		},
 
 		_convertPositionTo: function(d, pos) {
-
 			if(!pos) {
 				pos = this.position;
 			}
@@ -1258,7 +1178,6 @@ if ( $.uiBackCompat !== false ) {
 					( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
 				)
 			};
-
 		},
 
 		_getParentOffset: function() {
@@ -1287,11 +1206,9 @@ if ( $.uiBackCompat !== false ) {
 				top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
 				left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
 			};
-
 		},
 
 		_getRelativeOffset: function() {
-
 			if(this.cssPosition === "relative") {
 				var p = this.element.position();
 				return {
@@ -1301,9 +1218,7 @@ if ( $.uiBackCompat !== false ) {
 			}
 
 			return { top: 0, left: 0 };
-
 		}
-
 	});
 
 	// refreshPositions option
@@ -1313,7 +1228,6 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-
 			var self = this,
 				drops;
 
@@ -1333,13 +1247,7 @@ if ( $.uiBackCompat !== false ) {
 				drops.each( function() {
 					$(this).sortable("refreshPositions");
 				});
-
-
 			});
-
 		}
-
 	});
-
-
 }
