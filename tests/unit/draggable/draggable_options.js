@@ -1113,7 +1113,7 @@ test( "snap, snapMode, and snapTolerance", function() {
 		left: 1
 	});
 
-	newX = element2.offset().left - element.outerWidth() - snapTolerance - 1;
+	newX = element2.offset().left - element.outerWidth() - snapTolerance - 2;
 	newY = element2.offset().top;
 
 	element.simulate( "drag", {
@@ -1125,7 +1125,7 @@ test( "snap, snapMode, and snapTolerance", function() {
 
 	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap outside the snapTolerance" );
 
-	newX += 2;
+	newX += 3;
 
 	element.simulate( "drag", {
 		handle: "corner",
