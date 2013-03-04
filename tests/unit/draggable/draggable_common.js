@@ -29,12 +29,6 @@ TestHelpers.commonWidgetTests( "draggable", {
 		zIndex: false,
 		cancel: null,
 
-		//todo: remove the following option checks when interactions are rewritten:
-		addClasses: true,
-		delay: 0,
-		distance: 1,
-		iframeFix: false,
-
 		// callbacks
 		beforeStart: null,
 		create: null,

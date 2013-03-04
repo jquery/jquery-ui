@@ -40,7 +40,7 @@ test( "{ appendTo: 'parent' }, default", function() {
 
 	TestHelpers.draggable.trackAppendedParent( element );
 
-	equal( element.draggable( "option", "appendTo" ), "parent" );
+	equal( element.draggable( "option", "appendTo" ), null );
 
 	TestHelpers.draggable.move( element, 1, 1 );
 	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
