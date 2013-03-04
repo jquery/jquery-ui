@@ -481,7 +481,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 	},
 
 	_setContainment: function( event, ui ) {
-		var offset, left, top,
+		var offset, left, top, bottom, right,
 			container = this._getContainer();
 
 		if ( !container ) {
@@ -489,19 +489,28 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			return;
 		}
 
-		offset = container.offset();
-		left = offset.left +
-			(parseFloat( $.css( container[0], "borderLeftWidth", true ) ) || 0) +
-			(parseFloat( $.css( container[0], "paddingLeft", true ) ) || 0);
-		top = offset.top +
-			(parseFloat( $.css( container[0], "borderTopWidth", true ) ) || 0) +
-			(parseFloat( $.css( container[0], "paddingTop", true ) ) || 0);
+		if ( $.isArray( container ) ) {
+			offset = container.offset();
+			left = offset.left +
+				(parseFloat( $.css( container[0], "borderLeftWidth", true ) ) || 0) +
+				(parseFloat( $.css( container[0], "paddingLeft", true ) ) || 0);
+			top = offset.top +
+				(parseFloat( $.css( container[0], "borderTopWidth", true ) ) || 0) +
+				(parseFloat( $.css( container[0], "paddingTop", true ) ) || 0);
+			right = left + container.width();
+			bottom = top + container.height();
+		} else {
+			left = container[ 0 ];
+			top = container[ 1 ];
+			right = container[ 2 ];
+			bottom = container[ 3 ];
+		}
 
 		this.containment = {
 			left: left,
 			top: top,
-			right: left + container.width(),
-			bottom: top + container.height(),
+			right: right,
+			bottom: bottom,
 			leftDiff: ui.originalOffset.left - ui.originalPosition.left,
 			topDiff: ui.originalOffset.top - ui.originalPosition.top,
 			width: this.dragDimensions.width,
@@ -937,8 +946,8 @@ if ( $.uiBackCompat !== false ) {
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			scroll: true,
-			scrollSpeed: null,
-			scrollSensitivity: null
+			scrollSpeed: 20,
+			scrollSensitivity: 20
 		},
 		_create : function() {
 			var self = this,
