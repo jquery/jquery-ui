@@ -301,7 +301,7 @@ test( "{ containment: [x1, y1, x2, y2] }", function() {
 	var element = $( "#draggable1" ).draggable(),
 		eo = element.offset();
 
-	element.draggable( "option", "containment", [ eo.left, eo.top, eo.left + element.width() + 5, eo.left + element.width() + 5 ] );
+	element.draggable( "option", "containment", [ eo.left, eo.top, eo.left + element.width() + 5, eo.top + element.height() + 5 ] );
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0 );
 });
