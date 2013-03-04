@@ -384,7 +384,7 @@ test("miscellaneous", function() {
 });
 
 test("minMax", function() {
-	expect( 19 );
+	expect( 23 );
 	var date,
 		inp = TestHelpers.datepicker.init("#inp"),
 		dp = $("#ui-datepicker-div"),
@@ -472,6 +472,22 @@ test("minMax", function() {
 	ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/1/minYear");
 	inp.datepicker("setDate", "12/30/" + new Date().getFullYear());
 	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled at 12/30/maxYear");
+
+	inp.datepicker("option", {
+		minDate: new Date(1900, 0, 1),
+		maxDate: "-6Y",
+		yearRange: "1900:-6"
+	}).val( "" );
+	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled");
+	ok(!dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - prev button enabled");
+
+	inp.datepicker("option", {
+		minDate: new Date(1900, 0, 1),
+		maxDate: "1/25/2007",
+		yearRange: "1900:2007"
+	}).val( "" );
+	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled");
+	ok(!dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - prev button enabled");
 });
 
 test("setDate", function() {
@@ -763,6 +779,21 @@ test("callbacks", function() {
 	ok(!day21.is(".day10"), "Before show day - CSS 21");
 	ok(!day20.attr("title"), "Before show day - title 20");
 	ok(day21.attr("title") === "Divisble by 3", "Before show day - title 21");
+	inp.datepicker("hide").datepicker("destroy");
+});
+
+test("beforeShowDay - tooltips with quotes", function() {
+	expect( 1 );
+	var inp, dp;
+	inp = TestHelpers.datepicker.init("#inp", {
+		beforeShowDay: function() {
+			return [ true, "", "'" ];
+		}
+	});
+	dp = $("#ui-datepicker-div");
+
+	inp.datepicker("show");
+	equal( dp.find( ".ui-datepicker-calendar td:contains('9')").attr( "title" ), "'" );
 	inp.datepicker("hide").datepicker("destroy");
 });
 

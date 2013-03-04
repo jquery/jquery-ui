@@ -126,14 +126,14 @@ test("_blockFrames, relative parent", function() {
 	el.on( "drag", function() {
 
 		var block = iframe.next();
-		
+
 		left = block.css("left");
 		top = block.css("top");
 
 	});
 
 	TestHelpers.draggable.shouldMove(el);
-	
+
 	equal( left, "30px" );
 	equal( top, "25px" );
 
@@ -153,14 +153,14 @@ test("_blockFrames, static parent", function() {
 	el.on( "drag", function() {
 
 		var block = iframe.next();
-		
+
 		left = block.css("left");
 		top = block.css("top");
 
 	});
 
 	TestHelpers.draggable.shouldMove(el);
-	
+
 	equal( left, "430px" );
   equal( top, "325px" );
 

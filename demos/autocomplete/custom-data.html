@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Custom data and display</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.8.3.js"></script>
+	<script src="../../jquery-1.9.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -66,7 +66,7 @@
 				return false;
 			}
 		})
-		.data( "autocomplete" )._renderItem = function( ul, item ) {
+		.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 			return $( "<li>" )
 				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
 				.appendTo( ul );

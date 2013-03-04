@@ -185,11 +185,41 @@ test("{ opacity: 1 }", function() {
 test("{ placeholder: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
+test( "{ placeholder: String }", function() {
+	expect( 1 );
 
-test("{ placeholder: String }", function() {
-	ok(false, "missing test - untested code is broken code.");
+	var element = $( "#sortable" ).sortable({
+		placeholder: "test",
+		start: function( event, ui ) {
+			ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+		}
+	});
+
+	element.find( "li" ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	});
 });
 
+test( "{ placholder: String } tr", function() {
+	expect( 3 );
+
+	var element = $( "#sortable-table tbody" ).sortable({
+		placeholder: "test",
+		start: function( event, ui ) {
+			ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+			equal( ui.placeholder.children().length, 1, "placeholder tr contains a td" );
+			equal( ui.placeholder.children().html(), $( "<span>&#160;</span>" ).html(),
+				"placeholder td has content for forced dimensions" );
+		}
+	});
+
+	element.find( "tr" ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	});
+});
+
+/*
 test("{ revert: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });

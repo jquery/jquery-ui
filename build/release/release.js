@@ -121,7 +121,7 @@ function getVersions() {
 
 		// TODO: handle 1.10.0
 		// Also see comment above about pre-releases
-		if ( minor === 0 ) {
+		if ( patch === 0 ) {
 			abort( "This script is not smart enough to handle the 1.10.0 release." );
 		}
 
