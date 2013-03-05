@@ -429,6 +429,9 @@ $.Widget.prototype = {
 	},
 
 	_hoverable: function( element ) {
+		if ( !element ) {
+			var element = this.element;
+		}
 		this.hoverable = this.hoverable.add( element );
 		this._on( element, {
 			mouseenter: function( event ) {
@@ -441,6 +444,9 @@ $.Widget.prototype = {
 	},
 
 	_focusable: function( element ) {
+		if ( !element ) {
+			var element = this.element;
+		}
 		this.focusable = this.focusable.add( element );
 		this._on( element, {
 			focusin: function( event ) {
