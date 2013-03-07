@@ -296,7 +296,7 @@ $.widget( "ui.selectmenu", {
 			this.button.addClass( "ui-state-focus" );
 			this._off( this.button, "focus" );
 		},
-		click: function( event ) {	
+		click: function( event ) {
 			this._toggle( event );
 			event.preventDefault();
 		},
@@ -332,9 +332,8 @@ $.widget( "ui.selectmenu", {
 				case $.ui.keyCode.SPACE:
 					if ( this.isOpen ) {
 						this.menu.menu( "select", event );
-					} else {
-						this._toggle( event );
 					}
+					prevDef = false;
 					break;
 				case $.ui.keyCode.LEFT:
 					this._move( "previous", event );
