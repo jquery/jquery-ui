@@ -11,7 +11,7 @@
 .ui-selectmenu-menu {
 	padding: 0;
 	margin: 0;
-	position:absolute;
+	position: absolute;
 	top: 0;
 	display: none;
 }
@@ -35,11 +35,12 @@
 .ui-selectmenu-open {
 	display: block;
 }
-.ui-selectmenu-button .ui-button {
+.ui-selectmenu-button {
 	display: inline-block;
 	overflow: hidden;
 	position: relative;
 	text-decoration: none;
+	cursor: pointer;
 }
 .ui-selectmenu-button span.ui-icon {
 	right: 0.5em;

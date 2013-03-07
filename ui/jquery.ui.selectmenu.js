@@ -69,7 +69,7 @@ $.widget( "ui.selectmenu", {
 
 		// create button
 		this.button = $( "<span>", {
-			"class": "ui-button ui-widget ui-state-default ui-corner-all",
+			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 			id: this.ids.button,
 			width: this.element.outerWidth(),
@@ -78,24 +78,18 @@ $.widget( "ui.selectmenu", {
 			"aria-autocomplete": "list",
 			"aria-owns": this.ids.menu,
 			"aria-haspopup": true
-		});
+		})
+		.insertAfter( this.element );
 
 		this.button.prepend( $( "<span>", {
 			"class": "ui-icon " + this.options.icons.button
 		}));
 
 		this.buttonText = $( "<span>", {
-				"class": "ui-selectmenu-text"
-			})
-			.appendTo( this.button );
+			"class": "ui-selectmenu-text"
+		})
+		.appendTo( this.button );
 		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
-
-		// wrap and insert new button
-		this.buttonWrap = $( "<span>", {
-				"class": "ui-selectmenu-button"
-			})
-			.append( this.button )
-			.insertAfter( this.element );
 
 		this._on( this.button, this._buttonEvents );
 		this._hoverable( this.button );
@@ -462,7 +456,7 @@ $.widget( "ui.selectmenu", {
 
 	_destroy: function() {
 		this.menuWrap.remove();
-		this.buttonWrap.remove();
+		this.button.remove();
 		this.element.show();
 		this.element.removeUniqueId();
 		this.label.attr( "for", this.ids.id );
