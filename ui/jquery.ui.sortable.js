@@ -762,6 +762,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 						// width of the table (browsers are smart enough to
 						// handle this properly)
 						element.append( "<td colspan='99'>&#160;</td>" );
+					} else if ( nodeName === "img" ) {
+						element.attr( "src", that.currentItem.attr( "src" ) );
 					}
 
 					if ( !className ) {

@@ -5,10 +5,6 @@
 
 module("sortable: options");
 
-// this is here to make JSHint pass "unused", and we don't want to
-// remove the parameter for when we finally implement
-$.noop();
-
 /*
 test("{ appendTo: 'parent' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
@@ -186,6 +182,23 @@ test("{ placeholder: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 */
+
+test( "{ placeholder: false } img", function() {
+	expect( 3 );
+
+	var element = $( "#sortable-images" ).sortable({
+		start: function( event, ui ) {
+			equal( ui.placeholder.attr( "src" ), "../images/jqueryui_32x32.png", "placeholder img has correct src" );
+			equal( ui.placeholder.height(), 32, "placeholder has correct height" );
+			equal( ui.placeholder.width(), 32, "placeholder has correct width" );
+		}
+	});
+
+	element.find( "img" ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	});
+});
+
 test( "{ placeholder: String }", function() {
 	expect( 1 );
 

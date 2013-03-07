@@ -23,6 +23,7 @@
 		"Globalize",
 		"module",
 		"notEqual",
+		"notDeepEqual",
 		"notStrictEqual",
 		"ok",
 		"QUnit",
