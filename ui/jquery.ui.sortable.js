@@ -160,6 +160,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		var i, body,
 			o = this.options;
+			
+		if (o.disabled) {
+			return false;
+		}
 
 		this.currentContainer = this;
 
@@ -294,6 +298,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 		var i, item, itemElement, intersection,
 			o = this.options,
 			scrolled = false;
+			
+		if (o.disabled) {
+			return false;
+		}
 
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
