@@ -56,7 +56,7 @@ $.widget( "ui.selectmenu", {
 		var tabindex = this.element.attr( "tabindex" );
 
 		// fix existing label
-		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
+		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button ).uniqueId();
 		this._on( this.label, {
 			"click":  function( event ) {
 				this.button.focus();
@@ -77,7 +77,9 @@ $.widget( "ui.selectmenu", {
 			"aria-expanded": false,
 			"aria-autocomplete": "list",
 			"aria-owns": this.ids.menu,
-			"aria-haspopup": true
+			"aria-haspopup": true,
+			"aria-live": "assertive",
+			"aria-labelledby": this.ids.button + " " + this.label.attr( "id" )
 		})
 		.insertAfter( this.element );
 
@@ -103,7 +105,6 @@ $.widget( "ui.selectmenu", {
 		// create menu portion, append to body
 		this.menu = $( "<ul>", {
 			"aria-hidden": true,
-			"aria-labelledby": this.ids.button,
 			id: this.ids.menu
 		});
 
@@ -290,6 +291,12 @@ $.widget( "ui.selectmenu", {
 			this.button.addClass( "ui-state-focus" );
 			this._off( this.button, "focus" );
 		},
+		blur: function() {
+			// restored aria label to include both button and label
+			this.button.attr({
+				"aria-labelledby": this.ids.button + " " + this.label.attr( "id" )
+			});
+		},
 		click: function( event ) {
 			this._toggle( event );
 			event.preventDefault();
@@ -360,6 +367,10 @@ $.widget( "ui.selectmenu", {
 		this.element[ 0 ].selectedIndex = item.index;
 		this._setText( this.buttonText, item.label );
 		this._setAria( item );
+		// only do this when the selection changes
+		this.button.attr({
+			"aria-labelledby": this.label.attr( "id" )
+		});
 		this._trigger( "select", event, { item: item } );
 
 		if ( item.index !== oldIndex ) {
@@ -372,10 +383,7 @@ $.widget( "ui.selectmenu", {
 			id = link.attr( "id" );
 
 		// change ARIA attr
-		this.menuItems.attr( "aria-selected", false );
-		link.attr( "aria-selected", true );
 		this.button.attr({
-			"aria-labelledby": id,
 			"aria-activedescendant": id
 		});
 		this.menu.attr( "aria-activedescendant", id );
@@ -459,7 +467,7 @@ $.widget( "ui.selectmenu", {
 		this.button.remove();
 		this.element.show();
 		this.element.removeUniqueId();
-		this.label.attr( "for", this.ids.id );
+		this.label.attr( "for", this.ids.id ).removeUniqueId();
 	}
 });
 
