@@ -248,6 +248,28 @@ test( "source, custom", function() {
 	});
 });
 
+test( "custom source with jQuery label object", function() {
+	expect( 4 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: function( request, response ) {
+			  equal( request.term, "er" );
+			  response([
+			    { label: $("<strong>er</strong><span>lang</span>"), value: "erlang" },
+			    { label: $("<span>p</span><strong>er</strong><span>l</span>"), value: "perl" },
+			    // Intentional string, must not be interpreted as HTML
+			    { label: "<span>ob</span><strong>er</strong><span>on</span>", value: "oberon" }
+			  ]);
+			}
+		});
+	element.val( "er" ).autocomplete( "search" );
+	var menu = $( "#autocomplete" ).autocomplete( "widget" ),
+	    perl = menu.find( ".ui-menu-item span+strong+span" ),
+	    oberon = menu.find( ".ui-menu-item:last-child" );
+	equal( perl.length, 1 );
+	equal( perl.parent().text(), "perl" );
+	equal( oberon.text(), "<span>ob</span><strong>er</strong><span>on</span>" );
+});
+
 test( "source, update after init", function() {
 	expect( 2 );
 	var element = $( "#autocomplete" ).autocomplete({
