@@ -19,11 +19,11 @@ test( "change", function () {
 		}
 	});
 
-	var button = this.element.selectmenu( "widget" ).parent(),
+	var button = this.element.selectmenu( "widget" ),
 		menu = this.element.selectmenu( "menuWidget" ).parent(),
 		value = this.element.find( "option" ).first().text();
 
-	button.find( "a" ).simulate( "focus" ).simulate( "click" );
+	button.simulate( "focus" ).simulate( "click" );
 	menu.find( "a" ).first().simulate( "mouseover" ).trigger( "click" );
 });
 
@@ -100,10 +100,10 @@ test( "select", function () {
 		}
 	});
 
-	var button = this.element.selectmenu( "widget" ).parent(),
+	var button = this.element.selectmenu( "widget" ),
 		menu = this.element.selectmenu( "menuWidget" ).parent();
 
-	button.find( "a" ).simulate( "focus" ).simulate( "click" );
+	button.simulate( "focus" ).simulate( "click" );
 	menu.find( "a" ).first().simulate( "mouseover" ).trigger( "click" );
 });
 
