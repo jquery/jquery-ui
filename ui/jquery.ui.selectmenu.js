@@ -187,6 +187,9 @@ $.widget( "ui.selectmenu", {
 		if ( this.options.disabled ) {
 			return;
 		}
+		if ( !this.menuItems ) {
+			this.refresh();
+		}
 
 		this.isOpen = true;
 		this._toggleAttr();
