@@ -68,9 +68,8 @@ $.widget( "ui.selectmenu", {
 		this.element.hide();
 
 		// create button
-		this.button = $( "<a>", {
+		this.button = $( "<button>", {
 			"class": "ui-button ui-widget ui-state-default ui-corner-all",
-			href: "#" + this.ids.id,
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 			id: this.ids.button,
 			width: this.element.outerWidth(),
@@ -294,8 +293,12 @@ $.widget( "ui.selectmenu", {
 			this.button.addClass( "ui-state-focus" );
 			this._off( this.button, "focus" );
 		},
-		click: function( event ) {
-			this._toggle( event );
+		click: function( event ) {	
+			if ( this.isOpen ) {
+				this.menu.menu( "select", event );
+			} else {
+				this._toggle( event );
+			}
 			event.preventDefault();
 		},
 		keydown: function( event ) {
@@ -327,13 +330,6 @@ $.widget( "ui.selectmenu", {
 						this._move( "next", event );
 					}
 					break;
-				case $.ui.keyCode.SPACE:
-					if ( this.isOpen ) {
-						this.menu.menu( "select", event );
-					} else {
-						this._toggle( event );
-					}
-					break;
 				case $.ui.keyCode.LEFT:
 					this._move( "previous", event );
 					break;
@@ -347,6 +343,8 @@ $.widget( "ui.selectmenu", {
 				case $.ui.keyCode.END:
 				case $.ui.keyCode.PAGE_DOWN:
 					this._move( "last", event );
+					break;
+				case $.ui.keyCode.SPACE:
 					break;
 				default:
 					this.menu.trigger( event );

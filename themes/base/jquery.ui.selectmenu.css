@@ -35,7 +35,7 @@
 .ui-selectmenu-open {
 	display: block;
 }
-.ui-selectmenu-button a.ui-button {
+.ui-selectmenu-button .ui-button {
 	display: inline-block;
 	overflow: hidden;
 	position: relative;
