@@ -68,7 +68,7 @@ $.widget( "ui.selectmenu", {
 		this.element.hide();
 
 		// create button
-		this.button = $( "<button>", {
+		this.button = $( "<span>", {
 			"class": "ui-button ui-widget ui-state-default ui-corner-all",
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 			id: this.ids.button,
@@ -332,8 +332,9 @@ $.widget( "ui.selectmenu", {
 				case $.ui.keyCode.SPACE:
 					if ( this.isOpen ) {
 						this.menu.menu( "select", event );
+					} else {
+						this._toggle( event );
 					}
-					prevDef = false;
 					break;
 				case $.ui.keyCode.LEFT:
 					this._move( "previous", event );
