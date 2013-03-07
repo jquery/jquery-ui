@@ -153,11 +153,11 @@ test( "widget", function() {
 
 	element.selectmenu( "refresh" );
 
-	equal( button.length, 1, "widget: one element" );
-	ok( button.is( "span.ui-selectmenu-button" ), "widget: button element" );
+	equal( button.length, 1, "button: one element" );
+	ok( button.is( ".ui-selectmenu-button" ), "button: class" );
 
-	equal( menu.length, 1, "menuWidget: one element" );
-	ok( menu.is( "ul.ui-menu" ), "menuWidget: menu element" );
+	equal( menu.length, 1, "Menu Widget: one element" );
+	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
 });
 
 })( jQuery );
