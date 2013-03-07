@@ -148,16 +148,16 @@ test( "refresh - disabled optgroup", function () {
 test( "widget", function() {
 	expect( 4 );
 	var element = $( "#speed" ).selectmenu(),
-		widgetElement = element.selectmenu( "widget" ),
-		menuWidgetElement = element.selectmenu( "menuWidget" );
+		button = element.selectmenu( "widget" ),
+		menu = element.selectmenu( "menuWidget" );
 
 	element.selectmenu( "refresh" );
 
-	equal( widgetElement.length, 1, "widget: one element" );
-	ok( widgetElement.is( "span.ui-button" ), "widget: button element" );
+	equal( button.length, 1, "widget: one element" );
+	ok( button.is( "span.ui-selectmenu-button" ), "widget: button element" );
 
-	equal( menuWidgetElement.length, 1, "menuWidget: one element" );
-	ok( menuWidgetElement.is( "ul.ui-menu" ), "menuWidget: menu element" );
+	equal( menu.length, 1, "menuWidget: one element" );
+	ok( menu.is( "ul.ui-menu" ), "menuWidget: menu element" );
 });
 
 })( jQuery );
