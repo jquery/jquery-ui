@@ -231,11 +231,34 @@ test("receive", function() {
 test("remove", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
-test("over", function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "over", function() {
+	expect( 8 );
+
+	var hash,
+		overCount = 0;
+
+	$( "#sortable" ).sortable({
+		over: function( e, ui ) {
+			hash = ui;
+			overCount++;
+		}
+	}).find( "li:eq(0)" ).simulate( "drag", {
+		dy: 20
+	});
+
+	ok( hash, "stop event triggered" );
+	ok( hash.helper, "UI should not include: helper" );
+	ok( hash.placeholder, "UI hash includes: placeholder" );
+	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );
+	ok( hash.offset && ( hash.offset.top && hash.offset.left ), "UI hash includes: offset" );
+	ok( hash.item, "UI hash includes: item" );
+	ok( hash.sender, "UI hash does not include: sender" );
+	equal( overCount, 1, "over fires only once" );
 });
 
+/*
 test("out", function() {
 	ok(false, "missing test - untested code is broken code.");
 });

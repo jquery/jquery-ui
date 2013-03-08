@@ -37,7 +37,44 @@ test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
 test("{ cancel: Selector }", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
+test( "#8792: issues with floated items in connected lists", function() {
+	expect( 2 );
+
+	var element,
+		changeCount = 0;
+
+	$( "#qunit-fixture" )
+		.html( "<ul class='c'><li>a</li><li>a</li></ul><ul class='c'><li>a</li><li>a</li></ul>" )
+		.find( "ul" ).css({ "float": "left", width: "100px" }).end()
+		.find( "li" ).css({ "float": "left", width: "50px", height: "50px" });
+
+	$( "#qunit-fixture .c" ).sortable({
+		connectWith: "#qunit-fixture .c",
+		change: function() {
+			changeCount++;
+		}
+	});
+
+	element = $( "#qunit-fixture li:eq(0)" );
+
+	element.simulate( "drag", {
+		dx: 51,
+		moves: 15
+	});
+
+	equal( changeCount, 1, "change fired only once (no jitters) when dragging a floated sortable in it's own container" );
+
+	element.simulate( "drag", {
+		dx: 50,
+		moves: 15
+	});
+
+	equal( changeCount, 3, "change fired once for each expected change when dragging a floated sortable to a connected container" );
+});
+
+/*
 test("{ connectWith: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
