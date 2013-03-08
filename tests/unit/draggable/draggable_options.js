@@ -603,38 +603,14 @@ test( "grid, switching after initialization", function() {
 });
 
 test( "{ handle: 'span' }", function() {
-	expect( 2 );
+	expect( 3 );
 
 	var element = $( "#draggable2" ).draggable({ handle: "span" });
 
 	TestHelpers.draggable.testDrag( element, "#draggable2 span", 50, 50, 50, 50, "drag span" );
+	TestHelpers.draggable.testDrag( element, "#draggable2 span em", 50, 50, 50, 50, "drag span child" );
 	TestHelpers.draggable.shouldNotMove( element, "drag element" );
 });
-
-/*
-test( "{ handle: Selectors }, matching parent selector", function() {
-
-	expect( 4 );
-
-	var element = $( "#draggable2" ).draggable({ handle: "span a" });
-
-	$( "#qunit-fixture" ).append( "<span id='wrapping'><a></a></span>" );
-
-	element.find( "span" ).append( "<a>" );
-
-	$( "#wrapping a" ).append( element );
-
-	TestHelpers.draggable.testDrag( element, "#draggable2 span a", 50, 50, 50, 50, "drag span child" );
-	TestHelpers.draggable.shouldNotMove( $( "#wrapping a" ) );
-
-	$( "#draggable2" ).draggable( "option", "handle", "span > a" );
-	$( "#draggable2" ).find( "a" ).append( "<a>" );
-
-	TestHelpers.draggable.testDrag( element, $( "#draggable2 span a" ).first(), 50, 50, 50, 50, "drag span child" );
-	TestHelpers.draggable.shouldNotMove( $( "#draggable2 span a" ).last() );
-
-});
-*/
 
 test( "handle, default, switching after initialization", function() {
 	expect( 6 );
