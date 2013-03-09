@@ -60,7 +60,7 @@ TestHelpers.draggable = {
 
 	},
 	trackMouseCss : function( el ) {
-		el.on( "drag", function() {
+		el.bind( "drag", function() {
 			el.data( "last_dragged_cursor", $("body").css("cursor") );
 		});
 	},
@@ -69,7 +69,7 @@ TestHelpers.draggable = {
 		// appendTo ignored without being clone
 		el.draggable( "option", "helper", "clone" );
 
-		el.on( "drag", function(e,ui) {
+		el.bind( "drag", function(e,ui) {
 			// Get what parent is at time of drag
 			el.data( "last_dragged_parent", ui.helper.parent()[0] );
 		});
