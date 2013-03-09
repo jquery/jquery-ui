@@ -372,8 +372,6 @@ $.widget( "ui.selectmenu", {
 			id = link.attr( "id" );
 
 		// change ARIA attr
-		this.menuItems.attr( "aria-selected", false );
-		link.attr( "aria-selected", true );
 		this.button.attr({
 			"aria-labelledby": id,
 			"aria-activedescendant": id
