@@ -340,8 +340,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		//Get the offsetParent and cache its position
 		this.offsetParent = this.helper.offsetParent();
-		var po = this.offsetParent.offset();
-		var document = this.document[0];
+		var po = this.offsetParent.offset(),
+			document = this.document[0];
 
 		// This is a special case where we need to modify a offset calculated on start, since the following happened:
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
