@@ -1,10 +1,10 @@
-﻿/* Faroese initialisation for the jQuery UI date picker plugin */
+/* Faroese initialisation for the jQuery UI date picker plugin */
 /* Written by Sverri Mohr Olsen, sverrimo@gmail.com */
 jQuery(function($){
 	$.datepicker.regional['fo'] = {
 		closeText: 'Lat aftur',
-		prevText: '&#x3c;Fyrra',
-		nextText: 'Næsta&#x3e;',
+		prevText: '&#x3C;Fyrra',
+		nextText: 'Næsta&#x3E;',
 		currentText: 'Í dag',
 		monthNames: ['Januar','Februar','Mars','Apríl','Mei','Juni',
 		'Juli','August','September','Oktober','November','Desember'],
@@ -15,7 +15,7 @@ jQuery(function($){
 		dayNamesMin: ['Su','Má','Tý','Mi','Hó','Fr','Le'],
 		weekHeader: 'Vk',
 		dateFormat: 'dd-mm-yy',
-		firstDay: 0,
+		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
