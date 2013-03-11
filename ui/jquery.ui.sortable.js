@@ -412,8 +412,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseStop: function(event, noPropagation) {
-
-	if(!event) {
+		var movement = {};
+		if(!event) {
 			return;
 		}
 
@@ -428,17 +428,11 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 			this.reverting = true;
 			
-			// will  save all needed movement
-			var movement = {};
-			if(this.options.axis === false || this.options.axis == "x"){
-				$.extend(movement,{
-					left: cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft)
-				});
+			if(this.options.axis === false || this.options.axis === "x"){
+				movement.left = cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft);
 			}
-			if(this.options.axis === false || this.options.axis == "y"){
-				$.extend(movement,{
-					top: cur.top - this.offset.parent.top - this.margins.top + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollTop)
-				});
+			if(this.options.axis === false || this.options.axis === "y"){
+				movement.top = cur.top - this.offset.parent.top - this.margins.top + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollTop);
 			}
 			
 			$(this.helper).animate(movement, parseInt(this.options.revert, 10) || 500, function() {
