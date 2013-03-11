@@ -127,7 +127,8 @@ grunt.loadNpmTasks( "grunt-contrib-jshint" );
 grunt.loadNpmTasks( "grunt-contrib-uglify" );
 grunt.loadNpmTasks( "grunt-contrib-concat" );
 grunt.loadNpmTasks( "grunt-contrib-qunit" );
-grunt.loadNpmTasks( "grunt-css" );
+grunt.loadNpmTasks( "grunt-contrib-csslint" );
+grunt.loadNpmTasks( "grunt-contrib-cssmin" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
 grunt.loadNpmTasks( "grunt-git-authors" );
@@ -354,7 +355,6 @@ grunt.initConfig({
 		}
 	},
 	csslint: {
-		// nothing: []
 		// TODO figure out what to check for, then fix and enable
 		base_theme: {
 			src: expandFiles( "themes/base/*.css" ).filter(function( file ) {
@@ -362,7 +362,7 @@ grunt.initConfig({
 				return !( /(button|datepicker|core|dialog|theme)\.css$/ ).test( file );
 			}),
 			// TODO consider reenabling some of these rules
-			rules: {
+			options: {
 				"adjoining-classes": false,
 				"import": false,
 				"outline-none": false,
