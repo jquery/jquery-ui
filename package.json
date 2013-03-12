@@ -62,7 +62,7 @@
 		"grunt-contrib-cssmin": "0.4.2",
 		"grunt-compare-size": "0.3.1",
 		"grunt-html": "0.3.3",
-		"grunt-git-authors": "1.1.0",
+		"grunt-git-authors": "1.2.0",
 		"rimraf": "2.1.4",
 		"testswarm": "1.0.0-alpha"
 	},
