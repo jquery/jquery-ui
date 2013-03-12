@@ -236,3 +236,7 @@ Thomas Jaggi <thomas.jaggi@gmail.com>
 Vahid Sohrabloo <vahid4134@gmail.com>
 Travis Carden <travis.carden@gmail.com>
 Bruno M. Custódio <bruno@brunomcustodio.com>
+Nathanael Silverman <nathanael.silverman@gmail.com>
+Christian Wenz <christian@wenz.org>
+Steve Urmston <steve@urm.st>
+Zaven Muradyan <megalivoithos@gmail.com>
