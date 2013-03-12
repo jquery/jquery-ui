@@ -64,29 +64,30 @@ test("enable", function() {
 	equal(actual, expected, "enable is chainable");
 });
 
-test("disable", function() {
-	expect(7);
+test( "disable", function() {
+	expect( 9 );
 
-	var el, actual, expected;
+	var chainable,
+		element = $( "#sortable" ).sortable({ disabled: false });
 
-	el = $("#sortable").sortable({ disabled: false });
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, ".sortable({ disabled: false })");
+	TestHelpers.sortable.sort( $( "li", element )[ 0 ], 0, 44, 2, ".sortable({ disabled: false })" );
 
-	el.sortable("disable");
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 0, "disabled.sortable getter");
+	chainable = element.sortable( "disable" );
+	TestHelpers.sortable.sort( $( "li", element )[ 0 ], 0, 44, 0, "disabled.sortable getter" );
 
-	el.sortable("destroy");
+	element.sortable( "destroy" );
 
-	el.sortable({ disabled: false });
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, ".sortable({ disabled: false })");
-	el.sortable("option", "disabled", true);
-	equal(el.sortable("option", "disabled"), true, "disabled option setter");
-	ok(el.sortable("widget").is(":not(.ui-state-disabled)"), "sortable element does not get ui-state-disabled since it's an interaction");
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 0, ".sortable('option', 'disabled', true)");
+	element.sortable({ disabled: false });
+	TestHelpers.sortable.sort( $( "li", element )[ 0 ], 0, 44, 2, ".sortable({ disabled: false })" );
+	element.sortable( "option", "disabled", true);
+	equal( element.sortable( "option", "disabled" ), true, "disabled option setter" );
 
-	expected = $("<div></div>").sortable(),
-	actual = expected.sortable("disable");
-	equal(actual, expected, "disable is chainable");
+	ok( !element.sortable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	ok( !element.sortable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.sortable( "widget" ).hasClass( "ui-sortable-disabled" ), "element gets ui-sortable-disabled" );
+
+	TestHelpers.sortable.sort($( "li", element )[ 0 ], 0, 44, 0, ".sortable('option', 'disabled', true)" );
+	equal( chainable, element, "disable is chainable" );
 });
 
 })(jQuery);

@@ -49,7 +49,7 @@ test( "enable", function() {
 });
 
 test( "disable", function() {
-	expect( 5 );
+	expect( 6 );
 	var element,
 		expected = $( "<div></div>" ).slider(),
 		actual = expected.slider( "disable" );
@@ -61,6 +61,7 @@ test( "disable", function() {
 	element.slider( "disable" );
 	ok( element.hasClass( "ui-state-disabled" ), "slider has ui-state-disabled class after disable method call" );
 	ok( element.hasClass( "ui-slider-disabled" ), "slider has ui-slider-disabled class after disable method call" );
+	ok( !element.attr( "aria-disabled" ), "slider does not have aria-disabled attr after disable method call" );
 });
 
 test( "value", function() {

@@ -7,6 +7,16 @@ test( "destroy", function() {
 	});
 });
 
+test( "disable", function() {
+	expect( 3 );
+
+	var element = $( "#progressbar" ).progressbar().progressbar( "disable" );
+
+	ok( element.progressbar( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
+	ok( element.progressbar( "widget" ).attr( "aria-disabled" ), "element gets aria-disabled" );
+	ok( element.progressbar( "widget" ).hasClass( "ui-progressbar-disabled" ), "element gets ui-progressbar-disabled" );
+});
+
 test( "value", function() {
 	expect( 3 );
 
