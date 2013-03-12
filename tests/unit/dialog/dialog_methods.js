@@ -101,11 +101,13 @@ test("#4980: Destroy should place element back in original DOM position", functi
 });
 
 test( "enable/disable disabled", function() {
-	expect( 2 );
+	expect( 4 );
 	var element = $( "<div></div>" ).dialog();
 	element.dialog( "disable" );
 	equal(element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
 	ok( !element.dialog( "widget" ).hasClass( "ui-dialog-disabled" ), "disable method doesn't add ui-dialog-disabled class" );
+	ok( !element.dialog( "widget" ).hasClass( "ui-state-disabled" ), "disable method doesn't add ui-state-disabled class" );
+	ok( !element.dialog( "widget" ).attr( "aria-disabled" ), "disable method doesn't add aria-disabled" );
 });
 
 test("close", function() {

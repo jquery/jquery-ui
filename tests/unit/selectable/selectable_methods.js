@@ -71,34 +71,40 @@ test("enable", function() {
 	equal(actual, expected, "enable is chainable");
 });
 
-test("disable", function() {
-	expect(3);
-	var expected, actual,
+test( "disable", function() {
+	expect( 6 );
+	var chainable,
 		fired = false,
-		el = $("#selectable1");
+		element = $( "#selectable1" );
 
-	el.selectable({
+	element.selectable({
 		disabled: false,
-		start: function() { fired = true; }
+		start: function() {
+			fired = true;
+		}
 	});
-	el.simulate( "drag", {
+	element.simulate( "drag", {
 		dx: 20,
 		dy: 20
 	});
-	equal(fired, true, "start fired");
-	el.selectable("disable");
+	equal( fired, true, "start fired" );
+
+	chainable = element.selectable( "disable" );
 	fired = false;
 
-	el.simulate( "drag", {
+	element.simulate( "drag", {
 		dx: 20,
 		dy: 20
 	});
-	equal(fired, false, "start fired");
-	el.selectable("destroy");
+	equal( fired, false, "start fired" );
 
-	expected = $("<div></div>").selectable();
-	actual = expected.selectable("disable");
-	equal(actual, expected, "disable is chainable");
+	ok( !element.selectable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	ok( !element.selectable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.selectable( "widget" ).hasClass( "ui-selectable-disabled" ), "element gets ui-selectable-disabled" );
+
+	element.selectable( "destroy" );
+
+	equal( chainable, element, "disable is chainable" );
 });
 
 })(jQuery);

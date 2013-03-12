@@ -12,7 +12,7 @@ test( "destroy", function() {
 });
 
 test( "disable", function() {
-	expect( 14 );
+	expect( 16 );
 	var element = $( "#spin" ).val( 2 ).spinner(),
 		wrapper = $( "#spin" ).spinner( "widget" );
 
@@ -21,6 +21,8 @@ test( "disable", function() {
 
 	element.spinner( "disable" );
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "after: wrapper has ui-spinner-disabled class" );
+	ok( wrapper.hasClass( "ui-state-disabled" ), "after: wrapper has ui-state-disabled class" );
+	ok( !wrapper.attr( "aria-disabled" ), "after: wrapper does not have aria-disabled attr" );
 	ok( element.is( ":disabled"), "after: input has disabled attribute" );
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
