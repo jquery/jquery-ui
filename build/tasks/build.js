@@ -5,6 +5,19 @@ module.exports = function( grunt ) {
 var path = require( "path" ),
 	fs = require( "fs" );
 
+function expandFiles( files ) {
+	return grunt.util._.pluck( grunt.file.expandMapping( files ), "src" ).filter(function(filepath) {
+		// restrict to files, exclude folders
+		try {
+			return fs.statSync( filepath[ 0 ] ).isFile();
+		} catch(e) {
+			throw grunt.task.taskError(e.message, e);
+		}
+	}).map(function( values ) {
+		return values[ 0 ];
+	});
+}
+
 grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
 	var pkg = grunt.config( "pkg" ),
 		base = {
@@ -97,8 +110,8 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 			grunt.file.copy( src, dest );
 		}
 	}
-	var files = grunt.file.expandFiles( this.file.src ),
-		target = this.file.dest + "/",
+	var files = expandFiles( this.filesSrc ),
+		target = this.data.dest + "/",
 		strip = this.data.strip,
 		renameCount = 0,
 		fileName;
@@ -121,28 +134,11 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 
 
 grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
-	// TODO switch back to adm-zip for better cross-platform compability once it actually works
-	// 0.1.3 works, but result can't be unzipped
-	// its also a lot slower then zip program, probably due to how its used...
-	// var files = grunt.file.expandFiles( "dist/" + this.file.src + "/**/*" );
-	// grunt.log.writeln( "Creating zip file " + this.file.dest );
-
-	//var AdmZip = require( "adm-zip" );
-	//var zip = new AdmZip();
-	//files.forEach(function( file ) {
-	//	grunt.verbose.writeln( "Zipping " + file );
-	//	// rewrite file names from dist folder (created by build), drop the /dist part
-	//	zip.addFile(file.replace(/^dist/, "" ), fs.readFileSync( file ) );
-	//});
-	//zip.writeZip( "dist/" + this.file.dest );
-	//grunt.log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
-
 	var done = this.async(),
-		dest = this.file.dest,
-		src = grunt.template.process( this.file.src, grunt.config() );
-	grunt.utils.spawn({
+		dest = this.data.dest;
+	grunt.util.spawn({
 		cmd: "zip",
-		args: [ "-r", dest, src ],
+		args: [ "-r", dest, this.data.src ],
 		opts: {
 			cwd: 'dist'
 		}
@@ -159,19 +155,19 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 
 grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
 	// remove dest file before creating it, to make sure itself is not included
-	if ( fs.existsSync( this.file.dest ) ) {
-		fs.unlinkSync( this.file.dest );
+	if ( fs.existsSync( this.data.dest ) ) {
+		fs.unlinkSync( this.data.dest );
 	}
 	var crypto = require( "crypto" ),
-		dir = this.file.src + "/",
+		dir = this.filesSrc + "/",
 		hashes = [];
-	grunt.file.expandFiles( dir + "**/*" ).forEach(function( fileName ) {
+	expandFiles( dir + "**/*" ).forEach(function( fileName ) {
 		var hash = crypto.createHash( "md5" );
 		hash.update( grunt.file.read( fileName, "ascii" ) );
 		hashes.push( fileName.replace( dir, "" ) + " " + hash.digest( "hex" ) );
 	});
-	grunt.file.write( this.file.dest, hashes.join( "\n" ) + "\n" );
-	grunt.log.writeln( "Wrote " + this.file.dest + " with " + hashes.length + " hashes" );
+	grunt.file.write( this.data.dest, hashes.join( "\n" ) + "\n" );
+	grunt.log.writeln( "Wrote " + this.data.dest + " with " + hashes.length + " hashes" );
 });
 
 grunt.registerTask( "generate_themes", function() {
