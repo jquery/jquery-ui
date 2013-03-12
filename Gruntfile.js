@@ -81,7 +81,7 @@ var
 	},
 
 	compareFiles = {
-		files: [
+		all: [
 			"dist/jquery-ui.js",
 			"dist/jquery-ui.min.js"
 		]
