@@ -72,9 +72,6 @@ function cloneRepo() {
 		if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
 			abort( "Error installing dependencies." );
 		}
-		if ( exec( "cd node_modules/download.jqueryui.com && grunt prepare" ).code !== 0 ) {
-			abort( "Error installing dependencies." );
-		}
 	}
 	echo();
 }
