@@ -144,23 +144,39 @@ test( "{ collapsible: true }", function() {
 });
 
 test( "disabled", function() {
-	expect( 10 );
+	expect( 22 );
 
 	// fully enabled by default
 	var element = $( "#tabs1" ).tabs();
 	disabled( element, false );
 
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
+
 	// disable single tab
 	element.tabs( "option", "disabled", [ 1 ] );
 	disabled( element, [ 1 ] );
+
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
 	// disabled active tab
 	element.tabs( "option", "disabled", [ 0, 1 ] );
 	disabled( element, [ 0, 1 ] );
 
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
+
 	// disable all tabs
 	element.tabs( "option", "disabled", [ 0, 1, 2 ] );
 	disabled( element, true );
+
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
 	// enable all tabs
 	element.tabs( "option", "disabled", [] );

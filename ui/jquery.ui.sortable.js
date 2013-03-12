@@ -102,17 +102,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 		return this;
 	},
 
-	_setOption: function(key, value){
-		if ( key === "disabled" ) {
-			this.options[ key ] = value;
-
-			this.widget().toggleClass( "ui-sortable-disabled", !!value );
-		} else {
-			// Don't call widget base _setOption for disable as it adds ui-state-disabled class
-			$.Widget.prototype._setOption.apply(this, arguments);
-		}
-	},
-
 	_mouseCapture: function(event, overrideHandle) {
 		var currentItem = null,
 			validHandle = false,

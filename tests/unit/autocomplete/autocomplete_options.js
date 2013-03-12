@@ -88,16 +88,19 @@ asyncTest( "delay", function() {
 });
 
 asyncTest( "disabled", function() {
-	expect( 2 );
+	expect( 5 );
 	var element = $( "#autocomplete" ).autocomplete({
 			source: data,
-			delay: 0,
-			disabled: true
+			delay: 0
 		}),
-		menu = element.autocomplete( "widget" );
+		menu = element.autocomplete( "disable" ).autocomplete( "widget" );
 	element.val( "ja" ).keydown();
 
 	ok( menu.is( ":hidden" ) );
+
+	ok( !element.is( ".ui-state-disabled" ), "element doesn't get ui-state-disabled" );
+	ok( !element.attr( "aria-disabled" ), "element doesn't get aria-disabled" );
+	ok( menu.is( ".ui-autocomplete-disabled" ), "element gets ui-autocomplete-disabled" );
 
 	setTimeout(function() {
 		ok( menu.is( ":hidden" ) );
