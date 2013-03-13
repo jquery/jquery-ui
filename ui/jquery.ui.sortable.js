@@ -405,7 +405,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseStop: function(event, noPropagation) {
-
+		var movement = {};
 		if(!event) {
 			return;
 		}
@@ -420,11 +420,15 @@ $.widget("ui.sortable", $.ui.mouse, {
 				cur = this.placeholder.offset();
 
 			this.reverting = true;
-
-			$(this.helper).animate({
-				left: cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft),
-				top: cur.top - this.offset.parent.top - this.margins.top + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollTop)
-			}, parseInt(this.options.revert, 10) || 500, function() {
+			
+			if(this.options.axis === false || this.options.axis === "x"){
+				movement.left = cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft);
+			}
+			if(this.options.axis === false || this.options.axis === "y"){
+				movement.top = cur.top - this.offset.parent.top - this.margins.top + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollTop);
+			}
+			
+			$(this.helper).animate(movement, parseInt(this.options.revert, 10) || 500, function() {
 				that._clear(event);
 			});
 		} else {
