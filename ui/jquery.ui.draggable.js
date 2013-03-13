@@ -15,7 +15,7 @@
  */
 (function( $, undefined ) {
 
-// create a shallow copy of an object
+// Create a shallow copy of an object
 function copy( obj ) {
 	var prop,
 		ret = {};
@@ -57,11 +57,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// appendTo option without a helper
 	// dragDimensions: saved off width and height used for various options
 
+	scrollSensitivity: 20,
+	scrollSpeed: 5,
+
 	_create: function() {
 		this._super();
-
-		this.scrollSensitivity = 20;
-		this.scrollSpeed = 5;
 
 		// Static position elements can't be moved with top/left
 		if ( this.element.css( "position" ) === "static" ) {
@@ -74,11 +74,14 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-		var handle = this.options.handle ? element.is( this.element.find( this.options.handle ) ) : true,
-			exclude = this.options.exclude ? element.is( this.element.find( this.options.exclude ) ) : false;
+		var handle = this.options.handle ?
+				element.is( this.element.find( this.options.handle ) ) :
+				true,
+			exclude = this.options.exclude ?
+				element.is( this.element.find( this.options.exclude ) ) :
+				false;
 
-		// Enforce boolean
-		return !!( handle && !exclude );
+		return handle && !exclude;
 	},
 
 	_start: function( event, pointerPosition ) {
@@ -88,7 +91,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.dragDimensions = null;
 
 		// The actual dragging element, should always be a jQuery object
-		this.dragEl = ( this.options.helper === true || typeof this.options.helper === "function" ) ?
+		this.dragEl = ( this.options.helper === true || $.isFunction( this.options.helper ) ) ?
 			this._createHelper( pointerPosition ) :
 			this.element;
 
@@ -101,7 +104,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			};
 			offset = this.dragEl.offset();
 			this.dragEl
-				.appendTo( this._appendToEl() )
+				.appendTo( this._appendTo() )
 				.offset( offset );
 		}
 
@@ -113,7 +116,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.originalOffset = this.startOffset = this.dragEl.offset();
 		this.originalPointer = pointerPosition;
 
-		// If not already cached within _createHelper
+		// If not already cached within _createHelper()
 		if ( !this.dragDimensions ) {
 			this._cacheDragDimensions( this.dragEl );
 		}
@@ -122,15 +125,16 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.position = copy( this.startPosition );
 		this.offset = copy( this.startOffset );
 
-		// Cache the offset of scrollParent, if required for _handleScrolling
-		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
+		// Cache the offset of scrollParent, if required for _handleScrolling()
+		if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				this.scrollParent[ 0 ].tagName.toUpperCase() !== "HTML" ) {
 			this.overflowOffset = this.scrollParent.offset();
 		}
 
 		this.overflow = {
-			height: this.scrollParent[0] === this.document[0] ?
+			height: this.scrollParent[ 0 ] === this.document[ 0 ] ?
 				this.window.height() : this.scrollParent.height(),
-			width: this.scrollParent[0] === this.document[0] ?
+			width: this.scrollParent[ 0 ] === this.document[ 0 ] ?
 				this.window.width() : this.scrollParent.width()
 		};
 
@@ -140,15 +144,15 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		if ( this._trigger( "beforeStart", event,
 				this._originalHash( pointerPosition ) ) === false ) {
 
-			// domPosition needs to be undone even if beforeStart is stopped
-			// Otherwise this.dragEl will remain in the element appendTo is set to
+			// domPosition needs to be undone even if beforeStart is stopped,
+			// otherwise this.dragEl will remain in the `appendTo` element
 			this._resetDomPosition();
 			return false;
 		}
 
-		// Save off the usual properties locally, so they can be reverted from start
-		startCssLeft = this.dragEl.css("left");
-		startCssTop = this.dragEl.css("top");
+		// Save off the usual properties locally, so they can be reverted
+		startCssLeft = this.dragEl.css( "left" );
+		startCssTop = this.dragEl.css( "top" );
 		startPosition = copy( this._getPosition() );
 		startOffset = copy( this.offset );
 
@@ -159,9 +163,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// If user cancels on start, don't allow dragging
 		if ( this._trigger( "start", event,
 				this._fullHash( pointerPosition ) ) === false ) {
-				// domPosition needs to be undone even if start is stopped
-				// Otherwise this.dragEl will remain in the element appendTo is set to
 
+				// domPosition needs to be undone even if start is stopped,
+				// otherwise this.dragEl will remain in the `appendTo` element
 				this.startPosition = startPosition;
 				this.startOffset = startOffset;
 				this.dragEl.css({
@@ -172,6 +176,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				this._resetDomPosition();
 				return false;
 		}
+
 		this._blockFrames();
 	},
 
@@ -197,7 +202,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._preparePosition( pointerPosition );
 
 		// If user cancels drag, don't move the element
-		if ( this._trigger( "drag", event, this._fullHash( pointerPosition ) ) === false ) {
+		if ( this._trigger( "drag", event,
+				this._fullHash( pointerPosition ) ) === false ) {
 			return false;
 		}
 
@@ -211,9 +217,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._preparePosition( pointerPosition );
 
 		// If user cancels stop, leave helper there
-		if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
+		if ( this._trigger( "stop", event,
+				this._fullHash( pointerPosition ) ) !== false ) {
 			if ( this.options.helper ) {
-				delete this.element.data( "ui-draggable" ).helper;
+				delete this.helper;
 				this.dragEl.remove();
 			}
 			this._resetDomPosition();
@@ -225,33 +232,30 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	/** internal **/
 
 	_createHelper: function( pointerPosition ) {
-		var helper,
-			offset = this.element.offset(),
+		var offset = this.element.offset(),
 			xPos = (pointerPosition.x - offset.left) / this.element.outerWidth(),
 			yPos = (pointerPosition.y - offset.top) / this.element.outerHeight();
 
-		// clone
+		// Clone
 		if ( this.options.helper === true ) {
-			helper = this.element.clone()
+			this.helper = this.element.clone()
 				.removeAttr( "id" )
 				.find( "[id]" )
 					.removeAttr( "id" )
 				.end();
 		} else {
 			// TODO: figure out the signature for this; see #4957
-			helper = $( this.options.helper() );
+			this.helper = $( this.options.helper() );
 		}
 
 		// Ensure the helper is in the DOM; obey the appendTo option if it exists
-		if ( this.options.appendTo || !helper.closest( "body" ).length ) {
-			helper.appendTo( this._appendToEl() || this.document[0].body );
+		if ( this.options.appendTo || !this.helper.closest( "body" ).length ) {
+			this.helper.appendTo( this._appendTo() || this.document[ 0 ].body );
 		}
 
-		this.element.data( "ui-draggable" ).helper = helper;
+		this._cacheDragDimensions( this.helper );
 
-		this._cacheDragDimensions( helper );
-
-		return helper
+		return this.helper
 			// Helper must be absolute to function properly
 			.css( "position", "absolute" )
 			.offset({
@@ -260,15 +264,15 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			});
 	},
 
-	_cacheDragDimensions: function( el) {
+	_cacheDragDimensions: function( element ) {
 		this.dragDimensions = {
-			width: el.outerWidth(),
-			height: el.outerHeight()
+			width: element.outerWidth(),
+			height: element.outerHeight()
 		};
 	},
 
 	// TODO: Remove after 2.0, only used for backCompat
-	_appendToEl: function() {
+	_appendTo: function() {
 		return this.options.appendTo;
 	},
 
@@ -288,11 +292,12 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			return position;
 		}
 
-		// When using relative, css values are checked
-		// Otherwise the position wouldn't account for padding on ancestors
+		// When using relative, css values are checked,
+		// otherwise the position wouldn't account for padding on ancestors
 		left = this.dragEl.css( "left" );
 		top = this.dragEl.css( "top" );
 
+		// TODO: add proper support comment
 		// Webkit will give back auto if there is no explicit value
 		left = ( left === "auto" ) ? 0: parseInt( left, 10 );
 		top = ( top === "auto" ) ? 0: parseInt( top, 10 );
@@ -321,7 +326,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			yBottom = this.overflow.height + overflowTop - pointerPosition.y,
 			yTop = pointerPosition.y - overflowTop,
 
-			// accounts for change in scrollbar to modify "original" pointer so calc
+			// Accounts for change in scrollbar to modify "original" pointer
 			change;
 
 		// Handle vertical scrolling
@@ -362,7 +367,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		return this.scrollSpeed + Math.round( distance / 2 );
 	},
 
-	// Uses event to determine new position of draggable, before any override from callbacks
+	// Uses event to determine new position of draggable, before any override
+	// from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( pointerPosition ) {
 		var leftDiff = pointerPosition.x - this.originalPointer.x,
@@ -387,7 +393,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.offset.top = this.startOffset.top + topDiff;
 	},
 
-	// Places draggable where event, or user via event/callback, indicates
+	// Places draggable where event indicates
 	_setCss: function() {
 		var newLeft = this.position.left,
 			newTop = this.position.top;
@@ -395,6 +401,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// User overriding left/top so shortcut math is no longer valid
 		if ( this.tempPosition.left !== this.position.left ||
 				this.tempPosition.top !== this.position.top ) {
+
 			// Reset offset based on difference of expected and overridden values
 			this.offset.left += newLeft - this.tempPosition.left;
 			this.offset.top += newTop - this.tempPosition.top;
@@ -445,7 +452,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 					height: iframe.outerHeight()
 				})
 				.appendTo( iframe.parent() )
-				.offset( iframe.offset() )[0];
+				.offset( iframe.offset() )[ 0 ];
 		});
 	},
 
@@ -462,12 +469,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	}
 });
 
+// Add containment option via extension
 $.widget( "ui.draggable", $.ui.draggable, {
-
-	// $.widget doesn't know how to handle redefinitions with a custom prefix
-	// custom prefixes are going away anyway, so it's not worth fixing right now
-	widgetEventPrefix: "drag",
-
 	options: {
 		containment: null
 	},
@@ -492,11 +495,11 @@ $.widget( "ui.draggable", $.ui.draggable, {
 		if ( $.isArray( container ) ) {
 			offset = container.offset();
 			left = offset.left +
-				(parseFloat( $.css( container[0], "borderLeftWidth", true ) ) || 0) +
-				(parseFloat( $.css( container[0], "paddingLeft", true ) ) || 0);
+				(parseFloat( $.css( container[ 0 ], "borderLeftWidth", true ) ) || 0) +
+				(parseFloat( $.css( container[ 0 ], "paddingLeft", true ) ) || 0);
 			top = offset.top +
-				(parseFloat( $.css( container[0], "borderTopWidth", true ) ) || 0) +
-				(parseFloat( $.css( container[0], "paddingTop", true ) ) || 0);
+				(parseFloat( $.css( container[ 0 ], "borderTopWidth", true ) ) || 0) +
+				(parseFloat( $.css( container[ 0 ], "paddingTop", true ) ) || 0);
 			right = left + container.width();
 			bottom = top + container.height();
 		} else {
@@ -555,7 +558,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 	}
 });
 
-})( jQuery );
+
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
@@ -564,7 +567,7 @@ if ( $.uiBackCompat !== false ) {
 	$.widget( "ui.draggable", $.ui.draggable, {
 
 		// Helper passed in since _createHelper calls this before dragEl is set
-		_appendToEl: function() {
+		_appendTo: function() {
 			var el = this.options.appendTo;
 
 			// This should only happen via _createHelper
@@ -949,7 +952,7 @@ if ( $.uiBackCompat !== false ) {
 			scrollSpeed: 20,
 			scrollSensitivity: 20
 		},
-		_create : function() {
+		_create: function() {
 			var self = this,
 				handleScroll = this._handleScrolling,
 				speed = this._speed;
@@ -1260,3 +1263,5 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 }
+
+})( jQuery );
