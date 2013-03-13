@@ -563,35 +563,27 @@ $.widget( "ui.draggable", $.ui.draggable, {
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
 
-	// appendTo 'parent' value
+	// appendTo "parent" value
 	$.widget( "ui.draggable", $.ui.draggable, {
-
-		// Helper passed in since _createHelper calls this before dragEl is set
 		_appendTo: function() {
-			var el = this.options.appendTo;
+			var element = this.options.appendTo;
 
-			// This should only happen via _createHelper
-			if ( el === null ) {
+			// This should only happen via _createHelper()
+			if ( element === null ) {
 				return this.element.parent();
 			}
 
-			if ( el === "parent" ) {
-				el = this.dragEl.parent();
+			if ( element === "parent" ) {
+				element = this.dragEl.parent();
 			}
 
-			return el;
+			return element;
 		}
 	});
 
-	// helper 'original' or 'clone' value + helper return value
+	// helper "original" or "clone" value + helper return value
 	$.widget( "ui.draggable", $.ui.draggable, {
-
 		_create: function() {
-			var self = this,
-				orig = this._originalHash;
-
-			this._super();
-
 			if ( this.options.helper === "original" ) {
 				this.options.helper = false;
 			}
@@ -600,27 +592,23 @@ if ( $.uiBackCompat !== false ) {
 				this.options.helper = true;
 			}
 
-			this._originalHash = function() {
-				var ret = orig.apply( self, arguments );
+			this._super();
+		},
 
-				if ( !ret.helper ) {
-					ret.helper = self.element;
-				}
+		_originalHash: function() {
+			var ret = this._superApply( arguments );
 
-				return ret;
-			};
+			if ( !ret.helper ) {
+				ret.helper = this.element;
+			}
+
+			return ret;
 		},
 
 		_setOption: function( key, value ) {
-			if ( key !== "helper" ) {
-				return this._super( key, value );
-			}
-
-			if ( value === "clone" ) {
+			if ( key === "helper" && value === "clone" ) {
 				value = true;
-			}
-
-			if ( value === "original" ) {
+			} else if ( key === "helper" && value === "original" ) {
 				value = false;
 			}
 
@@ -635,19 +623,17 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this;
-
 			this._super();
 
-			// On drag, make sure top does not change so axis is locked
-			this.element.on( "drag", function( event, ui ) {
+			this._on({
+				drag: function( event, ui ) {
+					if ( this.options.axis === "x" ) {
+						ui.position.top = ui.originalPosition.top;
+					}
 
-				if ( self.options.axis === "x" ) {
-					ui.position.top = ui.originalPosition.top;
-				}
-
-				if ( self.options.axis === "y" ) {
-					ui.position.left = ui.originalPosition.left;
+					if ( this.options.axis === "y" ) {
+						ui.position.left = ui.originalPosition.left;
+					}
 				}
 			});
 		}
@@ -660,20 +646,20 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			this._super();
-
 			if ( this.options.cancel !== null ) {
 				this.options.exclude = this.options.cancel;
 			}
+
+			this._super();
 		},
 
 		_setOption: function( key, value ) {
-			if ( key !== "cancel" ) {
-				return this._super( key, value );
+			if ( key === "cancel" ) {
+				key = "exclude";
 			}
 
 			this._super( key, value );
-			this.options.exclude = this.options.cancel;
+			this.options.cancel = this.options.exclude;
 		}
 	});
 
@@ -684,28 +670,26 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var startCursor, self, body;
+			var startCursor, body;
 
 			this._super();
 
-			self = this;
-			body = $( this.document[0].body );
+			body = $( this.document[ 0 ].body );
 
-			// Cache original cursor to set back
-			this.element.on( "dragbeforestart", function() {
+			this._on({
+				// Cache original cursor to set back
+				dragbeforestart: function() {
+					if ( this.options.cursor ) {
+						startCursor = body[ 0 ].style.cursor;
+						body.css( "cursor", this.options.cursor );
+					}
+				},
 
-				if ( self.options.cursor ) {
-					startCursor = body[0].style.cursor;
-					body.css( "cursor", self.options.cursor );
-				}
-
-			});
-
-			// Set back cursor to whatever default was
-			this.element.on( "dragstop", function() {
-
-				if ( self.options.cursor ) {
-					body.css( "cursor", startCursor );
+				// Set back cursor to whatever default was
+				dragstop: function() {
+					if ( this.options.cursor ) {
+						body.css( "cursor", startCursor );
+					}
 				}
 			});
 		}
@@ -718,41 +702,44 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this;
-
 			this._super();
 
-			this.element.on( "dragbeforestart", function( event, ui ) {
-				var cursorAt = self.options.cursorAt;
+			this._on({
+				dragbeforestart: function( event, ui ) {
+					var cursorAt = this.options.cursorAt;
 
-				// No need to continue
-				if ( !cursorAt ) {
-					return;
-				}
+					if ( !cursorAt ) {
+						return;
+					}
 
-				// support array and string position notation
-				// TODO: Remove after 2.0, only used for backCompat
-				if ( typeof cursorAt === "string" ) {
-					cursorAt = cursorAt.split(" ");
-				}
-				if ( $.isArray( cursorAt ) ) {
-					cursorAt = {
-						left: +cursorAt[ 0 ],
-						top: +cursorAt[ 1 ] || 0
-					};
-				}
+					if ( typeof cursorAt === "string" ) {
+						cursorAt = cursorAt.split(" ");
+					}
+					if ( $.isArray( cursorAt ) ) {
+						cursorAt = {
+							left: +cursorAt[ 0 ],
+							top: +cursorAt[ 1 ] || 0
+						};
+					}
 
-				if ( "top" in cursorAt ) {
-					ui.position.top += ui.pointer.y - ui.offset.top - cursorAt.top;
-				}
-				if ( "left" in cursorAt ) {
-					ui.position.left += ui.pointer.x - ui.offset.left - cursorAt.left;
-				}
-				if ( "bottom" in cursorAt ) {
-					ui.position.top += ui.pointer.y - ui.offset.top - self.dragDimensions.height + cursorAt.bottom;
-				}
-				if ( "right" in cursorAt ) {
-					ui.position.left += ui.pointer.x - ui.offset.left - self.dragDimensions.width + cursorAt.right;
+					if ( "top" in cursorAt ) {
+						ui.position.top += ui.pointer.y -
+							ui.offset.top - cursorAt.top;
+					}
+					if ( "left" in cursorAt ) {
+						ui.position.left += ui.pointer.x -
+							ui.offset.left - cursorAt.left;
+					}
+					if ( "bottom" in cursorAt ) {
+						ui.position.top += ui.pointer.y -
+							ui.offset.top - this.dragDimensions.height +
+							cursorAt.bottom;
+					}
+					if ( "right" in cursorAt ) {
+						ui.position.left += ui.pointer.x -
+							ui.offset.left - this.dragDimensions.width +
+							cursorAt.right;
+					}
 				}
 			});
 		}
@@ -765,52 +752,53 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this,
-				currentX, currentY;
+			var currentX, currentY;
 
 			this._super();
 
-			this.element.on( "dragbeforestart", function( event, ui ) {
-				if ( !self.options.grid ) {
-					return;
-				}
-
-				// Save off the start position, which may be overwritten during drag
-				currentX = ui.position.left;
-				currentY = ui.position.top;
-			});
-
-			this.element.on( "drag", function( event, ui ) {
-				if ( !self.options.grid ) {
-					return;
-				}
-
-				// Save off the intended intervals
-				var x = self.options.grid[0],
-					y = self.options.grid[1];
-
-				// If x is actually something, check that user is at least half way to next point
-				if ( x ) {
-					if ( ui.position.left - currentX >= x/2 ) {
-						currentX = currentX + x;
-					}	else if ( currentX - ui.position.left >= x/2 ) {
-						currentX = currentX - x;
+			this._on({
+				dragbeforestart: function( event, ui ) {
+					if ( !this.options.grid ) {
+						return;
 					}
-				}
 
-				// If y is actually something, check that user is at least half way to next point
-				if ( y ) {
-					if ( ui.position.top - currentY >= y/2 ) {
-						currentY = currentY + y;
-					} else if ( currentY - ui.position.top >= y/2 ) {
-						currentY = currentY - y;
+					// Save off the start position,
+					// which may be overwritten during drag
+					currentX = ui.position.left;
+					currentY = ui.position.top;
+				},
+
+				drag: function( event, ui ) {
+					if ( !this.options.grid ) {
+						return;
 					}
-				}
 
-				// If there threshold wasn't crossed these variables wouldn't be changed
-				// Otherwise this will now bump the draggable to the next spot on grid
-				ui.position.left = currentX;
-				ui.position.top = currentY;
+					// Save off the intended intervals
+					var x = this.options.grid[ 0 ],
+						y = this.options.grid[ 1 ];
+
+					// Check that user is at least half way to next point on x axis
+					if ( x ) {
+						if ( ui.position.left - currentX >= x / 2 ) {
+							currentX = currentX + x;
+						}	else if ( currentX - ui.position.left >= x / 2 ) {
+							currentX = currentX - x;
+						}
+					}
+
+					// Check that user is at least half way to next point on y axis
+					if ( y ) {
+						if ( ui.position.top - currentY >= y / 2 ) {
+							currentY = currentY + y;
+						} else if ( currentY - ui.position.top >= y / 2 ) {
+							currentY = currentY - y;
+						}
+					}
+
+					// Force the draggable to the appropriate spot on the grid
+					ui.position.left = currentX;
+					ui.position.top = currentY;
+				}
 			});
 		}
 	});
@@ -822,34 +810,31 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this,
-				originalOpacity;
+			var originalOpacity;
 
 			this._super();
 
-			this.element.on( "dragstart", function() {
+			this._on({
+				dragstart: function() {
+					if ( !this.options.opacity ) {
+						return;
+					}
 
-				// No need to continue
-				if ( !self.options.opacity ) {
-					return;
+					// Cache the original opacity of draggable element to reset later
+					originalOpacity = this.dragEl.css( "opacity" );
+
+					// Set draggable element to new opacity
+					this.dragEl.css( "opacity", this.options.opacity );
+				},
+
+				dragstop: function() {
+					if ( !this.options.opacity ) {
+						return;
+					}
+
+					// Reset opacity
+					this.dragEl.css( "opacity", originalOpacity );
 				}
-
-				// Cache the original opacity of draggable element to reset later
-				originalOpacity = self.dragEl.css( "opacity" );
-
-				// Set draggable element to new opacity
-				self.dragEl.css( "opacity", self.options.opacity );
-			});
-
-			this.element.on( "dragstop", function() {
-
-				// No need to continue
-				if ( !self.options.opacity ) {
-					return;
-				}
-
-				// Reset opacity
-				self.dragEl.css( "opacity", originalOpacity );
 			});
 		}
 	});
@@ -863,38 +848,34 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this,
-				originalLeft, originalTop, originalPosition;
+			var originalLeft, originalTop, originalPosition;
 
 			this._super();
 
-			this.element.on( "dragbeforestart", function() {
+			this._on({
+				dragbeforestart: function() {
+					if ( !this.options.revert ) {
+						return;
+					}
 
-				// No need to continue
-				if ( !self.options.revert ) {
-					return;
+					// Cache the original css of draggable element to reset later
+					originalLeft = this.dragEl.css( "left" );
+					originalTop = this.dragEl.css( "top" );
+					originalPosition = this.dragEl.css( "position" );
+				},
+
+				dragstop: function() {
+					if ( !this.options.revert ) {
+						return;
+					}
+
+					// Reset to before drag
+					this.dragEl.animate({
+						left: originalLeft,
+						top: originalTop,
+						position: originalPosition
+					}, this.options.revertDuration );
 				}
-
-				// Cache the original css of draggable element to reset later
-				originalLeft = self.dragEl.css( "left" );
-				originalTop = self.dragEl.css( "top" );
-				originalPosition = self.dragEl.css( "position" );
-
-			});
-
-			this.element.on( "dragstop", function() {
-
-				// No need to continue
-				if ( !self.options.revert ) {
-					return;
-				}
-
-				// Reset to before drag
-				self.dragEl.animate({
-					left: originalLeft,
-					top: originalTop,
-					position: originalPosition
-				}, self.options.revertDuration );
 			});
 		}
 	});
@@ -906,34 +887,31 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this,
-				originalZIndex;
+			var originalZindex;
 
 			this._super();
 
-			this.element.on( "dragstart", function() {
+			this._on({
+				dragstart: function() {
+					if ( !this.options.zIndex ) {
+						return;
+					}
 
-				// No need to continue
-				if ( !self.options.zIndex ) {
-					return;
+					// Cache the original zIndex of draggable element to reset later
+					originalZindex = this.dragEl.css( "z-index" );
+
+					// Set draggable element to new zIndex
+					this.dragEl.css( "z-index", this.options.zIndex );
+				},
+
+				dragstop: function() {
+					if ( !this.options.zIndex ) {
+						return;
+					}
+
+					// Reset zIndex
+					this.dragEl.css( "z-index", originalZindex );
 				}
-
-				// Cache the original zIndex of draggable element to reset later
-				originalZIndex = self.dragEl.css( "z-index" );
-
-				// Set draggable element to new zIndex
-				self.dragEl.css( "z-index", self.options.zIndex );
-			});
-
-			this.element.on( "dragstop", function() {
-
-				// No need to continue
-				if ( !self.options.zIndex ) {
-					return;
-				}
-
-				// Reset zIndex
-				self.dragEl.css( "z-index", originalZIndex );
 			});
 		}
 	});
@@ -952,38 +930,28 @@ if ( $.uiBackCompat !== false ) {
 			scrollSpeed: 20,
 			scrollSensitivity: 20
 		},
-		_create: function() {
-			var self = this,
-				handleScroll = this._handleScrolling,
-				speed = this._speed;
 
-			this._super();
+		_speed: function( distance ) {
+			if ( this.options.scrollSpeed !== null ) {
+				this.scrollSpeed = this.options.scrollSpeed;
 
-			this._speed = function( distance ) {
-				if ( self.options.scrollSpeed !== null ) {
+				// Undo calculation that makes things go faster as distance increases
+				distance = 0;
+			}
 
-					self.scrollSpeed = self.options.scrollSpeed;
+			return this._super( distance );
+		},
 
-					// Undo calculation that makes things go faster as distance increases
-					distance = 0;
-				}
+		_handleScrolling: function( pointerPosition ) {
+			if ( !this.options.scroll ) {
+				return;
+			}
 
-				return speed.call( self, distance );
-			};
+			if ( this.options.scrollSensitivity !== null ) {
+				this.scrollSensitivity = this.options.scrollSensitivity;
+			}
 
-			// Wrap member function to check for ability to scroll
-			this._handleScrolling = function( pointerPosition ) {
-
-				if ( !self.options.scroll ) {
-					return;
-				}
-
-				if ( self.options.scrollSensitivity !== null ) {
-					self.scrollSensitivity = self.options.scrollSensitivity;
-				}
-
-				handleScroll.call( self, pointerPosition );
-			};
+			this._super( pointerPosition );
 		}
 	});
 
@@ -994,44 +962,41 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this;
-
 			this._super();
 
-			this.element.on( "dragbeforestart", function() {
+			this._on({
+				dragbeforestart: function() {
+					var group, min,
+						stack = this.options.stack;
 
-				var stack = self.options.stack,
-					group, min;
+					if ( !stack ) {
+						return;
+					}
 
-				if ( !self.options.stack ) {
-					return;
+					group = $.makeArray( $( stack ) ).sort(function( a, b ) {
+						var aZIndex = parseInt( $( a ).css( "zIndex" ), 10 ) || 0,
+							bZIndex = parseInt( $( b ).css( "zIndex" ), 10 ) || 0;
+						return aZIndex - bZIndex;
+					});
+
+					if ( !group.length ) {
+						return;
+					}
+
+					min = parseInt( group[ 0 ].style.zIndex, 10 ) || 0;
+
+					$( group ).each(function( i ) {
+						this.style.zIndex = min + i;
+					});
+
+					this.element.css( "zIndex", min + group.length );
 				}
-
-				group = $.makeArray( $(stack) ).sort(function(a,b) {
-
-					var aZIndex = parseInt( $(a).css("zIndex"), 10 ),
-						bZIndex = parseInt( $(b).css("zIndex"), 10 );
-
-					return ( aZIndex || 0) -  ( bZIndex|| 0);
-				});
-
-				if (!group.length) {
-					return;
-				}
-
-				min = parseInt(group[0].style.zIndex, 10) || 0;
-
-				$(group).each(function(i) {
-					this.style.zIndex = min + i;
-				});
-
-				self.element[0].style.zIndex = min + group.length;
 			});
 		}
 	});
 
-	// snap snapMode snapTolerance options
-	// mainly copy-pasted from 1.9 since the code is so "insane" didn't want to reverse-engineer into sanity
+	// TODO: cleanup
+	// snap, snapMode, and snapTolerance options
 	$.widget( "ui.draggable", $.ui.draggable, {
 		options: {
 			snap: false,
@@ -1240,25 +1205,24 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			var self = this,
-				drops;
+			var drops;
 
 			this._super();
 
-			this.element.on( "dragstart", function() {
-				drops = $(":data(ui-sortable)");
-			});
+			this._on({
+				dragstart: function() {
+					drops = $( ":data(ui-sortable)" );
+				},
 
-			// On drag, make sure top does not change so axis is locked
-			this.element.on( "drag", function() {
+				drag: function() {
+					if ( this.options.refreshPositions !== true ) {
+						return;
+					}
 
-				if ( self.options.refreshPositions !== true ) {
-					return;
+					drops.each(function() {
+						$( this ).sortable( "refreshPositions" );
+					});
 				}
-
-				drops.each( function() {
-					$(this).sortable("refreshPositions");
-				});
 			});
 		}
 	});

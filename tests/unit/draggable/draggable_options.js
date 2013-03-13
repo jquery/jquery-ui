@@ -229,7 +229,7 @@ test( "{ cancel: Selectors }, matching parent selector", function() {
 });
 */
 
-test( "cancelement, default, switching after initialization", function() {
+test( "cancel, default, switching after initialization", function() {
 	expect( 3 );
 
 	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#main" );
