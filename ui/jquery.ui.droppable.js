@@ -82,7 +82,7 @@ $.widget("ui.droppable", {
 				return d.is(value);
 			};
 		}
-		this._super( key, value );
+		$.Widget.prototype._setOption.apply(this, arguments);
 	},
 
 	_activate: function(event) {

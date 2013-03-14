@@ -427,11 +427,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			valsLength = this.options.values.length;
 		}
 
-		if ( key === "disabled" ) {
-			this.element.toggleClass( "ui-state-disabled", !!value );
-		}
-
-		this._super( key, value );
+		$.Widget.prototype._setOption.apply( this, arguments );
 
 		switch ( key ) {
 			case "orientation":

@@ -345,7 +345,8 @@ $.Widget.prototype = {
 
 		if ( key === "disabled" ) {
 			this.widget()
-				.toggleClass( this.widgetFullName + "-disabled", !!value );
+				.toggleClass( this.widgetFullName + "-disabled ui-state-disabled", !!value )
+				.attr( "aria-disabled", value );
 			this.hoverable.removeClass( "ui-state-hover" );
 			this.focusable.removeClass( "ui-state-focus" );
 		}
