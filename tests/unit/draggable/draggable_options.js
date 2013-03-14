@@ -1103,6 +1103,40 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 	TestHelpers.draggable.restoreScroll( document );
 });
 
+test( "#6817: auto scroll goes double distance when dragging", function() {
+	expect( 2 );
+
+	var offsetBefore,
+		distance = 10,
+		viewportHeight = $( window ).height(),
+		element = $( "#draggable1" ).draggable({
+			scroll: true,
+			stop: function( e, ui ) {
+				equal( ui.offset.top, newY, "offset of item matches pointer position after scroll" );
+				equal( ui.offset.top - offsetBefore.top, distance, "offset of item only moves expected distance after scroll" );
+			}
+		}),
+		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
+		oldY = viewportHeight - scrollSensitivity,
+		newY = oldY + distance;
+
+	element.offset({
+		top: oldY,
+		left: 1
+	});
+
+	offsetBefore = element.offset();
+
+	element.simulate( "drag", {
+		handle: "corner",
+		dx: 1,
+		y: newY,
+		moves: 1
+	});
+
+	TestHelpers.draggable.restoreScroll( document );
+});
+
 test( "snap, snapMode, and snapTolerance", function() {
 	expect( 9 );
 
