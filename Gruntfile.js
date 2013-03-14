@@ -253,9 +253,7 @@ grunt.initConfig({
 				"dist/jquery-ui.js": "jquery-ui.js",
 				"dist/jquery-ui.min.js": "jquery-ui.min.js",
 				"dist/i18n/jquery-ui-i18n.js": "i18n/jquery-ui-i18n.js",
-				"dist/i18n/jquery-ui-i18n.min.js": "i18n/jquery-ui-i18n.min.js",
-				"dist/jquery-ui.css": "themes/base/jquery-ui.css",
-				"dist/jquery-ui.min.css": "themes/base/minified/jquery-ui.min.css"
+				"dist/i18n/jquery-ui-i18n.min.js": "i18n/jquery-ui-i18n.min.js"
 			},
 			dest: "dist/<%= files.cdn %>"
 		},
@@ -273,11 +271,6 @@ grunt.initConfig({
 			src: "dist/minified/*.js",
 			strip: /^dist\/minified/,
 			dest: "dist/<%= files.cdn %>/ui"
-		},
-		cdn_min_images: {
-			src: "themes/base/images/*",
-			strip: /^themes\/base\//,
-			dest: "dist/<%= files.cdn %>/themes/base/minified"
 		},
 		cdn_themes: {
 			src: "dist/<%= files.themes %>/themes/**/*",
@@ -380,6 +373,6 @@ grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
 grunt.registerTask( "build", [ "concat", "uglify", "cssmin", "copy:dist_units_images" ] );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist".split( " " ) );
 grunt.registerTask( "release_themes", "release generate_themes copy:themes md5:themes zip:themes".split( " " ) );
-grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn".split( " " ) );
+grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_themes md5:cdn zip:cdn".split( " " ) );
 
 };
