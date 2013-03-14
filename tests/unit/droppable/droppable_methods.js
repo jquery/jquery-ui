@@ -63,26 +63,29 @@ test("enable", function() {
 	equal(actual, expected, "enable is chainable");
 });
 
-test("disable", function() {
-	expect(7);
+test( "disable", function() {
+	expect( 10 );
 
-	var el, actual, expected;
+	var actual, expected,
+		element = $( "#droppable1" ).droppable({ disabled: false });
 
-	el = $("#droppable1").droppable({ disabled: false });
 	TestHelpers.droppable.shouldDrop();
-	el.droppable("disable");
+	element.droppable( "disable" );
 	TestHelpers.droppable.shouldNotDrop();
-	equal(el.droppable("option", "disabled"), true, "disabled option getter");
-	el.droppable("destroy");
-	el.droppable({ disabled: false });
+	equal( element.droppable( "option", "disabled" ), true, "disabled option getter" );
+	element.droppable( "destroy" );
+	element.droppable({ disabled: false });
 	TestHelpers.droppable.shouldDrop();
-	el.droppable("option", "disabled", true);
-	equal(el.droppable("option", "disabled"), true, "disabled option setter");
+	element.droppable( "option", "disabled", true );
+	ok( !element.droppable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	ok( !element.droppable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.droppable( "widget" ).hasClass( "ui-droppable-disabled" ), "element gets ui-droppable-disabled" );
+	equal( element.droppable( "option", "disabled" ), true, "disabled option setter" );
 	TestHelpers.droppable.shouldNotDrop();
 
-	expected = $("<div></div>").droppable(),
-	actual = expected.droppable("disable");
-	equal(actual, expected, "disable is chainable");
+	expected = $( "<div></div>" ).droppable();
+	actual = expected.droppable( "disable" );
+	equal( actual, expected, "disable is chainable" );
 });
 
 })(jQuery);
