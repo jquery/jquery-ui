@@ -151,13 +151,17 @@ $.widget( "ui.menubar", {
 
 		this._on( subMenus, {
 			keydown: function( event ) {
-				var menu = $( this );
+				var parentButton,
+					menu = $( this );
 				if ( menu.is(":hidden") ) {
 					return;
 				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
-					this.previous( event );
+					parentButton = menubar.active.prev(".ui-button").focus();
+					menubar.active.blur();
+					menubar._close( event );
+					parentButton.focus();
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.RIGHT:
@@ -269,6 +273,7 @@ $.widget( "ui.menubar", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.LEFT:
+				debugger;
 				this.previous( event );
 				event.preventDefault();
 				break;
