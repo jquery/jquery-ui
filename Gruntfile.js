@@ -348,20 +348,18 @@ grunt.initConfig({
 		}
 	},
 	csslint: {
-		// TODO figure out what to check for, then fix and enable
 		base_theme: {
-			src: expandFiles( "themes/base/*.css" ).filter(function( file ) {
-				// TODO remove items from this list once rewritten
-				return !( /(button|datepicker|core|dialog|theme)\.css$/ ).test( file );
-			}),
-			// TODO consider reenabling some of these rules
+			src: "themes/base/*.css",
 			options: {
 				"adjoining-classes": false,
+				"box-model": false,
+				"compatible-vendor-prefixes": false,
+				"duplicate-background-images": false,
 				"import": false,
+				"important": false,
 				"outline-none": false,
-				// especially this one
 				"overqualified-elements": false,
-				"compatible-vendor-prefixes": false
+				"text-indent": false
 			}
 		}
 	}
