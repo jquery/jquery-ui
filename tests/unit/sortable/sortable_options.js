@@ -13,23 +13,100 @@ test("{ appendTo: 'parent' }, default", function() {
 test("{ appendTo: Selector }", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
-test("{ axis: false }, default", function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ axis: false }, default", function() {
+	expect( 2 );
+
+	var offsetAfter,
+		element = $( "#sortable" ).sortable({
+			axis: false,
+			change: function() {
+				offsetAfter = item.offset();
+				notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: false" );
+				notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: false" );
+			}
+		}),
+		item = element.find( "li" ).eq( 0 ),
+		offsetBefore = item.offset();
+
+	item.simulate( "drag", {
+		dx: 50,
+		dy: 25,
+		moves: 1
+	});
 });
 
-test("{ axis: 'x' }", function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ axis: 'x' }", function() {
+	expect( 2 );
+
+	var offsetAfter,
+		element = $( "#sortable" ).sortable({
+			axis: "x",
+			change: function() {
+				offsetAfter = item.offset();
+				notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: x" );
+				equal( offsetAfter.top, offsetBefore.top, "y axis constrained when axis: x" );
+			}
+		}),
+		item = element.find( "li" ).eq( 0 ),
+		offsetBefore = item.offset();
+
+	item.simulate( "drag", {
+		dx: 50,
+		dy: 25,
+		moves: 1
+	});
 });
 
-test("{ axis: 'y' }", function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ axis: 'y' }", function() {
+	expect( 2 );
+
+	var offsetAfter,
+		element = $( "#sortable" ).sortable({
+			axis: "y",
+			change: function() {
+				offsetAfter = item.offset();
+				equal( offsetAfter.left, offsetBefore.left, "x axis constrained when axis: y" );
+				notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: y" );
+			}
+		}),
+		item = element.find( "li" ).eq( 0 ),
+		offsetBefore = item.offset();
+
+	item.simulate( "drag", {
+		dx: 50,
+		dy: 25,
+		moves: 1
+	});
 });
 
-test("{ axis: ? }, unexpected", function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "#7415: Incorrect revert animation with axis: 'y'", function() {
+  expect( 2 );
+	var expectedLeft,
+		element = $( "#sortable" ).sortable({
+			axis: "y",
+			revert: true,
+			stop: start,
+			sort: function() {
+				expectedLeft = item.css( "left" );
+			}
+		}),
+		item = element.find( "li" ).eq( 0 );
+
+	item.simulate( "drag", {
+		dy: 300,
+		dx: 50
+	});
+
+	setTimeout(function() {
+		var top = parseFloat( item.css( "top" ) );
+		equal( item.css( "left" ), expectedLeft, "left not animated" );
+		ok( top > 0 && top < 300, "top is animated" );
+	}, 100 );
 });
 
+/*
 test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
