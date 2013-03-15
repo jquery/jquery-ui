@@ -367,7 +367,9 @@ grunt.initConfig({
 	}
 });
 
-grunt.registerTask( "default", [ "jshint", "csslint", "htmllint", "qunit" ] );
+grunt.registerTask( "default", [ "lint", "test" ] );
+grunt.registerTask( "lint", [ "jshint", "csslint", "htmllint" ] );
+grunt.registerTask( "test", [ "qunit" ] );
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
 grunt.registerTask( "build", [ "concat", "uglify", "cssmin", "copy:dist_units_images" ] );
