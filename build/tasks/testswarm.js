@@ -14,6 +14,7 @@ var versions = {
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Core": "core/core.html",
+		"Core_deprecated": "core/core_deprecated.html",
 		"Datepicker": "datepicker/datepicker.html",
 		"Dialog": "dialog/dialog.html",
 		"Draggable": "draggable/draggable.html",
