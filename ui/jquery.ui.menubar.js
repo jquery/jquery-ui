@@ -458,7 +458,7 @@ $.widget( "ui.menubar", {
 			wrapItem = this.menuItems[ filter ]();
 		} else {
 			if ( event ) {
-				next = $( event.target ).closest(".ui-menubar-item")[ direction + "All" ]( this.options.items ).children(".ui-menubar-link").eq( 0 );
+				next = $( event.target ).closest(".ui-menubar-item")[ direction + "All" ]( this.options.items ).children(".ui-button").eq( 0 );
 				wrapItem = this.menuItems[ filter ]().children(".ui-menubar-link").eq( 0 );
 			} else {
 				next = wrapItem = this.menuItems.children("a").eq( 0 );
