@@ -1257,6 +1257,39 @@ test( "snap, snapMode, and snapTolerance", function() {
 	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap on the inner snapTolerance area when snapMode is outer" );
 });
 
+test( "#8459: element can snap to an element that was removed during drag", function() {
+	expect( 1 );
+
+	var newX, newY,
+		snapTolerance = 15,
+		element = $( "#draggable1" ).draggable({
+			snap: true,
+			snapMode: "both",
+			snapTolerance: snapTolerance,
+			start: function() {
+				element2.remove();
+			}
+		}),
+		element2 = $( "#draggable2" ).draggable();
+
+	element.offset({
+		top: 1,
+		left: 1
+	});
+
+	newX = element2.offset().left - element.outerWidth() - snapTolerance + 1;
+	newY = element2.offset().top;
+
+	element.simulate( "drag", {
+		handle: "corner",
+		x: newX,
+		y: newY,
+		moves: 1
+	});
+
+	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap to a removed element" );
+});
+
 test( "#8165: Snapping large rectangles to small rectangles doesn't snap properly", function() {
 	expect( 1 );
 
