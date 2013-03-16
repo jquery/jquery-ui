@@ -87,15 +87,14 @@ $.widget( "ui.menubar", {
 
 	_initializeMenuItems: function() {
 		var $item,
-			menubar = this,
-			seenFirstItem = false;
+			menubar = this;
 
 		this.menuItems
 			.addClass("ui-menubar-item")
 			.attr( "role", "presentation" );
 
 		$.each( this.menuItems, function( index, menuItem ){
-			menubar._initializeMenuItem( $( menuItem ), menubar, seenFirstItem );
+			menubar._initializeMenuItem( $( menuItem ), menubar );
 		} );
 	},
 
