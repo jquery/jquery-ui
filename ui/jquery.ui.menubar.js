@@ -272,7 +272,6 @@ $.widget( "ui.menubar", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.LEFT:
-				debugger;
 				this.previous( event );
 				event.preventDefault();
 				break;
