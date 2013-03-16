@@ -370,8 +370,7 @@ $.widget( "ui.menubar", {
 				});
 			this.active
 				.prev()
-				.removeClass("ui-state-active")
-				.removeAttr("tabIndex");
+				.removeClass("ui-state-active");
 			this.active.closest( this.options.items ).removeClass("ui-state-active");
 		} else {
 			this.active
@@ -478,7 +477,7 @@ $.widget( "ui.menubar", {
 				this._submenuless_open( event, next );
 			}
 		} else {
-			next.removeAttr("tabIndex")[0].focus();
+			next.focus();
 		}
 	},
 
