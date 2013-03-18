@@ -625,6 +625,22 @@ test( ".widget() - overriden", function() {
 	deepEqual( wrapper[0], $( "<div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
+test( ".instance()", function() {
+	expect( 2 );
+	var div,
+		_test = function() {};
+
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		_test: _test
+	});
+
+	div = $( "<div>" );
+	equal( div.testWidget( "instance" ), undefined );
+	div.testWidget();
+	equal( div.testWidget( "instance" ), div.data( "ui-testWidget" ) );
+});
+
 test( "._on() to element (default)", function() {
 	expect( 12 );
 	var that, widget;
