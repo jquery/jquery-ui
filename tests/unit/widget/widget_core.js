@@ -627,12 +627,10 @@ test( ".widget() - overriden", function() {
 
 test( ".instance()", function() {
 	expect( 2 );
-	var div,
-		_test = function() {};
+	var div;
 
 	$.widget( "ui.testWidget", {
-		_create: function() {},
-		_test: _test
+		_create: function() {}
 	});
 
 	div = $( "<div>" );
