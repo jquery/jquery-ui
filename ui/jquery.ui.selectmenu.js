@@ -393,6 +393,10 @@ $.widget( "ui.selectmenu", {
 		}
 		if ( key === "disabled" ) {
 			this.menu.menu( "option", "disabled", value );
+			this.button
+				.toggleClass( "ui-state-disabled", !!value )
+				.attr( "aria-disabled", value );
+
 			if ( value ) {
 				this.element.attr( "disabled", "disabled" );
 				this.button.attr( "tabindex", -1 );
