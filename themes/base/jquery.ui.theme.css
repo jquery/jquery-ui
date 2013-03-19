@@ -156,7 +156,6 @@
 .ui-icon {
 	width: 16px;
 	height: 16px;
-	background-position: 16px 16px;
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
@@ -184,6 +183,7 @@
 }
 
 /* positioning */
+.ui-icon-blank { background-position: 16px 16px; }
 .ui-icon-carat-1-n { background-position: 0 0; }
 .ui-icon-carat-1-ne { background-position: -16px 0; }
 .ui-icon-carat-1-e { background-position: -32px 0; }

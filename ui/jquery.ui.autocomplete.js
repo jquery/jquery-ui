@@ -201,7 +201,7 @@ $.widget( "ui.autocomplete", {
 				role: null
 			})
 			.hide()
-			.data( "ui-menu" );
+			.menu( "instance" );
 
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
