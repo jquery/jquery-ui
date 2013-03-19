@@ -81,7 +81,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			//Overwrite the original this.element
 			this.element = this.element.parent().data(
-				"ui-resizable", this.element.data("ui-resizable")
+				"ui-resizable", this.element.resizable( "instance" )
 			);
 
 			this.elementIsWrapper = true;
@@ -651,7 +651,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 $.ui.plugin.add("resizable", "animate", {
 
 	stop: function( event ) {
-		var that = $(this).data("ui-resizable"),
+		var that = $(this).resizable( "instance" ),
 			o = that.options,
 			pr = that._proportionallyResizeElements,
 			ista = pr.length && (/textarea/i).test(pr[0].nodeName),
@@ -693,7 +693,7 @@ $.ui.plugin.add("resizable", "containment", {
 
 	start: function() {
 		var element, p, co, ch, cw, width, height,
-			that = $(this).data("ui-resizable"),
+			that = $(this).resizable( "instance" ),
 			o = that.options,
 			el = that.element,
 			oc = o.containment,
@@ -739,7 +739,7 @@ $.ui.plugin.add("resizable", "containment", {
 
 	resize: function( event ) {
 		var woset, hoset, isParent, isOffsetRelative,
-			that = $(this).data("ui-resizable"),
+			that = $(this).resizable( "instance" ),
 			o = that.options,
 			co = that.containerOffset, cp = that.position,
 			pRatio = that._aspectRatio || event.shiftKey,
@@ -794,7 +794,7 @@ $.ui.plugin.add("resizable", "containment", {
 	},
 
 	stop: function(){
-		var that = $(this).data("ui-resizable"),
+		var that = $(this).resizable( "instance" ),
 			o = that.options,
 			co = that.containerOffset,
 			cop = that.containerPosition,
@@ -818,7 +818,7 @@ $.ui.plugin.add("resizable", "containment", {
 $.ui.plugin.add("resizable", "alsoResize", {
 
 	start: function () {
-		var that = $(this).data("ui-resizable"),
+		var that = $(this).resizable( "instance" ),
 			o = that.options,
 			_store = function (exp) {
 				$(exp).each(function() {
@@ -839,7 +839,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 	},
 
 	resize: function (event, ui) {
-		var that = $(this).data("ui-resizable"),
+		var that = $(this).resizable( "instance" ),
 			o = that.options,
 			os = that.originalSize,
 			op = that.originalPosition,
@@ -880,7 +880,7 @@ $.ui.plugin.add("resizable", "ghost", {
 
 	start: function() {
 
-		var that = $(this).data("ui-resizable"), o = that.options, cs = that.size;
+		var that = $(this).resizable( "instance" ), o = that.options, cs = that.size;
 
 		that.ghost = that.originalElement.clone();
 		that.ghost
@@ -893,14 +893,14 @@ $.ui.plugin.add("resizable", "ghost", {
 	},
 
 	resize: function(){
-		var that = $(this).data("ui-resizable");
+		var that = $(this).resizable( "instance" );
 		if (that.ghost) {
 			that.ghost.css({ position: "relative", height: that.size.height, width: that.size.width });
 		}
 	},
 
 	stop: function() {
-		var that = $(this).data("ui-resizable");
+		var that = $(this).resizable( "instance" );
 		if (that.ghost && that.helper) {
 			that.helper.get(0).removeChild(that.ghost.get(0));
 		}
@@ -911,7 +911,7 @@ $.ui.plugin.add("resizable", "ghost", {
 $.ui.plugin.add("resizable", "grid", {
 
 	resize: function() {
-		var that = $(this).data("ui-resizable"),
+		var that = $(this).resizable( "instance" ),
 			o = that.options,
 			cs = that.size,
 			os = that.originalSize,

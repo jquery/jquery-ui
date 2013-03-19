@@ -117,7 +117,7 @@ test( "stopping the stop callback", function() {
 		dy: 10
 	});
 
-	ok( element.data("ui-draggable").helper, "the clone should not be deleted if the stop callback is stopped" );
+	ok( element.draggable( "instance" ).helper, "the clone should not be deleted if the stop callback is stopped" );
 
 
 });
