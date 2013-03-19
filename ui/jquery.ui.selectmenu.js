@@ -144,7 +144,7 @@ $.widget( "ui.selectmenu", {
 			// set ARIA role
 			role: "listbox"
 		})
-		.data( "ui-menu" );
+		.menu( "instance" );
 
 		// adjust border radius
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
