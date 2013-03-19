@@ -314,7 +314,7 @@ test( "hide and show: false", function() {
 			show: false,
 			hide: false
 		}),
-		widget = element.data( "ui-tabs" ),
+		widget = element.tabs( "instance" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function() {
 		ok( false, "_show() called" );
@@ -335,7 +335,7 @@ asyncTest( "hide and show - animation", function() {
 			show: "drop",
 			hide: 2000
 		}),
-		widget = element.data( "ui-tabs" ),
+		widget = element.tabs( "instance" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function( element, options, callback ) {
 		strictEqual( element[ 0 ], panels[ 1 ], "correct element in _show()" );

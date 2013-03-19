@@ -185,8 +185,8 @@ test( "values", function() {
 	});
 
 	notStrictEqual(
-		ranges.eq( 0 ).data( "ui-slider" ).options.values,
-		ranges.eq( 1 ).data( "ui-slider" ).options.values,
+		ranges.eq( 0 ).slider( "instance" ).options.values,
+		ranges.eq( 1 ).slider( "instance" ).options.values,
 		"multiple range sliders should not have a reference to the same options.values array"
 	);
 
