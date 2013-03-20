@@ -89,6 +89,30 @@ test( "allow form submit on enter when menu is not active", function() {
 	test( "down arrow moves focus - contenteditable", function() {
 		arrowsMoveFocus( "#autocomplete-contenteditable", false );
 	});
+	
+	test( "up arrow moves cursor - input", function() {
+		arrowsNavigateElement( "#autocomplete", true, false );
+	});
+
+	test( "down arrow moves cursor - input", function() {
+		arrowsNavigateElement( "#autocomplete", false, false );
+	});
+
+	test( "up arrow moves cursor - textarea", function() {
+		arrowsNavigateElement( "#autocomplete-textarea", true, true );
+	});
+
+	test( "down arrow moves cursor - textarea", function() {
+		arrowsNavigateElement( "#autocomplete-textarea", false, true );
+	});
+
+	test( "up arrow moves cursor - contenteditable", function() {
+		arrowsNavigateElement( "#autocomplete-contenteditable", true, true );
+	});
+
+	test( "down arrow moves cursor - contenteditable", function() {
+		arrowsNavigateElement( "#autocomplete-contenteditable", false, true );
+	});
 
 	function arrowsInvokeSearch( id, isKeyUp, shouldMove ) {
 		expect( 1 );
@@ -119,6 +143,23 @@ test( "allow form submit on enter when menu is not active", function() {
 		};
 		element.autocomplete( "search" );
 		element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+	}
+	
+	function arrowsNavigateElement( id, isKeyUp, shouldMove ) {
+		expect( 1 );
+
+		var didMove = false,
+			element = $( id ).autocomplete({
+				source: [ "a" ],
+				delay: 0,
+				minLength: 0
+			});
+		element.on( "keypress", function( e ) {
+			didMove = !e.isDefaultPrevented();
+		});
+		element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+		element.simulate( "keypress" );
+		equal( didMove, shouldMove, "respond to arrow" );
 	}
 })();
 

@@ -142,7 +142,9 @@ $.widget( "ui.autocomplete", {
 			keypress: function( event ) {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
-					event.preventDefault();
+					if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
+						event.preventDefault();
+					}
 					return;
 				}
 				if ( suppressKeyPressRepeat ) {
