@@ -22,23 +22,13 @@
 	});
 	</script>
 
+	<script src="datepicker_common.js"></script>
 	<script src="datepicker_core.js"></script>
-	<script src="datepicker_defaults.js"></script>
 	<script src="datepicker_events.js"></script>
 	<script src="datepicker_methods.js"></script>
 	<script src="datepicker_options.js"></script>
-	<script src="datepicker_tickets.js"></script>
+	<script src="datepicker_test_helpers.js"></script>
 
-	<script>
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("datepicker", function() { ok(true, "disabled datepicker testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>

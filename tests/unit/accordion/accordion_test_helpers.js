@@ -1,13 +1,8 @@
 TestHelpers.accordion = {
-	equalHeights: function( accordion, min, max ) {
-		var sizes = [];
+	equalHeight: function( accordion, height ) {
 		accordion.find( ".ui-accordion-content" ).each(function() {
-			sizes.push( $( this ).outerHeight() );
+			equal( $( this ).outerHeight(), height );
 		});
-		ok( sizes[ 0 ] >= min && sizes[ 0 ] <= max,
-			"must be within " + min + " and " + max + ", was " + sizes[ 0 ] );
-		deepEqual( sizes[ 0 ], sizes[ 1 ] );
-		deepEqual( sizes[ 0 ], sizes[ 2 ] );
 	},
 
 	setupTeardown: function() {

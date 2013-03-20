@@ -5,9 +5,6 @@
 	<title>jQuery UI Tabs Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script>
-	$.uiBackCompat = false;
-	</script>
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
@@ -31,6 +28,14 @@
 	<script src="tabs_options.js"></script>
 
 	<script src="../swarminject.js"></script>
+	<style>
+	#tabs8, #tabs8 * {
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+		line-height: 15px;
+	}
+	</style>
 </head>
 <body>
 
@@ -57,7 +62,7 @@
 		<li><a href="#colon:test"><span>1</span></a></li>
 		<li><a href="#inline-style"><span>2</span></a></li>
 		<li><a href="data/test.html#test"><span>3</span></a></li>
-		<li><a href="data/test.html" aria-controls="custom-id"><span>4</span></a></li>
+		<li aria-controls="custom-id"><a href="data/test.html"><span>4</span></a></li>
 		<li><a href="data/test.html" title="∫ßáö Սե"><span>5</span></a></li>
 	</ul>
 	<div id="colon:test"></div>
@@ -118,6 +123,31 @@
 	</ul>
 	<div id="tabs7-2"></div>
 	<div id="tabs7-1"></div>
+</div>
+
+<div id="tabs8Wrapper">
+	<div id="tabs8">
+		<ul id="tabs8-list">
+			<li><a href="#tabs8-1">1</a></li>
+			<li><a href="#tabs8-2">2</a></li>
+		</ul>
+		<div id="tabs8-1">
+			<p>Lorem ipsum</p>
+			<p>Lorem ipsum</p>
+			<p>Lorem ipsum</p>
+		</div>
+		<div id="tabs8-2">
+			<p>Lorem ipsum</p>
+		</div>
+	</div>
+</div>
+
+<div id="tabs9">
+	<ul>
+		<li>not a tab</li>
+		<li><a href="#tabs9-1">tab</a></li>
+	</ul>
+	<div id="tabs9-1"></div>
 </div>
 
 </div>

@@ -1,5 +1,5 @@
 test( "$.widget.extend()", function() {
-	expect( 26 );
+	expect( 27 );
 
 	var ret, empty, optionsWithLength, optionsWithDate, myKlass, customObject, optionsWithCustomObject, nullUndef,
 		target, recursive, obj, input, output,
@@ -76,13 +76,16 @@ test( "$.widget.extend()", function() {
 	ret = $.widget.extend( { foo: [] }, { foo: [0] } ); // 1907
 	equal( ret.foo.length, 1, "Check to make sure a value with coersion 'false' copies over when necessary to fix #1907" );
 
-	ret = $.widget.extend( { foo: "1,2,3" }, { foo: [1, 2, 3] } );
-	strictEqual( typeof ret.foo, "object", "Check to make sure values equal with coersion (but not actually equal) overwrite correctly" );
+	ret = $.widget.extend( { foo: "1,2,3" }, { foo: [ 1, 2, 3 ] } );
+	deepEqual( ret.foo, [ 1, 2, 3 ], "Properly extend a string to array." );
 
-	ret = $.widget.extend( { foo:"bar" }, { foo:null } );
-	strictEqual( typeof ret.foo, "object", "Make sure a null value doesn't crash with deep extend, for #1908" );
+	ret = $.widget.extend( { foo: "1,2,3" }, { foo: { to: "object" } } );
+	deepEqual( ret.foo, { to: "object" }, "Properly extend a string to object." );
 
-	obj = { foo:null };
+	ret = $.widget.extend( { foo: "bar" }, { foo: null } );
+	strictEqual( ret.foo, null, "Make sure a null value doesn't crash with deep extend, for #1908" );
+
+	obj = { foo: null };
 	$.widget.extend( obj, { foo:"notnull" } );
 	equal( obj.foo, "notnull", "Make sure a null value can be overwritten" );
 

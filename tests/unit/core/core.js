@@ -2,13 +2,14 @@
 
 module( "core - jQuery extensions" );
 
-TestHelpers.testJshint( "ui.core" );
+TestHelpers.testJshint( "core" );
 
-test( "focus - original functionality", function() {
+asyncTest( "focus - original functionality", function() {
 	expect( 1 );
 	$( "#inputTabindex0" )
-		.focus(function() {
+		.one( "focus", function() {
 			ok( true, "event triggered" );
+			start();
 		})
 		.focus();
 });
@@ -16,36 +17,17 @@ test( "focus - original functionality", function() {
 asyncTest( "focus", function() {
 	expect( 2 );
 	$( "#inputTabindex0" )
-		.focus(function() {
+		.one( "focus", function() {
 			ok( true, "event triggered" );
+			start();
 		})
 		.focus( 500, function() {
-			// prevent double focus event in IE
-			$( this ).unbind( "focus" );
 			ok( true, "callback triggered" );
-			start();
 		});
 });
 
-test( "zIndex", function() {
-	var el = $( "#zIndexAutoWithParent" ),
-		parent = el.parent();
-	equal( el.zIndex(), 100, "zIndex traverses up to find value" );
-	equal( parent.zIndex(200 ), parent, "zIndex setter is chainable" );
-	equal( el.zIndex(), 200, "zIndex setter changed zIndex" );
-
-	el = $( "#zIndexAutoWithParentViaCSS" );
-	equal( el.zIndex(), 0, "zIndex traverses up to find CSS value, not found because not positioned" );
-
-	el = $( "#zIndexAutoWithParentViaCSSPositioned" );
-	equal( el.zIndex(), 100, "zIndex traverses up to find CSS value" );
-	el.parent().zIndex( 200 );
-	equal( el.zIndex(), 200, "zIndex setter changed zIndex, overriding CSS" );
-
-	equal( $( "#zIndexAutoNoParent" ).zIndex(), 0, "zIndex never explicitly set in hierarchy" );
-});
-
 test( "innerWidth - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	equal( el.innerWidth(), 122, "getter passthru" );
@@ -54,6 +36,7 @@ test( "innerWidth - getter", function() {
 });
 
 test( "innerWidth - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.innerWidth( 120 );
@@ -64,6 +47,7 @@ test( "innerWidth - setter", function() {
 });
 
 test( "innerHeight - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	equal( el.innerHeight(), 70, "getter passthru" );
@@ -72,6 +56,7 @@ test( "innerHeight - getter", function() {
 });
 
 test( "innerHeight - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.innerHeight( 60 );
@@ -82,6 +67,7 @@ test( "innerHeight - setter", function() {
 });
 
 test( "outerWidth - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	equal( el.outerWidth(), 140, "getter passthru" );
@@ -90,6 +76,7 @@ test( "outerWidth - getter", function() {
 });
 
 test( "outerWidth - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerWidth( 130 );
@@ -100,6 +87,7 @@ test( "outerWidth - setter", function() {
 });
 
 test( "outerWidth(true) - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	equal( el.outerWidth(true), 154, "getter passthru w/ margin" );
@@ -108,6 +96,7 @@ test( "outerWidth(true) - getter", function() {
 });
 
 test( "outerWidth(true) - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerWidth( 130, true );
@@ -118,6 +107,7 @@ test( "outerWidth(true) - setter", function() {
 });
 
 test( "outerHeight - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	equal( el.outerHeight(), 86, "getter passthru" );
@@ -126,6 +116,7 @@ test( "outerHeight - getter", function() {
 });
 
 test( "outerHeight - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerHeight( 80 );
@@ -136,6 +127,7 @@ test( "outerHeight - setter", function() {
 });
 
 test( "outerHeight(true) - getter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	equal( el.outerHeight(true), 98, "getter passthru w/ margin" );
@@ -144,6 +136,7 @@ test( "outerHeight(true) - getter", function() {
 });
 
 test( "outerHeight(true) - setter", function() {
+	expect( 2 );
 	var el = $( "#dimensions" );
 
 	el.outerHeight( 90, true );
@@ -151,6 +144,23 @@ test( "outerHeight(true) - setter", function() {
 	el.hide();
 	el.outerHeight( 80, true );
 	equal( el.height(), 32, "height set properly when hidden" );
+});
+
+test( "uniqueId / removeUniqueId", function() {
+	expect( 3 );
+	var el = $( "img" ).eq( 0 );
+
+	// support: jQuery <1.6.2
+	// support: IE <8
+	// We should use strictEqual( id, undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
+	ok( !el.attr( "id" ), "element has no initial id" );
+	el.uniqueId();
+	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
+	el.removeUniqueId();
+	// support: jQuery <1.6.2
+	// support: IE <8
+	// see above
+	ok( !el.attr( "id" ), "unique id has been removed from element" );
 });
 
 })( jQuery );

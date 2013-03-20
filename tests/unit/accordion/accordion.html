@@ -5,9 +5,6 @@
 	<title>jQuery UI Accordion Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script>
-	$.uiBackCompat = false;
-	</script>
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
@@ -37,6 +34,10 @@
 		padding: 0;
 		font-size: 12px;
 		line-height: 15px;
+	}
+	/* avoid IE7 oscillating between overflow visible and scroll values */
+	#list1 > div {
+		overflow: visible;
 	}
 	</style>
 </head>

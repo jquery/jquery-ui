@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Droppable - Simple photo manager</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../jquery-1.9.1.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
@@ -15,7 +15,7 @@
 	<script src="../../ui/jquery.ui.dialog.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	#gallery { float: left; width: 65%; min-height: 12em; } * html #gallery { height: 12em; } /* IE6 */
+	#gallery { float: left; width: 65%; min-height: 12em; }
 	.gallery.custom-state-active { background: #eee; }
 	.gallery li { float: left; width: 96px; padding: 0.4em; margin: 0 0.4em 0.4em 0; text-align: center; }
 	.gallery li h5 { margin: 0 0 0.4em; cursor: move; }
@@ -23,7 +23,7 @@
 	.gallery li a.ui-icon-zoomin { float: left; }
 	.gallery li img { width: 100%; cursor: move; }
 
-	#trash { float: right; width: 32%; min-height: 18em; padding: 1%;} * html #trash { height: 18em; } /* IE6 */
+	#trash { float: right; width: 32%; min-height: 18em; padding: 1%; }
 	#trash h4 { line-height: 16px; margin: 0 0 0.4em; }
 	#trash h4 .ui-icon { float: left; }
 	#trash .gallery h5 { display: none; }
@@ -38,7 +38,7 @@
 		$( "li", $gallery ).draggable({
 			cancel: "a.ui-icon", // clicking an icon won't initiate dragging
 			revert: "invalid", // when not dropped, the item will revert back to its initial position
-			containment: $( "#demo-frame" ).length ? "#demo-frame" : "document", // stick to demo-frame if present
+			containment: "document",
 			helper: "clone",
 			cursor: "move"
 		});
@@ -138,7 +138,7 @@
 </head>
 <body>
 
-<div class="demo ui-widget ui-helper-clearfix">
+<div class="ui-widget ui-helper-clearfix">
 
 <ul id="gallery" class="gallery ui-helper-reset ui-helper-clearfix">
 	<li class="ui-widget-content ui-corner-tr">
@@ -171,14 +171,12 @@
 	<h4 class="ui-widget-header"><span class="ui-icon ui-icon-trash">Trash</span> Trash</h4>
 </div>
 
-</div><!-- End demo -->
-
+</div>
 
 <div class="demo-description">
 <p>You can delete an image either by dragging it to the Trash or by clicking the trash icon.</p>
 <p>You can "recycle" an image by dragging it back to the gallery or by clicking the recycle icon.</p>
 <p>You can view larger image by clicking the zoom icon. jQuery UI dialog widget is used for the modal window.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

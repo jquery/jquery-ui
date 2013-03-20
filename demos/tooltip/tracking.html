@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Tooltip - Track the mouse</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../jquery-1.9.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -18,32 +18,13 @@
 	</style>
 	<script>
 	$(function() {
-		$( ".demo" ).tooltip({
-			position: {
-				my: "left+25 center",
-				at: "center"
-			},
-			open: function( event ) {
-				var tooltip = $( ".ui-tooltip" ),
-					positionOption = $( this ).tooltip( "option", "position" );
-				function position( event ) {
-					positionOption.of = event;
-					tooltip.position( positionOption );
-				}
-				$( document ).bind( "mousemove.tooltip-position", position );
-				// trigger once to override element-relative positioning
-				position( event );
-			},
-			close: function() {
-				$( document ).unbind( "mousemove.tooltip-position" );
-			}
+		$( document ).tooltip({
+			track: true
 		});
 	});
 	</script>
 </head>
 <body>
-
-<div class="demo">
 
 <p><a href="#" title="That's what this widget is">Tooltips</a> can be attached to any element. When you hover
 the element with your mouse, the title attribute is displayed in a little box next to the element, just like a native tooltip.</p>
@@ -54,13 +35,8 @@ will also style tooltips accordingly.</p>
 <p><label for="age">Your age:</label><input id="age" title="We ask for your age only for statistical purposes."></p>
 <p>Hover the field to see the tooltip.</p>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Here the tooltips are positioned relative to the mouse, and follow the mouse while it moves above the element.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

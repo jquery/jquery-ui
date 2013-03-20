@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Effects - Animate demo</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
-	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../jquery-1.9.1.js"></script>
+	<script src="../../ui/jquery.ui.effect.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 		.toggler { width: 500px; height: 200px; position: relative; }
@@ -15,28 +15,27 @@
 	</style>
 	<script>
 	$(function() {
-		$( "#button" ).toggle(
-			function() {
+		var state = true;
+		$( "#button" ).click(function() {
+			if ( state ) {
 				$( "#effect" ).animate({
 					backgroundColor: "#aa0000",
 					color: "#fff",
 					width: 500
 				}, 1000 );
-			},
-			function() {
+			} else {
 				$( "#effect" ).animate({
 					backgroundColor: "#fff",
 					color: "#000",
 					width: 240
 				}, 1000 );
 			}
-		);
+			state = !state;
+		});
 	});
 	</script>
 </head>
 <body>
-
-<div class="demo">
 
 <div class="toggler">
 	<div id="effect" class="ui-widget-content ui-corner-all">
@@ -49,13 +48,8 @@
 
 <a href="#" id="button" class="ui-state-default ui-corner-all">Toggle Effect</a>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Click the button above to preview the effect.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

@@ -12,7 +12,7 @@ test( "destroy", function() {
 });
 
 test( "disable", function() {
-	expect( 14 );
+	expect( 16 );
 	var element = $( "#spin" ).val( 2 ).spinner(),
 		wrapper = $( "#spin" ).spinner( "widget" );
 
@@ -21,6 +21,8 @@ test( "disable", function() {
 
 	element.spinner( "disable" );
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "after: wrapper has ui-spinner-disabled class" );
+	ok( wrapper.hasClass( "ui-state-disabled" ), "after: wrapper has ui-state-disabled class" );
+	ok( !wrapper.attr( "aria-disabled" ), "after: wrapper does not have aria-disabled attr" );
 	ok( element.is( ":disabled"), "after: input has disabled attribute" );
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
@@ -161,6 +163,14 @@ test( "value", function() {
 	equal( element.val(), 9, "change value via value method" );
 
 	equal( element.spinner( "value" ), 9, "get value via value method" );
+});
+
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#spin" ).spinner(),
+		widgetElement = element.spinner( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element.parent()[ 0 ], "parent element" );
 });
 
 })( jQuery );

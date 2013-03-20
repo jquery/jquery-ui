@@ -1,28 +1,53 @@
-/*
- * progressbar_core.js
- */
+module( "progressbar: core" );
 
-var el;
-
-(function($) {
-
-module("progressbar: core");
-
-test("accessibility", function() {
-	expect(7);
-	el = $("#progressbar").progressbar();
-
-	equal(el.attr("role"), "progressbar", "aria role");
-	equal(el.attr("aria-valuemin"), 0, "aria-valuemin");
-	equal(el.attr("aria-valuemax"), 100, "aria-valuemax");
-	equal(el.attr("aria-valuenow"), 0, "aria-valuenow initially");
-	el.progressbar("value", 77);
-	equal(el.attr("aria-valuenow"), 77, "aria-valuenow");
-	el.progressbar("disable");
-	equal(el.attr("aria-disabled"), "true", "aria-disabled on");
-	el.progressbar("enable");
-	// FAIL: for some reason IE6 and 7 return a boolean false instead of the string
-	equal(el.attr("aria-disabled"), "false", "aria-disabled off");
+test( "markup structure", function() {
+	expect( 5 );
+	var element = $( "#progressbar" ).progressbar();
+	ok( element.hasClass( "ui-progressbar" ), "main element is .ui-progressbar" );
+	ok( !element.hasClass( "ui-progressbar-indeterminate" ),
+		"main element is not .ui-progressbar-indeterminate" );
+	equal( element.children().length, 1, "main element contains one child" );
+	ok( element.children().eq( 0 ).hasClass( "ui-progressbar-value" ),
+		"child is .ui-progressbar-value" );
+	equal( element.children().children().length, 0, "no overlay div" );
 });
 
-})(jQuery);
+test( "markup structure - indeterminate", function() {
+	expect( 5 );
+	var element = $( "#progressbar" ).progressbar({ value: false });
+	ok( element.hasClass( "ui-progressbar" ), "main element is .ui-progressbar" );
+	ok( element.hasClass( "ui-progressbar-indeterminate" ),
+		"main element is .ui-progressbar-indeterminate" );
+	equal( element.children().length, 1, "main element contains one child" );
+	ok( element.children().eq( 0 ).hasClass( "ui-progressbar-value" ),
+		"child is .ui-progressbar-value" );
+	equal( element.children().children( ".ui-progressbar-overlay" ).length, 1,
+		".ui-progressbar-value has .ui-progressbar-overlay" );
+});
+
+test( "accessibility", function() {
+	expect( 11 );
+	var element = $( "#progressbar" ).progressbar();
+
+	equal( element.attr( "role" ), "progressbar", "aria role" );
+	equal( element.attr( "aria-valuemin" ), 0, "aria-valuemin" );
+	equal( element.attr( "aria-valuemax" ), 100, "aria-valuemax" );
+	equal( element.attr( "aria-valuenow" ), 0, "aria-valuenow initially" );
+
+	element.progressbar( "value", 77 );
+	equal( element.attr( "aria-valuenow" ), 77, "aria-valuenow" );
+
+	element.progressbar( "option", "max", 150 );
+	equal( element.attr( "aria-valuemax" ), 150, "aria-valuemax" );
+
+	element.progressbar( "disable" );
+	equal( element.attr( "aria-disabled" ), "true", "aria-disabled on" );
+
+	element.progressbar( "enable" );
+	equal( element.attr( "aria-disabled" ), "false", "aria-disabled off" );
+
+	element.progressbar( "option", "value", false );
+	equal( element.attr( "aria-valuemin" ), 0, "aria-valuemin" );
+	equal( element.attr( "aria-valuemax" ), 150, "aria-valuemax" );
+	strictEqual( element.attr( "aria-valuenow" ), undefined, "aria-valuenow" );
+});

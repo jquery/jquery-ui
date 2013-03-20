@@ -1,11 +1,12 @@
 /*!
  * jQuery UI Spinner @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Spinner
+ * http://api.jqueryui.com/spinner/
  *
  * Depends:
  *  jquery.ui.core.js
@@ -31,6 +32,10 @@ $.widget( "ui.spinner", {
 	widgetEventPrefix: "spin",
 	options: {
 		culture: null,
+		icons: {
+			down: "ui-icon-triangle-1-s",
+			up: "ui-icon-triangle-1-n"
+		},
 		incremental: true,
 		max: null,
 		min: null,
@@ -54,13 +59,13 @@ $.widget( "ui.spinner", {
 		this._value( this.element.val(), true );
 
 		this._draw();
-		this._bind( this._events );
+		this._on( this._events );
 		this._refresh();
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
-		this._bind( this.window, {
+		this._on( this.window, {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
 			}
@@ -89,12 +94,16 @@ $.widget( "ui.spinner", {
 		},
 		keyup: "_stop",
 		focus: function() {
-			this.uiSpinner.addClass( "ui-state-active" );
 			this.previous = this.element.val();
 		},
 		blur: function( event ) {
+			if ( this.cancelBlur ) {
+				delete this.cancelBlur;
+				return;
+			}
+
+			this._stop();
 			this._refresh();
-			this.uiSpinner.removeClass( "ui-state-active" );
 			if ( this.previous !== this.element.val() ) {
 				this._trigger( "change", event );
 			}
@@ -117,11 +126,42 @@ $.widget( "ui.spinner", {
 			event.preventDefault();
 		},
 		"mousedown .ui-spinner-button": function( event ) {
+			var previous;
+
+			// We never want the buttons to have focus; whenever the user is
+			// interacting with the spinner, the focus should be on the input.
+			// If the input is focused then this.previous is properly set from
+			// when the input first received focus. If the input is not focused
+			// then we need to set this.previous based on the value before spinning.
+			previous = this.element[0] === this.document[0].activeElement ?
+				this.previous : this.element.val();
+			function checkFocus() {
+				var isActive = this.element[0] === this.document[0].activeElement;
+				if ( !isActive ) {
+					this.element.focus();
+					this.previous = previous;
+					// support: IE
+					// IE sets focus asynchronously, so we need to check if focus
+					// moved off of the input because the user clicked on the button.
+					this._delay(function() {
+						this.previous = previous;
+					});
+				}
+			}
+
 			// ensure focus is on (or stays on) the text field
 			event.preventDefault();
-			if ( this.document[0].activeElement !== this.element[ 0 ] ) {
-				this.element.focus();
-			}
+			checkFocus.call( this );
+
+			// support: IE
+			// IE doesn't prevent moving focus even with event.preventDefault()
+			// so we set a flag to know when we should ignore the blur event
+			// and check (again) if focus moved off of the input.
+			this.cancelBlur = true;
+			this._delay(function() {
+				delete this.cancelBlur;
+				checkFocus.call( this );
+			});
 
 			if ( this._start( event ) === false ) {
 				return;
@@ -155,7 +195,6 @@ $.widget( "ui.spinner", {
 			.parent()
 				// add buttons
 				.append( this._buttonHtml() );
-		this._hoverable( uiSpinner );
 
 		this.element.attr( "role", "spinbutton" );
 
@@ -201,16 +240,16 @@ $.widget( "ui.spinner", {
 	},
 
 	_uiSpinnerHtml: function() {
-		return "<span class='ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all'></span>";
+		return "<span class='ui-spinner ui-widget ui-widget-content ui-corner-all'></span>";
 	},
 
 	_buttonHtml: function() {
 		return "" +
 			"<a class='ui-spinner-button ui-spinner-up ui-corner-tr'>" +
-				"<span class='ui-icon ui-icon-triangle-1-n'>&#9650;</span>" +
+				"<span class='ui-icon " + this.options.icons.up + "'>&#9650;</span>" +
 			"</a>" +
 			"<a class='ui-spinner-button ui-spinner-down ui-corner-br'>" +
-				"<span class='ui-icon ui-icon-triangle-1-s'>&#9660;</span>" +
+				"<span class='ui-icon " + this.options.icons.down + "'>&#9660;</span>" +
 			"</a>";
 	},
 
@@ -330,17 +369,21 @@ $.widget( "ui.spinner", {
 				value = this._parse( value );
 			}
 		}
+		if ( key === "icons" ) {
+			this.buttons.first().find( ".ui-icon" )
+				.removeClass( this.options.icons.up )
+				.addClass( value.up );
+			this.buttons.last().find( ".ui-icon" )
+				.removeClass( this.options.icons.down )
+				.addClass( value.down );
+		}
 
 		this._super( key, value );
 
 		if ( key === "disabled" ) {
-			if ( value ) {
-				this.element.prop( "disabled", true );
-				this.buttons.button( "disable" );
-			} else {
-				this.element.prop( "disabled", false );
-				this.buttons.button( "enable" );
-			}
+			this.widget().toggleClass( "ui-state-disabled", !!value );
+			this.element.prop( "disabled", !!value );
+			this.buttons.button( value ? "disable" : "enable" );
 		}
 	},
 
@@ -391,7 +434,7 @@ $.widget( "ui.spinner", {
 		this._refresh();
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element
 			.removeClass( "ui-spinner-input" )
 			.prop( "disabled", false )
@@ -400,7 +443,6 @@ $.widget( "ui.spinner", {
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
-		this._super();
 		this.uiSpinner.replaceWith( this.element );
 	},
 
@@ -408,14 +450,20 @@ $.widget( "ui.spinner", {
 		this._stepUp( steps );
 	}),
 	_stepUp: function( steps ) {
-		this._spin( (steps || 1) * this.options.step );
+		if ( this._start() ) {
+			this._spin( (steps || 1) * this.options.step );
+			this._stop();
+		}
 	},
 
 	stepDown: modifier(function( steps ) {
 		this._stepDown( steps );
 	}),
 	_stepDown: function( steps ) {
-		this._spin( (steps || 1) * -this.options.step );
+		if ( this._start() ) {
+			this._spin( (steps || 1) * -this.options.step );
+			this._stop();
+		}
 	},
 
 	pageUp: modifier(function( pages ) {

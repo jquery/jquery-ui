@@ -44,18 +44,14 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Menu Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit">jQuery UI Menu Test Suite</div>
 <div id="qunit-fixture">
 
 <ul class="foo" id="menu1">
 	<li class="foo"><a class="foo" href="#">Aberdeen</a></li>
 	<li class="foo"><a class="foo" href="#">Ada</a></li>
 	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
-	<li class="foo"><a class="foo" href="#">Addyston</a></li>
+	<li class="foo"><a id="testID1" class="foo" href="#">Addyston</a></li>
 	<li class="foo"><a class="foo" href="#">Adelphi</a></li>
 </ul>
 
@@ -63,7 +59,7 @@
 	<li class="foo"><a class="foo" href="#">Aberdeen</a></li>
 	<li class="foo"><a class="foo" href="#">Ada</a></li>
 	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
-	<li class="foo"><a class="foo" href="#">Addyston</a></li>
+	<li class="foo"><a class="foo" href="#"><span class="ui-icon ui-icon-print"></span>Addyston</a></li>
 	<li>
 		<a href="#">Delphi</a>
 		<ul>
@@ -88,8 +84,11 @@
 				<a href="#">Delphi</a>
 				<ul>
 					<li class="foo"><a class="foo" href="#">Ada</a></li>
+					<li> - </li>
 					<li class="foo"><a class="foo" href="#">Saarland</a></li>
+					<li></li>
 					<li class="foo"><a class="foo" href="#">Salzburg</a></li>
+					<li>&ndash;</li>
 				</ul>
 			</li>
 			<li class="foo"><a class="foo" href="#">Perch</a></li>
@@ -232,7 +231,7 @@
 				<a href="#">Delphi</a>
 				<div>
 					<blockquote><a href="#">Ada</a></blockquote>
-					<blockquote><a href="#">Saarland</a></blockquote>
+					<blockquote><a id="testID2" href="#">Saarland</a></blockquote>
 					<blockquote><a href="#">Salzburg</a></blockquote>
 				</div>
 			</blockquote>
@@ -255,7 +254,7 @@
 	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
 	<li class="foo"><a class="foo" href="#">Addyston</a></li>
 	<li class="ui-state-disabled">
-		<a href="#">Delphi</a>
+		<a id="testID3" href="#">Delphi</a>
 		<ul>
 			<li class="foo"><a class="foo" href="#">Ada</a></li>
 			<li class="foo"><a class="foo" href="#">Saarland</a></li>
@@ -264,8 +263,6 @@
 	</li>
 	<li class="foo"><a class="foo" href="#">Saarland</a></li>
 </ul>
-
-<div id="log"></div>
 
 </div>
 </body>

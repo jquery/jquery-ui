@@ -1,51 +1,51 @@
-/*
- * progressbar_events.js
- */
-(function($) {
+module( "progressbar: events" );
 
-module("progressbar: events");
-
-test("create", function() {
-	expect(1);
-	$("#progressbar").progressbar({
+test( "create", function() {
+	expect( 1 );
+	$( "#progressbar" ).progressbar({
 		value: 5,
 		create: function() {
-			deepEqual(5, $(this).progressbar("value") );
+			equal( $( this ).progressbar( "value" ), 5, "Correct value at create" );
 		},
 		change: function() {
-			ok(false, 'create() has triggered change()');
+			ok( false, "create has triggered change()" );
 		}
 	});
 });
 
-test("change", function() {
-	expect(1);
-	$("#progressbar").progressbar({
-		change: function() {
-			deepEqual( 5, $(this).progressbar("value") );
-		}
-	}).progressbar("value", 5);
+test( "change", function() {
+	expect( 2 );
+	var element = $( "#progressbar" ).progressbar();
+
+	element.one( "progressbarchange", function() {
+		equal( element.progressbar( "value" ), 5, "change triggered for middle value" );
+	});
+	element.progressbar( "value", 5 );
+	element.one( "progressbarchange", function() {
+		equal( element.progressbar( "value" ), 100, "change triggered for final value" );
+	});
+	element.progressbar( "value", 100 );
 });
 
 test( "complete", function() {
-	expect( 3 );
-	var changes = 0,
-		value;
-
-	$( "#progressbar" ).progressbar({
-		change: function() {
-			changes++;
-			deepEqual( $( this ).progressbar( "value" ), value, "change at " + value );
-		},
-		complete: function() {
-			equal( changes, 2, "complete triggered after change" );
-		}
-	});
+	expect( 5 );
+	var value,
+		changes = 0,
+		element = $( "#progressbar" ).progressbar({
+			change: function() {
+				changes++;
+				equal( element.progressbar( "value" ), value, "change at " + value );
+			},
+			complete: function() {
+				equal( changes, 3, "complete triggered after change and not on indeterminate" );
+				equal( element.progressbar( "value" ), 100, "value is 100" );
+			}
+		});
 
 	value = 5;
-	$( "#progressbar" ).progressbar( "value", value );
+	element.progressbar( "value", value );
+	value = false;
+	element.progressbar( "value", value );
 	value = 100;
-	$( "#progressbar" ).progressbar( "value", value );
+	element.progressbar( "value", value );
 });
-
-})(jQuery);

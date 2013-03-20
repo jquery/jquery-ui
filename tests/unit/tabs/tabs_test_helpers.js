@@ -38,12 +38,18 @@ TestHelpers.tabs = {
 		deepEqual( actual, expected );
 	},
 
+	equalHeight: function( tabs, height ) {
+		tabs.find( ".ui-tabs-panel" ).each(function() {
+			equal( $( this ).outerHeight(), height );
+		});
+	},
+
 	state: function( tabs ) {
 		var expected = $.makeArray( arguments ).slice( 1 ),
 			actual = tabs.find( ".ui-tabs-nav li" ).map(function() {
 				var tab = $( this ),
 					panel = $( $.ui.tabs.prototype._sanitizeSelector(
-						"#" + tab.find( "a" ).attr( "aria-controls" ) ) ),
+						"#" + tab.attr( "aria-controls" ) ) ),
 					tabIsActive = tab.hasClass( "ui-state-active" ),
 					panelIsActive = panel.css( "display" ) !== "none";
 

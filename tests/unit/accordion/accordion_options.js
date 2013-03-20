@@ -1,6 +1,6 @@
 (function( $ ) {
 
-var equalHeights = TestHelpers.accordion.equalHeights,
+var equalHeight = TestHelpers.accordion.equalHeight,
 	setupTeardown = TestHelpers.accordion.setupTeardown,
 	state = TestHelpers.accordion.state;
 
@@ -9,6 +9,15 @@ module( "accordion: options", setupTeardown() );
 test( "{ active: default }", function() {
 	expect( 2 );
 	var element = $( "#list1" ).accordion();
+	equal( element.accordion( "option", "active" ), 0 );
+	state( element, 1, 0, 0 );
+});
+
+test( "{ active: null }", function() {
+	expect( 2 );
+	var element = $( "#list1" ).accordion({
+		active: null
+	});
 	equal( element.accordion( "option", "active" ), 0 );
 	state( element, 1, 0, 0 );
 });
@@ -56,28 +65,26 @@ test( "{ active: Number }", function() {
 	state( element, 0, 1, 0 );
 });
 
-if ( $.uiBackCompat === false ) {
-	test( "{ active: -Number }", function() {
-		expect( 8 );
-		var element = $( "#list1" ).accordion({
-			active: -1
-		});
-		equal( element.accordion( "option", "active" ), 2 );
-		state( element, 0, 0, 1 );
-
-		element.accordion( "option", "active", -2 );
-		equal( element.accordion( "option", "active" ), 1 );
-		state( element, 0, 1, 0 );
-
-		element.accordion( "option", "active", -10 );
-		equal( element.accordion( "option", "active" ), 1 );
-		state( element, 0, 1, 0 );
-
-		element.accordion( "option", "active", -3 );
-		equal( element.accordion( "option", "active" ), 0 );
-		state( element, 1, 0, 0 );
+test( "{ active: -Number }", function() {
+	expect( 8 );
+	var element = $( "#list1" ).accordion({
+		active: -1
 	});
-}
+	equal( element.accordion( "option", "active" ), 2 );
+	state( element, 0, 0, 1 );
+
+	element.accordion( "option", "active", -2 );
+	equal( element.accordion( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.accordion( "option", "active", -10 );
+	equal( element.accordion( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.accordion( "option", "active", -3 );
+	equal( element.accordion( "option", "active" ), 0 );
+	state( element, 1, 0, 0 );
+});
 
 test( "{ animate: false }", function() {
 	expect( 3 );
@@ -105,9 +112,9 @@ asyncTest( "{ animate: Number }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, undefined, "default easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, undefined, "default easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -129,9 +136,9 @@ asyncTest( "{ animate: String }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, undefined, "default duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, undefined, "default duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -153,9 +160,9 @@ asyncTest( "{ animate: {} }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, undefined, "default duration" );
-		equal( easing, undefined, "default easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, undefined, "default duration" );
+		equal( options.easing, undefined, "default easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -177,9 +184,9 @@ asyncTest( "{ animate: { duration, easing } }", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -202,9 +209,9 @@ asyncTest( "{ animate: { duration, easing } }, animate down", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "linear", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "linear", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -233,9 +240,9 @@ asyncTest( "{ animate: { duration, easing, down } }, animate down", function() {
 		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
-	$.fn.animate = function( props, duration, easing ) {
-		equal( duration, 100, "correct duration" );
-		equal( easing, "swing", "correct easing" );
+	$.fn.animate = function( props, options ) {
+		equal( options.duration, 100, "correct duration" );
+		equal( options.easing, "swing", "correct easing" );
 		animate.apply( this, arguments );
 	};
 
@@ -359,7 +366,7 @@ test( "{ header: custom }", function() {
 test( "{ heightStyle: 'auto' }", function() {
 	expect( 3 );
 	var element = $( "#navigation" ).accordion({ heightStyle: "auto" });
-	equalHeights( element, 95, 130 );
+	equalHeight( element, 105 );
 });
 
 test( "{ heightStyle: 'content' }", function() {
@@ -368,16 +375,16 @@ test( "{ heightStyle: 'content' }", function() {
 		sizes = element.find( ".ui-accordion-content" ).map(function() {
 			return $( this ).height();
 		}).get();
-	ok( sizes[ 0 ] >= 70 && sizes[ 0 ] <= 105, "was " + sizes[ 0 ] );
-	ok( sizes[ 1 ] >= 98 && sizes[ 1 ] <= 126, "was " + sizes[ 1 ] );
-	ok( sizes[ 2 ] >= 42 && sizes[ 2 ] <= 54, "was " + sizes[ 2 ] );
+	equal( sizes[ 0 ], 75 );
+	equal( sizes[ 1 ], 105 );
+	equal( sizes[ 2 ], 45 );
 });
 
 test( "{ heightStyle: 'fill' }", function() {
 	expect( 3 );
 	$( "#navigationWrapper" ).height( 500 );
 	var element = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeights( element, 446, 458 );
+	equalHeight( element, 455 );
 });
 
 test( "{ heightStyle: 'fill' } with sibling", function() {
@@ -391,7 +398,7 @@ test( "{ heightStyle: 'fill' } with sibling", function() {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeights( element , 346, 358);
+	equalHeight( element , 355 );
 });
 
 test( "{ heightStyle: 'fill' } with multiple siblings", function() {
@@ -420,7 +427,7 @@ test( "{ heightStyle: 'fill' } with multiple siblings", function() {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeights( element, 296, 308 );
+	equalHeight( element, 305 );
 });
 
 test( "{ icons: false }", function() {

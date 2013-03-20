@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Dialog - Modal form</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
-	<script src="../../external/jquery.bgiframe-2.1.2.js"></script>
+	<script src="../../jquery-1.9.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.mouse.js"></script>
@@ -13,8 +12,9 @@
 	<script src="../../ui/jquery.ui.draggable.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.resizable.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.dialog.js"></script>
-	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../ui/jquery.ui.effect.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 		body { font-size: 62.5%; }
@@ -30,9 +30,6 @@
 	</style>
 	<script>
 	$(function() {
-		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
-		$( "#dialog:ui-dialog" ).dialog( "destroy" );
-		
 		var name = $( "#name" ),
 			email = $( "#email" ),
 			password = $( "#password" ),
@@ -68,7 +65,7 @@
 				return true;
 			}
 		}
-		
+
 		$( "#dialog-form" ).dialog({
 			autoOpen: false,
 			height: 300,
@@ -90,10 +87,10 @@
 
 					if ( bValid ) {
 						$( "#users tbody" ).append( "<tr>" +
-							"<td>" + name.val() + "</td>" + 
-							"<td>" + email.val() + "</td>" + 
+							"<td>" + name.val() + "</td>" +
+							"<td>" + email.val() + "</td>" +
 							"<td>" + password.val() + "</td>" +
-						"</tr>" ); 
+						"</tr>" );
 						$( this ).dialog( "close" );
 					}
 				},
@@ -115,8 +112,6 @@
 	</script>
 </head>
 <body>
-
-<div class="demo">
 
 <div id="dialog-form" title="Create new user">
 	<p class="validateTips">All form fields are required.</p>
@@ -155,13 +150,8 @@
 </div>
 <button id="create-user">Create new user</button>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Use a modal dialog to require that the user enter data during a multi-step process.  Embed form markup in the content area, set the <code>modal</code> option to true, and specify primary and secondary user actions with the <code>buttons</code> option.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

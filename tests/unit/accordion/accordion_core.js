@@ -48,31 +48,31 @@ test( "accessibility", function () {
 	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
 	equal( headers.eq( 1 ).next().attr( "aria-expanded" ), "true", "active tabpanel has aria-expanded=true" );
 	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
-	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
-	equal( headers.eq( 0 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
-	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
-	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
-	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-expanded" ), "false", "inactive tabpanel has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-expanded" ), "false", "inactive tabpanel has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
 
 	element.accordion( "option", "active", 0 );
 	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
 	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
 	equal( headers.eq( 0 ).next().attr( "aria-expanded" ), "true", "active tabpanel has aria-expanded=true" );
 	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
-	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
-	equal( headers.eq( 1 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
-	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
-	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
-	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
+	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-expanded" ), "false", "inactive tabpanel has aria-expanded=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-expanded" ), "false", "inactive tabpanel has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
 });
 
-asyncTest( "keybaord support", function() {
+asyncTest( "keyboard support", function() {
 	expect( 13 );
 	var element = $( "#list1" ).accordion(),
 		headers = element.find( ".ui-accordion-header" ),

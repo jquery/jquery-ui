@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Widget - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../jquery-1.9.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
@@ -56,8 +56,8 @@
 				.button();
 
 				// bind click events on the changer button to the random method
-				this._bind( this.changer, {
-					// _bind won't call random when widget is disabled
+				this._on( this.changer, {
+					// _on won't call random when widget is disabled
 					click: "random"
 				});
 				this._refresh();
@@ -90,7 +90,7 @@
 				}
 			},
 
-			// events bound via _bind are removed automatically
+			// events bound via _on are removed automatically
 			// revert other modifications here
 			_destroy: function() {
 				// remove generated elements
@@ -139,11 +139,14 @@
 		});
 
 		// click to toggle enabled/disabled
-		$( "#disable" ).toggle(function() {
+		$( "#disable" ).click(function() {
 			// use the custom selector created for each widget to find all instances
-			$( ":custom-colorize" ).colorize( "disable" );
-		}, function() {
-			$( ":custom-colorize" ).colorize( "enable" );
+			// all instances are toggled together, so we can check the state from the first
+			if ( $( ":custom-colorize" ).colorize( "option", "disabled" ) ) {
+				$( ":custom-colorize" ).colorize( "enable" );
+			} else {
+				$( ":custom-colorize" ).colorize( "disable" );
+			}
 		});
 
 		// click to set options after initalization
@@ -159,8 +162,6 @@
 </head>
 <body>
 
-<div class="demo">
-
 <div>
 	<div id="my-widget1">color me</div>
 	<div id="my-widget2">color me</div>
@@ -169,15 +170,9 @@
 	<button id="black">Go black</button>
 </div>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>This demo shows a simple custom widget built using the widget factory (jquery.ui.widget.js).</p>
 <p>The three boxes are initialized in different ways. Clicking them changes their background color. View source to see how it works, its heavily commented</p>
-<p><a href="http://wiki.jqueryui.com/w/page/12138135/Widget-factory">For more details on the widget factory, visit the jQuery UI planning wiki.</a></p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>
