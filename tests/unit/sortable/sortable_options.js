@@ -151,6 +151,34 @@ test( "#8792: issues with floated items in connected lists", function() {
 	equal( changeCount, 3, "change fired once for each expected change when dragging a floated sortable to a connected container" );
 });
 
+test( "#8301: single axis with connected list", function() {
+	expect( 1 );
+
+	var element = $( "#sortable" ).sortable({
+		axis: "y",
+		tolerance: "pointer",
+		connectWith: ".connected"
+	});
+
+	$( "<ul class='connected'><li>Item 7</li><li>Item 8</li></ul>" )
+		.sortable({
+			axis: "y",
+			tolerance: "pointer",
+			connectWith: "#sortable",
+			receive: function() {
+				ok( true, "connected list received item" );
+			}
+		})
+		.insertAfter( element );
+
+	element.find( "li" ).eq( 0 ).simulate( "drag", {
+		handle: "corner",
+		dx: -1,
+		dy: 114,
+		moves: 1
+	});
+});
+
 /*
 test("{ connectWith: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
