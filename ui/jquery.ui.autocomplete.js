@@ -195,8 +195,6 @@ $.widget( "ui.autocomplete", {
 			.addClass( "ui-autocomplete ui-front" )
 			.appendTo( this._appendTo() )
 			.menu({
-				// custom key handling for now
-				input: $(),
 				// disable ARIA support, the live region takes care of that
 				role: null
 			})
