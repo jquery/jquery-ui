@@ -194,6 +194,9 @@ $.widget( "ui.menubar", {
 					event.preventDefault();
 					break;
 				}
+			},
+			focusout: function( event ) {
+				event.stopImmediatePropagation();
 			}
 		});
 	},
