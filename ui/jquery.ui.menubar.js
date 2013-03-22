@@ -95,11 +95,11 @@ $.widget( "ui.menubar", {
 
 		$.each( this.menuItems, function( index, menuItem ){
 			menubar._initializeMenuItem( $( menuItem ), menubar );
-			menubar._initializeMenuItemNeighbors( $( menuItem ), menubar, index );
+			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
 		} );
 	},
 
-	_initializeMenuItemNeighbors: function( $menuItem, menubar, index ) {
+	_identifyMenuItemsNeighbors: function( $menuItem, menubar, index ) {
 		var collectionLength = this.menuItems.toArray().length,
 			isFirstElement = ( index === 0 ),
 			isLastElement = ( index === ( collectionLength - 1 ) );
