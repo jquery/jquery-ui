@@ -157,10 +157,17 @@ $.widget( "ui.menubar", {
 				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
-					parentButton = menubar.active.prev(".ui-button").focus();
-					menubar.active.blur();
-					menubar._close( event );
-					parentButton.focus();
+					parentButton = menubar.active.prev(".ui-button");
+
+					if ( parentButton.parent().prev().data('hasSubMenu') ) {
+						menubar.active.blur();
+						menubar._open( event, parentButton.parent().prev().find(".ui-menu") );
+					} else {
+						parentButton.parent().prev().find(".ui-button").focus();
+						menubar._close( event );
+						this.open = true;
+					}
+
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.RIGHT:
