@@ -82,6 +82,11 @@ $.widget("ui.droppable", {
 				return d.is(value);
 			};
 		}
+		else if(key === "scope") {
+			// Add the reference and positions to the manager
+			$.ui.ddmanager.droppables[value] = $.ui.ddmanager.droppables[value] || [];
+			$.ui.ddmanager.droppables[value].push(this);
+		}
 		this._super( key, value );
 	},
 
