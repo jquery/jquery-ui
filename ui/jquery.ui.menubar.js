@@ -95,7 +95,25 @@ $.widget( "ui.menubar", {
 
 		$.each( this.menuItems, function( index, menuItem ){
 			menubar._initializeMenuItem( $( menuItem ), menubar );
+			menubar._initializeMenuItemNeighbors( $( menuItem ), menubar, index );
 		} );
+	},
+
+	_initializeMenuItemNeighbors: function( $menuItem, menubar, index ) {
+		var collectionLength = this.menuItems.toArray().length,
+			isFirstElement = ( index === 0 ),
+			isLastElement = ( index === ( collectionLength - 1 ) );
+
+		if ( isFirstElement ) {
+			$menuItem.data( "prevMenuItem", $( this.menuItems[collectionLength - 1])  );
+			$menuItem.data( "nextMenuItem", $( this.menuItems[index+1])  );
+		} else if ( isLastElement ) {
+			$menuItem.data( "nextMenuItem", $( this.menuItems[0])  );
+			$menuItem.data( "prevMenuItem", $( this.menuItems[index-1])  );
+		} else {
+			$menuItem.data( "nextMenuItem", $( this.menuItems[index+1])  );
+			$menuItem.data( "prevMenuItem", $( this.menuItems[index-1])  );
+		}
 	},
 
 	_initializeMenuItem: function( $menuItem, menubar ) {
@@ -103,6 +121,7 @@ $.widget( "ui.menubar", {
 
 			menubar._determineSubmenuStatus( $menuItem, menubar );
 			menubar._styleMenuItem( $menuItem, menubar );
+
 			if ( $menuItem.data("hasSubMenu") ) {
 				menubar._initializeSubMenu( $menuItem, menubar );
 			}
@@ -431,7 +450,7 @@ $.widget( "ui.menubar", {
 	},
 
 	next: function( event ) {
-		if ( this.open &&
+		if ( this.open && this.active &&
 				 this.active.closest( this.options.items ).data("hasSubMenu") &&
 				 this.active.data("menu").active &&
 				 this.active.data("menu").active.has(".ui-menu").length ) {
@@ -458,33 +477,19 @@ $.widget( "ui.menubar", {
 		var next,
 			wrapItem;
 
+		var closestMenuItem = $( event.target ).closest(".ui-menubar-item"),
+			nextMenuItem = closestMenuItem.data( direction + "MenuItem" ),
+			focusableTarget = nextMenuItem.find("a, button");
+
 		if ( this.open ) {
-			next = this.active.
-				closest(".ui-menubar-item")[ direction + "All" ]( this.options.items )
-					.first();
-			wrapItem = this.menuItems[ filter ]();
-		} else {
-			if ( event ) {
-				next = $( event.target ).closest(".ui-menubar-item")[ direction + "All" ]( this.options.items ).children(".ui-button").eq( 0 );
-				wrapItem = this.menuItems[ filter ]().children(".ui-menubar-link").eq( 0 );
+			if ( nextMenuItem.data("hasSubMenu") ) {
+				this._open( event, nextMenuItem.children(".ui-menu") );
 			} else {
-				next = wrapItem = this.menuItems.children("a").eq( 0 );
+				this._submenuless_open( event, nextMenuItem );
 			}
 		}
 
-		if ( !next.length ) {
-			next = wrapItem;
-		}
-
-		if ( this.open ) {
-			if ( next.data("hasSubMenu") ) {
-				this._open( event, next.children("ul") );
-			} else {
-				this._submenuless_open( event, next );
-			}
-		} else {
-			next.focus();
-		}
+		focusableTarget.focus();
 	},
 
 	_submenuless_open: function( event, next ) {
