@@ -378,7 +378,7 @@ test( "containment, account for border", function() {
 });
 
 test( "containment, default, switching after initialization", function() {
-	expect( 2 );
+	expect( 3 );
 
 	var element = $( "#draggable1" ).draggable({ containment: false });
 
@@ -393,9 +393,8 @@ test( "containment, default, switching after initialization", function() {
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0 );
 
-	// TODO: Switching back to false does not update to false
-	// element.draggable( "option", "containment", false );
-	// TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100 );
+	element.draggable( "option", "containment", false );
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100 );
 });
 
 test( "{ cursor: 'auto' }, default", function() {
