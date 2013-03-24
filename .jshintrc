@@ -3,10 +3,10 @@
 	"eqnull": true,
 	"eqeqeq": true,
 	"expr": true,
-	"latedef": true,
 	"noarg": true,
+	"node": true,
 	"onevar": true,
-	"smarttabs": true,
 	"trailing": true,
-	"undef": true
+	"undef": true,
+	"unused": true
 }

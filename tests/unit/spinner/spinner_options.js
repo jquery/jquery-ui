@@ -1,16 +1,21 @@
 (function( $ ) {
 
-var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
-
 module( "spinner: options" );
 
 // culture is tested after numberFormat, since it depends on numberFormat
 
 test( "icons: default ", function() {
-	expect( 2 );
-	var element = $( "#spin" ).val( 0 ).spinner().spinner( "widget" );
-	equal( element.find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-triangle-1-n" );
-	equal( element.find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
+	expect( 4 );
+	var element = $( "#spin" ).val( 0 ).spinner();
+	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-triangle-1-n" );
+	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
+
+	element.spinner( "option", "icons", {
+		up: "ui-icon-carat-1-n",
+		down: "ui-icon-carat-1-s"
+	});
+	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-carat-1-n" );
+	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-carat-1-s" );
 });
 
 test( "icons: custom ", function() {
@@ -28,7 +33,7 @@ test( "icons: custom ", function() {
 test( "incremental, false", function() {
 	expect( 100 );
 
-	var i, diff,
+	var i,
 		prev = 0,
 		element = $( "#spin" ).val( prev ).spinner({
 			incremental: false,
@@ -53,7 +58,7 @@ test( "incremental, true", function() {
 		});
 	}
 
-	var i, diff,
+	var i,
 		prev = 0,
 		expected = [].concat( fill( 18, 1 ), fill( 37, 2 ), fill( 14, 3 ),
 			fill( 9, 4 ), fill( 6, 5 ), fill( 5, 6 ), fill ( 5, 7 ),

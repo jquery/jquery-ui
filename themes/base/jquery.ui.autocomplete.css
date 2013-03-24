@@ -2,7 +2,7 @@
  * jQuery UI Autocomplete @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -10,9 +10,7 @@
  */
 .ui-autocomplete {
 	position: absolute;
-	top: 0; /* #8656 */
+	top: 0;
+	left: 0;
 	cursor: default;
 }
-
-/* workarounds */
-* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */

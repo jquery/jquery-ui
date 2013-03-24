@@ -16,8 +16,15 @@ QUnit.extend( QUnit, {
 	},
 
 	runSuite: function( suite ) {
+		var path = suite;
+
+		if ( QUnit.is( "object", suite ) ) {
+			path = suite.path;
+			suite = suite.name;
+		}
+
 		asyncTest( suite, function() {
-			QUnit.iframe.setAttribute( "src", suite );
+			QUnit.iframe.setAttribute( "src", path );
 		});
 	},
 
@@ -33,6 +40,9 @@ QUnit.extend( QUnit, {
 			var module, test,
 				count = 0;
 
+			if (iframe.src === "") {
+				return;
+			}
 
 			iframeWin.QUnit.moduleStart(function( data ) {
 				// capture module name for messages
@@ -96,7 +106,7 @@ QUnit.testDone(function() {
 		}
 	});
 
-	current.getElementsByTagName('a')[0].href = src;
+	current.getElementsByTagName("a")[0].href = src;
 });
 
 }( QUnit ) );

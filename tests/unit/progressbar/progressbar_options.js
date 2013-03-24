@@ -1,14 +1,14 @@
 module( "progressbar: options" );
 
-test( "{ value : 0 }, default", function() {
+test( "{ value: 0 }, default", function() {
 	expect( 1 );
 	$( "#progressbar" ).progressbar();
-	equal( 0, $( "#progressbar" ).progressbar( "value" ) );
+	equal( $( "#progressbar" ).progressbar( "value" ), 0 );
 });
 
 // Ticket #7231 - valueDiv should be hidden when value is at 0%
 test( "value: visibility of valueDiv", function() {
-	expect( 5 );
+	expect( 4 );
 	var element = $( "#progressbar" ).progressbar({
 		value: 0
 	});
@@ -23,40 +23,50 @@ test( "value: visibility of valueDiv", function() {
 	element.progressbar( "value", 0 );
 	ok( element.children( ".ui-progressbar-value" ).is( ":hidden" ),
 		"valueDiv hidden when value is set to 0" );
-	element.progressbar( "value", -1 );
-	ok( element.children( ".ui-progressbar-value" ).is( ":hidden" ),
-		"valueDiv hidden when value set to -1 (normalizes to 0)" );
 });
 
-test( "{ value : 5 }", function() {
+test( "{ value: 5 }", function() {
 	expect( 1 );
 	$( "#progressbar" ).progressbar({
 		value: 5
 	});
-	equal( 5, $( "#progressbar" ).progressbar( "value" ) );
+	equal( $( "#progressbar" ).progressbar( "value" ), 5 );
 });
 
-test( "{ value : -5 }", function() {
+test( "{ value: -5 }", function() {
 	expect( 1 );
 	$( "#progressbar" ).progressbar({
 		value: -5
 	});
-	deepEqual( 0, $( "#progressbar" ).progressbar( "value" ) );
+	equal( $( "#progressbar" ).progressbar( "value" ), 0,
+		"value constrained at min" );
 });
 
-test( "{ value : 105 }", function() {
+test( "{ value: 105 }", function() {
 	expect( 1 );
 	$( "#progressbar" ).progressbar({
 		value: 105
 	});
-	deepEqual( 100, $( "#progressbar" ).progressbar( "value" ) );
+	equal( $( "#progressbar" ).progressbar( "value" ), 100,
+		"value constrained at max" );
 });
 
-test( "{ max : 5, value : 10 }", function() {
+test( "{ value: 10, max: 5 }", function() {
 	expect( 1 );
 	$("#progressbar").progressbar({
 		max: 5,
 		value: 10
 	});
-	deepEqual( 5, $( "#progressbar" ).progressbar( "value" ) );
+	equal( $( "#progressbar" ).progressbar( "value" ), 5,
+		"value constrained at max" );
+});
+
+test( "change max below value", function() {
+	expect( 1 );
+	$("#progressbar").progressbar({
+		max: 10,
+		value: 10
+	}).progressbar( "option", "max", 5 );
+	equal( $( "#progressbar" ).progressbar( "value" ), 5,
+		"value constrained at max" );
 });

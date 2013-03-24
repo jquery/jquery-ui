@@ -3,19 +3,26 @@
  */
 (function($) {
 
-module("button: options");
+module( "button: options" );
 
-test("disabled, explicit value", function() {
-	expect( 4 );
-	$("#radio01").button({ disabled: false });
-	deepEqual(false, $("#radio01").button("option", "disabled"),
-		"disabled option set to false");
-	deepEqual(false, $("#radio01").prop("disabled"), "element is disabled");
+test( "disabled, explicit value", function() {
+	expect( 9 );
 
-	$("#radio02").button({ disabled: true });
-	deepEqual(true, $("#radio02").button("option", "disabled"),
-		"disabled option set to true");
-	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
+	var element = $( "#radio01" ).button({ disabled: false });
+	deepEqual( element.button( "option", "disabled" ), false, "disabled option set to false" );
+	deepEqual( element.prop( "disabled" ), false, "element is disabled" );
+
+	ok( !element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
+	ok( !element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
+
+	element = $( "#radio02" ).button({ disabled: true });
+
+	ok( element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
+	ok( !element.button( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
+
+	deepEqual( element.button( "option", "disabled" ), true, "disabled option set to true" );
+	deepEqual( element.prop( "disabled" ), true, "element is not disabled" );
 });
 
 test("disabled, null", function() {
@@ -101,6 +108,17 @@ test("icons", function() {
 	ok( $("#button").is(":has(span.ui-icon.ui-button-icon-primary.iconclass):has(span.ui-icon.ui-button-icon-secondary.iconclass2)") );
 
 	$("#button").button("destroy");
+});
+
+test( "#5295 - button does not remove hoverstate if disabled" , function() {
+	expect( 1 );
+	var btn = $("#button").button();
+	btn.hover( function() {
+		btn.button( "disable" );
+	});
+	btn.trigger( "mouseenter" );
+	btn.trigger( "mouseleave" );
+	ok( !btn.is( ".ui-state-hover") );
 });
 
 })(jQuery);
