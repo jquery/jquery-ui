@@ -2,7 +2,7 @@
  * jQuery UI Progressbar @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -17,12 +17,12 @@
 	margin: -1px;
 	height: 100%;
 }
-.ui-progressbar .ui-progressbar-value .ui-progressbar-overlay {
+.ui-progressbar .ui-progressbar-overlay {
 	background: url("images/animated-overlay.gif");
 	height: 100%;
 	filter: alpha(opacity=25);
 	opacity: 0.25;
 }
-.ui-progressbar .ui-progressbar-indeterminate {
+.ui-progressbar-indeterminate .ui-progressbar-value {
 	background-image: none;
 }

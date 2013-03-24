@@ -8,37 +8,37 @@ module("droppable: methods");
 test("init", function() {
 	expect( 5 );
 
-	$("<div></div>").appendTo('body').droppable().remove();
-	ok(true, '.droppable() called on element');
+	$("<div></div>").appendTo("body").droppable().remove();
+	ok(true, ".droppable() called on element");
 
 	$([]).droppable();
-	ok(true, '.droppable() called on empty collection');
+	ok(true, ".droppable() called on empty collection");
 
 	$("<div></div>").droppable();
-	ok(true, '.droppable() called on disconnected DOMElement');
+	ok(true, ".droppable() called on disconnected DOMElement");
 
 	$("<div></div>").droppable().droppable("option", "foo");
-	ok(true, 'arbitrary option getter after init');
+	ok(true, "arbitrary option getter after init");
 
 	$("<div></div>").droppable().droppable("option", "foo", "bar");
-	ok(true, 'arbitrary option setter after init');
+	ok(true, "arbitrary option setter after init");
 });
 
 test("destroy", function() {
 	expect( 4 );
 
-	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();
-	ok(true, '.droppable("destroy") called on element');
+	$("<div></div>").appendTo("body").droppable().droppable("destroy").remove();
+	ok(true, ".droppable('destroy') called on element");
 
 	$([]).droppable().droppable("destroy");
-	ok(true, '.droppable("destroy") called on empty collection');
+	ok(true, ".droppable('destroy') called on empty collection");
 
 	$("<div></div>").droppable().droppable("destroy");
-	ok(true, '.droppable("destroy") called on disconnected DOMElement');
+	ok(true, ".droppable('destroy') called on disconnected DOMElement");
 
-	var expected = $('<div></div>').droppable(),
-		actual = expected.droppable('destroy');
-	equal(actual, expected, 'destroy is chainable');
+	var expected = $("<div></div>").droppable(),
+		actual = expected.droppable("destroy");
+	equal(actual, expected, "destroy is chainable");
 });
 
 test("enable", function() {
@@ -58,31 +58,34 @@ test("enable", function() {
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
 	TestHelpers.droppable.shouldDrop();
 
-	expected = $('<div></div>').droppable(),
-	actual = expected.droppable('enable');
-	equal(actual, expected, 'enable is chainable');
+	expected = $("<div></div>").droppable(),
+	actual = expected.droppable("enable");
+	equal(actual, expected, "enable is chainable");
 });
 
-test("disable", function() {
-	expect(7);
+test( "disable", function() {
+	expect( 10 );
 
-	var el, actual, expected;
+	var actual, expected,
+		element = $( "#droppable1" ).droppable({ disabled: false });
 
-	el = $("#droppable1").droppable({ disabled: false });
 	TestHelpers.droppable.shouldDrop();
-	el.droppable("disable");
+	element.droppable( "disable" );
 	TestHelpers.droppable.shouldNotDrop();
-	equal(el.droppable("option", "disabled"), true, "disabled option getter");
-	el.droppable("destroy");
-	el.droppable({ disabled: false });
+	equal( element.droppable( "option", "disabled" ), true, "disabled option getter" );
+	element.droppable( "destroy" );
+	element.droppable({ disabled: false });
 	TestHelpers.droppable.shouldDrop();
-	el.droppable("option", "disabled", true);
-	equal(el.droppable("option", "disabled"), true, "disabled option setter");
+	element.droppable( "option", "disabled", true );
+	ok( !element.droppable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	ok( !element.droppable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.droppable( "widget" ).hasClass( "ui-droppable-disabled" ), "element gets ui-droppable-disabled" );
+	equal( element.droppable( "option", "disabled" ), true, "disabled option setter" );
 	TestHelpers.droppable.shouldNotDrop();
 
-	expected = $('<div></div>').droppable(),
-	actual = expected.droppable('disable');
-	equal(actual, expected, 'disable is chainable');
+	expected = $( "<div></div>" ).droppable();
+	actual = expected.droppable( "disable" );
+	equal( actual, expected, "disable is chainable" );
 });
 
 })(jQuery);

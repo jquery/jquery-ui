@@ -2,7 +2,7 @@
  * jQuery UI Droppable @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -16,17 +16,28 @@
  */
 (function( $, undefined ) {
 
+function isOverAxis( x, reference, size ) {
+	return ( x > reference ) && ( x < ( reference + size ) );
+}
+
 $.widget("ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
 	options: {
-		accept: '*',
+		accept: "*",
 		activeClass: false,
 		addClasses: true,
 		greedy: false,
 		hoverClass: false,
-		scope: 'default',
-		tolerance: 'intersect'
+		scope: "default",
+		tolerance: "intersect",
+
+		// callbacks
+		activate: null,
+		deactivate: null,
+		drop: null,
+		out: null,
+		over: null
 	},
 	_create: function() {
 
@@ -66,12 +77,12 @@ $.widget("ui.droppable", {
 
 	_setOption: function(key, value) {
 
-		if(key === 'accept') {
+		if(key === "accept") {
 			this.accept = $.isFunction(value) ? value : function(d) {
 				return d.is(value);
 			};
 		}
-		$.Widget.prototype._setOption.apply(this, arguments);
+		this._super( key, value );
 	},
 
 	_activate: function(event) {
@@ -80,7 +91,7 @@ $.widget("ui.droppable", {
 			this.element.addClass(this.options.activeClass);
 		}
 		if(draggable){
-			this._trigger('activate', event, this.ui(draggable));
+			this._trigger("activate", event, this.ui(draggable));
 		}
 	},
 
@@ -90,7 +101,7 @@ $.widget("ui.droppable", {
 			this.element.removeClass(this.options.activeClass);
 		}
 		if(draggable){
-			this._trigger('deactivate', event, this.ui(draggable));
+			this._trigger("deactivate", event, this.ui(draggable));
 		}
 	},
 
@@ -107,7 +118,7 @@ $.widget("ui.droppable", {
 			if(this.options.hoverClass) {
 				this.element.addClass(this.options.hoverClass);
 			}
-			this._trigger('over', event, this.ui(draggable));
+			this._trigger("over", event, this.ui(draggable));
 		}
 
 	},
@@ -125,7 +136,7 @@ $.widget("ui.droppable", {
 			if(this.options.hoverClass) {
 				this.element.removeClass(this.options.hoverClass);
 			}
-			this._trigger('out', event, this.ui(draggable));
+			this._trigger("out", event, this.ui(draggable));
 		}
 
 	},
@@ -141,7 +152,7 @@ $.widget("ui.droppable", {
 		}
 
 		this.element.find(":data(ui-droppable)").not(".ui-draggable-dragging").each(function() {
-			var inst = $.data(this, 'ui-droppable');
+			var inst = $( this ).droppable( "instance" );
 			if(
 				inst.options.greedy &&
 				!inst.options.disabled &&
@@ -161,7 +172,7 @@ $.widget("ui.droppable", {
 			if(this.options.hoverClass) {
 				this.element.removeClass(this.options.hoverClass);
 			}
-			this._trigger('drop', event, this.ui(draggable));
+			this._trigger("drop", event, this.ui(draggable));
 			return this.element;
 		}
 
@@ -193,18 +204,18 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 		t = droppable.offset.top, b = t + droppable.proportions.height;
 
 	switch (toleranceMode) {
-		case 'fit':
+		case "fit":
 			return (l <= x1 && x2 <= r && t <= y1 && y2 <= b);
-		case 'intersect':
+		case "intersect":
 			return (l < x1 + (draggable.helperProportions.width / 2) && // Right Half
 				x2 - (draggable.helperProportions.width / 2) < r && // Left Half
 				t < y1 + (draggable.helperProportions.height / 2) && // Bottom Half
 				y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
-		case 'pointer':
+		case "pointer":
 			draggableLeft = ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left);
 			draggableTop = ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top);
-			return $.ui.isOver(draggableTop, draggableLeft, t, l, droppable.proportions.height, droppable.proportions.width);
-		case 'touch':
+			return isOverAxis( draggableTop, t, droppable.proportions.height ) && isOverAxis( draggableLeft, l, droppable.proportions.width );
+		case "touch":
 			return (
 				(y1 >= t && y1 <= b) ||	// Top edge touching
 				(y2 >= t && y2 <= b) ||	// Bottom edge touching
@@ -225,13 +236,13 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 */
 $.ui.ddmanager = {
 	current: null,
-	droppables: { 'default': [] },
+	droppables: { "default": [] },
 	prepareOffsets: function(t, event) {
 
 		var i, j,
 			m = $.ui.ddmanager.droppables[t.options.scope] || [],
 			type = event ? event.type : null, // workaround for #2317
-			list = (t.currentItem || t.element).find(":data(ui-droppable)").andSelf();
+			list = (t.currentItem || t.element).find(":data(ui-droppable)").addBack();
 
 		droppablesLoop: for (i = 0; i < m.length; i++) {
 
@@ -267,7 +278,8 @@ $.ui.ddmanager = {
 	drop: function(draggable, event) {
 
 		var dropped = false;
-		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
+		// Create a copy of the droppables in case the list changes during the drop (#9116)
+		$.each(($.ui.ddmanager.droppables[draggable.options.scope] || []).slice(), function() {
 
 			if(!this.options) {
 				return;
@@ -310,7 +322,7 @@ $.ui.ddmanager = {
 
 			var parentInstance, scope, parent,
 				intersects = $.ui.intersect(draggable, this, this.options.tolerance),
-				c = !intersects && this.isover ? 'isout' : (intersects && !this.isover ? 'isover' : null);
+				c = !intersects && this.isover ? "isout" : (intersects && !this.isover ? "isover" : null);
 			if(!c) {
 				return;
 			}
@@ -318,29 +330,29 @@ $.ui.ddmanager = {
 			if (this.options.greedy) {
 				// find droppable parents with same scope
 				scope = this.options.scope;
-				parent = this.element.parents(':data(ui-droppable)').filter(function () {
-					return $.data(this, 'ui-droppable').options.scope === scope;
+				parent = this.element.parents(":data(ui-droppable)").filter(function () {
+					return $(this).droppable( "instance" ).options.scope === scope;
 				});
 
 				if (parent.length) {
-					parentInstance = $.data(parent[0], 'ui-droppable');
-					parentInstance.greedyChild = (c === 'isover');
+					parentInstance = $( parent[ 0 ] ).droppable( "instance" );
+					parentInstance.greedyChild = (c === "isover");
 				}
 			}
 
 			// we just moved into a greedy child
-			if (parentInstance && c === 'isover') {
+			if (parentInstance && c === "isover") {
 				parentInstance.isover = false;
 				parentInstance.isout = true;
 				parentInstance._out.call(parentInstance, event);
 			}
 
 			this[c] = true;
-			this[c === 'isout' ? 'isover' : 'isout'] = false;
+			this[c === "isout" ? "isover" : "isout"] = false;
 			this[c === "isover" ? "_over" : "_out"].call(this, event);
 
 			// we just moved out of a greedy child
-			if (parentInstance && c === 'isout') {
+			if (parentInstance && c === "isout") {
 				parentInstance.isout = false;
 				parentInstance.isover = true;
 				parentInstance._over.call(parentInstance, event);

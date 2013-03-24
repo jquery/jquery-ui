@@ -2,7 +2,7 @@
  * jQuery UI Tabs @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -11,7 +11,6 @@
 .ui-tabs {
 	position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	padding: .2em;
-	zoom: 1;
 }
 .ui-tabs .ui-tabs-nav {
 	margin: 0;
@@ -23,7 +22,7 @@
 	position: relative;
 	top: 0;
 	margin: 1px .2em 0 0;
-	border-bottom: 0;
+	border-bottom-width: 0;
 	padding: 0;
 	white-space: nowrap;
 }

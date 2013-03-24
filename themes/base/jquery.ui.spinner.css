@@ -2,7 +2,7 @@
  * jQuery UI Spinner @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -18,6 +18,7 @@
 .ui-spinner-input {
 	border: none;
 	background: none;
+	color: inherit;
 	padding: 0;
 	margin: .2em 0;
 	vertical-align: middle;

@@ -5,7 +5,7 @@ module( "autocomplete: options" );
 var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl" ];
 
 test( "appendTo", function() {
-	expect( 7 );
+	expect( 8 );
 	var detached = $( "<div>" ),
 		element = $( "#autocomplete" ).autocomplete();
 	equal( element.autocomplete( "widget" ).parent()[0], document.body, "defaults to body" );
@@ -18,11 +18,11 @@ test( "appendTo", function() {
 	equal( $( "#ac-wrap2 .ui-autocomplete" ).length, 0, "only appends to one element" );
 	element.autocomplete( "destroy" );
 
-	element.autocomplete({
-		appendTo: null
-	});
-	equal( element.autocomplete( "widget" ).parent()[0], document.body, "null" );
+	$( "#ac-wrap2" ).addClass( "ui-front" );
+	element.autocomplete();
+	equal( element.autocomplete( "widget" ).parent()[0], $( "#ac-wrap2" )[0], "null, inside .ui-front" );
 	element.autocomplete( "destroy" );
+	$( "#ac-wrap2" ).removeClass( "ui-front" );
 
 	element.autocomplete().autocomplete( "option", "appendTo", "#ac-wrap1" );
 	equal( element.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "modified after init" );
@@ -38,6 +38,10 @@ test( "appendTo", function() {
 		appendTo: detached[0]
 	});
 	equal( element.autocomplete( "widget" ).parent()[0], detached[0], "detached DOM element" );
+	element.autocomplete( "destroy" );
+
+	element.autocomplete().autocomplete( "option", "appendTo", detached );
+	equal( element.autocomplete( "widget" ).parent()[0], detached[0], "detached DOM element via option()" );
 	element.autocomplete( "destroy" );
 });
 
@@ -84,16 +88,19 @@ asyncTest( "delay", function() {
 });
 
 asyncTest( "disabled", function() {
-	expect( 2 );
+	expect( 5 );
 	var element = $( "#autocomplete" ).autocomplete({
 			source: data,
-			delay: 0,
-			disabled: true
+			delay: 0
 		}),
-		menu = element.autocomplete( "widget" );
+		menu = element.autocomplete( "disable" ).autocomplete( "widget" );
 	element.val( "ja" ).keydown();
 
 	ok( menu.is( ":hidden" ) );
+
+	ok( !element.is( ".ui-state-disabled" ), "element doesn't get ui-state-disabled" );
+	ok( !element.attr( "aria-disabled" ), "element doesn't get aria-disabled" );
+	ok( menu.is( ".ui-autocomplete-disabled" ), "element gets ui-autocomplete-disabled" );
 
 	setTimeout(function() {
 		ok( menu.is( ":hidden" ) );

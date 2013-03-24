@@ -80,6 +80,33 @@ test( "keydown PAGE_DOWN on input, decreases value not less than min", function(
 	equal( element.val(), 20 );
 });
 
+asyncTest( "blur input while spinning with UP", function() {
+	expect( 3 );
+	var value,
+		element = $( "#spin" ).val( 10 ).spinner();
+
+	function step1() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
+		equal( element.val(), 11 );
+		setTimeout( step2, 750 );
+	}
+
+	function step2() {
+		value = element.val();
+		ok( value > 11, "repeating while key is down" );
+		element[0].blur();
+		setTimeout( step3, 250 );
+	}
+
+	function step3() {
+		equal( element.val(), value, "stopped repeating on blur" );
+		start();
+	}
+
+	element[ 0 ].focus();
+	setTimeout( step1 );
+});
+
 test( "mouse click on up button, increases value not greater than max", function() {
 	expect( 3 );
 	var element = $( "#spin" ).val( 18 ).spinner({

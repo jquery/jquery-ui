@@ -16,8 +16,8 @@ test( "create", function() {
 		create: function( event, ui ) {
 			equal( ui.header.length, 1, "header length" );
 			strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
-			equal( ui.content.length, 1, "content length" );
-			strictEqual( ui.content[ 0 ], contents[ 0 ], "content" );
+			equal( ui.panel.length, 1, "panel length" );
+			strictEqual( ui.panel[ 0 ], contents[ 0 ], "panel" );
 		}
 	});
 	element.accordion( "destroy" );
@@ -27,8 +27,8 @@ test( "create", function() {
 		create: function( event, ui ) {
 			equal( ui.header.length, 1, "header length" );
 			strictEqual( ui.header[ 0 ], headers[ 2 ], "header" );
-			equal( ui.content.length, 1, "content length" );
-			strictEqual( ui.content[ 0 ], contents[ 2 ], "content" );
+			equal( ui.panel.length, 1, "panel length" );
+			strictEqual( ui.panel[ 0 ], contents[ 2 ], "panel" );
 		}
 	});
 	element.accordion( "destroy" );
@@ -38,7 +38,7 @@ test( "create", function() {
 		collapsible: true,
 		create: function( event, ui ) {
 			equal( ui.header.length, 0, "header length" );
-			equal( ui.content.length, 0, "content length" );
+			equal( ui.panel.length, 0, "panel length" );
 		}
 	});
 	element.accordion( "destroy" );

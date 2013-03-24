@@ -2,10 +2,10 @@
 /* Written by Milian Wolff (mail@milianw.de). */
 jQuery(function($){
 	$.datepicker.regional['de'] = {
-		closeText: 'schließen',
-		prevText: '&#x3C;zurück',
+		closeText: 'Schließen',
+		prevText: '&#x3C;Zurück',
 		nextText: 'Vor&#x3E;',
-		currentText: 'heute',
+		currentText: 'Heute',
 		monthNames: ['Januar','Februar','März','April','Mai','Juni',
 		'Juli','August','September','Oktober','November','Dezember'],
 		monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',

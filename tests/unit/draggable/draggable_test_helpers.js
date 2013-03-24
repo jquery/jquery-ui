@@ -1,24 +1,21 @@
 TestHelpers.draggable = {
 	// todo: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
-	drag: function(handle, dx, dy) {
-		$(handle).simulate("drag", {
-			dx: dx || 0,
-			dy: dy || 0
-		});
-	},
 	testDrag: function(el, handle, dx, dy, expectedDX, expectedDY, msg) {
 		var offsetAfter, actual, expected,
 			offsetBefore = el.offset();
 
-		TestHelpers.draggable.drag(handle, dx, dy);
+		$( handle ).simulate( "drag", {
+			dx: dx,
+			dy: dy
+		});
 		offsetAfter = el.offset();
 
-		actual = { left: offsetAfter.left, top: offsetAfter.top },
+		actual = { left: offsetAfter.left, top: offsetAfter.top };
 		expected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
 		msg = msg ? msg + "." : "";
-		deepEqual(actual, expected, 'dragged[' + dx + ', ' + dy + '] ' + msg);
+		deepEqual(actual, expected, "dragged[" + dx + ", " + dy + "] " + msg);
 	},
 	shouldMove: function(el, why) {
 		TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50, why);
@@ -27,10 +24,10 @@ TestHelpers.draggable = {
 		TestHelpers.draggable.testDrag(el, el, 50, 50, 0, 0, why);
 	},
 	testScroll: function(el, position ) {
-		var oldPosition = $("#main").css('position');
-		$("#main").css('position', position);
-		TestHelpers.draggable.shouldMove(el, position+' parent');
-		$("#main").css('position', oldPosition);
+		var oldPosition = $("#main").css("position");
+		$("#main").css("position", position);
+		TestHelpers.draggable.shouldMove(el, position+" parent");
+		$("#main").css("position", oldPosition);
 	},
 	restoreScroll: function( what ) {
 		if( what ) {
@@ -49,9 +46,33 @@ TestHelpers.draggable = {
 		}
 	},
 	border: function(el, side) {
-		return parseInt(el.css('border-' + side + '-width'), 10) || 0;
+		return parseInt(el.css("border-" + side + "-width"), 10) || 0;
 	},
 	margin: function(el, side) {
-		return parseInt(el.css('margin-' + side), 10) || 0;
+		return parseInt(el.css("margin-" + side), 10) || 0;
+	},
+	move: function( el, x, y ) {
+
+		$( el ).simulate( "drag", {
+			dx: x,
+			dy: y
+		});
+
+	},
+	trackMouseCss : function( el ) {
+		el.bind( "drag", function() {
+			el.data( "last_dragged_cursor", $("body").css("cursor") );
+		});
+	},
+	trackAppendedParent : function( el ) {
+
+		// appendTo ignored without being clone
+		el.draggable( "option", "helper", "clone" );
+
+		el.bind( "drag", function(e,ui) {
+			// Get what parent is at time of drag
+			el.data( "last_dragged_parent", ui.helper.parent()[0] );
+		});
+
 	}
 };

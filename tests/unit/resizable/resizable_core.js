@@ -8,17 +8,17 @@ module("resizable: core");
 
 /*
 test("element types", function() {
-	var typeNames = ('p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form'
-		+ ',table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr'
-		+ ',acronym,code,samp,kbd,var,img,object,hr'
-		+ ',input,button,label,select,iframe').split(',');
+	var typeNames = ("p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form"
+		+ ",table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr"
+		+ ",acronym,code,samp,kbd,var,img,object,hr"
+		+ ",input,button,label,select,iframe").split(",");
 
 	$.each(typeNames, function(i) {
 		var typeName = typeNames[i];
-		el = $(document.createElement(typeName)).appendTo('body');
-		(typeName == 'table' && el.append("<tr><td>content</td></tr>"));
+		el = $(document.createElement(typeName)).appendTo("body");
+		(typeName == "table" && el.append("<tr><td>content</td></tr>"));
 		el.resizable();
-		ok(true, '$("&lt;' + typeName + '/&gt").resizable()');
+		ok(true, "$('&lt;" + typeName + "/&gt').resizable()");
 		el.resizable("destroy");
 		el.remove();
 	});
@@ -28,7 +28,7 @@ test("element types", function() {
 test("n", function() {
 	expect(4);
 
-	var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-n", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, 0, -50);
 	equal( target.height(), 150, "compare height" );
@@ -43,7 +43,7 @@ test("n", function() {
 test("s", function() {
 	expect(5);
 
-	var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-s", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, 0, 50);
 	equal( target.height(), 150, "compare height" );
@@ -59,7 +59,7 @@ test("s", function() {
 test("e", function() {
 	expect(5);
 
-	var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-e", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, 50);
 	equal( target.width(), 150, "compare width");
@@ -75,7 +75,7 @@ test("e", function() {
 test("w", function() {
 	expect(4);
 
-	var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-w", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, -50);
 	equal( target.width(), 150, "compare width" );
@@ -90,7 +90,7 @@ test("w", function() {
 test("ne", function() {
 	expect(5);
 
-	var handle = '.ui-resizable-ne', target = $('#resizable1').css({ overflow: 'hidden' }).resizable({ handles: 'all' });
+	var handle = ".ui-resizable-ne", target = $("#resizable1").css({ overflow: "hidden" }).resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, -50, -50);
 	equal( target.width(), 50, "compare width" );
@@ -106,7 +106,7 @@ test("ne", function() {
 test("se", function() {
 	expect(6);
 
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, 50, 50);
 	equal( target.width(), 150, "compare width" );
@@ -123,7 +123,7 @@ test("se", function() {
 test("sw", function() {
 	expect(5);
 
-	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-sw", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, -50, -50);
 	equal( target.width(), 150, "compare width" );
@@ -139,7 +139,7 @@ test("sw", function() {
 test("nw", function() {
 	expect(4);
 
-	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-nw", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, -50, -50);
 	equal( target.width(), 150, "compare width" );
@@ -153,15 +153,15 @@ test("nw", function() {
 test("handle with complex markup (#8756)", function() {
 	expect(2);
 
-	$('#resizable1')
+	$("#resizable1")
 		.append(
-			$('<div>')
+			$("<div>")
 				.addClass("ui-resizable-handle")
 				.addClass("ui-resizable-w")
-				.append($('<div>'))
+				.append($("<div>"))
 		);
 
-	var handle = '.ui-resizable-w div', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = ".ui-resizable-w div", target = $("#resizable1").resizable({ handles: "all" });
 
 	TestHelpers.resizable.drag(handle, -50);
 	equal( target.width(), 150, "compare width" );
@@ -176,7 +176,7 @@ test("resizable accounts for scroll position correctly (#3815)", function() {
 	var position, top, left,
 		container = $("<div style='overflow:scroll;height:300px;width:300px;position:relative;'></div>").appendTo("#qunit-fixture"),
 		overflowed = $("<div style='width: 1000px; height: 1000px;'></div>").appendTo( container ),
-		el = $("<div style='height:100px;width:100px;position:absolute;top:10px;left:10px;'></div>").appendTo( overflowed ).resizable({ handles: 'all' }),
+		el = $("<div style='height:100px;width:100px;position:absolute;top:10px;left:10px;'></div>").appendTo( overflowed ).resizable({ handles: "all" }),
 		handle = ".ui-resizable-e";
 
 	container.scrollLeft( 100 ).scrollTop( 100 );

@@ -99,7 +99,7 @@ test( "allow form submit on enter when menu is not active", function() {
 				delay: 0,
 				minLength: 0
 			});
-		element.data( "ui-autocomplete" )._move = function() {
+		element.autocomplete( "instance" )._move = function() {
 			didMove = true;
 		};
 		element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
@@ -114,7 +114,7 @@ test( "allow form submit on enter when menu is not active", function() {
 				delay: 0,
 				minLength: 0
 			});
-		element.data( "ui-autocomplete" )._move = function() {
+		element.autocomplete( "instance" )._move = function() {
 			ok( true, "repsond to arrow" );
 		};
 		element.autocomplete( "search" );
@@ -156,7 +156,7 @@ test( "ARIA", function() {
 	var element = $( "#autocomplete" ).autocomplete({
 			source: [ "java", "javascript" ]
 		}),
-		liveRegion = element.data( "ui-autocomplete" ).liveRegion;
+		liveRegion = element.autocomplete( "instance" ).liveRegion;
 
 	equal( liveRegion.text(), "", "Empty live region on create" );
 
@@ -186,6 +186,16 @@ test( "ARIA", function() {
 	element.autocomplete( "search", "j" );
 	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
 		"Live region for multiple values" );
+});
+
+test( ".replaceWith() (#9172)", function() {
+	expect( 1 );
+
+	var element = $( "#autocomplete" ).autocomplete(),
+		replacement = "<div>test</div>",
+		parent = element.parent();
+	element.replaceWith( replacement );
+	equal( parent.html(), replacement );
 });
 
 }( jQuery ) );

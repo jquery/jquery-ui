@@ -4,11 +4,12 @@ module( "core - jQuery extensions" );
 
 TestHelpers.testJshint( "core" );
 
-test( "focus - original functionality", function() {
+asyncTest( "focus - original functionality", function() {
 	expect( 1 );
 	$( "#inputTabindex0" )
-		.focus(function() {
+		.one( "focus", function() {
 			ok( true, "event triggered" );
+			start();
 		})
 		.focus();
 });
@@ -16,34 +17,13 @@ test( "focus - original functionality", function() {
 asyncTest( "focus", function() {
 	expect( 2 );
 	$( "#inputTabindex0" )
-		.focus(function() {
+		.one( "focus", function() {
 			ok( true, "event triggered" );
+			start();
 		})
 		.focus( 500, function() {
-			// prevent double focus event in IE
-			$( this ).unbind( "focus" );
 			ok( true, "callback triggered" );
-			start();
 		});
-});
-
-test( "zIndex", function() {
-	expect( 7 );
-	var el = $( "#zIndexAutoWithParent" ),
-		parent = el.parent();
-	equal( el.zIndex(), 100, "zIndex traverses up to find value" );
-	equal( parent.zIndex(200 ), parent, "zIndex setter is chainable" );
-	equal( el.zIndex(), 200, "zIndex setter changed zIndex" );
-
-	el = $( "#zIndexAutoWithParentViaCSS" );
-	equal( el.zIndex(), 0, "zIndex traverses up to find CSS value, not found because not positioned" );
-
-	el = $( "#zIndexAutoWithParentViaCSSPositioned" );
-	equal( el.zIndex(), 100, "zIndex traverses up to find CSS value" );
-	el.parent().zIndex( 200 );
-	equal( el.zIndex(), 200, "zIndex setter changed zIndex, overriding CSS" );
-
-	equal( $( "#zIndexAutoNoParent" ).zIndex(), 0, "zIndex never explicitly set in hierarchy" );
 });
 
 test( "innerWidth - getter", function() {

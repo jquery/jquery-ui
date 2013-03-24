@@ -2,7 +2,7 @@
  * jQuery UI Tooltip @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -46,7 +46,9 @@ $.widget( "ui.tooltip", {
 	version: "@VERSION",
 	options: {
 		content: function() {
-			var title = $( this ).attr( "title" );
+			// support: IE<9, Opera in jQuery <1.7
+			// .text() can't accept undefined, so coerce to a string
+			var title = $( this ).attr( "title" ) || "";
 			// Escape title, since we're going from an attribute to raw HTML
 			return $( "<a>" ).text( title ).html();
 		},
@@ -113,7 +115,7 @@ $.widget( "ui.tooltip", {
 		});
 
 		// remove title attributes to prevent native tooltips
-		this.element.find( this.options.items ).andSelf().each(function() {
+		this.element.find( this.options.items ).addBack().each(function() {
 			var element = $( this );
 			if ( element.is( "[title]" ) ) {
 				element
@@ -125,7 +127,7 @@ $.widget( "ui.tooltip", {
 
 	_enable: function() {
 		// restore title attributes
-		this.element.find( this.options.items ).andSelf().each(function() {
+		this.element.find( this.options.items ).addBack().each(function() {
 			var element = $( this );
 			if ( element.data( "ui-tooltip-title" ) ) {
 				element.attr( "title", element.data( "ui-tooltip-title" ) );
@@ -270,7 +272,7 @@ $.widget( "ui.tooltip", {
 		// as the tooltip is visible, position the tooltip using the most recent
 		// event.
 		if ( this.options.show && this.options.show.delay ) {
-			delayedShow = setInterval(function() {
+			delayedShow = this.delayedShow = setInterval(function() {
 				if ( tooltip.is( ":visible" ) ) {
 					position( positionOption.of );
 					clearInterval( delayedShow );
@@ -311,6 +313,9 @@ $.widget( "ui.tooltip", {
 		if ( this.closing ) {
 			return;
 		}
+
+		// Clear the interval for delayed tracking tooltips
+		clearInterval( this.delayedShow );
 
 		// only set title if we had one before (see comment in _open())
 		if ( target.data( "ui-tooltip-title" ) ) {
