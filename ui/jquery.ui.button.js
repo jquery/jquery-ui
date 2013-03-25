@@ -139,6 +139,10 @@ $.widget( "ui.button", {
 				}
 				if ( !event.isDefaultPrevented() ) {
 					event.preventDefault();
+					//Checkbox/radio toggling is handled at the mouseup handler.
+					//The next block is for handling synthetic click events,
+					//so that .trigger( "click" ) still works correctly and
+					//consistently cross-browser.
 					// !event.originalEvent as fallback for jQuery < 1.7
 					if ( event.isTrigger || !event.originalEvent ) {
 						that._toggleToggleButton();
