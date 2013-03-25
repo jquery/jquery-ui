@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-var interaction, touchHook, pointerHook;
+var interaction, pointerHook;
 
 $.widget( "ui.interaction", {
 	version: "@VERSION",
@@ -90,18 +90,25 @@ $.extend( interaction, {
 	hooks: {}
 });
 
-interaction.hooks.mouse = {
+pointerHook = interaction.hooks.pointer = {
 	setup: function( widget, start ) {
 		widget._on( widget.widget(), {
-			"mousedown": function( event ) {
+			"pointerdown": function( event ) {
+				if ( pointerHook.id ) {
+					return;
+				}
+
 				// only react to the primary button
-				if ( event.which === 1 ) {
+				if ( event.pointerId !== 1 || event.which === 1 ) {
 					var started = start( event, event.target, {
 						x: event.pageX,
 						y: event.pageY
 					});
 
 					if ( started ) {
+						// track pointer which is performing the interaction
+						pointerHook.id = event.pointerId;
+
 						// prevent selection
 						event.preventDefault();
 					}
@@ -111,7 +118,7 @@ interaction.hooks.mouse = {
 	},
 
 	handle: function( widget, move, stop ) {
-		function mousemove( event ) {
+		function pointermove( event ) {
 			event.preventDefault();
 			move( event, {
 				x: event.pageX,
@@ -119,166 +126,9 @@ interaction.hooks.mouse = {
 			});
 		}
 
-		function mouseup( event ) {
-			stop( event, {
-				x: event.pageX,
-				y: event.pageY
-			});
-			widget.document
-				.unbind( "mousemove", mousemove )
-				.unbind( "mouseup", mouseup );
-		}
+		function pointerup( event ) {
 
-		widget._on( widget.document, {
-			"mousemove": mousemove,
-			"mouseup": mouseup
-		});
-	}
-};
-
-// WebKit doesn't support TouchList.identifiedTouch()
-function getTouch( event ) {
-	var touches = event.originalEvent.changedTouches,
-		i = 0, length = touches.length;
-
-	for ( ; i < length; i++ ) {
-		if ( touches[ i ].identifier === touchHook.id ) {
-			return touches[ i ];
-		}
-	}
-}
-
-touchHook = interaction.hooks.touch = {
-	setup: function( widget, start ) {
-		widget._on( widget.widget(), {
-			"touchstart": function( event ) {
-				var touch, started;
-
-				if ( touchHook.id ) {
-					return;
-				}
-
-				touch = event.originalEvent.changedTouches.item( 0 );
-				started = start( event, touch.target, {
-					x: touch.pageX,
-					y: touch.pageY
-				});
-
-				if ( started ) {
-					// track which finger is performing the interaction
-					touchHook.id = touch.identifier;
-					// prevent panning/zooming
-					event.preventDefault();
-				}
-			}
-		});
-	},
-
-	handle: function( widget, move, stop ) {
-		function moveHandler( event ) {
-			// TODO: test non-Apple WebKits to see if they allow
-			// zooming/scrolling if we don't preventDefault()
-			var touch = getTouch( event );
-			if ( !touch ) {
-				return;
-			}
-
-			event.preventDefault();
-			move( event, {
-				x: touch.pageX,
-				y: touch.pageY
-			});
-		}
-
-		function stopHandler( event ) {
-			var touch = getTouch( event );
-			if ( !touch ) {
-				return;
-			}
-
-			stop( event, {
-				x: touch.pageX,
-				y: touch.pageY
-			});
-			touchHook.id = null;
-			widget.document
-				.unbind( "touchmove", moveHandler )
-				.unbind( "touchend", stopHandler );
-		}
-
-		widget._on( widget.document, {
-			"touchmove": moveHandler,
-			"touchend": stopHandler
-		});
-	}
-};
-
-pointerHook = interaction.hooks.msPointer = {
-	setup: function( widget, start ) {
-		widget._on( widget.widget(), {
-			"MSPointerDown": function( _event ) {
-				var started,
-					event = _event.originalEvent;
-
-				if ( pointerHook.id ) {
-					return;
-				}
-
-				// TODO: how can we detect a "right click" with a pen?
-				// TODO: get full details about which and button from MS
-				// touch and pen = 1
-				// primary mouse button = 2
-				if ( event.which > 2 ) {
-					return;
-				}
-
-				started = start( event, event.target, {
-					x: event.pageX,
-					y: event.pageY
-				});
-
-				if ( started ) {
-					// track which pointer is performing the interaction
-					pointerHook.id = event.pointerId;
-					// prevent panning/zooming
-					event.preventManipulation();
-					// prevent promoting pointer events to mouse events
-					event.preventMouseEvent();
-				}
-			}
-		});
-	},
-
-	handle: function( widget, move, stop ) {
-		function moveHandler( _event ) {
-			var event = _event.originalEvent,
-				pageX = event.pageX,
-				pageY = event.pageY;
-
-			// always prevent manipulation to avoid panning/zooming
-			event.preventManipulation();
-
-			if ( event.pointerId !== pointerHook.id ) {
-				return;
-			}
-
-			// MS streams events constantly, even if there is no movement
-			// so we optimize by ignoring repeat events
-			if ( pointerHook.x === pageX && pointerHook.y === pageY ) {
-				return;
-			}
-
-			pointerHook.x = pageX;
-			pointerHook.y = pageY;
-			move( event, {
-				x: pageX,
-				y: pageY
-			});
-		}
-
-		function stopHandler( _event ) {
-			var event = _event.originalEvent;
-
+			// Only stop if original pointer stops
 			if ( event.pointerId !== pointerHook.id ) {
 				return;
 			}
@@ -287,17 +137,17 @@ pointerHook = interaction.hooks.msPointer = {
 				x: event.pageX,
 				y: event.pageY
 			});
-			pointerHook.id = pointerHook.x = pointerHook.y = undefined;
+
+			pointerHook.id = null;
+
 			widget.document
-				.unbind( "MSPointerMove", moveHandler )
-				.unbind( "MSPointerUp", stopHandler )
-				.unbind( "MSPointerCancel", stopHandler );
+				.unbind( "pointermove", pointermove )
+				.unbind( "pointerup", pointerup );
 		}
 
 		widget._on( widget.document, {
-			"MSPointerMove": moveHandler,
-			"MSPointerUp": stopHandler,
-			"MSPointerCancel": stopHandler
+			"pointermove": pointermove,
+			"pointerup": pointerup
 		});
 	}
 };

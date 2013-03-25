@@ -68,6 +68,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			this.element.css( "position", "relative" );
 		}
 
+		this.element.css( "-ms-touch-action", "none" );
 		this.element.addClass( "ui-draggable" );
 	},
 
