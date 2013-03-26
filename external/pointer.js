@@ -1,8 +1,8 @@
 (function( $ ) {
-var POINTER_TYPE_UNAVAILABLE = 1,
-    POINTER_TYPE_TOUCH = 2,
-    POINTER_TYPE_PEN = 3,
-    POINTER_TYPE_MOUSE = 4;
+var POINTER_TYPE_UNAVAILABLE = "1",
+    POINTER_TYPE_TOUCH = "2",
+    POINTER_TYPE_PEN = "3",
+    POINTER_TYPE_MOUSE = "4";
 
 function processEvent( event, pointerType ) {
     var prop,
