@@ -45,10 +45,10 @@ function processEvent( event, pointerType ) {
 
 $.event.special.pointerdown = {
     setup: function() {
-        $( this ).bind( "mousedown touchstart MSPointerDown", jQuery.event.special.pointerdown.handler );
+        $( this ).on( "mousedown touchstart MSPointerDown", $.event.special.pointerdown.handler );
     },
     teardown: function() {
-        $( this ).unbind( "mousedown touchstart MSPointerDown", jQuery.event.special.pointerdown.handler );
+        $( this ).off( "mousedown touchstart MSPointerDown", $.event.special.pointerdown.handler );
     },
     handler: function( event ) {
         event = processEvent( event, "pointerdown" );
@@ -58,10 +58,10 @@ $.event.special.pointerdown = {
 
 $.event.special.pointerup = {
     setup: function() {
-        $( this ).bind( "mouseup touchend MSPointerUp", jQuery.event.special.pointerup.handler );
+        $( this ).on( "mouseup touchend MSPointerUp", $.event.special.pointerup.handler );
     },
     teardown: function() {
-        $( this ).unbind( "mouseup touchend MSPointerUp", jQuery.event.special.pointerup.handler );
+        $( this ).off( "mouseup touchend MSPointerUp", $.event.special.pointerup.handler );
     },
     handler: function( event ) {
         event = processEvent( event, "pointerup" );
@@ -71,10 +71,10 @@ $.event.special.pointerup = {
 
 $.event.special.pointermove = {
     setup: function() {
-        $( this ).bind( "mousemove touchmove MSPointerMove", jQuery.event.special.pointermove.handler );
+        $( this ).on( "mousemove touchmove MSPointerMove", $.event.special.pointermove.handler );
     },
     teardown: function() {
-        $( this ).unbind( "mousemove touchmove MSPointerMove", jQuery.event.special.pointermove.handler );
+        $( this ).off( "mousemove touchmove MSPointerMove", $.event.special.pointermove.handler );
     },
     handler: function( event ) {
         event = processEvent( event, "pointermove" );
