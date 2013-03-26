@@ -15,7 +15,7 @@ test("destroy", function() {
 
 test( "refresh: Ensure disabled state is preserved correctly.", function() {
 	expect( 8 );
-	
+
 	var element = $( "<a href='#'></a>" );
 	element.button({ disabled: true }).button( "refresh" );
 	ok( element.button( "option", "disabled" ), "Anchor button should remain disabled after refresh" ); //See #8237
