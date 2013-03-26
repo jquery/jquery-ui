@@ -85,4 +85,24 @@ test( "resizable handle with complex markup (#8756 / #8757)", function() {
 	equal( target.width(), 200, "compare width" );
 });
 
+test( "#8269: Removing draggable element on drop", function() {
+	expect( 1 );
+
+	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable(),
+		dropOffset = $( "#droppable" ).offset();
+
+	$( "#droppable" ).droppable({
+		drop: function() {
+			$( "#wrapper" ).remove();
+			ok( true, "element removed from DOM on drop" );
+		}
+	});
+
+	element.simulate( "drag", {
+		handle: "corner",
+		x: dropOffset.left,
+		y: dropOffset.top
+	});
+});
+
 })( jQuery );
