@@ -35,7 +35,7 @@ test( "enable/disable", function() {
 });
 
 test( "refresh", function() {
-	expect( 17 );
+	expect( 19 );
 	var element = $( "#navigation" )
 		.parent()
 			.height( 300 )
@@ -109,6 +109,15 @@ test( "refresh", function() {
 	element.find( "div.foo" ).eq( 0 ).remove();
 	element.accordion( "refresh" );
 	state( element, 1 );
+
+	// collapse all panels
+	element.accordion( "option", {
+		collapsible: true,
+		active: false
+	});
+	state( element, 0 );
+	element.accordion( "refresh" );
+	state( element, 0 );
 });
 
 test( "widget", function() {
