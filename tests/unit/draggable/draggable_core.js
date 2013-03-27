@@ -75,9 +75,13 @@ test( "resizable handle with complex markup (#8756 / #8757)", function() {
 });
 
 test( "#8269: Removing draggable element on drop", function() {
-	expect( 1 );
+	expect( 2 );
 
-	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable(),
+	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable({
+			stop: function() {
+				ok( true, "stop still called despite element being removed from DOM on drop" );
+			}
+		}),
 		dropOffset = $( "#droppable" ).offset();
 
 	$( "#droppable" ).droppable({

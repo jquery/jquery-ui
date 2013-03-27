@@ -451,6 +451,33 @@ test( "{ cursor: 'move' }", function() {
 	equal( after, before, "after drag: cursor restored" );
 });
 
+test( "#6889: Cursor doesn't revert to pre-dragging state after revert action when original element is removed", function() {
+	function getCursor() {
+		return $( "body" ).css( "cursor" );
+	}
+
+	expect( 2 );
+
+	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable({
+			cursor: "move",
+			revert: true,
+			revertDuration: 0,
+			start: function() {
+				notEqual( getCursor(), expected, "start callback: cursor '" + expected + "'" );
+				$( "#wrapper" ).remove();
+			},
+			stop: function() {
+				equal( getCursor(), expected, "after drag: cursor restored" );
+			}
+		}),
+		expected = getCursor();
+
+	element.simulate( "drag", {
+		dx: -1,
+		dy: -1
+	});
+});
+
 test( "cursor, default, switching after initialization", function() {
 	expect( 3 );
 
