@@ -446,12 +446,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			var iframe = $( this );
 
 			return $( "<div>" )
-				.css({
-					position: "absolute",
-					width: iframe.outerWidth(),
-					height: iframe.outerHeight()
-				})
+				.css( "position", "absolute" )
 				.appendTo( iframe.parent() )
+				.outerWidth( iframe.outerWidth() )
+				.outerHeight( iframe.outerHeight() )
 				.offset( iframe.offset() )[ 0 ];
 		});
 	},
