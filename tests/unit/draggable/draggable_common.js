@@ -4,7 +4,7 @@ TestHelpers.commonWidgetTests( "draggable", {
 		appendTo: null,
 		containment: null,
 		disabled: false,
-		exclude: "input,textarea,button,select,option",
+		exclude: "input,textarea,button,select",
 		handle: null,
 		helper: false,
 

@@ -31,7 +31,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	options: {
 		appendTo: null,
-		exclude: "input,textarea,button,select,option",
+		exclude: "input,textarea,button,select",
 		handle: null,
 		helper: false,
 
