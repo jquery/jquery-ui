@@ -164,17 +164,17 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		if ( this._trigger( "start", event,
 				this._fullHash( pointerPosition ) ) === false ) {
 
-				// domPosition needs to be undone even if start is stopped,
-				// otherwise this.dragEl will remain in the `appendTo` element
-				this.startPosition = startPosition;
-				this.startOffset = startOffset;
-				this.dragEl.css({
-					left: startCssLeft,
-					top: startCssTop
-				});
+			// domPosition needs to be undone even if start is stopped,
+			// otherwise this.dragEl will remain in the `appendTo` element
+			this.startPosition = startPosition;
+			this.startOffset = startOffset;
+			this.dragEl.css({
+				left: startCssLeft,
+				top: startCssTop
+			});
 
-				this._resetDomPosition();
-				return false;
+			this._resetDomPosition();
+			return false;
 		}
 
 		this._blockFrames();
@@ -309,7 +309,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( pointerPosition ) {
-		var newScrollTop, newScrollLeft,
+		var newScrollTop, newScrollLeft, change,
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = this.scrollSensitivity,
@@ -324,10 +324,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			xRight = this.overflow.width + overflowLeft - pointerPosition.x,
 			xLeft = pointerPosition.x- overflowLeft,
 			yBottom = this.overflow.height + overflowTop - pointerPosition.y,
-			yTop = pointerPosition.y - overflowTop,
-
-			// Accounts for change in scrollbar to modify "original" pointer
-			change;
+			yTop = pointerPosition.y - overflowTop;
 
 		// Handle vertical scrolling
 		if ( yBottom < scrollSensitivity ) {
