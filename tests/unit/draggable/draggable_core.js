@@ -94,4 +94,18 @@ test( "#8269: Removing draggable element on drop", function() {
 	});
 });
 
+test( "#7772: Draggable with right/bottom css shouldn't resize", function() {
+	expect( 3 );
+
+	var element = $( "#draggable3" ),
+		origWidth = element.width(),
+		origHeight = element.height();
+
+	element.draggable();
+	TestHelpers.draggable.testDrag( element, element, -50, -50, -50, -50 );
+
+	equal( element.width(), origWidth, "compare width" );
+	equal( element.height(), origHeight, "compare height" );
+});
+
 })( jQuery );
