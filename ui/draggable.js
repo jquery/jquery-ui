@@ -220,6 +220,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 			$.ui.ddmanager.prepareOffsets(this, event);
 		}
 
+		// Reset helper's right/bottom css if they're set and set explicit width/height instead
+		// as this prevents resizing of elements with right/bottom set (see #7772)
+		this._normalizeRightBottom();
+
 		this._mouseDrag(event, true); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 
 		//If the ddmanager is used for droppables, inform the manager that dragging has started (see #5003)
@@ -629,6 +633,17 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.cancelHelperRemoval = false;
 		if ( this.destroyOnClear ) {
 			this.destroy();
+		}
+	},
+
+	_normalizeRightBottom: function() {
+		if ( this.options.axis !== "y" && this.helper.css( "right" ) !== "auto" ) {
+			this.helper.width( this.helper.width() );
+			this.helper.css( "right", "auto" );
+		}
+		if ( this.options.axis !== "x" && this.helper.css( "bottom" ) !== "auto" ) {
+			this.helper.height( this.helper.height() );
+			this.helper.css( "bottom", "auto" );
 		}
 	},
 
