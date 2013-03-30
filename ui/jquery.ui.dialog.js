@@ -769,7 +769,7 @@ $.extend($.ui.dialog.overlay, {
 			this.oldInstances.push(this.instances.splice(indexOf, 1)[0]);
 		}
 
-		if (this.instances.length === 0) {
+		if (this.instances.length === 0 && !$.browser.msie) {
 			$([document, window]).unbind('.dialog-overlay');
 		}
 
