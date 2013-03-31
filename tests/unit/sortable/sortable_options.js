@@ -330,7 +330,7 @@ test( "{ placeholder: false } img", function() {
 
 	var element = $( "#sortable-images" ).sortable({
 		start: function( event, ui ) {
-			equal( ui.placeholder.attr( "src" ), "../images/jqueryui_32x32.png", "placeholder img has correct src" );
+			ok( ui.placeholder.attr( "src" ).indexOf( "images/jqueryui_32x32.png" ) > 0, "placeholder img has correct src" );
 			equal( ui.placeholder.height(), 32, "placeholder has correct height" );
 			equal( ui.placeholder.width(), 32, "placeholder has correct width" );
 		}
