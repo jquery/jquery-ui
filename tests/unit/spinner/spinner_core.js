@@ -94,6 +94,9 @@ asyncTest( "blur input while spinning with UP", function() {
 	function step2() {
 		value = element.val();
 		ok( value > 11, "repeating while key is down" );
+		setTimeout( function() {
+			value = element.val();
+		});
 		element[0].blur();
 		setTimeout( step3, 250 );
 	}
