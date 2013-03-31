@@ -38,27 +38,30 @@ test( "stop", function() {
 test( "mousedown: initial position of helper", function() {
 	expect( 2 );
 
-	var contentToForceScroll, helper,
-		element = $("#selectable1").selectable();
+	var helperOffset,
+		element = $( "#selectable1" ).selectable(),
+		contentToForceScroll = $( "<div>" ).css({
+			height: "10000px",
+			width: "10000px"
+		});
 
-	contentToForceScroll = $("<div>").css({
-		height: "10000px",
-		width: "10000px"
-	});
+	contentToForceScroll.appendTo( "body" );
+	$( window ).scrollTop( 100 ).scrollLeft( 100 );
 
-	contentToForceScroll.appendTo("body");
-	$( window ).scrollTop( 1 ).scrollLeft( 1 );
 	element.simulate( "mousedown", {
 		clientX: 10,
 		clientY: 10
 	});
 
-	helper = $(".ui-selectable-helper");
-	equal( helper.css("top"), "11px", "Scroll top should be accounted for." );
-	equal( helper.css("left"), "11px", "Scroll left should be accounted for." );
+	// we do a GTE comparison here because IE7 erroneously subtracts
+	// 2 pixels from a simulated mousedown for clientX/Y
+	// Support: IE7
+	helperOffset = $( ".ui-selectable-helper" ).offset();
+	ok( helperOffset.top >= 99, "Scroll top should be accounted for." );
+	ok( helperOffset.left >= 99, "Scroll left should be accounted for." );
 
 	// Cleanup
-	element.simulate("mouseup");
+	element.simulate( "mouseup" );
 	contentToForceScroll.remove();
 	$( window ).scrollTop( 0 ).scrollLeft( 0 );
 });
