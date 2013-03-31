@@ -195,7 +195,7 @@ test( ".replaceWith() (#9172)", function() {
 		replacement = "<div>test</div>",
 		parent = element.parent();
 	element.replaceWith( replacement );
-	equal( parent.html(), replacement );
+	equal( parent.html().toLowerCase(), replacement );
 });
 
 }( jQuery ) );
