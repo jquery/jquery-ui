@@ -136,15 +136,18 @@ test( "#8792: issues with floated items in connected lists", function() {
 
 	element = $( "#qunit-fixture li:eq(0)" );
 
+	// move the first li to the right of the second li in the first ul
 	element.simulate( "drag", {
-		dx: 51,
+		dx: 55,
 		moves: 15
 	});
 
 	equal( changeCount, 1, "change fired only once (no jitters) when dragging a floated sortable in it's own container" );
 
+	// move the first li ( which is now in the second spot )
+	// through the first spot in the second ul to the second spot in the second ul
 	element.simulate( "drag", {
-		dx: 50,
+		dx: 100,
 		moves: 15
 	});
 
@@ -173,8 +176,7 @@ test( "#8301: single axis with connected list", function() {
 
 	element.find( "li" ).eq( 0 ).simulate( "drag", {
 		handle: "corner",
-		dx: -1,
-		dy: 114,
+		dy: 120,
 		moves: 1
 	});
 });
