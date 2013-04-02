@@ -4,18 +4,7 @@
 
 (function( $ ) {
 
-var relativeElement, absoluteElement;
-
-module( "draggable: core", {
-	setup: function() {
-		relativeElement = $("<div style='width: 200px; height: 100px;'>Relative</div>").appendTo("#qunit-fixture");
-		absoluteElement = $("<div style='background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;'><span>Absolute</span></div>").appendTo("#qunit-fixture");
-	},
-	teardown: function() {
-		relativeElement.remove();
-		absoluteElement.remove();
-	}
-});
+module( "draggable: core" );
 
 test( "element types", function() {
 	var typeNames = (
@@ -55,18 +44,18 @@ test( "element types", function() {
 
 test( "No options, relative", function() {
 	expect( 1 );
-	TestHelpers.draggable.shouldMove( relativeElement.draggable() );
+	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable() );
 });
 
 test( "No options, absolute", function() {
 	expect( 1 );
-	TestHelpers.draggable.shouldMove( absoluteElement.draggable() );
+	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable() );
 });
 
 test( "resizable handle with complex markup (#8756 / #8757)", function() {
 	expect( 2 );
 
-	relativeElement
+	$( "#draggable1" )
 		.append(
 			$("<div>")
 				.addClass("ui-resizable-handle ui-resizable-w")
@@ -74,7 +63,7 @@ test( "resizable handle with complex markup (#8756 / #8757)", function() {
 		);
 
 	var handle = $(".ui-resizable-w div"),
-		target = relativeElement.draggable().resizable({ handles: "all" });
+		target = $( "#draggable1" ).draggable().resizable({ handles: "all" });
 
 	// todo: fix resizable so it doesn't require a mouseover
 	handle.simulate("mouseover").simulate( "drag", { dx: -50 } );
@@ -83,6 +72,26 @@ test( "resizable handle with complex markup (#8756 / #8757)", function() {
 	// todo: fix resizable so it doesn't require a mouseover
 	handle.simulate("mouseover").simulate( "drag", { dx: 50 } );
 	equal( target.width(), 200, "compare width" );
+});
+
+test( "#8269: Removing draggable element on drop", function() {
+	expect( 1 );
+
+	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable(),
+		dropOffset = $( "#droppable" ).offset();
+
+	$( "#droppable" ).droppable({
+		drop: function() {
+			$( "#wrapper" ).remove();
+			ok( true, "element removed from DOM on drop" );
+		}
+	});
+
+	element.simulate( "drag", {
+		handle: "corner",
+		x: dropOffset.left,
+		y: dropOffset.top
+	});
 });
 
 })( jQuery );

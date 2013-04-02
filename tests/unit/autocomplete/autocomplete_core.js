@@ -188,4 +188,14 @@ test( "ARIA", function() {
 		"Live region for multiple values" );
 });
 
+test( ".replaceWith() (#9172)", function() {
+	expect( 1 );
+
+	var element = $( "#autocomplete" ).autocomplete(),
+		replacement = "<div>test</div>",
+		parent = element.parent();
+	element.replaceWith( replacement );
+	equal( parent.html().toLowerCase(), replacement );
+});
+
 }( jQuery ) );

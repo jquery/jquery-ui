@@ -378,7 +378,7 @@ test( "containment, account for border", function() {
 });
 
 test( "containment, default, switching after initialization", function() {
-	expect( 2 );
+	expect( 3 );
 
 	var element = $( "#draggable1" ).draggable({ containment: false });
 
@@ -393,9 +393,8 @@ test( "containment, default, switching after initialization", function() {
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0 );
 
-	// TODO: Switching back to false does not update to false
-	// element.draggable( "option", "containment", false );
-	// TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100 );
+	element.draggable( "option", "containment", false );
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100 );
 });
 
 test( "{ cursor: 'auto' }, default", function() {
@@ -1057,11 +1056,11 @@ test( "scope", function() {
 
 	$( "#droppable" ).droppable({ scope: "tasks" });
 
-	TestHelpers.draggable.testDrag( element, element, 100, 100, 0, 0, "revert: valid reverts when dropped on a droppable" );
+	TestHelpers.draggable.testDrag( element, element, 100, 100, 0, 0, "revert: valid reverts when dropped on a droppable in scope" );
 
 	$( "#droppable" ).droppable( "destroy" ).droppable({ scope: "nottasks" });
 
-	TestHelpers.draggable.testDrag( element, element, 100, 100, 100, 100, "revert: valid reverts when dropped on a droppable" );
+	TestHelpers.draggable.testDrag( element, element, 100, 100, 100, 100, "revert: valid reverts when dropped on a droppable out of scope" );
 });
 
 test( "scroll, scrollSensitivity, and scrollSpeed", function() {
@@ -1113,7 +1112,8 @@ test( "#6817: auto scroll goes double distance when dragging", function() {
 			scroll: true,
 			stop: function( e, ui ) {
 				equal( ui.offset.top, newY, "offset of item matches pointer position after scroll" );
-				equal( ui.offset.top - offsetBefore.top, distance, "offset of item only moves expected distance after scroll" );
+				// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+				closeEnough( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
 			}
 		}),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
@@ -1138,7 +1138,7 @@ test( "#6817: auto scroll goes double distance when dragging", function() {
 });
 
 test( "snap, snapMode, and snapTolerance", function() {
-	expect( 9 );
+	expect( 10 );
 
 	var newX, newY,
 		snapTolerance = 15,
@@ -1164,7 +1164,9 @@ test( "snap, snapMode, and snapTolerance", function() {
 		moves: 1
 	});
 
-	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap outside the snapTolerance" );
+	// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+	closeEnough( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
+	closeEnough( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
 
 	newX += 3;
 
@@ -1258,7 +1260,7 @@ test( "snap, snapMode, and snapTolerance", function() {
 });
 
 test( "#8459: element can snap to an element that was removed during drag", function() {
-	expect( 1 );
+	expect( 2 );
 
 	var newX, newY,
 		snapTolerance = 15,
@@ -1287,7 +1289,9 @@ test( "#8459: element can snap to an element that was removed during drag", func
 		moves: 1
 	});
 
-	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap to a removed element" );
+	// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+	closeEnough( element.offset().left, newX, 1, "doesn't snap to a removed element" );
+	closeEnough( element.offset().top, newY, 1, "doesn't snap to a removed element" );
 });
 
 test( "#8165: Snapping large rectangles to small rectangles doesn't snap properly", function() {

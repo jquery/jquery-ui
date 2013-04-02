@@ -12,7 +12,7 @@
 	"trailing": true,
 	"undef": true,
 	"unused": true,
-	"predef": [
-		"Globalize"
-	]
+	"globals": {
+		"Globalize": false
+	}
 }
