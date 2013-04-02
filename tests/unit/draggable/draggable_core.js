@@ -94,4 +94,39 @@ test( "#8269: Removing draggable element on drop", function() {
 	});
 });
 
+test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
+	expect( 2 );
+
+	var element = $( "#draggable1" ).draggable({
+			stop: function( event, ui ) {
+				equal( ui.position.left, 1, "left position is correct despite overflow on HTML" );
+				equal( ui.position.top, 1, "top position is correct despite overflow on HTML" );
+				$( "html" )
+					.css( "overflow-y", oldOverflowY )
+					.css( "overflow-x", oldOverflowX )
+					.scrollTop( 0 )
+					.scrollLeft( 0 );
+			}
+		}),
+		contentToForceScroll = $( "<div>" ).css({
+			height: "10000px",
+			width: "10000px"
+		}),
+		oldOverflowY = $( "html" ).css( "overflow-y" ),
+		oldOverflowX = $( "html" ).css( "overflow-x" );
+
+		contentToForceScroll.appendTo( "#qunit-fixture" );
+		$( "html" )
+			.css( "overflow-y", "scroll" )
+			.css( "overflow-x", "scroll" )
+			.scrollTop( 300 )
+			.scrollLeft( 300 );
+
+		element.simulate( "drag", {
+			dx: 1,
+			dy: 1,
+			moves: 1
+		});
+});
+
 })( jQuery );
