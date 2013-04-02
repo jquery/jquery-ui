@@ -359,19 +359,31 @@ test( "{ placeholder: String }", function() {
 });
 
 test( "{ placholder: String } tr", function() {
-	expect( 3 );
+	expect( 4 );
 
-	var element = $( "#sortable-table tbody" ).sortable({
-		placeholder: "test",
-		start: function( event, ui ) {
-			ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
-			equal( ui.placeholder.children().length, 1, "placeholder tr contains a td" );
-			equal( ui.placeholder.children().html(), $( "<span>&#160;</span>" ).html(),
-				"placeholder td has content for forced dimensions" );
-		}
-	});
+	var originalWidths,
+		element = $( "#sortable-table tbody" ).sortable({
+			placeholder: "test",
+			start: function( event, ui ) {
+				var currentWidths = otherRow.children().map(function() {
+					return $( this ).width();
+				}).get();
+				ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+				deepEqual( currentWidths, originalWidths, "table cells maintian size" );
+				equal( ui.placeholder.children().length, dragRow.children().length,
+					"placeholder has correct number of cells" );
+				equal( ui.placeholder.children().html(), $( "<span>&#160;</span>" ).html(),
+					"placeholder td has content for forced dimensions" );
+			}
+		}),
+		rows = element.children( "tr" ),
+		dragRow = rows.eq( 0 ),
+		otherRow = rows.eq( 1 );
 
-	element.find( "tr" ).eq( 0 ).simulate( "drag", {
+	originalWidths = otherRow.children().map(function() {
+		return $( this ).width();
+	}).get();
+	dragRow.simulate( "drag", {
 		dy: 1
 	});
 });

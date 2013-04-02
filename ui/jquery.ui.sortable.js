@@ -752,15 +752,16 @@ $.widget("ui.sortable", $.ui.mouse, {
 				element: function() {
 
 					var nodeName = that.currentItem[0].nodeName.toLowerCase(),
-						element = $( that.document[0].createElement( nodeName ) )
+						element = $( "<" + nodeName + ">", that.document[0] )
 							.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
 							.removeClass("ui-sortable-helper");
 
 					if ( nodeName === "tr" ) {
-						// Use a high colspan to force the td to expand the full
-						// width of the table (browsers are smart enough to
-						// handle this properly)
-						element.append( "<td colspan='99'>&#160;</td>" );
+						that.currentItem.children().each(function() {
+							$( "<td>&#160;</td>", that.document[0] )
+								.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
+								.appendTo( element );
+						});
 					} else if ( nodeName === "img" ) {
 						element.attr( "src", that.currentItem.attr( "src" ) );
 					}
