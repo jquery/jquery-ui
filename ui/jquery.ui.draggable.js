@@ -135,9 +135,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 			left: this.offset.left - this.margins.left
 		};
 
-		//Reset scroll cache
-		this.offset.scroll = false;
-
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
 				left: event.pageX - this.offset.left,
@@ -440,10 +437,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		var mod = d === "absolute" ? 1 : -1,
-			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent;
+			scroll;
 
 		//Cache the scroll
 		if (!this.offset.scroll) {
+			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent;
 			this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
 		}
 
@@ -468,12 +466,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var containment, co, top, left,
 			o = this.options,
-			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent,
+			scroll,
 			pageX = event.pageX,
 			pageY = event.pageY;
 
 		//Cache the scroll
 		if (!this.offset.scroll) {
+			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent;
 			this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
 		}
 
