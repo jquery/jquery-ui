@@ -129,4 +129,34 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 		});
 });
 
+test( "#5009: scroll not working with parent's position fixed", function() {
+	expect( 2 );
+
+	var startValue = 300,
+		element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable({
+			drag: function() {
+				startValue += 100;
+				$( document ).scrollTop( startValue ).scrollLeft( startValue );
+			},
+			stop: function( event, ui ) {
+				equal( ui.position.left, 10, "left position is correct despite overflow on HTML" );
+				equal( ui.position.top, 10, "top position is correct despite overflow on HTML" );
+				$( document ).scrollTop( 0 ).scrollLeft( 0 );
+			}
+		}),
+		contentToForceScroll = $( "<div>" ).css({
+			height: "20000px",
+			width: "20000px"
+		});
+
+	$( "#qunit-fixture" ).append( contentToForceScroll );
+	$( "#wrapper" ).css( "position", "fixed" );
+
+	element.simulate( "drag", {
+		dx: 10,
+		dy: 10,
+		moves: 3
+	});
+});
+
 })( jQuery );
