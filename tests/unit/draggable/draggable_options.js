@@ -1289,9 +1289,15 @@ test( "#8459: element can snap to an element that was removed during drag", func
 		moves: 1
 	});
 
-	// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
-	closeEnough( element.offset().left, newX, 1, "doesn't snap to a removed element" );
-	closeEnough( element.offset().top, newY, 1, "doesn't snap to a removed element" );
+	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
+	if ( TestHelpers.draggable.unreliableContains ) {
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+	} else {
+		// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+		closeEnough( element.offset().left, newX, 1, "doesn't snap to a removed element" );
+		closeEnough( element.offset().top, newY, 1, "doesn't snap to a removed element" );
+	}
 });
 
 test( "#8165: Snapping large rectangles to small rectangles doesn't snap properly", function() {
