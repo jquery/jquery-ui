@@ -114,7 +114,7 @@ asyncTest( "invocation", function() {
 
 				step2();
 			});
-		})[ 0 ].focus();
+		}).simulate( "focus" );
 	}
 
 	function step2() {
