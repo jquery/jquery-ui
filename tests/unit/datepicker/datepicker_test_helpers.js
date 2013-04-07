@@ -22,8 +22,8 @@ TestHelpers.datepicker = {
 		element.one( "blur", function(){
 			element.one( "focus", function(){
 				callback();
-			})[ 0 ].focus();
-		})[ 0 ].blur();
+			}).simulate( "focus" );
+		}).simulate( "blur" );
 	},
 	PROP_NAME: "datepicker"
 };
