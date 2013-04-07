@@ -46,4 +46,17 @@ test( "hover over a menu item with no sub-menu should close open menu", function
 	equal($(".ui-menu:visible").length, 0,  "After triggering a sub-menu, a click on a peer menu item should close the opened sub-menu");
 });
 
+test ( "_findNextFocusableTarget should find one and only one item", function() {
+	expect(2);
+
+	var element = $("#bar1").menubar(),
+		menubarWidget = element.data("ui-menubar"),
+		firstMenuItem = $("#bar1 .ui-menubar-item").eq(0),
+		expectedFocusableTarget = $("#bar1 .ui-menubar-item .ui-widget").eq(0),
+		result = menubarWidget._findNextFocusableTarget( firstMenuItem );
+
+  equal( expectedFocusableTarget[0], result[0], "_findNextFocusableTarget should return the focusable element underneath the menuItem" );
+	equal( 1, result.length, "One and only one item should be returned." );
+});
+
 })( jQuery );

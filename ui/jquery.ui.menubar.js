@@ -476,13 +476,17 @@ $.widget( "ui.menubar", {
 		this._move( "prev", "last", event );
 	},
 
+	_findNextFocusableTarget: function( menuItem ) {
+		return menuItem.find(".ui-button");
+	},
+
 	_move: function( direction, filter, event ) {
 		var next,
 			wrapItem;
 
 		var closestMenuItem = $( event.target ).closest(".ui-menubar-item"),
 			nextMenuItem = closestMenuItem.data( direction + "MenuItem" ),
-			focusableTarget = nextMenuItem.find("a, button");
+			focusableTarget = this._findNextFocusableTarget( nextMenuItem );
 
 		if ( this.open ) {
 			if ( nextMenuItem.data("hasSubMenu") ) {
