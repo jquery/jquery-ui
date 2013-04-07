@@ -18,5 +18,12 @@ TestHelpers.datepicker = {
 		$.datepicker.setDefaults($.datepicker.regional[""]);
 		return $(id).datepicker($.extend({showAnim: ""}, options || {}));
 	},
+	onBlurThenFocus: function( element, callback ) {
+		element.one( "blur", function(){
+			element.one( "focus", function(){
+				callback();
+			})[ 0 ].focus();
+		})[ 0 ].blur();
+	},
 	PROP_NAME: "datepicker"
 };
