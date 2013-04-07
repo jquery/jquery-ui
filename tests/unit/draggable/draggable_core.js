@@ -139,8 +139,8 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 				$( document ).scrollTop( startValue ).scrollLeft( startValue );
 			},
 			stop: function( event, ui ) {
-				equal( ui.position.left, 10, "left position is correct despite overflow on HTML" );
-				equal( ui.position.top, 10, "top position is correct despite overflow on HTML" );
+				equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
+				equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
 				$( document ).scrollTop( 0 ).scrollLeft( 0 );
 			}
 		}),
