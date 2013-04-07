@@ -1050,38 +1050,40 @@ test("Ticket 6827: formatDate day of year calculation is wrong during day lights
 	equal(time, "089");
 });
 
-test("Ticket 7602: Stop datepicker from appearing with beforeShow event handler", function(){
+test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler", function() {
 	expect( 3 );
-	var inp = TestHelpers.datepicker.init("#inp",{
-			beforeShow: function(){
-				return false;
-			}
-		}),
-		dp = $("#ui-datepicker-div");
-	inp.datepicker("show");
-	equal(dp.css("display"), "none","beforeShow returns false");
-	inp.datepicker("destroy");
 
-	inp = TestHelpers.datepicker.init("#inp",{
-		beforeShow: function(){
+	var inp, dp;
+
+	inp = TestHelpers.datepicker.init( "#inp", {
+		beforeShow: function() {
 		}
 	});
-	dp = $("#ui-datepicker-div");
-	inp.datepicker("show");
-	equal(dp.css("display"), "block","beforeShow returns nothing");
-	inp.datepicker("hide");
-	inp.datepicker("destroy");
+	dp = $( "#ui-datepicker-div" );
+	inp.datepicker( "show" );
+	equal( dp.css( "display" ), "block", "beforeShow returns nothing" );
+	inp.datepicker( "hide" ).datepicker( "destroy" );
 
-	inp = TestHelpers.datepicker.init("#inp",{
-		beforeShow: function(){
+	inp = TestHelpers.datepicker.init( "#inp", {
+		beforeShow: function() {
 			return true;
 		}
 	});
-	dp = $("#ui-datepicker-div");
-	inp.datepicker("show");
-	equal(dp.css("display"), "block","beforeShow returns true");
-	inp.datepicker("hide");
-	inp.datepicker("destroy");
+	dp = $( "#ui-datepicker-div" );
+	inp.datepicker( "show" );
+	equal( dp.css( "display" ), "block", "beforeShow returns true" );
+	inp.datepicker( "hide" );
+	inp.datepicker( "destroy" );
+
+	inp = TestHelpers.datepicker.init( "#inp", {
+		beforeShow: function() {
+			return false;
+		}
+	});
+	dp = $( "#ui-datepicker-div" );
+	inp.datepicker( "show" );
+	equal( dp.css( "display" ), "none","beforeShow returns false" );
+	inp.datepicker( "destroy" );
 });
 
 })(jQuery);
