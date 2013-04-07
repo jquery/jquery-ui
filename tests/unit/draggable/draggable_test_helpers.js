@@ -1,6 +1,11 @@
 TestHelpers.draggable = {
 	// todo: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
+	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
+	unreliableContains: function(){
+		var element = $( "<div>" );
+		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
+	}(),
 	testDrag: function(el, handle, dx, dy, expectedDX, expectedDY, msg) {
 		var offsetAfter, actual, expected,
 			offsetBefore = el.offset();
