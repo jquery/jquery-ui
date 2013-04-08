@@ -140,7 +140,7 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 		cmd: "zip",
 		args: [ "-r", dest, this.data.src ],
 		opts: {
-			cwd: 'dist'
+			cwd: "dist"
 		}
 	}, function( err ) {
 		if ( err ) {
