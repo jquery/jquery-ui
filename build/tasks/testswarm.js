@@ -53,7 +53,7 @@ function submit( commit, runs, configFile, version, done ) {
 	} )
 	.addjob(
 		{
-			name: 'jQuery UI ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
+			name: "jQuery UI " + version + "#<a href='https://github.com/jquery/jquery-ui/commit/" + commit + "'>" + commit.substr( 0, 10 ) + "</a>",
 			runs: runs,
 			runMax: config.runMax,
 			browserSets: config.browserSets

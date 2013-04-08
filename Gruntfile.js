@@ -73,7 +73,7 @@ var
 		},
 		main: {
 			options: {
-				keepSpecialComments: '*'
+				keepSpecialComments: "*"
 			},
 			src: "dist/jquery-ui.css",
 			dest: "dist/jquery-ui.min.css"
