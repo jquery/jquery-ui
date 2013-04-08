@@ -178,7 +178,9 @@ $.widget( "ui.menubar", {
 				case $.ui.keyCode.LEFT:
 					parentButton = menubar.active.prev(".ui-button");
 
-					if ( parentButton.parent().prev().data('hasSubMenu') ) {
+					if ( this.openSubmenus ) {
+						this.openSubmenus--;
+					} else if ( parentButton.parent().prev().data('hasSubMenu') ) {
 						menubar.active.blur();
 						menubar._open( event, parentButton.parent().prev().find(".ui-menu") );
 					} else {
@@ -452,18 +454,23 @@ $.widget( "ui.menubar", {
 		this.open = true;
 	},
 
+	_shouldOpenNestedSubMenu: function() {
+		return this.open &&
+			this.active &&
+			this.active.closest( this.options.items ).data("hasSubMenu") &&
+			this.active.data("uiMenu") &&
+			this.active.data("uiMenu").active &&
+			this.active.data("uiMenu").active.has(".ui-menu").length
+	},
+
 	next: function( event ) {
-		if ( this.open && this.active &&
-				 this.active.closest( this.options.items ).data("hasSubMenu") &&
-				 this.active.data("menu").active &&
-				 this.active.data("menu").active.has(".ui-menu").length ) {
+		if ( this._shouldOpenNestedSubMenu() ) {
 			// Track number of open submenus and prevent moving to next menubar item
 			this.openSubmenus++;
 			return;
 		}
 		this.openSubmenus = 0;
 		this._move( "next", "first", event );
-
 	},
 
 	previous: function( event ) {
