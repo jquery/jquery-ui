@@ -1,12 +1,17 @@
 {
+	"boss": true,
 	"curly": true,
-	"eqnull": true,
 	"eqeqeq": true,
+	"eqnull": true,
 	"expr": true,
+	"immed": true,
 	"noarg": true,
-	"node": true,
 	"onevar": true,
+	"quotmark": "double",
+	"smarttabs": true,
 	"trailing": true,
 	"undef": true,
-	"unused": true
+	"unused": true,
+
+	"node": true
 }
