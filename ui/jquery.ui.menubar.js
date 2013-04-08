@@ -64,12 +64,13 @@ $.widget( "ui.menubar", {
 					active.prev().focus();
 				}
 			},
-			focusin: function( event ) {
+			focusin: function() {
 				clearTimeout( menubar.closeTimer );
 			},
 			focusout: function( event ) {
 				menubar.closeTimer = setTimeout (function() {
 					menubar._close( event );
+					menubar._reenableTabIndexOnFirstMenuItem();
 				}, 150 );
 			},
 			"mouseleave .ui-menubar-item": function( event ) {
@@ -79,15 +80,14 @@ $.widget( "ui.menubar", {
 					}, 150 );
 				}
 			},
-			"mouseenter .ui-menubar-item": function( event ) {
+			"mouseenter .ui-menubar-item": function() {
 				clearTimeout( menubar.closeTimer );
 			}
 		});
 	},
 
 	_initializeMenuItems: function() {
-		var $item,
-			menubar = this;
+		var menubar = this;
 
 		this.menuItems
 			.addClass("ui-menubar-item")
@@ -122,6 +122,8 @@ $.widget( "ui.menubar", {
 			menubar._determineSubmenuStatus( $menuItem, menubar );
 			menubar._styleMenuItem( $menuItem, menubar );
 
+			$menuItem.data( "name", $item.text() );
+
 			if ( $menuItem.data("hasSubMenu") ) {
 				menubar._initializeSubMenu( $menuItem, menubar );
 			}
@@ -137,7 +139,7 @@ $.widget( "ui.menubar", {
 		$menuItem.data( "hasSubMenu", hasSubMenu );
 	},
 
-	_styleMenuItem: function( $menuItem, menubar ) {
+	_styleMenuItem: function( $menuItem ) {
 		$menuItem.css({
 			"border-width" : "1px",
 			"border-style" : "hidden"
@@ -178,7 +180,9 @@ $.widget( "ui.menubar", {
 				case $.ui.keyCode.LEFT:
 					parentButton = menubar.active.prev(".ui-button");
 
-					if ( parentButton.parent().prev().data('hasSubMenu') ) {
+					if ( this.openSubmenus ) {
+						this.openSubmenus--;
+					} else if ( parentButton.parent().prev().data("hasSubMenu") ) {
 						menubar.active.blur();
 						menubar._open( event, parentButton.parent().prev().find(".ui-menu") );
 					} else {
@@ -196,7 +200,7 @@ $.widget( "ui.menubar", {
 				}
 			},
 			focusout: function( event ) {
-				event.stopImmediatePropagation();
+				$(event.target).removeClass("ui-state-focus");
 			}
 		});
 	},
@@ -235,10 +239,10 @@ $.widget( "ui.menubar", {
 
 	__applyMouseAndKeyboardBehaviorForMenuItem: function( $anItem, menubar ) {
 		menubar._on( $anItem, {
-			focus:  function( event ){
+			focus:  function(){
 				$anItem.addClass("ui-state-focus");
 			},
-			focusout:  function( event ){
+			focusout:  function(){
 				$anItem.removeClass("ui-state-focus");
 			}
 		} );
@@ -320,7 +324,7 @@ $.widget( "ui.menubar", {
 		menubar._off( $anItem, "click mouseenter" );
 		menubar._hoverable( $anItem );
 		menubar._on( $anItem, {
-			click: function( event ) {
+			click: function() {
 				if ( this.active ) {
 					this._close();
 				} else {
@@ -328,7 +332,7 @@ $.widget( "ui.menubar", {
 					this.active = $( $anItem ).parent();
 				}
 			},
-			mouseenter: function( event ) {
+			mouseenter: function() {
 				if ( this.open ) {
 					this.stashedOpenMenu = this.active;
 					this._close();
@@ -367,7 +371,7 @@ $.widget( "ui.menubar", {
 			.removeAttr("role")
 			.removeAttr("aria-haspopup")
 			// TODO unwrap?
-			.children("span.ui-button-text").each(function( i, e ) {
+			.children("span.ui-button-text").each(function() {
 				var item = $( this );
 				item.parent().html( item.html() );
 			})
@@ -445,25 +449,30 @@ $.widget( "ui.menubar", {
 			.removeAttr("aria-hidden")
 			.attr("aria-expanded", "true")
 			.menu("focus", event, menu.children(".ui-menu-item").first() )
-			// TODO need a comment here why both events are triggered
-			.focus()
-			.focusin();
+			.focus() // Establish focus on the submenu item
+			.focusin(); // Move focus within the containing submenu
+
 
 		this.open = true;
 	},
 
+	_shouldOpenNestedSubMenu: function() {
+		return this.open &&
+			this.active &&
+			this.active.closest( this.options.items ).data("hasSubMenu") &&
+			this.active.data("uiMenu") &&
+			this.active.data("uiMenu").active &&
+			this.active.data("uiMenu").active.has(".ui-menu").length;
+	},
+
 	next: function( event ) {
-		if ( this.open && this.active &&
-				 this.active.closest( this.options.items ).data("hasSubMenu") &&
-				 this.active.data("menu").active &&
-				 this.active.data("menu").active.has(".ui-menu").length ) {
+		if ( this._shouldOpenNestedSubMenu() ) {
 			// Track number of open submenus and prevent moving to next menubar item
 			this.openSubmenus++;
 			return;
 		}
 		this.openSubmenus = 0;
 		this._move( "next", "first", event );
-
 	},
 
 	previous: function( event ) {
@@ -481,9 +490,6 @@ $.widget( "ui.menubar", {
 	},
 
 	_move: function( direction, filter, event ) {
-		var next,
-			wrapItem;
-
 		var closestMenuItem = $( event.target ).closest(".ui-menubar-item"),
 			nextMenuItem = closestMenuItem.data( direction + "MenuItem" ),
 			focusableTarget = this._findNextFocusableTarget( nextMenuItem );
@@ -494,18 +500,16 @@ $.widget( "ui.menubar", {
 			} else {
 				this._submenuless_open( event, nextMenuItem );
 			}
+		} else {
+			closestMenuItem.find(".ui-button").attr( "tabindex", -1 );
+			focusableTarget.focus();
 		}
-
-		focusableTarget.focus();
 	},
 
-	_submenuless_open: function( event, next ) {
-		var button,
-			menuItem = next.closest(".ui-menubar-item");
+	_submenuless_open: function( event, nextMenuItem) {
+		var menuItem = $(event.target).closest(".ui-menubar-item");
 
-		if ( this.active && this.active.length ) {
-		// TODO refactor, almost the same as _close above, but don't remove tabIndex
-			if ( this.active.closest( this.options.items ) ) {
+		if ( this.active && this.active.length && menuItem.data("hasSubMenu")  ) {
 				this.active
 					.menu("collapseAll")
 					.hide()
@@ -513,16 +517,30 @@ $.widget( "ui.menubar", {
 						"aria-hidden": "true",
 						"aria-expanded": "false"
 					});
-			}
-			this.active.closest(this.options.items)
-				.removeClass("ui-state-active");
+				menuItem.removeClass("ui-state-active");
 		}
 
-		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
-		button = menuItem.attr( "tabIndex", -1 );
+		nextMenuItem.find(".ui-button").focus();
 
 		this.open = true;
-		this.active = menuItem;
+	},
+
+	_closeOpenMenu: function( menu ) {
+		menu
+		.menu("collapseAll")
+		.hide()
+		.attr({
+			"aria-hidden": "true",
+			"aria-expanded": "false"
+		});
+	},
+
+	_deactivateMenusParentButton: function( menu ) {
+		menu.parent(".ui-menubar-item").removeClass("ui-state-active");
+	},
+
+	_reenableTabIndexOnFirstMenuItem: function() {
+		$(this.menuItems[0]).find(".ui-widget").attr( "tabindex", 1 );
 	}
 
 });
