@@ -447,9 +447,9 @@ $.widget( "ui.menubar", {
 			.removeAttr("aria-hidden")
 			.attr("aria-expanded", "true")
 			.menu("focus", event, menu.children(".ui-menu-item").first() )
-			// TODO need a comment here why both events are triggered
-			.focus()
-			.focusin();
+			.focus() // Establish focus on the submenu item
+			.focusin(); // Move focus within the containing submenu
+
 
 		this.open = true;
 	},
