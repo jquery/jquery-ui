@@ -164,4 +164,18 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
+test( "#7772: Draggable with right/bottom css shouldn't resize", function() {
+	expect( 3 );
+
+	var element = $( "#draggable3" ),
+		origWidth = element.width(),
+		origHeight = element.height();
+
+	element.draggable();
+	TestHelpers.draggable.testDrag( element, element, -50, -50, -50, -50 );
+
+	equal( element.width(), origWidth, "compare width" );
+	equal( element.height(), origHeight, "compare height" );
+});
+
 })( jQuery );
