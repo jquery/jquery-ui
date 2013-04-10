@@ -5,7 +5,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Interaction
+ * http://api.jqueryui.com/interaction/
  *
  * Depends:
  *	jquery.ui.widget.js
