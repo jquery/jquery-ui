@@ -501,9 +501,9 @@ $.widget( "ui.menubar", {
 			} else {
 				this._submenuless_open( event, nextMenuItem );
 			}
+		} else {
+			focusableTarget.focus();
 		}
-
-		focusableTarget.focus();
 	},
 
 	_submenuless_open: function( event, next ) {
