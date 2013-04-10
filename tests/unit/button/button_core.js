@@ -154,7 +154,7 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 });
 
 asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function() {
-	expect( 1 );
+	expect( 2 );
 	var form = $( "<form>" +
 		"<button></button>" +
 		"<label for='c1'></label><input id='c1' type='checkbox' checked>" +
@@ -163,6 +163,8 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 		checkbox = form.find( "input[type=checkbox]" ).button();
 
 	checkbox.prop( "checked", false ).button( "refresh" );
+	ok( !checkbox.button( "widget" ).hasClass( "ui-state-active" ) );
+
 	form.get( 0 ).reset();
 	
 	// #9213: If a button has been removed, refresh should not be called on it when
