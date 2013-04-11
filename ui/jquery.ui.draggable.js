@@ -91,7 +91,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.dragDimensions = null;
 
 		// The actual dragging element, should always be a jQuery object
-		this.dragEl = ( this.options.helper === true || $.isFunction( this.options.helper ) ) ?
+		this.dragEl = this.options.helper ?
 			this._createHelper( pointerPosition ) :
 			this.element;
 
