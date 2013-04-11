@@ -14,7 +14,7 @@
  */
 (function( $, undefined ) {
 
-var lastActive, startXPos, startYPos, clickDragged,
+var lastActive, lastToggleActive,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
@@ -115,55 +115,39 @@ $.widget( "ui.button", {
 
 		if ( toggleButton ) {
 			this.element.bind( "change" + this.eventNamespace, function() {
-				if ( clickDragged ) {
-					return;
-				}
 				that.refresh();
 			});
-			// if mouse moves between mousedown and mouseup (drag) set clickDragged flag
-			// prevents issue where button state changes but checkbox/radio checked state
-			// does not in Firefox (see ticket #6970)
-			this.buttonElement
-				.bind( "mousedown" + this.eventNamespace, function( event ) {
-					if ( options.disabled ) {
-						return;
-					}
-					clickDragged = false;
-					startXPos = event.pageX;
-					startYPos = event.pageY;
-				})
-				.bind( "mouseup" + this.eventNamespace, function( event ) {
-					if ( options.disabled ) {
-						return;
-					}
-					if ( startXPos !== event.pageX || startYPos !== event.pageY ) {
-						clickDragged = true;
-					}
-			});
-		}
 
-		if ( this.type === "checkbox" ) {
-			this.buttonElement.bind( "click" + this.eventNamespace, function() {
-				if ( options.disabled || clickDragged ) {
-					return false;
+			this.buttonElement.bind( "mousedown" + this.eventNamespace, function() {
+				if ( options.disabled ) {
+					return;
 				}
-			});
-		} else if ( this.type === "radio" ) {
-			this.buttonElement.bind( "click" + this.eventNamespace, function() {
-				if ( options.disabled || clickDragged ) {
-					return false;
+				lastToggleActive = this;
+				that.document.one( "mouseup", function() {
+					lastToggleActive = null;
+				});
+			}).bind( "mouseup" + this.eventNamespace, function() {
+				if ( options.disabled ) {
+					return;
 				}
-				$( this ).addClass( "ui-state-active" );
-				that.buttonElement.attr( "aria-pressed", "true" );
-
-				var radio = that.element[ 0 ];
-				radioGroup( radio )
-					.not( radio )
-					.map(function() {
-						return $( this ).button( "widget" )[ 0 ];
-					})
-					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", "false" );
+				if ( this === lastToggleActive ) {
+					that._toggleToggleButton();
+				}
+			}).bind( "click" + this.eventNamespace, function( event ) {
+				if ( options.disabled ) {
+					return;
+				}
+				if ( !event.isDefaultPrevented() ) {
+					event.preventDefault();
+					//Checkbox/radio toggling is handled at the mouseup handler.
+					//The next block is for handling synthetic click events,
+					//so that .trigger( "click" ) still works correctly and
+					//consistently cross-browser.
+					// !event.originalEvent as fallback for jQuery < 1.7
+					if ( event.isTrigger || !event.originalEvent ) {
+						that._toggleToggleButton();
+					}
+				}
 			});
 		} else {
 			this.buttonElement
@@ -243,7 +227,8 @@ $.widget( "ui.button", {
 			if ( checked ) {
 				this.buttonElement.addClass( "ui-state-active" );
 			}
-			this.buttonElement.prop( "aria-pressed", checked );
+			//needs .attr() instead of .prop() to set aria-pressed, added unit test
+			this.buttonElement.attr( "aria-pressed", checked );
 		} else {
 			this.buttonElement = this.element;
 		}
@@ -350,6 +335,16 @@ $.widget( "ui.button", {
 			buttonClasses.push( "ui-button-text-only" );
 		}
 		buttonElement.addClass( buttonClasses.join( " " ) );
+	},
+
+	_toggleToggleButton: function() {
+		if ( this.type === "checkbox" ) {
+			this.element[ 0 ].checked = !this.element[ 0 ].checked;
+			this.element.change();
+		} else if ( !this.element[ 0 ].checked ) {
+			this.element[ 0 ].checked = true;
+			this.element.change();
+		}
 	}
 });
 

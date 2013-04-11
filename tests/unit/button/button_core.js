@@ -30,13 +30,32 @@ test("radios", function() {
 });
 
 function assert(noForm, form1, form2) {
-	ok( $("#radio0 .ui-button" + noForm).is(".ui-state-active") );
-	ok( $("#radio1 .ui-button" + form1).is(".ui-state-active") );
-	ok( $("#radio2 .ui-button" + form2).is(".ui-state-active") );
+	ok( $("#radio0 input" + noForm).is(":checked") );
+	ok( $("#radio1 input" + form1).is(":checked") );
+	ok( $("#radio2 input" + form2).is(":checked") );
+	var buttons0 = $("#radio0 .ui-button"),
+		buttons1 = $("#radio1 .ui-button"),
+		buttons2 = $("#radio2 .ui-button");
+	//active class
+	ok( buttons0.filter(noForm).is(".ui-state-active") );
+	ok( buttons1.filter(form1).is(".ui-state-active") );
+	ok( buttons2.filter(form2).is(".ui-state-active") );
+	//aria-pressed
+	ok( buttons0.filter(noForm).attr("aria-pressed") === "true" );
+	ok( buttons1.filter(form1).attr("aria-pressed") === "true" );
+	ok( buttons2.filter(form2).attr("aria-pressed") === "true" );
+	//check if ui-state-active class was removed from previously checked radios
+	ok( buttons0.not(noForm + ", .ui-state-active").length === 2 );
+	ok( buttons1.not(form1 + ", .ui-state-active").length === 2 );
+	ok( buttons2.not(form2 + ", .ui-state-active").length === 2 );
+	//check if aria-pressed is set to false for previously checked radios
+	ok( buttons0.not(noForm).filter('[aria-pressed=false]').length === 2 );
+	ok( buttons1.not(form1).filter('[aria-pressed=false]').length === 2 );
+	ok( buttons2.not(form2).filter('[aria-pressed=false]').length === 2 );
 }
 
 test("radio groups", function() {
-	expect( 12 );
+	expect( 60 );
 	$("input[type=radio]").button();
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
@@ -91,27 +110,15 @@ test("buttonset (rtl)", function() {
 // TODO: simulated click events don't behave like real click events in IE
 // remove this when simulate properly simulates this
 // see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
-if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
-		expect( 3 );
-
-		$("#check2").button().change( function() {
-			var lbl = $( this ).button("widget");
-			ok( this.checked, "checked ok" );
-			ok( lbl.attr("aria-pressed") === "true", "aria ok" );
-			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
-		});
-
-		// support: Opera
-		// Opera doesn't trigger a change event when this is done synchronously.
-		// This seems to be a side effect of another test, but until that can be
-		// tracked down, this delay will have to do.
-		setTimeout(function() {
-			$("#check2").button("widget").simulate("click");
-			start();
-		}, 1 );
-	});
-}
+test( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+	expect( 3 );
+	$("#check2").button().change( function() {
+		var lbl = $( this ).button("widget");
+		ok( this.checked, "checked ok" );
+		ok( lbl.attr("aria-pressed") === "true", "aria ok" );
+		ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+	}).button("widget").click();
+});
 
 test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
 	expect( 5 );
@@ -194,6 +201,19 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
+});
+
+test( "#7665 - Radio button & checkboxes ignore mouseclicks for minor mouse movements", function() {
+	expect( 3 );
+	$( "#checkdrag" ).button().change( function() {
+		var lbl = $(this).button( "widget" );
+		ok( this.checked );
+		ok( lbl.hasClass( "ui-state-active" ) );
+		ok( lbl.attr( "aria-pressed" ) === "true" );
+	}).button( "widget" ).simulate( "drag", {
+		dx: 10,
+		dy: 10
+	});
 });
 
 })(jQuery);
