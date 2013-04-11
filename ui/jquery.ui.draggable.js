@@ -186,7 +186,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		// If user cancels drag, don't move the element
 		if ( this._trigger( "drag", event,
 				this._fullHash( pointerPosition ) ) === false ) {
-			return false;
+			return;
 		}
 
 		this._setCss();
