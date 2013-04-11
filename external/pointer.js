@@ -110,4 +110,16 @@ $.event.special.pointermove = {
         pointerEventHandler( event, "pointermove" );
     }
 };
+
+$.event.special.pointercancel = {
+    setup: function() {
+        $( this ).on( "touchcancel MSPointerCancel", $.event.special.pointermove.handler );
+    },
+    teardown: function() {
+        $( this ).off( "touchcancel MSPointerCancel", $.event.special.pointermove.handler );
+    },
+    handler: function( event ) {
+        pointerEventHandler( event, "pointercancel" );
+    }
+};
 })( jQuery );
