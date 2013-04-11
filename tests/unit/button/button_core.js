@@ -196,4 +196,17 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
 
+asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
+	expect( 2 );
+	var element = $( "#button1" ).button();
+	element[ 0 ].focus();
+	setTimeout(function() {
+		ok( element.hasClass( "ui-state-focus" ), "button has ui-state-focus" );
+		element.button( "disable" );
+		ok( !element.hasClass( "ui-state-focus" ),
+			"button does not have ui-state-focus when disabled" );
+		start();
+	});
+});
+
 })(jQuery);
