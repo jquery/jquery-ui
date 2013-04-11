@@ -180,24 +180,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._blockFrames();
 	},
 
-	_resetDomPosition: function() {
-
-		// Nothing to do in this case
-		if ( !this.domPosition ) {
-			return;
-		}
-
-		var parent = this.domPosition.parent,
-			next = parent.children().eq( this.domPosition.index );
-		if ( next.length ) {
-			next.before( this.element );
-		} else {
-			parent.append( this.element );
-		}
-		this.element.offset( this.offset );
-		this.domPosition = null;
-	},
-
 	_move: function( event, pointerPosition ) {
 		this._preparePosition( pointerPosition );
 
@@ -269,6 +251,24 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			width: element.outerWidth(),
 			height: element.outerHeight()
 		};
+	},
+
+	_resetDomPosition: function() {
+
+		// Nothing to do in this case
+		if ( !this.domPosition ) {
+			return;
+		}
+
+		var parent = this.domPosition.parent,
+			next = parent.children().eq( this.domPosition.index );
+		if ( next.length ) {
+			next.before( this.element );
+		} else {
+			parent.append( this.element );
+		}
+		this.element.offset( this.offset );
+		this.domPosition = null;
 	},
 
 	// TODO: Remove after 2.0, only used for backCompat
