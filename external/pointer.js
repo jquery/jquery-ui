@@ -1,8 +1,8 @@
 (function( $ ) {
-var POINTER_TYPE_UNAVAILABLE = "1",
-    POINTER_TYPE_TOUCH = "2",
-    POINTER_TYPE_PEN = "3",
-    POINTER_TYPE_MOUSE = "4";
+var POINTER_TYPE_UNAVAILABLE = "",
+    POINTER_TYPE_TOUCH = "touch",
+    POINTER_TYPE_PEN = "pen",
+    POINTER_TYPE_MOUSE = "mouse";
 
 function processEvent( event, pointerType ) {
     var propLength,
@@ -20,8 +20,7 @@ function processEvent( event, pointerType ) {
         tiltX: 0,
         tiltY: 0,
         pointerType: "",
-        // TODO: properly determine isPrimary
-        isPrimary: true
+        isPrimary: false
     });
 
     for ( propLength = mouseProps.length; i < propLength; i++ ) {
@@ -34,12 +33,15 @@ function processEvent( event, pointerType ) {
         // TODO: Don't assume left click
         event.button = 0;
         event.buttons = 1;
+        event.isPrimary = true;
     } else if ( orig.type.indexOf("touch") !== -1 ) {
         event.pointerId = orig.pointerId;
         event.pointerType = POINTER_TYPE_TOUCH;
         event.button = 0;
         event.buttons = 1;
         event.originalEvent = orig;
+        // TODO: Properly determine primary pointer
+        event.isPrimary = true;
     } else if ( orig.type.indexOf("Pointer") !== -1 ) {
         event.pointerId = orig.originalEvent.pointerId;
         event.pointerType = orig.originalEvent.pointerType || POINTER_TYPE_UNAVAILABLE;
@@ -50,6 +52,7 @@ function processEvent( event, pointerType ) {
         event.pressure = orig.originalEvent.pressure;
         event.tiltX = orig.originalEvent.tiltX;
         event.tiltY = orig.originalEvent.tiltY;
+        event.isPrimary = orig.originalEvent.isPrimary;
     }
 
     return event;
