@@ -508,13 +508,11 @@ $.widget( "ui.menubar", {
 		}
 	},
 
-	_submenuless_open: function( event, next ) {
+	_submenuless_open: function( event, nextMenuItem) {
 		var button,
-			menuItem = next.closest(".ui-menubar-item");
+			menuItem = $(event.target).closest(".ui-menubar-item");
 
-		if ( this.active && this.active.length ) {
-		// TODO refactor, almost the same as _close above, but don't remove tabIndex
-			if ( this.active.closest( this.options.items ) ) {
+		if ( this.active && this.active.length && menuItem.data("hasSubMenu")  ) {
 				this.active
 					.menu("collapseAll")
 					.hide()
@@ -522,16 +520,26 @@ $.widget( "ui.menubar", {
 						"aria-hidden": "true",
 						"aria-expanded": "false"
 					});
-			}
-			this.active.closest(this.options.items)
-				.removeClass("ui-state-active");
+				menuItem.removeClass("ui-state-active");
 		}
 
-		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
-		button = menuItem.attr( "tabIndex", -1 );
+		nextMenuItem.find(".ui-button").focus();
 
 		this.open = true;
-		this.active = menuItem;
+	},
+
+	_closeOpenMenu: function( menu ) {
+		menu
+		.menu("collapseAll")
+		.hide()
+		.attr({
+			"aria-hidden": "true",
+			"aria-expanded": "false"
+		});
+	},
+
+	_deactivateMenusParentButton: function( menu ) {
+		menu.parent(".ui-menubar-item").removeClass("ui-state-active");
 	}
 
 });
