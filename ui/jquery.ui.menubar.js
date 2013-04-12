@@ -70,6 +70,7 @@ $.widget( "ui.menubar", {
 			focusout: function( event ) {
 				menubar.closeTimer = setTimeout (function() {
 					menubar._close( event );
+					menubar._reenableTabIndexOnFirstMenuItem();
 				}, 150 );
 			},
 			"mouseleave .ui-menubar-item": function( event ) {
@@ -200,7 +201,6 @@ $.widget( "ui.menubar", {
 				}
 			},
 			focusout: function( event ) {
-				console.log('focusingout');
 				$(event.target).removeClass("ui-state-focus");
 			}
 		});
@@ -542,6 +542,10 @@ $.widget( "ui.menubar", {
 
 	_deactivateMenusParentButton: function( menu ) {
 		menu.parent(".ui-menubar-item").removeClass("ui-state-active");
+	},
+
+	_reenableTabIndexOnFirstMenuItem: function() {
+		$(this.menuItems[0]).find(".ui-widget").attr( "tabindex", 1 );
 	}
 
 });
