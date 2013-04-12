@@ -122,6 +122,8 @@ $.widget( "ui.menubar", {
 			menubar._determineSubmenuStatus( $menuItem, menubar );
 			menubar._styleMenuItem( $menuItem, menubar );
 
+			$menuItem.data( "name", $item.text() );
+
 			if ( $menuItem.data("hasSubMenu") ) {
 				menubar._initializeSubMenu( $menuItem, menubar );
 			}
