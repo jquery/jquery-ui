@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Draggable Test : Inside Iframe</title>
+
+	<style type="text/css">
+	    #draggable-inner { width: 200px; height: 150px; background: #dfd; text-align: center; vertical-align: center; line-height: 150px; font-size: 20px; }
+    	iframe { width: 80%; margin: 10px auto; height: 400px; }
+	</style>
+	<script>
+		function triggerLoad() {
+			window.parent.initNestedDraggable();
+		}
+	</script>
+</head>
+<body>
+	<div id="draggable-inner">
+		<span>INSIDE IFRAME</span>
+	</div>
+
+	<iframe id="nested-iframe" src='nested_iframe.html' onload='triggerLoad();'></iframe>
+
+</body>
+</html>

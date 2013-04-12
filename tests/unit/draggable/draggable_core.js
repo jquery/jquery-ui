@@ -164,4 +164,21 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
+test("#5727: draggable from iframe", function() {
+
+	expect( 2 );
+
+	var iframe = $("#iframe-draggable-container");
+	var iframeBody = iframe.contents().find("body");
+	var draggable1 = iframeBody.append(
+		'<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>'
+	);
+
+	draggable1.draggable();
+
+	equal(draggable1.closest(iframeBody).length, 1);
+
+	TestHelpers.draggable.shouldMove(draggable1);
+});
+
 })( jQuery );
