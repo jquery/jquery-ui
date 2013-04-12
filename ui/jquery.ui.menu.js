@@ -350,6 +350,11 @@ $.widget( "ui.menu", {
 				.removeClass( this.options.icons.submenu )
 				.addClass( value.submenu );
 		}
+		if ( key === "disabled" ) {
+			this.element
+				.toggleClass( "ui-state-disabled", !!value )
+				.attr( "aria-disabled", value );
+		}
 		this._super( key, value );
 	},
 

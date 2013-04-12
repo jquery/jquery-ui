@@ -82,7 +82,7 @@ $.widget("ui.droppable", {
 				return d.is(value);
 			};
 		}
-		$.Widget.prototype._setOption.apply(this, arguments);
+		this._super( key, value );
 	},
 
 	_activate: function(event) {
@@ -152,7 +152,7 @@ $.widget("ui.droppable", {
 		}
 
 		this.element.find(":data(ui-droppable)").not(".ui-draggable-dragging").each(function() {
-			var inst = $.data(this, "ui-droppable");
+			var inst = $( this ).droppable( "instance" );
 			if(
 				inst.options.greedy &&
 				!inst.options.disabled &&
@@ -278,7 +278,8 @@ $.ui.ddmanager = {
 	drop: function(draggable, event) {
 
 		var dropped = false;
-		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
+		// Create a copy of the droppables in case the list changes during the drop (#9116)
+		$.each(($.ui.ddmanager.droppables[draggable.options.scope] || []).slice(), function() {
 
 			if(!this.options) {
 				return;
@@ -330,11 +331,11 @@ $.ui.ddmanager = {
 				// find droppable parents with same scope
 				scope = this.options.scope;
 				parent = this.element.parents(":data(ui-droppable)").filter(function () {
-					return $.data(this, "ui-droppable").options.scope === scope;
+					return $(this).droppable( "instance" ).options.scope === scope;
 				});
 
 				if (parent.length) {
-					parentInstance = $.data(parent[0], "ui-droppable");
+					parentInstance = $( parent[ 0 ] ).droppable( "instance" );
 					parentInstance.greedyChild = (c === "isover");
 				}
 			}

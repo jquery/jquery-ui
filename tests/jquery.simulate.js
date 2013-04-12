@@ -277,18 +277,30 @@ function findCenter( elem ) {
 	};
 }
 
+function findCorner( elem ) {
+	var offset,
+		document = $( elem.ownerDocument );
+	elem = $( elem );
+	offset = elem.offset();
+
+	return {
+		x: offset.left - document.scrollLeft(),
+		y: offset.top - document.scrollTop()
+	};
+}
+
 $.extend( $.simulate.prototype, {
 	simulateDrag: function() {
 		var i = 0,
 			target = this.target,
 			options = this.options,
-			center = findCenter( target ),
+			center = options.handle === "corner" ? findCorner( target ) : findCenter( target ),
 			x = Math.floor( center.x ),
 			y = Math.floor( center.y ),
-			dx = options.dx || 0,
-			dy = options.dy || 0,
-			moves = options.moves || 3,
-			coord = { clientX: x, clientY: y };
+			coord = { clientX: x, clientY: y },
+			dx = options.dx || ( options.x !== undefined ? options.x - x : 0 ),
+			dy = options.dy || ( options.y !== undefined ? options.y - y : 0 ),
+			moves = options.moves || 3;
 
 		this.simulateEvent( target, "mousedown", coord );
 

@@ -6,7 +6,7 @@ var setupTeardown = TestHelpers.accordion.setupTeardown,
 module( "accordion: events", setupTeardown() );
 
 test( "create", function() {
-	expect( 15 );
+	expect( 10 );
 
 	var element = $( "#list1" ),
 		headers = element.children( "h3" ),
@@ -18,8 +18,6 @@ test( "create", function() {
 			strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], contents[ 0 ], "panel" );
-			equal( ui.content.length, 1, "content length" );
-			strictEqual( ui.content[ 0 ], contents[ 0 ], "content" );
 		}
 	});
 	element.accordion( "destroy" );
@@ -31,8 +29,6 @@ test( "create", function() {
 			strictEqual( ui.header[ 0 ], headers[ 2 ], "header" );
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], contents[ 2 ], "panel" );
-			equal( ui.content.length, 1, "content length" );
-			strictEqual( ui.content[ 0 ], contents[ 2 ], "content" );
 		}
 	});
 	element.accordion( "destroy" );
@@ -43,7 +39,6 @@ test( "create", function() {
 		create: function( event, ui ) {
 			equal( ui.header.length, 0, "header length" );
 			equal( ui.panel.length, 0, "panel length" );
-			equal( ui.content.length, 0, "content length" );
 		}
 	});
 	element.accordion( "destroy" );

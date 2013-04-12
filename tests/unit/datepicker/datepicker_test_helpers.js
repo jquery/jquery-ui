@@ -18,5 +18,16 @@ TestHelpers.datepicker = {
 		$.datepicker.setDefaults($.datepicker.regional[""]);
 		return $(id).datepicker($.extend({showAnim: ""}, options || {}));
 	},
+	onFocus: function( element, onFocus ) {
+		var fn = function( event ){
+			if( !event.originalEvent ) {
+				return;
+			}
+			element.unbind( "focus", fn );
+			onFocus();
+		};
+
+		element.bind( "focus", fn )[ 0 ].focus();
+	},
 	PROP_NAME: "datepicker"
 };

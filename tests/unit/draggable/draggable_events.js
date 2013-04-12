@@ -1,99 +1,125 @@
 /*
  * draggable_events.js
  */
-(function($) {
+(function( $ ) {
 
-module("draggable: events");
+var element;
 
-test("callbacks occurrence count", function() {
+module( "draggable: events", {
+	setup: function() {
+		element = $("<div>").appendTo("#qunit-fixture");
+	},
+	teardown: function() {
+		element.draggable("destroy");
+	}
+});
 
-	expect(3);
+test( "callbacks occurrence count", function() {
+	expect( 3 );
 
 	var start = 0,
 		stop = 0,
-		dragc = 0,
-		el = $("#draggable2").draggable({
-			start: function() { start++; },
-			drag: function() { dragc++; },
-			stop: function() { stop++; }
-		});
+		dragc = 0;
 
-	el.simulate( "drag", {
+	element.draggable({
+		start: function() {
+			start++;
+		},
+		drag: function() {
+			dragc++;
+		},
+		stop: function() {
+			stop++;
+		}
+	});
+
+	element.simulate( "drag", {
 		dx: 10,
 		dy: 10
 	});
 
-	equal(start, 1, "start callback should happen exactly once");
-	equal(dragc, 3, "drag callback should happen exactly once per mousemove");
-	equal(stop, 1, "stop callback should happen exactly once");
-
+	equal( start, 1, "start callback should happen exactly once" );
+	equal( dragc, 3, "drag callback should happen exactly once per mousemove" );
+	equal( stop, 1, "stop callback should happen exactly once" );
 });
 
-test("stopping the start callback", function() {
-
-	expect(3);
+test( "stopping the start callback", function() {
+	expect( 3 );
 
 	var start = 0,
 		stop = 0,
-		dragc = 0,
-		el = $("#draggable2").draggable({
-			start: function() { start++; return false; },
-			drag: function() { dragc++; },
-			stop: function() { stop++; }
-		});
+		dragc = 0;
 
-	el.simulate( "drag", {
+	element.draggable({
+		start: function() {
+			start++;
+			return false;
+		},
+		drag: function() {
+			dragc++;
+		},
+		stop: function() {
+			stop++;
+		}
+	});
+
+	element.simulate( "drag", {
 		dx: 10,
 		dy: 10
 	});
 
-	equal(start, 1, "start callback should happen exactly once");
-	equal(dragc, 0, "drag callback should not happen at all");
-	equal(stop, 0, "stop callback should not happen if there wasnt even a start");
-
+	equal( start, 1, "start callback should happen exactly once" );
+	equal( dragc, 0, "drag callback should not happen at all" );
+	equal( stop, 0, "stop callback should not happen if there wasnt even a start" );
 });
 
-test("stopping the drag callback", function() {
-
-	expect(3);
+test( "stopping the drag callback", function() {
+	expect( 2 );
 
 	var start = 0,
 		stop = 0,
-		dragc = 0,
-		el = $("#draggable2").draggable({
-			start: function() { start++;},
-			drag: function() { dragc++; return false;  },
-			stop: function() { stop++; }
-		});
+		dragc = 0;
 
-	el.simulate( "drag", {
+	element.draggable({
+		start: function() {
+			start++;
+		},
+		drag: function() {
+			dragc++;
+			return false;
+		},
+		stop: function() {
+			stop++;
+		}
+	});
+
+	element.simulate( "drag", {
 		dx: 10,
 		dy: 10
 	});
 
-	equal(start, 1, "start callback should happen exactly once");
-	equal(dragc, 1, "drag callback should happen exactly once");
-	equal(stop, 1, "stop callback should happen, as we need to actively stop the drag");
-
+	equal( start, 1, "start callback should happen exactly once" );
+	equal( stop, 1, "stop callback should happen, as we need to actively stop the drag" );
 });
 
-test("stopping the stop callback", function() {
+test( "stopping the stop callback", function() {
+	expect( 1 );
 
-	expect(1);
-
-	var el = $("#draggable2").draggable({
+	element.draggable({
 		helper: "clone",
-		stop: function() { return false; }
+		stop: function() {
+			return false;
+		}
 	});
 
-	el.simulate( "drag", {
+	element.simulate( "drag", {
 		dx: 10,
 		dy: 10
 	});
 
-	ok($("#draggable2").data("ui-draggable").helper, "the clone should not be deleted if the stop callback is stopped");
+	ok( element.draggable( "instance" ).helper, "the clone should not be deleted if the stop callback is stopped" );
 
 
 });
 
-})(jQuery);
+})( jQuery );

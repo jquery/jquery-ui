@@ -168,7 +168,7 @@ Genie <386@mail.com>
 Rick Waldron <waldron.rick@gmail.com>
 Ian Simpson <spoonlikesham@gmail.com>
 Lev Kitsis <spam4lev@gmail.com>
-Ted VanToll <tj.vantoll@gmail.com>
+TJ VanToll <tj.vantoll@gmail.com>
 Justin Domnitz <jdomnitz@gmail.com>
 Douglas Cerna <douglascerna@yahoo.com>
 Bert ter Heide <bertjh@hotmail.com>
@@ -216,8 +216,8 @@ Marc-Andre Lafortune <github@marc-andre.ca>
 Nate Eagle <nate.eagle@teamaol.com>
 David Souther <davidsouther@gmail.com>
 Mathias Stenbom <mathias@stenbom.com>
-Avinash R <nashpapa@gmail.com>
 Sergey Kartashov <ebishkek@yandex.ru>
+Avinash R <nashpapa@gmail.com>
 Ethan Romba <ethanromba@gmail.com>
 Cory Gackenheimer <cory.gack@gmail.com>
 Juan Pablo Kaniefsky <jpkaniefsky@gmail.com>
@@ -231,3 +231,12 @@ Pavel Selitskas <p.selitskas@gmail.com>
 Bjørn Johansen <bjorn.johansen@metronet.no>
 Matthieu Penant <thieum22@hotmail.com>
 Dominic Barnes <dominic@dbarnes.info>
+David Sullivan <david.sullivan@gmail.com>
+Thomas Jaggi <thomas.jaggi@gmail.com>
+Vahid Sohrabloo <vahid4134@gmail.com>
+Travis Carden <travis.carden@gmail.com>
+Bruno M. Custódio <bruno@brunomcustodio.com>
+Nathanael Silverman <nathanael.silverman@gmail.com>
+Christian Wenz <christian@wenz.org>
+Steve Urmston <steve@urm.st>
+Zaven Muradyan <megalivoithos@gmail.com>

@@ -1,7 +1,7 @@
 /*
  * slider_events.js
  */
-(function($) {
+(function( $ ) {
 
 module( "slider: events" );
 
@@ -10,9 +10,9 @@ module( "slider: events" );
 // value (even if same as previous value), via mouse(mouseup) or keyboard(keyup)
 // or value method/option"
 test( "mouse based interaction", function() {
-	expect(4);
+	expect( 4 );
 
-	var el = $( "#slider1" )
+	var element = $( "#slider1" )
 		.slider({
 			start: function( event ) {
 				equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
@@ -28,15 +28,15 @@ test( "mouse based interaction", function() {
 			}
 		});
 
-	el.find( ".ui-slider-handle" ).eq( 0 )
+	element.find( ".ui-slider-handle" ).eq( 0 )
 		.simulate( "drag", { dx: 10, dy: 10 } );
 
 });
 test( "keyboard based interaction", function() {
-	expect(3);
+	expect( 3 );
 
 	// Test keyup at end of handle slide (keyboard)
-	var el = $( "#slider1" )
+	var element = $( "#slider1" )
 		.slider({
 			start: function( event ) {
 				equal( event.originalEvent.type, "keydown", "start triggered by keydown" );
@@ -52,17 +52,17 @@ test( "keyboard based interaction", function() {
 			}
 		});
 
-	el.find( ".ui-slider-handle" ).eq( 0 )
+	element.find( ".ui-slider-handle" ).eq( 0 )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } )
 		.simulate( "keypress", { keyCode: $.ui.keyCode.LEFT } )
 		.simulate( "keyup", { keyCode: $.ui.keyCode.LEFT } );
 
 });
 test( "programmatic event triggers", function() {
-	expect(6);
+	expect( 6 );
 
 	// Test value method
-	var el = $( "<div></div>" )
+	var element = $( "<div></div>" )
 		.slider({
 			change: function() {
 				ok( true, "change triggered by value method" );
@@ -71,17 +71,17 @@ test( "programmatic event triggers", function() {
 		.slider( "value", 0 );
 
 	// Test values method
-	el = $( "<div></div>" )
+	element = $( "<div></div>" )
 		.slider({
 			values: [ 10, 20 ],
 			change: function() {
 				ok( true, "change triggered by values method" );
 			}
 		})
-		.slider( "values", [80, 90] );
+		.slider( "values", [ 80, 90 ] );
 
 	// Test value option
-	el = $( "<div></div>" )
+	element = $( "<div></div>" )
 		.slider({
 			change: function() {
 				ok( true, "change triggered by value option" );
@@ -90,66 +90,66 @@ test( "programmatic event triggers", function() {
 		.slider( "option", "value", 0 );
 
 	// Test values option
-	el = $( "<div></div>" )
+	element = $( "<div></div>" )
 		.slider({
 			values: [ 10, 20 ],
 			change: function() {
 				ok( true, "change triggered by values option" );
 			}
 		})
-		.slider( "option", "values", [80, 90] );
+		.slider( "option", "values", [ 80, 90 ] );
 
 });
 
 test( "mouse based interaction part two: when handles overlap", function() {
-	expect(4);
+	expect( 4 );
 
-	var el = $( "#slider1" )
+	var element = $( "#slider1" )
 		.slider({
 			values: [ 0, 0, 0 ],
 			start: function( event, ui ) {
-				equal(handles.index(ui.handle), 2, "rightmost handle activated when overlapping at minimum (#3736)");
+				equal( handles.index( ui.handle ), 2, "rightmost handle activated when overlapping at minimum (#3736)" );
 			}
 		}),
-		handles = el.find( ".ui-slider-handle" );
-	handles.eq(0).simulate( "drag", { dx: 10 } );
-	el.slider( "destroy" );
+		handles = element.find( ".ui-slider-handle" );
+	handles.eq( 0 ).simulate( "drag", { dx: 10 } );
+	element.slider( "destroy" );
 
-	el = $( "#slider1" )
+	element = $( "#slider1" )
 		.slider({
 			values: [ 10, 10, 10 ],
 			max: 10,
 			start: function( event, ui ) {
-				equal(handles.index(ui.handle), 0, "leftmost handle activated when overlapping at maximum");
+				equal( handles.index( ui.handle ), 0, "leftmost handle activated when overlapping at maximum" );
 			}
 		}),
-		handles = el.find( ".ui-slider-handle" );
-	handles.eq(0).simulate( "drag", { dx: -10 } );
-	el.slider( "destroy" );
+		handles = element.find( ".ui-slider-handle" );
+	handles.eq( 0 ).simulate( "drag", { dx: -10 } );
+	element.slider( "destroy" );
 
-	el = $( "#slider1" )
+	element = $( "#slider1" )
 		.slider({
 			values: [ 19, 20 ]
 		}),
-		handles = el.find( ".ui-slider-handle" );
-	handles.eq(0).simulate( "drag", { dx: 10 } );
-	el.one("slidestart", function(event, ui) {
-		equal(handles.index(ui.handle), 0, "left handle activated if left was moved last");
+		handles = element.find( ".ui-slider-handle" );
+	handles.eq( 0 ).simulate( "drag", { dx: 10 } );
+	element.one( "slidestart", function( event, ui ) {
+		equal( handles.index( ui.handle ), 0, "left handle activated if left was moved last" );
 	});
-	handles.eq(0).simulate( "drag", { dx: 10 } );
-	el.slider( "destroy" );
+	handles.eq( 0 ).simulate( "drag", { dx: 10 } );
+	element.slider( "destroy" );
 
-	el = $( "#slider1" )
+	element = $( "#slider1" )
 		.slider({
 			values: [ 19, 20 ]
 		}),
-		handles = el.find( ".ui-slider-handle" );
-	handles.eq(1).simulate( "drag", { dx: -10 } );
-	el.one("slidestart", function(event, ui) {
-		equal(handles.index(ui.handle), 1, "right handle activated if right was moved last (#3467)");
+		handles = element.find( ".ui-slider-handle" );
+	handles.eq( 1 ).simulate( "drag", { dx: -10 } );
+	element.one( "slidestart", function( event, ui ) {
+		equal( handles.index( ui.handle ), 1, "right handle activated if right was moved last (#3467)" );
 	});
-	handles.eq(0).simulate( "drag", { dx: 10 } );
+	handles.eq( 0 ).simulate( "drag", { dx: 10 } );
 
 });
 
-}( jQuery ) );
+})( jQuery );

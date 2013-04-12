@@ -54,7 +54,7 @@ test( "open/close with tracking", function() {
 });
 
 test( "enable/disable", function() {
-	expect( 7 );
+	expect( 10 );
 	$.fx.off = true;
 	var tooltip,
 		element = $( "#tooltipped1" ).tooltip();
@@ -66,6 +66,11 @@ test( "enable/disable", function() {
 
 	element.tooltip( "disable" );
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
+
+	ok( !element.tooltip( "widget" ).hasClass( "ui-state-disabled" ), "element doesn't get ui-state-disabled" );
+	ok( !element.tooltip( "widget" ).attr( "aria-disabled" ), "element doesn't get aria-disabled" );
+	ok( !element.tooltip( "widget" ).hasClass( "ui-tooltip-disabled" ), "element doesn't get ui-tooltip-disabled" );
+
 	// support: jQuery <1.6.2
 	// support: IE <8
 	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
