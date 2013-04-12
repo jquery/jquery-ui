@@ -75,7 +75,7 @@ These should be squashed before landing in master.
 
 Fetch the remote first:
 
-    git fetch [their-fork.git] [their-branch]
+	git fetch [their-fork.git] [their-branch]
 
 Then cherry-pick the commit(s):
 
@@ -83,7 +83,7 @@ Then cherry-pick the commit(s):
 
 If you need to edit the commit message:
 
-    git cherry-pick -e [sha-of-commit]
+	git cherry-pick -e [sha-of-commit]
 
 If you need to edit the changes:
 
@@ -93,7 +93,7 @@ If you need to edit the changes:
 
 If it should go to the stable brach, cherry-pick it to stable:
 
-    git checkout 1-8-stable
-    git cherry-pick -x [sha-of-commit-from-master]
+	git checkout 1-10-stable
+	git cherry-pick -x [sha-of-commit-from-master]
 
-*NOTE: Do not cherry-pick into 1-8-stable until you have pushed the commit from master upstream.*
+*NOTE: Do not cherry-pick into 1-10-stable until you have pushed the commit from master upstream.*

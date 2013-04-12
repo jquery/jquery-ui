@@ -14,9 +14,9 @@ var versions = {
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Core": "core/core.html",
+		"Core_deprecated": "core/core_deprecated.html",
 		"Datepicker": "datepicker/datepicker.html",
 		"Dialog": "dialog/dialog.html",
-		"Dialog_deprecated": "dialog/dialog_deprecated.html",
 		"Draggable": "draggable/draggable.html",
 		"Droppable": "droppable/droppable.html",
 		"Effects": "effects/effects.html",
@@ -33,37 +33,40 @@ var versions = {
 		"Widget": "widget/widget.html"
 	};
 
-function submit( commit, runs, configFile, version, done ) {
+function submit( commit, runs, configFile, extra, done ) {
 	var testName,
 		testswarm = require( "testswarm" ),
-		config = grunt.file.readJSON( configFile ).jqueryui;
-	version = version ? ( version + " " ) : "";
-	for ( testName in runs ) {
-		runs[ testName] = config.testUrl + commit + "/tests/unit/" + runs[ testName ];
+		config = grunt.file.readJSON( configFile ).jqueryui,
+		commitUrl = "https://github.com/jquery/jquery-ui/commit/" + commit;
+
+	if ( extra ) {
+		extra = " " + extra;
 	}
-	testswarm.createClient( {
+
+	for ( testName in runs ) {
+		runs[ testName ] = config.testUrl + commit + "/tests/unit/" + runs[ testName ];
+	}
+	testswarm.createClient({
 		url: config.swarmUrl,
 		pollInterval: 10000,
 		timeout: 1000 * 60 * 45
-	} )
+	})
 	.addReporter( testswarm.reporters.cli )
-	.auth( {
+	.auth({
 		id: config.authUsername,
 		token: config.authToken
-	} )
-	.addjob(
-		{
-			name: 'jQuery UI ' + version + '#<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
-			runs: runs,
-			runMax: config.runMax,
-			browserSets: config.browserSets
-		}, function( err, passed ) {
-			if ( err ) {
-				grunt.log.error( err );
-			}
-			done( passed );
+	})
+	.addjob({
+		name: "jQuery UI #<a href='" + commitUrl + "'>" + commit.substr( 0, 10 ) + "</a>" + extra,
+		runs: runs,
+		runMax: config.runMax,
+		browserSets: config.browserSets
+	}, function( error, passed ) {
+		if ( error ) {
+			grunt.log.error( error );
 		}
-	);
+		done( passed );
+	});
 }
 
 grunt.registerTask( "testswarm", function( commit, configFile ) {
@@ -82,7 +85,7 @@ grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, mino
 			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
 		}
 	});
-	submit( commit, allTests, configFile, minor + " core", this.async() );
+	submit( commit, allTests, configFile, "core " + minor, this.async() );
 });
 
 };

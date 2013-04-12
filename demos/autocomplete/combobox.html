@@ -14,11 +14,11 @@
 	<script src="../../ui/jquery.ui.tooltip.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.ui-combobox {
+	.custom-combobox {
 		position: relative;
 		display: inline-block;
 	}
-	.ui-combobox-toggle {
+	.custom-combobox-toggle {
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -28,19 +28,20 @@
 		*height: 1.7em;
 		*top: 0.1em;
 	}
-	.ui-combobox-input {
+	.custom-combobox-input {
 		margin: 0;
 		padding: 0.3em;
 	}
 	</style>
 	<script>
 	(function( $ ) {
-		$.widget( "ui.combobox", {
+		$.widget( "custom.combobox", {
 			_create: function() {
 				this.wrapper = $( "<span>" )
-					.addClass( "ui-combobox" )
+					.addClass( "custom-combobox" )
 					.insertAfter( this.element );
 
+				this.element.hide();
 				this._createAutocomplete();
 				this._createShowAllButton();
 			},
@@ -53,7 +54,7 @@
 					.appendTo( this.wrapper )
 					.val( value )
 					.attr( "title", "" )
-					.addClass( "ui-state-default ui-combobox-input ui-widget ui-widget-content ui-corner-left" )
+					.addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
@@ -76,7 +77,8 @@
 			},
 
 			_createShowAllButton: function() {
-				var wasOpen = false;
+				var input = this.input,
+					wasOpen = false;
 
 				$( "<a>" )
 					.attr( "tabIndex", -1 )
@@ -90,7 +92,7 @@
 						text: false
 					})
 					.removeClass( "ui-corner-all" )
-					.addClass( "ui-corner-right ui-combobox-toggle" )
+					.addClass( "custom-combobox-toggle ui-corner-right" )
 					.mousedown(function() {
 						wasOpen = input.autocomplete( "widget" ).is( ":visible" );
 					})
@@ -152,7 +154,7 @@
 				this._delay(function() {
 					this.input.tooltip( "close" ).attr( "title", "" );
 				}, 2500 );
-				this.input.data( "ui-autocomplete" ).term = "";
+				this.input.autocomplete( "instance" ).term = "";
 			},
 
 			_destroy: function() {

@@ -102,17 +102,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 		return this;
 	},
 
-	_setOption: function(key, value){
-		if ( key === "disabled" ) {
-			this.options[ key ] = value;
-
-			this.widget().toggleClass( "ui-sortable-disabled", !!value );
-		} else {
-			// Don't call widget base _setOption for disable as it adds ui-state-disabled class
-			$.Widget.prototype._setOption.apply(this, arguments);
-		}
-	},
-
 	_mouseCapture: function(event, overrideHandle) {
 		var currentItem = null,
 			validHandle = false,
@@ -428,14 +417,18 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		if(this.options.revert) {
 			var that = this,
-				cur = this.placeholder.offset();
+				cur = this.placeholder.offset(),
+				axis = this.options.axis,
+				animation = {};
 
+			if ( !axis || axis === "x" ) {
+				animation.left = cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft);
+			}
+			if ( !axis || axis === "y" ) {
+				animation.top = cur.top - this.offset.parent.top - this.margins.top + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollTop);
+			}
 			this.reverting = true;
-
-			$(this.helper).animate({
-				left: cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft),
-				top: cur.top - this.offset.parent.top - this.margins.top + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollTop)
-			}, parseInt(this.options.revert, 10) || 500, function() {
+			$(this.helper).animate( animation, parseInt(this.options.revert, 10) || 500, function() {
 				that._clear(event);
 			});
 		} else {
@@ -542,7 +535,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 			b = t + item.height,
 			dyClick = this.offset.click.top,
 			dxClick = this.offset.click.left,
-			isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
+			isOverElementHeight = ( this.options.axis === "x" ) || ( ( y1 + dyClick ) > t && ( y1 + dyClick ) < b ),
+			isOverElementWidth = ( this.options.axis === "y" ) || ( ( x1 + dxClick ) > l && ( x1 + dxClick ) < r ),
+			isOverElement = isOverElementHeight && isOverElementWidth;
 
 		if ( this.options.tolerance === "pointer" ||
 			this.options.forcePointerForContainers ||
@@ -757,15 +752,16 @@ $.widget("ui.sortable", $.ui.mouse, {
 				element: function() {
 
 					var nodeName = that.currentItem[0].nodeName.toLowerCase(),
-						element = $( that.document[0].createElement( nodeName ) )
+						element = $( "<" + nodeName + ">", that.document[0] )
 							.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
 							.removeClass("ui-sortable-helper");
 
 					if ( nodeName === "tr" ) {
-						// Use a high colspan to force the td to expand the full
-						// width of the table (browsers are smart enough to
-						// handle this properly)
-						element.append( "<td colspan='99'>&#160;</td>" );
+						that.currentItem.children().each(function() {
+							$( "<td>&#160;</td>", that.document[0] )
+								.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
+								.appendTo( element );
+						});
 					} else if ( nodeName === "img" ) {
 						element.attr( "src", that.currentItem.attr( "src" ) );
 					}

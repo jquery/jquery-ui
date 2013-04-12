@@ -16,9 +16,30 @@
 $.extend($.ui, { datepicker: { version: "@VERSION" } });
 
 var PROP_NAME = "datepicker",
-	dpuuid = new Date().getTime(),
 	instActive;
 
+function getZindex( elem ) {
+	var position, value;
+	while ( elem.length && elem[ 0 ] !== document ) {
+		// Ignore z-index if position is set to a value where z-index is ignored by the browser
+		// This makes behavior of this function consistent across browsers
+		// WebKit always returns auto if the element is positioned
+		position = elem.css( "position" );
+		if ( position === "absolute" || position === "relative" || position === "fixed" ) {
+			// IE returns 0 when zIndex is not specified
+			// other browsers return a string
+			// we ignore the case of nested elements with an explicit value of 0
+			// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+			value = parseInt( elem.css( "zIndex" ), 10 );
+			if ( !isNaN( value ) && value !== 0 ) {
+				return value;
+			}
+		}
+		elem = elem.parent();
+	}
+
+	return 0;
+}
 /* Date picker manager.
    Use the singleton instance of this class, $.datepicker, to interact with the date picker.
    Settings for (groups of) date pickers are maintained in an instance object,
@@ -744,7 +765,7 @@ $.extend(Datepicker.prototype, {
 		if (!inst.inline) {
 			showAnim = $.datepicker._get(inst, "showAnim");
 			duration = $.datepicker._get(inst, "duration");
-			inst.dpDiv.zIndex($(input).zIndex()+1);
+			inst.dpDiv.css( "z-index", getZindex( $( input ) ) + 1 );
 			$.datepicker._datepickerShowing = true;
 
 			if ( $.effects && $.effects.effect[ showAnim ] ) {
@@ -753,9 +774,10 @@ $.extend(Datepicker.prototype, {
 				inst.dpDiv[showAnim || "show"](showAnim ? duration : null);
 			}
 
-			if (inst.input.is(":visible") && !inst.input.is(":disabled")) {
+			if ( $.datepicker._shouldFocusInput( inst ) ) {
 				inst.input.focus();
 			}
+
 			$.datepicker._curInst = inst;
 		}
 	},
@@ -782,10 +804,7 @@ $.extend(Datepicker.prototype, {
 		inst.dpDiv[(this._get(inst, "isRTL") ? "add" : "remove") +
 			"Class"]("ui-datepicker-rtl");
 
-		// #6694 - don't focus the input if it's already focused
-		// this breaks the change event in IE
-		if (inst === $.datepicker._curInst && $.datepicker._datepickerShowing && inst.input &&
-			inst.input.is(":visible") && !inst.input.is(":disabled") && inst.input[0] !== document.activeElement) {
+		if (inst === $.datepicker._curInst && $.datepicker._datepickerShowing && $.datepicker._shouldFocusInput( inst ) ) {
 			inst.input.focus();
 		}
 
@@ -802,16 +821,11 @@ $.extend(Datepicker.prototype, {
 		}
 	},
 
-	/* Retrieve the size of left and top borders for an element.
-	 * @param  elem  (jQuery object) the element of interest
-	 * @return  (number[2]) the left and top borders
-	 */
-	_getBorders: function(elem) {
-		var convert = function(value) {
-			return {thin: 1, medium: 2, thick: 3}[value] || value;
-		};
-		return [parseFloat(convert(elem.css("border-left-width"))),
-			parseFloat(convert(elem.css("border-top-width")))];
+	// #6694 - don't focus the input if it's already focused
+	// this breaks the change event in IE
+	// Support: IE and jQuery <1.9
+	_shouldFocusInput: function( inst ) {
+		return inst.input && inst.input.is( ":visible" ) && !inst.input.is( ":disabled" ) && !inst.input.is( ":focus" );
 	},
 
 	/* Check positioning to remain on screen. */
@@ -1558,27 +1572,27 @@ $.extend(Datepicker.prototype, {
 		inst.dpDiv.find("[data-handler]").map(function () {
 			var handler = {
 				prev: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._adjustDate(id, -stepMonths, "M");
+					$.datepicker._adjustDate(id, -stepMonths, "M");
 				},
 				next: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._adjustDate(id, +stepMonths, "M");
+					$.datepicker._adjustDate(id, +stepMonths, "M");
 				},
 				hide: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._hideDatepicker();
+					$.datepicker._hideDatepicker();
 				},
 				today: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._gotoToday(id);
+					$.datepicker._gotoToday(id);
 				},
 				selectDay: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._selectDay(id, +this.getAttribute("data-month"), +this.getAttribute("data-year"), this);
+					$.datepicker._selectDay(id, +this.getAttribute("data-month"), +this.getAttribute("data-year"), this);
 					return false;
 				},
 				selectMonth: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._selectMonthYear(id, this, "M");
+					$.datepicker._selectMonthYear(id, this, "M");
 					return false;
 				},
 				selectYear: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._selectMonthYear(id, this, "Y");
+					$.datepicker._selectMonthYear(id, this, "Y");
 					return false;
 				}
 			};
@@ -2042,9 +2056,5 @@ $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
 $.datepicker.version = "@VERSION";
-
-// Workaround for #4055
-// Add another global to avoid noConflict issues with inline event handlers
-window["DP_jQuery_" + dpuuid] = $;
 
 })(jQuery);

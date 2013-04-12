@@ -17,6 +17,7 @@
 
 	<script src="core.js"></script>
 	<script src="selector.js"></script>
+	<script src="core_deprecated.js"></script>
 
 	<script src="../swarminject.js"></script>
 	<style>
@@ -116,6 +117,17 @@
 	<input id="dimensionlessParent">
 	<input id="dimensionlessParent-dimensionless" style="height: 0; width: 0;">
 </div>
+
+<div id="zIndex100" style="z-index: 100; position: absolute">
+	<div id="zIndexAutoWithParent">.</div>
+</div>
+<div id="zIndex100ViaCSS" class="zindex">
+	<div id="zIndexAutoWithParentViaCSS">.</div>
+</div>
+<div id="zIndex100ViaCSSPositioned" class="zindex absolute">
+	<div id="zIndexAutoWithParentViaCSSPositioned">.</div>
+</div>
+<div id="zIndexAutoNoParent"></div>
 
 <div id="dimensions" style="float: left; height: 50px; width: 100px; margin: 1px 12px 11px 2px; border-style: solid; border-width: 3px 14px 13px 4px; padding: 5px 16px 15px 6px;"></div>
 

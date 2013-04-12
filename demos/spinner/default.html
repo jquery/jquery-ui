@@ -23,7 +23,7 @@
 			}
 		});
 		$( "#destroy" ).click(function() {
-			if ( spinner.data( "ui-spinner" ) ) {
+			if ( spinner.spinner( "instance" ) ) {
 				spinner.spinner( "destroy" );
 			} else {
 				spinner.spinner();
