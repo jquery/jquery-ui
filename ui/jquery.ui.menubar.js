@@ -200,7 +200,8 @@ $.widget( "ui.menubar", {
 				}
 			},
 			focusout: function( event ) {
-				event.stopImmediatePropagation();
+				console.log('focusingout');
+				$(event.target).removeClass("ui-state-focus");
 			}
 		});
 	},
@@ -504,6 +505,7 @@ $.widget( "ui.menubar", {
 				this._submenuless_open( event, nextMenuItem );
 			}
 		} else {
+			closestMenuItem.find(".ui-button").attr( "tabindex", -1 );
 			focusableTarget.focus();
 		}
 	},
