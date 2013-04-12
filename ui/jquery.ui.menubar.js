@@ -64,7 +64,7 @@ $.widget( "ui.menubar", {
 					active.prev().focus();
 				}
 			},
-			focusin: function( event ) {
+			focusin: function() {
 				clearTimeout( menubar.closeTimer );
 			},
 			focusout: function( event ) {
@@ -80,15 +80,14 @@ $.widget( "ui.menubar", {
 					}, 150 );
 				}
 			},
-			"mouseenter .ui-menubar-item": function( event ) {
+			"mouseenter .ui-menubar-item": function() {
 				clearTimeout( menubar.closeTimer );
 			}
 		});
 	},
 
 	_initializeMenuItems: function() {
-		var $item,
-			menubar = this;
+		var menubar = this;
 
 		this.menuItems
 			.addClass("ui-menubar-item")
@@ -140,7 +139,7 @@ $.widget( "ui.menubar", {
 		$menuItem.data( "hasSubMenu", hasSubMenu );
 	},
 
-	_styleMenuItem: function( $menuItem, menubar ) {
+	_styleMenuItem: function( $menuItem ) {
 		$menuItem.css({
 			"border-width" : "1px",
 			"border-style" : "hidden"
@@ -183,7 +182,7 @@ $.widget( "ui.menubar", {
 
 					if ( this.openSubmenus ) {
 						this.openSubmenus--;
-					} else if ( parentButton.parent().prev().data('hasSubMenu') ) {
+					} else if ( parentButton.parent().prev().data("hasSubMenu") ) {
 						menubar.active.blur();
 						menubar._open( event, parentButton.parent().prev().find(".ui-menu") );
 					} else {
@@ -240,10 +239,10 @@ $.widget( "ui.menubar", {
 
 	__applyMouseAndKeyboardBehaviorForMenuItem: function( $anItem, menubar ) {
 		menubar._on( $anItem, {
-			focus:  function( event ){
+			focus:  function(){
 				$anItem.addClass("ui-state-focus");
 			},
-			focusout:  function( event ){
+			focusout:  function(){
 				$anItem.removeClass("ui-state-focus");
 			}
 		} );
@@ -325,7 +324,7 @@ $.widget( "ui.menubar", {
 		menubar._off( $anItem, "click mouseenter" );
 		menubar._hoverable( $anItem );
 		menubar._on( $anItem, {
-			click: function( event ) {
+			click: function() {
 				if ( this.active ) {
 					this._close();
 				} else {
@@ -333,7 +332,7 @@ $.widget( "ui.menubar", {
 					this.active = $( $anItem ).parent();
 				}
 			},
-			mouseenter: function( event ) {
+			mouseenter: function() {
 				if ( this.open ) {
 					this.stashedOpenMenu = this.active;
 					this._close();
@@ -372,7 +371,7 @@ $.widget( "ui.menubar", {
 			.removeAttr("role")
 			.removeAttr("aria-haspopup")
 			// TODO unwrap?
-			.children("span.ui-button-text").each(function( i, e ) {
+			.children("span.ui-button-text").each(function() {
 				var item = $( this );
 				item.parent().html( item.html() );
 			})
@@ -463,7 +462,7 @@ $.widget( "ui.menubar", {
 			this.active.closest( this.options.items ).data("hasSubMenu") &&
 			this.active.data("uiMenu") &&
 			this.active.data("uiMenu").active &&
-			this.active.data("uiMenu").active.has(".ui-menu").length
+			this.active.data("uiMenu").active.has(".ui-menu").length;
 	},
 
 	next: function( event ) {
@@ -491,9 +490,6 @@ $.widget( "ui.menubar", {
 	},
 
 	_move: function( direction, filter, event ) {
-		var next,
-			wrapItem;
-
 		var closestMenuItem = $( event.target ).closest(".ui-menubar-item"),
 			nextMenuItem = closestMenuItem.data( direction + "MenuItem" ),
 			focusableTarget = this._findNextFocusableTarget( nextMenuItem );
@@ -511,8 +507,7 @@ $.widget( "ui.menubar", {
 	},
 
 	_submenuless_open: function( event, nextMenuItem) {
-		var button,
-			menuItem = $(event.target).closest(".ui-menubar-item");
+		var menuItem = $(event.target).closest(".ui-menubar-item");
 
 		if ( this.active && this.active.length && menuItem.data("hasSubMenu")  ) {
 				this.active
