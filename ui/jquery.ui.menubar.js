@@ -14,6 +14,23 @@
  *	jquery.ui.menu.js
  */
 (function( $ ) {
+// A POJsO used for initializing menuItems so that we can be more OO
+
+$.widget( "ui.menubarMenuItem", {
+	version: "@VERSION",
+
+	_create: function() {
+		this._initializeElementAttributes()
+	},
+
+	/* Auxiliary Methods */
+	_initializeElementAttributes: function(){
+		$(this.element)
+		.addClass("ui-menubar-item")
+		.attr( "role", "presentation" );
+	}
+
+});
 
 // TODO when mixing clicking menus and keyboard navigation, focus handling is broken
 // there has to be just one item that has tabindex
@@ -97,11 +114,11 @@ $.widget( "ui.menubar", {
 	_initializeMenuItems: function() {
 		var menubar = this;
 
-		this.menuItems
-			.addClass("ui-menubar-item")
-			.attr( "role", "presentation" );
-
 		$.each( this.menuItems, function( index, menuItem ){
+			$( menuItem ).menubarMenuItem({
+				parentMenubar: menubar,
+				position: index
+			});
 			menubar._initializeMenuItem( $( menuItem ), menubar );
 			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
 		} );
