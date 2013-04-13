@@ -52,36 +52,38 @@ $.widget( "ui.menubar", {
 	},
 
 	_initializeWidget: function() {
-		var menubar = this;
-
 		this._on( {
 			keydown: function( event ) {
-				if ( event.keyCode === $.ui.keyCode.ESCAPE && menubar.active && menubar.active.menu( "collapse", event ) !== true ) {
-					var active = menubar.active;
-					menubar.active.blur();
-					menubar._close( event );
+				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.active && this.active.menu( "collapse", event ) !== true ) {
+					var active = this.active;
+					this.active.blur();
+					this._close( event );
 					$( event.target ).blur().mouseleave();
 					active.prev().focus();
 				}
 			},
 			focusin: function() {
-				clearTimeout( menubar.closeTimer );
+				clearTimeout( this.closeTimer );
 			},
 			focusout: function( event ) {
-				menubar.closeTimer = setTimeout (function() {
+				var menubar = this;
+
+				this.closeTimer = setTimeout (function() {
 					menubar._close( event );
 					menubar._reenableTabIndexOnFirstMenuItem();
 				}, 150 );
 			},
 			"mouseleave .ui-menubar-item": function( event ) {
-				if ( menubar.options.autoExpand ) {
-					menubar.closeTimer = setTimeout( function() {
+				var menubar = this;
+
+				if ( this.options.autoExpand ) {
+					this.closeTimer = setTimeout( function() {
 						menubar._close( event );
 					}, 150 );
 				}
 			},
 			"mouseenter .ui-menubar-item": function() {
-				clearTimeout( menubar.closeTimer );
+				clearTimeout( this.closeTimer );
 			}
 		});
 	},
