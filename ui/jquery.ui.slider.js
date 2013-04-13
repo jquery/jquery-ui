@@ -98,8 +98,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 	_createRange: function() {
 		var options = this.options,
-			classes = "";
-		
+			classes = ""
+
 		if ( options.range ) {
 			if ( options.range === true ) {
 				if ( !options.values ) {
@@ -426,6 +426,12 @@ $.widget( "ui.slider", $.ui.mouse, {
 				}
 				if(options.values[0] > options.values[1]) {
 					options.values[1] = options.values[0];
+					this._handleIndex = 0;
+				}
+				if(options.values[0] == this._valueMax() && options.values[1] == this._valueMax()) {
+					if(this.handles) {
+						this._handleIndex = 0;
+					}
 				}
 			}
 		}
