@@ -548,3 +548,5 @@ $.widget( "ui.menubar", {
 });
 
 }( jQuery ));
+
+/* vim: set fdm=indent foldlevel=1: */
