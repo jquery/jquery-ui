@@ -22,7 +22,7 @@ var numPages = 5;
 $.widget( "ui.slider", $.ui.mouse, {
 	version: "@VERSION",
 	widgetEventPrefix: "slide",
-
+	
 	options: {
 		animate: false,
 		distance: 0,
@@ -48,7 +48,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
-
+		
 		this.element
 			.addClass( "ui-slider" +
 				" ui-slider-" + this.orientation +
@@ -75,7 +75,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
 			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
 			handles = [];
-
+		
 		handleCount = ( options.values && options.values.length ) || 1;
 
 		if ( existingHandles.length > handleCount ) {
@@ -99,7 +99,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 	_createRange: function() {
 		var options = this.options,
 			classes = "";
-
+		
 		if ( options.range ) {
 			if ( options.range === true ) {
 				if ( !options.values ) {
@@ -109,8 +109,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 				} else if ( $.isArray( options.values ) ) {
 					options.values = options.values.slice(0);
 				}
+				this._verifyValues();
 			}
-
+			
 			if ( !this.range || !this.range.length ) {
 				this.range = $( "<div></div>" )
 					.appendTo( this.element );
@@ -380,7 +381,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		var vals,
 			newValues,
 			i;
-
+		
 		if ( arguments.length > 1 ) {
 			this.options.values[ index ] = this._trimAlignValue( newValue );
 			this._refreshValue();
@@ -396,19 +397,40 @@ $.widget( "ui.slider", $.ui.mouse, {
 					vals[ i ] = this._trimAlignValue( newValues[ i ] );
 					this._change( null, i );
 				}
+				this._verifyValues();
 				this._refreshValue();
 			} else {
 				if ( this.options.values && this.options.values.length ) {
+					this._verifyValues();
 					return this._values( index );
 				} else {
 					return this.value();
 				}
 			}
 		} else {
+			this._verifyValues();
 			return this._values();
 		}
 	},
-
+	
+	_verifyValues: function( ) {
+		var options = this.options;
+		
+		if ( options.range ) {
+			if ( options.range === true ) {
+				if(options.values[0] < this._valueMin()) {
+					options.values[0] = this._valueMin();
+				}
+				if(options.values[1] > this._valueMax()) {
+					options.values[1] = this._valueMax();
+				}
+				if(options.values[0] > options.values[1]) {
+					options.values[1] = options.values[0];
+				}
+			}
+		}
+	},
+	
 	_setOption: function( key, value ) {
 		var i,
 			valsLength = 0;

@@ -171,7 +171,7 @@ test( "step", function() {
 //});
 
 test( "values", function() {
-	expect( 2 );
+	expect( 3 );
 
 	// testing multiple ranges on the same page, the object reference to the values
 	// property is preserved via multiple range elements, so updating options.values
@@ -196,6 +196,14 @@ test( "values", function() {
 		ranges.eq( 0 ).slider( "values", 0 ),
 		ranges.eq( 1 ).slider( "values", 0 ),
 		"the values for multiple sliders should be different"
+	);
+	
+	ranges.eq( 0 ).slider( "values", [ 50, 30 ] );
+	
+	equal(
+		ranges.eq( 0 ).slider( "values", 0 ),
+		ranges.eq( 0 ).slider( "values", 1 ),
+		"the values should be equated if the first is greater than the second"
 	);
 });
 
