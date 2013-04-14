@@ -54,12 +54,17 @@ $.widget( "ui.menubar", {
 	_initializeWidget: function() {
 		this._on( {
 			keydown: function( event ) {
-				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.active && this.active.menu( "collapse", event ) !== true ) {
-					var active = this.active;
-					this.active.blur();
-					this._close( event );
-					$( event.target ).blur().mouseleave();
-					active.prev().focus();
+				var closeActionResult, stashActive,
+					isEscape = ( event.keyCode === $.ui.keyCode.ESCAPE );
+
+				if ( isEscape ) {
+					closeActionResult = this.active &&
+						this.active.menu( "collapse", event ) !== true;
+					if ( closeActionResult ) {
+						stashActive = this.active;
+						this._close( event );
+						stashActive.prev().focus();
+					}
 				}
 			},
 			focusin: function() {
