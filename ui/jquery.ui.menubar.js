@@ -268,8 +268,7 @@ $.widget( "ui.menubar", {
 
 
 	__applyMouseBehaviorForSubmenuHavingMenuItem: function ( input ) {
-		var menubar = this,
-			menu = input.next( menubar.options.menuElement ),
+			menu = input.next( this.options.menuElement ),
 			mouseBehaviorCallback = function( event ) {
 				// ignore triggered focus event
 				if ( event.type === "focus" && !event.originalEvent ) {
@@ -297,7 +296,7 @@ $.widget( "ui.menubar", {
 				}
 			};
 
-		menubar._on( input, {
+		this._on( input, {
 			click: mouseBehaviorCallback,
 			focus: mouseBehaviorCallback,
 			mouseenter: mouseBehaviorCallback
@@ -305,13 +304,13 @@ $.widget( "ui.menubar", {
 	},
 
 	__applyKeyboardBehaviorForSubmenuHavingMenuItem: function( input ) {
-		var menubar = this;
-			keyboardBehaviorCallback = function( event ) {
+		this._on( input, {
+			keydown: function( event ) {
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.SPACE:
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.DOWN:
-					menubar._open( event, $( event.target ).next() );
+					this._open( event, $( event.target ).next() );
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.LEFT:
@@ -323,19 +322,14 @@ $.widget( "ui.menubar", {
 					event.preventDefault();
 					break;
 				}
-		};
-
-		menubar._on( input, {
-			keydown: keyboardBehaviorCallback
-		});
+			}
+		} );
 	},
 
 	__applyMouseBehaviorForSubmenulessMenuItem: function( $anItem ) {
-		var menubar = this;
-
-		menubar._off( $anItem, "click mouseenter" );
-		menubar._hoverable( $anItem );
-		menubar._on( $anItem, {
+		this._off( $anItem, "click mouseenter" );
+		this._hoverable( $anItem );
+		this._on( $anItem, {
 			click: function() {
 				if ( this.active ) {
 					this._close();
@@ -352,9 +346,10 @@ $.widget( "ui.menubar", {
 			}
 		});
 	},
+
 	__applyKeyboardBehaviorForSubmenulessMenuItem: function( $anItem ) {
-		var menubar = this,
-			behavior = function( event ) {
+		this._on( $anItem, {
+			keydown: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.LEFT ) {
 					this.previous( event );
 					event.preventDefault();
@@ -362,9 +357,7 @@ $.widget( "ui.menubar", {
 					this.next( event );
 					event.preventDefault();
 				}
-			};
-		menubar._on( $anItem, {
-			keydown: behavior
+			}
 		});
 	},
 
