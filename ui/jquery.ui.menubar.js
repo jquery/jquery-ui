@@ -21,6 +21,7 @@ $.widget( "ui.menubarMenuItem", {
 
 	_create: function() {
 		this._initializeElementAttributes()
+		this._initializeMenuItem();
 	},
 
 	/* Auxiliary Methods */
@@ -28,7 +29,26 @@ $.widget( "ui.menubarMenuItem", {
 		$(this.element)
 		.addClass("ui-menubar-item")
 		.attr( "role", "presentation" );
-	}
+	},
+
+	_initializeMenuItem: function() {
+			var $menuItem = this.element,
+				menubar = this.options.parentMenubar,
+				$item = $menuItem.children("button, a");
+
+			menubar._determineSubmenuStatus( $menuItem, menubar );
+			menubar._styleMenuItem( $menuItem, menubar );
+
+			$menuItem.data( "name", $item.text() );
+
+			if ( $menuItem.data("hasSubMenu") ) {
+				menubar._initializeSubMenu( $menuItem, menubar );
+			}
+
+			$item.data( "parentMenuItem", $menuItem );
+			menubar.items.push( $item );
+			menubar._initializeItem( $item, menubar );
+	},
 
 });
 
@@ -119,7 +139,6 @@ $.widget( "ui.menubar", {
 				parentMenubar: menubar,
 				position: index
 			});
-			menubar._initializeMenuItem( $( menuItem ), menubar );
 			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
 		} );
 	},
@@ -141,22 +160,6 @@ $.widget( "ui.menubar", {
 		}
 	},
 
-	_initializeMenuItem: function( $menuItem, menubar ) {
-			var $item = $menuItem.children("button, a");
-
-			menubar._determineSubmenuStatus( $menuItem, menubar );
-			menubar._styleMenuItem( $menuItem, menubar );
-
-			$menuItem.data( "name", $item.text() );
-
-			if ( $menuItem.data("hasSubMenu") ) {
-				menubar._initializeSubMenu( $menuItem, menubar );
-			}
-
-			$item.data( "parentMenuItem", $menuItem );
-			menubar.items.push( $item );
-			menubar._initializeItem( $item, menubar );
-	},
 
 	_determineSubmenuStatus: function ( $menuItem, menubar ) {
 		var subMenus = $menuItem.children( menubar.options.menuElement ),
