@@ -297,7 +297,10 @@ asyncTest( "customStructure", function() {
 		});
 	}
 
-	step1();
+	// TODO: figure out why this setTimeout is needed in IE,
+	// it only is necessary when the previous baseStructure tests runs first
+	// Support: IE
+	setTimeout( step1 );
 });
 
 test("keystrokes", function() {
