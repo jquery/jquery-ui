@@ -26,28 +26,31 @@ $.widget( "ui.menubarMenuItem", {
 
 	/* Auxiliary Methods */
 	_initializeElementAttributes: function(){
-		$(this.element)
+		this.element
 		.addClass("ui-menubar-item")
-		.attr( "role", "presentation" );
+		.attr( "role", "presentation" )
+		.css({
+			"border-width" : "1px",
+			"border-style" : "hidden"
+		});
 	},
 
 	_initializeMenuItem: function() {
-			var $menuItem = this.element,
-				menubar = this.options.parentMenubar,
-				$item = $menuItem.children("button, a");
+		var $menuItem = this.element,
+			menubar = this.options.parentMenubar,
+			$item = $menuItem.children("button, a");
 
-			this._determineSubmenuStatus( $menuItem, menubar );
-			menubar._styleMenuItem( $menuItem, menubar );
+		this._determineSubmenuStatus( $menuItem, menubar );
 
-			$menuItem.data( "name", $item.text() );
+		$menuItem.data( "name", $item.text() );
 
-			if ( $menuItem.data("hasSubMenu") ) {
-				menubar._initializeSubMenu( $menuItem, menubar );
-			}
+		if ( $menuItem.data("hasSubMenu") ) {
+			menubar._initializeSubMenu( $menuItem, menubar );
+		}
 
-			$item.data( "parentMenuItem", $menuItem );
-			menubar.items.push( $item );
-			menubar._initializeItem( $item, menubar );
+		$item.data( "parentMenuItem", $menuItem );
+		menubar.items.push( $item );
+		menubar._initializeItem( $item, menubar );
 	},
 
 	_determineSubmenuStatus: function ( $menuItem ) {
@@ -174,12 +177,6 @@ $.widget( "ui.menubar", {
 	},
 
 
-	_styleMenuItem: function( $menuItem ) {
-		$menuItem.css({
-			"border-width" : "1px",
-			"border-style" : "hidden"
-		});
-	},
 
 	_initializeSubMenu: function( $menuItem, menubar ){
 		var subMenus = $menuItem.children( menubar.options.menuElement );
