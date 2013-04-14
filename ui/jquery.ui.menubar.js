@@ -50,12 +50,47 @@ $.widget( "ui.menubarMenuItem", {
 		$menuItem.data( "name", $item.text() );
 
 		if ( this.hasSubmenu() ) {
-			menubar._initializeSubMenu( $menuItem, menubar );
+			this._initializeSubMenus();
 		}
 
 		$item.data( "parentMenuItem", $menuItem );
 		menubar.items.push( $item );
 		menubar._initializeItem( $item, menubar );
+	},
+
+	_applyMenuWidgetToSubMenus: function( subMenus, options ) {
+		return subMenus
+			.menu({
+				position: {
+					within: options.position.within
+				},
+				select: function( event, ui ) {
+					ui.item.parents("ul.ui-menu:last").hide();
+					menubar._close();
+					// TODO what is this targetting? there's probably a better way to access it
+					$( event.target ).prev().focus();
+					menubar._trigger( "select", event, ui );
+				},
+				menus: options.menuElement
+			})
+	},
+
+	_initializeSubMenus: function(){
+		var menubar = this.options.parentMenubar,
+			subMenus = this.element.children( menubar.options.menuElement );
+
+		this._applyMenuWidgetToSubMenus( subMenus, menubar.options )
+		.hide()
+		.attr({
+			"aria-hidden": "true",
+			"aria-expanded": "false"
+		});
+
+		/* Throw this back to the macro element:
+		* 1) the this context for options is correct
+		* 2) Knowing how to move between menuItems is a menubar concern
+		*/
+		menubar.applySubmenuEventHandling( subMenus );
 	},
 
 	_determineSubmenuStatus: function () {
@@ -180,66 +215,6 @@ $.widget( "ui.menubar", {
 		}
 	},
 
-
-
-	_initializeSubMenu: function( $menuItem, menubar ){
-		var subMenus = $menuItem.children( menubar.options.menuElement );
-
-		subMenus
-			.menu({
-				position: {
-					within: this.options.position.within
-				},
-				select: function( event, ui ) {
-					ui.item.parents("ul.ui-menu:last").hide();
-					menubar._close();
-					// TODO what is this targetting? there's probably a better way to access it
-					$( event.target ).prev().focus();
-					menubar._trigger( "select", event, ui );
-				},
-				menus: this.options.menuElement
-			})
-			.hide()
-			.attr({
-				"aria-hidden": "true",
-				"aria-expanded": "false"
-			});
-
-		this._on( subMenus, {
-			keydown: function( event ) {
-				var parentButton,
-					menu = $( this );
-				if ( menu.is(":hidden") ) {
-					return;
-				}
-				switch ( event.keyCode ) {
-				case $.ui.keyCode.LEFT:
-					parentButton = menubar.active.prev(".ui-button");
-
-					if ( this.openSubmenus ) {
-						this.openSubmenus--;
-					} else if ( parentButton.parent().prev().data("hasSubMenu") ) {
-						menubar.active.blur();
-						menubar._open( event, parentButton.parent().prev().find(".ui-menu") );
-					} else {
-						parentButton.parent().prev().find(".ui-button").focus();
-						menubar._close( event );
-						this.open = true;
-					}
-
-					event.preventDefault();
-					break;
-				case $.ui.keyCode.RIGHT:
-					this.next( event );
-					event.preventDefault();
-					break;
-				}
-			},
-			focusout: function( event ) {
-				$(event.target).removeClass("ui-state-focus");
-			}
-		});
-	},
 
 	_initializeItem: function( $anItem, menubar ) {
 		//only the first item is eligible to receive the focus
@@ -577,6 +552,43 @@ $.widget( "ui.menubar", {
 
 	_reenableTabIndexOnFirstMenuItem: function() {
 		$(this.menuItems[0]).find(".ui-widget").attr( "tabindex", 1 );
+	},
+
+	applySubmenuEventHandling: function( subMenus ) {
+		this._on( subMenus, {
+			keydown: function( event ) {
+				var parentButton,
+				menu = $( this );
+				if ( menu.is(":hidden") ) {
+					return;
+				}
+				switch ( event.keyCode ) {
+					case $.ui.keyCode.LEFT:
+						parentButton = this.active.prev(".ui-button");
+
+					if ( this.openSubmenus ) {
+						this.openSubmenus--;
+					} else if ( parentButton.parent().prev().data("hasSubMenu") ) {
+						this.active.blur();
+						this._open( event, parentButton.parent().prev().find(".ui-menu") );
+					} else {
+						parentButton.parent().prev().find(".ui-button").focus();
+						this._close( event );
+						this.open = true;
+					}
+
+					event.preventDefault();
+					break;
+					case $.ui.keyCode.RIGHT:
+						this.next( event );
+					event.preventDefault();
+					break;
+				}
+			},
+			focusout: function( event ) {
+				$(event.target).removeClass("ui-state-focus");
+			}
+		});
 	}
 
 });
