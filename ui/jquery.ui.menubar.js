@@ -40,7 +40,7 @@ $.widget( "ui.menubarMenuItem", {
 			menubar = this.options.parentMenubar,
 			$item = $menuItem.children("button, a");
 
-		this._determineSubmenuStatus( $menuItem, menubar );
+		this._determineSubmenuStatus();
 
 		$menuItem.data( "name", $item.text() );
 
@@ -53,7 +53,7 @@ $.widget( "ui.menubarMenuItem", {
 		menubar._initializeItem( $item, menubar );
 	},
 
-	_determineSubmenuStatus: function ( $menuItem ) {
+	_determineSubmenuStatus: function () {
 		var $menuItem = this.element,
 			subMenus = $menuItem.children( this._parentMenubarsMenuElementOption() ),
 			hasSubMenu = subMenus.length > 0;
