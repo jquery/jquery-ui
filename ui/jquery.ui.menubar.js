@@ -36,7 +36,7 @@ $.widget( "ui.menubarMenuItem", {
 				menubar = this.options.parentMenubar,
 				$item = $menuItem.children("button, a");
 
-			menubar._determineSubmenuStatus( $menuItem, menubar );
+			this._determineSubmenuStatus( $menuItem, menubar );
 			menubar._styleMenuItem( $menuItem, menubar );
 
 			$menuItem.data( "name", $item.text() );
@@ -48,6 +48,19 @@ $.widget( "ui.menubarMenuItem", {
 			$item.data( "parentMenuItem", $menuItem );
 			menubar.items.push( $item );
 			menubar._initializeItem( $item, menubar );
+	},
+
+	_determineSubmenuStatus: function ( $menuItem ) {
+		var $menuItem = this.element,
+			subMenus = $menuItem.children( this._parentMenubarsMenuElementOption() ),
+			hasSubMenu = subMenus.length > 0;
+		$menuItem.data( "hasSubMenu", hasSubMenu );
+	},
+
+	_parentMenubarsMenuElementOption: function() {
+		var menubar = this.options.parentMenubar;
+
+		return menubar.options.menuElement;
 	},
 
 });
@@ -160,12 +173,6 @@ $.widget( "ui.menubar", {
 		}
 	},
 
-
-	_determineSubmenuStatus: function ( $menuItem, menubar ) {
-		var subMenus = $menuItem.children( menubar.options.menuElement ),
-			hasSubMenu = subMenus.length > 0;
-		$menuItem.data( "hasSubMenu", hasSubMenu );
-	},
 
 	_styleMenuItem: function( $menuItem ) {
 		$menuItem.css({
