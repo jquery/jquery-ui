@@ -34,11 +34,12 @@ $.widget( "ui.menubar", {
 	_create: function() {
 		// Top-level elements containing the submenu-triggering elem
 		this.menuItems = this.element.children( this.options.items );
+
 		// Links or buttons in menuItems, triggers of the submenus
 		this.items = [];
 
 		this._initializeMenubarsBoundElement();
-		this._initializeWidget();
+		this._initializeWidgetEvents();
 		this._initializeMenuItems();
 
 		// Keep track of open submenus
@@ -51,7 +52,7 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menubar" );
 	},
 
-	_initializeWidget: function() {
+	_initializeWidgetEvents: function() {
 		this._on( {
 			keydown: function( event ) {
 				var closeActionResult, stashActive,
