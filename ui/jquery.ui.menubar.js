@@ -59,10 +59,9 @@ $.widget( "ui.menubarMenuItem", {
 	},
 
 	_determineSubmenuStatus: function () {
-		var $menuItem = this.element,
-			subMenus = $menuItem.children( this._parentMenubarsMenuElementOption() ),
+		var subMenus = this.element.children( this._parentMenubarsMenuElementOption() ),
 			hasSubMenu = subMenus.length > 0;
-		$menuItem.data( "hasSubMenu", hasSubMenu );
+		this.element.data( "hasSubMenu", hasSubMenu );
 	},
 
 	_parentMenubarsMenuElementOption: function() {
