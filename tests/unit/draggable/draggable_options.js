@@ -472,10 +472,15 @@ test( "#6889: Cursor doesn't revert to pre-dragging state after revert action wh
 		}),
 		expected = getCursor();
 
-	element.simulate( "drag", {
-		dx: -1,
-		dy: -1
-	});
+	if ( TestHelpers.draggable.unreliableContains ) {
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+	} else {
+		element.simulate( "drag", {
+			dx: -1,
+			dy: -1
+		});
+	}
 });
 
 test( "cursor, default, switching after initialization", function() {

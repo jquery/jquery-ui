@@ -166,7 +166,7 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 	ok( !checkbox.button( "widget" ).hasClass( "ui-state-active" ) );
 
 	form.get( 0 ).reset();
-	
+
 	// #9213: If a button has been removed, refresh should not be called on it when
 	// its corresponding form is reset.
 	button.remove();
