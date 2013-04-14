@@ -30,9 +30,6 @@ function processEvent( event, pointerType ) {
     if ( orig.type.indexOf("mouse") !== -1 ) {
         event.pointerId = 1;
         event.pointerType = POINTER_TYPE_MOUSE;
-        // TODO: Don't assume left click
-        event.button = 0;
-        event.buttons = 1;
         event.isPrimary = true;
     } else if ( orig.type.indexOf("touch") !== -1 ) {
         event.pointerId = orig.pointerId;
