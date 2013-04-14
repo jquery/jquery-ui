@@ -53,9 +53,38 @@ $.widget( "ui.menubarMenuItem", {
 			this._initializeSubMenus();
 		}
 
-		$item.data( "parentMenuItem", $menuItem );
-		menubar.items.push( $item );
-		menubar._initializeItem( $item, menubar );
+		this._initializeItem( $item );
+	},
+
+	_initializeItem: function ( $item ) {
+		var menubar = this.options.parentMenubar;
+
+		$item
+		.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
+		.attr( "role", "menuitem" )
+		.wrapInner("<span class='ui-button-text'></span>");
+
+		if ( this.options.position === 0 ) {
+			$item.attr( "tabindex", 1 );
+		} else {
+			$item.attr( "tabIndex", -1 );
+		}
+
+		if ( menubar.options.buttons ) {
+			$item.removeClass("ui-menubar-link").addClass("ui-state-default");
+		}
+
+		this._on( $item, {
+			focus:  function(){
+				$item.addClass("ui-state-focus");
+			},
+			focusout:  function(){
+				$item.removeClass("ui-state-focus");
+			}
+		});
+
+		$item.data( "parentMenuItem", this.element );
+		menubar.applyItemEventHandling( $item, this.hasSubmenu() );
 	},
 
 	_applyMenuWidgetToSubMenus: function( subMenus, options ) {
@@ -216,62 +245,31 @@ $.widget( "ui.menubar", {
 	},
 
 
-	_initializeItem: function( $anItem, menubar ) {
-		//only the first item is eligible to receive the focus
-		var menuItemHasSubMenu = $anItem.data("parentMenuItem").data("hasSubMenu");
-
-		// Only the first item is tab-able
-		if ( menubar.items.length === 1 ) {
-			$anItem.attr( "tabindex", 1 );
-		} else {
-			$anItem.attr( "tabIndex", -1 );
-		}
+	applyItemEventHandling: function( $anItem, hasSubMenu ) {
+		this.items.push( $anItem );
 
 		this._focusable( this.items );
 		this._hoverable( this.items );
-		this._applyDOMPropertiesOnItem( $anItem, menubar);
 
-		this.__applyMouseAndKeyboardBehaviorForMenuItem ( $anItem, menubar );
-
-		if ( menuItemHasSubMenu ) {
-			this.__applyMouseBehaviorForSubmenuHavingMenuItem( $anItem, menubar );
-			this.__applyKeyboardBehaviorForSubmenuHavingMenuItem( $anItem, menubar );
+		if ( hasSubMenu ) {
+			this.__applyMouseBehaviorForSubmenuHavingMenuItem( $anItem );
+			this.__applyKeyboardBehaviorForSubmenuHavingMenuItem( $anItem );
 
 			$anItem.attr( "aria-haspopup", "true" );
-			if ( menubar.options.menuIcon ) {
+			if ( this.options.menuIcon ) {
 				$anItem.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
 				$anItem.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
 			}
 		} else {
-			this.__applyMouseBehaviorForSubmenulessMenuItem( $anItem, menubar );
-			this.__applyKeyboardBehaviorForSubmenulessMenuItem( $anItem, menubar );
+			this.__applyMouseBehaviorForSubmenulessMenuItem( $anItem );
+			this.__applyKeyboardBehaviorForSubmenulessMenuItem( $anItem );
 		}
 	},
 
-	__applyMouseAndKeyboardBehaviorForMenuItem: function( $anItem, menubar ) {
-		menubar._on( $anItem, {
-			focus:  function(){
-				$anItem.addClass("ui-state-focus");
-			},
-			focusout:  function(){
-				$anItem.removeClass("ui-state-focus");
-			}
-		} );
-	},
 
-	_applyDOMPropertiesOnItem: function( $item, menubar) {
-		$item
-			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
-			.attr( "role", "menuitem" )
-			.wrapInner("<span class='ui-button-text'></span>");
-
-		if ( menubar.options.buttons ) {
-			$item.removeClass("ui-menubar-link").addClass("ui-state-default");
-		}
-	},
-
-	__applyMouseBehaviorForSubmenuHavingMenuItem: function ( input, menubar ) {
-		var menu = input.next( menubar.options.menuElement ),
+	__applyMouseBehaviorForSubmenuHavingMenuItem: function ( input ) {
+		var menubar = this,
+			menu = input.next( menubar.options.menuElement ),
 			mouseBehaviorCallback = function( event ) {
 				// ignore triggered focus event
 				if ( event.type === "focus" && !event.originalEvent ) {
@@ -306,24 +304,25 @@ $.widget( "ui.menubar", {
 		});
 	},
 
-	__applyKeyboardBehaviorForSubmenuHavingMenuItem: function( input, menubar ) {
-		var keyboardBehaviorCallback = function( event ) {
-			switch ( event.keyCode ) {
-			case $.ui.keyCode.SPACE:
-			case $.ui.keyCode.UP:
-			case $.ui.keyCode.DOWN:
-				menubar._open( event, $( event.target ).next() );
-				event.preventDefault();
-				break;
-			case $.ui.keyCode.LEFT:
-				this.previous( event );
-				event.preventDefault();
-				break;
-			case $.ui.keyCode.RIGHT:
-				this.next( event );
-				event.preventDefault();
-				break;
-			}
+	__applyKeyboardBehaviorForSubmenuHavingMenuItem: function( input ) {
+		var menubar = this;
+			keyboardBehaviorCallback = function( event ) {
+				switch ( event.keyCode ) {
+				case $.ui.keyCode.SPACE:
+				case $.ui.keyCode.UP:
+				case $.ui.keyCode.DOWN:
+					menubar._open( event, $( event.target ).next() );
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.LEFT:
+					this.previous( event );
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.RIGHT:
+					this.next( event );
+					event.preventDefault();
+					break;
+				}
 		};
 
 		menubar._on( input, {
@@ -331,7 +330,9 @@ $.widget( "ui.menubar", {
 		});
 	},
 
-	__applyMouseBehaviorForSubmenulessMenuItem: function( $anItem, menubar ) {
+	__applyMouseBehaviorForSubmenulessMenuItem: function( $anItem ) {
+		var menubar = this;
+
 		menubar._off( $anItem, "click mouseenter" );
 		menubar._hoverable( $anItem );
 		menubar._on( $anItem, {
@@ -351,16 +352,17 @@ $.widget( "ui.menubar", {
 			}
 		});
 	},
-	__applyKeyboardBehaviorForSubmenulessMenuItem: function( $anItem, menubar ) {
-		var behavior = function( event ) {
-			if ( event.keyCode === $.ui.keyCode.LEFT ) {
-				this.previous( event );
-				event.preventDefault();
-			} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
-				this.next( event );
-				event.preventDefault();
-			}
-		};
+	__applyKeyboardBehaviorForSubmenulessMenuItem: function( $anItem ) {
+		var menubar = this,
+			behavior = function( event ) {
+				if ( event.keyCode === $.ui.keyCode.LEFT ) {
+					this.previous( event );
+					event.preventDefault();
+				} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
+					this.next( event );
+					event.preventDefault();
+				}
+			};
 		menubar._on( $anItem, {
 			keydown: behavior
 		});
