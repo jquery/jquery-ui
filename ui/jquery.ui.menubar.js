@@ -25,7 +25,7 @@ $.widget( "ui.menubarMenuItem", {
 
 	/* jquery.Widget internals */
 	_create: function() {
-		this._initializeElementAttributes()
+		this._initializeElementAttributes();
 		this._initializeMenuItem();
 	},
 
@@ -42,7 +42,6 @@ $.widget( "ui.menubarMenuItem", {
 
 	_initializeMenuItem: function() {
 		var $menuItem = this.element,
-			menubar = this.options.parentMenubar,
 			$item = $menuItem.children("button, a");
 
 		this._determineSubmenuStatus();
@@ -96,7 +95,7 @@ $.widget( "ui.menubarMenuItem", {
 		var menubar = this.options.parentMenubar,
 			subMenus = this.element.children( menubar.options.menuElement );
 
-		this._applyMenuWidgetToSubMenus( subMenus, menubar.options )
+		this._applyMenuWidgetToSubMenus( subMenus, menubar )
 		.hide()
 		.attr({
 			"aria-hidden": "true",
@@ -110,7 +109,9 @@ $.widget( "ui.menubarMenuItem", {
 		menubar.applySubmenuEventHandling( subMenus );
 	},
 
-	_applyMenuWidgetToSubMenus: function( subMenus, options ) {
+	_applyMenuWidgetToSubMenus: function( subMenus, menubar ) {
+		var options = menubar.options;
+
 		return subMenus
 			.menu({
 				position: {
@@ -124,7 +125,7 @@ $.widget( "ui.menubarMenuItem", {
 					menubar._trigger( "select", event, ui );
 				},
 				menus: options.menuElement
-			})
+			});
 	},
 
 	_parentMenubarsMenuElementOption: function() {
@@ -157,12 +158,12 @@ $.widget( "ui.menubar", {
 		// Links or buttons in menuItems, triggers of the submenus
 		this.items = [];
 
+		// Keep track of open submenus
+		this.openSubmenus = 0;
+
 		this._initializeMenubarsBoundElement();
 		this._initializeWidgetEvents();
 		this._initializeMenuItems();
-
-		// Keep track of open submenus
-		this.openSubmenus = 0;
 	},
 
 	_initializeMenubarsBoundElement: function() {
@@ -248,7 +249,6 @@ $.widget( "ui.menubar", {
 
 	},
 
-
 	applyItemEventHandling: function( $anItem, hasSubMenu ) {
 		this.items.push( $anItem );
 
@@ -272,33 +272,33 @@ $.widget( "ui.menubar", {
 
 
 	__applyMouseBehaviorForSubmenuHavingMenuItem: function ( input ) {
-			menu = input.next( this.options.menuElement ),
-			mouseBehaviorCallback = function( event ) {
-				// ignore triggered focus event
-				if ( event.type === "focus" && !event.originalEvent ) {
-					return;
+		var menu = input.next( this.options.menuElement ),
+		mouseBehaviorCallback = function( event ) {
+			// ignore triggered focus event
+			if ( event.type === "focus" && !event.originalEvent ) {
+				return;
+			}
+			event.preventDefault();
+			// TODO can we simplify or extract this check? especially the last two expressions
+			// there's a similar active[0] == menu[0] check in _open
+			if ( event.type === "click" && menu.is(":visible") && this.active && this.active[0] === menu[0] ) {
+				this._close();
+				return;
+			}
+			if ( event.type === "mouseenter" ) {
+				this.element.find(":focus").focusout();
+				if ( this.stashedOpenMenu ) {
+					this._open( event, menu);
 				}
-				event.preventDefault();
-				// TODO can we simplify or extract this check? especially the last two expressions
-				// there's a similar active[0] == menu[0] check in _open
-				if ( event.type === "click" && menu.is(":visible") && this.active && this.active[0] === menu[0] ) {
-					this._close();
-					return;
+				this.stashedOpenMenu = undefined;
+			}
+			if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
+				if ( this.options.autoExpand ) {
+					clearTimeout( this.closeTimer );
 				}
-				if ( event.type === "mouseenter" ) {
-					this.element.find(":focus").focusout();
-					if ( this.stashedOpenMenu ) {
-						this._open( event, menu);
-					}
-					this.stashedOpenMenu = undefined;
-				}
-				if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
-					if ( this.options.autoExpand ) {
-						clearTimeout( this.closeTimer );
-					}
-					this._open( event, menu );
-				}
-			};
+				this._open( event, menu );
+			}
+		};
 
 		this._on( input, {
 			click: mouseBehaviorCallback,
