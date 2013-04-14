@@ -19,6 +19,12 @@
 $.widget( "ui.menubarMenuItem", {
 	version: "@VERSION",
 
+	/* Public API */
+	hasSubmenu: function() {
+		return this.element.data("hasSubMenu");
+	},
+
+	/* jquery.Widget internals */
 	_create: function() {
 		this._initializeElementAttributes()
 		this._initializeMenuItem();
@@ -41,10 +47,9 @@ $.widget( "ui.menubarMenuItem", {
 			$item = $menuItem.children("button, a");
 
 		this._determineSubmenuStatus();
-
 		$menuItem.data( "name", $item.text() );
 
-		if ( $menuItem.data("hasSubMenu") ) {
+		if ( this.hasSubmenu() ) {
 			menubar._initializeSubMenu( $menuItem, menubar );
 		}
 
