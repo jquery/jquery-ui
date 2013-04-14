@@ -14,7 +14,6 @@
  *	jquery.ui.menu.js
  */
 (function( $ ) {
-// A POJsO used for initializing menuItems so that we can be more OO
 
 $.widget( "ui.menubarMenuItem", {
 	version: "@VERSION",
@@ -49,11 +48,17 @@ $.widget( "ui.menubarMenuItem", {
 		this._determineSubmenuStatus();
 		$menuItem.data( "name", $item.text() );
 
+		this._initializeItem( $item );
+
 		if ( this.hasSubmenu() ) {
 			this._initializeSubMenus();
 		}
+	},
 
-		this._initializeItem( $item );
+	_determineSubmenuStatus: function () {
+		var subMenus = this.element.children( this._parentMenubarsMenuElementOption() ),
+			hasSubMenu = subMenus.length > 0;
+		this.element.data( "hasSubMenu", hasSubMenu );
 	},
 
 	_initializeItem: function ( $item ) {
@@ -87,23 +92,6 @@ $.widget( "ui.menubarMenuItem", {
 		menubar.applyItemEventHandling( $item, this.hasSubmenu() );
 	},
 
-	_applyMenuWidgetToSubMenus: function( subMenus, options ) {
-		return subMenus
-			.menu({
-				position: {
-					within: options.position.within
-				},
-				select: function( event, ui ) {
-					ui.item.parents("ul.ui-menu:last").hide();
-					menubar._close();
-					// TODO what is this targetting? there's probably a better way to access it
-					$( event.target ).prev().focus();
-					menubar._trigger( "select", event, ui );
-				},
-				menus: options.menuElement
-			})
-	},
-
 	_initializeSubMenus: function(){
 		var menubar = this.options.parentMenubar,
 			subMenus = this.element.children( menubar.options.menuElement );
@@ -122,18 +110,28 @@ $.widget( "ui.menubarMenuItem", {
 		menubar.applySubmenuEventHandling( subMenus );
 	},
 
-	_determineSubmenuStatus: function () {
-		var subMenus = this.element.children( this._parentMenubarsMenuElementOption() ),
-			hasSubMenu = subMenus.length > 0;
-		this.element.data( "hasSubMenu", hasSubMenu );
+	_applyMenuWidgetToSubMenus: function( subMenus, options ) {
+		return subMenus
+			.menu({
+				position: {
+					within: options.position.within
+				},
+				select: function( event, ui ) {
+					ui.item.parents("ul.ui-menu:last").hide();
+					menubar._close();
+					// TODO what is this targetting? there's probably a better way to access it
+					$( event.target ).prev().focus();
+					menubar._trigger( "select", event, ui );
+				},
+				menus: options.menuElement
+			})
 	},
 
 	_parentMenubarsMenuElementOption: function() {
 		var menubar = this.options.parentMenubar;
 
 		return menubar.options.menuElement;
-	},
-
+	}
 });
 
 // TODO when mixing clicking menus and keyboard navigation, focus handling is broken
@@ -223,25 +221,31 @@ $.widget( "ui.menubar", {
 				parentMenubar: menubar,
 				position: index
 			});
-			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
 		} );
+		this._identifyMenuItemsNeighbors();
 	},
 
-	_identifyMenuItemsNeighbors: function( $menuItem, menubar, index ) {
-		var collectionLength = this.menuItems.toArray().length,
-			isFirstElement = ( index === 0 ),
-			isLastElement = ( index === ( collectionLength - 1 ) );
+	_identifyMenuItemsNeighbors: function() {
+		var collection = this.menuItems,
+			collectionLength = this.menuItems.toArray().length;
 
-		if ( isFirstElement ) {
-			$menuItem.data( "prevMenuItem", $( this.menuItems[collectionLength - 1])  );
-			$menuItem.data( "nextMenuItem", $( this.menuItems[index+1])  );
-		} else if ( isLastElement ) {
-			$menuItem.data( "nextMenuItem", $( this.menuItems[0])  );
-			$menuItem.data( "prevMenuItem", $( this.menuItems[index-1])  );
-		} else {
-			$menuItem.data( "nextMenuItem", $( this.menuItems[index+1])  );
-			$menuItem.data( "prevMenuItem", $( this.menuItems[index-1])  );
-		}
+		$.each( this.menuItems, function( index, menuItem ) {
+			var	$menuItem = $( menuItem ),
+				isFirstElement = ( index === 0 ),
+				isLastElement = ( index === ( collectionLength - 1 ) );
+
+			if ( isFirstElement ) {
+				$menuItem.data( "prevMenuItem", $( collection[collectionLength - 1])  );
+				$menuItem.data( "nextMenuItem", $( collection[index+1])  );
+			} else if ( isLastElement ) {
+				$menuItem.data( "nextMenuItem", $( collection[0])  );
+				$menuItem.data( "prevMenuItem", $( collection[index-1])  );
+			} else {
+				$menuItem.data( "nextMenuItem", $( collection[index+1])  );
+				$menuItem.data( "prevMenuItem", $( collection[index-1])  );
+			}
+		} );
+
 	},
 
 
