@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Slider - Range slider</title>
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+	<script src="../../../jquery-1.9.1.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../../ui/jquery.ui.slider.js"></script>
+	<script>
+	$(function() {
+		$( "#slider-range" ).slider({
+			range: true,
+			min: 100,
+			max: 500,
+			values: [ 200, 350 ],
+			slide: function( event, ui ) {
+				$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+				$("#leftValue").val(ui.values[ 0 ]);
+				$("#rightValue").val(ui.values[ 1 ]);
+			}
+		});
+		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+		
+		$("#leftValue").val($( "#slider-range" ).slider( "values", 0 ));
+		$("#rightValue").val($( "#slider-range" ).slider( "values", 1 ));
+	});
+	
+	function clickBnt1() {
+		var leftValue = $("#leftValue").val();
+		var rightValue = $( "#slider-range" ).slider( "values", 1 );
+		
+		$( "#slider-range" ).slider( "option", "values", [ leftValue, rightValue ] );
+		
+		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+			
+		$("#leftValue").val($( "#slider-range" ).slider( "values", 0 ));
+		$("#rightValue").val($( "#slider-range" ).slider( "values", 1 ));
+	};
+	
+	function clickBnt2() {
+		var leftValue = $( "#slider-range" ).slider( "values", 0 );
+		var rightValue = $("#rightValue").val();
+		
+		$( "#slider-range" ).slider( "option", "values", [ leftValue, rightValue ] );
+		
+		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+			
+		$("#leftValue").val($( "#slider-range" ).slider( "values", 0 ));
+		$("#rightValue").val($( "#slider-range" ).slider( "values", 1 ));
+	};
+	
+	</script>
+</head>
+<body>
+
+<p>
+	<label for="amount">Range:</label>
+	<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+	<br/>
+	Left value:<input type="text" id="leftValue" /> <input type="button" id="bntLeftValue" value="ok" onclick="clickBnt1();" />
+	<br/>
+	Right value:<input type="text" id="rightValue" /> <input type="button" id="bntRightValue" value="ok" onclick="clickBnt2();" />
+</p>
+
+<div id="slider-range"></div>
+
+<div class="demo-description">
+<br/>
+<b>First test:</b>
+<p>Set the left value to be greater than right value (use the textboxes to achieve this). Note that both values will be equated.</p>
+<b>Second test:</b>
+<p>Set the right value to the max (through textbox or mouse). After that, set the left value to the max too (through textbox). Then, try to move the handle via mouse. In previous versions the slider used to lock after doing these steps.</p>
+</div>
+</body>
+</html>
