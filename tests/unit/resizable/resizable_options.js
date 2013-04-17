@@ -404,4 +404,21 @@ test( "alsoResize + containment", function() {
 	equal( other.height(), 150, "alsoResize constrained height at containment edge" );
 });
 
+test( "draggable", function() {
+	expect( 4 );
+	var element = $( "#resizable1" ).resizable({
+		containment: "#containment"
+	}).draggable({
+		containment: "#containment"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 20, 30 );
+	equal( element.width(), 120, "unconstrained width within container" );
+	equal( element.height(), 130, "unconstrained height within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	equal( element.width(), 300, "constrained width at containment edge" );
+	equal( element.height(), 200, "constrained height at containment edge" );
+});
+
 })(jQuery);
