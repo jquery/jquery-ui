@@ -43,6 +43,9 @@ $.widget( "ui.menubar", {
 
 		// Keep track of open submenus
 		this.openSubmenus = 0;
+
+		// Scorched earth: NOTHING can be tabbed to
+		this.menuItems.find("*").slice(1).attr("tabindex", -1);
 	},
 
 	_initializeMenubarsBoundElement: function() {
@@ -65,6 +68,7 @@ $.widget( "ui.menubar", {
 				}
 			},
 			focusin: function() {
+        this._disableTabIndexOnFirstMenuItem();
 				clearTimeout( menubar.closeTimer );
 			},
 			focusout: function( event ) {
@@ -105,7 +109,7 @@ $.widget( "ui.menubar", {
 			isLastElement = ( index === ( collectionLength - 1 ) );
 
 		if ( isFirstElement ) {
-			$menuItem.data( "prevMenuItem", $( this.menuItems[collectionLength - 1])  );
+			$menuItem.data( "prevMenuItem", $( this.menuItems[collectionLength - 1]) );
 			$menuItem.data( "nextMenuItem", $( this.menuItems[index+1])  );
 		} else if ( isLastElement ) {
 			$menuItem.data( "nextMenuItem", $( this.menuItems[0])  );
@@ -171,6 +175,7 @@ $.widget( "ui.menubar", {
 
 		this._on( subMenus, {
 			keydown: function( event ) {
+        $(event.target).attr("tabIndex", 1);
 				var parentButton,
 					menu = $( this );
 				if ( menu.is(":hidden") ) {
@@ -192,6 +197,7 @@ $.widget( "ui.menubar", {
 					}
 
 					event.preventDefault();
+        $(event.target).attr("tabIndex", -1);
 					break;
 				case $.ui.keyCode.RIGHT:
 					this.next( event );
@@ -206,15 +212,8 @@ $.widget( "ui.menubar", {
 	},
 
 	_initializeItem: function( $anItem, menubar ) {
-		//only the first item is eligible to receive the focus
 		var menuItemHasSubMenu = $anItem.data("parentMenuItem").data("hasSubMenu");
 
-		// Only the first item is tab-able
-		if ( menubar.items.length === 1 ) {
-			$anItem.attr( "tabindex", 1 );
-		} else {
-			$anItem.attr( "tabIndex", -1 );
-		}
 
 		this._focusable( this.items );
 		this._hoverable( this.items );
@@ -239,10 +238,12 @@ $.widget( "ui.menubar", {
 
 	__applyMouseAndKeyboardBehaviorForMenuItem: function( $anItem, menubar ) {
 		menubar._on( $anItem, {
-			focus:  function(){
+			focus:	function(){
+        $anItem.attr("tabIndex", 1);
 				$anItem.addClass("ui-state-focus");
 			},
 			focusout:  function(){
+        $anItem.attr("tabIndex", -1);
 				$anItem.removeClass("ui-state-focus");
 			}
 		} );
@@ -287,7 +288,6 @@ $.widget( "ui.menubar", {
 					this._open( event, menu );
 				}
 			};
-
 		menubar._on( input, {
 			click: mouseBehaviorCallback,
 			focus: mouseBehaviorCallback,
@@ -311,6 +311,9 @@ $.widget( "ui.menubar", {
 			case $.ui.keyCode.RIGHT:
 				this.next( event );
 				event.preventDefault();
+				break;
+			case $.ui.keyCode.TAB:
+        event.stopPropagation();
 				break;
 			}
 		};
@@ -439,7 +442,7 @@ $.widget( "ui.menubar", {
 		}
 
 		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
-		button = menuItem.addClass("ui-state-active").attr( "tabIndex", -1 );
+		button = menuItem.addClass("ui-state-active");
 
 		this.active = menu
 			.show()
@@ -501,7 +504,7 @@ $.widget( "ui.menubar", {
 				this._submenuless_open( event, nextMenuItem );
 			}
 		} else {
-			closestMenuItem.find(".ui-button").attr( "tabindex", -1 );
+			closestMenuItem.find(".ui-button");
 			focusableTarget.focus();
 		}
 	},
@@ -539,8 +542,12 @@ $.widget( "ui.menubar", {
 		menu.parent(".ui-menubar-item").removeClass("ui-state-active");
 	},
 
+  _disableTabIndexOnFirstMenuItem: function() {
+    this.items[0].attr( "tabIndex", -1 );
+  },
+
 	_reenableTabIndexOnFirstMenuItem: function() {
-		$(this.menuItems[0]).find(".ui-widget").attr( "tabindex", 1 );
+    this.items[0].attr( "tabIndex", 1 );
 	}
 
 });

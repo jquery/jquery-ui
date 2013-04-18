@@ -50,13 +50,70 @@ test ( "_findNextFocusableTarget should find one and only one item", function() 
 	expect(2);
 
 	var element = $("#bar1").menubar(),
-		menubarWidget = element.data("ui-menubar"),
-		firstMenuItem = $("#bar1 .ui-menubar-item").eq(0),
-		expectedFocusableTarget = $("#bar1 .ui-menubar-item .ui-widget").eq(0),
+		menubarWidget = element.data( "ui-menubar" ),
+		firstMenuItem = $( "#bar1 .ui-menubar-item" ).eq( 0 ),
+		expectedFocusableTarget = $("#bar1 .ui-menubar-item .ui-widget").eq( 0 ),
 		result = menubarWidget._findNextFocusableTarget( firstMenuItem );
 
   equal( expectedFocusableTarget[0], result[0], "_findNextFocusableTarget should return the focusable element underneath the menuItem" );
 	equal( 1, result.length, "One and only one item should be returned." );
 });
+
+asyncTest( "TAB order should be sane mirroring dialog's test", function() {
+	expect( 3 );
+
+	var element = $( "#bar1" ).menubar(),
+		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" );
+
+	function checkTab() {
+		setTimeout( start );
+		ok( !firstMenuItem.hasClass( "ui-state-focus" ), "The manually focused item should no longer have focus after TAB" );
+		//setTimeout( start );
+	}
+
+	firstMenuItem[ 0 ].focus();
+	ok( $( firstMenuItem ).hasClass( "ui-state-focus" ), "Should have focus class" );
+
+	setTimeout(function() {
+		equal( document.activeElement, firstMenuItem[0], "Focus set on first menuItem" );
+		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+		setTimeout( checkTab );
+	})
+
+} );
+
+asyncTest( "TAB order should be sane", function() {
+	expect( 3 );
+
+
+	var element = $( "#bar1" ).menubar(),
+		debugDelay = 0,
+		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" );
+
+	/* Make the qunit fixture visible if we're debugging this test*/
+  if ( debugDelay ) {
+		$('<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" />').appendTo("head");
+		$( "#qunit-fixture" ).css({ right: "300px", top: "300px", left:0 });
+	}
+
+	setTimeout(function(){
+		firstMenuItem[ 0 ].focus();
+
+		function postFocus(){
+			ok( !firstMenuItem.hasClass( "ui-state-focus" ), "The manually focused item should no longer have focus after TAB" );
+			setTimeout( start );
+		};
+
+		setTimeout(function() {
+			ok( firstMenuItem.hasClass( "ui-state-focus" ), "Should have focus class" );
+			equal( document.activeElement, firstMenuItem, "Focus set on first menuItem" );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+			setTimeout( postFocus );
+		});
+
+	}, debugDelay );
+
+} );
+
 
 })( jQuery );
