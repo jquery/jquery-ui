@@ -99,7 +99,7 @@ pointerHook = interaction.hooks.pointer = {
 				}
 
 				// only react to the primary button or touch
-				if ( event.button === 0 && event.buttons === 1 ) {
+				if ( event.button === 0 ) {
 					var started = start( event, event.target, {
 						x: event.pageX,
 						y: event.pageY
