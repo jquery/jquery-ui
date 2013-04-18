@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Dialog @VERSION
+ * jQuery UI Dialog 1.10.2
  * http://jqueryui.com
  *
  * Copyright 2013 jQuery Foundation and other contributors
@@ -36,7 +36,7 @@ var sizeRelatedOptions = {
 	};
 
 $.widget( "ui.dialog", {
-	version: "@VERSION",
+	version: "1.10.2",
 	options: {
 		appendTo: "body",
 		autoOpen: true,
@@ -84,6 +84,8 @@ $.widget( "ui.dialog", {
 	},
 
 	_create: function() {
+		if(!$.ui.dialog.topIndex) $.ui.dialog.topIndex=100;
+		$.ui.dialog.topIndex++;
 		this.originalCss = {
 			display: this.element[0].style.display,
 			width: this.element[0].style.width,
@@ -195,11 +197,28 @@ $.widget( "ui.dialog", {
 	},
 
 	moveToTop: function() {
+
 		this._moveToTop();
 	},
-
+	
 	_moveToTop: function( event, silent ) {
-		var moved = !!this.uiDialog.nextAll(":visible").insertBefore( this.uiDialog ).length;
+///////////////var moved = !!this.uiDialog.nextAll(":visible").insertBefore( this.uiDialog ).length;
+		var moved=true;
+		this.element.parent().css('z-index',$.ui.dialog.topIndex++);
+		var array=[];
+		var dialogs=$('.ui-dialog');
+		dialogs.each(function(){
+			var obj={ele:$(this),index:$(this).css('z-index')};
+			array.push(obj);
+		});
+		array.sort(function(a,b){
+			return a.index-b.index;
+		});
+		for(var i=0;i<array.length;i++){
+			array[i].ele.css('z-index',100+i);
+			$.ui.dialog.topIndex=101+i;	
+		}
+//////////////
 		if ( moved && !silent ) {
 			this._trigger( "focus", event );
 		}
@@ -754,5 +773,55 @@ $.widget( "ui.dialog", {
 });
 
 $.ui.dialog.overlayInstances = 0;
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+	// position option with array notation
+	// just override with old implementation
+	$.widget( "ui.dialog", $.ui.dialog, {
+		_position: function() {
+			var position = this.options.position,
+				myAt = [],
+				offset = [ 0, 0 ],
+				isVisible;
+
+			if ( position ) {
+				if ( typeof position === "string" || (typeof position === "object" && "0" in position ) ) {
+					myAt = position.split ? position.split(" ") : [ position[0], position[1] ];
+					if ( myAt.length === 1 ) {
+						myAt[1] = myAt[0];
+					}
+
+					$.each( [ "left", "top" ], function( i, offsetPosition ) {
+						if ( +myAt[ i ] === myAt[ i ] ) {
+							offset[ i ] = myAt[ i ];
+							myAt[ i ] = offsetPosition;
+						}
+					});
+
+					position = {
+						my: myAt[0] + (offset[0] < 0 ? offset[0] : "+" + offset[0]) + " " +
+							myAt[1] + (offset[1] < 0 ? offset[1] : "+" + offset[1]),
+						at: myAt.join(" ")
+					};
+				}
+
+				position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
+			} else {
+				position = $.ui.dialog.prototype.options.position;
+			}
+
+			// need to show the dialog to get the actual offset in the position plugin
+			isVisible = this.uiDialog.is(":visible");
+			if ( !isVisible ) {
+				this.uiDialog.show();
+			}
+			this.uiDialog.position( position );
+			if ( !isVisible ) {
+				this.uiDialog.hide();
+			}
+		}
+	});
+}
 
 }( jQuery ) );
