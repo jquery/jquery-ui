@@ -404,21 +404,156 @@ test( "alsoResize + containment", function() {
 	equal( other.height(), 150, "alsoResize constrained height at containment edge" );
 });
 
-test( "draggable", function() {
+test( "non-parent containment: se", function() {
 	expect( 4 );
-	var element = $( "#resizable1" ).resizable({
-		containment: "#containment"
-	}).draggable({
-		containment: "#containment"
-	});
+	var containment = $('#containment1'),
+		element = $( "#resizable1" ).resizable({
+			containment: "#containment1" 
+		}),
+		originalTop = element.position().top,
+		originalLeft = element.position().top,
+		originalWidth = element.width(),
+		originalHeight = element.height(),
+		containmentWidth = containment.width(),
+		containmentHeight = containment.height();
 
 	TestHelpers.resizable.drag( ".ui-resizable-se", 20, 30 );
-	equal( element.width(), 120, "unconstrained width within container" );
-	equal( element.height(), 130, "unconstrained height within container" );
+	equal( element.width(), originalWidth + 20, "unconstrained width within container" );
+	equal( element.height(), originalWidth + 30, "unconstrained height within container" );
 
 	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
-	equal( element.width(), 300, "constrained width at containment edge" );
-	equal( element.height(), 200, "constrained height at containment edge" );
+	equal( element.width(), containmentWidth - originalLeft, "constrained width at containment edge" );
+	equal( element.height(), containmentHeight - originalTop, "constrained height at containment edge" );
+});
+
+test( "non-parent containment: nw", function() {
+	expect( 2 );
+	var containment = $('#containment1'),
+		element = $( "#resizable1" ).resizable({
+			containment: "#containment1",
+			handles: "all"
+		}),
+		originalTop = element.position().top,
+		originalLeft = element.position().top,
+		originalWidth = element.width(),
+		originalHeight = element.height();
+
+	TestHelpers.resizable.drag( ".ui-resizable-nw", -400, -400 );
+	equal( element.width(), originalLeft + originalWidth, "constrained width at containment edge" );
+	equal( element.height(), originalTop + originalHeight, "constrained height at containment edge" );
+});
+
+test( "scrolling parent with containment: nw", function() {
+	expect( 8 );
+	var element = $( "#resizable3" ).resizable({
+			containment: 'parent',
+			handles: "all"
+		}),
+		scrolled = 50,
+		originalTop = element.position().top - scrolled,
+		originalLeft = element.position().left - scrolled,
+		originalWidth = element.width(),
+		originalHeight = element.height();
+		
+	$( "#scroll-container" ).scrollTop(scrolled).scrollLeft(scrolled);
+		
+	TestHelpers.resizable.drag( ".ui-resizable-nw", -20, -30 );
+	equal( element.position().left, originalLeft - 20, "unconstrained left within container" );
+	equal( element.position().top, originalTop - 30, "unconstrained top within container" );
+	equal( element.width(), originalWidth + 20, "unconstrained width within container" );
+	equal( element.height(), originalHeight + 30, "unconstrained height within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-nw", -400, -400 );
+	equal( element.position().left, 0, "constrained left at containment edge" );
+	equal( element.position().top, 0, "constrained top at containment edge" );
+	equal( element.width(), originalWidth + originalLeft, "constrained width at containment edge");
+	equal( element.height(), originalHeight + originalTop, "constrained height at containment edge" );
+});
+
+test( "scrolling parent with containment: se", function() {
+	expect( 8 );
+	var element = $( "#resizable3" ).resizable({
+			containment: 'parent'
+		}),
+		content = $( "#lots_o_content" )
+		scrolled = 50,
+		originalTop = element.position().top - scrolled,
+		originalLeft = element.position().left - scrolled,
+		originalWidth = element.width(),
+		originalHeight = element.height(),
+		contentWidth = content.width(),
+		contentHeight = content.height();
+		
+	$( "#scroll-container" ).scrollTop(scrolled).scrollLeft(scrolled);
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 20, 30 );
+	equal( element.position().left + element.width(), originalTop + originalWidth + 20, "unconstrained right within container" );
+	equal( element.position().top + element.height(), originalTop + originalHeight + 30, "unconstrained bottom within container" );
+	equal( element.width(), originalWidth + 20, "unconstrained width within container" );
+	equal( element.height(), originalHeight + 30, "unconstrained height within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 1000, 1000 );
+	equal( element.position().left + element.width(), contentWidth, "constrained right at containment edge" );
+	equal( element.position().top + element.height(), contentHeight, "constrained bottom at containment edge" );
+	equal( element.width(), contentWidth - originalLeft, "constrained width at containment edge" );
+	equal( element.height(), contentHeight - originalTop, "constrained height at containment edge" );
+});
+
+test( "scrolling parent with non-parent containment: nw", function() {
+	expect( 8 );
+	var containment = $( "#containment2" ),
+		element = $( "#resizable3" ).resizable({
+			containment: containment,
+			handles: "all"
+		}),
+		scrolled = 50,
+		originalTop = element.position().top - scrolled,
+		originalLeft = element.position().left - scrolled,
+		originalWidth = element.width(),
+		originalHeight = element.height();
+		
+	$( "#scroll-container" ).scrollTop(scrolled).scrollLeft(scrolled);
+		
+	TestHelpers.resizable.drag( ".ui-resizable-nw", -20, -30 );
+	equal( element.position().left, originalLeft - 20, "unconstrained left within container" );
+	equal( element.position().top, originalTop - 30, "unconstrained top within container" );
+	equal( element.width(), originalWidth + 20, "unconstrained width within container" );
+	equal( element.height(), originalHeight + 30, "unconstrained height within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-nw", -400, -400 );
+	equal( element.position().left, 0, "constrained left at containment edge" );
+	equal( element.position().top, 0, "constrained top at containment edge" );
+	equal( element.width(), originalWidth + originalLeft, "constrained width at containment edge");
+	equal( element.height(), originalHeight + originalTop, "constrained height at containment edge" );
+});
+
+test( "scrolling parent with non-parent containment: se", function() {
+	expect( 8 );
+	var containment = $( "#containment2" ),
+		element = $( "#resizable3" ).resizable({
+			containment: containment
+		}),
+		scrolled = 50,
+		originalTop = element.position().top - scrolled,
+		originalLeft = element.position().left - scrolled,
+		originalWidth = element.width(),
+		originalHeight = element.height(),
+		containmentWidth = containment.width(),
+		containmentHeight = containment.height();
+		
+	$( "#scroll-container" ).scrollTop(scrolled).scrollLeft(scrolled);
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 20, 30 );
+	equal( element.position().left + element.width(), originalLeft + originalWidth + 20, "unconstrained right within container" );
+	equal( element.position().top + element.height(), originalTop + originalHeight + 30, "unconstrained bottom within container" );
+	equal( element.width(), originalWidth + 20, "unconstrained width within container" );
+	equal( element.height(), originalHeight + 30, "unconstrained height within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	equal( element.position().left + element.width(), containmentWidth, "constrained right at containment edge" );
+	equal( element.position().top + element.height(), containmentHeight, "constrained bottom at containment edge" );
+	equal( element.width(), containmentWidth - originalLeft, "constrained width at containment edge" );
+	equal( element.height(), containmentHeight - originalTop, "constrained height at containment edge" );
 });
 
 })(jQuery);

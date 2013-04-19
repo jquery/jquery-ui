@@ -879,36 +879,37 @@ $.ui.plugin.add( "resizable", "containment", {
 				left: 0
 			},
 			ce = that.containerElement,
-			continueResize = true;
+			continueResize = true,
+			parent = $(this).parent();
 
 		if ( ce[ 0 ] !== document && ( /static/ ).test( ce.css( "position" ) ) ) {
 			cop = co;
 		}
 
-		if ( cp.left < ( that._helper ? co.left : 0 ) ) {
+		if ( cp.left - parent.scrollLeft() < ( that._helper ? co.left : 0 ) ) {
 			that.size.width = that.size.width +
 				( that._helper ?
 					( that.position.left - co.left ) :
-					( that.position.left - cop.left ) );
+					( that.position.left - parent.scrollLeft() ) );
 
 			if ( pRatio ) {
 				that.size.height = that.size.width / that.aspectRatio;
 				continueResize = false;
 			}
-			that.position.left = o.helper ? co.left : 0;
+			that.position.left = that._helper ? co.left : parent.scrollLeft();
 		}
 
-		if ( cp.top < ( that._helper ? co.top : 0 ) ) {
+		if ( cp.top - parent.scrollTop() < ( that._helper ? co.top : 0 ) ) {
 			that.size.height = that.size.height +
 				( that._helper ?
 					( that.position.top - co.top ) :
-					that.position.top );
+					( that.position.top - parent.scrollTop() ) );
 
 			if ( pRatio ) {
 				that.size.width = that.size.height * that.aspectRatio;
 				continueResize = false;
 			}
-			that.position.top = that._helper ? co.top : 0;
+			that.position.top = that._helper ? co.top : parent.scrollTop();
 		}
 
 		isParent = that.containerElement.get( 0 ) === that.element.parent().get( 0 );
@@ -923,14 +924,14 @@ $.ui.plugin.add( "resizable", "containment", {
 		}
 
 		woset = Math.abs( that.sizeDiff.width +
-			(that._helper ?
-				that.offset.left - cop.left :
-				(that.offset.left - co.left)) );
+			( that._helper ?
+				( that.offset.left - cop.left ) :
+				( that.offset.left - co.left ) ) ) - parent.scrollLeft();
 
 		hoset = Math.abs( that.sizeDiff.height +
-			(that._helper ?
-				that.offset.top - cop.top :
-				(that.offset.top - co.top)) );
+			( that._helper ?
+				( that.offset.top - cop.top ) :
+				( that.offset.top - co.top ) ) ) - parent.scrollTop();
 
 		if ( woset + that.size.width >= that.parentData.width ) {
 			that.size.width = that.parentData.width - woset;
