@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*global cat:true cd:true echo:true exec:true exit:true*/
+/* global cat:true, cd:true, echo:true, exec:true, exit:true */
 
 // Usage:
 // stable release: node release.js

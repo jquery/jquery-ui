@@ -1,18 +1,22 @@
 {
-	"browser": true,
+	"boss": true,
 	"curly": true,
-	"eqnull": true,
 	"eqeqeq": true,
+	"eqnull": true,
 	"expr": true,
-	"evil": true,
-	"jquery": true,
-	"latedef": true,
+	"immed": true,
 	"noarg": true,
 	"onevar": true,
 	"quotmark": "double",
+	"smarttabs": true,
 	"trailing": true,
 	"undef": true,
 	"unused": true,
+
+	"browser": true,
+	"evil": true,
+	"jquery": true,
+
 	"globals": {
 		"asyncTest": false,
 		"closeEnough": false,

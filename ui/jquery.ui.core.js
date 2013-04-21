@@ -276,10 +276,15 @@ $.ui.plugin = {
 			proto.plugins[ i ].push( [ option, set[ i ] ] );
 		}
 	},
-	call: function( instance, name, args ) {
+	call: function( instance, name, args, allowDisconnected ) {
 		var i,
 			set = instance.plugins[ name ];
-		if ( !set || !instance.element[ 0 ].parentNode || instance.element[ 0 ].parentNode.nodeType === 11 ) {
+
+		if ( !set ) {
+			return;
+		}
+
+		if ( !allowDisconnected && ( !instance.element[ 0 ].parentNode || instance.element[ 0 ].parentNode.nodeType === 11 ) ) {
 			return;
 		}
 

@@ -153,6 +153,30 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 	ok( set.find( "label:eq(2)" ).is( ".ui-button.ui-corner-right" ) );
 });
 
+asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function() {
+	expect( 2 );
+	var form = $( "<form>" +
+		"<button></button>" +
+		"<label for='c1'></label><input id='c1' type='checkbox' checked>" +
+		"</form>" ),
+		button = form.find( "button" ).button(),
+		checkbox = form.find( "input[type=checkbox]" ).button();
+
+	checkbox.prop( "checked", false ).button( "refresh" );
+	ok( !checkbox.button( "widget" ).hasClass( "ui-state-active" ) );
+
+	form.get( 0 ).reset();
+
+	// #9213: If a button has been removed, refresh should not be called on it when
+	// its corresponding form is reset.
+	button.remove();
+
+	setTimeout(function() {
+		ok( checkbox.button( "widget" ).hasClass( "ui-state-active" ));
+		start();
+	});
+});
+
 asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
 	expect( 2 );
 	var check = $( "#check" ).button(),
@@ -170,6 +194,19 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
+});
+
+asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
+	expect( 2 );
+	var element = $( "#button1" ).button();
+	element[ 0 ].focus();
+	setTimeout(function() {
+		ok( element.hasClass( "ui-state-focus" ), "button has ui-state-focus" );
+		element.button( "disable" );
+		ok( !element.hasClass( "ui-state-focus" ),
+			"button does not have ui-state-focus when disabled" );
+		start();
+	});
 });
 
 })(jQuery);
