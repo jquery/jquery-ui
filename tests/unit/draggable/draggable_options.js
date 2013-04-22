@@ -643,6 +643,17 @@ test( "{ handle: 'span' }", function() {
 	TestHelpers.draggable.shouldNotMove( element, "drag element" );
 });
 
+test( "handle, self as element, { handle: selfElement }", function() {
+	expect( 3 );
+
+	var selfElement = $( "#draggable2" );
+	var element = $( "#draggable2" ).draggable({ handle: selfElement });
+
+	TestHelpers.draggable.testDrag( element, "#draggable2 span", 50, 50, 50, 50, "drag span" );
+	TestHelpers.draggable.testDrag( element, "#draggable2 span em", 50, 50, 50, 50, "drag span child" );
+	TestHelpers.draggable.shouldMove( element, "drag element" );
+});
+
 test( "handle, default, switching after initialization", function() {
 	expect( 6 );
 
