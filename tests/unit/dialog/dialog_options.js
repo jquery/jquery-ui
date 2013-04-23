@@ -224,26 +224,6 @@ test("closeText", function() {
 	element.remove();
 });
 
-test("dialogClass", function() {
-	expect( 6 );
-
-	var element = $("<div></div>").dialog();
-		equal(element.dialog("widget").is(".foo"), false, "dialogClass not specified. foo class added");
-	element.remove();
-
-	element = $("<div></div>").dialog({ dialogClass: "foo" });
-		equal(element.dialog("widget").is(".foo"), true, "dialogClass in init. foo class added");
-	element.dialog( "option", "dialogClass", "foobar" );
-		equal( element.dialog("widget").is(".foo"), false, "dialogClass changed, previous one was removed" );
-		equal( element.dialog("widget").is(".foobar"), true, "dialogClass changed, new one was added" );
-	element.remove();
-
-	element = $("<div></div>").dialog({ dialogClass: "foo bar" });
-		equal(element.dialog("widget").is(".foo"), true, "dialogClass in init, two classes. foo class added");
-		equal(element.dialog("widget").is(".bar"), true, "dialogClass in init, two classes. bar class added");
-	element.remove();
-});
-
 test("draggable", function() {
 	expect(4);
 

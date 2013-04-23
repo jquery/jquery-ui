@@ -29,15 +29,27 @@
 	}
 }(function( $ ) {
 
-return $.widget( "ui.dialog", {
+$.widget( "ui.dialog", {
 	version: "@VERSION",
 	options: {
 		appendTo: "body",
 		autoOpen: true,
 		buttons: [],
+		classes: {
+			"ui-dialog": "ui-corner-all",
+			"ui-dialog-content": null,
+			"ui-dialog-titlebar": "ui-corner-all",
+			"ui-dialog-titlebar-close": null,
+			"ui-dialog-title": null,
+			"ui-dialog-buttons": null,
+			"ui-dialog-buttonpane": null,
+			"ui-dialog-buttonset": null,
+			"ui-dialog-dragging": null,
+			"ui-dialog-resizing": null,
+			"ui-widget-overlay": null
+		},
 		closeOnEscape: true,
 		closeText: "Close",
-		dialogClass: "",
 		draggable: true,
 		hide: null,
 		height: "auto",
@@ -114,7 +126,7 @@ return $.widget( "ui.dialog", {
 		this.element
 			.show()
 			.removeAttr( "title" )
-			.addClass( "ui-dialog-content ui-widget-content" )
+			.addClass( this._classes( "ui-dialog-content" ) + " ui-widget-content" )
 			.appendTo( this.uiDialog );
 
 		this._createTitlebar();
@@ -154,7 +166,7 @@ return $.widget( "ui.dialog", {
 
 		this.element
 			.removeUniqueId()
-			.removeClass( "ui-dialog-content ui-widget-content" )
+			.removeClass( this._classes( "ui-dialog-content" ) + " ui-widget-content" )
 			.css( this.originalCss )
 			// Without detaching first, the following becomes really slow
 			.detach();
@@ -327,8 +339,7 @@ return $.widget( "ui.dialog", {
 
 	_createWrapper: function() {
 		this.uiDialog = $("<div>")
-			.addClass( "ui-dialog ui-widget ui-widget-content ui-corner-all ui-front " +
-				this.options.dialogClass )
+			.addClass( this._classes( "ui-dialog" ) + " ui-widget ui-widget-content ui-front " )
 			.hide()
 			.attr({
 				// Setting tabIndex makes the div focusable
@@ -387,7 +398,7 @@ return $.widget( "ui.dialog", {
 		var uiDialogTitle;
 
 		this.uiDialogTitlebar = $( "<div>" )
-			.addClass( "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" )
+			.addClass( this._classes( "ui-dialog-titlebar") + " ui-widget-header ui-helper-clearfix" )
 			.prependTo( this.uiDialog );
 		this._on( this.uiDialogTitlebar, {
 			mousedown: function( event ) {
@@ -412,7 +423,7 @@ return $.widget( "ui.dialog", {
 				},
 				text: false
 			})
-			.addClass( "ui-dialog-titlebar-close" )
+			.addClass( this._classes( "ui-dialog-titlebar-close" ) )
 			.appendTo( this.uiDialogTitlebar );
 		this._on( this.uiDialogTitlebarClose, {
 			click: function( event ) {
@@ -423,7 +434,7 @@ return $.widget( "ui.dialog", {
 
 		uiDialogTitle = $( "<span>" )
 			.uniqueId()
-			.addClass( "ui-dialog-title" )
+			.addClass( this._classes( "ui-dialog-title" ) )
 			.prependTo( this.uiDialogTitlebar );
 		this._title( uiDialogTitle );
 
@@ -441,10 +452,10 @@ return $.widget( "ui.dialog", {
 
 	_createButtonPane: function() {
 		this.uiDialogButtonPane = $( "<div>" )
-			.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
+			.addClass( this._classes( "ui-dialog-buttonpane" ) + " ui-widget-content ui-helper-clearfix");
 
 		this.uiButtonSet = $( "<div>" )
-			.addClass( "ui-dialog-buttonset" )
+			.addClass( this._classes( "ui-dialog-buttonset" ) )
 			.appendTo( this.uiDialogButtonPane );
 
 		this._createButtons();
@@ -459,7 +470,7 @@ return $.widget( "ui.dialog", {
 		this.uiButtonSet.empty();
 
 		if ( $.isEmptyObject( buttons ) || ($.isArray( buttons ) && !buttons.length) ) {
-			this.uiDialog.removeClass( "ui-dialog-buttons" );
+			this.uiDialog.removeClass( this._classes( "ui-dialog-buttons" ) );
 			return;
 		}
 
@@ -485,7 +496,7 @@ return $.widget( "ui.dialog", {
 				.button( buttonOptions )
 				.appendTo( that.uiButtonSet );
 		});
-		this.uiDialog.addClass( "ui-dialog-buttons" );
+		this.uiDialog.addClass( this._classes( "ui-dialog-buttons" ) );
 		this.uiDialogButtonPane.appendTo( this.uiDialog );
 	},
 
@@ -505,7 +516,7 @@ return $.widget( "ui.dialog", {
 			handle: ".ui-dialog-titlebar",
 			containment: "document",
 			start: function( event, ui ) {
-				$( this ).addClass( "ui-dialog-dragging" );
+				$( this ).addClass( that._classes( "ui-dialog-dragging" ) );
 				that._blockFrames();
 				that._trigger( "dragStart", event, filteredUi( ui ) );
 			},
@@ -522,7 +533,7 @@ return $.widget( "ui.dialog", {
 						"top" + (top >= 0 ? "+" : "") + top,
 					of: that.window
 				};
-				$( this ).removeClass( "ui-dialog-dragging" );
+				$( this ).removeClass( that._classes( "ui-dialog-dragging" ) );
 				that._unblockFrames();
 				that._trigger( "dragStop", event, filteredUi( ui ) );
 			}
@@ -559,7 +570,7 @@ return $.widget( "ui.dialog", {
 			minHeight: this._minHeight(),
 			handles: resizeHandles,
 			start: function( event, ui ) {
-				$( this ).addClass( "ui-dialog-resizing" );
+				$( this ).addClass( that._classes( "ui-dialog-resizing" ) );
 				that._blockFrames();
 				that._trigger( "resizeStart", event, filteredUi( ui ) );
 			},
@@ -579,7 +590,6 @@ return $.widget( "ui.dialog", {
 						"top" + (top >= 0 ? "+" : "") + top,
 					of: that.window
 				};
-				$( this ).removeClass( "ui-dialog-resizing" );
 				that._unblockFrames();
 				that._trigger( "resizeStop", event, filteredUi( ui ) );
 			}
@@ -666,12 +676,6 @@ return $.widget( "ui.dialog", {
 	_setOption: function( key, value ) {
 		var isDraggable, isResizable,
 			uiDialog = this.uiDialog;
-
-		if ( key === "dialogClass" ) {
-			uiDialog
-				.removeClass( this.options.dialogClass )
-				.addClass( value );
-		}
 
 		if ( key === "disabled" ) {
 			return;
@@ -841,7 +845,7 @@ return $.widget( "ui.dialog", {
 		}
 
 		this.overlay = $( "<div>" )
-			.addClass( "ui-widget-overlay ui-front" )
+			.addClass( this._classes( "ui-widget-overlay" ) + " ui-front")
 			.appendTo( this._appendTo() );
 		this._on( this.overlay, {
 			mousedown: "_keepFocus"
@@ -871,5 +875,29 @@ return $.widget( "ui.dialog", {
 		}
 	}
 });
+
+// DEPRECATED
+if ($.uiBackCompat !== false) {
+	// dialogClass option
+	$.widget( "ui.dialog", $.ui.dialog, {
+		options: {
+			dialogClass: ""
+		},
+		_createWrapper: function() {
+			this._super();
+			this.uiDialog.addClass( this.options.dialogClass );
+		},
+		_setOption: function( key, value ) {
+			if ( key === "dialogClass" ) {
+				this.uiDialog
+					.removeClass( this.options.dialogClass )
+					.addClass( value );
+			}
+			this._superApply( arguments );
+		}
+	});
+}
+
+return $.ui.dialog;
 
 }));

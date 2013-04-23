@@ -7,6 +7,41 @@
 // TODO add teardown callback to remove dialogs
 module("dialog: core");
 
+test( "markup structure", function() {
+	expect( 15 );
+	var element = $("<div></div>").dialog({
+			buttons: [{
+				text: "Ok",
+				click: $.noop
+			}]
+		}),
+		widget = element.dialog( "widget" ),
+		titlebar = widget.find( ".ui-dialog-titlebar" ),
+		close = titlebar.find( "button" ),
+		buttonpane = widget.find( ".ui-dialog-buttonpane" );
+
+	ok( widget.hasClass( "ui-dialog" ), "widget is .ui-dialog" );
+	ok( widget.hasClass( "ui-widget" ), "widget is .ui-widget" );
+	ok( widget.hasClass( "ui-widget-content" ), "widget is .ui-widget-content" );
+	ok( widget.hasClass( "ui-corner-all" ), "widget is .ui-corner-all" );
+	ok( widget.hasClass( "ui-dialog-buttons" ), "widget is .ui-dialog-buttons" );
+
+	ok( titlebar.hasClass( "ui-dialog-titlebar" ), "titlebar is .ui-dialog-titlebar" );
+	ok( titlebar.hasClass( "ui-corner-all" ), "titlebar is .ui-corner-all" );
+	ok( titlebar.hasClass( "ui-widget-header" ), "titlebar is .ui-widget-header" );
+	ok( titlebar.find( ".ui-dialog-title" ).length, "title is .ui-dialog-title" );
+
+	ok( close.hasClass( "ui-dialog-titlebar-close" ), "close button is .ui-dialog-titlebar-close" );
+
+	ok( element.hasClass( "ui-dialog-content" ), "element is .ui-dialog-content" );
+	ok( element.hasClass( "ui-widget-content" ), "element is .ui-widget-content" );
+
+	ok( buttonpane.hasClass( "ui-dialog-buttonpane" ), "buttonpane is .ui-dialog-buttonpane" );
+	ok( buttonpane.hasClass( "ui-widget-content" ), "buttonpane is .ui-widget-content" );
+	ok( buttonpane.find( ".ui-dialog-buttonset" ).length, "buttonset is .ui-dialog-buttonset" );
+
+});
+
 test("title id", function() {
 	expect(1);
 
