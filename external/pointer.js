@@ -32,6 +32,7 @@ function processEvent( event, pointerType ) {
         event.pointerId = 1;
         event.pointerType = POINTER_TYPE_MOUSE;
         event.isPrimary = true;
+        event.pressure = event.button > -1 ? 0.5 : 0;
     } else if ( orig.type.indexOf("touch") !== -1 ) {
         touch = orig.originalEvent.changedTouches[ 0 ];
         event.pageX = touch.pageX;
@@ -44,6 +45,7 @@ function processEvent( event, pointerType ) {
         event.pointerType = POINTER_TYPE_TOUCH;
         event.button = 0;
         event.buttons = 1;
+        event.pressure = 0.5;
         event.originalEvent = orig;
         // TODO: Properly determine primary pointer
         event.isPrimary = true;
