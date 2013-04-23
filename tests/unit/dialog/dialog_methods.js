@@ -34,7 +34,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect( 17 );
+	expect( 18 );
 
 	var element, element2;
 
@@ -49,6 +49,14 @@ test("destroy", function() {
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
 		equal( dialog.index(), 2 );
 	});
+	domEqual( "#dialog2", function() {
+		$( "#dialog2" ).dialog({
+				buttons: [{
+					text: "Ok",
+					click: $.noop
+				}]
+			}).dialog( "destroy" );
+	}, "Buttons");
 
 	// Ensure dimensions are restored (#8119)
 	$( "#dialog1" ).show().css({
