@@ -1,9 +1,19 @@
 module( "progressbar: core" );
 
 test( "markup structure", function() {
-	expect( 5 );
-	var element = $( "#progressbar" ).progressbar();
+	expect( 12 );
+	var element = $( "#progressbar" ).progressbar(),
+		value = element.children().eq( 0 );
 	ok( element.hasClass( "ui-progressbar" ), "main element is .ui-progressbar" );
+	ok( element.hasClass( "ui-widget" ), "main element is .ui-widget" );
+	ok( element.hasClass( "ui-widget-content" ), "main element is .ui-widget-content" );
+	ok( element.hasClass( "ui-corner-all" ), "main element is .ui-corner-all" );
+	ok( !value.hasClass( "ui-progressbar-complete" ), "value is not .ui-progressbar-complete" );
+	ok( !value.hasClass( "ui-corner-right" ), "value is not .ui-corner-right" );
+	element.progressbar( "option", "value", 100 );
+	ok( value.hasClass( "ui-progressbar-complete" ), "value is .ui-progressbar-complete" );
+	ok( value.hasClass( "ui-corner-right" ), "value is .ui-corner-right" );
+
 	ok( !element.hasClass( "ui-progressbar-indeterminate" ),
 		"main element is not .ui-progressbar-indeterminate" );
 	equal( element.children().length, 1, "main element contains one child" );
