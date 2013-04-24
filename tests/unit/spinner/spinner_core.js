@@ -4,6 +4,27 @@ var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
 
 module( "spinner: core" );
 
+test( "markup structure", function() {
+	expect( 9 );
+	var element = $( "#spin" ).spinner(),
+		spinner = element.spinner( "widget" ),
+		up = spinner.find( ".ui-spinner-up" ),
+		down = spinner.find( ".ui-spinner-down" );
+
+	ok( element.hasClass( "ui-spinner-input" ), "input is .ui-spinner-input" );
+
+	ok( spinner.hasClass( "ui-spinner" ), "main element is .ui-spinner" );
+	ok( spinner.hasClass( "ui-widget" ), "main element is .ui-widget" );
+	ok( spinner.hasClass( "ui-widget-content" ), "main element is .ui-widget-content" );
+	ok( spinner.hasClass( "ui-corner-all" ), "main element is .ui-corner-all" );
+
+	ok( up.hasClass( "ui-spinner-button" ), "up button is .ui-spinner-button" );
+	ok( up.hasClass( "ui-corner-tr" ), "up button is .ui-corner-tr" );
+
+	ok( down.hasClass( "ui-spinner-button" ), "down button is .ui-spinner-button" );
+	ok( down.hasClass( "ui-corner-br" ), "down button is .ui-corner-br" );
+});
+
 test( "keydown UP on input, increases value not greater than max", function() {
 	expect( 5 );
 	var element = $( "#spin" ).val( 70 ).spinner({
