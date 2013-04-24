@@ -2052,6 +2052,63 @@ $.fn.datepicker = function(options){
 	});
 };
 
+/* Invoke the monthpicker functionality.
+	@param  options  string - a command, optionally followed by additional parameters or
+					Object - settings for attaching new datepicker functionality
+	@return  jQuery object */
+$.fn.monthpicker = function(args) {
+	if (typeof args == 'string') {
+		return this.datepicker.apply(this, arguments);
+	}
+	
+	var staticMonth = undefined;
+	if (args) {
+		staticMonth = args['staticMonth'];
+		delete args['staticMonth'];
+	}
+	
+	return this
+		.datepicker($.extend({
+			dateFormat: 'yy-mm',
+			changeMonth: true,
+			changeYear: true,
+			onChangeMonthYear: function(year, month, inst) {
+				inst._lastDate = new Date(year, (staticMonth ? staticMonth : month) - 1, 1);
+				$.datepicker._setDate(inst, inst._lastDate, true);
+			},
+			beforeShow: function(input, inst) {
+				return {
+					'defaultDate': inst._lastDate
+				};
+			}
+		}, args))
+		.focus(function() {
+			$(".ui-datepicker-calendar").hide();
+			$("#ui-datepicker-div").position({
+				my: "center top",
+				at: "center bottom",
+				of: $(this)
+			});
+		});
+};
+
+/* Invoke the yearpicker functionality.
+	@param  options  string - a command, optionally followed by additional parameters or
+					Object - settings for attaching new datepicker functionality
+	@return  jQuery object */
+$.fn.yearpicker = function(args) {
+	if (typeof args == 'string') {
+		return this.datepicker.apply(this, arguments);
+	}
+	
+	return this
+		.monthpicker($.extend({
+			dateFormat: 'yy',
+			changeMonth: false, 
+			staticMonth: 1
+		}, args));
+};
+
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
