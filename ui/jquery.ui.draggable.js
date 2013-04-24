@@ -487,7 +487,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			return;
 		}
 
-		if ( $.isArray( container ) ) {
+		if ( container.jquery ) {
 			offset = container.offset();
 			left = offset.left +
 				(parseFloat( $.css( container[ 0 ], "borderLeftWidth", true ) ) || 0) +
@@ -557,6 +557,20 @@ $.widget( "ui.draggable", $.ui.draggable, {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
+
+	$.widget( "ui.draggable", $.ui.draggable, {
+		_getContainer: function() {
+
+			var containment = this.options.containment;
+
+			if ( $.isArray( containment ) ) {
+				return containment;
+			}
+
+			return this._super();
+
+		}
+	});
 
 	// appendTo "parent" value
 	$.widget( "ui.draggable", $.ui.draggable, {
