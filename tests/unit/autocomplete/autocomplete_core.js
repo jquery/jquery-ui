@@ -2,6 +2,15 @@
 
 module( "autocomplete: core" );
 
+test( "markup structure", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete(),
+		menu = element.autocomplete( "widget" );
+
+	ok( element.hasClass( "ui-autocomplete-input" ), "main element is .ui-autocomplete-input" );
+	ok( menu.hasClass( "ui-autocomplete" ), "menu is .ui-autocomplete" );
+});
+
 test( "prevent form submit on enter when menu is active", function() {
 	expect( 2 );
 	var event,
