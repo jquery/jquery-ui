@@ -41,6 +41,13 @@ return $.widget( "ui.spinner", {
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
+		classes: {
+			"ui-spinner-input": null,
+			"ui-spinner": "ui-corner-all",
+			"ui-spinner-button": null,
+			"ui-spinner-up": "ui-corner-tr",
+			"ui-spinner-down": "ui-corner-br"
+		},
 		culture: null,
 		icons: {
 			down: "ui-icon-triangle-1-s",
@@ -203,7 +210,7 @@ return $.widget( "ui.spinner", {
 
 	_draw: function() {
 		var uiSpinner = this.uiSpinner = this.element
-			.addClass( "ui-spinner-input" )
+			.addClass( this._classes( "ui-spinner-input" ) )
 			.attr( "autocomplete", "off" )
 			.wrap( this._uiSpinnerHtml() )
 			.parent()
@@ -254,15 +261,15 @@ return $.widget( "ui.spinner", {
 	},
 
 	_uiSpinnerHtml: function() {
-		return "<span class='ui-spinner ui-widget ui-widget-content ui-corner-all'></span>";
+		return "<span class='" + this._classes( "ui-spinner" ) + " ui-widget ui-widget-content'></span>";
 	},
 
 	_buttonHtml: function() {
 		return "" +
-			"<a class='ui-spinner-button ui-spinner-up ui-corner-tr'>" +
+			"<a class='" + this._classes( "ui-spinner-button ui-spinner-up" ) + "'>" +
 				"<span class='ui-icon " + this.options.icons.up + "'>&#9650;</span>" +
 			"</a>" +
-			"<a class='ui-spinner-button ui-spinner-down ui-corner-br'>" +
+			"<a class='" + this._classes( "ui-spinner-button ui-spinner-down" ) + "'>" +
 				"<span class='ui-icon " + this.options.icons.down + "'>&#9660;</span>" +
 			"</a>";
 	},
@@ -461,7 +468,7 @@ return $.widget( "ui.spinner", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-spinner-input" )
+			.removeClass( this._classes( "ui-spinner-input" ) )
 			.prop( "disabled", false )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
