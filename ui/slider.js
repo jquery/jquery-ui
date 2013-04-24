@@ -31,6 +31,15 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 	options: {
 		animate: false,
+		classes: {
+			"ui-slider": "ui-corner-all",
+			"ui-slider-handle": "ui-corner-all",
+			"ui-slider-range": "ui-corner-all",
+			"ui-slider-range-min": null,
+			"ui-slider-range-max": null,
+			"ui-slider-horizontal": null,
+			"ui-slider-vertical": null
+		},
 		distance: 0,
 		max: 100,
 		min: 0,
@@ -61,11 +70,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._calculateNewMax();
 
 		this.element
-			.addClass( "ui-slider" +
-				" ui-slider-" + this.orientation +
+			.addClass( this._classes( "ui-slider ui-slider-" + this.orientation ) +
 				" ui-widget" +
-				" ui-widget-content" +
-				" ui-corner-all");
+				" ui-widget-content" );
 
 		this._refresh();
 		this._setOption( "disabled", this.options.disabled );
@@ -83,8 +90,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	_createHandles: function() {
 		var i, handleCount,
 			options = this.options,
-			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
-			handle = "<span class='ui-slider-handle ui-state-default ui-corner-all' tabindex='0'></span>",
+			existingHandles = this.element.find( ".ui-slider-handle" )
+				.addClass( this._classes( "ui-slider-handle" ) + " ui-state-default" ),
+			handle = "<span class='" + this._classes( "ui-slider-handle" ) + " ui-state-default' tabindex='0'></span>",
 			handles = [];
 
 		handleCount = ( options.values && options.values.length ) || 1;
@@ -123,15 +131,15 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			if ( !this.range || !this.range.length ) {
-				this.range = $( "<div></div>" )
+				this.range = $( "<div>" )
 					.appendTo( this.element );
 
-				classes = "ui-slider-range" +
+				classes = this._classes( "ui-slider-range" ) +
 				// note: this isn't the most fittingly semantic framework class for this element,
 				// but worked best visually with a variety of themes
-				" ui-widget-header ui-corner-all";
+				" ui-widget-header";
 			} else {
-				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
+				this.range.removeClass( this._classes( "ui-slider-range-min ui-slider-range-max" ) )
 					// Handle range switching from true to min/max
 					.css({
 						"left": "",
@@ -139,8 +147,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 					});
 			}
 
-			this.range.addClass( classes +
-				( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
+			this.range.addClass( classes + " " +
+				this._classes( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
 		} else {
 			if ( this.range ) {
 				this.range.remove();
@@ -163,12 +171,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 
 		this.element
-			.removeClass( "ui-slider" +
-				" ui-slider-horizontal" +
-				" ui-slider-vertical" +
-				" ui-widget" +
-				" ui-widget-content" +
-				" ui-corner-all" );
+			.removeClass( this._classes( "ui-slider ui-slider-horizontal ui-slider-vertical" ) +
+				" ui-widget ui-widget-content" );
 
 		this._mouseDestroy();
 	},
@@ -452,8 +456,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "orientation":
 				this._detectOrientation();
 				this.element
-					.removeClass( "ui-slider-horizontal ui-slider-vertical" )
-					.addClass( "ui-slider-" + this.orientation );
+					.removeClass( this._classes( "ui-slider-horizontal ui-slider-vertical" ) )
+					.addClass( this._classes( "ui-slider-" + this.orientation ) );
 				this._refreshValue();
 
 				// Reset positioning from previous orientation
