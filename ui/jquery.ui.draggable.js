@@ -487,7 +487,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			return;
 		}
 
-		if ( $.isArray( container ) ) {
+		if ( container.jquery ) {
 			offset = container.offset();
 			left = offset.left +
 				(parseFloat( $.css( container[ 0 ], "borderLeftWidth", true ) ) || 0) +
@@ -542,6 +542,8 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			container = null;
 		} else if ( containment === "parent" ) {
 			container = this.element.parent();
+		} else if ( $.isArray( containment ) ) {
+			container = containment;
 		} else {
 			container = $( containment );
 			if ( !container.length ) {
