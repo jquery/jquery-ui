@@ -460,7 +460,9 @@ $.extend(Datepicker.prototype, {
 	 */
 	_getInst: function(target) {
 		try {
-			return $.data(target, PROP_NAME);
+			if ( target.className.indexOf(this.markerClassName) !== -1 ) {
+				return $.data(target, PROP_NAME);
+			}
 		}
 		catch (err) {
 			throw "Missing instance data for this datepicker";
