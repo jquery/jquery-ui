@@ -30,6 +30,13 @@ return $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {
+		classes: {
+			"ui-menu": "ui-corner-all",
+			"ui-menu-icons": null,
+			"ui-menu-icon": null,
+			"ui-menu-item": null,
+			"ui-menu-divider": null
+		},
 		icons: {
 			submenu: "ui-icon-caret-1-e"
 		},
@@ -55,8 +62,8 @@ return $.widget( "ui.menu", {
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
-			.addClass( "ui-menu ui-widget ui-widget-content" )
-			.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length )
+			.addClass( this._classes( "ui-menu" ) + " ui-widget ui-widget-content" )
+			.toggleClass( this._classes( "ui-menu-icons" ), !!this.element.find( ".ui-icon" ).length )
 			.attr({
 				role: this.options.role,
 				tabIndex: 0
@@ -155,7 +162,7 @@ return $.widget( "ui.menu", {
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" ).addBack()
-				.removeClass( "ui-menu ui-widget ui-widget-content ui-menu-icons ui-front" )
+				.removeClass( this._classes( "ui-menu ui-menu-icons" ) + " ui-widget ui-widget-content ui-front" )
 				.removeAttr( "role" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "aria-labelledby" )
@@ -167,12 +174,12 @@ return $.widget( "ui.menu", {
 
 		// Destroy menu items
 		this.element.find( ".ui-menu-item" )
-			.removeClass( "ui-menu-item" )
+			.removeClass( this._classes( "ui-menu-item" ) )
 			.removeAttr( "role" )
 			.removeAttr( "aria-disabled" )
 			.children( ".ui-menu-item-wrapper" )
 				.removeUniqueId()
-				.removeClass( "ui-menu-item-wrapper ui-state-hover" )
+				.removeClass( this._classes( "ui-menu-item-wrapper" ) + "ui-state-hover" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "role" )
 				.removeAttr( "aria-haspopup" )
@@ -184,7 +191,8 @@ return $.widget( "ui.menu", {
 				});
 
 		// Destroy menu dividers
-		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
+		this.element.find( ".ui-menu-divider" )
+			.removeClass( this._classes( "ui-menu-divider" ) + " ui-widget-content" );
 	},
 
 	_keydown: function( event ) {
@@ -287,7 +295,7 @@ return $.widget( "ui.menu", {
 
 		// Initialize nested menus
 		submenus.filter( ":not(.ui-menu)" )
-			.addClass( "ui-menu ui-widget ui-widget-content ui-front" )
+			.addClass( this._classes( "ui-menu" ) + " ui-widget ui-widget-content ui-front" )
 			.hide()
 			.attr({
 				role: this.options.role,
@@ -297,9 +305,9 @@ return $.widget( "ui.menu", {
 			.each(function() {
 				var menu = $( this ),
 					item = menu.prev(),
-					submenuCaret = $( "<span>" )
-						.addClass( "ui-menu-icon ui-icon " + icon )
-						.data( "ui-menu-submenu-caret", true );
+					submenuCarat = $( "<span>" )
+						.addClass( that._classes( "ui-menu-icon" ) + " ui-icon " + icon )
+						.data( "ui-menu-submenu-carat", true );
 
 				item
 					.attr( "aria-haspopup", "true" )
@@ -314,16 +322,16 @@ return $.widget( "ui.menu", {
 		items.not( ".ui-menu-item" ).each(function() {
 			var item = $( this );
 			if ( that._isDivider( item ) ) {
-				item.addClass( "ui-widget-content ui-menu-divider" );
+				item.addClass( that._classes( "ui-menu-divider" ) + " ui-widget-content" );
 			}
 		});
 
 		// Don't refresh list items that are already adapted
 		items.not( ".ui-menu-item, .ui-menu-divider" )
-			.addClass( "ui-menu-item" )
+			.addClass( this._classes( "ui-menu-item" ) )
 			.children()
 				.not( ".ui-menu" )
-					.addClass( "ui-menu-item-wrapper" )
+					.addClass( this._classes( "ui-menu-item-wrapper" ) )
 					.uniqueId()
 					.attr({
 						tabIndex: -1,
