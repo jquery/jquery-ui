@@ -25,7 +25,7 @@
 }(function( $ ) {
 
 var lastActive,
-	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
+	baseClasses = " ui-state-default ui-corner-all",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
 	formResetHandler = function() {
 		var form = $( this );
@@ -55,6 +55,16 @@ $.widget( "ui.button", {
 	version: "@VERSION",
 	defaultElement: "<button>",
 	options: {
+		classes: {
+			"ui-button": "ui-corner-all",
+			"ui-button-text": null,
+			"ui-button-icons-only": null,
+			"ui-button-icon-only": null,
+			"ui-button-text-icons": null,
+			"ui-button-text-icon-primary": null,
+			"ui-button-text-icon-secondary": null,
+			"ui-button-text-only": null
+		},
 		disabled: null,
 		text: true,
 		label: null,
@@ -89,7 +99,7 @@ $.widget( "ui.button", {
 		this._hoverable( this.buttonElement );
 
 		this.buttonElement
-			.addClass( baseClasses )
+			.addClass( this._classes( "ui-button" ) + baseClasses )
 			.attr( "role", "button" )
 			.bind( "mouseenter" + this.eventNamespace, function() {
 				if ( options.disabled ) {
@@ -244,10 +254,10 @@ $.widget( "ui.button", {
 		this.element
 			.removeClass( "ui-helper-hidden-accessible" );
 		this.buttonElement
-			.removeClass( baseClasses + " ui-state-active " + typeClasses )
+			.removeClass( this._classes( "ui-button " + typeClasses ) + baseClasses + " ui-state-active" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" )
-			.html( this.buttonElement.find(".ui-button-text").html() );
+			.html( this.buttonElement.find( ".ui-button-text" ).html() );
 
 		if ( !this.hasTitle ) {
 			this.buttonElement.removeAttr( "title" );
@@ -312,7 +322,7 @@ $.widget( "ui.button", {
 		}
 		var buttonElement = this.buttonElement.removeClass( typeClasses ),
 			buttonText = $( "<span></span>", this.document[0] )
-				.addClass( "ui-button-text" )
+				.addClass( this._classes( "ui-button-text" ) )
 				.html( this.options.label )
 				.appendTo( buttonElement.empty() )
 				.text(),
@@ -326,11 +336,11 @@ $.widget( "ui.button", {
 			}
 
 			if ( icons.primary ) {
-				buttonElement.prepend( "<span class='ui-button-icon-primary ui-icon " + icons.primary + "'></span>" );
+				buttonElement.prepend( "<span class='" + this._classes( "ui-button-icon-primary" ) + " ui-icon " + icons.primary + "'></span>" );
 			}
 
 			if ( icons.secondary ) {
-				buttonElement.append( "<span class='ui-button-icon-secondary ui-icon " + icons.secondary + "'></span>" );
+				buttonElement.append( "<span class='" + this._classes( "ui-button-icon-secondary" ) + " ui-icon " + icons.secondary + "'></span>" );
 			}
 
 			if ( !this.options.text ) {
@@ -343,18 +353,21 @@ $.widget( "ui.button", {
 		} else {
 			buttonClasses.push( "ui-button-text-only" );
 		}
-		buttonElement.addClass( buttonClasses.join( " " ) );
+		buttonElement.addClass( this._classes( buttonClasses.join( " " ) ) );
 	}
 });
 
 $.widget( "ui.buttonset", {
 	version: "@VERSION",
 	options: {
+		classes: {
+			"ui-buttonset": null
+		},
 		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(ui-button)"
 	},
 
 	_create: function() {
-		this.element.addClass( "ui-buttonset" );
+		this.element.addClass( this._classes( "ui-buttonset" ) );
 	},
 
 	_init: function() {
@@ -384,6 +397,7 @@ $.widget( "ui.buttonset", {
 			.map(function() {
 				return $( this ).button( "widget" )[ 0 ];
 			})
+			// TODO: need to figure out how to use _classes here
 				.removeClass( "ui-corner-all ui-corner-left ui-corner-right" )
 				.filter( ":first" )
 					.addClass( rtl ? "ui-corner-right" : "ui-corner-left" )

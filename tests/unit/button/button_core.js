@@ -8,7 +8,7 @@
 module("button: core");
 
 test("checkbox", function() {
-	expect( 4 );
+	expect( 5 );
 	var input = $("#check"),
 		label = $("label[for=check]");
 	ok( input.is(":visible") );
@@ -16,10 +16,11 @@ test("checkbox", function() {
 	input.button();
 	ok( input.is(".ui-helper-hidden-accessible") );
 	ok( label.is(".ui-button") );
+	ok( label.is(".ui-corner-all") );
 });
 
 test("radios", function() {
-	expect( 4 );
+	expect( 5 );
 	var inputs = $("#radio0 input"),
 		labels = $("#radio0 label");
 	ok( inputs.is(":visible") );
@@ -27,6 +28,7 @@ test("radios", function() {
 	inputs.button();
 	ok( inputs.is(".ui-helper-hidden-accessible") );
 	ok( labels.is(".ui-button") );
+	ok( labels.is(".ui-corner-all") );
 });
 
 function assert(noForm, form1, form2) {
