@@ -16,9 +16,6 @@
  */
 (function( $, undefined ) {
 
-// used to prevent race conditions with remote data sources
-var requestIndex = 0;
-
 $.widget( "ui.autocomplete", {
 	version: "@VERSION",
 	defaultElement: "<input>",
@@ -416,21 +413,24 @@ $.widget( "ui.autocomplete", {
 		this.source( { term: value }, this._response() );
 	},
 
-	_response: function() {
-		var that = this,
-			index = ++requestIndex;
+	_response: (function() {
+		var requestIndex = 0;
 
-		return function( content ) {
-			if ( index === requestIndex ) {
-				that.__response( content );
-			}
+		return function() {
+			var index = ++requestIndex;
 
-			that.pending--;
-			if ( !that.pending ) {
-				that.element.removeClass( "ui-autocomplete-loading" );
-			}
+			return $.proxy(function( content ) {
+				if ( index === requestIndex ) {
+					this.__response( content );
+				}
+
+				this.pending--;
+				if ( !this.pending ) {
+					this.element.removeClass( "ui-autocomplete-loading" );
+				}
+			}, this );
 		};
-	},
+	})(),
 
 	__response: function( content ) {
 		if ( content ) {
