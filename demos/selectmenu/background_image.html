@@ -3,7 +3,7 @@
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Demo Page for jQuery UI selectmenu</title>
-	
+
 	<link type="text/css" href="../../themes/base/jquery.ui.core.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/base/jquery.ui.theme.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
@@ -11,56 +11,56 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	
+
 	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
 
 	<style type="text/css">
 		/* demo styles */
 		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
-		fieldset { border:0; }	
+		fieldset { border:0; }
 		label,select,.ui-select-menu { float: left; margin-right: 10px; }
 		select { width: 250px; }
 		.ui-selectmenu-menu li a, .ui-selectmenu-status { padding: 0.3em 2em; }
-				
-		.avatar-big .ui-selectmenu-item-icon, .css-avatar .ui-selectmenu-item-icon , .avatar .ui-selectmenu-item-icon { background-position: 0 0; }		
-					
+
+		.avatar-big .ui-selectmenu-item-icon, .css-avatar .ui-selectmenu-item-icon , .avatar .ui-selectmenu-item-icon { background-position: 0 0; }
+
 		/* select with custom icons */
 		body a.customicons { height: 2.8em;}
 		body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
-		body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }		
+		body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
 		body a.video { height: 2.7em; }
 		body li.video.ui-selectmenu-hasIcon a, body li.podcast.ui-selectmenu-hasIcon a, body li.rss.ui-selectmenu-hasIcon a, body .video .ui-selectmenu-status { padding: 7px 0 7px 30px; }
 		body .video .ui-selectmenu-item-icon { background: url(images/24-video-square.png) 0 0 no-repeat; }
 		body .podcast .ui-selectmenu-item-icon { background: url(images/24-podcast-square.png) 0 0 no-repeat; }
 		body .rss .ui-selectmenu-item-icon { background: url(images/24-rss-square.png) 0 0 no-repeat; }
-		
+
 		/* select with CSS avatar icons */
 		option.css-avatar { background-repeat: no-repeat !important; padding-left: 20px; }
-		
+
 		/* select with big avatar icons */
 		a.avatar-big { height: 5em; }
-		.avatar-big .ui-selectmenu-item-icon { height: 50px; width: 50px; }		
+		.avatar-big .ui-selectmenu-item-icon { height: 50px; width: 50px; }
 		.ui-selectmenu-menu li.avatar-big a, a.avatar-big span.ui-selectmenu-status { padding-left: 5em !important; height: 50px; }
 	</style>
-	<script type="text/javascript">	
+	<script type="text/javascript">
 		$(function(){
 			$('select#files').selectmenu({
-				style:'popup', 
+				style:'popup',
 				icons: [
 					{find: '.script', icon: 'ui-icon-script'},
 					{find: '.image', icon: 'ui-icon-image'}
 				]
-			});	
-			
+			});
+
 			$('select#filesB').selectmenu({
-				style:'popup', 
+				style:'popup',
 				icons: [
 					{find: '.video'},
 					{find: '.podcast'},
 					{find: '.rss'}
 				]
-			});			
-			
+			});
+
 			$('select#peopleA').selectmenu({
 				icons: [
 					{find: '.avatar'}
@@ -89,7 +89,7 @@
 				menuWidth: "300px"
 			});
 		});
-		
+
 		//a custom format option callback
 		var addressFormatting = function(text){
 			var newText = text;
@@ -101,12 +101,12 @@
 				{find:/([^\|><\(\)]+)$/g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
 				{find:/(\([^\|><]+\))$/g, rep: '<span class="ui-selectmenu-item-footer">$1</span>'}
 			];
-			
+
 			for(var i in findreps){
 				newText = newText.replace(findreps[i].find, findreps[i].rep);
 			}
 			return newText;
-		}		
+		}
 	</script>
 </head>
 <body>
@@ -130,8 +130,8 @@
 				<option value="myvideo" class="video">Scott Gonzales Video</option>
 				<option value="myrss" class="rss">jQuery RSS XML</option>
 			</select>
-		</fieldset>		
-		
+		</fieldset>
+
 		<h2>"dropdown" Style with custom avatar 16x16 images</h2>
 		<fieldset>
 			<label for="peopleA">Select a Person:</label>
@@ -141,7 +141,7 @@
 				<option value="3" class="avatar" title="http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=16">Jane Doe</option>
 			</select>
 		</fieldset>
-		
+
 		<h2>"dropdown" Style with custom avatar 16x16 images as CSS background</h2>
 		<fieldset>
 			<label for="peopleB">Select a Person:</label>
@@ -151,7 +151,7 @@
 				<option value="3" class="css-avatar" style="background-image: url(http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=16);">Jane Doe</option>
 			</select>
 		</fieldset>
-		
+
 		<h2>"dropdown" Style with custom avatar 50x50 images</h2>
 		<fieldset>
 			<label for="peopleC">Select an Address:</label>
