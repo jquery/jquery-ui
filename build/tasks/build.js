@@ -39,8 +39,8 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				name: "ui.effect-{plugin}",
 				title: "jQuery UI {Plugin} Effect",
 				keywords: [ "effect", "show", "hide" ],
-				homepage: "http://jqueryui.com/{plugin}-effect/",
-				demo: "http://jqueryui.com/{plugin}-effect/",
+				homepage: "http://jqueryui.com/effect/",
+				demo: "http://jqueryui.com/effect/",
 				docs: "http://api.jqueryui.com/{plugin}-effect/",
 				dependencies: [ "effect" ]
 			}
