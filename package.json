@@ -67,5 +67,8 @@
 		"rimraf": "2.1.4",
 		"testswarm": "1.0.0-alpha"
 	},
-	"keywords": []
+	"keywords": [],
+	"scripts": {
+		"test": "grunt"
+	}
 }
