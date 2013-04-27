@@ -68,7 +68,9 @@ function processEvent( event, pointerType ) {
         event.pointerId = 1;
         event.pointerType = POINTER_TYPE_MOUSE;
         event.isPrimary = true;
-        event.pressure = event.button > -1 ? 0.5 : 0;
+        event.button = event.button !== undefined ? event.button : -1,
+        event.buttons = event.buttons !== undefined ? event.buttons : 0,
+        event.pressure = event.buttons > 0 ? 0.5 : 0;
     } else if ( orig.type.indexOf("touch") !== -1 ) {
         touch = orig.originalEvent.changedTouches[ 0 ];
         event.pageX = touch.pageX;
