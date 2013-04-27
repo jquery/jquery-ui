@@ -1,9 +1,45 @@
 (function( $ ) {
-var POINTER_TYPE_UNAVAILABLE = "",
+var currentEventType,
+    POINTER_TYPE_UNAVAILABLE = "",
     POINTER_TYPE_TOUCH = "touch",
     POINTER_TYPE_PEN = "pen",
     POINTER_TYPE_MOUSE = "mouse",
-    preventDuplicate = false;
+    preventDuplicate = false,
+    eventMap = {
+        mouse: {
+            pointerdown: "mousedown",
+            pointerup: "mouseup",
+            pointermove: "mousemove",
+            pointercancel: "",
+            pointerover: "mouseover",
+            pointerout: "mouseout"
+        },
+        touch: {
+            pointerdown: "touchstart",
+            pointerup: "touchend",
+            pointermove: "touchmove",
+            pointercancel: "touchcancel",
+            pointerover: "",
+            pointerout: ""
+        },
+        MSPointer: {
+            pointerdown: "MSPointerDown",
+            pointerup: "MSPointerUp",
+            pointermove: "MSPointerMove",
+            pointercancel: "MSPointerCancel",
+            pointerover: "MSPointerOver",
+            pointerout: "MSPointerOut"
+        }
+    };
+
+    if ( "MSPointerEvent" in window ) {
+        currentEventType = "MSPointer";
+    } else if ( "TouchEvent" in window ) {
+        // TODO: Is this good enough?
+        currentEventType = "touch";
+    } else {
+        currentEventType = "mouse";
+    }
 
 function processEvent( event, pointerType ) {
     var propLength, touch,
@@ -91,19 +127,21 @@ function processMSPointerType( type ) {
 
 $.event.special.pointerdown = {
     setup: function() {
-        $( this ).on( "mousedown touchstart MSPointerDown", $.event.special.pointerdown.handler );
+        $( this ).on( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
     },
     teardown: function() {
-        $( this ).off( "mousedown touchstart MSPointerDown", $.event.special.pointerdown.handler );
+        $( this ).off( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
     },
     handler: function( event ) {
         if ( !preventDuplicate ) {
-            // Trigger pointerover for devices that don't support hover
-            checkHoverSupport( event, "pointerover" );
+            if ( event.type.indexOf("touch") !== -1 ) {
+                // Trigger pointerover for devices that don't support hover
+                checkHoverSupport( event, "pointerover" );
+            }
             $( event.target ).trigger( processEvent( event, "pointerdown" ) );
         }
 
-        if ( event.type.indexOf("Pointer") !== -1 ) {
+        if ( event.type.indexOf("touch") !== -1 ) {
             preventDuplicate = true;
         } else {
             preventDuplicate = false;
@@ -113,35 +151,54 @@ $.event.special.pointerdown = {
 
 $.event.special.pointerup = {
     setup: function() {
-        $( this ).on( "mouseup touchend MSPointerUp", $.event.special.pointerup.handler );
+        $( this ).on( eventMap[ currentEventType ].pointerup, $.event.special.pointerup.handler );
     },
     teardown: function() {
-        $( this ).off( "mouseup touchend MSPointerUp", $.event.special.pointerup.handler );
+        $( this ).off( eventMap[ currentEventType ].pointerup, $.event.special.pointerup.handler );
     },
     handler: function( event ) {
-        checkHoverSupport( event, "pointerout" );
-        $( event.target ).trigger( processEvent( event, "pointerup" ) );
+        if ( !preventDuplicate ) {
+            $( event.target ).trigger( processEvent( event, "pointerup" ) );
+            if ( event.type.indexOf("touch") !== -1 ) {
+                // Trigger pointerout for devices that don't support hover
+                checkHoverSupport( event, "pointerout" );
+            }
+        }
+
+        if ( event.type.indexOf("touch") !== -1 ) {
+            preventDuplicate = true;
+        } else {
+            preventDuplicate = false;
+        }
     }
 };
 
 $.event.special.pointermove = {
     setup: function() {
-        $( this ).on( "mousemove touchmove MSPointerMove", $.event.special.pointermove.handler );
+        $( this ).on( eventMap[ currentEventType ].pointermove, $.event.special.pointermove.handler );
     },
     teardown: function() {
-        $( this ).off( "mousemove touchmove MSPointerMove", $.event.special.pointermove.handler );
+        $( this ).off( eventMap[ currentEventType ].pointermove, $.event.special.pointermove.handler );
     },
     handler: function( event ) {
-        $( event.target ).trigger( processEvent( event, "pointermove" ) );
+        if ( !preventDuplicate ) {
+            $( event.target ).trigger( processEvent( event, "pointermove" ) );
+        }
+
+        if ( event.type.indexOf("touch") !== -1 ) {
+            preventDuplicate = true;
+        } else {
+            preventDuplicate = false;
+        }
     }
 };
 
 $.event.special.pointercancel = {
     setup: function() {
-        $( this ).on( "touchcancel MSPointerCancel", $.event.special.pointercancel.handler );
+        $( this ).on( eventMap[ currentEventType ].pointercancel, $.event.special.pointercancel.handler );
     },
     teardown: function() {
-        $( this ).off( "touchcancel MSPointerCancel", $.event.special.pointercancel.handler );
+        $( this ).off( eventMap[ currentEventType ].pointercancel, $.event.special.pointercancel.handler );
     },
     handler: function( event ) {
         $( event.target ).trigger( processEvent( event, "pointercancel" ) );
@@ -151,10 +208,10 @@ $.event.special.pointercancel = {
 
 $.event.special.pointerover = {
     setup: function() {
-        $( this ).on( "mouseover MSPointerOver", $.event.special.pointerover.handler );
+        $( this ).on( eventMap[ currentEventType ].pointerover, $.event.special.pointerover.handler );
     },
     teardown: function() {
-        $( this ).off( "mouseover MSPointerOver", $.event.special.pointerover.handler );
+        $( this ).off( eventMap[ currentEventType ].pointerover, $.event.special.pointerover.handler );
     },
     handler: function( event ) {
         $( event.target ).trigger( processEvent( event, "pointerover" ) );
@@ -163,10 +220,10 @@ $.event.special.pointerover = {
 
 $.event.special.pointerout = {
     setup: function() {
-        $( this ).on( "mouseout MSPointerOut", $.event.special.pointerout.handler );
+        $( this ).on( eventMap[ currentEventType ].pointerout, $.event.special.pointerout.handler );
     },
     teardown: function() {
-        $( this ).off( "mouseout MSPointerOut", $.event.special.pointerout.handler );
+        $( this ).off( eventMap[ currentEventType ].pointerout, $.event.special.pointerout.handler );
     },
     handler: function( event ) {
         $( event.target ).trigger( processEvent( event, "pointerout" ) );
