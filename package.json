@@ -51,7 +51,9 @@
 			"url": "https://github.com/jquery/jquery-ui/blob/master/MIT-LICENSE.txt"
 		}
 	],
-	"dependencies": {},
+	"dependencies": {
+		"jquery": ">=1.6.0"
+	},
 	"devDependencies": {
 		"grunt": "0.4.1",
 		"grunt-contrib-jshint": "0.4.1",
