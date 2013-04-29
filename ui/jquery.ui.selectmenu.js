@@ -163,22 +163,25 @@ $.widget( "ui.selectmenu", {
 
 		var item,
 			options = this.element.find( "option" );
-		if ( options.length ) {
-			this._readOptions( options );
-			this._renderMenu( this.menu, this.items );
-
-			this.menu.menu( "refresh" );
-			this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
-
-			item = this._getSelectedItem();
-
-			// Make sure menu is selected item aware
-			this.menu.menu( "focus", null, item );
-			this._setAria( item.data( "ui-selectmenu-item" ) );
-
-			// Set disabled state
-			this._setOption( "disabled", this._getCreateOptions().disabled );
+			
+		if ( !options.length ) {
+			return;
 		}
+		
+		this._readOptions( options );
+		this._renderMenu( this.menu, this.items );
+
+		this.menu.menu( "refresh" );
+		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
+
+		item = this._getSelectedItem();
+
+		// Make sure menu is selected item aware
+		this.menu.menu( "focus", null, item );
+		this._setAria( item.data( "ui-selectmenu-item" ) );
+
+		// Set disabled state
+		this._setOption( "disabled", this._getCreateOptions().disabled );
 	},
 
 	open: function( event ) {
