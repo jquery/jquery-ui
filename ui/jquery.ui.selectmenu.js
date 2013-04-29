@@ -85,9 +85,9 @@ $.widget( "ui.selectmenu", {
 		})
 		.insertAfter( this.element );
 
-		this.button.prepend( $( "<span>", {
+		$( "<span>", {
 			"class": "ui-icon " + this.options.icons.button
-		}));
+		}).prependTo( this.button );
 
 		this.buttonText = $( "<span>", {
 			"class": "ui-selectmenu-text"
