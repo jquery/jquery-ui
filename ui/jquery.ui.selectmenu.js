@@ -428,7 +428,7 @@ $.widget( "ui.selectmenu", {
 		}
 
 		if ( !element.length ) {
-			element = this.document[0].body;
+			element = this.document[ 0 ].body;
 		}
 
 		return element;
