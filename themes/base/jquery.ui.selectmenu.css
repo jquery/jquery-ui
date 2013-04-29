@@ -13,17 +13,18 @@
 	margin: 0;
 	position: absolute;
 	top: 0;
+	left: 0;
 	display: none;
 }
-.ui-selectmenu-menu  ul.ui-menu {
+.ui-selectmenu-menu .ui-menu {
 	overflow: auto;
-	overflow-y: auto ;
+	overflow-y: auto;
 	overflow-x: hidden;
 }
-.ui-selectmenu-menu .ui-menu .ui-menu-item a {
-	padding: 0.3em 1em 0.3em 1em;
+.ui-selectmenu-menu .ui-menu-item a {
+	padding: 0.3em 1em;
 }
-.ui-selectmenu-menu .ui-menu li.ui-selectmenu-optgroup {
+.ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
 	font-size: 1em;
 	font-weight: bold;
 	line-height: 1.5;
