@@ -181,7 +181,7 @@ $.widget( "ui.selectmenu", {
 		this._setAria( item.data( "ui-selectmenu-item" ) );
 
 		// Set disabled state
-		this._setOption( "disabled", !!this.element.attr( "disabled" ) );
+		this._setOption( "disabled", !!this.element.prop( "disabled" ) );
 	},
 
 	open: function( event ) {
@@ -446,7 +446,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getCreateOptions: function() {
-		return { disabled: !!this.element.attr( "disabled" ) };
+		return { disabled: !!this.element.prop( "disabled" ) };
 	},
 
 	_readOptions: function( options ) {
