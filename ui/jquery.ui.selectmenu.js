@@ -59,7 +59,7 @@ $.widget( "ui.selectmenu", {
 	_drawButton: function() {
 		var tabindex = this.element.attr( "tabindex" );
 
-		// fix existing label
+		// Fix existing label
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
 		this._on( this.label, {
 			click: function( event ) {
@@ -68,10 +68,10 @@ $.widget( "ui.selectmenu", {
 			}
 		});
 
-		// hide original select tag
+		// Hide original select tag
 		this.element.hide();
 
-		// create button
+		// Create button
 		this.button = $( "<span>", {
 			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
 			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
@@ -104,14 +104,14 @@ $.widget( "ui.selectmenu", {
 		var menuInstance,
 			that = this;
 
-		// create menu portion, append to body
+		// Create menu portion, append to body
 		this.menu = $( "<ul>", {
 			"aria-hidden": true,
 			"aria-labelledby": this.ids.button,
 			id: this.ids.menu
 		});
 
-		// wrap menu
+		// Wrap menu
 		this.menuWrap = $( "<div>", {
 				"class": "ui-selectmenu-menu",
 				width: this.button.outerWidth()
@@ -119,7 +119,7 @@ $.widget( "ui.selectmenu", {
 			.append( this.menu )
 			.appendTo( this._appendTo() );
 
-		// init menu widget
+		// Init menu widget
 		menuInstance = this.menu.menu({
 			select: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
@@ -145,17 +145,17 @@ $.widget( "ui.selectmenu", {
 				// Set ARIA active descendant
 				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).attr( "id" ) );
 			},
-			// set ARIA role
+			// Set ARIA role
 			role: "listbox"
 		})
 		.menu( "instance" );
 
-		// adjust border radius
+		// Adjust border radius
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
-		// make sure focus stays on selected item
+		// Make sure focus stays on selected item
 		menuInstance.delay = 999999999;
-		// unbind uneeded Menu events
+		// Unbind uneeded Menu events
 		menuInstance._off( this.menu, "mouseleave" );
 	},
 
@@ -172,11 +172,11 @@ $.widget( "ui.selectmenu", {
 			this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
 
 			item = this._getSelectedItem();
-			// make sure menu is selected item aware
+			// Make sure menu is selected item aware
 			this.menu.menu( "focus", null, item );
 			this._setAria( item.data( "ui-selectmenu-item" ) );
 
-			// set disabled state
+			// Set disabled state
 			this._setOption( "disabled", this._getCreateOptions().disabled );
 		}
 	},
@@ -204,7 +204,7 @@ $.widget( "ui.selectmenu", {
 		this.isOpen = false;
 		this._toggleAttr();
 
-		// check if we have an item to select
+		// Check if we have an item to select
 		if ( this.menuItems ) {
 			this.menu.menu( "focus", null, this._getSelectedItem() );
 		}
@@ -258,10 +258,10 @@ $.widget( "ui.selectmenu", {
 
 	_move: function( direction, event ) {
 		if ( direction === "first" || direction === "last" ) {
-			// set focus manually for first or last item
+			// Set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
 		} else {
-			// move to and focus next or prev item
+			// Move to and focus next or prev item
 			this.menu.menu( direction, event );
 		}
 	},
@@ -288,9 +288,9 @@ $.widget( "ui.selectmenu", {
 
 	_buttonEvents: {
 		focus: function() {
-			// init Menu on first focus
+			// Init Menu on first focus
 			this.refresh();
-			// reset focus class as its removed by ui.widget._setOption
+			// Reset focus class as its removed by ui.widget._setOption
 			this.button.addClass( "ui-state-focus" );
 			this._off( this.button, "focus" );
 		},
@@ -360,7 +360,7 @@ $.widget( "ui.selectmenu", {
 
 	_select: function( item, event ) {
 		var oldIndex = this.element[ 0 ].selectedIndex;
-		// change native select element
+		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
 		this._setText( this.buttonText, item.label );
 		this._setAria( item );
@@ -375,7 +375,7 @@ $.widget( "ui.selectmenu", {
 		var link = this.menuItems.eq( item.index ),
 			id = link.attr( "id" );
 
-		// change ARIA attr
+		// Change ARIA attr
 		this.button.attr({
 			"aria-labelledby": id,
 			"aria-activedescendant": id
