@@ -28,13 +28,12 @@ test( "change", function () {
 
 
 test( "close", function () {
-	expect( 3 );
+	expect( 2 );
 
 	this.element.selectmenu({
 		close: function ( event, ui ) {
 			ok( event, "close event fired on close" );
 			equal( event.type, "selectmenuclose", "event type set to selectmenuclose" );
-			ok( ui, "ui object is passed as second argument to event handler" );
 		}
 	});
 
@@ -43,7 +42,7 @@ test( "close", function () {
 
 
 test( "focus", function () {
-	expect( 4 );
+	expect( 3 );
 
 	var button,
 		menu,
@@ -53,7 +52,6 @@ test( "focus", function () {
 		focus: function ( event, ui ) {
 			ok( event, "focus event fired on mouseover" );
 			equal( event.type, "selectmenufocus", "event type set to selectmenufocus" );
-			ok( ui, "ui object is passed as second argument to event handler" );
 			equal( ui.item.element[0].nodeName, "OPTION", "ui points to original option element" );
 		}
 	});
@@ -73,13 +71,12 @@ test( "focus", function () {
 
 
 test( "open", function () {
-	expect( 3 );
+	expect( 2 );
 
 	this.element.selectmenu({
 		open: function ( event, ui ) {
 			ok( event, "open event fired on open" );
 			equal( event.type, "selectmenuopen", "event type set to selectmenuopen" );
-			ok( ui, "ui object is passed as second argument to event handler" );
 		}
 	});
 
@@ -88,13 +85,12 @@ test( "open", function () {
 
 
 test( "select", function () {
-	expect( 4 );
+	expect( 3 );
 
 	this.element.selectmenu({
 		select: function ( event, ui ) {
 			ok( event, "select event fired on item select" );
 			equal( event.type, "selectmenuselect", "event type set to selectmenuselect" );
-			ok( ui, "ui object is passed as second argument to event handler" );
 			equal( ui.item.element[0].nodeName, "OPTION", "ui points to original option element" );
 		}
 	});
