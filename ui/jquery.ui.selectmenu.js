@@ -114,7 +114,7 @@ $.widget( "ui.selectmenu", {
 		// Wrap menu
 		this.menuWrap = $( "<div>", {
 				"class": "ui-selectmenu-menu",
-				width: this.button.outerWidth()
+				outerWidth: this.button.outerWidth()
 			})
 			.append( this.menu )
 			.appendTo( this._appendTo() );
