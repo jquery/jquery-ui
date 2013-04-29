@@ -1,4 +1,4 @@
-(function ($) {
+(function ( $ ) {
 
 module( "selectmenu: events", {
 	setup: function () {
