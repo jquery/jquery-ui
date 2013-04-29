@@ -1,4 +1,4 @@
-(function ($) {
+(function ( $ ) {
 
 module( "selectmenu: options" );
 
@@ -34,7 +34,7 @@ test( "appendTo another element", function () {
 	element.selectmenu( "destroy" );
 
 	element.selectmenu({
-		appendTo: detached[0]
+		appendTo: detached[ 0 ]
 	});
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[0], detached[0], "detached DOM element" );
 	element.selectmenu( "destroy" );
@@ -48,9 +48,9 @@ test( "appendTo another element", function () {
 test( "CSS styles", function () {
 	expect( 2 );
 
-	var element = $("#speed").selectmenu(),
-		button = element.selectmenu("widget"),
-		menu = element.selectmenu("menuWidget");
+	var element = $( "#speed" ).selectmenu(),
+		button = element.selectmenu( "widget" ),
+		menu = element.selectmenu( "menuWidget" );
 
 	element.selectmenu( "open" );
 	ok( button.hasClass( "ui-corner-top" ) && !button.hasClass( "ui-corner-all" ) && button.find( "span.ui-icon" ).hasClass( "ui-icon-triangle-1-s" ), "button styles dropdown" );

@@ -123,14 +123,13 @@ test( "refresh - disabled option", function () {
 
 test( "refresh - disabled optgroup", function () {
 
-	var i,
-		item,
+	var i, item,
 		element = $( "#files" ).selectmenu(),
 		menu = element.selectmenu( "menuWidget" ).parent(),
 		originalDisabledOptgroup = element.find( "optgroup" ).first(),
 		originalDisabledOptions = originalDisabledOptgroup.find( "option" );
 
-	expect(2 + originalDisabledOptions.length);
+	expect( 2 + originalDisabledOptions.length );
 
 	originalDisabledOptgroup.attr( "disabled", "disabled" );
 	element.selectmenu( "refresh" );
