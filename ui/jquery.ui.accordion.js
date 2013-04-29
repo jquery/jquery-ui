@@ -169,7 +169,6 @@ $.widget( "ui.accordion", {
 	},
 
 	_keydown: function( event ) {
-		/*jshint maxcomplexity:15*/
 		if ( event.altKey || event.ctrlKey ) {
 			return;
 		}
