@@ -20,7 +20,7 @@ test("accessibility", function () {
 	equal( button.attr( "aria-owns" ), menu.attr("id"), "button link aria-owns" );
 	equal( 
 		button.attr( "aria-labelledby" ), 
-		links.eq( element[0].selectedIndex ).attr( "id" ), 
+		links.eq( element[ 0 ].selectedIndex ).attr( "id" ), 
 		"button link aria-labelledby" 
 	);
 	equal( button.attr( "tabindex" ), 0, "button link tabindex" );

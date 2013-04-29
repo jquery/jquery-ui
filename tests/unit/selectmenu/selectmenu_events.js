@@ -13,7 +13,7 @@ test( "change", function () {
 		change: function ( event, ui ) {
 			ok( event, "change event fired on change" );
 			equal( event.type, "selectmenuchange", "event type set to selectmenuchange" );
-			equal( ui.item.element[ 0 ].nodeName.toLowerCase(), "option", "ui.item.element[0] points to original option element" );
+			equal( ui.item.element[ 0 ].nodeName.toLowerCase(), "option", "ui.item.element[ 0 ] points to original option element" );
 			equal( ui.item.value, value, "ui.item.value property updated correctly" );
 		}
 	});
@@ -50,7 +50,7 @@ test( "focus", function () {
 		focus: function ( event, ui ) {
 			ok( event, "focus event fired on mouseover" );
 			equal( event.type, "selectmenufocus", "event type set to selectmenufocus" );
-			equal( ui.item.element[0].nodeName.toLowerCase(), "option", "ui points to original option element" );
+			equal( ui.item.element[ 0 ].nodeName.toLowerCase(), "option", "ui points to original option element" );
 		}
 	});
 
@@ -89,7 +89,7 @@ test( "select", function () {
 		select: function ( event, ui ) {
 			ok( event, "select event fired on item select" );
 			equal( event.type, "selectmenuselect", "event type set to selectmenuselect" );
-			equal( ui.item.element[0].nodeName.toLowerCase(), "option", "ui points to original option element" );
+			equal( ui.item.element[ 0 ].nodeName.toLowerCase(), "option", "ui points to original option element" );
 		}
 	});
 
