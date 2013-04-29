@@ -78,10 +78,10 @@ $.widget( "ui.selectmenu", {
 			id: this.ids.button,
 			width: this.element.outerWidth(),
 			role: "combobox",
-			"aria-expanded": false,
+			"aria-expanded": "false",
 			"aria-autocomplete": "list",
 			"aria-owns": this.ids.menu,
-			"aria-haspopup": true
+			"aria-haspopup": "true"
 		})
 		.insertAfter( this.element );
 
@@ -106,7 +106,7 @@ $.widget( "ui.selectmenu", {
 
 		// Create menu portion, append to body
 		this.menu = $( "<ul>", {
-			"aria-hidden": true,
+			"aria-hidden": "true",
 			"aria-labelledby": this.ids.button,
 			id: this.ids.menu
 		});
