@@ -23,7 +23,7 @@ test( "change", function () {
 		value = this.element.find( "option" ).first().text();
 
 	button.simulate( "focus" ).simulate( "click" );
-	menu.find( "a" ).first().simulate( "mouseover" ).trigger( "click" );
+	menu.find( "a" ).first().simulate( "mouseover" ).simulate( "click" );
 });
 
 
@@ -103,7 +103,7 @@ test( "select", function () {
 		menu = this.element.selectmenu( "menuWidget" ).parent();
 
 	button.simulate( "focus" ).simulate( "click" );
-	menu.find( "a" ).first().simulate( "mouseover" ).trigger( "click" );
+	menu.find( "a" ).first().simulate( "mouseover" ).simulate( "click" );
 });
 
 })(jQuery);
