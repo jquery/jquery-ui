@@ -16,7 +16,7 @@
 		$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
 			_renderItem: function( ul, item ) {
 				var element, span,
-					li = $( "<li>" ).data( "ui-selectmenu-item", item );
+					li = $( "<li>" );
 
 				if ( item.disabled ) {
 					li.addClass( "ui-state-disabled" ).text( item.label );

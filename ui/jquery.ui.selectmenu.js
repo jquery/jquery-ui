@@ -163,11 +163,11 @@ $.widget( "ui.selectmenu", {
 
 		var item,
 			options = this.element.find( "option" );
-			
+
 		if ( !options.length ) {
 			return;
 		}
-		
+
 		this._readOptions( options );
 		this._renderMenu( this.menu, this.items );
 
@@ -235,12 +235,16 @@ $.widget( "ui.selectmenu", {
 				}).appendTo( ul );
 				currentOptgroup = item.optgroup;
 			}
-			that._renderItem( ul, item );
+			that._renderItemData( ul, item );
 		});
 	},
 
+	_renderItemData: function( ul, item ) {
+		return this._renderItem( ul, item ).data( "ui-selectmenu-item", item );
+	},
+
 	_renderItem: function( ul, item ) {
-		var li = $( "<li>" ).data( "ui-selectmenu-item", item ),
+		var li = $( "<li>" ),
 			a = $( "<a>", { href: "#" });
 
 		if ( item.disabled ) {
