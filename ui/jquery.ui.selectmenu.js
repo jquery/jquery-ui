@@ -40,10 +40,10 @@ $.widget( "ui.selectmenu", {
 
 	_create: function() {
 		var selectmenuId = this.element.uniqueId().attr( "id" );
-		this.ids = { 
-			element: selectmenuId, 
-			button: selectmenuId + "-button", 
-			menu: selectmenuId + "-menu" 
+		this.ids = {
+			element: selectmenuId,
+			button: selectmenuId + "-button",
+			menu: selectmenuId + "-menu"
 		};
 
 		this._drawButton();
@@ -133,7 +133,7 @@ $.widget( "ui.selectmenu", {
 			},
 			focus: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
-				
+
 				// prevent inital focus from firing and checks if its a newly focused item
 				if ( !that.isOpen && that.focusIndex !== undefined && item.index !== that.focusIndex ) {
 					that._trigger( "focus", event, { item: item } );
@@ -143,15 +143,13 @@ $.widget( "ui.selectmenu", {
 				}
 				that.focusIndex = item.index;
 
-				// Set ARIA active descendant
 				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).attr( "id" ) );
 			},
-			// Set ARIA role
 			role: "listbox"
 		})
 		.menu( "instance" );
 
-		// Adjust border radius
+		// adjust menu styles to dropdown
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
 		// Make sure focus stays on selected item
@@ -173,6 +171,7 @@ $.widget( "ui.selectmenu", {
 			this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
 
 			item = this._getSelectedItem();
+
 			// Make sure menu is selected item aware
 			this.menu.menu( "focus", null, item );
 			this._setAria( item.data( "ui-selectmenu-item" ) );
@@ -376,7 +375,6 @@ $.widget( "ui.selectmenu", {
 		var link = this.menuItems.eq( item.index ),
 			id = link.attr( "id" );
 
-		// Change ARIA attr
 		this.button.attr({
 			"aria-labelledby": id,
 			"aria-activedescendant": id
