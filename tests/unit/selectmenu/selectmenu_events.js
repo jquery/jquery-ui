@@ -7,13 +7,12 @@ module( "selectmenu: events", {
 });
 
 test( "change", function () {
-	expect( 5 );
+	expect( 4 );
 
 	this.element.selectmenu({
 		change: function ( event, ui ) {
 			ok( event, "change event fired on change" );
 			equal( event.type, "selectmenuchange", "event type set to selectmenuchange" );
-			ok(ui, "ui object is passed as second argument to event handler" );
 			equal( ui.item.element[ 0 ].nodeName, "OPTION", "ui.item.element[0] points to original option element" );
 			equal( ui.item.value, value, "ui.item.value property updated correctly" );
 		}
