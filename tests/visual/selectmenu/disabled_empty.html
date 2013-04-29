@@ -17,6 +17,7 @@
 		$('select#disabled1').selectmenu();
 		var withOverflow = $('select#disabled2').selectmenu();
 		withOverflow.selectmenu("menuWidget").addClass("overflow");
+		
 		$('select#disabled3').selectmenu();
 		var disabled4 = $('select#disabled4').selectmenu();
 
@@ -55,7 +56,7 @@
 		});
 
 		/* empty */
-		$('select.empty').selectmenu();
+		$('.empty select').selectmenu();
 	});
 	</script>
 	<style>
@@ -72,7 +73,7 @@
 <form action="#">
 	<h2>Disabled tests</h2>
 	<fieldset>
-		<label for="disabled1">Select a speed:</label>
+		<label for="disabled1">Disabled select</label>
 		<select disabled="disabled" name="disabled1" id="disabled1">
 			<option value="Slower">Slower</option>
 			<option value="Slow">Slow</option>
@@ -82,7 +83,7 @@
 		</select>
 		<br />
 		<br />
-		<label for="disabled2">Select a number:</label>
+		<label for="disabled2">Disabled options</label>
 		<select name="disabled2" id="disabled2">
 			<option value="1">1</option>
 			<option value="2" selected="selected">2</option>
@@ -106,7 +107,7 @@
 		</select>
 		<br />
 		<br />
-		<label for="disabled3">Select a file:</label>
+		<label for="disabled3">Disabled optgroup</label>
 		<select name="disabled3" id="disabled3">
 			<optgroup disabled="disabled" label="Scripts">
 				<option value="jquery">jQuery.js</option>
@@ -119,7 +120,7 @@
 		</select>
 		<br />
 		<br />
-		<label for="disabled4">Select a file:</label>
+		<label for="disabled4">Disable specific element and refresh selectmenu on button click</label>
 		<select name="disabled4" id="disabled4">
 			<optgroup label="Scripts">
 				<option value="jquery">jQuery.js</option>
@@ -136,16 +137,19 @@
 	</fieldset>
 	<br />
 	<h2>Empty tests</h2>
-	<fieldset>
-		<select name="speed1" class="empty"></select>
+	<fieldset class="empty">
+		<label for="empty1">Select with no option elements</label>
+		<select name="empty1" id="empty1"></select>
 		<br />
 		<br />
-		<select name="speed2" class="empty">
+		<label for="empty2">Select with one empty option element</label>
+		<select name="empty2" id="empty2">
 			<option value=""></option>
 		</select>
 		<br />
 		<br />
-		<select name="number" class="empty">
+		<label for="empty3">Select with some empty option elements</label>
+		<select name="empty3" id="empty3">
 			<option value="1">1</option>
 			<option value="2" selected="selected">2</option>
 			<option value="3">3</option>
@@ -158,7 +162,8 @@
 		</select>
 		<br />
 		<br />
-		<select name="files" class="empty">
+		<label for="empty4">Select with empty optgroup</label>
+		<select name="empty4" class="empty4">
 			<optgroup label="Scripts"></optgroup>
 			<optgroup label="Other files">
 				<option value="somefile">Some unknown file</option>
