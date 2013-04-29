@@ -62,7 +62,7 @@ $.widget( "ui.selectmenu", {
 		// fix existing label
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
 		this._on( this.label, {
-			"click":  function( event ) {
+			click: function( event ) {
 				this.button.focus();
 				event.preventDefault();
 			}
