@@ -144,7 +144,7 @@ test( "refresh - disabled optgroup", function () {
 	}
 });
 
-test( "widget", function() {
+test( "widget and menuWidget", function() {
 	expect( 4 );
 	var element = $( "#speed" ).selectmenu(),
 		button = element.selectmenu( "widget" ),
