@@ -135,13 +135,13 @@ $.widget( "ui.selectmenu", {
 				var item = ui.item.data( "ui-selectmenu-item" );
 				
 				// prevent inital focus from firing and checks if its a newly focused item
-				if ( !that.isOpen && that.focus !== undefined && item.index !== that.focus ) {
+				if ( !that.isOpen && that.focusIndex !== undefined && item.index !== that.focusIndex ) {
 					that._trigger( "focus", event, { item: item } );
 					if ( !that.isOpen ) {
 						that._select( item, event );
 					}
 				}
-				that.focus = item.index;
+				that.focusIndex = item.index;
 
 				// Set ARIA active descendant
 				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).attr( "id" ) );
