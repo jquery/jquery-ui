@@ -40,7 +40,11 @@ $.widget( "ui.selectmenu", {
 
 	_create: function() {
 		var selectmenuId = this.element.uniqueId().attr( "id" );
-		this.ids = { id: selectmenuId, button: selectmenuId + "-button", menu: selectmenuId + "-menu" };
+		this.ids = { 
+			element: selectmenuId, 
+			button: selectmenuId + "-button", 
+			menu: selectmenuId + "-menu" 
+		};
 
 		this._drawButton();
 		this._drawMenu();
@@ -56,7 +60,7 @@ $.widget( "ui.selectmenu", {
 		var tabindex = this.element.attr( "tabindex" );
 
 		// fix existing label
-		this.label = $( "label[for='" + this.ids.id + "']" ).attr( "for", this.ids.button );
+		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
 		this._on( this.label, {
 			"click":  function( event ) {
 				this.button.focus();
@@ -461,7 +465,7 @@ $.widget( "ui.selectmenu", {
 		this.button.remove();
 		this.element.show();
 		this.element.removeUniqueId();
-		this.label.attr( "for", this.ids.id );
+		this.label.attr( "for", this.ids.element );
 	}
 });
 
