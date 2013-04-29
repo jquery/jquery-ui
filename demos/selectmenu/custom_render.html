@@ -13,12 +13,10 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-
 		$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
 			_renderItem: function( ul, item ) {
-				var li = $( "<li>" ).data( "ui-selectmenu-item", item ),
-					element,
-					span;
+				var element, span,
+					li = $( "<li>" ).data( "ui-selectmenu-item", item );
 
 				if ( item.disabled ) {
 					li.addClass( "ui-state-disabled" ).text( item.label );
@@ -26,45 +24,84 @@
 					element = item.element;
 					span = $( "<span>", {
 						style: element.attr( "style" ),
-						'class': "ui-icon " + element.attr( "class" )
+						"class": "ui-icon " + element.attr( "class" )
 					});
 					$( "<a>", {
 							text: item.label,
-							href: '#'
-					}).append( span ).appendTo( li );
+							href: "#"
+					})
+					.append( span )
+					.appendTo( li );
 				}
 
 				return li.appendTo( ul );
 			}
 		});
 
-		$( "select#files" ).iconselectmenu().iconselectmenu( "menuWidget" ).addClass( "ui-menu-icons" );
+		$( "#filesA" )
+			.iconselectmenu()
+			.iconselectmenu( "menuWidget" )
+			.addClass( "ui-menu-icons" );
 
-		$( "select#filesB" ).iconselectmenu().iconselectmenu( "menuWidget" ).addClass( "ui-menu-icons customicons" );
+		$( "#filesB" )
+			.iconselectmenu()
+			.iconselectmenu( "menuWidget" )
+			.addClass( "ui-menu-icons customicons" );
 
-		$( "select#peopleA" ).iconselectmenu().iconselectmenu( "menuWidget").addClass( "ui-menu-icons avatar" );
+		$( "#people" )
+			.iconselectmenu()
+			.iconselectmenu( "menuWidget")
+			.addClass( "ui-menu-icons avatar" );
 	});
 	</script>
 	<style>
-		form { margin: 50px 0 0 0 }
-		h2 { margin: 30px 0 0 0 }
-		fieldset { border: 0; }
-		label { display: block; }
-		select { width: 200px; }
+		h2 {
+			margin: 30px 0 0 0
+		}
+		fieldset {
+			border: 0;
+		}
+		label {
+			display: block;
+		}
+		select {
+			width: 200px;
+		}
 
-		.ui-selectmenu-menu .ui-menu .ui-icon {	top: 0.4em; }
-		.ui-selectmenu-menu .ui-menu .ui-menu-item a { padding-left: 2em; }
+		.ui-selectmenu-menu .ui-menu .ui-icon {
+			top: 0.4em;
+		}
+		.ui-selectmenu-menu .ui-menu .ui-menu-item a {
+			padding-left: 2em;
+		}
 
 		/* select with custom icons */
-		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item a { padding: 0.5em 0 0.5em 3em; }
-		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item a .ui-icon { height: 24px; width: 24px; top: 0.2em;}
-		.ui-icon.video { background: url(images/24-video-square.png) 0 0 no-repeat; }
-		.ui-icon.podcast { background: url(images/24-podcast-square.png) 0 0 no-repeat; }
-		.ui-icon.rss { background: url(images/24-rss-square.png) 0 0 no-repeat; }
+		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item a {
+			padding: 0.5em 0 0.5em 3em;
+		}
+		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item a .ui-icon {
+			height: 24px;
+			width: 24px;
+			top: 0.2em;
+		}
+		.ui-icon.video {
+			background: url(images/24-video-square.png) 0 0 no-repeat;
+		}
+		.ui-icon.podcast {
+			background: url(images/24-podcast-square.png) 0 0 no-repeat;
+		}
+		.ui-icon.rss {
+			background: url(images/24-rss-square.png) 0 0 no-repeat;
+		}
 
 		/* select with CSS avatar icons */
-		option.avatar { background-repeat: no-repeat !important; padding-left: 20px; }
-		.avatar .ui-icon { background-position: left top; }
+		option.avatar {
+			background-repeat: no-repeat !important;
+			padding-left: 20px;
+		}
+		.avatar .ui-icon {
+			background-position: left top;
+		}
 	</style>
 </head>
 <body>
@@ -75,8 +112,8 @@
 
 		<h2>Selectmenu with framework icons</h2>
 		<fieldset>
-			<label for="files">Select a File:</label>
-			<select name="files" id="files">
+			<label for="filesA">Select a File:</label>
+			<select name="filesA" id="filesA">
 				<option value="jquery" class="ui-icon-script">jQuery.js</option>
 				<option value="jquerylogo" class="ui-icon-image">jQuery Logo</option>
 				<option value="jqueryui" class="ui-icon-script">ui.jQuery.js</option>
@@ -97,8 +134,8 @@
 
 		<h2>Selectmenu with custom avatar 16x16 images as CSS background</h2>
 		<fieldset>
-			<label for="peopleA">Select a Person:</label>
-			<select name="peopleA" id="peopleA">
+			<label for="people">Select a Person:</label>
+			<select name="people" id="people">
 				<option value="1" class="avatar" style="background-image: url(http://www.gravatar.com/avatar/b3e04a46e85ad3e165d66f5d927eb609?d=monsterid&amp;r=g&amp;s=16);">John Resig</option>
 				<option value="2" class="avatar" style="background-image: url(http://www.gravatar.com/avatar/e42b1e5c7cfd2be0933e696e292a4d5f?d=monsterid&amp;r=g&amp;s=16);">Tauren Mills</option>
 				<option value="3" class="avatar" style="background-image: url(http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&amp;r=g&amp;s=16);">Jane Doe</option>
@@ -107,13 +144,10 @@
 
 </form>
 
-</div><!-- End demo -->
-
-
+</div>
 
 <div class="demo-description">
 <p>The whole rendering process is extendable to make custom styling as easy as possible.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>
