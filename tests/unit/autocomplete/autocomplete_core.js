@@ -89,7 +89,7 @@ test( "allow form submit on enter when menu is not active", function() {
 	test( "down arrow moves focus - contenteditable", function() {
 		arrowsMoveFocus( "#autocomplete-contenteditable", false );
 	});
-	
+
 	test( "up arrow moves cursor - input", function() {
 		arrowsNavigateElement( "#autocomplete", true, false );
 	});
@@ -144,7 +144,7 @@ test( "allow form submit on enter when menu is not active", function() {
 		element.autocomplete( "search" );
 		element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
 	}
-	
+
 	function arrowsNavigateElement( id, isKeyUp, shouldMove ) {
 		expect( 1 );
 
