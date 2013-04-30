@@ -25,6 +25,7 @@
 	<script src="../../../ui/jquery.ui.selectmenu.js"></script>
 	<script>
 	$(function() {
+		$( "#dialog" ).dialog();
 		$( "[title]" ).tooltip();
 		$( "#accordion" ).accordion();
 		$( "#autocomplete" ).autocomplete({
@@ -47,7 +48,6 @@
 		});
 		$( "#tabs" ).tabs();
 		$( '#select' ).selectmenu();
-		$( "#dialog" ).dialog();
 		$( "#dialog2" ).dialog({
 			autoOpen: false,
 			width: 100,
