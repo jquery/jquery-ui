@@ -596,7 +596,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			var allowed, curVal, newVal, step,
 				index = $( event.target ).data( "ui-slider-handle-index" );
 
-			switch ( event.keyCode ) {
+			switch ( event.which ) {
 				case $.ui.keyCode.HOME:
 				case $.ui.keyCode.END:
 				case $.ui.keyCode.PAGE_UP:
@@ -624,7 +624,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				curVal = newVal = this.value();
 			}
 
-			switch ( event.keyCode ) {
+			switch ( event.which ) {
 				case $.ui.keyCode.HOME:
 					newVal = this._valueMin();
 					break;

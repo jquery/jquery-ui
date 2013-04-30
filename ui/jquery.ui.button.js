@@ -187,7 +187,7 @@ $.widget( "ui.button", {
 					if ( options.disabled ) {
 						return false;
 					}
-					if ( event.keyCode === $.ui.keyCode.SPACE || event.keyCode === $.ui.keyCode.ENTER ) {
+					if ( event.which === $.ui.keyCode.SPACE || event.which === $.ui.keyCode.ENTER ) {
 						$( this ).addClass( "ui-state-active" );
 					}
 				})
@@ -199,7 +199,7 @@ $.widget( "ui.button", {
 
 			if ( this.buttonElement.is("a") ) {
 				this.buttonElement.keyup(function(event) {
-					if ( event.keyCode === $.ui.keyCode.SPACE ) {
+					if ( event.which === $.ui.keyCode.SPACE ) {
 						// TODO pass through original event correctly (just as 2nd argument doesn't work)
 						$( this ).click();
 					}
