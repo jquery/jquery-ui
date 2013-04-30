@@ -30,6 +30,12 @@
 				buttons: dialogButtons,
 				open: function() {
 					progressTimer = setTimeout( progress, 2000 );
+				},
+				beforeClose: function() {
+					downloadButton.button( "option", {
+						disabled: false,
+						label: "Start Download"
+					});
 				}
 			}),
 			downloadButton = $( "#downloadButton" )
@@ -53,6 +59,7 @@
 					text: "Close",
 					click: closeDownload
 				}]);
+				$(".ui-dialog button").last().focus();
 			}
 		});
 
@@ -61,7 +68,7 @@
 
 			progressbar.progressbar( "value", val + Math.floor( Math.random() * 3 ) );
 
-			if ( val < 99 ) {
+			if ( val <= 99 ) {
 				progressTimer = setTimeout( progress, 100 );
 			}
 		}
@@ -74,10 +81,7 @@
 			progressbar.progressbar( "value", false );
 			progressLabel
 				.text( "Starting download..." );
-			downloadButton.button( "option", {
-				disabled: false,
-				label: "Start Download"
-			});
+			downloadButton.focus();
 		}
 	});
 	</script>
