@@ -29,6 +29,7 @@ $.widget( "ui.accordion", {
 		active: 0,
 		animate: {},
 		collapsible: false,
+		autoCollapseNonActive: true,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
 		heightStyle: "auto",
@@ -395,60 +396,71 @@ $.widget( "ui.accordion", {
 	},
 
 	_eventHandler: function( event ) {
-		var options = this.options,
-			active = this.active,
-			clicked = $( event.currentTarget ),
-			clickedIsActive = clicked[ 0 ] === active[ 0 ],
-			collapsing = clickedIsActive && options.collapsible,
-			toShow = collapsing ? $() : clicked.next(),
-			toHide = active.next(),
-			eventData = {
-				oldHeader: active,
-				oldPanel: toHide,
-				newHeader: collapsing ? $() : clicked,
-				newPanel: toShow
-			};
+		 var options = this.options,
+                active = this.active,
+                clicked = $(event.currentTarget),
+                clickedIsActive = clicked[0] === active[0],
+                collapsing = clickedIsActive && options.collapsible && clicked.attr("aria-selected") == "true",
+                toShow = collapsing || (!options.autoCollapseNonActive && clicked.attr("aria-selected") == "true") ? $() : clicked.next(),
+                toHide = options.autoCollapseNonActive ? active.next() : clicked.attr("aria-selected") == "true" ? clicked.next() : $(""),
+                eventData = {
+                    oldHeader: clicked.attr("aria-selected") == "true" ? clicked : active,
+                    oldPanel: toHide,
+                    newHeader: collapsing ? $() : clicked,
+                    newPanel: toShow
+                };
 
-		event.preventDefault();
+            if (!options.autoCollapseNonActive && !clickedIsActive) this.prevShow = $('');
 
-		if (
-				// click on active header, but not collapsible
-				( clickedIsActive && !options.collapsible ) ||
-				// allow canceling activation
-				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
-			return;
-		}
+            event.preventDefault();
+            if (
+                // click on active header, but not collapsible
+                    (clickedIsActive && !options.collapsible) ||
+                // allow canceling activation
+                    (this._trigger("beforeActivate", event, eventData) === false)) {
+                return;
+            }
 
-		options.active = collapsing ? false : this.headers.index( clicked );
+            options.active = collapsing ? false : this.headers.index(clicked);
 
-		// when the call to ._toggle() comes after the class changes
-		// it causes a very odd bug in IE 8 (see #6720)
-		this.active = clickedIsActive ? $() : clicked;
-		this._toggle( eventData );
+            // when the call to ._toggle() comes after the class changes
+            // it causes a very odd bug in IE 8 (see #6720)
+            this.active = clickedIsActive ? $() : clicked;
+            this._toggle(eventData);
 
-		// switch classes
-		// corner classes on the previously active header stay after the animation
-		active.removeClass( "ui-accordion-header-active ui-state-active" );
-		if ( options.icons ) {
-			active.children( ".ui-accordion-header-icon" )
-				.removeClass( options.icons.activeHeader )
-				.addClass( options.icons.header );
-		}
+            if (options.autoCollapseNonActive) {
+                // switch classes
+                // corner classes on the previously active header stay after the animation
+                active.removeClass("ui-accordion-header-active ui-state-active");
+                if (options.icons) {
+                    active.children(".ui-accordion-header-icon")
+                        .removeClass(options.icons.activeHeader)
+                        .addClass(options.icons.header);
+                }
+            } else {
+                //clean state of the clicked
+                clicked.removeClass("ui-accordion-header-active ui-state-active");
+                if (options.icons) {
+                    clicked.children(".ui-accordion-header-icon")
+                        .removeClass(options.icons.activeHeader)
+                        .addClass(options.icons.header);
+                }
+            }
 
-		if ( !clickedIsActive ) {
-			clicked
-				.removeClass( "ui-corner-all" )
-				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" );
-			if ( options.icons ) {
-				clicked.children( ".ui-accordion-header-icon" )
-					.removeClass( options.icons.header )
-					.addClass( options.icons.activeHeader );
-			}
+            if (!clickedIsActive && clicked.attr("aria-selected") == "true") {
+                clicked
+                    .removeClass("ui-corner-all")
+                    .addClass("ui-accordion-header-active ui-state-active ui-corner-top");
+                if (options.icons) {
+                    clicked.children(".ui-accordion-header-icon")
+                        .removeClass(options.icons.header)
+                        .addClass(options.icons.activeHeader);
+                }
 
-			clicked
-				.next()
-				.addClass( "ui-accordion-content-active" );
-		}
+                clicked
+                    .next()
+                    .addClass("ui-accordion-content-active");
+            }
 	},
 
 	_toggle: function( data ) {
