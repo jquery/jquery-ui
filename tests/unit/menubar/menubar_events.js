@@ -43,75 +43,27 @@ test( "hover over a menu item with no sub-menu should close open menu", function
 	menuItemWithDropdown.trigger("click");
 	menuItemWithoutDropdown.trigger("click");
 
-	equal($(".ui-menu:visible").length, 0,  "After triggering a sub-menu, a click on a peer menu item should close the opened sub-menu");
+	equal($(".ui-menu:visible").length, 0,	"After triggering a sub-menu, a click on a peer menu item should close the opened sub-menu");
 });
 
-test ( "_findNextFocusableTarget should find one and only one item", function() {
-	expect(2);
-
-	var element = $("#bar1").menubar(),
-		menubarWidget = element.data( "ui-menubar" ),
-		firstMenuItem = $( "#bar1 .ui-menubar-item" ).eq( 0 ),
-		expectedFocusableTarget = $("#bar1 .ui-menubar-item .ui-widget").eq( 0 ),
-		result = menubarWidget._findNextFocusableTarget( firstMenuItem );
-
-  equal( expectedFocusableTarget[0], result[0], "_findNextFocusableTarget should return the focusable element underneath the menuItem" );
-	equal( 1, result.length, "One and only one item should be returned." );
-});
-
-asyncTest( "TAB order should be sane mirroring dialog's test", function() {
-	expect( 3 );
+test( "Cursor keys should move focus within the menu items", function() {
+	expect( 6 );
 
 	var element = $( "#bar1" ).menubar(),
-		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" );
+		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" ),
+		nextLeftwardMenuElement = firstMenuItem.parent().siblings().last().children().eq( 0 );
 
-	function checkTab() {
-		setTimeout( start );
-		ok( !firstMenuItem.hasClass( "ui-state-focus" ), "The manually focused item should no longer have focus after TAB" );
-		//setTimeout( start );
-	}
-
+	equal( element.find( ":tabbable" ).length, 1, "A Menubar should have 1 tabbable element on init." );
 	firstMenuItem[ 0 ].focus();
-	ok( $( firstMenuItem ).hasClass( "ui-state-focus" ), "Should have focus class" );
 
-	setTimeout(function() {
-		equal( document.activeElement, firstMenuItem[0], "Focus set on first menuItem" );
-		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
-		setTimeout( checkTab );
-	})
-
-} );
-
-asyncTest( "TAB order should be sane", function() {
-	expect( 3 );
+	ok( firstMenuItem.hasClass( "ui-state-focus" ), "After a focus event, the first element should have the focus class." );
+	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 
 
-	var element = $( "#bar1" ).menubar(),
-		debugDelay = 0,
-		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" );
-
-	/* Make the qunit fixture visible if we're debugging this test*/
-  if ( debugDelay ) {
-		$('<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" />').appendTo("head");
-		$( "#qunit-fixture" ).css({ right: "300px", top: "300px", left:0 });
-	}
-
-	setTimeout(function(){
-		firstMenuItem[ 0 ].focus();
-
-		function postFocus(){
-			ok( !firstMenuItem.hasClass( "ui-state-focus" ), "The manually focused item should no longer have focus after TAB" );
-			setTimeout( start );
-		};
-
-		setTimeout(function() {
-			ok( firstMenuItem.hasClass( "ui-state-focus" ), "Should have focus class" );
-			equal( document.activeElement, firstMenuItem, "Focus set on first menuItem" );
-			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
-			setTimeout( postFocus );
-		});
-
-	}, debugDelay );
+	ok( !firstMenuItem.hasClass( "ui-state-focus" ), "After a keypress event, the first element, should no longer have the focus class." );
+	ok( nextLeftwardMenuElement.hasClass( "ui-state-focus" ), "After a LEFT cursor event from  the first element, the last element should have focus." );
+	equal( element.find( ":tabbable" ).length, 1, "A Menubar, after a cursor key action, should have 1 tabbable." );
+	equal( element.find( ":tabbable" )[ 0 ], nextLeftwardMenuElement[ 0 ], "A Menubar, after a cursor key action, should have 1 tabbable." );
 
 } );
 

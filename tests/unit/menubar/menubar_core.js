@@ -31,6 +31,18 @@ test( "Cursor keys should move the focus", function() {
 	ok( !firstMenuItem.hasClass( "ui-state-focus" ), "RIGHT should move focus off of focused item" );
 	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal( document.activeElement, firstMenuItem[0], "LEFT should return focus first menuItem" );
-} );
+});
+
+test ( "_destroy should successfully unwrap 'span.ui-button-text' elements" , function() {
+  expect(1);
+
+	var containedButtonTextSpans,
+    element = $( "#bar1" ).menubar();
+
+  element.menubar( "destroy" );
+  containedButtonTextSpans = element.find( "span.ui-button-text" ).length
+  equal( containedButtonTextSpans, 0, "All 'span.ui-button-text'  should be removed by destroy" );
+});
+
 
 })( jQuery );
