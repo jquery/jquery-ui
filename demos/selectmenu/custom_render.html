@@ -15,23 +15,20 @@
 	$(function() {
 		$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
 			_renderItem: function( ul, item ) {
-				var element, span,
+				var a, span,
 					li = $( "<li>" );
 
 				if ( item.disabled ) {
 					li.addClass( "ui-state-disabled" ).text( item.label );
 				} else {
-					element = item.element;
+					a = $( "<a>", {
+						text: item.label,
+						href: "#"
+					}).appendTo( li );
 					span = $( "<span>", {
-						style: element.attr( "style" ),
-						"class": "ui-icon " + element.attr( "class" )
-					});
-					$( "<a>", {
-							text: item.label,
-							href: "#"
-					})
-					.append( span )
-					.appendTo( li );
+						style: item.element.attr( "style" ),
+						"class": "ui-icon " + item.element.attr( "class" )
+					}).appendTo( a );
 				}
 
 				return li.appendTo( ul );
