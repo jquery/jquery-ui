@@ -134,7 +134,7 @@ $.event.special.pointerdown = {
         $( this ).off( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
     },
     handler: function( event ) {
-        if ( currentEventType === "touch" ) {
+        if ( event.type.indexOf("touch") !== -1 ) {
             // Trigger pointerover for devices that don't support hover
             checkHoverSupport( event, "pointerover" );
         }
@@ -151,7 +151,7 @@ $.event.special.pointerup = {
     },
     handler: function( event ) {
         $( event.target ).trigger( processEvent( event, "pointerup" ) );
-        if ( currentEventType === "touch" ) {
+        if ( event.type.indexOf("touch") !== -1 ) {
             // Trigger pointerout for devices that don't support hover
             checkHoverSupport( event, "pointerout" );
         }
