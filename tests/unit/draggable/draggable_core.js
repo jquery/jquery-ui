@@ -199,4 +199,20 @@ test( "#8399: A draggable should become the active element after you are finishe
 	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
 });
 
+asyncTest( "#4261: active element should blur when mousing down on a draggable", function() {
+	expect( 2 );
+
+	var textInput = $( "<input>" ).appendTo( "#qunit-fixture" ),
+		element = $( "#draggable1" ).draggable();
+
+	TestHelpers.onFocus( textInput, function() {
+		strictEqual( document.activeElement, textInput.get( 0 ), "ensure that a focussed text input is the active element before mousing down on a draggable" );
+
+		TestHelpers.draggable.move( element, 50, 50 );
+
+		notStrictEqual( document.activeElement, textInput.get( 0 ), "ensure the text input is no longer the active element after mousing down on a draggable" );
+		start();
+	});
+});
+
 })( jQuery );

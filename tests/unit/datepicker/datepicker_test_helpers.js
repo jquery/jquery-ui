@@ -22,16 +22,6 @@ TestHelpers.datepicker = {
 		var id = $( "<input>" ).appendTo( "#qunit-fixture" );
 		return TestHelpers.datepicker.init( id, options );
 	},
-	onFocus: function( element, onFocus ) {
-		var fn = function( event ){
-			if( !event.originalEvent ) {
-				return;
-			}
-			element.unbind( "focus", fn );
-			onFocus();
-		};
-
-		element.bind( "focus", fn )[ 0 ].focus();
-	},
+	onFocus: TestHelpers.onFocus,
 	PROP_NAME: "datepicker"
 };
