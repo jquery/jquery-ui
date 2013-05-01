@@ -4,7 +4,6 @@ var currentEventType,
     POINTER_TYPE_TOUCH = "touch",
     POINTER_TYPE_PEN = "pen",
     POINTER_TYPE_MOUSE = "mouse",
-    preventDuplicate = false,
     eventMap = {
         mouse: {
             pointerdown: "mousedown",
@@ -135,19 +134,11 @@ $.event.special.pointerdown = {
         $( this ).off( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
     },
     handler: function( event ) {
-        if ( !preventDuplicate ) {
-            if ( event.type.indexOf("touch") !== -1 ) {
-                // Trigger pointerover for devices that don't support hover
-                checkHoverSupport( event, "pointerover" );
-            }
-            $( event.target ).trigger( processEvent( event, "pointerdown" ) );
+        if ( currentEventType === "touch" ) {
+            // Trigger pointerover for devices that don't support hover
+            checkHoverSupport( event, "pointerover" );
         }
-
-        if ( event.type.indexOf("touch") !== -1 ) {
-            preventDuplicate = true;
-        } else {
-            preventDuplicate = false;
-        }
+        $( event.target ).trigger( processEvent( event, "pointerdown" ) );
     }
 };
 
@@ -159,18 +150,10 @@ $.event.special.pointerup = {
         $( this ).off( eventMap[ currentEventType ].pointerup, $.event.special.pointerup.handler );
     },
     handler: function( event ) {
-        if ( !preventDuplicate ) {
-            $( event.target ).trigger( processEvent( event, "pointerup" ) );
-            if ( event.type.indexOf("touch") !== -1 ) {
-                // Trigger pointerout for devices that don't support hover
-                checkHoverSupport( event, "pointerout" );
-            }
-        }
-
-        if ( event.type.indexOf("touch") !== -1 ) {
-            preventDuplicate = true;
-        } else {
-            preventDuplicate = false;
+        $( event.target ).trigger( processEvent( event, "pointerup" ) );
+        if ( currentEventType === "touch" ) {
+            // Trigger pointerout for devices that don't support hover
+            checkHoverSupport( event, "pointerout" );
         }
     }
 };
@@ -183,15 +166,7 @@ $.event.special.pointermove = {
         $( this ).off( eventMap[ currentEventType ].pointermove, $.event.special.pointermove.handler );
     },
     handler: function( event ) {
-        if ( !preventDuplicate ) {
-            $( event.target ).trigger( processEvent( event, "pointermove" ) );
-        }
-
-        if ( event.type.indexOf("touch") !== -1 ) {
-            preventDuplicate = true;
-        } else {
-            preventDuplicate = false;
-        }
+        $( event.target ).trigger( processEvent( event, "pointermove" ) );
     }
 };
 
