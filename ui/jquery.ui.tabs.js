@@ -150,7 +150,6 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabKeydown: function( event ) {
-		/*jshint maxcomplexity:15*/
 		var focusedTab = $( this.document[0].activeElement ).closest( "li" ),
 			selectedIndex = this.tabs.index( focusedTab ),
 			goingForward = true;
