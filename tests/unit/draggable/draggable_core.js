@@ -185,4 +185,18 @@ test( "#5727: draggable from iframe" , function() {
 	TestHelpers.draggable.shouldMove( draggable1 );
 });
 
+test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function() {
+	expect( 2 );
+
+	var element = $( "<a href='#'>link</a>" ).appendTo( "#qunit-fixture" ).draggable();
+
+	$( document ).one( "mousemove", function() {
+		notStrictEqual( document.activeElement, element.get( 0 ), "moving a draggable anchor did not make it the active element" );
+	});
+
+	TestHelpers.draggable.move( element, 50, 50 );
+
+	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
+});
+
 })( jQuery );

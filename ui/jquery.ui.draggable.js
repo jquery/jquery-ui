@@ -263,6 +263,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 			$.ui.ddmanager.dragStop(this, event);
 		}
 
+		// The interaction is over; whether or not the click resulted in a drag, focus the element
+		this.element.focus();
+
 		return $.ui.mouse.prototype._mouseUp.call(this, event);
 	},
 
