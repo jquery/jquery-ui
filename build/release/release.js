@@ -11,7 +11,7 @@
 var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime, preRelease, repo,
 	fs = require( "fs" ),
 	rnewline = /\r?\n/,
-	branch = "master";
+	branch = "1-10-stable";
 
 walk([
 	bootstrap,
