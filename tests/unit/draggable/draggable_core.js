@@ -169,4 +169,24 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
+test( "#8399: clicking on a draggable anchor without moving it should make it the active element", function() {
+	expect( 1 );
+
+	var element = $('#testAnchor').draggable();
+
+	TestHelpers.draggable.move( element, 0, 0 );
+
+	strictEqual( document.activeElement, element.get(0), "clicking on a draggable anchor without moving it made it the active element" );
+});
+
+test( "#8399: moving a draggable anchor should not make it the active element", function() {
+	expect( 1 );
+
+	var element = $('#testAnchor').draggable();
+
+	TestHelpers.draggable.move( element, 50, 50 );
+
+	notStrictEqual( document.activeElement, element.get(0), "moving a draggable anchor did not make it the active element" );
+});
+
 })( jQuery );
