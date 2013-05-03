@@ -54,4 +54,23 @@ test( "focus events", function() {
 	element.trigger( "focusout" );
 });
 
+// http://bugs.jqueryui.com/ticket/8740
+asyncTest( "content: async callback loses focus before load", function() {
+	expect( 1 );
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function( response ) {
+			element.trigger( "mouseleave" );
+			setTimeout(function () {
+				response( "sometext" );
+				setTimeout(function () {
+					ok(!$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ), "Tooltip should not display" );
+					start();
+				}, 1);
+			}, 1);
+		}
+	});
+	element.trigger( "mouseover" );
+	element.tooltip( "destroy" );
+});
+
 }( jQuery ) );
