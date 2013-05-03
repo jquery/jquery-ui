@@ -1,18 +1,22 @@
 {
-	"browser": true,
+	"boss": true,
 	"curly": true,
-	"eqnull": true,
 	"eqeqeq": true,
+	"eqnull": true,
 	"expr": true,
-	"jquery": true,
-	"latedef": true,
+	"immed": true,
 	"noarg": true,
 	"onevar": true,
 	"quotmark": "double",
+	"smarttabs": true,
 	"trailing": true,
 	"undef": true,
 	"unused": true,
-	"predef": [
-		"Globalize"
-	]
+
+	"browser": true,
+	"jquery": true,
+
+	"globals": {
+		"Globalize": false
+	}
 }

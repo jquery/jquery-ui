@@ -14,9 +14,24 @@ TestHelpers.datepicker = {
 		d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
 		equal(d1.toString(), d2.toString(), message);
 	},
-	init: function(id, options) {
-		$.datepicker.setDefaults($.datepicker.regional[""]);
-		return $(id).datepicker($.extend({showAnim: ""}, options || {}));
+	init: function( id, options ) {
+		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
+		return $( id ).datepicker( $.extend( { showAnim: "" }, options || {} ) );
+	},
+	initNewInput: function( options ) {
+		var id = $( "<input>" ).appendTo( "#qunit-fixture" );
+		return TestHelpers.datepicker.init( id, options );
+	},
+	onFocus: function( element, onFocus ) {
+		var fn = function( event ){
+			if( !event.originalEvent ) {
+				return;
+			}
+			element.unbind( "focus", fn );
+			onFocus();
+		};
+
+		element.bind( "focus", fn )[ 0 ].focus();
 	},
 	PROP_NAME: "datepicker"
 };
