@@ -23,6 +23,7 @@ $.widget( "ui.menubar", {
 		items: "li",
 		menuElement: "ul",
 		menuIcon: false,
+		orientation: "horizontal",
 		position: {
 			my: "left top",
 			at: "left bottom"
@@ -42,12 +43,37 @@ $.widget( "ui.menubar", {
 		this._initializeWidget();
 		this._initializeMenuItems();
 		this._initializeItems();
+
+		if ( this.options.orientation === "vertical" ) {
+			function findLargestWidth( set ) {
+				return set.map(function(){
+					return parseInt($( this ).css( 'width' ))
+				}).sort()[ 0 ];
+			}
+
+			var cssWidth = findLargestWidth( this.items ) + "px";
+
+			this.element.css( "width", cssWidth );
+			this.element.css({
+				border: "1px solid transparent/*{borderColorHeader}*/",
+				color: "#222222/*{fcHeader}*/",
+				"background-position": "0% 0%"
+			});
+
+			this.items.css( "width", cssWidth);
+		}
+
 	},
 
 	_initializeWidget: function() {
 		this.element
 			.addClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
 			.attr( "role", "menubar" );
+
+		if ( this.options.orientation === "vertical" ) {
+			this.element.addClass( "vertical" );
+		}
+
 		this._on( this.element, {
 			keydown: function( event ) {
 				var active;
@@ -98,6 +124,10 @@ $.widget( "ui.menubar", {
 				"border-width": "1px",
 				"border-style": "hidden"
 			});
+
+		if ( this.options.orientation === "vertical" ) {
+			this.menuItems.addClass( "vertical" );
+		}
 
 		subMenus = this.menuItems.children( menubar.options.menuElement ).menu({
 			position: {
@@ -298,7 +328,7 @@ $.widget( "ui.menubar", {
 
 		// If we have an open menu and we see a click on the menuItem
 		// and the menu thereunder is the same as the active menu, close it.
-		// Succinctly: toggle menu open / closed  on the menuItem
+		// Succinctly: toggle menu open / closed on the menuItem
 		isClickingToCloseOpenMenu = event.type === "click" &&
 			menu.is( ":visible" ) &&
 			this.active &&
@@ -319,11 +349,11 @@ $.widget( "ui.menubar", {
 		// we clicked on a new menuItem (whether open or not) or if we auto expand (i.e.
 		// we expand regardless of click if there is a submenu
 		if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
-      clearTimeout( this.closeTimer );
+			clearTimeout( this.closeTimer );
 			this._open( event, menu );
-      // Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
-      // takes the "selected" status off off of the first element of the submenu.
-      event.stopPropagation();
+			// Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
+			// takes the "selected" status off off of the first element of the submenu.
+			event.stopPropagation();
 		}
 	},
 

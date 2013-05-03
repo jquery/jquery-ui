@@ -13,3 +13,10 @@
 .ui-menubar .ui-menubar-link { border-right: 1px dashed transparent; border-left: 1px dashed transparent; }
 
 .ui-menubar .ui-menu { width: 200px; position: absolute; z-index: 9999; font-weight: normal; }
+
+/* Vertical orientation support */
+.ui-menubar-item.vertical { float: none; }
+.ui-menubar.vertical .ui-button { float: none; }
+.ui-menubar.vertical .ui-button.ui-state-focus, .ui-menubar.vertical .ui-button:hover {
+	float: none; border: solid 1px transparent;
+}

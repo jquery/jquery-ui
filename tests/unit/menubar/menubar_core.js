@@ -11,6 +11,21 @@ test( "markup structure", function() {
 	});
 });
 
+test( "Passing a vertical orientation parameter adds vertical classes on ui elements", function() {
+	expect( 4 );
+
+	var element = $( "#bar1" ).menubar({ orientation: "vertical" }),
+		widget = element.data( "ui-menubar" ),
+		options = widget.options,
+		menuItemCount = element.children( ".ui-menubar-item" ).length,
+		defaultOrientation = $( "#bar2" ).menubar().data( "ui-menubar" ).options.orientation;
+
+	equal( "horizontal", defaultOrientation, "menubars shoud have horizontal orientation by default" );
+	equal( "vertical", options.orientation, "options should reflect vertical option being set" );
+	ok( element.hasClass( "vertical" ) , "menubar should have a vertical class applied" );
+	equal( element.children( ".ui-menubar-item.vertical" ).length, menuItemCount, "menuItems should have a vertical class applied" );
+});
+
 test( "accessibility", function () {
 	expect( 2 );
 	var element = $( "#bar1" ).menubar();
@@ -34,14 +49,14 @@ test( "Cursor keys should move the focus", function() {
 });
 
 test ( "_destroy should successfully unwrap 'span.ui-button-text' elements" , function() {
-  expect(1);
+	expect(1);
 
 	var containedButtonTextSpans,
-    element = $( "#bar1" ).menubar();
+		element = $( "#bar1" ).menubar();
 
-  element.menubar( "destroy" );
-  containedButtonTextSpans = element.find( "span.ui-button-text" ).length
-  equal( containedButtonTextSpans, 0, "All 'span.ui-button-text'  should be removed by destroy" );
+	element.menubar( "destroy" );
+	containedButtonTextSpans = element.find( "span.ui-button-text" ).length
+	equal( containedButtonTextSpans, 0, "All 'span.ui-button-text'	should be removed by destroy" );
 });
 
 
