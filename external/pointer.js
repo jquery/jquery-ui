@@ -24,7 +24,7 @@ var currentEventType,
         MSPointer: {
             pointerdown: "MSPointerDown",
             pointerup: "MSPointerUp",
-            pointermove: "MSPointerMove",
+            pointermove: "MSPointerMove MSPointerHover",
             pointercancel: "MSPointerCancel",
             pointerover: "MSPointerOver",
             pointerout: "MSPointerOut"
