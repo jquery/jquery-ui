@@ -33,7 +33,7 @@ var currentEventType,
 
     if ( "MSPointerEvent" in window ) {
         currentEventType = "MSPointer";
-    } else if ( "TouchEvent" in window ) {
+    } else if ( "ontouchstart" in window ) {
         // TODO: Is this good enough?
         currentEventType = "touch";
     } else {
