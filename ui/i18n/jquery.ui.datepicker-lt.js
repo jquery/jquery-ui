@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['lt'] = {
 		closeText: 'Uždaryti',
-		prevText: '&#x3C;Atgal',
-		nextText: 'Pirmyn&#x3E;',
+		prevText: '&#x3c;Atgal',
+		nextText: 'Pirmyn&#x3e;',
 		currentText: 'Šiandien',
 		monthNames: ['Sausis','Vasaris','Kovas','Balandis','Gegužė','Birželis',
 		'Liepa','Rugpjūtis','Rugsėjis','Spalis','Lapkritis','Gruodis'],
@@ -13,11 +13,11 @@ jQuery(function($){
 		dayNames: ['sekmadienis','pirmadienis','antradienis','trečiadienis','ketvirtadienis','penktadienis','šeštadienis'],
 		dayNamesShort: ['sek','pir','ant','tre','ket','pen','šeš'],
 		dayNamesMin: ['Se','Pr','An','Tr','Ke','Pe','Še'],
-		weekHeader: 'Wk',
-		dateFormat: 'yy-mm-dd',
+		weekHeader: 'SAV',
+		dateFormat: 'yyyy-mm-dd',
 		firstDay: 1,
 		isRTL: false,
-		showMonthAfterYear: false,
+		showMonthAfterYear: true,
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['lt']);
 });
