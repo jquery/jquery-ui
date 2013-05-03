@@ -43,7 +43,29 @@ test( "hover over a menu item with no sub-menu should close open menu", function
 	menuItemWithDropdown.trigger("click");
 	menuItemWithoutDropdown.trigger("click");
 
-	equal($(".ui-menu:visible").length, 0,  "After triggering a sub-menu, a click on a peer menu item should close the opened sub-menu");
+	equal($(".ui-menu:visible").length, 0,	"After triggering a sub-menu, a click on a peer menu item should close the opened sub-menu");
 });
+
+test( "Cursor keys should move focus within the menu items", function() {
+	expect( 6 );
+
+	var element = $( "#bar1" ).menubar(),
+		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" ),
+		nextLeftwardMenuElement = firstMenuItem.parent().siblings().last().children().eq( 0 );
+
+	equal( element.find( ":tabbable" ).length, 1, "A Menubar should have 1 tabbable element on init." );
+	firstMenuItem[ 0 ].focus();
+
+	ok( firstMenuItem.hasClass( "ui-state-focus" ), "After a focus event, the first element should have the focus class." );
+	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+
+
+	ok( !firstMenuItem.hasClass( "ui-state-focus" ), "After a keypress event, the first element, should no longer have the focus class." );
+	ok( nextLeftwardMenuElement.hasClass( "ui-state-focus" ), "After a LEFT cursor event from  the first element, the last element should have focus." );
+	equal( element.find( ":tabbable" ).length, 1, "A Menubar, after a cursor key action, should have 1 tabbable." );
+	equal( element.find( ":tabbable" )[ 0 ], nextLeftwardMenuElement[ 0 ], "A Menubar, after a cursor key action, should have 1 tabbable." );
+
+} );
+
 
 })( jQuery );
