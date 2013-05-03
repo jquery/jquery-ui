@@ -109,7 +109,7 @@ function processEvent( event, pointerType ) {
 }
 
 function checkHoverSupport( event, toTrigger ) {
-    if ( event.type.indexOf("touch") !== -1 || event.originalEvent.pointerType === 2 ) {
+    if ( event.type.indexOf("touch") !== -1 ) {
         $( event.target ).trigger( processEvent( event, toTrigger ) );
     }
 }
@@ -134,10 +134,7 @@ $.event.special.pointerdown = {
         $( this ).off( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
     },
     handler: function( event ) {
-        if ( event.type.indexOf("touch") !== -1 ) {
-            // Trigger pointerover for devices that don't support hover
-            checkHoverSupport( event, "pointerover" );
-        }
+        checkHoverSupport( event, "pointerover" );
         $( event.target ).trigger( processEvent( event, "pointerdown" ) );
     }
 };
@@ -151,10 +148,7 @@ $.event.special.pointerup = {
     },
     handler: function( event ) {
         $( event.target ).trigger( processEvent( event, "pointerup" ) );
-        if ( event.type.indexOf("touch") !== -1 ) {
-            // Trigger pointerout for devices that don't support hover
-            checkHoverSupport( event, "pointerout" );
-        }
+        checkHoverSupport( event, "pointerout" );
     }
 };
 
