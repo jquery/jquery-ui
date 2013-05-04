@@ -112,7 +112,7 @@ $.widget( "ui.menubar", {
 			this.menuItems.addClass( "vertical" );
 		}
 
-		subMenus = this.menuItems.children( menubar.options.menuElement ).menu({
+		subMenus = this.menuItems.children( this.options.menuElement ).menu({
 			position: {
 				within: this.options.position.within
 			},
@@ -221,7 +221,7 @@ $.widget( "ui.menubar", {
 			anItem.removeClass( "ui-menubar-link" ).addClass( "ui-state-default" );
 		}
 
-		menubar._on( anItem, {
+		this._on( anItem, {
 			focus:	function(){
 				anItem.attr( "tabIndex", 0 );
 				anItem.addClass( "ui-state-focus" );
@@ -270,7 +270,7 @@ $.widget( "ui.menubar", {
 				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
 		} else {
-			menubar._on( anItem, {
+			this._on( anItem, {
 				click: function() {
 					if ( this.active ) {
 						this._close();
@@ -480,6 +480,8 @@ $.widget( "ui.menubar", {
 	},
 
 	_alterToVerticalOrientation: function() {
+    var menubar = this;
+
 		if ( this.options.orientation !== "vertical" ) {
 			return;
 		}
@@ -509,10 +511,130 @@ $.widget( "ui.menubar", {
 		}
 
     /* Alter event handlers */
-    // TODO
+    this._off( this.items );
+    this._off( this.menuItems.children( this.options.menuElement ) );
+
+		this.items.each(function( index, item ) {
+			menubar._initializeVerticalItem( $( item ), menubar );
+		});
+
+		this._on( this.menuItems.children( this.options.menuElement ), {
+			keydown: function( event ) {
+				$(event.target).attr( "tabIndex", 0 );
+				var parentButton,
+					menu = $( this );
+				if ( menu.is( ":hidden" ) ) {
+					return;
+				}
+				switch ( event.keyCode ) {
+				case $.ui.keyCode.LEFT:
+					parentButton = menubar.active.prev( ".ui-button" );
+
+					if ( this.openSubmenus ) {
+						this.openSubmenus--;
+					} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
+						menubar.active.blur();
+						menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
+					} else {
+						parentButton.parent().prev().find( ".ui-button" ).focus();
+						menubar._close( event );
+						this.open = true;
+					}
+
+					event.preventDefault();
+					$(event.target).attr( "tabIndex", -1 );
+					break;
+				case $.ui.keyCode.RIGHT:
+					this.next( event );
+					event.preventDefault();
+					break;
+				}
+			},
+			focusout: function( event ) {
+				$(event.target).removeClass( "ui-state-focus" );
+			}
+    });
+	},
+
+  _initializeVerticalItem: function( anItem ) {
+		var menubar = this,
+			menuItemHasSubMenu = this._hasSubMenu( anItem.parent() );
+
+		this._on( anItem, {
+			focus:	function(){
+				anItem.attr( "tabIndex", 0 );
+				anItem.addClass( "ui-state-focus" );
+				event.preventDefault();
+			},
+			focusout:  function(){
+				anItem.attr( "tabIndex", -1 );
+				anItem.removeClass( "ui-state-focus" );
+				event.preventDefault();
+			}
+		} );
+
+		if ( menuItemHasSubMenu ) {
+			this._on( anItem, {
+				click: this._mouseBehaviorForMenuItemWithSubmenu,
+				focus: this._mouseBehaviorForMenuItemWithSubmenu,
+				mouseenter: this._mouseBehaviorForMenuItemWithSubmenu
+			});
+
+      /* HERE */
+			this._on( anItem, {
+				keydown: function( event ) {
+					switch ( event.keyCode ) {
+					case $.ui.keyCode.SPACE:
+					case $.ui.keyCode.UP:
+					case $.ui.keyCode.DOWN:
+						this._open( event, $( event.target ).next() );
+						event.preventDefault();
+						break;
+					case $.ui.keyCode.LEFT:
+						this.previous( event );
+						event.preventDefault();
+						break;
+					case $.ui.keyCode.RIGHT:
+						this.next( event );
+						event.preventDefault();
+						break;
+					case $.ui.keyCode.TAB:
+						break;
+					}
+				}
+			});
+
+		} else {
+      /* HERE */
+			this._on( anItem, {
+				click: function() {
+					if ( this.active ) {
+						this._close();
+					} else {
+						this.open = true;
+						this.active = $( anItem ).parent();
+					}
+				},
+				mouseenter: function() {
+					if ( this.open ) {
+						this.stashedOpenMenu = this.active;
+						this._close();
+					}
+				},
+				keydown: function( event ) {
+          console.log( "keydown a" );
+					if ( event.keyCode === $.ui.keyCode.LEFT ) {
+						this.previous( event );
+						event.preventDefault();
+					} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
+						console.log("no!");
+						this.next( event );
+						event.preventDefault();
+					}
+				}
+			});
+		}
 	}
-
-
 });
 
 }( jQuery ));
