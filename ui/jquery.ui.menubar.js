@@ -43,25 +43,8 @@ $.widget( "ui.menubar", {
 		this._initializeWidget();
 		this._initializeMenuItems();
 		this._initializeItems();
+		this._alterToVerticalOrientation();
 
-		if ( this.options.orientation === "vertical" ) {
-			function findLargestWidth( set ) {
-				return set.map(function(){
-					return parseInt($( this ).css( 'width' ))
-				}).sort()[ 0 ];
-			}
-
-			var cssWidth = findLargestWidth( this.items ) + "px";
-
-			this.element.css( "width", cssWidth );
-			this.element.css({
-				border: "1px solid transparent/*{borderColorHeader}*/",
-				color: "#222222/*{fcHeader}*/",
-				"background-position": "0% 0%"
-			});
-
-			this.items.css( "width", cssWidth);
-		}
 
 	},
 
@@ -303,10 +286,12 @@ $.widget( "ui.menubar", {
 					}
 				},
 				keydown: function( event ) {
+          console.log( "keydown a" );
 					if ( event.keyCode === $.ui.keyCode.LEFT ) {
 						this.previous( event );
 						event.preventDefault();
 					} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
+						console.log("no!");
 						this.next( event );
 						event.preventDefault();
 					}
@@ -492,7 +477,41 @@ $.widget( "ui.menubar", {
 			closestMenuItem.find( ".ui-button" );
 			focusableTarget.focus();
 		}
+	},
+
+	_alterToVerticalOrientation: function() {
+		if ( this.options.orientation !== "vertical" ) {
+			return;
+		}
+
+		function findLargestWidth( set ) {
+			return set.map(function(){
+				return parseInt($( this ).css( 'width' ))
+			}).sort()[ 0 ];
+		}
+
+    /* Make width of menubar the width of the largest menuItem */
+		var cssWidth = findLargestWidth( this.items ) + "px";
+		this.element.css( "width", cssWidth );
+		this.items.css( "width", cssWidth);
+
+    /* Reposition gradient background image */
+		this.element.css({
+			border: "1px solid #ccc/*{borderColorHeader}*/",
+			color: "#222222/*{fcHeader}*/",
+			"background-position": "0% 0%"
+		});
+
+    /* jquery.ui.menu should appear to the right of the vertical menu */
+		this.options.position = {
+			my: "left top",
+			at: "right top"
+		}
+
+    /* Alter event handlers */
+    // TODO
 	}
+
 
 });
 
