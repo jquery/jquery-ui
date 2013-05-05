@@ -131,9 +131,9 @@ $.widget( "ui.menubar", {
 		});
 
 		if ( this.options.orientation === "horizontal" ) {
-			this._on( subMenus, this._submenuEventHandlerinHorizOrientation );;
+			this._on( subMenus, this._submenuEventHandlerinHorizOrientation );
 		} else if ( this.options.orientation === "vertical" ) {
-			this._on( subMenus, this._submenuEventHandlerinVertOrientation );;
+			this._on( subMenus, this._submenuEventHandlerinVertOrientation );
 		}
 
 		this.menuItems.each(function( index, menuItem ) {
@@ -151,17 +151,16 @@ $.widget( "ui.menubar", {
 			}
 			switch ( event.keyCode ) {
 			case $.ui.keyCode.LEFT:
-			console.log( "fire1!" );
-				parentButton = menubar.active.prev( ".ui-button" );
+				parentButton = this.active.prev( ".ui-button" );
 
 				if ( this.openSubmenus ) {
 					this.openSubmenus--;
 				} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
-					menubar.active.blur();
-					menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
+					this.active.blur();
+					this._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
 				} else {
 					parentButton.parent().prev().find( ".ui-button" ).focus();
-					menubar._close( event );
+					this._close( event );
 					this.open = true;
 				}
 
@@ -557,7 +556,7 @@ $.widget( "ui.menubar", {
 	},
 
 	_alterToVerticalOrientation: function() {
-    var menubar = this;
+    var cssWidth;
 
 		if ( this.options.orientation !== "vertical" ) {
 			return;
@@ -565,12 +564,12 @@ $.widget( "ui.menubar", {
 
 		function findLargestWidth( set ) {
 			return set.map(function(){
-				return parseInt($( this ).css( 'width' ))
+				return parseInt( $( this ).css( "width" ), 10 );
 			}).sort()[ 0 ];
 		}
 
     /* Make width of menubar the width of the largest menuItem */
-		var cssWidth = findLargestWidth( this.items ) + "px";
+		cssWidth = findLargestWidth( this.items ) + "px";
 		this.element.css( "width", cssWidth );
 		this.items.css( "width", cssWidth);
 
@@ -585,7 +584,7 @@ $.widget( "ui.menubar", {
 		this.options.position = {
 			my: "left top",
 			at: "right top"
-		}
+		};
 
 	}
 });

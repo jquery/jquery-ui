@@ -12,13 +12,14 @@ test( "markup structure", function() {
 });
 
 test( "Passing a vertical orientation parameter adds vertical classes on ui elements", function() {
-	expect( 4 );
+	expect( 11 );
 
-	var element = $( "#bar1" ).menubar({ orientation: "vertical" }),
+	var secondMenuItem,
+		element = $( "#bar1" ).menubar({ orientation: "vertical" }),
 		widget = element.data( "ui-menubar" ),
 		options = widget.options,
 		menuItemCount = element.children( ".ui-menubar-item" ).length,
-		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" );
+		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" ),
 		defaultOrientation = $( "#bar2" ).menubar().data( "ui-menubar" ).options.orientation;
 
 	equal( "horizontal", defaultOrientation, "menubars shoud have horizontal orientation by default" );
@@ -29,6 +30,24 @@ test( "Passing a vertical orientation parameter adds vertical classes on ui elem
 	firstMenuItem[ 0 ].focus();
 	equal( document.activeElement, firstMenuItem[0], "Focus set on first menuItem" );
 
+	$( firstMenuItem ).simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+	ok( firstMenuItem.hasClass( "ui-state-focus" ), "RIGHT should NOT move focus off of focused item if vertically oriented" );
+
+	$( firstMenuItem ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+	ok( firstMenuItem.hasClass( "ui-state-focus" ), "LEFT should NOT move focus off of focused item if vertically oriented" );
+
+	$( firstMenuItem ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	ok( !firstMenuItem.hasClass( "ui-state-focus" ), "DOWN should move focus off of focused item if vertically oriented" );
+
+	secondMenuItem = firstMenuItem.parent().next().children(":first");
+	equal( document.activeElement, secondMenuItem[ 0 ], "Focus is set on second menuItem" );
+
+	$( secondMenuItem ).simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
+	ok( firstMenuItem.hasClass( "ui-state-focus" ), "UP should move focus back to the original menu item" );
+
+	$( firstMenuItem ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	$( secondMenuItem ).simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+	ok( widget.active, "Pressing RIGHT on a menuItem with a subMenu should make the submenu active" );
 });
 
 test( "accessibility", function () {
