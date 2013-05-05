@@ -10,6 +10,7 @@ TestHelpers.commonWidgetTests( "menubar", {
 			at: "left bottom"
 		},
 		disabled: false,
+		orientation: "horizontal",
 
 		// callbacks
 		create: null

@@ -23,6 +23,7 @@ $.widget( "ui.menubar", {
 		items: "li",
 		menuElement: "ul",
 		menuIcon: false,
+		orientation: "horizontal",
 		position: {
 			my: "left top",
 			at: "left bottom"
@@ -42,12 +43,20 @@ $.widget( "ui.menubar", {
 		this._initializeWidget();
 		this._initializeMenuItems();
 		this._initializeItems();
+		this._alterToVerticalOrientation();
+
+
 	},
 
 	_initializeWidget: function() {
 		this.element
 			.addClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
 			.attr( "role", "menubar" );
+
+		if ( this.options.orientation === "vertical" ) {
+			this.element.addClass( "vertical" );
+		}
+
 		this._on( this.element, {
 			keydown: function( event ) {
 				var active;
@@ -99,7 +108,11 @@ $.widget( "ui.menubar", {
 				"border-style": "hidden"
 			});
 
-		subMenus = this.menuItems.children( menubar.options.menuElement ).menu({
+		if ( this.options.orientation === "vertical" ) {
+			this.menuItems.addClass( "vertical" );
+		}
+
+		subMenus = this.menuItems.children( this.options.menuElement ).menu({
 			position: {
 				within: this.options.position.within
 			},
@@ -111,53 +124,92 @@ $.widget( "ui.menubar", {
 			},
 			menus: this.options.menuElement
 		})
-			.hide()
-			.attr({
-				"aria-hidden": "true",
-				"aria-expanded": "false"
-			});
-
-		this._on( subMenus, {
-			keydown: function( event ) {
-				$(event.target).attr( "tabIndex", 0 );
-				var parentButton,
-					menu = $( this );
-				if ( menu.is( ":hidden" ) ) {
-					return;
-				}
-				switch ( event.keyCode ) {
-				case $.ui.keyCode.LEFT:
-					parentButton = menubar.active.prev( ".ui-button" );
-
-					if ( this.openSubmenus ) {
-						this.openSubmenus--;
-					} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
-						menubar.active.blur();
-						menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
-					} else {
-						parentButton.parent().prev().find( ".ui-button" ).focus();
-						menubar._close( event );
-						this.open = true;
-					}
-
-					event.preventDefault();
-					$(event.target).attr( "tabIndex", -1 );
-					break;
-				case $.ui.keyCode.RIGHT:
-					this.next( event );
-					event.preventDefault();
-					break;
-				}
-			},
-			focusout: function( event ) {
-				$(event.target).removeClass( "ui-state-focus" );
-			}
+		.hide()
+		.attr({
+			"aria-hidden": "true",
+			"aria-expanded": "false"
 		});
+
+		if ( this.options.orientation === "horizontal" ) {
+			this._on( subMenus, this._submenuEventHandlerinHorizOrientation );
+		} else if ( this.options.orientation === "vertical" ) {
+			this._on( subMenus, this._submenuEventHandlerinVertOrientation );
+		}
 
 		this.menuItems.each(function( index, menuItem ) {
 			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
 		});
+	},
 
+	_submenuEventHandlerinHorizOrientation: {
+		keydown: function( event ) {
+			$(event.target).attr( "tabIndex", 0 );
+			var parentButton,
+				menu = $( this );
+			if ( menu.is( ":hidden" ) ) {
+				return;
+			}
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.LEFT:
+				parentButton = this.active.prev( ".ui-button" );
+
+				if ( this.openSubmenus ) {
+					this.openSubmenus--;
+				} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
+					this.active.blur();
+					this._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
+				} else {
+					parentButton.parent().prev().find( ".ui-button" ).focus();
+					this._close( event );
+					this.open = true;
+				}
+
+				event.preventDefault();
+				$(event.target).attr( "tabIndex", -1 );
+				break;
+			case $.ui.keyCode.RIGHT:
+				this.next( event );
+				event.preventDefault();
+				break;
+			}
+		},
+		focusout: function( event ) {
+			$(event.target).removeClass( "ui-state-focus" );
+		}
+	},
+
+	_submenuEventHandlerinVertOrientation: {
+		keydown: function( event ) {
+			$(event.target).attr( "tabIndex", 0 );
+			var parentButton,
+				menu = $( this );
+			if ( menu.is( ":hidden" ) ) {
+				return;
+			}
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.LEFT:
+				parentButton = this.active.prev( ".ui-button" );
+
+				if ( this.openSubmenus ) {
+					this.openSubmenus--;
+				} else {
+					parentButton.parent().find( ".ui-button" ).focus();
+					this._close( event );
+					this.open = false;
+				}
+
+				event.preventDefault();
+				$(event.target).attr( "tabIndex", -1 );
+				break;
+			case $.ui.keyCode.RIGHT:
+				this.next( event );
+				event.preventDefault();
+				break;
+			}
+		},
+		focusout: function( event ) {
+			$(event.target).removeClass( "ui-state-focus" );
+		}
 	},
 
 	_hasSubMenu: function( menuItem ) {
@@ -208,7 +260,7 @@ $.widget( "ui.menubar", {
 			anItem.removeClass( "ui-menubar-link" ).addClass( "ui-state-default" );
 		}
 
-		menubar._on( anItem, {
+		this._on( anItem, {
 			focus:	function(){
 				anItem.attr( "tabIndex", 0 );
 				anItem.addClass( "ui-state-focus" );
@@ -228,28 +280,11 @@ $.widget( "ui.menubar", {
 				mouseenter: this._mouseBehaviorForMenuItemWithSubmenu
 			});
 
-			this._on( anItem, {
-				keydown: function( event ) {
-					switch ( event.keyCode ) {
-					case $.ui.keyCode.SPACE:
-					case $.ui.keyCode.UP:
-					case $.ui.keyCode.DOWN:
-						this._open( event, $( event.target ).next() );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.LEFT:
-						this.previous( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.RIGHT:
-						this.next( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.TAB:
-						break;
-					}
-				}
-			});
+      if ( this.options.orientation === "horizontal" ) {
+				this._on( anItem, this._itemEventHandlerinHorizOrientation );
+      } else if ( this.options.orientation === "vertical" ){
+				this._on( anItem, this._itemEventHandlerinVertOrientation );
+      }
 
 			anItem.attr( "aria-haspopup", "true" );
 			if ( menubar.options.menuIcon ) {
@@ -257,7 +292,7 @@ $.widget( "ui.menubar", {
 				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
 		} else {
-			menubar._on( anItem, {
+			this._on( anItem, {
 				click: function() {
 					if ( this.active ) {
 						this._close();
@@ -273,15 +308,71 @@ $.widget( "ui.menubar", {
 					}
 				},
 				keydown: function( event ) {
-					if ( event.keyCode === $.ui.keyCode.LEFT ) {
+					var advanceKey, retreatKey;
+
+					if ( this.options.orientation === "horizontal" ) {
+						advanceKey = $.ui.keyCode.RIGHT;
+						retreatKey = $.ui.keyCode.LEFT;
+					} else if ( this.options.orientation === "vertical" ) {
+						advanceKey = $.ui.keyCode.DOWN;
+						retreatKey = $.ui.keyCode.UP;
+					}
+
+					if ( event.keyCode === retreatKey ) {
 						this.previous( event );
 						event.preventDefault();
-					} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
+					} else if ( event.keyCode === advanceKey ) {
 						this.next( event );
 						event.preventDefault();
 					}
 				}
 			});
+		}
+	},
+
+	_itemEventHandlerinHorizOrientation: {
+		keydown: function( event ) {
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.SPACE:
+			case $.ui.keyCode.UP:
+			case $.ui.keyCode.DOWN:
+				this._open( event, $( event.target ).next() );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.LEFT:
+				this.previous( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.RIGHT:
+				this.next( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.TAB:
+				break;
+			}
+		}
+	},
+
+	_itemEventHandlerinVertOrientation: {
+		keydown: function( event ) {
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.SPACE:
+			case $.ui.keyCode.LEFT:
+			case $.ui.keyCode.RIGHT:
+				this._open( event, $( event.target ).next() );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.UP:
+				this.previous( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.DOWN:
+				this.next( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.TAB:
+				break;
+			}
 		}
 	},
 
@@ -298,7 +389,7 @@ $.widget( "ui.menubar", {
 
 		// If we have an open menu and we see a click on the menuItem
 		// and the menu thereunder is the same as the active menu, close it.
-		// Succinctly: toggle menu open / closed  on the menuItem
+		// Succinctly: toggle menu open / closed on the menuItem
 		isClickingToCloseOpenMenu = event.type === "click" &&
 			menu.is( ":visible" ) &&
 			this.active &&
@@ -319,11 +410,11 @@ $.widget( "ui.menubar", {
 		// we clicked on a new menuItem (whether open or not) or if we auto expand (i.e.
 		// we expand regardless of click if there is a submenu
 		if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
-      clearTimeout( this.closeTimer );
+			clearTimeout( this.closeTimer );
 			this._open( event, menu );
-      // Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
-      // takes the "selected" status off off of the first element of the submenu.
-      event.stopPropagation();
+			// Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
+			// takes the "selected" status off off of the first element of the submenu.
+			event.stopPropagation();
 		}
 	},
 
@@ -396,8 +487,8 @@ $.widget( "ui.menubar", {
 			menuItem = menu.closest( ".ui-menubar-item" );
 
 		if ( this.active && this.active.length &&
-				this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
-					this._collapseActiveMenu();
+      this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
+        this._collapseActiveMenu();
 		}
 
 		button = menuItem.addClass( "ui-state-active" );
@@ -462,8 +553,40 @@ $.widget( "ui.menubar", {
 			closestMenuItem.find( ".ui-button" );
 			focusableTarget.focus();
 		}
-	}
+	},
 
+	_alterToVerticalOrientation: function() {
+    var cssWidth;
+
+		if ( this.options.orientation !== "vertical" ) {
+			return;
+		}
+
+		function findLargestWidth( set ) {
+			return set.map(function(){
+				return parseInt( $( this ).css( "width" ), 10 );
+			}).sort()[ 0 ];
+		}
+
+    /* Make width of menubar the width of the largest menuItem */
+		cssWidth = findLargestWidth( this.items ) + "px";
+		this.element.css( "width", cssWidth );
+		this.items.css( "width", cssWidth);
+
+    /* Reposition gradient background image */
+		this.element.css({
+			border: "1px solid #ccc/*{borderColorHeader}*/",
+			color: "#222222/*{fcHeader}*/",
+			"background-position": "0% 0%"
+		});
+
+    /* jquery.ui.menu should appear to the right of the vertical menu */
+		this.options.position = {
+			my: "left top",
+			at: "right top"
+		};
+
+	}
 });
 
 }( jQuery ));
