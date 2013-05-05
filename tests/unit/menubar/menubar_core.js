@@ -18,12 +18,17 @@ test( "Passing a vertical orientation parameter adds vertical classes on ui elem
 		widget = element.data( "ui-menubar" ),
 		options = widget.options,
 		menuItemCount = element.children( ".ui-menubar-item" ).length,
+		firstMenuItem = $( "#bar1 .ui-menubar-item .ui-button:first" );
 		defaultOrientation = $( "#bar2" ).menubar().data( "ui-menubar" ).options.orientation;
 
 	equal( "horizontal", defaultOrientation, "menubars shoud have horizontal orientation by default" );
 	equal( "vertical", options.orientation, "options should reflect vertical option being set" );
 	ok( element.hasClass( "vertical" ) , "menubar should have a vertical class applied" );
 	equal( element.children( ".ui-menubar-item.vertical" ).length, menuItemCount, "menuItems should have a vertical class applied" );
+
+	firstMenuItem[ 0 ].focus();
+	equal( document.activeElement, firstMenuItem[0], "Focus set on first menuItem" );
+
 });
 
 test( "accessibility", function () {

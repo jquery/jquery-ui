@@ -124,54 +124,93 @@ $.widget( "ui.menubar", {
 			},
 			menus: this.options.menuElement
 		})
-			.hide()
-			.attr({
-				"aria-hidden": "true",
-				"aria-expanded": "false"
-			});
-
-		this._on( subMenus, {
-			keydown: function( event ) {
-				$(event.target).attr( "tabIndex", 0 );
-				var parentButton,
-					menu = $( this );
-				if ( menu.is( ":hidden" ) ) {
-					return;
-				}
-				switch ( event.keyCode ) {
-				case $.ui.keyCode.LEFT:
-        console.log( "fire1!" );
-					parentButton = menubar.active.prev( ".ui-button" );
-
-					if ( this.openSubmenus ) {
-						this.openSubmenus--;
-					} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
-						menubar.active.blur();
-						menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
-					} else {
-						parentButton.parent().prev().find( ".ui-button" ).focus();
-						menubar._close( event );
-						this.open = true;
-					}
-
-					event.preventDefault();
-					$(event.target).attr( "tabIndex", -1 );
-					break;
-				case $.ui.keyCode.RIGHT:
-					this.next( event );
-					event.preventDefault();
-					break;
-				}
-			},
-			focusout: function( event ) {
-				$(event.target).removeClass( "ui-state-focus" );
-			}
+		.hide()
+		.attr({
+			"aria-hidden": "true",
+			"aria-expanded": "false"
 		});
+
+		if ( this.options.orientation === "horizontal" ) {
+			this._on( subMenus, this._submenuEventHandlerinHorizOrientation );;
+		} else if ( this.options.orientation === "vertical" ) {
+			this._on( subMenus, this._submenuEventHandlerinVertOrientation );;
+		}
 
 		this.menuItems.each(function( index, menuItem ) {
 			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
 		});
+	},
 
+	_submenuEventHandlerinHorizOrientation: {
+		keydown: function( event ) {
+			$(event.target).attr( "tabIndex", 0 );
+			var parentButton,
+				menu = $( this );
+			if ( menu.is( ":hidden" ) ) {
+				return;
+			}
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.LEFT:
+			console.log( "fire1!" );
+				parentButton = menubar.active.prev( ".ui-button" );
+
+				if ( this.openSubmenus ) {
+					this.openSubmenus--;
+				} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
+					menubar.active.blur();
+					menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
+				} else {
+					parentButton.parent().prev().find( ".ui-button" ).focus();
+					menubar._close( event );
+					this.open = true;
+				}
+
+				event.preventDefault();
+				$(event.target).attr( "tabIndex", -1 );
+				break;
+			case $.ui.keyCode.RIGHT:
+				this.next( event );
+				event.preventDefault();
+				break;
+			}
+		},
+		focusout: function( event ) {
+			$(event.target).removeClass( "ui-state-focus" );
+		}
+	},
+
+	_submenuEventHandlerinVertOrientation: {
+		keydown: function( event ) {
+			$(event.target).attr( "tabIndex", 0 );
+			var parentButton,
+				menu = $( this );
+			if ( menu.is( ":hidden" ) ) {
+				return;
+			}
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.LEFT:
+				parentButton = this.active.prev( ".ui-button" );
+
+				if ( this.openSubmenus ) {
+					this.openSubmenus--;
+				} else {
+					parentButton.parent().find( ".ui-button" ).focus();
+					this._close( event );
+					this.open = false;
+				}
+
+				event.preventDefault();
+				$(event.target).attr( "tabIndex", -1 );
+				break;
+			case $.ui.keyCode.RIGHT:
+				this.next( event );
+				event.preventDefault();
+				break;
+			}
+		},
+		focusout: function( event ) {
+			$(event.target).removeClass( "ui-state-focus" );
+		}
 	},
 
 	_hasSubMenu: function( menuItem ) {
@@ -242,29 +281,11 @@ $.widget( "ui.menubar", {
 				mouseenter: this._mouseBehaviorForMenuItemWithSubmenu
 			});
 
-			this._on( anItem, {
-				keydown: function( event ) {
-					switch ( event.keyCode ) {
-					case $.ui.keyCode.SPACE:
-					case $.ui.keyCode.UP:
-					case $.ui.keyCode.DOWN:
-						this._open( event, $( event.target ).next() );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.LEFT:
-        console.log( "fire2!" );
-						this.previous( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.RIGHT:
-						this.next( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.TAB:
-						break;
-					}
-				}
-			});
+      if ( this.options.orientation === "horizontal" ) {
+				this._on( anItem, this._itemEventHandlerinHorizOrientation );
+      } else if ( this.options.orientation === "vertical" ){
+				this._on( anItem, this._itemEventHandlerinVertOrientation );
+      }
 
 			anItem.attr( "aria-haspopup", "true" );
 			if ( menubar.options.menuIcon ) {
@@ -288,17 +309,71 @@ $.widget( "ui.menubar", {
 					}
 				},
 				keydown: function( event ) {
-          console.log( "keydown a" );
-					if ( event.keyCode === $.ui.keyCode.LEFT ) {
+					var advanceKey, retreatKey;
+
+					if ( this.options.orientation === "horizontal" ) {
+						advanceKey = $.ui.keyCode.RIGHT;
+						retreatKey = $.ui.keyCode.LEFT;
+					} else if ( this.options.orientation === "vertical" ) {
+						advanceKey = $.ui.keyCode.DOWN;
+						retreatKey = $.ui.keyCode.UP;
+					}
+
+					if ( event.keyCode === retreatKey ) {
 						this.previous( event );
 						event.preventDefault();
-					} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
-						console.log("no!");
+					} else if ( event.keyCode === advanceKey ) {
 						this.next( event );
 						event.preventDefault();
 					}
 				}
 			});
+		}
+	},
+
+	_itemEventHandlerinHorizOrientation: {
+		keydown: function( event ) {
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.SPACE:
+			case $.ui.keyCode.UP:
+			case $.ui.keyCode.DOWN:
+				this._open( event, $( event.target ).next() );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.LEFT:
+				this.previous( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.RIGHT:
+				this.next( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.TAB:
+				break;
+			}
+		}
+	},
+
+	_itemEventHandlerinVertOrientation: {
+		keydown: function( event ) {
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.SPACE:
+			case $.ui.keyCode.LEFT:
+			case $.ui.keyCode.RIGHT:
+				this._open( event, $( event.target ).next() );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.UP:
+				this.previous( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.DOWN:
+				this.next( event );
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.TAB:
+				break;
+			}
 		}
 	},
 
@@ -512,149 +587,7 @@ $.widget( "ui.menubar", {
 			at: "right top"
 		}
 
-    /* Alter event handlers */
-    this._off( this.items );
-    this._off( this.menuItems.children( this.options.menuElement ) );
-
-		this.items.each(function( index, item ) {
-			menubar._initializeVerticalItem( $( item ), menubar );
-		});
-
-		this._on( this.menuItems.children( this.options.menuElement ), {
-			keydown: function( event ) {
-				$(event.target).attr( "tabIndex", 0 );
-				var parentButton,
-					menu = $( this );
-				if ( menu.is( ":hidden" ) ) {
-					return;
-				}
-				switch ( event.keyCode ) {
-				case $.ui.keyCode.LEFT:
-					parentButton = menubar.active.prev( ".ui-button" );
-
-					if ( this.openSubmenus ) {
-						this.openSubmenus--;
-					} else {
-						parentButton.parent().find( ".ui-button" ).focus();
-						menubar._close( event );
-						this.open = false;
-					}
-
-					event.preventDefault();
-					$(event.target).attr( "tabIndex", -1 );
-					break;
-				case $.ui.keyCode.RIGHT:
-					this.next( event );
-					event.preventDefault();
-					break;
-				}
-			},
-			focusout: function( event ) {
-				$(event.target).removeClass( "ui-state-focus" );
-			}
-    });
-	},
-
-  _initializeVerticalItem: function( anItem ) {
-		var menubar = this,
-			menuItemHasSubMenu = this._hasSubMenu( anItem.parent() );
-
-		this._on( anItem, {
-			focus:	function(){
-				anItem.attr( "tabIndex", 0 );
-				anItem.addClass( "ui-state-focus" );
-				event.preventDefault();
-			},
-			focusout:  function(){
-				anItem.attr( "tabIndex", -1 );
-				anItem.removeClass( "ui-state-focus" );
-				event.preventDefault();
-			}
-		} );
-
-		if ( menuItemHasSubMenu ) {
-			this._on( anItem, {
-				click: this._mouseBehaviorForMenuItemWithSubmenu,
-				focus: this._mouseBehaviorForMenuItemWithSubmenu,
-				mouseenter: this._mouseBehaviorForMenuItemWithSubmenu
-			});
-
-      /* HERE */
-			this._on( anItem, {
-				keydown: function( event ) {
-					switch ( event.keyCode ) {
-					case $.ui.keyCode.SPACE:
-					case $.ui.keyCode.LEFT:
-					case $.ui.keyCode.RIGHT:
-						this._open( event, $( event.target ).next() );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.UP:
-						this.previous( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.DOWN:
-						this.next( event );
-						event.preventDefault();
-						break;
-					case $.ui.keyCode.TAB:
-						break;
-					}
-				}
-			});
-
-		} else {
-			this._on( anItem, {
-				click: function() {
-					if ( this.active ) {
-						this._close();
-					} else {
-						this.open = true;
-						this.active = $( anItem ).parent();
-					}
-				},
-				mouseenter: function() {
-					if ( this.open ) {
-						this.stashedOpenMenu = this.active;
-						this._close();
-					}
-				},
-				keydown: function( event ) {
-					if ( event.keyCode === $.ui.keyCode.UP ) {
-						this.previous( event );
-						event.preventDefault();
-					} else if ( event.keyCode === $.ui.keyCode.DOWN ) {
-						this.next( event );
-						event.preventDefault();
-					}
-				}
-			});
-		}
-	},
-
-	_vertical_open: function( event, menu ) {
-		var button,
-			menuItem = menu.closest( ".ui-menubar-item" );
-
-		if ( this.active && this.active.length &&
-      this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
-        this._collapseActiveMenu();
-		}
-
-		button = menuItem.addClass( "ui-state-active" );
-
-		this.active = menu
-			.show()
-			.position( $.extend({
-				of: button
-			}, this.options.position ) )
-			.removeAttr( "aria-hidden" )
-			.attr( "aria-expanded", "true" )
-			.menu( "focus", event, menu.children( ".ui-menu-item" ).first()  )
-			.focus();
-
-		this.open = true;
-	},
+	}
 });
 
 }( jQuery ));
