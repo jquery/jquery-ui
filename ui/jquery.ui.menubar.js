@@ -140,6 +140,7 @@ $.widget( "ui.menubar", {
 				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
+        console.log( "fire1!" );
 					parentButton = menubar.active.prev( ".ui-button" );
 
 					if ( this.openSubmenus ) {
@@ -251,6 +252,7 @@ $.widget( "ui.menubar", {
 						event.preventDefault();
 						break;
 					case $.ui.keyCode.LEFT:
+        console.log( "fire2!" );
 						this.previous( event );
 						event.preventDefault();
 						break;
@@ -411,8 +413,8 @@ $.widget( "ui.menubar", {
 			menuItem = menu.closest( ".ui-menubar-item" );
 
 		if ( this.active && this.active.length &&
-				this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
-					this._collapseActiveMenu();
+      this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
+        this._collapseActiveMenu();
 		}
 
 		button = menuItem.addClass( "ui-state-active" );
@@ -532,13 +534,10 @@ $.widget( "ui.menubar", {
 
 					if ( this.openSubmenus ) {
 						this.openSubmenus--;
-					} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
-						menubar.active.blur();
-						menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
 					} else {
-						parentButton.parent().prev().find( ".ui-button" ).focus();
+						parentButton.parent().find( ".ui-button" ).focus();
 						menubar._close( event );
-						this.open = true;
+						this.open = false;
 					}
 
 					event.preventDefault();
@@ -585,16 +584,16 @@ $.widget( "ui.menubar", {
 				keydown: function( event ) {
 					switch ( event.keyCode ) {
 					case $.ui.keyCode.SPACE:
-					case $.ui.keyCode.UP:
-					case $.ui.keyCode.DOWN:
+					case $.ui.keyCode.LEFT:
+					case $.ui.keyCode.RIGHT:
 						this._open( event, $( event.target ).next() );
 						event.preventDefault();
 						break;
-					case $.ui.keyCode.LEFT:
+					case $.ui.keyCode.UP:
 						this.previous( event );
 						event.preventDefault();
 						break;
-					case $.ui.keyCode.RIGHT:
+					case $.ui.keyCode.DOWN:
 						this.next( event );
 						event.preventDefault();
 						break;
@@ -605,7 +604,6 @@ $.widget( "ui.menubar", {
 			});
 
 		} else {
-      /* HERE */
 			this._on( anItem, {
 				click: function() {
 					if ( this.active ) {
@@ -622,19 +620,41 @@ $.widget( "ui.menubar", {
 					}
 				},
 				keydown: function( event ) {
-          console.log( "keydown a" );
-					if ( event.keyCode === $.ui.keyCode.LEFT ) {
+					if ( event.keyCode === $.ui.keyCode.UP ) {
 						this.previous( event );
 						event.preventDefault();
-					} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
-						console.log("no!");
+					} else if ( event.keyCode === $.ui.keyCode.DOWN ) {
 						this.next( event );
 						event.preventDefault();
 					}
 				}
 			});
 		}
-	}
+	},
+
+	_vertical_open: function( event, menu ) {
+		var button,
+			menuItem = menu.closest( ".ui-menubar-item" );
+
+		if ( this.active && this.active.length &&
+      this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
+        this._collapseActiveMenu();
+		}
+
+		button = menuItem.addClass( "ui-state-active" );
+
+		this.active = menu
+			.show()
+			.position( $.extend({
+				of: button
+			}, this.options.position ) )
+			.removeAttr( "aria-hidden" )
+			.attr( "aria-expanded", "true" )
+			.menu( "focus", event, menu.children( ".ui-menu-item" ).first()  )
+			.focus();
+
+		this.open = true;
+	},
 });
 
 }( jQuery ));
