@@ -35,8 +35,14 @@ TestHelpers.draggable = {
 		} else {
 			$("#main").scrollTop(0); $("#main").scrollLeft(0);
 		}
+		
+		$('.force-scroll').remove();
+		
 	},
 	setScroll: function( what ) {
+	
+		$(document.body).append( "<div class='force-scroll'>" );
+	
 		if(what) {
 			$(document).scrollTop(100); $(document).scrollLeft(100);
 		} else {
