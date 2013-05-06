@@ -279,7 +279,7 @@ test( "{ containment: Selector }", function() {
 	expect( 1 );
 
 	var offsetAfter,
-		element = $( "#draggable1" ).draggable({ containment: $( "#qunit-fixture" ) }),
+		element = $( "#draggable1" ).draggable({ containment: "#qunit-fixture" }),
 		p = element.parent(),
 		po = p.offset(),
 		expected = {

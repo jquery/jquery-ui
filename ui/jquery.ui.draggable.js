@@ -542,8 +542,6 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			container = null;
 		} else if ( containment === "parent" ) {
 			container = this.element.parent();
-		} else if ( $.isArray( containment ) ) {
-			container = containment;
 		} else {
 			container = $( containment );
 			if ( !container.length ) {
@@ -559,6 +557,20 @@ $.widget( "ui.draggable", $.ui.draggable, {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
+
+	$.widget( "ui.draggable", $.ui.draggable, {
+		_getContainer: function() {
+
+			var containment = this.options.containment;
+
+			if ( $.isArray( containment ) ) {
+				return containment;
+			}
+
+			return this._super();
+
+		}
+	});
 
 	// appendTo "parent" value
 	$.widget( "ui.draggable", $.ui.draggable, {
