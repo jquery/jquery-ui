@@ -2,7 +2,7 @@
 
 module( "selectmenu: core" );
 
-asyncTest("accessibility", function () {
+asyncTest( "accessibility", function() {
 	var links,
 		element = $( "#speed" ).selectmenu(),
 		button = element.selectmenu( "widget" ),
@@ -11,7 +11,7 @@ asyncTest("accessibility", function () {
 	button.simulate( "focus" );
 	links = menu.find( "li.ui-menu-item a" );
 
-	expect(12 + links.length * 2);
+	expect( 12 + links.length * 2 );
 
 	setTimeout(function() {
 		equal( button.attr( "role" ), "combobox", "button link role" );
@@ -88,8 +88,8 @@ $.each([
 		}, 1 );
 	});
 
-	asyncTest("state synchronization - after click on item - " + settings.type, function () {
-		expect(4);
+	asyncTest( "state synchronization - after click on item - " + settings.type, function () {
+		expect( 4 );
 
 		var links,
 			element = $( settings.selector ).selectmenu(),
@@ -123,7 +123,7 @@ $.each([
 	});
 
 	asyncTest( "state synchronization - after focus item and keydown on button - " + settings.type, function () {
-		expect(4);
+		expect( 4 );
 
 		var links,
 			element = $( settings.selector ).selectmenu(),
@@ -141,7 +141,7 @@ $.each([
 			links.first().simulate( "mouseover" ).trigger( "click" );
 			// open menu again and hover item
 			button.simulate( "click" );
-			links.eq(3).simulate( "mouseover" );
+			links.eq( 3 ).simulate( "mouseover" );
 			// close and use keyboard control on button
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 			button.simulate( "focus" );
