@@ -40,7 +40,7 @@ asyncTest( "accessibility", function() {
 			equal( $( this ).attr( "tabindex" ), -1, "menu link #" + index +" tabindex" );
 		});
 		start();
-	}, 1 );
+	});
 });
 
 
