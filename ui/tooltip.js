@@ -208,7 +208,8 @@ return $.widget( "ui.tooltip", {
 			that = this,
 			eventType = event ? event.type : null;
 
-		if ( typeof contentOption === "string" ) {
+		if ( typeof contentOption === "string" || contentOption.nodeType ||
+				contentOption.jquery ) {
 			return this._open( event, target, contentOption );
 		}
 
@@ -276,13 +277,9 @@ return $.widget( "ui.tooltip", {
 		// JAWS announces deletions even when aria-relevant="additions"
 		// Voiceover will sometimes re-read the entire log region's contents from the beginning
 		this.liveRegion.children().hide();
-		if ( content.clone ) {
-			a11yContent = content.clone();
-			a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
-		} else {
-			a11yContent = content;
-		}
-		$( "<div>" ).html( a11yContent ).appendTo( this.liveRegion );
+		a11yContent = $( "<div>" ).html( tooltip.find( ".ui-tooltip-content" ).html() );
+		a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
+		a11yContent.appendTo( this.liveRegion );
 
 		function position( event ) {
 			positionOption.of = event;
