@@ -208,7 +208,8 @@ return $.widget( "ui.tooltip", {
 			that = this,
 			eventType = event ? event.type : null;
 
-		if ( typeof contentOption === "string" ) {
+		if ( typeof contentOption === "string" || contentOption.nodeType ||
+				contentOption.jquery ) {
 			return this._open( event, target, contentOption );
 		}
 
