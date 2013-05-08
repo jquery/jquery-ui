@@ -7,3 +7,4 @@ docs
 *.patch
 .DS_Store
 .settings
+*.sw?

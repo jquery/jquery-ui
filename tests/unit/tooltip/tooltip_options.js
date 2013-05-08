@@ -97,6 +97,32 @@ test( "content: string", function() {
 	}).tooltip( "open" );
 });
 
+test( "content: element", function() {
+	expect( 1 );
+	var content = "<p>This is a <i>test</i> of the emergency broadcast system.</p>"
+	var element = $( content )[ 0 ];
+	$( "#tooltipped1" ).tooltip({
+		content: element,
+		open: function( event, ui ) {
+			// Getting just the contents of the tooltip wrapper.
+			equal( ui.tooltip[ 0 ].firstChild.innerHTML, content );
+		}
+	}).tooltip( "open" );
+});
+
+test( "content: jQuery", function() {
+	expect( 1 );
+	var content = "<p>This is a <i>test</i> of the emergency broadcast system.</p>"
+	var element = $( content );
+	$( "#tooltipped1" ).tooltip({
+		content: element,
+		open: function( event, ui ) {
+			console.log( ui.tooltip );
+			equal( ui.tooltip[ 0 ].firstChild.innerHTML, content );
+		}
+	}).tooltip( "open" );
+});
+
 test( "items", function() {
 	expect( 2 );
 	var event,
