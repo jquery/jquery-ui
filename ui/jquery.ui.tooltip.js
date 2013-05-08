@@ -180,10 +180,14 @@ $.widget( "ui.tooltip", {
 	_updateContent: function( target, event ) {
 		var content,
 			contentOption = this.options.content,
+			contentOptionType = (typeof contentOption),
 			that = this,
 			eventType = event ? event.type : null;
 
-		if ( typeof contentOption === "string" ) {
+		if ( contentOptionType === "string" ||
+			( contentOptionType === "object" &&
+			( contentOption instanceof HTMLElement || contentOption instanceof jQuery ) )
+		) {
 			return this._open( event, target, contentOption );
 		}
 

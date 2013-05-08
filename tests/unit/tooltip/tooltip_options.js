@@ -95,7 +95,32 @@ test( "content: string", function() {
 			equal( ui.tooltip.text(), "just a string" );
 		}
 	}).tooltip( "open" );
+}
+
+test( "content: element", function() {
+	expect( 1 );
+	var html = $( "<p>This is a <i>test</i> of the emergency broadcast system.</p>" )[0];
+	$( "#tooltipped1" ).tooltip({
+		content: html,
+		open: function( event, ui ) {
+			equal( ui.tooltip.html(), html );
+		}
+	}).tooltip( "open" );
 });
+);
+
+test( "content: jQuery", function() {
+	expect( 1 );
+	var html = $( "<p>This is a <i>test</i> of the emergency broadcast system.</p>" );
+	$( "#tooltipped1" ).tooltip({
+		content: html,
+		open: function( event, ui ) {
+			equal( ui.tooltip.html(), html );
+		}
+	}).tooltip( "open" );
+});
+);
+
 
 test( "items", function() {
 	expect( 2 );
