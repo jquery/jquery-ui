@@ -95,32 +95,33 @@ test( "content: string", function() {
 			equal( ui.tooltip.text(), "just a string" );
 		}
 	}).tooltip( "open" );
-}
+});
 
 test( "content: element", function() {
 	expect( 1 );
-	var html = $( "<p>This is a <i>test</i> of the emergency broadcast system.</p>" )[0];
+	var content = "<p>This is a <i>test</i> of the emergency broadcast system.</p>"
+	var element = $( content )[ 0 ];
 	$( "#tooltipped1" ).tooltip({
-		content: html,
+		content: element,
 		open: function( event, ui ) {
-			equal( ui.tooltip.html(), html );
+			// Getting just the contents of the tooltip wrapper.
+			equal( ui.tooltip[ 0 ].firstChild.innerHTML, content );
 		}
 	}).tooltip( "open" );
 });
-);
 
 test( "content: jQuery", function() {
 	expect( 1 );
-	var html = $( "<p>This is a <i>test</i> of the emergency broadcast system.</p>" );
+	var content = "<p>This is a <i>test</i> of the emergency broadcast system.</p>"
+	var element = $( content );
 	$( "#tooltipped1" ).tooltip({
-		content: html,
+		content: element,
 		open: function( event, ui ) {
-			equal( ui.tooltip.html(), html );
+			console.log( ui.tooltip );
+			equal( ui.tooltip[ 0 ].firstChild.innerHTML, content );
 		}
 	}).tooltip( "open" );
 });
-);
-
 
 test( "items", function() {
 	expect( 2 );
