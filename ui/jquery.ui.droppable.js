@@ -42,7 +42,8 @@ $.widget("ui.droppable", {
 	_create: function() {
 
 		var o = this.options,
-			accept = o.accept;
+			accept = o.accept,
+			proportions;
 
 		this.isover = false;
 		this.isout = true;
@@ -51,9 +52,21 @@ $.widget("ui.droppable", {
 			return d.is(accept);
 		};
 
-		//Store the droppable's proportions
-		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
-
+		this.proportions = function(/* valueToWrite */) {
+			if (arguments.length) {
+				// Store the droppable's proportions
+				proportions = arguments[0];
+			} else {
+				// Retrieve or derive the droppable's proportions
+				return proportions ?
+					proportions :
+					proportions = {
+						width: this.element[0].offsetWidth,
+						height: this.element[0].offsetHeight
+					};
+			}
+		};
+		
 		// Add the reference and positions to the manager
 		$.ui.ddmanager.droppables[o.scope] = $.ui.ddmanager.droppables[o.scope] || [];
 		$.ui.ddmanager.droppables[o.scope].push(this);
@@ -200,8 +213,8 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 	var draggableLeft, draggableTop,
 		x1 = (draggable.positionAbs || draggable.position.absolute).left, x2 = x1 + draggable.helperProportions.width,
 		y1 = (draggable.positionAbs || draggable.position.absolute).top, y2 = y1 + draggable.helperProportions.height,
-		l = droppable.offset.left, r = l + droppable.proportions.width,
-		t = droppable.offset.top, b = t + droppable.proportions.height;
+		l = droppable.offset.left, r = l + droppable.proportions().width,
+		t = droppable.offset.top, b = t + droppable.proportions().height;
 
 	switch (toleranceMode) {
 		case "fit":
@@ -214,7 +227,7 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 		case "pointer":
 			draggableLeft = ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left);
 			draggableTop = ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top);
-			return isOverAxis( draggableTop, t, droppable.proportions.height ) && isOverAxis( draggableLeft, l, droppable.proportions.width );
+			return isOverAxis( draggableTop, t, droppable.proportions().height ) && isOverAxis( draggableLeft, l, droppable.proportions().width );
 		case "touch":
 			return (
 				(y1 >= t && y1 <= b) ||	// Top edge touching
@@ -254,7 +267,7 @@ $.ui.ddmanager = {
 			// Filter out elements in the current dragged item
 			for (j=0; j < list.length; j++) {
 				if(list[j] === m[i].element[0]) {
-					m[i].proportions.height = 0;
+					m[i].proportions().height = 0;
 					continue droppablesLoop;
 				}
 			}
@@ -270,7 +283,7 @@ $.ui.ddmanager = {
 			}
 
 			m[i].offset = m[i].element.offset();
-			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
+			m[i].proportions({ width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight });
 
 		}
 
