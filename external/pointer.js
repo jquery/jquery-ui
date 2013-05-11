@@ -1,25 +1,17 @@
 (function( $ ) {
-var currentEventType,
+var currentEventType, currentEventMap, eventName,
 	POINTER_TYPE_UNAVAILABLE = "",
 	POINTER_TYPE_TOUCH = "touch",
 	POINTER_TYPE_PEN = "pen",
 	POINTER_TYPE_MOUSE = "mouse",
 	eventMap = {
-		mouse: {
-			pointerdown: "mousedown",
-			pointerup: "mouseup",
-			pointermove: "mousemove",
-			pointercancel: "",
+		touch: {
+			pointerdown: "touchstart mousedown",
+			pointerup: "touchend mouseup",
+			pointermove: "touchmove mousemove",
+			pointercancel: "touchcancel",
 			pointerover: "mouseover",
 			pointerout: "mouseout"
-		},
-		touch: {
-			pointerdown: "touchstart",
-			pointerup: "touchend",
-			pointermove: "touchmove",
-			pointercancel: "touchcancel",
-			pointerover: "",
-			pointerout: ""
 		},
 		MSPointer: {
 			pointerdown: "MSPointerDown",
@@ -33,12 +25,10 @@ var currentEventType,
 
 	if ( "MSPointerEvent" in window ) {
 		currentEventType = "MSPointer";
-	} else if ( "ontouchstart" in window ) {
-		// TODO: Is this good enough?
-		currentEventType = "touch";
 	} else {
-		currentEventType = "mouse";
+		currentEventType = "touch";
 	}
+	currentEventMap = eventMap[ currentEventType ];
 
 function processEvent( event, pointerType ) {
 	var propLength, touch,
@@ -126,78 +116,27 @@ function processMSPointerType( type ) {
 	}
 }
 
-$.event.special.pointerdown = {
-	setup: function() {
-		$( this ).on( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
-	},
-	teardown: function() {
-		$( this ).off( eventMap[ currentEventType ].pointerdown, $.event.special.pointerdown.handler );
-	},
-	handler: function( event ) {
-		checkHoverSupport( event, "pointerover" );
-		$( event.target ).trigger( processEvent( event, "pointerdown" ) );
-	}
-};
+function createSpecialEvent( eventName, currentEventMap ) {
+	$.event.special[ eventName ] = {
+		setup: function() {
+			$( this ).on( currentEventMap[ eventName ], $.event.special[ eventName ].handler );
+		},
+		teardown: function() {
+			$( this ).off( currentEventMap[ eventName ], $.event.special[ eventName ].handler );
+		},
+		handler: function( event ) {
+			if ( eventName === "pointerdown" && event.type.indexOf("touch") !== -1 ) {
+				$( event.target ).trigger( processEvent( event, "pointerover" ) );
+			}
+			$( event.target ).trigger( processEvent( event, eventName ) );
+			if ( eventName === "pointerup" && event.type.indexOf("touch") !== -1 ) {
+				$( event.target ).trigger( processEvent( event, "pointerout" ) );
+			}
+		}
+	};
+}
 
-$.event.special.pointerup = {
-	setup: function() {
-		$( this ).on( eventMap[ currentEventType ].pointerup, $.event.special.pointerup.handler );
-	},
-	teardown: function() {
-		$( this ).off( eventMap[ currentEventType ].pointerup, $.event.special.pointerup.handler );
-	},
-	handler: function( event ) {
-		$( event.target ).trigger( processEvent( event, "pointerup" ) );
-		checkHoverSupport( event, "pointerout" );
-	}
-};
-
-$.event.special.pointermove = {
-	setup: function() {
-		$( this ).on( eventMap[ currentEventType ].pointermove, $.event.special.pointermove.handler );
-	},
-	teardown: function() {
-		$( this ).off( eventMap[ currentEventType ].pointermove, $.event.special.pointermove.handler );
-	},
-	handler: function( event ) {
-		$( event.target ).trigger( processEvent( event, "pointermove" ) );
-	}
-};
-
-$.event.special.pointercancel = {
-	setup: function() {
-		$( this ).on( eventMap[ currentEventType ].pointercancel, $.event.special.pointercancel.handler );
-	},
-	teardown: function() {
-		$( this ).off( eventMap[ currentEventType ].pointercancel, $.event.special.pointercancel.handler );
-	},
-	handler: function( event ) {
-		$( event.target ).trigger( processEvent( event, "pointercancel" ) );
-		$( event.target ).trigger( processEvent( event, "pointerout" ) );
-	}
-};
-
-$.event.special.pointerover = {
-	setup: function() {
-		$( this ).on( eventMap[ currentEventType ].pointerover, $.event.special.pointerover.handler );
-	},
-	teardown: function() {
-		$( this ).off( eventMap[ currentEventType ].pointerover, $.event.special.pointerover.handler );
-	},
-	handler: function( event ) {
-		$( event.target ).trigger( processEvent( event, "pointerover" ) );
-	}
-};
-
-$.event.special.pointerout = {
-	setup: function() {
-		$( this ).on( eventMap[ currentEventType ].pointerout, $.event.special.pointerout.handler );
-	},
-	teardown: function() {
-		$( this ).off( eventMap[ currentEventType ].pointerout, $.event.special.pointerout.handler );
-	},
-	handler: function( event ) {
-		$( event.target ).trigger( processEvent( event, "pointerout" ) );
-	}
-};
+for ( eventName in currentEventMap ) {
+	createSpecialEvent( eventName, currentEventMap );
+}
 })( jQuery );
