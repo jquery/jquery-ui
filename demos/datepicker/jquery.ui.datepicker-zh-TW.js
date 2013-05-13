@@ -2,6 +2,7 @@
 /* Written by Ressol (ressol@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['zh-TW'] = {
+		calendar: Date,
 		closeText: '關閉',
 		prevText: '&#x3C;上月',
 		nextText: '下月&#x3E;',

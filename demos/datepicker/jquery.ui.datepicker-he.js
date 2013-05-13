@@ -2,6 +2,7 @@
 /* Written by Amir Hardon (ahardon at gmail dot com). */
 jQuery(function($){
 	$.datepicker.regional['he'] = {
+		calendar: Date,
 		closeText: 'סגור',
 		prevText: '&#x3C;הקודם',
 		nextText: 'הבא&#x3E;',

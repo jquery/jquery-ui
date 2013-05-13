@@ -62,6 +62,7 @@ function Datepicker() {
 	this._dayOverClass = "ui-datepicker-days-cell-over"; // The name of the day hover marker class
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[""] = { // Default regional settings
+		calendar: Date, //[CC]
 		closeText: "Done", // Display text for close link
 		prevText: "Prev", // Display text for previous month link
 		nextText: "Next", // Display text for next month link
@@ -167,7 +168,8 @@ $.extend(Datepicker.prototype, {
 			target.id = "dp" + this.uuid;
 		}
 		inst = this._newInst($(target), inline);
-		inst.settings = $.extend({}, settings || {});
+		var regional = $.extend({}, settings && this.regional[settings['regional']] || {});//[CC]
+		inst.settings = $.extend(regional, settings || {});//[CC]
 		if (nodeName === "input") {
 			this._connectDatepicker(target, inst);
 		} else if (inline) {
@@ -961,7 +963,7 @@ $.extend(Datepicker.prototype, {
 			inst.drawMonth = inst.selectedMonth = inst.currentMonth;
 			inst.drawYear = inst.selectedYear = inst.currentYear;
 		} else {
-			date = new Date();
+			date = new this.CDate();//[CC]
 			inst.selectedDay = date.getDate();
 			inst.drawMonth = inst.selectedMonth = date.getMonth();
 			inst.drawYear = inst.selectedYear = date.getFullYear();
@@ -1103,7 +1105,7 @@ $.extend(Datepicker.prototype, {
 			iValue = 0,
 			shortYearCutoffTemp = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff,
 			shortYearCutoff = (typeof shortYearCutoffTemp !== "string" ? shortYearCutoffTemp :
-				new Date().getFullYear() % 100 + parseInt(shortYearCutoffTemp, 10)),
+				new this.CDate().getFullYear() % 100 + parseInt(shortYearCutoffTemp, 10)),//[CC]
 			dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort,
 			dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames,
 			monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort,
@@ -1194,7 +1196,7 @@ $.extend(Datepicker.prototype, {
 						year = getNumber("y");
 						break;
 					case "@":
-						date = new Date(getNumber("@"));
+						date = new this.CDate(getNumber("@"));//[CC]
 						year = date.getFullYear();
 						month = date.getMonth() + 1;
 						day = date.getDate();
@@ -1226,9 +1228,9 @@ $.extend(Datepicker.prototype, {
 		}
 
 		if (year === -1) {
-			year = new Date().getFullYear();
+			year = new this.CDate().getFullYear();//[CC]
 		} else if (year < 100) {
-			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
+			year += new this.CDate().getFullYear() - new this.CDate().getFullYear() % 100 +//[CC]
 				(year <= shortYearCutoff ? 0 : -100);
 		}
 
@@ -1245,7 +1247,7 @@ $.extend(Datepicker.prototype, {
 			} while (true);
 		}
 
-		date = this._daylightSavingAdjust(new Date(year, month - 1, day));
+		date = this._daylightSavingAdjust(new this.CDate(year, month - 1, day));//[CC]
 		if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
 			throw "Invalid date"; // E.g. 31/02/00
 		}
@@ -1350,7 +1352,7 @@ $.extend(Datepicker.prototype, {
 							break;
 						case "o":
 							output += formatNumber("o",
-								Math.round((new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000), 3);
+								Math.round((new this.CDate(date.getFullYear(), date.getMonth(), date.getDate()).getTime() - new this.CDate(date.getFullYear(), 0, 0).getTime()) / 86400000), 3);//[CC]
 							break;
 						case "m":
 							output += formatNumber("m", date.getMonth() + 1, 2);
@@ -1461,12 +1463,14 @@ $.extend(Datepicker.prototype, {
 
 	/* Retrieve the default date shown on opening. */
 	_getDefaultDate: function(inst) {
+		this.CDate = this._get(inst, 'calendar');//[CC]
 		return this._restrictMinMax(inst,
-			this._determineDate(inst, this._get(inst, "defaultDate"), new Date()));
+			this._determineDate(inst, this._get(inst, "defaultDate"), new this.CDate()));//[CC]
 	},
 
 	/* A date may be specified as an exact value or a relative one. */
 	_determineDate: function(inst, date, defaultDate) {
+		var Date = this.CDate;//[CC]
 		var offsetNumeric = function(offset) {
 				var date = new Date();
 				date.setDate(date.getDate() + offset);
@@ -1538,10 +1542,11 @@ $.extend(Datepicker.prototype, {
 
 	/* Set the date(s) directly. */
 	_setDate: function(inst, date, noChange) {
+		this.CDate = this._get(inst, 'calendar');//[CC]
 		var clear = !date,
 			origMonth = inst.selectedMonth,
 			origYear = inst.selectedYear,
-			newDate = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
+			newDate = this._restrictMinMax(inst, this._determineDate(inst, date, new this.CDate()));//[CC]
 
 		inst.selectedDay = inst.currentDay = newDate.getDate();
 		inst.drawMonth = inst.selectedMonth = inst.currentMonth = newDate.getMonth();
@@ -1557,8 +1562,9 @@ $.extend(Datepicker.prototype, {
 
 	/* Retrieve the date(s) directly. */
 	_getDate: function(inst) {
+		this.CDate = this._get(inst, 'calendar');//[CC]
 		var startDate = (!inst.currentYear || (inst.input && inst.input.val() === "") ? null :
-			this._daylightSavingAdjust(new Date(
+			this._daylightSavingAdjust(new this.CDate(//[CC]
 			inst.currentYear, inst.currentMonth, inst.currentDay)));
 			return startDate;
 	},
@@ -1608,9 +1614,9 @@ $.extend(Datepicker.prototype, {
 			selectOtherMonths, defaultDate, html, dow, row, group, col, selectedDate,
 			cornerClass, calender, thead, day, daysInMonth, leadDays, curRows, numRows,
 			printDate, dRow, tbody, daySettings, otherMonth, unselectable,
-			tempDate = new Date(),
+			tempDate = new this.CDate(),//[CC]
 			today = this._daylightSavingAdjust(
-				new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate())), // clear time
+				new this.CDate(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate())), // clear time //[CC]
 			isRTL = this._get(inst, "isRTL"),
 			showButtonPanel = this._get(inst, "showButtonPanel"),
 			hideIfNoPrevNext = this._get(inst, "hideIfNoPrevNext"),
@@ -1620,7 +1626,7 @@ $.extend(Datepicker.prototype, {
 			stepMonths = this._get(inst, "stepMonths"),
 			isMultiMonth = (numMonths[0] !== 1 || numMonths[1] !== 1),
 			currentDate = this._daylightSavingAdjust((!inst.currentDay ? new Date(9999, 9, 9) :
-				new Date(inst.currentYear, inst.currentMonth, inst.currentDay))),
+				new this.CDate(inst.currentYear, inst.currentMonth, inst.currentDay))),//[CC]
 			minDate = this._getMinMaxDate(inst, "min"),
 			maxDate = this._getMinMaxDate(inst, "max"),
 			drawMonth = inst.drawMonth - showCurrentAtPos,
@@ -1631,10 +1637,10 @@ $.extend(Datepicker.prototype, {
 			drawYear--;
 		}
 		if (maxDate) {
-			maxDraw = this._daylightSavingAdjust(new Date(maxDate.getFullYear(),
+			maxDraw = this._daylightSavingAdjust(new this.CDate(maxDate.getFullYear(),//[CC]
 				maxDate.getMonth() - (numMonths[0] * numMonths[1]) + 1, maxDate.getDate()));
-			maxDraw = (minDate && maxDraw < minDate ? minDate : maxDraw);
-			while (this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1)) > maxDraw) {
+			maxDraw = (minDate && this._compareDate(maxDraw, '<', minDate) ? minDate : maxDraw);//[CC]
+			while (this._daylightSavingAdjust(new this.CDate(drawYear, drawMonth, 1)) > maxDraw) {//[CC]
 				drawMonth--;
 				if (drawMonth < 0) {
 					drawMonth = 11;
@@ -1647,7 +1653,7 @@ $.extend(Datepicker.prototype, {
 
 		prevText = this._get(inst, "prevText");
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
-			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
+			this._daylightSavingAdjust(new this.CDate(drawYear, drawMonth - stepMonths, 1)),//[CC]
 			this._getFormatConfig(inst)));
 
 		prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
@@ -1657,7 +1663,7 @@ $.extend(Datepicker.prototype, {
 
 		nextText = this._get(inst, "nextText");
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
-			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
+			this._daylightSavingAdjust(new this.CDate(drawYear, drawMonth + stepMonths, 1)),//[CC]
 			this._getFormatConfig(inst)));
 
 		next = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
@@ -1695,7 +1701,7 @@ $.extend(Datepicker.prototype, {
 			group = "";
 			this.maxRows = 4;
 			for (col = 0; col < numMonths[1]; col++) {
-				selectedDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, inst.selectedDay));
+				selectedDate = this._daylightSavingAdjust(new this.CDate(drawYear, drawMonth, inst.selectedDay));//[CC]
 				cornerClass = " ui-corner-all";
 				calender = "";
 				if (isMultiMonth) {
@@ -1733,7 +1739,7 @@ $.extend(Datepicker.prototype, {
 				curRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
 				numRows = (isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows); //If multiple months, use the higher number of rows (see #7043)
 				this.maxRows = numRows;
-				printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
+				printDate = this._daylightSavingAdjust(new this.CDate(drawYear, drawMonth, 1 - leadDays));//[CC]
 				for (dRow = 0; dRow < numRows; dRow++) { // create date picker rows
 					calender += "<tr>";
 					tbody = (!showWeek ? "" : "<td class='ui-datepicker-week-col'>" +
@@ -1743,7 +1749,7 @@ $.extend(Datepicker.prototype, {
 							beforeShowDay.apply((inst.input ? inst.input[0] : null), [printDate]) : [true, ""]);
 						otherMonth = (printDate.getMonth() !== drawMonth);
 						unselectable = (otherMonth && !selectOtherMonths) || !daySettings[0] ||
-							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
+							((minDate && this._compareDate(printDate, '<', minDate)) || (maxDate && this._compareDate(printDate, '>', maxDate)));//[CC]
 						tbody += "<td class='" +
 							((dow + firstDay + 6) % 7 >= 5 ? " ui-datepicker-week-end" : "") + // highlight weekends
 							(otherMonth ? " ui-datepicker-other-month" : "") + // highlight days from other months
@@ -1824,7 +1830,7 @@ $.extend(Datepicker.prototype, {
 			} else {
 				// determine range of years to display
 				years = this._get(inst, "yearRange").split(":");
-				thisYear = new Date().getFullYear();
+				thisYear = new this.CDate().getFullYear();//[CC]
 				determineYear = function(value) {
 					var year = (value.match(/c[+\-].*/) ? drawYear + parseInt(value.substring(1), 10) :
 						(value.match(/[+\-].*/) ? thisYear + parseInt(value, 10) :
@@ -1861,7 +1867,7 @@ $.extend(Datepicker.prototype, {
 		var year = inst.drawYear + (period === "Y" ? offset : 0),
 			month = inst.drawMonth + (period === "M" ? offset : 0),
 			day = Math.min(inst.selectedDay, this._getDaysInMonth(year, month)) + (period === "D" ? offset : 0),
-			date = this._restrictMinMax(inst, this._daylightSavingAdjust(new Date(year, month, day)));
+			date = this._restrictMinMax(inst, this._daylightSavingAdjust(new this.CDate(year, month, day)));//[CC]
 
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
@@ -1875,8 +1881,8 @@ $.extend(Datepicker.prototype, {
 	_restrictMinMax: function(inst, date) {
 		var minDate = this._getMinMaxDate(inst, "min"),
 			maxDate = this._getMinMaxDate(inst, "max"),
-			newDate = (minDate && date < minDate ? minDate : date);
-		return (maxDate && newDate > maxDate ? maxDate : newDate);
+			newDate = ((minDate && this._compareDate(date, '<', minDate)) ? minDate : date);//[CC]
+		return ((maxDate && this._compareDate(newDate, '>', maxDate)) ? maxDate : newDate);//[CC]
 	},
 
 	/* Notify change of month/year. */
@@ -1901,18 +1907,18 @@ $.extend(Datepicker.prototype, {
 
 	/* Find the number of days in a given month. */
 	_getDaysInMonth: function(year, month) {
-		return 32 - this._daylightSavingAdjust(new Date(year, month, 32)).getDate();
+		return 32 - this._daylightSavingAdjust(new  this.CDate(year, month, 32)).getDate();//[CC]
 	},
 
 	/* Find the day of the week of the first of a month. */
 	_getFirstDayOfMonth: function(year, month) {
-		return new Date(year, month, 1).getDay();
+		return new this.CDate(year, month, 1).getDay();//[CC]
 	},
 
 	/* Determines if we should allow a "next/prev" month display change. */
 	_canAdjustMonth: function(inst, offset, curYear, curMonth) {
 		var numMonths = this._getNumberOfMonths(inst),
-			date = this._daylightSavingAdjust(new Date(curYear,
+			date = this._daylightSavingAdjust(new this.CDate(curYear,//[CC]
 			curMonth + (offset < 0 ? offset : numMonths[0] * numMonths[1]), 1));
 
 		if (offset < 0) {
@@ -1951,8 +1957,9 @@ $.extend(Datepicker.prototype, {
 	/* Provide the configuration settings for formatting/parsing. */
 	_getFormatConfig: function(inst) {
 		var shortYearCutoff = this._get(inst, "shortYearCutoff");
+		this.CDate = this._get(inst, 'calendar');//[CC]
 		shortYearCutoff = (typeof shortYearCutoff !== "string" ? shortYearCutoff :
-			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
+			new this.CDate().getFullYear() % 100 + parseInt(shortYearCutoff, 10));//[CC]
 		return {shortYearCutoff: shortYearCutoff,
 			dayNamesShort: this._get(inst, "dayNamesShort"), dayNames: this._get(inst, "dayNames"),
 			monthNamesShort: this._get(inst, "monthNamesShort"), monthNames: this._get(inst, "monthNames")};
@@ -1966,10 +1973,22 @@ $.extend(Datepicker.prototype, {
 			inst.currentYear = inst.selectedYear;
 		}
 		var date = (day ? (typeof day === "object" ? day :
-			this._daylightSavingAdjust(new Date(year, month, day))) :
-			this._daylightSavingAdjust(new Date(inst.currentYear, inst.currentMonth, inst.currentDay)));
+			this._daylightSavingAdjust(new this.CDate(year, month, day))) ://[CC]
+			this._daylightSavingAdjust(new this.CDate(inst.currentYear, inst.currentMonth, inst.currentDay)));//[CC]
 		return this.formatDate(this._get(inst, "dateFormat"), date, this._getFormatConfig(inst));
-	}
+	},//[CC]
+
+	/* [CC]Compare two dates */
+	_compareDate: function(d1, op, d2) {//[CC]
+		if(d1 && d2) {//[CC]
+			if(d1.getGregorianDate) d1 = d1.getGregorianDate();//[CC]
+			if(d2.getGregorianDate) d2 = d2.getGregorianDate();//[CC]
+			if(op == '<') return d1 < d2;//[CC]
+			return d1 > d2;//[CC]
+		} else {//[CC]
+			return null;//[CC]
+		}//[CC]
+	}//[CC]
 });
 
 /*
