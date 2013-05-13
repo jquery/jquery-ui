@@ -4,6 +4,7 @@
 			  Stéphane Raimbault <stephane.raimbault@gmail.com> */
 jQuery(function($){
 	$.datepicker.regional['fr'] = {
+		calendar: Date,
 		closeText: 'Fermer',
 		prevText: 'Précédent',
 		nextText: 'Suivant',
