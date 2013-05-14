@@ -28,111 +28,127 @@ function copy( obj ) {
 $.widget( "ui.sortable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
-	items: "li", // TODO: move to options when API is ready
 
-	// dragEl: element being dragged (original or helper)
-	// position: final CSS position of dragEl
-	// offset: offset of dragEl
-	// originalPosition: CSS position before drag start
-	// originalOffset: offset before drag start
+	// sorting: element being sorted
+	// 	.element: jQuery object
+	// 	.originalCss: CSS position of element before being made absolute on start
+	// helper: element being sorted (original or helper)
+	// 	.element: jquery object
+	// 	.position: final CSS position of helper
+	// 	.offset: offset of helper
+	// 	.originalPosition: CSS position before drag start
+	// 	.originalOffset: offset before drag start
+	// 	.proportions: width and height properties
+	// 	.startPosition: CSS position at drag start (after beforeStart)
+	// 	.startOffset: offset at drag start (after beforeStart)
+	// 	.tempPosition: overridable CSS position of helper
+	// horizontallyAlignedItems
+	// items: cache of positions of all sortable items
 	// originalPointer: pageX/Y at drag start (offset of pointer)
-	// startPosition: CSS position at drag start (after beforeStart)
-	// startOffset: offset at drag start (after beforeStart)
-	// tempPosition: overridable CSS position of dragEl
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
-	// sortablePositions: cache of positions of all sortable items
-	// originalCssPosition: CSS position of element before being made absolute on start
 	// placeholder: reference to jquery object of cloned element that is being dragged
 
 	options: {
+		appendTo: null,
+		exclude: "input,textarea,button,select",
+		handle: null,
+		helper: false,
+		items: "> *",
+		placeholder: null,
+		tolerance: "intersect"
 	},
 
 	_create: function() {
+
+		var float, inline;
 
 		this._super();
 
 		this.element.addClass( "ui-sortable" );
 
-		this._setSortablePositions();
+		this._refreshItems();
 
+		// TODO: What if there are no items yet, and they'll happen to be horizontally aligned?
+		if ( this.items.length ) {
+			float = ( /left|right/ ).test( this.items[0].element.css( "float" ) );
+			inline = ( /inline|table-cell/ ).test( this.items[0].element.css("display") );
+		}
+
+		this.horizontallyAlignedItems = float || inline;
 	},
 
-	_setSortablePositions: function() {
+	_refreshItems: function() {
 
-		var sortablePositions = this.sortablePositions = [];
+		var items = this.items = [];
 
-		this.element.find( this.items ).each( function() {
+		this.element.find( this.options.items ).each( function() {
 
-			var el = $(this);
+			var item,
+				element = $(this),
+				offset = element.offset(),
+				width = element.outerWidth(),
+				height = element.outerHeight();
 
-			sortablePositions.push([{
-				el: el,
-				offset: el.offset()
-			}]);
+			item = {
+				edges: {
+					right: width + offset.left,
+					bottom: height + offset.top
+				},
+				element: element,
+				offset: offset,
+				proportions: {
+					width: width,
+					height: height
+				}
+			}
+
+			items.push( item );
 		});
-
 	},
 
 	/** interaction interface **/
 
 	_isValidTarget: function( element ) {
-
-		// TODO: options for what is actually valid
-		return element.is( this.items );
+		return !!( element.closest( this.element.find( this.options.items ) ).length &&
+			( !this.options.handle || element.closest( this.element.find( this.options.handle ) ).length ) &&
+			!element.closest( this.element.find( this.options.exclude ) ).length );
 	},
 
 	_start: function( event, pointerPosition ) {
 
-		// The actual dragging element, should always be a jQuery object
-		// this.dragEl = this.options.helper ?
-			// this._createHelper( pointerPosition ) :
-			// this.element;
-
-		this.dragEl = $(event.target);
+		this.sorting = {
+			element: $( event.target ).closest( this.element.find( this.options.items ) )
+		};
 
 		// Save original css position if there are currently styles
 		// Otherwise the original css will be set back by removing attribute
-		if ( this.dragEl[0].style.position ) {
-			this.originalCssPosition = this.dragEl[0].style.position;
+		this.sorting.originalCss = {
+			position: this.sorting.element[0].style.position,
+			bottom: this.sorting.element[0].style.bottom,
+			left: this.sorting.element[0].style.left,
+			right: this.sorting.element[0].style.right,
+			top: this.sorting.element[0].style.top
 		}
 
-		// Create placeholder for while element is dragging
-		// TODO: what do we do about IDs?
-		// TODO: possibly use CSS for visibility portion
-		this.placeholder = this.dragEl.clone().removeAttr("id").css({
-			visibility : "hidden",
-			position : this.originalCssPosition || ""
-		});
+		this.placeholder = this._createPlaceholder();
 
-		this.dragEl.after( this.placeholder );
+		// Helper could be appended anywhere so insert the placeholder first
+		this.sorting.element.after( this.placeholder );
+		this.helper = this._createHelper( pointerPosition );
 
-		this.dragEl.css( "position", "absolute" );
+		this._refreshItems();
 
-		// // _createHelper() ensures that helpers are in the correct position
-		// // in the DOM, but we need to handle appendTo when there is no helper
-		// if ( this.options.appendTo && this.dragEl === this.element ) {
-			// this.domPosition = {
-				// parent: this.element.parent(),
-				// index: this.element.index()
-			// };
-			// offset = this.dragEl.offset();
-			// this.dragEl
-				// .appendTo( this.options.appendTo )
-				// .offset( offset );
-		// }
-
-		this.cssPosition = this.dragEl.css( "position" );
+		this.helper.cssPosition = this.helper.element.css( "position" );
 		this.scrollParent = this.element.scrollParent();
 
-		// Cache starting positions
-		this.originalPosition = this.startPosition = this._getPosition();
-		this.originalOffset = this.startOffset = this.dragEl.offset();
-		this.originalPointer = pointerPosition;
+		// Cache current position (offset was cached at creation)
+		this.helper.position = this._getPosition();
 
-		// Cache current position and offset
-		this.position = copy( this.startPosition );
-		this.offset = copy( this.startOffset );
+		// Cache starting positions
+		this.helper.originalPosition = this.helper.startPosition = copy( this.helper.position );
+		this.helper.originalOffset = this.helper.startOffset = copy( this.helper.offset );
+		this.originalPointer = pointerPosition;
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
 		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
@@ -156,8 +172,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		}
 
 		this._setCss();
-		this.startPosition = this._getPosition();
-		this.startOffset = this.dragEl.offset();
+		this.helper.startPosition = this._getPosition();
+		this.helper.startOffset = this.helper.offset;
 
 		this._trigger( "start", event, this._fullHash( pointerPosition ) );
 		this._blockFrames();
@@ -166,7 +182,10 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	_move: function( event, pointerPosition ) {
 
 		var sort, sortItem, sortIndex,
-			len = this.sortablePositions.length;
+			beforePlaceholder = true,
+			dragDirection = this.horizontallyAlignedItems ?
+				this.helper.horizontalDragDirection : this.helper.verticalDragDirection;
+			len = this.items.length;
 
 
 		this._preparePosition( pointerPosition );
@@ -183,54 +202,42 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		for ( sortIndex=0; sortIndex<len; ++sortIndex ) {
 
-			for ( sort in this.sortablePositions[sortIndex] ) {
+			sortItem = this.items[sortIndex];
 
-				sortItem = this.sortablePositions[sortIndex][sort];
+			// Don't bother checking against self
+			if ( sortItem.element[0] === this.helper.element[0] ) {
+				continue;
+			}
 
-				// Don't bother checking against self
-				if ( sortItem.el[0] === this.dragEl[0] ) {
-					continue;
+			if ( sortItem.element[0] === this.placeholder[0] ) {
+				beforePlaceholder = false;
+				continue;
+			}
+
+			// If we're still over the same item from last sort and the drag direction hasn't changed, don't resort
+			if ( this._over( sortItem, pointerPosition ) ) {
+				if ( !this.lastSortDragDirection || dragDirection === -this.lastSortDragDirection ) {
+
+					beforePlaceholder ?
+						sortItem.element.before( this.placeholder ) :
+						sortItem.element.after( this.placeholder );
+
+					this.lastSortDragDirection = dragDirection;
+
+					this._refreshItems();
 				}
 
-				if ( this._over( sortItem ) )  {
-
-					// TODO: cache height of element
-					if ( ( this.offset.top + this.dragEl.height() )	> ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
-
-						sortItem.el.after( this.dragEl );
-						this.dragEl.after( this.placeholder );
-						this._setSortablePositions();
-					}
-					else if ( this.offset.top	< ( sortItem.offset.top + sortItem.el.height()/2 ) ) {
-						sortItem.el.before( this.dragEl );
-						this.dragEl.before( this.placeholder );
-						this._setSortablePositions();
-					}
-
-				}
-
-
+				return;
 			}
 		}
 
+		// This reset also serves to indicate we're not over the same element anymore
+		this.lastSortDragDirection = null;
 	},
 
-	// TODO: swap out for real tolerance options
-	_over: function( sortItem ) {
-
-		// TODO: use same cache from _move for height and width of element
-		var edges = {
-			droppableRight: sortItem.offset.left + sortItem.el.width(),
-			droppableBottom: sortItem.offset.top + sortItem.el.height(),
-			draggableRight: this.offset.left + this.dragEl.width(),
-			draggableBottom: this.offset.top + this.dragEl.height()
-		};
-
-		return sortItem.offset.left < edges.draggableRight &&
-				edges.droppableRight > this.offset.left &&
-				sortItem.offset.top < edges.draggableBottom &&
-				edges.droppableBottom > sortItem.offset.top;
-
+	_over: function( sortItem, pointerPosition ) {
+		return $.ui.sortable.tolerance[ this.options.tolerance ]
+			.call( this, this.helper, sortItem, pointerPosition );
 	},
 
 	_stop: function( event, pointerPosition ) {
@@ -240,29 +247,24 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		// // If user cancels stop, leave helper there
 		// if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
 			// if ( this.options.helper ) {
-				// this.dragEl.remove();
+				// this.helper.remove();
 			// }
 			// this._resetDomPosition();
 		// }
 
-		// If there were inline styles before drag, set them back
-		if ( this.originalCssPosition ) {
-			this.dragEl.css( "position", this.originalCssPosition );
-		}
-		// If there were no inline styles, let CSS take over again by removing inline absolute
-		else {
-			this.dragEl.css( "position", "" );
+		// If helper is a clone or user generated, remove
+		if ( this.options.helper !== false ) {
+			this.helper.element.remove();
+		} else {
+			this.sorting.element.css( this.sorting.originalCss );
+			this.sorting.element.removeClass( "ui-front" );
 		}
 
-		// TODO: should same thing be done here as is done for position or is there better way altogether
-		this.dragEl.css( "left", "" );
-		this.dragEl.css( "top", "" );
-
-		this.placeholder.remove();
+		this.placeholder.replaceWith( this.sorting.element );
 
 		// Unset properties only needed during draggin/sorting
-		this.dragEl = null;
-		this.originalCssPosition = null;
+		this.sorting = null;
+		this.helper = null;
 		this.placeholder = null;
 
 		this._unblockFrames();
@@ -270,37 +272,71 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	// /** internal **/
 
-	// _createHelper: function( pointerPosition ) {
-		// var helper,
-			// offset = this.element.offset(),
-			// xPos = (pointerPosition.x - offset.left) / this.element.outerWidth(),
-			// yPos = (pointerPosition.y - offset.top) / this.element.outerHeight();
+	_createHelper: function( pointerPosition ) {
+		var helper = {},
+			offset = this.sorting.element.offset(),
+			xPos = (pointerPosition.x - offset.left) / this.sorting.element.outerWidth(),
+			yPos = (pointerPosition.y - offset.top) / this.sorting.element.outerHeight();
 
-		// // clone
-		// if ( this.options.helper === true ) {
-			// helper = this.element.clone()
-				// .removeAttr( "id" )
-				// .find( "[id]" )
-					// .removeAttr( "id" )
-				// .end();
-		// } else {
-			// // TODO: figure out the signature for this; see #4957
-			// helper = $( this.options.helper() );
-		// }
+		// clone
+		if ( this.options.helper === false ) {
+			helper.element = this.sorting.element;
+		}
+		else {
+			if ( this.options.helper === true ) {
+				helper.element = this.sorting.element.clone()
+					.removeAttr( "id" )
+					.find( "[id]" )
+						.removeAttr( "id" )
+					.end();
+			}
+			else {
+				// // TODO: figure out the signature for this; see #4957
+				helper.element = $( this.options.helper() );
+			}
 
-		// // Ensure the helper is in the DOM; obey the appendTo option if it exists
-		// if ( this.options.appendTo || !helper.closest( "body" ).length ) {
-			// helper.appendTo( this.options.appendTo || this.document[0].body );
-		// }
+			this.sorting.element.after( helper.element );
+			this.sorting.element.detach();
+		}
 
-		// return helper
-			// // Helper must be absolute to function properly
-			// .css( "position", "absolute" )
-			// .offset({
-				// left: pointerPosition.x - helper.outerWidth() * xPos,
-				// top: pointerPosition.y - helper.outerHeight() * yPos
-			// });
-	// },
+		// Ensure the helper is in the DOM; obey the appendTo option if it exists
+		if ( this.options.appendTo || !helper.element.closest( this.document.find( "body" ) ).length ) {
+			helper.element.appendTo( this.options.appendTo || this.element );
+		}
+
+		helper.proportions = {
+			width: helper.element.outerWidth(),
+			height: helper.element.outerHeight()
+		};
+
+		helper.offset = {
+			left: pointerPosition.x - helper.proportions.width * xPos,
+			top: pointerPosition.y - helper.proportions.height * yPos
+		};
+
+		// Used to determine drag direction
+		helper.lastOffset = helper.offset;
+
+		helper.element
+			.addClass( "ui-front" )
+			// Helper must be absolute to function properly
+			.css( "position", "absolute" )
+			.offset({
+				left: helper.offset.left,
+				top: helper.offset.top
+			});
+
+		return helper;
+	},
+
+	_createPlaceholder: function() {
+		return $.isFunction( this.options.placeholder ) ?
+			$( this.options.placeholder( this.sorting ) ) :
+			this.sorting.element.clone().removeAttr("id").css({
+				visibility : "hidden",
+				position : this.sorting.originalCss.position || ""
+			});
+	},
 
 	_getPosition: function() {
 		var left, top, position,
@@ -308,8 +344,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 			scrollLeft = this.scrollParent.scrollLeft();
 
 		// If fixed or absolute
-		if ( this.cssPosition !== "relative" ) {
-			position = this.dragEl.position();
+		if ( this.helper.cssPosition !== "relative" ) {
+			position = this.helper.element.position();
 
 			// Take into account scrollbar
 			position.top -= scrollTop;
@@ -320,8 +356,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 		// When using relative, css values are checked
 		// Otherwise the position wouldn't account for padding on ancestors
-		left = this.dragEl.css( "left" );
-		top = this.dragEl.css( "top" );
+		left = this.helper.element.css( "left" );
+		top = this.helper.element.css( "top" );
 
 		// Webkit will give back auto if there is no explicit value
 		left = ( left === "auto" ) ? 0: parseInt( left, 10 );
@@ -376,47 +412,58 @@ $.widget( "ui.sortable", $.ui.interaction, {
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( pointerPosition ) {
 		var leftDiff = pointerPosition.x - this.originalPointer.x,
-			topDiff = pointerPosition.y - this.originalPointer.y,
-			newLeft = leftDiff + this.startPosition.left,
-			newTop = topDiff + this.startPosition.top;
+			topDiff = pointerPosition.y - this.originalPointer.y;
 
 		// Save off new values for .css() in various callbacks using this function
-		this.position = {
-			left: newLeft,
-			top: newTop
+		this.helper.position = {
+			left: leftDiff + this.helper.startPosition.left,
+			top: topDiff + this.helper.startPosition.top
 		};
 
 		// Save off values to compare user override against automatic coordinates
-		this.tempPosition = {
-			left: newLeft,
-			top: newTop
-		};
+		this.helper.tempPosition = copy( this.helper.position );
 
-		// Refresh offset cache with new positions
-		this.offset.left = this.startOffset.left + leftDiff;
-		this.offset.top = this.startOffset.top + topDiff;
+		this.helper.lastOffset = this.helper.offset;
+
+		this.helper.offset = {
+			left: leftDiff + this.helper.startOffset.left,
+			top: topDiff + this.helper.startOffset.top
+		};
 	},
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-		var newLeft = this.position.left,
-			newTop = this.position.top;
+		var horizontalDelta, verticalDelta, 
+			newLeft = this.helper.position.left,
+			newTop = this.helper.position.top;
 
 		// User overriding left/top so shortcut math is no longer valid
-		if ( this.tempPosition.left !== this.position.left ||
-				this.tempPosition.top !== this.position.top ) {
+		if ( this.helper.tempPosition.left !== this.helper.position.left ||
+				this.helper.tempPosition.top !== this.helper.position.top ) {
 			// Reset offset based on difference of expected and overridden values
-			this.offset.left += newLeft - this.tempPosition.left;
-			this.offset.top += newTop - this.tempPosition.top;
+			this.helper.offset.left += newLeft - this.helper.tempPosition.left;
+			this.helper.offset.top += newTop - this.helper.tempPosition.top;
 		}
 
 		// TODO: does this work with nested scrollable parents?
-		if ( this.cssPosition !== "fixed" ) {
+		if ( this.helper.cssPosition !== "fixed" ) {
 			newLeft += this.scrollParent.scrollLeft();
 			newTop += this.scrollParent.scrollTop();
 		}
 
-		this.dragEl.css({
+		this.helper.edges = {
+			right: this.helper.offset.left + this.helper.proportions.width,
+			bottom: this.helper.offset.top + this.helper.proportions.height
+		};
+
+		// -1 is up, 1 is down
+		horizontalDelta = this.helper.offset.left - this.helper.lastOffset.left;
+		this.helper.horizontalDragDirection = horizontalDelta ? horizontalDelta / Math.abs( horizontalDelta ) : 0;
+
+		verticalDelta = this.helper.offset.top - this.helper.lastOffset.top;
+		this.helper.verticalDragDirection = verticalDelta ? verticalDelta / Math.abs( verticalDelta ) : 0;
+
+		this.helper.element.css({
 			left: newLeft,
 			top: newTop
 		});
@@ -424,13 +471,13 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_originalHash: function( pointerPosition ) {
 		var ret = {
-			position: this.position,
-			offset: copy( this.offset ),
+			position: this.helper.position,
+			offset: copy( this.helper.offset ),
 			pointer: copy( pointerPosition )
 		};
 
 		if ( this.options.helper ) {
-			ret.helper = this.dragEl;
+			ret.helper = this.helper.element;
 		}
 
 		return ret;
@@ -438,8 +485,8 @@ $.widget( "ui.sortable", $.ui.interaction, {
 
 	_fullHash: function( pointerPosition ) {
 		return $.extend( this._originalHash( pointerPosition ), {
-			originalPosition: copy( this.originalPosition ),
-			originalOffset: copy( this.originalOffset ),
+			originalPosition: copy( this.helper.originalPosition ),
+			originalOffset: copy( this.helper.originalOffset ),
 			originalPointer: copy( this.originalPointer )
 		});
 	},
@@ -472,4 +519,30 @@ $.widget( "ui.sortable", $.ui.interaction, {
 		this._super();
 	}
 });
+
+$.extend( $.ui.sortable, {
+	tolerance: {
+		// Half of the helper overlaps the item, horizontally and vertically
+		intersect: function( helper, item ) {
+			var helperMiddleX = helper.offset.left + helper.proportions.width / 2,
+				helperMiddleY = helper.offset.top + helper.proportions.height / 2;
+
+			return item.offset.left < helperMiddleX && item.edges.right > helperMiddleX &&
+				item.offset.top < helperMiddleY && item.edges.bottom > helperMiddleY;
+		},
+
+		// Pointer overlaps item
+		pointer: function( helper, item, pointerPosition ) {
+			return pointerPosition.x >= item.offset.left && pointerPosition.x <= item.edges.right &&
+				pointerPosition.y >= item.offset.top && pointerPosition.y <= item.edges.bottom;
+		},
+
+		// Helper overlaps item by at least one pixel
+		touch: function( helper, item, pointerPosition ) {
+			return item.offset.left < helper.edges.right && item.edges.right > helper.offset.left &&
+				item.offset.top < helper.edges.bottom && item.edges.bottom > helper.offset.top;
+		}
+	}
+});
+
 })( jQuery );
