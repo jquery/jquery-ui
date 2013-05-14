@@ -68,6 +68,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			this.element.css( "position", "relative" );
 		}
 
+		// Prevent view panning when dragging a draggable in IE10 via touch
+		this.element.css( "-ms-touch-action", "none" );
 		this.element.addClass( "ui-draggable" );
 	},
 
