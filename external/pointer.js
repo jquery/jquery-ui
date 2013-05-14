@@ -45,11 +45,11 @@ function processEvent( event, pointerType ) {
 		isPrimary: false
 	});
 
-	for ( propLength = mouseProps.length; i < propLength; i++ ) {
-		event[ mouseProps[ i ] ] = orig[ mouseProps[ i ] ];
-	}
-
 	if ( orig.type.indexOf("mouse") !== -1 ) {
+		for ( propLength = mouseProps.length; i < propLength; i++ ) {
+			event[ mouseProps[ i ] ] = orig[ mouseProps[ i ] ];
+		}
+
 		event.pointerId = 1;
 		event.pointerType = POINTER_TYPE_MOUSE;
 		event.isPrimary = true;
