@@ -80,7 +80,7 @@ function processEvent( event, pointerType ) {
         event.pointerId = orig.originalEvent.pointerId;
         event.pointerType = processMSPointerType( orig.originalEvent.pointerType );
         event.button = orig.originalEvent.button;
-        event.buttons = event.pointerType === "touch" ? 1 : orig.originalEvent.buttons;
+        event.buttons = event.pointerType === POINTER_TYPE_TOUCH ? 1 : orig.originalEvent.buttons;
         event.width = orig.originalEvent.width;
         event.height = orig.originalEvent.height;
         event.pressure = orig.originalEvent.pressure;
