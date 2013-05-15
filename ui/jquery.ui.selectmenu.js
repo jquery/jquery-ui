@@ -49,8 +49,6 @@ $.widget( "ui.selectmenu", {
 		this._drawButton();
 		this._drawMenu();
 
-		this._on( document, this._documentClick );
-
 		if ( this.options.disabled ) {
 			this.disable();
 		}
@@ -196,6 +194,8 @@ $.widget( "ui.selectmenu", {
 		this._toggleAttr();
 		this.menuWrap.position( $.extend( { of: this.button }, this.options.position ) );
 
+		this._on( this.document, this._documentClick );
+
 		this._trigger( "open", event );
 	},
 
@@ -211,6 +211,8 @@ $.widget( "ui.selectmenu", {
 		if ( this.menuItems ) {
 			this.menu.menu( "focus", null, this._getSelectedItem() );
 		}
+
+		this._off( this.document );
 
 		this._trigger( "close", event );
 	},
