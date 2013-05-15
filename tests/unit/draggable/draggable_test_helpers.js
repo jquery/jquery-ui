@@ -7,7 +7,9 @@ TestHelpers.draggable = {
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
-			dy: dy
+			dy: dy,
+			// MUST be one move since scroll events are async, things will not calculate properly
+			moves: 1
 		});
 		offsetAfter = el.offset();
 
@@ -26,27 +28,53 @@ TestHelpers.draggable = {
 	testScroll: function(el, position ) {
 		var oldPosition = $("#main").css("position");
 		$("#main").css("position", position);
-		TestHelpers.draggable.shouldMove(el, position+" parent");
+
+		// Make sure draggable is in viewport for test
+		$('#qunit-fixture').css({
+		  top: "0px",
+			left: "0px"
+		});
+		
+		// Draggalbe should now be in top left, partially in viewport
+		// See that it drags to top-left properly
+		TestHelpers.draggable.testDrag(el, el, -50, -50, -50, -50, position+" parent");
+		// TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50, position+" parent");
+
+		// Reset fixture
+		$('#qunit-fixture').css({
+		  top: "",
+			left: ""
+		});
 		$("#main").css("position", oldPosition);
 	},
 	restoreScroll: function( what ) {
 		if( what ) {
-			$(document).scrollTop(0); $(document).scrollLeft(0);
+			$(document).scrollTop(0);
+			$(document).scrollLeft(0);
 		} else {
-			$("#main").scrollTop(0); $("#main").scrollLeft(0);
+			$("#main").scrollTop(0);
+			$("#main").scrollLeft(0);
 		}
-		
+
 		$('.force-scroll').remove();
-		
+
 	},
-	setScroll: function( what ) {
-	
+	setScroll: function( what, scrollLeftAmount, scrollTopAmount ) {
+
+		// Defaults to slightly less than half the size of dragable1, since simulate picks up by center by default
+		// This ensures that simulate will pick up the draggable in the viewport
+		scrollLeftAmount = scrollLeftAmount || 95;
+		scrollTopAmount = scrollTopAmount || 45;
+
 		$(document.body).append( "<div class='force-scroll'>" );
-	
+
+
 		if(what) {
-			$(document).scrollTop(100); $(document).scrollLeft(100);
+			$(document).scrollTop(scrollTopAmount);
+			$(document).scrollLeft(scrollLeftAmount);
 		} else {
-			$("#main").scrollTop(100); $("#main").scrollLeft(100);
+			$("#main").scrollTop(scrollTopAmount);
+			$("#main").scrollLeft(scrollLeftAmount);
 		}
 	},
 	border: function(el, side) {
