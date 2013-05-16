@@ -170,4 +170,51 @@ test("stop", function() {
 
 });
 
+test( "resize (containment) works with parent with negative offset", function() {
+
+	expect( 1 );
+
+	var widthBefore, widthAfter,
+		handle = ".ui-resizable-e",
+		target = $( "#resizable1" ),
+		absoluteContainer = target.wrap( "<div />" ).parent(),
+		fixedContainer = absoluteContainer.wrap( "<div />" ).parent(),
+		increaseWidthBy = 50;
+
+	// position fixed container in window top left
+	fixedContainer.css({
+		width: 400,
+		height: 100,
+		position: "fixed",
+		top: 0,
+		left: 0
+	});
+
+	// position absolute container within fixed on slightly outside window
+	absoluteContainer.css({
+		width: 400,
+		height: 100,
+		position: "absolute",
+		top: 0,
+		left: -50
+	});
+
+	// set up resizable to be contained within absolute container
+	target.resizable({
+		handles: "all",
+		containment: "parent"
+	}).css({
+		width: 300
+	});
+
+	widthBefore = target.width();
+
+	TestHelpers.resizable.drag( handle, increaseWidthBy, 0 );
+
+	widthAfter = target.width();
+
+	equal( widthAfter, ( widthBefore + increaseWidthBy ), "resizable width should be increased by the value dragged" );
+
+});
+
 })(jQuery);

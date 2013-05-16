@@ -797,8 +797,8 @@ $.ui.plugin.add("resizable", "containment", {
 		isParent = that.containerElement.get(0) === that.element.parent().get(0);
 		isOffsetRelative = /relative|absolute/.test(that.containerElement.css("position"));
 
-		if(isParent && isOffsetRelative) {
-			woset -= that.parentData.left;
+		if ( isParent && isOffsetRelative ) {
+			woset -= Math.abs( that.parentData.left );
 		}
 
 		if (woset + that.size.width >= that.parentData.width) {
