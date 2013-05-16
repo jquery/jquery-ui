@@ -186,6 +186,7 @@ $.widget( "ui.selectmenu", {
 		if ( this.options.disabled ) {
 			return;
 		}
+		// Support: IE6-IE9 click doesn't trigger focus on the button
 		if ( !this.menuItems ) {
 			this.refresh();
 		}
