@@ -18,7 +18,7 @@
 }
 .ui-selectmenu-menu .ui-menu {
 	overflow: auto;
-	overflow-y: auto;
+	/* Support: IE7 */
 	overflow-x: hidden;
 }
 .ui-selectmenu-menu .ui-menu-item a {
