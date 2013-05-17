@@ -42,7 +42,8 @@ $.widget("ui.droppable", {
 	_create: function() {
 
 		var o = this.options,
-			accept = o.accept;
+			accept = o.accept,
+			tgt = this.element;
 
 		this.isover = false;
 		this.isout = true;
@@ -54,9 +55,15 @@ $.widget("ui.droppable", {
 		//Store the droppable's proportions
 		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
 
+		//Store the droppable's depth in the DOM tree
+		this.depth = 0;
+		while ( tgt.parent().size() >= 1 ) {
+			++this.depth;
+			tgt = tgt.parent();
+		}
+
 		// Add the reference and positions to the manager
-		$.ui.ddmanager.droppables[o.scope] = $.ui.ddmanager.droppables[o.scope] || [];
-		$.ui.ddmanager.droppables[o.scope].push(this);
+		$.ui.ddmanager.addDroppable( o.scope, this );
 
 		(o.addClasses && this.element.addClass("ui-droppable"));
 
@@ -274,6 +281,16 @@ $.ui.ddmanager = {
 
 		}
 
+	},
+	addDroppable: function ( scope, droppable ) {
+		$.ui.ddmanager.droppables[ scope ] = $.ui.ddmanager.droppables[ scope ] || [];
+		// TODO: Binary search would be faster
+		for ( var idx = 0; idx < $.ui.ddmanager.droppables[ scope ].length; ++idx ) {
+			if ( $.ui.ddmanager.droppables[ scope ][ idx ].depth <= droppable.depth ) {
+				break;
+			}
+		}
+		$.ui.ddmanager.droppables[ scope ].splice( idx, 0, droppable );
 	},
 	drop: function(draggable, event) {
 
