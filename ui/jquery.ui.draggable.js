@@ -138,7 +138,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		this.overflow = {
 			height: this.overflowOffset ? this.scrollParent.height() : this.window.height(),
-			width: this.overflowOffset ? this.scrollParent.width() : this.window.width(),
+			width: this.overflowOffset ? this.scrollParent.width() : this.window.width()
 		};
 
 		this._preparePosition( pointerPosition );
@@ -576,15 +576,11 @@ if ( $.uiBackCompat !== false ) {
 
 	$.widget( "ui.draggable", $.ui.draggable, {
 		_getContainer: function() {
-
-			var containment = this.options.containment;
-
-			if ( $.isArray( containment ) ) {
-				return containment;
+			if ( $.isArray( this.options.containment ) ) {
+				return this.options.containment;
 			}
 
 			return this._super();
-
 		}
 	});
 

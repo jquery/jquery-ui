@@ -15,8 +15,15 @@ TestHelpers.draggable = {
 		positionAfter = el.position();
 
 
-		actual = { left: positionAfter.left, top: positionAfter.top };
-		expected = { left: positionBefore.left + expectedDX, top: positionBefore.top + expectedDY };
+		actual = {
+			left: positionAfter.left,
+			top: positionAfter.top
+		};
+
+		expected = {
+			left: positionBefore.left + expectedDX,
+			top: positionBefore.top + expectedDY
+		};
 
 		msg = msg ? msg + "." : "";
 		deepEqual(actual, expected, "dragged[" + dx + ", " + dy + "] " + msg);
@@ -31,33 +38,27 @@ TestHelpers.draggable = {
 		var oldPosition = $("#main").css("position");
 		$("#main").css("position", position);
 
-		// Make sure draggable is in viewport for test
-		$('#qunit-fixture').css({
-		  top: "0px",
-			left: "0px"
-		});
-
-		// Draggalbe should now be in top left, partially in viewport
+		// Draggable should now be in top left, partially in viewport
 		// See that it drags to top-left properly
-		TestHelpers.draggable.testDrag(el, el, -50, -50, -50, -50, position+" parent");
+		TestHelpers.draggable.testDrag( el, el, -50, -50, -50, -50, position + " parent" );
 
-		// Reset fixture
-		$('#qunit-fixture').css({
-		  top: "",
-			left: ""
-		});
 		$("#main").css("position", oldPosition);
 	},
 	restoreScroll: function( what ) {
 		if( what ) {
-			$(document).scrollTop(0);
-			$(document).scrollLeft(0);
+			$( document ).scrollTop( 0 );
+			$( document ).scrollLeft( 0 );
 		} else {
-			$("#main").scrollTop(0);
-			$("#main").scrollLeft(0);
+			$( "#main" ).scrollTop( 0 );
+			$( "#main" ).scrollLeft( 0 );
 		}
 
-		$('.force-scroll').remove();
+		$(".force-scroll").remove();
+		// Reset fixture
+		$("#qunit-fixture").css({
+			top: "",
+			left: ""
+		});
 
 	},
 	setScroll: function( what, scrollLeftAmount, scrollTopAmount ) {
@@ -67,15 +68,21 @@ TestHelpers.draggable = {
 		scrollLeftAmount = scrollLeftAmount || 95;
 		scrollTopAmount = scrollTopAmount || 45;
 
-		$(document.body).append( "<div class='force-scroll'>" );
+		$( document.body ).append( "<div class='force-scroll'>" );
+
+		// Make sure draggable is in viewport for test
+		$( "#qunit-fixture" ).css({
+			top: "0px",
+			left: "0px"
+		});
 
 
-		if(what) {
-			$(document).scrollTop(scrollTopAmount);
-			$(document).scrollLeft(scrollLeftAmount);
+		if( what ) {
+			$( document ).scrollTop( scrollTopAmount );
+			$( document ).scrollLeft( scrollLeftAmount );
 		} else {
-			$("#main").scrollTop(scrollTopAmount);
-			$("#main").scrollLeft(scrollLeftAmount);
+			$( "#main" ).scrollTop( scrollTopAmount );
+			$( "#main" ).scrollLeft( scrollLeftAmount );
 		}
 	},
 	border: function(el, side) {
