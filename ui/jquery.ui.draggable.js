@@ -137,10 +137,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		this.overflow = {
-			height: this.scrollParent[ 0 ] === this.document[ 0 ] ?
-				this.window.height() : this.scrollParent.height(),
-			width: this.scrollParent[ 0 ] === this.document[ 0 ] ?
-				this.window.width() : this.scrollParent.width()
+			height: this.overflowOffset ? this.scrollParent.height() : this.window.height(),
+			width: this.overflowOffset ? this.scrollParent.width() : this.window.width(),
 		};
 
 		this._preparePosition( pointerPosition );
@@ -319,6 +317,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = this.scrollSensitivity,
+			/**
+       * TODO: Why on earth does mulitplying by 2, make fixed position element drag with scrollbar properly
+			 * Without mod, this only breaks in browser. Tests do not currently reflect this.
+			 */
+			mod = this.cssPosition === "fixed" ? 2 : 1,
 
 			// overflowOffset is only set when scrollParent is not doc/html
 			overflowLeft = this.overflowOffset ?
@@ -340,7 +343,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		if ( yBottom < scrollSensitivity ) {
 			change = this._speed( scrollSensitivity - yBottom );
 			this.scrollParent.scrollTop( scrollTop + change );
-			this.scrollChange.y += change;
+			this.scrollChange.y += change*mod;
 
 		// Distance from top is less than threshhold, scroll up
 		} else if ( yTop < scrollSensitivity ) {
@@ -351,7 +354,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			if ( newScrollTop >= 0 ) {
 				this.scrollParent.scrollTop( newScrollTop );
 				this._speed( scrollSensitivity - yTop );
-				this.scrollChange.y -= change;
+				this.scrollChange.y -= change*mod;
 			}
 		}
 
@@ -359,7 +362,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		if ( xRight < scrollSensitivity ) {
 			change = this._speed( scrollSensitivity - xRight );
 			this.scrollParent.scrollLeft( scrollLeft + change);
-			this.scrollChange.x += change;
+			this.scrollChange.x += change*mod;
 
 		// Distance from left less than threshhold, scroll left
 		} else if ( xLeft < scrollSensitivity ) {
@@ -369,7 +372,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			// Don't do anything unless new value is "real"
 			if ( newScrollLeft >= 0 ) {
 				this.scrollParent.scrollLeft( newScrollLeft );
-				this.scrollChange.x -= change;
+				this.scrollChange.x -= change*mod;
 			}
 		}
 	},
@@ -420,10 +423,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// TODO: does this work with nested scrollable parents?
 		// Account for scrollbar position on top of how much pointer position changed
-		if ( this.cssPosition !== "fixed" ) {
-			newLeft += this.scrollParent.scrollLeft();
-			newTop += this.scrollParent.scrollTop();
-		}
+		newLeft += this.scrollParent.scrollLeft();
+		newTop += this.scrollParent.scrollTop();
 
 		this.dragEl.css({
 			left: newLeft,

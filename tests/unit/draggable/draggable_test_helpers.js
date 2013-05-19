@@ -2,8 +2,9 @@ TestHelpers.draggable = {
 	// todo: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
 	testDrag: function(el, handle, dx, dy, expectedDX, expectedDY, msg) {
-		var offsetAfter, actual, expected,
-			offsetBefore = el.offset();
+		var positionAfter, actual, expected,
+			// Using offset rather than position, would break for fixed position elements
+			positionBefore = el.position();
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
@@ -11,10 +12,11 @@ TestHelpers.draggable = {
 			// MUST be one move since scroll events are async, things will not calculate properly
 			moves: 1
 		});
-		offsetAfter = el.offset();
+		positionAfter = el.position();
 
-		actual = { left: offsetAfter.left, top: offsetAfter.top };
-		expected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+		actual = { left: positionAfter.left, top: positionAfter.top };
+		expected = { left: positionBefore.left + expectedDX, top: positionBefore.top + expectedDY };
 
 		msg = msg ? msg + "." : "";
 		deepEqual(actual, expected, "dragged[" + dx + ", " + dy + "] " + msg);
@@ -34,11 +36,10 @@ TestHelpers.draggable = {
 		  top: "0px",
 			left: "0px"
 		});
-		
+
 		// Draggalbe should now be in top left, partially in viewport
 		// See that it drags to top-left properly
 		TestHelpers.draggable.testDrag(el, el, -50, -50, -50, -50, position+" parent");
-		// TestHelpers.draggable.testDrag(el, el, 50, 50, 50, 50, position+" parent");
 
 		// Reset fixture
 		$('#qunit-fixture').css({
