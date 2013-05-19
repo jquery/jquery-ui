@@ -169,4 +169,43 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
+test( "#4261: active element should blur when mousing down on a draggable", function() {
+	expect( 2 );
+
+	var textInput = $("#textInput"),
+			element   = $("#draggable1").draggable();
+
+	// Focus the text input
+	textInput.focus();
+
+	// Ensure the text input is the active element
+	strictEqual( document.activeElement, textInput.get(0), "ensure that a focussed text input is the active element before mousing down on a draggable" );
+
+	// Mouse down on the draggable, but don't move it
+	element.simulate("mousedown");
+
+	// Ensure the text input is no longer the active element
+	notStrictEqual( document.activeElement, textInput.get(0), "ensure the text input is no longer the active element after mousing down on a draggable" );
+});
+
+
+test( "#4261: active element should blur when dragging a draggable", function() {
+	expect( 2 );
+
+	var textInput = $("#textInput"),
+			element   = $("#draggable1").draggable();
+
+	// Focus the text input
+	textInput.focus();
+
+	// Ensure the text input is the active element
+	strictEqual( document.activeElement, textInput.get(0), "ensure that a focussed text input is the active element before dragging a draggable" );
+
+	// Drag the draggable
+	TestHelpers.draggable.move( element, 50, 50 );
+
+	// Ensure the text input is no longer the active element
+	notStrictEqual( document.activeElement, textInput.get(0), "ensure the text input is no longer the active element after dragging a draggable" );
+});
+
 })( jQuery );
