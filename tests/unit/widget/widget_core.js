@@ -331,6 +331,16 @@ test( "re-init", function() {
 	deepEqual( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
 });
 
+test( "redeclare", function() {
+	expect( 2 );
+
+	$.widget( "ui.testWidget", {} );
+	equal( $.ui.testWidget.prototype.widgetEventPrefix, "testWidget" );
+
+	$.widget( "ui.testWidget", {} );
+	equal( $.ui.testWidget.prototype.widgetEventPrefix, "testWidget" );
+});
+
 test( "inheritance", function() {
 	expect( 6 );
 	// #5830 - Widget: Using inheritance overwrites the base classes options
