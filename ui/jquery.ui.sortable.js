@@ -16,7 +16,7 @@
 (function( $, undefined ) {
 
 function isOverAxis( x, reference, size ) {
-	return ( x > reference ) && ( x < ( reference + size ) );
+	return ( x >= reference ) && ( x < ( reference + size ) );
 }
 
 function isFloating(item) {

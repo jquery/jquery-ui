@@ -88,4 +88,55 @@ test( "disable", function() {
 	equal( actual, expected, "disable is chainable" );
 });
 
+test("intersect", function() {
+	expect(8);
+
+  var draggable = $("<div></div>").appendTo("body").draggable();
+  var droppable = $("<div></div>").appendTo("body").droppable();
+  
+  $(droppable).width(10).height(10);
+  $(draggable).width(10).height(10);
+  $(droppable).offset({top: 5, left: 5});
+  
+  $(draggable).simulate("drag", {dx: (-1 - $(draggable).position().left), dy: (-1 - $(draggable).position().top)});
+  var actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  var expected = false;
+  equal(actual, expected, "no intersection - too far up and left");
+  
+  $(draggable).simulate("drag", {dx: (-1 - $(draggable).position().left), dy: (0 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = false;
+  equal(actual, expected, "no intersection - too far left");
+  
+  $(draggable).simulate("drag", {dx: (0 - $(draggable).position().left), dy: (-1 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = false;
+  equal(actual, expected, "no intersection - too far up");
+  
+  $(draggable).simulate("drag", {dx: (0 - $(draggable).position().left), dy: (0 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = true;
+  equal(actual, expected, "intersection - top left corner");
+  
+  $(draggable).simulate("drag", {dx: (9 - $(draggable).position().left), dy: (9 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = true;
+  equal(actual, expected, "intersection - bottom right corner");
+  
+  $(draggable).simulate("drag", {dx: (10 - $(draggable).position().left), dy: (9 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = false;
+  equal(actual, expected, "no intersection - too far right");
+  
+  $(draggable).simulate("drag", {dx: (9 - $(draggable).position().left), dy: (10 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = false;
+  equal(actual, expected, "no intersection - too far down");
+  
+  $(draggable).simulate("drag", {dx: (10 - $(draggable).position().left), dy: (10 - $(draggable).position().top)});
+  actual = $.ui.intersect($(draggable).data('ui-draggable'), $(droppable).data('ui-droppable'), "pointer");
+  expected = false;
+  equal(actual, expected, "no intersection - too far down and right");
+});
+
 })(jQuery);
