@@ -158,7 +158,7 @@ $.widget("ui.droppable", {
 				!inst.options.disabled &&
 				inst.options.scope === draggable.options.scope &&
 				inst.accept.call(inst.element[0], (draggable.currentItem || draggable.element)) &&
-				$.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)
+				$.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance, event)
 			) { childrenIntersection = true; return false; }
 		});
 		if(childrenIntersection) {
@@ -191,7 +191,7 @@ $.widget("ui.droppable", {
 
 });
 
-$.ui.intersect = function(draggable, droppable, toleranceMode) {
+$.ui.intersect = function(draggable, droppable, toleranceMode, event) {
 
 	if (!droppable.offset) {
 		return false;
@@ -212,8 +212,8 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 				t < y1 + (draggable.helperProportions.height / 2) && // Bottom Half
 				y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
 		case "pointer":
-			draggableLeft = ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left);
-			draggableTop = ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top);
+			draggableLeft = event.pageX;
+			draggableTop = event.pageY;
 			return isOverAxis( draggableTop, t, droppable.proportions.height ) && isOverAxis( draggableLeft, l, droppable.proportions.width );
 		case "touch":
 			return (
@@ -284,7 +284,7 @@ $.ui.ddmanager = {
 			if(!this.options) {
 				return;
 			}
-			if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance)) {
+			if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance, event)) {
 				dropped = this._drop.call(this, event) || dropped;
 			}
 
@@ -321,7 +321,7 @@ $.ui.ddmanager = {
 			}
 
 			var parentInstance, scope, parent,
-				intersects = $.ui.intersect(draggable, this, this.options.tolerance),
+				intersects = $.ui.intersect(draggable, this, this.options.tolerance, event),
 				c = !intersects && this.isover ? "isout" : (intersects && !this.isover ? "isover" : null);
 			if(!c) {
 				return;
