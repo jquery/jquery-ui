@@ -96,7 +96,7 @@ test( "tolerance, intersect", function() {
 */
 
 test( "tolerance, pointer", function() {
-	expect( 2 );
+	expect( 3 );
 
 	var draggable, droppable,
 		dataset = [
@@ -131,6 +131,19 @@ test( "tolerance, pointer", function() {
 			dx: ( data[ 0 ] - $( draggable ).position().left ),
 			dy: ( data[ 1 ] - $( draggable ).position().top )
 		});
+	});
+
+	// http://bugs.jqueryui.com/ticket/4977 - tolerance, pointer - bug when pointer outside draggable
+	draggable.css({ top: 0, left: 0 }).draggable( "option", "axis", "x" );
+	droppable.css({ top: 15, left: 15 });
+
+	droppable.unbind( "drop" ).bind( "drop", function() {
+		ok( true, "drop fires as long as pointer is within droppable" );
+	});
+
+	$( draggable ).simulate( "drag", {
+		dx: 10,
+		dy: 10
 	});
 });
 

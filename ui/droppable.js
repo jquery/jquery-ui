@@ -191,7 +191,7 @@ $.widget( "ui.droppable", {
 				!inst.options.disabled &&
 				inst.options.scope === draggable.options.scope &&
 				inst.accept.call( inst.element[ 0 ], ( draggable.currentItem || draggable.element ) ) &&
-				$.ui.intersect( draggable, $.extend( inst, { offset: inst.element.offset() } ), inst.options.tolerance )
+				$.ui.intersect( draggable, $.extend( inst, { offset: inst.element.offset() } ), inst.options.tolerance, event )
 			) { childrenIntersection = true; return false; }
 		});
 		if ( childrenIntersection ) {
@@ -229,14 +229,13 @@ $.ui.intersect = (function() {
 		return ( x >= reference ) && ( x < ( reference + size ) );
 	}
 
-	return function( draggable, droppable, toleranceMode ) {
+	return function( draggable, droppable, toleranceMode, event ) {
 
 		if ( !droppable.offset ) {
 			return false;
 		}
 
-		var draggableLeft, draggableTop,
-			x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
+		var x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
 			y1 = ( draggable.positionAbs || draggable.position.absolute ).top,
 			x2 = x1 + draggable.helperProportions.width,
 			y2 = y1 + draggable.helperProportions.height,
@@ -254,9 +253,7 @@ $.ui.intersect = (function() {
 				t < y1 + ( draggable.helperProportions.height / 2 ) && // Bottom Half
 				y2 - ( draggable.helperProportions.height / 2 ) < b ); // Top Half
 		case "pointer":
-			draggableLeft = ( ( draggable.positionAbs || draggable.position.absolute ).left + ( draggable.clickOffset || draggable.offset.click ).left );
-			draggableTop = ( ( draggable.positionAbs || draggable.position.absolute ).top + ( draggable.clickOffset || draggable.offset.click ).top );
-			return isOverAxis( draggableTop, t, droppable.proportions().height ) && isOverAxis( draggableLeft, l, droppable.proportions().width );
+			return isOverAxis( event.pageY, t, droppable.proportions().height ) && isOverAxis( event.pageX, l, droppable.proportions().width );
 		case "touch":
 			return (
 				( y1 >= t && y1 <= b ) || // Top edge touching
@@ -326,7 +323,7 @@ $.ui.ddmanager = {
 			if ( !this.options ) {
 				return;
 			}
-			if ( !this.options.disabled && this.visible && $.ui.intersect( draggable, this, this.options.tolerance ) ) {
+			if ( !this.options.disabled && this.visible && $.ui.intersect( draggable, this, this.options.tolerance, event ) ) {
 				dropped = this._drop.call( this, event ) || dropped;
 			}
 
@@ -363,7 +360,7 @@ $.ui.ddmanager = {
 			}
 
 			var parentInstance, scope, parent,
-				intersects = $.ui.intersect( draggable, this, this.options.tolerance ),
+				intersects = $.ui.intersect( draggable, this, this.options.tolerance, event ),
 				c = !intersects && this.isover ? "isout" : ( intersects && !this.isover ? "isover" : null );
 			if ( !c ) {
 				return;
