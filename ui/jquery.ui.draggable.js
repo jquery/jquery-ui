@@ -227,6 +227,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//If we are using droppables, inform the manager about the drop
 		var that = this,
 			dropped = false;
+
 		if ($.ui.ddmanager && !this.options.dropBehaviour) {
 			dropped = $.ui.ddmanager.drop(this, event);
 		}
@@ -325,7 +326,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_getParentOffset: function() {
 
 		//Get the offsetParent and cache its position
-		var po = this.offsetParent.offset();
+		var po = this.offsetParent.offset(),
+			document = this.document[ 0 ];
 
 		// This is a special case where we need to modify a offset calculated on start, since the following happened:
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
@@ -383,7 +385,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_setContainment: function() {
 
 		var over, c, ce,
-			o = this.options;
+			o = this.options,
+			document = this.document[ 0 ];
 
 		if ( !o.containment ) {
 			this.containment = null;
@@ -444,6 +447,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		var mod = d === "absolute" ? 1 : -1,
+			document = this.document[ 0 ],
 			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent;
 
 		//Cache the scroll
@@ -472,6 +476,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var containment, co, top, left,
 			o = this.options,
+			document = this.document[ 0 ],
 			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent,
 			pageX = event.pageX,
 			pageY = event.pageY;
@@ -778,6 +783,9 @@ $.ui.plugin.add("draggable", "opacity", {
 
 $.ui.plugin.add("draggable", "scroll", {
 	start: function( event, ui, i ) {
+
+		var document = i.document[ 0 ];
+
 		if(i.scrollParent[0] !== document && i.scrollParent[0].tagName !== "HTML") {
 			i.overflowOffset = i.scrollParent.offset();
 		}
@@ -785,7 +793,8 @@ $.ui.plugin.add("draggable", "scroll", {
 	drag: function( event, ui, i  ) {
 
 		var o = i.options,
-			scrolled = false;
+			scrolled = false,
+			document = i.document[ 0 ];
 
 		if(i.scrollParent[0] !== document && i.scrollParent[0].tagName !== "HTML") {
 
