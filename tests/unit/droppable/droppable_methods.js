@@ -88,4 +88,33 @@ test( "disable", function() {
 	equal( actual, expected, "disable is chainable" );
 });
 
-})(jQuery);
+test( "intersect", function() {
+	expect( 8 );
+
+	var actual, data,
+		draggable = $( "<div />" ).appendTo( "#qunit-fixture" ).css({ width: 10, height: 10, position: "absolute" }).draggable(),
+		droppable = $( "<div />" ).appendTo( "#qunit-fixture" ).css({ width: 10, height: 10, position: "absolute", top: 5, left: 5 }).droppable(),
+		dataset = [
+			[ -1, -1, false, "too far up and left" ],
+			[ -1, 0, false, "too far left" ],
+			[ 0, -1, false, "too far up" ],
+			[ 0, 0, true, "top left corner" ],
+			[ 9, 9, true, "bottom right corner" ],
+			[ 10, 9, false, "too far right" ],
+			[ 9, 10, false, "too far down" ],
+			[ 10, 10, false, "too far down and right" ]
+		],
+		x = 0;
+
+	for ( ; x < dataset.length; x++ ) {
+		data = dataset[ x ];
+		$( draggable ).simulate( "drag", {
+			dx: ( data[ 0 ] - $( draggable ).position().left ),
+			dy: ( data[ 1 ] - $( draggable ).position().top )
+		});
+		actual = $.ui.intersect( $( draggable ).draggable( "instance" ), $( droppable ).droppable( "instance" ), "pointer" );
+		equal( actual, data[ 2 ], data[ 3 ] );
+	}
+});
+
+})( jQuery );

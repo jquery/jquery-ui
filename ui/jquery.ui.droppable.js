@@ -17,7 +17,7 @@
 (function( $, undefined ) {
 
 function isOverAxis( x, reference, size ) {
-	return ( x > reference ) && ( x < ( reference + size ) );
+	return ( x >= reference ) && ( x < ( reference + size ) );
 }
 
 $.widget("ui.droppable", {
