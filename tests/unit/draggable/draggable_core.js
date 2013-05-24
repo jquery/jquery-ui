@@ -169,24 +169,26 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
-test( "#8399: clicking on a draggable anchor without moving it should make it the active element", function() {
-	expect( 1 );
+// https://github.com/jquery/jquery-ui/pull/977#issuecomment-18147331
+test( "A draggable should become the active element after you are finished interacting with it, but not before.", function() {
+	// jQuery.simulate makes 3 moves when it simulates a drag
+	expect( 1 + 3 );
 
-	var element = $('#testAnchor').draggable();
-
-	TestHelpers.draggable.move( element, 0, 0 );
-
-	strictEqual( document.activeElement, element.get(0), "clicking on a draggable anchor without moving it made it the active element" );
-});
-
-test( "#8399: moving a draggable anchor should not make it the active element", function() {
-	expect( 1 );
-
-	var element = $('#testAnchor').draggable();
-
+	var $doc = $( document ),
+		element = $('#testAnchor').draggable(),
+		notActiveElementAssertion = notStrictEqual.bind( this, document.activeElement, element.get(0) );
+		
+	// Cleverly listen to mousemove to be able to make assertions before the mouse is released
+	$doc.on( 'mousemove', notActiveElementAssertion );
+	
+	// Drag the thing
 	TestHelpers.draggable.move( element, 50, 50 );
-
-	notStrictEqual( document.activeElement, element.get(0), "moving a draggable anchor did not make it the active element" );
+	
+	// After the drag, assert that the draggable has become the active element
+	strictEqual( document.activeElement, element.get(0), "moving a draggable anchor did not make it the active element" );
+	
+	// Clean up
+	$doc.off( 'mousemove', notActiveElementAssertion );
 });
 
 })( jQuery );
