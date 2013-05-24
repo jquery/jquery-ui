@@ -55,14 +55,14 @@ $.widget("ui.droppable", {
 		this.proportions = function( /* valueToWrite */ ) {
 			if ( arguments.length ) {
 				// Store the droppable's proportions
-				proportions = arguments[0];
+				proportions = arguments[ 0 ];
 			} else {
 				// Retrieve or derive the droppable's proportions
 				return proportions ?
 					proportions :
 					proportions = {
-						width: this.element[0].offsetWidth,
-						height: this.element[0].offsetHeight
+						width: this.element[ 0 ].offsetWidth,
+						height: this.element[ 0 ].offsetHeight
 					};
 			}
 		};
@@ -211,10 +211,14 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 	}
 
 	var draggableLeft, draggableTop,
-		x1 = (draggable.positionAbs || draggable.position.absolute).left, x2 = x1 + draggable.helperProportions.width,
-		y1 = (draggable.positionAbs || draggable.position.absolute).top, y2 = y1 + draggable.helperProportions.height,
-		l = droppable.offset.left, r = l + droppable.proportions().width,
-		t = droppable.offset.top, b = t + droppable.proportions().height;
+		x1 = (draggable.positionAbs || draggable.position.absolute).left,
+		y1 = (draggable.positionAbs || draggable.position.absolute).top,
+		x2 = x1 + draggable.helperProportions.width,
+		y2 = y1 + draggable.helperProportions.height,
+		l = droppable.offset.left,
+		t = droppable.offset.top,
+		r = l + droppable.proportions().width,
+		b = t + droppable.proportions().height;
 
 	switch (toleranceMode) {
 		case "fit":
@@ -282,8 +286,8 @@ $.ui.ddmanager = {
 				m[i]._activate.call(m[i], event);
 			}
 
-			m[i].offset = m[i].element.offset();
-			m[i].proportions( { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight } );
+			m[ i ].offset = m[ i ].element.offset();
+			m[ i ].proportions({ width: m[ i ].element[ 0 ].offsetWidth, height: m[ i ].element[ 0 ].offsetHeight });
 
 		}
 
