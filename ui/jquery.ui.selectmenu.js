@@ -844,7 +844,7 @@ $.widget("ui.selectmenu", {
 
 		this.listWrap
 			.removeAttr( 'style' )
-			.zIndex( this.element.zIndex() + 1 )
+			.zIndex( this.element.zIndex() + 2 )
 			.position( $.extend( positionDefault, o.positionOptions ) );
 	}
 });
