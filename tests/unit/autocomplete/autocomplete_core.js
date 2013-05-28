@@ -192,6 +192,34 @@ asyncTest( "handle race condition", function() {
 	}
 });
 
+asyncTest( "simultaneous searches (#9334)", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: function( request, response ) {
+				setTimeout(function() {
+					response([ request.term ]);
+				});
+			},
+			response: function() {
+				ok( true, "response from first instance" );
+			}
+		}),
+		element2 = $( "#autocomplete-textarea" ).autocomplete({
+			source: function( request, response ) {
+				setTimeout(function() {
+					response([ request.term ]);
+				});
+			},
+			response: function() {
+				ok( true, "response from second instance" );
+				start();
+			}
+		});
+
+	element.autocomplete( "search", "test" );
+	element2.autocomplete( "search", "test" );
+});
+
 test( "ARIA", function() {
 	expect( 7 );
 	var element = $( "#autocomplete" ).autocomplete({
