@@ -159,7 +159,7 @@ $.widget("ui.selectmenu", {
 		// document click closes menu
 		$( document ).bind( "mousedown.selectmenu-" + this.ids[ 0 ], function( event ) {
 			//check if open and if the clicket targes parent is the same
-			if ( self.isOpen && !event.target.offsetParent ) {
+			if ( self.isOpen && !$( event.target ).closest( "#" + self.ids[ 1 ] ).length ) {
 				self.close( event );
 			}
 		});
