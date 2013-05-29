@@ -60,4 +60,50 @@ test("drop", function() {
 });
 */
 
+
+   test("#4977: tolerance, pointer - when pointer outside draggable", function() {
+	expect(1);
+
+	var draggable1 = $("#draggable1");
+	var droppable1 = $("#droppable1");
+	var isDropped = false;
+
+	droppable1.droppable({
+		tolerance: 'pointer',
+		drop: function() { isDropped = true; }
+	});
+
+	// Contain draggable so only its bottom half can be dragged
+	// over the droppable.
+	draggable1.draggable({ containment: [
+		draggable1.offset().left,
+		draggable1.offset().top,
+		droppable1.offset().left + droppable1.width(),
+		droppable1.offset().top - Math.round(draggable1.height() / 2)
+	]});
+
+	// Pointer starts out over "top of draggable"
+	draggable1.simulate("mousedown", {
+		clientX: draggable1.offset().left + draggable1.width() / 2,
+		clientY: draggable1.offset().top + 1 // draggable1.height() - 1
+	});
+
+	// Pointer ends up below bottom of draggable:
+	//
+	//   * Top of draggable is *not* inside droppable.
+	//   * Bottom of draggable *is* inside droppable.
+	//   * Pointer *is* inside droppable, and outside droppable.
+	var pos = {
+		clientX: droppable1.offset().left + droppable1.width() / 2,
+		clientY: droppable1.offset().top + draggable1.height()
+	};
+	draggable1.simulate("mousemove", pos);
+	draggable1.simulate("mouseup", pos);
+
+	draggable1.draggable("destroy");
+	droppable1.droppable("destroy");
+
+	ok(isDropped, "tolerance, pointer - when pointer outside draggable");
+   });
+
 })( jQuery );
