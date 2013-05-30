@@ -104,10 +104,12 @@ $.widget( "ui.menubar", {
 				within: this.options.position.within
 			},
 			select: function( event, ui ) {
+			      if (ui.item.find('a.ui-state-focus:last').attr('aria-haspopup') === undefined) {	
 				ui.item.parents( "ul.ui-menu:last" ).hide();
 				menubar._close();
 				ui.item.parents( ".ui-menubar-item" ).children().first().focus();
 				menubar._trigger( "select", event, ui );
+			      }	
 			},
 			menus: this.options.menuElement
 		})
