@@ -6,11 +6,12 @@ module( "selectmenu: events", {
 	}
 });
 
-test( "change", function () {
+asyncTest( "change", function () {
 	expect( 5 );
 
 	var that = this,
-		optionIndex = 1;
+		optionIndex = 1,
+		button, menu, options;
 
 	this.element.selectmenu({
 		change: function ( event, ui ) {
@@ -22,12 +23,17 @@ test( "change", function () {
 		}
 	});
 
-	var button = this.element.selectmenu( "widget" ),
-		menu = this.element.selectmenu( "menuWidget" ).parent(),
-		options = this.element.find( "option" );
+	button = this.element.selectmenu( "widget" );
+	menu = this.element.selectmenu( "menuWidget" ).parent();
+	options = this.element.find( "option" );
 
-	button.simulate( "focus" ).simulate( "click" );
-	menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
+	button.simulate( "focus" );
+
+	setTimeout(function() {
+		button.simulate( "click" );
+		menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
+		start();
+	}, 1 );
 });
 
 
@@ -40,20 +46,21 @@ test( "close", function () {
 			equal( event.type, "selectmenuclose", "event type set to selectmenuclose" );
 		}
 	});
-	
+
 	this.element.selectmenu( "open" ).selectmenu( "close" );
-	
+
 	this.element.selectmenu( "open" );
 	$( "body" ).simulate( "click" );
 });
 
 
-test( "focus", function () {
+asyncTest( "focus", function () {
 	expect( 12 );
 
-	var button, menu, links,
+	var that = this,
 		optionIndex = this.element[ 0 ].selectedIndex + 1,
-		options = this.element.find( "option" );
+		options = this.element.find( "option" ),
+		button, menu, links;
 
 	this.element.selectmenu({
 		focus: function ( event, ui ) {
@@ -67,19 +74,22 @@ test( "focus", function () {
 	button = this.element.selectmenu( "widget" ),
 	menu = this.element.selectmenu( "menuWidget" );
 
-	button
-		.simulate( "focus" )
-		.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	button.simulate( "focus" )
 
-	button.simulate( "click" );
-	links = menu.find( "li.ui-menu-item a" );
-	optionIndex = 0;
-	links.eq( optionIndex ).simulate( "mouseover" );
-	optionIndex += 1;
-	links.eq( optionIndex ).simulate( "mouseover" );
+	setTimeout(function() {
+		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 
-	// this tests for unwanted, additional focus event on close
-	this.element.selectmenu( "close" );
+		button.simulate( "click" );
+		links = menu.find( "li.ui-menu-item a" );
+		optionIndex = 0;
+		links.eq( optionIndex ).simulate( "mouseover" );
+		optionIndex += 1;
+		links.eq( optionIndex ).simulate( "mouseover" );
+
+		// this tests for unwanted, additional focus event on close
+		that.element.selectmenu( "close" );
+		start();
+	}, 1 );
 });
 
 
@@ -97,7 +107,7 @@ test( "open", function () {
 });
 
 
-test( "select", function () {
+asyncTest( "select", function () {
 	expect( 4 );
 
 	this.element.selectmenu({
@@ -114,8 +124,13 @@ test( "select", function () {
 		options = this.element.find( "option" ),
 		optionIndex = 1;
 
-	button.simulate( "focus" ).simulate( "click" );
-	menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
+	button.simulate( "focus" );
+
+	setTimeout(function() {
+		button.simulate( "click" );
+		menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
+		start();
+	}, 1 );
 });
 
 })(jQuery);

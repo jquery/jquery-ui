@@ -68,7 +68,7 @@ test( "refresh - structure", function () {
 	equal( element.find( "option" ).first().text(), menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).first().text(), "changed item" );
 });
 
-test( "refresh - change selected option", function () {
+asyncTest( "refresh - change selected option", function () {
 	expect( 3 );
 
 	var element = $( "#speed" ).selectmenu(),
@@ -78,13 +78,16 @@ test( "refresh - change selected option", function () {
 
 	button.simulate( "focus" );
 
-	equal( element.find( "option:selected" ).text(), button.text(), "button text after focus" );
+	setTimeout(function() {
+		equal( element.find( "option:selected" ).text(), button.text(), "button text after focus" );
 
-	element.find( "option" ).eq( 2 ).removeAttr( "selected" );
-	element.find( "option" ).eq( 0 ).attr( "selected", "selected" );
-	element.selectmenu( "refresh" );
+		element[ 0 ].selectedIndex = 0
+		element.selectmenu( "refresh" );
 
-	equal( element.find( "option:selected" ).text(), button.text(), "button text after changing selected option" );
+		equal( element.find( "option:selected" ).text(), button.text(), "button text after changing selected option" );
+
+		start();
+	}, 1 );
 });
 
 
