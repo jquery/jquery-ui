@@ -7,16 +7,18 @@ module( "selectmenu: events", {
 });
 
 test( "change", function () {
-	expect( 4 );
-	
-	var that = this;
+	expect( 5 );
+
+	var that = this,
+		optionIndex = 1;
 
 	this.element.selectmenu({
 		change: function ( event, ui ) {
 			ok( event, "change event fired on change" );
 			equal( event.type, "selectmenuchange", "event type set to selectmenuchange" );
-			equal( ui.item.element[ 0 ], options.eq( ui.item.index )[ 0 ], "ui.item.element contains original option element" );
-			equal( ui.item.value, options.eq( ui.item.index ).text(), "ui.item.value property updated correctly" );
+			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
+			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ], "ui.item.element contains original option element" );
+			equal( ui.item.value, options.eq( optionIndex ).text(), "ui.item.value property updated correctly" );
 		}
 	});
 
@@ -25,7 +27,7 @@ test( "change", function () {
 		options = this.element.find( "option" );
 
 	button.simulate( "focus" ).simulate( "click" );
-	menu.find( "a" ).first().simulate( "mouseover" ).simulate( "click" );
+	menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
 });
 
 
@@ -65,11 +67,11 @@ test( "focus", function () {
 	button
 		.simulate( "focus" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	
+
 	button.simulate( "click" );
 	links = menu.find( "li.ui-menu-item a" );
 	optionIndex = 0;
-	links.eq( optionIndex ).simulate( "mouseover" );	
+	links.eq( optionIndex ).simulate( "mouseover" );
 	optionIndex += 1;
 	links.eq( optionIndex ).simulate( "mouseover" );
 
@@ -93,22 +95,24 @@ test( "open", function () {
 
 
 test( "select", function () {
-	expect( 3 );
+	expect( 4 );
 
 	this.element.selectmenu({
 		select: function ( event, ui ) {
 			ok( event, "select event fired on item select" );
 			equal( event.type, "selectmenuselect", "event type set to selectmenuselect" );
-			equal( ui.item.element[ 0 ], options.eq( ui.item.index )[ 0 ], "ui.item.element contains original option element" );
+			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
+			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ], "ui.item.element contains original option element" );
 		}
 	});
 
 	var button = this.element.selectmenu( "widget" ),
 		menu = this.element.selectmenu( "menuWidget" ).parent(),
-		options = this.element.find( "option" );
+		options = this.element.find( "option" ),
+		optionIndex = 1;
 
 	button.simulate( "focus" ).simulate( "click" );
-	menu.find( "a" ).first().simulate( "mouseover" ).simulate( "click" );
+	menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
 });
 
 })(jQuery);
