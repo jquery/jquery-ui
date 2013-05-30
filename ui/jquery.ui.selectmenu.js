@@ -99,8 +99,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_drawMenu: function() {
-		var menuInstance,
-			that = this;
+		var that = this;
 
 		// Create menu portion, append to body
 		this.menu = $( "<ul>", {
