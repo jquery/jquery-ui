@@ -118,7 +118,7 @@ $.widget( "ui.selectmenu", {
 			.appendTo( this._appendTo() );
 
 		// Init menu widget
-		menuInstance = this.menu.menu({
+		this.menuInstance = this.menu.menu({
 			select: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
 
@@ -151,9 +151,9 @@ $.widget( "ui.selectmenu", {
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
 		// Make sure focus stays on selected item
-		menuInstance.delay = 999999999;
+		this.menuInstance.delay = 999999999;
 		// Unbind uneeded Menu events
-		menuInstance._off( this.menu, "mouseleave" );
+		this.menuInstance._off( this.menu, "mouseleave" );
 	},
 
 	refresh: function() {
@@ -210,7 +210,7 @@ $.widget( "ui.selectmenu", {
 
 		// Check if we have an item to select
 		if ( this.menuItems ) {
-			this.menu.menu( "focus", null, this._getSelectedItem() );
+			this.menuInstance.active = this._getSelectedItem();
 		}
 
 		this._off( this.document );
