@@ -32,7 +32,7 @@ test( "change", function () {
 
 
 test( "close", function () {
-	expect( 2 );
+	expect( 4 );
 
 	this.element.selectmenu({
 		close: function ( event, ui ) {
@@ -40,8 +40,11 @@ test( "close", function () {
 			equal( event.type, "selectmenuclose", "event type set to selectmenuclose" );
 		}
 	});
-
+	
 	this.element.selectmenu( "open" ).selectmenu( "close" );
+	
+	this.element.selectmenu( "open" );
+	$( "body" ).simulate( "click" );
 });
 
 
