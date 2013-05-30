@@ -133,7 +133,7 @@ $.widget( "ui.selectmenu", {
 				var item = ui.item.data( "ui-selectmenu-item" );
 
 				// prevent inital focus from firing and checks if its a newly focused item
-				if ( that.focusIndex !== undefined && item.index !== that.focusIndex ) {
+				if ( that.focusIndex != null && item.index !== that.focusIndex ) {
 					that._trigger( "focus", event, { item: item } );
 					if ( !that.isOpen ) {
 						that._select( item, event );
