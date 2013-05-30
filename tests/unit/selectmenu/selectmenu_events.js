@@ -44,29 +44,36 @@ test( "close", function () {
 
 
 test( "focus", function () {
-	expect( 3 );
+	expect( 12 );
 
 	var button, menu, links,
+		optionIndex = this.element[ 0 ].selectedIndex + 1,
 		options = this.element.find( "option" );
 
 	this.element.selectmenu({
 		focus: function ( event, ui ) {
-			ok( event, "focus event fired on mouseover" );
+			ok( event, "focus event fired on element #" + optionIndex + " mouseover" );
 			equal( event.type, "selectmenufocus", "event type set to selectmenufocus" );
-			equal( ui.item.element[ 0 ], options.eq( ui.item.index )[ 0 ], "ui.item.element contains original option element" );
+			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
+			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ], "ui.item.element contains original option element" );
 		}
 	});
 
 	button = this.element.selectmenu( "widget" ),
 	menu = this.element.selectmenu( "menuWidget" );
 
-	button.simulate( "focus" );
-	links = menu.find( "li.ui-menu-item a" );
-
+	button
+		.simulate( "focus" )
+		.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	
 	button.simulate( "click" );
+	links = menu.find( "li.ui-menu-item a" );
+	optionIndex = 0;
+	links.eq( optionIndex ).simulate( "mouseover" );	
+	optionIndex += 1;
+	links.eq( optionIndex ).simulate( "mouseover" );
 
-	menu.find( "a" ).last().simulate( "mouseover" );
-
+	// this tests for unwanted, additional focus event on close
 	this.element.selectmenu( "close" );
 });
 
