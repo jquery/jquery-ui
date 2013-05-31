@@ -18,7 +18,6 @@
 $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
-		autoExpand: false,
 		buttons: false,
 		items: "li",
 		menuElement: "ul",
@@ -73,13 +72,6 @@ $.widget( "ui.menubar", {
 					this._close( event );
 					this.items.eq( 0 ).attr( "tabIndex", 0 );
 				}, 150 );
-			},
-			"mouseleave .ui-menubar-item": function() {
-				if ( this.options.autoExpand ) {
-					this.closeTimer = this._delay( function() {
-						this._close();
-					}, 150 );
-				}
 			},
 			"mouseenter .ui-menubar-item": function() {
 				clearTimeout( this.closeTimer );
@@ -318,12 +310,12 @@ $.widget( "ui.menubar", {
 		// If we already opened a menu and then changed to be "over" another MenuItem ||
 		// we clicked on a new menuItem (whether open or not) or if we auto expand (i.e.
 		// we expand regardless of click if there is a submenu
-		if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" || this.options.autoExpand ) {
-      clearTimeout( this.closeTimer );
+		if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" ) {
+			clearTimeout( this.closeTimer );
 			this._open( event, menu );
-      // Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
-      // takes the "selected" status off off of the first element of the submenu.
-      event.stopPropagation();
+			// Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
+			// takes the "selected" status off off of the first element of the submenu.
+			event.stopPropagation();
 		}
 	},
 
