@@ -64,8 +64,10 @@ function submit( commit, runs, configFile, extra, done ) {
 	}, function( error, passed ) {
 		if ( error ) {
 			grunt.log.error( error );
+			done( false );
+			return;
 		}
-		done( passed );
+		done();
 	});
 }
 
