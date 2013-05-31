@@ -64,7 +64,7 @@
 		"grunt-html": "0.3.3",
 		"grunt-git-authors": "1.2.0",
 		"rimraf": "2.1.4",
-		"testswarm": "1.0.0-alpha"
+		"testswarm": "1.0.3"
 	},
 	"keywords": []
 }
