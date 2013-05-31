@@ -286,7 +286,7 @@ $.widget( "ui.menubar", {
 		}
 		event.preventDefault();
 
-		menu = $(event.target).parents( ".ui-menubar-item" ).children( "ul" );
+		menu = $(event.target).parents( ".ui-menubar-item" ).children( this.options.menuElement );
 
 		// If we have an open menu and we see a click on the menuItem
 		// and the menu thereunder is the same as the active menu, close it.
@@ -384,20 +384,19 @@ $.widget( "ui.menubar", {
 	},
 
 	_open: function( event, menu ) {
-		var button,
-			menuItem = menu.closest( ".ui-menubar-item" );
+		var menuItem = menu.closest( ".ui-menubar-item" );
 
 		if ( this.active && this.active.length &&
 				this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
 					this._collapseActiveMenu();
 		}
 
-		button = menuItem.addClass( "ui-state-active" );
+		menuItem.addClass( "ui-state-active" );
 
 		this.active = menu
 			.show()
 			.position( $.extend({
-				of: button
+				of: menuItem
 			}, this.options.position ) )
 			.removeAttr( "aria-hidden" )
 			.attr( "aria-expanded", "true" )

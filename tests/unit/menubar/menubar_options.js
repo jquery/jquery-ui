@@ -10,4 +10,17 @@ module( "menubar: options", {
 	}
 });
 
+test( "menuElement and items", function() {
+	expect( 2 );
+	var element = $( "#bar3" ).menubar({
+		items: ".menubarItem",
+		menuElement: ".menuElement"
+	});
+	var fileItem = element.find( ">:eq(1)>a:first" );
+	var fileMenu = fileItem.next();
+	ok( fileMenu.is(":hidden") );
+	fileItem.click();
+	ok( fileMenu.is(":visible") );
+});
+
 })( jQuery );
