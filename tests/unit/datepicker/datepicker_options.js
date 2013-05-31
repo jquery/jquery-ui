@@ -1057,13 +1057,13 @@ test("formatDate", function() {
 	settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
 	equal($.datepicker.formatDate("D M y", new Date(2001, 4 - 1, 9), settings),
-		"Lun. Avril 01", "Format date D M y with settings");
+		"lun. avril 01", "Format date D M y with settings");
 	equal($.datepicker.formatDate("DD MM yy", new Date(2001, 4 - 1, 9), settings),
-		"Lundi Avril 2001", "Format date DD MM yy with settings");
+		"lundi avril 2001", "Format date DD MM yy with settings");
 	equal($.datepicker.formatDate("DD, MM d, yy", new Date(2001, 4 - 1, 9), settings),
-		"Lundi, Avril 9, 2001", "Format date DD, MM d, yy with settings");
+		"lundi, avril 9, 2001", "Format date DD, MM d, yy with settings");
 	equal($.datepicker.formatDate("'jour' d 'de' MM (''DD''), yy",
-		new Date(2001, 4 - 1, 9), settings), "jour 9 de Avril ('Lundi'), 2001",
+		new Date(2001, 4 - 1, 9), settings), "jour 9 de avril ('lundi'), 2001",
 		"Format date 'jour' d 'de' MM (''DD''), yy with settings");
 });
 
