@@ -454,10 +454,15 @@ $.widget( "ui.dialog", {
 				that._trigger( "drag", event, filteredUi( ui ) );
 			},
 			stop: function( event, ui ) {
-				options.position = [
-					ui.position.left - that.document.scrollLeft(),
-					ui.position.top - that.document.scrollTop()
-				];
+				var left = ui.offset.left - that.document.scrollLeft(),
+					top = ui.offset.top - that.document.scrollTop();
+
+				options.position = {
+					my: "left top",
+					at: "left" + (left >= 0 ? "+" : "") + left + " " +
+						"top" + (top >= 0 ? "+" : "") + top,
+					of: that.window
+				};
 				$( this ).removeClass("ui-dialog-dragging");
 				that._unblockFrames();
 				that._trigger( "dragStop", event, filteredUi( ui ) );
@@ -503,8 +508,18 @@ $.widget( "ui.dialog", {
 				that._trigger( "resize", event, filteredUi( ui ) );
 			},
 			stop: function( event, ui ) {
-				options.height = $( this ).height();
-				options.width = $( this ).width();
+				var offset = that.uiDialog.offset(),
+					left = offset.left - that.document.scrollLeft(),
+					top = offset.top - that.document.scrollTop();
+
+				options.height = that.uiDialog.height();
+				options.width = that.uiDialog.width();
+				options.position = {
+					my: "left top",
+					at: "left" + (left >= 0 ? "+" : "") + left + " " +
+						"top" + (top >= 0 ? "+" : "") + top,
+					of: that.window
+				};
 				$( this ).removeClass("ui-dialog-resizing");
 				that._unblockFrames();
 				that._trigger( "resizeStop", event, filteredUi( ui ) );
