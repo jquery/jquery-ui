@@ -11,17 +11,37 @@
 	<script src="../../../ui/jquery.ui.menu.js"></script>
 	<script src="../../../ui/jquery.ui.menubar.js"></script>
 	<style>
-		body { font-size:62.5%; }
-		.ui-menu { width: 200px; margin-bottom: 2em; }
-		.menu4 { height: 200px; overflow-y: auto; overflow-x: hidden; }
-		.address-item { border-bottom: 1px solid #999; }
-		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
-		.address-content { display: block; margin-bottom: .2em; padding-left: 10px; }
 	</style>
-	<script type="text/javascript" charset="utf-8">
-		$(document).ready( function() {
-			$(".menubar").menubar();
-		} );
+	<script>
+		$(function() {
+			$.ui.menubar.prototype.options.select = function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+				if ( ui.item.text() == "Quit" ) {
+					console.log(this)
+					$( this ).menubar( "destroy" );
+				}
+			};
+			var defaultBar = $( ".menubar" );
+			var noIcons = defaultBar.clone().insertAfter( defaultBar );
+			$( "<h2>No Icons</h2>" ).insertAfter( defaultBar )
+			var customIcon = defaultBar.clone().insertAfter( noIcons );
+			$( "<h2>Custom Icon</h2>" ).insertAfter( noIcons )
+			defaultBar.menubar();
+			noIcons.menubar({
+				icons: null
+			});
+			customIcon.menubar({
+				icons: {
+					menu: "ui-icon-circle-triangle-s"
+				}
+			});
+
+			$("#non-ul-bar").menubar({
+				items: ".menubarItem",
+				menuElement: ".menuElement",
+				icons: null
+			});
+		});
 	</script>
 </head>
 <body>
@@ -75,5 +95,60 @@
 		</ul>
 	</li>
 </ul>
+
+<h2>Other markup</h2>
+
+<div id="non-ul-bar">
+	<div class="menubarItem"><a href="#About">About</a></div>
+	<div class="menubarItem">
+		<a href="#File">File</a>
+		<div class="menuElement">
+			<div><a href="#Open...">Open...</a></div>
+			<div class="ui-state-disabled"><a href="#">Open recent...</a></div>
+			<div><a href="#Save">Save</a></div>
+			<div><a href="#Save%20as...">Save as...</a></div>
+			<div><a href="#Close">Close</a></div>
+			<div><a href="#Quit">Quit</a></div>
+		</div>
+	</div>
+	<div class="menubarItem">
+		<a href="#Edit">Edit</a>
+		<div class="menuElement">
+			<div><a href="#Copy">Copy</a></div>
+			<div><a href="#Cut">Cut</a></div>
+			<div class="ui-state-disabled"><a href="#">Paste</a></div>
+		</div>
+	</div>
+	<div class="menubarItem">
+		<a href="#View">View</a>
+		<div class="menuElement">
+			<div><a href="#Fullscreen">Fullscreen</a></div>
+			<div><a href="#Fit%20into%20view">Fit into view</a></div>
+			<div>
+				<a href="#Encoding">Encoding</a>
+				<div class="menuElement">
+					<div class="ui-state-disabled"><a href="#">Auto-detect</a></div>
+					<div><a href="#UTF-8">UTF-8</a></div>
+					<div>
+						<a href="#UTF-16">UTF-16</a>
+						<div class="menuElement">
+							<div><a href="#Option%201">Option 1</a></div>
+							<div><a href="#Option%202">Option 2</a></div>
+							<div class="ui-state-disabled"><a href="#">Option 3</a></div>
+							<div><a href="#Option%204">Option 4</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div><a href="#Customize...">Customize...</a></div>
+		</div>
+	</div>
+</div>
+
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+	Log:
+	<div id="log" style="height: 100px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+
 </body>
 </html>

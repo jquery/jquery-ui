@@ -2,7 +2,9 @@ TestHelpers.commonWidgetTests( "menubar", {
 	defaults: {
 		items: "li",
 		menuElement: "ul",
-		menuIcon: false,
+		icons: {
+			menu: "ui-icon-triangle-1-s"
+		},
 		position: {
 			my: "left top",
 			at: "left bottom"

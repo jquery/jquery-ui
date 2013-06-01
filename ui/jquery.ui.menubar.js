@@ -21,7 +21,9 @@ $.widget( "ui.menubar", {
 	options: {
 		items: "li",
 		menuElement: "ul",
-		menuIcon: false,
+		icons: {
+			menu: "ui-icon-triangle-1-s"
+		},
 		position: {
 			my: "left top",
 			at: "left bottom"
@@ -188,6 +190,7 @@ $.widget( "ui.menubar", {
 	},
 
 	_initializeItem: function( anItem ) {
+		// TODO remove this var, or rename to `that`
 		var menubar = this,
 			menuItemHasSubMenu = this._hasSubMenu( anItem.parent() );
 
@@ -240,8 +243,8 @@ $.widget( "ui.menubar", {
 			});
 
 			anItem.attr( "aria-haspopup", "true" );
-			if ( menubar.options.menuIcon ) {
-				anItem.append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
+			if ( menubar.options.icons ) {
+				anItem.append( "<span class='ui-button-icon-secondary ui-icon " + this.options.icons.menu + "'></span>" );
 				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
 		} else {
