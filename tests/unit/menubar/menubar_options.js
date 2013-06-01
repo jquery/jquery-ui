@@ -12,7 +12,7 @@ module( "menubar: options", {
 
 test( "menuElement and items", function() {
 	expect( 2 );
-	var element = $( "#bar3" ).menubar({
+	var element = $( "#bar2" ).menubar({
 		items: ".menubarItem",
 		menuElement: ".menuElement"
 	});
