@@ -19,7 +19,6 @@
 $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
-		buttons: false,
 		items: "li",
 		menuElement: "ul",
 		menuIcon: false,
@@ -197,10 +196,6 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menuitem" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
-		if ( menubar.options.buttons ) {
-			anItem.removeClass( "ui-menubar-link" ).addClass( "ui-state-default" );
-		}
-
 		menubar._on( anItem, {
 			focus:	function(){
 				anItem.attr( "tabIndex", 0 );
@@ -246,7 +241,7 @@ $.widget( "ui.menubar", {
 
 			anItem.attr( "aria-haspopup", "true" );
 			if ( menubar.options.menuIcon ) {
-				anItem.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
+				anItem.append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
 				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
 		} else {

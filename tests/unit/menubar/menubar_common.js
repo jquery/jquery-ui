@@ -1,6 +1,5 @@
 TestHelpers.commonWidgetTests( "menubar", {
 	defaults: {
-		buttons: false,
 		items: "li",
 		menuElement: "ul",
 		menuIcon: false,
