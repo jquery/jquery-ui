@@ -81,7 +81,7 @@ asyncTest( "refresh - change selected option", function () {
 	setTimeout(function() {
 		equal( element.find( "option:selected" ).text(), button.text(), "button text after focus" );
 
-		element[ 0 ].selectedIndex = 0
+		element[ 0 ].selectedIndex = 0;
 		element.selectmenu( "refresh" );
 
 		equal( element.find( "option:selected" ).text(), button.text(), "button text after changing selected option" );

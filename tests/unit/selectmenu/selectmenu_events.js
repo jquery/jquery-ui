@@ -9,8 +9,7 @@ module( "selectmenu: events", {
 asyncTest( "change", function () {
 	expect( 5 );
 
-	var that = this,
-		optionIndex = 1,
+	var optionIndex = 1,
 		button, menu, options;
 
 	this.element.selectmenu({
@@ -41,7 +40,7 @@ test( "close", function () {
 	expect( 4 );
 
 	this.element.selectmenu({
-		close: function ( event, ui ) {
+		close: function ( event ) {
 			ok( event, "close event fired on close" );
 			equal( event.type, "selectmenuclose", "event type set to selectmenuclose" );
 		}
@@ -71,10 +70,10 @@ asyncTest( "focus", function () {
 		}
 	});
 
-	button = this.element.selectmenu( "widget" ),
+	button = this.element.selectmenu( "widget" );
 	menu = this.element.selectmenu( "menuWidget" );
 
-	button.simulate( "focus" )
+	button.simulate( "focus" );
 
 	setTimeout(function() {
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -97,7 +96,7 @@ test( "open", function () {
 	expect( 2 );
 
 	this.element.selectmenu({
-		open: function ( event, ui ) {
+		open: function ( event ) {
 			ok( event, "open event fired on open" );
 			equal( event.type, "selectmenuopen", "event type set to selectmenuopen" );
 		}
