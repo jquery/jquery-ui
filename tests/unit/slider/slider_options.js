@@ -1,6 +1,3 @@
-/*
- * slider_options.js
- */
 (function( $ ) {
 
 var element, options;

@@ -1,6 +1,3 @@
-/*
- * slider_methods.js
- */
 (function( $ ) {
 
 module( "slider: methods" );
