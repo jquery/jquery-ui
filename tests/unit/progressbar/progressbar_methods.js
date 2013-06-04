@@ -7,12 +7,22 @@ test( "destroy", function() {
 	});
 });
 
+test( "disable", function() {
+	expect( 3 );
+
+	var element = $( "#progressbar" ).progressbar().progressbar( "disable" );
+
+	ok( element.progressbar( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
+	ok( element.progressbar( "widget" ).attr( "aria-disabled" ), "element gets aria-disabled" );
+	ok( element.progressbar( "widget" ).hasClass( "ui-progressbar-disabled" ), "element gets ui-progressbar-disabled" );
+});
+
 test( "value", function() {
 	expect( 3 );
 
 	var element = $( "<div>" ).progressbar({ value: 20 });
 	equal( element.progressbar( "value" ), 20, "correct value as getter" );
-	equal( element.progressbar( "value", 30), element, "chainable as setter" );
+	strictEqual( element.progressbar( "value", 30 ), element, "chainable as setter" );
 	equal( element.progressbar( "option", "value" ), 30, "correct value after setter" );
 });
 

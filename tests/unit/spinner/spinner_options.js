@@ -5,10 +5,17 @@ module( "spinner: options" );
 // culture is tested after numberFormat, since it depends on numberFormat
 
 test( "icons: default ", function() {
-	expect( 2 );
-	var element = $( "#spin" ).val( 0 ).spinner().spinner( "widget" );
-	equal( element.find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-triangle-1-n" );
-	equal( element.find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
+	expect( 4 );
+	var element = $( "#spin" ).val( 0 ).spinner();
+	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-triangle-1-n" );
+	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
+
+	element.spinner( "option", "icons", {
+		up: "ui-icon-carat-1-n",
+		down: "ui-icon-carat-1-s"
+	});
+	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-carat-1-n" );
+	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-carat-1-s" );
 });
 
 test( "icons: custom ", function() {

@@ -16,6 +16,24 @@ var minDuration = 15,
 
 module( "effects.core" );
 
+// TODO: test all signatures of .show(), .hide(), .toggle().
+// Look at core's signatures and UI's signatures.
+asyncTest( ".hide() with step", function() {
+	expect( 1 );
+	var element = $( "#elem" ),
+		step = function() {
+			ok( true, "step callback invoked" );
+			step = $.noop;
+		};
+
+	element.hide({
+		step: function() {
+			step();
+		},
+		complete: start
+	});
+});
+
 test( "Immediate Return Conditions", function() {
 	var hidden = $( "div.hidden" ),
 		count = 0;
@@ -28,6 +46,14 @@ test( "Immediate Return Conditions", function() {
 	equal( ++count, 3, "Both Functions worked properly" );
 });
 
+test( ".hide() with hidden parent", function() {
+	expect( 1 );
+	var element = $( "div.hidden" ).children();
+	element.hide( "blind", function() {
+		equal( element.css( "display" ), "none", "display: none" );
+	});
+});
+
 asyncTest( "Parse of null for options", function() {
 	var hidden = $( "div.hidden" ),
 		count = 0;
@@ -36,6 +62,17 @@ asyncTest( "Parse of null for options", function() {
 		equal( ++count, 1, "null for options still works" );
 		start();
 	});
+});
+
+test( "removeClass", function() {
+	expect( 3 );
+
+	var element = $( "<div>" );
+	equal( "", element[ 0 ].className );
+	element.addClass( "destroyed" );
+	equal( "destroyed", element[ 0 ].className );
+	element.removeClass();
+	equal( "", element[ 0 ].className );
 });
 
 

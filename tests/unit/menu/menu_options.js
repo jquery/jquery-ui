@@ -41,9 +41,12 @@ test( "{ disabled: false }", function() {
 });
 
 test( "{ icons: default }", function() {
-	expect( 1 );
+	expect( 2 );
 	var element = $( "#menu2" ).menu();
 	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon ui-icon-carat-1-e" );
+
+	element.menu("option", "icons.submenu", "ui-icon-triangle-1-e");
+	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon ui-icon-triangle-1-e" );
 });
 
 test( "{ icons: { submenu: 'custom' } }", function() {

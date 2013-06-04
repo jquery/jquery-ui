@@ -28,9 +28,9 @@ QUnit.reset = function() {
 QUnit.config.requireExpects = true;
 
 QUnit.config.urlConfig.push({
-  id: "min",
-  label: "Minified source",
-  tooltip: "Load minified source files instead of the regular unminified ones."
+	id: "min",
+	label: "Minified source",
+	tooltip: "Load minified source files instead of the regular unminified ones."
 });
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
@@ -77,16 +77,22 @@ TestHelpers.testJshint = function( module ) {
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
-			var passed = JSHINT( srcArgs[ 0 ], hintArgs[ 0 ] ),
-				errors = $.map( JSHINT.errors, function( error ) {
-					// JSHINT may report null if there are too many errors
-					if ( !error ) {
-						return;
-					}
+			var globals, passed, errors,
+				jshintrc = hintArgs[ 0 ],
+				source = srcArgs[ 0 ];
 
-					return "[L" + error.line + ":C" + error.character + "] " +
-						error.reason + "\n" + error.evidence + "\n";
-				}).join( "\n" );
+			globals = jshintrc.globals || {};
+			delete jshintrc.globals;
+			passed = JSHINT( source, jshintrc, globals ),
+			errors = $.map( JSHINT.errors, function( error ) {
+				// JSHINT may report null if there are too many errors
+				if ( !error ) {
+					return;
+				}
+
+				return "[L" + error.line + ":C" + error.character + "] " +
+					error.reason + "\n" + error.evidence + "\n";
+			}).join( "\n" );
 			ok( passed, errors );
 			start();
 		})
@@ -212,7 +218,7 @@ window.domEqual = function( selector, modifier, message ) {
 			"tabIndex",
 			"title"
 		];
-/*
+
 	function getElementStyles( elem ) {
 		var key, len,
 			style = elem.ownerDocument.defaultView ?
@@ -239,7 +245,7 @@ window.domEqual = function( selector, modifier, message ) {
 
 		return styles;
 	}
-*/
+
 	function extract( elem ) {
 		if ( !elem || !elem.length ) {
 			QUnit.push( false, actual, expected,
@@ -257,8 +263,7 @@ window.domEqual = function( selector, modifier, message ) {
 			var value = elem.attr( attr );
 			result[ attr ] = value !== undefined ? value : "";
 		});
-		// TODO: Enable when we can figure out what's happening with accordion
-		//result.style = getElementStyles( elem[ 0 ] );
+		result.style = getElementStyles( elem[ 0 ] );
 		result.events = $._data( elem[ 0 ], "events" );
 		result.data = $.extend( {}, elem.data() );
 		delete result.data[ $.expando ];

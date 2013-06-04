@@ -2,7 +2,7 @@
  * jQuery UI Effects Scale @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -21,7 +21,9 @@ $.effects.effect.puff = function( o, done ) {
 		factor = percent / 100,
 		original = {
 			height: elem.height(),
-			width: elem.width()
+			width: elem.width(),
+			outerHeight: elem.outerHeight(),
+			outerWidth: elem.outerWidth()
 		};
 
 	$.extend( o, {
@@ -35,7 +37,9 @@ $.effects.effect.puff = function( o, done ) {
 			original :
 			{
 				height: original.height * factor,
-				width: original.width * factor
+				width: original.width * factor,
+				outerHeight: original.outerHeight * factor,
+				outerWidth: original.outerWidth * factor
 			}
 	});
 
@@ -74,7 +78,12 @@ $.effects.effect.scale = function( o, done ) {
 		options.restore = true;
 	}
 
-	options.from = o.from || ( mode === "show" ? { height: 0, width: 0 } : original );
+	options.from = o.from || ( mode === "show" ? {
+		height: 0,
+		width: 0,
+		outerHeight: 0,
+		outerWidth: 0
+	} : original );
 	options.to = {
 		height: original.height * factor.y,
 		width: original.width * factor.x,
@@ -124,7 +133,9 @@ $.effects.effect.size = function( o, done ) {
 		props = restore ? props0 : props1,
 		zero = {
 			height: 0,
-			width: 0
+			width: 0,
+			outerHeight: 0,
+			outerWidth: 0
 		};
 
 	if ( mode === "show" ) {
@@ -213,7 +224,9 @@ $.effects.effect.size = function( o, done ) {
 			var child = $( this ),
 				c_original = {
 					height: child.height(),
-					width: child.width()
+					width: child.width(),
+					outerHeight: child.outerHeight(),
+					outerWidth: child.outerWidth()
 				};
 			if (restore) {
 				$.effects.save(child, props2);
@@ -221,11 +234,15 @@ $.effects.effect.size = function( o, done ) {
 
 			child.from = {
 				height: c_original.height * factor.from.y,
-				width: c_original.width * factor.from.x
+				width: c_original.width * factor.from.x,
+				outerHeight: c_original.outerHeight * factor.from.y,
+				outerWidth: c_original.outerWidth * factor.from.x
 			};
 			child.to = {
 				height: c_original.height * factor.to.y,
-				width: c_original.width * factor.to.x
+				width: c_original.width * factor.to.x,
+				outerHeight: c_original.height * factor.to.y,
+				outerWidth: c_original.width * factor.to.x
 			};
 
 			// Vertical props scaling
