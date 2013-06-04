@@ -21,13 +21,11 @@ $.widget( "ui.menubar", {
 	options: {
 		items: "li",
 		menuElement: "ul",
-		icons: {
-			menu: "ui-icon-triangle-1-s"
-		},
-		position: {
-			my: "left top",
-			at: "left bottom"
-		}
+		icons: { menu: "ui-icon-triangle-1-s" },
+		position: { my: "left top", at: "left bottom" },
+
+		// callbacks
+		select: null
 	},
 
 	_create: function() {
