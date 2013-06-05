@@ -4,7 +4,8 @@
 // Usage:
 // stable release: node release.js
 // pre-release: node release.js --pre-release {version}
-// test run: node release.js --remote=user/repo
+// test run: node release.js --remote={repo}
+// - repo: "/tmp/repo" (filesystem), "user/repo" (github), "http://mydomain/repo.git" (another domain)
 
 "use strict";
 
@@ -515,7 +516,11 @@ function writePackage( pkg ) {
 
 function bootstrap( fn ) {
 	getRemote(function( remote ) {
-		repo = "git@github.com:" + remote + ".git";
+		if ( (/:/).test( remote ) || fs.existsSync( remote ) ) {
+			repo = remote;
+		} else {
+			repo = "git@github.com:" + remote + ".git";
+		}
 		_bootstrap( fn );
 	});
 }
