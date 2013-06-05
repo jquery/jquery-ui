@@ -8,8 +8,9 @@
 
 "use strict";
 
-var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime, preRelease, repo,
+var baseDir, downloadBuilder, repoDir, prevVersion, newVersion, nextVersion, tagTime, preRelease, repo,
 	fs = require( "fs" ),
+	path = require( "path" ),
 	rnewline = /\r?\n/,
 	branch = "master";
 
@@ -25,7 +26,8 @@ walk([
 	confirm,
 
 	section( "building release" ),
-	buildRelease,
+	buildReleaseBranch,
+	buildPackage,
 
 	section( "pushing tag" ),
 	confirmReview,
@@ -65,13 +67,6 @@ function cloneRepo() {
 	echo( "Installing dependencies..." );
 	if ( exec( "npm install" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
-	}
-	// We need download.jqueryui.com in order to generate themes.
-	// We only generate themes for stable releases.
-	if ( !preRelease ) {
-		if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
-			abort( "Error installing dependencies." );
-		}
 	}
 	echo();
 }
@@ -135,9 +130,8 @@ function getVersions() {
 	echo( "After the release, the version will be " + nextVersion.cyan + "." );
 }
 
-function buildRelease() {
-	var pkg,
-		releaseTask = preRelease ? "release" : "release_cdn";
+function buildReleaseBranch() {
+	var pkg;
 
 	echo( "Creating " + "release".cyan + " branch..." );
 	git( "checkout -b release", "Error creating release branch." );
@@ -158,12 +152,6 @@ function buildRelease() {
 	}
 	echo();
 
-	echo( "Building release..." );
-	if ( exec( "grunt " + releaseTask ).code !== 0 ) {
-		abort( "Error building release." );
-	}
-	echo();
-
 	echo( "Committing release artifacts..." );
 	git( "add *.jquery.json", "Error adding manifest files to git." );
 	git( "commit -am 'Tagging the " + newVersion + " release.'",
@@ -173,6 +161,175 @@ function buildRelease() {
 	echo( "Tagging release..." );
 	git( "tag " + newVersion, "Error tagging " + newVersion + "." );
 	tagTime = git( "log -1 --format='%ad'", "Error getting tag timestamp." ).trim();
+}
+
+function buildPackage( callback ) {
+	if( preRelease ) {
+		return buildPreReleasePackage( callback );
+	} else {
+		return buildCDNPackage( callback );
+	}
+}
+
+function buildPreReleasePackage( callback ) {
+	var build, files, jqueryUi, packer, target, targetZip;
+
+	echo( "Build pre-release Package" );
+
+	jqueryUi = new downloadBuilder.JqueryUi( path.resolve( "." ) );
+	build = new downloadBuilder.Builder( jqueryUi, ":all:" );
+	packer = new downloadBuilder.Packer( build, null, {
+		addTests: true,
+		bundleSuffix: "",
+		skipDocs: true,
+		skipTheme: true
+	});
+	target = "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version;
+	targetZip = target + ".zip";
+
+	return walk([
+		function( callback ) {
+			echo( "Building release files" );
+			packer.pack(function( error, _files ) {
+				if( error ) {
+					abort( error.stack );
+				}
+				files = _files.map(function( file ) {
+
+					// Strip first path
+					file.path = file.path.replace( /^[^\/]*\//, "" );
+					return file;
+
+				}).filter(function( file ) {
+
+					// Filter development-bundle content only
+					return (/^development-bundle/).test( file.path );
+				}).map(function( file ) {
+
+					// Strip development-bundle
+					file.path = file.path.replace( /^development-bundle\//, "" );
+					return file;
+
+				});
+				return callback();
+			});
+		},
+		function() {
+			downloadBuilder.util.createZip( files, targetZip, function( error ) {
+				if ( error ) {
+					abort( error.stack );
+				}
+				echo( "Built zip package at " + path.relative( "../..", targetZip ).cyan );
+				return callback();
+			});
+		}
+	]);
+}
+
+function buildCDNPackage( callback ) {
+	var build, output, target, targetZip,
+		add = function( file ) {
+			output.push( file );
+		},
+		bundleFiles = [],
+		jqueryUi = new downloadBuilder.JqueryUi( path.resolve( "." ) ),
+		themeGallery = downloadBuilder.themeGallery( jqueryUi );
+
+	echo( "Build CDN Package" );
+
+	build = new downloadBuilder.Builder( jqueryUi, ":all:" );
+	output = [];
+	target = "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version + "-cdn";
+	targetZip = target + ".zip";
+
+	[ "AUTHORS.txt", "MIT-LICENSE.txt", "package.json" ].map(function( name ) {
+		return build.get( name );
+	}).forEach( add );
+
+	// "ui/*.js"
+	build.componentFiles.filter(function( file ) {
+		return (/^ui\//).test( file.path );
+	}).forEach( add );
+
+	// "ui/*.min.js"
+	build.componentMinFiles.filter(function( file ) {
+		return (/^ui\//).test( file.path );
+	}).forEach( add );
+
+	// "i18n/*.js"
+	build.i18nFiles.rename( /^ui\//, "" ).forEach( add );
+	build.i18nMinFiles.rename( /^ui\//, "" ).forEach( add );
+	build.bundleI18n.into( "i18n/" ).forEach( add );
+	build.bundleI18nMin.into( "i18n/" ).forEach( add );
+
+	build.bundleJs.forEach( add );
+	build.bundleJsMin.forEach( add );
+
+	walk( themeGallery.map(function( theme ) {
+		return function( callback ) {
+			var themeCssOnlyRe, themeDirRe,
+				folderName = theme.folderName(),
+				packer = new downloadBuilder.Packer( build, theme, {
+					skipDocs: true
+				});
+			// TODO improve code by using custom packer instead of download packer (Packer)
+			themeCssOnlyRe = new RegExp( "development-bundle/themes/" + folderName + "/jquery.ui.theme.css" );
+			themeDirRe = new RegExp( "css/" + folderName );
+			packer.pack(function( error, files ) {
+				if ( error ) {
+					abort( error.stack );
+				}
+				// Add theme files.
+				files
+					// Pick only theme files we need on the bundle.
+					.filter(function( file ) {
+						if ( themeCssOnlyRe.test( file.path ) || themeDirRe.test( file.path ) ) {
+							return true;
+						}
+						return false;
+					})
+					// Convert paths the way bundle needs
+					.map(function( file ) {
+						file.path = file.path
+
+							// Remove initial package name eg. "jquery-ui-1.10.0.custom"
+							.split( "/" ).slice( 1 ).join( "/" )
+
+							.replace( /development-bundle\/themes/, "css" )
+							.replace( /css/, "themes" )
+
+							// Make jquery-ui-1.10.0.custom.css into jquery-ui.css, or jquery-ui-1.10.0.custom.min.css into jquery-ui.min.css
+							.replace( /jquery-ui-.*?(\.min)*\.css/, "jquery-ui$1.css" );
+
+						return file;
+					}).forEach( add );
+				return callback();
+			});
+		
+		}
+	}).concat([function() {
+		var crypto = require( "crypto" );
+	
+		// Create MD5 manifest
+		output.push({
+			path: "MANIFEST",
+			data: output.sort(function( a, b ) {
+				return a.path.localeCompare( b.path );
+			}).map(function( file ) {
+				var md5 = crypto.createHash( "md5" );
+				md5.update( file.data );
+				return file.path + " " + md5.digest( "hex" );
+			}).join( "\n" )
+		});
+
+		downloadBuilder.util.createZip( output, targetZip, function( error ) {
+			if ( error ) {
+				abort( error.stack );
+			}
+			echo( "Built zip CDN package at " + path.relative( "../..", targetZip ).cyan );
+			return callback();
+		});
+	}]));
 }
 
 function pushRelease() {
@@ -419,7 +576,7 @@ function _bootstrap( fn ) {
 	fs.mkdirSync( baseDir );
 
 	console.log( "Installing dependencies..." );
-	require( "child_process" ).exec( "npm install shelljs colors", function( error ) {
+	require( "child_process" ).exec( "npm install shelljs colors download.jqueryui.com", function( error ) {
 		if ( error ) {
 			console.log( error );
 			return process.exit( 1 );
@@ -427,6 +584,7 @@ function _bootstrap( fn ) {
 
 		require( "shelljs/global" );
 		require( "colors" );
+		downloadBuilder = require( "download.jqueryui.com" );
 
 		fn();
 	});
