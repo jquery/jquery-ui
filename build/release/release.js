@@ -105,8 +105,7 @@ function getVersions() {
 
 	if ( preRelease ) {
 		newVersion = preRelease;
-		// Note: prevVersion is not currently used for pre-releases. The TODO
-		// below about 1.10.0 applies here as well.
+		// Note: prevVersion is not currently used for pre-releases.
 		prevVersion = nextVersion = currentVersion;
 	} else {
 		newVersion = currentVersion.substr( 0, currentVersion.length - 3 );
@@ -115,15 +114,14 @@ function getVersions() {
 		minor = parseInt( parts[ 1 ], 10 );
 		patch = parseInt( parts[ 2 ], 10 );
 
-		// TODO: handle 1.10.0
-		// Also see comment above about pre-releases
-		if ( patch === 0 ) {
-			abort( "This script is not smart enough to handle the 1.10.0 release." );
+		if ( minor === 0 && patch === 0 ) {
+			abort( "This script is not smart enough to handle major release (eg. 2.0.0)." );
+		} else if ( patch === 0 ) {
+			prevVersion = git( "for-each-ref --count=1 --sort=-authordate --format='%(refname:short)' refs/tags/" + [ major, minor - 1 ].join( "." ) + "*" ).trim();
+		} else {
+			prevVersion = [ major, minor, patch - 1 ].join( "." );
 		}
 
-		prevVersion = patch === 0 ?
-			[ major, minor - 1, 0 ].join( "." ) :
-			[ major, minor, patch - 1 ].join( "." );
 		nextVersion = [ major, minor, patch + 1 ].join( "." ) + "pre";
 	}
 
