@@ -560,15 +560,11 @@ if ( $.uiBackCompat !== false ) {
 
 	$.widget( "ui.draggable", $.ui.draggable, {
 		_getContainer: function() {
-
-			var containment = this.options.containment;
-
-			if ( $.isArray( containment ) ) {
-				return containment;
+			if ( $.isArray( this.options.containment ) ) {
+				return this.options.containment;
 			}
 
 			return this._super();
-
 		}
 	});
 
