@@ -3,7 +3,7 @@ TestHelpers.commonWidgetTests( "menubar", {
 		items: "li",
 		menus: "ul",
 		icons: {
-			menu: "ui-icon-triangle-1-s"
+			dropdown: "ui-icon-triangle-1-s"
 		},
 		position: {
 			my: "left top",

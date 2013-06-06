@@ -17,7 +17,6 @@
 			$.ui.menubar.prototype.options.select = function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 				if ( ui.item.text() == "Quit" ) {
-					console.log(this)
 					$( this ).menubar( "destroy" );
 				}
 			};
@@ -32,7 +31,7 @@
 			});
 			customIcon.menubar({
 				icons: {
-					menu: "ui-icon-circle-triangle-s"
+					dropdown: "ui-icon-circle-triangle-s"
 				}
 			});
 

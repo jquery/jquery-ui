@@ -41,7 +41,7 @@ test( "icons: custom", function() {
 	expect( 1 );
 	var element = $( "#bar1" ).menubar({
 		icons: {
-			menu: "custom-icon-class"
+			dropdown: "custom-icon-class"
 		}
 	});
 	equal( element.find(".custom-icon-class").length, 3 );

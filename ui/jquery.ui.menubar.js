@@ -22,7 +22,7 @@ $.widget( "ui.menubar", {
 		items: "li",
 		menus: "ul",
 		icons: {
-			menu: "ui-icon-triangle-1-s"
+			dropdown: "ui-icon-triangle-1-s"
 		},
 		position: {
 			my: "left top",
@@ -248,7 +248,7 @@ $.widget( "ui.menubar", {
 
 			anItem.attr( "aria-haspopup", "true" );
 			if ( menubar.options.icons ) {
-				anItem.append( "<span class='ui-button-icon-secondary ui-icon " + this.options.icons.menu + "'></span>" );
+				anItem.append( "<span class='ui-button-icon-secondary ui-icon " + this.options.icons.dropdown + "'></span>" );
 				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
 		} else {
