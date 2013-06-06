@@ -10,11 +10,11 @@ module( "menubar: options", {
 	}
 });
 
-test( "menuElement and items", function() {
+test( "menus and items", function() {
 	expect( 2 );
 	var element = $( "#bar2" ).menubar({
 		items: ".menubarItem",
-		menuElement: ".menuElement"
+		menus: ".menuElement"
 	});
 	var fileItem = element.find( ">:eq(1)>a:first" );
 	var fileMenu = fileItem.next();

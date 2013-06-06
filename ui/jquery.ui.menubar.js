@@ -20,7 +20,7 @@ $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
 		items: "li",
-		menuElement: "ul",
+		menus: "ul",
 		icons: {
 			menu: "ui-icon-triangle-1-s"
 		},
@@ -96,7 +96,7 @@ $.widget( "ui.menubar", {
 				"border-style": "hidden"
 			});
 
-		subMenus = this.menuItems.children( menubar.options.menuElement ).menu({
+		subMenus = this.menuItems.children( menubar.options.menus ).menu({
 			position: {
 				within: this.options.position.within
 			},
@@ -106,7 +106,7 @@ $.widget( "ui.menubar", {
 				ui.item.parents( ".ui-menubar-item" ).children().first().focus();
 				menubar._trigger( "select", event, ui );
 			},
-			menus: this.options.menuElement
+			menus: this.options.menus
 		})
 			.hide()
 			.attr({
@@ -158,7 +158,7 @@ $.widget( "ui.menubar", {
 	},
 
 	_hasSubMenu: function( menuItem ) {
-		return $( menuItem ).children( this.options.menuElement ).length > 0;
+		return $( menuItem ).children( this.options.menus ).length > 0;
 	},
 
 	_identifyMenuItemsNeighbors: function( menuItem, menubar, index ) {
@@ -289,7 +289,7 @@ $.widget( "ui.menubar", {
 		}
 		event.preventDefault();
 
-		menu = $(event.target).parents( ".ui-menubar-item" ).children( this.options.menuElement );
+		menu = $(event.target).parents( ".ui-menubar-item" ).children( this.options.menus );
 
 		// If we have an open menu and we see a click on the menuItem
 		// and the menu thereunder is the same as the active menu, close it.

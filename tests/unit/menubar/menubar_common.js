@@ -1,7 +1,7 @@
 TestHelpers.commonWidgetTests( "menubar", {
 	defaults: {
 		items: "li",
-		menuElement: "ul",
+		menus: "ul",
 		icons: {
 			menu: "ui-icon-triangle-1-s"
 		},
