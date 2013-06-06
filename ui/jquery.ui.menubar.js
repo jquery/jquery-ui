@@ -71,7 +71,7 @@ $.widget( "ui.menubar", {
 			focusin: function() {
 				clearTimeout( this.closeTimer );
 			},
-			focusout: function() {
+			focusout: function( event ) {
 				this.closeTimer = this._delay( function() {
 					this._close( event );
 					this.items.attr( "tabIndex", -1 );
@@ -364,6 +364,9 @@ $.widget( "ui.menubar", {
 	},
 
 	_collapseActiveMenu: function() {
+		if ( !this.active.is( ":ui-menu" ) ) {
+			return;
+		}
 		this.active
 			.menu( "collapseAll" )
 			.hide()
@@ -395,6 +398,13 @@ $.widget( "ui.menubar", {
 		}
 
 		menuItem.addClass( "ui-state-active" );
+		// workaround when clicking a non-menu item, then hovering a menu, then going back
+		// this way afterwards its still possible to tab back to a menubar, even if its
+		// the wrong item
+		// see also "click menu-less item, hover in and out of item with menu" test in menubar_core
+		if ( !this.lastFocused ) {
+			this.lastFocused = menu.prev();
+		}
 
 		this.active = menu
 			.show()

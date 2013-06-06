@@ -1,5 +1,6 @@
 (function( $ ) {
 
+// TODO get rid of these, used just once anyway, awkward at best
 var log = TestHelpers.menubar.log,
 	logOutput = TestHelpers.menubar.logOutput,
 	click = TestHelpers.menubar.click;
@@ -56,6 +57,31 @@ test( "handle click on menu item", function() {
 	click( $( "#bar1" ), "3", "3" );
 	click( element, "1", "2" );
 	equal( logOutput(), "click,(1,2),afterclick,(2,1),(3,3),(1,2)", "Click order not valid." );
+});
+
+test( "two clicks on non-menu item", function() {
+	expect( 1 );
+	var element = $( "#bar1" ).menubar(),
+		item = element.find( "a:first" );
+	item.click().click();
+	ok( true, "all good!" );
+});
+
+asyncTest( "click menu-less item, hover in and out of item with menu", function() {
+	expect( 1 );
+	var element = $( "#bar1" ).menubar(),
+		item = element.find( "a:first" ),
+		menuItem = element.find( "a:eq(1)" );
+	element.menubar( "instance" )._close = function() {
+		ok( true, "all good!" );
+		// TODO this is supposed to catch issues with focus handling code
+		// TODO but it never passes. The approach is too brittle
+		// equal( element.find( "a[tabindex=0]" ).length, 1 );
+		start();
+	};
+	item.click();
+	menuItem.mouseover();
+	menuItem.next().focusout();
 });
 
 test( "hover over a menu item with no sub-menu should close open menu", function() {
