@@ -1,4 +1,4 @@
-﻿Authors ordered by first contribution
+Authors ordered by first contribution
 A list of current team members is available at http://jqueryui.com/about
 
 Paul Bakaus <paul.bakaus@googlemail.com>
@@ -168,7 +168,7 @@ Genie <386@mail.com>
 Rick Waldron <waldron.rick@gmail.com>
 Ian Simpson <spoonlikesham@gmail.com>
 Lev Kitsis <spam4lev@gmail.com>
-Ted VanToll <tj.vantoll@gmail.com>
+TJ VanToll <tj.vantoll@gmail.com>
 Justin Domnitz <jdomnitz@gmail.com>
 Douglas Cerna <douglascerna@yahoo.com>
 Bert ter Heide <bertjh@hotmail.com>
@@ -208,3 +208,38 @@ Sindre Sorhus <sindresorhus@gmail.com>
 Bernhard Sirlinger <bernhard.sirlinger@tele2.de>
 Jared A. Scheel <jared@jaredscheel.com>
 Rafael Xavier de Souza <rxaviers@gmail.com>
+John Chen <zhang.z.chen@intel.com>
+Dale Kocian <dale.kocian@gmail.com>
+Mike Sherov <mike.sherov@gmail.com>
+Andrew Couch <andy@couchand.com>
+Marc-Andre Lafortune <github@marc-andre.ca>
+Nate Eagle <nate.eagle@teamaol.com>
+David Souther <davidsouther@gmail.com>
+Mathias Stenbom <mathias@stenbom.com>
+Sergey Kartashov <ebishkek@yandex.ru>
+Avinash R <nashpapa@gmail.com>
+Ethan Romba <ethanromba@gmail.com>
+Cory Gackenheimer <cory.gack@gmail.com>
+Juan Pablo Kaniefsky <jpkaniefsky@gmail.com>
+Roman Salnikov <bardt.dz@gmail.com>
+Anika Henke <anika@selfthinker.org>
+Samuel Bovée <samycookie2000@yahoo.fr>
+Fabrício Matté <ult_combo@hotmail.com>
+Viktor Kojouharov <vkojouharov@gmail.com>
+Pawel Maruszczyk <lord_t@o2.pl>
+Pavel Selitskas <p.selitskas@gmail.com>
+Bjørn Johansen <bjorn.johansen@metronet.no>
+Matthieu Penant <thieum22@hotmail.com>
+Dominic Barnes <dominic@dbarnes.info>
+David Sullivan <david.sullivan@gmail.com>
+Thomas Jaggi <thomas.jaggi@gmail.com>
+Vahid Sohrabloo <vahid4134@gmail.com>
+Travis Carden <travis.carden@gmail.com>
+Bruno M. Custódio <bruno@brunomcustodio.com>
+Nathanael Silverman <nathanael.silverman@gmail.com>
+Christian Wenz <christian@wenz.org>
+Steve Urmston <steve@urm.st>
+Zaven Muradyan <megalivoithos@gmail.com>
+Woody Gilk <shadowhand@deviantart.com>
+Zbigniew Motyka <zbigniew.motyka@gmail.com>
+Suhail Alkowaileet <xsoh.k7@gmail.com>

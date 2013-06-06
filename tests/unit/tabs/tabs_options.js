@@ -73,29 +73,27 @@ test( "{ active: Number }", function() {
 	state( element, 0, 1, 0 );
 });
 
-if ( $.uiBackCompat === false ) {
-	test( "{ active: -Number }", function() {
-		expect( 8 );
+test( "{ active: -Number }", function() {
+	expect( 8 );
 
-		var element = $( "#tabs1" ).tabs({
-			active: -1
-		});
-		equal( element.tabs( "option", "active" ), 2 );
-		state( element, 0, 0, 1 );
-
-		element.tabs( "option", "active", -2 );
-		equal( element.tabs( "option", "active" ), 1 );
-		state( element, 0, 1, 0 );
-
-		element.tabs( "option", "active", -10 );
-		equal( element.tabs( "option", "active" ), 1 );
-		state( element, 0, 1, 0 );
-
-		element.tabs( "option", "active", -3 );
-		equal( element.tabs( "option", "active" ), 0 );
-		state( element, 1, 0, 0 );
+	var element = $( "#tabs1" ).tabs({
+		active: -1
 	});
-}
+	equal( element.tabs( "option", "active" ), 2 );
+	state( element, 0, 0, 1 );
+
+	element.tabs( "option", "active", -2 );
+	equal( element.tabs( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.tabs( "option", "active", -10 );
+	equal( element.tabs( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.tabs( "option", "active", -3 );
+	equal( element.tabs( "option", "active" ), 0 );
+	state( element, 1, 0, 0 );
+});
 
 test( "active - mismatched tab/panel order", function() {
 	expect( 3 );
@@ -146,23 +144,39 @@ test( "{ collapsible: true }", function() {
 });
 
 test( "disabled", function() {
-	expect( 10 );
+	expect( 22 );
 
 	// fully enabled by default
 	var element = $( "#tabs1" ).tabs();
 	disabled( element, false );
 
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
+
 	// disable single tab
 	element.tabs( "option", "disabled", [ 1 ] );
 	disabled( element, [ 1 ] );
+
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
 	// disabled active tab
 	element.tabs( "option", "disabled", [ 0, 1 ] );
 	disabled( element, [ 0, 1 ] );
 
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
+
 	// disable all tabs
 	element.tabs( "option", "disabled", [ 0, 1, 2 ] );
 	disabled( element, true );
+
+	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
+	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
+	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
 	// enable all tabs
 	element.tabs( "option", "disabled", [] );
@@ -237,10 +251,18 @@ test( "{ heightStyle: 'content' }", function() {
 });
 
 test( "{ heightStyle: 'fill' }", function() {
-	expect( 2 );
+	expect( 4 );
 	$( "#tabs8Wrapper" ).height( 500 );
 	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
 	equalHeight( element, 485 );
+	element.tabs( "destroy" );
+
+	element = $( "#tabs8" ).css({
+		"border": "1px solid black",
+		"padding": "1px 0"
+	});
+	element.tabs({ heightStyle: "fill" });
+	equalHeight( element, 481 );
 });
 
 test( "{ heightStyle: 'fill' } with sibling", function() {
@@ -292,7 +314,7 @@ test( "hide and show: false", function() {
 			show: false,
 			hide: false
 		}),
-		widget = element.data( "tabs" ),
+		widget = element.tabs( "instance" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function() {
 		ok( false, "_show() called" );
@@ -313,7 +335,7 @@ asyncTest( "hide and show - animation", function() {
 			show: "drop",
 			hide: 2000
 		}),
-		widget = element.data( "tabs" ),
+		widget = element.tabs( "instance" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function( element, options, callback ) {
 		strictEqual( element[ 0 ], panels[ 1 ], "correct element in _show()" );

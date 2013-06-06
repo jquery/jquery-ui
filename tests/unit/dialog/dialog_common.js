@@ -1,34 +1,43 @@
 TestHelpers.commonWidgetTests( "dialog", {
 	defaults: {
+		appendTo: "body",
 		autoOpen: true,
-		buttons: {},
+		buttons: [],
 		closeOnEscape: true,
-		closeText: 'close',
+		closeText: "close",
 		disabled: false,
-		dialogClass: '',
+		dialogClass: "",
 		draggable: true,
-		height: 'auto',
+		height: "auto",
 		hide: null,
-		maxHeight: false,
-		maxWidth: false,
+		maxHeight: null,
+		maxWidth: null,
 		minHeight: 150,
 		minWidth: 150,
 		modal: false,
 		position: {
-			my: 'center',
-			at: 'center',
+			my: "center",
+			at: "center",
 			of: window,
-			collision: 'fit',
+			collision: "fit",
 			using: $.ui.dialog.prototype.options.position.using
 		},
 		resizable: true,
 		show: null,
-		stack: true,
-		title: '',
+		title: null,
 		width: 300,
-		zIndex: 1000,
 
 		// callbacks
-		create: null
+		beforeClose: null,
+		close: null,
+		create: null,
+		drag: null,
+		dragStart: null,
+		dragStop: null,
+		focus: null,
+		open: null,
+		resize: null,
+		resizeStart: null,
+		resizeStop: null
 	}
 });

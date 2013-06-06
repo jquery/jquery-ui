@@ -221,7 +221,9 @@ test( "of", function() {
 });
 
 test( "offsets", function() {
-	expect( 4 );
+	expect( 9 );
+
+	var offset;
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -254,6 +256,34 @@ test( "offsets", function() {
 		collision: "none"
 	});
 	deepEqual( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
+
+	$( "#elx" ).position({
+		my: "left-30.001% top+50.0%",
+		at: "left bottom",
+		of: "#parentx",
+		collision: "none"
+	});
+	offset = $( "#elx" ).offset();
+	equal( Math.round( offset.top ), 65, "decimal percentage offsets in my" );
+	equal( Math.round( offset.left ), 37, "decimal percentage offsets in my" );
+
+	$( "#elx" ).position({
+		my: "left+10.4 top-10.6",
+		at: "left bottom",
+		of: "#parentx",
+		collision: "none"
+	});
+	offset = $( "#elx" ).offset();
+	equal( Math.round( offset.top ), 49, "decimal offsets in my" );
+	equal( Math.round( offset.left ), 50, "decimal offsets in my" );
+
+	$( "#elx" ).position({
+		my: "left+right top-left",
+		at: "left-top bottom-bottom",
+		of: "#parentx",
+		collision: "none"
+	});
+	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "invalid offsets" );
 });
 
 test( "using", function() {
@@ -342,6 +372,8 @@ test( "collision: fit, no collision", function() {
 	}, "with offset" );
 });
 
+// Currently failing in IE8 due to the iframe used by TestSwarm
+if ( !/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() ) ) {
 test( "collision: fit, collision", function() {
 	expect( 2 + (scrollTopSupport() ? 1 : 0) );
 
@@ -372,6 +404,7 @@ test( "collision: fit, collision", function() {
 		win.scrollTop( 0 ).scrollLeft( 0 );
 	}
 });
+}
 
 test( "collision: flip, no collision", function() {
 	expect( 2 );

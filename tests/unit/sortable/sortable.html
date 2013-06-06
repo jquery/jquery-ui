@@ -11,7 +11,7 @@
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
-		css: [ "ui.core", "ui.sortable" ],
+		css: [ "ui.core" ],
 		js: [
 			"ui/jquery.ui.core.js",
 			"ui/jquery.ui.widget.js",
@@ -26,19 +26,28 @@
 	<script src="sortable_events.js"></script>
 	<script src="sortable_methods.js"></script>
 	<script src="sortable_options.js"></script>
-	<script src="sortable_tickets.js"></script>
+	<script src="sortable_test_helpers.js"></script>
 
-	<script>
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("sortable", function() { ok(true, "disabled sortable testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
+	<style>
+	#sortable, #sortable2 {
+		position:relative;
+		top:0;
+		left:0;
+		padding: 0;
+		margin: 1px;
+		border-width: 0;
+	}
+	#sortable li{
+		padding: 0;
+		margin: 0;
+		border-width: 0;
+		height:19px;
+	}
+	#sortable-table {
+		width: 100%;
+	}
+	</style>
 </head>
 <body>
 
@@ -56,6 +65,34 @@
 	<li>Item 4</li>
 	<li>Item 5</li>
 </ul>
+
+<table id="sortable-table">
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>2</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>4</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>6</td>
+		</tr>
+		<tr>
+			<td>7</td>
+			<td>8</td>
+		</tr>
+	</tbody>
+</table>
+
+<div id="sortable-images">
+	<img src="../images/jqueryui_32x32.png" alt="">
+	<img src="../images/jqueryui_32x32.png" alt="">
+	<img src="../images/jqueryui_32x32.png" alt="">
+	<img src="../images/jqueryui_32x32.png" alt="">
+</div>
 
 </div>
 </body>

@@ -1,11 +1,12 @@
-/*
+/*!
  * jQuery UI Menubar @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Menubar
+ * http://api.jqueryui.com/menubar/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -15,172 +16,314 @@
  */
 (function( $ ) {
 
-// TODO when mixing clicking menus and keyboard navigation, focus handling is broken
-// there has to be just one item that has tabindex
 $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
-		autoExpand: false,
-		buttons: false,
 		items: "li",
 		menuElement: "ul",
-		menuIcon: false,
-		position: {
-			my: "left top",
-			at: "left bottom"
-		}
+		icons: { menu: "ui-icon-triangle-1-s" },
+		position: { my: "left top", at: "left bottom" },
+
+		// callbacks
+		select: null
 	},
+
 	_create: function() {
-		var that = this;
+		// Top-level elements containing the submenu-triggering elem
 		this.menuItems = this.element.children( this.options.items );
+
+		// Links or buttons in menuItems, triggers of the submenus
 		this.items = this.menuItems.children( "button, a" );
 
-		this.menuItems
-			.addClass( "ui-menubar-item" )
-			.attr( "role", "presentation" );
-		// let only the first item receive focus
-		this.items.slice(1).attr( "tabIndex", -1 );
+		// Keep track of open submenus
+		this.openSubmenus = 0;
 
+		this._initializeWidget();
+		this._initializeMenuItems();
+		this._initializeItems();
+	},
+
+	_initializeWidget: function() {
 		this.element
 			.addClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
 			.attr( "role", "menubar" );
-		this._focusable( this.items );
-		this._hoverable( this.items );
-		this.items.siblings( this.options.menuElement )
-			.menu({
-				position: {
-					within: this.options.position.within
-				},
-				select: function( event, ui ) {
-					ui.item.parents( "ul.ui-menu:last" ).hide();
-					that._close();
-					// TODO what is this targetting? there's probably a better way to access it
-					$(event.target).prev().focus();
-					that._trigger( "select", event, ui );
-				},
-				menus: that.options.menuElement
-			})
+		this._on( this.element, {
+			keydown: function( event ) {
+				var active;
+
+				// If we are in a nested sub-sub-menu and we see an ESCAPE
+				// we must close recursively.
+				if ( event.keyCode === $.ui.keyCode.ESCAPE &&
+						this.active &&
+						this.active.menu( "collapse", event ) !== true ) {
+					active = this.active;
+					this.active.blur();
+					this._close( event );
+					$( event.target ).blur().mouseleave();
+					active.prev().focus();
+				}
+			},
+			focusin: function() {
+				this.items.eq( 0 ).attr( "tabIndex", -1 );
+				clearTimeout( this.closeTimer );
+			},
+			focusout: function() {
+				this.closeTimer = this._delay( function() {
+					this._close( event );
+					this.items.eq( 0 ).attr( "tabIndex", 0 );
+				}, 150 );
+			},
+			"mouseenter .ui-menubar-item": function() {
+				clearTimeout( this.closeTimer );
+			}
+		} );
+	},
+
+	_initializeMenuItems: function() {
+		var subMenus,
+			menubar = this;
+
+		this.menuItems
+			.addClass( "ui-menubar-item" )
+			.attr( "role", "presentation" )
+			.css({
+				"border-width": "1px",
+				"border-style": "hidden"
+			});
+
+		subMenus = this.menuItems.children( menubar.options.menuElement ).menu({
+			position: {
+				within: this.options.position.within
+			},
+			select: function( event, ui ) {
+				ui.item.parents( "ul.ui-menu:last" ).hide();
+				menubar._close();
+				ui.item.parents( ".ui-menubar-item" ).children().first().focus();
+				menubar._trigger( "select", event, ui );
+			},
+			menus: this.options.menuElement
+		})
 			.hide()
 			.attr({
 				"aria-hidden": "true",
 				"aria-expanded": "false"
-			})
-			.bind( "keydown.menubar", function( event ) {
-				var menu = $( this );
+			});
+
+		this._on( subMenus, {
+			keydown: function( event ) {
+				$(event.target).attr( "tabIndex", 0 );
+				var parentButton,
+					menu = $( this );
 				if ( menu.is( ":hidden" ) ) {
 					return;
 				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
-					that.previous( event );
+					parentButton = menubar.active.prev( ".ui-button" );
+
+					if ( this.openSubmenus ) {
+						this.openSubmenus--;
+					} else if ( this._hasSubMenu( parentButton.parent().prev() ) ) {
+						menubar.active.blur();
+						menubar._open( event, parentButton.parent().prev().find( ".ui-menu" ) );
+					} else {
+						parentButton.parent().prev().find( ".ui-button" ).focus();
+						menubar._close( event );
+						this.open = true;
+					}
+
 					event.preventDefault();
+					$(event.target).attr( "tabIndex", -1 );
 					break;
 				case $.ui.keyCode.RIGHT:
-					that.next( event );
+					this.next( event );
 					event.preventDefault();
 					break;
 				}
+			},
+			focusout: function( event ) {
+				$(event.target).removeClass( "ui-state-focus" );
+			}
+		});
+
+		this.menuItems.each(function( index, menuItem ) {
+			menubar._identifyMenuItemsNeighbors( $( menuItem ), menubar, index );
+		});
+
+	},
+
+	_hasSubMenu: function( menuItem ) {
+		return $( menuItem ).children( this.options.menuElement ).length > 0;
+	},
+
+	_identifyMenuItemsNeighbors: function( menuItem, menubar, index ) {
+		var collectionLength = this.menuItems.length,
+			isFirstElement = ( index === 0 ),
+			isLastElement = ( index === ( collectionLength - 1 ) );
+
+		if ( isFirstElement ) {
+			menuItem.data( "prevMenuItem", $( this.menuItems[collectionLength - 1]) );
+			menuItem.data( "nextMenuItem", $( this.menuItems[index+1]) );
+		} else if ( isLastElement ) {
+			menuItem.data( "nextMenuItem", $( this.menuItems[0]) );
+			menuItem.data( "prevMenuItem", $( this.menuItems[index-1]) );
+		} else {
+			menuItem.data( "nextMenuItem", $( this.menuItems[index+1]) );
+			menuItem.data( "prevMenuItem", $( this.menuItems[index-1]) );
+		}
+	},
+
+	_initializeItems: function() {
+		var menubar = this;
+
+		this._focusable( this.items );
+		this._hoverable( this.items );
+
+		// let only the first item receive focus
+		this.items.slice(1).attr( "tabIndex", -1 );
+
+		this.items.each(function( index, item ) {
+			menubar._initializeItem( $( item ), menubar );
+		});
+	},
+
+	_initializeItem: function( anItem ) {
+		// TODO remove this var, or rename to `that`
+		var menubar = this,
+			menuItemHasSubMenu = this._hasSubMenu( anItem.parent() );
+
+		anItem
+			.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
+			.attr( "role", "menuitem" )
+			.wrapInner( "<span class='ui-button-text'></span>" );
+
+		menubar._on( anItem, {
+			focus:	function(){
+				anItem.attr( "tabIndex", 0 );
+				anItem.addClass( "ui-state-focus" );
+				event.preventDefault();
+			},
+			focusout:  function(){
+				anItem.attr( "tabIndex", -1 );
+				anItem.removeClass( "ui-state-focus" );
+				event.preventDefault();
+			}
+		} );
+
+		if ( menuItemHasSubMenu ) {
+			this._on( anItem, {
+				click: this._mouseBehaviorForMenuItemWithSubmenu,
+				focus: this._mouseBehaviorForMenuItemWithSubmenu,
+				mouseenter: this._mouseBehaviorForMenuItemWithSubmenu
 			});
-		this.items.each(function() {
-			var input = $(this),
-				// TODO menu var is only used on two places, doesn't quite justify the .each
-				menu = input.next( that.options.menuElement );
 
-			// might be a non-menu button
-			if ( menu.length ) {
-				input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
-					// ignore triggered focus event
-					if ( event.type === "focus" && !event.originalEvent ) {
-						return;
-					}
-					event.preventDefault();
-					// TODO can we simplify or extractthis check? especially the last two expressions
-					// there's a similar active[0] == menu[0] check in _open
-					if ( event.type === "click" && menu.is( ":visible" ) && that.active && that.active[0] === menu[0] ) {
-						that._close();
-						return;
-					}
-					if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" || that.options.autoExpand ) {
-						if( that.options.autoExpand ) {
-							clearTimeout( that.closeTimer );
-						}
-
-						that._open( event, menu );
-					}
-				})
-				.bind( "keydown", function( event ) {
+			this._on( anItem, {
+				keydown: function( event ) {
 					switch ( event.keyCode ) {
 					case $.ui.keyCode.SPACE:
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.DOWN:
-						that._open( event, $( this ).next() );
+						this._open( event, $( event.target ).next() );
 						event.preventDefault();
 						break;
 					case $.ui.keyCode.LEFT:
-						that.previous( event );
+						this.previous( event );
 						event.preventDefault();
 						break;
 					case $.ui.keyCode.RIGHT:
-						that.next( event );
+						this.next( event );
 						event.preventDefault();
 						break;
+					case $.ui.keyCode.TAB:
+						break;
 					}
-				})
-				.attr( "aria-haspopup", "true" );
-
-				// TODO review if these options (menuIcon and buttons) are a good choice, maybe they can be merged
-				if ( that.options.menuIcon ) {
-					input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
-					input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 				}
-			}
+			});
 
-			input
-				.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
-				.attr( "role", "menuitem" )
-				.wrapInner( "<span class='ui-button-text'></span>" );
-
-			if ( that.options.buttons ) {
-				input.removeClass( "ui-menubar-link" ).addClass( "ui-state-default" );
+			anItem.attr( "aria-haspopup", "true" );
+			if ( menubar.options.icons ) {
+				anItem.append( "<span class='ui-button-icon-secondary ui-icon " + this.options.icons.menu + "'></span>" );
+				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
-		});
-		that._on( {
-			keydown: function( event ) {
-				if ( event.keyCode === $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
-					var active = that.active;
-					that.active.blur();
-					that._close( event );
-					active.prev().focus();
+		} else {
+			menubar._on( anItem, {
+				click: function() {
+					if ( this.active ) {
+						this._close();
+					} else {
+						this.open = true;
+						this.active = $( anItem ).parent();
+					}
+				},
+				mouseenter: function() {
+					if ( this.open ) {
+						this.stashedOpenMenu = this.active;
+						this._close();
+					}
+				},
+				keydown: function( event ) {
+					if ( event.keyCode === $.ui.keyCode.LEFT ) {
+						this.previous( event );
+						event.preventDefault();
+					} else if ( event.keyCode === $.ui.keyCode.RIGHT ) {
+						this.next( event );
+						event.preventDefault();
+					}
 				}
-			},
-			focusin: function( event ) {
-				clearTimeout( that.closeTimer );
-			},
-			focusout: function( event ) {
-				that.closeTimer = setTimeout( function() {
-					that._close( event );
-				}, 150);
-			},
-			"mouseleave .ui-menubar-item": function( event ) {
-				if ( that.options.autoExpand ) {
-					that.closeTimer = setTimeout( function() {
-						that._close( event );
-					}, 150);
-				}
-			},
-			"mouseenter .ui-menubar-item": function( event ) {
-				clearTimeout( that.closeTimer );
-			}
-		});
+			});
+		}
+	},
 
-		// Keep track of open submenus
-		this.openSubmenus = 0;
+	_mouseBehaviorForMenuItemWithSubmenu: function( event ) {
+		var isClickingToCloseOpenMenu, menu;
+
+		// ignore triggered focus event
+		if ( event.type === "focus" && !event.originalEvent ) {
+			return;
+		}
+		event.preventDefault();
+
+		menu = $(event.target).parents( ".ui-menubar-item" ).children( this.options.menuElement );
+
+		// If we have an open menu and we see a click on the menuItem
+		// and the menu thereunder is the same as the active menu, close it.
+		// Succinctly: toggle menu open / closed  on the menuItem
+		isClickingToCloseOpenMenu = event.type === "click" &&
+			menu.is( ":visible" ) &&
+			this.active &&
+			this.active[0] === menu[0];
+
+		if ( isClickingToCloseOpenMenu ) {
+			this._close();
+			return;
+		}
+		if ( event.type === "mouseenter" ) {
+			this.element.find( ":focus" ).focusout();
+			if ( this.stashedOpenMenu ) {
+				this._open( event, menu);
+			}
+			this.stashedOpenMenu = undefined;
+		}
+		// If we already opened a menu and then changed to be "over" another MenuItem ||
+		// we clicked on a new menuItem (whether open or not) or if we auto expand (i.e.
+		// we expand regardless of click if there is a submenu
+		if ( ( this.open && event.type === "mouseenter" ) || event.type === "click" ) {
+			clearTimeout( this.closeTimer );
+			this._open( event, menu );
+			// Stop propagation so that menuItem mouseenter doesn't fire.  If it does it
+			// takes the "selected" status off off of the first element of the submenu.
+			event.stopPropagation();
+		}
 	},
 
 	_destroy : function() {
 		this.menuItems
 			.removeClass( "ui-menubar-item" )
-			.removeAttr( "role" );
+			.removeAttr( "role" )
+			.css({
+				"border-width": "",
+				"border-style": ""
+			});
 
 		this.element
 			.removeClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
@@ -192,13 +335,18 @@ $.widget( "ui.menubar", {
 			.removeClass( "ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-haspopup" )
-			// TODO unwrap?
-			.children( "span.ui-button-text" ).each(function( i, e ) {
+			.children( ".ui-icon" ).remove();
+
+		if ( false ) {
+			// Does not unwrap
+			this.items.children( "span.ui-button-text" ).unwrap();
+		} else {
+			// Does "unwrap"
+			this.items.children( "span.ui-button-text" ).each( function(){
 				var item = $( this );
 				item.parent().html( item.html() );
-			})
-			.end()
-			.children( ".ui-icon" ).remove();
+			});
+		}
 
 		this.element.find( ":ui-menu" )
 			.menu( "destroy" )
@@ -209,68 +357,70 @@ $.widget( "ui.menubar", {
 			.unbind( ".menubar" );
 	},
 
-	_close: function() {
-		if ( !this.active || !this.active.length ) {
-			return;
-		}
+	_collapseActiveMenu: function() {
 		this.active
 			.menu( "collapseAll" )
 			.hide()
 			.attr({
 				"aria-hidden": "true",
 				"aria-expanded": "false"
-			});
-		this.active
-			.prev()
-			.removeClass( "ui-state-active" )
-			.removeAttr( "tabIndex" );
+			})
+			.closest( this.options.items ).removeClass( "ui-state-active" );
+	},
+
+	_close: function() {
+		if ( !this.active ) {
+			return;
+		}
+
+		this._collapseActiveMenu();
+
 		this.active = null;
 		this.open = false;
 		this.openSubmenus = 0;
 	},
 
 	_open: function( event, menu ) {
-		// on a single-button menubar, ignore reopening the same menu
-		if ( this.active && this.active[0] === menu[0] ) {
-			return;
+		var menuItem = menu.closest( ".ui-menubar-item" );
+
+		if ( this.active && this.active.length &&
+				this._hasSubMenu( this.active.closest( this.options.items ) ) ) {
+					this._collapseActiveMenu();
 		}
-		// TODO refactor, almost the same as _close above, but don't remove tabIndex
-		if ( this.active ) {
-			this.active
-				.menu( "collapseAll" )
-				.hide()
-				.attr({
-					"aria-hidden": "true",
-					"aria-expanded": "false"
-				});
-			this.active
-				.prev()
-				.removeClass( "ui-state-active" );
-		}
-		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
-		var button = menu.prev().addClass( "ui-state-active" ).attr( "tabIndex", -1 );
+
+		menuItem.addClass( "ui-state-active" );
+
 		this.active = menu
 			.show()
 			.position( $.extend({
-				of: button
+				of: menuItem
 			}, this.options.position ) )
 			.removeAttr( "aria-hidden" )
 			.attr( "aria-expanded", "true" )
-			.menu("focus", event, menu.children( ".ui-menu-item" ).first() )
-			// TODO need a comment here why both events are triggered
-			.focus()
-			.focusin();
+			.menu( "focus", event, menu.children( ".ui-menu-item" ).first()  )
+			.focus();
+
 		this.open = true;
 	},
 
 	next: function( event ) {
-		if ( this.open && this.active.data( "menu" ).active.has( ".ui-menu" ).length ) {
-			// Track number of open submenus and prevent moving to next menubar item
-			this.openSubmenus++;
-			return;
+		function shouldOpenNestedSubMenu() {
+			return this.active &&
+				this._hasSubMenu( this.active.closest( this.options.items ) ) &&
+				this.active.data( "uiMenu" ) &&
+				this.active.data( "uiMenu" ).active &&
+				this.active.data( "uiMenu" ).active.has( ".ui-menu" ).length;
+		}
+
+		if ( this.open ) {
+			if ( shouldOpenNestedSubMenu.call( this ) ) {
+				// Track number of open submenus and prevent moving to next menubar item
+				this.openSubmenus++;
+				return;
+			}
 		}
 		this.openSubmenus = 0;
-		this._move( "next", "first", event );
+		this._move( "next", event );
 	},
 
 	previous: function( event ) {
@@ -280,38 +430,28 @@ $.widget( "ui.menubar", {
 			return;
 		}
 		this.openSubmenus = 0;
-		this._move( "prev", "last", event );
+		this._move( "prev", event );
 	},
 
-	_move: function( direction, filter, event ) {
-		var next,
-			wrapItem;
-		if ( this.open ) {
-			next = this.active.closest( ".ui-menubar-item" )[ direction + "All" ]( this.options.items ).first().children( ".ui-menu" ).eq( 0 );
-			wrapItem = this.menuItems[ filter ]().children( ".ui-menu" ).eq( 0 );
-		} else {
-			if ( event ) {
-				next = $( event.target ).closest( ".ui-menubar-item" )[ direction + "All" ]( this.options.items ).children( ".ui-menubar-link" ).eq( 0 );
-				wrapItem = this.menuItems[ filter ]().children( ".ui-menubar-link" ).eq( 0 );
-			} else {
-				next = wrapItem = this.menuItems.children( "a" ).eq( 0 );
-			}
-		}
+	_move: function( direction, event ) {
+		var closestMenuItem = $( event.target ).closest( ".ui-menubar-item" ),
+			nextMenuItem = closestMenuItem.data( direction + "MenuItem" ),
+			focusableTarget = nextMenuItem.find( ".ui-button" );
 
-		if ( next.length ) {
-			if ( this.open ) {
-				this._open( event, next );
+		if ( this.open ) {
+			if ( this._hasSubMenu( nextMenuItem ) ) {
+				this._open( event, nextMenuItem.children( ".ui-menu" ) );
 			} else {
-				next.removeAttr( "tabIndex")[0].focus();
+				this._collapseActiveMenu();
+				nextMenuItem.find( ".ui-button" ).focus();
+				this.open = true;
 			}
 		} else {
-			if ( this.open ) {
-				this._open( event, wrapItem );
-			} else {
-				wrapItem.removeAttr( "tabIndex")[0].focus();
-			}
+			closestMenuItem.find( ".ui-button" );
+			focusableTarget.focus();
 		}
 	}
+
 });
 
 }( jQuery ));

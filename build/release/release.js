@@ -1,13 +1,16 @@
 #!/usr/bin/env node
-/*global cat:true cd:true cp:true echo:true exec:true exit:true ls:true*/
+/* global cat:true, cd:true, echo:true, exec:true, exit:true */
 
-var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
+// Usage:
+// stable release: node release.js
+// pre-release: node release.js --pre-release {version}
+// test run: node release.js --remote=user/repo
+
+"use strict";
+
+var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime, preRelease, repo,
 	fs = require( "fs" ),
-	path = require( "path" ),
-	// support: node <0.8
-	existsSync = fs.existsSync || path.existsSync,
 	rnewline = /\r?\n/,
-	repo = "git@github.com:jquery/jquery-ui.git",
 	branch = "master";
 
 walk([
@@ -41,14 +44,9 @@ walk([
 	section( "gathering contributors" ),
 	gatherContributors,
 
-	section( "generating quick download" ),
-	generateQuickDownload,
-
 	section( "updating trac" ),
 	updateTrac,
 	confirm
-
-	// TODO: upload release zip to GitHub
 ]);
 
 
@@ -68,8 +66,12 @@ function cloneRepo() {
 	if ( exec( "npm install" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
 	}
-	if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
-		abort( "Error installing dependencies." );
+	// We need download.jqueryui.com in order to generate themes.
+	// We only generate themes for stable releases.
+	if ( !preRelease ) {
+		if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
+			abort( "Error installing dependencies." );
+		}
 	}
 	echo();
 }
@@ -105,32 +107,37 @@ function getVersions() {
 		abort( "The version must be a pre version." );
 	}
 
-	newVersion = currentVersion.substr( 0, currentVersion.length - 3 );
-	parts = newVersion.split( "." );
-	major = parseInt( parts[ 0 ], 10 );
-	minor = parseInt( parts[ 1 ], 10 );
-	patch = parseInt( parts[ 2 ], 10 );
+	if ( preRelease ) {
+		newVersion = preRelease;
+		// Note: prevVersion is not currently used for pre-releases. The TODO
+		// below about 1.10.0 applies here as well.
+		prevVersion = nextVersion = currentVersion;
+	} else {
+		newVersion = currentVersion.substr( 0, currentVersion.length - 3 );
+		parts = newVersion.split( "." );
+		major = parseInt( parts[ 0 ], 10 );
+		minor = parseInt( parts[ 1 ], 10 );
+		patch = parseInt( parts[ 2 ], 10 );
 
-	// TODO: handle 2.0.0
-	if ( minor === 0 ) {
-		abort( "This script is not smart enough to handle the 2.0.0 release." );
-	}
+		// TODO: handle 1.10.0
+		// Also see comment above about pre-releases
+		if ( patch === 0 ) {
+			abort( "This script is not smart enough to handle the 1.10.0 release." );
+		}
 
-	prevVersion = patch === 0 ?
-		[ major, minor - 1, 0 ].join( "." ) :
-		[ major, minor, patch - 1 ].join( "." );
-	// TODO: Remove version hack after 1.9.0 release
-	if ( prevVersion === "1.8.0" ) {
-		prevVersion = "1.8";
+		prevVersion = patch === 0 ?
+			[ major, minor - 1, 0 ].join( "." ) :
+			[ major, minor, patch - 1 ].join( "." );
+		nextVersion = [ major, minor, patch + 1 ].join( "." ) + "pre";
 	}
-	nextVersion = [ major, minor, patch + 1 ].join( "." ) + "pre";
 
 	echo( "We are going from " + prevVersion.cyan + " to " + newVersion.cyan + "." );
 	echo( "After the release, the version will be " + nextVersion.cyan + "." );
 }
 
 function buildRelease() {
-	var pkg;
+	var pkg,
+		releaseTask = preRelease ? "release" : "release_cdn";
 
 	echo( "Creating " + "release".cyan + " branch..." );
 	git( "checkout -b release", "Error creating release branch." );
@@ -152,7 +159,7 @@ function buildRelease() {
 	echo();
 
 	echo( "Building release..." );
-	if ( exec( "grunt release_cdn" ).code !== 0 ) {
+	if ( exec( "grunt " + releaseTask ).code !== 0 ) {
 		abort( "Error building release." );
 	}
 	echo();
@@ -174,6 +181,11 @@ function pushRelease() {
 }
 
 function updateBranchVersion() {
+	// Pre-releases don't change the master version
+	if ( preRelease ) {
+		return;
+	}
+
 	var pkg;
 
 	echo( "Checking out " + branch.cyan + " branch..." );
@@ -190,11 +202,20 @@ function updateBranchVersion() {
 }
 
 function pushBranch() {
+	// Pre-releases don't change the master version
+	if ( preRelease ) {
+		return;
+	}
+
 	echo( "Pushing " + branch.cyan + " to GitHub..." );
 	git( "push", "Error pushing to GitHub." );
 }
 
 function generateChangelog() {
+	if ( preRelease ) {
+		return;
+	}
+
 	var commits,
 		changelogPath = baseDir + "/changelog",
 		changelog = cat( "build/release/changelog-shell" ) + "\n",
@@ -233,6 +254,10 @@ function generateChangelog() {
 }
 
 function gatherContributors() {
+	if ( preRelease ) {
+		return;
+	}
+
 	var contributors,
 		contributorsPath = baseDir + "/contributors";
 
@@ -261,38 +286,13 @@ function gatherContributors() {
 	echo( "Stored contributors in " + contributorsPath.cyan + "." );
 }
 
-function generateQuickDownload() {
-	var config,
-		downloadDir = repoDir + "/node_modules/download.jqueryui.com",
-		filename = "jquery-ui-" + newVersion + ".custom.zip",
-		destination = baseDir + "/" + filename;
-
-	cd( downloadDir );
-
-	// Update jQuery UI version for download builder
-	config = JSON.parse( cat( "config.json" ) );
-	config.jqueryUi = newVersion;
-	JSON.stringify( config ).to( "config.json" );
-
-	// Generate quick download
-	// TODO: Find a way to avoid having to clone jquery-ui inside download builder
-	if ( exec( "grunt prepare build" ).code !== 0 ) {
-		abort( "Error generating quick download." );
-	}
-	cp( downloadDir + "/release/" + filename, destination );
-	// cp() doesn't have error handling, so check for the file
-	if ( ls( destination ).length !== 1 ) {
-		abort( "Error copying quick download." );
-	}
-
-	// Go back to repo directory for consistency
-	cd( repoDir );
-}
-
 function updateTrac() {
 	echo( newVersion.cyan + " was tagged at " + tagTime.cyan + "." );
-	echo( "Close the " + newVersion.cyan + " Milestone with the above date and time." );
-	echo( "Create the " + newVersion.cyan + " Version with the above date and time." );
+	if ( !preRelease ) {
+		echo( "Close the " + newVersion.cyan + " Milestone." );
+	}
+	echo( "Create the " + newVersion.cyan + " Version." );
+	echo( "When Trac asks for date and time, match the above. Should only change minutes and seconds." );
 	echo( "Create a Milestone for the next minor release." );
 }
 
@@ -357,11 +357,59 @@ function writePackage( pkg ) {
 }
 
 function bootstrap( fn ) {
+	getRemote(function( remote ) {
+		repo = "git@github.com:" + remote + ".git";
+		_bootstrap( fn );
+	});
+}
+
+function getRemote( fn ) {
+	var matches, remote;
+
+	console.log( "Determining remote repo..." );
+	process.argv.forEach(function( arg ) {
+		matches = /--remote=(.+)/.exec( arg );
+		if ( matches ) {
+			remote = matches[ 1 ];
+		}
+	});
+
+	if ( remote ) {
+		fn( remote );
+		return;
+	}
+
+	console.log();
+	console.log( "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+	console.log( "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+	console.log( "     !!                        !!" );
+	console.log( "     !! Using jquery/jquery-ui !!" );
+	console.log( "     !!                        !!" );
+	console.log( "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+	console.log( "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+	console.log();
+	console.log( "Press enter to continue, or ctrl+c to cancel." );
+	prompt(function() {
+		fn( "jquery/jquery-ui" );
+	});
+}
+
+function _bootstrap( fn ) {
+	console.log( "Determining release type..." );
+	preRelease = process.argv.indexOf( "--pre-release" );
+	if ( preRelease !== -1 ) {
+		preRelease = process.argv[ preRelease + 1 ];
+		console.log( "pre-release" );
+	} else {
+		preRelease = null;
+		console.log( "stable release" );
+	}
+
 	console.log( "Determining directories..." );
 	baseDir = process.cwd() + "/__release";
 	repoDir = baseDir + "/repo";
 
-	if ( existsSync( baseDir ) ) {
+	if ( fs.existsSync( baseDir ) ) {
 		console.log( "The directory '" + baseDir + "' already exists." );
 		console.log( "Aborting." );
 		process.exit( 1 );
@@ -371,9 +419,7 @@ function bootstrap( fn ) {
 	fs.mkdirSync( baseDir );
 
 	console.log( "Installing dependencies..." );
-	require( "child_process" ).exec( "npm install shelljs colors", {
-		cwd: baseDir
-	}, function( error ) {
+	require( "child_process" ).exec( "npm install shelljs colors", function( error ) {
 		if ( error ) {
 			console.log( error );
 			return process.exit( 1 );
@@ -423,7 +469,7 @@ function abort( msg ) {
 function walk( methods ) {
 	var method = methods.shift();
 
-	function next( error ) {
+	function next() {
 		if ( methods.length ) {
 			walk( methods );
 		}

@@ -1,99 +1,103 @@
 /*
  * draggable_methods.js
  */
-(function($) {
+(function( $ ) {
 
-function shouldmove(why) {
-	drag(el, 50, 50);
-	moved(50, 50, why);
-}
+var element;
 
-function shouldnotmove(why) {
-	drag(el, 50, 50);
-	moved(0, 0, why);
-}
+module( "draggable: methods", {
+	setup: function() {
+		element = $("<div style='background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;'><span>Absolute</span></div>").appendTo("#qunit-fixture");
+	},
+	teardown: function() {
+		element.remove();
+	}
+});
 
-module("draggable: methods");
+test( "init", function() {
+	expect( 5 );
 
-test("init", function() {
-	expect(6);
-
-	$("<div></div>").appendTo('body').draggable().remove();
-	ok(true, '.draggable() called on element');
+	element.draggable();
+	ok( true, ".draggable() called on element" );
 
 	$([]).draggable();
-	ok(true, '.draggable() called on empty collection');
+	ok( true, ".draggable() called on empty collection" );
 
 	$("<div></div>").draggable();
-	ok(true, '.draggable() called on disconnected DOMElement');
+	ok( true, ".draggable() called on disconnected DOMElement" );
 
-	$("<div></div>").draggable().draggable("foo");
-	ok(true, 'arbitrary method called after init');
+	element.draggable( "option", "foo" );
+	ok( true, "arbitrary option getter after init" );
 
-	$("<div></div>").draggable().draggable("option", "foo");
-	ok(true, 'arbitrary option getter after init');
-
-	$("<div></div>").draggable().draggable("option", "foo", "bar");
-	ok(true, 'arbitrary option setter after init');
+	element.draggable( "option", "foo", "bar" );
+	ok( true, "arbitrary option setter after init" );
 });
 
-test("destroy", function() {
-	$("<div></div>").appendTo('body').draggable().draggable("destroy").remove();
-	ok(true, '.draggable("destroy") called on element');
+test( "destroy", function() {
+	expect( 4 );
+
+	element.draggable().draggable("destroy");
+	ok( true, ".draggable('destroy') called on element" );
 
 	$([]).draggable().draggable("destroy");
-	ok(true, '.draggable("destroy") called on empty collection');
+	ok( true, ".draggable('destroy') called on empty collection" );
 
-	$("<div></div>").draggable().draggable("destroy");
-	ok(true, '.draggable("destroy") called on disconnected DOMElement');
+	element.draggable().draggable("destroy");
+	ok( true, ".draggable('destroy') called on disconnected DOMElement" );
 
-	$("<div></div>").draggable().draggable("destroy").draggable("foo");
-	ok(true, 'arbitrary method called after destroy');
-
-	var expected = $('<div></div>').draggable(),
-		actual = expected.draggable('destroy');
-	equal(actual, expected, 'destroy is chainable');
+	var expected = element.draggable(),
+		actual = expected.draggable("destroy");
+	equal( actual, expected, "destroy is chainable" );
 });
 
-test("enable", function() {
-	expect(7);
-	el = $("#draggable2").draggable({ disabled: true });
-	shouldnotmove('.draggable({ disabled: true })');
-	el.draggable("enable");
-	shouldmove('.draggable("enable")');
-	equal(el.draggable("option", "disabled"), false, "disabled option getter");
+test( "enable", function() {
+	expect( 7 );
 
-	el.draggable("destroy");
-	el.draggable({ disabled: true });
-	shouldnotmove('.draggable({ disabled: true })');
-	el.draggable("option", "disabled", false);
-	equal(el.draggable("option", "disabled"), false, "disabled option setter");
-	shouldmove('.draggable("option", "disabled", false)');
+	element.draggable({ disabled: true });
+	TestHelpers.draggable.shouldNotMove( element, ".draggable({ disabled: true })" );
 
-	var expected = $('<div></div>').draggable(),
-		actual = expected.draggable('enable');
-	equal(actual, expected, 'enable is chainable');
+	element.draggable("enable");
+	TestHelpers.draggable.shouldMove( element, ".draggable('enable')" );
+	equal( element.draggable( "option", "disabled" ), false, "disabled option getter" );
+
+	element.draggable("destroy");
+	element.draggable({ disabled: true });
+	TestHelpers.draggable.shouldNotMove( element, ".draggable({ disabled: true })" );
+
+	element.draggable( "option", "disabled", false );
+	equal(element.draggable( "option", "disabled" ), false, "disabled option setter" );
+	TestHelpers.draggable.shouldMove( element, ".draggable('option', 'disabled', false)" );
+
+	var expected = element.draggable(),
+		actual = expected.draggable("enable");
+	equal( actual, expected, "enable is chainable" );
 });
 
-test("disable", function() {
-	expect(7);
-	el = $("#draggable2").draggable({ disabled: false });
-	shouldmove('.draggable({ disabled: false })');
-	el.draggable("disable");
-	shouldnotmove('.draggable("disable")');
-	equal(el.draggable("option", "disabled"), true, "disabled option getter");
+test( "disable", function() {
+	expect( 10 );
 
-	el.draggable("destroy");
+	element = $( "#draggable2" ).draggable({ disabled: false });
+	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );
 
-	el.draggable({ disabled: false });
-	shouldmove('.draggable({ disabled: false })');
-	el.draggable("option", "disabled", true);
-	equal(el.draggable("option", "disabled"), true, "disabled option setter");
-	shouldnotmove('.draggable("option", "disabled", true)');
+	element.draggable( "disable" );
+	TestHelpers.draggable.shouldNotMove( element, ".draggable('disable')" );
+	equal( element.draggable( "option", "disabled" ), true, "disabled option getter" );
 
-	var expected = $('<div></div>').draggable(),
-		actual = expected.draggable('disable');
-	equal(actual, expected, 'disable is chainable');
+	element.draggable( "destroy" );
+	element.draggable({ disabled: false });
+	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );
+
+	element.draggable( "option", "disabled", true );
+	equal( element.draggable( "option", "disabled" ), true, "disabled option setter" );
+	TestHelpers.draggable.shouldNotMove( element, ".draggable('option', 'disabled', true)" );
+
+	ok( !element.draggable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	ok( !element.draggable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.draggable( "widget" ).hasClass( "ui-draggable-disabled" ), "element gets ui-draggable-disabled" );
+
+	var expected = element.draggable(),
+		actual = expected.draggable( "disable" );
+	equal( actual, expected, "disable is chainable" );
 });
 
-})(jQuery);
+})( jQuery );

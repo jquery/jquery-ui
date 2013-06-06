@@ -2,7 +2,7 @@
  * jQuery UI Effects Scale @VERSION
  * http://jqueryui.com
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -21,7 +21,9 @@ $.effects.effect.puff = function( o, done ) {
 		factor = percent / 100,
 		original = {
 			height: elem.height(),
-			width: elem.width()
+			width: elem.width(),
+			outerHeight: elem.outerHeight(),
+			outerWidth: elem.outerWidth()
 		};
 
 	$.extend( o, {
@@ -35,7 +37,9 @@ $.effects.effect.puff = function( o, done ) {
 			original :
 			{
 				height: original.height * factor,
-				width: original.width * factor
+				width: original.width * factor,
+				outerHeight: original.outerHeight * factor,
+				outerWidth: original.outerWidth * factor
 			}
 	});
 
@@ -74,7 +78,12 @@ $.effects.effect.scale = function( o, done ) {
 		options.restore = true;
 	}
 
-	options.from = o.from || ( mode === "show" ? { height: 0, width: 0 } : original );
+	options.from = o.from || ( mode === "show" ? {
+		height: 0,
+		width: 0,
+		outerHeight: 0,
+		outerWidth: 0
+	} : original );
 	options.to = {
 		height: original.height * factor.y,
 		width: original.width * factor.x,
@@ -102,8 +111,9 @@ $.effects.effect.scale = function( o, done ) {
 $.effects.effect.size = function( o, done ) {
 
 	// Create element
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "width", "height", "overflow", "opacity" ],
+	var original, baseline, factor,
+		el = $( this ),
+		props0 = [ "position", "top", "bottom", "left", "right", "width", "height", "overflow", "opacity" ],
 
 		// Always restore
 		props1 = [ "position", "top", "bottom", "left", "right", "overflow", "opacity" ],
@@ -119,8 +129,14 @@ $.effects.effect.size = function( o, done ) {
 		restore = o.restore || mode !== "effect",
 		scale = o.scale || "both",
 		origin = o.origin || [ "middle", "center" ],
-		original, baseline, factor,
-		position = el.css( "position" );
+		position = el.css( "position" ),
+		props = restore ? props0 : props1,
+		zero = {
+			height: 0,
+			width: 0,
+			outerHeight: 0,
+			outerWidth: 0
+		};
 
 	if ( mode === "show" ) {
 		el.show();
@@ -132,8 +148,13 @@ $.effects.effect.size = function( o, done ) {
 		outerWidth: el.outerWidth()
 	};
 
-	el.from = o.from || original;
-	el.to = o.to || original;
+	if ( o.mode === "toggle" && mode === "show" ) {
+		el.from = o.to || zero;
+		el.to = o.from || original;
+	} else {
+		el.from = o.from || ( mode === "show" ? zero : original );
+		el.to = o.to || ( mode === "hide" ? zero : original );
+	}
 
 	// Set scaling factor
 	factor = {
@@ -170,13 +191,13 @@ $.effects.effect.size = function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			props = props.concat( cProps );
+			props = props.concat( cProps ).concat( props2 );
 			el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
 		}
 	}
 
-	$.effects.save( el, restore ? props : props1 );
+	$.effects.save( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 	el.css( "overflow", "hidden" ).css( el.from );
@@ -197,13 +218,15 @@ $.effects.effect.size = function( o, done ) {
 		// Add margins/font-size
 		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat(cProps);
 		hProps = hProps.concat([ "marginLeft", "marginRight" ]);
-		props2 = props.concat(vProps).concat(hProps);
+		props2 = props0.concat(vProps).concat(hProps);
 
 		el.find( "*[width]" ).each( function(){
 			var child = $( this ),
 				c_original = {
 					height: child.height(),
-					width: child.width()
+					width: child.width(),
+					outerHeight: child.outerHeight(),
+					outerWidth: child.outerWidth()
 				};
 			if (restore) {
 				$.effects.save(child, props2);
@@ -211,11 +234,15 @@ $.effects.effect.size = function( o, done ) {
 
 			child.from = {
 				height: c_original.height * factor.from.y,
-				width: c_original.width * factor.from.x
+				width: c_original.width * factor.from.x,
+				outerHeight: c_original.outerHeight * factor.from.y,
+				outerWidth: c_original.outerWidth * factor.from.x
 			};
 			child.to = {
 				height: c_original.height * factor.to.y,
-				width: c_original.width * factor.to.x
+				width: c_original.width * factor.to.x,
+				outerHeight: c_original.height * factor.to.y,
+				outerWidth: c_original.width * factor.to.x
 			};
 
 			// Vertical props scaling
@@ -254,7 +281,7 @@ $.effects.effect.size = function( o, done ) {
 			if( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, restore ? props : props1 );
+			$.effects.restore( el, props );
 			if ( !restore ) {
 
 				// we need to calculate our new positioning based on the scaling

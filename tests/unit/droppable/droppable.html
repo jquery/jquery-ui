@@ -27,17 +27,8 @@
 	<script src="droppable_events.js"></script>
 	<script src="droppable_methods.js"></script>
 	<script src="droppable_options.js"></script>
+	<script src="droppable_test_helpers.js"></script>
 
-	<script>
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("droppable", function() { ok(true, "disabled droppable testsuite"); });
-	}
-	</script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>
@@ -51,6 +42,7 @@
 
 <div id="draggable1" style="width: 25px; height: 25px;">Draggable</div>
 <div id="droppable1" style="width: 100px; height: 100px;">Droppable</div>
+<div id="droppable2" style="width: 100px; height: 100px;">Droppable</div>
 <div style='width:1000px;height:1000px;'>&nbsp;</div>
 
 </div>

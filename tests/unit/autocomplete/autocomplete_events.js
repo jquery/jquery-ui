@@ -39,7 +39,7 @@ $.each([
 						], "response ui.content" );
 						ui.content.splice( 0, 1 );
 					},
-					open: function( event ) {
+					open: function() {
 						ok( menu.is( ":visible" ), "menu open on open" );
 					},
 					focus: function( event, ui ) {
@@ -127,7 +127,7 @@ asyncTest( "cancel focus", function() {
 		element = $( "#autocomplete" ).autocomplete({
 			delay: 0,
 			source: data,
-			focus: function( event, ui ) {
+			focus: function() {
 				$( this ).val( customVal );
 				return false;
 			}
@@ -146,7 +146,7 @@ asyncTest( "cancel select", function() {
 		element = $( "#autocomplete" ).autocomplete({
 			delay: 0,
 			source: data,
-			select: function( event, ui ) {
+			select: function() {
 				$( this ).val( customVal );
 				return false;
 			}
