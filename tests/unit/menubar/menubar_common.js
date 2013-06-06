@@ -12,6 +12,7 @@ TestHelpers.commonWidgetTests( "menubar", {
 		disabled: false,
 
 		// callbacks
-		create: null
+		create: null,
+		select: null
 	}
 });
