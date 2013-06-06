@@ -2,12 +2,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<script src="../jquery-1.8.2.js"></script>
+	<script src="../jquery-1.9.1.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
-	<script src="../ui/jquery.ui.popup.js"></script>
 	<script src="jquery.tmpl.js"></script>
 	<script src="../external/globalize.js"></script>
 	<script src="../external/globalize.culture.de-DE.js"></script>
@@ -157,7 +156,7 @@
 	</script>
 
 	<script id="ui-datepicker-title-tmpl" type="text/x-jquery-tmpl">
-		<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+		<span class="ui-datepicker-month">${date.monthName()}</span> <span class="ui-datepicker-year">${date.year()}</span>
 	</script>
 
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
@@ -186,7 +185,7 @@
 				<a class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
 				<a class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
 				<div class="ui-datepicker-title">
-					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+					<span class="ui-datepicker-month">${date.monthName()}</span> <span class="ui-datepicker-year">${date.year()}</span>
 				</div>
 			</div>
 			<table class="ui-datepicker-calendar">
@@ -237,7 +236,7 @@
 							<a class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
 						{{/if}}
 						<div class="ui-datepicker-title">
-							<span class="ui-datepicker-month">${monthObj.monthname()}</span> <span class="ui-datepicker-year">${monthObj.year()}</span>
+							<span class="ui-datepicker-month">${monthObj.monthName()}</span> <span class="ui-datepicker-year">${monthObj.year()}</span>
 						</div>
 					</div>
 					<table class="ui-datepicker-calendar">
