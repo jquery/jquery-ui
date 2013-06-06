@@ -52,7 +52,7 @@ $.widget( "ui.menubar", {
 		this.element
 			.addClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
 			.attr( "role", "menubar" );
-		this._on( this.element, {
+		this._on({
 			keydown: function( event ) {
 				var active;
 
@@ -69,13 +69,13 @@ $.widget( "ui.menubar", {
 				}
 			},
 			focusin: function() {
-				this.items.eq( 0 ).attr( "tabIndex", -1 );
 				clearTimeout( this.closeTimer );
 			},
 			focusout: function() {
 				this.closeTimer = this._delay( function() {
 					this._close( event );
-					this.items.eq( 0 ).attr( "tabIndex", 0 );
+					this.items.attr( "tabIndex", -1 );
+					this.lastFocused.attr( "tabIndex", 0 );
 				}, 150 );
 			},
 			"mouseenter .ui-menubar-item": function() {
@@ -210,6 +210,7 @@ $.widget( "ui.menubar", {
 			},
 			focusout:  function(){
 				anItem.attr( "tabIndex", -1 );
+				menubar.lastFocused = anItem;
 				anItem.removeClass( "ui-state-focus" );
 				event.preventDefault();
 			}

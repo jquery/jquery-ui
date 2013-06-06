@@ -97,4 +97,32 @@ test( "Cursor keys should move focus within the menu items", function() {
 	equal( element.find( ":tabbable" )[ 0 ], nextLeftwardMenuElement[ 0 ], "A Menubar, after a cursor key action, should have 1 tabbable." );
 });
 
+asyncTest( "Tabbing away and back should keep the focus on the same item", function() {
+	function index(element, tabIndex) {
+		equal( element.attr( "tabIndex" ), tabIndex );
+	}
+	expect( 8 );
+
+	var element = $( "#bar1" ).menubar();
+	var firstItem = element.find( "a:first" ),
+		secondItem = element.find( "a:eq(1)" );
+	index( firstItem, undefined );
+	index( secondItem, -1 );
+
+	firstItem.focus();
+	index( firstItem, 0 );
+	index( secondItem, -1 );
+
+	firstItem.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+	index( firstItem, -1 );
+	index( secondItem, 0 );
+
+	secondItem.blur();
+	setTimeout(function() {
+		index( firstItem, -1 );
+		index( secondItem, 0 );
+		start();
+	}, 150);
+});
+
 })( jQuery );
