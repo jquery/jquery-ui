@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Menubar - Adminbar demo</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" />
+	<script src="../../jquery-1.9.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.menubar.js"></script>
+	<script>
+	$(function() {
+		$("#admin").menubar({
+			position: {
+				within: $("#demo-frame").add(window).first()
+			}
+		});
+	});
+	</script>
+	<style>
+		body { margin: 0; }
+		#admin { margin: 0; }
+		.demo-description {
+			margin: 8px;
+		}
+ 	</style>
+</head>
+<body>
+
+<ul id="admin" class="menubar">
+	<li>
+		<a href="#About">About</a>
+		<ul>
+			<li><a href="#about">About this software</a></li>
+			<li>-</li>
+			<li><a href="#site">Software Home</a></li>
+			<li><a href="#documentation">Documentation</a></li>
+			<li><a href="#support">Support Forums</a></li>
+			<li><a href="#feedback">Feedback</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="#navigation">Admin Navigation</a>
+		<ul>
+			<li><a href="#dashboard">Dashboard</a></li>
+			<li><a href="#themes">Themes</a></li>
+			<li><a href="#customize">Customize</a></li>
+			<li><a href="#widgets">Widgets</a></li>
+			<li><a href="#menus">Menus</a></li>
+			<li><a href="#background">Background</a></li>
+			<li><a href="#header">Header</a></li>
+		</ul>
+	</li>
+	<li><a href="#comments">0 new comments</a></li>
+	<li>
+		<a href="#View">New</a>
+		<ul>
+			<li><a href="#post">Post</a></li>
+			<li><a href="#media">Media</a></li>
+			<li><a href="#page">Page</a></li>
+			<li><a href="#user">User</a></li>
+		</ul>
+	</li>
+	<li><a href="#edit">Edit Page</a></li>
+</ul>
+
+<div class="demo-description">
+
+<p>A CMS style admin bar.</p>
+
+</div><!-- End demo-description -->
+
+
+</body>
+</html>
