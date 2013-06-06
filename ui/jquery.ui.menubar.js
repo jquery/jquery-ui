@@ -91,6 +91,7 @@ $.widget( "ui.menubar", {
 		this.menuItems
 			.addClass( "ui-menubar-item" )
 			.attr( "role", "presentation" )
+			// TODO why do these not work when moved to CSS?
 			.css({
 				"border-width": "1px",
 				"border-style": "hidden"
@@ -101,6 +102,7 @@ $.widget( "ui.menubar", {
 				within: this.options.position.within
 			},
 			select: function( event, ui ) {
+				// TODO don't hardcode markup selectors
 				ui.item.parents( "ul.ui-menu:last" ).hide();
 				menubar._close();
 				ui.item.parents( ".ui-menubar-item" ).children().first().focus();
@@ -116,14 +118,17 @@ $.widget( "ui.menubar", {
 
 		this._on( subMenus, {
 			keydown: function( event ) {
-				$(event.target).attr( "tabIndex", 0 );
+				// TODO why is this needed?
+				$( event.target ).attr( "tabIndex", 0 );
 				var parentButton,
 					menu = $( this );
+				// TODO why are there keydown events on a hidden menu?
 				if ( menu.is( ":hidden" ) ) {
 					return;
 				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
+					// TODO why can't this call menubar.previous()?
 					parentButton = menubar.active.prev( ".ui-button" );
 
 					if ( this.openSubmenus ) {
@@ -138,7 +143,8 @@ $.widget( "ui.menubar", {
 					}
 
 					event.preventDefault();
-					$(event.target).attr( "tabIndex", -1 );
+					// TODO same as above where it's set to 0
+					$( event.target ).attr( "tabIndex", -1 );
 					break;
 				case $.ui.keyCode.RIGHT:
 					this.next( event );
@@ -147,7 +153,8 @@ $.widget( "ui.menubar", {
 				}
 			},
 			focusout: function( event ) {
-				$(event.target).removeClass( "ui-state-focus" );
+				// TODO why does this have to use event.target? Is that different from currentTarget?
+				$( event.target ).removeClass( "ui-state-focus" );
 			}
 		});
 
@@ -161,6 +168,7 @@ $.widget( "ui.menubar", {
 		return $( menuItem ).children( this.options.menus ).length > 0;
 	},
 
+	// TODO get rid of these - currently still in use in _move
 	_identifyMenuItemsNeighbors: function( menuItem, menubar, index ) {
 		var collectionLength = this.menuItems.length,
 			isFirstElement = ( index === 0 ),
@@ -193,16 +201,14 @@ $.widget( "ui.menubar", {
 	},
 
 	_initializeItem: function( anItem ) {
-		// TODO remove this var, or rename to `that`
-		var menubar = this,
-			menuItemHasSubMenu = this._hasSubMenu( anItem.parent() );
+		var menuItemHasSubMenu = this._hasSubMenu( anItem.parent() );
 
 		anItem
 			.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
 			.attr( "role", "menuitem" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
-		menubar._on( anItem, {
+		this._on( anItem, {
 			focus:	function(){
 				anItem.attr( "tabIndex", 0 );
 				anItem.addClass( "ui-state-focus" );
@@ -210,7 +216,7 @@ $.widget( "ui.menubar", {
 			},
 			focusout:  function(){
 				anItem.attr( "tabIndex", -1 );
-				menubar.lastFocused = anItem;
+				this.lastFocused = anItem;
 				anItem.removeClass( "ui-state-focus" );
 				event.preventDefault();
 			}
@@ -247,12 +253,12 @@ $.widget( "ui.menubar", {
 			});
 
 			anItem.attr( "aria-haspopup", "true" );
-			if ( menubar.options.icons ) {
+			if ( this.options.icons ) {
 				anItem.append( "<span class='ui-button-icon-secondary ui-icon " + this.options.icons.dropdown + "'></span>" );
 				anItem.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
 		} else {
-			menubar._on( anItem, {
+			this._on( anItem, {
 				click: function() {
 					if ( this.active ) {
 						this._close();
@@ -280,6 +286,8 @@ $.widget( "ui.menubar", {
 		}
 	},
 
+	// TODO silly name, too much complexity
+	// TODO why is this used for three types of events?
 	_mouseBehaviorForMenuItemWithSubmenu: function( event ) {
 		var isClickingToCloseOpenMenu, menu;
 
@@ -343,6 +351,7 @@ $.widget( "ui.menubar", {
 			.removeAttr( "aria-haspopup" )
 			.children( ".ui-icon" ).remove();
 
+		// TODO fix this
 		if ( false ) {
 			// Does not unwrap
 			this.items.children( "span.ui-button-text" ).unwrap();
