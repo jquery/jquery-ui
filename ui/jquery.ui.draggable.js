@@ -68,6 +68,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			this.element.css( "position", "relative" );
 		}
 
+		// Add touch-action attribute for pointer events to prevent view panning when dragging
+		this.element.attr("touch-action", "none");
+
 		this.element.addClass( "ui-draggable" );
 	},
 
