@@ -121,6 +121,12 @@ pointerHook = interaction.hooks.pointer = {
 	handle: function( widget, move, stop ) {
 		function moveHandler( event ) {
 			event = event.originalEvent;
+
+			// Only move if original pointer moves
+			if ( event.pointerId !== pointerHook.id ) {
+				return;
+			}
+
 			move( event, {
 				x: event.pageX,
 				y: event.pageY
