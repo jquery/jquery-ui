@@ -119,7 +119,7 @@ pointerHook = interaction.hooks.pointer = {
 	},
 
 	handle: function( widget, move, stop ) {
-		function pointermove( event ) {
+		function moveHandler( event ) {
 			event = event.originalEvent;
 			move( event, {
 				x: event.pageX,
@@ -127,7 +127,7 @@ pointerHook = interaction.hooks.pointer = {
 			});
 		}
 
-		function pointerup( event ) {
+		function stopHandler( event ) {
 			event = event.originalEvent;
 
 			// Only stop if original pointer stops
@@ -143,13 +143,15 @@ pointerHook = interaction.hooks.pointer = {
 			pointerHook.id = null;
 
 			widget.document
-				.unbind( "pointermove", pointermove )
-				.unbind( "pointerup", pointerup );
+				.unbind( "pointermove", moveHandler )
+				.unbind( "pointerup", stopHandler )
+				.unbind( "pointercancel", stopHandler );
 		}
 
 		widget._on( widget.document, {
-			"pointermove": pointermove,
-			"pointerup": pointerup
+			"pointermove": moveHandler,
+			"pointerup": stopHandler,
+			"pointercancel": stopHandler
 		});
 	}
 };
