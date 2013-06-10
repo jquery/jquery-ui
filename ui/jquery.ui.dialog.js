@@ -66,6 +66,8 @@ $.widget( "ui.dialog", {
 			}
 		},
 		resizable: true,
+		rollupable: false,
+		rollupText: "rollup/down",
 		show: null,
 		title: null,
 		width: 300,
@@ -230,6 +232,24 @@ $.widget( "ui.dialog", {
 		this._trigger("open");
 	},
 
+	rollupdown: function(event) {
+		if (!this.isOpen())
+			return;
+
+		if (this.isRolledup())
+		{
+			this.uiDialogTitlebarRollup.button("option", "icons", {primary: 'ui-icon-triangle-1-n'});
+			this._isRolledup = false;
+			this.element.show();
+		}
+		else
+		{
+			this.uiDialogTitlebarRollup.button("option", "icons", {primary: 'ui-icon-triangle-1-s'});
+			this._isRolledup = true;
+			this.element.hide();
+		}
+	},
+	
 	_focusTabbable: function() {
 		// Set focus to the first match:
 		// 1. First element inside the dialog matching [autofocus]
@@ -342,6 +362,26 @@ $.widget( "ui.dialog", {
 			}
 		});
 
+		if (!this.options.modal && this.options.rollupable)
+		{
+			this.uiDialogTitlebarRollup = $("<button></button>")
+				.button({
+					label: this.options.rollupText,
+					icons: {
+						primary: "ui-icon-triangle-1-n"
+					},
+					text: false
+				})
+				.addClass("ui-dialog-titlebar-rollup")
+				.appendTo( this.uiDialogTitlebar );
+			this._on( this.uiDialogTitlebarRollup, {
+				click: function ( event ) {
+					event.preventDefault();
+					this.rollupdown( event );
+				}
+			});
+		}
+		
 		// support: IE
 		// Use type="button" to prevent enter keypresses in textboxes from closing the
 		// dialog in IE (#9312)
