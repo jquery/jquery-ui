@@ -36,6 +36,15 @@
 	padding: 1px;
 	height: 20px;
 }
+.ui-dialog .ui-dialog-titlebar-rollup {
+	position: absolute;
+	right: 2.2em;
+	top: 50%;
+	width: 21px;
+	margin: -10px 0 0 0;
+	padding: 1px;
+	height: 20px;
+}
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;
