@@ -61,6 +61,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	scrollSpeed: 5,
 
 	_create: function() {
+		var handle;
+
 		this._super();
 
 		// Static position elements can't be moved with top/left
@@ -69,7 +71,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		// Add touch-action attribute for pointer events to prevent view panning when dragging
-		this.element.attr("touch-action", "none");
+		handle = this.element.find( this.options.handle ).eq(0);
+		if ( !handle.length ) {
+			handle = this.element;
+		}
+		handle.attr("touch-action", "none");
 
 		this.element.addClass( "ui-draggable" );
 	},

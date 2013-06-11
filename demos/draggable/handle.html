@@ -7,6 +7,7 @@
 	<script src="../../jquery-1.9.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../external/pointerevents.js"></script>
 	<script src="../../ui/jquery.ui.interaction.js"></script>
 	<script src="../../ui/jquery.ui.draggable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
@@ -15,22 +16,9 @@
 	#draggable p { cursor: move; }
 	</style>
 	<script>
-	$.widget( "ui.draggable", $.ui.draggable, {
-		options: {
-			cancel: null
-		},
-		_isValidTarget: function( element ) {
-			var valid = this._super( element );
-			if ( valid && this.options.cancel ) {
-				valid = !element.is( this.options.cancel );
-			}
-			return valid;
-		}
-	});
-
 	$(function() {
 		$( "#draggable" ).draggable({ handle: "p" });
-		$( "#draggable2" ).draggable({ cancel: "p.ui-widget-header" });
+		$( "#draggable2" ).draggable({ exclude: "p.ui-widget-header" });
 	});
 	</script>
 </head>
