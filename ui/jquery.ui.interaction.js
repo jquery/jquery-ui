@@ -12,19 +12,16 @@
  */
 (function( $, undefined ) {
 
-var interaction, pointerHook;
-
 $.widget( "ui.interaction", {
 	version: "@VERSION",
+	started: false,
 	_create: function() {
-		// force the context so we can pass these methods to the hooks
+		// force the context so we can pass these methods to the hook
 		this._interactionMove = $.proxy( this, "_interactionMove" );
 		this._interactionStop = $.proxy( this, "_interactionStop" );
 
-		// initialize all hooks for this widget
-		for ( var hook in interaction.hooks ) {
-			interaction.hooks[ hook ].setup( this, this._startProxy( hook ) );
-		}
+		// initialize hook for this widget
+		this.setup( this, this._startProxy( this ) );
 	},
 
 	/** abstract methods **/
@@ -53,7 +50,7 @@ $.widget( "ui.interaction", {
 		var started;
 
 		// only one interaction can happen at a time
-		if ( interaction.started ) {
+		if ( this.started ) {
 			return false;
 		}
 
@@ -65,8 +62,8 @@ $.widget( "ui.interaction", {
 		// check if the widget wants the event to start an interaction
 		started = ( this._start( event, pointerPosition ) !== false );
 		if ( started ) {
-			interaction.started = true;
-			interaction.hooks[ hook ].handle( this,
+			this.started = true;
+			this.handle( this,
 				this._interactionMove, this._interactionStop );
 		}
 
@@ -80,22 +77,14 @@ $.widget( "ui.interaction", {
 
 	_interactionStop: function( event, pointerPosition ) {
 		this._stop( event, pointerPosition );
-		interaction.started = false;
-	}
-});
+		this.started = false;
+	},
 
-interaction = $.ui.interaction;
-$.extend( interaction, {
-	started: false,
-	hooks: {}
-});
-
-pointerHook = interaction.hooks.pointer = {
 	setup: function( widget, start ) {
 		widget._on( widget.widget(), {
 			"pointerdown": function( event ) {
 				event = event.originalEvent;
-				if ( pointerHook.id ) {
+				if ( this.id ) {
 					return;
 				}
 
@@ -108,7 +97,7 @@ pointerHook = interaction.hooks.pointer = {
 
 					if ( started ) {
 						// track pointer which is performing the interaction
-						pointerHook.id = event.pointerId;
+						this.id = event.pointerId;
 
 						// prevent selection
 						event.preventDefault();
@@ -123,7 +112,7 @@ pointerHook = interaction.hooks.pointer = {
 			event = event.originalEvent;
 
 			// Only move if original pointer moves
-			if ( event.pointerId !== pointerHook.id ) {
+			if ( event.pointerId !== this.id ) {
 				return;
 			}
 
@@ -137,7 +126,7 @@ pointerHook = interaction.hooks.pointer = {
 			event = event.originalEvent;
 
 			// Only stop if original pointer stops
-			if ( event.pointerId !== pointerHook.id ) {
+			if ( event.pointerId !== this.id ) {
 				return;
 			}
 
@@ -146,7 +135,7 @@ pointerHook = interaction.hooks.pointer = {
 				y: event.pageY
 			});
 
-			pointerHook.id = null;
+			this.id = null;
 
 			widget.document
 				.unbind( "pointermove", moveHandler )
@@ -160,6 +149,6 @@ pointerHook = interaction.hooks.pointer = {
 			"pointercancel": stopHandler
 		});
 	}
-};
+});
 
 })( jQuery );
