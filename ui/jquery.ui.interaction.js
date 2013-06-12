@@ -82,7 +82,7 @@ $.widget( "ui.interaction", {
 
 	setup: function( widget, start ) {
 		widget._on( widget.widget(), {
-			"pointerdown": function( event ) {
+			pointerdown: function( event ) {
 				event = event.originalEvent;
 				if ( this.id ) {
 					return;
@@ -144,9 +144,9 @@ $.widget( "ui.interaction", {
 		}
 
 		widget._on( widget.document, {
-			"pointermove": moveHandler,
-			"pointerup": stopHandler,
-			"pointercancel": stopHandler
+			pointermove: moveHandler,
+			pointerup: stopHandler,
+			pointercancel: stopHandler
 		});
 	}
 });
