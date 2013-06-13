@@ -12,6 +12,15 @@
  */
 (function( $, undefined ) {
 
+// Add missing event props for pointer events
+var eventName,
+	events = ["pointerdown","pointermove","pointerup","pointerover","pointerout","pointerenter","pointerleave"];
+for ( eventName in events ) {
+	$.event.fixHooks[ events[ eventName ] ] = $.event.mouseHooks;
+	$.event.fixHooks[ events[ eventName ] ].props.push("pointerId");
+	delete $.event.fixHooks[ events[ eventName ] ].filter;
+}
+
 $.widget( "ui.interaction", {
 	version: "@VERSION",
 	started: false,
@@ -83,7 +92,6 @@ $.widget( "ui.interaction", {
 	setup: function( widget, start ) {
 		widget._on( widget.widget(), {
 			pointerdown: function( event ) {
-				event = event.originalEvent;
 				if ( this.id ) {
 					return;
 				}
@@ -109,7 +117,6 @@ $.widget( "ui.interaction", {
 
 	handle: function( widget, move, stop ) {
 		function moveHandler( event ) {
-			event = event.originalEvent;
 
 			// Only move if original pointer moves
 			if ( event.pointerId !== this.id ) {
@@ -123,7 +130,6 @@ $.widget( "ui.interaction", {
 		}
 
 		function stopHandler( event ) {
-			event = event.originalEvent;
 
 			// Only stop if original pointer stops
 			if ( event.pointerId !== this.id ) {
