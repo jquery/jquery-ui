@@ -282,6 +282,8 @@ $.widget( "ui.menu", {
 			icon = this.options.icons.submenu,
 			submenus = this.element.find( this.options.menus );
 
+		this.element.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length );
+
 		// Initialize nested menus
 		submenus.filter( ":not(.ui-menu)" )
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
