@@ -26,9 +26,15 @@ function isLocal( anchor ) {
 	// IE7 doesn't normalize the href property when set via script (#9317)
 	anchor = anchor.cloneNode( false );
 
+	var base = $( "head > base[href]" );
 	return anchor.hash.length > 1 &&
-		decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
-			decodeURIComponent( location.href.replace( rhash, "" ) );
+		(
+			decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
+				decodeURIComponent( location.href.replace( rhash, "" ) ) ||
+
+			base.length && decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
+				decodeURIComponent( base.attr("href").replace( rhash, "" ) )
+		);
 }
 
 $.widget( "ui.tabs", {
