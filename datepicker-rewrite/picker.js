@@ -5,13 +5,17 @@
  */
 (function( $, undefined ) {
 
+// TODO use uniqueId, if possible
 var idIncrement = 0,
+	// TODO move this to the instance
 	suppressExpandOnFocus = false;
 
 $.widget( "ui.datepicker", {
 	options: {
 		appendTo: null,
+		// TODO review
 		eachDay: $.noop,
+		// TODO replace with builder methods
 		tmpl: "#ui-datepicker-tmpl",
 		gridTmpl: "#ui-datepicker-grid-tmpl",
 		position: {
@@ -127,6 +131,7 @@ $.widget( "ui.datepicker", {
 			var newId = this.id + "-" + this.date.day(),
 				newCell = $("#" + newId);
 
+			// TODO unnecessary optimization? is it really needed?
 			if ( !newCell.length ) {
 				return;
 			}
@@ -144,7 +149,6 @@ $.widget( "ui.datepicker", {
 			.uniqueId()
 			.hide();
 		this._setHiddenPicker();
-		// implement proper ui-front insert logic
 		this.picker.appendTo( this._appendTo() )
 
 		this.element
@@ -204,6 +208,7 @@ $.widget( "ui.datepicker", {
 			focusout: function( event ) {
 				// use a timer to allow click to clear it and letting that
 				// handle the closing instead of opening again
+				// also allows tabbing inside the calendar without it closing
 				this.closeTimer = this._delay( function() {
 					this.close( event );
 				}, 150);
@@ -214,6 +219,7 @@ $.widget( "ui.datepicker", {
 			mouseup: function( event ) {
 				clearTimeout( this.closeTimer );
 			},
+			// TODO on TAB (or shift TAB), make sure it ends up on something useful in DOM order
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.picker.is( ":visible" ) ) {
 					this.close( event );
@@ -249,6 +255,7 @@ $.widget( "ui.datepicker", {
 
 		return element;
 	},
+	// TODO replace with builder methods
 	_createTmpl: function() {
 		this.date.refresh();
 
@@ -289,6 +296,7 @@ $.widget( "ui.datepicker", {
 				focusedDay: this.date.day()
 			}
 		});
+		// TODO fix me
 		this.grid = this.grid.replaceWith( newGrid );
 		this.grid = newGrid;
 	},
@@ -297,6 +305,7 @@ $.widget( "ui.datepicker", {
 			return;
 		}
 
+		// TODO explain this
 		this.date = $.date( this.element.val() );
 		this.date.eachDay = this.options.eachDay;
 		this.date.select();
@@ -316,6 +325,7 @@ $.widget( "ui.datepicker", {
 		this._show( this.picker, this.options.show );
 
 		// take trigger out of tab order to allow shift-tab to skip trigger
+		// TODO does this really make sense? related bug: tab-shift moves focus to last element on page
 		this.element.attr( "tabindex", -1 );
 		this.isOpen = true;
 
@@ -348,6 +358,7 @@ $.widget( "ui.datepicker", {
 			this._focusTrigger();
 		}
 		this._trigger( "select", event, {
+			// TODO replace with value option to initialise and read
 			date: this.date.format()
 		});
 	},
