@@ -14,12 +14,12 @@ test( "prevent form submit on enter when menu is active", function() {
 		menu = element.autocomplete( "widget" );
 
 	event = $.Event( "keydown" );
-	event.keyCode = $.ui.keyCode.DOWN;
+	event.keyCode = event.which = $.ui.keyCode.DOWN;
 	element.trigger( event );
 	deepEqual( menu.find( ".ui-menu-item:has(.ui-state-focus)" ).length, 1, "menu item is active" );
 
 	event = $.Event( "keydown" );
-	event.keyCode = $.ui.keyCode.ENTER;
+	event.keyCode = event.which = $.ui.keyCode.ENTER;
 	element.trigger( event );
 	ok( event.isDefaultPrevented(), "default action is prevented" );
 });
@@ -36,7 +36,7 @@ test( "allow form submit on enter when menu is not active", function() {
 			.autocomplete( "search" );
 
 	event = $.Event( "keydown" );
-	event.keyCode = $.ui.keyCode.ENTER;
+	event.keyCode = event.which = $.ui.keyCode.ENTER;
 	element.trigger( event );
 	ok( !event.isDefaultPrevented(), "default action is prevented" );
 });
