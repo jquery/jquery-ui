@@ -14,10 +14,11 @@
 
 // Add missing event props for pointer events
 var eventName,
-	events = ["pointerdown","pointermove","pointerup","pointerover","pointerout","pointerenter","pointerleave"];
+	events = ["pointerdown","pointermove","pointerup","pointerover","pointerout","pointerenter","pointerleave"],
+	missingProps = ["height","isPrimary","pointerId","pointerType","pressure","tiltX","tiltY","width"];
 for ( eventName in events ) {
 	$.event.fixHooks[ events[ eventName ] ] = $.event.mouseHooks;
-	$.event.fixHooks[ events[ eventName ] ].props.push("pointerId");
+	$.event.fixHooks[ events[ eventName ] ].props.push.apply( $.event.fixHooks[ events[ eventName ] ].props, missingProps );
 	delete $.event.fixHooks[ events[ eventName ] ].filter;
 }
 
