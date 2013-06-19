@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 2 );
+	expect( 4 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -56,6 +56,18 @@ test( "max", function() {
 	ok(element.slider( "value" ) === options.max, "value method is contained by max" );
 	element.slider( "destroy" );
 
+    /*Ticket #9376 - Mouse position can give value in float , set it close to max*/    
+	options = {
+		max: 99,
+		min: 1,
+		orientation: "horizontal",
+		step: 3,
+		value: 98.67854
+	};
+
+	element.slider( options );
+	ok(element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
+	ok(element.slider( "value" ) === options.max, "value method is contained by max" );
 });
 
 test( "min", function() {
