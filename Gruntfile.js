@@ -127,6 +127,7 @@ grunt.loadNpmTasks( "grunt-contrib-jshint" );
 grunt.loadNpmTasks( "grunt-contrib-uglify" );
 grunt.loadNpmTasks( "grunt-contrib-concat" );
 grunt.loadNpmTasks( "grunt-contrib-qunit" );
+grunt.loadNpmTasks( "grunt-contrib-connect" );
 grunt.loadNpmTasks( "grunt-contrib-csslint" );
 grunt.loadNpmTasks( "grunt-contrib-cssmin" );
 grunt.loadNpmTasks( "grunt-html" );
@@ -315,11 +316,32 @@ grunt.initConfig({
 		}
 	},
 	qunit: {
-		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
-			// disabling everything that doesn't (quite) work with PhantomJS for now
-			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|index|test|dialog|tooltip)\.html$/ ).test( file );
-		})
+		all: {
+			options: {
+				urls: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
+					// disabling everything that doesn't (quite) work with PhantomJS for now
+					// TODO except for all|index|test, try to include more as we go
+					return !( /(all|index|test|dialog|tooltip)\.html$/ ).test( file );
+				}).map(function( file ) {
+					return "http://localhost:8000/" + file;
+				})
+			}
+		}
+	},
+	connect: {
+		server: {
+			options: {
+				port: 8000,
+				base: ".",
+				// 1: Allow to statically serve ui/.jshintrc. See TestHelpers.testJshint and http://git.io/S0s8qg.
+				middleware: function( connect, options ) {
+					return [
+						connect.static( options.base, { hidden: true /* 1 */ } ),
+						connect.directory( options.base ),
+					];
+				}
+			}
+		}
 	},
 	jshint: {
 		ui: {
@@ -359,7 +381,7 @@ grunt.initConfig({
 
 grunt.registerTask( "default", [ "lint", "test" ] );
 grunt.registerTask( "lint", [ "jshint", "csslint", "htmllint" ] );
-grunt.registerTask( "test", [ "qunit" ] );
+grunt.registerTask( "test", [ "connect", "qunit" ] );
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
 grunt.registerTask( "build", [ "concat", "uglify", "cssmin", "copy:dist_units_images" ] );
