@@ -2,8 +2,7 @@ module.exports = function( grunt ) {
 
 "use strict";
 
-var path = require( "path" ),
-	fs = require( "fs" );
+var fs = require( "fs" );
 
 function expandFiles( files ) {
 	return grunt.util._.pluck( grunt.file.expandMapping( files ), "src" ).filter(function(filepath) {
