@@ -384,7 +384,7 @@ $.widget( "ui.menu", {
 		}
 
 		nested = item.children( ".ui-menu" );
-		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
+		if ( nested.length && event && ( /^mouse/.test( event.type ) ) ) {
 			this._startOpening(nested);
 		}
 		this.activeMenu = item.parent();
