@@ -230,7 +230,6 @@ function buildCDNPackage( callback ) {
 		add = function( file ) {
 			output.push( file );
 		},
-		bundleFiles = [],
 		jqueryUi = new downloadBuilder.JqueryUi( path.resolve( "." ) ),
 		themeGallery = downloadBuilder.themeGallery( jqueryUi );
 
@@ -304,11 +303,10 @@ function buildCDNPackage( callback ) {
 					}).forEach( add );
 				return callback();
 			});
-		
-		}
+		};
 	}).concat([function() {
 		var crypto = require( "crypto" );
-	
+
 		// Create MD5 manifest
 		output.push({
 			path: "MANIFEST",
