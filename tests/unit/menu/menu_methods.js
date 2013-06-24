@@ -69,6 +69,19 @@ test( "refresh submenu", function() {
 	equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
 });
 
+test( "refresh icons (see #9377)", function() {
+	expect( 3 );
+	var element = $( "#menu1" ).menu();
+	ok( !element.hasClass( "ui-menu-icons") );
+	element.find( "li:first a" ).html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
+	element.menu( "refresh" );
+
+	ok( element.hasClass( "ui-menu-icons" ) );
+	element.find( "li:first a" ).html( "Save" );
+	element.menu( "refresh" );
+	ok( !element.hasClass( "ui-menu-icons") );
+});
+
 test( "widget", function() {
 	expect( 2 );
 	var element = $( "#menu1" ).menu(),

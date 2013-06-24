@@ -78,6 +78,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var o = this.options;
 
+		$( document.activeElement ).blur();
+
 		// among others, prevent a drag on a resizable-handle
 		if (this.helper || o.disabled || $(event.target).closest(".ui-resizable-handle").length > 0) {
 			return false;
@@ -262,6 +264,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if( $.ui.ddmanager ) {
 			$.ui.ddmanager.dragStop(this, event);
 		}
+
+		// The interaction is over; whether or not the click resulted in a drag, focus the element
+		this.element.focus();
 
 		return $.ui.mouse.prototype._mouseUp.call(this, event);
 	},

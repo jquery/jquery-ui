@@ -175,6 +175,18 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 	});
 };
 
+TestHelpers.onFocus= function( element, onFocus ) {
+	var fn = function( event ){
+		if( !event.originalEvent ) {
+			return;
+		}
+		element.unbind( "focus", fn );
+		onFocus();
+	};
+
+	element.bind( "focus", fn )[ 0 ].focus();
+};
+
 /*
  * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
  */
