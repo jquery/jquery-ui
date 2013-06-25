@@ -577,7 +577,7 @@ function _bootstrap( fn ) {
 	fs.mkdirSync( baseDir );
 
 	console.log( "Installing dependencies..." );
-	require( "child_process" ).exec( "npm install shelljs colors download.jqueryui.com", function( error ) {
+	require( "child_process" ).exec( "npm install shelljs colors download.jqueryui.com@1.10.3-4", function( error ) {
 		if ( error ) {
 			console.log( error );
 			return process.exit( 1 );
