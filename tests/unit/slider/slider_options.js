@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 2 );
+	expect( 5 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -54,6 +54,44 @@ test( "max", function() {
 	element.slider( options );
 	ok(element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
 	ok(element.slider( "value" ) === options.max, "value method is contained by max" );
+	element.slider( "destroy" );
+
+	element = $( "<div></div>" );
+
+	options = {
+		max: 9,
+		min: 1,
+		orientation: "horizontal",
+		step: 3,
+		value: 8.75
+	};
+
+	element.slider( options );
+	ok(element.slider( "value" ) === 7, "value method is within max , when options value is less than max , but more than max(acheivable by icrementing steps)" );
+	element.slider( "destroy" );
+
+	options = {
+		max: 9,
+		min: 1,
+		orientation: "horizontal",
+		step: 3,
+		value: 10
+	};
+
+	element.slider( options );
+	ok(element.slider( "value" ) === 7, "value method is within max , when options value is more than max" );
+	element.slider( "destroy" );
+
+	options = {
+		max: 7,
+		min: 1,
+		orientation: "horizontal",
+		step: 3,
+		value: 7
+	};
+
+	element.slider( options );
+	ok(element.slider( "value" ) === 7, "value method will max , if max is possible by repeat incrementing of min by step" );
 	element.slider( "destroy" );
 
 });
