@@ -32,7 +32,9 @@ flatten = function( flat, arr ) {
 
 pkg = require( "../package.json" );
 
-manifest = function() {
+manifest = function( options ) {
+	options = options || {};
+
 	return Object.keys( categories ).map(function( category ) {
 		var baseManifest = categories[ category ],
 			plugins = require( "./" + category );
@@ -71,6 +73,12 @@ manifest = function() {
 				// custom
 				category: data.category || category
 			};
+
+			if ( options.extra ) {
+				Object.keys( data._ || {} ).forEach(function( prop ) {
+					manifest[ prop ] = data._[ prop ];
+				});
+			}
 
 			(baseManifest.dependencies || [])
 				.concat(data.dependencies || [])
