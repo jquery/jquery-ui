@@ -512,14 +512,22 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 	// returns the step-aligned value that val is closest to, between (inclusive) min and max
 	_trimAlignValue: function( val ) {
+		var newmax,
+			step = ( this.options.step > 0 ) ? this.options.step : 1;
+
+		//value will always change by an increment of step, whether by keyboard or mouse
+		newmax = this._valueMin();
+		while ( newmax + step <= this._valueMax() ){
+			newmax = newmax + step;
+		}
+		
 		if ( val <= this._valueMin() ) {
 			return this._valueMin();
 		}
-		if ( val >= this._valueMax() ) {
-			return this._valueMax();
+		if ( val >= newmax ) {
+			return newmax;
 		}
-		var step = ( this.options.step > 0 ) ? this.options.step : 1,
-			valModStep = (val - this._valueMin()) % step,
+		var valModStep = ( val - this._valueMin() ) % step,
 			alignValue = val - valModStep;
 
 		if ( Math.abs(valModStep) * 2 >= step ) {
