@@ -153,6 +153,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 			o = this.options;
 
 		this.currentContainer = this;
+		
+		//Call callbacks
+		this._trigger("beforeStart", event, this._uiHash());
 
 		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
 		this.refreshPositions();
