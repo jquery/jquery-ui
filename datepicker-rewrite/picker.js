@@ -255,19 +255,11 @@ $.widget( "ui.datepicker", {
 
 		return element;
 	},
-	// TODO replace with builder methods
 	_createTmpl: function() {
 		this.date.refresh();
 
-		$( this.options.tmpl ).tmpl( {
-			date: this.date,
-			labels: Globalize.localize( "datepicker" ),
-			instance: {
-				id: this.id,
-				focusedDay: this.date.day()
-			}
-		}).appendTo( this.picker )
-			.find( "button" ).button().end();
+		this._createDatepicker();
+		this.picker.find( "button" ).button();
 
 		if ( this.inline ) {
 			this.picker.children().addClass( "ui-datepicker-inline" );
@@ -275,6 +267,163 @@ $.widget( "ui.datepicker", {
 		// against display:none in datepicker.css
 		this.picker.find( ".ui-datepicker" ).css( "display", "block" );
 		this.grid = this.picker.find( ".ui-datepicker-calendar" );
+	},
+	_createDatepicker: function() {
+		$( "<div>" )
+			.addClass( "ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+			.attr({
+				role: "region",
+				"aria-labelledby": this.id + "-title"
+			})
+			.html( this._buildHeader() + this._buildGrid() + this._buildButtons() )
+			.appendTo( this.picker );
+	},
+	_buildHeader: function() {
+		return "<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
+			this._buildPreviousLink() +
+			this._buildNextLink() +
+			this._buildTitlebar() +
+		"</div>";
+	},
+	_buildPreviousLink: function() {
+		var labels = Globalize.localize( "datepicker" );
+		return "<a href='#' class='ui-datepicker-prev ui-corner-all' " +
+			"title='" + labels.prevText + "'>" +
+				"<span class='ui-icon ui-icon-circle-triangle-w'>" +
+					labels.prevText +
+				"</span>" +
+			"</a>";
+	},
+	_buildNextLink: function() {
+		var labels = Globalize.localize( "datepicker" );
+		return "<a href='#' class='ui-datepicker-next ui-corner-all' " +
+			"title='" + labels.nextText + "'>" +
+				"<span class='ui-icon ui-icon-circle-triangle-e'>" +
+					labels.nextText +
+				"</span>" +
+			"</a>";
+	},
+	_buildTitlebar: function() {
+		var labels = Globalize.localize( "datepicker" );
+		return "<div role='header' id='" + this.id + "-title'>" +
+			"<div id='" + this.id + "-month-lbl' class='ui-datepicker-title'>" +
+				this._buildTitle() +
+			"</div>" +
+			"<span class='ui-helper-hidden-accessible'>, " + labels.datePickerRole + "</span>" +
+		"</div>";
+	},
+	_buildTitle: function() {
+		return "<span class='ui-datepicker-month'>" +
+				this.date.monthName() +
+			"</span>" +
+			"<span class='ui-datepicker-year'>" +
+				this.date.year() +
+			"</span>";
+	},
+	_buildGrid: function() {
+		return "<table class='ui-datepicker-calendar' role='grid' aria-readonly='true' " +
+			"aria-labelledby='" + this.id + "-month-lbl' tabindex='0' aria-activedescendant='" + this.id + "-" + this.date.day() + "'>" +
+			this._buildGridHeading() +
+			this._buildGridBody() +
+		"</table>";
+	},
+	_buildGridHeading: function() {
+		var cells = "",
+			i = 0;
+		for ( i; i < this.date.weekdays().length; i++ ) {
+			cells += this._buildGridHeaderCell( this.date.weekdays()[i] );
+		}
+		return "<thead role='presentation'>" +
+			"<tr role='row'>" + cells + "</tr>" +
+		"</thead>";
+	},
+	_buildGridHeaderCell: function( day ) {
+		return "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
+			"<span title='" + day.fullname + "'>" +
+				day.shortname +
+			"</span>" +
+		"</th>";
+	},
+	_buildGridBody: function() {
+		var rows = "",
+			i = 0;
+		for ( i; i < this.date.days().length; i++ ) {
+			rows += this._buildWeekRow( this.date.days()[i] );
+		}
+		return "<tbody role='presentation'>" + rows + "</tbody>";
+	},
+	_buildWeekRow: function( week ) {
+		var cells = "",
+			i = 0;
+		for ( i; i < week.days.length; i++ ) {
+			cells += this._buildDayCell( week.days[i] );
+		}
+		return "<tr role='row'>" + cells + "</tr>";
+	},
+	_buildDayCell: function( day ) {
+		var contents = "";
+			idAttribute = day.render ? ( "id=" + this.id + "-" + day.date ) : "",
+			ariaSelectedAttribute = "aria-selected=" + ( day.current ? "true" : "false" ),
+			ariaDisabledAttribute = day.selectable ? "" : "aria-disabled=true";
+
+		if ( day.render ) {
+			if ( day.selectable ) {
+				contents = this._buildDayLink( day );
+			} else {
+				contents = this._buildDayDisplay( day );
+			}
+		}
+
+		return "<td role='gridcell' " + idAttribute + " " + ariaSelectedAttribute + " " + ariaDisabledAttribute + ">" +
+			contents +
+		"</td>";
+	},
+	_buildDayLink: function( day ) {
+		var link,
+			classes = [ "ui-state-default" ],
+			labels = Globalize.localize( "datepicker" );
+
+		if ( day.date == this.date.day() ) {
+			classes.push( "ui-state-focus" )
+		}
+		if ( day.current ) {
+			classes.push( "ui-state-active" );
+		}
+		if ( day.today ) {
+			classes.push( "ui-state-highlight" );
+		}
+		if ( day.extraClasses ) {
+			classes.push( day.extraClasses.split( "" ) );
+		}
+
+		link = "<a href='#' tabindex='-1' data-timestamp='" + day.timestamp + "' class='" + classes.join( " " ) + "'>" +
+				day.date + "</a>";
+		if ( day.today ) {
+			link += "<span class='ui-helper-hidden-accessible'>, " + labels.currentText + "</span>";
+		}
+		return link;
+	},
+	_buildDayDisplay: function( day ) {
+		var classes = [];
+		if ( day.current ) {
+			classes.push( "ui-state-active" );
+		}
+		if ( day.today ) {
+			classes.push( "ui-state-highlight" );
+		}
+		if ( day.extraClasses ) {
+			classes.push( day.extraClasses.split( "" ) );
+		}
+
+		return "<span class='" + classes.join( "" ) + "'>" +
+					day.date + "</span>";
+	},
+	_buildButtons: function() {
+		var labels = Globalize.localize( "datepicker" );
+		return "<div class='ui-datepicker-buttonpane ui-widget-content'>" +
+			"<button class='ui-datepicker-current'>" + labels.currentText + "</button>" +
+			"<button class='ui-datepicker-close'>" + labels.closeText + "</button>" +
+		"</div>";
 	},
 	_focusTrigger: function( event ) {
 		suppressExpandOnFocus = true;
@@ -284,19 +433,11 @@ $.widget( "ui.datepicker", {
 		//determine which day gridcell to focus after refresh
 		//TODO: Prevent disabled cells from being focused
 		this.date.refresh();
-		$(".ui-datepicker-title", this.picker).html(
-			$("#ui-datepicker-title-tmpl").tmpl( {
-				date: this.date
-		}));
-		var newGrid = $( this.options.gridTmpl ).tmpl( {
-			date: this.date,
-			labels: Globalize.localize( "datepicker" ),
-			instance: {
-				id: this.id,
-				focusedDay: this.date.day()
-			}
-		});
+
+		$( ".ui-datepicker-title", this.picker ).html( this._buildTitle() );
+
 		// TODO fix me
+		var newGrid = $( this._buildGrid() );
 		this.grid = this.grid.replaceWith( newGrid );
 		this.grid = newGrid;
 	},
