@@ -3,7 +3,22 @@
 		"description": "The core of jQuery UI, required for all interactions and widgets.",
 		"homepage": "http://jqueryui.com/",
 		"demo": "http://jqueryui.com/",
-		"docs": "http://api.jqueryui.com/category/ui-core/"
+		"docs": "http://api.jqueryui.com/category/ui-core/",
+		"_": {
+			"docs": [
+				"http://api.jqueryui.com/data-selector/",
+				"http://api.jqueryui.com/disableSelection/",
+				"http://api.jqueryui.com/enableSelection/",
+				"http://api.jqueryui.com/focus/",
+				"http://api.jqueryui.com/focusable-selector/",
+				"http://api.jqueryui.com/jQuery.ui.keyCode/",
+				"http://api.jqueryui.com/removeUniqueId/",
+				"http://api.jqueryui.com/scrollParent/",
+				"http://api.jqueryui.com/tabbable-selector/",
+				"http://api.jqueryui.com/uniqueId/",
+				"http://api.jqueryui.com/zIndex/"
+			]
+		}
 	},
 	"datepicker": {
 		"description": "Displays a calendar from an input or inline for selecting dates.",
@@ -31,7 +46,20 @@
 		"category": "effect",
 		"homepage": "http://jqueryui.com/",
 		"demo": "http://jqueryui.com/effect/",
-		"docs": "http://api.jqueryui.com/category/effects-core/"
+		"docs": "http://api.jqueryui.com/category/effects-core/",
+		"_": {
+			"docs": [
+				"http://api.jqueryui.com/addClass/",
+				"http://api.jqueryui.com/color-animation/",
+				"http://api.jqueryui.com/effect/",
+				"http://api.jqueryui.com/hide/",
+				"http://api.jqueryui.com/removeClass/",
+				"http://api.jqueryui.com/show/",
+				"http://api.jqueryui.com/switchClass/",
+				"http://api.jqueryui.com/toggle/",
+				"http://api.jqueryui.com/toggleClass/"
+			]
+		}
 	},
 	"position": {
 		"description": "Positions elements relative to other elements.",
