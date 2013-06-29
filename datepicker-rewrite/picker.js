@@ -256,7 +256,7 @@ $.widget( "ui.datepicker", {
 		this.date.refresh();
 
 		this._createDatepicker();
-		this.picker.find( "button" ).button();
+		this.picker.find( "button, .ui-datepicker-header a" ).button();
 
 		if ( this.inline ) {
 			this.picker.children().addClass( "ui-datepicker-inline" );
