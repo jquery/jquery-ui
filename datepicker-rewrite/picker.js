@@ -312,7 +312,7 @@ $.widget( "ui.datepicker", {
 	_buildTitle: function() {
 		return "<span class='ui-datepicker-month'>" +
 				this.date.monthName() +
-			"</span>" +
+			"</span> " +
 			"<span class='ui-datepicker-year'>" +
 				this.date.year() +
 			"</span>";
