@@ -61,7 +61,7 @@
 				}
 			});
 			$( "#datepicker-inline-multi" ).datepicker( {
-				tmpl: "#ui-datepicker-multi-tmpl",
+				numberOfMonths: 3,
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
 				}

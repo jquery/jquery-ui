@@ -15,6 +15,7 @@ $.widget( "ui.datepicker", {
 		appendTo: null,
 		// TODO review
 		eachDay: $.noop,
+		numberOfMonths: 1,
 		position: {
 			my: "left top",
 			at: "left bottom"
@@ -89,6 +90,7 @@ $.widget( "ui.datepicker", {
 			oldMonth = this.date.month(),
 			oldYear = this.date.year();
 
+		// TODO: Handle for pickers with multiple months
 		switch ( event.keyCode ) {
 			case $.ui.keyCode.ENTER:
 				activeCell.children( "a:first" ).mousedown();
@@ -267,14 +269,55 @@ $.widget( "ui.datepicker", {
 		this.grid = this.picker.find( ".ui-datepicker-calendar" );
 	},
 	_createDatepicker: function() {
+		var multiClasses = [],
+			pickerHtml = "";
+
+		if (this.options.numberOfMonths === 1 ) {
+			pickerHtml = this._buildHeader() + this._buildGrid() + this._buildButtons();
+		} else {
+			pickerHtml = this._buildMultiplePicker();
+			multiClasses.push( "ui-datepicker-multi" );
+			multiClasses.push( "ui-datepicker-multi-" + this.options.numberOfMonths );
+		}
+
 		$( "<div>" )
 			.addClass( "ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+			.addClass( multiClasses.join( " " ) )
 			.attr({
 				role: "region",
 				"aria-labelledby": this.id + "-title"
 			})
-			.html( this._buildHeader() + this._buildGrid() + this._buildButtons() )
+			.html( pickerHtml )
 			.appendTo( this.picker );
+	},
+	_buildMultiplePicker: function() {
+		var html = "",
+			// TODO: All months returned by months() are the same?
+			months = this.date.months( this.options.numberOfMonths - 1 ),
+			i = 0;
+
+		for ( i; i < months.length; i++ ) {
+			html += "<div class='ui-datepicker-group'>" +
+				"<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all'>";
+			if ( months[i].first ) {
+				html += this._buildPreviousLink();
+			}
+			if ( months[i].last ) {
+				html += this._buildNextLink();
+			}
+
+			// TODO: Change _buildTitlebar and _buildGrid to handle for multiple months.
+			// Right now they just use this.date.
+			html += this._buildTitlebar();
+			html += "</div>";
+			html += this._buildGrid();
+			html += "</div>";
+		}
+
+		html += "<div class='ui-datepicker-row-break'></div>";
+		html += this._buildButtons();
+
+		return html;
 	},
 	_buildHeader: function() {
 		return "<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
