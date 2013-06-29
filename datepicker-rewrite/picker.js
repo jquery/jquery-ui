@@ -15,9 +15,6 @@ $.widget( "ui.datepicker", {
 		appendTo: null,
 		// TODO review
 		eachDay: $.noop,
-		// TODO replace with builder methods
-		tmpl: "#ui-datepicker-tmpl",
-		gridTmpl: "#ui-datepicker-grid-tmpl",
 		position: {
 			my: "left top",
 			at: "left bottom"
