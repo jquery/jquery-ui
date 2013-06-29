@@ -19,6 +19,7 @@ $.widget( "ui.datepicker", {
 			my: "left top",
 			at: "left bottom"
 		},
+		showWeek: false,
 		show: true,
 		hide: true,
 
@@ -326,7 +327,12 @@ $.widget( "ui.datepicker", {
 	},
 	_buildGridHeading: function() {
 		var cells = "",
-			i = 0;
+			i = 0,
+			labels = Globalize.localize( "datepicker" );
+
+		if ( this.options.showWeek ) {
+			cells += "<th>" + labels.weekHeader + "</th>";
+		}
 		for ( i; i < this.date.weekdays().length; i++ ) {
 			cells += this._buildGridHeaderCell( this.date.weekdays()[i] );
 		}
@@ -352,6 +358,10 @@ $.widget( "ui.datepicker", {
 	_buildWeekRow: function( week ) {
 		var cells = "",
 			i = 0;
+
+		if ( this.options.showWeek ) {
+			cells += "<td>" + week.number + "</td>";
+		}
 		for ( i; i < week.days.length; i++ ) {
 			cells += this._buildDayCell( week.days[i] );
 		}
