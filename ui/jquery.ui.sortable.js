@@ -911,16 +911,46 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this._storedCSS = { width: this.currentItem[0].style.width, height: this.currentItem[0].style.height, position: this.currentItem.css("position"), top: this.currentItem.css("top"), left: this.currentItem.css("left") };
 		}
 
-		if(!helper[0].style.width || o.forceHelperSize) {
+		if (!this._hasAutoSize(helper, "width") || o.forceHelperSize) {
 			helper.width(this.currentItem.width());
 		}
-		if(!helper[0].style.height || o.forceHelperSize) {
+
+		if (!this._hasAutoSize(helper, "height") || o.forceHelperSize) {
 			helper.height(this.currentItem.height());
 		}
 
 		return helper;
-
 	},
+
+	_hasAutoSize: function (obj, sizeProperty) {
+	    /// <summary>
+	    /// Verify if the height or width property was set using custom CSS and/or inline style
+	    /// Can't use "css" or "width" methods because they return the computed value
+	    /// </summary>
+	    /// <param name="obj" type="Object">The jQuery object for which to check if it has a static size</param>
+	    /// <param name="sizeProperty" type="Object">The size property (width or height)</param>
+	    /// <returns type="boolean">True if the control has a static width</returns>
+        
+	    var htmlEl = obj[0],
+	        cloneParams = { visibility: "hidden", position: "relative", "z-index": "-100" },
+	        $clone,
+	        clonnedWidth,
+	        currentWidth = obj.css(sizeProperty);
+        if (htmlEl.style && htmlEl.style[sizeProperty]) {
+            return true;
+        }
+
+        cloneParams[sizeProperty] = "auto";
+
+        $clone = obj.clone().css(cloneParams).appendTo(obj.parent());
+        clonnedWidth = $clone.css(sizeProperty);
+        $clone.remove();
+
+        if (clonnedWidth !== currentWidth) {
+            return true;
+        }
+        return false;
+    },
 
 	_adjustOffsetFromHelper: function(obj) {
 		if (typeof obj === "string") {
