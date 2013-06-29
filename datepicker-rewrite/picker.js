@@ -479,6 +479,11 @@ $.widget( "ui.datepicker", {
 		suppressExpandOnFocus = true;
 		this.element.focus();
 	},
+	// Refreshing the entire datepicker during interaction confuses screen readers, specifically
+	// because the grid heading is marked up as a live region and will often not update if it's 
+	// destroyed and recreated instead of just having its text change. Additionally, interacting 
+	// with the prev and next links would cause loss of focus issues because the links being
+	// interacted with will disappear while focused.
 	refresh: function() {
 		//determine which day gridcell to focus after refresh
 		//TODO: Prevent disabled cells from being focused
