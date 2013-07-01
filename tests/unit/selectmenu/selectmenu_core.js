@@ -156,6 +156,34 @@ $.each([
 			}, 1 );
 		}, 1 );
 	});
+
+	asyncTest( "item looping - " + settings.type, function () {
+		expect( 2 );
+
+		var links,
+			element = $( settings.selector ).selectmenu(),
+			button = element.selectmenu( "widget" ),
+			menu = element.selectmenu( "menuWidget" ),
+			options = element.find( "option" );
+
+		// init menu
+		button.simulate( "focus" );
+
+		setTimeout(function() {
+			links = menu.find( "li.ui-menu-item a" );
+
+			button.trigger( "click" );
+			links.first().simulate( "mouseover" ).trigger( "click" );
+			button.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
+			equal( element[ 0 ].selectedIndex, 0, "No looping beyond first item" );
+
+			button.trigger( "click" );
+			links.last().simulate( "mouseover" ).trigger( "click" );
+			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+			equal( element[ 0 ].selectedIndex + 1, links.length, "No looping behind last item" );
+			start();
+		}, 1 );
+	});
 });
 
 })( jQuery );
