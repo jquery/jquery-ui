@@ -270,6 +270,10 @@ $.widget( "ui.selectmenu", {
 			// Set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
 		} else {
+			if ( direction === "previous" && this.menu.menu( "isFirstItem" ) || direction === "next" && this.menu.menu( "isLastItem" ) ) {
+				return;
+			}
+
 			// Move to and focus next or prev item
 			this.menu.menu( direction, event );
 		}
