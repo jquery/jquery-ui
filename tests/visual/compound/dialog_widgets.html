@@ -22,8 +22,10 @@
 	<script src="../../../ui/jquery.ui.slider.js"></script>
 	<script src="../../../ui/jquery.ui.tabs.js"></script>
 	<script src="../../../ui/jquery.ui.tooltip.js"></script>
+	<script src="../../../ui/jquery.ui.selectmenu.js"></script>
 	<script>
 	$(function() {
+		$( "#dialog" ).dialog();
 		$( "[title]" ).tooltip();
 		$( "#accordion" ).accordion();
 		$( "#autocomplete" ).autocomplete({
@@ -45,7 +47,7 @@
 			}
 		});
 		$( "#tabs" ).tabs();
-		$( "#dialog" ).dialog();
+		$( '#select' ).selectmenu();
 		$( "#dialog2" ).dialog({
 			autoOpen: false,
 			width: 100,
@@ -92,6 +94,13 @@
 		<div id="tabs-2">Phasellus mattis tincidunt nibh.</div>
 		<div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
 	</div>
+	<select id="select">
+		<option>Slower</option>
+		<option>Slow</option>
+		<option>Medium</option>
+		<option>Fast</option>
+		<option>Faster</option>
+	</select>
 </div>
 <div id="dialog2">
 	Yay, another dialog.
