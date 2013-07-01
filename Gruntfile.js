@@ -154,9 +154,7 @@ function createBanner( files ) {
 grunt.initConfig({
 	pkg: grunt.file.readJSON("package.json"),
 	files: {
-		dist: "<%= pkg.name %>-<%= pkg.version %>",
-		cdn: "<%= pkg.name %>-<%= pkg.version %>-cdn",
-		themes: "<%= pkg.name %>-themes-<%= pkg.version %>"
+		dist: "<%= pkg.name %>-<%= pkg.version %>"
 	},
 	compare_size: compareFiles,
 	concat: {
@@ -197,122 +195,10 @@ grunt.initConfig({
 		})
 	},
 	copy: {
-		dist: {
-			src: [
-				"AUTHORS.txt",
-				"jquery-*.js",
-				"MIT-LICENSE.txt",
-				"README.md",
-				"Gruntfile.js",
-				"package.json",
-				"*.jquery.json",
-				"ui/**/*",
-				"ui/.jshintrc",
-				"demos/**/*",
-				"themes/**/*",
-				"external/**/*",
-				"tests/**/*"
-			],
-			renames: {
-				"dist/jquery-ui.js": "ui/jquery-ui.js",
-				"dist/jquery-ui.min.js": "ui/minified/jquery-ui.min.js",
-				"dist/i18n/jquery-ui-i18n.js": "ui/i18n/jquery-ui-i18n.js",
-				"dist/i18n/jquery-ui-i18n.min.js": "ui/minified/i18n/jquery-ui-i18n.min.js",
-				"dist/jquery-ui.css": "themes/base/jquery-ui.css",
-				"dist/jquery-ui.min.css": "themes/base/minified/jquery-ui.min.css"
-			},
-			dest: "dist/<%= files.dist %>"
-		},
-		dist_min: {
-			src: "dist/minified/**/*",
-			strip: /^dist/,
-			dest: "dist/<%= files.dist %>/ui"
-		},
-		dist_css_min: {
-			src: "dist/themes/base/minified/*.css",
-			strip: /^dist/,
-			dest: "dist/<%= files.dist %>"
-		},
 		dist_units_images: {
 			src: "themes/base/images/*",
 			strip: /^themes\/base\//,
 			dest: "dist/"
-		},
-		dist_min_images: {
-			src: "themes/base/images/*",
-			strip: /^themes\/base\//,
-			dest: "dist/<%= files.dist %>/themes/base/minified"
-		},
-		cdn: {
-			src: [
-				"AUTHORS.txt",
-				"MIT-LICENSE.txt",
-				"ui/*.js",
-				"package.json"
-			],
-			renames: {
-				"dist/jquery-ui.js": "jquery-ui.js",
-				"dist/jquery-ui.min.js": "jquery-ui.min.js",
-				"dist/i18n/jquery-ui-i18n.js": "i18n/jquery-ui-i18n.js",
-				"dist/i18n/jquery-ui-i18n.min.js": "i18n/jquery-ui-i18n.min.js"
-			},
-			dest: "dist/<%= files.cdn %>"
-		},
-		cdn_i18n: {
-			src: "ui/i18n/jquery.ui.datepicker-*.js",
-			strip: "ui/",
-			dest: "dist/<%= files.cdn %>"
-		},
-		cdn_i18n_min: {
-			src: "dist/minified/i18n/jquery.ui.datepicker-*.js",
-			strip: "dist/minified",
-			dest: "dist/<%= files.cdn %>"
-		},
-		cdn_min: {
-			src: "dist/minified/*.js",
-			strip: /^dist\/minified/,
-			dest: "dist/<%= files.cdn %>/ui"
-		},
-		cdn_themes: {
-			src: "dist/<%= files.themes %>/themes/**/*",
-			strip: "dist/<%= files.themes %>",
-			dest: "dist/<%= files.cdn %>"
-		},
-		themes: {
-			src: [
-				"AUTHORS.txt",
-				"MIT-LICENSE.txt",
-				"package.json"
-			],
-			dest: "dist/<%= files.themes %>"
-		}
-	},
-	zip: {
-		dist: {
-			src: "<%= files.dist %>",
-			dest: "<%= files.dist %>.zip"
-		},
-		cdn: {
-			src: "<%= files.cdn %>",
-			dest: "<%= files.cdn %>.zip"
-		},
-		themes: {
-			src: "<%= files.themes %>",
-			dest: "<%= files.themes %>.zip"
-		}
-	},
-	md5: {
-		dist: {
-			src: "dist/<%= files.dist %>",
-			dest: "dist/<%= files.dist %>/MANIFEST"
-		},
-		cdn: {
-			src: "dist/<%= files.cdn %>",
-			dest: "dist/<%= files.cdn %>/MANIFEST"
-		},
-		themes: {
-			src: "dist/<%= files.themes %>",
-			dest: "dist/<%= files.themes %>/MANIFEST"
 		}
 	},
 	qunit: {
@@ -363,9 +249,8 @@ grunt.registerTask( "lint", [ "jshint", "csslint", "htmllint" ] );
 grunt.registerTask( "test", [ "qunit" ] );
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
+
+// "copy:dist_units_images" is used by unit tests
 grunt.registerTask( "build", [ "concat", "uglify", "cssmin", "copy:dist_units_images" ] );
-grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist".split( " " ) );
-grunt.registerTask( "release_themes", "release generate_themes copy:themes md5:themes zip:themes".split( " " ) );
-grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_themes md5:cdn zip:cdn".split( " " ) );
 
 };
