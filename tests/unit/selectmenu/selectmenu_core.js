@@ -163,8 +163,7 @@ $.each([
 		var links,
 			element = $( settings.selector ).selectmenu(),
 			button = element.selectmenu( "widget" ),
-			menu = element.selectmenu( "menuWidget" ),
-			options = element.find( "option" );
+			menu = element.selectmenu( "menuWidget" );
 
 		// init menu
 		button.simulate( "focus" );
