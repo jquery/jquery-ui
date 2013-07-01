@@ -100,7 +100,7 @@ $.each([
 		setTimeout(function() {
 			links = menu.find("li.ui-menu-item a");
 
-			button.simulate( "click" );
+			button.trigger( "click" );
 			menu.find( "a" ).last().simulate( "mouseover" ).trigger( "click" );
 			equal(
 				menu.attr( "aria-activedescendant" ),
@@ -137,10 +137,10 @@ $.each([
 		setTimeout(function() {
 			links = menu.find( "li.ui-menu-item a" );
 			// open menu and click first item
-			button.simulate( "click" );
+			button.trigger( "click" );
 			links.first().simulate( "mouseover" ).trigger( "click" );
 			// open menu again and hover item
-			button.simulate( "click" );
+			button.trigger( "click" );
 			links.eq( 3 ).simulate( "mouseover" );
 			// close and use keyboard control on button
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );

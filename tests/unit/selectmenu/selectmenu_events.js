@@ -29,8 +29,8 @@ asyncTest( "change", function () {
 	button.simulate( "focus" );
 
 	setTimeout(function() {
-		button.simulate( "click" );
-		menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
+		button.trigger( "click" );
+		menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).trigger( "click" );
 		start();
 	}, 1 );
 });
@@ -49,7 +49,7 @@ test( "close", function () {
 	this.element.selectmenu( "open" ).selectmenu( "close" );
 
 	this.element.selectmenu( "open" );
-	$( "body" ).simulate( "click" );
+	$( "body" ).trigger( "click" );
 });
 
 
@@ -78,7 +78,7 @@ asyncTest( "focus", function () {
 	setTimeout(function() {
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 
-		button.simulate( "click" );
+		button.trigger( "click" );
 		links = menu.find( "li.ui-menu-item a" );
 		optionIndex = 0;
 		links.eq( optionIndex ).simulate( "mouseover" );
@@ -126,8 +126,8 @@ asyncTest( "select", function () {
 	button.simulate( "focus" );
 
 	setTimeout(function() {
-		button.simulate( "click" );
-		menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).simulate( "click" );
+		button.trigger( "click" );
+		menu.find( "a" ).eq( optionIndex ).simulate( "mouseover" ).trigger( "click" );
 		start();
 	}, 1 );
 });
