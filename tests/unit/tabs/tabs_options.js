@@ -144,10 +144,11 @@ test( "{ collapsible: true }", function() {
 });
 
 test( "disabled", function() {
-	expect( 22 );
+	expect( 23 );
 
 	// fully enabled by default
-	var element = $( "#tabs1" ).tabs();
+	var event,
+		element = $( "#tabs1" ).tabs();
 	disabled( element, false );
 
 	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
@@ -177,6 +178,10 @@ test( "disabled", function() {
 	ok( !element.tabs( "widget" ).hasClass( "ui-state-disabled" ), "after: wrapper doesn't have ui-state-disabled class" );
 	ok( !element.tabs( "widget" ).hasClass( "ui-tabs-disabled" ), "after: wrapper doesn't have ui-tabs-disabled class" );
 	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
+
+	event = $.Event( "click" );
+	element.find( ".ui-tabs-anchor" ).eq( 0 ).trigger( event );
+	ok( event.isDefaultPrevented(), "click is prevented for disabled tab" );
 
 	// enable all tabs
 	element.tabs( "option", "disabled", [] );
