@@ -27,6 +27,8 @@
 			$("#timepicker3").timepicker({ ampm: false });
 			$("#timepicker4").timepicker({ seconds: false });
 			$("#timepicker5").timepicker({ ampm: false, seconds: false });
+			$("#timepicker6").timepicker({ ampm: false, seconds: false, clearEmpty: true });
+			$("#timepicker7").timepicker({ disabled: true });
 		}
 		setup();
 	});
@@ -50,6 +52,10 @@
 		<input id="timepicker4">
 		<label>Timepicker - <code>{ ampm: false, seconds: false }</code></label>
 		<input id="timepicker5">
+		<label>Timepicker - <code>{ ampm: false, seconds: false, clearEmpty: true }</code></label>
+		<input id="timepicker6">
+        	<label>Timepicker - <code>{ disabled: true }</code></label>
+		<input id="timepicker7">
 		<label>Globalize Culture Selector</label>
 		<select id="culture" name="culture">
 			<option value="en-US">en-US</option>

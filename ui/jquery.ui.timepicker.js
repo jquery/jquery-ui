@@ -17,7 +17,9 @@
 function makeBetweenMaskFunction( min, max, def, pad ) {
 	return function( value ) {
 		if ( !value ) {
-			return def;
+			if ( !allowEmpty ) {
+				return def;
+			}
 		}
 		value = parseInt( value, 10 );
 		if ( value >= min && value <= max ) {
@@ -26,8 +28,9 @@ function makeBetweenMaskFunction( min, max, def, pad ) {
 	};
 }
 
-var formatNonPaddedHours = /\b(h)(?=:)/i,
-	format12Hour = /h/g,
+var formatNonPaddedHours = /\b(h)(?=>?:)/i,
+	format12Hour = /_h/g,
+	allowEmpty = false,
 	maskDefinitions = {
 		_h: makeBetweenMaskFunction( 1, 12, "12", " " ),
 		hh: makeBetweenMaskFunction( 1, 12, "12", "0" ),
@@ -42,20 +45,26 @@ $.widget( "ui.timepicker", {
 	defaultElement: "<input>",
 	options: {
 		ampm: true,
-		seconds: true
+		seconds: true,
+		clearEmpty: false,
+		disabled: false,
+		page: 1
 	},
 	_create: function() {
 
 		// handles globalization options
 		this.element.mask({
 			mask: this._generateMask(),
-			clearEmpty: false,
+			clearEmpty: this.options.clearEmpty,
 			definitions: $.extend({
 				tt: $.proxy( this, "_validAmPm" )
 			}, maskDefinitions )
 		});
 		this.mask = this.element.data( "ui-mask" );
-		this.element.spinner();
+		this.element.spinner({
+			disabled: this.options.disabled,
+			page: this.options.page
+		});
 		this.spinner = this.element.data( "ui-spinner" );
 		$.extend( this.spinner, {
 			_parse: $.proxy( this, "_spinnerParse" ),
@@ -91,7 +100,8 @@ $.widget( "ui.timepicker", {
 			buffer = this.mask.buffer,
 			bufferLength = buffer.length,
 			maskDefinitions = this.mask.options.definitions,
-			ampm = this._getCulture();
+			ampm = this._getCulture(),
+			shouldClear = true;
 
 		if ( value == null ) {
 
@@ -99,32 +109,45 @@ $.widget( "ui.timepicker", {
 			value = [ 0, "00", "00" ];
 			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
 				bufferObject = buffer[ bufferIndex ];
-				if (
-					bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ||
-					bufferObject.valid === maskDefinitions._H || bufferObject.valid === maskDefinitions.HH
-				) {
-					value[ 0 ] = parseInt( bufferObject.value, 10 );
-				} else if ( bufferObject.valid === maskDefinitions.mm ) {
-					value[ 1 ] = bufferObject.value;
-				} else if ( bufferObject.valid === maskDefinitions.ss ) {
-					value[ 2 ] = bufferObject.value;
-				} else if ( bufferObject.valid === maskDefinitions.tt ) {
-					value[ 0 ] %= 12;
-					if ( jQuery.inArray( bufferObject.value, ampm.PM ) > -1 ) {
-						value[ 0 ] += 12;
+				if ( bufferObject.value ) {
+					shouldClear = false;
+					if (
+						bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ||
+						bufferObject.valid === maskDefinitions._H || bufferObject.valid === maskDefinitions.HH
+					) {
+						value[ 0 ] = parseInt( bufferObject.value, 10 );
+					} else if ( bufferObject.valid === maskDefinitions.mm ) {
+						value[ 1 ] = bufferObject.value;
+					} else if ( bufferObject.valid === maskDefinitions.ss ) {
+						value[ 2 ] = bufferObject.value;
+					} else if ( bufferObject.valid === maskDefinitions.tt ) {
+						value[ 0 ] %= 12;
+						if ( jQuery.inArray( bufferObject.value, ampm.PM ) > -1 ) {
+							value[ 0 ] += 12;
+						}
 					}
 				}
 			}
 
+			if ( shouldClear && this.options.clearEmpty ) {
+				return "";
+			}
 			// pads with zeros
 			value[ 0 ] = maskDefinitions.HH( "" + value[ 0 ] );
 			return value.join( ":" );
 		} else {
 
+			if ( value !== "" ) {
+				shouldClear = false;
+			}
 			// setter for values
 			value = value.split( ":" );
 			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
 				bufferObject = buffer[ bufferIndex ];
+				if ( shouldClear && this.options.clearEmpty ) {
+					bufferObject.value = "";
+                        		continue;
+                    		}
 				if ( bufferObject.valid === maskDefinitions._h || bufferObject.valid === maskDefinitions.hh ) {
 
 					// 12 hr mode
@@ -147,7 +170,13 @@ $.widget( "ui.timepicker", {
 
 	_events: {
 		click: "_checkPosition",
-		keydown: "_checkPosition"
+		keydown: "_checkPosition",
+		focus: function() {
+			allowEmpty = this.options.clearEmpty;
+		},
+		blur: function() {
+			allowEmpty = false;
+		}
 	},
 	_checkPosition: function( event ) {
 		var position = this.mask._caret(),
@@ -188,7 +217,7 @@ $.widget( "ui.timepicker", {
 		mask = mask.replace( formatNonPaddedHours, "_$1" );
 
 		if ( !this.options.ampm ) {
-			mask = mask.replace( format12Hour, "H" ).replace( / <?tt>?/, "" );
+			mask = mask.replace( format12Hour, "HH" ).replace( / <?tt>?/, "" );
 		}
 
 		return mask;
@@ -229,6 +258,9 @@ $.widget( "ui.timepicker", {
 		// update the mask, all of the option changes have a chance of changing it
 		this.element.mask( "option", "mask", this._generateMask() );
 
+		// update the spinner enabling
+		this.element.spinner( "option", "disabled", options.disabled );
+
 		// restore the value from before the option changed
 		this.value( currentValue );
 	},
@@ -254,7 +286,10 @@ $.widget( "ui.timepicker", {
 			valid = this._getCulture();
 
 		if ( val === "" ) {
-			return valid.PM && valid.PM[0];
+			if ( !allowEmpty ) {
+				return valid.PM && valid.PM[ 0 ];
+			}
+			return "";
 		}
 
 		for ( ampm in { AM: 1, PM: 1 } ) {
