@@ -358,10 +358,10 @@ $.Widget.prototype = {
 	},
 
 	enable: function() {
-		return this._setOption( "disabled", false );
+		return this._setOptions( { "disabled": false } );
 	},
 	disable: function() {
-		return this._setOption( "disabled", true );
+		return this._setOptions( { "disabled": true } );
 	},
 
 	_on: function( suppressDisabledCheck, element, handlers ) {
