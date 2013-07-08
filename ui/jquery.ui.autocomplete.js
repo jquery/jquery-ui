@@ -412,15 +412,15 @@ $.widget( "ui.autocomplete", {
 		this.element.addClass( "ui-autocomplete-loading" );
 		this.cancelSearch = false;
 
-		this.source( { term: value }, this._response() );
+		this.source( { term: value }, this._response( { term: value } ) );
 	},
 
-	_response: function() {
+	_response: function( properties ) {
 		var index = ++this.requestIndex;
 
 		return $.proxy(function( content ) {
 			if ( index === this.requestIndex ) {
-				this.__response( content );
+				this.__response( content, properties );
 			}
 
 			this.pending--;
@@ -430,11 +430,11 @@ $.widget( "ui.autocomplete", {
 		}, this );
 	},
 
-	__response: function( content ) {
+	__response: function( content, properties ) {
 		if ( content ) {
 			content = this._normalize( content );
 		}
-		this._trigger( "response", null, { content: content } );
+		this._trigger( "response", null, { content: content, term: properties.term } );
 		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
 			this._suggest( content );
 			this._trigger( "open" );
