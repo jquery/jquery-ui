@@ -16,6 +16,12 @@ asyncTest( "focus - original functionality", function() {
 
 asyncTest( "focus", function() {
 	expect( 2 );
+
+	// support: IE 8
+	// IE sometimes gets confused about what's focused if we don't explicitly
+	// focus a different element first
+	$( "body" ).focus();
+
 	$( "#inputTabindex0" )
 		.one( "focus", function() {
 			ok( true, "event triggered" );

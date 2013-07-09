@@ -245,7 +245,7 @@ grunt.initConfig({
 });
 
 grunt.registerTask( "default", [ "lint", "test" ] );
-grunt.registerTask( "lint", [ "jshint", "csslint", "htmllint" ] );
+grunt.registerTask( "lint", [ "asciilint", "jshint", "csslint", "htmllint" ] );
 grunt.registerTask( "test", [ "qunit" ] );
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
