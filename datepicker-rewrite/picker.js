@@ -259,7 +259,7 @@ $.widget( "ui.datepicker", {
 		this.date.refresh();
 
 		this._createDatepicker();
-		this.picker.find( "button, .ui-datepicker-header a" ).button();
+		this.picker.find( "button" ).button();
 
 		if ( this.inline ) {
 			this.picker.children().addClass( "ui-datepicker-inline" );
@@ -328,21 +328,21 @@ $.widget( "ui.datepicker", {
 	},
 	_buildPreviousLink: function() {
 		var labels = Globalize.localize( "datepicker" );
-		return "<a href='#' class='ui-datepicker-prev ui-corner-all' " +
+		return "<button class='ui-datepicker-prev ui-corner-all' " +
 			"title='" + labels.prevText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-w'>" +
 					labels.prevText +
 				"</span>" +
-			"</a>";
+			"</button>";
 	},
 	_buildNextLink: function() {
 		var labels = Globalize.localize( "datepicker" );
-		return "<a href='#' class='ui-datepicker-next ui-corner-all' " +
+		return "<button class='ui-datepicker-next ui-corner-all' " +
 			"title='" + labels.nextText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-e'>" +
 					labels.nextText +
 				"</span>" +
-			"</a>";
+			"</button>";
 	},
 	_buildTitlebar: function() {
 		var labels = Globalize.localize( "datepicker" );
