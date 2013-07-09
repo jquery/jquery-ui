@@ -71,7 +71,7 @@ $.widget( "ui.selectmenu", {
 
 		// Create button
 		this.button = $( "<span>", {
-			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
+			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all ui-front",
 			tabindex: tabindex || this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			width: this.element.outerWidth(),
@@ -110,7 +110,7 @@ $.widget( "ui.selectmenu", {
 
 		// Wrap menu
 		this.menuWrap = $( "<div>", {
-				"class": "ui-selectmenu-menu",
+				"class": "ui-selectmenu-menu ui-front",
 				outerWidth: this.button.outerWidth()
 			})
 			.append( this.menu )
