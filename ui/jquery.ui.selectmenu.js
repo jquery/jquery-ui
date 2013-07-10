@@ -192,11 +192,15 @@ $.widget( "ui.selectmenu", {
 
 		this.isOpen = true;
 		this._toggleAttr();
-		this.menuWrap.position( $.extend( { of: this.button }, this.options.position ) );
+		this._position();
 
 		this._on( this.document, this._documentClick );
 
 		this._trigger( "open", event );
+	},
+	
+	_position: function() {
+		this.menuWrap.position( $.extend( { of: this.button }, this.options.position ) );
 	},
 
 	close: function( event ) {
