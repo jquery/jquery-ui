@@ -24,6 +24,11 @@
 	width: 19px;
 	height: 18px;
 }
+.ui-datepicker .ui-datepicker-prev:not(.ui-state-hover):not(.ui-state-focus),
+.ui-datepicker .ui-datepicker-next:not(.ui-state-hover):not(.ui-state-focus) {
+	background: none;
+	border: none;
+}
 .ui-datepicker .ui-datepicker-prev-hover,
 .ui-datepicker .ui-datepicker-next-hover {
 	top: 1px;
