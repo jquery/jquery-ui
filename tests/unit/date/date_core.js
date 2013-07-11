@@ -144,16 +144,17 @@ test('Days', 1, function(){
 	ok(date.days(), 'Date days() returns');
 });
 
-test('Months', 1, function(){
-	var date = $.date();
-	ok(date.months(1), 'Months returns')
+test( "Months", 5, function(){
+	var date = $.date(),
+		firstMonth = date.months( 1 )[ 0 ],
+		lastMonth = date.months( 1 )[ 1 ];
 
-	var dateMonth1 = date.clone();
-	dateMonth1.first = true;
-	var dateMonth2 = date.clone().adjust('M',1);
-	dateMonth2.last = true;
-	//TODO compare objects
-	//deepEqual(date.months(1), [ dateMonth1, dateMonth2 ], 'Months returned correctly');
+	ok( firstMonth.first );
+	ok( !lastMonth.first );
+	ok( lastMonth.last );
+	ok( !lastMonth.first );
+
+	ok( firstMonth.month() == ( lastMonth.month() - 1 ) );
 });
 
 test('iso8601Week', 2, function(){
