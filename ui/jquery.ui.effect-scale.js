@@ -12,9 +12,23 @@
  *	jquery.ui.effect.js
  *	jquery.ui.effect-size.js
  */
-(function( $, undefined ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
 
-$.effects.effect.scale = function( o, done ) {
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./jquery.ui.effect",
+			"./jquery.ui.effect-size"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
+
+return $.effects.effect.scale = function( o, done ) {
 
 	// Create element
 	var el = $( this ),
@@ -76,4 +90,4 @@ $.effects.effect.scale = function( o, done ) {
 
 };
 
-})(jQuery);
+}));

@@ -13,9 +13,24 @@
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
  */
-(function( $, undefined ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
 
-$.widget( "ui.menu", {
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./jquery.ui.core",
+			"./jquery.ui.widget",
+			"./jquery.ui.position"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
+
+return $.widget( "ui.menu", {
 	version: "@VERSION",
 	defaultElement: "<ul>",
 	delay: 300,
@@ -627,4 +642,4 @@ $.widget( "ui.menu", {
 	}
 });
 
-}( jQuery ));
+}));

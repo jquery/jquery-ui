@@ -13,7 +13,22 @@
  *  jquery.ui.widget.js
  *  jquery.ui.button.js
  */
-(function( $ ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./jquery.ui.core",
+			"./jquery.ui.widget",
+			"./jquery.ui.button"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
 
 function spinner_modifier( fn ) {
 	return function() {
@@ -26,7 +41,7 @@ function spinner_modifier( fn ) {
 	};
 }
 
-$.widget( "ui.spinner", {
+return $.widget( "ui.spinner", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
@@ -502,4 +517,4 @@ $.widget( "ui.spinner", {
 	}
 });
 
-}( jQuery ) );
+}));

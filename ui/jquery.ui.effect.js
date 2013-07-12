@@ -8,7 +8,17 @@
  *
  * http://api.jqueryui.com/category/effects-core/
  */
-(function($, undefined) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [ "jquery" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
 
 var dataSpace = "ui-effects-";
 
@@ -1282,4 +1292,6 @@ $.each( baseEasings, function( name, easeIn ) {
 
 })();
 
-})(jQuery);
+return $.effects;
+
+}));

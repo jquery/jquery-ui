@@ -16,7 +16,7 @@
  */
 (function( $, undefined ) {
 
-$.widget( "ui.selectmenu", {
+return $.widget( "ui.selectmenu", {
 	version: "@VERSION",
 	defaultElement: "<select>",
 	options: {

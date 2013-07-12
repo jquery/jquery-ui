@@ -11,7 +11,20 @@
  * Depends:
  *	jquery.ui.core.js
  */
-(function( $, undefined ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./jquery.ui.core"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
 
 $.extend($.ui, { datepicker: { version: "@VERSION" } });
 
@@ -2056,4 +2069,6 @@ $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
 $.datepicker.version = "@VERSION";
 
-})(jQuery);
+return $.datepicker;
+
+}));

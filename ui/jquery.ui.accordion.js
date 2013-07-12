@@ -12,9 +12,23 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  */
-(function( $, undefined ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
 
-$.widget( "ui.accordion", {
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./jquery.ui.core",
+			"./jquery.ui.widget"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
+
+return $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
 		active: 0,
@@ -562,4 +576,4 @@ $.widget( "ui.accordion", {
 	}
 });
 
-})( jQuery );
+}));
