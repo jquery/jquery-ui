@@ -603,7 +603,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 			if (sortable && !sortable.options.disabled) {
 				inst.sortables.push({
 					instance: sortable,
-					shouldRevert: sortable.options.revert
+					sortableRevert: sortable.options.revert
 				});
 				sortable.refreshPositions();	// Call the sortable's refreshPositions at drag start to refresh the containerCache since the sortable container cache is used in drag and needs to be up to date (this will ensure it's initialised as well as being kept in step with any changes that might have happened on the page).
 				sortable._trigger("activate", event, uiSortable);
@@ -626,9 +626,14 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
 				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
 
-				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert: "valid/invalid"
-				if(this.shouldRevert) {
-					this.instance.options.revert = this.shouldRevert;
+				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert. The sortable revert can correspond to either draggable revert ("valid/invalid") or revertDuration if the value is numeric. We need to check that and set the appropriate property.
+				if(this.sortableRevert) {
+					if (isNaN(this.sortableRevert)) {
+						this.instance.options.revert = true;
+					}
+					else {
+						this.instance.options.revertDuration = this.sortableRevert;
+					}
 				}
 
 				//Trigger the stop of the sortable
