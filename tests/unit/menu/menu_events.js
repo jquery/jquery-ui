@@ -598,4 +598,25 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 	element[0].focus();
 });
 
+test( "ensure default is prevented when clicking on anchors in disabled menus ", function() {
+	expect( 1 );
+	var element = $( "#menu1" ).menu();
+	element.bind("click.menu", function(event) {
+		if ( !event.isDefaultPrevented() ) {
+			log();
+		}
+	});
+	log( "click", true );
+	click( $( "#menu1" ), "1" );
+	log( "afterclick,disable" );
+	element.menu("option", "disabled", true);
+	click( element, "2" );
+	click( $( "#menu1" ), "3" );
+	click( element, "1" );
+	log( "enable" );
+	element.menu("option", "disabled", false);
+	click( element, "3" );
+	equal( logOutput(), "click,1,afterclick,disable,enable,3", "Click order not valid." );
+});
+
 })( jQuery );
