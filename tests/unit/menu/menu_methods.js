@@ -65,7 +65,7 @@ test( "refresh submenu", function() {
 	var element = $( "#menu2" ).menu();
 	equal( element.find( "ul:first .ui-menu-item" ).length, 3 );
 	element.find( "ul" ).addBack().append( "<li><a href=\"#\">New Item</a></li>" );
-	element.menu("refresh");
+	element.menu( "refresh" );
 	equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
 });
 
@@ -79,7 +79,7 @@ test( "refresh icons (see #9377)", function() {
 	ok( element.hasClass( "ui-menu-icons" ) );
 	element.find( "li:first a" ).html( "Save" );
 	element.menu( "refresh" );
-	ok( !element.hasClass( "ui-menu-icons") );
+	ok( !element.hasClass( "ui-menu-icons" ) );
 });
 
 test( "widget", function() {
