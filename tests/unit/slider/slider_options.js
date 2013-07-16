@@ -119,7 +119,7 @@ test( "orientation", function() {
 // value option/method: the value option is not restricted by min/max/step.
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 test( "step", function() {
-	expect( 9 );
+	expect( 11 );
 	element = $( "<div></div>" ).slider({
 		min: 0,
 		value: 0,
@@ -161,6 +161,19 @@ test( "step", function() {
 	equal( element.slider( "value" ), 20 );
 
 	element.slider( "destroy" );
+
+
+	element = $( "<div></div>" ).slider({
+		min: 0,
+		value: 10,
+		step: 3,
+		max: 10
+	});
+	equal(element.slider( "value" ), 9, "starting value is corrected to 9" );
+
+	element.slider( "option", "value", 0 );
+	handle().simulate( "keydown", { keyCode: $.ui.keyCode.END } );
+	equal(element.slider( "value" ), 9 );
 });
 
 //test( "value", function() {
