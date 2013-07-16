@@ -512,11 +512,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 	// returns the step-aligned value that val is closest to, between (inclusive) min and max
 	_trimAlignValue: function( val ) {
-		if ( val <= this._valueMin() ) {
-			return this._valueMin();
+		if ( val < this._valueMin() ) {
+			val = this._valueMin();
 		}
-		if ( val >= this._valueMax() ) {
-			return this._valueMax();
+		if ( val > this._valueMax() ) {
+			val = this._valueMax();
 		}
 		var step = ( this.options.step > 0 ) ? this.options.step : 1,
 			valModStep = (val - this._valueMin()) % step,
