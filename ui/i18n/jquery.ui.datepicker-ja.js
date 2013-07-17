@@ -1,7 +1,17 @@
 /* Japanese initialisation for the jQuery UI date picker plugin. */
 /* Written by Kentaro SATO (kentaro@ranvis.com). */
-jQuery(function($){
-	$.datepicker.regional['ja'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['ja'] = {
 		closeText: '閉じる',
 		prevText: '&#x3C;前',
 		nextText: '次&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: true,
 		yearSuffix: '年'};
-	$.datepicker.setDefaults($.datepicker.regional['ja']);
-});
+	datepicker.setDefaults(datepicker.regional['ja']);
+
+	return datepicker.regional['ja'];
+
+}));

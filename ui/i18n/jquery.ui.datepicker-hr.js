@@ -1,7 +1,17 @@
 /* Croatian i18n for the jQuery UI date picker plugin. */
 /* Written by Vjekoslav Nesek. */
-jQuery(function($){
-	$.datepicker.regional['hr'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['hr'] = {
 		closeText: 'Zatvori',
 		prevText: '&#x3C;',
 		nextText: '&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['hr']);
-});
+	datepicker.setDefaults(datepicker.regional['hr']);
+
+	return datepicker.regional['hr'];
+
+}));

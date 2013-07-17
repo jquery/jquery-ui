@@ -1,7 +1,17 @@
 /* Polish initialisation for the jQuery UI date picker plugin. */
 /* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
-jQuery(function($){
-	$.datepicker.regional['pl'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['pl'] = {
 		closeText: 'Zamknij',
 		prevText: '&#x3C;Poprzedni',
 		nextText: 'Następny&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['pl']);
-});
+	datepicker.setDefaults(datepicker.regional['pl']);
+
+	return datepicker.regional['pl'];
+
+}));

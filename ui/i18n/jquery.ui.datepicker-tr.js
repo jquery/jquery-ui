@@ -1,7 +1,17 @@
 /* Turkish initialisation for the jQuery UI date picker plugin. */
 /* Written by Izzet Emre Erkan (kara@karalamalar.net). */
-jQuery(function($){
-	$.datepicker.regional['tr'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['tr'] = {
 		closeText: 'kapat',
 		prevText: '&#x3C;geri',
 		nextText: 'ileri&#x3e',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['tr']);
-});
+	datepicker.setDefaults(datepicker.regional['tr']);
+
+	return datepicker.regional['tr'];
+
+}));

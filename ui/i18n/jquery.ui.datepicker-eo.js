@@ -1,7 +1,17 @@
 /* Esperanto initialisation for the jQuery UI date picker plugin. */
 /* Written by Olivier M. (olivierweb@ifrance.com). */
-jQuery(function($){
-	$.datepicker.regional['eo'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['eo'] = {
 		closeText: 'Fermi',
 		prevText: '&#x3C;Anta',
 		nextText: 'Sekv&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['eo']);
-});
+	datepicker.setDefaults(datepicker.regional['eo']);
+
+	return datepicker.regional['eo'];
+
+}));

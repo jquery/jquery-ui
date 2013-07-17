@@ -1,7 +1,17 @@
 /* Latvian (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* @author Arturas Paleicikas <arturas.paleicikas@metasite.net> */
-jQuery(function($){
-	$.datepicker.regional['lv'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['lv'] = {
 		closeText: 'Aizvērt',
 		prevText: 'Iepr.',
 		nextText: 'Nāk.',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['lv']);
-});
+	datepicker.setDefaults(datepicker.regional['lv']);
+
+	return datepicker.regional['lv'];
+
+}));

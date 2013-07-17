@@ -2,8 +2,18 @@
 /* Written by Keith Wood (kbwood{at}iinet.com.au),
 			  Stéphane Nahmani (sholby@sholby.net),
 			  Stéphane Raimbault <stephane.raimbault@gmail.com> */
-jQuery(function($){
-	$.datepicker.regional['fr'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['fr'] = {
 		closeText: 'Fermer',
 		prevText: 'Précédent',
 		nextText: 'Suivant',
@@ -21,5 +31,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['fr']);
-});
+	datepicker.setDefaults(datepicker.regional['fr']);
+
+	return datepicker.regional['fr'];
+
+}));

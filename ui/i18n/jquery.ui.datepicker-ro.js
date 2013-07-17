@@ -3,8 +3,18 @@
  * Written by Edmond L. (ll_edmond@walla.com)
  * and Ionut G. Stan (ionut.g.stan@gmail.com)
  */
-jQuery(function($){
-	$.datepicker.regional['ro'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['ro'] = {
 		closeText: 'Închide',
 		prevText: '&#xAB; Luna precedentă',
 		nextText: 'Luna următoare &#xBB;',
@@ -22,5 +32,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['ro']);
-});
+	datepicker.setDefaults(datepicker.regional['ro']);
+
+	return datepicker.regional['ro'];
+
+}));

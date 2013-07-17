@@ -1,7 +1,17 @@
 /* Azerbaijani (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Jamil Najafov (necefov33@gmail.com). */
-jQuery(function($) {
-	$.datepicker.regional['az'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['az'] = {
 		closeText: 'Bağla',
 		prevText: '&#x3C;Geri',
 		nextText: 'İrəli&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($) {
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['az']);
-});
+	datepicker.setDefaults(datepicker.regional['az']);
+
+	return datepicker.regional['az'];
+
+}));

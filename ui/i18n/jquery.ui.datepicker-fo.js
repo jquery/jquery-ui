@@ -1,7 +1,17 @@
 /* Faroese initialisation for the jQuery UI date picker plugin */
 /* Written by Sverri Mohr Olsen, sverrimo@gmail.com */
-jQuery(function($){
-	$.datepicker.regional['fo'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['fo'] = {
 		closeText: 'Lat aftur',
 		prevText: '&#x3C;Fyrra',
 		nextText: 'Næsta&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['fo']);
-});
+	datepicker.setDefaults(datepicker.regional['fo']);
+
+	return datepicker.regional['fo'];
+
+}));

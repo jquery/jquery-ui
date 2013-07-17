@@ -1,7 +1,17 @@
 /* Tamil (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by S A Sureshkumar (saskumar@live.com). */
-jQuery(function($){
-	$.datepicker.regional['ta'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['ta'] = {
 		closeText: 'மூடு',
 		prevText: 'முன்னையது',
 		nextText: 'அடுத்தது',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['ta']);
-});
+	datepicker.setDefaults(datepicker.regional['ta']);
+
+	return datepicker.regional['ta'];
+
+}));

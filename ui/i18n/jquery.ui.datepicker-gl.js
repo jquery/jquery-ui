@@ -1,7 +1,17 @@
 /* Galician localization for 'UI date picker' jQuery extension. */
 /* Translated by Jorge Barreiro <yortx.barry@gmail.com>. */
-jQuery(function($){
-	$.datepicker.regional['gl'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['gl'] = {
 		closeText: 'Pechar',
 		prevText: '&#x3C;Ant',
 		nextText: 'Seg&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['gl']);
-});
+	datepicker.setDefaults(datepicker.regional['gl']);
+
+	return datepicker.regional['gl'];
+
+}));

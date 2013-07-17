@@ -1,8 +1,18 @@
 /* Norwegian initialisation for the jQuery UI date picker plugin. */
 /* Written by Naimdjon Takhirov (naimdjon@gmail.com). */
 
-jQuery(function($){
-	$.datepicker.regional['no'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['no'] = {
 		closeText: 'Lukk',
 		prevText: '&#xAB;Forrige',
 		nextText: 'Neste&#xBB;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-	$.datepicker.setDefaults($.datepicker.regional['no']);
-});
+	datepicker.setDefaults(datepicker.regional['no']);
+
+	return datepicker.regional['no'];
+
+}));

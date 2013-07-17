@@ -1,7 +1,17 @@
 /* Estonian initialisation for the jQuery UI date picker plugin. */
 /* Written by Mart Sõmermaa (mrts.pydev at gmail com). */
-jQuery(function($){
-	$.datepicker.regional['et'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['et'] = {
 		closeText: 'Sulge',
 		prevText: 'Eelnev',
 		nextText: 'Järgnev',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['et']);
-});
+	datepicker.setDefaults(datepicker.regional['et']);
+
+	return datepicker.regional['et'];
+
+}));

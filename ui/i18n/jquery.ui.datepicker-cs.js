@@ -1,7 +1,17 @@
 /* Czech initialisation for the jQuery UI date picker plugin. */
 /* Written by Tomas Muller (tomas@tomas-muller.net). */
-jQuery(function($){
-	$.datepicker.regional['cs'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['cs'] = {
 		closeText: 'Zavřít',
 		prevText: '&#x3C;Dříve',
 		nextText: 'Později&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['cs']);
-});
+	datepicker.setDefaults(datepicker.regional['cs']);
+
+	return datepicker.regional['cs'];
+
+}));

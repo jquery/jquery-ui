@@ -1,7 +1,17 @@
 /* Icelandic initialisation for the jQuery UI date picker plugin. */
 /* Written by Haukur H. Thorsson (haukur@eskill.is). */
-jQuery(function($){
-	$.datepicker.regional['is'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['is'] = {
 		closeText: 'Loka',
 		prevText: '&#x3C; Fyrri',
 		nextText: 'Næsti &#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['is']);
-});
+	datepicker.setDefaults(datepicker.regional['is']);
+
+	return datepicker.regional['is'];
+
+}));

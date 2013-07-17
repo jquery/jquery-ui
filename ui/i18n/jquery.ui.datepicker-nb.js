@@ -1,7 +1,17 @@
 /* Norwegian Bokmål initialisation for the jQuery UI date picker plugin. */
 /* Written by Bjørn Johansen (post@bjornjohansen.no). */
-jQuery(function($){
-	$.datepicker.regional['nb'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['nb'] = {
 		closeText: 'Lukk',
 		prevText: '&#xAB;Forrige',
 		nextText: 'Neste&#xBB;',
@@ -18,5 +28,8 @@ jQuery(function($){
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-	$.datepicker.setDefaults($.datepicker.regional['nb']);
-});
+	datepicker.setDefaults(datepicker.regional['nb']);
+
+	return datepicker.regional['nb'];
+
+}));

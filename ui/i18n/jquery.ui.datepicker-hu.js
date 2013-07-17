@@ -1,7 +1,17 @@
 /* Hungarian initialisation for the jQuery UI date picker plugin. */
-/* Written by Istvan Karaszi (jquery@spam.raszi.hu). */
-jQuery(function($){
-	$.datepicker.regional['hu'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "jquery", "../jquery.ui.datepicker"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['hu'] = {
 		closeText: 'bezár',
 		prevText: 'vissza',
 		nextText: 'előre',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: true,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['hu']);
-});
+	datepicker.setDefaults(datepicker.regional['hu']);
+
+	return datepicker.regional['hu'];
+
+}));

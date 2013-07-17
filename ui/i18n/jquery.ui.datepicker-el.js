@@ -1,7 +1,17 @@
 /* Greek (el) initialisation for the jQuery UI date picker plugin. */
 /* Written by Alex Cicovic (http://www.alexcicovic.com) */
-jQuery(function($){
-	$.datepicker.regional['el'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['el'] = {
 		closeText: 'Κλείσιμο',
 		prevText: 'Προηγούμενος',
 		nextText: 'Επόμενος',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['el']);
-});
+	datepicker.setDefaults(datepicker.regional['el']);
+
+	return datepicker.regional['el'];
+
+}));

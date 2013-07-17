@@ -1,7 +1,17 @@
 /* Kazakh (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Dmitriy Karasyov (dmitriy.karasyov@gmail.com). */
-jQuery(function($){
-	$.datepicker.regional['kk'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['kk'] = {
 		closeText: 'Жабу',
 		prevText: '&#x3C;Алдыңғы',
 		nextText: 'Келесі&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['kk']);
-});
+	datepicker.setDefaults(datepicker.regional['kk']);
+
+	return datepicker.regional['kk'];
+
+}));

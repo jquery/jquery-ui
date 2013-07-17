@@ -1,8 +1,18 @@
 /* Persian (Farsi) Translation for the jQuery UI date picker plugin. */
 /* Javad Mowlanezhad -- jmowla@gmail.com */
 /* Jalali calendar should supported soon! (Its implemented but I have to test it) */
-jQuery(function($) {
-	$.datepicker.regional['fa'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['fa'] = {
 		closeText: 'بستن',
 		prevText: '&#x3C;قبلی',
 		nextText: 'بعدی&#x3E;',
@@ -55,5 +65,8 @@ jQuery(function($) {
 		isRTL: true,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['fa']);
-});
+	datepicker.setDefaults(datepicker.regional['fa']);
+
+	return datepicker.regional['fa'];
+
+}));

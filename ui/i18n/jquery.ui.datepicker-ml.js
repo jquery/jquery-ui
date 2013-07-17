@@ -1,7 +1,17 @@
 /* Malayalam (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Saji Nediyanchath (saji89@gmail.com). */
-jQuery(function($){
-	$.datepicker.regional['ml'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['ml'] = {
 		closeText: 'ശരി',
 		prevText: 'മുന്നത്തെ',
 		nextText: 'അടുത്തത് ',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['ml']);
-});
+	datepicker.setDefaults(datepicker.regional['ml']);
+
+	return datepicker.regional['ml'];
+
+}));

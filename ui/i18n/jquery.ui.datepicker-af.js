@@ -1,7 +1,17 @@
 /* Afrikaans initialisation for the jQuery UI date picker plugin. */
 /* Written by Renier Pretorius. */
-jQuery(function($){
-	$.datepicker.regional['af'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['af'] = {
 		closeText: 'Selekteer',
 		prevText: 'Vorige',
 		nextText: 'Volgende',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['af']);
-});
+	datepicker.setDefaults(datepicker.regional['af']);
+
+	return datepicker.regional['af'];
+
+}));

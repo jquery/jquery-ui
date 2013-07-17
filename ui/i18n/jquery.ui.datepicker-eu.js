@@ -1,7 +1,17 @@
-/* Euskarako oinarria 'UI date picker' jquery-ko extentsioarentzat */
 /* Karrikas-ek itzulia (karrikas@karrikas.com) */
-jQuery(function($){
-	$.datepicker.regional['eu'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "jquery", "../jquery.ui.datepicker"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['eu'] = {
 		closeText: 'Egina',
 		prevText: '&#x3C;Aur',
 		nextText: 'Hur&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['eu']);
-});
+	datepicker.setDefaults(datepicker.regional['eu']);
+
+	return datepicker.regional['eu'];
+
+}));

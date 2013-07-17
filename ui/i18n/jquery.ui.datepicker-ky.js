@@ -1,7 +1,17 @@
 /* Kyrgyz (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Sergey Kartashov (ebishkek@yandex.ru). */
-jQuery(function($){
-	$.datepicker.regional['ky'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['ky'] = {
 		closeText: 'Жабуу',
 		prevText: '&#x3c;Мур',
 		nextText: 'Кий&#x3e;',
@@ -20,5 +30,8 @@ jQuery(function($){
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-	$.datepicker.setDefaults($.datepicker.regional['ky']);
-});
+	datepicker.setDefaults(datepicker.regional['ky']);
+
+	return datepicker.regional['ky'];
+
+}));

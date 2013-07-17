@@ -1,6 +1,16 @@
 /* Portuguese initialisation for the jQuery UI date picker plugin. */
-jQuery(function($){
-	$.datepicker.regional['pt'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['pt'] = {
 		closeText: 'Fechar',
 		prevText: 'Anterior',
 		nextText: 'Seguinte',
@@ -18,5 +28,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['pt']);
-});
+	datepicker.setDefaults(datepicker.regional['pt']);
+
+	return datepicker.regional['pt'];
+
+}));

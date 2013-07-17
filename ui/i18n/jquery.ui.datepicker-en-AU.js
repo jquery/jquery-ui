@@ -1,7 +1,17 @@
 /* English/Australia initialisation for the jQuery UI date picker plugin. */
 /* Based on the en-GB initialisation. */
-jQuery(function($){
-	$.datepicker.regional['en-AU'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['en-AU'] = {
 		closeText: 'Done',
 		prevText: 'Prev',
 		nextText: 'Next',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['en-AU']);
-});
+	datepicker.setDefaults(datepicker.regional['en-AU']);
+
+	return datepicker.regional['en-AU'];
+
+}));

@@ -1,7 +1,17 @@
 /* Bulgarian initialisation for the jQuery UI date picker plugin. */
 /* Written by Stoyan Kyosev (http://svest.org). */
-jQuery(function($){
-	$.datepicker.regional['bg'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['bg'] = {
 		closeText: 'затвори',
 		prevText: '&#x3C;назад',
 		nextText: 'напред&#x3E;',
@@ -20,5 +30,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['bg']);
-});
+	datepicker.setDefaults(datepicker.regional['bg']);
+
+	return datepicker.regional['bg'];
+
+}));

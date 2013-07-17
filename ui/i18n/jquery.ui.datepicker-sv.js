@@ -1,7 +1,17 @@
 /* Swedish initialisation for the jQuery UI date picker plugin. */
 /* Written by Anders Ekdahl ( anders@nomadiz.se). */
-jQuery(function($){
-	$.datepicker.regional['sv'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['sv'] = {
 		closeText: 'Stäng',
 		prevText: '&#xAB;Förra',
 		nextText: 'Nästa&#xBB;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['sv']);
-});
+	datepicker.setDefaults(datepicker.regional['sv']);
+
+	return datepicker.regional['sv'];
+
+}));

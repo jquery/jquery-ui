@@ -1,7 +1,17 @@
 /* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Ressol (ressol@gmail.com). */
-jQuery(function($){
-	$.datepicker.regional['zh-TW'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['zh-TW'] = {
 		closeText: '關閉',
 		prevText: '&#x3C;上月',
 		nextText: '下月&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: true,
 		yearSuffix: '年'};
-	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
-});
+	datepicker.setDefaults(datepicker.regional['zh-TW']);
+
+	return datepicker.regional['zh-TW'];
+
+}));

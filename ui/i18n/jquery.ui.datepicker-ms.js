@@ -1,7 +1,17 @@
 /* Malaysian initialisation for the jQuery UI date picker plugin. */
 /* Written by Mohd Nawawi Mohamad Jamili (nawawi@ronggeng.net). */
-jQuery(function($){
-	$.datepicker.regional['ms'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['ms'] = {
 		closeText: 'Tutup',
 		prevText: '&#x3C;Sebelum',
 		nextText: 'Selepas&#x3E;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['ms']);
-});
+	datepicker.setDefaults(datepicker.regional['ms']);
+
+	return datepicker.regional['ms'];
+
+}));

@@ -1,7 +1,17 @@
 /* Romansh initialisation for the jQuery UI date picker plugin. */
 /* Written by Yvonne Gienal (yvonne.gienal@educa.ch). */
-jQuery(function($){
-	$.datepicker.regional['rm'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['rm'] = {
 		closeText: 'Serrar',
 		prevText: '&#x3C;Suandant',
 		nextText: 'Precedent&#x3E;',
@@ -17,5 +27,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['rm']);
-});
+	datepicker.setDefaults(datepicker.regional['rm']);
+
+	return datepicker.regional['rm'];
+
+}));

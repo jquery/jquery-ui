@@ -1,7 +1,17 @@
 /* Belarusian initialisation for the jQuery UI date picker plugin. */
 /* Written by Pavel Selitskas <p.selitskas@gmail.com> */
-jQuery(function($){
-	$.datepicker.regional['be'] = {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}(function( datepicker ) {
+	datepicker.regional['be'] = {
 		closeText: 'Зачыніць',
 		prevText: '&larr;Папяр.',
 		nextText: 'Наст.&rarr;',
@@ -19,5 +29,8 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['be']);
-});
+	datepicker.setDefaults(datepicker.regional['be']);
+
+	return datepicker.regional['be'];
+
+}));
