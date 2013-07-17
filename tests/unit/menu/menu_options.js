@@ -10,6 +10,38 @@ module( "menu: options", {
 	}
 });
 
+asyncTest( "{ closeOnDocumentClick: false }", function() {
+	expect( 1 );
+	var blurHandled = false,
+		element = $( "#menu1" ).menu({
+			blur: function() {
+				// Ignore duplicate blur event fired by IE
+				if ( !blurHandled ) {
+					blurHandled = true;
+					log( "blur" );
+				}
+			},
+			select: function() {
+				log();
+			}
+		});
+
+	click( element, "1" );
+	setTimeout(function() {
+		$( "<a>", { id: "remove"} ).appendTo( "body" ).trigger( "click" );
+		setTimeout(function() {
+			blurHandled = false;
+			element.menu( "option", "closeOnDocumentClick", false );
+			click( element, "1" );
+			$( "<a>", { id: "remove"} ).appendTo( "body" ).trigger( "click" );
+				setTimeout(function() {
+					equal( logOutput(), "1,blur,1", "Keydown focus Delphi by repeating the 'd' again" );
+					start();
+				}, 350 );
+		}, 350 );
+	});
+});
+
 test( "{ disabled: true }", function() {
 	expect( 2 );
 	var element = $( "#menu1" ).menu({

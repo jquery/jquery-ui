@@ -20,6 +20,7 @@ $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {
+		closeOnDocumentClick: true,
 		icons: {
 			submenu: "ui-icon-carat-1-e"
 		},
@@ -41,6 +42,7 @@ $.widget( "ui.menu", {
 		// flag used to prevent firing of the click handler
 		// as the event bubbles up through nested menus
 		this.mouseHandled = false;
+
 		this.element
 			.uniqueId()
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
@@ -126,7 +128,7 @@ $.widget( "ui.menu", {
 		// Clicks outside of a menu collapse any open menus
 		this._on( this.document, {
 			click: function( event ) {
-				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
+				if ( !$( event.target ).closest( ".ui-menu" ).length && this.options.closeOnDocumentClick ) {
 					this.collapseAll( event );
 				}
 
