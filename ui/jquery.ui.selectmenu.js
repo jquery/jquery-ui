@@ -142,6 +142,7 @@ $.widget( "ui.selectmenu", {
 
 				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).attr( "id" ) );
 			},
+			closeOnDocumentClick: false,
 			role: "listbox"
 		})
 		.menu( "instance" );
@@ -149,8 +150,6 @@ $.widget( "ui.selectmenu", {
 		// adjust menu styles to dropdown
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
-		// Make sure focus stays on selected item
-		this.menuInstance.delay = 999999999;
 		// Unbind uneeded Menu events
 		this.menuInstance._off( this.menu, "mouseleave" );
 	},
@@ -198,7 +197,7 @@ $.widget( "ui.selectmenu", {
 
 		this._trigger( "open", event );
 	},
-	
+
 	_position: function() {
 		this.menuWrap.position( $.extend( { of: this.button }, this.options.position ) );
 	},

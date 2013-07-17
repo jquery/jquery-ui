@@ -132,4 +132,24 @@ asyncTest( "select", function () {
 	}, 1 );
 });
 
+asyncTest( "maintain item focus after opening select", function () {
+	expect( 2 );
+
+	this.element.selectmenu();
+
+	var button = this.element.selectmenu( "widget" ),
+		menu = this.element.selectmenu( "menuWidget" ).parent();
+
+	button.simulate( "focus" );
+
+	setTimeout(function() {
+		button.trigger( "click" );
+		equal( menu.find( ".ui-state-focus" ).length, 1, "Selectmenu initially has 1 item 'focused'" );
+		setTimeout(function() {
+			equal( menu.find( ".ui-state-focus" ).length, 1, "Selectmenu still has 1 item 'focused'" );
+			start();
+		}, 350 );
+	}, 1 );
+});
+
 })(jQuery);
