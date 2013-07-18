@@ -735,8 +735,9 @@ $.widget( "ui.dialog", {
 				if ( $.ui.dialog.overlayInstances ) {
 					this.document.bind( "focusin.dialog", function( event ) {
 						if ( !that._allowInteraction( event ) ) {
+							var elementContext = that.element[0].ownerDocument;
 							event.preventDefault();
-							$(".ui-dialog:visible:last .ui-dialog-content")
+							$(".ui-dialog:visible:last .ui-dialog-content", elementContext)
 								.data( widgetFullName )._focusTabbable();
 						}
 					});
