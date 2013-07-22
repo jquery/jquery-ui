@@ -116,7 +116,7 @@ test("{ cancel: Selector }", function() {
 });
 */
 
-test( "#xxxx: Could not drag any but last item toward last position from initially empty floated sortable with { axis: 'x' }", function() {
+test( "#9443: Could not drag any but last item toward last position from initially empty floated sortable with { axis: 'x' }", function() {
 	expect(1);
 	var item, i,
 		changeCount = 0,
