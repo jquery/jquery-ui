@@ -18,10 +18,10 @@ test( "handle click on menu", function() {
 		}
 	});
 	log( "click", true );
-	click( $( "#menu1" ), "1" );
+	click( element, "1" );
 	log( "afterclick" );
 	click( element, "2" );
-	click( $( "#menu1" ), "3" );
+	click( element, "3" );
 	click( element, "1" );
 	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 });
@@ -35,10 +35,10 @@ test( "handle click on custom item menu", function() {
 		menus: "div"
 	});
 	log( "click", true );
-	click( $( "#menu5" ), "1" );
+	click( element, "1" );
 	log( "afterclick" );
 	click( element, "2" );
-	click( $( "#menu5" ), "3" );
+	click( element, "3" );
 	click( element, "1" );
 	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 });
@@ -96,13 +96,13 @@ asyncTest( "handle focus of menu with active item", function() {
 	});
 
 	log( "focus", true );
-	element[0].focus();
+	element[ 0 ].focus();
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		element[0].blur();
+		element[ 0 ].blur();
 		setTimeout(function() {
-			element[0].focus();
+			element[ 0 ].focus();
 			setTimeout(function() {
 				equal( logOutput(), "focus,0,1,2,2", "current active item remains active" );
 				start();
@@ -174,7 +174,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and without submen
 	expect( 12 );
 	var element = $( "#menu1" ).menu({
 		select: function( event, ui ) {
-			log( $( ui.item[0] ).text() );
+			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
@@ -182,7 +182,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and without submen
 	});
 
 	log( "keydown", true );
-	element[0].focus();
+	element[ 0 ].focus();
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -360,7 +360,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 	expect( 14 );
 	var element = $( "#menu3" ).menu({
 		select: function( event, ui ) {
-			log( $( ui.item[0] ).text() );
+			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
@@ -368,7 +368,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 	});
 
 	log( "keydown", true );
-	element[0].focus();
+	element[ 0 ].focus();
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -435,7 +435,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	expect( 14 );
 	var element = $( "#menu4" ).menu({
 		select: function( event, ui ) {
-			log( $( ui.item[0] ).text() );
+			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
@@ -595,7 +595,28 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 		equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
 		start();
 	});
-	element[0].focus();
+	element[ 0 ].focus();
+});
+
+test( "ensure default is prevented when clicking on anchors in disabled menus ", function() {
+	expect( 1 );
+	var element = $( "#menu1" ).menu();
+	element.bind( "click.menu", function(event) {
+		if ( !event.isDefaultPrevented() ) {
+			log();
+		}
+	});
+	log( "click", true );
+	click( element, "1" );
+	log( "afterclick,disable" );
+	element.menu( "option", "disabled", true );
+	click( element, "2" );
+	click( element, "3" );
+	click( element, "1" );
+	log( "enable" );
+	element.menu( "option", "disabled", false );
+	click( element, "3" );
+	equal( logOutput(), "click,1,afterclick,disable,enable,3", "Click order not valid." );
 });
 
 })( jQuery );

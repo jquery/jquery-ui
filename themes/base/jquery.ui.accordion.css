@@ -12,9 +12,10 @@
 	display: block;
 	cursor: pointer;
 	position: relative;
-	margin-top: 2px;
+	margin: 2px 0 0 0;
 	padding: .5em .5em .5em .7em;
 	min-height: 0; /* support: IE7 */
+	font-size: 100%;
 }
 .ui-accordion .ui-accordion-icons {
 	padding-left: 2.2em;
