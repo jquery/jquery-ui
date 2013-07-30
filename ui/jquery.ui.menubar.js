@@ -209,12 +209,12 @@ $.widget( "ui.menubar", {
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
 		this._on( anItem, {
-			focus:	function(){
+			focus:	function( event ){
 				anItem.attr( "tabIndex", 0 );
 				anItem.addClass( "ui-state-focus" );
 				event.preventDefault();
 			},
-			focusout:  function(){
+			focusout:  function( event ){
 				anItem.attr( "tabIndex", -1 );
 				this.lastFocused = anItem;
 				anItem.removeClass( "ui-state-focus" );
