@@ -1,12 +1,12 @@
 [jQuery UI](http://jqueryui.com/) - Interactions and Widgets for the web
 ================================
 
-jQuery UI provides interactions like Drag and Drop and widgets like Autocomplete, Tabs and Slider and makes these as easy to use as jQuery itself.
+jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of jQuery. Whether you're building highly interactive web applications, or you just need to add a date picker to a form control, jQuery UI is the perfect choice.
 
-If you want to use jQuery UI, go to [jqueryui.com](http://jqueryui.com) to get started. Or visit the [Using jQuery UI Forum](http://forum.jquery.com/using-jquery-ui) for discussions and questions.
+If you want to use jQuery UI, go to [jqueryui.com](http://jqueryui.com) to get started, [jqueryui.com/demos/](http://jqueryui.com/demos/) for demos, [api.jqueryui.com](http://api.jqueryui.com/) for API documentation, or the [Using jQuery UI Forum](http://forum.jquery.com/using-jquery-ui) for discussions and questions.
 
 If you are interested in helping develop jQuery UI, you are in the right place.
-To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui) or in #jquery on irc.freednode.net.
+To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui) or [#jqueryui-dev on irc.freenode.net](http://irc.jquery.org/).
 
 
 For contributors
@@ -91,7 +91,7 @@ If you need to edit the changes:
 	# make changes
 	git commit --author="[author-name-and-email]"
 
-If it should go to the stable brach, cherry-pick it to stable:
+If it should go to the stable branch, cherry-pick it to stable:
 
 	git checkout 1-10-stable
 	git cherry-pick -x [sha-of-commit-from-master]
