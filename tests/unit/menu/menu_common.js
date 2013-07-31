@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
+		closeOnDocumentClick: true,
 		disabled: false,
 		icons: {
 			submenu: "ui-icon-carat-1-e"
