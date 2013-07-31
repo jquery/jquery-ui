@@ -382,11 +382,16 @@ $.widget( "ui.autocomplete", {
 	_searchTimeout: function( event ) {
 		clearTimeout( this.searching );
 		this.searching = this._delay(function() {
+			// this is just stupid, even if you don't want to search for the
+			// same value, at least RESHOW the search result!!! or there will
+			// be no feedback at all!!!
+			this.selectedItem = null;
+			this.search( null, event );
 			// only search if the value has changed
-			if ( this.term !== this._value() ) {
-				this.selectedItem = null;
-				this.search( null, event );
-			}
+			// if ( this.term !== this._value() ) {
+			//	this.selectedItem = null;
+			//	this.search( null, event );
+			// }
 		}, this.options.delay );
 	},
 
