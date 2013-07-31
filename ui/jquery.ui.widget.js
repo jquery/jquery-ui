@@ -134,6 +134,8 @@ $.widget = function( name, base, prototype ) {
 	}
 
 	$.widget.bridge( name, constructor );
+
+	return constructor;
 };
 
 $.widget.extend = function( target ) {
