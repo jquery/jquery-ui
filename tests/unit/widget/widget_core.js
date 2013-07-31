@@ -617,9 +617,9 @@ test( ".disable()", function() {
 test( ".widget() - base", function() {
 	expect( 2 );
 	var constructor = $.widget( "ui.testWidget", {
-		_create: function() {}
-	});
-	var div = $( "<div>" ).testWidget();
+			_create: function() {}
+		}),
+		div = $( "<div>" ).testWidget();
 	deepEqual( div[0], div.testWidget( "widget" )[0]);
 	deepEqual( constructor, $.ui.testWidget, "$.widget returns the constructor" );
 });
