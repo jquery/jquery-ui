@@ -878,20 +878,21 @@ $.widget("ui.sortable", $.ui.mouse, {
 				return;
 			}
 
-			if(this.currentContainer === this.containers[innermostIndex]) {
-				return;
+			if(this.currentContainer !== this.containers[innermostIndex]) {
+				itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true);
+				this._trigger("change", event, this._uiHash());
+				this.containers[innermostIndex]._trigger("change", event, this._uiHash(this));
+				this.currentContainer = this.containers[innermostIndex];
+
+				//Update the placeholder
+				this.options.placeholder.update(this.currentContainer, this.placeholder);
 			}
+			
 
-			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true);
-			this._trigger("change", event, this._uiHash());
-			this.containers[innermostIndex]._trigger("change", event, this._uiHash(this));
-			this.currentContainer = this.containers[innermostIndex];
-
-			//Update the placeholder
-			this.options.placeholder.update(this.currentContainer, this.placeholder);
-
-			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
-			this.containers[innermostIndex].containerCache.over = 1;
+			if (!this.containers[innermostIndex].containerCache.over) {
+				this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
+				this.containers[innermostIndex].containerCache.over = 1;
+			}
 		}
 
 
