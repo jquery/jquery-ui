@@ -7,15 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/dialog/
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *  jquery.ui.button.js
- *	jquery.ui.draggable.js
- *	jquery.ui.mouse.js
- *	jquery.ui.position.js
- *	jquery.ui.resizable.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -7,9 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/fold-effect/
- *
- * Depends:
- *	jquery.ui.effect.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -7,12 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/droppable/
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *	jquery.ui.mouse.js
- *	jquery.ui.draggable.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -7,10 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/accordion/
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

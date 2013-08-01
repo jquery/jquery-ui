@@ -7,10 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/scale-effect/
- *
- * Depends:
- *	jquery.ui.effect.js
- *	jquery.ui.effect-size.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

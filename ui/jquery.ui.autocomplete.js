@@ -7,12 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/autocomplete/
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *	jquery.ui.position.js
- *	jquery.ui.menu.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

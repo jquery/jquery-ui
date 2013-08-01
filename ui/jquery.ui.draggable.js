@@ -7,11 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/draggable/
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.mouse.js
- *	jquery.ui.widget.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

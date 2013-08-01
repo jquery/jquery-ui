@@ -7,11 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/spinner/
- *
- * Depends:
- *  jquery.ui.core.js
- *  jquery.ui.widget.js
- *  jquery.ui.button.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

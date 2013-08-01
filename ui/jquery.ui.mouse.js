@@ -7,9 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/mouse/
- *
- * Depends:
- *	jquery.ui.widget.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -7,9 +7,6 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/datepicker/
- *
- * Depends:
- *	jquery.ui.core.js
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
