@@ -212,7 +212,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 		if(!this.options.axis || this.options.axis !== "x") {
 			// scrollTop exist
-			//this.helper[0].style.top = this.position.top+"px";
 			this.helper[0].style.top = (this.position.top-$(document).scrollTop())+"px";
 		}
 		if($.ui.ddmanager) {
