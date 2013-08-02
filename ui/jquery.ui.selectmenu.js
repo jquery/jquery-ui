@@ -149,10 +149,13 @@ $.widget( "ui.selectmenu", {
 		// adjust menu styles to dropdown
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
-		// Make sure focus stays on selected item
-		this.menuInstance.delay = 999999999;
 		// Unbind uneeded Menu events
 		this.menuInstance._off( this.menu, "mouseleave" );
+
+		// Cancel the menu's collapseAll on document click
+		this.menuInstance._closeOnDocumentClick = function() {
+			return false;
+		};
 	},
 
 	refresh: function() {
@@ -185,9 +188,13 @@ $.widget( "ui.selectmenu", {
 		if ( this.options.disabled ) {
 			return;
 		}
+
 		// Support: IE6-IE9 click doesn't trigger focus on the button
 		if ( !this.menuItems ) {
 			this.refresh();
+		} else {
+			this.menu.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
+			this.menu.menu( "focus", null, this._getSelectedItem() );
 		}
 
 		this.isOpen = true;
@@ -198,7 +205,7 @@ $.widget( "ui.selectmenu", {
 
 		this._trigger( "open", event );
 	},
-	
+
 	_position: function() {
 		this.menuWrap.position( $.extend( { of: this.button }, this.options.position ) );
 	},
