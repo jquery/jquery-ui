@@ -183,6 +183,43 @@ $.each([
 			start();
 		}, 1 );
 	});
+
+	asyncTest( "item focus - " + settings.type, function () {
+		expect( 4 );
+
+		var element = $( settings.selector ).selectmenu(),
+			button = element.selectmenu( "widget" ),
+			menu = element.selectmenu( "menuWidget" ),
+			links, activeItem, focusedItem;
+
+		// init menu
+		button.simulate( "focus" );
+
+		setTimeout(function() {
+			links = menu.find( "li.ui-menu-item a" );
+
+			button.trigger( "click" );
+			focusedItem = menu.find( "li.ui-menu-item a.ui-state-focus" );
+			equal( focusedItem.length, 1, "only one item has focus after first opening" );
+			equal( focusedItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "active item has focus after first opening" );
+
+			links.eq( 3 ).simulate( "mouseover" ).trigger( "click" );
+
+			button.trigger( "click" );
+			links.eq( 2 ).simulate( "mouseover" );
+			$( document ).trigger( "click" );
+
+			button.trigger( "click" );
+			links.eq( 1 ).simulate( "mouseover" );
+			$( document ).trigger( "click" );
+
+			button.trigger( "click" );
+			focusedItem = menu.find( "li.ui-menu-item a.ui-state-focus" );
+			equal( focusedItem.length, 1, "only one item has focus" );
+			equal( focusedItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "active item has focus" );
+			start();
+		}, 1 );
+	});
 });
 
 })( jQuery );
