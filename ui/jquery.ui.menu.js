@@ -621,6 +621,9 @@ $.widget( "ui.menu", {
 			this.collapseAll( event, true );
 		}
 		this._trigger( "select", event, ui );
+		// #9469: Set mouseHandled flag in case a select event prevents event
+		// propagation.
+		this.mouseHandled = false;
 	}
 });
 
