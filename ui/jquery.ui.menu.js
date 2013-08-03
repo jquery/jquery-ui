@@ -75,9 +75,13 @@ $.widget( "ui.menu", {
 			"click .ui-menu-item:has(a)": function( event ) {
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
-					this.mouseHandled = true;
-
 					this.select( event );
+
+					// Only set the mouseHandled flag if the event will bubble, see #9469.
+					if ( !event.isPropagationStopped() ) {
+						this.mouseHandled = true;
+					}
+
 					// Open submenu on click
 					if ( target.has( ".ui-menu" ).length ) {
 						this.expand( event );
@@ -621,9 +625,6 @@ $.widget( "ui.menu", {
 			this.collapseAll( event, true );
 		}
 		this._trigger( "select", event, ui );
-		// #9469: Set mouseHandled flag in case a select event prevents event
-		// propagation.
-		this.mouseHandled = false;
 	}
 });
 
