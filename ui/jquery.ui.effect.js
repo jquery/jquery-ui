@@ -964,6 +964,7 @@ $.extend( $.effects, {
 		var props = {
 				width: element.outerWidth(true),
 				height: element.outerHeight(true),
+        display: element.css( "display" ),
 				"float": element.css( "float" )
 			},
 			wrapper = $( "<div></div>" )
