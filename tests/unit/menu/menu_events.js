@@ -622,7 +622,7 @@ test( "ensure default is prevented when clicking on anchors in disabled menus ",
 test( "#9469: Stopping propagation in a select event should not suppress subsequent select events.", function() {
 	expect( 1 );
 	var element = $( "#menu1" ).menu({
-		select: function( event, ui ) {
+		select: function( event ) {
 			log();
 			event.stopPropagation();
 		}
