@@ -336,6 +336,9 @@ $.widget( "ui.menu", {
 		// Add aria-disabled attribute to any disabled menu item
 		menus.children( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
 
+
+		this.mouseHandled = false;
+		
 		// If the active item has been removed, blur the menu
 		if ( this.active && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
 			this.blur();
