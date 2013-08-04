@@ -206,13 +206,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		if(!this.options.axis || this.options.axis !== "y") {
-			// scrollLeft exist
-			this.helper[0].style.left = (this.position.left-$(document).scrollLeft())+"px";
+			this.helper[0].style.left = this.position.left-$(document).scrollLeft()+"px";
 			
 		}
 		if(!this.options.axis || this.options.axis !== "x") {
-			// scrollTop exist
-			this.helper[0].style.top = (this.position.top-$(document).scrollTop())+"px";
+			this.helper[0].style.top = this.position.top-$(document).scrollTop()+"px";
 		}
 		if($.ui.ddmanager) {
 			$.ui.ddmanager.drag(this, event);
