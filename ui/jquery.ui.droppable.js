@@ -254,6 +254,7 @@ $.ui.intersect = function( draggable, droppable, toleranceMode ) {
 $.ui.ddmanager = {
 	current: null,
 	droppables: { "default": [] },
+	dragIndex: 1, 
 	prepareOffsets: function( t, event ) {
 
 		var i, j,
@@ -329,6 +330,8 @@ $.ui.ddmanager = {
 		if ( draggable.options.refreshPositions ) {
 			$.ui.ddmanager.prepareOffsets( draggable, event );
 		}
+		
+		var dragIndex = this.dragIndex++;
 
 		// Run through all droppables and check their positions based on specific tolerance options
 		$.each( $.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
@@ -353,7 +356,7 @@ $.ui.ddmanager = {
 
 				if ( parent.length ) {
 					parentInstance = $( parent[ 0 ] ).droppable( "instance" );
-					parentInstance.greedyChild = ( c === "isover" );
+					parentInstance.greedyChild = ( parentInstance.insidegreedy && parentInstance.insidegreedy === dragIndex ) || ( c === "isover" );
 				}
 			}
 
@@ -361,6 +364,7 @@ $.ui.ddmanager = {
 			if ( parentInstance && c === "isover" ) {
 				parentInstance.isover = false;
 				parentInstance.isout = true;
+				parentInstance.insidegreedy = dragIndex;
 				parentInstance._out.call( parentInstance, event );
 			}
 
@@ -369,7 +373,7 @@ $.ui.ddmanager = {
 			this[c === "isover" ? "_over" : "_out"].call( this, event );
 
 			// we just moved out of a greedy child
-			if ( parentInstance && c === "isout" ) {
+			if ( parentInstance && ( !parentInstance.insidegreedy || parentInstance.insidegreedy !== dragIndex ) && c === "isout" ) {
 				parentInstance.isout = false;
 				parentInstance.isover = true;
 				parentInstance._over.call( parentInstance, event );
