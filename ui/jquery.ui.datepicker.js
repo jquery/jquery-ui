@@ -1573,9 +1573,11 @@ $.extend(Datepicker.prototype, {
 			var handler = {
 				prev: function () {
 					$.datepicker._adjustDate(id, -stepMonths, "M");
+					return false;
 				},
 				next: function () {
 					$.datepicker._adjustDate(id, +stepMonths, "M");
+					return false;
 				},
 				hide: function () {
 					$.datepicker._hideDatepicker();
