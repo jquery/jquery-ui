@@ -116,6 +116,31 @@ test("{ cancel: Selector }", function() {
 });
 */
 
+test( "#9443: Could not drag any but last item toward last position from initially empty floated sortable with { axis: 'x' }", function() {
+	expect(1);
+	var item, i,
+		changeCount = 0,
+		element = $( "#sortable" ).empty().sortable({
+		axis: "x",
+		change: function() {
+			changeCount++;
+		}
+	});
+
+	for(i = 0; i < 5; i++) {
+		element.append( "<li>Item " + i + "</li>" );
+	}
+
+	item = element.find( "li" ).css( "float", "left" ).eq( -2 );
+
+	item.simulate( "drag", {
+		dx: 50,
+		dy: 0,
+		moves: 1
+	});
+	equal( changeCount, 1, "change fired once when dragging a floated sortable in it's own container" );
+});
+
 test( "#8792: issues with floated items in connected lists", function() {
 	expect( 2 );
 
