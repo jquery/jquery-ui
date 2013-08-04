@@ -71,6 +71,8 @@ $.widget( "ui.progressbar", {
 		}
 
 		this.indeterminate = newValue === false;
+		
+		newValue = Number(newValue);
 
 		// sanitize value
 		if ( typeof newValue !== "number" ) {
