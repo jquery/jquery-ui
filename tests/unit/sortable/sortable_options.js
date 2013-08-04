@@ -178,7 +178,7 @@ test( "#8301: single axis with connected list", function() {
 		handle: "corner",
 		dy: 120,
 		moves: 1
-	});
+	}).simulate("click", {});
 });
 
 /*
@@ -387,6 +387,26 @@ test( "{ placholder: String } tr", function() {
 		dy: 1
 	});
 });
+
+test("#9099: Sortable: Items in connected list revert to last list interacted with rather than their starting point", function () {
+    expect(1);
+
+    var element;
+
+    $("#sortable").sortable({
+        forceReturn2Original: true,
+        stop:function() {
+            equal(element.index(), 0, "check the item returned to the original position");
+        }
+    });
+    element = $("#qunit-fixture li:eq(0)");
+
+    element.simulate("drag", {
+        dy: 57,
+        moves: 5
+    }).simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+});
+
 
 /*
 test("{ revert: false }, default", function() {

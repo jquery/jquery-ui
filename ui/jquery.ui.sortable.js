@@ -37,6 +37,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		dropOnEmpty: true,
 		forcePlaceholderSize: false,
 		forceHelperSize: false,
+        forceReturn2Original: false,/*true - to make sure that the item returns to the original position if the dragged item is outside all containers */
 		grid: false,
 		handle: false,
 		helper: "original",
@@ -284,6 +285,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	_mouseDrag: function(event) {
 		var i, item, itemElement, intersection,
 			o = this.options,
+		    isAnyContainerInFocus = false,/**true if the mouse if over any of the list containers - needed to be able to return to the original position**/
 			scrolled = false;
 
 		//Compute the helpers position
@@ -348,6 +350,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 			//Cache variables and intersection, continue if no intersection
 			item = this.items[i];
 			itemElement = item.item[0];
+
+			if (o.forceReturn2Original && !isAnyContainerInFocus) {
+		        if (this._isIntersectingWithContainer(itemElement)) {
+		            isAnyContainerInFocus = true;
+		        }
+			}
+
 			intersection = this._intersectsWithPointer(item);
 			if (!intersection) {
 				continue;
@@ -363,6 +372,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 			if (item.instance !== this.currentContainer) {
 				continue;
 			}
+
+            if (itemElement === this.currentItem[0]) {
+                this.CurrentSortableItem = item;
+            }
 
 			// cannot intersect with itself
 			// no useless actions that have been done before
@@ -388,6 +401,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Post events to containers
 		this._contactContainers(event);
+	    
+		if (o.forceReturn2Original && !isAnyContainerInFocus) {
+		    this._restoreOriginalPlaceholder(event);
+		}
 
 		//Interconnect with droppables
 		if($.ui.ddmanager) {
@@ -401,7 +418,25 @@ $.widget("ui.sortable", $.ui.mouse, {
 		return false;
 
 	},
-
+	_restoreOriginalPlaceholder: function (event) {
+	    if (!this.CurrentSortableItem) {
+	        return;
+	    }
+   
+	    this._rearrange(event, this.CurrentSortableItem);
+	    this._trigger("change", event, this._uiHash());
+	},
+    _isIntersectingWithContainer: function(itemElement) {
+        var $container = $(itemElement.parentNode),
+            containerPosition = $container.offset(),
+            oParams = {
+                top: Math.max(containerPosition.top - 10, 0),
+                left: Math.max(containerPosition.left - 10, 0),
+                width: $container.width() + 10,
+                height: $container.height() + 10
+            };
+        return this._intersectsWithPointer(oParams);
+    },
 	_mouseStop: function(event, noPropagation) {
 
 		if(!event) {
@@ -559,15 +594,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 			isOverElement = isOverElementHeight && isOverElementWidth,
 			verticalDirection = this._getDragVerticalDirection(),
 			horizontalDirection = this._getDragHorizontalDirection();
-
 		if (!isOverElement) {
 			return false;
 		}
-
 		return this.floating ?
-			( ((horizontalDirection && horizontalDirection === "right") || verticalDirection === "down") ? 2 : 1 )
-			: ( verticalDirection && (verticalDirection === "down" ? 2 : 1) );
-
+			(((horizontalDirection && horizontalDirection === "right") || verticalDirection === "down") ? 2 : 1)
+			: ((verticalDirection && (verticalDirection === "down")) ? 2 : 1);
 	},
 
 	_intersectsWithSides: function(item) {

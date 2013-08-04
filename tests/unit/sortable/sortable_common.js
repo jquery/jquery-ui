@@ -12,6 +12,7 @@ TestHelpers.commonWidgetTests( "sortable", {
 		distance: 1,
 		dropOnEmpty: true,
 		forcePlaceholderSize: false,
+	    forceReturn2Original: false,
 		forceHelperSize: false,
 		grid: false,
 		handle: false,
