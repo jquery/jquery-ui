@@ -500,7 +500,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 			options = { duration: options };
 		}
 		hasOptions = !$.isEmptyObject( options );
-		options.complete = callback;
+		options.complete = $.isFunction(options.complete) ? options.complete : callback;
 		if ( options.delay ) {
 			element.delay( options.delay );
 		}
