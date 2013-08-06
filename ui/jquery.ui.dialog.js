@@ -724,23 +724,30 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
-		var that = this,
-			widgetFullName = this.widgetFullName;
-		if ( !$.ui.dialog.overlayInstances ) {
-			// Prevent use of anchors and inputs.
-			// We use a delay in case the overlay is created from an
-			// event that we're going to be cancelling. (#2804)
-			this._delay(function() {
-				// Handle .dialog().dialog("close") (#4065)
-				if ( $.ui.dialog.overlayInstances ) {
-					this.document.bind( "focusin.dialog", function( event ) {
-						if ( !that._allowInteraction( event ) ) {
-							event.preventDefault();
-							$(".ui-dialog:visible:last .ui-dialog-content")
-								.data( widgetFullName )._focusTabbable();
-						}
-					});
+		var widgetFullName = this.widgetFullName,
+			isOpening = true;
+
+		if ( !this.document.data( "ui-dialog-overlays" ) ) {
+
+			// Prevent use of anchors and inputs
+			this._on( this.document, {
+				focusin: function( event ) {
+					if ( isOpening ) {
+						return;
+					}
+
+					if ( !this._allowInteraction( event ) ) {
+						event.preventDefault();
+						this.document.find( ".ui-dialog:visible:last .ui-dialog-content" )
+							.data( widgetFullName )._focusTabbable();
+					}
 				}
+			});
+
+			// We use a delay in case the overlay is created from an
+			// event that we're going to be cancelling (#2804)
+			this._delay(function() {
+				isOpening = false;
 			});
 		}
 
@@ -750,7 +757,8 @@ $.widget( "ui.dialog", {
 		this._on( this.overlay, {
 			mousedown: "_keepFocus"
 		});
-		$.ui.dialog.overlayInstances++;
+		this.document.data( "ui-dialog-overlays",
+			(this.document.data( "ui-dialog-overlays" ) || 0) + 1 );
 	},
 
 	_destroyOverlay: function() {
@@ -759,17 +767,20 @@ $.widget( "ui.dialog", {
 		}
 
 		if ( this.overlay ) {
-			$.ui.dialog.overlayInstances--;
+			var overlays = this.document.data( "ui-dialog-overlays" ) - 1;
 
-			if ( !$.ui.dialog.overlayInstances ) {
-				this.document.unbind( "focusin.dialog" );
+			if ( !overlays ) {
+				this.document
+					.off( "focusin" )
+					.removeData( "ui-dialog-overlays" );
+			} else {
+				this.document.data( "ui-dialog-overlays", overlays );
 			}
+
 			this.overlay.remove();
 			this.overlay = null;
 		}
 	}
 });
-
-$.ui.dialog.overlayInstances = 0;
 
 }( jQuery ) );
