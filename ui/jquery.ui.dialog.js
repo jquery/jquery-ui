@@ -724,8 +724,7 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
-		var widgetFullName = this.widgetFullName,
-			isOpening = true;
+		var isOpening = true;
 
 		if ( !this.document.data( "ui-dialog-overlays" ) ) {
 
@@ -739,7 +738,7 @@ $.widget( "ui.dialog", {
 					if ( !this._allowInteraction( event ) ) {
 						event.preventDefault();
 						this.document.find( ".ui-dialog:visible:last .ui-dialog-content" )
-							.data( widgetFullName )._focusTabbable();
+							.data( this.widgetFullName )._focusTabbable();
 					}
 				}
 			});
