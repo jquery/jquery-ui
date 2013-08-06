@@ -724,7 +724,12 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
+		// We use a delay in case the overlay is created from an
+		// event that we're going to be cancelling (#2804)
 		var isOpening = true;
+		this._delay(function() {
+			isOpening = false;
+		});
 
 		if ( !this.document.data( "ui-dialog-overlays" ) ) {
 
@@ -741,12 +746,6 @@ $.widget( "ui.dialog", {
 							.data( this.widgetFullName )._focusTabbable();
 					}
 				}
-			});
-
-			// We use a delay in case the overlay is created from an
-			// event that we're going to be cancelling (#2804)
-			this._delay(function() {
-				isOpening = false;
 			});
 		}
 
