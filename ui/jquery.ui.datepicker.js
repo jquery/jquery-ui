@@ -1571,28 +1571,28 @@ $.extend(Datepicker.prototype, {
 			id = "#" + inst.id.replace( /\\\\/g, "\\" );
 		inst.dpDiv.find("[data-handler]").map(function () {
 			var handler = {
-				prev: function () {
-					$.datepicker._adjustDate(id, -stepMonths, "M");
+				prev: function (e) {
+					$.datepicker._adjustDate($(id, e.target.ownerDocument), -stepMonths, "M");
 				},
-				next: function () {
-					$.datepicker._adjustDate(id, +stepMonths, "M");
+				next: function (e) {
+					$.datepicker._adjustDate($(id, e.target.ownerDocument), +stepMonths, "M");
 				},
 				hide: function () {
 					$.datepicker._hideDatepicker();
 				},
-				today: function () {
-					$.datepicker._gotoToday(id);
+				today: function (e) {
+					$.datepicker._gotoToday($(id, e.target.ownerDocument));
 				},
-				selectDay: function () {
-					$.datepicker._selectDay(id, +this.getAttribute("data-month"), +this.getAttribute("data-year"), this);
+				selectDay: function (e) {
+					$.datepicker._selectDay($(id, e.target.ownerDocument), +this.getAttribute("data-month"), +this.getAttribute("data-year"), this);
 					return false;
 				},
-				selectMonth: function () {
-					$.datepicker._selectMonthYear(id, this, "M");
+				selectMonth: function (e) {
+					$.datepicker._selectMonthYear($(id, e.target.ownerDocument), this, "M");
 					return false;
 				},
-				selectYear: function () {
-					$.datepicker._selectMonthYear(id, this, "Y");
+				selectYear: function (e) {
+					$.datepicker._selectMonthYear($(id, e.target.ownerDocument), this, "Y");
 					return false;
 				}
 			};
