@@ -12,16 +12,6 @@
  */
 (function( $, undefined ) {
 
-// Add missing event props for pointer events
-var eventName,
-	events = ["pointerdown","pointermove","pointerup","pointerover","pointerout","pointerenter","pointerleave"],
-	missingProps = ["height","isPrimary","pointerId","pointerType","pressure","tiltX","tiltY","width"];
-for ( eventName in events ) {
-	$.event.fixHooks[ events[ eventName ] ] = $.event.mouseHooks;
-	$.event.fixHooks[ events[ eventName ] ].props.push.apply( $.event.fixHooks[ events[ eventName ] ].props, missingProps );
-	delete $.event.fixHooks[ events[ eventName ] ].filter;
-}
-
 $.widget( "ui.interaction", {
 	version: "@VERSION",
 	started: false,
@@ -93,12 +83,16 @@ $.widget( "ui.interaction", {
 	setup: function( widget, start ) {
 		widget._on( widget.widget(), {
 			pointerdown: function( event ) {
+				if ( !event.pointerId ) {
+					event = event.originalEvent;
+				}
+
 				if ( this.id ) {
 					return;
 				}
 
 				// only react to the primary button or touch
-				if ( event.button === 0 ) {
+				if ( event.isPrimary ) {
 					var started = start( event, event.target, {
 						x: event.pageX,
 						y: event.pageY
@@ -118,6 +112,9 @@ $.widget( "ui.interaction", {
 
 	handle: function( widget, move, stop ) {
 		function moveHandler( event ) {
+			if ( !event.pointerId ) {
+				event = event.originalEvent;
+			}
 
 			// Only move if original pointer moves
 			if ( event.pointerId !== this.id ) {
@@ -131,6 +128,9 @@ $.widget( "ui.interaction", {
 		}
 
 		function stopHandler( event ) {
+			if ( !event.pointerId ) {
+				event = event.originalEvent;
+			}
 
 			// Only stop if original pointer stops
 			if ( event.pointerId !== this.id ) {

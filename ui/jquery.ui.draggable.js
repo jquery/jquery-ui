@@ -76,6 +76,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			handle = this.element;
 		}
 		handle.attr("touch-action", "none");
+		window.PointerEventsPolyfill.dispatcher.register(handle.parent()[0]);
 
 		this.element.addClass( "ui-draggable" );
 	},
