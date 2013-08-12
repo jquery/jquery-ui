@@ -217,4 +217,52 @@ test( "resize (containment) works with parent with negative offset", function() 
 
 });
 
+test( "resize (nested) inner created first", function() {
+
+	expect( 2 );
+
+	var widthInnerBefore, widthInnerAfter,
+		widthOuterBefore, widthOuterAfter,
+		handle = ".ui-resizable-e",
+		targetInner = $( "#inner" ).resizable({ handles: "e" }),
+		targetOuter = $( "#outer" ).resizable({ handles: "e" }),
+		increaseWidthBy = 50;
+
+	widthInnerBefore = targetInner.width();
+	widthOuterBefore = targetOuter.width();
+
+	TestHelpers.resizable.drag( handle, increaseWidthBy, 0 );
+
+	widthInnerAfter = targetInner.width();
+	widthOuterAfter = targetOuter.width();
+
+	equal(widthInnerAfter, (widthInnerBefore + increaseWidthBy), "resizable width should be increased by the value dragged");
+	equal(widthOuterAfter, (widthOuterBefore + increaseWidthBy), "resizable width should be increased by the value dragged");
+
+});
+
+test( "resize (nested) outer created first", function() {
+
+	expect( 2 );
+
+	var widthInnerBefore, widthInnerAfter,
+		widthOuterBefore, widthOuterAfter,
+		handle = ".ui-resizable-e",
+		targetOuter = $( "#outer" ).resizable({ handles: "e" }),
+		targetInner = $( "#inner" ).resizable({ handles: "e" }),
+		increaseWidthBy = 50;
+
+	widthInnerBefore = targetInner.width();
+	widthOuterBefore = targetOuter.width();
+
+	TestHelpers.resizable.drag( handle, increaseWidthBy, 0 );
+
+	widthInnerAfter = targetInner.width();
+	widthOuterAfter = targetOuter.width();
+
+	equal(widthInnerAfter, (widthInnerBefore + increaseWidthBy), "resizable width should be increased by the value dragged");
+	equal(widthOuterAfter, (widthOuterBefore + increaseWidthBy), "resizable width should be increased by the value dragged");
+
+});
+
 })(jQuery);
