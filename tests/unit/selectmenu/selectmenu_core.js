@@ -190,7 +190,7 @@ $.each([
 		var element = $( settings.selector ).selectmenu(),
 			button = element.selectmenu( "widget" ),
 			menu = element.selectmenu( "menuWidget" ),
-			links, activeItem, focusedItem;
+			links, focusedItem;
 
 		// init menu
 		button.simulate( "focus" );
