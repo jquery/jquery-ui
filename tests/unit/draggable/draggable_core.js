@@ -139,6 +139,31 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 		});
 });
 
+test( "#9315: Draggable: jumps down with offset of scrollbar", function() {
+	expect( 2 );
+
+	var element = $( "#draggable2" ).draggable({
+			stop: function( event, ui ) {
+				equal( ui.position.left, 11, "left position is correct when position is absolute" );
+				equal( ui.position.top, 11, "top position is correct when position is absolute" );
+				$( "html" ).scrollTop( 0 ).scrollLeft( 0 );
+			}
+		}),
+		contentToForceScroll = $( "<div>" ).css({
+			height: "10000px",
+			width: "10000px"
+		});
+
+		contentToForceScroll.appendTo( "#qunit-fixture" );
+		$( "html" ).scrollTop( 300 ).scrollLeft( 300 );
+
+		element.simulate( "drag", {
+			dx: 1,
+			dy: 1,
+			moves: 1
+		});
+});
+
 test( "#5009: scroll not working with parent's position fixed", function() {
 	expect( 2 );
 
