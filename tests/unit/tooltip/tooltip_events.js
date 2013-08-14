@@ -76,14 +76,14 @@ asyncTest( "content: async callback loses focus before load", function() {
 // https://github.com/jquery/jquery-ui/pull/992/files#r5667799
 asyncTest( "content: close should only be called once, even if content is set multiple times", function() {
 	expect( 1 );
-	var element = $( "#tooltipped1" ).tooltip();
-	var closecount = 0;
-	element.bind( "tooltipopen", function( event ) {
+	var element = $( "#tooltipped1" ).tooltip(),
+		closecount = 0;
+	element.bind( "tooltipopen", function() {
 		element.tooltip( "option", "content", "one" );
 		element.tooltip( "option", "content", "two" );
 		element.trigger( "mouseleave" );
 	});
-	element.bind( "tooltipclose", function( event ) {
+	element.bind( "tooltipclose", function() {
 		closecount++;
 		if (closecount === 1) {
 			setTimeout(function () {
