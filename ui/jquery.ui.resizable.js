@@ -281,8 +281,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 			$(this.handles[i]).each(function(idxHandle,handle) {
 				if (handle === event.target || $.contains(handle, event.target)) {
 					capture = true;
+					return false; //get out of the $().each loop
 				}
 			});
+			if(capture) break; //we found one.  Get out of the for loop
 		}
 
 		return !this.options.disabled && capture;
