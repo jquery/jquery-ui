@@ -83,7 +83,7 @@ TestHelpers.testJshint = function( module ) {
 
 			globals = jshintrc.globals || {};
 			delete jshintrc.globals;
-			passed = JSHINT( source, jshintrc, globals ),
+			passed = JSHINT( source, jshintrc, globals );
 			errors = $.map( JSHINT.errors, function( error ) {
 				// JSHINT may report null if there are too many errors
 				if ( !error ) {
