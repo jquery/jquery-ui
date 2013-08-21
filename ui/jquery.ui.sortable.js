@@ -189,6 +189,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 			parent: this._getParentOffset(),
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
 		});
+		
+		//Create the placeholder
+		this._createPlaceholder();
 
 		// Only after we got the offset, we can change the helper's position to absolute
 		// TODO: Still need to figure out a way to make relative sorting possible
@@ -210,9 +213,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.helper[0] !== this.currentItem[0]) {
 			this.currentItem.hide();
 		}
-
-		//Create the placeholder
-		this._createPlaceholder();
 
 		//Set a containment if given in the options
 		if(o.containment) {
