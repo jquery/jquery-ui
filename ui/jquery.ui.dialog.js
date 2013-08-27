@@ -199,7 +199,13 @@ $.widget( "ui.dialog", {
 	},
 
 	_moveToTop: function( event, silent ) {
-		var moved = !!this.uiDialog.nextAll(":visible").insertBefore( this.uiDialog ).length;
+		var visibleAfter = this.uiDialog.nextAll(":visible");
+		var moved = !!visibleAfter.length;
+		
+		if ( moved ) {
+			this.uiDialog.insertAfter( visibleAfter.last() );
+		}
+		
 		if ( moved && !silent ) {
 			this._trigger( "focus", event );
 		}
