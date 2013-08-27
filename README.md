@@ -36,29 +36,29 @@ Run the unit tests with a local server that supports PHP. No database is require
 Building jQuery UI
 ---
 
-jQuery UI uses the [grunt](http://github.com/cowboy/grunt) build system. Building jQuery UI requires node.js and a command line zip program.
+jQuery UI uses the [Grunt](http://github.com/gruntjs/grunt) build system.
 
-Install grunt.
+To build jQuery UI, you must have [node.js](http://nodejs.org/) installed and then run the following commands:
 
-`npm install grunt -g`
+```sh
 
-Clone the jQuery UI git repo.
+# Install the Grunt CLI
+npm install -g grunt-cli
 
-`git clone git://github.com/jquery/jquery-ui.git`
+# Clone the jQuery UI git repo
+git clone git://github.com/jquery/jquery-ui.git
+cd jquery-ui
 
-`cd jquery-ui`
+# Install the node module dependencies
+npm install
 
-Install node modules.
+# Run the build task
+grunt build
 
-`npm install`
-
-Run grunt.
-
-`grunt build`
-
-There are many other tasks that can be run through grunt. For a list of all tasks:
-
-`grunt --help`
+# There are many other tasks that can be run through Grunt.
+# For a list of all tasks:
+grunt --help
+```
 
 
 For committers
