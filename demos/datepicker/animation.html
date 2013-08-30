@@ -5,6 +5,9 @@
 	<title>jQuery UI Datepicker - Animations</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../external/globalize/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/effect.js"></script>
@@ -14,13 +17,19 @@
 	<script src="../../ui/effect-drop.js"></script>
 	<script src="../../ui/effect-fold.js"></script>
 	<script src="../../ui/effect-slide.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/position.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker();
 		$( "#anim" ).change(function() {
-			$( "#datepicker" ).datepicker( "option", "showAnim", $( this ).val() );
+			var value = $( this ).val(),
+				hideValue = $( this ).find( "option:selected" ).data( "hide" );
+			$( "#datepicker" )
+				.datepicker( "option", "show", value )
+				.datepicker( "option", "hide", hideValue || value );
 		});
 	});
 	</script>
@@ -31,16 +40,15 @@
 
 <p>Animations:<br />
 	<select id="anim">
-		<option value="show">Show (default)</option>
-		<option value="slideDown">Slide down</option>
-		<option value="fadeIn">Fade in</option>
+		<option value="show">Fade in/out (default)</option>
+		<option value="slideDown" data-hide="slideUp">Slide down/up</option>
 		<option value="blind">Blind (UI Effect)</option>
 		<option value="bounce">Bounce (UI Effect)</option>
 		<option value="clip">Clip (UI Effect)</option>
 		<option value="drop">Drop (UI Effect)</option>
 		<option value="fold">Fold (UI Effect)</option>
 		<option value="slide">Slide (UI Effect)</option>
-		<option value="">None</option>
+		<option value="false">None</option>
 	</select>
 </p>
 

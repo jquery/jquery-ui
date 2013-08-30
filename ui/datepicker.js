@@ -39,6 +39,7 @@ var idIncrement = 0,
 $.widget( "ui.datepicker", {
 	options: {
 		appendTo: null,
+		dateFormat: null,
 		// TODO review
 		eachDay: $.noop,
 		numberOfMonths: 1,
@@ -51,12 +52,13 @@ $.widget( "ui.datepicker", {
 		hide: true,
 
 		// callbacks
+		beforeOpen: null,
 		close: null,
 		open: null,
 		select: null
 	},
 	_create: function() {
-		this.date = $.date();
+		this.date = $.date( null, this.options.dateFormat );
 		this.date.eachDay = this.options.eachDay;
 		this.id = "ui-datepicker-" + idIncrement;
 		idIncrement++;
@@ -511,8 +513,8 @@ $.widget( "ui.datepicker", {
 		this.element.focus();
 	},
 	// Refreshing the entire datepicker during interaction confuses screen readers, specifically
-	// because the grid heading is marked up as a live region and will often not update if it's 
-	// destroyed and recreated instead of just having its text change. Additionally, interacting 
+	// because the grid heading is marked up as a live region and will often not update if it's
+	// destroyed and recreated instead of just having its text change. Additionally, interacting
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
@@ -529,7 +531,7 @@ $.widget( "ui.datepicker", {
 		}
 	},
 	_refreshMultiplePicker: function() {
-		for (var i = 0; i < this.options.numberOfMonths; i++ ) {
+		for ( var i = 0; i < this.options.numberOfMonths; i++ ) {
 			$( ".ui-datepicker-title", this.picker ).eq( i ).html( this._buildTitle() );
 			$( ".ui-datepicker-calendar", this.picker ).eq( i ).html( this._buildGrid() );
 			this.date.adjust( "M", 1 );
@@ -541,9 +543,12 @@ $.widget( "ui.datepicker", {
 		if ( this.inline || this.isOpen ) {
 			return;
 		}
+		if ( this._trigger( "beforeOpen", event ) === false ) {
+			return;
+		}
 
 		// TODO explain this
-		this.date = $.date( this.element.val() );
+		this.date = $.date( this.element.val(), this.options.dateFormat );
 		this.date.eachDay = this.options.eachDay;
 		this.date.select();
 		this.refresh();

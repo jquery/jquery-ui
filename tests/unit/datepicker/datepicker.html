@@ -8,16 +8,23 @@
 	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
 	<script src="../../../external/qunit/qunit.js"></script>
 	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
+	<script src="../../../external/date.js"></script>
+	<script src="../../../external/globalize/globalize.js"></script>
+	<script src="../../../external/localization.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
 		css: [ "core", "datepicker" ],
 		js: [
 			"ui/core.js",
-			"ui/datepicker.js",
+			"ui/widget.js",
+			"ui/button.js",
+			"ui/position.js",
+			"ui/datepicker.js"
+			/* TODO: Replace with Globalize cultures
 			"ui/i18n/datepicker-fr.js",
 			"ui/i18n/datepicker-he.js",
-			"ui/i18n/datepicker-zh-CN.js"
+			"ui/i18n/datepicker-zh-CN.js"*/
 		]
 	});
 	</script>

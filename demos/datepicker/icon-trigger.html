@@ -5,18 +5,32 @@
 	<title>jQuery UI Datepicker - Icon trigger</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../external/globalize/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/position.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker({
-			showOn: "button",
-			buttonImage: "images/calendar.gif",
-			buttonImageOnly: true,
-			buttonText: "Select date"
+		var allowOpen = false;
+		var datepicker = $( "#datepicker" ).datepicker({
+			beforeOpen: function() {
+				return allowOpen;
+			}
 		});
+		$( "<img src='images/calendar.gif' alt='Open Datepicker'>")
+			.insertAfter( datepicker )
+			.click(function() {
+				allowOpen = true;
+				datepicker.focus();
+				setTimeout(function() {
+					allowOpen = false;
+				});
+			});
 	});
 	</script>
 </head>
