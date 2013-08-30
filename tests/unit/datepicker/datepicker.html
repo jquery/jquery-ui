@@ -5,6 +5,9 @@
 	<title>jQuery UI Datepicker Test Suite</title>
 
 	<script src="../../jquery.js"></script>
+	<script src="../../../external/date.js"></script>
+	<script src="../../../external/globalize.js"></script>
+	<script src="../../../external/localization.js"></script>
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
@@ -14,10 +17,14 @@
 		css: [ "ui.core", "ui.datepicker" ],
 		js: [
 			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.button.js",
 			"ui/jquery.ui.datepicker.js",
+			"ui/jquery.ui.position.js"
+			/* TODO: Replace with Globalize cultures
 			"ui/i18n/jquery.ui.datepicker-fr.js",
 			"ui/i18n/jquery.ui.datepicker-he.js",
-			"ui/i18n/jquery.ui.datepicker-zh-CN.js"
+			"ui/i18n/jquery.ui.datepicker-zh-CN.js"*/
 		]
 	});
 	</script>

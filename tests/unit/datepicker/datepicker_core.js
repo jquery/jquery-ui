@@ -8,16 +8,6 @@ module("datepicker: core");
 
 TestHelpers.testJshint( "datepicker" );
 
-test("initialization - Reinitialization after body had been emptied.", function() {
-	expect( 1 );
-	var bodyContent = $("body").children(), inp = $("#inp");
-	$("#inp").datepicker();
-	$("body").empty().append(inp);
-	$("#inp").datepicker();
-	ok( $("#"+$.datepicker._mainDivId).length===1, "Datepicker container added" );
-	$("body").empty().append(bodyContent); // Returning to initial state for later tests
-});
-
 test( "widget method - empty collection", function() {
 	expect( 1 );
 	$( "#nonExist" ).datepicker(); // should create nothing
