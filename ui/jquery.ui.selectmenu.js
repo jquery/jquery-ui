@@ -179,6 +179,8 @@ $.widget( "ui.selectmenu", {
 		// Make sure menu is selected item aware
 		this.menu.menu( "focus", null, item );
 		this._setAria( item.data( "ui-selectmenu-item" ) );
+		
+		this._setText( this.buttonText, item.text() );		
 
 		// Set disabled state
 		this._setOption( "disabled", !!this.element.prop( "disabled" ) );
