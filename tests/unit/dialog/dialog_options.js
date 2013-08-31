@@ -209,7 +209,7 @@ test("closeText", function() {
 	expect(3);
 
 	var element = $("<div></div>").dialog();
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close span").text(), "close",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close span").text(), "Close",
 			"default close text");
 	element.remove();
 

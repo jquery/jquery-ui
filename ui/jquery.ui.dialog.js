@@ -42,7 +42,7 @@ $.widget( "ui.dialog", {
 		autoOpen: true,
 		buttons: [],
 		closeOnEscape: true,
-		closeText: "close",
+		closeText: "Close",
 		dialogClass: "",
 		draggable: true,
 		hide: null,
