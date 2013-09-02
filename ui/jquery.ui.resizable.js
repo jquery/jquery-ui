@@ -273,6 +273,20 @@ $.widget("ui.resizable", $.ui.mouse, {
 		return this;
 	},
 
+	_enable: function() {
+
+		this._handles.show();
+		return this;
+	
+	},
+
+	_disable: function() {
+		
+		this._handles.hide();
+		return this;
+		
+	},
+
 	_mouseCapture: function(event) {
 		var i, handle,
 			capture = false;
