@@ -88,8 +88,8 @@ $.position = {
 		return (cachedScrollbarWidth = w1 - w2);
 	},
 	getScrollInfo: function( within ) {
-		var overflowX = within.isWindow ? "" : within.element.css( "overflow-x" ),
-			overflowY = within.isWindow ? "" : within.element.css( "overflow-y" ),
+		var overflowX = within.isWindow || within.isDoc ? "" : within.element.css( "overflow-x" ),
+			overflowY = within.isWindow || within.isDoc ? "" : within.element.css( "overflow-y" ),
 			hasOverflowX = overflowX === "scroll" ||
 				( overflowX === "auto" && within.width < within.element[0].scrollWidth ),
 			hasOverflowY = overflowY === "scroll" ||
@@ -101,10 +101,12 @@ $.position = {
 	},
 	getWithinInfo: function( element ) {
 		var withinElement = $( element || window ),
-			isWindow = $.isWindow( withinElement[0] );
+			isWindow = $.isWindow( withinElement[0] ),
+			isDoc = (!!withinElement[0] && withinElement[0].nodeType === 9);
 		return {
 			element: withinElement,
 			isWindow: isWindow,
+			isDoc: isDoc,
 			offset: withinElement.offset() || { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
