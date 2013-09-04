@@ -45,8 +45,8 @@ function getDimensions( elem ) {
 	}
 	if ( $.isWindow( raw ) ) {
 		return {
-			width: elem.width(),
-			height: elem.height(),
+			width: (typeof raw.innerWidth === "number") ? raw.innerWidth : elem.width(),
+			height: (typeof raw.innerHeight === "number") ? raw.innerHeight : elem.height(),
 			offset: { top: elem.scrollTop(), left: elem.scrollLeft() }
 		};
 	}
