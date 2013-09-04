@@ -575,7 +575,14 @@ test( "collision: flip, with margin", function() {
 });
 
 test( "within", function() {
-	expect( 6 );
+	expect( 7 );
+
+	collisionTest({
+		within : document
+	}, {
+		top : 10,
+		left : 10
+	}, "within document (bug #9533)");
 
 	collisionTest({
 		within: "#within",
