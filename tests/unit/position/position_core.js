@@ -723,10 +723,8 @@ test("bug #9534: position in iframe window", function() {
 	expect(1);
 
 	var iframe = $("#bug-9534")[0];
-	var iframeWindow = iframe.contentWindow;
-	var iframeBody = iframe.contentDocument.body;
 
-	$(iframeBody).css({
+	$(iframe.contentDocument.body).css({
 		"width" : "30px",
 		"height" : "30px"
 	});
@@ -734,7 +732,7 @@ test("bug #9534: position in iframe window", function() {
 	collisionTest({
 		my : "center",
 		at : "center",
-		of : iframeWindow
+		of : iframe.contentWindow
 	}, {
 		top : 5,
 		left : 5
