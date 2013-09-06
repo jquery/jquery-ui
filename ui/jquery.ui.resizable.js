@@ -623,6 +623,9 @@ $.widget("ui.resizable", $.ui.mouse, {
 		},
 		w: function(event, dx) {
 			var cs = this.originalSize, sp = this.originalPosition;
+			if ((sp.left + dx) < 0) {
+				dx = -sp.left;
+			}
 			return { left: sp.left + dx, width: cs.width - dx };
 		},
 		n: function(event, dx, dy) {
