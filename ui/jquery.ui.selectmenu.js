@@ -747,12 +747,12 @@ $.widget("ui.selectmenu", {
 		var optionElem = this._optionLis.eq( index );
 		if ( optionElem ) {
 				optionElem
-					.toggleClass( 'ui-state-disabled', flag )
-					.find( "a" ).attr( "aria-disabled", !flag );
+					.toggleClass( 'ui-state-disabled', !flag )
+					.find( "a" ).attr( "aria-disabled", flag );
 			if ( flag ) {
-				this.element.find( "option" ).eq( index ).attr( "disabled", "disabled" );
-			} else {
 				this.element.find( "option" ).eq( index ).removeAttr( "disabled" );
+			} else {
+				this.element.find( "option" ).eq( index ).attr( "disabled", "disabled" );
 			}
 		}
 	},
@@ -762,12 +762,12 @@ $.widget("ui.selectmenu", {
 			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
 			if ( optGroupElem ) {
 				optGroupElem
-					.toggleClass( 'ui-state-disabled', flag )
-					.attr( "aria-disabled", !flag );
+					.toggleClass( 'ui-state-disabled', !flag )
+					.attr( "aria-disabled", flag );
 				if ( flag ) {
-					this.element.find( "optgroup" ).eq( index ).attr( "disabled", "disabled" );
-				} else {
 					this.element.find( "optgroup" ).eq( index ).removeAttr( "disabled" );
+				} else {
+					this.element.find( "optgroup" ).eq( index ).attr( "disabled", "disabled" );
 				}
 			}
 	},
