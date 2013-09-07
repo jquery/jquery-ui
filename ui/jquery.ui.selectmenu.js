@@ -743,7 +743,7 @@ $.widget("ui.selectmenu", {
 		if ( elements ) {
 			elements
 				.toggleClass( 'ui-state-disabled', !flag )
-				.attr( "aria-disabled", flag );
+				.attr( "aria-disabled", !flag );
 				
 			if ( flag ) {
 				element.removeAttr( "disabled" );
