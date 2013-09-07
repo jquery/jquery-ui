@@ -718,11 +718,7 @@ $.widget("ui.selectmenu", {
 			if ( typeof( index ) == 'undefined' ) {
 				this._setOption( 'disabled', true );
 			} else {
-				if ( type == "optgroup" ) {
-					this._toggleOptgroup( index, false );
-				} else {
-					this._toggleOption( index, false );
-				}
+				this._toggleEnabled( ( type || "option" ), index, false );
 			}
 	},
 
@@ -731,45 +727,30 @@ $.widget("ui.selectmenu", {
 			if ( typeof( index ) == 'undefined' ) {
 				this._setOption( 'disabled', false );
 			} else {
-				if ( type == "optgroup" ) {
-					this._toggleOptgroup( index, true );
-				} else {
-					this._toggleOption( index, true );
-				}
+				this._toggleEnabled( ( type || "option" ), index, true );
 			}
 	},
 
 	_disabled: function( elem ) {
 			return $( elem ).hasClass( 'ui-state-disabled' );
 	},
-
-	_toggleOption: function( index, flag ) {
-		var optionElem = this._optionLis.eq( index );
-		if ( optionElem ) {
-				optionElem
-					.toggleClass( 'ui-state-disabled', !flag )
-					.find( "a" ).attr( "aria-disabled", flag );
+	
+	// true = enabled, false = disabled
+	_toggleEnabled: function( type, index, flag ) {
+		var element = this.element.find( type ).eq( index ),
+			elements = ( type === "optgroup" ) ? this.list.find( 'li.ui-selectmenu-group-' + index ) : this._optionLis.eq( index );
+				
+		if ( elements ) {
+			elements
+				.toggleClass( 'ui-state-disabled', !flag )
+				.attr( "aria-disabled", flag );
+				
 			if ( flag ) {
-				this.element.find( "option" ).eq( index ).removeAttr( "disabled" );
+				element.removeAttr( "disabled" );
 			} else {
-				this.element.find( "option" ).eq( index ).attr( "disabled", "disabled" );
+				element.attr( "disabled", "disabled" );
 			}
 		}
-	},
-
-	// true = enabled, false = disabled
-	_toggleOptgroup: function( index, flag ) {
-			var optGroupElem = this.list.find( 'li.ui-selectmenu-group-' + index );
-			if ( optGroupElem ) {
-				optGroupElem
-					.toggleClass( 'ui-state-disabled', !flag )
-					.attr( "aria-disabled", flag );
-				if ( flag ) {
-					this.element.find( "optgroup" ).eq( index ).removeAttr( "disabled" );
-				} else {
-					this.element.find( "optgroup" ).eq( index ).attr( "disabled", "disabled" );
-				}
-			}
 	},
 
 	index: function( newIndex ) {
