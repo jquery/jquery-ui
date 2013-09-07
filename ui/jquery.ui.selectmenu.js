@@ -703,13 +703,13 @@ $.widget("ui.selectmenu", {
 
 	_setOption: function( key, value ) {
 		this.options[ key ] = value;
-		// set
 		if ( key == 'disabled' ) {
 			if ( value ) this.close();
 			this.element
 				.add( this.newelement )
 				.add( this.list )[ value ? 'addClass' : 'removeClass' ]( 'ui-selectmenu-disabled ' + 'ui-state-disabled' )
-				.attr( "aria-disabled" , value );
+				.attr( "aria-disabled" , value )
+				.attr( "tabindex" , value ? 1 : 0 );
 		}
 	},
 
