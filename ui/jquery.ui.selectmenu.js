@@ -28,13 +28,13 @@ $.widget("ui.selectmenu", {
 
 	_create: function() {
 		var self = this, o = this.options;
-		
+
 		// make / set unique id
 		var selectmenuId = this.element.uniqueId().attr( "id" );
 
 		// quick array of button and menu id's
 		this.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
-		
+
 		// define safe mouseup for future toggling
 		this._safemouseup = true;
 		this.isOpen = false;
@@ -714,37 +714,37 @@ $.widget("ui.selectmenu", {
 	},
 
 	disable: function( index, type ){
-			// if options is not provided, call the parents disable function
-			if ( typeof( index ) == 'undefined' ) {
-				this._setOption( 'disabled', true );
-			} else {
-				this._toggleEnabled( ( type || "option" ), index, false );
-			}
+		// if options is not provided, call the parents disable function
+		if ( typeof( index ) == 'undefined' ) {
+			this._setOption( 'disabled', true );
+		} else {
+			this._toggleEnabled( ( type || "option" ), index, false );
+		}
 	},
 
 	enable: function( index, type ) {
-			// if options is not provided, call the parents enable function
-			if ( typeof( index ) == 'undefined' ) {
-				this._setOption( 'disabled', false );
-			} else {
-				this._toggleEnabled( ( type || "option" ), index, true );
-			}
+		// if options is not provided, call the parents enable function
+		if ( typeof( index ) == 'undefined' ) {
+			this._setOption( 'disabled', false );
+		} else {
+			this._toggleEnabled( ( type || "option" ), index, true );
+		}
 	},
 
 	_disabled: function( elem ) {
-			return $( elem ).hasClass( 'ui-state-disabled' );
+		return $( elem ).hasClass( 'ui-state-disabled' );
 	},
-	
+
 	// true = enabled, false = disabled
 	_toggleEnabled: function( type, index, flag ) {
 		var element = this.element.find( type ).eq( index ),
 			elements = ( type === "optgroup" ) ? this.list.find( 'li.ui-selectmenu-group-' + index ) : this._optionLis.eq( index );
-				
+
 		if ( elements ) {
 			elements
 				.toggleClass( 'ui-state-disabled', !flag )
 				.attr( "aria-disabled", !flag );
-				
+
 			if ( flag ) {
 				element.removeAttr( "disabled" );
 			} else {
