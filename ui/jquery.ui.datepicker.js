@@ -1665,8 +1665,8 @@ $.extend(Datepicker.prototype, {
 
 		prev = this._generateNextPrevButton(inst, -1, "ui-datepicker-prev", prevText, "prev", isRTL);
                 next = this._generateNextPrevButton(inst, +1, "ui-datepicker-next", nextText, "next", !isRTL);
-                bigPrev = this._generateNextPrevButton(inst, -1, "ui-datepicker-bigprev", prevText, "bigPrev", isRTL);
-                bigNext = this._generateNextPrevButton(inst, +1, "ui-datepicker-bignext", nextText, "bigNext", !isRTL);
+                bigPrev = this._generateNextPrevButton(inst, -1, "ui-datepicker-prev", prevText, "bigPrev", isRTL);
+                bigNext = this._generateNextPrevButton(inst, +1, "ui-datepicker-next", nextText, "bigNext", !isRTL);
                 
 		currentText = this._get(inst, "currentText");
 		gotoDate = (this._get(inst, "gotoCurrent") && inst.currentDay ? currentDate : today);
