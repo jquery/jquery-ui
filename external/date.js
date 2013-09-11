@@ -130,8 +130,9 @@ $.date = function( datestring, formatstring ) {
 						today: today.equal( printDate )
 					};
 					day.render = day.selectable = !day.lead;
-					// TODO undefined in picker demos, fix it
-					// this.eachDay( day );
+					if ( this.eachDay ) {
+						this.eachDay( day );
+					}
 					// TODO use adjust("D", 1)?
 					printDate.setDate( printDate.getDate() + 1 );
 				}
