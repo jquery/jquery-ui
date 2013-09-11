@@ -122,6 +122,7 @@ function Datepicker() {
 		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
 		stepBigMonths: 12, // Number of months to step back/forward for the big links
+		separateHeader: false, //Separate the month and year header.
 		altField: "", // Selector for an alternate field to store selected dates into
 		altFormat: "", // The date format to use for the alternate field
 		constrainInput: true, // The input is constrained by the current date format
@@ -1568,6 +1569,7 @@ $.extend(Datepicker.prototype, {
 	 */
 	_attachHandlers: function(inst) {
 		var stepMonths = this._get(inst, "stepMonths"),
+			stepBigMonths = this._get(inst, "stepBigMonths"),
 			id = "#" + inst.id.replace( /\\\\/g, "\\" );
 		inst.dpDiv.find("[data-handler]").map(function () {
 			var handler = {
@@ -1576,6 +1578,12 @@ $.extend(Datepicker.prototype, {
 				},
 				next: function () {
 					$.datepicker._adjustDate(id, +stepMonths, "M");
+				},
+				bigPrev: function() {
+					$.datepicker._adjustDate(id, -stepBigMonths, "M");
+				},
+				bigNext: function() {
+					$.datepicker._adjustDate(id, +stepBigMonths, "M");
 				},
 				hide: function () {
 					$.datepicker._hideDatepicker();
@@ -1602,7 +1610,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the HTML for the current state of the date picker. */
 	_generateHTML: function(inst) {
-		var maxDraw, prevText, prev, nextText, next, currentText, gotoDate,
+		var maxDraw, prevText, nextText, next, prev, bigNext, bigPrev, currentText, gotoDate,
 			controls, buttonPanel, firstDay, showWeek, dayNames, dayNamesMin,
 			monthNames, monthNamesShort, beforeShowDay, showOtherMonths,
 			selectOtherMonths, defaultDate, html, dow, row, group, col, selectedDate,
@@ -1613,11 +1621,11 @@ $.extend(Datepicker.prototype, {
 				new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate())), // clear time
 			isRTL = this._get(inst, "isRTL"),
 			showButtonPanel = this._get(inst, "showButtonPanel"),
-			hideIfNoPrevNext = this._get(inst, "hideIfNoPrevNext"),
 			navigationAsDateFormat = this._get(inst, "navigationAsDateFormat"),
 			numMonths = this._getNumberOfMonths(inst),
 			showCurrentAtPos = this._get(inst, "showCurrentAtPos"),
 			stepMonths = this._get(inst, "stepMonths"),
+			isSeparateHeader = this._get(inst, "separateHeader"),
 			isMultiMonth = (numMonths[0] !== 1 || numMonths[1] !== 1),
 			currentDate = this._daylightSavingAdjust((!inst.currentDay ? new Date(9999, 9, 9) :
 				new Date(inst.currentYear, inst.currentMonth, inst.currentDay))),
@@ -1650,21 +1658,16 @@ $.extend(Datepicker.prototype, {
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
 			this._getFormatConfig(inst)));
 
-		prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
-			"<a class='ui-datepicker-prev ui-corner-all' data-handler='prev' data-event='click'" +
-			" title='" + prevText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "e" : "w") + "'>" + prevText + "</span></a>" :
-			(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-prev ui-corner-all ui-state-disabled' title='"+ prevText +"'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "e" : "w") + "'>" + prevText + "</span></a>"));
-
 		nextText = this._get(inst, "nextText");
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
 			this._getFormatConfig(inst)));
 
-		next = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
-			"<a class='ui-datepicker-next ui-corner-all' data-handler='next' data-event='click'" +
-			" title='" + nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>" :
-			(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-next ui-corner-all ui-state-disabled' title='"+ nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>"));
-
+		prev = this._generateNextPrevButton(inst, -1, "ui-datepicker-prev", prevText, "prev", isRTL);
+		next = this._generateNextPrevButton(inst, +1, "ui-datepicker-next", nextText, "next", !isRTL);
+		bigPrev = this._generateNextPrevButton(inst, -1, "ui-datepicker-prev", prevText, "bigPrev", isRTL);
+		bigNext = this._generateNextPrevButton(inst, +1, "ui-datepicker-next", nextText, "bigNext", !isRTL);
+                
 		currentText = this._get(inst, "currentText");
 		gotoDate = (this._get(inst, "gotoCurrent") && inst.currentDay ? currentDate : today);
 		currentText = (!navigationAsDateFormat ? currentText :
@@ -1689,7 +1692,9 @@ $.extend(Datepicker.prototype, {
 		showOtherMonths = this._get(inst, "showOtherMonths");
 		selectOtherMonths = this._get(inst, "selectOtherMonths");
 		defaultDate = this._getDefaultDate(inst);
-		html = "";
+		html = (isSeparateHeader) ? "<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
+			(isRTL ? bigNext : bigPrev) + (isRTL ? bigPrev : bigNext) +
+			this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate, false, monthNames, monthNamesShort, true) + "</div>": "";
 		dow;
 		for (row = 0; row < numMonths[0]; row++) {
 			group = "";
@@ -1715,7 +1720,7 @@ $.extend(Datepicker.prototype, {
 					(/all|left/.test(cornerClass) && row === 0 ? (isRTL ? next : prev) : "") +
 					(/all|right/.test(cornerClass) && row === 0 ? (isRTL ? prev : next) : "") +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
-					row > 0 || col > 0, monthNames, monthNamesShort) + // draw month headers
+					row > 0 || col > 0, monthNames, monthNamesShort, false) + // draw month headers
 					"</div><table class='ui-datepicker-calendar'><thead>" +
 					"<tr>";
 				thead = (showWeek ? "<th class='ui-datepicker-week-col'>" + this._get(inst, "weekHeader") + "</th>" : "");
@@ -1783,17 +1788,33 @@ $.extend(Datepicker.prototype, {
 		inst._keyEvent = false;
 		return html;
 	},
+        
+        /* Generate the next and prev button */
+		_generateNextPrevButton: function(inst, offset, uiclass, text, handler, isReverse)
+		{
+			var drawYear = inst.drawYear,
+				drawMonth = inst.drawMonth,
+				hideIfNoPrevNext = this._get(inst, "hideIfNoPrevNext");
+
+			return (this._canAdjustMonth(inst, offset, drawYear, drawMonth) ?
+				"<a class='" + uiclass + " ui-corner-all' data-handler='" + handler + "' data-event='click'" +
+				" title='" + text + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isReverse ? "e" : "w") + "'>" + text + "</span></a>" :
+				(hideIfNoPrevNext ? "" : "<a class='" + uiclass + " ui-corner-all ui-state-disabled' title='"+
+				text +"'><span class='ui-icon ui-icon-circle-triangle-" + ( isReverse ? "e" : "w") + "'>" + text + "</span></a>"));
+		},
 
 	/* Generate the month and year header. */
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
-			secondary, monthNames, monthNamesShort) {
+			secondary, monthNames, monthNamesShort, isYearHeader) {
 
 		var inMinYear, inMaxYear, month, years, thisYear, determineYear, year, endYear,
 			changeMonth = this._get(inst, "changeMonth"),
 			changeYear = this._get(inst, "changeYear"),
 			showMonthAfterYear = this._get(inst, "showMonthAfterYear"),
+			isSeparateHeader = this._get(inst, "separateHeader"),
 			html = "<div class='ui-datepicker-title'>",
-			monthHtml = "";
+			monthHtml = "",
+			yearHtml = "";
 
 		// month selection
 		if (secondary || !changeMonth) {
@@ -1812,15 +1833,11 @@ $.extend(Datepicker.prototype, {
 			monthHtml += "</select>";
 		}
 
-		if (!showMonthAfterYear) {
-			html += monthHtml + (secondary || !(changeMonth && changeYear) ? "&#xa0;" : "");
-		}
-
 		// year selection
 		if ( !inst.yearshtml ) {
 			inst.yearshtml = "";
 			if (secondary || !changeYear) {
-				html += "<span class='ui-datepicker-year'>" + drawYear + "</span>";
+				yearHtml += "<span class='ui-datepicker-year'>" + drawYear + "</span>";
 			} else {
 				// determine range of years to display
 				years = this._get(inst, "yearRange").split(":");
@@ -1843,14 +1860,33 @@ $.extend(Datepicker.prototype, {
 				}
 				inst.yearshtml += "</select>";
 
-				html += inst.yearshtml;
+				yearHtml += inst.yearshtml;
 				inst.yearshtml = null;
 			}
 		}
-
-		html += this._get(inst, "yearSuffix");
-		if (showMonthAfterYear) {
-			html += (secondary || !(changeMonth && changeYear) ? "&#xa0;" : "") + monthHtml;
+		yearHtml += this._get(inst, "yearSuffix");
+                
+		if(isSeparateHeader)
+		{
+			if(isYearHeader)
+			{
+				html += yearHtml;
+			}
+			else
+			{
+				html += monthHtml;
+			}
+		}
+		else
+		{
+			if (showMonthAfterYear)
+			{
+				html += yearHtml + (secondary || !(changeMonth && changeYear) ? "&#xa0;" : "") + monthHtml;
+			}
+			else
+			{
+				html += monthHtml + (secondary || !(changeMonth && changeYear) ? "&#xa0;" : "") + yearHtml;
+			}
 		}
 		html += "</div>"; // Close datepicker_header
 		return html;
