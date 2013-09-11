@@ -24,6 +24,7 @@ var idIncrement = 0,
 $.widget( "ui.datepicker", {
 	options: {
 		appendTo: null,
+		dateFormat: null,
 		// TODO review
 		eachDay: $.noop,
 		numberOfMonths: 1,
@@ -41,7 +42,7 @@ $.widget( "ui.datepicker", {
 		select: null
 	},
 	_create: function() {
-		this.date = $.date();
+		this.date = $.date( null, this.options.dateFormat );
 		this.date.eachDay = this.options.eachDay;
 		this.id = "ui-datepicker-" + idIncrement;
 		idIncrement++;
@@ -528,7 +529,7 @@ $.widget( "ui.datepicker", {
 		}
 
 		// TODO explain this
-		this.date = $.date( this.element.val() );
+		this.date = $.date( this.element.val(), this.options.dateFormat );
 		this.date.eachDay = this.options.eachDay;
 		this.date.select();
 		this.refresh();
