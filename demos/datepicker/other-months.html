@@ -17,8 +17,13 @@
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker({
-			showOtherMonths: true,
-			selectOtherMonths: true
+			eachDay: function( day ) {
+				if ( day.lead ) {
+					day.render = true;
+					day.selectable = true;
+					day.extraClasses = "ui-priority-secondary";
+				}
+			}
 		});
 	});
 	</script>

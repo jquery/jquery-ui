@@ -471,7 +471,7 @@ $.widget( "ui.datepicker", {
 			classes.push( "ui-state-highlight" );
 		}
 		if ( day.extraClasses ) {
-			classes.push( day.extraClasses.split( "" ) );
+			classes.push( day.extraClasses.split( " " ) );
 		}
 
 		link = "<a href='#' tabindex='-1' data-timestamp='" + day.timestamp + "' class='" + classes.join( " " ) + "'>" +
@@ -490,7 +490,7 @@ $.widget( "ui.datepicker", {
 			classes.push( "ui-state-highlight" );
 		}
 		if ( day.extraClasses ) {
-			classes.push( day.extraClasses.split( "" ) );
+			classes.push( day.extraClasses.split( " " ) );
 		}
 
 		return "<span class='" + classes.join( "" ) + "'>" +
