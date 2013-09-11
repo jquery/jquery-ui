@@ -1790,8 +1790,8 @@ $.extend(Datepicker.prototype, {
 	},
         
         /* Generate the next and prev button */
-        _generateNextPrevButton: function(inst, offset, uiclass, text, handler, isReverse)
-        {
+		_generateNextPrevButton: function(inst, offset, uiclass, text, handler, isReverse)
+		{
 			var drawYear = inst.drawYear,
 				drawMonth = inst.drawMonth,
 				hideIfNoPrevNext = this._get(inst, "hideIfNoPrevNext");
@@ -1801,7 +1801,7 @@ $.extend(Datepicker.prototype, {
 				" title='" + text + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isReverse ? "e" : "w") + "'>" + text + "</span></a>" :
 				(hideIfNoPrevNext ? "" : "<a class='" + uiclass + " ui-corner-all ui-state-disabled' title='"+
 				text +"'><span class='ui-icon ui-icon-circle-triangle-" + ( isReverse ? "e" : "w") + "'>" + text + "</span></a>"));
-        },
+		},
 
 	/* Generate the month and year header. */
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
