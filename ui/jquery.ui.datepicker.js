@@ -37,6 +37,7 @@ $.widget( "ui.datepicker", {
 		hide: true,
 
 		// callbacks
+		beforeOpen: null,
 		close: null,
 		open: null,
 		select: null
@@ -525,6 +526,9 @@ $.widget( "ui.datepicker", {
 	},
 	open: function( event ) {
 		if ( this.inline || this.isOpen ) {
+			return;
+		}
+		if ( this._trigger( "beforeOpen", event ) === false ) {
 			return;
 		}
 
