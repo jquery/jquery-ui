@@ -1621,7 +1621,6 @@ $.extend(Datepicker.prototype, {
 				new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate())), // clear time
 			isRTL = this._get(inst, "isRTL"),
 			showButtonPanel = this._get(inst, "showButtonPanel"),
-			hideIfNoPrevNext = this._get(inst, "hideIfNoPrevNext"),
 			navigationAsDateFormat = this._get(inst, "navigationAsDateFormat"),
 			numMonths = this._getNumberOfMonths(inst),
 			showCurrentAtPos = this._get(inst, "showCurrentAtPos"),
@@ -1664,10 +1663,10 @@ $.extend(Datepicker.prototype, {
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
 			this._getFormatConfig(inst)));
 
-		prev = this._generateNextPrevButton(inst, "ui-datepicker-prev", prevText, "prev", isRTL);
-                next = this._generateNextPrevButton(inst, "ui-datepicker-next", nextText, "next", !isRTL);
-                bigPrev = this._generateNextPrevButton(inst, "ui-datepicker-prev", prevText, "bigPrev", isRTL);
-                bigNext = this._generateNextPrevButton(inst, "ui-datepicker-next", nextText, "bigNext", !isRTL);
+		prev = this._generateNextPrevButton(inst, -1, "ui-datepicker-prev", prevText, "prev", isRTL);
+                next = this._generateNextPrevButton(inst, +1, "ui-datepicker-next", nextText, "next", !isRTL);
+                bigPrev = this._generateNextPrevButton(inst, -1, "ui-datepicker-bigprev", prevText, "bigPrev", isRTL);
+                bigNext = this._generateNextPrevButton(inst, +1, "ui-datepicker-bignext", nextText, "bigNext", !isRTL);
                 
 		currentText = this._get(inst, "currentText");
 		gotoDate = (this._get(inst, "gotoCurrent") && inst.currentDay ? currentDate : today);
@@ -1791,16 +1790,16 @@ $.extend(Datepicker.prototype, {
 	},
         
         /* Generate the next and prev button */
-        _generateNextPrevButton: function(inst, uiclass, text, handler, isReverse)
+        _generateNextPrevButton: function(inst, offset, uiclass, text, handler, isReverse)
         {
                 var drawYear = inst.drawYear,
                         drawMonth = inst.drawMonth,
                         hideIfNoPrevNext = this._get(inst, "hideIfNoPrevNext");
                 
-                return (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
-                        "<a class='ui-corner-all " + uiclass + "' data-handler='" + handler + "' data-event='click'" +
+                return (this._canAdjustMonth(inst, offset, drawYear, drawMonth) ?
+                        "<a class='" + uiclass + " ui-corner-all' data-handler='" + handler + "' data-event='click'" +
                         " title='" + text + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isReverse ? "e" : "w") + "'>" + text + "</span></a>" :
-                        (hideIfNoPrevNext ? "" : "<a class='ui-datepicker-prev ui-corner-all ui-state-disabled' title='"+
+                        (hideIfNoPrevNext ? "" : "<a class='" + uiclass + " ui-corner-all ui-state-disabled' title='"+
                         text +"'><span class='ui-icon ui-icon-circle-triangle-" + ( isReverse ? "e" : "w") + "'>" + text + "</span></a>"));
         },
 
