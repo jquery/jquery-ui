@@ -41,7 +41,6 @@ $.widget( "ui.datepicker", {
 		select: null
 	},
 	_create: function() {
-		var that = this;
 		this.date = $.date();
 		this.date.eachDay = this.options.eachDay;
 		this.id = "ui-datepicker-" + idIncrement;
@@ -97,7 +96,8 @@ $.widget( "ui.datepicker", {
 		}
 		event.preventDefault();
 
-		var activeCell = $( "#" + this.grid.attr( "aria-activedescendant" ) ),
+		var newId, newCell,
+			activeCell = $( "#" + this.grid.attr( "aria-activedescendant" ) ),
 			oldMonth = this.date.month(),
 			oldYear = this.date.year();
 
@@ -134,13 +134,13 @@ $.widget( "ui.datepicker", {
 				return;
 		}
 
-		if ( this.date.month() != oldMonth || this.date.year() != oldYear ) {
+		if ( this.date.month() !== oldMonth || this.date.year() !== oldYear ) {
 			this.refresh();
 			this.grid.focus( 1 );
 		}
 		else {
-			var newId = this.id + "-" + this.date.day(),
-				newCell = $("#" + newId);
+			newId = this.id + "-" + this.date.day();
+			newCell = $("#" + newId);
 
 			// TODO unnecessary optimization? is it really needed?
 			if ( !newCell.length ) {
@@ -160,7 +160,7 @@ $.widget( "ui.datepicker", {
 			.uniqueId()
 			.hide();
 		this._setHiddenPicker();
-		this.picker.appendTo( this._appendTo() )
+		this.picker.appendTo( this._appendTo() );
 
 		this.element
 			.attr( "aria-haspopup", "true" )
@@ -210,7 +210,7 @@ $.widget( "ui.datepicker", {
 					suppressExpandOnFocus = false;
 				}, 100);
 			},
-			blur: function( event ) {
+			blur: function() {
 				suppressExpandOnFocus = false;
 			}
 		});
@@ -224,10 +224,10 @@ $.widget( "ui.datepicker", {
 					this.close( event );
 				}, 150);
 			},
-			focusin: function( event ) {
+			focusin: function() {
 				clearTimeout( this.closeTimer );
 			},
-			mouseup: function( event ) {
+			mouseup: function() {
 				clearTimeout( this.closeTimer );
 			},
 			// TODO on TAB (or shift TAB), make sure it ends up on something useful in DOM order
@@ -426,7 +426,7 @@ $.widget( "ui.datepicker", {
 		return "<tr role='row'>" + cells + "</tr>";
 	},
 	_buildDayCell: function( day ) {
-		var contents = "";
+		var contents = "",
 			idAttribute = day.render ? ( "id=" + this.id + "-" + day.date ) : "",
 			ariaSelectedAttribute = "aria-selected=" + ( day.current ? "true" : "false" ),
 			ariaDisabledAttribute = day.selectable ? "" : "aria-disabled=true";
@@ -448,8 +448,8 @@ $.widget( "ui.datepicker", {
 			classes = [ "ui-state-default" ],
 			labels = Globalize.localize( "datepicker" );
 
-		if ( day.date == this.date.day() ) {
-			classes.push( "ui-state-focus" )
+		if ( day.date === this.date.day() ) {
+			classes.push( "ui-state-focus" );
 		}
 		if ( day.current ) {
 			classes.push( "ui-state-active" );
@@ -490,13 +490,13 @@ $.widget( "ui.datepicker", {
 			"<button class='ui-datepicker-close'>" + labels.closeText + "</button>" +
 		"</div>";
 	},
-	_focusTrigger: function( event ) {
+	_focusTrigger: function() {
 		suppressExpandOnFocus = true;
 		this.element.focus();
 	},
 	// Refreshing the entire datepicker during interaction confuses screen readers, specifically
-	// because the grid heading is marked up as a live region and will often not update if it's 
-	// destroyed and recreated instead of just having its text change. Additionally, interacting 
+	// because the grid heading is marked up as a live region and will often not update if it's
+	// destroyed and recreated instead of just having its text change. Additionally, interacting
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
@@ -513,8 +513,7 @@ $.widget( "ui.datepicker", {
 		}
 	},
 	_refreshMultiplePicker: function() {
-		var currentDate = this.date,
-			i = 0;
+		var i = 0;
 
 		for ( ; i < this.options.numberOfMonths; i++ ) {
 			$( ".ui-datepicker-title", this.picker ).eq( i ).html( this._buildTitle() );
