@@ -25,9 +25,11 @@
 	$(function() {
 		$( "#datepicker" ).datepicker();
 		$( "#anim" ).change(function() {
+			var value = $( this ).val(),
+				hideValue = $( this ).find( "option:selected" ).data( "hide" );
 			$( "#datepicker" )
-				.datepicker( "option", "show", $( this ).val() )
-				.datepicker( "option", "hide", $( this ).val() );
+				.datepicker( "option", "show", value )
+				.datepicker( "option", "hide", hideValue || value );
 		});
 	});
 	</script>
@@ -38,9 +40,8 @@
 
 <p>Animations:<br />
 	<select id="anim">
-		<option value="show">Show (default)</option>
-		<option value="slideDown">Slide down</option>
-		<option value="fadeIn">Fade in</option>
+		<option value="show">Fade in/out (default)</option>
+		<option value="slideDown" data-hide="slideUp">Slide down/up</option>
 		<option value="blind">Blind (UI Effect)</option>
 		<option value="bounce">Bounce (UI Effect)</option>
 		<option value="clip">Clip (UI Effect)</option>
