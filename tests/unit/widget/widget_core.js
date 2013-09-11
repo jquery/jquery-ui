@@ -1409,7 +1409,7 @@ asyncTest( "_delay", function() {
 });
 
 test( "$.widget.bridge()", function() {
-	expect( 10 );
+	expect( 14 );
 
 	var instance, ret,
 		elem = $( "<div>" );
@@ -1427,6 +1427,9 @@ test( "$.widget.bridge()", function() {
 		},
 		getter: function() {
 			return "qux";
+		},
+		option: function( options ) {
+			deepEqual( options, {} );
 		}
 	});
 
@@ -1444,6 +1447,14 @@ test( "$.widget.bridge()", function() {
 
 	ret = elem.testWidget( "getter" );
 	equal( ret, "qux", "getter returns value" );
+
+	elem.testWidget();
+	ok( true, "_init is optional" );
+
+	TestWidget.prototype._init = function() {
+		ok( "_init", "_init now exists, so its called" );
+	};
+	elem.testWidget();
 });
 
 test( "$.widget.bridge() - widgetFullName", function() {
