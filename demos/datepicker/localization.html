@@ -6,6 +6,8 @@
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
 	<script src="../../jquery-1.10.2.js"></script>
 	<script src="../../external/globalize.js"></script>
+	<script src="../../external/globalize.culture.de-DE.js"></script>
+	<script src="../../external/globalize.culture.ja-JP.js"></script>
 	<script src="../../external/date.js"></script>
 	<script src="../../external/localization.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
@@ -13,17 +15,14 @@
 	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.datepicker.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
-	<script src="jquery.ui.datepicker-ar.js"></script>
-	<script src="jquery.ui.datepicker-fr.js"></script>
-	<script src="jquery.ui.datepicker-he.js"></script>
-	<script src="jquery.ui.datepicker-zh-TW.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker( $.datepicker.regional[ "fr" ] );
+		Globalize.culture( "de-DE" );
+		$( "#datepicker" ).datepicker();
 		$( "#locale" ).change(function() {
-			$( "#datepicker" ).datepicker( "option",
-				$.datepicker.regional[ $( this ).val() ] );
+			// TODO refresh the current value to convert to the selected culture
+			Globalize.culture( $(this).val() );
 		});
 	});
 	</script>
@@ -32,11 +31,9 @@
 
 <p>Date: <input type="text" id="datepicker"/>&nbsp;
 	<select id="locale">
-		<option value="ar">Arabic (&#8235;(&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</option>
-		<option value="zh-TW">Chinese Traditional (&#32321;&#39636;&#20013;&#25991;)</option>
-		<option value="">English</option>
-		<option value="fr" selected="selected">French (Fran&ccedil;ais)</option>
-		<option value="he">Hebrew (&#8235;(&#1506;&#1489;&#1512;&#1497;&#1514;</option>
+		<option value="de-DE" selected>German (Deutsch)</option>
+		<option value="ja-JP">Japanese (日本語</option>
+		<option value="en">English</option>
 	</select></p>
 
 <div class="demo-description">
