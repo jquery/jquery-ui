@@ -307,7 +307,7 @@ $.widget("ui.selectmenu", {
 					'aria-selected' : false
 				};
 				if ( selectOptionData[ i ].disabled ) {
-					thisAAttr[ 'aria-disabled' ] = selectOptionData[ i ].disabled;
+					thisAAttr[ 'aria-disabled' ] = true;
 				}
 				if ( selectOptionData[ i ].typeahead ) {
 					thisAAttr[ 'typeahead' ] = selectOptionData[ i ].typeahead;
