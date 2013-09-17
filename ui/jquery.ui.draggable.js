@@ -222,10 +222,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		if(!this.options.axis || this.options.axis !== "y") {
-			this.helper[0].style.left = this.position.left+"px";
+			this.helper[0].style.left = this.position.left-$(document).scrollLeft()+"px";
+			
 		}
 		if(!this.options.axis || this.options.axis !== "x") {
-			this.helper[0].style.top = this.position.top+"px";
+			this.helper[0].style.top = this.position.top-$(document).scrollTop()+"px";
 		}
 		if($.ui.ddmanager) {
 			$.ui.ddmanager.drag(this, event);
