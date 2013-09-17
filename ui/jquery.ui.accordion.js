@@ -14,15 +14,6 @@
  */
 (function( $, undefined ) {
 
-var uid = 0,
-	hideProps = {},
-	showProps = {};
-
-hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
-	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
-showProps.height = showProps.paddingTop = showProps.paddingBottom =
-	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
-
 $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
@@ -40,6 +31,22 @@ $.widget( "ui.accordion", {
 		// callbacks
 		activate: null,
 		beforeActivate: null
+	},
+
+	hideProps: {
+		borderTopWidth: "hide",
+		borderBottomWidth: "hide",
+		paddingTop: "hide",
+		paddingBottom: "hide",
+		height: "hide"
+	},
+
+	showProps: {
+		borderTopWidth: "show",
+		borderBottomWidth: "show",
+		paddingTop: "show",
+		paddingBottom: "show",
+		height: "show"
 	},
 
 	_create: function() {
@@ -99,31 +106,27 @@ $.widget( "ui.accordion", {
 
 		// clean up headers
 		this.headers
-			.removeClass( "ui-accordion-header ui-accordion-header-active ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
+			.removeClass( "ui-accordion-header ui-accordion-header-active ui-state-default " +
+				"ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-selected" )
 			.removeAttr( "aria-controls" )
 			.removeAttr( "tabIndex" )
-			.each(function() {
-				if ( /^ui-accordion/.test( this.id ) ) {
-					this.removeAttribute( "id" );
-				}
-			});
+			.removeUniqueId();
+
 		this._destroyIcons();
 
 		// clean up content panels
 		contents = this.headers.next()
+			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom " +
+				"ui-accordion-content ui-accordion-content-active ui-state-disabled" )
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-hidden" )
 			.removeAttr( "aria-labelledby" )
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" )
-			.each(function() {
-				if ( /^ui-accordion/.test( this.id ) ) {
-					this.removeAttribute( "id" );
-				}
-			});
+			.removeUniqueId();
+
 		if ( this.options.heightStyle !== "content" ) {
 			contents.css( "height", "" );
 		}
@@ -259,9 +262,7 @@ $.widget( "ui.accordion", {
 		var maxHeight,
 			options = this.options,
 			heightStyle = options.heightStyle,
-			parent = this.element.parent(),
-			accordionId = this.accordionId = "ui-accordion-" +
-				(this.element.attr( "id" ) || ++uid);
+			parent = this.element.parent();
 
 		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
@@ -272,19 +273,11 @@ $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
-			.each(function( i ) {
+			.each(function() {
 				var header = $( this ),
-					headerId = header.attr( "id" ),
+					headerId = header.uniqueId().attr( "id" ),
 					panel = header.next(),
-					panelId = panel.attr( "id" );
-				if ( !headerId ) {
-					headerId = accordionId + "-header-" + i;
-					header.attr( "id", headerId );
-				}
-				if ( !panelId ) {
-					panelId = accordionId + "-panel-" + i;
-					panel.attr( "id", panelId );
-				}
+					panelId = panel.uniqueId().attr( "id" );
 				header.attr( "aria-controls", panelId );
 				panel.attr( "aria-labelledby", headerId );
 			})
@@ -520,14 +513,14 @@ $.widget( "ui.accordion", {
 		duration = duration || options.duration || animate.duration;
 
 		if ( !toHide.length ) {
-			return toShow.animate( showProps, duration, easing, complete );
+			return toShow.animate( this.showProps, duration, easing, complete );
 		}
 		if ( !toShow.length ) {
-			return toHide.animate( hideProps, duration, easing, complete );
+			return toHide.animate( this.hideProps, duration, easing, complete );
 		}
 
 		total = toShow.show().outerHeight();
-		toHide.animate( hideProps, {
+		toHide.animate( this.hideProps, {
 			duration: duration,
 			easing: easing,
 			step: function( now, fx ) {
@@ -536,7 +529,7 @@ $.widget( "ui.accordion", {
 		});
 		toShow
 			.hide()
-			.animate( showProps, {
+			.animate( this.showProps, {
 				duration: duration,
 				easing: easing,
 				complete: complete,
