@@ -67,7 +67,7 @@ test( "aria-controls", function() {
 	tabs = element.find( ".ui-tabs-nav li" );
 	equal( tabs.eq( 0 ).attr( "aria-controls" ), "colon:test" );
 	equal( tabs.eq( 1 ).attr( "aria-controls" ), "inline-style" );
-	ok( /^ui-tabs-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
+	ok( /^ui-id-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
 	equal( tabs.eq( 3 ).attr( "aria-controls" ), "custom-id" );
 });
 
