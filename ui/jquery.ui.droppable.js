@@ -16,10 +16,6 @@
  */
 (function( $, undefined ) {
 
-function isOverAxis( x, reference, size ) {
-	return ( x >= reference ) && ( x < ( reference + size ) );
-}
-
 $.widget( "ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
@@ -204,23 +200,28 @@ $.widget( "ui.droppable", {
 
 });
 
-$.ui.intersect = function( draggable, droppable, toleranceMode ) {
-
-	if ( !droppable.offset ) {
-		return false;
+$.ui.intersect = (function() {
+	function isOverAxis( x, reference, size ) {
+		return ( x >= reference ) && ( x < ( reference + size ) );
 	}
 
-	var draggableLeft, draggableTop,
-		x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
-		y1 = ( draggable.positionAbs || draggable.position.absolute ).top,
-		x2 = x1 + draggable.helperProportions.width,
-		y2 = y1 + draggable.helperProportions.height,
-		l = droppable.offset.left,
-		t = droppable.offset.top,
-		r = l + droppable.proportions().width,
-		b = t + droppable.proportions().height;
+	return function( draggable, droppable, toleranceMode ) {
 
-	switch ( toleranceMode ) {
+		if ( !droppable.offset ) {
+			return false;
+		}
+
+		var draggableLeft, draggableTop,
+			x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
+			y1 = ( draggable.positionAbs || draggable.position.absolute ).top,
+			x2 = x1 + draggable.helperProportions.width,
+			y2 = y1 + draggable.helperProportions.height,
+			l = droppable.offset.left,
+			t = droppable.offset.top,
+			r = l + droppable.proportions().width,
+			b = t + droppable.proportions().height;
+
+		switch ( toleranceMode ) {
 		case "fit":
 			return ( l <= x1 && x2 <= r && t <= y1 && y2 <= b );
 		case "intersect":
@@ -245,8 +246,8 @@ $.ui.intersect = function( draggable, droppable, toleranceMode ) {
 		default:
 			return false;
 		}
-
-};
+	};
+})();
 
 /*
 	This manager tracks offsets of draggables and droppables
