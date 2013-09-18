@@ -68,10 +68,10 @@
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	border: 1px solid #999999/*{borderColorHover}*/;
-	background: #dadada/*{bgColorHover}*/ url(images/ui-bg_glass_75_dadada_1x400.png)/*{bgImgUrlHover}*/ 50%/*{bgHoverXPos}*/ 50%/*{bgHoverYPos}*/ repeat-x/*{bgHoverRepeat}*/;
-	font-weight: normal/*{fwDefault}*/;
-	color: #212121/*{fcHover}*/;
+	border: 1px solid #999999/*{borderColorHover}*/ !important;
+	background: #dadada/*{bgColorHover}*/ url(images/ui-bg_glass_75_dadada_1x400.png)/*{bgImgUrlHover}*/ 50%/*{bgHoverXPos}*/ 50%/*{bgHoverYPos}*/ repeat-x/*{bgHoverRepeat}*/ !important;
+	font-weight: normal/*{fwDefault}*/ !important;
+	color: #212121/*{fcHover}*/ !important;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
