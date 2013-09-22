@@ -40,5 +40,8 @@ TestHelpers.dialog = {
 		actual = { width: widthAfter, height: heightAfter },
 		expected = { width: widthBefore + dw, height: heightBefore + dh };
 		deepEqual(actual, expected, "resized[" + 50 + ", " + 50 + "] " + msg);
+	},
+	checkScrollBar: function() {
+		return $( document ).height() > $( window ).height();
 	}
 };

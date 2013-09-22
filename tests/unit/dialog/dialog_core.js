@@ -116,6 +116,42 @@ test( "#7960: resizable handles below modal overlays", function() {
 	dialog.dialog( "destroy" );
 });
 
+test("#9521: Dialog: Resiable dialogs move/resize out of viewpoint boundry", function() {
+	expect( 2 );
+	var doc = {},
+		dialogWithNoResize = {},
+		dialogWithResize = {},
+		delta ={},
+		elementWithNoResize = $( "<div></div>" ).dialog({ resizable:false }),
+		elementWithResize = $( "<div></div>" ).dialog({ resizable:true }),
+		handleWithNoResize = $( ".ui-dialog-titlebar", elementWithNoResize.dialog( "widget" )),
+		handleWithResize = $( ".ui-dialog-titlebar", elementWithResize.dialog( "widget" ));
+	
+	//Dialog with NO Resize Handles
+	doc.height = $( document ).height();
+	doc.width = $( document ).width();
+	dialogWithNoResize.height = elementWithNoResize.outerHeight();
+	dialogWithNoResize.width = elementWithNoResize.outerWidth();
+	delta.width = doc.width - dialogWithNoResize.width;
+	delta.height = doc.height - dialogWithNoResize.height;
+
+	elementWithNoResize.offset({ top: 0, left: 0 });
+	
+	TestHelpers.dialog.drag( elementWithNoResize,handleWithNoResize, delta.width, delta.height );
+	equal( TestHelpers.dialog.checkScrollBar(),false );
+
+	//Dialog with Resize Handles
+	elementWithResize.offset({ top: 0, left: 0 });
+	dialogWithResize.height = elementWithResize.outerHeight();
+	dialogWithResize.width = elementWithResize.outerWidth();
+	delta.width = doc.width - dialogWithResize.width;
+	delta.height = doc.height - dialogWithResize.height;
+	
+	TestHelpers.dialog.drag( elementWithResize,handleWithResize, delta.width, delta.height );
+	
+	equal( TestHelpers.dialog.checkScrollBar(),false );
+});
+
 asyncTest( "Prevent tabbing out of dialogs", function() {
 	expect( 3 );
 

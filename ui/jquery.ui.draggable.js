@@ -396,6 +396,48 @@ $.widget("ui.draggable", $.ui.mouse, {
 		};
 	},
 
+	_isResizableHandlersAttached: function (){
+		var handle;
+		this.resizableHandle = this.resizableHandle || {};
+		this.resizableHandle.attached = 0;
+		this.resizableHandle.type = {
+			RIGHT: 2, //E
+			BOTTOM: 4, //S
+			LEFT: 8, //W
+			TOP: 16,  //N
+			TOP_LEFT: 32, //NW
+			TOP_RIGHT: 64, //NE
+			BOTTOM_RIGHT: 128, //SE
+			BOTTOM_LEFT: 256, //SW
+			ALL: 510
+		};
+
+		this.resizableHandle.overflow = {};
+		this.resizableHandle.overflow = {
+			width: 0,
+			height: 0
+		};
+		
+		if ( this.element.children( " .ui-resizable-e " )[ 0 ] ) {
+			handle = $( this.element.children( " .ui-resizable-e " )[ 0 ] );
+			this.resizableHandle.attached = this.resizableHandle.attached | this.resizableHandle.type.RIGHT;
+			this.resizableHandle.overflow.width = handle.outerWidth() + ( parseInt( handle.css( "right" ), 10 ) || 0 ) ;
+		}
+		
+		if ( this.element.children( " .ui-resizable-s " )[ 0 ] ){
+			handle = $( this.element.children( " .ui-resizable-s " )[ 0 ] );
+			this.resizableHandle.attached = this.resizableHandle.attached | this.resizableHandle.type.BOTTOM;
+			this.resizableHandle.overflow.height = handle.outerHeight() + ( parseInt( handle.css( "bottom" ), 10 ) || 0 );
+		}
+		
+		if ( this.element.children( " .ui-resizable-se " )[ 0 ] ) {
+			handle = $( this.element.children( " .ui-resizable-se " )[ 0 ] );
+			this.resizableHandle.attached = this.resizableHandle.attached | this.resizableHandle.type.BOTTOM_RIGHT;
+			this.resizableHandle.overflow.width = handle.outerWidth() + ( parseInt( handle.css( "right"), 10 ) || 0 );
+			this.resizableHandle.overflow.height = handle.outerHeight() + ( parseInt( handle.css( "bottom" ),10 ) || 0 );
+		}
+	},
+
 	_setContainment: function() {
 
 		var over, c, ce,
@@ -406,6 +448,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this.containment = null;
 			return;
 		}
+
+		this._isResizableHandlersAttached();
 
 		if ( o.containment === "window" ) {
 			this.containment = [
@@ -418,12 +462,21 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		if ( o.containment === "document") {
-			this.containment = [
-				0,
-				0,
-				$( document ).width() - this.helperProportions.width - this.margins.left,
-				( $( document ).height() || document.body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
-			];
+			if ( this.resizableHandle.attached ){
+				this.containment = [
+					0,
+					0,
+					$( document ).width() - this.helperProportions.width - this.margins.left - this.resizableHandle.overflow.width,
+					( $( document ).height() || document.body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top - this.resizableHandle.overflow.height
+				];
+			} else {
+				this.containment = [
+					0,
+					0,
+					$( document ).width() - this.helperProportions.width - this.margins.left,
+					( $( document ).height() || document.body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
+				];
+			}
 			return;
 		}
 
