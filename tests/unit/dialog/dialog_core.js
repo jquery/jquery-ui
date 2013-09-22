@@ -137,8 +137,8 @@ test("#9521: Dialog: Resiable dialogs move/resize out of viewpoint boundry", fun
 
 	elementWithNoResize.offset({ top: 0, left: 0 });
 	
-	TestHelpers.dialog.drag( elementWithNoResize,handleWithNoResize, delta.width, delta.height );
-	equal( TestHelpers.dialog.checkScrollBar(),false );
+	TestHelpers.dialog.drag( elementWithNoResize, handleWithNoResize, delta.width, delta.height );
+	equal( TestHelpers.dialog.checkScrollBar(), false );
 
 	//Dialog with Resize Handles
 	elementWithResize.offset({ top: 0, left: 0 });
@@ -147,9 +147,9 @@ test("#9521: Dialog: Resiable dialogs move/resize out of viewpoint boundry", fun
 	delta.width = doc.width - dialogWithResize.width;
 	delta.height = doc.height - dialogWithResize.height;
 	
-	TestHelpers.dialog.drag( elementWithResize,handleWithResize, delta.width, delta.height );
+	TestHelpers.dialog.drag( elementWithResize, handleWithResize, delta.width, delta.height );
 	
-	equal( TestHelpers.dialog.checkScrollBar(),false );
+	equal( TestHelpers.dialog.checkScrollBar(), false );
 });
 
 asyncTest( "Prevent tabbing out of dialogs", function() {
