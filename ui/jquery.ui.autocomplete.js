@@ -523,9 +523,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderItem: function( ul, item ) {
-		return $( "<li>" )
-			.append( $( "<a>" ).text( item.label ) )
-			.appendTo( ul );
+		return $( "<li>" ).text( item.label ).appendTo( ul );
 	},
 
 	_move: function( direction, event ) {
