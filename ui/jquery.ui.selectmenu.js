@@ -122,6 +122,7 @@ $.widget( "ui.selectmenu", {
 			select: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
 
+				event.preventDefault();				
 				that._select( item, event );
 			},
 			focus: function( event, ui ) {
