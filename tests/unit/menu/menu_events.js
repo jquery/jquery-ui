@@ -577,6 +577,37 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 	}
 });
 
+asyncTest( "handle keyboard navigation and mouse click on menu with dividers and group labels", function() {
+	expect( 2 );
+	var element = $( "#menu7" ).menu({
+		items: "> :not('.ui-menu-group')",
+		select: function( event, ui ) {
+			log( $( ui.item[0] ).text() );
+		},
+		focus: function( event ) {
+			log( $( event.target ).find( ".ui-state-focus" ).index());
+		}
+	});
+
+	log( "keydown", true );
+	element.one( "menufocus", function() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		equal( logOutput(), "keydown,2,Ada", "Keydown skips initial group label" );
+		setTimeout( menukeyboard1, 50 );
+	});
+	element.focus();
+
+	function menukeyboard1() {
+		log( "keydown", true );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equal( logOutput(), "keydown,3,4,7", "Keydown focus skips divider and group label" );
+		start();
+	}
+});
+
 asyncTest( "handle keyboard navigation with spelling of menu items", function() {
 	expect( 2 );
 	var element = $( "#menu2" ).menu({
