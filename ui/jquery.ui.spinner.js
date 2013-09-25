@@ -418,6 +418,18 @@ $.widget( "ui.spinner", {
 		});
 	},
 
+	isValid: function() {
+		var value = this.value();
+
+		// null is invalid
+		if ( value === null ) {
+			return false;
+		}
+
+		// if value gets adjusted, it's invalid
+		return value === this._adjustValue( value );
+	},
+
 	// update the value without triggering change
 	_value: function( value, allowAny ) {
 		var parsed;

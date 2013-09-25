@@ -203,7 +203,10 @@ $.widget.bridge = function( name, object ) {
 			this.each(function() {
 				var instance = $.data( this, fullName );
 				if ( instance ) {
-					instance.option( options || {} )._init();
+					instance.option( options || {} );
+					if ( instance._init ) {
+						instance._init();
+					}
 				} else {
 					$.data( this, fullName, new object( options, this ) );
 				}
@@ -349,8 +352,12 @@ $.Widget.prototype = {
 		if ( key === "disabled" ) {
 			this.widget()
 				.toggleClass( this.widgetFullName + "-disabled", !!value );
-			this.hoverable.removeClass( "ui-state-hover" );
-			this.focusable.removeClass( "ui-state-focus" );
+
+			// If the widget is becoming disabled, then nothing is interactive
+			if ( value ) {
+				this.hoverable.removeClass( "ui-state-hover" );
+				this.focusable.removeClass( "ui-state-focus" );
+			}
 		}
 
 		return this;
