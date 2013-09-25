@@ -57,7 +57,7 @@ $.widget( "ui.selectmenu", {
 	_drawButton: function() {
 		var tabindex = this.element.attr( "tabindex" );
 
-		// Fix existing label
+		// Associate existing label with the new button
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
 		this._on( this.label, {
 			click: function( event ) {
@@ -66,7 +66,7 @@ $.widget( "ui.selectmenu", {
 			}
 		});
 
-		// Hide original select tag
+		// Hide original select element
 		this.element.hide();
 
 		// Create button
@@ -101,7 +101,7 @@ $.widget( "ui.selectmenu", {
 	_drawMenu: function() {
 		var that = this;
 
-		// Create menu portion, append to body
+		// Create menu
 		this.menu = $( "<ul>", {
 			"aria-hidden": "true",
 			"aria-labelledby": this.ids.button,
@@ -110,28 +110,24 @@ $.widget( "ui.selectmenu", {
 
 		// Wrap menu
 		this.menuWrap = $( "<div>", {
-				"class": "ui-selectmenu-menu ui-front",
-				outerWidth: this.button.outerWidth()
-			})
-			.append( this.menu )
-			.appendTo( this._appendTo() );
+			"class": "ui-selectmenu-menu ui-front",
+			outerWidth: this.button.outerWidth()
+		})
+		.append( this.menu )
+		.appendTo( this._appendTo() );
 
-		// Init menu widget
+		// Initialize menu widget
 		this.menuInstance = this.menu.menu({
+			role: "listbox",
 			select: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
 
 				that._select( item, event );
-
-				if ( that.isOpen ) {
-					event.preventDefault();
-					that.close( event );
-				}
 			},
 			focus: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
 
-				// prevent inital focus from firing and checks if its a newly focused item
+				// Prevent inital focus from firing and checks if its a newly focused item
 				if ( that.focusIndex != null && item.index !== that.focusIndex ) {
 					that._trigger( "focus", event, { item: item } );
 					if ( !that.isOpen ) {
@@ -140,16 +136,18 @@ $.widget( "ui.selectmenu", {
 				}
 				that.focusIndex = item.index;
 
-				that.button.attr( "aria-activedescendant", that.menuItems.eq( item.index ).attr( "id" ) );
-			},
-			role: "listbox"
+				that.button.attr( "aria-activedescendant",
+					that.menuItems.eq( item.index ).attr( "id" ) );
+			}
 		})
 		.menu( "instance" );
 
-		// adjust menu styles to dropdown
+		// Adjust menu styles to dropdown
 		this.menu.addClass( "ui-corner-bottom" ).removeClass( "ui-corner-all" );
 
-		// Unbind uneeded Menu events
+		// TODO: Can we make this cleaner?
+		// If not, at least update the comment to say what we're removing
+		// Unbind uneeded menu events
 		this.menuInstance._off( this.menu, "mouseleave" );
 
 		// Cancel the menu's collapseAll on document click
@@ -171,19 +169,19 @@ $.widget( "ui.selectmenu", {
 		this._readOptions( options );
 		this._renderMenu( this.menu, this.items );
 
-		this.menu.menu( "refresh" );
+		this.menuInstance.refresh();
 		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
 
 		item = this._getSelectedItem();
 
-		// Make sure menu is selected item aware
-		this.menu.menu( "focus", null, item );
+		// Update the menu to have the correct item focused
+		this.menuInstance.focus( null, item );
 		this._setAria( item.data( "ui-selectmenu-item" ) );
 
 		this._setText( this.buttonText, item.text() );
 
 		// Set disabled state
-		this._setOption( "disabled", !!this.element.prop( "disabled" ) );
+		this._setOption( "disabled", this.element.prop( "disabled" ) );
 	},
 
 	open: function( event ) {
@@ -191,12 +189,14 @@ $.widget( "ui.selectmenu", {
 			return;
 		}
 
-		// Support: IE6-IE9 click doesn't trigger focus on the button
+		// If this is the first time the menu is being opened, render the items
 		if ( !this.menuItems ) {
 			this.refresh();
 		} else {
+			// TODO: Why is this necessary?
+			// Shouldn't the underlying menu always have accurate state?
 			this.menu.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
-			this.menu.menu( "focus", null, this._getSelectedItem() );
+			this.menuInstance.focus( null, this._getSelectedItem() );
 		}
 
 		this.isOpen = true;
@@ -245,9 +245,13 @@ $.widget( "ui.selectmenu", {
 		$.each( items, function( index, item ) {
 			if ( item.optgroup !== currentOptgroup ) {
 				$( "<li>", {
-					"class": "ui-selectmenu-optgroup" + ( item.element.parent( "optgroup" ).attr( "disabled" ) ? " ui-state-disabled" : "" ),
+					"class": "ui-selectmenu-optgroup" +
+						( item.element.parent( "optgroup" ).attr( "disabled" ) ?
+							" ui-state-disabled" :
+							"" ),
 					text: item.optgroup
-				}).appendTo( ul );
+				})
+				.appendTo( ul );
 				currentOptgroup = item.optgroup;
 			}
 			that._renderItemData( ul, item );
@@ -283,7 +287,8 @@ $.widget( "ui.selectmenu", {
 			// Set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
 		} else {
-			if ( direction === "previous" && this.menu.menu( "isFirstItem" ) || direction === "next" && this.menu.menu( "isLastItem" ) ) {
+			if ( direction === "previous" && this.menu.menu( "isFirstItem" ) ||
+					direction === "next" && this.menu.menu( "isLastItem" ) ) {
 				return;
 			}
 
@@ -313,30 +318,25 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_buttonEvents: {
-		focus: function() {
-			// Init Menu on first focus
-			this.refresh();
-			// Reset focus class as its removed by ui.widget._setOption
-			this.button.addClass( "ui-state-focus" );
-			this._off( this.button, "focus" );
+		focusin: function() {
+			// Delay rendering the menu items until the button receives focus
+			if ( !this.menuItems ) {
+				this.refresh();
+			}
+			this._off( this.button, "focusin" );
 		},
-		click: function( event ) {
-			this._toggle( event );
-			event.preventDefault();
-		},
+		click: "_toggle",
 		keydown: function( event ) {
-			var prevDef = true;
+			var preventDefault = true;
 			switch ( event.keyCode ) {
 				case $.ui.keyCode.TAB:
 				case $.ui.keyCode.ESCAPE:
-					if ( this.isOpen ) {
-						this.close( event );
-					}
-					prevDef = false;
+					this.close( event );
+					preventDefault = false;
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.isOpen ) {
-						this.menu.menu( "select", event );
+						this.menuInstance.select( event );
 					}
 					break;
 				case $.ui.keyCode.UP:
@@ -355,7 +355,7 @@ $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.SPACE:
 					if ( this.isOpen ) {
-						this.menu.menu( "select", event );
+						this.menuInstance.select( event );
 					} else {
 						this._toggle( event );
 					}
@@ -376,9 +376,10 @@ $.widget( "ui.selectmenu", {
 					break;
 				default:
 					this.menu.trigger( event );
-					prevDef = false;
+					preventDefault = false;
 			}
-			if ( prevDef ) {
+
+			if ( preventDefault ) {
 				event.preventDefault();
 			}
 		}
@@ -386,6 +387,7 @@ $.widget( "ui.selectmenu", {
 
 	_select: function( item, event ) {
 		var oldIndex = this.element[ 0 ].selectedIndex;
+
 		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
 		this._setText( this.buttonText, item.label );
@@ -395,6 +397,8 @@ $.widget( "ui.selectmenu", {
 		if ( item.index !== oldIndex ) {
 			this._trigger( "change", event, { item: item } );
 		}
+
+		this.close( event );
 	},
 
 	_setAria: function( item ) {
@@ -421,17 +425,16 @@ $.widget( "ui.selectmenu", {
 			this.menuWrap.appendTo( this._appendTo() );
 		}
 		if ( key === "disabled" ) {
-			this.menu.menu( "option", "disabled", value );
+			this.menuInstance.option( "disabled", value );
 			this.button
-				.toggleClass( "ui-state-disabled", !!value )
+				.toggleClass( "ui-state-disabled", value )
 				.attr( "aria-disabled", value );
 
+			this.element.prop( "disabled", value );
 			if ( value ) {
-				this.element.attr( "disabled", "disabled" );
 				this.button.attr( "tabindex", -1 );
 				this.close();
 			} else {
-				this.element.removeAttr( "disabled" );
 				this.button.attr( "tabindex", 0 );
 			}
 		}
@@ -458,14 +461,16 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_toggleAttr: function(){
-		this.button.toggleClass( "ui-corner-top", this.isOpen ).toggleClass( "ui-corner-all", !this.isOpen );
+		this.button
+			.toggleClass( "ui-corner-top", this.isOpen )
+			.toggleClass( "ui-corner-all", !this.isOpen );
 		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
-		this.menu.attr( "aria-hidden", !this.isOpen);
-		this.button.attr( "aria-expanded", this.isOpen);
+		this.menu.attr( "aria-hidden", !this.isOpen );
+		this.button.attr( "aria-expanded", this.isOpen );
 	},
 
 	_getCreateOptions: function() {
-		return { disabled: !!this.element.prop( "disabled" ) };
+		return { disabled: this.element.prop( "disabled" ) };
 	},
 
 	_readOptions: function( options ) {
