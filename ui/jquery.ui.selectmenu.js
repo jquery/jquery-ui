@@ -120,7 +120,7 @@ $.widget( "ui.selectmenu", {
 		this.menuInstance = this.menu.menu({
 			role: "listbox",
 			select: function( event, ui ) {
-				event.preventDefault();				
+				event.preventDefault();
 				that._select( ui.item.data( "ui-selectmenu-item" ), event );
 			},
 			focus: function( event, ui ) {
@@ -156,6 +156,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	refresh: function() {
+		this._refreshMenu();
+		this._setText( this.buttonText, this._getSelectedItem().text() );
+	},
+
+	_refreshMenu: function() {
 		this.menu.empty();
 
 		var item,
@@ -177,8 +182,6 @@ $.widget( "ui.selectmenu", {
 		this.menuInstance.focus( null, item );
 		this._setAria( item.data( "ui-selectmenu-item" ) );
 
-		this._setText( this.buttonText, item.text() );
-
 		// Set disabled state
 		this._setOption( "disabled", this.element.prop( "disabled" ) );
 	},
@@ -190,7 +193,7 @@ $.widget( "ui.selectmenu", {
 
 		// If this is the first time the menu is being opened, render the items
 		if ( !this.menuItems ) {
-			this.refresh();
+			this._refreshMenu();
 		} else {
 			// TODO: Why is this necessary?
 			// Shouldn't the underlying menu always have accurate state?
@@ -320,7 +323,7 @@ $.widget( "ui.selectmenu", {
 		focusin: function() {
 			// Delay rendering the menu items until the button receives focus
 			if ( !this.menuItems ) {
-				this.refresh();
+				this._refreshMenu();
 			}
 			this._off( this.button, "focusin" );
 		},
