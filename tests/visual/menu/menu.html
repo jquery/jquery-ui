@@ -15,7 +15,7 @@
 			$( "<p>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
 		}
 
-		$( "#menu1, #menu2, #menu3, .menu4, #menu7" ).menu({
+		$( "#menu1, #menu2, #menu3, .menu4" ).menu({
 			select: logger
 		});
 
@@ -28,6 +28,11 @@
 			menus: ".menuElement",
 			select: logger,
 			icon: "ui-icon-carat-1-s"
+		});
+
+		$( "#menu7" ).menu({
+			items: "> :not('.ui-menu-group')",
+			select: logger
 		});
 	});
 	</script>
@@ -237,7 +242,7 @@
 	</div>
 </div>
 
-<h2>Inline with dividers and elements without anchors</h2>
+<h2>Inline with dividers and group labels</h2>
 <ul id="menu7">
 	<li class="ui-menu-group"><strong>Group 1</strong></li>
 	<li>Aberdeen</li>

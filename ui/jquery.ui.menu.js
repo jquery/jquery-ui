@@ -23,6 +23,7 @@ $.widget( "ui.menu", {
 		icons: {
 			submenu: "ui-icon-carat-1-e"
 		},
+		items: "> *",
 		menus: "ul",
 		position: {
 			my: "left top",
@@ -110,7 +111,7 @@ $.widget( "ui.menu", {
 			focus: function( event, keepActiveItem ) {
 				// If there's already an active item, keep it active
 				// If not, activate the first item
-				var item = this.active || this.element.children( ".ui-menu-item" ).eq( 0 );
+				var item = this.active || this.element.find( this.options.items ).eq( 0 );
 
 				if ( !keepActiveItem ) {
 					this.focus( event, item );
@@ -234,7 +235,7 @@ $.widget( "ui.menu", {
 			}
 
 			regex = new RegExp( "^" + escape( character ), "i" );
-			match = this.activeMenu.children( ".ui-menu-item" ).filter(function() {
+			match = this.activeMenu.find( this.options.items ).filter(function() {
 				return regex.test( $( this ).text() );
 			});
 			match = skip && match.index( this.active.next() ) !== -1 ?
@@ -246,7 +247,7 @@ $.widget( "ui.menu", {
 			if ( !match.length ) {
 				character = String.fromCharCode( event.keyCode );
 				regex = new RegExp( "^" + escape( character ), "i" );
-				match = this.activeMenu.children( ".ui-menu-item" ).filter(function() {
+				match = this.activeMenu.find( this.options.items ).filter(function() {
 					return regex.test( $( this ).text() );
 				});
 			}
@@ -283,6 +284,7 @@ $.widget( "ui.menu", {
 
 	refresh: function() {
 		var menus,
+			items,
 			icon = this.options.icons.submenu,
 			submenus = this.element.find( this.options.menus );
 
@@ -311,9 +313,10 @@ $.widget( "ui.menu", {
 			});
 
 		menus = submenus.add( this.element );
+		items = menus.find( this.options.items );
 
-		// Initialize unlinked menu-items containing spaces and/or dashes only as dividers
-		menus.children( ":not(.ui-menu-item)" ).each(function() {
+		// Initialize menu-items containing spaces and/or dashes only as dividers
+		items.not( ".ui-menu-item" ).each(function() {
 			var item = $( this );
 			// hyphen, em dash, en dash
 			if ( !/[^\-\u2014\u2013\s]/.test( item.text() ) ) {
@@ -322,7 +325,7 @@ $.widget( "ui.menu", {
 		});
 
 		// Don't refresh list items that are already adapted
-		menus.children( ":not(.ui-menu-item,.ui-menu-divider)" )
+		items.not( ".ui-menu-item, .ui-menu-divider" )
 			.addClass( "ui-menu-item" )
 			.uniqueId()
 			.addClass( "ui-corner-all" )
@@ -332,7 +335,7 @@ $.widget( "ui.menu", {
 			});
 
 		// Add aria-disabled attribute to any disabled menu item
-		menus.children( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
+		items.filter( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
 
 		// If the active item has been removed, blur the menu
 		if ( this.active && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
@@ -516,7 +519,7 @@ $.widget( "ui.menu", {
 		var newItem = this.active &&
 			this.active
 				.children( ".ui-menu " )
-				.children( ".ui-menu-item" )
+				.find( this.options.items )
 				.first();
 
 		if ( newItem && newItem.length ) {
@@ -559,7 +562,7 @@ $.widget( "ui.menu", {
 			}
 		}
 		if ( !next || !next.length || !this.active ) {
-			next = this.activeMenu.children( ".ui-menu-item" )[ filter ]();
+			next = this.activeMenu.find( this.options.items )[ filter ]();
 		}
 
 		this.focus( event, next );
@@ -585,7 +588,7 @@ $.widget( "ui.menu", {
 
 			this.focus( event, item );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
+			this.focus( event, this.activeMenu.find( this.options.items )
 				[ !this.active ? "first" : "last" ]() );
 		}
 	},
@@ -609,7 +612,7 @@ $.widget( "ui.menu", {
 
 			this.focus( event, item );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			this.focus( event, this.activeMenu.find( this.options.items ).first() );
 		}
 	},
 
