@@ -120,10 +120,8 @@ $.widget( "ui.selectmenu", {
 		this.menuInstance = this.menu.menu({
 			role: "listbox",
 			select: function( event, ui ) {
-				var item = ui.item.data( "ui-selectmenu-item" );
-
 				event.preventDefault();				
-				that._select( item, event );
+				that._select( ui.item.data( "ui-selectmenu-item" ), event );
 			},
 			focus: function( event, ui ) {
 				var item = ui.item.data( "ui-selectmenu-item" );
