@@ -329,8 +329,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		$("body").css("cursor", cursor === "auto" ? this.axis + "-resize" : cursor);
 
 		el.addClass("ui-resizable-resizing");
-		this._propagate("start", event);
-		return true;
+		return this._propagate("start", event);
 	},
 
 	_mouseDrag: function(event) {
@@ -648,7 +647,9 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	_propagate: function(n, event) {
 		$.ui.plugin.call(this, n, [event, this.ui()]);
-		(n !== "resize" && this._trigger(n, event, this.ui()));
+		if (n !== resize) {
+			return this._trigger(n, event, this.ui());
+		}
 	},
 
 	plugins: {},
