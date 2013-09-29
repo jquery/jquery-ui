@@ -55,4 +55,7 @@
 	padding: 0.4em 2.1em 0.4em 1em;
 	display: block;
 	line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
