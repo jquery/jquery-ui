@@ -29,6 +29,8 @@ $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
+		widthButton: null,
+		widthMenu: null,
 
 		// callbacks
 		change: null,
@@ -74,7 +76,6 @@ $.widget( "ui.selectmenu", {
 			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
 			tabindex: tabindex || this.options.disabled ? -1 : 0,
 			id: this.ids.button,
-			width: this.element.outerWidth(),
 			role: "combobox",
 			"aria-expanded": "false",
 			"aria-autocomplete": "list",
@@ -91,7 +92,9 @@ $.widget( "ui.selectmenu", {
 			"class": "ui-selectmenu-text"
 		})
 		.appendTo( this.button );
+
 		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
+		this._setOption( "widthButton", this.options.widthButton );
 
 		this._on( this.button, this._buttonEvents );
 		this._hoverable( this.button );
@@ -110,8 +113,7 @@ $.widget( "ui.selectmenu", {
 
 		// Wrap menu
 		this.menuWrap = $( "<div>", {
-			"class": "ui-selectmenu-menu ui-front",
-			outerWidth: this.button.outerWidth()
+			"class": "ui-selectmenu-menu ui-front"
 		})
 		.append( this.menu )
 		.appendTo( this._appendTo() );
@@ -203,6 +205,7 @@ $.widget( "ui.selectmenu", {
 
 		this.isOpen = true;
 		this._toggleAttr();
+		this._resizeMenu();
 		this._position();
 
 		this._on( this.document, this._documentClick );
@@ -440,6 +443,12 @@ $.widget( "ui.selectmenu", {
 				this.button.attr( "tabindex", 0 );
 			}
 		}
+		if ( key === "widthButton" ) {
+			if ( !value ) {
+				value = this.element.outerWidth();
+			}
+			this.button.outerWidth( value );
+		}
 	},
 
 	_appendTo: function() {
@@ -469,6 +478,13 @@ $.widget( "ui.selectmenu", {
 		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
 		this.menu.attr( "aria-hidden", !this.isOpen );
 		this.button.attr( "aria-expanded", this.isOpen );
+	},
+
+	_resizeMenu: function() {
+		this.menu.outerWidth( this.options.widthMenu || Math.max(
+			this.button.outerWidth(),
+			this.menu.width( "" ).outerWidth()
+		) );
 	},
 
 	_getCreateOptions: function() {
