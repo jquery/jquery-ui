@@ -10,6 +10,8 @@ TestHelpers.commonWidgetTests( "selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
+		widthButton: null,
+		widthMenu: null,
 
 		// callbacks
 		create: null,
