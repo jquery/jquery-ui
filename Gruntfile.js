@@ -32,6 +32,8 @@ var
 		"datepicker",
 		"dialog",
 		"menu",
+		"menubar",
+		"popup",
 		"progressbar",
 		"resizable",
 		"selectable",
