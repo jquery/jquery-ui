@@ -169,8 +169,8 @@ $.widget( "ui.dialog", {
 	enable: $.noop,
 
 	close: function( event ) {
-		var that = this,
-			document = this.document[ 0 ];
+		var activeElement,
+			that = this;
 
 		if ( !this._isOpen || this._trigger( "beforeClose", event ) === false ) {
 			return;
@@ -180,16 +180,20 @@ $.widget( "ui.dialog", {
 		this._destroyOverlay();
 
 		if ( !this.opener.filter(":focusable").focus().length ) {
+
 			// support: IE9
 			// IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
 			try {
+				activeElement = this.document[ 0 ].activeElement;
+
 				// Support: IE9, IE10
 				// If the <body> is blurred, IE will switch windows, see #4520
-				if ( document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body" ) {
+				if ( activeElement && activeElement.nodeName.toLowerCase() !== "body" ) {
+
 					// Hiding a focused element doesn't trigger blur in WebKit
 					// so in case we have nothing to focus on, explicitly blur the active element
 					// https://bugs.webkit.org/show_bug.cgi?id=47182
-					$( document.activeElement ).blur();
+					$( activeElement ).blur();
 				}
 			} catch ( error ) {}
 		}
