@@ -41,13 +41,12 @@ function submit( commit, runs, configFile, extra, done ) {
 		config = grunt.file.readJSON( configFile ).jqueryui,
 		commitUrl = "https://github.com/jquery/jquery-ui/commit/" + commit;
 
-	if ( extra ) {
-		extra = " " + extra;
-	}
+	extra = " (1.9" + ( extra ? "; " + extra : "" ) + ")";
 
 	for ( testName in runs ) {
 		runs[ testName ] = config.testUrl + commit + "/tests/unit/" + runs[ testName ];
 	}
+
 	testswarm.createClient({
 		url: config.swarmUrl,
 		pollInterval: 10000,
@@ -59,7 +58,7 @@ function submit( commit, runs, configFile, extra, done ) {
 		token: config.authToken
 	})
 	.addjob({
-		name: "jQuery UI 1-9 #<a href='" + commitUrl + "'>" + commit.substr( 0, 10 ) + "</a>" + extra,
+		name: "Commit <a href='" + commitUrl + "'>" + commit.substr( 0, 10 ) + "</a>" + extra,
 		runs: runs,
 		runMax: config.runMax,
 		browserSets: config.browserSets
@@ -77,7 +76,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 	for ( test in tests ) {
 		latestTests[ test ] = tests[ test ] + "?nojshint=true";
 	}
-	submit( commit, latestTests, configFile, "", this.async() );
+	submit( commit, latestTests, configFile, false, this.async() );
 });
 
 grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, minor ) {
