@@ -76,7 +76,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 	for ( test in tests ) {
 		latestTests[ test ] = tests[ test ] + "?nojshint=true";
 	}
-	submit( commit, latestTests, configFile, false, this.async() );
+	submit( commit, latestTests, configFile, "", this.async() );
 });
 
 grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, minor ) {
