@@ -14,7 +14,7 @@ Gilles van den Hoven <gilles@webunity.nl>
 Micheil Bryan Smith <micheil@brandedcode.com>
 Jörn Zaefferer <joern.zaefferer@gmail.com>
 Marc Grabanski <m@marcgrabanski.com>
-Keith Wood <kbwood.au@gmail.com>
+Keith Wood <kbwood@iinet.com.au>
 Brandon Aaron <brandon.aaron@gmail.com>
 Scott González <scott.gonzalez@gmail.com>
 Eduardo Lundgren <eduardolundgren@gmail.com>
@@ -29,8 +29,8 @@ Ca-Phun Ung <pazu2k@gmail.com>
 Ariel Flesler <aflesler@gmail.com>
 Maggie Wachs <maggie@filamentgroup.com>
 Scott Jehl <scott@scottjehl.com>
-Todd Parker <fg.todd@gmail.com>
-Andrew Powell <powella@gmail.com>
+Todd Parker <todd@filamentgroup.com>
+Andrew Powell <andrew@shellscape.org>
 Brant Burnett <btburnett3@gmail.com>
 Douglas Neiner <doug@dougneiner.com>
 Paul Irish <paul.irish@gmail.com>
@@ -79,10 +79,10 @@ Phillip Barnes <philbar@gmail.com>
 Kyle Wilkinson <kai@wikyd.org>
 Khaled AlHourani <me@khaledalhourani.com>
 Marian Rudzynski <mr@impaled.org>
-Jean-Francois Remy <jfremy@virtuoz.com>
+Jean-Francois Remy <jeff@melix.org>
 Doug Blood
 Filippo Cavallarin <filippo.cavallarin@codseq.it>
-Heiko Henning <h.henning@educa.ch>
+Heiko Henning <heiko@thehennings.ch>
 Aliaksandr Rahalevich <saksmlz@gmail.com>
 Mario Visic <mario@mariovisic.com>
 Xavi Ramirez <xavi.rmz@gmail.com>
@@ -124,7 +124,7 @@ Israel Tsadok <itsadok@gmail.com>
 Carson McDonald <carson@ioncannon.net>
 Jason Davies <jason@jasondavies.com>
 Garrison Locke <gplocke@gmail.com>
-David Murdoch <musicisair@yahoo.com>
+David Murdoch <david@davidmurdoch.com>
 Benjamin Scott Boyle <benjamins.boyle@gmail.com>
 Jesse Baird <jebaird@gmail.com>
 Jonathan Vingiano <jvingiano@gmail.com>
@@ -153,7 +153,7 @@ Gaëtan Muller <m.gaetan89@gmail.com>
 William Griffiths <william@ycymro.com>
 Stojce Slavkovski <stojce@gmail.com>
 David Soms <david.soms@gmail.com>
-David De Sloovere <david.desloovere@hotmail.com>
+David De Sloovere <david.desloovere@outlook.com>
 Michael P. Jung <michael.jung@terreon.de>
 Shannon Pekary <spekary@gmail.com>
 Matthew Edward Hutton <meh@corefiling.co.uk>
