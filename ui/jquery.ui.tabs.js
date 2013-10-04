@@ -441,7 +441,7 @@ $.widget( "ui.tabs", {
 
 	// allow overriding how to find the list for rare usage scenarios (#7715)
 	_getList: function() {
-		return this.element.find( "ol,ul" ).eq( 0 );
+		return this.tablist || this.element.find( "ol,ul" ).eq( 0 );
 	},
 
 	_createPanel: function( id ) {
