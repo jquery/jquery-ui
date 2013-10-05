@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Accordion - Collapse content</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+	
+		$( "#accordion" ).accordion({
+			collapsible: true,
+			data: [
+					{
+						header: "Section 1",
+						content: "Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, "
+					},
+					{
+						header: "Section 2",
+						content: "molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. "
+					},
+					{
+						header: "Section 3",
+						content: "Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate."
+					}
+				  ]
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div id="accordion"></div>
+
+<div class="demo-description">
+<p>The show that populata with Json</p>
+</div>
+</body>
+</html>
