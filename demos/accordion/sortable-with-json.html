@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Accordion - Sortable</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	/* IE has layout issues when sorting (see #5413) */
+	.group { zoom: 1 }
+	</style>
+	<script>
+	$(function() {
+		$( "#accordion" )
+			.accordion({
+				header: "> div > div > h3",
+				data: [
+					{
+						header: "Section 1",
+						content: "Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, ",
+						//able to add multiple level of wrappers
+						wrappers : ['<div class="group">', '<div>']
+					},
+					{
+						header: "Section 2",
+						content: "molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. ",
+						wrappers : ['<div class="group">', '<div>']
+					},
+					{
+						header: "Section 3",
+						content: "Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.",
+						wrappers : ['<div class="group">', '<div>']
+					}
+				  ]
+			})
+			.sortable({
+				axis: "y",
+				handle: "h3",
+				stop: function( event, ui ) {
+					// IE doesn't register the blur when sorting
+					// so trigger focusout handlers to remove .ui-state-focus
+					ui.item.children( "h3" ).triggerHandler( "focusout" );
+				}
+			});
+	});
+	</script>
+</head>
+<body>
+
+<div id="accordion"></div>
+
+<div class="demo-description">
+<p>Drag the header to re-order panels.</p>
+</div>
+</body>
+</html>

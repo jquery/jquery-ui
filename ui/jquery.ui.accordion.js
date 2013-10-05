@@ -39,7 +39,8 @@ $.widget( "ui.accordion", {
 
 		// callbacks
 		activate: null,
-		beforeActivate: null
+		beforeActivate: null,
+		data : null
 	},
 
 	_create: function() {
@@ -53,6 +54,11 @@ $.widget( "ui.accordion", {
 		if ( !options.collapsible && (options.active === false || options.active == null) ) {
 			options.active = 0;
 		}
+		
+		if(this.options.data !== null)
+        {
+             this.element.html(this.buildAccodion(this.options.data));
+        }
 
 		this._processPanels();
 		// handle negative values
@@ -61,7 +67,7 @@ $.widget( "ui.accordion", {
 		}
 		this._refresh();
 	},
-
+	
 	_getCreateEventData: function() {
 		return {
 			header: this.active,
@@ -211,6 +217,34 @@ $.widget( "ui.accordion", {
 		if ( event.keyCode === $.ui.keyCode.UP && event.ctrlKey ) {
 			$( event.currentTarget ).prev().focus();
 		}
+	},
+	
+	buildAccodion: function(data) {
+		var html = "";
+		for ( var i in data ) {
+		    if ( $.isArray(data[i]['wrappers']) && data[i]['wrappers'].length > 0) {
+				var wrapHtml = '<h3>' + data[i]['header'] + '</h3>' + '<div>' + data[i]['content'] + '</div>';
+				var wrapperArray = data[i]['wrappers'].reverse();
+				
+				for ( var j in wrapperArray) {
+					wrapHtml = wrapperArray[j] + wrapHtml + this.generateEndingTag(wrapperArray[j]);				
+				}
+				
+				html += wrapHtml;
+			} else {
+				html += '<h3>' + data[i]['header'] + '</h3>';
+				html += '<div>' + data[i]['content'] + '</div>';
+			}
+		}	
+		return html;
+	},
+	
+	generateEndingTag: function (tag) {
+		var pattern = /<div|<p|<span|<li|<ul|<ol|<h[1-6]|<nav|<header|<aside|<section/i;
+		var ending = tag.match(pattern)[0];
+		ending = ending.replace("<","</");
+		ending += ">";
+		return ending;
 	},
 
 	refresh: function() {
