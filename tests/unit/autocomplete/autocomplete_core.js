@@ -16,7 +16,7 @@ test( "prevent form submit on enter when menu is active", function() {
 	event = $.Event( "keydown" );
 	event.keyCode = $.ui.keyCode.DOWN;
 	element.trigger( event );
-	deepEqual( menu.find( ".ui-menu-item:has(.ui-state-focus)" ).length, 1, "menu item is active" );
+	equal( menu.find( ".ui-menu-item.ui-state-focus" ).length, 1, "menu item is active" );
 
 	event = $.Event( "keydown" );
 	event.keyCode = $.ui.keyCode.ENTER;
