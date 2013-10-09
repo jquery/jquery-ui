@@ -176,7 +176,7 @@ $.widget( "ui.selectmenu", {
 		this._renderMenu( this.menu, this.items );
 
 		this.menuInstance.refresh();
-		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).find( "a" );
+		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
 
 		item = this._getSelectedItem();
 
@@ -250,7 +250,7 @@ $.widget( "ui.selectmenu", {
 		$.each( items, function( index, item ) {
 			if ( item.optgroup !== currentOptgroup ) {
 				$( "<li>", {
-					"class": "ui-selectmenu-optgroup" +
+					"class": "ui-selectmenu-optgroup ui-menu-divider" +
 						( item.element.parent( "optgroup" ).attr( "disabled" ) ?
 							" ui-state-disabled" :
 							"" ),
@@ -268,15 +268,14 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_renderItem: function( ul, item ) {
-		var li = $( "<li>" ),
-			a = $( "<a>", { href: "#" });
+		var li = $( "<li>" );
 
 		if ( item.disabled ) {
 			li.addClass( "ui-state-disabled" );
 		}
-		this._setText( a, item.label );
+		this._setText( li, item.label );
 
-		return li.append( a ).appendTo( ul );
+		return li.appendTo( ul );
 	},
 
 	_setText: function( element, value ) {
@@ -303,7 +302,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getSelectedItem: function() {
-		return this.menuItems.eq( this.element[ 0 ].selectedIndex ).parent( "li" );
+		return this.menuItems.eq( this.element[ 0 ].selectedIndex );
 	},
 
 	_toggle: function( event ) {
@@ -407,8 +406,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setAria: function( item ) {
-		var link = this.menuItems.eq( item.index ),
-			id = link.attr( "id" );
+		var id = this.menuItems.eq( item.index ).attr( "id" );
 
 		this.button.attr({
 			"aria-labelledby": id,

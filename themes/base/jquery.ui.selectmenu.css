@@ -21,7 +21,7 @@
 	/* Support: IE7 */
 	overflow-x: hidden;
 }
-.ui-selectmenu-menu .ui-menu-item a {
+.ui-selectmenu-menu .ui-menu-item {
 	padding: 0.3em 1em;
 }
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {

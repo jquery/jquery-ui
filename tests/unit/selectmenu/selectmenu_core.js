@@ -9,7 +9,7 @@ asyncTest( "accessibility", function() {
 		menu = element.selectmenu( "menuWidget" );
 
 	button.simulate( "focus" );
-	links = menu.find( "li.ui-menu-item a" );
+	links = menu.find( "li.ui-menu-item" );
 
 	expect( 12 + links.length * 2 );
 
@@ -65,7 +65,7 @@ $.each([
 
 		button.simulate( "focus" );
 		setTimeout(function() {
-			links = menu.find("li.ui-menu-item a");
+			links = menu.find("li.ui-menu-item");
 
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 			equal(
@@ -98,10 +98,10 @@ $.each([
 
 		button.simulate( "focus" );
 		setTimeout(function() {
-			links = menu.find("li.ui-menu-item a");
+			links = menu.find("li.ui-menu-item");
 
 			button.trigger( "click" );
-			menu.find( "a" ).last().simulate( "mouseover" ).trigger( "click" );
+			menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
 			equal(
 				menu.attr( "aria-activedescendant" ),
 				links.eq( element[ 0 ].selectedIndex ).attr( "id" ),
@@ -135,7 +135,7 @@ $.each([
 		button.simulate( "focus" );
 
 		setTimeout(function() {
-			links = menu.find( "li.ui-menu-item a" );
+			links = menu.find( "li.ui-menu-item" );
 			// open menu and click first item
 			button.trigger( "click" );
 			links.first().simulate( "mouseover" ).trigger( "click" );
@@ -169,7 +169,7 @@ $.each([
 		button.simulate( "focus" );
 
 		setTimeout(function() {
-			links = menu.find( "li.ui-menu-item a" );
+			links = menu.find( "li.ui-menu-item" );
 
 			button.trigger( "click" );
 			links.first().simulate( "mouseover" ).trigger( "click" );
@@ -196,7 +196,7 @@ $.each([
 		button.simulate( "focus" );
 
 		setTimeout(function() {
-			links = menu.find( "li.ui-menu-item a" );
+			links = menu.find( "li.ui-menu-item" );
 
 			button.trigger( "click" );
 			setTimeout(function() {
@@ -221,11 +221,11 @@ $.each([
 		}, 1 );
 
 		function checkItemClasses() {
-			focusedItem = menu.find( "li.ui-menu-item a.ui-state-focus" );
+			focusedItem = menu.find( "li.ui-state-focus" );
 			equal( focusedItem.length, 1, "only one item has ui-state-focus class" );
 			equal( focusedItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-focus class" );
 
-			activeItem = menu.find( "li.ui-menu-item a.ui-state-active" );
+			activeItem = menu.find( "li.ui-state-active" );
 			equal( activeItem.length, 1, "only one item has ui-state-active class" );
 			equal( activeItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-active class" );
 		}
