@@ -105,6 +105,7 @@ grunt.loadNpmTasks( "grunt-contrib-uglify" );
 grunt.loadNpmTasks( "grunt-contrib-concat" );
 grunt.loadNpmTasks( "grunt-contrib-qunit" );
 grunt.loadNpmTasks( "grunt-contrib-csslint" );
+grunt.loadNpmTasks( "grunt-jscs-checker" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
 grunt.loadNpmTasks( "grunt-git-authors" );
@@ -161,6 +162,13 @@ grunt.initConfig({
 			dest: "dist/jquery-ui.css"
 		}
 	},
+	jscs: {
+		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
+		ui: [ "ui/jquery.ui.*.js", "!ui/jquery.ui.datepicker.js", "!ui/jquery.ui.sortable.js", "!ui/jquery.ui.resizable.js", "!ui/jquery.ui.draggable.js" ],
+		// TODO enable this once we have a tool that can help with fixing formatting of existing files
+		// tests: "tests/unit/**/*.js",
+		grunt: "Gruntfile.js"
+	},
 	uglify: minify,
 	htmllint: {
 		// ignore files that contain invalid html, used only for ajax content testing
@@ -197,7 +205,7 @@ grunt.initConfig({
 });
 
 grunt.registerTask( "default", [ "lint", "test" ] );
-grunt.registerTask( "lint", [ "asciilint", "jshint", "csslint", "htmllint" ] );
+grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ] );
 grunt.registerTask( "test", [ "qunit" ] );
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
