@@ -1,5 +1,5 @@
  /*
- * jQuery UI Selectmenu version 1.4.0pre
+ * jQuery UI Selectmenu version 1.4.0
  *
  * Copyright (c) 2009-2010 filament group, http://filamentgroup.com
  * Copyright (c) 2010-2013 Felix Nagel, http://www.felixnagel.com
