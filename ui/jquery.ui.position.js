@@ -59,7 +59,7 @@ function getDimensions( elem ) {
 		};
 	}
 	if ( raw.getBoundingClientRect !== undefined ) {
-        clientRect = raw.getBoundingClientRect();
+		clientRect = raw.getBoundingClientRect();
 		return {
 			width: clientRect.width,
 			height: clientRect.height,
