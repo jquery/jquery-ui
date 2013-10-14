@@ -63,7 +63,7 @@ function getDimensions( elem ) {
 		return {
 			width: clientRect.width,
 			height: clientRect.height,
-			offset: elem.offset();
+			offset: elem.offset()
 		};
 	}
 	return {
