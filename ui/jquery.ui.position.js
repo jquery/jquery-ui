@@ -35,7 +35,8 @@ function parseCss( element, property ) {
 }
 
 function getDimensions( elem ) {
-	var raw = elem[0];
+	var raw = elem[0],
+		clientRect;
 	if ( raw.nodeType === 9 ) {
 		return {
 			width: elem.width(),
@@ -55,6 +56,14 @@ function getDimensions( elem ) {
 			width: 0,
 			height: 0,
 			offset: { top: raw.pageY, left: raw.pageX }
+		};
+	}
+	if ( raw.getBoundingClientRect !== undefined ) {
+        clientRect = raw.getBoundingClientRect();
+		return {
+			width: clientRect.width,
+			height: clientRect.height,
+			offset: elem.offset();
 		};
 	}
 	return {
