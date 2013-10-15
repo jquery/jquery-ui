@@ -586,7 +586,7 @@ test( ".option() - deep option setter", function() {
 	div.testWidget( "option", "foo.bar", "qux" );
 
 	deepOption( { bar: "baz" }, { bar: undefined }, "one deep - value = undefined" );
-	//Note : this assertion will never run if - when option behave like getter 
+	
 	result = div.testWidget( "option", "foo.bar", undefined );
 
 	deepEqual ( result, div, "option should return widget on successful set operation" );
