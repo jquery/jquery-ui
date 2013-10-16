@@ -191,4 +191,19 @@ test("resizable accounts for scroll position correctly (#3815)", function() {
 	equal( el.css("top"), top, "css('top') stays the same when resized" );
 });
 
+test( "resizable stores correct size when using helper and grid (#9547)", function() {
+	expect( 2 );
+
+	var handle = ".ui-resizable-se",
+		target = $( "#resizable1" ).resizable({
+			handles: "all",
+			helper: "ui-resizable-helper",
+			grid: [ 10, 10 ]
+		});
+
+	TestHelpers.resizable.drag( handle, 1, 1 );
+	equal( target.width(), 100, "compare width" );
+	equal( target.height(), 100, "compare height" );
+});
+
 })(jQuery);
