@@ -125,7 +125,7 @@ $.effects.effect.size = function( o, done ) {
 		hProps = hProps.concat([ "marginLeft", "marginRight" ]);
 		props2 = props0.concat(vProps).concat(hProps);
 
-		el.find( "*[width]" ).each( function(){
+		el.find( "*[width]" ).each( function() {
 			var child = $( this ),
 				c_original = {
 					height: child.height(),
@@ -183,7 +183,7 @@ $.effects.effect.size = function( o, done ) {
 			if ( el.to.opacity === 0 ) {
 				el.css( "opacity", el.from.opacity );
 			}
-			if( mode === "hide" ) {
+			if ( mode === "hide" ) {
 				el.hide();
 			}
 			$.effects.restore( el, props );

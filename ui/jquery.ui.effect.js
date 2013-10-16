@@ -33,7 +33,7 @@ $.effects = {
 	// plusequals test for += 100 -= 100
 	rplusequals = /^([\-+])=\s*(\d+\.?\d*)/,
 	// a set of RE's that can match strings and generate color tuples.
-	stringParsers = [{
+	stringParsers = [ {
 			re: /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,
 			parse: function( execResult ) {
 				return [
@@ -84,7 +84,7 @@ $.effects = {
 					execResult[ 4 ]
 				];
 			}
-		}],
+		} ],
 
 	// jQuery.Color( )
 	color = jQuery.Color = function( color, green, blue, alpha ) {
@@ -443,18 +443,18 @@ color.fn.parse.prototype = color.fn;
 function hue2rgb( p, q, h ) {
 	h = ( h + 1 ) % 1;
 	if ( h * 6 < 1 ) {
-		return p + (q - p) * h * 6;
+		return p + ( q - p ) * h * 6;
 	}
 	if ( h * 2 < 1) {
 		return q;
 	}
 	if ( h * 3 < 2 ) {
-		return p + (q - p) * ((2/3) - h) * 6;
+		return p + ( q - p ) * ( ( 2 / 3 ) - h ) * 6;
 	}
 	return p;
 }
 
-spaces.hsla.to = function ( rgba ) {
+spaces.hsla.to = function( rgba ) {
 	if ( rgba[ 0 ] == null || rgba[ 1 ] == null || rgba[ 2 ] == null ) {
 		return [ null, null, null, rgba[ 3 ] ];
 	}
@@ -491,7 +491,7 @@ spaces.hsla.to = function ( rgba ) {
 	return [ Math.round(h) % 360, s, l, a == null ? 1 : a ];
 };
 
-spaces.hsla.from = function ( hsla ) {
+spaces.hsla.from = function( hsla ) {
 	if ( hsla[ 0 ] == null || hsla[ 1 ] == null || hsla[ 2 ] == null ) {
 		return [ null, null, null, hsla[ 3 ] ];
 	}
@@ -509,7 +509,6 @@ spaces.hsla.from = function ( hsla ) {
 		a
 	];
 };
-
 
 each( spaces, function( spaceName, space ) {
 	var props = space.props,
@@ -680,7 +679,6 @@ colors = jQuery.Color.names = {
 
 })( jQuery );
 
-
 /******************************************************************************/
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
@@ -734,7 +732,6 @@ function getElementStyles( elem ) {
 
 	return styles;
 }
-
 
 function styleDifference( oldStyle, newStyle ) {
 	var diff = {},
@@ -897,7 +894,7 @@ $.extend( $.effects, {
 
 	// Saves a set of properties in a data storage
 	save: function( element, set ) {
-		for( var i=0; i < set.length; i++ ) {
+		for ( var i = 0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
 				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
 			}
@@ -907,7 +904,7 @@ $.extend( $.effects, {
 	// Restores a set of previously saved properties from a data storage
 	restore: function( element, set ) {
 		var val, i;
-		for( i=0; i < set.length; i++ ) {
+		for ( i = 0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
 				val = element.data( dataSpace + set[ i ] );
 				// support: jQuery 1.6.2
@@ -1039,7 +1036,6 @@ $.extend( $.effects, {
 				$( active ).focus();
 			}
 		}
-
 
 		return element;
 	},
@@ -1250,10 +1246,10 @@ $.each( [ "Quad", "Cubic", "Quart", "Quint", "Expo" ], function( i, name ) {
 });
 
 $.extend( baseEasings, {
-	Sine: function ( p ) {
+	Sine: function( p ) {
 		return 1 - Math.cos( p * Math.PI / 2 );
 	},
-	Circ: function ( p ) {
+	Circ: function( p ) {
 		return 1 - Math.sqrt( 1 - p * p );
 	},
 	Elastic: function( p ) {
@@ -1263,7 +1259,7 @@ $.extend( baseEasings, {
 	Back: function( p ) {
 		return p * p * ( 3 * p - 2 );
 	},
-	Bounce: function ( p ) {
+	Bounce: function( p ) {
 		var pow2,
 			bounce = 4;
 
