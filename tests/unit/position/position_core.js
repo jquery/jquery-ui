@@ -719,4 +719,24 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 	deepEqual( offset1, offset2 );
 });
 
+test("bug #9534: position in iframe window", function() {
+	expect(1);
+
+	var iframe = $("#bug-9534")[0];
+
+	$(iframe.contentDocument.body).css({
+		"width" : "30px",
+		"height" : "30px"
+	});
+
+	collisionTest({
+		my : "center",
+		at : "center",
+		of : iframe.contentWindow
+	}, {
+		top : 5,
+		left : 5
+	}, "positioned to iframe window");
+});
+
 }( jQuery ) );
