@@ -371,7 +371,7 @@ $.widget( "ui.menu", {
 		this._scrollIntoView( item );
 
 		this.active = item.first();
-		focused = this.active.addClass( "ui-state-focus" );
+		focused = this.active.addClass( "ui-state-focus" ).removeClass( "ui-state-active" );
 		// Only update aria-activedescendant if there's a role
 		// otherwise we assume focus is managed elsewhere
 		if ( this.options.role ) {
@@ -498,7 +498,7 @@ $.widget( "ui.menu", {
 				.attr( "aria-hidden", "true" )
 				.attr( "aria-expanded", "false" )
 			.end()
-			.find( ".ui-state-active" )
+			.find( ".ui-state-active" ).not( ".ui-state-focus" )
 				.removeClass( "ui-state-active" );
 	},
 
