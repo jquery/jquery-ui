@@ -294,7 +294,7 @@ $.widget( "ui.autocomplete", {
 				"aria-live": "polite"
 			})
 			.addClass( "ui-helper-hidden-accessible" )
-			.insertBefore( this.element );
+			.appendTo( this.document[ 0 ].body );
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete

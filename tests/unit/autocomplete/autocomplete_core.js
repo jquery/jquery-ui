@@ -257,6 +257,15 @@ test( "ARIA", function() {
 		"Live region for multiple values" );
 });
 
+test( "ARIA, init on detached input", function() {
+	expect( 1 );
+	var element = $( "<input>" ).autocomplete({
+			source: [ "java", "javascript" ]
+		}),
+		liveRegion = element.autocomplete( "instance" ).liveRegion;
+	equal( liveRegion.parent().length, 1, "liveRegion must have a parent" );
+});
+
 test( ".replaceWith() (#9172)", function() {
 	expect( 1 );
 
