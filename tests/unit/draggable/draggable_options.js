@@ -43,7 +43,7 @@ test( "{ appendTo: 'parent' }, default", function() {
 	equal( element.draggable( "option", "appendTo" ), "parent" );
 
 	TestHelpers.draggable.move( element, 1, 1 );
-	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
+	equal( element.data( "last_dragged_parent" ), $( "#main" )[ 0 ] );
 });
 
 test( "{ appendTo: Element }", function() {
@@ -91,12 +91,12 @@ test( "appendTo, default, switching after initialization", function() {
 
 	// Move and make sure element was appended to fixture
 	TestHelpers.draggable.move( element, 1, 1 );
-	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
+	equal( element.data( "last_dragged_parent" ), $( "#main" )[ 0 ] );
 
 	// Move and make sure element was appended to main
-	element.draggable( "option", "appendTo", $( "#main" ) );
+	element.draggable( "option", "appendTo", $( "#qunit-fixture" ) );
 	TestHelpers.draggable.move( element, 2, 2 );
-	equal( element.data( "last_dragged_parent" ), $( "#main" )[ 0 ] );
+	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
 });
 
 test( "{ axis: false }, default", function() {
