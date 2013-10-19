@@ -3,11 +3,18 @@
 module( "tooltip: options" );
 
 test( "disabled: true", function() {
-	expect( 1 );
+	expect( 2 );
 	$( "#tooltipped1" ).tooltip({
 		disabled: true
 	}).tooltip( "open" );
 	equal( $( ".ui-tooltip" ).length, 0 );
+
+	$( "#tooltipped1" ).tooltip({
+		disabled: true
+	}).tooltip( "option", "content", "I'm a tip." )
+		.tooltip( "open" );
+	equal( $( ".ui-tooltip" ).length, 0 );
+
 });
 
 test( "content: default", function() {
