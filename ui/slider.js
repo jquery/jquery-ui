@@ -58,6 +58,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
+		this._calculateNewMax();
 
 		this.element
 			.addClass( "ui-slider" +
@@ -472,9 +473,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				this._animateOff = false;
 				break;
+			case "step":
 			case "min":
 			case "max":
 				this._animateOff = true;
+				this._calculateNewMax();
 				this._refreshValue();
 				this._animateOff = false;
 				break;
@@ -543,12 +546,22 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return parseFloat( alignValue.toFixed(5) );
 	},
 
+	_calculateNewMax: function() {
+		var max = this._valueMin(),
+			step = this.options.step;
+
+		while ( max + step <= this.options.max ) {
+			max = max + step;
+		}
+		this.max = max;
+	},
+
 	_valueMin: function() {
 		return this.options.min;
 	},
 
 	_valueMax: function() {
-		return this.options.max;
+		return this.max;
 	},
 
 	_refreshValue: function() {
