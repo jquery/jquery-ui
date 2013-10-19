@@ -166,6 +166,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		});
 
 		//Generate the original position
+		this.constrainedPageX = event.pageX;
+		this.constrainedPageY = event.pageY;
 		this.originalPosition = this.position = this._generatePosition( event, false );
 		this.originalPageX = event.pageX;
 		this.originalPageY = event.pageY;
@@ -218,7 +220,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 				this._mouseUp({});
 				return false;
 			}
-			this.position = ui.position;
+			if ( this.position !== ui.position ) {
+				this.position = ui.position;
+			}
 		}
 
 		this.helper[ 0 ].style.left = this.position.left + "px";
@@ -466,23 +470,18 @@ $.widget("ui.draggable", $.ui.mouse, {
 			// this across browsers. Blink bug: https://code.google.com/p/chromium/issues/detail?id=157855
 			scrollIsRootNode = useOffsetParent && ( /(html|body)/i ).test( scroll[ 0 ].nodeName );
 
-		//Cache the scroll
-		if (!this.offset.scroll) {
-			this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
-		}
-
 		return {
 			top: (
-				pos.top	+																// The absolute mouse position
-				this.offset.relative.top * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.top * mod -										// The offsetParent's offset without borders (offset + border)
-				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : this.offset.scroll.top ) ) * mod)
+				pos.top	+
+				this.offset.relative.top * mod +
+				this.offset.parent.top * mod -
+				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod)
 			),
 			left: (
-				pos.left +																// The absolute mouse position
-				this.offset.relative.left * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.left * mod	-										// The offsetParent's offset without borders (offset + border)
-				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : this.offset.scroll.left ) * mod)
+				pos.left +
+				this.offset.relative.left * mod +
+				this.offset.parent.left * mod -
+				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
 			)
 		};
 
@@ -490,93 +489,106 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_generatePosition: function( event, constrainPosition ) {
 
-		var containment, co, top, left,
-			o = this.options,
-			document = this.document[ 0 ],
+		var document = this.document[ 0 ],
 			useOffsetParent = this.cssPosition === "absolute" && ( this.scrollParent[ 0 ] === document || !$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ),
 			scroll = useOffsetParent ? this.offsetParent : this.scrollParent,
 			// we need to test if offsetParent was used here because Blink incorrectly reports a 0 scrollTop
 			// on document.documentElement when the page is scrolled. Checking for offsetParent normalizes
 			// this across browsers. Blink bug: https://code.google.com/p/chromium/issues/detail?id=157855
-			scrollIsRootNode = useOffsetParent && ( /(html|body)/i ).test( scroll[ 0 ].nodeName ),
-			pageX = event.pageX,
-			pageY = event.pageY;
+			scrollIsRootNode = useOffsetParent && ( /(html|body)/i ).test( scroll[ 0 ].nodeName );
 
-		//Cache the scroll
-		if (!this.offset.scroll) {
-			this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
-		}
-
-		/*
-		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
-		 */
-
-		// If we are not dragging yet, we won't check for options
 		if ( constrainPosition ) {
-			if ( this.containment ) {
-				if ( this.relative_container ){
-					co = this.relative_container.offset();
-					containment = [
-						this.containment[ 0 ] + co.left,
-						this.containment[ 1 ] + co.top,
-						this.containment[ 2 ] + co.left,
-						this.containment[ 3 ] + co.top
-					];
-				}
-				else {
-					containment = this.containment;
-				}
-
-				if(event.pageX - this.offset.click.left < containment[0]) {
-					pageX = containment[0] + this.offset.click.left;
-				}
-				if(event.pageY - this.offset.click.top < containment[1]) {
-					pageY = containment[1] + this.offset.click.top;
-				}
-				if(event.pageX - this.offset.click.left > containment[2]) {
-					pageX = containment[2] + this.offset.click.left;
-				}
-				if(event.pageY - this.offset.click.top > containment[3]) {
-					pageY = containment[3] + this.offset.click.top;
-				}
-			}
-
-			if(o.grid) {
-				//Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
-				top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
-				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
-
-				left = o.grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
-				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
-			}
-
-			if ( o.axis === "y" ) {
-				pageX = this.originalPageX;
-			}
-
-			if ( o.axis === "x" ) {
-				pageY = this.originalPageY;
-			}
+			this._generateConstrainedEventPosition( event );
 		}
 
 		return {
 			top: (
-				pageY -																	// The absolute mouse position
-				this.offset.click.top	-												// Click offset (relative to the element)
-				this.offset.relative.top -												// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.top +												// The offsetParent's offset without borders (offset + border)
-				( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : this.offset.scroll.top ) )
+				this.constrainedPageY -
+				this.offset.click.top -
+				this.offset.relative.top -
+				this.offset.parent.top +
+				( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) )
 			),
 			left: (
-				pageX -																	// The absolute mouse position
-				this.offset.click.left -												// Click offset (relative to the element)
-				this.offset.relative.left -												// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.parent.left +												// The offsetParent's offset without borders (offset + border)
-				( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : this.offset.scroll.left ) )
+				this.constrainedPageX -
+				this.offset.click.left -
+				this.offset.relative.left -
+				this.offset.parent.left +
+				( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : scroll.scrollLeft() ) )
 			)
 		};
 
+	},
+
+	_generateConstrainedEventPosition: function( event ) {
+		var co, containment, left, top,
+			pageX = event.pageX,
+			pageY = event.pageY,
+			o = this.options;
+
+		if ( this.containment ) {
+			if ( this.relative_container ){
+				co = this.relative_container.offset();
+				containment = [
+					this.containment[ 0 ] + co.left,
+					this.containment[ 1 ] + co.top,
+					this.containment[ 2 ] + co.left,
+					this.containment[ 3 ] + co.top
+				];
+			}
+			else {
+				containment = this.containment;
+			}
+
+			if ( event.pageX - this.offset.click.left < containment[ 0 ] ) {
+				pageX = containment[ 0 ] + this.offset.click.left;
+			}
+			if ( event.pageY - this.offset.click.top < containment[ 1 ] ) {
+				pageY = containment[ 1 ] + this.offset.click.top;
+			}
+			if ( event.pageX - this.offset.click.left > containment[ 2 ] ) {
+				pageX = containment[ 2 ] + this.offset.click.left;
+			}
+			if ( event.pageY - this.offset.click.top > containment[ 3 ] ) {
+				pageY = containment[ 3 ] + this.offset.click.top;
+			}
+		}
+
+		if ( o.grid ) {
+			// Check for grid elements set to 0 to prevent divide by 0 error
+			// causing invalid argument errors in IE (see ticket #6950)
+			// support: IE
+			top = o.grid[ 1 ] ?
+				this.originalPageY + Math.round( ( pageY - this.originalPageY ) / o.grid[ 1 ] ) * o.grid[ 1 ] :
+				this.originalPageY;
+
+			left = o.grid[ 0 ] ?
+				this.originalPageX + Math.round( ( pageX - this.originalPageX ) / o.grid[ 0 ] ) * o.grid[ 0 ] :
+				this.originalPageX;
+
+			pageY = top;
+			pageX = left;
+			if ( containment ) {
+				if ( top - this.offset.click.top < containment[ 1 ] && top - this.offset.click.top <= containment[ 3 ] ) {
+					pageY = ( ( top - this.offset.click.top >= containment[ 1 ] ) ? top - o.grid[ 1 ] : top + o.grid[ 1 ] );
+				}
+				if ( left - this.offset.click.left < containment[ 0 ] && left - this.offset.click.left <= containment[ 2 ] ) {
+					pageX = ( ( left - this.offset.click.left >= containment[ 0 ] ) ? left - o.grid[ 0 ] : left + o.grid[ 0 ] );
+				}
+
+			}
+		}
+
+		if ( o.axis === "y" ) {
+			pageX = this.originalPageX;
+		}
+
+		if ( o.axis === "x" ) {
+			pageY = this.originalPageY;
+		}
+
+		this.constrainedPageX = pageX;
+		this.constrainedPageY = pageY;
 	},
 
 	_clear: function() {
@@ -817,49 +829,64 @@ $.ui.plugin.add("draggable", "scroll", {
 	},
 	drag: function( event, ui, i  ) {
 
-		var o = i.options,
-			scrolled = false,
+		var oldScrollTop,
+			oldScrollLeft,
+			scrollX,
+			scrollY,
+			o = i.options,
 			document = i.document[ 0 ];
 
-		if( i.scrollParent[ 0 ] !== document && i.scrollParent[ 0 ].tagName !== "HTML" ) {
-			if(!o.axis || o.axis !== "x") {
-				if((i.overflowOffset.top + i.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity) {
-					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop + o.scrollSpeed;
-				} else if(event.pageY - i.overflowOffset.top < o.scrollSensitivity) {
-					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
+		if ( i.scrollParent[ 0 ] !== document && i.scrollParent[ 0 ].tagName !== "HTML" ) {
+			oldScrollTop = i.scrollParent[ 0 ].scrollTop;
+			oldScrollLeft = i.scrollParent[ 0 ].scrollLeft;
+
+			if( !o.axis || o.axis !== "x" ) {
+				if ( ( i.overflowOffset.top + i.scrollParent[ 0 ].offsetHeight ) - event.pageY < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollTop = i.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
+				} else if ( event.pageY - i.overflowOffset.top < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollTop = i.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
 				}
 			}
 
-			if(!o.axis || o.axis !== "y") {
-				if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity) {
-					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
-				} else if(event.pageX - i.overflowOffset.left < o.scrollSensitivity) {
-					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;
+			if( !o.axis || o.axis !== "y" ) {
+				if ( ( i.overflowOffset.left + i.scrollParent[ 0 ].offsetWidth) - event.pageX < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollLeft = i.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
+				} else if ( event.pageX - i.overflowOffset.left < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollLeft = i.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
 				}
 			}
 
+			scrollX = i.scrollParent[ 0 ].scrollLeft - oldScrollLeft;
+			scrollY = i.scrollParent[ 0 ].scrollTop - oldScrollTop;
 		} else {
+			oldScrollTop = $( document ).scrollTop();
+			oldScrollLeft = $( document ).scrollLeft();
 
-			if(!o.axis || o.axis !== "x") {
-				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity) {
-					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
-				} else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity) {
-					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+			if( !o.axis || o.axis !== "x" ) {
+				if ( event.pageY - $( document ).scrollTop() < o.scrollSensitivity ) {
+					$( document ).scrollTop( $( document ).scrollTop() - o.scrollSpeed );
+				} else if ( $( window ).height() - ( event.pageY - $( document ).scrollTop()) < o.scrollSensitivity ) {
+					$( document ).scrollTop( $( document ).scrollTop() + o.scrollSpeed );
 				}
 			}
 
-			if(!o.axis || o.axis !== "y") {
-				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity) {
-					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
-				} else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity) {
-					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+			if ( !o.axis || o.axis !== "y" ) {
+				if ( event.pageX - $( document ).scrollLeft() < o.scrollSensitivity ) {
+					$( document ).scrollLeft( $( document ).scrollLeft() - o.scrollSpeed );
+				} else if ( $( window ).width() - ( event.pageX - $( document ).scrollLeft()) < o.scrollSensitivity ) {
+					$( document ).scrollLeft( $( document ).scrollLeft() + o.scrollSpeed );
 				}
 			}
 
+			scrollX = $( document ).scrollLeft() - oldScrollLeft;
+			scrollY = $( document ).scrollTop() - oldScrollTop;
 		}
 
-		if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour) {
-			$.ui.ddmanager.prepareOffsets(i, event);
+		if ( scrollX || scrollY ) {
+			ui.position = i._generatePosition( event, true );
+			if( $.ui.ddmanager && !o.dropBehaviour ) {
+				$.ui.ddmanager.prepareOffsets( i, event );
+			}
 		}
 
 	}
@@ -952,9 +979,7 @@ $.ui.plugin.add("draggable", "snap", {
 				(inst.options.snap.snap && inst.options.snap.snap.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
 			}
 			inst.snapElements[i].snapping = (ts || bs || ls || rs || first);
-
 		}
-
 	}
 });
 

@@ -377,7 +377,7 @@ test( "containment, account for border", function() {
 test( "containment, default, switching after initialization", function() {
 	expect( 6 );
 
-	var element = $( "#draggable1" ).draggable({ containment: false });
+	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false });
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: default" );
 
@@ -905,6 +905,7 @@ test( "snap, snapMode, and snapTolerance", function() {
 		snapTolerance = 15,
 		element = $( "#draggable1" ).draggable({
 			snap: true,
+			scroll: false,
 			snapMode: "both",
 			snapTolerance: snapTolerance
 		}),
@@ -1027,6 +1028,7 @@ test( "#8459: element can snap to an element that was removed during drag", func
 		snapTolerance = 15,
 		element = $( "#draggable1" ).draggable({
 			snap: true,
+			scroll: false,
 			snapMode: "both",
 			snapTolerance: snapTolerance,
 			start: function() {
