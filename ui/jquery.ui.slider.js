@@ -56,6 +56,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-widget-content" +
 				" ui-corner-all");
 
+		this._cleanValues();
 		this._refresh();
 		this._setOption( "disabled", this.options.disabled );
 
@@ -135,6 +136,34 @@ $.widget( "ui.slider", $.ui.mouse, {
 				this.range.remove();
 			}
 			this.range = null;
+		}
+	},
+
+	_cleanValues: function( newValues ) {
+		var i = 0,
+			values = newValues || this.options.values;
+
+		if ( values ) {
+			for (; i < values.length; i++){
+				if ( values[ i ] < this._valueMin() ) {
+					values[ i ] = this._valueMin();
+				}
+
+				if ( ( i - 1 ) >= 0 && values[ i ] < values[ i - 1 ] ) {
+					values[ i ] = values[ i - 1 ];
+				}
+
+				if ( values[ i ]  > this._valueMax() ){
+					values[ i ] = this._valueMax();
+				}
+
+				if ( ( i + 1 ) < values.length && values[ i ] > values[ i + 1 ] ) {
+					values[ i ] = values[ i + 1 ];
+				}
+			}
+		}
+		if ( newValues ){
+			return values;
 		}
 	},
 
@@ -396,7 +425,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( arguments.length ) {
 			if ( $.isArray( arguments[ 0 ] ) ) {
 				vals = this.options.values;
-				newValues = arguments[ 0 ];
+				newValues = this._cleanValues( arguments[ 0 ] );
 				for ( i = 0; i < vals.length; i += 1 ) {
 					vals[ i ] = this._trimAlignValue( newValues[ i ] );
 					this._change( null, i );
@@ -453,6 +482,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				this._animateOff = false;
 				break;
 			case "values":
+				this._cleanValues();
 				this._animateOff = true;
 				this._refreshValue();
 				for ( i = 0; i < valsLength; i += 1 ) {
