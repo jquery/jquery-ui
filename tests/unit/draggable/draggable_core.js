@@ -118,14 +118,11 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 					.scrollLeft( 0 );
 			}
 		}),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "10000px",
-			width: "10000px"
-		}),
 		oldOverflowY = $( "html" ).css( "overflow-y" ),
 		oldOverflowX = $( "html" ).css( "overflow-x" );
 
-		contentToForceScroll.appendTo( "#qunit-fixture" );
+		TestHelpers.forceScrollableWindow();
+
 		$( "html" )
 			.css( "overflow-y", "scroll" )
 			.css( "overflow-x", "scroll" )
@@ -148,13 +145,10 @@ test( "#9315: Draggable: jumps down with offset of scrollbar", function() {
 				equal( ui.position.top, 11, "top position is correct when position is absolute" );
 				$( "html" ).scrollTop( 0 ).scrollLeft( 0 );
 			}
-		}),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "10000px",
-			width: "10000px"
 		});
 
-		contentToForceScroll.appendTo( "#qunit-fixture" );
+		TestHelpers.forceScrollableWindow();
+
 		$( "html" ).scrollTop( 300 ).scrollLeft( 300 );
 
 		element.simulate( "drag", {
@@ -178,13 +172,11 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 				equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
 				$( document ).scrollTop( 0 ).scrollLeft( 0 );
 			}
-		}),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "20000px",
-			width: "20000px"
 		});
 
-	$( "#qunit-fixture" ).append( contentToForceScroll );
+
+	TestHelpers.forceScrollableWindow();
+
 	$( "#wrapper" ).css( "position", "fixed" );
 
 	element.simulate( "drag", {

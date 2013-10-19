@@ -191,6 +191,13 @@ TestHelpers.onFocus= function( element, onFocus ) {
 	element.bind( "focus", fn )[ 0 ].focus();
 };
 
+TestHelpers.forceScrollableWindow = function( appendTo ) {
+	return $( "<div>" ).css({
+		height: "10000px",
+		width: "10000px"
+	}).appendTo( appendTo || "#qunit-fixture" );
+};
+
 /*
  * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
  */
