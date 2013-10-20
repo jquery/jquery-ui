@@ -21,10 +21,11 @@ test( "markup structure", function() {
 });
 
 test( "accessibility", function() {
-	expect( 5 );
+	expect( 7 );
 
 	var tooltipId,
 		tooltip,
+		announced = $("#ui-politeannounce p").length,
 		element = $( "#multiple-describedby" ).tooltip();
 
 	element.tooltip( "open" );
@@ -38,6 +39,8 @@ test( "accessibility", function() {
 	// support: IE <8
 	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
 	ok( !element.attr( "title" ), "no title when open" );
+    equal($("#ui-politeannounce p").length, announced + 1);
+    equal($("#ui-politeannounce p").last().text(), "...");
 	element.tooltip( "close" );
 	equal( element.attr( "aria-describedby" ), "fixture-span",
 		"correct describedby when closed" );

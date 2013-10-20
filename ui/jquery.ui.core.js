@@ -11,7 +11,9 @@
 (function( $, undefined ) {
 
 var uuid = 0,
-	runiqueId = /^ui-id-\d+$/;
+	runiqueId = /^ui-id-\d+$/,
+	politeAnnouncer = $("#ui-politeannouncer"),
+	assertiveAnnouncer = $("#ui-assertiveannouncer");
 
 // $.ui might exist from components with no dependencies, e.g., $.ui.position
 $.ui = $.ui || {};
@@ -38,6 +40,44 @@ $.extend( $.ui, {
 		UP: 38
 	}
 });
+
+// utility functions
+
+$.ui.politeAnnounce = function ( msg ) {
+    politeAnnouncer.append( $( "<p>" ).text( msg ));
+};
+
+$.ui.assertiveAnnounce = function ( msg ) {
+    assertiveAnnouncer.append( $( "<p>" ).text( msg ));
+};
+
+/*
+Add the polite announce div to the page
+these need to be added at document ready because otherwise VoiceOver will not work properly
+*/
+if ( !politeAnnouncer || !politeAnnouncer.length ) {
+    $( document ).ready( function () {
+        politeAnnouncer = $( "<div>" ).attr( {
+                "id": "ui-politeannounce",
+                "role": "log",
+                "aria-live": "polite",
+                "aria-relevant": "additions"
+            } ).addClass( "ui-helper-hidden-accessible" );
+        $( "body" ).append( politeAnnouncer );
+    });
+}
+// Add the polite announce div to the page
+if ( !assertiveAnnouncer || !assertiveAnnouncer.length ) {
+    $( document ).ready( function () {
+        assertiveAnnouncer = $( "<div>" ).attr( {
+                "id": "ui-assertiveannounce",
+                "role": "log",
+                "aria-live": "assertive",
+                "aria-relevant": "additions"
+            } ).addClass( "ui-helper-hidden-accessible" );
+        $( "body" ).append( assertiveAnnouncer );
+    });
+}
 
 // plugins
 $.fn.extend({
