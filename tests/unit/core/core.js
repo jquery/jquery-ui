@@ -183,7 +183,7 @@ test( "Test addition of the announce functions", function () {
 
 test( "The insertion of a paragraph into the polite announce divs when $.ui.politeAnnounce() called", function () {
     expect(2);
-    equal($("#jui-politeannounce p").length, 0);
+    equal($("#ui-politeannounce p").length, 0);
     $.ui.politeAnnounce("Message");
     equal($("#ui-politeannounce p").length, 1);
 });
