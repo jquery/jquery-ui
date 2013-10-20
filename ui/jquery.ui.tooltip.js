@@ -245,6 +245,7 @@ $.widget( "ui.tooltip", {
 		tooltip = this._tooltip( target );
 		addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
+		$.ui.politeAnnounce(content);
 
 		function position( event ) {
 			positionOption.of = event;

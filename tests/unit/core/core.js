@@ -169,4 +169,30 @@ test( "uniqueId / removeUniqueId", function() {
 	ok( !el.attr( "id" ), "unique id has been removed from element" );
 });
 
+test( "Test addition of the announce divs", function () {
+    expect(2);
+    equal($("#ui-politeannounce").length, 1);
+    equal($("#ui-assertiveannounce").length, 1);
+});
+
+test( "Test addition of the announce functions", function () {
+    expect(2);
+    equal(typeof $.ui.politeAnnounce, "function");
+    equal(typeof $.ui.assertiveAnnounce, "function");
+});
+
+test( "The insertion of a paragraph into the polite announce divs when $.ui.politeAnnounce() called", function () {
+    expect(2);
+    equal($("#jui-politeannounce p").length, 0);
+    $.ui.politeAnnounce("Message");
+    equal($("#ui-politeannounce p").length, 1);
+});
+
+test( "The insertion of a paragraph into the assertive announce div when $.ui.assertiveAnnounce() called", function () {
+    expect(2);
+    equal($("#ui-assertiveannounce p").length, 0);
+    $.ui.assertiveAnnounce("Message");
+    equal($("#ui-assertiveannounce p").length, 1);
+});
+
 })( jQuery );
