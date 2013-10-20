@@ -13,8 +13,8 @@ TestHelpers.draggable = {
 			offsetBefore = el.offset(),
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
-		$( el ).one( "dragstop", function( event, ui ) {
-			var expectedPosition = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
+		$( el ).one( "dragstop", function( /* event, ui */ ) {
+			// var expectedPosition = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
 			// TODO: fix test bugs and actual bugs that cause this not to be true
 			// deepEqual( ui.position, expectedPosition, "position dragged[" + dx + ", " + dy + "] " + msg );
 			ok( true, "TODO: deepEqual( ui.position, expectedPosition, 'position dragged[" + dx + ", " + dy + "] " + msg + "');");
