@@ -106,14 +106,28 @@ test( "{ axis: false }, default", function() {
 });
 
 test( "{ axis: 'x' }", function() {
-	expect( 2 );
-	var element = $( "#draggable2" ).draggable({ axis: "x" });
+	expect( 3 );
+	var element = $( "#draggable2" ).draggable({
+		axis: "x",
+		// TODO: remove the stop callback when all TestHelpers.draggable.testDrag bugs are fixed
+		stop: function( event, ui ) {
+			var expectedPosition = { left: ui.originalPosition.left + 50, top: ui.originalPosition.top };
+			deepEqual( ui.position, expectedPosition, "position dragged[50,0] for axis: x" );
+		}
+	});
 	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 0, "axis: x" );
 });
 
 test( "{ axis: 'y' }", function() {
-	expect( 2 );
-	var element = $( "#draggable2" ).draggable({ axis: "y" });
+	expect( 3 );
+	var element = $( "#draggable2" ).draggable({
+		axis: "y",
+		// TODO: remove the stop callback when all TestHelpers.draggable.testDrag bugs are fixed
+		stop: function( event, ui ) {
+			var expectedPosition = { left: ui.originalPosition.left, top: ui.originalPosition.top + 50 };
+			deepEqual( ui.position, expectedPosition, "position dragged[0,50] for axis: y" );
+		}
+	});
 	TestHelpers.draggable.testDrag( element, element, 50, 50, 0, 50, "axis: y" );
 });
 
