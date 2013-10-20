@@ -43,12 +43,12 @@ test( "element types", function() {
 });
 
 test( "No options, relative", function() {
-	expect( 1 );
+	expect( 2 );
 	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
 });
 
 test( "No options, absolute", function() {
-	expect( 1 );
+	expect( 2 );
 	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 

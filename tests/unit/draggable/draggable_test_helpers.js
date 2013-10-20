@@ -7,8 +7,18 @@ TestHelpers.draggable = {
 		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
 	})(),
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
-		var offsetAfter, actual, expected,
-			offsetBefore = el.offset();
+		msg = msg ? msg + "." : "";
+
+		var offsetActual,
+			offsetBefore = el.offset(),
+			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+		$( el ).one( "dragstop", function( event, ui ) {
+			var expectedPosition = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
+			// TODO: fix test bugs and actual bugs that cause this not to be true
+			// deepEqual( ui.position, expectedPosition, "position dragged[" + dx + ", " + dy + "] " + msg );
+			ok( true, "TODO: deepEqual( ui.position, expectedPosition, 'position dragged[" + dx + ", " + dy + "] " + msg + "');");
+		} );
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
@@ -17,13 +27,10 @@ TestHelpers.draggable = {
 			// so we can't faithfully test things that rely on a scroll event (which is async)
 			moves: 1
 		});
-		offsetAfter = el.offset();
 
-		actual = { left: offsetAfter.left, top: offsetAfter.top };
-		expected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+		offsetActual = el.offset();
 
-		msg = msg ? msg + "." : "";
-		deepEqual( actual, expected, "dragged[" + dx + ", " + dy + "] " + msg );
+		deepEqual( offsetActual, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
 	},
 	shouldMove: function( el, why, handle ) {
 		handle = handle || el;
@@ -32,6 +39,13 @@ TestHelpers.draggable = {
 	shouldNotMove: function( el, why, handle ) {
 		handle = handle || el;
 		TestHelpers.draggable.testDrag( el, handle, 50, 50, 0, 0, why );
+	},
+	shouldNotDrag: function( el, why, handle ) {
+		$( el ).bind( "dragstop", function() {
+			ok( false, "should not drag " + why );
+		} );
+		TestHelpers.draggable.shouldNotMove( el, why, handle );
+		$( el ).unbind( "dragstop" );
 	},
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
