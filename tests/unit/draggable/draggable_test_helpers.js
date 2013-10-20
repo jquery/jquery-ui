@@ -38,18 +38,10 @@ TestHelpers.draggable = {
 		$( "#main" ).css( "position", oldPosition );
 	},
 	restoreScroll: function( what ) {
-		if( what ) {
-			$( document ).scrollTop( 0 ).scrollLeft( 0 );
-		} else {
-			$( "#main" ).scrollTop( 0 ).scrollLeft( 0 );
-		}
+		$( what ).scrollTop( 0 ).scrollLeft( 0 );
 	},
 	setScroll: function( what ) {
-		if( what ) {
-			$( document ).scrollTop( 100 ).scrollLeft( 100 );
-		} else {
-			$( "#main" ).scrollTop( 100 ).scrollLeft( 100 );
-		}
+		$( what ).scrollTop( 100 ).scrollLeft( 100 );
 	},
 	border: function( el, side ) {
 		return parseInt( el.css( "border-" + side + "-width" ), 10 ) || 0;
