@@ -25,11 +25,13 @@ TestHelpers.draggable = {
 		msg = msg ? msg + "." : "";
 		deepEqual( actual, expected, "dragged[" + dx + ", " + dy + "] " + msg );
 	},
-	shouldMove: function( el, why ) {
-		TestHelpers.draggable.testDrag( el, el, 50, 50, 50, 50, why );
+	shouldMove: function( el, why, handle ) {
+		handle = handle || el;
+		TestHelpers.draggable.testDrag( el, handle, 50, 50, 50, 50, why );
 	},
-	shouldNotMove: function( el, why ) {
-		TestHelpers.draggable.testDrag( el, el, 50, 50, 0, 0, why );
+	shouldNotMove: function( el, why, handle ) {
+		handle = handle || el;
+		TestHelpers.draggable.testDrag( el, handle, 50, 50, 0, 0, why );
 	},
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );

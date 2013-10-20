@@ -44,12 +44,12 @@ test( "element types", function() {
 
 test( "No options, relative", function() {
 	expect( 1 );
-	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable() );
+	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
 });
 
 test( "No options, absolute", function() {
 	expect( 1 );
-	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable() );
+	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 
 test( "resizable handle with complex markup (#8756 / #8757)", function() {
@@ -199,7 +199,7 @@ test( "#5727: draggable from iframe" , function() {
 
 	equal( draggable1.closest( iframeBody ).length, 1 );
 
-	TestHelpers.draggable.shouldMove( draggable1 );
+	TestHelpers.draggable.shouldMove( draggable1, "draggable from an iframe" );
 });
 
 test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function() {
