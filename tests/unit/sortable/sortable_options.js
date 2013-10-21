@@ -212,9 +212,66 @@ test("{ containment: 'window' }", function() {
 
 test("{ containment: Selector }", function() {
 	ok(false, "missing test - untested code is broken code.");
+});*/
+
+test("#5772: wide element sorting to first and last position on x-axis", function() {
+	expect(2);
+
+	var element = $("#sortable-horizontal").sortable({
+				axis: "x",
+				containment: "parent",
+				scroll: false
+			}),
+		item = element.find(".wide").eq(0);
+
+	item.simulate("drag", { dx: -150 });
+
+	equal(item.index(), 0, "Item is sorted to first position");
+
+	item.simulate("drag", { dx: 150 });
+
+	equal(item.index(), 4, "Item is sorted to last position");
 });
 
-test("{ cursor: 'auto' }, default", function() {
+test("#5772: tall element sorting to first and last position on y-axis", function() {
+	expect(2);
+
+	var element = $("#sortable-vertical").sortable({
+				axis: "y",
+				containment: "parent",
+				scroll: false
+			}),
+		item = element.find(".tall").eq(0);
+
+	item.simulate("drag", { dy: -150 });
+
+	equal(item.index(), 0, "Item is sorted to first position");
+
+	item.simulate("drag", { dy: 150 });
+
+	equal(item.index(), 4, "Item is sorted to last position");
+});
+
+test("#5772: element sorting to first and last position on grid", function() {
+	expect(2);
+
+	var element = $("#sortable-grid").sortable({
+				containment: "parent",
+				scroll: false
+			}),
+		item = element.find("span").eq(5);
+
+	item.simulate("drag", { dy: -150, dx: -150 });
+
+	equal(item.index(), 0, "Item is sorted to first position");
+
+	item.simulate("drag", { dx: 150, dy: 150 });
+
+	equal(item.index(), 8, "Item is sorted to last position");
+});
+
+
+/*test("{ cursor: 'auto' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 

@@ -45,6 +45,29 @@
 		border-width: 0;
 		height:19px;
 	}
+	#sortable-horizontal {
+		width: 142px;
+		height: 22px;
+	}
+	#sortable-vertical {
+		width: 22px;
+		height: 142px;
+	}
+	#sortable-grid {
+		width: 62px;
+		height: 62px;
+	}
+	.sortable-axis span {
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+	}
+	.sortable-axis span.wide {
+		width: 60px;
+	}
+	.sortable-axis span.tall {
+		height: 60px;
+	}
 	#sortable-table {
 		width: 100%;
 	}
@@ -70,6 +93,34 @@
 	<li>Item 4</li>
 	<li>Item 5</li>
 </ul>
+
+<div id="sortable-horizontal" class="sortable-axis">
+	<span>Item 1</span>
+	<span>Item 2</span>
+	<span class="wide">Item 3</span>
+	<span>Item 4</span>
+	<span>Item 5</span>
+</div>
+
+<div id="sortable-vertical" class="sortable-axis">
+	<span>Item 1</span>
+	<span>Item 2</span>
+	<span class="tall">Item 3</span>
+	<span>Item 4</span>
+	<span>Item 5</span>
+</div>
+
+<div id="sortable-grid" class="sortable-axis">
+	<span>Item 1</span>
+	<span>Item 2</span>
+	<span>Item 3</span>
+	<span>Item 4</span>
+	<span>Item 5</span>
+	<span>Item 6</span>
+	<span>Item 7</span>
+	<span>Item 8</span>
+	<span>Item 9</span>
+</div>
 
 <table id="sortable-table">
 	<tbody>
