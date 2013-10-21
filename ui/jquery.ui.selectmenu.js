@@ -201,6 +201,7 @@ $.widget( "ui.selectmenu", {
 			// Shouldn't the underlying menu always have accurate state?
 			this.menu.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
 			this.menuInstance.focus( null, this._getSelectedItem() );
+			this.menuItems.eq( this.element[ 0 ].selectedIndex ).addClass( "ui-state-active" ); 
 		}
 
 		this.isOpen = true;
