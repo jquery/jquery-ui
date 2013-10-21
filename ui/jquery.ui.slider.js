@@ -322,7 +322,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				} );
 				otherVal = this.values( index ? 0 : 1 );
 				if ( allowed !== false ) {
-					this.values( index, newVal, true );
+					this.values( index, newVal );
 				}
 			}
 		} else {

@@ -166,7 +166,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		});
 
 		//Generate the original position
-		this.originalPosition = this.position = this._generatePosition(event);
+		this.originalPosition = this.position = this._generatePosition( event, false );
 		this.originalPageX = event.pageX;
 		this.originalPageY = event.pageY;
 
@@ -208,7 +208,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		//Compute the helpers position
-		this.position = this._generatePosition(event);
+		this.position = this._generatePosition( event, true );
 		this.positionAbs = this._convertPositionTo("absolute");
 
 		//Call plugins and callbacks and use the resulting position if something is returned
@@ -221,12 +221,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this.position = ui.position;
 		}
 
-		if(!this.options.axis || this.options.axis !== "y") {
-			this.helper[0].style.left = this.position.left+"px";
-		}
-		if(!this.options.axis || this.options.axis !== "x") {
-			this.helper[0].style.top = this.position.top+"px";
-		}
+		this.helper[ 0 ].style.left = this.position.left + "px";
+		this.helper[ 0 ].style.top = this.position.top + "px";
+
 		if($.ui.ddmanager) {
 			$.ui.ddmanager.drag(this, event);
 		}
@@ -491,7 +488,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	},
 
-	_generatePosition: function(event) {
+	_generatePosition: function( event, constrainPosition ) {
 
 		var containment, co, top, left,
 			o = this.options,
@@ -516,7 +513,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		 */
 
 		// If we are not dragging yet, we won't check for options
-		if ( this.originalPosition ) {
+		if ( constrainPosition ) {
 			if ( this.containment ) {
 				if ( this.relative_container ){
 					co = this.relative_container.offset();
@@ -554,6 +551,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
 			}
 
+			if ( o.axis === "y" ) {
+				pageX = this.originalPageX;
+			}
+
+			if ( o.axis === "x" ) {
+				pageY = this.originalPageY;
+			}
 		}
 
 		return {

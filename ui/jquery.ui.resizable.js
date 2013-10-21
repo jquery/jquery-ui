@@ -316,7 +316,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		//Store needed variables
 		this.offset = this.helper.offset();
 		this.position = { left: curleft, top: curtop };
-		this.size = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+		this.size = this._helper ? { width: this.helper.width(), height: this.helper.height() } : { width: el.width(), height: el.height() };
 		this.originalSize = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
 		this.originalPosition = { left: curleft, top: curtop };
 		this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };

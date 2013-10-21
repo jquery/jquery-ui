@@ -40,12 +40,8 @@ test( "mousedown: initial position of helper", function() {
 
 	var helperOffset,
 		element = $( "#selectable1" ).selectable(),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "10000px",
-			width: "10000px"
-		});
+		contentToForceScroll = TestHelpers.forceScrollableWindow( "body" );
 
-	contentToForceScroll.appendTo( "body" );
 	$( window ).scrollTop( 100 ).scrollLeft( 100 );
 
 	element.simulate( "mousedown", {
