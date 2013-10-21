@@ -285,7 +285,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		var i, item, itemElement, intersection,
 			o = this.options,
 			scrolled = false,
-			touchingContainmentEdge = false;
+			touchingEdge;
 
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
@@ -347,21 +347,19 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.containment) {
 			if(this.positionAbs.left === this.containment[0] &&
 					this.positionAbs.top === this.containment[1]) {
-				touchingContainmentEdge = 0;
+				touchingEdge = 0;
 				this.direction = "down";
-			}
-			else if(this.positionAbs.left === this.containment[2] &&
+			} else if(this.positionAbs.left === this.containment[2] &&
 					this.positionAbs.top === this.containment[3]) {
-				touchingContainmentEdge = this.items.length - 1;
+				touchingEdge = this.items.length - 1;
 				this.direction = "up";
 			}
 		}
 
-		if(touchingContainmentEdge !== false &&
-				this.helper[0] !== this.items[touchingContainmentEdge].item[0]) {
+		if(touchingEdge !== undefined && this.helper[0] !== this.items[touchingEdge].item[0]) {
 			// Rearrange, if the helper is touching the edge of the containment and not
 			// already the item at the edge.
-			this._rearrange(event, this.items[touchingContainmentEdge]);
+			this._rearrange(event, this.items[touchingEdge], false);
 			this._trigger("change", event, this._uiHash());
 		} else {
 			//Rearrange
@@ -376,12 +374,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 				}
 
 				// Only put the placeholder inside the current Container, skip all
-				// items form other containers. This works because when moving
+				// items from other containers. This works because when moving
 				// an item from one container to another the
 				// currentContainer is switched before the placeholder is moved.
 				//
-				// Without this moving items in "sub-sortables" can cause the placeholder to jitter
-				// beetween the outer and inner container.
+				// Without this, moving items in "sub-sortables" can cause
+				// the placeholder to jitter beetween the outer and inner container.
 				if (item.instance !== this.currentContainer) {
 					continue;
 				}
@@ -394,7 +392,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 					!$.contains(this.placeholder[0], itemElement) &&
 					(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
 				) {
-
 					this.direction = intersection === 1 ? "down" : "up";
 
 					if (this.options.tolerance === "pointer" || this._intersectsWithSides(item)) {
