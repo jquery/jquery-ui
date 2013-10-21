@@ -377,13 +377,13 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 		// Check if the helper is touching the edges of the containment.
 		if(this.containment) {
-			if(this.positionAbs.left === this.containment[0] &&
-					this.positionAbs.top === this.containment[1]) {
+			if((this.positionAbs.left === this.containment[0] || this.options.axis === "y") &&
+					(this.positionAbs.top === this.containment[1] || this.options.axis === "x")) {
 				touchingContainmentEdge = 0;
 				this.direction = "down";
 			}
-			else if(this.positionAbs.left === this.containment[2] &&
-					this.positionAbs.top === this.containment[3]) {
+			else if((this.positionAbs.left === this.containment[2] || this.options.axis === "y") &&
+					(this.positionAbs.top === this.containment[3] || this.options.axis === "x")) {
 				touchingContainmentEdge = this.items.length - 1;
 				this.direction = "up";
 			}
