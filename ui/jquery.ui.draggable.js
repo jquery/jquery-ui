@@ -166,7 +166,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		});
 
 		//Generate the original position
-		this.originalPosition = this.position = this._generatePosition(event);
+		this.originalPosition = this.position = this._generatePosition( event, false );
 		this.originalPageX = event.pageX;
 		this.originalPageY = event.pageY;
 
@@ -208,7 +208,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		//Compute the helpers position
-		this.position = this._generatePosition(event);
+		this.position = this._generatePosition( event, true );
 		this.positionAbs = this._convertPositionTo("absolute");
 
 		//Call plugins and callbacks and use the resulting position if something is returned
@@ -488,7 +488,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	},
 
-	_generatePosition: function(event) {
+	_generatePosition: function( event, constrainPosition ) {
 
 		var containment, co, top, left,
 			o = this.options,
@@ -513,7 +513,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		 */
 
 		// If we are not dragging yet, we won't check for options
-		if ( this.originalPosition ) {
+		if ( constrainPosition ) {
 			if ( this.containment ) {
 				if ( this.relative_container ){
 					co = this.relative_container.offset();
