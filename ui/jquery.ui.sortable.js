@@ -357,9 +357,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 		}
 
-		if(touchingEdge !== undefined && this.helper[0] !== this.items[touchingEdge].item[0]) {
-			// Rearrange, if the helper is touching the edge of the containment and not
-			// already the item at the edge.
+		if(touchingEdge !== undefined && this.placeholder[0] !== this.items[touchingEdge].item[0]) {
+			// Rearrange if the helper is at the edge of the containment and the placeholder is not at that edge.
 			this._rearrange(event, this.items[touchingEdge], false);
 			this._trigger("change", event, this._uiHash());
 		} else {
