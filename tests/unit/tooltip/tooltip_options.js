@@ -9,12 +9,12 @@ test( "disabled: true", function() {
 	}).tooltip( "open" );
 	equal( $( ".ui-tooltip" ).length, 0 );
 
+	// #9145 - Tooltip: Disabled tooltip opens after content is changed
 	$( "#tooltipped1" ).tooltip({
 		disabled: true
 	}).tooltip( "option", "content", "I'm a tip." )
 		.tooltip( "open" );
 	equal( $( ".ui-tooltip" ).length, 0 );
-
 });
 
 test( "content: default", function() {
