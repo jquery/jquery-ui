@@ -390,9 +390,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		if(touchingContainmentEdge !== false &&
-				this.helper[0] !== this.items[touchingContainmentEdge].item[0]) {
-			// Rearrange, if the helper is touching the edge of the containment and not
-			// already the item at the edge.
+				this.placeholder[0] !== this.items[touchingContainmentEdge].item[0]) {
 			this._rearrange(event, this.items[touchingContainmentEdge]);
 			this._trigger("change", event, this._uiHash());
 		} else {
