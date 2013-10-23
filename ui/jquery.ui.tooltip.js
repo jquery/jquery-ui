@@ -15,33 +15,6 @@
  */
 (function( $ ) {
 
-var increments = 0;
-
-function addDescribedBy( elem, id ) {
-	var describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ );
-	describedby.push( id );
-	elem
-		.data( "ui-tooltip-id", id )
-		.attr( "aria-describedby", $.trim( describedby.join( " " ) ) );
-}
-
-function removeDescribedBy( elem ) {
-	var id = elem.data( "ui-tooltip-id" ),
-		describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ ),
-		index = $.inArray( id, describedby );
-	if ( index !== -1 ) {
-		describedby.splice( index, 1 );
-	}
-
-	elem.removeData( "ui-tooltip-id" );
-	describedby = $.trim( describedby.join( " " ) );
-	if ( describedby ) {
-		elem.attr( "aria-describedby", describedby );
-	} else {
-		elem.removeAttr( "aria-describedby" );
-	}
-}
-
 $.widget( "ui.tooltip", {
 	version: "@VERSION",
 	options: {
@@ -67,6 +40,32 @@ $.widget( "ui.tooltip", {
 		// callbacks
 		close: null,
 		open: null
+	},
+
+	_addDescribedBy: function( elem, id ) {
+		var describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ );
+		describedby.push( id );
+		elem
+			.data( "ui-tooltip-id", id )
+			.attr( "aria-describedby", $.trim( describedby.join( " " ) ) );
+	},
+
+	_removeDescribedBy: function( elem ) {
+		var id = elem.data( "ui-tooltip-id" ),
+			describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ ),
+			index = $.inArray( id, describedby );
+
+		if ( index !== -1 ) {
+			describedby.splice( index, 1 );
+		}
+
+		elem.removeData( "ui-tooltip-id" );
+		describedby = $.trim( describedby.join( " " ) );
+		if ( describedby ) {
+			elem.attr( "aria-describedby", describedby );
+		} else {
+			elem.removeAttr( "aria-describedby" );
+		}
 	},
 
 	_create: function() {
@@ -243,7 +242,7 @@ $.widget( "ui.tooltip", {
 		}
 
 		tooltip = this._tooltip( target );
-		addDescribedBy( target, tooltip.attr( "id" ) );
+		this._addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 
 		function position( event ) {
@@ -322,7 +321,7 @@ $.widget( "ui.tooltip", {
 			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
 
-		removeDescribedBy( target );
+		this._removeDescribedBy( target );
 
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
@@ -350,17 +349,16 @@ $.widget( "ui.tooltip", {
 	},
 
 	_tooltip: function( element ) {
-		var id = "ui-tooltip-" + increments++,
-			tooltip = $( "<div>" )
-				.attr({
-					id: id,
-					role: "tooltip"
-				})
+		var tooltip = $( "<div>" )
+				.attr( "role", "tooltip" )
 				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
-					( this.options.tooltipClass || "" ) );
+					( this.options.tooltipClass || "" ) ),
+			id = tooltip.uniqueId().attr( "id" );
+
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
+
 		tooltip.appendTo( this.document[0].body );
 		this.tooltips[ id ] = element;
 		return tooltip;
