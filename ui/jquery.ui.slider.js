@@ -638,7 +638,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 					break;
 				case $.ui.keyCode.PAGE_UP:
 					newVal = this._trimAlignValue(
-						curVal + ( (this._valueMax() - this._valueMin()) / this.numPages ) );
+						curVal + ( ( this._valueMax() - this._valueMin() ) / this.numPages )
+					);
 					break;
 				case $.ui.keyCode.PAGE_DOWN:
 					newVal = this._trimAlignValue(

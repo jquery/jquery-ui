@@ -15,7 +15,7 @@
  */
 (function( $ ) {
 
-function modifier( fn ) {
+function spinner_modifier( fn ) {
 	return function() {
 		var previous = this.element.val();
 		fn.apply( this, arguments );
@@ -391,7 +391,7 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	_setOptions: modifier(function( options ) {
+	_setOptions: spinner_modifier(function( options ) {
 		this._super( options );
 		this._value( this.element.val() );
 	}),
@@ -462,7 +462,7 @@ $.widget( "ui.spinner", {
 		this.uiSpinner.replaceWith( this.element );
 	},
 
-	stepUp: modifier(function( steps ) {
+	stepUp: spinner_modifier(function( steps ) {
 		this._stepUp( steps );
 	}),
 	_stepUp: function( steps ) {
@@ -472,7 +472,7 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	stepDown: modifier(function( steps ) {
+	stepDown: spinner_modifier(function( steps ) {
 		this._stepDown( steps );
 	}),
 	_stepDown: function( steps ) {
@@ -482,11 +482,11 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	pageUp: modifier(function( pages ) {
+	pageUp: spinner_modifier(function( pages ) {
 		this._stepUp( (pages || 1) * this.options.page );
 	}),
 
-	pageDown: modifier(function( pages ) {
+	pageDown: spinner_modifier(function( pages ) {
 		this._stepDown( (pages || 1) * this.options.page );
 	}),
 
@@ -494,7 +494,7 @@ $.widget( "ui.spinner", {
 		if ( !arguments.length ) {
 			return this._parse( this.element.val() );
 		}
-		modifier( this._value ).call( this, newVal );
+		spinner_modifier( this._value ).call( this, newVal );
 	},
 
 	widget: function() {
