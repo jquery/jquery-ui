@@ -29,8 +29,7 @@ $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
-		widthButton: null,
-		widthMenu: null,
+		width: null,
 
 		// callbacks
 		change: null,
@@ -94,7 +93,7 @@ $.widget( "ui.selectmenu", {
 		.appendTo( this.button );
 
 		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
-		this._setOption( "widthButton", this.options.widthButton );
+		this._setOption( "width", this.options.width );
 
 		this._on( this.button, this._buttonEvents );
 		this._hoverable( this.button );
@@ -442,7 +441,7 @@ $.widget( "ui.selectmenu", {
 				this.button.attr( "tabindex", 0 );
 			}
 		}
-		if ( key === "widthButton" ) {
+		if ( key === "width" ) {
 			if ( !value ) {
 				value = this.element.outerWidth();
 			}
@@ -480,7 +479,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_resizeMenu: function() {
-		this.menu.outerWidth( this.options.widthMenu || Math.max(
+		this.menu.outerWidth( Math.max(
 			this.button.outerWidth(),
 			this.menu.width( "" ).outerWidth()
 		) );
