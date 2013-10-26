@@ -21,12 +21,18 @@ test( "markup structure", function() {
 });
 
 test( "accessibility", function() {
-	expect( 5 );
+	expect( 15 );
 
 	var tooltipId,
 		tooltip,
-		element = $( "#multiple-describedby" ).tooltip();
+		element = $( "#multiple-describedby" ).tooltip(),
+		liveRegion = element.tooltip( "instance" ).liveRegion,
+		announced = 0;
 
+	equal( liveRegion.find( ">div" ).length, 0 );
+	equal( liveRegion.attr( "role" ), "log" );
+	equal( liveRegion.attr( "aria-live" ), "assertive" );
+	equal( liveRegion.attr( "aria-relevant" ), "additions" );
 	element.tooltip( "open" );
 	tooltipId = element.data( "ui-tooltip-id" );
 	tooltip = $( "#" + tooltipId );
@@ -38,10 +44,25 @@ test( "accessibility", function() {
 	// support: IE <8
 	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
 	ok( !element.attr( "title" ), "no title when open" );
+	equal( liveRegion.children().length, announced + 1 );
+	equal( liveRegion.children().last().html(), "..." );
 	element.tooltip( "close" );
 	equal( element.attr( "aria-describedby" ), "fixture-span",
 		"correct describedby when closed" );
 	equal( element.attr( "title" ), "...", "title restored when closed" );
+
+	// Additional announcement tests
+	element.tooltip( "open" );
+	equal( liveRegion.children().length, announced + 2,
+		"After the second tooltip show, there should be two children" );
+	equal( liveRegion.children().filter( ":visible" ).length, 1,
+		"Only one of the children should be visible" );
+	ok( liveRegion.children().last().is( ":visible" ),
+		"Only the last child should be visible" );
+	element.tooltip( "close" );
+	element.tooltip( "destroy" );
+	equal( liveRegion.parent().length, 0,
+		"Tooltip liveregion element should be detached from the body" );
 });
 
 test( "delegated removal", function() {
