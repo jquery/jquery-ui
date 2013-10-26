@@ -21,12 +21,17 @@ test( "markup structure", function() {
 });
 
 test( "accessibility", function() {
-	expect( 5 );
+	expect( 10 );
 
 	var tooltipId,
 		tooltip,
-		element = $( "#multiple-describedby" ).tooltip();
+		element = $( "#multiple-describedby" ).tooltip(),
+		politeAnnouncer = $( ".ui-tooltip-polite" ).last(),
+		announced = politeAnnouncer.find( "p" ).length;
 
+	equal( politeAnnouncer.attr( "role" ), "log" );
+	equal( politeAnnouncer.attr( "aria-live" ), "assertive" );
+	equal( politeAnnouncer.attr( "aria-relevant" ), "additions" );
 	element.tooltip( "open" );
 	tooltipId = element.data( "ui-tooltip-id" );
 	tooltip = $( "#" + tooltipId );
@@ -38,6 +43,8 @@ test( "accessibility", function() {
 	// support: IE <8
 	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
 	ok( !element.attr( "title" ), "no title when open" );
+	equal( politeAnnouncer.find( "p" ).length, announced + 1 );
+	equal( politeAnnouncer.find( "p" ).last().text(), "..." );
 	element.tooltip( "close" );
 	equal( element.attr( "aria-describedby" ), "fixture-span",
 		"correct describedby when closed" );

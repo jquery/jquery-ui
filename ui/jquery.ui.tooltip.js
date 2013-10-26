@@ -82,6 +82,16 @@ $.widget( "ui.tooltip", {
 		if ( this.options.disabled ) {
 			this._disable();
 		}
+
+		// Append the aria-live region so tooltips announce correctly
+		this.liveRegion = $( "<div>", this.document )
+			.attr({
+				"role": "log",
+				"aria-live": "assertive",
+				"aria-relevant": "additions"
+			})
+			.addClass( "ui-tooltip-polite ui-helper-hidden-accessible" );
+		$( "body", this.document ).append( this.liveRegion );
 	},
 
 	_setOption: function( key, value ) {
@@ -244,6 +254,8 @@ $.widget( "ui.tooltip", {
 		tooltip = this._tooltip( target );
 		this._addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
+		this.liveRegion.find( "p" ).hide(); // stop duplicate announcement on VO (OSX)
+		this.liveRegion.append( $( "<p>", this.document ).text( content ) );
 
 		function position( event ) {
 			positionOption.of = event;
@@ -394,6 +406,7 @@ $.widget( "ui.tooltip", {
 				element.removeData( "ui-tooltip-title" );
 			}
 		});
+		this.liveRegion.remove(); // remove the liveRegion
 	}
 });
 
