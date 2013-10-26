@@ -20,8 +20,8 @@ TestHelpers.draggable = {
 		var offsetBefore = el.offset(),
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
-		$( el ).one( "dragstop", function() {
-			deepEqual( el.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+		$( el ).one( "dragstop", function( event, ui ) {
+			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
 		} );
 	},
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
@@ -68,9 +68,13 @@ TestHelpers.draggable = {
 		});
 		$( el ).unbind( "dragstop" );
 	},
+	setScrollable: function ( what, isScrollable ) {
+		var overflow = isScrollable ? "scroll" : "hidden";
+		$( what ).css({ overflow: overflow, overflowX: overflow, overflowY: overflow });
+	},
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
-		$( "#main" ).css( "position", position);
+		$( "#main" ).css({ position: position, top: "0px", left: "0px" });
 		TestHelpers.draggable.shouldMove( el, position + " parent" );
 		$( "#main" ).css( "position", oldPosition );
 	},

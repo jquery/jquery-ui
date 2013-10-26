@@ -8,8 +8,38 @@
 	<link rel="stylesheet" href="../../../external/qunit.css">
 
 	<style>
+		#main {
+			width: 1000px;
+			height: 1000px;
+			overflow: scroll;
+			overflow-x: scroll;
+			overflow-y: scroll;
+			position: relative;
+			left: 0;
+			top: 0;
+		}
+		#main-forceScrollable {
+			width: 1100px;
+			height: 1100px;
+		}
+		#scrollParent {
+			width: 1200px;
+			height: 1200px;
+			position: relative;
+			left: 0;
+			top: 0;
+			overflow: hidden;
+			overflow-x: hidden;
+			overflow-y: hidden;
+		}
+		#scrollParent-forceScrollable {
+			width: 1300px;
+			height: 1300px;
+		}
 		/* See #9077 */
-		#draggable3, #draggable4 { z-index: 100; }
+		#draggable3, #draggable4 {
+			z-index: 100;
+		}
 	</style>
 
 	<script src="../../../external/qunit.js"></script>
@@ -46,10 +76,14 @@
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	<div id="main">
-		<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>
-		<div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span><em>Absolute</em></span></div>
-		<div id="droppable" style="background: green; width: 200px; height: 100px; position: absolute; top: 110px; left: 110px;"><span>Absolute</span></div>
+	<div id="scrollParent">
+		<div id="main">
+			<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>
+			<div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span><em>Absolute</em></span></div>
+			<div id="droppable" style="background: green; width: 200px; height: 100px; position: absolute; top: 110px; left: 110px;"><span>Absolute</span></div>
+			<div id="main-forceScrollable"></div>
+		</div>
+		<div id="scrollParent-forceScrollable"></div>
 	</div>
 	<div style="width: 1px; height: 1000px;"></div>
 	<div style="position: absolute; width: 1px; height: 2000px;"></div>

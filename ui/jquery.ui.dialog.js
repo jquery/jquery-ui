@@ -19,22 +19,6 @@
  */
 (function( $, undefined ) {
 
-var sizeRelatedOptions = {
-		buttons: true,
-		height: true,
-		maxHeight: true,
-		maxWidth: true,
-		minHeight: true,
-		minWidth: true,
-		width: true
-	},
-	resizableRelatedOptions = {
-		maxHeight: true,
-		maxWidth: true,
-		minHeight: true,
-		minWidth: true
-	};
-
 $.widget( "ui.dialog", {
 	version: "@VERSION",
 	options: {
@@ -81,6 +65,23 @@ $.widget( "ui.dialog", {
 		resize: null,
 		resizeStart: null,
 		resizeStop: null
+	},
+
+	sizeRelatedOptions: {
+		buttons: true,
+		height: true,
+		maxHeight: true,
+		maxWidth: true,
+		minHeight: true,
+		minWidth: true,
+		width: true
+	},
+
+	resizableRelatedOptions: {
+		maxHeight: true,
+		maxWidth: true,
+		minHeight: true,
+		minWidth: true
 	},
 
 	_create: function() {
@@ -579,10 +580,10 @@ $.widget( "ui.dialog", {
 		$.each( options, function( key, value ) {
 			that._setOption( key, value );
 
-			if ( key in sizeRelatedOptions ) {
+			if ( key in that.sizeRelatedOptions ) {
 				resize = true;
 			}
-			if ( key in resizableRelatedOptions ) {
+			if ( key in that.resizableRelatedOptions ) {
 				resizableOptions[ key ] = value;
 			}
 		});

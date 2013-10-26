@@ -15,37 +15,6 @@
  */
 (function( $, undefined ) {
 
-function num(v) {
-	return parseInt(v, 10) || 0;
-}
-
-function isNumber(value) {
-	return !isNaN(parseInt(value, 10));
-}
-
-function hasScroll( el, a ) {
-
-	//If overflow is hidden, the element might have extra content, but the user wants to hide it
-	if ( $( el ).css( "overflow" ) === "hidden") {
-		return false;
-	}
-
-	var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
-		has = false;
-
-	if ( el[ scroll ] > 0 ) {
-		return true;
-	}
-
-	// TODO: determine which cases actually cause this to happen
-	// if the element doesn't have the scroll set, see if it's possible to
-	// set the scroll
-	el[ scroll ] = 1;
-	has = ( el[ scroll ] > 0 );
-	el[ scroll ] = 0;
-	return has;
-}
-
 $.widget("ui.resizable", $.ui.mouse, {
 	version: "@VERSION",
 	widgetEventPrefix: "resize",
@@ -73,6 +42,38 @@ $.widget("ui.resizable", $.ui.mouse, {
 		start: null,
 		stop: null
 	},
+
+	_num: function( value ) {
+		return parseInt( value, 10 ) || 0;
+	},
+
+	_isNumber: function( value ) {
+		return !isNaN( parseInt( value , 10 ) );
+	},
+
+	_hasScroll: function( el, a ) {
+
+		//If overflow is hidden, the element might have extra content, but the user wants to hide it
+		if ( $( el ).css( "overflow" ) === "hidden") {
+			return false;
+		}
+
+		var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
+			has = false;
+
+		if ( el[ scroll ] > 0 ) {
+			return true;
+		}
+
+		// TODO: determine which cases actually cause this to happen
+		// if the element doesn't have the scroll set, see if it's possible to
+		// set the scroll
+		el[ scroll ] = 1;
+		has = ( el[ scroll ] > 0 );
+		el[ scroll ] = 0;
+		return has;
+	},
+
 	_create: function() {
 
 		var n, i, handle, axis, hname,
@@ -305,8 +306,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		this._renderProxy();
 
-		curleft = num(this.helper.css("left"));
-		curtop = num(this.helper.css("top"));
+		curleft = this._num(this.helper.css("left"));
+		curtop = this._num(this.helper.css("top"));
 
 		if (o.containment) {
 			curleft += $(o.containment).scrollLeft() || 0;
@@ -404,7 +405,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			pr = this._proportionallyResizeElements;
 			ista = pr.length && (/textarea/i).test(pr[0].nodeName);
-			soffseth = ista && hasScroll(pr[0], "left") /* TODO - jump height */ ? 0 : that.sizeDiff.height;
+			soffseth = ista && this._hasScroll(pr[0], "left") /* TODO - jump height */ ? 0 : that.sizeDiff.height;
 			soffsetw = ista ? 0 : that.sizeDiff.width;
 
 			s = { width: (that.helper.width()  - soffsetw), height: (that.helper.height() - soffseth) };
@@ -442,10 +443,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 			o = this.options;
 
 		b = {
-			minWidth: isNumber(o.minWidth) ? o.minWidth : 0,
-			maxWidth: isNumber(o.maxWidth) ? o.maxWidth : Infinity,
-			minHeight: isNumber(o.minHeight) ? o.minHeight : 0,
-			maxHeight: isNumber(o.maxHeight) ? o.maxHeight : Infinity
+			minWidth: this._isNumber(o.minWidth) ? o.minWidth : 0,
+			maxWidth: this._isNumber(o.maxWidth) ? o.maxWidth : Infinity,
+			minHeight: this._isNumber(o.minHeight) ? o.minHeight : 0,
+			maxHeight: this._isNumber(o.maxHeight) ? o.maxHeight : Infinity
 		};
 
 		if(this._aspectRatio || forceAspectRatio) {
@@ -474,16 +475,16 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	_updateCache: function(data) {
 		this.offset = this.helper.offset();
-		if (isNumber(data.left)) {
+		if (this._isNumber(data.left)) {
 			this.position.left = data.left;
 		}
-		if (isNumber(data.top)) {
+		if (this._isNumber(data.top)) {
 			this.position.top = data.top;
 		}
-		if (isNumber(data.height)) {
+		if (this._isNumber(data.height)) {
 			this.size.height = data.height;
 		}
-		if (isNumber(data.width)) {
+		if (this._isNumber(data.width)) {
 			this.size.width = data.width;
 		}
 	},
@@ -494,9 +495,9 @@ $.widget("ui.resizable", $.ui.mouse, {
 			csize = this.size,
 			a = this.axis;
 
-		if (isNumber(data.height)) {
+		if (this._isNumber(data.height)) {
 			data.width = (data.height * this.aspectRatio);
-		} else if (isNumber(data.width)) {
+		} else if (this._isNumber(data.width)) {
 			data.height = (data.width / this.aspectRatio);
 		}
 
@@ -516,8 +517,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		var o = this._vBoundaries,
 			a = this.axis,
-			ismaxw = isNumber(data.width) && o.maxWidth && (o.maxWidth < data.width), ismaxh = isNumber(data.height) && o.maxHeight && (o.maxHeight < data.height),
-			isminw = isNumber(data.width) && o.minWidth && (o.minWidth > data.width), isminh = isNumber(data.height) && o.minHeight && (o.minHeight > data.height),
+			ismaxw = this._isNumber(data.width) && o.maxWidth && (o.maxWidth < data.width), ismaxh = this._isNumber(data.height) && o.maxHeight && (o.maxHeight < data.height),
+			isminw = this._isNumber(data.width) && o.minWidth && (o.minWidth > data.width), isminh = this._isNumber(data.height) && o.minHeight && (o.minHeight > data.height),
 			dw = this.originalPosition.left + this.originalSize.width,
 			dh = this.position.top + this.size.height,
 			cw = /sw|nw|w/.test(a), ch = /nw|ne|n/.test(a);
@@ -678,7 +679,7 @@ $.ui.plugin.add("resizable", "animate", {
 			o = that.options,
 			pr = that._proportionallyResizeElements,
 			ista = pr.length && (/textarea/i).test(pr[0].nodeName),
-			soffseth = ista && hasScroll(pr[0], "left") /* TODO - jump height */ ? 0 : that.sizeDiff.height,
+			soffseth = ista && that._hasScroll(pr[0], "left") /* TODO - jump height */ ? 0 : that.sizeDiff.height,
 			soffsetw = ista ? 0 : that.sizeDiff.width,
 			style = { width: (that.size.width - soffsetw), height: (that.size.height - soffseth) },
 			left = (parseInt(that.element.css("left"), 10) + (that.position.left - that.originalPosition.left)) || null,
@@ -742,7 +743,7 @@ $.ui.plugin.add("resizable", "containment", {
 		else {
 			element = $(ce);
 			p = [];
-			$([ "Top", "Right", "Left", "Bottom" ]).each(function(i, name) { p[i] = num(element.css("padding" + name)); });
+			$([ "Top", "Right", "Left", "Bottom" ]).each(function(i, name) { p[i] = that._num(element.css("padding" + name)); });
 
 			that.containerOffset = element.offset();
 			that.containerPosition = element.position();
@@ -751,8 +752,8 @@ $.ui.plugin.add("resizable", "containment", {
 			co = that.containerOffset;
 			ch = that.containerSize.height;
 			cw = that.containerSize.width;
-			width = (hasScroll(ce, "left") ? ce.scrollWidth : cw );
-			height = (hasScroll(ce) ? ce.scrollHeight : ch);
+			width = (that._hasScroll(ce, "left") ? ce.scrollWidth : cw );
+			height = (that._hasScroll(ce) ? ce.scrollHeight : ch);
 
 			that.parentData = {
 				element: ce, left: co.left, top: co.top, width: width, height: height

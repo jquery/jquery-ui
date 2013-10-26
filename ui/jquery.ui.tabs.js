@@ -14,23 +14,6 @@
  */
 (function( $, undefined ) {
 
-var tabId = 0,
-	rhash = /#.*$/;
-
-function getNextTabId() {
-	return ++tabId;
-}
-
-function isLocal( anchor ) {
-	// support: IE7
-	// IE7 doesn't normalize the href property when set via script (#9317)
-	anchor = anchor.cloneNode( false );
-
-	return anchor.hash.length > 1 &&
-		decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
-			decodeURIComponent( location.href.replace( rhash, "" ) );
-}
-
 $.widget( "ui.tabs", {
 	version: "@VERSION",
 	delay: 300,
@@ -48,6 +31,21 @@ $.widget( "ui.tabs", {
 		beforeLoad: null,
 		load: null
 	},
+
+	_isLocal: (function() {
+		var rhash = /#.*$/;
+
+		return function( anchor ) {
+
+			// support: IE7
+			// IE7 doesn't normalize the href property when set via script (#9317)
+			anchor = anchor.cloneNode( false );
+
+			return anchor.hash.length > 1 &&
+				decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
+					decodeURIComponent( location.href.replace( rhash, "" ) );
+		};
+	})(),
 
 	_create: function() {
 		var that = this,
@@ -296,10 +294,6 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	_tabId: function( tab ) {
-		return tab.attr( "aria-controls" ) || "ui-tabs-" + getNextTabId();
-	},
-
 	_sanitizeSelector: function( hash ) {
 		return hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g, "\\$&" ) : "";
 	},
@@ -406,12 +400,15 @@ $.widget( "ui.tabs", {
 				originalAriaControls = tab.attr( "aria-controls" );
 
 			// inline tab
-			if ( isLocal( anchor ) ) {
+			if ( that._isLocal( anchor ) ) {
 				selector = anchor.hash;
+				panelId = selector.substring( 1 );
 				panel = that.element.find( that._sanitizeSelector( selector ) );
 			// remote tab
 			} else {
-				panelId = that._tabId( tab );
+				// If the tab doesn't already have aria-controls,
+				// generate an id by using a throw-away element
+				panelId = tab.attr( "aria-controls" ) || $( {} ).uniqueId()[ 0 ].id;
 				selector = "#" + panelId;
 				panel = that.element.find( selector );
 				if ( !panel.length ) {
@@ -428,7 +425,7 @@ $.widget( "ui.tabs", {
 				tab.data( "ui-tabs-aria-controls", originalAriaControls );
 			}
 			tab.attr({
-				"aria-controls": selector.substring( 1 ),
+				"aria-controls": panelId,
 				"aria-labelledby": anchorId
 			});
 			panel.attr( "aria-labelledby", anchorId );
@@ -790,7 +787,7 @@ $.widget( "ui.tabs", {
 			};
 
 		// not remote
-		if ( isLocal( anchor[ 0 ] ) ) {
+		if ( this._isLocal( anchor[ 0 ] ) ) {
 			return;
 		}
 
