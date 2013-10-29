@@ -56,7 +56,8 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_drawButton: function() {
-		var tabindex = this.element.attr( "tabindex" );
+		var that = this,
+			tabindex = this.element.attr( "tabindex" );
 
 		// Associate existing label with the new button
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
@@ -96,6 +97,10 @@ $.widget( "ui.selectmenu", {
 		this._setOption( "width", this.options.width );
 
 		this._on( this.button, this._buttonEvents );
+		this.button.one( "focusin", function() {
+			// Delay rendering the menu items until the button receives focus
+			that._refreshMenu();
+		});
 		this._hoverable( this.button );
 		this._focusable( this.button );
 	},
@@ -329,13 +334,6 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_buttonEvents: {
-		focusin: function() {
-			// Delay rendering the menu items until the button receives focus
-			if ( !this.menuItems ) {
-				this._refreshMenu();
-			}
-			this._off( this.button, "focusin" );
-		},
 		click: "_toggle",
 		keydown: function( event ) {
 			var preventDefault = true;
