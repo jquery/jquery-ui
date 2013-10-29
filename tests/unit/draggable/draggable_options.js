@@ -666,284 +666,59 @@ test( "helper, default, switching after initialization", function() {
 	TestHelpers.draggable.shouldMove( element, "helper: original" );
 });
 
-test( "{ helper: 'clone' }, relative", function() {
-	expect( 2 );
-
-	var element = $( "#draggable1" ).draggable({ helper: "clone" });
-	TestHelpers.draggable.shouldMove( element, "helper: clone relative" );
-});
-
-test( "{ helper: 'clone' }, absolute", function() {
-	expect( 2 );
-
-	var element = $( "#draggable2" ).draggable({ helper: "clone" });
-	TestHelpers.draggable.shouldMove( element, "helper: clone absolute" );
-});
-
-test( "{ helper: 'original' }, relative, with scroll offset on parent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-});
-
-test( "{ helper: 'original' }, relative, with scroll offset on root", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'original' }, relative, with scroll offset on root and parent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on parent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on grandparent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScrollable( "#main", false );
-	TestHelpers.draggable.setScrollable( "#scrollParent", true );
-
-	TestHelpers.draggable.setScroll( "#scrollParent" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#scrollParent" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#scrollParent" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#scrollParent" );
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on root", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on root and parent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'original' }, fixed, with scroll offset on parent", function() {
-	expect( 4 );
-
-	var element = $( "#draggable1" ).css({ position: "fixed", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	// TODO: investigate these failure in PhantomJS
-	//TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-});
-
-test( "{ helper: 'original' }, fixed, with scroll offset on root", function() {
-	expect( 4 );
-
-	var element = $( "#draggable1" ).css({ position: "fixed", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( document );
-	// TODO: investigate these failure in PhantomJS
-	//TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'original' }, fixed, with scroll offset on root and parent", function() {
-	expect( 4 );
-
-	var element = $( "#draggable1" ).css({ position: "fixed", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.setScroll( document );
-	// TODO: investigate these failure in PhantomJS
-	//TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'clone' }, absolute", function() {
-	expect( 1 );
-
-	var helperOffset = null,
-		origOffset = $( "#draggable1" ).offset(),
-		element = $( "#draggable1" ).draggable({ helper: "clone", drag: function( event, ui) {
-			helperOffset = ui.helper.offset();
-		} });
-
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-});
-
-test( "{ helper: 'clone' }, absolute with scroll offset on parent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).draggable({
-			helper: "clone"
-		});
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "#main" );
-});
-
-test( "{ helper: 'clone' }, absolute with scroll offset on root", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).draggable({
-			helper: "clone"
-		});
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( document );
-});
-
-test( "{ helper: 'clone' }, absolute with scroll offset on root and parent", function() {
-	expect( 6 );
-
-	var element = $( "#draggable1" ).draggable({
-			helper: "clone"
-		});
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( document );
-	TestHelpers.draggable.setScroll( "#main" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( document );
-	TestHelpers.draggable.restoreScroll( "#main" );
-});
+/* jshint loopfunc: true */
+(function(){
+	var k, l, m,
+		scrollElements = {
+			"no elements": [],
+			"parent": [ "#main" ],
+			"root": [ document ],
+			"parent and root": [ "#main", document ],
+			"grandparent": [ "#scrollParent" ]
+		},
+		positions = [ "absolute", "fixed", "relative" ],
+		helpers = [ "original", "clone" ],
+		scrollPositions = [ "relative", "static", "absolute" ];
+
+	for ( m = 0 ; m < helpers.length; m++ ) {
+		for ( l = 0; l < positions.length; l++ ) {
+			for ( k in scrollElements ) {
+				(function( position, helper, scrollElements, scrollElementsTitle ){
+					test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
+						expect( 6 );
+						var i, j,
+							element = $( "#draggable1" ).css({ position: position, top: 0, left: 0 }).draggable({
+								helper: helper
+							});
+
+						if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {
+							TestHelpers.draggable.setScrollable( "#main", false );
+							TestHelpers.draggable.setScrollable( "#scrollParent", true );
+						}
+
+						for ( j = 0; j < scrollPositions.length; j++ ) {
+							for ( i = 0; i < scrollElements.length; i++ ) {
+								TestHelpers.draggable.setScroll( scrollElements[ i ] );
+							}
+
+							TestHelpers.draggable.testScroll( element, scrollPositions[ j ] );
+
+							for ( i = 0; i < scrollElements.length; i++ ) {
+								TestHelpers.draggable.restoreScroll( scrollElements[ i ] );
+							}
+						}
+
+						if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {
+							TestHelpers.draggable.setScrollable( "#main", true );
+							TestHelpers.draggable.setScrollable( "#scrollParent", false );
+						}
+					});
+				})( positions[ l ], helpers[ m ], scrollElements[ k ], k );
+			}
+		}
+	}
+})();
+/* jshint loopfunc: false */
 
 test( "{ opacity: 0.5 }", function() {
 	expect( 1 );
