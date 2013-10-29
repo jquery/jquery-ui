@@ -63,23 +63,31 @@ $.widget( "ui.droppable", {
 			}
 		};
 
-		// Add the reference and positions to the manager
-		$.ui.ddmanager.droppables[ o.scope ] = $.ui.ddmanager.droppables[ o.scope ] || [];
-		$.ui.ddmanager.droppables[ o.scope ].push( this );
+		this._addToManager( o.scope );
 
 		o.addClasses && this.element.addClass( "ui-droppable" );
 
 	},
 
-	_destroy: function() {
-		var i = 0,
-			drop = $.ui.ddmanager.droppables[ this.options.scope ];
+	_addToManager: function( scope ) {
+		// Add the reference and positions to the manager
+		$.ui.ddmanager.droppables[ scope ] = $.ui.ddmanager.droppables[ scope ] || [];
+		$.ui.ddmanager.droppables[ scope ].push( this );
+	},
 
+	_splice: function( drop ) {
+		var i = 0;
 		for ( ; i < drop.length; i++ ) {
 			if ( drop[ i ] === this ) {
 				drop.splice( i, 1 );
 			}
 		}
+	},
+
+	_destroy: function() {
+		var drop = $.ui.ddmanager.droppables[ this.options.scope ];
+
+		this._splice( drop );
 
 		this.element.removeClass( "ui-droppable ui-droppable-disabled" );
 	},
@@ -90,7 +98,13 @@ $.widget( "ui.droppable", {
 			this.accept = $.isFunction( value ) ? value : function( d ) {
 				return d.is( value );
 			};
+		} else if ( key === "scope" ) {
+			var drop = $.ui.ddmanager.droppables[ this.options.scope ];
+
+			this._splice( drop );
+			this._addToManager( value );
 		}
+
 		this._super( key, value );
 	},
 
