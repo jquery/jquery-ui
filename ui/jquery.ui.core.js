@@ -55,18 +55,17 @@ $.fn.extend({
 	})( $.fn.focus ),
 
 	scrollParent: function() {
-		var scrollParent;
-		if (($.ui.ie && (/(static|relative)/).test(this.css("position"))) || (/absolute/).test(this.css("position"))) {
-			scrollParent = this.parents().filter(function() {
-				return (/(relative|absolute|fixed)/).test($.css(this,"position")) && (/(auto|scroll)/).test($.css(this,"overflow")+$.css(this,"overflow-y")+$.css(this,"overflow-x"));
-			}).eq(0);
-		} else {
-			scrollParent = this.parents().filter(function() {
-				return (/(auto|scroll)/).test($.css(this,"overflow")+$.css(this,"overflow-y")+$.css(this,"overflow-x"));
-			}).eq(0);
-		}
+		var position = this.css( "position" ),
+			excludeStaticParent = position === "absolute",
+			scrollParent = this.parents().filter( function() {
+				var parent = $( this );
+				if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
+					return false;
+				}
+				return (/(auto|scroll)/).test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) );
+			}).eq( 0 );
 
-		return ( /fixed/ ).test( this.css( "position") ) || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
+		return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
 	},
 
 	uniqueId: (function() {

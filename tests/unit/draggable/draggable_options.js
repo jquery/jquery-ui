@@ -377,7 +377,7 @@ test( "containment, account for border", function() {
 test( "containment, default, switching after initialization", function() {
 	expect( 6 );
 
-	var element = $( "#draggable1" ).draggable({ containment: false });
+	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false });
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: default" );
 
@@ -692,7 +692,7 @@ test( "helper, default, switching after initialization", function() {
 								scroll: false
 							});
 
-						if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {
+						if ( scrollElements.length === 1 && scrollElements[ 0 ] === "#scrollParent" ) {
 							TestHelpers.draggable.setScrollable( "#main", false );
 							TestHelpers.draggable.setScrollable( "#scrollParent", true );
 						}
@@ -867,6 +867,8 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 test( "#6817: auto scroll goes double distance when dragging", function() {
 	expect( 2 );
 
+	TestHelpers.draggable.restoreScroll( document );
+
 	var offsetBefore,
 		distance = 10,
 		viewportHeight = $( window ).height(),
@@ -906,6 +908,7 @@ test( "snap, snapMode, and snapTolerance", function() {
 		snapTolerance = 15,
 		element = $( "#draggable1" ).draggable({
 			snap: true,
+			scroll: false,
 			snapMode: "both",
 			snapTolerance: snapTolerance
 		}),
@@ -1028,6 +1031,7 @@ test( "#8459: element can snap to an element that was removed during drag", func
 		snapTolerance = 15,
 		element = $( "#draggable1" ).draggable({
 			snap: true,
+			scroll: false,
 			snapMode: "both",
 			snapTolerance: snapTolerance,
 			start: function() {

@@ -19,6 +19,9 @@
 			top: 0;
 		}
 		#main-forceScrollable {
+			position: absolute;
+			left: 0;
+			top: 0;
 			width: 1100px;
 			height: 1100px;
 		}
@@ -33,6 +36,9 @@
 			overflow-y: hidden;
 		}
 		#scrollParent-forceScrollable {
+			position: absolute;
+			left: 0;
+			top: 0;
 			width: 1300px;
 			height: 1300px;
 		}
@@ -78,7 +84,7 @@
 <div id="qunit-fixture">
 	<div id="scrollParent">
 		<div id="main">
-			<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>
+			<div id="draggable1" style="background: green; width: 200px; height: 100px; position: relative; top: 0; left: 0;">Relative</div>
 			<div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span><em>Absolute</em></span></div>
 			<div id="droppable" style="background: green; width: 200px; height: 100px; position: absolute; top: 110px; left: 110px;"><span>Absolute</span></div>
 			<div id="main-forceScrollable"></div>
