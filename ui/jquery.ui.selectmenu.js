@@ -321,7 +321,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_documentClick: {
-		click: function( event ) {
+		mousedown: function( event ) {
 			if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
 				this.close( event );
 			}

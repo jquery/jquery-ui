@@ -49,7 +49,7 @@ test( "close", function () {
 	this.element.selectmenu( "open" ).selectmenu( "close" );
 
 	this.element.selectmenu( "open" );
-	$( "body" ).trigger( "click" );
+	$( "body" ).trigger( "mousedown" );
 });
 
 
