@@ -287,17 +287,24 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_move: function( direction, event ) {
-		if ( direction === "first" || direction === "last" ) {
-			// Set focus manually for first or last item
-			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
-		} else {
-			if ( direction === "previous" && this.menu.menu( "isFirstItem" ) ||
-					direction === "next" && this.menu.menu( "isLastItem" ) ) {
-				return;
-			}
+		var filter = ".ui-menu-item",
+			item, next;
 
-			// Move to and focus next or prev item
-			this.menu.menu( direction, event );
+		if ( this.isOpen ) {
+			item = this.menuItems.eq( this.focusIndex );
+		} else {
+			item = this.menuItems.eq( this.element[ 0 ].selectedIndex );
+			filter += ":not(.ui-state-disabled)";
+		}
+
+		if ( direction === "first" || direction === "last" ) {
+			next = item[ direction === "first" ? "prevAll" : "nextAll" ]( filter ).eq( -1 );
+		} else {
+			next = item[ direction + "All" ]( filter ).eq( 0 );
+		}
+
+		if ( next.length ) {
+			this.menu.menu( "focus", event, next );
 		}
 	},
 
@@ -340,14 +347,14 @@ $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.isOpen ) {
-						this.menuInstance.select( event );
+						this._selectMenu( event );
 					}
 					break;
 				case $.ui.keyCode.UP:
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
-						this._move( "previous", event );
+						this._move( "prev", event );
 					}
 					break;
 				case $.ui.keyCode.DOWN:
@@ -359,13 +366,13 @@ $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.SPACE:
 					if ( this.isOpen ) {
-						this.menuInstance.select( event );
+						this._selectMenu( event );
 					} else {
 						this._toggle( event );
 					}
 					break;
 				case $.ui.keyCode.LEFT:
-					this._move( "previous", event );
+					this._move( "prev", event );
 					break;
 				case $.ui.keyCode.RIGHT:
 					this._move( "next", event );
@@ -386,6 +393,12 @@ $.widget( "ui.selectmenu", {
 			if ( preventDefault ) {
 				event.preventDefault();
 			}
+		}
+	},
+
+	_selectMenu: function( event ) {
+		if ( !this.menuItems.eq( this.focusIndex ).hasClass( "ui-state-disabled" ) ) {
+			this.menuInstance.select( event );
 		}
 	},
 
