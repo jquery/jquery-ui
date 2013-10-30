@@ -150,8 +150,8 @@ $.widget( "ui.datepicker", {
 			}
 			this.grid.attr("aria-activedescendant", newId);
 
-			activeCell.children("a").removeClass("ui-state-focus");
-			newCell.children("a").addClass("ui-state-focus");
+			this.grid.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
+			newCell.children( "a" ).addClass( "ui-state-focus" );
 		}
 	},
 	_createPicker: function() {
@@ -523,6 +523,10 @@ $.widget( "ui.datepicker", {
 			this.date.adjust( "M", 1 );
 		}
 		this.date.adjust( "M", -this.options.numberOfMonths );
+
+		// TODO: This assumes focus is on the first grid. For multi pickers, the widget needs
+		// to maintain the currently focused grid and base queries like this off of it.
+		$( this.picker ).find( ".ui-state-focus" ).not( ":first" ).removeClass( "ui-state-focus" );
 	},
 	open: function( event ) {
 		if ( this.inline || this.isOpen ) {
