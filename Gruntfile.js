@@ -208,30 +208,15 @@ grunt.initConfig({
 		})
 	},
 	jshint: {
-		ui: {
-			options: {
-				jshintrc: "ui/.jshintrc"
-			},
-			files: {
-				src: "ui/*.js"
-			}
+		options: {
+			jshintrc: true
 		},
-		grunt: {
-			options: {
-				jshintrc: ".jshintrc"
-			},
-			files: {
-				src: [ "Gruntfile.js", "build/**/*.js" ]
-			}
-		},
-		tests: {
-			options: {
-				jshintrc: "tests/.jshintrc"
-			},
-			files: {
-				src: "tests/unit/**/*.js"
-			}
-		}
+		src: [
+			"ui/*.js",
+			"Gruntfile.js",
+			"build/**/*.js",
+			"tests/unit/**/*.js"
+		]
 	},
 	csslint: {
 		base_theme: {
