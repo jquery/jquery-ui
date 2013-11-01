@@ -676,19 +676,20 @@ test( "helper, default, switching after initialization", function() {
 			"parent and root": [ "#main", document ],
 			"grandparent": [ "#scrollParent" ]
 		},
-		positions = [ "absolute", "fixed", "relative" ],
+		positions = [ "absolute", "fixed", "relative", "static" ],
 		helpers = [ "original", "clone" ],
-		scrollPositions = [ "relative", "static", "absolute" ];
+		scrollPositions = [ "relative", "static", "absolute", "fixed" ];
 
 	for ( m = 0 ; m < helpers.length; m++ ) {
 		for ( l = 0; l < positions.length; l++ ) {
 			for ( k in scrollElements ) {
 				(function( position, helper, scrollElements, scrollElementsTitle ){
 					test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
-						expect( 6 );
+						expect( 8 );
 						var i, j,
 							element = $( "#draggable1" ).css({ position: position, top: 0, left: 0 }).draggable({
-								helper: helper
+								helper: helper,
+								scroll: false
 							});
 
 						if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {

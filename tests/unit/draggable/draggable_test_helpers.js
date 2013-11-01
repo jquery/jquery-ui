@@ -30,10 +30,7 @@ TestHelpers.draggable = {
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
-			dy: dy,
-			// moves is 1 here because simulate currently fire events synchronously
-			// so we can't faithfully test things that rely on a scroll event (which is async)
-			moves: 1
+			dy: dy
 		});
 	},
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
@@ -43,10 +40,7 @@ TestHelpers.draggable = {
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
-			dy: 100,
-			// moves is 1 here because simulate currently fire events synchronously
-			// so we can't faithfully test things that rely on a scroll event (which is async)
-			moves: 1
+			dy: 100
 		});
 	},
 	shouldMove: function( el, msg, handle ) {
