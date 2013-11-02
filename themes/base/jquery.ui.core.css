@@ -80,27 +80,34 @@
 	background-repeat: no-repeat;
 }
 
-body .ui-icon-left {
+.ui-icon.ui-button:after {
+	content: "";
+	position: absolute;
+	display: block;
+}
+
+.ui-icon.ui-button {
 	padding-left: 2.1em;
 }
 
-body .ui-icon-right {
-	padding-right: 2.1em;
+body .ui-icon.ui-icon-end {
+	padding: .4em 2.1em .4em 1em;
 }
 
-body .ui-icon-top {
-	padding-top: 1.1em;
+body .ui-icon.ui-icon-top {
+	padding: 1.1em 1em .4em 1em;
 }
 
-body .ui-icon-bottom {
-	padding-bottom: 1.1em;
+body .ui-icon.ui-icon-bottom {
+	padding: .4em 1em 1.1em 1em;
 }
 
-.ui-icon-left:after {
+.ui-icon:after {
 	left: .5em;
 }
 
-.ui-icon-right:after {
+.ui-icon-end:after {
+	left: auto;
 	right: .5em;
 }
 
@@ -115,31 +122,22 @@ body .ui-icon-bottom {
 	margin-left: -11px;
 }
 
-.ui-button.ui-icon.ui-icon-top:after {
+body .ui-icon.ui-icon-top:after {
 	top: .6em;
 }
 
-.ui-button.ui-icon.ui-icon-bottom:after {
+body .ui-icon.ui-icon-bottom:after {
 	top: auto;
 	bottom: .25em;
 }
 
-.ui-icon-left:after,
-.ui-icon-top:after,
-.ui-icon-bottom:after,
-.ui-icon-right:after,
-.ui-icon-notext:after {
-	content: "";
-	position: absolute;
-	display: block;
-}
-
-.ui-button.ui-icon.ui-icon-notext {
+body .ui-icon.ui-icon-notext {
 	padding: 0;
 	width: 2.1em;
 	height: 2.1em;
 	text-indent: -9999px;
 	white-space: nowrap !important;
+
 }
 
 /* Misc visuals

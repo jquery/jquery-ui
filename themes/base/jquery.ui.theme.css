@@ -284,7 +284,7 @@
 a.ui-button,
 a:link.ui-button,
 a:visited.ui-button,
-.ui-button,{
+.ui-button {
 	color: #555555/*{fcDefault}*/;
 	text-decoration: none;
 }
@@ -326,7 +326,7 @@ a.ui-button:active,
 }
 .ui-state-active a,
 .ui-state-active a:link,
-.ui-state-active a:visited
+.ui-state-active a:visited {
 	color: #212121/*{fcActive}*/;
 	text-decoration: none;
 }
