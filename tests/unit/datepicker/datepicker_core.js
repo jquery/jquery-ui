@@ -27,22 +27,23 @@ asyncTest( "baseStructure", function() {
 	expect( 58 );
 	var header, title, table, thead, week, panel, inl, child,
 		inp = TestHelpers.datepicker.initNewInput(),
-		dp = $( "#ui-datepicker-div" );
+		dp = inp.datepicker( "widget" ).find( ".ui-datepicker" );
 
 	function step1() {
-		TestHelpers.datepicker.onFocus( inp, function() {
+		inp.focus();
+		setTimeout(function() {
 			ok( dp.is( ":visible" ), "Structure - datepicker visible" );
 			ok( !dp.is( ".ui-datepicker-rtl" ), "Structure - not right-to-left" );
 			ok( !dp.is( ".ui-datepicker-multi" ), "Structure - not multi-month" );
-			equal( dp.children().length, 2, "Structure - child count" );
+			equal( dp.children().length, 3, "Structure - child count (header, calendar, buttonpane)" );
 
 			header = dp.children( ":first" );
 			ok( header.is( "div.ui-datepicker-header" ), "Structure - header division" );
 			equal( header.children().length, 3, "Structure - header child count" );
-			ok( header.children( ":first" ).is( "a.ui-datepicker-prev" ) && header.children( ":first" ).html() !== "", "Structure - prev link" );
-			ok( header.children( ":eq(1)" ).is( "a.ui-datepicker-next" ) && header.children( ":eq(1)" ).html() !== "", "Structure - next link" );
+			ok( header.children( ":first" ).is( ".ui-datepicker-prev" ) && header.children( ":first" ).html() !== "", "Structure - prev link" );
+			ok( header.children( ":eq(1)" ).is( ".ui-datepicker-next" ) && header.children( ":eq(1)" ).html() !== "", "Structure - next link" );
 
-			title = header.children( ":last" );
+			title = header.children( ":last" ).children( ":first" );
 			ok( title.is( "div.ui-datepicker-title" ) && title.html() !== "","Structure - title division" );
 			equal( title.children().length, 2, "Structure - title child count" );
 			ok( title.children( ":first" ).is( "span.ui-datepicker-month" ) && title.children( ":first" ).text() !== "", "Structure - month text" );
@@ -64,10 +65,10 @@ asyncTest( "baseStructure", function() {
 			ok( week.children( ":first" ).is( "td.ui-datepicker-week-end" ), "Structure - month table first day cell" );
 			ok( week.children( ":last" ).is( "td.ui-datepicker-week-end" ), "Structure - month table second day cell" );
 
-			inp.datepicker( "hide" ).datepicker( "destroy" );
+			inp.datepicker( "close" ).datepicker( "destroy" );
 			step2();
 		});
-	}
+	};
 
 	function step2() {
 		// Editable month/year and button panel
@@ -76,7 +77,8 @@ asyncTest( "baseStructure", function() {
 			changeYear: true,
 			showButtonPanel: true
 		});
-		TestHelpers.datepicker.onFocus( inp, function() {
+		inp.focus();
+		setTimeout(function() {
 			title = dp.find( "div.ui-datepicker-title" );
 			ok( title.children( ":first" ).is( "select.ui-datepicker-month" ), "Structure - month selector" );
 			ok( title.children( ":last" ).is( "select.ui-datepicker-year" ), "Structure - year selector" );
@@ -87,7 +89,7 @@ asyncTest( "baseStructure", function() {
 			ok( panel.children( ":first" ).is( "button.ui-datepicker-current" ), "Structure - today button" );
 			ok( panel.children( ":last" ).is( "button.ui-datepicker-close" ), "Structure - close button" );
 
-			inp.datepicker( "hide" ).datepicker( "destroy" );
+			inp.datepicker( "close" ).datepicker( "destroy" );
 			step3();
 		});
 	}
@@ -95,7 +97,8 @@ asyncTest( "baseStructure", function() {
 	function step3() {
 		// Multi-month 2
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: 2 });
-		TestHelpers.datepicker.onFocus( inp, function() {
+		inp.focus();
+		setTimeout(function() {
 			ok( dp.is( ".ui-datepicker-multi" ), "Structure multi [2] - multi-month" );
 			equal( dp.children().length, 3, "Structure multi [2] - child count" );
 
@@ -109,7 +112,7 @@ asyncTest( "baseStructure", function() {
 			ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2] - row break" );
 			ok( dp.is( ".ui-datepicker-multi-2" ), "Structure multi [2] - multi-2" );
 
-			inp.datepicker( "hide" ).datepicker( "destroy" );
+			inp.datepicker( "close" ).datepicker( "destroy" );
 			step4();
 		});
 	}
@@ -117,11 +120,12 @@ asyncTest( "baseStructure", function() {
 	function step4() {
 		// Multi-month 3
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: 3 });
-		TestHelpers.datepicker.onFocus( inp, function() {
+		inp.focus();
+		setTimeout(function() {
 			ok( dp.is( ".ui-datepicker-multi-3" ), "Structure multi [3] - multi-3" );
 			ok( !dp.is( ".ui-datepicker-multi-2" ), "Structure multi [3] - Trac #6704" );
 
-			inp.datepicker( "hide" ).datepicker( "destroy" );
+			inp.datepicker( "close" ).datepicker( "destroy" );
 			step5();
 		});
 	}
@@ -129,7 +133,8 @@ asyncTest( "baseStructure", function() {
 	function step5() {
 		// Multi-month [2, 2]
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: [ 2, 2 ] });
-		TestHelpers.datepicker.onFocus( inp, function() {
+		inp.focus();
+		setTimeout(function() {
 			ok( dp.is( ".ui-datepicker-multi" ), "Structure multi - multi-month" );
 			equal( dp.children().length, 6, "Structure multi [2,2] - child count" );
 
@@ -151,7 +156,7 @@ asyncTest( "baseStructure", function() {
 			child = dp.children( ":eq(5)" );
 			ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2,2] - row break" );
 
-			inp.datepicker( "hide" ).datepicker( "destroy" );
+			inp.datepicker( "close" ).datepicker( "destroy" );
 
 			// Inline
 			inl = TestHelpers.datepicker.init( "#inl" );
