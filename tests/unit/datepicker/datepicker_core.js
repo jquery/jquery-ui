@@ -10,14 +10,17 @@ TestHelpers.testJshint( "datepicker" );
 
 test( "widget method - empty collection", function() {
 	expect( 1 );
-	$( "#nonExist" ).datepicker(); // should create nothing
+
+	// should create nothing
+	$( "#nonExist" ).datepicker();
 	ok( !$( "#ui-datepicker-div" ).length, "Non init on empty collection" );
 });
 
-test("widget method", function() {
+test( "widget method", function() {
 	expect( 1 );
-	var actual = $("#inp").datepicker().datepicker("widget")[0];
-	deepEqual($("body > #ui-datepicker-div:last-child")[0], actual);
+	var actual = $( "#inp" ).datepicker().datepicker( "widget" );
+	deepEqual( $("body > .ui-front" )[ 0 ],  actual[ 0 ] );
+	actual.remove();
 });
 
 asyncTest( "baseStructure", function() {
