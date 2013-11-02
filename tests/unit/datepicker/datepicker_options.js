@@ -1,11 +1,28 @@
+(function( $ ) {
+
+module( "datepicker: options" );
+
+test( "dateFormat", function() {
+	expect( 0 );
+});
+
+test( "eachDay", function() {
+	expect( 0 );
+});
+
+test( "numberOfMonths", function() {
+	expect( 0 );
+});
+
+test( "position", function() {
+	expect( 0 );
+});
+
+test( "showWeek", function() {
+	expect( 0 );
+});
+
 /*
- * datepicker_options.js
- */
-
-(function($) {
-
-module("datepicker: options");
-
 test("setDefaults", function() {
 	expect( 3 );
 	TestHelpers.datepicker.init("#inp");
@@ -1119,5 +1136,6 @@ test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler
 	equal( dp.css( "display" ), "none","beforeShow returns false" );
 	inp.datepicker( "destroy" );
 });
+*/
 
 })(jQuery);
