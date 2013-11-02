@@ -1,10 +1,29 @@
+(function( $ ) {
+
+module( "datepicker: events" );
+
+test( "beforeOpen", function() {
+	expect( 0 );
+});
+
+test( "close", function() {
+	expect( 0 );
+});
+
+test( "open", function() {
+	expect( 0 );
+});
+
+test( "select", function() {
+	expect( 0 );
+});
+
+// The implement of events is completely changing therefore these tests are no longer directly
+// relevant. Leaving them around commented out so we can ensure the functionality is replicated.
+// For example:
+// TODO: In the old implementation the Enter key select's today's date when the <input> has
+// focus and is empty. Do we want to replicate this behavior in the rewrite?
 /*
- * datepicker_events.js
- */
-(function($) {
-
-module("datepicker: events");
-
 var selectedThis = null,
 selectedDate = null,
 selectedInst = null;
@@ -125,29 +144,6 @@ test("events", function() {
 	inp.datepicker("show");
 	equal(selectedThis, inp2[0], "Callback close this");
 });
+*/
 
-test("beforeShowDay-getDate", function() {
-	expect( 3 );
-	var inp = TestHelpers.datepicker.init("#inp", {beforeShowDay: function() { inp.datepicker("getDate"); return [true, ""]; }}),
-		dp = $("#ui-datepicker-div");
-	inp.val("01/01/2010").datepicker("show");
-	// contains non-breaking space
-	equal($("div.ui-datepicker-title").text(),
-		// support: IE <9, jQuery <1.8
-		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
-		$( "<span>January&#xa0;2010</span>" ).text(), "Initial month");
-	$("a.ui-datepicker-next", dp).click();
-	$("a.ui-datepicker-next", dp).click();
-	// contains non-breaking space
-	equal($("div.ui-datepicker-title").text(),
-		$( "<span>March&#xa0;2010</span>" ).text(), "After next clicks");
-	inp.datepicker("hide").datepicker("show");
-	$("a.ui-datepicker-prev", dp).click();
-	$("a.ui-datepicker-prev", dp).click();
-	// contains non-breaking space
-	equal($("div.ui-datepicker-title").text(),
-		$( "<span>November&#xa0;2009</span>" ).text(), "After prev clicks");
-	inp.datepicker("hide");
-});
-
-})(jQuery);
+})( jQuery );
