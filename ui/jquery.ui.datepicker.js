@@ -130,6 +130,12 @@ function Datepicker() {
 	};
 	$.extend(this._defaults, this.regional[""]);
 	this.dpDiv = datepicker_bindHover($("<div id='" + this._mainDivId + "' class='ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>"));
+	this.liveRegion = $( "<div id='" + this._mainDivId + "-liveregion' class='ui-helper-hidden-accessible'>" )
+						.attr({
+							"role": "log",
+							"aria-live": "assertive",
+							"aria-relevant": "additions"
+						});
 }
 
 $.extend(Datepicker.prototype, {
@@ -202,6 +208,7 @@ $.extend(Datepicker.prototype, {
 		if( inst.settings.disabled ) {
 			this._disableDatepicker( target );
 		}
+		input.attr( "role", "application" );
 	},
 
 	/* Make attachments based on settings. */
@@ -377,6 +384,7 @@ $.extend(Datepicker.prototype, {
 		} else if (nodeName === "div" || nodeName === "span") {
 			$target.removeClass(this.markerClassName).empty();
 		}
+		$target.removeAttr( "role" );
 	},
 
 	/* Enable the date picker to a jQuery selection.
@@ -563,6 +571,13 @@ $.extend(Datepicker.prototype, {
 		return (inst ? this._getDate(inst) : null);
 	},
 
+	/* Announce updates to assistive technology using aria-live */
+	_announce: function( inst ) {
+		var announcement = this._formatDate( inst, inst.selectedDay, inst.selectedMonth, inst.selectedYear );
+		this.liveRegion.find( "p" ).hide();
+		$( "<p>" ).text( announcement ).appendTo( this.liveRegion );
+	},
+
 	/* Handle keystrokes. */
 	_doKeyDown: function(event) {
 		var onSelect, dateStr, sel,
@@ -591,7 +606,7 @@ $.extend(Datepicker.prototype, {
 						} else {
 							$.datepicker._hideDatepicker();
 						}
-
+						$.datepicker._announce( inst );
 						return false; // don't submit the form
 				case 27: $.datepicker._hideDatepicker();
 						break; // hide on escape
@@ -656,6 +671,7 @@ $.extend(Datepicker.prototype, {
 		}
 
 		if (handled) {
+			$.datepicker._announce( inst );
 			event.preventDefault();
 			event.stopPropagation();
 		}
@@ -2027,6 +2043,11 @@ $.fn.datepicker = function(options){
 	if (!$.datepicker.initialized) {
 		$(document).mousedown($.datepicker._checkExternalClick);
 		$.datepicker.initialized = true;
+	}
+
+	/* Append the live region if it does not exist */
+	if ( $( "#" + $.datepicker._mainDivId + "-liveregion" ).length === 0 ) {
+		$( "body" ).append( $.datepicker.liveRegion );
 	}
 
 	/* Append datepicker main container to body if not exist. */

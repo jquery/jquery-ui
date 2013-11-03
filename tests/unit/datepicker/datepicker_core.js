@@ -303,9 +303,14 @@ asyncTest( "customStructure", function() {
 	setTimeout( step1 );
 });
 
+var announcedDate = null;
+function callback ( date, inst ) {
+	announcedDate = $.datepicker._formatDate( inst, inst.selectedDay, inst.selectedMonth, inst.selectedYear );
+}
+
 test("keystrokes", function() {
-	expect( 26 );
-	var inp = TestHelpers.datepicker.init("#inp"),
+	expect( 41 );
+	var inp = TestHelpers.datepicker.init( "#inp", { onSelect : callback } ),
 		date = new Date();
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
@@ -334,67 +339,105 @@ test("keystrokes", function() {
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 2 - 1, 4),
 		"Keystroke esc - abandoned");
 	// Moving by day or week
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.LEFT}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 1);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke ctrl+left");
+	equal( $.datepicker.liveRegion.find( "p" ).length, 2, "Should have made two announcements" );
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "CTRL+LEFT was announced" );
+	equal( $.datepicker.liveRegion.find( "p" ).last().text(), announcedDate, "SELECT was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.LEFT}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 1);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke left");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "LEFT was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.RIGHT}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 1);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke ctrl+right");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "CTRL+RIGHT was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.RIGHT}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 1);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke right");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "RIGHT was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 7);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke ctrl+up");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "CTRL+UP was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 7);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke up");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "UP was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 7);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke ctrl+down");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "CTRL+DOWN was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 7);
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Keystroke down");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "DOWN was announced" );
+
 	// Moving by month or year
+	$.datepicker.liveRegion.empty();
 	inp.val("02/04/2008").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 1 - 1, 4),
 		"Keystroke pgup");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "PAGE_UP was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("02/04/2008").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 3 - 1, 4),
 		"Keystroke pgdn");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "PAGE_DOWN was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("02/04/2008").datepicker("show").
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2007, 2 - 1, 4),
 		"Keystroke ctrl+pgup");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "CTRL+PAGE_UP was announced" );
+
+	$.datepicker.liveRegion.empty();
 	inp.val("02/04/2008").datepicker("show").
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2009, 2 - 1, 4),
 		"Keystroke ctrl+pgdn");
+	equal( $.datepicker.liveRegion.find( "p" ).first().text(), announcedDate, "CTRL+PAGE_DOWN was announced" );
+
 	// Check for moving to short months
 	inp.val("03/31/2008").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
@@ -424,6 +467,8 @@ test("keystrokes", function() {
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 2 - 1, 4),
 		"Keystroke ctrl+home");
+	equal( $.datepicker.liveRegion.find( "p" ).last().prev("p").text(), announcedDate, "CTRL+HOME was announced" );
+
 	// Change steps
 	inp.datepicker("option", {stepMonths: 2, gotoCurrent: false}).
 		datepicker("hide").val("02/04/2008").datepicker("show").
