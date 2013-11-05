@@ -763,6 +763,7 @@ $.ui.plugin.add("resizable", "containment", {
 			that.size.width = that.size.width + (that._helper ? (that.position.left - co.left) : (that.position.left - cop.left));
 			if (pRatio) {
 				that.size.height = that.size.width / that.aspectRatio;
+				continueResize = false;
 			}
 			that.position.left = o.helper ? co.left : 0;
 		}
@@ -771,6 +772,7 @@ $.ui.plugin.add("resizable", "containment", {
 			that.size.height = that.size.height + (that._helper ? (that.position.top - co.top) : that.position.top);
 			if (pRatio) {
 				that.size.width = that.size.height * that.aspectRatio;
+				continueResize = false;
 			}
 			that.position.top = that._helper ? co.top : 0;
 		}

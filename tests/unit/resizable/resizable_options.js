@@ -124,9 +124,10 @@ test("aspectRatio: 'preserve' (ne)", function() {
 });
 
 test( "aspectRatio: Resizing can move objects", function() {
-	expect( 6 );
+	expect( 7 );
 	// http://bugs.jqueryui.com/ticket/7018 - Resizing can move objects
-	var handle = ".ui-resizable-w",
+	var handleW = ".ui-resizable-w",
+		handleNW = ".ui-resizable-nw",
 		target = $( "#resizable1" ).resizable({
 										aspectRatio: true,
 										handles: "all",
@@ -134,19 +135,22 @@ test( "aspectRatio: Resizing can move objects", function() {
 									});
 
 	$( "#container" ).css({ width: 200, height: 300 });
-	$( "#resizable1" ).css({ width: 100, height: 100, left: 75, top: 100 });
-
-	TestHelpers.resizable.drag( handle, -20 );
-	equal( target.width(), 120, "compare width" );
-	equal( target.height(), 120, "compare height" );
-	equal( target.position().left, 55, "compare left" );
-
 	$( "#resizable1" ).css({ width: 100, height: 100, left: 75, top: 200 });
 
-	TestHelpers.resizable.drag( handle, -20 );
+	TestHelpers.resizable.drag( handleW, -20 );
 	equal( target.width(), 100, "compare width - no size change" );
 	equal( target.height(), 100, "compare height - no size change" );
 	equal( target.position().left, 75, "compare left - no movement" );
+
+	// http://bugs.jqueryui.com/ticket/9107 - aspectRatio and containment not handled correctly
+	$( "#container" ).css({ width: 200, height: 300, position: "absolute", left: 100, top: 100 });
+	$( "#resizable1" ).css({ width: 100, height: 100, left: 0, top: 0 });
+
+	TestHelpers.resizable.drag( handleNW, -20, -20 );
+	equal( target.width(), 100, "compare width - no size change" );
+	equal( target.height(), 100, "compare height - no size change" );
+	equal( target.position().left, 0, "compare left - no movement" );
+	equal( target.position().top, 0, "compare top - no movement" );
 });
 
 test( "containment", function() {
