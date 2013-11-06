@@ -50,4 +50,23 @@ test( "enable / disable", function() {
 	// are properly disabled when in an inline picker.
 });
 
+test( "widget", function() {
+	expect( 1 );
+	var actual = $( "#inp" ).datepicker().datepicker( "widget" );
+	deepEqual( $("body > .ui-front" )[ 0 ],  actual[ 0 ] );
+	actual.remove();
+});
+
+test( "close", function() {
+	expect( 0 );
+});
+
+test( "open", function() {
+	expect( 0 );
+});
+
+test( "value", function() {
+	expect( 0 );
+});
+
 })( jQuery );

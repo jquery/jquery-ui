@@ -8,21 +8,6 @@ module("datepicker: core");
 
 TestHelpers.testJshint( "datepicker" );
 
-test( "widget method - empty collection", function() {
-	expect( 1 );
-
-	// should create nothing
-	$( "#nonExist" ).datepicker();
-	ok( !$( "#ui-datepicker-div" ).length, "Non init on empty collection" );
-});
-
-test( "widget method", function() {
-	expect( 1 );
-	var actual = $( "#inp" ).datepicker().datepicker( "widget" );
-	deepEqual( $("body > .ui-front" )[ 0 ],  actual[ 0 ] );
-	actual.remove();
-});
-
 asyncTest( "baseStructure", function() {
 	expect( 42 );
 	var header, title, table, thead, week, panel, inl, child,
