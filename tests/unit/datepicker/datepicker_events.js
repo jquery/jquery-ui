@@ -2,6 +2,22 @@
 
 module( "datepicker: events" );
 
+test( "beforeOpen", function() {
+	expect( 0 );
+});
+
+test( "close", function() {
+	expect( 0 );
+});
+
+test( "open", function() {
+	expect( 0 );
+});
+
+test( "select", function() {
+	expect( 0 );
+});
+
 // The implement of events is completely changing therefore these tests are no longer directly
 // relevant. Leaving them around commented out so we can ensure the functionality is replicated.
 // For example:
