@@ -124,7 +124,7 @@ test("aspectRatio: 'preserve' (ne)", function() {
 });
 
 test( "containment", function() {
-	expect( 4 );
+	expect( 6 );
 	var element = $( "#resizable1" ).resizable({
 		containment: "#container"
 	});
@@ -136,6 +136,19 @@ test( "containment", function() {
 	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
 	equal( element.width(), 300, "constrained width at containment edge" );
 	equal( element.height(), 200, "constrained height at containment edge" );
+
+	// http://bugs.jqueryui.com/ticket/7485 - Resizable: Containment calculation is wrong
+	// when containment element is not the immediate parent
+	element = $( "#child" ).resizable({
+		containment: "#container2",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 300, 0 );
+	equal( element.width(), 400, "element able to resize itself to max allowable width within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
+	equal( element.height(), 400, "element able to resize itself to max allowable height within container" );
 });
 
 test("grid", function() {
