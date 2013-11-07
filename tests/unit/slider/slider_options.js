@@ -8,6 +8,39 @@ function handle() {
 
 module( "slider: options" );
 
+test( "handle", function(){
+	expect( 2 );
+
+	element = $( "<div></div>" );
+
+	options = {
+		max: 37,
+		min: 6,
+		orientation: "horizontal",
+		step: 1,
+		value: 50
+	};
+
+	element.slider( options );
+	var sliderElement = element.find('.ui-slider-handle').first().prop('tagName');
+	ok(sliderElement.match(/a/i), "slider handle element should be an '<a>'");
+	element.slider( "destroy" );
+
+	options = {
+		max: 37,
+		min: 6,
+		orientation: "horizontal",
+		step: 1,
+		value: 50,
+		handle: "DIV"
+	};
+
+	element.slider( options );
+	var sliderElement = element.find('.ui-slider-handle').first().prop('tagName');
+	ok(sliderElement.match(/div/i), "slider handle element should be a '<div>'");
+	element.slider( "destroy" );
+});
+
 test( "disabled", function(){
 	expect( 8 );
 	var count = 0;
