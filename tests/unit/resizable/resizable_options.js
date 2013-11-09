@@ -180,6 +180,29 @@ test("grid (wrapped)", function() {
 	equal( target.height(), 120, "compare height");
 });
 
+test( "grid - Resizable: can be moved when grid option is set (#9611)", function() {
+	expect( 6 );
+
+	var oldPosition,
+		handle = ".ui-resizable-nw",
+		target = $( "#resizable1" ).resizable({
+			handles: "all",
+			grid: 50
+		});
+
+	TestHelpers.resizable.drag( handle, 50, 50 );
+	equal( target.width(), 50, "compare width" );
+	equal( target.height(), 50, "compare height" );
+
+	oldPosition = target.position();
+
+	TestHelpers.resizable.drag( handle, 50, 50 );
+	equal( target.width(), 50, "compare width" );
+	equal( target.height(), 50, "compare height" );
+	equal( target.position().top, oldPosition.top, "compare top" );
+	equal( target.position().left, oldPosition.left, "compare left" );
+});
+
 test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 	expect(4);
 
