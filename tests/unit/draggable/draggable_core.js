@@ -186,6 +186,40 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
+test( "#9379: Draggable: position bug in scrollable div", function() {
+	expect( 2 );
+
+	$( "#qunit-fixture" ).html( "<div id='o_9379'><div id='i_9379'></div><div id='d_9379'>a</div></div>" );
+	$( "#i_9379" ).css({ position: "absolute", width: "500px", height: "500px" });
+	$( "#o_9379" ).css({ position: "absolute", width: "300px", height: "300px" });
+	$( "#d_9379" ).css({ width: "10px", height: "10px" });
+
+	var moves = 3,
+		startValue = 0,
+		dragDelta = 20,
+		delta = 100,
+		// we scroll after each drag event, so subtract 1 from number of moves for expected
+		expected = delta + ( ( moves - 1 ) * dragDelta ),
+		element = $( "#d_9379" ).draggable({
+			drag: function() {
+				startValue += dragDelta;
+				$( "#o_9379" ).scrollTop( startValue ).scrollLeft( startValue );
+			},
+			stop: function( event, ui ) {
+				equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
+				equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
+			}
+		});
+
+	$( "#o_9379" ).css( "overflow", "auto" );
+
+	element.simulate( "drag", {
+		dy: delta,
+		dx: delta,
+		moves: moves
+	});
+});
+
 test( "#5727: draggable from iframe" , function() {
 	expect( 1 );
 
