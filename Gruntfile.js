@@ -211,7 +211,7 @@ grunt.initConfig({
 		options: {
 			jshintrc: true
 		},
-		src: [
+		all: [
 			"ui/*.js",
 			"Gruntfile.js",
 			"build/**/*.js",
