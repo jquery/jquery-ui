@@ -279,10 +279,13 @@ $.widget("ui.resizable", $.ui.mouse, {
 			capture = false;
 
 		for (i in this.handles) {
-			handle = $(this.handles[i])[0];
-			if (handle === event.target || $.contains(handle, event.target)) {
-				capture = true;
-			}
+			$(this.handles[i]).each(function(idxHandle,handle) {
+				if (handle === event.target || $.contains(handle, event.target)) {
+					capture = true;
+					return false; //get out of the $().each loop
+				}
+			});
+			if(capture) break; //we found one.  Get out of the for loop
 		}
 
 		return !this.options.disabled && capture;
