@@ -1601,7 +1601,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the HTML for the current state of the date picker. */
 	_generateHTML: function(inst) {
-		var maxDraw, prevText, prev, nextText, next, currentText, gotoDate,
+		var maxDraw, maxDrawMonth, prevText, prev, nextText, next, currentText, gotoDate,
 			controls, buttonPanel, firstDay, showWeek, dayNames, dayNamesMin,
 			monthNames, monthNamesShort, beforeShowDay, showOtherMonths,
 			selectOtherMonths, defaultDate, html, dow, row, group, col, selectedDate,
@@ -1629,9 +1629,14 @@ $.extend(Datepicker.prototype, {
 			drawMonth += 12;
 			drawYear--;
 		}
+			
 		if (maxDate) {
-			maxDraw = this._daylightSavingAdjust(new Date(maxDate.getFullYear(),
-				maxDate.getMonth() - (numMonths[0] * numMonths[1]) + 1, maxDate.getDate()));
+			maxDrawMonth = (maxDate.getMonth() - (numMonths[0] * numMonths[1]) + 1);
+			maxDraw = this._daylightSavingAdjust(new Date(maxDate.getFullYear(), maxDrawMonth, maxDate.getDate()));
+			while(maxDraw.getMonth() !== maxDrawMonth){
+				maxDraw.setDate(maxDraw.getDate() -1);
+			}
+			
 			maxDraw = (minDate && maxDraw < minDate ? minDate : maxDraw);
 			while (this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1)) > maxDraw) {
 				drawMonth--;
