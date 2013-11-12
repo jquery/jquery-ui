@@ -388,7 +388,35 @@ test( "{ placholder: String } tr", function() {
 	});
 });
 
-/*
+
+test("#4345: incorrect helper size when using CSS classes", function () {
+    expect(3);
+
+    var clonnedHelper, 
+        helperWithClass;
+    $("<style>.helperWithSize { background-color: red;width: 100px;height: 100px;} </style>").appendTo("head");
+    helperWithClass = $("<div class='helperWithSize'>testing</div>").appendTo("#qunit-fixture");
+
+    // mark the control as sortable with custom helper
+    $("#sortable").sortable({
+        helper: function () {
+            clonnedHelper = $(helperWithClass).clone();
+            return clonnedHelper;
+        },
+        start: function() {
+            ok($(clonnedHelper).hasClass("helperWithSize"), "class check");
+            equal($(clonnedHelper).css("background-color"), "rgb(255, 0, 0)", "color check");
+            equal($(clonnedHelper).width(), 100, "width check");
+        },
+    });
+    
+    // move an item from the list to show the helper
+    $("#qunit-fixture li:eq(0)").simulate("drag", {
+        dx: 55,
+        moves: 15
+    });
+});
+    /*
 test("{ revert: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
