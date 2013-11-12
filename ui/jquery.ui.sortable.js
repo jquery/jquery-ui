@@ -879,6 +879,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 
 			if(this.currentContainer === this.containers[innermostIndex]) {
+				itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true);
 				return;
 			}
 
