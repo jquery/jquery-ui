@@ -236,6 +236,19 @@ test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
 	equal( target.height(), 100, "compare maxHeight" );
 });
 
+
+test("custom handles { handles: { 's': $('#resizer'), containment: 'parent' }", function () {
+	expect(2);
+
+	var handle = "#resizer", target = $("#resizable1").resizable({ handles: { "s": $("#resizer") }, containment: "parent" });
+
+	TestHelpers.resizable.drag(handle, 0, 70);
+	equal(target.height(), 170, "compare height");
+
+	TestHelpers.resizable.drag(handle, 0, -70);
+	equal(target.height(), 100, "compare height");
+});
+
 test("zIndex, applied to all handles", function() {
 	expect(8);
 
