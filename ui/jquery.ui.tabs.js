@@ -36,14 +36,24 @@ $.widget( "ui.tabs", {
 		var rhash = /#.*$/;
 
 		return function( anchor ) {
+			var anchorUrl, locationUrl;
 
 			// support: IE7
 			// IE7 doesn't normalize the href property when set via script (#9317)
 			anchor = anchor.cloneNode( false );
 
-			return anchor.hash.length > 1 &&
-				decodeURIComponent( anchor.href.replace( rhash, "" ) ) ===
-					decodeURIComponent( location.href.replace( rhash, "" ) );
+			anchorUrl = anchor.href.replace( rhash, "" );
+			locationUrl = location.href.replace( rhash, "" );
+
+			// decoding may throw an error if the URL isn't UTF-8 (#9518)
+			try {
+				anchorUrl = decodeURIComponent( anchorUrl );
+			} catch ( error ) {}
+			try {
+				locationUrl = decodeURIComponent( locationUrl );
+			} catch ( error ) {}
+
+			return anchor.hash.length > 1 && anchorUrl === locationUrl;
 		};
 	})(),
 
