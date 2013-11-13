@@ -237,10 +237,10 @@ test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
 });
 
 
-test("custom handles { handles: { 's': $('#resizer'), containment: 'parent' }", function () {
+test("custom handles { handles: { 's': $('#resizer1'), containment: 'parent' }", function () {
 	expect(2);
 
-	var handle = "#resizer", target = $("#resizable1").resizable({ handles: { "s": $("#resizer") }, containment: "parent" });
+	var handle = "#resizer1", target = $("#resizable1").resizable({ handles: { "s": $("#resizer1") }, containment: "parent" });
 
 	TestHelpers.resizable.drag(handle, 0, 70);
 	equal(target.height(), 170, "compare height");
@@ -249,10 +249,10 @@ test("custom handles { handles: { 's': $('#resizer'), containment: 'parent' }", 
 	equal(target.height(), 100, "compare height");
 });
 
-test("custom handles { handles: { 's': '#resizer', containment: 'parent' }", function () {
+test("custom handles { handles: { 's': '#resizer2', containment: 'parent' }", function () {
 	expect(2);
 
-	var handle = "#resizer", target = $("#resizable1").resizable({ handles: { "s": "#resizer" }, containment: "parent" });
+	var handle = "#resizer2", target = $("#resizable2").resizable({ handles: { "s": "#resizer2" }, containment: "parent" });
 
 	TestHelpers.resizable.drag(handle, 0, 70);
 	equal(target.height(), 170, "compare height");
