@@ -63,6 +63,7 @@
 		"grunt-contrib-qunit": "0.2.0",
 		"grunt-contrib-csslint": "0.1.1",
 		"grunt-compare-size": "0.4.0-rc.3",
+		"grunt-jscs-checker": "0.2.0",
 		"grunt-html": "0.3.3",
 		"grunt-git-authors": "1.2.0",
 		"rimraf": "2.1.4",
