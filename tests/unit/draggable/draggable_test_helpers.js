@@ -20,8 +20,8 @@ TestHelpers.draggable = {
 		var offsetBefore = el.offset(),
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
-		$( el ).one( "dragstop", function() {
-			deepEqual( el.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+		$( el ).one( "dragstop", function( event, ui ) {
+			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
 		} );
 	},
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
@@ -30,10 +30,7 @@ TestHelpers.draggable = {
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
-			dy: dy,
-			// moves is 1 here because simulate currently fire events synchronously
-			// so we can't faithfully test things that rely on a scroll event (which is async)
-			moves: 1
+			dy: dy
 		});
 	},
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
@@ -43,10 +40,7 @@ TestHelpers.draggable = {
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
-			dy: 100,
-			// moves is 1 here because simulate currently fire events synchronously
-			// so we can't faithfully test things that rely on a scroll event (which is async)
-			moves: 1
+			dy: 100
 		});
 	},
 	shouldMove: function( el, msg, handle ) {
@@ -68,9 +62,13 @@ TestHelpers.draggable = {
 		});
 		$( el ).unbind( "dragstop" );
 	},
+	setScrollable: function ( what, isScrollable ) {
+		var overflow = isScrollable ? "scroll" : "hidden";
+		$( what ).css({ overflow: overflow, overflowX: overflow, overflowY: overflow });
+	},
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
-		$( "#main" ).css( "position", position);
+		$( "#main" ).css({ position: position, top: "0px", left: "0px" });
 		TestHelpers.draggable.shouldMove( el, position + " parent" );
 		$( "#main" ).css( "position", oldPosition );
 	},

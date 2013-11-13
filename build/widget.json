@@ -21,7 +21,7 @@
 	},
 	"button": {
 		"dependencies": [],
-		"description": "Enhances a form with themable buttons.",
+		"description": "Enhances a form with themeable buttons.",
 		"keywords": [
 			"form",
 			"radio",

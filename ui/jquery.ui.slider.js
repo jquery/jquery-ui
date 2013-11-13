@@ -15,10 +15,6 @@
  */
 (function( $, undefined ) {
 
-// number of pages in a slider
-// (how many times can you page up/down to go through the whole range)
-var numPages = 5;
-
 $.widget( "ui.slider", $.ui.mouse, {
 	version: "@VERSION",
 	widgetEventPrefix: "slide",
@@ -40,6 +36,10 @@ $.widget( "ui.slider", $.ui.mouse, {
 		start: null,
 		stop: null
 	},
+
+	// number of pages in a slider
+	// (how many times can you page up/down to go through the whole range)
+	numPages: 5,
 
 	_create: function() {
 		this._keySliding = false;
@@ -637,10 +637,13 @@ $.widget( "ui.slider", $.ui.mouse, {
 					newVal = this._valueMax();
 					break;
 				case $.ui.keyCode.PAGE_UP:
-					newVal = this._trimAlignValue( curVal + ( (this._valueMax() - this._valueMin()) / numPages ) );
+					newVal = this._trimAlignValue(
+						curVal + ( ( this._valueMax() - this._valueMin() ) / this.numPages )
+					);
 					break;
 				case $.ui.keyCode.PAGE_DOWN:
-					newVal = this._trimAlignValue( curVal - ( (this._valueMax() - this._valueMin()) / numPages ) );
+					newVal = this._trimAlignValue(
+						curVal - ( (this._valueMax() - this._valueMin()) / this.numPages ) );
 					break;
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.RIGHT:
@@ -674,7 +677,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 			}
 		}
 	}
-
 });
 
 }(jQuery));

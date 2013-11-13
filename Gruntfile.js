@@ -173,34 +173,19 @@ grunt.initConfig({
 		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|index|test|dialog|tooltip)\.html$/ ).test( file );
+			return !( /(all|index|test|dialog|tooltip|draggable)\.html$/ ).test( file );
 		})
 	},
 	jshint: {
-		ui: {
-			options: {
-				jshintrc: "ui/.jshintrc"
-			},
-			files: {
-				src: "ui/*.js"
-			}
+		options: {
+			jshintrc: true
 		},
-		grunt: {
-			options: {
-				jshintrc: ".jshintrc"
-			},
-			files: {
-				src: [ "Gruntfile.js", "build/**/*.js" ]
-			}
-		},
-		tests: {
-			options: {
-				jshintrc: "tests/.jshintrc"
-			},
-			files: {
-				src: "tests/unit/**/*.js"
-			}
-		}
+		all: [
+			"ui/*.js",
+			"Gruntfile.js",
+			"build/**/*.js",
+			"tests/unit/**/*.js"
+		]
 	},
 	csslint: {
 		base_theme: {

@@ -16,10 +16,6 @@
  */
 (function( $, undefined ) {
 
-function isOverAxis( x, reference, size ) {
-	return ( x >= reference ) && ( x < ( reference + size ) );
-}
-
 $.widget( "ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
@@ -67,23 +63,31 @@ $.widget( "ui.droppable", {
 			}
 		};
 
-		// Add the reference and positions to the manager
-		$.ui.ddmanager.droppables[ o.scope ] = $.ui.ddmanager.droppables[ o.scope ] || [];
-		$.ui.ddmanager.droppables[ o.scope ].push( this );
+		this._addToManager( o.scope );
 
 		o.addClasses && this.element.addClass( "ui-droppable" );
 
 	},
 
-	_destroy: function() {
-		var i = 0,
-			drop = $.ui.ddmanager.droppables[ this.options.scope ];
+	_addToManager: function( scope ) {
+		// Add the reference and positions to the manager
+		$.ui.ddmanager.droppables[ scope ] = $.ui.ddmanager.droppables[ scope ] || [];
+		$.ui.ddmanager.droppables[ scope ].push( this );
+	},
 
+	_splice: function( drop ) {
+		var i = 0;
 		for ( ; i < drop.length; i++ ) {
 			if ( drop[ i ] === this ) {
 				drop.splice( i, 1 );
 			}
 		}
+	},
+
+	_destroy: function() {
+		var drop = $.ui.ddmanager.droppables[ this.options.scope ];
+
+		this._splice( drop );
 
 		this.element.removeClass( "ui-droppable ui-droppable-disabled" );
 	},
@@ -94,7 +98,13 @@ $.widget( "ui.droppable", {
 			this.accept = $.isFunction( value ) ? value : function( d ) {
 				return d.is( value );
 			};
+		} else if ( key === "scope" ) {
+			var drop = $.ui.ddmanager.droppables[ this.options.scope ];
+
+			this._splice( drop );
+			this._addToManager( value );
 		}
+
 		this._super( key, value );
 	},
 
@@ -204,23 +214,28 @@ $.widget( "ui.droppable", {
 
 });
 
-$.ui.intersect = function( draggable, droppable, toleranceMode ) {
-
-	if ( !droppable.offset ) {
-		return false;
+$.ui.intersect = (function() {
+	function isOverAxis( x, reference, size ) {
+		return ( x >= reference ) && ( x < ( reference + size ) );
 	}
 
-	var draggableLeft, draggableTop,
-		x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
-		y1 = ( draggable.positionAbs || draggable.position.absolute ).top,
-		x2 = x1 + draggable.helperProportions.width,
-		y2 = y1 + draggable.helperProportions.height,
-		l = droppable.offset.left,
-		t = droppable.offset.top,
-		r = l + droppable.proportions().width,
-		b = t + droppable.proportions().height;
+	return function( draggable, droppable, toleranceMode ) {
 
-	switch ( toleranceMode ) {
+		if ( !droppable.offset ) {
+			return false;
+		}
+
+		var draggableLeft, draggableTop,
+			x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
+			y1 = ( draggable.positionAbs || draggable.position.absolute ).top,
+			x2 = x1 + draggable.helperProportions.width,
+			y2 = y1 + draggable.helperProportions.height,
+			l = droppable.offset.left,
+			t = droppable.offset.top,
+			r = l + droppable.proportions().width,
+			b = t + droppable.proportions().height;
+
+		switch ( toleranceMode ) {
 		case "fit":
 			return ( l <= x1 && x2 <= r && t <= y1 && y2 <= b );
 		case "intersect":
@@ -245,8 +260,8 @@ $.ui.intersect = function( draggable, droppable, toleranceMode ) {
 		default:
 			return false;
 		}
-
-};
+	};
+})();
 
 /*
 	This manager tracks offsets of draggables and droppables

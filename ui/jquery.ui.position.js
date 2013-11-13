@@ -9,6 +9,7 @@
  * http://api.jqueryui.com/position/
  */
 (function( $, undefined ) {
+(function() {
 
 $.ui = $.ui || {};
 
@@ -494,4 +495,5 @@ $.ui.position = {
 	testElementParent.removeChild( testElement );
 })();
 
+})();
 }( jQuery ) );
