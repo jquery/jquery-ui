@@ -201,9 +201,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		//TODO: make renderAxis a prototype function
 		this._renderAxis(this.element);
-
-		this._handles = $(".ui-resizable-handle", this.element)
-			.disableSelection();
+		
+		this._handles = $(".ui-resizable-handle", this.element);
+		//Add the custom handles of jquery Objects outside this.element
+		for (i in this.handles)     
+			this._handles = this._handles.add(this.handles[i]);
+		this._handles.disableSelection();
 
 		//Matching axis name
 		this._handles.mouseover(function() {
@@ -242,6 +245,15 @@ $.widget("ui.resizable", $.ui.mouse, {
 		//Initialize the mouse interaction
 		this._mouseInit();
 
+		//Bind the mousedown event directly in the custom jquery elements
+		if(o.handles.constructor !== String) {
+			for (i in o.handles) {
+				if(o.handles[i].constructor !== String) 
+					o.handles[i].bind('mousedown.'+this.widgetName, function(event) {
+						return that._mouseDown(event);
+					});
+			}
+		}
 	},
 
 	_destroy: function() {
