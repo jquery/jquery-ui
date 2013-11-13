@@ -10,27 +10,25 @@
  */
 .ui-menu {
 	list-style: none;
-	padding: 2px;
+	padding: 0;
 	margin: 0;
 	display: block;
 	outline: none;
 }
 .ui-menu .ui-menu {
-	margin-top: -3px;
 	position: absolute;
 }
 .ui-menu .ui-menu-item {
 	margin: 0;
 	display: block;
-	padding: 2px .4em;
-	line-height: 1.5;
+	padding: 3px .4em;
+	cursor: pointer;
 	min-height: 0; /* support: IE7 */
-	font-weight: normal;
 	/* support: IE10, see #8844 */
 	list-style-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
 }
 .ui-menu .ui-menu-divider {
-	margin: 5px -2px 5px -2px;
+	margin: 5px 0;
 	height: 0;
 	font-size: 0;
 	line-height: 0;
@@ -38,17 +36,7 @@
 }
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
-	font-weight: normal;
 	margin: -1px;
-}
-
-.ui-menu .ui-state-disabled {
-	font-weight: normal;
-	margin: .4em 0 .2em;
-	line-height: 1.5;
-}
-.ui-menu .ui-state-disabled a {
-	cursor: default;
 }
 
 /* icon support */
@@ -69,6 +57,7 @@
 
 /* right-aligned */
 .ui-menu .ui-menu-icon {
-	position: static;
+	position: relative;
+	top: -.2em;
 	float: right;
 }

@@ -26,7 +26,7 @@ $.widget( "ui.menu", {
 		items: "> *",
 		menus: "ul",
 		position: {
-			my: "left top",
+			my: "left-1 top",
 			at: "right top"
 		},
 		role: "menu",
@@ -44,7 +44,7 @@ $.widget( "ui.menu", {
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
-			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+			.addClass( "ui-menu ui-widget ui-widget-content" )
 			.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length )
 			.attr({
 				role: this.options.role,
@@ -147,7 +147,7 @@ $.widget( "ui.menu", {
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" ).addBack()
-				.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all ui-menu-icons" )
+				.removeClass( "ui-menu ui-widget ui-widget-content ui-menu-icons" )
 				.removeAttr( "role" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "aria-labelledby" )
@@ -163,7 +163,7 @@ $.widget( "ui.menu", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-disabled" )
 			.removeUniqueId()
-			.removeClass( "ui-corner-all ui-state-hover" )
+			.removeClass( "ui-state-hover" )
 			.removeAttr( "tabIndex" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-haspopup" )
@@ -292,7 +292,7 @@ $.widget( "ui.menu", {
 
 		// Initialize nested menus
 		submenus.filter( ":not(.ui-menu)" )
-			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+			.addClass( "ui-menu ui-widget ui-widget-content" )
 			.hide()
 			.attr({
 				role: this.options.role,
@@ -328,7 +328,6 @@ $.widget( "ui.menu", {
 		items.not( ".ui-menu-item, .ui-menu-divider" )
 			.addClass( "ui-menu-item" )
 			.uniqueId()
-			.addClass( "ui-corner-all" )
 			.attr({
 				tabIndex: -1,
 				role: this._itemRole()
