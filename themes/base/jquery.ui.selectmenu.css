@@ -20,9 +20,7 @@
 	overflow: auto;
 	/* Support: IE7 */
 	overflow-x: hidden;
-}
-.ui-selectmenu-menu .ui-menu-item {
-	padding: 0.3em 1em;
+	padding-bottom: 1px;
 }
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
 	font-size: 1em;
