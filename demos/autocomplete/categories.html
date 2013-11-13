@@ -21,6 +21,10 @@
 	</style>
 	<script>
 	$.widget( "custom.catcomplete", $.ui.autocomplete, {
+		_create: function() {
+			this._super();
+			this.menu.option( "items", "> :not(.ui-autocomplete-category)" );
+		},
 		_renderMenu: function( ul, items ) {
 			var that = this,
 				currentCategory = "";
