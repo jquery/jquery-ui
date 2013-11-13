@@ -203,8 +203,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 		this._renderAxis(this.element);
 		
 		this._handles = $(".ui-resizable-handle", this.element);
+		
 		//Add the custom handles of jquery Objects outside this.element
 		for (i in this.handles) {
+			if (!this.handles[i].length && this.handles[i].selector) {
+				this.handles[i] = this.handles[i].add($(this.handles[i].selector));
+			}
 			this._handles = this._handles.add(this.handles[i]);
 		}
 		this._handles.disableSelection();
@@ -249,8 +253,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 		//Bind the mousedown event directly in the custom jquery elements
 		if (o.handles.constructor !== String) {
 			for (i in o.handles) {
-				if (o.handles[i].constructor !== String) {
-					o.handles[i].bind("mousedown." + this.widgetName, onMouseDownCustom);
+				handle = o.handles[i];
+				if (!handle.length && handle.selector) {
+					handle = handle.add($(handle.selector));
+				}
+				if (handle instanceof $) {
+					handle.bind("mousedown." + this.widgetName, onMouseDownCustom);
 				}
 			}
 		}
