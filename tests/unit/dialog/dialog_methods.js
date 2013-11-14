@@ -205,6 +205,11 @@ asyncTest( "#8958: dialog can be opened while opening", function() {
 		}
 	});
 
+	// Support: IE8
+	// For some reason the #favorite-color input doesn't get focus if we don't
+	// focus the body first, causing the test to hang.
+	$( "body" ).focus();
+
 	$( "#favorite-animal" )
 		// We focus the input to start the test. Once it receives focus, the
 		// dialog will open. Opening the dialog, will cause an element inside
