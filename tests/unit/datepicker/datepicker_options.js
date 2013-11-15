@@ -2,6 +2,44 @@
 
 module( "datepicker: options" );
 
+test( "appendTo", function() {
+	expect( 6 );
+	var container,
+		detached = $( "<div>" ),
+		input = $( "#datepicker" );
+
+	input.datepicker();
+	container = input.datepicker( "widget" ).parent()[ 0 ];
+	equal( container, document.body, "defaults to body" );
+	input.datepicker( "destroy" );
+
+	input.datepicker({ appendTo: "#qunit-fixture" });
+	container = input.datepicker( "widget" ).parent()[ 0 ];
+	equal( container, $( "#qunit-fixture" )[ 0 ], "child of specified element" );
+	input.datepicker( "destroy" );
+
+	input.datepicker({ appendTo: "#does-not-exist" });
+	container = input.datepicker( "widget" ).parent()[ 0 ];
+	equal( container, document.body, "set to body if element does not exist" );
+	input.datepicker( "destroy" );
+
+	input.datepicker()
+		.datepicker( "option", "appendTo", "#qunit-fixture" );
+	container = input.datepicker( "widget" ).parent()[ 0 ];
+	equal( container, $( "#qunit-fixture" )[ 0 ], "modified after init" );
+	input.datepicker( "destroy" );
+
+	input.datepicker({ appendTo: detached });
+	container = input.datepicker( "widget" ).parent()[ 0 ];
+	equal( container, detached[ 0 ], "detached jQuery object" );
+	input.datepicker( "destroy" );
+
+	input.datepicker({ appendTo: detached[ 0 ] });
+	container = input.datepicker( "widget" ).parent()[ 0 ];
+	equal( container, detached[ 0 ], "detached DOM element" );
+	input.datepicker( "destroy" );
+});
+
 /*
 test("setDefaults", function() {
 	expect( 3 );
