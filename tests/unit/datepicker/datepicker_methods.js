@@ -5,7 +5,7 @@ module( "datepicker: methods" );
 test( "destroy", function() {
 	expect( 9 );
 	var inl,
-		inp = TestHelpers.datepicker.init( "#inp" );
+		inp = TestHelpers.datepicker.init( "#datepicker" );
 
 	ok( inp.datepicker( "instance" ), "instance created" );
 	ok( inp.attr( "aria-owns" ), "aria-owns attribute added" );
@@ -15,7 +15,7 @@ test( "destroy", function() {
 	ok( !inp.attr( "aria-owns" ), "aria-owns attribute removed" );
 	ok( !inp.attr( "aria-haspopup" ), "aria-haspopup attribute removed" );
 
-	inl = TestHelpers.datepicker.init( "#inl" );
+	inl = TestHelpers.datepicker.init( "#inline" );
 	ok( inl.datepicker( "instance" ), "instance created" );
 	ok( inl.children().length > 0, "inline datepicker has children" );
 	inl.datepicker( "destroy" );
@@ -27,7 +27,7 @@ test( "destroy", function() {
 test( "enable / disable", function() {
 	expect( 6 );
 	var inl,
-		inp = TestHelpers.datepicker.init( "#inp" ),
+		inp = TestHelpers.datepicker.init( "#datepicker" ),
 		dp = inp.datepicker( "widget" );
 
 	ok( !inp.datepicker( "option", "disabled" ), "initially enabled" );
@@ -42,7 +42,7 @@ test( "enable / disable", function() {
 	ok( !dp.hasClass( "ui-datepicker-disabled" ), "no longer has disabled class name" );
 
 	// Inline
-	inl = TestHelpers.datepicker.init( "#inl" );
+	inl = TestHelpers.datepicker.init( "#inline" );
 	dp = inl.datepicker( "instance" );
 
 	// TODO: Disabling inline pickers does not work.
@@ -52,7 +52,7 @@ test( "enable / disable", function() {
 
 test( "widget", function() {
 	expect( 1 );
-	var actual = $( "#inp" ).datepicker().datepicker( "widget" );
+	var actual = $( "#datepicker" ).datepicker().datepicker( "widget" );
 	deepEqual( $("body > .ui-front" )[ 0 ],  actual[ 0 ] );
 	actual.remove();
 });

@@ -158,7 +158,7 @@ asyncTest( "baseStructure", function() {
 
 	function step6() {
 		// Inline
-		inl = TestHelpers.datepicker.init( "#inl" );
+		inl = TestHelpers.datepicker.init( "#inline" );
 		dp = inl.children();
 
 		ok( dp.is( ".ui-datepicker-inline" ), "Structure inline - main div" );
@@ -185,7 +185,7 @@ asyncTest( "baseStructure", function() {
 
 	function step7() {
 		// Inline multi-month
-		inl = TestHelpers.datepicker.init( "#inl", { numberOfMonths: 2 } );
+		inl = TestHelpers.datepicker.init( "#inline", { numberOfMonths: 2 } );
 		dp = inl.datepicker( "widget" ).find( ".ui-datepicker" );
 
 		ok( dp.is( ".ui-datepicker-inline" ) && dp.is( ".ui-datepicker-multi" ), "Structure inline multi - main div" );
@@ -319,7 +319,7 @@ test( "Keyboard handling", function() {
 	return;
 
 	expect( 24 );
-	var inp = TestHelpers.datepicker.init( "#inp" ),
+	var inp = TestHelpers.datepicker.init( "#datepicker" ),
 		date = new Date();
 
 	inp.val( "" ).datepicker( "open" )
@@ -486,7 +486,7 @@ test( "mouse", function() {
 
 	expect( 15 );
 	var inl,
-		inp = TestHelpers.datepicker.init( "#inp" ),
+		inp = TestHelpers.datepicker.init( "#datepicker" ),
 		dp = inp.datepicker( "widget" ).find( ".ui-datepicker" ),
 		date = new Date();
 
@@ -551,7 +551,7 @@ test( "mouse", function() {
 		"Mouse click - next + min/max" );
 
 	// Inline
-	inl = TestHelpers.datepicker.init( "#inl" );
+	inl = TestHelpers.datepicker.init( "#inline" );
 	dp = $( ".ui-datepicker-inline", inl );
 	date = new Date();
 	inl.datepicker( "setDate", date );
