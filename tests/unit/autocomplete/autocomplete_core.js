@@ -16,7 +16,7 @@ test( "prevent form submit on enter when menu is active", function() {
 	event = $.Event( "keydown" );
 	event.keyCode = $.ui.keyCode.DOWN;
 	element.trigger( event );
-	deepEqual( menu.find( ".ui-menu-item:has(.ui-state-focus)" ).length, 1, "menu item is active" );
+	equal( menu.find( ".ui-menu-item.ui-state-focus" ).length, 1, "menu item is active" );
 
 	event = $.Event( "keydown" );
 	event.keyCode = $.ui.keyCode.ENTER;
@@ -255,6 +255,15 @@ test( "ARIA", function() {
 	element.autocomplete( "search", "j" );
 	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
 		"Live region for multiple values" );
+});
+
+test( "ARIA, init on detached input", function() {
+	expect( 1 );
+	var element = $( "<input>" ).autocomplete({
+			source: [ "java", "javascript" ]
+		}),
+		liveRegion = element.autocomplete( "instance" ).liveRegion;
+	equal( liveRegion.parent().length, 1, "liveRegion must have a parent" );
 });
 
 test( ".replaceWith() (#9172)", function() {

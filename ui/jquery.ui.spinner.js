@@ -15,7 +15,7 @@
  */
 (function( $ ) {
 
-function modifier( fn ) {
+function spinner_modifier( fn ) {
 	return function() {
 		var previous = this.element.val();
 		fn.apply( this, arguments );
@@ -55,8 +55,12 @@ $.widget( "ui.spinner", {
 		this._setOption( "min", this.options.min );
 		this._setOption( "step", this.options.step );
 
-		// format the value, but don't constrain
-		this._value( this.element.val(), true );
+		// Only format if there is a value, prevents the field from being marked
+		// as invalid in Firefox, see #9573.
+		if ( this.value() !== "" ) {
+			// Format the value, but don't constrain.
+			this._value( this.element.val(), true );
+		}
 
 		this._draw();
 		this._on( this._events );
@@ -387,7 +391,7 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	_setOptions: modifier(function( options ) {
+	_setOptions: spinner_modifier(function( options ) {
 		this._super( options );
 		this._value( this.element.val() );
 	}),
@@ -418,6 +422,18 @@ $.widget( "ui.spinner", {
 		});
 	},
 
+	isValid: function() {
+		var value = this.value();
+
+		// null is invalid
+		if ( value === null ) {
+			return false;
+		}
+
+		// if value gets adjusted, it's invalid
+		return value === this._adjustValue( value );
+	},
+
 	// update the value without triggering change
 	_value: function( value, allowAny ) {
 		var parsed;
@@ -446,7 +462,7 @@ $.widget( "ui.spinner", {
 		this.uiSpinner.replaceWith( this.element );
 	},
 
-	stepUp: modifier(function( steps ) {
+	stepUp: spinner_modifier(function( steps ) {
 		this._stepUp( steps );
 	}),
 	_stepUp: function( steps ) {
@@ -456,7 +472,7 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	stepDown: modifier(function( steps ) {
+	stepDown: spinner_modifier(function( steps ) {
 		this._stepDown( steps );
 	}),
 	_stepDown: function( steps ) {
@@ -466,11 +482,11 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	pageUp: modifier(function( pages ) {
+	pageUp: spinner_modifier(function( pages ) {
 		this._stepUp( (pages || 1) * this.options.page );
 	}),
 
-	pageDown: modifier(function( pages ) {
+	pageDown: spinner_modifier(function( pages ) {
 		this._stepDown( (pages || 1) * this.options.page );
 	}),
 
@@ -478,7 +494,7 @@ $.widget( "ui.spinner", {
 		if ( !arguments.length ) {
 			return this._parse( this.element.val() );
 		}
-		modifier( this._value ).call( this, newVal );
+		spinner_modifier( this._value ).call( this, newVal );
 	},
 
 	widget: function() {

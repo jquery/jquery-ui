@@ -6,49 +6,77 @@ TestHelpers.draggable = {
 		var element = $( "<div>" );
 		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
 	})(),
+	testDragPosition: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+		msg = msg ? msg + "." : "";
+
+		$( el ).one( "dragstop", function( event, ui ) {
+			var positionExpected = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
+			deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
+		} );
+	},
+	testDragOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+		msg = msg ? msg + "." : "";
+
+		var offsetBefore = el.offset(),
+			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+		$( el ).one( "dragstop", function( event, ui ) {
+			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+		} );
+	},
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
-		var offsetAfter, actual, expected,
-			offsetBefore = el.offset();
+		TestHelpers.draggable.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
+		TestHelpers.draggable.testDragOffset( el, dx, dy, expectedDX, expectedDY, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
 			dy: dy
 		});
-		offsetAfter = el.offset();
-
-		actual = { left: offsetAfter.left, top: offsetAfter.top };
-		expected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
-
-		msg = msg ? msg + "." : "";
-		deepEqual( actual, expected, "dragged[" + dx + ", " + dy + "] " + msg );
 	},
-	shouldMove: function( el, why ) {
-		TestHelpers.draggable.testDrag( el, el, 50, 50, 50, 50, why );
+	shouldMovePositionButNotOffset: function( el, msg, handle ) {
+		handle = handle || el;
+		TestHelpers.draggable.testDragPosition( el, 100, 100, 100, 100, msg );
+		TestHelpers.draggable.testDragOffset( el, 100, 100, 0, 0, msg );
+
+		$( handle ).simulate( "drag", {
+			dx: 100,
+			dy: 100
+		});
 	},
-	shouldNotMove: function( el, why ) {
-		TestHelpers.draggable.testDrag( el, el, 50, 50, 0, 0, why );
+	shouldMove: function( el, msg, handle ) {
+		handle = handle || el;
+		TestHelpers.draggable.testDrag( el, handle, 100, 100, 100, 100, msg );
+	},
+	shouldNotMove: function( el, msg, handle ) {
+		handle = handle || el;
+		TestHelpers.draggable.testDrag( el, handle, 100, 100, 0, 0, msg );
+	},
+	shouldNotDrag: function( el, msg, handle ) {
+		handle = handle || el;
+		$( el ).bind( "dragstop", function() {
+			ok( false, "should not drag " + msg );
+		} );
+		$( handle ).simulate( "drag", {
+			dx: 100,
+			dy: 100
+		});
+		$( el ).unbind( "dragstop" );
+	},
+	setScrollable: function ( what, isScrollable ) {
+		var overflow = isScrollable ? "scroll" : "hidden";
+		$( what ).css({ overflow: overflow, overflowX: overflow, overflowY: overflow });
 	},
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
-		$( "#main" ).css( "position", position);
+		$( "#main" ).css({ position: position, top: "0px", left: "0px" });
 		TestHelpers.draggable.shouldMove( el, position + " parent" );
 		$( "#main" ).css( "position", oldPosition );
 	},
 	restoreScroll: function( what ) {
-		if( what ) {
-			$( document ).scrollTop( 0 ).scrollLeft( 0 );
-		} else {
-			$( "#main" ).scrollTop( 0 ).scrollLeft( 0 );
-		}
+		$( what ).scrollTop( 0 ).scrollLeft( 0 );
 	},
 	setScroll: function( what ) {
-		if( what ) {
-			// TODO: currently, the draggable interaction doesn't properly account for scrolled pages,
-			// uncomment the line below to make the tests fail that should when the page is scrolled
-			// $( document ).scrollTop( 100 ).scrollLeft( 100 );
-		} else {
-			$( "#main" ).scrollTop( 100 ).scrollLeft( 100 );
-		}
+		$( what ).scrollTop( 100 ).scrollLeft( 100 );
 	},
 	border: function( el, side ) {
 		return parseInt( el.css( "border-" + side + "-width" ), 10 ) || 0;

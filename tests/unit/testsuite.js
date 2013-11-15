@@ -27,11 +27,15 @@ QUnit.reset = function() {
 
 QUnit.config.requireExpects = true;
 
+/*
+// TODO: Add back the ability to test against minified files
+// see QUnit.urlParams.min usage below
 QUnit.config.urlConfig.push({
 	id: "min",
 	label: "Minified source",
 	tooltip: "Load minified source files instead of the regular unminified ones."
 });
+*/
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
@@ -185,6 +189,13 @@ TestHelpers.onFocus= function( element, onFocus ) {
 	};
 
 	element.bind( "focus", fn )[ 0 ].focus();
+};
+
+TestHelpers.forceScrollableWindow = function( appendTo ) {
+	return $( "<div>" ).css({
+		height: "10000px",
+		width: "10000px"
+	}).appendTo( appendTo || "#qunit-fixture" );
 };
 
 /*

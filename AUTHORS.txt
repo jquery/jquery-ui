@@ -1,20 +1,20 @@
 Authors ordered by first contribution
 A list of current team members is available at http://jqueryui.com/about
 
-Paul Bakaus <paul.bakaus@googlemail.com>
+Paul Bakaus <paul.bakaus@gmail.com>
 Richard Worth <rdworth@gmail.com>
 Yehuda Katz <wycats@gmail.com>
 Sean Catchpole <sean@sunsean.com>
 John Resig <jeresig@gmail.com>
 Tane Piper <piper.tane@gmail.com>
 Dmitri Gaskin <dmitrig01@gmail.com>
-Klaus Hartl <klaus.hartl@googlemail.com>
+Klaus Hartl <klaus.hartl@gmail.com>
 Stefan Petre <stefan.petre@gmail.com>
 Gilles van den Hoven <gilles@webunity.nl>
 Micheil Bryan Smith <micheil@brandedcode.com>
 Jörn Zaefferer <joern.zaefferer@gmail.com>
 Marc Grabanski <m@marcgrabanski.com>
-Keith Wood <kbwood.au@gmail.com>
+Keith Wood <kbwood@iinet.com.au>
 Brandon Aaron <brandon.aaron@gmail.com>
 Scott González <scott.gonzalez@gmail.com>
 Eduardo Lundgren <eduardolundgren@gmail.com>
@@ -27,12 +27,12 @@ David Bolter <david.bolter@gmail.com>
 Chi Cheng <cloudream@gmail.com>
 Ca-Phun Ung <pazu2k@gmail.com>
 Ariel Flesler <aflesler@gmail.com>
-Maggie Costello Wachs <fg.maggie@gmail.com>
+Maggie Wachs <maggie@filamentgroup.com>
 Scott Jehl <scott@scottjehl.com>
-Todd Parker <fg.todd@gmail.com>
-Andrew Powell <powella@gmail.com>
+Todd Parker <todd@filamentgroup.com>
+Andrew Powell <andrew@shellscape.org>
 Brant Burnett <btburnett3@gmail.com>
-Douglas Neiner <doug@pixelgraphics.us>
+Douglas Neiner <doug@dougneiner.com>
 Paul Irish <paul.irish@gmail.com>
 Ralph Whitbeck <ralph.whitbeck@gmail.com>
 Thibault Duplessis <thibault.duplessis@gmail.com>
@@ -79,10 +79,10 @@ Phillip Barnes <philbar@gmail.com>
 Kyle Wilkinson <kai@wikyd.org>
 Khaled AlHourani <me@khaledalhourani.com>
 Marian Rudzynski <mr@impaled.org>
-Jean-Francois Remy <jfremy@virtuoz.com>
-Doug Blood <dougblood@gmail.com>
+Jean-Francois Remy <jeff@melix.org>
+Doug Blood
 Filippo Cavallarin <filippo.cavallarin@codseq.it>
-Heiko Henning <h.henning@educa.ch>
+Heiko Henning <heiko@thehennings.ch>
 Aliaksandr Rahalevich <saksmlz@gmail.com>
 Mario Visic <mario@mariovisic.com>
 Xavi Ramirez <xavi.rmz@gmail.com>
@@ -106,7 +106,7 @@ Adam Parod <mystic414@gmail.com>
 Guillaume Gautreau <guillaume+github@ghusse.com>
 Marcel Toele <EleotleCram@gmail.com>
 Dan Streetman <ddstreet@ieee.org>
-Matt Hoskins <furlined@cat-basket.org>
+Matt Hoskins <matt@nipltd.com>
 Giovanni Giacobbi <giovanni@giacobbi.net>
 Kyle Florence <kyle.florence@gmail.com>
 Pavol Hluchý <lopo@losys.sk>
@@ -124,7 +124,7 @@ Israel Tsadok <itsadok@gmail.com>
 Carson McDonald <carson@ioncannon.net>
 Jason Davies <jason@jasondavies.com>
 Garrison Locke <gplocke@gmail.com>
-David Murdoch <musicisair@yahoo.com>
+David Murdoch <david@davidmurdoch.com>
 Benjamin Scott Boyle <benjamins.boyle@gmail.com>
 Jesse Baird <jebaird@gmail.com>
 Jonathan Vingiano <jvingiano@gmail.com>
@@ -150,11 +150,10 @@ Marwan Al Jubeh <marwan.aljubeh@gmail.com>
 Milan Broum <midlis@googlemail.com>
 Sebastian Sauer <info@dynpages.de>
 Gaëtan Muller <m.gaetan89@gmail.com>
-Michel Weimerskirch <michel@weimerskirch.net>
 William Griffiths <william@ycymro.com>
 Stojce Slavkovski <stojce@gmail.com>
 David Soms <david.soms@gmail.com>
-David De Sloovere <david.desloovere@hotmail.com>
+David De Sloovere <david.desloovere@outlook.com>
 Michael P. Jung <michael.jung@terreon.de>
 Shannon Pekary <spekary@gmail.com>
 Matthew Edward Hutton <meh@corefiling.co.uk>
@@ -198,7 +197,7 @@ Lee Rowlands <lee.rowlands@previousnext.com.au>
 Timmy Willison <timmywillisn@gmail.com>
 Karl Swedberg <kswedberg@gmail.com>
 Baoju Yuan <the_guy_1987@hotmail.com>
-Maciej Mroziński <mrozik87@gmail.com>
+Maciej Mroziński <maciej.k.mrozinski@gmail.com>
 Luis Dalmolin <luis.nh@gmail.com>
 Mark Aaron Shirley <maspwr@gmail.com>
 Martin Hoch <martin@fidion.de>
