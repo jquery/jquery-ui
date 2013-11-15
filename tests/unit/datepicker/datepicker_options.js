@@ -40,6 +40,26 @@ test( "appendTo", function() {
 	input.datepicker( "destroy" );
 });
 
+test( "dateFormat", function() {
+	expect( 0 );
+});
+
+test( "eachDay", function() {
+	expect( 0 );
+});
+
+test( "numberOfMonths", function() {
+	expect( 0 );
+});
+
+test( "position", function() {
+	expect( 0 );
+});
+
+test( "showWeek", function() {
+	expect( 0 );
+});
+
 /*
 test("setDefaults", function() {
 	expect( 3 );
