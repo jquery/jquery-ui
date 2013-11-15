@@ -160,7 +160,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 					nw: ".ui-resizable-nw"
 				} );
 
-		if (this.handles.constructor === String) {
+		this._handles = $();
+		if(this.handles.constructor === String) {
 
 			if ( this.handles === "all") {
 				this.handles = "n,e,s,w,se,sw,ne,nw";
@@ -190,7 +191,11 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		this._renderAxis = function(target) {
 
-			var i, axis, padPos, padWrapper;
+			var i, axis, padPos, padWrapper, mouseDownHandlers = {
+				mousedown: function (event) {
+					return that._mouseDown(event);
+				}
+			};
 
 			target = target || this.element;
 
@@ -198,6 +203,9 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 				if (this.handles[i].constructor === String) {
 					this.handles[i] = this.element.children( this.handles[ i ] ).first().show();
+				}
+				else if (this.handles[i] instanceof $) {
+					this._on(this.handles[i], mouseDownHandlers);
 				}
 
 				if (this.elementIsWrapper && this.originalElement[0].nodeName.match(/textarea|input|select|button/i)) {
@@ -217,8 +225,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 				}
 
-				// TODO: What's that good for? There's not anything to be executed left
-				if (!$(this.handles[i]).length) {
+				this._handles = this._handles.add(this.handles[i]);
+
+				//TODO: What's that good for? There's not anything to be executed left
+				if(!$(this.handles[i]).length) {
 					continue;
 				}
 			}
@@ -227,12 +237,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		// TODO: make renderAxis a prototype function
 		this._renderAxis(this.element);
 		
-		this._handles = $(".ui-resizable-handle", this.element);
-		
-		//Add the custom handles of jquery Objects outside this.element
-		for (i in this.handles) {
-			this._handles = this._handles.add(this.handles[i]);
-		}
+		this._handles = this._handles.add($(".ui-resizable-handle", this.element));
 		this._handles.disableSelection();
 
 		this._handles.mouseover(function() {
@@ -267,20 +272,6 @@ $.widget("ui.resizable", $.ui.mouse, {
 		}
 
 		this._mouseInit();
-
-		//Bind the mousedown event directly in the custom jquery elements
-		if (o.handles.constructor !== String) {
-			for (i in o.handles) {
-				handle = o.handles[i];
-				if (handle instanceof $) {
-					handle.bind("mousedown." + this.widgetName, onMouseDownCustom);
-				}
-			}
-		}
-
-		function onMouseDownCustom(event) {
-			return that._mouseDown(event);
-		}
 	},
 
 	_destroy: function() {
