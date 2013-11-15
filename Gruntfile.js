@@ -110,6 +110,7 @@ grunt.loadNpmTasks( "grunt-jscs-checker" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
 grunt.loadNpmTasks( "grunt-git-authors" );
+grunt.loadNpmTasks( "grunt-esformatter" );
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -202,6 +203,21 @@ grunt.initConfig({
 				csslintrc: ".csslintrc"
 			}
 		}
+	},
+
+	esformatter: {
+		options: {
+			preset: "jquery"
+		},
+		ui: "ui/*.js",
+		tests: "tests/unit/**/*.js",
+		build: {
+			options: {
+				skipHashbang: true
+			},
+			src: "build/**/*.js"
+		},
+		grunt: "Gruntfile.js"
 	}
 });
 
