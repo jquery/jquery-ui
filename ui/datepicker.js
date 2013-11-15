@@ -618,6 +618,13 @@ $.widget( "ui.datepicker", {
 	},
 	widget: function() {
 		return this.picker;
+	},
+	_setOption: function( key, value ) {
+		this._super( key, value );
+
+		if ( key === "appendTo" ) {
+			this.picker.appendTo( this._appendTo() );
+		}
 	}
 });
 
