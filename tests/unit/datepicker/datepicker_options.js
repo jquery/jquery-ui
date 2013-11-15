@@ -57,7 +57,29 @@ test( "position", function() {
 });
 
 test( "showWeek", function() {
-	expect( 0 );
+	expect( 7 );
+	var input = $( "#datepicker" ).datepicker(),
+		container = input.datepicker( "widget" );
+
+	equal( container.find( "thead th" ).length, 7, "just 7 days, no column cell" );
+	equal( container.find( ".ui-datepicker-week-col" ).length, 0,
+		"no week column cells present" );
+	input.datepicker( "destroy" );
+
+	input = $( "#datepicker" ).datepicker({ showWeek: true });
+	container = input.datepicker( "widget" );
+	equal( container.find( "thead th" ).length, 8, "7 days + a column cell" );
+	ok( container.find( "thead th:first" ).is( ".ui-datepicker-week-col" ),
+		"first cell should have ui-datepicker-week-col class name" );
+	equal( container.find( ".ui-datepicker-week-col" ).length,
+		container.find( "tr" ).length, "one week cell for each week" );
+	input.datepicker( "destroy" );
+
+	input = $( "#datepicker" ).datepicker();
+	container = input.datepicker( "widget" );
+	equal( container.find( "thead th" ).length, 7, "no week column" );
+	input.datepicker( "option", "showWeek", true );
+	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
 });
 
 /*
