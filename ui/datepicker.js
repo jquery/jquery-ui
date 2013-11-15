@@ -407,7 +407,7 @@ $.widget( "ui.datepicker", {
 			labels = Globalize.localize( "datepicker" );
 
 		if ( this.options.showWeek ) {
-			cells += "<th>" + labels.weekHeader + "</th>";
+			cells += "<th class='ui-datepicker-week-col'>" + labels.weekHeader + "</th>";
 		}
 		for ( i; i < this.date.weekdays().length; i++ ) {
 			cells += this._buildGridHeaderCell( this.date.weekdays()[i] );
@@ -436,7 +436,7 @@ $.widget( "ui.datepicker", {
 			i = 0;
 
 		if ( this.options.showWeek ) {
-			cells += "<td>" + week.number + "</td>";
+			cells += "<td class='ui-datepicker-week-col'>" + week.number + "</td>";
 		}
 		for ( i; i < week.days.length; i++ ) {
 			cells += this._buildDayCell( week.days[i] );
@@ -624,6 +624,10 @@ $.widget( "ui.datepicker", {
 
 		if ( key === "appendTo" ) {
 			this.picker.appendTo( this._appendTo() );
+		}
+
+		if ( key === "showWeek" ) {
+			this.refresh();
 		}
 	}
 });
