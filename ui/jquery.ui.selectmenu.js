@@ -480,7 +480,7 @@ $.widget( "ui.selectmenu", {
 		return element;
 	},
 
-	_toggleAttr: function(){
+	_toggleAttr: function() {
 		this.button
 			.toggleClass( "ui-corner-top", this.isOpen )
 			.toggleClass( "ui-corner-all", !this.isOpen );
