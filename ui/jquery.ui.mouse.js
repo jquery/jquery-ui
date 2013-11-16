@@ -56,7 +56,9 @@ $.widget("ui.mouse", {
 
 	_mouseDown: function(event) {
 		// don't let more than one widget handle mouseStart
-		if( mouseHandled ) { return; }
+		if ( mouseHandled ) {
+			return;
+		}
 
 		// we may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
@@ -114,9 +116,9 @@ $.widget("ui.mouse", {
 		// IE mouseup check - mouseup happened when mouse was out of window
 		if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
 			return this._mouseUp(event);
-		}
+
 		// Iframe mouseup check - mouseup occurred in another document
-		else if ( !event.which ) {
+		} else if ( !event.which ) {
 			return this._mouseUp( event );
 		}
 

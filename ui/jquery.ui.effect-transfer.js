@@ -22,8 +22,8 @@ $.effects.effect.transfer = function( o, done ) {
 		fixLeft = targetFixed ? body.scrollLeft() : 0,
 		endPosition = target.offset(),
 		animation = {
-			top: endPosition.top - fixTop ,
-			left: endPosition.left - fixLeft ,
+			top: endPosition.top - fixTop,
+			left: endPosition.left - fixLeft,
 			height: target.innerHeight(),
 			width: target.innerWidth()
 		},
@@ -32,8 +32,8 @@ $.effects.effect.transfer = function( o, done ) {
 			.appendTo( document.body )
 			.addClass( o.className )
 			.css({
-				top: startPosition.top - fixTop ,
-				left: startPosition.left - fixLeft ,
+				top: startPosition.top - fixTop,
+				left: startPosition.left - fixLeft,
 				height: elem.innerHeight(),
 				width: elem.innerWidth(),
 				position: targetFixed ? "fixed" : "absolute"

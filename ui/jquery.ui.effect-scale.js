@@ -42,7 +42,7 @@ $.effects.effect.scale = function( o, done ) {
 
 	// Set default origin and restore for show/hide
 	if ( mode !== "effect" ) {
-		options.origin = origin || ["middle","center"];
+		options.origin = origin || [ "middle", "center" ];
 		options.restore = true;
 	}
 

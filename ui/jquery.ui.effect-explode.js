@@ -41,11 +41,11 @@ $.effects.effect.explode = function( o, done ) {
 	}
 
 	// clone the element for each row and cell.
-	for( i = 0; i < rows ; i++ ) { // ===>
+	for ( i = 0; i < rows ; i++ ) { // ===>
 		top = offset.top + i * height;
 		my = i - ( rows - 1 ) / 2 ;
 
-		for( j = 0; j < cells ; j++ ) { // |||
+		for ( j = 0; j < cells ; j++ ) { // |||
 			left = offset.left + j * width;
 			mx = j - ( cells - 1 ) / 2 ;
 

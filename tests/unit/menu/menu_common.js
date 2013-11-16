@@ -7,7 +7,7 @@ TestHelpers.commonWidgetTests( "menu", {
 		items: "> *",
 		menus: "ul",
 		position: {
-			my: "left top",
+			my: "left-1 top",
 			at: "right top"
 		},
 		role: "menu",

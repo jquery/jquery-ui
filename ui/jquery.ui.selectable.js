@@ -83,7 +83,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 		var that = this,
 			options = this.options;
 
-		this.opos = [event.pageX, event.pageY];
+		this.opos = [ event.pageX, event.pageY ];
 
 		if (this.options.disabled) {
 			return;
@@ -166,7 +166,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 
 		if (x1 > x2) { tmp = x2; x2 = x1; x1 = tmp; }
 		if (y1 > y2) { tmp = y2; y2 = y1; y1 = tmp; }
-		this.helper.css({left: x1, top: y1, width: x2-x1, height: y2-y1});
+		this.helper.css({ left: x1, top: y1, width: x2 - x1, height: y2 - y1 });
 
 		this.selectees.each(function() {
 			var selectee = $.data(this, "selectable-item"),
