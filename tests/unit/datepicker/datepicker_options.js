@@ -52,8 +52,32 @@ test( "numberOfMonths", function() {
 	expect( 0 );
 });
 
-test( "position", function() {
-	expect( 0 );
+asyncTest( "position", function() {
+	expect( 3 );
+	var input = $( "<input>" ).datepicker().appendTo( "body" ).css({
+			position: "absolute",
+			top: 0,
+			left: 0
+		}),
+		container = input.datepicker( "widget" );
+
+	input.datepicker( "open" );
+	setTimeout(function() {
+		closeEnough( input.offset().left, container.offset().left, 1, "left sides line up by default" );
+		closeEnough( container.offset().top, input.offset().top + input.outerHeight(), 1,
+			"datepicker directly under input by default" );
+
+		// Change the position option using option()
+		input.datepicker( "option", "position", {
+			my: "left top",
+			at: "right bottom"
+		});
+		closeEnough( container.offset().left, input.offset().left + input.outerWidth(), 1,
+			"datepicker on right hand side of input after position change" );
+
+		input.remove();
+		start();
+	});
 });
 
 test( "showWeek", function() {
