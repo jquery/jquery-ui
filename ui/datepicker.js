@@ -552,15 +552,11 @@ $.widget( "ui.datepicker", {
 		this.date.select();
 		this.refresh();
 
-		var position = $.extend( {}, {
-			of: this.element
-		}, this.options.position );
-
 		this.picker
 			.attr( "aria-hidden", "false" )
 			.attr( "aria-expanded", "true" )
 			.show()
-			.position( position )
+			.position( this._buildPosition() )
 			.hide();
 
 		this._show( this.picker, this.options.show );
@@ -589,6 +585,11 @@ $.widget( "ui.datepicker", {
 		this.picker
 			.attr( "aria-hidden", "true" )
 			.attr( "aria-expanded", "false" );
+	},
+	_buildPosition: function() {
+		return $.extend( {}, {
+			of: this.element
+		}, this.options.position );
 	},
 	select: function( event, time ) {
 		this.date.setTime( time ).select();
@@ -623,6 +624,10 @@ $.widget( "ui.datepicker", {
 
 		if ( key === "showWeek" ) {
 			this.refresh();
+		}
+
+		if ( key === "position" ) {
+			this.picker.position( this._buildPosition() );
 		}
 	}
 });
