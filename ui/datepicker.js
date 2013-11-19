@@ -622,6 +622,11 @@ $.widget( "ui.datepicker", {
 			this.picker.appendTo( this._appendTo() );
 		}
 
+		if ( key === "eachDay" ) {
+			this.date.eachDay = this.options.eachDay;
+			this.refresh();
+		}
+
 		if ( key === "showWeek" ) {
 			this.refresh();
 		}
