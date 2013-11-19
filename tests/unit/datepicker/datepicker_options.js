@@ -54,7 +54,7 @@ test( "numberOfMonths", function() {
 
 asyncTest( "position", function() {
 	expect( 3 );
-	var input = $( "input" ).datepicker().appendTo( "body" ).css({
+	var input = $( "<input>" ).datepicker().appendTo( "body" ).css({
 			position: "absolute",
 			top: 0,
 			left: 0
