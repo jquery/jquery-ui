@@ -1,12 +1,23 @@
-/*
- * datepicker_core.js
- */
+(function( $ ) {
 
-(function($) {
-
-module("datepicker: core");
+module( "datepicker: core" );
 
 TestHelpers.testJshint( "datepicker" );
+
+test( "input's value determines starting date", function() {
+	expect( 3 );
+
+	var input = $( "#datepicker" ).val( "1/1/2014" ).datepicker(),
+		picker = input.datepicker( "widget" );
+
+	input.datepicker( "open" );
+
+	equal( picker.find( ".ui-datepicker-month" ).html(), "January", "correct month displayed" );
+	equal( picker.find( ".ui-datepicker-year" ).html(), "2014", "correct year displayed" );
+	equal( picker.find( ".ui-state-focus" ).html(), "1", "correct day highlighted" );
+
+	input.val( "" ).datepicker( "destroy" );
+});
 
 asyncTest( "baseStructure", function() {
 	expect( 42 );
@@ -584,4 +595,4 @@ test( "mouse", function() {
 		"Mouse click inline - next" );
 });
 
-})(jQuery);
+})( jQuery );
