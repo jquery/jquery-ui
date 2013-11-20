@@ -617,6 +617,13 @@ $.widget( "ui.datepicker", {
 			this.refresh();
 		}
 
+		if ( key === "dateFormat" ) {
+			this.date.setFormat( this.options.dateFormat );
+			if ( !this.inline ) {
+				this.element.val( this.date.format() );
+			}
+		}
+
 		if ( key === "showWeek" ) {
 			this.refresh();
 		}
