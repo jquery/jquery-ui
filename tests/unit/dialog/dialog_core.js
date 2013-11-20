@@ -4,6 +4,7 @@
 
 (function($) {
 
+// TODO add teardown callback to remove dialogs
 module("dialog: core");
 
 test("title id", function() {
@@ -180,4 +181,51 @@ asyncTest( "#9048: multiple modal dialogs opened and closed in different order",
 		start();
 	});
 });
+
+asyncTest( "interaction between overlay and other dialogs", function() {
+	$.widget( "ui.testWidget", $.ui.dialog, {
+		options: {
+			modal: true,
+			autoOpen: false
+		}
+	});
+	expect( 2 );
+	var first = $( "<div><input id='input-1'></div>" ).dialog({
+			modal: true
+		}),
+		firstInput = first.find( "input" ),
+		second = $( "<div><input id='input-2'></div>" ).testWidget(),
+		secondInput = second.find( "input" );
+
+	// Support: IE8
+	// For some reason the focus doesn't get set properly if we don't
+	// focus the body first.
+	$( "body" ).focus();
+
+	// Wait for the modal to init
+	setTimeout(function() {
+		second.testWidget( "open" );
+
+		// Simulate user tabbing from address bar to an element outside the dialog
+		$( "#favorite-animal" ).focus();
+		setTimeout(function() {
+			equal( document.activeElement, secondInput[ 0 ] );
+
+			// Last active dialog must receive focus
+			firstInput.focus();
+			$( "#favorite-animal" ).focus();
+			setTimeout(function() {
+				equal( document.activeElement, firstInput[ 0 ] );
+
+				// Cleanup
+				first.remove();
+				second.remove();
+				delete $.ui.testWidget;
+				delete $.fn.testWidget;
+				start();
+			});
+		});
+	});
+});
+
 })(jQuery);

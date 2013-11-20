@@ -182,6 +182,7 @@ $.widget( "ui.dialog", {
 		this._isOpen = false;
 		this._focusedElement = null;
 		this._destroyOverlay();
+		this._untrackInstance();
 
 		if ( !this.opener.filter( ":focusable" ).focus().length ) {
 
@@ -562,9 +563,28 @@ $.widget( "ui.dialog", {
 	_trackFocus: function() {
 		this._on( this.widget(), {
 			"focusin": function( event ) {
+				this._untrackInstance();
+				this._trackingInstances().unshift( this );
 				this._focusedElement = $( event.target );
 			}
 		});
+	},
+
+	_untrackInstance: function() {
+		var instances = this._trackingInstances(),
+			exists = $.inArray( this, instances );
+		if ( exists !== -1 ) {
+			instances.splice( exists, 1 );
+		}
+	},
+
+	_trackingInstances: function() {
+		var instances = this.document.data( "ui-dialog-instances" );
+		if ( !instances ) {
+			instances = [];
+			this.document.data( "ui-dialog-instances", instances );
+		}
+		return instances;
 	},
 
 	_minHeight: function() {
@@ -783,8 +803,7 @@ $.widget( "ui.dialog", {
 
 					if ( !this._allowInteraction( event ) ) {
 						event.preventDefault();
-						this.document.find( ".ui-dialog:visible:last .ui-dialog-content" )
-							.data( this.widgetFullName )._focusTabbable();
+						this._trackingInstances()[ 0 ]._focusTabbable();
 					}
 				}
 			});
