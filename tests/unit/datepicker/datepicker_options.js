@@ -41,7 +41,19 @@ test( "appendTo", function() {
 });
 
 test( "dateFormat", function() {
-	expect( 0 );
+	expect( 2 );
+	var input = $( "#datepicker" ).val( "1/1/2014" ).datepicker(),
+		picker = input.datepicker( "widget" ),
+		firstDayLink = picker.find( "td[id]:first a" ); 
+
+	input.datepicker( "open" );
+	firstDayLink.trigger( "mousedown" );
+	equal( input.val(), "1/1/2014", "default formatting" );
+
+	input.datepicker( "option", "dateFormat", "D" );
+	equal( input.val(), "Wednesday, January 01, 2014", "updated formatting" );
+
+	input.datepicker( "destroy" );
 });
 
 test( "eachDay", function() {
