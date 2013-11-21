@@ -594,6 +594,17 @@ $.widget( "ui.datepicker", {
 			date: this.date.format()
 		});
 	},
+	value: function( value ) {
+		if ( arguments.length ) {
+			this.date.setTime( value ).select();
+			if ( !this.inline ) {
+				this.element.val( this.date.format() );
+			}
+			this.refresh();
+		} else {
+			return this.date.format();
+		}
+	},
 	_destroy: function() {
 		if ( !this.inline ) {
 			this.picker.remove();
