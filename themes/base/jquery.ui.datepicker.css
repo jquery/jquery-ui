@@ -18,30 +18,48 @@
 	padding: .2em 0;
 }
 .ui-datepicker .ui-datepicker-prev,
-.ui-datepicker .ui-datepicker-next {
+.ui-datepicker .ui-datepicker-next,
+.ui-datepicker .ui-datepicker-prevYear,
+.ui-datepicker .ui-datepicker-nextYear {
 	position: absolute;
 	top: 2px;
 	width: 1.8em;
 	height: 1.8em;
 }
 .ui-datepicker .ui-datepicker-prev-hover,
-.ui-datepicker .ui-datepicker-next-hover {
+.ui-datepicker .ui-datepicker-next-hover,
+.ui-datepicker .ui-datepicker-prevYear-hover,
+.ui-datepicker .ui-datepicker-nextYear-hover {
 	top: 1px;
 }
 .ui-datepicker .ui-datepicker-prev {
-	left: 2px;
+	left: 25px;
 }
 .ui-datepicker .ui-datepicker-next {
-	right: 2px;
+	right: 25px;
 }
 .ui-datepicker .ui-datepicker-prev-hover {
-	left: 1px;
+	left: 24px;
 }
 .ui-datepicker .ui-datepicker-next-hover {
+	right: 24px;
+}
+.ui-datepicker .ui-datepicker-prevYear {
+	left: 2px;
+}
+.ui-datepicker .ui-datepicker-nextYear {
+	right: 2px;
+}
+.ui-datepicker .ui-datepicker-prevYear-hover {
+	left: 1px;
+}
+.ui-datepicker .ui-datepicker-nextYear-hover {
 	right: 1px;
 }
 .ui-datepicker .ui-datepicker-prev span,
-.ui-datepicker .ui-datepicker-next span {
+.ui-datepicker .ui-datepicker-next span,
+.ui-datepicker .ui-datepicker-prevYear span,
+.ui-datepicker .ui-datepicker-nextYear span {
 	display: block;
 	position: absolute;
 	left: 50%;
@@ -142,19 +160,23 @@
 .ui-datepicker-rtl {
 	direction: rtl;
 }
-.ui-datepicker-rtl .ui-datepicker-prev {
+.ui-datepicker-rtl .ui-datepicker-prev,
+.ui-datepicker-rtl .ui-datepicker-prevYear {
 	right: 2px;
 	left: auto;
 }
-.ui-datepicker-rtl .ui-datepicker-next {
+.ui-datepicker-rtl .ui-datepicker-next,
+.ui-datepicker-rtl .ui-datepicker-nextYear {
 	left: 2px;
 	right: auto;
 }
-.ui-datepicker-rtl .ui-datepicker-prev:hover {
+.ui-datepicker-rtl .ui-datepicker-prev:hover,
+.ui-datepicker-rtl .ui-datepicker-prevYear:hover {
 	right: 1px;
 	left: auto;
 }
-.ui-datepicker-rtl .ui-datepicker-next:hover {
+.ui-datepicker-rtl .ui-datepicker-next:hover,
+.ui-datepicker-rtl .ui-datepicker-nextYear:hover {
 	left: 1px;
 	right: auto;
 }

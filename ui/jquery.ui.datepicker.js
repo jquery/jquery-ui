@@ -1567,6 +1567,7 @@ $.extend(Datepicker.prototype, {
 	 */
 	_attachHandlers: function(inst) {
 		var stepMonths = this._get(inst, "stepMonths"),
+		stepBigMonths = this._get(inst, "stepBigMonths"),
 			id = "#" + inst.id.replace( /\\\\/g, "\\" );
 		inst.dpDiv.find("[data-handler]").map(function () {
 			var handler = {
@@ -1575,6 +1576,12 @@ $.extend(Datepicker.prototype, {
 				},
 				next: function () {
 					$.datepicker._adjustDate(id, +stepMonths, "M");
+				},
+				prevYear: function () {
+					$.datepicker._adjustDate(id, -stepBigMonths, "M");
+				},
+				nextYear: function () {
+					$.datepicker._adjustDate(id, +stepBigMonths, "M");
 				},
 				hide: function () {
 					$.datepicker._hideDatepicker();
@@ -1601,7 +1608,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the HTML for the current state of the date picker. */
 	_generateHTML: function(inst) {
-		var maxDraw, prevText, prev, nextText, next, currentText, gotoDate,
+		var maxDraw, prevText, prev, nextText, next, prevYearText, prevYear,
+			nextYearText, nextYear, currentText, gotoDate,
 			controls, buttonPanel, firstDay, showWeek, dayNames, dayNamesMin,
 			monthNames, monthNamesShort, beforeShowDay, showOtherMonths,
 			selectOtherMonths, defaultDate, html, dow, row, group, col, selectedDate,
@@ -1643,6 +1651,16 @@ $.extend(Datepicker.prototype, {
 		}
 		inst.drawMonth = drawMonth;
 		inst.drawYear = drawYear;
+		
+                prevYearText = this._get(inst, "prevYearText");
+                prevYearText = (!navigationAsDateFormat ? prevYearText : this.formatDate(prevYearText,
+                        this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
+                        this._getFormatConfig(inst)));
+
+                prevYear = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
+                        "<a class='ui-datepicker-prevYear ui-corner-all' data-handler='prevYear' data-event='click'" +
+                        " title='" + prevYearText + "'><span class='ui-icon ui-icon-circle-arrow-" + ( isRTL ? "e" : "w") + "'>" + prevYearText + "</span></a>" :
+                        (hideIfNoPrevNext ? "" : "<a class='ui-datepicker-prevYear ui-corner-all ui-state-disabled' title='"+ prevYearText +"'><span class='ui-icon ui-icon-circle-arrow-" + ( isRTL ? "e" : "w") + "'>" + prevYearText + "</span></a>"));
 
 		prevText = this._get(inst, "prevText");
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
@@ -1663,6 +1681,16 @@ $.extend(Datepicker.prototype, {
 			"<a class='ui-datepicker-next ui-corner-all' data-handler='next' data-event='click'" +
 			" title='" + nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>" :
 			(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-next ui-corner-all ui-state-disabled' title='"+ nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>"));
+
+                nextYearText = this._get(inst, "nextYearText");
+                nextYearText = (!navigationAsDateFormat ? nextYearText : this.formatDate(nextYearText,
+                        this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
+                        this._getFormatConfig(inst)));
+
+                nextYear = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
+                        "<a class='ui-datepicker-nextYear ui-corner-all' data-handler='nextYear' data-event='click'" +
+                        " title='" + nextYearText + "'><span class='ui-icon ui-icon-circle-arrow-" + ( isRTL ? "w" : "e") + "'>" + nextYearText + "</span></a>" :
+                        (hideIfNoPrevNext ? "" : "<a class='ui-datepicker-nextYear ui-corner-all ui-state-disabled' title='"+ nextYearText + "'><span class='ui-icon ui-icon-circle-arrow-" + ( isRTL ? "w" : "e") + "'>" + nextYearText + "</span></a>"));
 
 		currentText = this._get(inst, "currentText");
 		gotoDate = (this._get(inst, "gotoCurrent") && inst.currentDay ? currentDate : today);
@@ -1711,8 +1739,10 @@ $.extend(Datepicker.prototype, {
 					calender += "'>";
 				}
 				calender += "<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix" + cornerClass + "'>" +
+					(/all|left/.test(cornerClass) && row === 0 ? (isRTL ? nextYear : prevYear) : "") +
 					(/all|left/.test(cornerClass) && row === 0 ? (isRTL ? next : prev) : "") +
 					(/all|right/.test(cornerClass) && row === 0 ? (isRTL ? prev : next) : "") +
+					(/all|right/.test(cornerClass) && row === 0 ? (isRTL ? prevYear : nextYear) : "") +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
 					row > 0 || col > 0, monthNames, monthNamesShort) + // draw month headers
 					"</div><table class='ui-datepicker-calendar'><thead>" +
@@ -1977,7 +2007,7 @@ $.extend(Datepicker.prototype, {
  * Global datepicker_instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
  */
 function datepicker_bindHover(dpDiv) {
-	var selector = "button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";
+	var selector = "button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-prevYear, .ui-datepicker-nextYear, .ui-datepicker-calendar td a";
 	return dpDiv.delegate(selector, "mouseout", function() {
 			$(this).removeClass("ui-state-hover");
 			if (this.className.indexOf("ui-datepicker-prev") !== -1) {
@@ -1986,6 +2016,12 @@ function datepicker_bindHover(dpDiv) {
 			if (this.className.indexOf("ui-datepicker-next") !== -1) {
 				$(this).removeClass("ui-datepicker-next-hover");
 			}
+			if (this.className.indexOf("ui-datepicker-prevYear") !== -1) {
+                                $(this).removeClass("ui-datepicker-prevYear-hover");
+                        }
+                        if (this.className.indexOf("ui-datepicker-nextYear") !== -1) {
+                                $(this).removeClass("ui-datepicker-nextYear-hover");
+                        }
 		})
 		.delegate(selector, "mouseover", function(){
 			if (!$.datepicker._isDisabledDatepicker( datepicker_instActive.inline ? dpDiv.parent()[0] : datepicker_instActive.input[0])) {
@@ -1997,6 +2033,12 @@ function datepicker_bindHover(dpDiv) {
 				if (this.className.indexOf("ui-datepicker-next") !== -1) {
 					$(this).addClass("ui-datepicker-next-hover");
 				}
+				if (this.className.indexOf("ui-datepicker-prevYear") !== -1) {
+                                        $(this).addClass("ui-datepicker-prevYear-hover");
+                                }
+                                if (this.className.indexOf("ui-datepicker-nextYear") !== -1) {
+                                        $(this).addClass("ui-datepicker-nextYear-hover");
+                                }
 			}
 		});
 }
