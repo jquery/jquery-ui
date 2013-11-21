@@ -594,15 +594,25 @@ $.widget( "ui.datepicker", {
 			date: this.date.format()
 		});
 	},
+	_value: function( value ) {
+		this.date.setTime( value ).select();
+		if ( !this.inline ) {
+			this.element.val( this.date.format() );
+		}
+		this.refresh();
+	},
 	value: function( value ) {
 		if ( arguments.length ) {
-			this.date.setTime( value ).select();
-			if ( !this.inline ) {
-				this.element.val( this.date.format() );
-			}
-			this.refresh();
+			this._value( value );
 		} else {
 			return this.date.format();
+		}
+	},
+	valueAsDate: function( value ) {
+		if ( arguments.length ) {
+			this._value( value );
+		} else {
+			return this.date.date();
 		}
 	},
 	_destroy: function() {
