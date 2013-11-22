@@ -64,40 +64,51 @@ test( "open", function() {
 });
 
 test( "value", function() {
-	expect( 3 );
+	expect( 5 );
 	var input = $( "#datepicker" ).datepicker(),
-		picker = input.datepicker( "widget" );
+		picker = input.datepicker( "widget" ),
+		inline = $( "#inline" ).datepicker();
 
 	input.datepicker( "value", "1/1/2014" );
 	equal( input.val(), "1/1/2014", "input's value set" );
 	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
-
 	equal( input.datepicker( "value" ), "1/1/2014", "getter" );
 
+	inline.datepicker( "value", "1/1/2014" );
+	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
+		"first day marked as selected" );
+	equal( inline.datepicker( "value" ), "1/1/2014", "getter" );
+
 	// TODO: Handle for invalid values.
-	// TODO: Add tests for inline pickers.
 
 	input.datepicker( "destroy" );
+	inline.datepicker( "destroy" );
 });
 
 test( "valueAsDate", function() {
-	expect( 3 );
+	expect( 5 );
 	var input = $( "#datepicker" ).datepicker(),
-		picker = input.datepicker( "widget" );
+		picker = input.datepicker( "widget" ),
+		inline = $( "#inline" ).datepicker();
 
 	input.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
 	equal( input.val(), "1/1/2014", "input's value set" );
 	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
-
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ),
 		new Date( 2014, 0, 1 ), "getter" );
 
+	inline.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
+	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
+		"first day marked as selected" );
+	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ),
+		new Date( 2014, 0, 1 ), "getter" );
+
 	// TODO: Handle for invalid values.
-	// TODO: Add tests for inline pickers.
 
 	input.datepicker( "destroy" );
+	inline.datepicker( "destroy" );
 });
 
 })( jQuery );
