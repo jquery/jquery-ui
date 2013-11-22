@@ -610,7 +610,9 @@ $.widget( "ui.datepicker", {
 		});
 	},
 	_destroy: function() {
-		if ( !this.inline ) {
+		if ( this.inline ) {
+			this.picker.empty();
+		} else {
 			this.picker.remove();
 			this.element
 				.removeAttr( "aria-haspopup" )

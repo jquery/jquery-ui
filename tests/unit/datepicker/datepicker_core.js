@@ -188,9 +188,6 @@ asyncTest( "baseStructure", function() {
 
 		inl.datepicker( "destroy" );
 
-		// TODO: Calling destroy() on inline pickers currently does not work.
-		inl.empty();
-
 		step7();
 	}
 
