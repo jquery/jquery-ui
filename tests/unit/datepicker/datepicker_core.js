@@ -321,7 +321,7 @@ asyncTest( "customStructure", function() {
 });
 
 test( "Keyboard handling", function() {
-	expect( 2 );
+	expect( 4 );
 	var input = $( "#datepicker" ).datepicker(),
 		date = new Date();
 
@@ -329,22 +329,25 @@ test( "Keyboard handling", function() {
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke enter" );
 
+	// Enter = Select today's date by default
 	input.val( "1/1/2014" ).datepicker( "open" )
 		.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke enter - preset" );
 
-	input.datepicker( "destroy" );
-	return;
-
+	// Control + Home = Change the calendar to the current month
 	input.val( "1/1/2014" ).datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.HOME })
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke ctrl+home" );
 
-	input.val( "02/04/2008" ).datepicker( "open" )
+	// Control + End = Close the calendar and clear the input
+	input.val( "1/1/2014" ).datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.END });
-	ok( input.datepicker( "valueAsDate" ) == null, "Keystroke ctrl+end" );
+	equal( input.val(), "", "Keystroke ctrl+end" );
+
+	input.datepicker( "destroy" );
+	return;
 
 	input.val( "" ).datepicker( "open" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
