@@ -59,6 +59,7 @@ $.widget( "ui.datepicker", {
 	},
 	_create: function() {
 		this.date = $.date( null, this.options.dateFormat );
+
 		this.date.eachDay = this.options.eachDay;
 		this.id = "ui-datepicker-" + idIncrement;
 		idIncrement++;
@@ -197,6 +198,9 @@ $.widget( "ui.datepicker", {
 							this.close( event );
 						}
 						break;
+					case $.ui.keyCode.ENTER:
+						this._handleKeydown( event );
+						break;
 					case $.ui.keyCode.DOWN:
 					case $.ui.keyCode.UP:
 						clearTimeout( this.closeTimer );
@@ -204,6 +208,26 @@ $.widget( "ui.datepicker", {
 							this.open( event );
 							this.grid.focus();
 						}, 1);
+						break;
+					case $.ui.keyCode.HOME:
+						if ( event.ctrlKey ) {
+							this.date.setTime( new Date() );
+							event.preventDefault();
+							if ( this.isOpen ) {
+								this.refresh();
+							} else {
+								this.open( event );
+							}
+						}
+						break;
+					case $.ui.keyCode.END:
+						if ( event.ctrlKey ) {
+							this.element.val( "" );
+							event.preventDefault();
+							if ( this.isOpen ) {
+								this.close( event );
+							}
+						}
 						break;
 				}
 			},
