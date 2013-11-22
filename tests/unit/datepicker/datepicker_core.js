@@ -321,18 +321,16 @@ asyncTest( "customStructure", function() {
 });
 
 test( "Keyboard handling", function() {
-	// TODO: These tests all rely on having a method to retrieve a Date object. There
-	// is not only implemented yet so bail.
-	expect( 0 );
-	return;
-
-	expect( 24 );
-	var inp = TestHelpers.datepicker.init( "#datepicker" ),
+	expect( 1 );
+	var input = $( "#datepicker" ).datepicker(),
 		date = new Date();
 
-	inp.val( "" ).datepicker( "open" )
+	input.datepicker( "open" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	TestHelpers.datepicker.equalsDate( inp.val(), date, "Keystroke enter" );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke enter" );
+
+	input.datepicker( "destroy" );
+	return;
 
 	inp.val( "02/04/2008" ).datepicker( "open" )
 		.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
