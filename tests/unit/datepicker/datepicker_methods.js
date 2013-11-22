@@ -3,25 +3,23 @@
 module( "datepicker: methods" );
 
 test( "destroy", function() {
-	expect( 9 );
-	var inl,
-		inp = TestHelpers.datepicker.init( "#datepicker" );
+	expect( 10 );
+	var input = $( "#datepicker" ).datepicker(),
+		inline = $( "#inline" ).datepicker();
 
-	ok( inp.datepicker( "instance" ), "instance created" );
-	ok( inp.attr( "aria-owns" ), "aria-owns attribute added" );
-	ok( inp.attr( "aria-haspopup" ), "aria-haspopup attribute added" );
-	inp.datepicker( "destroy" );
-	ok( !inp.datepicker( "instance" ), "instance removed" );
-	ok( !inp.attr( "aria-owns" ), "aria-owns attribute removed" );
-	ok( !inp.attr( "aria-haspopup" ), "aria-haspopup attribute removed" );
+	ok( input.datepicker( "instance" ), "instance created" );
+	ok( input.attr( "aria-owns" ), "aria-owns attribute added" );
+	ok( input.attr( "aria-haspopup" ), "aria-haspopup attribute added" );
+	input.datepicker( "destroy" );
+	ok( !input.datepicker( "instance" ), "instance removed" );
+	ok( !input.attr( "aria-owns" ), "aria-owns attribute removed" );
+	ok( !input.attr( "aria-haspopup" ), "aria-haspopup attribute removed" );
 
-	inl = TestHelpers.datepicker.init( "#inline" );
-	ok( inl.datepicker( "instance" ), "instance created" );
-	ok( inl.children().length > 0, "inline datepicker has children" );
-	inl.datepicker( "destroy" );
-	ok( !inl.datepicker( "instance" ), "instance removed" );
-	// TODO: Destroying inline datepickers currently does not work.
-	// ok( inl.children().length === 0, "inline picker no longer has children" );
+	ok( inline.datepicker( "instance" ), "instance created" );
+	ok( inline.children().length > 0, "inline datepicker has children" );
+	inline.datepicker( "destroy" );
+	ok( !inline.datepicker( "instance" ), "instance removed" );
+	ok( inline.children().length === 0, "inline picker no longer has children" );
 });
 
 test( "enable / disable", function() {
