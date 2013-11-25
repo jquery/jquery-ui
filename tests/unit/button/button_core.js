@@ -174,7 +174,7 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 	setTimeout(function() {
 		ok( checkbox.button( "widget" ).hasClass( "ui-state-active" ));
 		start();
-	});
+	}, 1 );
 });
 
 asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
