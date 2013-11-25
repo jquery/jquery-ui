@@ -166,7 +166,7 @@ asyncTest( "invocation", function() {
 		ok( button.length === 0, "Image button - button absent" );
 		image = inp.siblings( "img" );
 		ok( image.length === 1, "Image button - image present" );
-		equal( image.attr( "src" ), "images/calendar.gif", "Image button - image source" );
+		ok( /images\/calendar\.gif$/.test( image.attr( "src" ) ), "Image button - image source" );
 		equal( image.attr( "title" ), "Cal", "Image button - image text" );
 
 		TestHelpers.datepicker.onFocus( inp, function() {
