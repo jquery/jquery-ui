@@ -364,32 +364,87 @@ test( "Keyboard handling", function() {
 		"Keystroke esc - abandoned" );
 
 	input.datepicker( "destroy" );
-	return;
+});
 
-	// Moving by day or week
-	input.val( "" ).datepicker( "open" )
-		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.LEFT })
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	date.setDate( date.getDate() - 1 );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke ctrl+left" );
+asyncTest( "keyboard handling - arrow keys", function() {
+	expect( 6 );
+	var picker,
+		input = $( "#datepicker" ),
+		date = new Date();
 
-	input.val( "" ).datepicker( "open" )
-		.simulate( "keydown", {keyCode: $.ui.keyCode.LEFT })
-		.simulate( "keydown", {keyCode: $.ui.keyCode.ENTER });
-	date.setDate( date.getDate() + 1 );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke left") ;
-	
+	function step1() {
+		input.datepicker();
+		picker = input.datepicker( "widget" );
+		ok( !picker.is( ":visible" ), "datepicker closed" );
+		input.val( "" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			ok( picker.is( ":visible" ), "Keystroke down opens datepicker" );
+			input.datepicker( "destroy" );
+			step2();
+		});
+	};
+
+	function step2() {
+		input.datepicker();
+		picker = input.datepicker( "widget" )
+		ok( !picker.is( ":visible" ), "datepicker closed" );
+		input.val( "" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.UP });
+
+		setTimeout(function() {
+			ok( picker.is( ":visible" ), "Keystroke up opens datepicker" );
+			input.datepicker( "destroy" );
+			step3();
+		});
+	};
+
+	function step3() {
+		input.datepicker()
+			.val( "" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			$( ":focus" )
+				.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT })
+				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
+			date.setDate( date.getDate() - 1 );
+			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
+				"Keystroke left to switch to previous day" );
+
+			input.datepicker( "destroy" );
+			step4();
+		}, 100);
+	};
+
+	function step4() {
+		input.datepicker()
+			.val( "" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			$( ":focus" )
+				.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT })
+				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
+			date.setDate( new Date().getDate() + 1 );
+			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
+				"Keystroke right to switch to next day" );
+
+			input.datepicker( "destroy" );
+			start();
+		}, 100);
+	};
+
+	step1();
+});
+
+/*
 	input.val( "" ).datepicker( "open" )
 		.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.RIGHT })
 		.simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 1);
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke ctrl+right" );
-	
-	input.val( "" ).datepicker( "open" )
-		.simulate( "keydown", {keyCode: $.ui.keyCode.RIGHT}).
-		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	date.setDate(date.getDate() - 1);
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke right" );
 	
 	input.val( "" ).datepicker( "open" )
 		.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.UP}).
@@ -487,7 +542,7 @@ test( "Keyboard handling", function() {
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 4 - 1, 4 ),
 		"Keystroke pgdn step 2" );
-});
+*/
 
 test( "mouse", function() {
 	// TODO: These tests use the old getDate() and setDate() methods. Re-activate these
