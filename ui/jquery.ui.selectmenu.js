@@ -492,7 +492,9 @@ $.widget( "ui.selectmenu", {
 	_resizeMenu: function() {
 		this.menu.outerWidth( Math.max(
 			this.button.outerWidth(),
-			this.menu.width( "" ).outerWidth()
+			// IE10 wraps long text (possibly a rounding bug)
+			// so we add 1px to avoid the wrapping
+			this.menu.width( "" ).outerWidth() + 1
 		) );
 	},
 
