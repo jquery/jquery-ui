@@ -16,20 +16,15 @@
 	$(function() {
 		$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
 			_renderItem: function( ul, item ) {
-				var a, span,
-					li = $( "<li>" );
+				var li = $( "<li>", { text: item.label } );
 
 				if ( item.disabled ) {
 					li.addClass( "ui-state-disabled" ).text( item.label );
 				} else {
-					a = $( "<a>", {
-						text: item.label,
-						href: "#"
-					}).appendTo( li );
-					span = $( "<span>", {
+					$( "<span>", {
 						style: item.element.attr( "style" ),
 						"class": "ui-icon " + item.element.attr( "class" )
-					}).appendTo( a );
+					}).appendTo( li );
 				}
 
 				return li.appendTo( ul );
@@ -66,21 +61,18 @@
 			width: 200px;
 		}
 
-		.ui-selectmenu-menu .ui-menu .ui-icon {
-			top: 0.4em;
-		}
 		.ui-selectmenu-menu .ui-menu .ui-menu-item a {
 			padding-left: 2em;
 		}
 
 		/* select with custom icons */
-		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item a {
+		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item {
 			padding: 0.5em 0 0.5em 3em;
 		}
-		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item a .ui-icon {
+		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon {
 			height: 24px;
 			width: 24px;
-			top: 0.2em;
+			top: 0.1em;
 		}
 		.ui-icon.video {
 			background: url(images/24-video-square.png) 0 0 no-repeat;
