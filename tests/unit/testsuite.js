@@ -59,7 +59,9 @@ QUnit.config.urlConfig.push({
 
 jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
-	if ( QUnit.urlParams.nojshint ) {
+	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
+	// https://github.com/jshint/jshint/issues/1384
+	if ( QUnit.urlParams.nojshint || !Function.prototype.bind ) {
 		return;
 	}
 
