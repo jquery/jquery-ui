@@ -284,7 +284,7 @@ $.ui.ddmanager = {
 			}
 
 			// Filter out elements in the current dragged item
-			for ( j=0; j < list.length; j++ ) {
+			for ( j = 0; j < list.length; j++ ) {
 				if ( list[ j ] === m[ i ].element[ 0 ] ) {
 					m[ i ].proportions().height = 0;
 					continue droppablesLoop;
@@ -362,7 +362,7 @@ $.ui.ddmanager = {
 			if ( this.options.greedy ) {
 				// find droppable parents with same scope
 				scope = this.options.scope;
-				parent = this.element.parents( ":data(ui-droppable)" ).filter(function () {
+				parent = this.element.parents( ":data(ui-droppable)" ).filter(function() {
 					return $( this ).droppable( "instance" ).options.scope === scope;
 				});
 

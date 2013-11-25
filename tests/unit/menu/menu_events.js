@@ -389,15 +389,15 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,20", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,34", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_UP" );
+		equal( logOutput(), "keydown,17", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
@@ -484,11 +484,11 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	function menukeyboard3() {
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,20", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,27", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
