@@ -321,8 +321,9 @@ asyncTest( "customStructure", function() {
 });
 
 test( "Keyboard handling", function() {
-	expect( 4 );
+	expect( 8 );
 	var input = $( "#datepicker" ).datepicker(),
+		instance = input.datepicker( "instance" ),
 		date = new Date();
 
 	input.datepicker( "open" )
@@ -346,23 +347,24 @@ test( "Keyboard handling", function() {
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.END });
 	equal( input.val(), "", "Keystroke ctrl+end" );
 
-	input.datepicker( "destroy" );
-	return;
+	input.val( "" ).datepicker( "open" );
+	ok( instance.isOpen, "datepicker is open before escape" );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
+	ok( !instance.isOpen, "escape closes the datepicker" );
 
-	input.val( "" ).datepicker( "open" )
+	input.val( "1/1/2014" ).datepicker( "open" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
-	ok( input.datepicker( "valueAsDate" ) == null, "Keystroke esc" );
-
-	input.val( "02/04/2008" ).datepicker( "open" )
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 4 ),
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke esc - preset" );
 
-	input.val( "02/04/2008" ).datepicker( "open" )
+	input.val( "1/1/2014" ).datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP })
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date(2008, 2 - 1, 4),
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke esc - abandoned" );
+
+	input.datepicker( "destroy" );
+	return;
 
 	// Moving by day or week
 	input.val( "" ).datepicker( "open" )
