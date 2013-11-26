@@ -396,8 +396,8 @@ $.widget( "ui.tooltip", {
 				// if the title attribute has changed since open(), don't restore
 				var title = element.attr( "title" );
 				if ( title === "" || title === undefined ) { 
-				    element.attr( "title", element.data( "ui-tooltip-title" ) );
-			    }
+					element.attr( "title", element.data( "ui-tooltip-title" ) );
+				}
 				element.removeData( "ui-tooltip-title" );
 			}
 		});
