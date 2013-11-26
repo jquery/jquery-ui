@@ -308,7 +308,6 @@ $.widget( "ui.tooltip", {
 			tooltip = this._find( target ),
 			title = target.attr( "title" );
 
-
 		// disabling closes the tooltip, so we need to track when we're closing
 		// to avoid an infinite loop in case the tooltip becomes disabled on close
 		if ( this.closing ) {
@@ -395,7 +394,7 @@ $.widget( "ui.tooltip", {
 			if ( element.data( "ui-tooltip-title" ) ) {
 				// if the title attribute has changed since open(), don't restore
 				var title = element.attr( "title" );
-				if ( title === "" || title === undefined ) { 
+				if ( title === "" || title === undefined ) {
 					element.attr( "title", element.data( "ui-tooltip-title" ) );
 				}
 				element.removeData( "ui-tooltip-title" );
