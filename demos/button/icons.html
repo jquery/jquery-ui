@@ -8,28 +8,48 @@
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
-	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
 		$( "button:first" ).button({
-			icons: {
-				primary: "ui-icon-locked"
-			},
+			icon: "ui-icon-locked",
 			text: false
 		}).next().button({
-			icons: {
-				primary: "ui-icon-locked"
-			}
+			icon: "ui-icon-locked"
 		}).next().button({
-			icons: {
-				primary: "ui-icon-gear",
-				secondary: "ui-icon-triangle-1-s"
-			}
+			icon: "ui-icon-gear",
+			iconPosition: "right"
 		}).next().button({
-			icons: {
-				primary: "ui-icon-gear",
-				secondary: "ui-icon-triangle-1-s"
-			},
+			icon: "ui-icon-gear",
+			iconPosition: "top"
+		}).next().button({
+			icon: "ui-icon-gear",
+			iconPosition: "bottom"
+		}).next().button({
+			label: "My text was set with the label option"
+		}).next().button({
+			icon: "ui-icon-gear",
+			iconPosition: "left",
+			text: false
+		});
+		$( "input:first" ).button({
+			icon: "ui-icon-locked",
+			text: false
+		}).next().button({
+			icon: "ui-icon-locked"
+		}).next().button({
+			icon: "ui-icon-gear",
+			iconPosition: "right"
+		}).next().button({
+			icon: "ui-icon-gear",
+			iconPosition: "top"
+		}).next().button({
+			icon: "ui-icon-gear",
+			iconPosition: "bottom"
+		}).next().button({
+			label: "My text was set with the label option"
+		}).next().button({
+			icon: "ui-icon-gear",
+			iconPosition: "left",
 			text: false
 		});
 	});
@@ -39,8 +59,19 @@
 
 <button>Button with icon only</button>
 <button>Button with icon on the left</button>
-<button>Button with two icons</button>
-<button>Button with two icons and no text</button>
+<button>Button with icon on the right</button>
+<button>Button with icon on the top</button>
+<button>Button with icon on the bottom</buttom>
+<button></button>
+<button>Button with icon position and no label</button>
+<input type="submit" value="Label with icon only" />
+<input type="submit" value="Label with icon on the left" />
+<input type="submit" value="Label with icon on the right" />
+<input type="submit" value="Label with icon on the top" />
+<input type="submit" value="Label with icon on the bottom" />
+<input type="submit"/>
+<input type="submit" value="Label with icon position and no label" />
+
 
 <div class="demo-description">
 <p>Some buttons with various combinations of text and icons.</p>
