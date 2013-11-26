@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Selectmenu Test Suite</title>
+
+	<script src="../../jquery.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		css: [ "ui.core", "ui.menu" , "ui.selectmenu" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.position.js",
+			"ui/jquery.ui.menu.js",
+			"ui/jquery.ui.selectmenu.js"
+		]
+	});
+	</script>
+
+	<script src="selectmenu_common.js"></script>
+	<script src="selectmenu_core.js"></script>
+	<script src="selectmenu_events.js"></script>
+	<script src="selectmenu_methods.js"></script>
+	<script src="selectmenu_options.js"></script>
+
+	<script src="../swarminject.js"></script>
+</head>
+<body>
+
+<h1 id="qunit-header">jQuery UI Selectmenu Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-fixture">
+	<div id="selectmenu-wrap1" class="selectmenu-wrap"></div>
+
+	<div id="selectmenu-wrap2" class="selectmenu-wrap">
+		<label for="speed">Select a speed:</label>
+		<select name="speed" id="speed">
+			<option value="Slower">Slower</option>
+			<option value="Slow">Slow</option>
+			<option value="Medium" selected="selected">Medium</option>
+			<option value="Fast">Fast</option>
+			<option value="Faster">Faster</option>
+		</select>
+	</div>
+
+	<label for="number">Select a number:</label>
+	<select name="number" id="number">
+		<option value="1">1</option>
+		<option value="2" selected="selected">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+		<option value="13">13</option>
+		<option value="14">14</option>
+		<option value="15">15</option>
+		<option value="16">16</option>
+		<option value="17">17</option>
+		<option value="18">18</option>
+		<option value="19">19</option>
+	</select>
+
+	<label for="files">Select a file:</label>
+	<select name="files" id="files">
+		<optgroup label="Scripts">
+			<option value="jquery">jQuery.js</option>
+			<option value="jqueryui">ui.jQuery.js</option>
+		</optgroup>
+		<optgroup label="Other files">
+			<option value="somefile">Some unknown file</option>
+			<option value="someotherfile">Some other file</option>
+		</optgroup>
+	</select>
+
+</div>
+</body>
+</html>
