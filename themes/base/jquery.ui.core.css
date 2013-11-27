@@ -111,11 +111,6 @@ body .ui-icon.ui-icon-bottom {
 	right: .5em;
 }
 
-.ui-icon-notext:after {
-	left: 50%;
-	margin-left: -8px;
-}
-
 .ui-icon-top:after,
 .ui-icon-bottom:after {
 	left: 50%;
@@ -131,13 +126,26 @@ body .ui-icon.ui-icon-bottom:after {
 	bottom: .25em;
 }
 
-body .ui-icon.ui-icon-notext {
+.ui-icon-notext:after {
+	left: 50%;
+	margin-left: -8px;
+}
+
+.ui-button.ui-icon.ui-icon-notext {
 	padding: 0;
 	width: 2.1em;
 	height: 2.1em;
 	text-indent: -9999px;
-	white-space: nowrap !important;
+	white-space: nowrap;
 
+}
+
+input.ui-button.ui-icon.ui-icon-notext {
+	width: auto;
+	height: auto;
+	text-indent: 0;
+	white-space: normal;
+	padding: .4em 1em;
 }
 
 /* Misc visuals

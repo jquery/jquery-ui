@@ -90,7 +90,7 @@
 .ui-button.ui-icon-blank:after {
 	background-position: 16px 16px;
 }
-.ui-icon-carat-1-n, .ui-button.ui-icon-blank:after  { background-position: 0 0; }
+.ui-icon-carat-1-n, .ui-button.ui-icon-carat-1-n:after  { background-position: 0 0; }
 .ui-icon-carat-1-ne, .ui-icon-carat-1-ne:after { background-position: -16px 0; }
 .ui-icon-carat-1-e, .ui-icon-carat-1-e:after { background-position: -32px 0; }
 .ui-icon-carat-1-se, .ui-icon-carat-1-se:after { background-position: -48px 0; }

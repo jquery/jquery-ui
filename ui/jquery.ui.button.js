@@ -109,7 +109,7 @@ $.widget( "ui.button", {
 		this.element
 			.removeClass( "ui-helper-hidden-accessible" + baseClasses + " ui-state-active " + typeClasses )
 			.removeAttr( "role" )
-			.removeAttr( "aria-pressed" )
+			.removeAttr( "aria-pressed" );
 
 		if ( !this.hasTitle ) {
 			this.element.removeAttr( "title" );
@@ -122,7 +122,7 @@ $.widget( "ui.button", {
 				.removeClass( this.options.icon );
 		}
 		if( key === "text" ) {
-			this.element.toggleClass( "ui-icon-notext", !( !!value ) )
+			this.element.toggleClass( ".ui-button-icon-only", !( !!value ) )
 				.toggleClass( this.options.iconPosition, !!value );
 			this._setTitle();
 		}

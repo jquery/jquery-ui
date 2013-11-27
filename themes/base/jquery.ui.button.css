@@ -27,23 +27,31 @@
 .ui-button:active {
 	text-decoration: none;
 }
-/* to make room for the icon, a width needs to be set here */
-.ui-button-icon-only {
-	width: 2.2em;
+/* Styles for icon only buttons */
+
+.ui-button-icon-only:after {
+	left: 50%;
+	margin-left: -8px;
 }
-/* button elements seem to need a little more width */
-button.ui-button-icon-only {
-	width: 2.4em;
+
+.ui-button.ui-icon.ui-button-icon-only {
+	padding: 0;
+	width: 2.1em;
+	height: 2.1em;
+	text-indent: -9999px;
+	white-space: nowrap;
 }
-.ui-button-icons-only {
-	width: 3.4em;
-}
-button.ui-button-icons-only {
-	width: 3.7em;
+
+input.ui-button.ui-icon.ui-button-icon-only {
+	width: auto;
+	height: auto;
+	text-indent: 0;
+	white-space: normal;
+	padding: .4em 1em;
 }
 
 /* no icon support for input elements, provide padding by default */
-input.ui-button {
+input.ui-button.ui-icon {
 	padding: .4em 1em;
 }
 
