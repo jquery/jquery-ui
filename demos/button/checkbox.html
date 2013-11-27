@@ -11,27 +11,49 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#check" ).button();
-		$( "#format" ).buttonset();
+
 	});
 	</script>
 	<style>
 	#format { margin-top: 2em; }
+	.ui-checkbox{
+		display:none;
+	}
+	.ui-checkbox-label:after{
+		background-color:#ccc;
+		border-radius: .12em;
+	}
+	.ui-radio-label:after{
+		background-color:#ccc;
+		border-radius: 1em;
+	}
+	label.ui-button.ui-icon{
+		padding-left: 2.5em;
+	}
 	</style>
 </head>
 <body>
-
-<input type="checkbox" id="check" /><label for="check">Toggle</label>
-
-<div id="format">
-	<input type="checkbox" id="check1" /><label for="check1">B</label>
-	<input type="checkbox" id="check2" /><label for="check2">I</label>
-	<input type="checkbox" id="check3" /><label for="check3">U</label>
+<div class="demo-description">
+	css for new checkbox widget
 </div>
 
-<div class="demo-description">
-<p>A checkbox is styled as a toggle button with the button widget. The label element associated with the checkbox is used for the button text.</p>
-<p>This demo also demonstrates three checkboxes styled as a button set by calling <code>.buttonset()</code> on a common container.</p>
+	<input type="checkbox" id="check" class="ui-helper-hidden-accessible"/>
+	<label for="check" class="ui-button ui-icon ui-icon-check ui-widget ui-corner-all ui-checkbox-label ui-state-active">Checked icon true</label>
+	<input type="checkbox" id="check" class="ui-helper-hidden-accessible"/>
+	<label class="ui-button ui-icon ui-icon-blank ui-widget ui-corner-all ui-checkbox-label" for="check">Unchecked icon true</label>
+
+	<input type="checkbox" id="check" class="ui-helper-hidden-accessible"/>
+	<label class="ui-button  ui-widget ui-corner-all ui-state-active"  for="check">Checked icon false</label>
+
+	<input type="checkbox" id="check" class="ui-helper-hidden-accessible"/>
+	<label class="ui-button ui-widget ui-corner-all" for="check">Unchecked icon false</label>
+
+	<input type="checkbox" id="check" class="ui-helper-hidden-accessible"/>
+	<label class="ui-button ui-icon ui-icon-bullet ui-widget ui-corner-all ui-state-active ui-radio-label" for="check">Radio icon true</label>
+
+	<input type="checkbox" id="check" class="ui-helper-hidden-accessible"/>
+	<label class="ui-button ui-icon ui-icon-blank ui-widget ui-corner-all ui-radio-label"  for="check">Radio icon true unchecked</label>
+
 </div>
 </body>
 </html>
