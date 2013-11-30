@@ -1,1585 +1,1788 @@
 /*!
- * Globalize
+ * Globalize v1.0.0pre
  *
  * http://github.com/jquery/globalize
  *
- * Copyright Software Freedom Conservancy, Inc.
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors
+ * Released under the MIT license
  * http://jquery.org/license
+ *
+ * Date: 2013-12-01T12:08Z
  */
+(function( root, factory ) {
 
-(function( window, undefined ) {
-
-var Globalize,
-	// private variables
-	regexHex,
-	regexInfinity,
-	regexParseFloat,
-	regexTrim,
-	// private JavaScript utility functions
-	arrayIndexOf,
-	endsWith,
-	extend,
-	isArray,
-	isFunction,
-	isObject,
-	startsWith,
-	trim,
-	truncate,
-	zeroPad,
-	// private Globalization utility functions
-	appendPreOrPostMatch,
-	expandFormat,
-	formatDate,
-	formatNumber,
-	getTokenRegExp,
-	getEra,
-	getEraYear,
-	parseExact,
-	parseNegativePattern;
-
-// Global variable (Globalize) or CommonJS module (globalize)
-Globalize = function( cultureSelector ) {
-	return new Globalize.prototype.init( cultureSelector );
-};
-
-if ( typeof require !== "undefined" &&
-	typeof exports !== "undefined" &&
-	typeof module !== "undefined" ) {
-	// Assume CommonJS
-	module.exports = Globalize;
-} else {
-	// Export as global variable
-	window.Globalize = Globalize;
-}
-
-Globalize.cultures = {};
-
-Globalize.prototype = {
-	constructor: Globalize,
-	init: function( cultureSelector ) {
-		this.cultures = Globalize.cultures;
-		this.cultureSelector = cultureSelector;
-
-		return this;
-	}
-};
-Globalize.prototype.init.prototype = Globalize.prototype;
-
-// 1. When defining a culture, all fields are required except the ones stated as optional.
-// 2. Each culture should have a ".calendars" object with at least one calendar named "standard"
-//    which serves as the default calendar in use by that culture.
-// 3. Each culture should have a ".calendar" object which is the current calendar being used,
-//    it may be dynamically changed at any time to one of the calendars in ".calendars".
-Globalize.cultures[ "default" ] = {
-	// A unique name for the culture in the form <language code>-<country/region code>
-	name: "en",
-	// the name of the culture in the english language
-	englishName: "English",
-	// the name of the culture in its own language
-	nativeName: "English",
-	// whether the culture uses right-to-left text
-	isRTL: false,
-	// "language" is used for so-called "specific" cultures.
-	// For example, the culture "es-CL" means "Spanish, in Chili".
-	// It represents the Spanish-speaking culture as it is in Chili,
-	// which might have different formatting rules or even translations
-	// than Spanish in Spain. A "neutral" culture is one that is not
-	// specific to a region. For example, the culture "es" is the generic
-	// Spanish culture, which may be a more generalized version of the language
-	// that may or may not be what a specific culture expects.
-	// For a specific culture like "es-CL", the "language" field refers to the
-	// neutral, generic culture information for the language it is using.
-	// This is not always a simple matter of the string before the dash.
-	// For example, the "zh-Hans" culture is netural (Simplified Chinese).
-	// And the "zh-SG" culture is Simplified Chinese in Singapore, whose lanugage
-	// field is "zh-CHS", not "zh".
-	// This field should be used to navigate from a specific culture to it's
-	// more general, neutral culture. If a culture is already as general as it
-	// can get, the language may refer to itself.
-	language: "en",
-	// numberFormat defines general number formatting rules, like the digits in
-	// each grouping, the group separator, and how negative numbers are displayed.
-	numberFormat: {
-		// [negativePattern]
-		// Note, numberFormat.pattern has no "positivePattern" unlike percent and currency,
-		// but is still defined as an array for consistency with them.
-		//   negativePattern: one of "(n)|-n|- n|n-|n -"
-		pattern: [ "-n" ],
-		// number of decimal places normally shown
-		decimals: 2,
-		// string that separates number groups, as in 1,000,000
-		",": ",",
-		// string that separates a number from the fractional portion, as in 1.99
-		".": ".",
-		// array of numbers indicating the size of each number group.
-		// TODO: more detailed description and example
-		groupSizes: [ 3 ],
-		// symbol used for positive numbers
-		"+": "+",
-		// symbol used for negative numbers
-		"-": "-",
-		// symbol used for NaN (Not-A-Number)
-		"NaN": "NaN",
-		// symbol used for Negative Infinity
-		negativeInfinity: "-Infinity",
-		// symbol used for Positive Infinity
-		positiveInfinity: "Infinity",
-		percent: {
-			// [negativePattern, positivePattern]
-			//   negativePattern: one of "-n %|-n%|-%n|%-n|%n-|n-%|n%-|-% n|n %-|% n-|% -n|n- %"
-			//   positivePattern: one of "n %|n%|%n|% n"
-			pattern: [ "-n %", "n %" ],
-			// number of decimal places normally shown
-			decimals: 2,
-			// array of numbers indicating the size of each number group.
-			// TODO: more detailed description and example
-			groupSizes: [ 3 ],
-			// string that separates number groups, as in 1,000,000
-			",": ",",
-			// string that separates a number from the fractional portion, as in 1.99
-			".": ".",
-			// symbol used to represent a percentage
-			symbol: "%"
-		},
-		currency: {
-			// [negativePattern, positivePattern]
-			//   negativePattern: one of "($n)|-$n|$-n|$n-|(n$)|-n$|n-$|n$-|-n $|-$ n|n $-|$ n-|$ -n|n- $|($ n)|(n $)"
-			//   positivePattern: one of "$n|n$|$ n|n $"
-			pattern: [ "($n)", "$n" ],
-			// number of decimal places normally shown
-			decimals: 2,
-			// array of numbers indicating the size of each number group.
-			// TODO: more detailed description and example
-			groupSizes: [ 3 ],
-			// string that separates number groups, as in 1,000,000
-			",": ",",
-			// string that separates a number from the fractional portion, as in 1.99
-			".": ".",
-			// symbol used to represent currency
-			symbol: "$"
-		}
-	},
-	// calendars defines all the possible calendars used by this culture.
-	// There should be at least one defined with name "standard", and is the default
-	// calendar used by the culture.
-	// A calendar contains information about how dates are formatted, information about
-	// the calendar's eras, a standard set of the date formats,
-	// translations for day and month names, and if the calendar is not based on the Gregorian
-	// calendar, conversion functions to and from the Gregorian calendar.
-	calendars: {
-		standard: {
-			// name that identifies the type of calendar this is
-			name: "Gregorian_USEnglish",
-			// separator of parts of a date (e.g. "/" in 11/05/1955)
-			"/": "/",
-			// separator of parts of a time (e.g. ":" in 05:44 PM)
-			":": ":",
-			// the first day of the week (0 = Sunday, 1 = Monday, etc)
-			firstDay: 0,
-			days: {
-				// full day names
-				names: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
-				// abbreviated day names
-				namesAbbr: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
-				// shortest day names
-				namesShort: [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" ]
-			},
-			months: {
-				// full month names (13 months for lunar calendards -- 13th month should be "" if not lunar)
-				names: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
-				// abbreviated month names
-				namesAbbr: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ]
-			},
-			// AM and PM designators in one of these forms:
-			// The usual view, and the upper and lower case versions
-			//   [ standard, lowercase, uppercase ]
-			// The culture does not use AM or PM (likely all standard date formats use 24 hour time)
-			//   null
-			AM: [ "AM", "am", "AM" ],
-			PM: [ "PM", "pm", "PM" ],
-			eras: [
-				// eras in reverse chronological order.
-				// name: the name of the era in this culture (e.g. A.D., C.E.)
-				// start: when the era starts in ticks (gregorian, gmt), null if it is the earliest supported era.
-				// offset: offset in years from gregorian calendar
-				{
-					"name": "A.D.",
-					"start": null,
-					"offset": 0
-				}
-			],
-			// when a two digit year is given, it will never be parsed as a four digit
-			// year greater than this year (in the appropriate era for the culture)
-			// Set it as a full year (e.g. 2029) or use an offset format starting from
-			// the current year: "+19" would correspond to 2029 if the current year 2010.
-			twoDigitYearMax: 2029,
-			// set of predefined date and time patterns used by the culture
-			// these represent the format someone in this culture would expect
-			// to see given the portions of the date that are shown.
-			patterns: {
-				// short date pattern
-				d: "M/d/yyyy",
-				// long date pattern
-				D: "dddd, MMMM dd, yyyy",
-				// short time pattern
-				t: "h:mm tt",
-				// long time pattern
-				T: "h:mm:ss tt",
-				// long date, short time pattern
-				f: "dddd, MMMM dd, yyyy h:mm tt",
-				// long date, long time pattern
-				F: "dddd, MMMM dd, yyyy h:mm:ss tt",
-				// month/day pattern
-				M: "MMMM dd",
-				// month/year pattern
-				Y: "yyyy MMMM",
-				// S is a sortable format that does not vary by culture
-				S: "yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss"
-			}
-			// optional fields for each calendar:
-			/*
-			monthsGenitive:
-				Same as months but used when the day preceeds the month.
-				Omit if the culture has no genitive distinction in month names.
-				For an explaination of genitive months, see http://blogs.msdn.com/michkap/archive/2004/12/25/332259.aspx
-			convert:
-				Allows for the support of non-gregorian based calendars. This convert object is used to
-				to convert a date to and from a gregorian calendar date to handle parsing and formatting.
-				The two functions:
-					fromGregorian( date )
-						Given the date as a parameter, return an array with parts [ year, month, day ]
-						corresponding to the non-gregorian based year, month, and day for the calendar.
-					toGregorian( year, month, day )
-						Given the non-gregorian year, month, and day, return a new Date() object
-						set to the corresponding date in the gregorian calendar.
-			*/
-		}
-	},
-	// For localized strings
-	messages: {}
-};
-
-Globalize.cultures[ "default" ].calendar = Globalize.cultures[ "default" ].calendars.standard;
-
-Globalize.cultures.en = Globalize.cultures[ "default" ];
-
-Globalize.cultureSelector = "en";
-
-//
-// private variables
-//
-
-regexHex = /^0x[a-f0-9]+$/i;
-regexInfinity = /^[+\-]?infinity$/i;
-regexParseFloat = /^[+\-]?\d*\.?\d*(e[+\-]?\d+)?$/;
-regexTrim = /^\s+|\s+$/g;
-
-//
-// private JavaScript utility functions
-//
-
-arrayIndexOf = function( array, item ) {
-	if ( array.indexOf ) {
-		return array.indexOf( item );
-	}
-	for ( var i = 0, length = array.length; i < length; i++ ) {
-		if ( array[i] === item ) {
-			return i;
-		}
-	}
-	return -1;
-};
-
-endsWith = function( value, pattern ) {
-	return value.substr( value.length - pattern.length ) === pattern;
-};
-
-extend = function() {
-	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0] || {},
-		i = 1,
-		length = arguments.length,
-		deep = false;
-
-	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
+	if ( typeof define === "function" && define.amd ) {
+		// AMD.
+		define( factory );
+	} else if ( typeof module === "object" && typeof module.exports === "object" ) {
+		// Node. CommonJS.
+		module.exports = factory();
+	} else {
+		// Global
+		root.Globalize = factory();
 	}
 
-	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && !isFunction(target) ) {
-		target = {};
-	}
+}( this, function() {
 
-	for ( ; i < length; i++ ) {
-		// Only deal with non-null/undefined values
-		if ( (options = arguments[ i ]) != null ) {
-			// Extend the base object
-			for ( name in options ) {
-				src = target[ name ];
-				copy = options[ name ];
+/**
+ * CLDR JavaScript Library v0.2.4-pre
+ * http://jquery.com/
+ *
+ * Copyright 2013 Rafael Xavier de Souza
+ * Released under the MIT license
+ * http://jquery.org/license
+ *
+ * Date: 2013-11-30T11:30Z
+ */
+/*!
+ * CLDR JavaScript Library v0.2.4-pre 2013-11-30T11:30Z MIT license © Rafael Xavier
+ * http://git.io/h4lmVg
+ */
+	var Cldr = (function() {
 
-				// Prevent never-ending loop
-				if ( target === copy ) {
-					continue;
-				}
 
-				// Recurse if we're merging plain objects or arrays
-				if ( deep && copy && ( isObject(copy) || (copyIsArray = isArray(copy)) ) ) {
-					if ( copyIsArray ) {
-						copyIsArray = false;
-						clone = src && isArray(src) ? src : [];
 
-					} else {
-						clone = src && isObject(src) ? src : {};
-					}
-
-					// Never move original objects, clone them
-					target[ name ] = extend( deep, clone, copy );
-
-				// Don't bring in undefined values
-				} else if ( copy !== undefined ) {
-					target[ name ] = copy;
-				}
-			}
-		}
-	}
-
-	// Return the modified object
-	return target;
-};
-
-isArray = Array.isArray || function( obj ) {
-	return Object.prototype.toString.call( obj ) === "[object Array]";
-};
-
-isFunction = function( obj ) {
-	return Object.prototype.toString.call( obj ) === "[object Function]";
-};
-
-isObject = function( obj ) {
-	return Object.prototype.toString.call( obj ) === "[object Object]";
-};
-
-startsWith = function( value, pattern ) {
-	return value.indexOf( pattern ) === 0;
-};
-
-trim = function( value ) {
-	return ( value + "" ).replace( regexTrim, "" );
-};
-
-truncate = function( value ) {
-	if ( isNaN( value ) ) {
-		return NaN;
-	}
-	return Math[ value < 0 ? "ceil" : "floor" ]( value );
-};
-
-zeroPad = function( str, count, left ) {
-	var l;
-	for ( l = str.length; l < count; l += 1 ) {
-		str = ( left ? ("0" + str) : (str + "0") );
-	}
-	return str;
-};
-
-//
-// private Globalization utility functions
-//
-
-appendPreOrPostMatch = function( preMatch, strings ) {
-	// appends pre- and post- token match strings while removing escaped characters.
-	// Returns a single quote count which is used to determine if the token occurs
-	// in a string literal.
-	var quoteCount = 0,
-		escaped = false;
-	for ( var i = 0, il = preMatch.length; i < il; i++ ) {
-		var c = preMatch.charAt( i );
-		switch ( c ) {
-			case "\'":
-				if ( escaped ) {
-					strings.push( "\'" );
-				}
-				else {
-					quoteCount++;
-				}
-				escaped = false;
-				break;
-			case "\\":
-				if ( escaped ) {
-					strings.push( "\\" );
-				}
-				escaped = !escaped;
-				break;
-			default:
-				strings.push( c );
-				escaped = false;
-				break;
-		}
-	}
-	return quoteCount;
-};
-
-expandFormat = function( cal, format ) {
-	// expands unspecified or single character date formats into the full pattern.
-	format = format || "F";
-	var pattern,
-		patterns = cal.patterns,
-		len = format.length;
-	if ( len === 1 ) {
-		pattern = patterns[ format ];
-		if ( !pattern ) {
-			throw "Invalid date format string \'" + format + "\'.";
-		}
-		format = pattern;
-	}
-	else if ( len === 2 && format.charAt(0) === "%" ) {
-		// %X escape format -- intended as a custom format string that is only one character, not a built-in format.
-		format = format.charAt( 1 );
-	}
-	return format;
-};
-
-formatDate = function( value, format, culture ) {
-	var cal = culture.calendar,
-		convert = cal.convert,
-		ret;
-
-	if ( !format || !format.length || format === "i" ) {
-		if ( culture && culture.name.length ) {
-			if ( convert ) {
-				// non-gregorian calendar, so we cannot use built-in toLocaleString()
-				ret = formatDate( value, cal.patterns.F, culture );
-			}
-			else {
-				var eraDate = new Date( value.getTime() ),
-					era = getEra( value, cal.eras );
-				eraDate.setFullYear( getEraYear(value, cal, era) );
-				ret = eraDate.toLocaleString();
-			}
-		}
-		else {
-			ret = value.toString();
-		}
-		return ret;
-	}
-
-	var eras = cal.eras,
-		sortable = format === "s";
-	format = expandFormat( cal, format );
-
-	// Start with an empty string
-	ret = [];
-	var hour,
-		zeros = [ "0", "00", "000" ],
-		foundDay,
-		checkedDay,
-		dayPartRegExp = /([^d]|^)(d|dd)([^d]|$)/g,
-		quoteCount = 0,
-		tokenRegExp = getTokenRegExp(),
-		converted;
-
-	function padZeros( num, c ) {
-		var r, s = num + "";
-		if ( c > 1 && s.length < c ) {
-			r = ( zeros[c - 2] + s);
-			return r.substr( r.length - c, c );
-		}
-		else {
-			r = s;
-		}
-		return r;
-	}
-
-	function hasDay() {
-		if ( foundDay || checkedDay ) {
-			return foundDay;
-		}
-		foundDay = dayPartRegExp.test( format );
-		checkedDay = true;
-		return foundDay;
-	}
-
-	function getPart( date, part ) {
-		if ( converted ) {
-			return converted[ part ];
-		}
-		switch ( part ) {
-			case 0:
-				return date.getFullYear();
-			case 1:
-				return date.getMonth();
-			case 2:
-				return date.getDate();
-			default:
-				throw "Invalid part value " + part;
-		}
-	}
-
-	if ( !sortable && convert ) {
-		converted = convert.fromGregorian( value );
-	}
-
-	for ( ; ; ) {
-		// Save the current index
-		var index = tokenRegExp.lastIndex,
-			// Look for the next pattern
-			ar = tokenRegExp.exec( format );
-
-		// Append the text before the pattern (or the end of the string if not found)
-		var preMatch = format.slice( index, ar ? ar.index : format.length );
-		quoteCount += appendPreOrPostMatch( preMatch, ret );
-
-		if ( !ar ) {
-			break;
-		}
-
-		// do not replace any matches that occur inside a string literal.
-		if ( quoteCount % 2 ) {
-			ret.push( ar[0] );
-			continue;
-		}
-
-		var current = ar[ 0 ],
-			clength = current.length;
-
-		switch ( current ) {
-			case "ddd":
-				//Day of the week, as a three-letter abbreviation
-			case "dddd":
-				// Day of the week, using the full name
-				var names = ( clength === 3 ) ? cal.days.namesAbbr : cal.days.names;
-				ret.push( names[value.getDay()] );
-				break;
-			case "d":
-				// Day of month, without leading zero for single-digit days
-			case "dd":
-				// Day of month, with leading zero for single-digit days
-				foundDay = true;
-				ret.push(
-					padZeros( getPart(value, 2), clength )
-				);
-				break;
-			case "MMM":
-				// Month, as a three-letter abbreviation
-			case "MMMM":
-				// Month, using the full name
-				var part = getPart( value, 1 );
-				ret.push(
-					( cal.monthsGenitive && hasDay() ) ?
-					( cal.monthsGenitive[ clength === 3 ? "namesAbbr" : "names" ][ part ] ) :
-					( cal.months[ clength === 3 ? "namesAbbr" : "names" ][ part ] )
-				);
-				break;
-			case "M":
-				// Month, as digits, with no leading zero for single-digit months
-			case "MM":
-				// Month, as digits, with leading zero for single-digit months
-				ret.push(
-					padZeros( getPart(value, 1) + 1, clength )
-				);
-				break;
-			case "y":
-				// Year, as two digits, but with no leading zero for years less than 10
-			case "yy":
-				// Year, as two digits, with leading zero for years less than 10
-			case "yyyy":
-				// Year represented by four full digits
-				part = converted ? converted[ 0 ] : getEraYear( value, cal, getEra(value, eras), sortable );
-				if ( clength < 4 ) {
-					part = part % 100;
-				}
-				ret.push(
-					padZeros( part, clength )
-				);
-				break;
-			case "h":
-				// Hours with no leading zero for single-digit hours, using 12-hour clock
-			case "hh":
-				// Hours with leading zero for single-digit hours, using 12-hour clock
-				hour = value.getHours() % 12;
-				if ( hour === 0 ) hour = 12;
-				ret.push(
-					padZeros( hour, clength )
-				);
-				break;
-			case "H":
-				// Hours with no leading zero for single-digit hours, using 24-hour clock
-			case "HH":
-				// Hours with leading zero for single-digit hours, using 24-hour clock
-				ret.push(
-					padZeros( value.getHours(), clength )
-				);
-				break;
-			case "m":
-				// Minutes with no leading zero for single-digit minutes
-			case "mm":
-				// Minutes with leading zero for single-digit minutes
-				ret.push(
-					padZeros( value.getMinutes(), clength )
-				);
-				break;
-			case "s":
-				// Seconds with no leading zero for single-digit seconds
-			case "ss":
-				// Seconds with leading zero for single-digit seconds
-				ret.push(
-					padZeros( value.getSeconds(), clength )
-				);
-				break;
-			case "t":
-				// One character am/pm indicator ("a" or "p")
-			case "tt":
-				// Multicharacter am/pm indicator
-				part = value.getHours() < 12 ? ( cal.AM ? cal.AM[0] : " " ) : ( cal.PM ? cal.PM[0] : " " );
-				ret.push( clength === 1 ? part.charAt(0) : part );
-				break;
-			case "f":
-				// Deciseconds
-			case "ff":
-				// Centiseconds
-			case "fff":
-				// Milliseconds
-				ret.push(
-					padZeros( value.getMilliseconds(), 3 ).substr( 0, clength )
-				);
-				break;
-			case "z":
-				// Time zone offset, no leading zero
-			case "zz":
-				// Time zone offset with leading zero
-				hour = value.getTimezoneOffset() / 60;
-				ret.push(
-					( hour <= 0 ? "+" : "-" ) + padZeros( Math.floor(Math.abs(hour)), clength )
-				);
-				break;
-			case "zzz":
-				// Time zone offset with leading zero
-				hour = value.getTimezoneOffset() / 60;
-				ret.push(
-					( hour <= 0 ? "+" : "-" ) + padZeros( Math.floor(Math.abs(hour)), 2 ) +
-					// Hard coded ":" separator, rather than using cal.TimeSeparator
-					// Repeated here for consistency, plus ":" was already assumed in date parsing.
-					":" + padZeros( Math.abs(value.getTimezoneOffset() % 60), 2 )
-				);
-				break;
-			case "g":
-			case "gg":
-				if ( cal.eras ) {
-					ret.push(
-						cal.eras[ getEra(value, eras) ].name
-					);
-				}
-				break;
-		case "/":
-			ret.push( cal["/"] );
-			break;
-		default:
-			throw "Invalid date format pattern \'" + current + "\'.";
-		}
-	}
-	return ret.join( "" );
-};
-
-// formatNumber
-(function() {
-	var expandNumber;
-
-	expandNumber = function( number, precision, formatInfo ) {
-		var groupSizes = formatInfo.groupSizes,
-			curSize = groupSizes[ 0 ],
-			curGroupIndex = 1,
-			factor = Math.pow( 10, precision ),
-			rounded = Math.round( number * factor ) / factor;
-
-		if ( !isFinite(rounded) ) {
-			rounded = number;
-		}
-		number = rounded;
-
-		var numberString = number+"",
-			right = "",
-			split = numberString.split( /e/i ),
-			exponent = split.length > 1 ? parseInt( split[1], 10 ) : 0;
-		numberString = split[ 0 ];
-		split = numberString.split( "." );
-		numberString = split[ 0 ];
-		right = split.length > 1 ? split[ 1 ] : "";
-
-		if ( exponent > 0 ) {
-			right = zeroPad( right, exponent, false );
-			numberString += right.slice( 0, exponent );
-			right = right.substr( exponent );
-		}
-		else if ( exponent < 0 ) {
-			exponent = -exponent;
-			numberString = zeroPad( numberString, exponent + 1, true );
-			right = numberString.slice( -exponent, numberString.length ) + right;
-			numberString = numberString.slice( 0, -exponent );
-		}
-
-		if ( precision > 0 ) {
-			right = formatInfo[ "." ] +
-				( (right.length > precision) ? right.slice(0, precision) : zeroPad(right, precision) );
-		}
-		else {
-			right = "";
-		}
-
-		var stringIndex = numberString.length - 1,
-			sep = formatInfo[ "," ],
-			ret = "";
-
-		while ( stringIndex >= 0 ) {
-			if ( curSize === 0 || curSize > stringIndex ) {
-				return numberString.slice( 0, stringIndex + 1 ) + ( ret.length ? (sep + ret + right) : right );
-			}
-			ret = numberString.slice( stringIndex - curSize + 1, stringIndex + 1 ) + ( ret.length ? (sep + ret) : "" );
-
-			stringIndex -= curSize;
-
-			if ( curGroupIndex < groupSizes.length ) {
-				curSize = groupSizes[ curGroupIndex ];
-				curGroupIndex++;
-			}
-		}
-
-		return numberString.slice( 0, stringIndex + 1 ) + sep + ret + right;
+	var alwaysArray = function( stringOrArray ) {
+		return typeof stringOrArray === "string" ?  [ stringOrArray ] : stringOrArray;
 	};
 
-	formatNumber = function( value, format, culture ) {
-		if ( !isFinite(value) ) {
-			if ( value === Infinity ) {
-				return culture.numberFormat.positiveInfinity;
-			}
-			if ( value === -Infinity ) {
-				return culture.numberFormat.negativeInfinity;
-			}
-			return culture.numberFormat.NaN;
-		}
-		if ( !format || format === "i" ) {
-			return culture.name.length ? value.toLocaleString() : value.toString();
-		}
-		format = format || "D";
 
-		var nf = culture.numberFormat,
-			number = Math.abs( value ),
-			precision = -1,
-			pattern;
-		if ( format.length > 1 ) precision = parseInt( format.slice(1), 10 );
 
-		var current = format.charAt( 0 ).toUpperCase(),
-			formatInfo;
 
-		switch ( current ) {
-			case "D":
-				pattern = "n";
-				number = truncate( number );
-				if ( precision !== -1 ) {
-					number = zeroPad( "" + number, precision, true );
-				}
-				if ( value < 0 ) number = "-" + number;
-				break;
-			case "N":
-				formatInfo = nf;
-				/* falls through */
-			case "C":
-				formatInfo = formatInfo || nf.currency;
-				/* falls through */
-			case "P":
-				formatInfo = formatInfo || nf.percent;
-				pattern = value < 0 ? formatInfo.pattern[ 0 ] : ( formatInfo.pattern[1] || "n" );
-				if ( precision === -1 ) precision = formatInfo.decimals;
-				number = expandNumber( number * (current === "P" ? 100 : 1), precision, formatInfo );
-				break;
-			default:
-				throw "Bad number format specifier: " + current;
-		}
+	var common = function( Cldr ) {
 
-		var patternParts = /n|\$|-|%/g,
-			ret = "";
-		for ( ; ; ) {
-			var index = patternParts.lastIndex,
-				ar = patternParts.exec( pattern );
+		Cldr.prototype.main = function( path ) {
+			path = alwaysArray( path );
+			return this.get( [ "main/{languageId}" ].concat( path ) );
+		};
 
-			ret += pattern.slice( index, ar ? ar.index : pattern.length );
-
-			if ( !ar ) {
-				break;
-			}
-
-			switch ( ar[0] ) {
-				case "n":
-					ret += number;
-					break;
-				case "$":
-					ret += nf.currency.symbol;
-					break;
-				case "-":
-					// don't make 0 negative
-					if ( /[1-9]/.test(number) ) {
-						ret += nf[ "-" ];
-					}
-					break;
-				case "%":
-					ret += nf.percent.symbol;
-					break;
-			}
-		}
-
-		return ret;
 	};
+
+
+
+
+	var arrayIsArray = Array.isArray || function( obj ) {
+		return Object.prototype.toString.call( obj ) === "[object Array]";
+	};
+
+
+
+
+	var pathNormalize = function( path, attributes ) {
+		if ( arrayIsArray( path ) ) {
+			path = path.join( "/" );
+		}
+		if ( typeof path !== "string" ) {
+			throw new Error( "invalid path \"" + path + "\"" );
+		}
+		// 1: Ignore leading slash `/`
+		// 2: Ignore leading `cldr/`
+		path = path
+			.replace( /^\// , "" ) /* 1 */
+			.replace( /^cldr\// , "" ); /* 2 */
+
+		// Replace {attribute}'s
+		path = path.replace( /{[a-zA-Z]+}/g, function( name ) {
+			name = name.replace( /^{([^}]*)}$/, "$1" );
+			return attributes[ name ];
+		});
+
+		return path.split( "/" );
+	};
+
+
+
+
+	var arraySome = function( array, callback ) {
+		var i, length;
+		if ( array.some ) {
+			return array.some( callback );
+		}
+		for ( i = 0, length = array.length; i < length; i++ ) {
+			if ( callback( array[ i ], i, array ) ) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+
+
+
+	// Return the maximized language id as defined in
+	// http://www.unicode.org/reports/tr35/#Likely_Subtags
+	// 1. Canonicalize.
+	// 1.1 Make sure the input locale is in canonical form: uses the right separator, and has the right casing.
+	// TODO Right casing? What df? It seems languages are lowercase, scripts are Capitalized, territory is uppercase. I am leaving this as an exercise to the user.
+
+	// 1.2 Replace any deprecated subtags with their canonical values using the <alias> data in supplemental metadata. Use the first value in the replacement list, if it exists. Language tag replacements may have multiple parts, such as "sh" ➞ "sr_Latn" or mo" ➞ "ro_MD". In such a case, the original script and/or region are retained if there is one. Thus "sh_Arab_AQ" ➞ "sr_Arab_AQ", not "sr_Latn_AQ".
+	// TODO What <alias> data?
+
+	// 1.3 If the tag is grandfathered (see <variable id="$grandfathered" type="choice"> in the supplemental data), then return it.
+	// TODO grandfathered?
+
+	// 1.4 Remove the script code 'Zzzz' and the region code 'ZZ' if they occur.
+	// 1.5 Get the components of the cleaned-up source tag (languages, scripts, and regions), plus any variants and extensions.
+	// 2. Lookup. Lookup each of the following in order, and stop on the first match:
+	// 2.1 languages_scripts_regions
+	// 2.2 languages_regions
+	// 2.3 languages_scripts
+	// 2.4 languages
+	// 2.5 und_scripts
+	// 3. Return
+	// 3.1 If there is no match, either return an error value, or the match for "und" (in APIs where a valid language tag is required).
+	// 3.2 Otherwise there is a match = languagem_scriptm_regionm
+	// 3.3 Let xr = xs if xs is not empty, and xm otherwise.
+	// 3.4 Return the language tag composed of languager _ scriptr _ regionr + variants + extensions .
+
+	//
+	// @subtags [Array] normalized language id subtags tuple (see init.js).
+	var likelySubtags = function( cldr, subtags, options ) {
+		var match, matchFound,
+			language = subtags[ 0 ],
+			script = subtags[ 1 ],
+			territory = subtags[ 2 ];
+		options = options || {};
+
+		// Skip if (language, script, territory) is not empty [3.3]
+		if ( language !== "und" && script !== "Zzzz" && territory !== "ZZ" ) {
+			return [ language, script, territory ];
+		}
+
+		// Skip if no supplemental likelySubtags data is present
+		if ( typeof cldr.get( "supplemental/likelySubtags" ) === "undefined" ) {
+			return;
+		}
+
+		// [2]
+		matchFound = arraySome([
+			[ language, script, territory ],
+			[ language, territory ],
+			[ language, script ],
+			[ language ],
+			[ "und", script ]
+		], function( test ) {
+			return match = !(/\b(Zzzz|ZZ)\b/).test( test.join( "_" ) ) /* [1.4] */ && cldr.get( [ "supplemental/likelySubtags", test.join( "_" ) ] );
+		});
+
+		// [3]
+		if ( matchFound ) {
+			// [3.2 .. 3.4]
+			match = match.split( "_" );
+			return [
+				language !== "und" ? language : match[ 0 ],
+				script !== "Zzzz" ? script : match[ 1 ],
+				territory !== "ZZ" ? territory : match[ 2 ]
+			];
+		} else if ( options.force ) {
+			// [3.1.2]
+			return cldr.get( "supplemental/likelySubtags/und" ).split( "_" );
+		} else {
+			// [3.1.1]
+			return;
+		}
+	};
+
+
+
+	// Given a locale, remove any fields that Add Likely Subtags would add.
+	// http://www.unicode.org/reports/tr35/#Likely_Subtags
+	// 1. First get max = AddLikelySubtags(inputLocale). If an error is signaled, return it.
+	// 2. Remove the variants from max.
+	// 3. Then for trial in {language, language _ region, language _ script}. If AddLikelySubtags(trial) = max, then return trial + variants.
+	// 4. If you do not get a match, return max + variants.
+	// 
+	// @maxLanguageId [Array] maxLanguageId tuple (see init.js).
+	var removeLikelySubtags = function( cldr, maxLanguageId ) {
+		var match, matchFound,
+			language = maxLanguageId[ 0 ],
+			script = maxLanguageId[ 1 ],
+			territory = maxLanguageId[ 2 ];
+
+		// [3]
+		matchFound = arraySome([
+			[ [ language, "Zzzz", "ZZ" ], [ language ] ],
+			[ [ language, "Zzzz", territory ], [ language, territory ] ],
+			[ [ language, script, "ZZ" ], [ language, script ] ]
+		], function( test ) {
+			var result = likelySubtags( cldr, test[ 0 ] );
+			match = test[ 1 ];
+			return result && result[ 0 ] === maxLanguageId[ 0 ] &&
+				result[ 1 ] === maxLanguageId[ 1 ] &&
+				result[ 2 ] === maxLanguageId[ 2 ];
+		});
+
+		// [4]
+		return matchFound ?  match : maxLanguageId;
+	};
+
+
+
+
+	var supplemental = function( cldr ) {
+
+		var prepend, supplemental;
+		
+		prepend = function( prepend ) {
+			return function( path ) {
+				path = alwaysArray( path );
+				return cldr.get( [ prepend ].concat( path ) );
+			};
+		};
+
+		supplemental = prepend( "supplemental" );
+
+		// Week Data
+		// http://www.unicode.org/reports/tr35/tr35-dates.html#Week_Data
+		supplemental.weekData = prepend( "supplemental/weekData" );
+
+		supplemental.weekData.firstDay = function() {
+			return cldr.get( "supplemental/weekData/firstDay/{territory}" ) ||
+				cldr.get( "supplemental/weekData/firstDay/001" );
+		};
+
+		supplemental.weekData.minDays = function() {
+			var minDays = cldr.get( "supplemental/weekData/minDays/{territory}" ) ||
+				cldr.get( "supplemental/weekData/minDays/001" );
+			return parseInt( minDays, 10 );
+		};
+
+		// Time Data
+		// http://www.unicode.org/reports/tr35/tr35-dates.html#Time_Data
+		supplemental.timeData = prepend( "supplemental/timeData" );
+
+		supplemental.timeData.allowed = function() {
+			return cldr.get( "supplemental/timeData/{territory}/_allowed" ) ||
+				cldr.get( "supplemental/timeData/001/_allowed" );
+		};
+
+		supplemental.timeData.preferred = function() {
+			return cldr.get( "supplemental/timeData/{territory}/_preferred" ) ||
+				cldr.get( "supplemental/timeData/001/_preferred" );
+		};
+
+		return supplemental;
+
+	};
+
+
+
+
+	var init = function( locale ) {
+		var language, languageId, maxLanguageId, script, territory, unicodeLanguageId, variant;
+
+		if ( typeof locale !== "string" ) {
+			throw new Error( "invalid locale type: \"" + JSON.stringify( locale ) + "\"" );
+		}
+
+		// Normalize locale code.
+		// Get (or deduce) the "triple subtags": language, territory (also aliased as region), and script subtags.
+		// Get the variant subtags (calendar, collation, currency, etc).
+		// refs:
+		// - http://www.unicode.org/reports/tr35/#Field_Definitions
+		// - http://www.unicode.org/reports/tr35/#Language_and_Locale_IDs
+		// - http://www.unicode.org/reports/tr35/#Unicode_locale_identifier
+
+		locale = locale.replace( /-/, "_" );
+
+		// TODO normalize unicode locale extensions. Currently, skipped.
+		// unicodeLocaleExtensions = locale.split( "_u_" )[ 1 ];
+		locale = locale.split( "_u_" )[ 0 ];
+
+		// TODO normalize transformed extensions. Currently, skipped.
+		// transformedExtensions = locale.split( "_t_" )[ 1 ];
+		locale = locale.split( "_t_" )[ 0 ];
+
+		unicodeLanguageId = locale;
+
+		// unicodeLanguageId = ...
+		switch ( true ) {
+
+			// language_script_territory..
+			case /^[a-z]{2}_[A-Z][a-z]{3}_[A-Z0-9]{2}(\b|_)/.test( unicodeLanguageId ):
+				language = unicodeLanguageId.split( "_" )[ 0 ];
+				script = unicodeLanguageId.split( "_" )[ 1 ];
+				territory = unicodeLanguageId.split( "_" )[ 2 ];
+				variant = unicodeLanguageId.split( "_" )[ 3 ];
+				break;
+
+			// language_script..
+			case /^[a-z]{2}_[A-Z][a-z]{3}(\b|_)/.test( unicodeLanguageId ):
+				language = unicodeLanguageId.split( "_" )[ 0 ];
+				script = unicodeLanguageId.split( "_" )[ 1 ];
+				territory = "ZZ";
+				variant = unicodeLanguageId.split( "_" )[ 2 ];
+				break;
+
+			// language_territory..
+			case /^[a-z]{2}_[A-Z0-9]{2}(\b|_)/.test( unicodeLanguageId ):
+				language = unicodeLanguageId.split( "_" )[ 0 ];
+				script = "Zzzz";
+				territory = unicodeLanguageId.split( "_" )[ 1 ];
+				variant = unicodeLanguageId.split( "_" )[ 2 ];
+				break;
+
+			// language.., or root
+			case /^([a-z]{2}|root)(\b|_)/.test( unicodeLanguageId ):
+				language = unicodeLanguageId.split( "_" )[ 0 ];
+				script = "Zzzz";
+				territory = "ZZ";
+				variant = unicodeLanguageId.split( "_" )[ 1 ];
+				break;
+
+			default:
+				language = "und";
+				break;
+		}
+
+		// When a locale id does not specify a language, or territory (region), or script, they are obtained by Likely Subtags.
+		maxLanguageId = likelySubtags( this, [ language, script, territory ], { force: true } ) || unicodeLanguageId.split( "_" );
+		language = maxLanguageId[ 0 ];
+		script = maxLanguageId[ 1 ];
+		territory  = maxLanguageId[ 2 ];
+
+		// TODO json content distributed on zip file use languageId with `-` on main.<lang>. Why `-` vs. `_` ?
+		languageId = removeLikelySubtags( this, maxLanguageId ).join( "_" );
+
+		// Set attributes
+		this.attributes = {
+
+			// Unicode Language Id
+			languageId: languageId,
+			maxLanguageId: maxLanguageId.join( "_" ),
+
+			// Unicode Language Id Subtabs
+			language: language,
+			script: script,
+			territory: territory,
+			region: territory, /* alias */
+			variant: variant
+		};
+
+		this.locale = variant ? [ languageId, variant ].join( "_" ) : languageId;
+
+		// Inlcude supplemental helper
+		this.supplemental = supplemental( this );
+	};
+
+
+
+
+	// @path: normalized path
+	var resourceGet = function( data, path ) {
+		var i,
+			node = data,
+			length = path.length;
+
+		for ( i = 0; i < length - 1; i++ ) {
+			node = node[ path[ i ] ];
+			if ( !node ) {
+				return undefined;
+			}
+		}
+		return node[ path[ i ] ];
+	};
+
+
+
+
+	var bundleParentLookup = function( Cldr, locale ) {
+		var parent;
+
+		if ( locale === "root" ) {
+			return;
+		}
+
+		// First, try to find parent on supplemental data.
+		parent = resourceGet( Cldr._resolved, pathNormalize( [ "supplemental/parentLocales/parentLocale", locale ] ) );
+		if ( parent ) {
+			return parent;
+		}
+
+		// Or truncate locale.
+		parent = locale.substr( 0, locale.lastIndexOf( "_" ) );
+		if ( !parent ) {
+			return "root";
+		}
+
+		return parent;
+	};
+
+
+
+
+	// @path: normalized path
+	var resourceSet = function( data, path, value ) {
+		var i,
+			node = data,
+			length = path.length;
+
+		for ( i = 0; i < length - 1; i++ ) {
+			if ( !node[ path[ i ] ] ) {
+				node[ path[ i ] ] = {};
+			}
+			node = node[ path[ i ] ];
+		}
+		node[ path[ i ] ] = value;
+	};
+
+
+
+
+	var arrayForEach = function( array, callback ) {
+		var i, length;
+		if ( array.forEach ) {
+			return array.forEach( callback );
+		}
+		for ( i = 0, length = array.length; i < length; i++ ) {
+			callback( array[ i ], i, array );
+		}
+	};
+
+
+	var jsonMerge = (function() {
+
+	// Returns new deeply merged JSON.
+	//
+	// Eg.
+	// merge( { a: { b: 1, c: 2 } }, { a: { b: 3, d: 4 } } )
+	// -> { a: { b: 3, c: 2, d: 4 } }
+	//
+	// @arguments JSON's
+	// 
+	var merge = function() {
+		var destination = {},
+			sources = [].slice.call( arguments, 0 );
+		arrayForEach( sources, function( source ) {
+			var prop;
+			for ( prop in source ) {
+				if ( prop in destination && arrayIsArray( destination[ prop ] ) ) {
+
+					// Concat Arrays
+					destination[ prop ] = destination[ prop ].concat( source[ prop ] );
+
+				} else if ( prop in destination && typeof destination[ prop ] === "object" ) {
+
+					// Merge Objects
+					destination[ prop ] = merge( destination[ prop ], source[ prop ] );
+
+				} else {
+
+					// Set new values
+					destination[ prop ] = source[ prop ];
+
+				}
+			}
+		});
+		return destination;
+	};
+
+	return merge;
+
+}());
+	var itemLookup = (function() {
+
+	var lookup;
+
+	lookup = function( Cldr, locale, path, attributes, childLocale ) {
+		var normalizedPath, parent, value;
+
+		// 1: Finish recursion
+		// 2: Avoid infinite loop
+		if ( typeof locale === "undefined" /* 1 */ || locale === childLocale /* 2 */ ) {
+			return;
+		}
+
+		// Resolve path
+		normalizedPath = pathNormalize( path, attributes );
+
+		// Check resolved (cached) data first
+		value = resourceGet( Cldr._resolved, normalizedPath );
+		if ( value ) {
+			return value;
+		}
+
+		// Check raw data
+		value = resourceGet( Cldr._raw, normalizedPath );
+
+		if ( !value ) {
+			// Or, lookup at parent locale
+			parent = bundleParentLookup( Cldr, locale );
+			value = lookup( Cldr, parent, path, jsonMerge( attributes, { languageId: parent }), locale );
+		}
+
+		// Set resolved (cached)
+		resourceSet( Cldr._resolved, normalizedPath, value );
+
+		return value;
+	};
+
+	return lookup;
 
 }());
 
-getTokenRegExp = function() {
-	// regular expression for matching date and time tokens in format strings.
-	return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
-};
 
-getEra = function( date, eras ) {
-	if ( !eras ) return 0;
-	var start, ticks = date.getTime();
-	for ( var i = 0, l = eras.length; i < l; i++ ) {
-		start = eras[ i ].start;
-		if ( start === null || ticks >= start ) {
-			return i;
-		}
-	}
-	return 0;
-};
+	var itemGetResolved = function( Cldr, path, attributes ) {
+		// Resolve path
+		var normalizedPath = pathNormalize( path, attributes );
 
-getEraYear = function( date, cal, era, sortable ) {
-	var year = date.getFullYear();
-	if ( !sortable && cal.eras ) {
-		// convert normal gregorian year to era-shifted gregorian
-		// year by subtracting the era offset
-		year -= cal.eras[ era ].offset;
-	}
-	return year;
-};
-
-// parseExact
-(function() {
-	var expandYear,
-		getDayIndex,
-		getMonthIndex,
-		getParseRegExp,
-		outOfRange,
-		toUpper,
-		toUpperArray;
-
-	expandYear = function( cal, year ) {
-		// expands 2-digit year into 4 digits.
-		if ( year < 100 ) {
-			var now = new Date(),
-				era = getEra( now ),
-				curr = getEraYear( now, cal, era ),
-				twoDigitYearMax = cal.twoDigitYearMax;
-			twoDigitYearMax = typeof twoDigitYearMax === "string" ? new Date().getFullYear() % 100 + parseInt( twoDigitYearMax, 10 ) : twoDigitYearMax;
-			year += curr - ( curr % 100 );
-			if ( year > twoDigitYearMax ) {
-				year -= 100;
-			}
-		}
-		return year;
+		return resourceGet( Cldr._resolved, normalizedPath );
 	};
 
-	getDayIndex = function	( cal, value, abbr ) {
-		var ret,
-			days = cal.days,
-			upperDays = cal._upperDays;
-		if ( !upperDays ) {
-			cal._upperDays = upperDays = [
-				toUpperArray( days.names ),
-				toUpperArray( days.namesAbbr ),
-				toUpperArray( days.namesShort )
-			];
-		}
-		value = toUpper( value );
-		if ( abbr ) {
-			ret = arrayIndexOf( upperDays[1], value );
-			if ( ret === -1 ) {
-				ret = arrayIndexOf( upperDays[2], value );
-			}
-		}
-		else {
-			ret = arrayIndexOf( upperDays[0], value );
-		}
-		return ret;
+
+
+
+	var Cldr = function() {
+		init.apply( this, arguments );
 	};
 
-	getMonthIndex = function( cal, value, abbr ) {
-		var months = cal.months,
-			monthsGen = cal.monthsGenitive || cal.months,
-			upperMonths = cal._upperMonths,
-			upperMonthsGen = cal._upperMonthsGen;
-		if ( !upperMonths ) {
-			cal._upperMonths = upperMonths = [
-				toUpperArray( months.names ),
-				toUpperArray( months.namesAbbr )
-			];
-			cal._upperMonthsGen = upperMonthsGen = [
-				toUpperArray( monthsGen.names ),
-				toUpperArray( monthsGen.namesAbbr )
-			];
+	Cldr._resolved = {};
+	Cldr._raw = {};
+
+	// Load resolved or unresolved cldr data
+	// @json [JSON]
+	Cldr.load = function( json ) {
+		if ( typeof json !== "object" ) {
+			throw new Error( "invalid json" );
 		}
-		value = toUpper( value );
-		var i = arrayIndexOf( abbr ? upperMonths[1] : upperMonths[0], value );
-		if ( i < 0 ) {
-			i = arrayIndexOf( abbr ? upperMonthsGen[1] : upperMonthsGen[0], value );
-		}
-		return i;
+		Cldr._raw = jsonMerge( Cldr._raw, json );
 	};
 
-	getParseRegExp = function( cal, format ) {
-		// converts a format string into a regular expression with groups that
-		// can be used to extract date fields from a date string.
-		// check for a cached parse regex.
-		var re = cal._parseRegExp;
-		if ( !re ) {
-			cal._parseRegExp = re = {};
-		}
-		else {
-			var reFormat = re[ format ];
-			if ( reFormat ) {
-				return reFormat;
-			}
-		}
+	Cldr.prototype.get = function( path ) {
+		// Simplify locale using languageId (there are no other resource bundles)
+		// 1: during init(), get is called, but languageId is not defined. Use "" as a workaround in this very specific scenario.
+		var locale = this.attributes && this.attributes.languageId || "" /* 1 */;
 
-		// expand single digit formats, then escape regular expression characters.
-		var expFormat = expandFormat( cal, format ).replace( /([\^\$\.\*\+\?\|\[\]\(\)\{\}])/g, "\\\\$1" ),
-			regexp = [ "^" ],
-			groups = [],
-			index = 0,
-			quoteCount = 0,
-			tokenRegExp = getTokenRegExp(),
-			match;
-
-		// iterate through each date token found.
-		while ( (match = tokenRegExp.exec(expFormat)) !== null ) {
-			var preMatch = expFormat.slice( index, match.index );
-			index = tokenRegExp.lastIndex;
-
-			// don't replace any matches that occur inside a string literal.
-			quoteCount += appendPreOrPostMatch( preMatch, regexp );
-			if ( quoteCount % 2 ) {
-				regexp.push( match[0] );
-				continue;
-			}
-
-			// add a regex group for the token.
-			var m = match[ 0 ],
-				len = m.length,
-				add;
-			switch ( m ) {
-				case "dddd": case "ddd":
-				case "MMMM": case "MMM":
-				case "gg": case "g":
-					add = "(\\D+)";
-					break;
-				case "tt": case "t":
-					add = "(\\D*)";
-					break;
-				case "yyyy":
-				case "fff":
-				case "ff":
-				case "f":
-					add = "(\\d{" + len + "})";
-					break;
-				case "dd": case "d":
-				case "MM": case "M":
-				case "yy": case "y":
-				case "HH": case "H":
-				case "hh": case "h":
-				case "mm": case "m":
-				case "ss": case "s":
-					add = "(\\d\\d?)";
-					break;
-				case "zzz":
-					add = "([+-]?\\d\\d?:\\d{2})";
-					break;
-				case "zz": case "z":
-					add = "([+-]?\\d\\d?)";
-					break;
-				case "/":
-					add = "(\\/)";
-					break;
-				default:
-					throw "Invalid date format pattern \'" + m + "\'.";
-			}
-			if ( add ) {
-				regexp.push( add );
-			}
-			groups.push( match[0] );
-		}
-		appendPreOrPostMatch( expFormat.slice(index), regexp );
-		regexp.push( "$" );
-
-		// allow whitespace to differ when matching formats.
-		var regexpStr = regexp.join( "" ).replace( /\s+/g, "\\s+" ),
-			parseRegExp = { "regExp": regexpStr, "groups": groups };
-
-		// cache the regex for this format.
-		return re[ format ] = parseRegExp;
+		return itemGetResolved( Cldr, path, this.attributes ) ||
+			itemLookup( Cldr, locale, path, this.attributes );
 	};
 
-	outOfRange = function( value, low, high ) {
-		return value < low || value > high;
+	common( Cldr );
+
+	return Cldr;
+
+
+
+}());
+
+
+	var arrayMap = function( array, callback ) {
+		var clone, i, length;
+		if ( array.map ) {
+			return array.map( callback );
+		}
+		for ( clone = [], i = 0, length = array.length; i < length; i++ ) {
+			clone[ i ] = callback( array[ i ], i, array );
+		}
+		return clone;
 	};
 
-	toUpper = function( value ) {
-		// "he-IL" has non-breaking space in weekday names.
-		return value.split( "\u00A0" ).join( " " ).toUpperCase();
-	};
 
-	toUpperArray = function( arr ) {
-		var results = [];
-		for ( var i = 0, l = arr.length; i < l; i++ ) {
-			results[ i ] = toUpper( arr[i] );
-		}
-		return results;
-	};
 
-	parseExact = function( value, format, culture ) {
-		// try to parse the date string by matching against the format string
-		// while using the specified culture for date field names.
-		value = trim( value );
-		var cal = culture.calendar,
-			// convert date formats into regular expressions with groupings.
-			// use the regexp to determine the input format and extract the date fields.
-			parseInfo = getParseRegExp( cal, format ),
-			match = new RegExp( parseInfo.regExp ).exec( value );
-		if ( match === null ) {
-			return null;
+
+	var objectValues = function( object ) {
+		var i,
+			result = [];
+
+		for ( i in object ) {
+			result.push( object[ i ] );
 		}
-		// found a date format that matches the input.
-		var groups = parseInfo.groups,
-			era = null, year = null, month = null, date = null, weekDay = null,
-			hour = 0, hourOffset, min = 0, sec = 0, msec = 0, tzMinOffset = null,
-			pmHour = false;
-		// iterate the format groups to extract and set the date fields.
-		for ( var j = 0, jl = groups.length; j < jl; j++ ) {
-			var matchGroup = match[ j + 1 ];
-			if ( matchGroup ) {
-				var current = groups[ j ],
-					clength = current.length,
-					matchInt = parseInt( matchGroup, 10 );
-				switch ( current ) {
-					case "dd": case "d":
-						// Day of month.
-						date = matchInt;
-						// check that date is generally in valid range, also checking overflow below.
-						if ( outOfRange(date, 1, 31) ) return null;
-						break;
-					case "MMM": case "MMMM":
-						month = getMonthIndex( cal, matchGroup, clength === 3 );
-						if ( outOfRange(month, 0, 11) ) return null;
-						break;
-					case "M": case "MM":
-						// Month.
-						month = matchInt - 1;
-						if ( outOfRange(month, 0, 11) ) return null;
-						break;
-					case "y": case "yy":
-					case "yyyy":
-						year = clength < 4 ? expandYear( cal, matchInt ) : matchInt;
-						if ( outOfRange(year, 0, 9999) ) return null;
-						break;
-					case "h": case "hh":
-						// Hours (12-hour clock).
-						hour = matchInt;
-						if ( hour === 12 ) hour = 0;
-						if ( outOfRange(hour, 0, 11) ) return null;
-						break;
-					case "H": case "HH":
-						// Hours (24-hour clock).
-						hour = matchInt;
-						if ( outOfRange(hour, 0, 23) ) return null;
-						break;
-					case "m": case "mm":
-						// Minutes.
-						min = matchInt;
-						if ( outOfRange(min, 0, 59) ) return null;
-						break;
-					case "s": case "ss":
-						// Seconds.
-						sec = matchInt;
-						if ( outOfRange(sec, 0, 59) ) return null;
-						break;
-					case "tt": case "t":
-						// AM/PM designator.
-						// see if it is standard, upper, or lower case PM. If not, ensure it is at least one of
-						// the AM tokens. If not, fail the parse for this format.
-						pmHour = cal.PM && ( matchGroup === cal.PM[0] || matchGroup === cal.PM[1] || matchGroup === cal.PM[2] );
-						if (
-							!pmHour && (
-								!cal.AM || ( matchGroup !== cal.AM[0] && matchGroup !== cal.AM[1] && matchGroup !== cal.AM[2] )
-							)
-						) return null;
-						break;
-					case "f":
-						// Deciseconds.
-					case "ff":
-						// Centiseconds.
-					case "fff":
-						// Milliseconds.
-						msec = matchInt * Math.pow( 10, 3 - clength );
-						if ( outOfRange(msec, 0, 999) ) return null;
-						break;
-					case "ddd":
-						// Day of week.
-					case "dddd":
-						// Day of week.
-						weekDay = getDayIndex( cal, matchGroup, clength === 3 );
-						if ( outOfRange(weekDay, 0, 6) ) return null;
-						break;
-					case "zzz":
-						// Time zone offset in +/- hours:min.
-						var offsets = matchGroup.split( /:/ );
-						if ( offsets.length !== 2 ) return null;
-						hourOffset = parseInt( offsets[0], 10 );
-						if ( outOfRange(hourOffset, -12, 13) ) return null;
-						var minOffset = parseInt( offsets[1], 10 );
-						if ( outOfRange(minOffset, 0, 59) ) return null;
-						tzMinOffset = ( hourOffset * 60 ) + ( startsWith(matchGroup, "-") ? -minOffset : minOffset );
-						break;
-					case "z": case "zz":
-						// Time zone offset in +/- hours.
-						hourOffset = matchInt;
-						if ( outOfRange(hourOffset, -12, 13) ) return null;
-						tzMinOffset = hourOffset * 60;
-						break;
-					case "g": case "gg":
-						var eraName = matchGroup;
-						if ( !eraName || !cal.eras ) return null;
-						eraName = trim( eraName.toLowerCase() );
-						for ( var i = 0, l = cal.eras.length; i < l; i++ ) {
-							if ( eraName === cal.eras[i].name.toLowerCase() ) {
-								era = i;
-								break;
-							}
-						}
-						// could not find an era with that name
-						if ( era === null ) return null;
-						break;
-				}
-			}
-		}
-		var result = new Date(), defaultYear, convert = cal.convert;
-		defaultYear = convert ? convert.fromGregorian( result )[ 0 ] : result.getFullYear();
-		if ( year === null ) {
-			year = defaultYear;
-		}
-		else if ( cal.eras ) {
-			// year must be shifted to normal gregorian year
-			// but not if year was not specified, its already normal gregorian
-			// per the main if clause above.
-			year += cal.eras[( era || 0 )].offset;
-		}
-		// set default day and month to 1 and January, so if unspecified, these are the defaults
-		// instead of the current day/month.
-		if ( month === null ) {
-			month = 0;
-		}
-		if ( date === null ) {
-			date = 1;
-		}
-		// now have year, month, and date, but in the culture's calendar.
-		// convert to gregorian if necessary
-		if ( convert ) {
-			result = convert.toGregorian( year, month, date );
-			// conversion failed, must be an invalid match
-			if ( result === null ) return null;
-		}
-		else {
-			// have to set year, month and date together to avoid overflow based on current date.
-			result.setFullYear( year, month, date );
-			// check to see if date overflowed for specified month (only checked 1-31 above).
-			if ( result.getDate() !== date ) return null;
-			// invalid day of week.
-			if ( weekDay !== null && result.getDay() !== weekDay ) {
-				return null;
-			}
-		}
-		// if pm designator token was found make sure the hours fit the 24-hour clock.
-		if ( pmHour && hour < 12 ) {
-			hour += 12;
-		}
-		result.setHours( hour, min, sec, msec );
-		if ( tzMinOffset !== null ) {
-			// adjust timezone to utc before applying local offset.
-			var adjustedMin = result.getMinutes() - ( tzMinOffset + result.getTimezoneOffset() );
-			// Safari limits hours and minutes to the range of -127 to 127.  We need to use setHours
-			// to ensure both these fields will not exceed this range.	adjustedMin will range
-			// somewhere between -1440 and 1500, so we only need to split this into hours.
-			result.setHours( result.getHours() + parseInt(adjustedMin / 60, 10), adjustedMin % 60 );
-		}
+
 		return result;
 	};
-}());
 
-parseNegativePattern = function( value, nf, negativePattern ) {
-	var neg = nf[ "-" ],
-		pos = nf[ "+" ],
-		ret;
-	switch ( negativePattern ) {
-		case "n -":
-			neg = " " + neg;
-			pos = " " + pos;
-			/* falls through */
-		case "n-":
-			if ( endsWith(value, neg) ) {
-				ret = [ "-", value.substr(0, value.length - neg.length) ];
+
+
+
+	/**
+	 * allPreset()
+	 *
+	 * @cldr [Cldr instance].
+	 *
+	 * Return an Array with all (skeleton, date, time, datetime) presets.
+	 */
+	var datetimeAllPresets = function( cldr ) {
+		var result = [];
+
+		// Skeleton
+		result = objectValues( cldr.main( "dates/calendars/gregorian/dateTimeFormats/availableFormats" ) );
+
+		// Time
+		result = result.concat( objectValues( cldr.main( "dates/calendars/gregorian/timeFormats" ) ) );
+
+		// Date
+		result = result.concat( objectValues( cldr.main( "dates/calendars/gregorian/dateFormats" ) ) );
+
+		// Datetime
+		result = result.concat( arrayMap( objectValues( cldr.main( "dates/calendars/gregorian/dateTimeFormats" ) ), function( datetimeFormat, key ) {
+			if ( typeof datetimeFormat !== "string" ) {
+				return datetimeFormat;
 			}
-			else if ( endsWith(value, pos) ) {
-				ret = [ "+", value.substr(0, value.length - pos.length) ];
-			}
-			break;
-		case "- n":
-			neg += " ";
-			pos += " ";
-			/* falls through */
-		case "-n":
-			if ( startsWith(value, neg) ) {
-				ret = [ "-", value.substr(neg.length) ];
-			}
-			else if ( startsWith(value, pos) ) {
-				ret = [ "+", value.substr(pos.length) ];
-			}
-			break;
-		case "(n)":
-			if ( startsWith(value, "(") && endsWith(value, ")") ) {
-				ret = [ "-", value.substr(1, value.length - 2) ];
-			}
-			break;
-	}
-	return ret || [ "", value ];
-};
+			return datetimeFormat
+				.replace( /\{0\}/, cldr.main([
+					"dates/calendars/gregorian/timeFormats",
+					key
+				]))
+				.replace( /\{1\}/, cldr.main([
+					"dates/calendars/gregorian/dateFormats",
+					key
+				]));
+		}));
 
-//
-// public instance functions
-//
-
-Globalize.prototype.findClosestCulture = function( cultureSelector ) {
-	return Globalize.findClosestCulture.call( this, cultureSelector );
-};
-
-Globalize.prototype.format = function( value, format, cultureSelector ) {
-	return Globalize.format.call( this, value, format, cultureSelector );
-};
-
-Globalize.prototype.localize = function( key, cultureSelector ) {
-	return Globalize.localize.call( this, key, cultureSelector );
-};
-
-Globalize.prototype.parseInt = function( value, radix, cultureSelector ) {
-	return Globalize.parseInt.call( this, value, radix, cultureSelector );
-};
-
-Globalize.prototype.parseFloat = function( value, radix, cultureSelector ) {
-	return Globalize.parseFloat.call( this, value, radix, cultureSelector );
-};
-
-Globalize.prototype.culture = function( cultureSelector ) {
-	return Globalize.culture.call( this, cultureSelector );
-};
-
-//
-// public singleton functions
-//
-
-Globalize.addCultureInfo = function( cultureName, baseCultureName, info ) {
-
-	var base = {},
-		isNew = false;
-
-	if ( typeof cultureName !== "string" ) {
-		// cultureName argument is optional string. If not specified, assume info is first
-		// and only argument. Specified info deep-extends current culture.
-		info = cultureName;
-		cultureName = this.culture().name;
-		base = this.cultures[ cultureName ];
-	} else if ( typeof baseCultureName !== "string" ) {
-		// baseCultureName argument is optional string. If not specified, assume info is second
-		// argument. Specified info deep-extends specified culture.
-		// If specified culture does not exist, create by deep-extending default
-		info = baseCultureName;
-		isNew = ( this.cultures[ cultureName ] == null );
-		base = this.cultures[ cultureName ] || this.cultures[ "default" ];
-	} else {
-		// cultureName and baseCultureName specified. Assume a new culture is being created
-		// by deep-extending an specified base culture
-		isNew = true;
-		base = this.cultures[ baseCultureName ];
-	}
-
-	this.cultures[ cultureName ] = extend(true, {},
-		base,
-		info
-	);
-	// Make the standard calendar the current culture if it's a new culture
-	if ( isNew ) {
-		this.cultures[ cultureName ].calendar = this.cultures[ cultureName ].calendars.standard;
-	}
-};
-
-Globalize.findClosestCulture = function( name ) {
-	var match;
-	if ( !name ) {
-		return this.findClosestCulture( this.cultureSelector ) || this.cultures[ "default" ];
-	}
-	if ( typeof name === "string" ) {
-		name = name.split( "," );
-	}
-	if ( isArray(name) ) {
-		var lang,
-			cultures = this.cultures,
-			list = name,
-			i, l = list.length,
-			prioritized = [];
-		for ( i = 0; i < l; i++ ) {
-			name = trim( list[i] );
-			var pri, parts = name.split( ";" );
-			lang = trim( parts[0] );
-			if ( parts.length === 1 ) {
-				pri = 1;
-			}
-			else {
-				name = trim( parts[1] );
-				if ( name.indexOf("q=") === 0 ) {
-					name = name.substr( 2 );
-					pri = parseFloat( name );
-					pri = isNaN( pri ) ? 0 : pri;
-				}
-				else {
-					pri = 1;
-				}
-			}
-			prioritized.push({ lang: lang, pri: pri });
-		}
-		prioritized.sort(function( a, b ) {
-			if ( a.pri < b.pri ) {
-				return 1;
-			} else if ( a.pri > b.pri ) {
-				return -1;
-			}
-			return 0;
+		return arrayMap( result, function( pattern ) {
+			return { pattern: pattern };
 		});
-		// exact match
-		for ( i = 0; i < l; i++ ) {
-			lang = prioritized[ i ].lang;
-			match = cultures[ lang ];
-			if ( match ) {
-				return match;
-			}
+	};
+
+
+
+
+	/**
+	 * expandPattern( pattern, cldr )
+	 *
+	 * @pattern [String or Object] if String, it's considered a skeleton. Object accepts:
+	 * - skeleton: [String] lookup availableFormat;
+	 * - date: [String] ( "full" | "long" | "medium" | "short" );
+	 * - time: [String] ( "full" | "long" | "medium" | "short" );
+	 * - datetime: [String] ( "full" | "long" | "medium" | "short" );
+	 * - pattern: [String] For more info see datetime/format.js.
+	 *
+	 * @cldr [Cldr instance].
+	 *
+	 * Return the corresponding pattern.
+	 * Eg for "en":
+	 * - "GyMMMd" returns "MMM d, y G";
+	 * - { skeleton: "GyMMMd" } returns "MMM d, y G";
+	 * - { date: "full" } returns "EEEE, MMMM d, y";
+	 * - { time: "full" } returns "h:mm:ss a zzzz";
+	 * - { datetime: "full" } returns "EEEE, MMMM d, y 'at' h:mm:ss a zzzz";
+	 * - { pattern: "dd/mm" } returns "dd/mm";
+	 */
+	var datetimeExpandPattern = function( pattern, cldr ) {
+		var result;
+
+		if ( typeof pattern === "string" ) {
+			pattern = { skeleton: pattern };
 		}
 
-		// neutral language match
-		for ( i = 0; i < l; i++ ) {
-			lang = prioritized[ i ].lang;
-			do {
-				var index = lang.lastIndexOf( "-" );
-				if ( index === -1 ) {
+		if ( typeof pattern === "object" ) {
+
+			switch ( true ) {
+				case "skeleton" in pattern:
+					result = cldr.main([
+						"dates/calendars/gregorian/dateTimeFormats/availableFormats",
+						pattern.skeleton
+					]);
 					break;
-				}
-				// strip off the last part. e.g. en-US => en
-				lang = lang.substr( 0, index );
-				match = cultures[ lang ];
-				if ( match ) {
-					return match;
-				}
+
+				case "date" in pattern:
+				case "time" in pattern:
+					result = cldr.main([
+						"dates/calendars/gregorian",
+						"date" in pattern ? "dateFormats" : "timeFormats",
+						( pattern.date || pattern.time )
+					]);
+					break;
+
+				case "datetime" in pattern:
+					result = cldr.main([
+						"dates/calendars/gregorian/dateTimeFormats",
+						pattern.datetime
+					]);
+					if ( result ) {
+						result = result
+							.replace( /\{0\}/, cldr.main([
+								"dates/calendars/gregorian/timeFormats",
+								pattern.datetime
+							]))
+							.replace( /\{1\}/, cldr.main([
+								"dates/calendars/gregorian/dateFormats",
+								pattern.datetime
+							]));
+					}
+					break;
+
+				case "pattern" in pattern:
+					result = pattern.pattern;
+					break;
+
+				default:
+					throw new Error( "Invalid pattern" );
 			}
-			while ( 1 );
+
+		} else {
+			throw new Error( "Invalid pattern" );
 		}
 
-		// last resort: match first culture using that language
-		for ( i = 0; i < l; i++ ) {
-			lang = prioritized[ i ].lang;
-			for ( var cultureKey in cultures ) {
-				var culture = cultures[ cultureKey ];
-				if ( culture.language === lang ) {
-					return culture;
-				}
+		if ( !result ) {
+			throw new Error( "Pattern not found" );
+		}
+
+		return result;
+	};
+
+
+
+	var datetimeWeekDays = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ];
+
+
+
+	var arrayIndexOf = function( array, item ) {
+		if ( array.indexOf ) {
+			return array.indexOf( item );
+		}
+		for ( var i = 0, length = array.length; i < length; i++ ) {
+			if ( array[i] === item ) {
+				return i;
 			}
 		}
-	}
-	else if ( typeof name === "object" ) {
-		return name;
-	}
-	return match || null;
-};
+		return -1;
+	};
 
-Globalize.format = function( value, format, cultureSelector ) {
-	var culture = this.findClosestCulture( cultureSelector );
-	if ( value instanceof Date ) {
-		value = formatDate( value, format, culture );
-	}
-	else if ( typeof value === "number" ) {
-		value = formatNumber( value, format, culture );
-	}
-	return value;
-};
 
-Globalize.localize = function( key, cultureSelector ) {
-	return this.findClosestCulture( cultureSelector ).messages[ key ] ||
-		this.cultures[ "default" ].messages[ key ];
-};
 
-Globalize.parseDate = function( value, formats, culture ) {
-	culture = this.findClosestCulture( culture );
 
-	var date, prop, patterns;
-	if ( formats ) {
-		if ( typeof formats === "string" ) {
-			formats = [ formats ];
+	/**
+	 * firstDayOfWeek
+	 */
+	var datetimeFirstDayOfWeek = function( cldr ) {
+		return arrayIndexOf( datetimeWeekDays, cldr.supplemental.weekData.firstDay() );
+	};
+
+
+
+
+	/**
+	 * dayOfWeek
+	 *
+	 * Return the day of the week normalized by the territory's firstDay [0-6].
+	 * Eg for "mon":
+	 * - return 0 if territory is GB, or BR, or DE, or FR (week starts on "mon");
+	 * - return 1 if territory is US (week starts on "sun");
+	 * - return 2 if territory is EG (week starts on "sat");
+	 */
+	var datetimeDayOfWeek = function( date, cldr ) {
+		return ( date.getDay() - datetimeFirstDayOfWeek( cldr ) + 7 ) % 7;
+	};
+
+
+
+
+	/**
+	 * distanceInDays( from, to )
+	 *
+	 * Return the distance in days between from and to Dates.
+	 */
+	var datetimeDistanceInDays = function( from, to ) {
+		var inDays = 864e5;
+		return ( to.getTime() - from.getTime() ) / inDays;
+	};
+
+
+
+
+	/**
+	 * startOf
+	 *
+	 * Return the 
+	 */
+	var datetimeStartOf = function( date, unit ) {
+		date = new Date( date.getTime() );
+		switch( unit ) {
+			case "year":
+				date.setMonth( 0 );
+			/* falls through */
+			case "month":
+				date.setDate( 1 );
+			/* falls through */
+			case "day":
+				date.setHours( 0 );
+			/* falls through */
+			case "hour":
+				date.setMinutes( 0 );
+			/* falls through */
+			case "minute":
+				date.setSeconds( 0 );
+			/* falls through */
+			case "second":
+				date.setMilliseconds( 0 );
 		}
-		if ( formats.length ) {
-			for ( var i = 0, l = formats.length; i < l; i++ ) {
-				var format = formats[ i ];
-				if ( format ) {
-					date = parseExact( value, format, culture );
-					if ( date ) {
+		return date;
+	};
+
+
+
+
+	/**
+	 * dayOfYear
+	 *
+	 * Return the distance in days of the date to the begin of the year [0-d].
+	 */
+	var datetimeDayOfYear = function( date ) {
+		return Math.floor( datetimeDistanceInDays( datetimeStartOf( date, "year" ), date ) );
+	};
+
+
+
+
+	/**
+	 * millisecondsInDay
+	 */
+	var datetimeMillisecondsInDay = function( date ) {
+		// TODO Handle daylight savings discontinuities
+		return date - datetimeStartOf( date, "day" );
+	};
+
+
+
+	var datetimePatternRe = (/([a-z])\1*|'[^']+'|''|./ig);
+
+
+
+	var stringPad = function( str, count, right ) {
+		var length;
+		if ( typeof str !== "string" ) {
+			str = String( str );
+		}
+		for ( length = str.length; length < count; length += 1 ) {
+			str = ( right ? ( str + "0" ) : ( "0" + str ) );
+		}
+		return str;
+	};
+
+
+
+
+	/**
+	 * format( date, pattern, cldr )
+	 *
+	 * @date [Date instance].
+	 *
+	 * @pattern [String] raw pattern.
+	 * ref: http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns
+	 *
+	 * @cldr [Cldr instance].
+	 *
+	 * TODO Support other calendar types.
+	 *
+	 * Disclosure: this function borrows excerpts of dojo/date/locale.
+	 */
+	var datetimeFormat = function( date, pattern, cldr ) {
+		var widths = [ "abbreviated", "wide", "narrow" ];
+		return pattern.replace( datetimePatternRe, function( current ) {
+			var pad, ret,
+				chr = current.charAt( 0 ),
+				length = current.length;
+
+			if ( chr === "j" ) {
+				// Locale preferred hHKk.
+				// http://www.unicode.org/reports/tr35/tr35-dates.html#Time_Data
+				chr = cldr.supplemental.timeData.preferred();
+			}
+
+			switch ( chr ) {
+
+				// Era
+				case "G":
+					ret = cldr.main([
+						"dates/calendars/gregorian/eras",
+						length <= 3 ? "eraAbbr" : ( length === 4 ? "eraNames" : "eraNarrow" ),
+						date.getFullYear() < 0 ? 0 : 1
+					]);
+					break;
+
+				// Year
+				case "y":
+					// Plain year.
+					// The length specifies the padding, but for two letters it also specifies the maximum length.
+					ret = String( date.getFullYear() );
+					pad = true;
+					if ( length === 2 ) {
+						ret = ret.substr( ret.length - 2 );
+					}
+					break;
+
+				case "Y":
+					// Year in "Week of Year"
+					// The length specifies the padding, but for two letters it also specifies the maximum length.
+					// yearInWeekofYear = date + DaysInAWeek - (dayOfWeek - firstDay) - minDays
+					ret = new Date( date.getTime() );
+					ret.setDate( ret.getDate() + 7 - ( datetimeDayOfWeek( date, cldr ) - datetimeFirstDayOfWeek( cldr ) ) - cldr.supplemental.weekData.minDays() );
+					ret = String( ret.getFullYear() );
+					pad = true;
+					if ( length === 2 ) {
+						ret = ret.substr( ret.length - 2 );
+					}
+					break;
+
+				case "u": // Extended year. Need to be implemented.
+				case "U": // Cyclic year name. Need to be implemented.
+					throw new Error( "Not implemented" );
+
+				// Quarter
+				case "Q":
+				case "q":
+					ret = Math.ceil( ( date.getMonth() + 1 ) / 3 );
+					if ( length <= 2 ) {
+						pad = true;
+					} else {
+						// http://unicode.org/cldr/trac/ticket/6788
+						ret = cldr.main([
+							"dates/calendars/gregorian/quarters",
+							chr === "Q" ? "format" : "stand-alone",
+							widths[ length - 3 ],
+							ret
+						]);
+					}
+					break;
+
+				// Month
+				case "M":
+				case "L":
+					ret = date.getMonth() + 1;
+					if ( length <= 2 ) {
+						pad = true;
+					} else {
+						ret = cldr.main([
+							"dates/calendars/gregorian/months",
+							chr === "M" ? "format" : "stand-alone",
+							widths[ length - 3 ],
+							ret
+						]);
+					}
+					break;
+
+				// Week
+				case "w":
+					// Week of Year.
+					// woy = ceil( ( doy + dow of 1/1 ) / 7 ) - minDaysStuff ? 1 : 0.
+					// TODO should pad on ww? Not documented, but I guess so.
+					ret = datetimeDayOfWeek( datetimeStartOf( date, "year" ), cldr );
+					ret = Math.ceil( ( datetimeDayOfYear( date ) + ret ) / 7 ) - ( 7 - ret >= cldr.supplemental.weekData.minDays() ? 0 : 1 );
+					pad = true;
+					break;
+
+				case "W":
+					// Week of Month.
+					// wom = ceil( ( dom + dow of `1/month` ) / 7 ) - minDaysStuff ? 1 : 0.
+					ret = datetimeDayOfWeek( datetimeStartOf( date, "month" ), cldr );
+					ret = Math.ceil( ( date.getDate() + ret ) / 7 ) - ( 7 - ret >= cldr.supplemental.weekData.minDays() ? 0 : 1 );
+					break;
+
+				// Day
+				case "d":
+					ret = date.getDate();
+					pad = true;
+					break;
+
+				case "D":
+					ret = datetimeDayOfYear( date ) + 1;
+					pad = true;
+					break;
+
+				case "F":
+					// Day of Week in month. eg. 2nd Wed in July.
+					ret = Math.floor( date.getDate() / 7 ) + 1;
+					break;
+
+				case "g+":
+					// Modified Julian day. Need to be implemented.
+					throw new Error( "Not implemented" );
+
+				// Week day
+				case "e":
+				case "c":
+					if ( length <= 2 ) {
+						// Range is [1-7] (deduced by example provided on documentation)
+						// TODO Should pad with zeros (not specified in the docs)?
+						ret = datetimeDayOfWeek( date, cldr ) + 1;
+						pad = true;
 						break;
 					}
+
+				/* falls through */
+				case "E":
+					ret = datetimeWeekDays[ date.getDay() ];
+					if ( length === 6 ) {
+						// If short day names are not explicitly specified, abbreviated day names are used instead.
+						// http://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras
+						// http://unicode.org/cldr/trac/ticket/6790
+						ret = cldr.main([
+								"dates/calendars/gregorian/days",
+								[ chr === "c" ? "stand-alone" : "format" ],
+								"short",
+								ret
+							]) || cldr.main([
+								"dates/calendars/gregorian/days",
+								[ chr === "c" ? "stand-alone" : "format" ],
+								"abbreviated",
+								ret
+							]);
+					} else {
+						ret = cldr.main([
+							"dates/calendars/gregorian/days",
+							[ chr === "c" ? "stand-alone" : "format" ],
+							widths[ length < 3 ? 0 : length - 3 ],
+							ret
+						]);
+					}
+					break;
+
+				// Period (AM or PM)
+				case "a":
+					ret = cldr.main([
+						"dates/calendars/gregorian/dayPeriods/format/wide",
+						date.getHours() < 12 ? "am" : "pm"
+					]);
+					break;
+
+				// Hour
+				case "h": // 1-12
+					ret = ( date.getHours() % 12 ) || 12;
+					pad = true;
+					break;
+
+				case "H": // 0-23
+					ret = date.getHours();
+					pad = true;
+					break;
+
+				case "K": // 0-11
+					ret = date.getHours() % 12;
+					pad = true;
+					break;
+
+				case "k": // 1-24
+					ret = date.getHours() || 24;
+					pad = true;
+					break;
+
+				// Minute
+				case "m":
+					ret = date.getMinutes();
+					pad = true;
+					break;
+
+				// Second
+				case "s":
+					ret = date.getSeconds();
+					pad = true;
+					break;
+
+				case "S":
+					ret = Math.round( date.getMilliseconds() * Math.pow( 10, length - 3 ) );
+					pad = true;
+					break;
+
+				case "A":
+					ret = Math.round( datetimeMillisecondsInDay( date ) * Math.pow( 10, length - 3 ) );
+					pad = true;
+					break;
+
+				// Zone
+				// see http://www.unicode.org/reports/tr35/tr35-dates.html#Using_Time_Zone_Names ?
+				// Need to be implemented.
+				case "z":
+				case "Z":
+				case "O":
+				case "v":
+				case "V":
+				case "X":
+				case "x":
+					throw new Error( "Not implemented" );
+
+				// Anything else is considered a literal, including [ ,:/.'@#], chinese, japonese, and arabic characters.
+				default:
+					return current;
+			}
+			if ( pad ) {
+				ret = stringPad( ret, length );
+			}
+			return ret;
+		});
+	};
+
+
+
+
+	var arrayEvery = function( array, callback ) {
+		var i, length;
+		if ( array.every ) {
+			return array.every( callback );
+		}
+		for ( i = 0, length = array.length; i < length; i++ ) {
+			if ( !callback( array[ i ], i, array ) ) {
+				return false;
+			}
+		}
+		return true;
+	};
+
+
+
+
+	/**
+	 * tokenizer( value, pattern )
+	 *
+	 * Returns an Array of tokens, eg. value "5 o'clock PM", pattern "h 'o''clock' a":
+	 * [{
+	 *   type: "h",
+	 *   lexeme: "5"
+	 * }, {
+	 *   type: "literal",
+	 *   lexeme: " "
+	 * }, {
+	 *   type: "literal",
+	 *   lexeme: "o'clock"
+	 * }, {
+	 *   type: "literal",
+	 *   lexeme: " "
+	 * }, {
+	 *   type: "a",
+	 *   lexeme: "PM",
+	 *   value: "pm"
+	 * }]
+	 *
+	 * OBS: lexeme's are always String and may return invalid ranges depending of the token type. Eg. "99" for month number.
+	 *
+	 * Return an empty Array when not successfully parsed.
+	 */
+	var datetimeTokenizer = function( value, pattern, cldr ) {
+		var valid,
+			tokens = [],
+			widths = [ "abbreviated", "wide", "narrow" ];
+
+		valid = arrayEvery( pattern.match( datetimePatternRe ), function( current ) {
+			var chr, length, tokenRe,
+				token = {};
+
+			function oneDigitIfLengthOne() {
+				if ( length === 1 ) {
+					return tokenRe = /\d/;
 				}
 			}
+
+			function oneOrTwoDigitsIfLengthOne() {
+				if ( length === 1 ) {
+					return tokenRe = /\d\d?/;
+				}
+			}
+
+			function twoDigitsIfLengthTwo() {
+				if ( length === 2 ) {
+					return tokenRe = /\d\d/;
+				}
+			}
+
+			// Brute-force test every locale entry in an attempt to match the given value.
+			// Return the first found one (and set token accordingly), or null.
+			function lookup( path ) {
+				var i, re,
+					data = cldr.main( path );
+				for ( i in data ) {
+					re = new RegExp( "^" + data[ i ] );
+					if ( re.test( value ) ) {
+						token.value = i;
+						return tokenRe = new RegExp( data[ i ] );
+					}
+				}
+				return null;
+			}
+
+			token.type = current;
+			chr = current.charAt( 0 ),
+			length = current.length;
+
+			switch ( chr ) {
+
+				// Era
+				case "G":
+					lookup([
+						"dates/calendars/gregorian/eras",
+						length <= 3 ? "eraAbbr" : ( length === 4 ? "eraNames" : "eraNarrow" )
+					]);
+					break;
+
+				// Year
+				case "y":
+				case "Y":
+					// number l=1:+, l=2:{2}, l=3:{3,}, l=4:{4,}, ...
+					if ( length === 1 ) {
+						tokenRe = /\d+/;
+					} else if ( length === 2 ) {
+						tokenRe = /\d\d/;
+					} else {
+						tokenRe = new RegExp( "\\d{" + length + ",}" );
+					}
+					break;
+
+				case "u": // Extended year. Need to be implemented.
+				case "U": // Cyclic year name. Need to be implemented.
+					throw new Error( "Not implemented" );
+
+				// Quarter
+				case "Q":
+				case "q":
+					// number l=1:{1}, l=2:{2}.
+					// lookup l=3...
+					oneDigitIfLengthOne() || twoDigitsIfLengthTwo() || lookup([
+						"dates/calendars/gregorian/quarters",
+						chr === "Q" ? "format" : "stand-alone",
+						widths[ length - 3 ]
+					]);
+					break;
+
+				// Month
+				case "M":
+				case "L":
+					// number l=1:{1,2}, l=2:{2}.
+					// lookup l=3...
+					oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo() || lookup([
+						"dates/calendars/gregorian/months",
+						chr === "M" ? "format" : "stand-alone",
+						widths[ length - 3 ]
+					]);
+					break;
+
+				// Day (see d below)
+				case "D":
+					// number {l,3}.
+					if ( length <= 3 ) {
+						tokenRe = new RegExp( "\\d{" + length + ",3}" );
+					}
+					break;
+
+				case "W":
+				case "F":
+					// number l=1:{1}.
+					oneDigitIfLengthOne();
+					break;
+
+				case "g+":
+					// Modified Julian day. Need to be implemented.
+					throw new Error( "Not implemented" );
+
+				// Week day
+				case "e":
+				case "c":
+					// number l=1:{1}, l=2:{2}.
+					// lookup for length >=3.
+					if( length <= 2 ) {
+						oneDigitIfLengthOne() || twoDigitsIfLengthTwo();
+						break;
+					}
+
+				/* falls through */
+				case "E":
+					if ( length === 6 ) {
+						// Note: if short day names are not explicitly specified, abbreviated day names are used instead http://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras
+						lookup([
+							"dates/calendars/gregorian/days",
+							[ chr === "c" ? "stand-alone" : "format" ],
+							"short"
+						]) || lookup([
+							"dates/calendars/gregorian/days",
+							[ chr === "c" ? "stand-alone" : "format" ],
+							"abbreviated"
+						]);
+					} else {
+						lookup([
+							"dates/calendars/gregorian/days",
+							[ chr === "c" ? "stand-alone" : "format" ],
+							widths[ length < 3 ? 0 : length - 3 ]
+						]);
+					}
+					break;
+
+				// Period (AM or PM)
+				case "a":
+					lookup([
+						"dates/calendars/gregorian/dayPeriods/format/wide"
+					]);
+					break;
+
+				// Week, Day, Hour, Minute, or Second
+				case "w":
+				case "d":
+				case "h":
+				case "H":
+				case "K":
+				case "k":
+				case "j":
+				case "m":
+				case "s":
+					// number l1:{1,2}, l2:{2}.
+					oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo();
+					break;
+
+				case "S":
+					// number {l}.
+						tokenRe = new RegExp( "\\d{" + length + "}" );
+					break;
+
+				case "A":
+					// number {l+5}.
+						tokenRe = new RegExp( "\\d{" + ( length + 5 ) + "}" );
+					break;
+
+				// Zone
+				// see http://www.unicode.org/reports/tr35/tr35-dates.html#Using_Time_Zone_Names ?
+				// Need to be implemented.
+				case "z":
+				case "Z":
+				case "O":
+				case "v":
+				case "V":
+				case "X":
+				case "x":
+					throw new Error( "Not implemented" );
+
+				case "'":
+					token.type = "literal";
+					if ( current.charAt( 1 ) === "'" ) {
+						tokenRe = /'/;
+					} else {
+						tokenRe = /'[^']+'/;
+					}
+					break;
+
+				default:
+					token.type = "literal";
+					tokenRe = /./;
+			}
+
+			if ( !tokenRe ) {
+				return false;
+			}
+
+			// Get lexeme and consume it.
+			value = value.replace( new RegExp( "^" + tokenRe.source ), function( lexeme ) {
+				token.lexeme = lexeme;
+				return "";
+			});
+
+			if ( !token.lexeme ) {
+				return false;
+			}
+
+			tokens.push( token );
+			return true;
+		});
+
+		return valid ? tokens : [];
+	};
+
+
+	var datetimeParse = (function() {
+
+	function outOfRange( value, low, high ) {
+		return value < low || value > high;
+	}
+
+	/**
+	 * parse
+	 *
+	 * ref: http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns
+	 */
+	return function( value, pattern, cldr ) {
+		var amPm, era, hour24, valid,
+			YEAR = 0,
+			MONTH = 1,
+			DAY = 2,
+			HOUR = 3,
+			MINUTE = 4,
+			SECOND = 5,
+			MILLISECONDS = 6,
+			date = new Date(),
+			tokens = datetimeTokenizer( value, pattern, cldr ),
+			truncateAt = [],
+			units = [ "year", "month", "day", "hour", "minute", "second", "milliseconds" ];
+
+		if ( !tokens.length ) {
+			return null;
 		}
-	} else {
-		patterns = culture.calendar.patterns;
-		for ( prop in patterns ) {
-			date = parseExact( value, patterns[prop], culture );
-			if ( date ) {
-				break;
+
+		valid = arrayEvery( tokens, function( token ) {
+			var century, chr, value, length;
+
+			if ( token.type === "literal" ) {
+				// continue
+				return true;
+			}
+
+			chr = token.type.charAt( 0 );
+			length = token.type.length;
+
+			if ( chr === "j" ) {
+				// Locale preferred hHKk.
+				// http://www.unicode.org/reports/tr35/tr35-dates.html#Time_Data
+				chr = cldr.supplemental.timeData.preferred();
+			}
+
+			switch ( chr ) {
+
+				// Era
+				case "G":
+					truncateAt.push( YEAR );
+					era = +token.value;
+					break;
+
+				// Year
+				case "y":
+					value = +token.lexeme;
+					if ( length === 2 ) {
+						if ( outOfRange( value, 0, 99 ) ) {
+							return false;
+						}
+						// mimic dojo/date/locale: choose century to apply, according to a sliding window of 80 years before and 20 years after present year.
+						century = Math.floor( date.getFullYear() / 100 ) * 100;
+						value += century;
+						if ( value > date.getFullYear() + 20 ) {
+							value -= 100;
+						}
+					}
+					date.setFullYear( value );
+					truncateAt.push( YEAR );
+					break;
+
+				case "Y": // Year in "Week of Year"
+				case "u": // Extended year. Need to be implemented.
+				case "U": // Cyclic year name. Need to be implemented.
+					throw new Error( "Not implemented" );
+
+				// Quarter (skip)
+				case "Q":
+				case "q":
+					break;
+
+				// Month
+				case "M":
+				case "L":
+					if ( length <= 2 ) {
+						value = +token.lexeme;
+					} else {
+						value = +token.value;
+					}
+					if( outOfRange( value, 1, 12 ) ) {
+						return false;
+					}
+					date.setMonth( value - 1 );
+					truncateAt.push( MONTH );
+					break;
+
+				// Week (skip)
+				case "w": // Week of Year.
+				case "W": // Week of Month.
+					break;
+
+				// Day
+				case "d":
+					value = +token.lexeme;
+					if( outOfRange( value, 1, 31 ) ) {
+						return false;
+					}
+					date.setDate( value );
+					truncateAt.push( DAY );
+					break;
+
+				case "D":
+					value = +token.lexeme;
+					if( outOfRange( value, 1, 366 ) ) {
+						return false;
+					}
+					date.setMonth(0);
+					date.setDate( value );
+					truncateAt.push( DAY );
+					break;
+
+				case "F":
+					// Day of Week in month. eg. 2nd Wed in July.
+					// Skip
+					break;
+
+				case "g+":
+					// Modified Julian day. Need to be implemented.
+					throw new Error( "Not implemented" );
+
+				// Week day
+				case "e":
+				case "c":
+				case "E":
+					// Skip.
+					// value = arrayIndexOf( datetimeWeekDays, token.value );
+					break;
+
+				// Period (AM or PM)
+				case "a":
+					amPm = token.value;
+					break;
+
+				// Hour
+				case "K": // 0-11
+					value = +token.lexeme + 1;
+
+				/* falls through */
+				case "h": // 1-12
+					value = value || +token.lexeme;
+					if( outOfRange( value, 1, 12 ) ) {
+						return false;
+					}
+					date.setHours( value );
+					truncateAt.push( HOUR );
+					break;
+
+				case "H": // 0-23
+					value = +token.lexeme + 1;
+
+				/* falls through */
+				case "k": // 1-24
+					hour24 = true;
+					value = value || +token.lexeme;
+					if( outOfRange( value, 1, 24 ) ) {
+						return false;
+					}
+					date.setHours( value );
+					truncateAt.push( HOUR );
+					break;
+
+				// Minute
+				case "m":
+					value = +token.lexeme;
+					if( outOfRange( value, 0, 59 ) ) {
+						return false;
+					}
+					date.setMinutes( value );
+					truncateAt.push( MINUTE );
+					break;
+
+				// Second
+				case "s":
+					value = +token.lexeme;
+					if( outOfRange( value, 0, 59 ) ) {
+						return false;
+					}
+					date.setSeconds( value );
+					truncateAt.push( SECOND );
+					break;
+
+				case "A":
+					date.setHours( 0 );
+					date.setMinutes( 0 );
+					date.setSeconds( 0 );
+
+				/* falls through */
+				case "S":
+					value = Math.round( +token.lexeme * Math.pow( 10, 3 - length ) );
+					date.setMilliseconds( value );
+					truncateAt.push( MILLISECONDS );
+					break;
+
+				// Zone
+				// see http://www.unicode.org/reports/tr35/tr35-dates.html#Using_Time_Zone_Names ?
+				// Need to be implemented.
+				case "z":
+				case "Z":
+				case "O":
+				case "v":
+				case "V":
+				case "X":
+				case "x":
+					throw new Error( "Not implemented" );
+			}
+
+			return true;
+		});
+
+		if ( !valid || amPm && hour24 ) {
+			return null;
+		}
+
+		if ( era === 0 ) {
+			// 1 BC = year 0
+			date.setFullYear( date.getFullYear() * -1 + 1 );
+		}
+
+		if ( amPm === "pm" && date.getHours() !== 12 ) {
+			date.setHours( date.getHours() + 12 );
+		}
+
+		// Truncate date at the most precise unit defined. Eg.
+		// If value is "12/31", and pattern is "MM/dd":
+		// => new Date( <current Year>, 12, 31, 0, 0, 0, 0 );
+		truncateAt = Math.max.apply( null, truncateAt );
+		date = datetimeStartOf( date, units[ truncateAt ] );
+
+		return date;
+	};
+
+}());
+
+
+	var arrayIsArray = Array.isArray || function( obj ) {
+		return Object.prototype.toString.call( obj ) === "[object Array]";
+	};
+
+
+
+
+	var alwaysArray = function( stringOrArray ) {
+		return arrayIsArray( stringOrArray ) ?  stringOrArray : [ stringOrArray ];
+	};
+
+
+
+
+	var arraySome = function( array, callback ) {
+		var i, length;
+		if ( array.some ) {
+			return array.some( callback );
+		}
+		for ( i = 0, length = array.length; i < length; i++ ) {
+			if ( callback( array[ i ], i, array ) ) {
+				return true;
 			}
 		}
+		return false;
+	};
+
+
+
+
+	var defaultLocale;
+
+	function getLocale( locale ) {
+		return locale ? new Cldr( locale ) : defaultLocale;
 	}
 
-	return date || null;
-};
+	var Globalize = {};
 
-Globalize.parseInt = function( value, radix, cultureSelector ) {
-	return truncate( Globalize.parseFloat(value, radix, cultureSelector) );
-};
+	/**
+	 * Globalize.load( json )
+	 *
+	 * @json [JSON]
+	 *
+	 * Load resolved or unresolved cldr data.
+	 * Somewhat equivalent to previous Globalize.addCultureInfo(...).
+	 */
+	Globalize.load = function( json ) {
+		Cldr.load( json );
+	};
 
-Globalize.parseFloat = function( value, radix, cultureSelector ) {
-	// radix argument is optional
-	if ( typeof radix !== "number" ) {
-		cultureSelector = radix;
-		radix = 10;
-	}
+	/**
+	 * Globalize.loadTranslations( locale, json )
+	 *
+	 * @locale [String]
+	 *
+	 * @json [JSON]
+	 *
+	 * Load translation data per locale.
+	 */
+	Globalize.loadTranslations = function( locale, json ) {
+		var customData = {
+			"globalize-translation": {}
+		};
+		locale = new Cldr( locale );
+		customData[ "globalize-translation" ][ locale.attributes.languageId ] = json;
+		Cldr.load( customData );
+	};
 
-	var culture = this.findClosestCulture( cultureSelector );
-	var ret = NaN,
-		nf = culture.numberFormat;
+	/**
+	 * Globalize.locale( locale )
+	 *
+	 * @locale [String]
+	 *
+	 * Set default locale.
+	 * Somewhat equivalent to previous culture( selector ).
+	 */
+	Globalize.locale = function( locale ) {
+		if ( arguments.length ) {
+			defaultLocale = new Cldr( locale );
+		}
+		return defaultLocale;
+	};
 
-	if ( value.indexOf(culture.numberFormat.currency.symbol) > -1 ) {
-		// remove currency symbol
-		value = value.replace( culture.numberFormat.currency.symbol, "" );
-		// replace decimal seperator
-		value = value.replace( culture.numberFormat.currency["."], culture.numberFormat["."] );
-	}
+	/**
+	 * Globalize.format( value, pattern, locale )
+	 *
+	 * @value [Date or Number]
+	 *
+	 * @pattern [String or Object] see datetime/expand_pattern for more info.
+	 *
+	 * @locale [String]
+	 *
+	 * Formats a date or number according to the given pattern string and the given locale (or the default locale if not specified).
+	 */
+	Globalize.format = function( value, pattern, locale ) {
+		locale = getLocale( locale );
 
-	//Remove percentage character from number string before parsing
-	if ( value.indexOf(culture.numberFormat.percent.symbol) > -1){
-		value = value.replace( culture.numberFormat.percent.symbol, "" );
-	}
+		if ( value instanceof Date ) {
 
-	// remove spaces: leading, trailing and between - and number. Used for negative currency pt-BR
-	value = value.replace( / /g, "" );
+			if ( !pattern ) {
+				throw new Error( "Missing pattern" );
+			}
+			pattern = datetimeExpandPattern( pattern, locale );
 
-	// allow infinity or hexidecimal
-	if ( regexInfinity.test(value) ) {
-		ret = parseFloat( value );
-	}
-	else if ( !radix && regexHex.test(value) ) {
-		ret = parseInt( value, 16 );
-	}
-	else {
+			value = datetimeFormat( value, pattern, locale );
 
-		// determine sign and number
-		var signInfo = parseNegativePattern( value, nf, nf.pattern[0] ),
-			sign = signInfo[ 0 ],
-			num = signInfo[ 1 ];
-
-		// #44 - try parsing as "(n)"
-		if ( sign === "" && nf.pattern[0] !== "(n)" ) {
-			signInfo = parseNegativePattern( value, nf, "(n)" );
-			sign = signInfo[ 0 ];
-			num = signInfo[ 1 ];
+		} else if ( typeof value === "number" ) {
+			// TODO value = numberFormat( value, pattern, locale );
+			throw new Error( "Number Format not implemented yet" );
 		}
 
-		// try parsing as "-n"
-		if ( sign === "" && nf.pattern[0] !== "-n" ) {
-			signInfo = parseNegativePattern( value, nf, "-n" );
-			sign = signInfo[ 0 ];
-			num = signInfo[ 1 ];
+		return value;
+	};
+
+	/**
+	 * Globalize.parseDate( value, patterns, locale )
+	 *
+	 * @value [Date]
+	 *
+	 * @patterns [Array] Optional. See datetime/expand_pattern for more info about each pattern. Defaults to the list of all presets defined in the locale (see datetime/all_presets for more info).
+	 *
+	 * @locale [String]
+	 *
+	 * Return a Date instance or null.
+	 */
+	Globalize.parseDate = function( value, patterns, locale ) {
+		var date;
+		locale = getLocale( locale );
+
+		if ( typeof value !== "string" ) {
+			throw new Error( "invalid value (" + value + "), string expected" );
 		}
 
-		sign = sign || "+";
+		if ( !patterns ) {
+			patterns = datetimeAllPresets( locale );
+		} else {
+			patterns = alwaysArray( patterns );
+		}
 
-		// determine exponent and number
-		var exponent,
-			intAndFraction,
-			exponentPos = num.indexOf( "e" );
-		if ( exponentPos < 0 ) exponentPos = num.indexOf( "E" );
-		if ( exponentPos < 0 ) {
-			intAndFraction = num;
-			exponent = null;
-		}
-		else {
-			intAndFraction = num.substr( 0, exponentPos );
-			exponent = num.substr( exponentPos + 1 );
-		}
-		// determine decimal position
-		var integer,
-			fraction,
-			decSep = nf[ "." ],
-			decimalPos = intAndFraction.indexOf( decSep );
-		if ( decimalPos < 0 ) {
-			integer = intAndFraction;
-			fraction = null;
-		}
-		else {
-			integer = intAndFraction.substr( 0, decimalPos );
-			fraction = intAndFraction.substr( decimalPos + decSep.length );
-		}
-		// handle groups (e.g. 1,000,000)
-		var groupSep = nf[ "," ];
-		integer = integer.split( groupSep ).join( "" );
-		var altGroupSep = groupSep.replace( /\u00A0/g, " " );
-		if ( groupSep !== altGroupSep ) {
-			integer = integer.split( altGroupSep ).join( "" );
-		}
-		// build a natively parsable number string
-		var p = sign + integer;
-		if ( fraction !== null ) {
-			p += "." + fraction;
-		}
-		if ( exponent !== null ) {
-			// exponent itself may have a number patternd
-			var expSignInfo = parseNegativePattern( exponent, nf, "-n" );
-			p += "e" + ( expSignInfo[0] || "+" ) + expSignInfo[ 1 ];
-		}
-		if ( regexParseFloat.test(p) ) {
-			ret = parseFloat( p );
-		}
-	}
-	return ret;
-};
+		arraySome( patterns, function( pattern ) {
+			pattern = datetimeExpandPattern( pattern, locale );
+			date = datetimeParse( value, pattern, locale );
+			return !!date;
+		});
 
-Globalize.culture = function( cultureSelector ) {
-	// setter
-	if ( typeof cultureSelector !== "undefined" ) {
-		this.cultureSelector = cultureSelector;
-	}
-	// getter
-	return this.findClosestCulture( cultureSelector ) || this.cultures[ "default" ];
-};
+		return date || null;
+	};
 
-}( this ));
+	/**
+	 * Globalize.translate( path, locale )
+	 *
+	 * @path [String or Array]
+	 *
+	 * @locale [String]
+	 *
+	 * Translate item given its path.
+	 */
+	Globalize.translate = function( path , locale ) {
+		locale = getLocale( locale );
+		path = alwaysArray( path );
+		return locale.get( [ "globalize-translation/{languageId}" ].concat( path ) );
+	};
+
+	return Globalize;
+
+
+
+}));

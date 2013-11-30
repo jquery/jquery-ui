@@ -69,16 +69,16 @@ test( "value", function() {
 		picker = input.datepicker( "widget" ),
 		inline = $( "#inline" ).datepicker();
 
-	input.datepicker( "value", "1/1/2014" );
-	equal( input.val(), "1/1/2014", "input's value set" );
+	input.datepicker( "value", "1/1/14" );
+	equal( input.val(), "1/1/14", "input's value set" );
 	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
-	equal( input.datepicker( "value" ), "1/1/2014", "getter" );
+	equal( input.datepicker( "value" ), "1/1/14", "getter" );
 
-	inline.datepicker( "value", "1/1/2014" );
+	inline.datepicker( "value", "1/1/14" );
 	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
-	equal( inline.datepicker( "value" ), "1/1/2014", "getter" );
+	equal( inline.datepicker( "value" ), "1/1/14", "getter" );
 
 	// TODO: Handle for invalid values.
 
@@ -93,7 +93,7 @@ test( "valueAsDate", function() {
 		inline = $( "#inline" ).datepicker();
 
 	input.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
-	equal( input.val(), "1/1/2014", "input's value set" );
+	equal( input.val(), "1/1/14", "input's value set" );
 	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ),

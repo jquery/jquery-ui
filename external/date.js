@@ -6,25 +6,31 @@
  */
 (function( $, undefined ) {
 
-$.date = function( datestring, formatstring ) {
-	//TODO: Need to refactor $.date to be a constructor, move the methods to a prototype.
-	var calendar = Globalize.culture().calendar,
-		format = formatstring ? formatstring : calendar.patterns.d,
-		date = datestring ? Globalize.parseDate( datestring, format ) : new Date();
+var weekdays = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ],
+	weekdaysRev = {
+		"sun": 0,
+		"mon": 1,
+		"tue": 2,
+		"wed": 3,
+		"thu": 4,
+		"fri": 5,
+		"sat": 6
+	};
 
-	if ( !date ) {
-		date = new Date();
+Globalize.locale( "en" );
+
+$.date = function( date, globalFormat ) {
+	//TODO: Need to refactor $.date to be a constructor, move the methods to a prototype.
+	if ( typeof date === "string" && date.length ) {
+		date = Globalize.parseDate( date, globalFormat );
 	}
 
+	date = date || new Date();
+
 	return {
-		refresh: function() {
-			calendar = Globalize.culture().calendar;
-			format = formatstring || calendar.patterns.d;
-			return this;
-		},
-		setFormat: function( formatstring ) {
-			if ( formatstring ) {
-				format = formatstring;
+		setFormat: function( format ) {
+			if ( format ) {
+				globalFormat = format;
 			}
 			return this;
 		},
@@ -82,7 +88,7 @@ $.date = function( datestring, formatstring ) {
 			return 32 - new Date( year, month, 32 ).getDate();
 		},
 		monthName: function() {
-			return calendar.months.names[ date.getMonth() ];
+			return Globalize.format( date, { pattern: "MMMM" } );
 		},
 		day: function() {
 			return date.getDate();
@@ -101,10 +107,10 @@ $.date = function( datestring, formatstring ) {
 		weekdays: function() {
 			var result = [];
 			for ( var dow = 0; dow < 7; dow++ ) {
-				var day = ( dow + calendar.firstDay ) % 7;
+				var day = ( dow + weekdaysRev[ Globalize.locale().supplemental.weekData.firstDay() ] ) % 7;
 				result.push({
-					shortname: calendar.days.namesShort[ day ],
-					fullname: calendar.days.names[ day ]
+					shortname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/abbreviated", weekdays[ day ] ]),
+					fullname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/wide", weekdays[ day ] ]),
 				});
 			}
 			return result;
@@ -113,12 +119,12 @@ $.date = function( datestring, formatstring ) {
 			var result = [],
 				today = $.date(),
 				firstDayOfMonth = new Date( this.year(), date.getMonth(), 1 ).getDay(),
-				leadDays = ( firstDayOfMonth - calendar.firstDay + 7 ) % 7,
+				leadDays = ( firstDayOfMonth - weekdaysRev[ Globalize.locale().supplemental.weekData.firstDay() ] + 7 ) % 7,
 				rows = Math.ceil( ( leadDays + this.daysInMonth() ) / 7 ),
 				printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
 			for ( var row = 0; row < rows; row++ ) {
 				var week = result[ result.length ] = {
-					number: this.iso8601Week( printDate ),
+					number: Globalize.format( printDate, { pattern: "w" } ),
 					days: []
 				};
 				for ( var dayx = 0; dayx < 7; dayx++ ) {
@@ -153,16 +159,6 @@ $.date = function( datestring, formatstring ) {
 			result[ result.length - 1 ].last = true;
 			return result;
 		},
-		iso8601Week: function(date) {
-			var checkDate = new Date( date.getTime() );
-			// Find Thursday of this week starting on Monday
-			checkDate.setDate( checkDate.getDate() + 4 - ( checkDate.getDay() || 7 ) );
-			var time = checkDate.getTime();
-			// Compare with Jan 1
-			checkDate.setMonth( 0 );
-			checkDate.setDate( 1 );
-			return Math.floor( Math.round( ( time - checkDate ) / 86400000) / 7 ) + 1;
-		},
 		select: function() {
 			this.selected = this.clone();
 			return this;
@@ -170,27 +166,20 @@ $.date = function( datestring, formatstring ) {
 		clone: function() {
 			return $.date( new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), date.getHours(),
-				date.getMinutes(), date.getSeconds()), formatstring );
+				date.getMinutes(), date.getSeconds()), globalFormat );
 		},
 		// TODO compare year, month, day each for better performance
 		equal: function( other ) {
 			function format( date ) {
-				return Globalize.format( date, "d" );
+				return Globalize.format( date, { pattern: "yyyyMMdd" } );
 			}
 			return format( date ) === format( other );
 		},
 		date: function() {
 			return date;
 		},
-		format: function( formatstring ) {
-			return Globalize.format( date, formatstring ? formatstring : format );
-		},
-		calendar: function( newcalendar ) {
-			if ( newcalendar ) {
-				calendar = newcalendar;
-				return this;
-			}
-			return calendar;
+		format: function( format ) {
+			return Globalize.format( date, format || globalFormat );
 		}
 	};
 };

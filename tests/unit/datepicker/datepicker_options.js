@@ -42,16 +42,16 @@ test( "appendTo", function() {
 
 test( "dateFormat", function() {
 	expect( 2 );
-	var input = $( "#datepicker" ).val( "1/1/2014" ).datepicker(),
+	var input = $( "#datepicker" ).val( "1/1/14" ).datepicker(),
 		picker = input.datepicker( "widget" ),
 		firstDayLink = picker.find( "td[id]:first a" ); 
 
 	input.datepicker( "open" );
 	firstDayLink.trigger( "mousedown" );
-	equal( input.val(), "1/1/2014", "default formatting" );
+	equal( input.val(), "1/1/14", "default formatting" );
 
-	input.datepicker( "option", "dateFormat", "D" );
-	equal( input.val(), "Wednesday, January 01, 2014", "updated formatting" );
+	input.datepicker( "option", "dateFormat", { date: "full" } );
+	equal( input.val(), "Wednesday, January 1, 2014", "updated formatting" );
 
 	input.datepicker( "destroy" );
 });
