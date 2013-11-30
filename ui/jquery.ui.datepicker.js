@@ -43,6 +43,7 @@ $.widget( "ui.datepicker", {
 		select: null
 	},
 	_create: function() {
+		this.options.dateFormat = this.options.dateFormat || { date: "short" };
 		this.date = $.date( null, this.options.dateFormat );
 
 		this.date.eachDay = this.options.eachDay;
@@ -335,6 +336,7 @@ $.widget( "ui.datepicker", {
 			i = 0;
 
 		for ( i; i < months.length; i++ ) {
+			// TODO Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
 			this.date = months[ i ];
 			headerClass = months[ i ].first ? "ui-corner-left" :
 				months[ i ].last ? "ui-corner-right" : "";
@@ -368,7 +370,7 @@ $.widget( "ui.datepicker", {
 		"</div>";
 	},
 	_buildPreviousLink: function() {
-		var labels = Globalize.localize( "datepicker" );
+		var labels = Globalize.translate( "datepicker" );
 		return "<button class='ui-datepicker-prev ui-corner-all' " +
 			"title='" + labels.prevText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-w'>" +
@@ -377,7 +379,7 @@ $.widget( "ui.datepicker", {
 			"</button>";
 	},
 	_buildNextLink: function() {
-		var labels = Globalize.localize( "datepicker" );
+		var labels = Globalize.translate( "datepicker" );
 		return "<button class='ui-datepicker-next ui-corner-all' " +
 			"title='" + labels.nextText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-e'>" +
@@ -386,7 +388,7 @@ $.widget( "ui.datepicker", {
 			"</button>";
 	},
 	_buildTitlebar: function() {
-		var labels = Globalize.localize( "datepicker" );
+		var labels = Globalize.translate( "datepicker" );
 		return "<div role='header' id='" + this.id + "-title'>" +
 			"<div id='" + this.id + "-month-lbl' class='ui-datepicker-title'>" +
 				this._buildTitle() +
@@ -412,7 +414,7 @@ $.widget( "ui.datepicker", {
 	_buildGridHeading: function() {
 		var cells = "",
 			i = 0,
-			labels = Globalize.localize( "datepicker" );
+			labels = Globalize.translate( "datepicker" );
 
 		if ( this.options.showWeek ) {
 			cells += "<th class='ui-datepicker-week-col'>" + labels.weekHeader + "</th>";
@@ -432,10 +434,12 @@ $.widget( "ui.datepicker", {
 		"</th>";
 	},
 	_buildGridBody: function() {
-		var rows = "",
-			i = 0;
-		for ( i; i < this.date.days().length; i++ ) {
-			rows += this._buildWeekRow( this.date.days()[i] );
+		// this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times. So, it equals O(n^3). Not good at all. Caching.
+		var days = this.date.days(),
+			i = 0,
+			rows = "";
+		for ( i; i < days.length; i++ ) {
+			rows += this._buildWeekRow( days[i] );
 		}
 		return "<tbody role='presentation'>" + rows + "</tbody>";
 	},
@@ -472,7 +476,7 @@ $.widget( "ui.datepicker", {
 	_buildDayLink: function( day ) {
 		var link,
 			classes = [ "ui-state-default" ],
-			labels = Globalize.localize( "datepicker" );
+			labels = Globalize.translate( "datepicker" );
 
 		if ( day.date === this.date.day() ) {
 			classes.push( "ui-state-focus" );
@@ -510,7 +514,7 @@ $.widget( "ui.datepicker", {
 					day.date + "</span>";
 	},
 	_buildButtons: function() {
-		var labels = Globalize.localize( "datepicker" );
+		var labels = Globalize.translate( "datepicker" );
 		return "<div class='ui-datepicker-buttonpane ui-widget-content'>" +
 			"<button class='ui-datepicker-current'>" + labels.currentText + "</button>" +
 			"<button class='ui-datepicker-close'>" + labels.closeText + "</button>" +
