@@ -5,15 +5,15 @@ module.exports = function( grunt ) {
 var
 	// files
 	coreFiles = [
-		"jquery.ui.core.js",
-		"jquery.ui.widget.js",
-		"jquery.ui.mouse.js",
-		"jquery.ui.draggable.js",
-		"jquery.ui.droppable.js",
-		"jquery.ui.resizable.js",
-		"jquery.ui.selectable.js",
-		"jquery.ui.sortable.js",
-		"jquery.ui.effect.js"
+		"core.js",
+		"widget.js",
+		"mouse.js",
+		"draggable.js",
+		"droppable.js",
+		"resizable.js",
+		"selectable.js",
+		"sortable.js",
+		"effect.js"
 	],
 
 	uiFiles = coreFiles.map(function( file ) {
@@ -42,7 +42,7 @@ var
 		"tooltip",
 		"theme"
 	].map(function( component ) {
-		return "themes/base/jquery.ui." + component + ".css";
+		return "themes/base/" + component + ".css";
 	}),
 
 	// minified files
@@ -166,7 +166,7 @@ grunt.initConfig({
 	},
 	jscs: {
 		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
-		ui: [ "ui/jquery.ui.*.js", "!ui/jquery.ui.datepicker.js", "!ui/jquery.ui.sortable.js", "!ui/jquery.ui.resizable.js", "!ui/jquery.ui.draggable.js" ],
+		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js", "!ui/draggable.js" ],
 		// TODO enable this once we have a tool that can help with fixing formatting of existing files
 		// tests: "tests/unit/**/*.js",
 		grunt: "Gruntfile.js"
