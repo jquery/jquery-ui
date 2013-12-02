@@ -18,7 +18,24 @@
 	$(function() {
 		$( "#datepicker" ).datepicker();
 		$( "#format" ).change(function() {
-			$( "#datepicker" ).datepicker( "option", "dateFormat", $( this ).val() );
+			var format;
+			switch( $( this ).val() ) {
+				case "short":
+					$( "#datepicker" ).datepicker( "option", "dateFormat", {
+						date: "short"
+					});
+					break;
+				case "long":
+					$( "#datepicker" ).datepicker( "option", "dateFormat", {
+						date: "long"
+					});
+					break;
+				case "iso":
+					$( "#datepicker" ).datepicker( "option", "dateFormat", {
+						pattern: "yyyy-MM-dd"
+					});
+					break;
+			}
 		});
 	});
 	</script>
@@ -29,9 +46,9 @@
 
 <p>Format options:<br />
 	<select id="format">
-		<option value="d">Default - M/d/yyyy</option>
-		<option value="D">Long - dddd, MMMM dd, yyyy</option>
-		<option value="yyyy-MM-dd">ISO 8601 - yyyy-MM-dd</option>
+		<option value="short">Short - M/d/yy in "en" locale</option>
+		<option value="long">Long - MMMM d, y in "en" locale</option>
+		<option value="iso">ISO 8601 - yyyy-MM-dd</option>
 	</select>
 </p>
 

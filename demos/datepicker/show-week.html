@@ -17,8 +17,7 @@
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker({
-			showWeek: true,
-			firstDay: 1
+			showWeek: true
 		});
 	});
 	</script>
@@ -28,10 +27,9 @@
 <p>Date: <input type="text" id="datepicker"></p>
 
 <div class="demo-description">
-<p>The datepicker can show the week of the year. The default calculation follows
-	the ISO 8601 definition: the week starts on Monday, the first week of the year
-	contains the first Thursday of the year. This means that some days from one
-	year may be placed into weeks 'belonging' to another year.</p>
+<p>The datepicker can show the week of the year. The calculation follows
+	<a href="http://www.unicode.org/reports/tr35 /tr35-dates.html#Date_Field_Symbol_Table">Unicode CLDR specification</a>.
+	This means that some days from one year may be placed into weeks 'belonging' to another year.</p>
 </div>
 </body>
 </html>

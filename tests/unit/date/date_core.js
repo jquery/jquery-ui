@@ -53,29 +53,28 @@ test("Date Adjustments - Leap Year Edge Cases", 1, function(){
 test("List days of Week", 2, function(){
 	var date = $.date(),
 		offset0 = [
-			{ "fullname": "Sunday", "shortname": "Su" },
-			{ "fullname": "Monday", "shortname": "Mo" },
-			{ "fullname": "Tuesday", "shortname": "Tu" },
-			{ "fullname": "Wednesday", "shortname": "We" },
-			{ "fullname": "Thursday", "shortname": "Th" },
-			{ "fullname": "Friday", "shortname": "Fr" },
-			{ "fullname": "Saturday", "shortname": "Sa" }
+			{ "fullname": "Sunday", "shortname": "Sun" },
+			{ "fullname": "Monday", "shortname": "Mon" },
+			{ "fullname": "Tuesday", "shortname": "Tue" },
+			{ "fullname": "Wednesday", "shortname": "Wed" },
+			{ "fullname": "Thursday", "shortname": "Thu" },
+			{ "fullname": "Friday", "shortname": "Fri" },
+			{ "fullname": "Saturday", "shortname": "Sat" }
 		],
 		offset1 = [
-			{ "fullname": "Montag", "shortname": "Mo" },
-			{ "fullname": "Dienstag", "shortname": "Di" },
-			{ "fullname": "Mittwoch", "shortname": "Mi" },
-			{ "fullname": "Donnerstag", "shortname": "Do" },
-			{ "fullname": "Freitag", "shortname": "Fr" },
-			{ "fullname": "Samstag", "shortname": "Sa" },
-			{ "fullname": "Sonntag", "shortname": "So" }
+			{ "fullname": "Montag", "shortname": "Mo." },
+			{ "fullname": "Dienstag", "shortname": "Di." },
+			{ "fullname": "Mittwoch", "shortname": "Mi." },
+			{ "fullname": "Donnerstag", "shortname": "Do." },
+			{ "fullname": "Freitag", "shortname": "Fr." },
+			{ "fullname": "Samstag", "shortname": "Sa." },
+			{ "fullname": "Sonntag", "shortname": "So." }
 		];
 	deepEqual(date.weekdays(), offset0, "Get weekdays with start of day on 0 (English)");
-	Globalize.culture( "de-DE" );
-	date.refresh();
+	Globalize.locale( "de-DE" );
 	deepEqual(date.weekdays(), offset1, "Get weekdays with start of day on 1 (Germany)");
 	//Revert Globalize changes back to English
-	Globalize.culture("en-EN");
+	Globalize.locale( "en" );
 });
 
 test("Leap Year Check", 8, function(){
@@ -101,10 +100,9 @@ test("Days in Month", 3, function(){
 test("Month Name", 2, function(){
 	var date = $.date();
 	equal(date.setMonth(3).monthName(), "April", "Month name return April (English)");
-	Globalize.culture( "de-DE" );
-	date.refresh();
+	Globalize.locale( "de-DE" );
 	equal(date.setMonth(2).monthName(), "März", "Month name return March (German)");
-	Globalize.culture("en-EN");
+	Globalize.locale( "en" );
 
 });
 
@@ -154,13 +152,6 @@ test( "Months", 5, function(){
 	ok( firstMonth.month() === lastMonth.month() - 1 );
 });
 
-test("iso8601Week", 2, function(){
-	var date = $.date();
-	//date.setFullDate(2012, 0, 8);
-	equal(date.iso8601Week(new Date(2012, 0, 8)), 1, "Test first week is 1");
-	equal(date.iso8601Week(new Date(2012, 11, 31)), 1, "Test last week is 1 in next year");
-});
-
 test("Equal", 4, function(){
 	var date = $.date();
 	date.setFullDate(2012, 9, 16);
@@ -178,45 +169,8 @@ test("Date", 1, function(){
 test("Format", 4, function(){
 	var date = $.date();
 	date.setFullDate(2012, 9, 16);
-	equal(date.format(), "10/16/2012", "Checking default US format");
-	equal(date.format("yyyy/MM/dd"), "2012/10/16", "Checking yyyy/MM/dd format");
-	equal(date.format("yy/dd/MM"), "12/16/10", "Checking yy/dd/MM format");
-	equal(date.format("MMMM dd, yyyy"), "October 16, 2012", "Checking MMMM dd, yyyy format");
-});
-
-test("Calendar", 3, function(){
-	var date = $.date(),
-		de_cal = {
-			calendars: {
-				standard: {
-					"/": ".",
-					firstDay: 1,
-					days: {
-						names: ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],
-						namesAbbr: ["So","Mo","Di","Mi","Do","Fr","Sa"],
-						namesShort: ["So","Mo","Di","Mi","Do","Fr","Sa"]
-					},
-					months: {
-						names: ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember",""],
-						namesAbbr: ["Jan","Feb","Mrz","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez",""]
-					},
-					AM: null,
-					PM: null,
-					eras: [{"name":"n. Chr.","start":null,"offset":0}],
-					patterns: {
-						d: "dd.MM.yyyy",
-						D: "dddd, d. MMMM yyyy",
-						t: "HH:mm",
-						T: "HH:mm:ss",
-						f: "dddd, d. MMMM yyyy HH:mm",
-						F: "dddd, d. MMMM yyyy HH:mm:ss",
-						M: "dd MMMM",
-						Y: "MMMM yyyy"
-					}
-				}
-			}
-		};
-	ok(date.calendar(), "Calendar type returned");
-	ok(date.calendar(de_cal), "Calendar type changed");
-	deepEqual(date.calendar(), de_cal, "Calendar change verified");
+	equal(date.format({ date: "short" }), "10/16/12", "Checking default US format");
+	equal(date.format({ pattern: "yyyy/MM/dd" }), "2012/10/16", "Checking yyyy/MM/dd format");
+	equal(date.format({ pattern: "yy/dd/MM" }), "12/16/10", "Checking yy/dd/MM format");
+	equal(date.format({ pattern: "MMMM dd, yyyy" }), "October 16, 2012", "Checking MMMM dd, yyyy format");
 });

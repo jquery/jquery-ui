@@ -19,24 +19,18 @@ var weekdays = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ],
 
 Globalize.locale( "en" );
 
-$.date = function( date, format ) {
+$.date = function( date, globalFormat ) {
 	//TODO: Need to refactor $.date to be a constructor, move the methods to a prototype.
-	var origFormat = format;
-
 	if ( typeof date === "string" && date.length ) {
-		date = Globalize.parseDate( date, format );
+		date = Globalize.parseDate( date, globalFormat );
 	}
 
 	date = date || new Date();
 
 	return {
-		refresh: function() {
-			format = origFormat;
-			return this;
-		},
 		setFormat: function( format ) {
 			if ( format ) {
-				format = format;
+				globalFormat = format;
 			}
 			return this;
 		},
@@ -130,7 +124,7 @@ $.date = function( date, format ) {
 				printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
 			for ( var row = 0; row < rows; row++ ) {
 				var week = result[ result.length ] = {
-					number: this.iso8601Week( printDate ),
+					number: Globalize.format( printDate, { pattern: "w" } ),
 					days: []
 				};
 				for ( var dayx = 0; dayx < 7; dayx++ ) {
@@ -165,16 +159,6 @@ $.date = function( date, format ) {
 			result[ result.length - 1 ].last = true;
 			return result;
 		},
-		iso8601Week: function(date) {
-			var checkDate = new Date( date.getTime() );
-			// Find Thursday of this week starting on Monday
-			checkDate.setDate( checkDate.getDate() + 4 - ( checkDate.getDay() || 7 ) );
-			var time = checkDate.getTime();
-			// Compare with Jan 1
-			checkDate.setMonth( 0 );
-			checkDate.setDate( 1 );
-			return Math.floor( Math.round( ( time - checkDate ) / 86400000) / 7 ) + 1;
-		},
 		select: function() {
 			this.selected = this.clone();
 			return this;
@@ -182,7 +166,7 @@ $.date = function( date, format ) {
 		clone: function() {
 			return $.date( new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), date.getHours(),
-				date.getMinutes(), date.getSeconds()), format );
+				date.getMinutes(), date.getSeconds()), globalFormat );
 		},
 		// TODO compare year, month, day each for better performance
 		equal: function( other ) {
@@ -195,7 +179,7 @@ $.date = function( date, format ) {
 			return date;
 		},
 		format: function( format ) {
-			return Globalize.format( date, format || origFormat );
+			return Globalize.format( date, format || globalFormat );
 		}
 	};
 };

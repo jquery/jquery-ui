@@ -294,8 +294,6 @@ $.widget( "ui.datepicker", {
 		return element;
 	},
 	_createTmpl: function() {
-		this.date.refresh();
-
 		this._createDatepicker();
 		this.picker.find( "button" ).button();
 
@@ -532,8 +530,6 @@ $.widget( "ui.datepicker", {
 	refresh: function() {
 		//determine which day gridcell to focus after refresh
 		//TODO: Prevent disabled cells from being focused
-		this.date.refresh();
-
 		if ( this.options.numberOfMonths === 1 ) {
 			this.grid = $( this._buildGrid() );
 			$( ".ui-datepicker-title", this.picker ).html( this._buildTitle() );

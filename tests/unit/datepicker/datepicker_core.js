@@ -7,7 +7,7 @@ TestHelpers.testJshint( "datepicker" );
 test( "input's value determines starting date", function() {
 	expect( 3 );
 
-	var input = $( "#datepicker" ).val( "1/1/2014" ).datepicker(),
+	var input = $( "#datepicker" ).val( "1/1/14" ).datepicker(),
 		picker = input.datepicker( "widget" );
 
 	input.datepicker( "open" );
@@ -331,19 +331,19 @@ test( "Keyboard handling", function() {
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke enter" );
 
 	// Enter = Select today's date by default
-	input.val( "1/1/2014" ).datepicker( "open" )
+	input.val( "1/1/14" ).datepicker( "open" )
 		.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke enter - preset" );
 
 	// Control + Home = Change the calendar to the current month
-	input.val( "1/1/2014" ).datepicker( "open" )
+	input.val( "1/1/14" ).datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.HOME })
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke ctrl+home" );
 
 	// Control + End = Close the calendar and clear the input
-	input.val( "1/1/2014" ).datepicker( "open" )
+	input.val( "1/1/14" ).datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.END });
 	equal( input.val(), "", "Keystroke ctrl+end" );
 
@@ -352,12 +352,12 @@ test( "Keyboard handling", function() {
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
 	ok( !instance.isOpen, "escape closes the datepicker" );
 
-	input.val( "1/1/2014" ).datepicker( "open" )
+	input.val( "1/1/14" ).datepicker( "open" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke esc - preset" );
 
-	input.val( "1/1/2014" ).datepicker( "open" )
+	input.val( "1/1/14" ).datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP })
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
