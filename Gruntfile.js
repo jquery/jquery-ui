@@ -182,7 +182,12 @@ grunt.initConfig({
 		    // disabling everything that doesn't (quite) work with PhantomJS for now
 		    // TODO except for all|index|test, try to include more as we go
 		    return !( /(all|index|test)\.html$/ ).test( file );
-		})
+		}),
+	    options: {
+		page : {
+		    viewportSize : { width: 700, height: 500 }
+		}
+	    }
 	},
 	jshint: {
 		options: {
