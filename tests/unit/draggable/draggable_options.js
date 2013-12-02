@@ -279,7 +279,7 @@ test( "{ containment: Selector }", function() {
 	expect( 1 );
 
 	var offsetAfter,
-		element = $( "#draggable1" ).draggable({ containment: $( "#qunit-fixture" ) }),
+		element = $( "#draggable1" ).draggable({ containment: "#qunit-fixture" }),
 		p = element.parent(),
 		po = p.offset(),
 		expected = {
@@ -875,39 +875,46 @@ test( "{ helper: 'clone' }, absolute with scroll offset on parent", function() {
 test( "{ helper: 'clone' }, absolute with scroll offset on root", function() {
 	expect( 3 );
 
-	TestHelpers.draggable.setScroll( "root" );
 	var helperOffset = null,
 		origOffset = null,
 		element = $( "#draggable1" ).draggable({
-			helper: "clone",
-			drag: function( event, ui) {
-				helperOffset = ui.helper.offset();
-			}
+			helper: "clone"
+		})
+		.on( "dragstop", function( event, ui) {
+			helperOffset = ui.helper.offset();
 		});
 
+	TestHelpers.draggable.setScroll("root");
 	$( "#main" ).css( "position", "relative" );
 	origOffset = $( "#draggable1" ).offset();
 	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
+		dx: -1,
+		dy: -1,
+		// MUST be one move since scroll events are async, things will not calculate properly
+		moves:1
 	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
 
+	deepEqual( helperOffset, { top: origOffset.top - 1, left: origOffset.left - 1 }, "dragged[1, 1]" );
+
+	TestHelpers.draggable.setScroll("root");
 	$( "#main" ).css( "position", "static" );
 	origOffset = $( "#draggable1" ).offset();
 	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
+		dx: -1,
+		dy: -1,
+		moves:1
 	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
+	deepEqual( helperOffset, { top: origOffset.top - 1, left: origOffset.left - 1 }, "dragged[1, 1]" );
 
+	TestHelpers.draggable.setScroll("root");
 	$( "#main" ).css( "position", "absolute" );
 	origOffset = $( "#draggable1" ).offset();
 	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
+		dx: -1,
+		dy: -1,
+		moves:1
 	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
+	deepEqual( helperOffset, { top: origOffset.top - 1, left: origOffset.left - 1 }, "dragged[1, 1]" );
 
 	TestHelpers.draggable.restoreScroll( "root" );
 });
@@ -915,41 +922,49 @@ test( "{ helper: 'clone' }, absolute with scroll offset on root", function() {
 test( "{ helper: 'clone' }, absolute with scroll offset on root and parent", function() {
 	expect( 3 );
 
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.setScroll();
-
 	var helperOffset = null,
 		origOffset = null,
 		element = $( "#draggable1" ).draggable({
-			helper: "clone",
-			drag: function( event, ui) {
-				helperOffset = ui.helper.offset();
-			}
+			helper: "clone"
+		})
+		.on( "dragstop", function( event, ui) {
+			helperOffset = ui.helper.offset();
 		});
 
+	TestHelpers.draggable.setScroll("root");
+	TestHelpers.draggable.setScroll();
 	$( "#main" ).css( "position", "relative" );
 	origOffset = $( "#draggable1" ).offset();
 	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
+		dx: -1,
+		dy: -1,
+		// MUST be one move since scroll events are async, things will not calculate properly
+		moves:1
 	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
 
+	deepEqual( helperOffset, { top: origOffset.top - 1, left: origOffset.left - 1 }, "dragged[1, 1]" );
+
+	TestHelpers.draggable.setScroll("root");
+	TestHelpers.draggable.setScroll();
 	$( "#main" ).css( "position", "static" );
 	origOffset = $( "#draggable1" ).offset();
 	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
+		dx: -1,
+		dy: -1,
+		moves:1
 	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
+	deepEqual( helperOffset, { top: origOffset.top - 1, left: origOffset.left - 1 }, "dragged[1, 1]" );
 
+	TestHelpers.draggable.setScroll("root");
+	TestHelpers.draggable.setScroll();
 	$( "#main" ).css( "position", "absolute" );
 	origOffset = $( "#draggable1" ).offset();
 	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
+		dx: -1,
+		dy: -1,
+		moves:1
 	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
+	deepEqual( helperOffset, { top: origOffset.top - 1, left: origOffset.left - 1 }, "dragged[1, 1]" );
 
 	TestHelpers.draggable.restoreScroll( "root" );
 	TestHelpers.draggable.restoreScroll();

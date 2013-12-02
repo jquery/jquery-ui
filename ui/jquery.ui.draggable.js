@@ -56,6 +56,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// domPosition: object containing original parent and index when using
 	// appendTo option without a helper
 	// dragDimensions: saved off width and height used for various options
+	// scrollChange: tracks how much scrollbar was automatically scrolled during single drag
 
 	scrollSensitivity: 20,
 	scrollSpeed: 5,
@@ -115,6 +116,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.originalPosition = this.startPosition = this._getPosition();
 		this.originalOffset = this.startOffset = this.dragEl.offset();
 		this.originalPointer = pointerPosition;
+		this.scrollChange = {
+			x: 0,
+			y: 0
+		};
 
 		// If not already cached within _createHelper()
 		if ( !this.dragDimensions ) {
@@ -132,10 +137,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		this.overflow = {
-			height: this.scrollParent[ 0 ] === this.document[ 0 ] ?
-				this.window.height() : this.scrollParent.height(),
-			width: this.scrollParent[ 0 ] === this.document[ 0 ] ?
-				this.window.width() : this.scrollParent.width()
+			height: this.overflowOffset ? this.scrollParent.height() : this.window.height(),
+			width: this.overflowOffset ? this.scrollParent.width() : this.window.width()
 		};
 
 		this._preparePosition( pointerPosition );
@@ -309,6 +312,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( pointerPosition ) {
+
 		var newScrollTop, newScrollLeft, change,
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
@@ -321,16 +325,22 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			overflowTop = this.overflowOffset ?
 				this.overflowOffset.top :
 				scrollTop,
+			// Determine the distance from right side of scrolling parent
 			xRight = this.overflow.width + overflowLeft - pointerPosition.x,
+			// Determine the distance from left side of scrolling parenbt
 			xLeft = pointerPosition.x- overflowLeft,
+			// Determine the distance from bottom side of scrolling parent
 			yBottom = this.overflow.height + overflowTop - pointerPosition.y,
+			// Determine the distance from top side of scrolling parent
 			yTop = pointerPosition.y - overflowTop;
 
-		// Handle vertical scrolling
+		// Distance from bottom less than threshhold, scroll down
 		if ( yBottom < scrollSensitivity ) {
 			change = this._speed( scrollSensitivity - yBottom );
 			this.scrollParent.scrollTop( scrollTop + change );
-			this.originalPointer.y = this.originalPointer.y + change;
+			this.scrollChange.y += change;
+
+		// Distance from top is less than threshhold, scroll up
 		} else if ( yTop < scrollSensitivity ) {
 			change = this._speed( scrollSensitivity - yTop );
 			newScrollTop = scrollTop - change;
@@ -339,15 +349,17 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			if ( newScrollTop >= 0 ) {
 				this.scrollParent.scrollTop( newScrollTop );
 				this._speed( scrollSensitivity - yTop );
-				this.originalPointer.y = this.originalPointer.y - change;
+				this.scrollChange.y -= change;
 			}
 		}
 
-		// Handle horizontal scrolling
+		// Distance from right less than threshhold, scroll right
 		if ( xRight < scrollSensitivity ) {
 			change = this._speed( scrollSensitivity - xRight );
 			this.scrollParent.scrollLeft( scrollLeft + change);
-			this.originalPointer.x = this.originalPointer.x + change;
+			this.scrollChange.x += change;
+
+		// Distance from left less than threshhold, scroll left
 		} else if ( xLeft < scrollSensitivity ) {
 			change = this._speed( scrollSensitivity - xLeft );
 			newScrollLeft = scrollLeft - change;
@@ -355,9 +367,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			// Don't do anything unless new value is "real"
 			if ( newScrollLeft >= 0 ) {
 				this.scrollParent.scrollLeft( newScrollLeft );
-				this.originalPointer.x = this.originalPointer.x - change;
+				this.scrollChange.x -= change;
 			}
 		}
+
 	},
 
 	_speed: function( distance ) {
@@ -368,8 +381,12 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( pointerPosition ) {
-		var leftDiff = pointerPosition.x - this.originalPointer.x,
-			topDiff = pointerPosition.y - this.originalPointer.y,
+
+		var fixed = ( this.cssPosition === "fixed" ),
+		  scrollX = ( fixed ) ? this.scrollChange.x : 0,
+			scrollY = ( fixed ) ? this.scrollChange.y : 0,
+		  leftDiff = pointerPosition.x - this.originalPointer.x - scrollX,
+			topDiff = pointerPosition.y - this.originalPointer.y - scrollY,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 
@@ -402,12 +419,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			// Reset offset based on difference of expected and overridden values
 			this.offset.left += newLeft - this.tempPosition.left;
 			this.offset.top += newTop - this.tempPosition.top;
-		}
-
-		// TODO: does this work with nested scrollable parents?
-		if ( this.cssPosition !== "fixed" ) {
-			newLeft += this.scrollParent.scrollLeft();
-			newTop += this.scrollParent.scrollTop();
 		}
 
 		this.dragEl.css({
@@ -487,7 +498,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 			return;
 		}
 
-		if ( $.isArray( container ) ) {
+		if ( container.jquery ) {
 			offset = container.offset();
 			left = offset.left +
 				(parseFloat( $.css( container[ 0 ], "borderLeftWidth", true ) ) || 0) +
@@ -557,6 +568,16 @@ $.widget( "ui.draggable", $.ui.draggable, {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
+
+	$.widget( "ui.draggable", $.ui.draggable, {
+		_getContainer: function() {
+			if ( $.isArray( this.options.containment ) ) {
+				return this.options.containment;
+			}
+
+			return this._super();
+		}
+	});
 
 	// appendTo "parent" value
 	$.widget( "ui.draggable", $.ui.draggable, {

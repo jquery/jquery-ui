@@ -2,17 +2,28 @@ TestHelpers.draggable = {
 	// todo: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
 	testDrag: function(el, handle, dx, dy, expectedDX, expectedDY, msg) {
-		var offsetAfter, actual, expected,
-			offsetBefore = el.offset();
+		var positionAfter, actual, expected,
+			// Using offset rather than position, would break for fixed position elements
+			positionBefore = el.position();
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
-			dy: dy
+			dy: dy,
+			// MUST be one move since scroll events are async, things will not calculate properly
+			moves: 1
 		});
-		offsetAfter = el.offset();
+		positionAfter = el.position();
 
-		actual = { left: offsetAfter.left, top: offsetAfter.top };
-		expected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+		actual = {
+			left: positionAfter.left,
+			top: positionAfter.top
+		};
+
+		expected = {
+			left: positionBefore.left + expectedDX,
+			top: positionBefore.top + expectedDY
+		};
 
 		msg = msg ? msg + "." : "";
 		deepEqual(actual, expected, "dragged[" + dx + ", " + dy + "] " + msg);
@@ -26,21 +37,52 @@ TestHelpers.draggable = {
 	testScroll: function(el, position ) {
 		var oldPosition = $("#main").css("position");
 		$("#main").css("position", position);
-		TestHelpers.draggable.shouldMove(el, position+" parent");
+
+		// Draggable should now be in top left, partially in viewport
+		// See that it drags to top-left properly
+		TestHelpers.draggable.testDrag( el, el, -50, -50, -50, -50, position + " parent" );
+
 		$("#main").css("position", oldPosition);
 	},
 	restoreScroll: function( what ) {
 		if( what ) {
-			$(document).scrollTop(0); $(document).scrollLeft(0);
+			$( document ).scrollTop( 0 );
+			$( document ).scrollLeft( 0 );
 		} else {
-			$("#main").scrollTop(0); $("#main").scrollLeft(0);
+			$( "#main" ).scrollTop( 0 );
+			$( "#main" ).scrollLeft( 0 );
 		}
+
+		$(".force-scroll").remove();
+		// Reset fixture
+		$("#qunit-fixture").css({
+			top: "",
+			left: ""
+		});
+
 	},
-	setScroll: function( what ) {
-		if(what) {
-			$(document).scrollTop(100); $(document).scrollLeft(100);
+	setScroll: function( what, scrollLeftAmount, scrollTopAmount ) {
+
+		// Defaults to slightly less than half the size of dragable1, since simulate picks up by center by default
+		// This ensures that simulate will pick up the draggable in the viewport
+		scrollLeftAmount = scrollLeftAmount || 95;
+		scrollTopAmount = scrollTopAmount || 45;
+
+		$( document.body ).append( "<div class='force-scroll'>" );
+
+		// Make sure draggable is in viewport for test
+		$( "#qunit-fixture" ).css({
+			top: "0px",
+			left: "0px"
+		});
+
+
+		if( what ) {
+			$( document ).scrollTop( scrollTopAmount );
+			$( document ).scrollLeft( scrollLeftAmount );
 		} else {
-			$("#main").scrollTop(100); $("#main").scrollLeft(100);
+			$( "#main" ).scrollTop( scrollTopAmount );
+			$( "#main" ).scrollLeft( scrollLeftAmount );
 		}
 	},
 	border: function(el, side) {
