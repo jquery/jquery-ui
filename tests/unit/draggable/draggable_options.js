@@ -678,7 +678,8 @@ test( "helper, default, switching after initialization", function() {
 		},
 		positions = [ "absolute", "fixed", "relative", "static" ],
 		helpers = [ "original", "clone" ],
-		scrollPositions = [ "relative", "static", "absolute", "fixed" ];
+		// static is not an option here since the fixture is in an absolute container
+		scrollPositions = [ "relative", "absolute", "fixed" ];
 
 	for ( m = 0 ; m < helpers.length; m++ ) {
 		for ( l = 0; l < positions.length; l++ ) {
