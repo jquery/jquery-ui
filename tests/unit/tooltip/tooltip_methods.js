@@ -96,4 +96,39 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
+test( "preserve changes to title attributes on close and destroy", function() {
+	expect( 6 );
+	var element = $( "#tooltipped1" ),
+		changed = "changed title text",
+		original = "original title text",
+		tests = [];
+
+	// 1. Changes to title attribute are preserved on close()
+	tests[ 0 ] = { title: changed, expected: changed, method: "close" };
+	// 2. Changes to title attribute are preserved on destroy()
+	tests[ 1 ] = { title: changed, expected: changed , method: "destroy" };
+	// 3. Changes to title attribute are NOT preserved when set to empty string on close()
+	tests[ 2 ] = { title: "", expected: original, method: "close" };
+	// 4. Changes to title attribute are NOT preserved when set to empty string on destroy()
+	tests[ 3 ] = { title: "", expected: original, method: "destroy" };
+	// 5. Changes to title attribute NOT preserved when attribute has been removed on close()
+	tests[ 4 ] = { expected: original, method: "close" };
+	// 6. Changes to title attribute NOT preserved when attribute has been removed on destroy()
+	tests[ 5 ] = { expected: original, method: "destroy" };
+
+	$.each( tests, function( index, test ) {
+		
+		element.attr( "title", original ).tooltip()
+			.tooltip( "open", $.Event( "mouseover", { target: element[ 0 ] } ) );
+		if ( test.title ) {
+			element.attr( "title", test.title );
+		} else {
+			element.removeAttr( "title" );
+		}
+		element.tooltip( test.method );
+		equal( $( "#tooltipped1" ).attr( "title" ), test.expected );
+		
+	} );
+});
+
 }( jQuery ) );
