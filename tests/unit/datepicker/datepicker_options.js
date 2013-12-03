@@ -89,7 +89,7 @@ test("change", function() {
 
 asyncTest( "invocation", function() {
 	var button, image,
-		isOldIE = $.ui.ie && ( !document.documentMode || document.documentMode < 9 ),
+		isOldIE = $.ui.ie && ( !document.documentMode || document.documentMode < 10 ),
 		body = $( "body" );
 
 	expect( isOldIE ? 25 : 29 );
@@ -196,7 +196,7 @@ asyncTest( "invocation", function() {
 		image = button.children( "img" );
 		ok( image.length === 1, "Both - button image present" );
 
-		// TODO: occasionally this test flakily fails to focus in IE8 in browserstack
+		// TODO: This test occasionally fails to focus in IE in TestSwarm
 		if ( !isOldIE ) {
 			TestHelpers.datepicker.onFocus( inp, function() {
 				ok( dp.is( ":visible" ), "Both - rendered on focus" );
