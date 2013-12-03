@@ -305,7 +305,8 @@ $.widget( "ui.tooltip", {
 	close: function( event ) {
 		var that = this,
 			target = $( event ? event.currentTarget : this.element ),
-			tooltip = this._find( target );
+			tooltip = this._find( target ),
+			title = target.attr( "title" );
 
 		// disabling closes the tooltip, so we need to track when we're closing
 		// to avoid an infinite loop in case the tooltip becomes disabled on close
@@ -317,7 +318,8 @@ $.widget( "ui.tooltip", {
 		clearInterval( this.delayedShow );
 
 		// only set title if we had one before (see comment in _open())
-		if ( target.data( "ui-tooltip-title" ) ) {
+		// if the title attribute has changed since open(), don't restore
+		if ( target.data( "ui-tooltip-title" ) && ( title === "" || title === undefined ) ) {
 			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
 
@@ -380,7 +382,7 @@ $.widget( "ui.tooltip", {
 		// close open tooltips
 		$.each( this.tooltips, function( id, element ) {
 			// Delegate to close method to handle common cleanup
-			var event = $.Event( "blur" );
+			var event = $.Event( "blur" ), title;
 			event.target = event.currentTarget = element[0];
 			that.close( event, true );
 
@@ -390,7 +392,11 @@ $.widget( "ui.tooltip", {
 
 			// Restore the title
 			if ( element.data( "ui-tooltip-title" ) ) {
-				element.attr( "title", element.data( "ui-tooltip-title" ) );
+				// if the title attribute has changed since open(), don't restore
+				title = element.attr( "title" );
+				if ( title === "" || title === undefined ) {
+					element.attr( "title", element.data( "ui-tooltip-title" ) );
+				}
 				element.removeData( "ui-tooltip-title" );
 			}
 		});
