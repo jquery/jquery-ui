@@ -96,39 +96,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
-// #8925 - Changes to title attribute are preserved after close() or destroy()
-test( "preserve changes to title attributes on close and destroy", function() {
-	expect( 4 );
-	var element = $( "#tooltipped1" ),
-		changed = "changed title text";
-		
-	// 1. Changes to title attribute are preserved on close()
-	element.attr( "title", "original title text" ).tooltip()
-	       .tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
-		   .attr( "title", changed )
-		   .tooltip( "close" );
-	equal( $( "#tooltipped1" ).attr( "title" ), changed );
-	
-	// 2. Changes to title attribute are preserved on destroy()
-	element.attr( "title", "original title text" ).tooltip()
-	       .tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
-		   .attr( "title", changed )
-		   .tooltip( "destroy" );
-	equal( $( "#tooltipped1" ).attr( "title" ), changed );
-	
-	// 3. Changes to title attribute are NOT preserved when set to empty string
-	element.attr( "title", "original title text" ).tooltip()
-	       .tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
-		   .attr( "title", "" )
-		   .tooltip( "close" );
-	notEqual( $( "#tooltipped1" ).attr( "title" ), changed );
-	
-	// 4. Changes to title attribute NOT preserved when attribute has been removed
-	element.attr( "title", "original title text" ).tooltip()
-	       .tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
-		   .removeAttr( "title" )
-		   .tooltip( "close" );
-	notEqual( $( "#tooltipped1" ).attr( "title" ), changed );
-});
-
 }( jQuery ) );
