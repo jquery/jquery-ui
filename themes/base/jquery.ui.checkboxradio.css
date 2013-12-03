@@ -1,0 +1,32 @@
+/*!
+ * jQuery UI Checkboxradio @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/checkboxradio/#theming
+ */
+
+.ui-checkbox{
+	display:none;
+}
+.ui-checkbox-label:after{
+	border-radius: .12em;
+}
+body label.ui-radio-label.ui-button:after{
+	width: 8px;
+	height: 8px;
+	border-radius: 1em;
+	border-width: 4px;
+	overflow: visible;
+	border-style: solid;
+}
+label.ui-radio-label.ui-radio-checked:after,
+label.ui-radio-label.ui-radio-checked:hover:after{
+	background-color: black;
+}
+label.ui-button.ui-icon{
+	padding-left: 2.5em;
+}

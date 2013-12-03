@@ -33,6 +33,19 @@
 	background: #ffffff/*{bgColorContent}*/ url(images/ui-bg_flat_75_ffffff_40x100.png)/*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/;
 	color: #222222/*{fcContent}*/;
 }
+.ui-radio-label.ui-radio-checked:after,
+.ui-checkbox-label.ui-checkbox-checked:after {
+	border-color: #e6e6e6/*{bgColorDefault}Pos}*/;
+	background-color: #e6e6e6/*{bgColorDefault}Pos}*/;
+}
+.ui-radio-label:after,
+.ui-checkbox-label:after,
+.ui-radio-label.ui-radio-checked:hover:after,
+.ui-checkbox-label:after,
+.ui-checkbox-label.ui-checkbox-checked:hover:after {
+	background-color: #ffffff/*{bgColorContent}}*/;
+	border-color: #ffffff/*{bgColorContent}*/;
+}
 .ui-widget-content a {
 	color: #222222/*{fcContent}*/;
 }
@@ -76,7 +89,7 @@
 .ui-state-active .ui-icon,
 .ui-button.ui-icon:active:after {
 	background-image: url(images/ui-icons_454545_256x240.png)/*{iconsActive}*/;
-}			
+}
 .ui-state-highlight .ui-icon {
 	background-image: url(images/ui-icons_2e83ff_256x240.png)/*{iconsHighlight}*/;
 }
@@ -278,6 +291,7 @@
 	font-weight: normal/*{fwDefault}*/;
 	color: #555555/*{fcDefault}*/;
 }
+
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited,
@@ -324,6 +338,7 @@ a.ui-button:active,
 	font-weight: normal/*{fwDefault}*/;
 	color: #212121/*{fcActive}*/;
 }
+
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
