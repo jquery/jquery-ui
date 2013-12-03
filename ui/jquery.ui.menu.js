@@ -147,7 +147,7 @@ $.widget( "ui.menu", {
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" ).addBack()
-				.removeClass( "ui-menu ui-widget ui-widget-content ui-menu-icons" )
+				.removeClass( "ui-menu ui-widget ui-widget-content ui-menu-icons ui-front" )
 				.removeAttr( "role" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "aria-labelledby" )
@@ -292,7 +292,7 @@ $.widget( "ui.menu", {
 
 		// Initialize nested menus
 		submenus.filter( ":not(.ui-menu)" )
-			.addClass( "ui-menu ui-widget ui-widget-content" )
+			.addClass( "ui-menu ui-widget ui-widget-content ui-front" )
 			.hide()
 			.attr({
 				role: this.options.role,

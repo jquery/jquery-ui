@@ -15,7 +15,15 @@
 			$( "<p>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
 		}
 
-		$( "#menu1, #menu2, #menu3, .menu4" ).menu({
+		$( "#menu1, #menu3, .menu4" ).menu({
+			select: logger
+		});
+
+		$( "#menu2" ).menu({
+			position: {
+				my: "left top",
+				at: "left+10 top-20"
+			},
 			select: logger
 		});
 
@@ -39,6 +47,7 @@
 	<style>
 		body { font-size:62.5%; }
 		.ui-menu { width: 200px; margin-bottom: 2em; }
+		.menu2-container { width: 220px; }
 		.menu4 { height: 200px; overflow-y: auto; overflow-x: hidden; }
 		.address-item { border-bottom: 1px solid #999; }
 		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
@@ -88,7 +97,7 @@
 					<li>Salzburg</li>
 				</ul>
 			</li>
-			<li>Perch</li>
+			<li class="ui-state-disabled">Perch</li>
 		</ul>
 	</li>
 	<li class="ui-state-disabled">Amesville</li>
