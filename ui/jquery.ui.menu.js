@@ -64,9 +64,6 @@ $.widget( "ui.menu", {
 			"mousedown .ui-menu-item": function( event ) {
 				event.preventDefault();
 			},
-			"click .ui-state-disabled": function( event ) {
-				event.preventDefault();
-			},
 			"click .ui-menu-item": function( event ) {
 				var target = $( event.target );
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
