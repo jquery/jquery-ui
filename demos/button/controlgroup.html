@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Button - Checkboxes</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.checkboxradio.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		
+	});
+	</script>
+	<style>
+	#format { margin-top: 2em; }
+	.ui-controlgroup .ui-button{
+		margin-left: -.25em;
+		margin-right: -.25em;
+	}
+	.ui-controlgroup .ui-button:first-child{
+		margin-left: 0;
+	}
+	.ui-controlgroup-verticle {
+		width:500px;
+	}
+	.ui-controlgroup-verticle .ui-button{
+		float:left;
+		display:block;
+		width: 100%;
+		clear:both;
+		margin: 0;
+		border-bottom-style:none;
+	}
+	.ui-controlgroup-verticle .ui-button:last-child{
+		border-bottom-style:solid;
+	}
+	.ui-state-focus{
+		z-index:99;
+	}
+	</style>
+</head>
+<body>
+<div class="demo-description">
+	css for new checkbox widget
+</div>
+		<div id="controlgroup" class="ui-controlgroup">
+			<button class="ui-button ui-corner-left ui-widget">First Button</button>
+			<button class="ui-button ui-widget">Middle Button</button>
+			<button class="ui-button ui-corner-right ui-widget">Button Last</button>
+		</div>
+		<br/>
+		<div id="controlgroup" class="ui-controlgroup ui-controlgroup-verticle">
+			<button class="ui-button ui-corner-top ui-widget">First Button</button>
+			<button class="ui-button ui-widget">Middle Button</button>
+			<button class="ui-button ui-corner-bottom ui-widget">Button Last</button>
+		</div>
+</div>
+</body>
+</html>

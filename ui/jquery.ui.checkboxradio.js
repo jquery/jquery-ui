@@ -201,7 +201,6 @@ $.widget( "ui.checkboxradio", {
 		var isDisabled = this.element.hasClass( "ui-checkboxradio-disabled" );
 
 		if ( isDisabled !== this.options.disabled ) {
-			console.log( "refresh(); set disabled" );
 			this._setOptions( { "disabled": isDisabled } );
 		}
 	}
