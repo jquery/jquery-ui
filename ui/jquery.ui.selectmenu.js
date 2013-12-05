@@ -164,6 +164,7 @@ $.widget( "ui.selectmenu", {
 	refresh: function() {
 		this._refreshMenu();
 		this._setText( this.buttonText, this._getSelectedItem().text() );
+		this._setOption( "width", this.options.width );
 	},
 
 	_refreshMenu: function() {
