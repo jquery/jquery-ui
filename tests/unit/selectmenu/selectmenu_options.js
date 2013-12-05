@@ -57,4 +57,43 @@ test( "CSS styles", function () {
 	ok( menu.hasClass( "ui-corner-bottom" ) && !menu.hasClass( "ui-corner-all" ), "menu styles dropdown" );
 });
 
+
+test( "Width", function () {
+	expect( 8 );
+
+	var element = $( "#speed" ),
+		button, menu;
+
+	element.selectmenu();
+	button = element.selectmenu( "widget" );
+	menu = element.selectmenu( "menuWidget" );
+
+	equal( button.outerWidth(), element.outerWidth(), "button width auto" );
+	element.selectmenu( "open" );
+	equal( menu.outerWidth(), element.outerWidth(), "menu width auto" );
+
+	element.outerWidth( 100 );
+	element.selectmenu( "refresh" );
+
+	equal( button.outerWidth(), 100, "button width set by CSS" );
+	element.selectmenu( "open" );
+	equal( menu.outerWidth(), 100, "menu width set by CSS" );
+
+	element.width( "" );
+	element.selectmenu( "option", "width", 100 );
+	element.selectmenu( "refresh" );
+
+	equal( button.outerWidth(), 100, "button width set by JS option" );
+	element.selectmenu( "open" );
+	equal( menu.outerWidth(), 100, "menu width set by JS option" );
+
+	element.append( $( "<option>", { text: "Option with a little longer text" } ) );
+	element.selectmenu( "option", "width", "" );
+	element.selectmenu( "refresh" );
+
+	equal( button.outerWidth(), element.outerWidth(), "button width with long option" );
+	element.selectmenu( "open" );
+	ok( menu.outerWidth() >= element.outerWidth(), "menu width with long option" );
+});
+
 })( jQuery );
