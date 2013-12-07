@@ -317,7 +317,7 @@ $.widget( "ui.tooltip", {
 		clearInterval( this.delayedShow );
 
 		// only set title if we had one before (see comment in _open())
-		// if the title attribute has changed since open(), don't restore
+		// If the title attribute has changed since open(), don't restore
 		if ( target.data( "ui-tooltip-title" ) && !target.attr( "title" ) ) {
 			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
@@ -391,7 +391,7 @@ $.widget( "ui.tooltip", {
 
 			// Restore the title
 			if ( element.data( "ui-tooltip-title" ) ) {
-				// if the title attribute has changed since open(), don't restore
+				// If the title attribute has changed since open(), don't restore
 				if ( !element.attr( "title" ) ) {
 					element.attr( "title", element.data( "ui-tooltip-title" ) );
 				}
