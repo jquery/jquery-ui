@@ -210,7 +210,7 @@ $.widget( "ui.accordion", {
 		}
 	},
 
-	_panelKeyDown : function( event ) {
+	_panelKeyDown: function( event ) {
 		if ( event.keyCode === $.ui.keyCode.UP && event.ctrlKey ) {
 			$( event.currentTarget ).prev().focus();
 		}
@@ -254,7 +254,7 @@ $.widget( "ui.accordion", {
 
 		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" )
-			.filter(":not(.ui-accordion-content-active)")
+			.filter( ":not(.ui-accordion-content-active)" )
 			.hide();
 	},
 
@@ -375,7 +375,7 @@ $.widget( "ui.accordion", {
 			keydown: "_keydown"
 		};
 		if ( event ) {
-			$.each( event.split(" "), function( index, eventName ) {
+			$.each( event.split( " " ), function( index, eventName ) {
 				events[ eventName ] = "_eventHandler";
 			});
 		}
@@ -556,7 +556,7 @@ $.widget( "ui.accordion", {
 
 		// Work around for rendering bug in IE (#5421)
 		if ( toHide.length ) {
-			toHide.parent()[0].className = toHide.parent()[0].className;
+			toHide.parent()[ 0 ].className = toHide.parent()[ 0 ].className;
 		}
 		this._trigger( "activate", null, data );
 	}
