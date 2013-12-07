@@ -19,8 +19,8 @@ var
 	uiFiles = coreFiles.map(function( file ) {
 		return "ui/" + file;
 	}).concat( expandFiles( "ui/*.js" ).filter(function( file ) {
-		return coreFiles.indexOf( file.substring(3) ) === -1;
-	})),
+		return coreFiles.indexOf( file.substring( 3 ) ) === -1;
+	}) ),
 
 	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
 
@@ -97,7 +97,7 @@ uiFiles.concat( allI18nFiles ).forEach(function( file ) {
 
 uiFiles.forEach(function( file ) {
 	// TODO this doesn't do anything until https://github.com/rwldrn/grunt-compare-size/issues/13
-	compareFiles[ file ] = [ file,  mapMinFile( file ) ];
+	compareFiles[ file ] = [ file, mapMinFile( file ) ];
 });
 
 // grunt plugins
@@ -129,7 +129,7 @@ function createBanner( files ) {
 }
 
 grunt.initConfig({
-	pkg: grunt.file.readJSON("package.json"),
+	pkg: grunt.file.readJSON( "package.json" ),
 	files: {
 		dist: "<%= pkg.name %>-<%= pkg.version %>"
 	},
@@ -205,10 +205,10 @@ grunt.initConfig({
 	}
 });
 
-grunt.registerTask( "default", [ "lint", "test" ] );
-grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ] );
-grunt.registerTask( "test", [ "qunit" ] );
-grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
-grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
+grunt.registerTask( "default", [ "lint", "test" ]);
+grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
+grunt.registerTask( "test", [ "qunit" ]);
+grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ]);
+grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ]);
 
 };
