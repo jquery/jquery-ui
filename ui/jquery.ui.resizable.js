@@ -169,7 +169,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 			for(i in this.handles) {
 
 				if(this.handles[i].constructor === String) {
-					this.handles[i] = $(this.handles[i], this.element).show();
+					this.handles[i] = this.element.children( this.handles[ i ] ).first().show();
 				}
 
 				//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)

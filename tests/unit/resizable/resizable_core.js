@@ -206,4 +206,37 @@ test( "resizable stores correct size when using helper and grid (#9547)", functi
 	equal( target.height(), 100, "compare height" );
 });
 
+test( "nested resizable", function() {
+	expect( 4 );
+	
+	var outer = $( "<div id='outer' style='width:50px'></div>" ),
+		inner = $( "<div id='inner' style='width:30px'></div>" ),
+		target = $( "#resizable1" ),
+		innerHandle,
+		outerHandle;
+
+	outer.appendTo( target );
+	inner.appendTo( outer );
+
+	inner.resizable( { handles : "e" } );
+	outer.resizable( { handles : "e" } );
+	target.resizable( { handles : "e" } );
+
+	innerHandle = $( "#inner > .ui-resizable-e" );
+	outerHandle = $( "#outer > .ui-resizable-e" );
+	
+	TestHelpers.resizable.drag( innerHandle, 10 );
+	equal( inner.width(), 40, "compare width of inner element" );
+	TestHelpers.resizable.drag( innerHandle, -10 );
+	equal( inner.width(), 30, "compare width of inner element" );
+
+	TestHelpers.resizable.drag( outerHandle, 10 );
+	equal( outer.width(), 60, "compare width of outer element" );
+	TestHelpers.resizable.drag( outerHandle, -10 );
+	equal( outer.width(), 50, "compare width of outer element" );
+
+	inner.remove();
+	outer.remove();
+});
+
 })(jQuery);
