@@ -12,6 +12,7 @@
     "requireSpacesInsideArrayBrackets": "all",
     "disallowLeftStickedOperators": [ "?", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<=" ],
     "disallowRightStickedOperators": [ "?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "requireSpaceBeforeBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
     "requireRightStickedOperators": [ "!" ],
     "requireLeftStickedOperators": [ "," ],
     "disallowKeywords": [ "with" ],

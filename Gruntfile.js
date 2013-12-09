@@ -124,7 +124,7 @@ function createBanner( files ) {
 	return "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - " +
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\\n' : '' %>" +
-		(files ? "* Includes: " + fileNames.join(", ") + "\n" : "")+
+		(files ? "* Includes: " + fileNames.join(", ") + "\n" : "") +
 		"* Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n";
 }
