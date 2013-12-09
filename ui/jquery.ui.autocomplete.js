@@ -170,7 +170,9 @@ $.widget( "ui.autocomplete", {
 					event.preventDefault();
 					return;
 				}
-				this._searchTimeout( event );
+				if ( this.term !== this._value() ) {
+					this._searchTimeout( event );
+				}
 			},
 			focus: function() {
 				this.selectedItem = null;
