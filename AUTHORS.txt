@@ -88,7 +88,7 @@ Mario Visic <mario@mariovisic.com>
 Xavi Ramirez <xavi.rmz@gmail.com>
 Max Schnur <max.schnur@gmail.com>
 Saji Nediyanchath <saji89@gmail.com>
-Corey Frang <gnarf@gnarf.net>
+Corey Frang <gnarf37@gmail.com>
 Aaron Peterson <aaronp123@yahoo.com>
 Ivan Peters <ivan@ivanpeters.com>
 Mohamed Cherif Bouchelaghem <cherifbouchelaghem@yahoo.fr>
@@ -172,7 +172,7 @@ Justin Domnitz <jdomnitz@gmail.com>
 Douglas Cerna <douglascerna@yahoo.com>
 Bert ter Heide <bertjh@hotmail.com>
 Jasvir Nagra <jasvir@gmail.com>
-Petr Hromadko <yuriy@tokyoscale.com>
+Yuriy Khabarov <13real008@gmail.com>
 Harri Kilpiö <harri.kilpio@gmail.com>
 Lado Lomidze <lado.lomidze@gmail.com>
 Amir E. Aharoni <amir.aharoni@mail.huji.ac.il>
@@ -227,11 +227,11 @@ Fabrício Matté <ult_combo@hotmail.com>
 Viktor Kojouharov <vkojouharov@gmail.com>
 Pawel Maruszczyk (http://hrabstwo.net)
 Pavel Selitskas <p.selitskas@gmail.com>
-Bjørn Johansen <bjorn.johansen@metronet.no>
+Bjørn Johansen <post@bjornjohansen.no>
 Matthieu Penant <thieum22@hotmail.com>
 Dominic Barnes <dominic@dbarnes.info>
 David Sullivan <david.sullivan@gmail.com>
-Thomas Jaggi <thomas.jaggi@gmail.com>
+Thomas Jaggi <thomas@responsive.ch>
 Vahid Sohrabloo <vahid4134@gmail.com>
 Travis Carden <travis.carden@gmail.com>
 Bruno M. Custódio <bruno@brunomcustodio.com>
@@ -247,3 +247,19 @@ David Hansen <hansede@gmail.com>
 Brian Grinstead <briangrinstead@gmail.com>
 Christian Klammer <christian314159@gmail.com>
 Steven Luscher <jquerycla@steveluscher.com>
+Gan Eng Chin <engchin.gan@gmail.com>
+Gabriel Schulhof <gabriel.schulhof@intel.com>
+Alexander Schmitz <arschmitz@gmail.com>
+Vilhjálmur Skúlason <vis@dmm.is>
+Siebrand Mazeland <s.mazeland@xs4all.nl>
+Mohsen Ekhtiari <mohsenekhtiari@yahoo.com>
+Pere Orga <gotrunks@gmail.com>
+Jasper de Groot <mail@ugomobi.com>
+Stephane Deschamps <stephane.deschamps@gmail.com>
+Jyoti Deka <dekajp@gmail.com>
+Andrei Picus <office.nightcrawler@gmail.com>
+Ondrej Novy <novy@ondrej.org>
+Jacob McCutcheon <jacob.mccutcheon@gmail.com>
+Monika Piotrowicz <monika.piotrowicz@gmail.com>
+Imants Horsts <imants.horsts@inbox.lv>
+Eric Dahl <eric.c.dahl@gmail.com>
