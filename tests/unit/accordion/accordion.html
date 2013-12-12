@@ -116,29 +116,30 @@
 	</dd>
 </dl>
 
-	<script src="../../../external/requirejs/require.js"></script>
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../swarminject.js"></script>
-	<script src="../helper/jquery.js"></script>
-	<script>
-	QUnit.config.autostart = false;
-	require.config({
-		paths: {
-			"helper": "../helper",
-			"jquery": window.helper.jqueryUrl(),
-			"jquery.simulate": "../../../external/jquery-simulate/jquery.simulate",
-			"jshint": "../../../external/jshint/jshint",
-			"ui": "../../../ui"
-		},
-		shim: {
-			"jquery.simulate": [ "jquery" ]
-		}
-	});
-	require([ "./accordion" ], function() {
-		QUnit.start();
-	});
-	</script>
-
 </div>
+
+<script src="../../../external/requirejs/require.js"></script>
+<script src="../../../external/qunit/qunit.js"></script>
+<script src="../swarminject.js"></script>
+<script src="../helper/jquery.js"></script>
+<script>
+QUnit.config.autostart = false;
+require.config({
+	paths: {
+		"helper": "../helper",
+		"jquery": window.helper.jqueryUrl(),
+		"jquery.simulate": "../../../external/jquery-simulate/jquery.simulate",
+		"jshint": "../../../external/jshint/jshint",
+		"ui": "../../../ui"
+	},
+	shim: {
+		"jquery.simulate": [ "jquery" ]
+	}
+});
+require([ "./accordion" ], function() {
+	QUnit.start();
+});
+</script>
+
 </body>
 </html>
