@@ -49,4 +49,15 @@ test( "refresh: Ensure disabled state is preserved correctly.", function() {
 	ok( !element.button( "option", "disabled" ), "Changing a radio button's disabled property should update the state after refresh.");
 });
 
+test( "ui-state-active should always be removed when setting disabled true", function() {
+	expect( 2 );
+	var element = $( "<button></button>" ).button();
+
+	element.trigger( "mousedown" );
+	ok( element.hasClass( "ui-state-active" ), "On mousedown event button adds ui-state-active class" );
+
+	element.button("option", "disabled", true );
+	ok( !element.hasClass( "ui-state-active" ), "Disabling button removes ui-state-active class" );
+});
+
 })(jQuery);

@@ -250,7 +250,7 @@ $.widget( "ui.button", {
 			this.widget().toggleClass( "ui-state-disabled", !!value );
 			this.element.prop( "disabled", !!value );
 			if ( value ) {
-				this.buttonElement.removeClass( "ui-state-focus" );
+				this.buttonElement.removeClass( "ui-state-focus ui-state-active" );
 			}
 			return;
 		}
