@@ -15,6 +15,7 @@
 		"jquery-simulate": "1.0.0",
 		"jshint": "2.4.4",
 		"qunit": "1.14.0",
+		"requirejs": "2.1.14",
 
 		"jquery-1.6.0": "jquery#1.6.0",
 		"jquery-1.6.1": "jquery#1.6.1",
