@@ -1,14 +1,19 @@
-(function( $ ) {
+define([
+	"jquery",
+	"./accordion_test_helpers",
+	"helper/testsuite",
+	"ui/accordion"
+], function( $, accordionTestHelper, testHelper ) {
 
-var equalHeight = TestHelpers.accordion.equalHeight,
-	setupTeardown = TestHelpers.accordion.setupTeardown,
-	state = TestHelpers.accordion.state;
+var equalHeight = accordionTestHelper.equalHeight,
+	setupTeardown = accordionTestHelper.setupTeardown,
+	state = accordionTestHelper.state;
 
 module( "accordion: methods", setupTeardown() );
 
 test( "destroy", function() {
 	expect( 1 );
-	domEqual( "#list1", function() {
+	testHelper.domEqual( "#list1", function() {
 		$( "#list1" ).accordion().accordion( "destroy" );
 	});
 });
@@ -129,4 +134,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
-}( jQuery ) );
+});

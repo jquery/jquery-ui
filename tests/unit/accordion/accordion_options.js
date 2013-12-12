@@ -1,8 +1,12 @@
-(function( $ ) {
+define([
+	"jquery",
+	"./accordion_test_helpers",
+	"ui/accordion"
+], function( $, accordionTestHelper ) {
 
-var equalHeight = TestHelpers.accordion.equalHeight,
-	setupTeardown = TestHelpers.accordion.setupTeardown,
-	state = TestHelpers.accordion.state;
+var equalHeight = accordionTestHelper.equalHeight,
+	setupTeardown = accordionTestHelper.setupTeardown,
+	state = accordionTestHelper.state;
 
 module( "accordion: options", setupTeardown() );
 
@@ -460,4 +464,4 @@ test( "{ icons: hash }", function( assert ) {
 	assert.hasClasses( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ), "a2" );
 });
 
-}( jQuery ) );
+});
