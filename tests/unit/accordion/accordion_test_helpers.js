@@ -26,7 +26,6 @@ return {
 			}).get();
 		QUnit.push( QUnit.equiv(actual, expected), actual, expected );
 	}
-
 };
 
 });
