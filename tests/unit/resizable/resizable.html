@@ -44,6 +44,18 @@
 		height: 100px;
 		width: 100px;
 	}
+    #outer { 
+        height: 200px; 
+        width: 200px; 
+        margin: 50px;
+        padding: 50px;
+        border: 1px solid black;
+    }
+    #inner { 
+        height: 100px; 
+        width: 100px; 
+        border: 1px solid red;
+    }
 	</style>
 </head>
 <body>
@@ -59,6 +71,10 @@
 	<div id="resizable1">I'm a resizable.</div>
 </div>
 <img src="images/test.jpg" id="resizable2" alt="solid gray">
+
+<div id="outer">
+    <div id="inner"></div>
+</div>
 
 </div>
 </body>
