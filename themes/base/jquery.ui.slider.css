@@ -18,6 +18,8 @@
 	width: 1.2em;
 	height: 1.2em;
 	cursor: default;
+	-ms-touch-action: none;
+	touch-action: none;
 }
 .ui-slider .ui-slider-range {
 	position: absolute;
