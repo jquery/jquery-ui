@@ -224,11 +224,15 @@ test( "#9379: Draggable: position bug in scrollable div", function() {
 test( "#5727: draggable from iframe" , function() {
 	expect( 1 );
 
-	var iframe = $( "<iframe id='iframe-draggable-container' src='about:blank'></iframe>" ).appendTo( "#qunit-fixture" ),
-		iframeBody = iframe.contents().find( "body" ).append(
-			"<div id='iframe-draggable-1' style='background: green; width: 200px; height: 100px;'>Relative</div>"
-		),
-		draggable1 = iframeBody.find( "#iframe-draggable-1" );
+	var iframeBody, draggable1,
+		iframe = $( "<iframe />" ).appendTo( "#qunit-fixture" ),
+		iframeDoc = ( iframe[ 0 ].contentWindow || iframe[ 0 ].contentDocument ).document;
+
+	iframeDoc.write( "<!doctype html><html><body>" );
+	iframeDoc.close();
+
+	iframeBody = $( iframeDoc.body ).append( "<div style='width: 2px; height: 2px;' />" );
+	draggable1 = iframeBody.find( "div" );
 
 	draggable1.draggable();
 
