@@ -269,4 +269,18 @@ asyncTest( "#4261: active element should blur when mousing down on a draggable",
 	});
 });
 
+test( "ui-draggable-handle assigned to appropriate element", function() {
+	expect( 4 );
+
+	var element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
+	ok( element.hasClass( "ui-draggable-handle" ), "handle is element by default" );
+
+	element.draggable( "option", "handle", "p" );
+	ok( !element.hasClass( "ui-draggable-handle" ), "removed from element" );
+	ok( element.find( "p" ).hasClass( "ui-draggable-handle" ), "added to handle" );
+
+	element.draggable( "destroy" );
+	ok( !element.find( "p" ).hasClass( "ui-draggable-handle" ), "removed in destroy()" );
+});
+
 })( jQuery );
