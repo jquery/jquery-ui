@@ -713,50 +713,69 @@ $.ui.plugin.add("resizable", "animate", {
 
 });
 
-$.ui.plugin.add("resizable", "containment", {
+$.ui.plugin.add( "resizable", "containment", {
 
 	start: function() {
 		var element, p, co, ch, cw, width, height,
-			that = $(this).resizable( "instance" ),
+			that = $( this ).resizable( "instance" ),
 			o = that.options,
 			el = that.element,
 			oc = o.containment,
-			ce = (oc instanceof $) ? oc.get(0) : (/parent/.test(oc)) ? el.parent().get(0) : oc;
+			ce = ( oc instanceof $ ) ? oc.get( 0 ) : ( /parent/.test( oc ) ) ? el.parent().get( 0 ) : oc;
 
-		if (!ce) {
+		if ( !ce ) {
 			return;
 		}
 
-		that.containerElement = $(ce);
+		that.containerElement = $( ce );
 
-		if (/document/.test(oc) || oc === document) {
-			that.containerOffset = { left: 0, top: 0 };
-			that.containerPosition = { left: 0, top: 0 };
+		if (/ document/.test( oc ) || oc === document ) {
+			that.containerOffset = {
+				left: 0,
+				top: 0
+			};
+			that.containerPosition = {
+				left: 0,
+				top: 0
+			};
 
 			that.parentData = {
-				element: $(document), left: 0, top: 0,
-				width: $(document).width(), height: $(document).height() || document.body.parentNode.scrollHeight
+				element: $( document ),
+				left: 0,
+				top: 0,
+				width: $( document ).width(),
+				height: $( document ).height() || document.body.parentNode.scrollHeight
 			};
 		}
 
 		// i'm a node, so compute top, left, right, bottom
 		else {
-			element = $(ce);
+			element = $( ce );
 			p = [];
-			$([ "Top", "Right", "Left", "Bottom" ]).each(function(i, name) { p[i] = that._num(element.css("padding" + name)); });
+			$([ "Top", "Right", "Left", "Bottom" ])
+				.each( function( i, name ) {
+							p[i] = that._num( element.css( "padding" + name ) );
+						});
 
 			that.containerOffset = element.offset();
 			that.containerPosition = element.position();
-			that.containerSize = { height: (element.innerHeight() - p[3]), width: (element.innerWidth() - p[1]) };
+			that.containerSize = {
+				height: ( element.innerHeight() - p[ 3 ]),
+				width: ( element.innerWidth() - p[ 1 ])
+			};
 
 			co = that.containerOffset;
 			ch = that.containerSize.height;
 			cw = that.containerSize.width;
-			width = (that._hasScroll(ce, "left") ? ce.scrollWidth : cw );
-			height = (that._hasScroll(ce) ? ce.scrollHeight : ch);
+			width = ( that._hasScroll ( ce, "left" ) ? ce.scrollWidth : cw );
+			height = ( that._hasScroll ( ce ) ? ce.scrollHeight : ch ) ;
 
 			that.parentData = {
-				element: ce, left: co.left, top: co.top, width: width, height: height
+				element: ce,
+				left: co.left,
+				top: co.top,
+				width: width,
+				height: height
 			};
 		}
 	},
@@ -767,75 +786,88 @@ $.ui.plugin.add("resizable", "containment", {
 			o = that.options,
 			co = that.containerOffset, cp = that.position,
 			pRatio = that._aspectRatio || event.shiftKey,
-			cop = { top:0, left:0 }, ce = that.containerElement;
+			cop = {
+				top: 0,
+				left: 0
+			},
+			ce = that.containerElement;
 
-		if (ce[0] !== document && (/static/).test(ce.css("position"))) {
+		if ( ce[ 0 ] !== document && ( /static/ ).test( ce.css( "position" ) ) ) {
 			cop = co;
 		}
 
-		if (cp.left < (that._helper ? co.left : 0)) {
-			that.size.width = that.size.width + (that._helper ? (that.position.left - co.left) : (that.position.left - cop.left));
-			if (pRatio) {
+		if ( cp.left < ( that._helper ? co.left : 0 ) ) {
+			that.size.width = that.size.width + ( that._helper ? ( that.position.left - co.left ) : ( that.position.left - cop.left ) );
+			if ( pRatio ) {
 				that.size.height = that.size.width / that.aspectRatio;
 			}
 			that.position.left = o.helper ? co.left : 0;
 		}
 
-		if (cp.top < (that._helper ? co.top : 0)) {
-			that.size.height = that.size.height + (that._helper ? (that.position.top - co.top) : that.position.top);
-			if (pRatio) {
+		if ( cp.top < ( that._helper ? co.top : 0 ) ) {
+			that.size.height = that.size.height + ( that._helper ? ( that.position.top - co.top ) : that.position.top );
+			if ( pRatio ) {
 				that.size.width = that.size.height * that.aspectRatio;
 			}
 			that.position.top = that._helper ? co.top : 0;
 		}
 
-		that.offset.left = that.parentData.left+that.position.left;
-		that.offset.top = that.parentData.top+that.position.top;
+		that.offset.left = that.parentData.left + that.position.left;
+		that.offset.top = that.parentData.top + that.position.top;
 
-		woset = Math.abs( (that._helper ? that.offset.left - cop.left : (that.offset.left - cop.left)) + that.sizeDiff.width );
-		hoset = Math.abs( (that._helper ? that.offset.top - cop.top : (that.offset.top - co.top)) + that.sizeDiff.height );
+		woset = Math.abs( ( that._helper ? that.offset.left - cop.left : ( that.offset.left - co.left ) ) + that.sizeDiff.width );
+		hoset = Math.abs( ( that._helper ? that.offset.top - cop.top : ( that.offset.top - co.top ) ) + that.sizeDiff.height );
 
-		isParent = that.containerElement.get(0) === that.element.parent().get(0);
+		isParent = that.containerElement.get( 0 ) === that.element.parent().get( 0 );
 		isOffsetRelative = /relative|absolute/.test(that.containerElement.css("position"));
 
 		if ( isParent && isOffsetRelative ) {
 			woset -= Math.abs( that.parentData.left );
 		}
 
-		if (woset + that.size.width >= that.parentData.width) {
+		if ( woset + that.size.width >= that.parentData.width ) {
 			that.size.width = that.parentData.width - woset;
-			if (pRatio) {
+			if ( pRatio ) {
 				that.size.height = that.size.width / that.aspectRatio;
 			}
 		}
 
-		if (hoset + that.size.height >= that.parentData.height) {
+		if ( hoset + that.size.height >= that.parentData.height ) {
 			that.size.height = that.parentData.height - hoset;
-			if (pRatio) {
+			if ( pRatio ) {
 				that.size.width = that.size.height * that.aspectRatio;
 			}
 		}
 	},
 
 	stop: function(){
-		var that = $(this).resizable( "instance" ),
+		var that = $( this ).resizable( "instance" ),
 			o = that.options,
 			co = that.containerOffset,
 			cop = that.containerPosition,
 			ce = that.containerElement,
-			helper = $(that.helper),
+			helper = $( that.helper ),
 			ho = helper.offset(),
 			w = helper.outerWidth() - that.sizeDiff.width,
 			h = helper.outerHeight() - that.sizeDiff.height;
 
-		if (that._helper && !o.animate && (/relative/).test(ce.css("position"))) {
-			$(this).css({ left: ho.left - cop.left - co.left, width: w, height: h });
+		if ( that._helper && !o.animate && ( /relative/ ).test( ce.css( "position" ) ) ) {
+			$( this )
+				.css({
+					left: ho.left - cop.left - co.left,
+					width: w,
+					height: h
+				});
 		}
 
-		if (that._helper && !o.animate && (/static/).test(ce.css("position"))) {
-			$(this).css({ left: ho.left - cop.left - co.left, width: w, height: h });
+		if ( that._helper && !o.animate && ( /static/ ).test( ce.css( "position" ) ) ) {
+			$( this )
+				.css({
+					left: ho.left - cop.left - co.left,
+					width: w,
+					height: h
+				});
 		}
-
 	}
 });
 
