@@ -50,14 +50,26 @@ test( "refresh: Ensure disabled state is preserved correctly.", function() {
 });
 
 test( "ui-state-active should always be removed when setting disabled true", function() {
-	expect( 2 );
-	var element = $( "<button></button>" ).button();
+	expect( 8 );
+	var elements = [
+		$( "<input type='button'>" ).button(),
+		$( "<button></button>" ).button(),
+		$( "<label for='radio'></label><input type='radio' id='radio'>" ).button(),
+		$( "<label for='checkbox'></label><input type='checkbox' id='checkbox'>" ).button()
+	];
 
-	element.trigger( "mousedown" );
-	ok( element.hasClass( "ui-state-active" ), "On mousedown event button adds ui-state-active class" );
+	$.each( elements, function( index, element ) {
 
-	element.button("option", "disabled", true );
-	ok( !element.hasClass( "ui-state-active" ), "Disabling button removes ui-state-active class" );
+		element.trigger( "mousedown" );
+		ok( element.hasClass( "ui-state-active" ), "On mousedown, element has ui-state-active class" );
+
+		element.button("option", "disabled", true );
+		if ( element.is( "input:button, button" ) ) {
+			ok( !element.hasClass( "ui-state-active" ), "Disabled button does not have ui-state-active class" );
+		} else {
+			ok( element.hasClass( "ui-state-active" ), "Disabled radio, or checkbox has ui-state-active class" );
+		}
+	});
 });
 
 })(jQuery);
