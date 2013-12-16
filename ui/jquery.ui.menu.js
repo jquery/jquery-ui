@@ -131,7 +131,7 @@ $.widget( "ui.menu", {
 		// Clicks outside of a menu collapse any open menus
 		this._on( this.document, {
 			click: function( event ) {
-				if ( this._closeOnDocumentClick( event ) ) {
+				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
 					this.collapseAll( event );
 				}
 
@@ -496,10 +496,6 @@ $.widget( "ui.menu", {
 			.end()
 			.find( "a.ui-state-active" )
 				.removeClass( "ui-state-active" );
-	},
-
-	_closeOnDocumentClick: function( event ) {
-		return !$( event.target ).closest( ".ui-menu" ).length;
 	},
 
 	collapse: function( event ) {
