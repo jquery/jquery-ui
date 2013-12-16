@@ -63,7 +63,7 @@ test( "ui-state-active should always be removed when setting disabled true", fun
 		element.trigger( "mousedown" );
 		ok( element.hasClass( "ui-state-active" ), "On mousedown, element has ui-state-active class" );
 
-		element.button("option", "disabled", true );
+		element.button( "option", "disabled", true );
 		if ( element.is( "input:button, button" ) ) {
 			ok( !element.hasClass( "ui-state-active" ), "Disabled button does not have ui-state-active class" );
 		} else {
