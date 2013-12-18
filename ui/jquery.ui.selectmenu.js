@@ -162,7 +162,7 @@ $.widget( "ui.selectmenu", {
 
 		this.menuInstance._isDivider = function() {
 			return false;
-		}
+		};
 	},
 
 	refresh: function() {
