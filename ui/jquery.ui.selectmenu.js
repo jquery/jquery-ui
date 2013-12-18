@@ -159,6 +159,10 @@ $.widget( "ui.selectmenu", {
 		this.menuInstance._closeOnDocumentClick = function() {
 			return false;
 		};
+
+		this.menuInstance._isDivider = function() {
+			return false;
+		}
 	},
 
 	refresh: function() {
