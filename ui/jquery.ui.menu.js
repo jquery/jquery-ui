@@ -274,10 +274,10 @@ $.widget( "ui.menu", {
 	},
 
 	refresh: function() {
-		var menus,
-			items,
+		var that = this,
 			icon = this.options.icons.submenu,
-			submenus = this.element.find( this.options.menus );
+			submenus = this.element.find( this.options.menus ),
+			menus, items;
 
 		this.element.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length );
 
@@ -310,7 +310,7 @@ $.widget( "ui.menu", {
 		items.not( ".ui-menu-item" ).each(function() {
 			var item = $( this );
 			// hyphen, em dash, en dash
-			if ( !/[^\-\u2014\u2013\s]/.test( item.text() ) ) {
+			if ( that._isDivider( item ) ) {
 				item.addClass( "ui-widget-content ui-menu-divider" );
 			}
 		});
@@ -494,6 +494,10 @@ $.widget( "ui.menu", {
 
 	_closeOnDocumentClick: function( event ) {
 		return !$( event.target ).closest( ".ui-menu" ).length;
+	},
+
+	_isDivider: function( item ) {
+		return !/[^\-\u2014\u2013\s]/.test( item.text() );
 	},
 
 	collapse: function( event ) {
