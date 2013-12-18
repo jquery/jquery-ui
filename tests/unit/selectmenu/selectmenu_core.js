@@ -230,6 +230,38 @@ $.each([
 			equal( activeItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-active class" );
 		}
 	});
+
+	asyncTest( "empty option - " + settings.type, function () {
+		expect( 7 );
+
+		var element = $( settings.selector ),
+			button, menu, links, link;
+
+		element.find( "option" ).first().text( "" );
+		element.selectmenu();
+		button = element.selectmenu( "widget" );
+		menu = element.selectmenu( "menuWidget" );
+
+		// init menu
+		button.simulate( "focus" );
+
+		setTimeout(function() {
+			links = menu.find( "li:not(.ui-selectmenu-optgroup)" );
+			link = links.first();
+
+			button.trigger( "click" );
+
+			equal( links.length, element.find( "option" ).length, "correct amount of list elements" );
+			ok( link.outerHeight() > 10, "empty item seems to have reasonable height" );
+			ok( link.attr( "id" ), "empty item has id attribute" );
+			ok( link.hasClass( "ui-menu-item" ), "empty item has ui-menu-item class" );
+			ok( !link.hasClass( "ui-menu-divider" ), "empty item has not ui-menu-divider class" );
+			equal( link.attr( "tabindex" ), -1, "empty item has tabindex" );
+			equal( link.attr( "role" ), "option", "empty item has role option" );
+
+			start();
+		}, 1 );
+	});
 });
 
 })( jQuery );
