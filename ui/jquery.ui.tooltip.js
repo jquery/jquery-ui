@@ -82,6 +82,16 @@ $.widget( "ui.tooltip", {
 		if ( this.options.disabled ) {
 			this._disable();
 		}
+
+		// Append the aria-live region so tooltips announce correctly
+		this.liveRegion = $( "<div>" )
+			.attr({
+				role: "log",
+				"aria-live": "assertive",
+				"aria-relevant": "additions"
+			})
+			.addClass( "ui-helper-hidden-accessible" )
+			.appendTo( this.document[ 0 ].body );
 	},
 
 	_setOption: function( key, value ) {
@@ -211,7 +221,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
-		var tooltip, events, delayedShow,
+		var tooltip, events, delayedShow, a11yContent,
 			positionOption = $.extend( {}, this.options.position );
 
 		if ( !content ) {
@@ -244,6 +254,18 @@ $.widget( "ui.tooltip", {
 		tooltip = this._tooltip( target );
 		this._addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
+
+		// Support: Voiceover on OS X, JAWS on IE <= 9
+		// JAWS announces deletions even when aria-relevant="additions"
+		// Voiceover will sometimes re-read the entire log region's contents from the beginning
+		this.liveRegion.children().hide();
+		if ( content.clone ) {
+			a11yContent = content.clone();
+			a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
+		} else {
+			a11yContent = content;
+		}
+		$( "<div>" ).html( a11yContent ).appendTo( this.liveRegion );
 
 		function position( event ) {
 			positionOption.of = event;
@@ -394,6 +416,7 @@ $.widget( "ui.tooltip", {
 				element.removeData( "ui-tooltip-title" );
 			}
 		});
+		this.liveRegion.remove();
 	}
 });
 
