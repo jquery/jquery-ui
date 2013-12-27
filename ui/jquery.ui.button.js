@@ -250,10 +250,10 @@ $.widget( "ui.button", {
 			this.widget().toggleClass( "ui-state-disabled", !!value );
 			this.element.prop( "disabled", !!value );
 			if ( value ) {
-				if ( this.buttonElement.is( "input:button, button" ) ) {
-					this.buttonElement.removeClass( "ui-state-focus ui-state-active" );
-				} else {
+				if ( this.type === "checkbox" || this.type === "radio" ) {
 					this.buttonElement.removeClass( "ui-state-focus" );
+				} else {
+					this.buttonElement.removeClass( "ui-state-focus ui-state-active" );
 				}
 			}
 			return;
