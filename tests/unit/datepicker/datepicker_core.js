@@ -366,8 +366,8 @@ test( "Keyboard handling", function() {
 	input.datepicker( "destroy" );
 });
 
-asyncTest( "keyboard handling - arrow keys", function() {
-	expect( 8 );
+asyncTest( "keyboard handling", function() {
+	expect( 10 );
 	var picker,
 		input = $( "#datepicker" ),
 		date = new Date();
@@ -466,6 +466,42 @@ asyncTest( "keyboard handling - arrow keys", function() {
 			date.setDate( new Date().getDate() + 7 );
 			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
 				"Keystroke down to move to the next week" );
+
+			input.datepicker( "destroy" );
+			step7();
+		}, 100 );
+	};
+
+	function step7() {
+		input.datepicker()
+			.val( "1/1/14" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			$( ":focus" )
+				.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP })
+				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
+			date = new Date( 2013, 12 - 1, 1 );
+			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
+				"Keystroke Page Up moves date to next month" );
+
+			input.datepicker( "destroy" );
+			step8();
+		}, 100 );
+	};
+
+	function step8() {
+		input.datepicker()
+			.val( "1/1/14" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			$( ":focus" )
+				.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN })
+				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
+			date = new Date( 2014, 2 - 1, 1 );
+			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
+				"Keystroke Page Down moves date to previous month" );
 
 			input.datepicker( "destroy" );
 			start();

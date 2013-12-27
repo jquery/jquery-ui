@@ -111,10 +111,10 @@ $.widget( "ui.datepicker", {
 				activeCell.children( "a:first" ).mousedown();
 				return;
 			case $.ui.keyCode.PAGE_UP:
-				this.date.adjust( event.altKey ? "Y" : "M", 1 );
+				this.date.adjust( event.altKey ? "Y" : "M", -1 );
 				break;
 			case $.ui.keyCode.PAGE_DOWN:
-				this.date.adjust( event.altKey ? "Y" : "M", -1 );
+				this.date.adjust( event.altKey ? "Y" : "M", 1 );
 				break;
 			case $.ui.keyCode.END:
 				this.date.setDay( this.date.daysInMonth() );
