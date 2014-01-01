@@ -224,7 +224,7 @@ $.widget( "ui.tooltip", {
 		var tooltip, events, delayedShow, a11yContent,
 			positionOption = $.extend( {}, this.options.position );
 
-		if ( !content ) {
+		if ( !content || this.options.disabled ) {
 			return;
 		}
 
