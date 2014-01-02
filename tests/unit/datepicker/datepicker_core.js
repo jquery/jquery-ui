@@ -367,7 +367,7 @@ test( "Keyboard handling", function() {
 });
 
 asyncTest( "keyboard handling", function() {
-	expect( 12 );
+	expect( 14 );
 	var picker,
 		input = $( "#datepicker" ),
 		date = new Date();
@@ -540,6 +540,43 @@ asyncTest( "keyboard handling", function() {
 				"Keystroke Page Down + Ctrl moves date to next year" );
 
 			input.datepicker( "destroy" );
+			step11();
+		}, 100 );
+	};
+
+	// Check for moving to short months
+	function step11() {
+		input.datepicker()
+			.val( "3/31/14" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			$( ":focus" )
+				.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP })
+				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
+			date = new Date( 2014, 2 - 1, 28 );
+			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
+				"Keystroke Page Up and short months" );
+
+			input.datepicker( "destroy" );
+			step12();
+		}, 100 );
+	};
+
+	function step12() {
+		input.datepicker()
+			.val( "1/30/16" )
+			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+
+		setTimeout(function() {
+			$( ":focus" )
+				.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN })
+				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
+			date = new Date( 2016, 2 - 1, 29 );
+			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
+				"Keystroke Page Down and leap years" );
+
+			input.datepicker( "destroy" );
 			start();
 		}, 100 );
 	};
@@ -548,41 +585,7 @@ asyncTest( "keyboard handling", function() {
 });
 
 /*
-	// Check for moving to short months
-	input.val( "03/31/2008" ).datepicker( "open" )
-		.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP })
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 29 ),
-		"Keystroke pgup - Feb" );
-
-	input.val( "01/30/2008" ).datepicker( "open" )
-		.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN })
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 29 ),
-		"Keystroke pgdn - Feb" );
-
-	input.val( "02/29/2008" ).datepicker( "open" )
-		.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP })
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2007, 2 - 1, 28 ),
-		"Keystroke ctrl+pgup - Feb" );
-
-	input.val( "02/29/2008" ).datepicker( "open" )
-		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN })
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2009, 2 - 1, 28 ),
-		"Keystroke ctrl+pgdn - Feb" );
-
-	// Goto current
-	input.datepicker( "option", { gotoCurrent: true })
-		.datepicker( "close" ).val( "02/04/2008" ).datepicker( "open" )
-		.late( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN })
-		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.HOME })
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 4 ),
-		"Keystroke ctrl+home" );
-
-	// Change steps
+	// TODO: Re-add tests if we implement a stepMonths option
 	input.datepicker( "option", { stepMonths: 2, gotoCurrent: false })
 		.datepicker( "close" ).val( "02/04/2008" ).datepicker( "open" )
 		.late( "keydown", { keyCode: $.ui.keyCode.PAGE_UP })
