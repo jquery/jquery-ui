@@ -402,14 +402,14 @@ asyncTest( "keyboard handling", function() {
 
 	function step3() {
 		input.datepicker()
-			.val( "" )
+			.val( "1/1/14" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
 
 		setTimeout(function() {
 			$( ":focus" )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT })
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-			date.setDate( date.getDate() - 1 );
+			date = new Date( 2013, 12 - 1, 31 );
 			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
 				"Keystroke left to switch to previous day" );
 
@@ -420,14 +420,14 @@ asyncTest( "keyboard handling", function() {
 
 	function step4() {
 		input.datepicker()
-			.val( "" )
+			.val( "1/1/14" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
 
 		setTimeout(function() {
 			$( ":focus" )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT })
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-			date.setDate( new Date().getDate() + 1 );
+			date = new Date( 2014, 1 - 1, 2 );
 			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
 				"Keystroke right to switch to next day" );
 
@@ -438,14 +438,14 @@ asyncTest( "keyboard handling", function() {
 
 	function step5() {
 		input.datepicker()
-			.val( "" )
+			.val( "1/1/14" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
 
 		setTimeout(function() {
 			$( ":focus" )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.UP })
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-			date.setDate( new Date().getDate() - 7 );
+			date = new Date( 2013, 12 - 1, 25 );
 			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
 				"Keystroke up to move to the previous week" );
 
@@ -456,14 +456,14 @@ asyncTest( "keyboard handling", function() {
 
 	function step6() {
 		input.datepicker()
-			.val( "" )
+			.val( "1/1/14" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
 
 		setTimeout(function() {
 			$( ":focus" )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN })
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER });
-			date.setDate( new Date().getDate() + 7 );
+			date = new Date( 2014, 1 - 1, 8 );
 			TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date,
 				"Keystroke down to move to the next week" );
 
