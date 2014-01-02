@@ -16,6 +16,7 @@
 			"ui/jquery.ui.core.js",
 			"ui/jquery.ui.widget.js",
 			"ui/jquery.ui.mouse.js",
+			"ui/jquery.ui.draggable.js",
 			"ui/jquery.ui.sortable.js"
 		]
 	});
@@ -46,6 +47,25 @@
 	}
 	#sortable-table {
 		width: 100%;
+	}
+	ul.sortableoutover, ul.sortableoutoverdraggable {
+		position:relative;
+		top:0;
+		left:0;
+	}
+	ul.sortableoutover, ul.sortableoutover li, ul.sortableoutoverdraggable, ul.sortableoutoverdraggable li {
+		margin: 0;
+		padding: 0;
+		border-width: 0;
+	}
+	ul.sortableoutover li, ul.sortableoutoverdraggable li {
+		height: 20px;
+	}
+	#sortableoutoverspace {
+		height: 100px;
+	}
+	#sortableoutoverdraggablelist {
+		height: 20px;
 	}
 	</style>
 </head>
@@ -102,6 +122,30 @@
 	<img src="../images/jqueryui_32x32.png" alt="">
 </div>
 
+<ul id="sortableoutover" class="sortableoutover">
+	<li>Item 1</li>
+	<li>Item 2</li>
+	<li>Item 3</li>
+	<li>Item 4</li>
+	<li>Item 5</li>
+</ul>
+
+<div id="sortableoutoverspace" class="sortableoutoverspace">
+Space	
+</div>
+
+<ul id="sortableoutoverdraggablelist" class="sortableoutoverdraggable">
+	<li id="sortableoutoverdraggable">Item 1</li>
+</ul>
+
+<ul id="sortableoutover2" class="sortableoutover">
+	<li>Item 1</li>
+	<li>Item 2</li>
+	<li>Item 3</li>
+	<li>Item 4</li>
+	<li>Item 5</li>
+</ul>
+	
 </div>
 </body>
 </html>
