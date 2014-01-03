@@ -111,4 +111,17 @@ test( "valueAsDate", function() {
 	inline.datepicker( "destroy" );
 });
 
+test( "isValid", function() {
+	expect( 2 );
+	var input = $( "#datepicker" ).datepicker();
+
+	input.val( "1/1/14" );
+	ok( input.datepicker( "isValid" ) );
+
+	input.val( "1/1/abc" );
+	ok( !input.datepicker( "isValid" ) );
+
+	input.datepicker( "destroy" );
+});
+
 })( jQuery );
