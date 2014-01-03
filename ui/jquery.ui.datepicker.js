@@ -639,6 +639,9 @@ $.widget( "ui.datepicker", {
 			return this.date.date();
 		}
 	},
+	isValid: function() {
+		return Globalize.parseDate( this.element.val(), this.options.dateFormat ) !== null;
+	},
 	_destroy: function() {
 		if ( this.inline ) {
 			this.picker.empty();
