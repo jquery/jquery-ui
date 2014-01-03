@@ -64,7 +64,7 @@ test( "open", function() {
 });
 
 test( "value", function() {
-	expect( 5 );
+	expect( 6 );
 	var input = $( "#datepicker" ).datepicker(),
 		picker = input.datepicker( "widget" ),
 		inline = $( "#inline" ).datepicker();
@@ -75,19 +75,21 @@ test( "value", function() {
 		"first day marked as selected" );
 	equal( input.datepicker( "value" ), "1/1/14", "getter" );
 
+	input.val( "abc" );
+	equal( input.datepicker( "value" ), "abc",
+		"Invalid values should be returned without formatting." );
+
 	inline.datepicker( "value", "1/1/14" );
 	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
 	equal( inline.datepicker( "value" ), "1/1/14", "getter" );
-
-	// TODO: Handle for invalid values.
 
 	input.datepicker( "destroy" );
 	inline.datepicker( "destroy" );
 });
 
 test( "valueAsDate", function() {
-	expect( 5 );
+	expect( 6 );
 	var input = $( "#datepicker" ).datepicker(),
 		picker = input.datepicker( "widget" ),
 		inline = $( "#inline" ).datepicker();
@@ -99,13 +101,14 @@ test( "valueAsDate", function() {
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ),
 		new Date( 2014, 0, 1 ), "getter" );
 
+	input.val( "a/b/c" );
+	equal( input.datepicker( "valueAsDate" ), null, "Invalid dates return null" );
+
 	inline.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
 	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
 		"first day marked as selected" );
 	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ),
 		new Date( 2014, 0, 1 ), "getter" );
-
-	// TODO: Handle for invalid values.
 
 	input.datepicker( "destroy" );
 	inline.datepicker( "destroy" );

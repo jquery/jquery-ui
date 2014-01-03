@@ -629,17 +629,20 @@ $.widget( "ui.datepicker", {
 		if ( arguments.length ) {
 			this._value( value );
 		} else {
-			return this.date.format();
+			return this.isValid() ? this.date.format() : this.element.val();
 		}
 	},
 	valueAsDate: function( value ) {
 		if ( arguments.length ) {
 			this._value( value );
 		} else {
-			return this.date.date();
+			return this.isValid() ? this.date.date() : null;
 		}
 	},
 	isValid: function() {
+		if ( this.inline ) {
+			return true;
+		}
 		return Globalize.parseDate( this.element.val(), this.options.dateFormat ) !== null;
 	},
 	_destroy: function() {
