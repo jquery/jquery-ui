@@ -232,6 +232,12 @@ $.widget( "ui.datepicker", {
 						break;
 				}
 			},
+			keyup: function() {
+				if ( this.isValid() && !this.inline ) {
+					this.date.setTime( this.element.val() ).select();
+					this.refresh();
+				}
+			},
 			mousedown: function( event ) {
 				if (this.isOpen) {
 					suppressExpandOnFocus = true;
