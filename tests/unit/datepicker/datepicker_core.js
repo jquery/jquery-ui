@@ -218,7 +218,7 @@ asyncTest( "baseStructure", function() {
 });
 
 test( "Keyboard handling", function() {
-	expect( 8 );
+	expect( 9 );
 	var input = $( "#datepicker" ).datepicker(),
 		instance = input.datepicker( "instance" ),
 		date = new Date();
@@ -259,6 +259,11 @@ test( "Keyboard handling", function() {
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke esc - abandoned" );
+
+	input.val( "1/2/14" )
+		.simulate( "keyup" );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 2 ),
+		"Picker updated as user types into input" );
 
 	input.datepicker( "destroy" );
 });
