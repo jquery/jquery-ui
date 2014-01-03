@@ -874,7 +874,7 @@ test( "_on() to common element", function() {
 				"customevent-withdash": "_handler",
 				"customevent:with:multiple:colons": "_handler",
 				"customevent-with-multiple-dashes": "_handler",
-				"customevent:with:colons-and-dashes": "_handler",
+				"customevent:with:colons-and-dashes": "_handler"
 			});
 		},
 		_handler: function() {
