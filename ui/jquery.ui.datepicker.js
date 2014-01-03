@@ -288,7 +288,6 @@ $.extend(Datepicker.prototype, {
 		}
 		divSpan.addClass(this.markerClassName).append(inst.dpDiv);
 		$.data(target, "datepicker", inst);
-		this._setDate(inst, this._getDefaultDate(inst), true);
 		this._updateDatepicker(inst);
 		this._updateAlternate(inst);
 		//If disabled option is true, disable the datepicker before showing it (see ticket #5665)
