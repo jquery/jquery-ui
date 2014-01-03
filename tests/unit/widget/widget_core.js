@@ -865,11 +865,16 @@ test( "_on() with delegate to descendent", function() {
 });
 
 test( "_on() to common element", function() {
-	expect( 1 );
+	expect( 6 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			this._on( this.document, {
-				"customevent": "_handler"
+				"customevent": "_handler",
+				"customevent:withcolon": "_handler",
+				"customevent-withdash": "_handler",
+				"customevent:with:multiple:colons": "_handler",
+				"customevent-with-multiple-dashes": "_handler",
+				"customevent:with:colons-and-dashes": "_handler",
 			});
 		},
 		_handler: function() {
@@ -880,6 +885,11 @@ test( "_on() to common element", function() {
 	$( "#widget-wrapper" ).testWidget();
 	widget.destroy();
 	$( document ).trigger( "customevent" );
+	$( document ).trigger( "customevent:withcolon" );
+	$( document ).trigger( "customevent-withdash" );
+	$( document ).trigger( "customevent:with:multiple:colons" );
+	$( document ).trigger( "customevent-with-multiple-dashes" );
+	$( document ).trigger( "customevent:with:colons-and-dashes" );
 });
 
 test( "_off() - single event", function() {
