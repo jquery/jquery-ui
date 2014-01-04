@@ -158,6 +158,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
 		this.refreshPositions();
 
+		//Create the placeholder
+		this._createPlaceholder();
+
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
 
@@ -211,9 +214,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.helper[0] !== this.currentItem[0]) {
 			this.currentItem.hide();
 		}
-
-		//Create the placeholder
-		this._createPlaceholder();
 
 		//Set a containment if given in the options
 		if(o.containment) {
