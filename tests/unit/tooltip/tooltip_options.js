@@ -49,7 +49,7 @@ test( "content: return jQuery", function() {
 	}).tooltip( "open" ),
 	liveRegion = element.tooltip( "instance" ).liveRegion;
 	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring" );
-	equal( liveRegion.children().last().html(), "<div>cu<b>s</b>tomstring</div>",
+	equal( liveRegion.children().last().html().toLowerCase(), "<div>cu<b>s</b>tomstring</div>",
 		"The accessibility live region will strip the ids but keep the structure" );
 });
 
