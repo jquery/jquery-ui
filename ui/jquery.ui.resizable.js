@@ -712,7 +712,7 @@ $.ui.plugin.add( "resizable", "containment", {
 
 		that.containerElement = $( ce );
 
-		if ( / document/.test( oc ) || oc === document ) {
+		if ( /document/.test( oc ) || oc === document ) {
 			that.containerOffset = {
 				left: 0,
 				top: 0
