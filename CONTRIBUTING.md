@@ -42,8 +42,10 @@ $ cd /path/to/your/www/root/
 
 Clone your jQuery UI fork to work locally.
 
+*Note: be sure to replace `[USERNAME]` with your GitHub username.*
+
 ```bash
-$ git clone git@github.com:username/jquery-ui.git
+$ git clone git@github.com:[USERNAME]/jquery-ui.git
 ```
 
 Change to the newly created directory.
