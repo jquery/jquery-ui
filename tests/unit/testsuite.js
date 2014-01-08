@@ -211,7 +211,7 @@ window.closeEnough = function( actual, expected, maxDifference, message ) {
 /*
  * Experimental assertion for comparing DOM objects.
  *
- * Serializes an element and some properties and attributes and it's children if any, otherwise the text.
+ * Serializes an element and some properties and attributes and its children if any, otherwise the text.
  * Then compares the result using deepEqual.
  */
 window.domEqual = function( selector, modifier, message ) {
