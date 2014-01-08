@@ -274,10 +274,10 @@ $.widget( "ui.menu", {
 	},
 
 	refresh: function() {
-		var that = this,
+		var menus, items,
+			that = this,
 			icon = this.options.icons.submenu,
-			submenus = this.element.find( this.options.menus ),
-			menus, items;
+			submenus = this.element.find( this.options.menus );
 
 		this.element.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length );
 
@@ -309,7 +309,6 @@ $.widget( "ui.menu", {
 		// Initialize menu-items containing spaces and/or dashes only as dividers
 		items.not( ".ui-menu-item" ).each(function() {
 			var item = $( this );
-			// hyphen, em dash, en dash
 			if ( that._isDivider( item ) ) {
 				item.addClass( "ui-widget-content ui-menu-divider" );
 			}
@@ -497,6 +496,8 @@ $.widget( "ui.menu", {
 	},
 
 	_isDivider: function( item ) {
+
+		// Match hyphen, em dash, en dash
 		return !/[^\-\u2014\u2013\s]/.test( item.text() );
 	},
 
