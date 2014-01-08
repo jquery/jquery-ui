@@ -66,6 +66,12 @@ Get in the habit of pulling in the "upstream" master to stay up to date as jQuer
 $ git pull upstream master
 ```
 
+Install the dependencies.
+
+```bash
+npm install
+```
+
 To lint the JavaScript, HTML, and CSS, as well as run a smoke test in PhantomJS, run grunt:
 
 ```bash
