@@ -74,12 +74,6 @@ $ grunt
 
 To run the tests for a specific plugin in your browser, open the approriate file from the `/tests/unit/` directory, for example: `http://localhost/tests/unit/accordion/accordion.html`. The domain will be dependent on your local server configuation; if there is a port, be sure to include it.
 
+Ideally you would test in all of our [supported browsers](http://jqueryui.com/browser-support/), but if you don't have all of these browsers available, that's ok.
+
 Make sure to read our [commits and pull requests documentation](http://dev.contribute.jquery.org/commits-and-pull-requests/) for full details on working with branches and forks, as well as our commit guidelines.
-
-### jQuery UI supports the following browsers:
-
-* Chrome Current-1
-* Safari Current-1
-* Firefox Current-1
-* Opera Current-1
-* IE 7+
