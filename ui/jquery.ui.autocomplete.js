@@ -104,8 +104,8 @@ $.widget( "ui.autocomplete", {
 					this._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
-					// when menu is open and has focus
-					if ( this.menu.active ) {
+					// when menu is open and has focus and is not disabled
+					if ( this._isItemActiveAndEnabled() ) {
 						// #6055 - Opera still allows the keypress to occur
 						// which causes forms to submit
 						suppressKeyPress = true;
@@ -114,8 +114,10 @@ $.widget( "ui.autocomplete", {
 					}
 					break;
 				case keyCode.TAB:
-					if ( this.menu.active ) {
+					if ( this._isItemActiveAndEnabled() ) {
 						this.menu.select( event );
+					} else {
+						event.preventDefault();
 					}
 					break;
 				case keyCode.ESCAPE:
@@ -555,6 +557,10 @@ $.widget( "ui.autocomplete", {
 			// prevents moving cursor to beginning/end of the text field in some browsers
 			event.preventDefault();
 		}
+	},
+	
+	_isItemActiveAndEnabled: function() {
+		return this.menu.active && !this.menu.active.hasClass( "ui-state-disabled" );
 	}
 });
 

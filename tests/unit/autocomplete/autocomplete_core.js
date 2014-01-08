@@ -276,4 +276,48 @@ test( ".replaceWith() (#9172)", function() {
 	equal( parent.html().toLowerCase(), replacement );
 });
 
+asyncTest( "Prevent selection on disabled menu items using ENTER or TAB", function() {
+	expect( 3 );
+	var down, enter, tab,
+		itemSelected,
+		element = $( "#autocomplete" )
+			.autocomplete({
+				source: [ "javascript" ],
+				select: function() {
+					itemSelected = true;
+				}
+			});
+
+	element.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+			.addClass( "ui-state-disabled" )
+			.append( $( "<a>" ).text( item.label ) )
+			.appendTo( ul );
+	};
+
+	element.val( "ja" );
+	element.autocomplete( "search" );
+
+	down = $.Event( "keydown" );
+	down.keyCode = $.ui.keyCode.DOWN;
+	element.trigger( down );
+
+	enter = $.Event( "keydown" );
+	enter.keyCode = $.ui.keyCode.ENTER;
+	element.trigger( enter );
+	ok( !enter.isDefaultPrevented(), "[ENTER] Default action is not prevented" );
+
+	tab = $.Event( "keydown" );
+	tab.keyCode = $.ui.keyCode.TAB;
+	
+	element.trigger( tab );
+	ok( tab.isDefaultPrevented(), "[TAB] Default action is prevented" );
+
+    setTimeout(function() {
+		ok ( !itemSelected, "Item has not been selected" );
+		start();
+    }, 200 );
+
+});
+
 }( jQuery ) );
