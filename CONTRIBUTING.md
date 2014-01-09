@@ -24,11 +24,9 @@ jQuery UI uses Node.js & Grunt to automate the building and validation of source
 
 Some tests depend on PHP running locally, so make sure you have the following installed:
 
-* Some kind of localhost server program that supports PHP (any will do)
+* A web server with PHP support (any will do, such as [XAMPP](http://www.apachefriends.org/en/xampp.html) or [MAMP](http://www.mamp.info/en/index.html))
 * [Node.js](http://nodejs.org/) (includes NPM, necessary for the next step)
 * Grunt (install with: `npm install -g grunt`
-
-Maintaining a list of platform specific instructions is outside of the scope of this document and there is plenty of existing documentation for the above technologies.
 
 ### Build a Local Copy of jQuery UI
 
