@@ -1,8 +1,9 @@
 module( "date: core" );
 
-test( "Check Date Setup", 2, function() {
-	ok( true, "First Test Always Passes" );
-	ok( $.date(), "Load JQuery Date" );
+test( "Instantiation", function() {
+	expect( 2 );
+	ok( new $.date() instanceof $.date, "constructor function" );
+	ok( $.date() instanceof $.date, "instantiation without new" );
 });
 
 test( "Check Sets and Gets", 6, function() {
@@ -38,7 +39,6 @@ test( "Date Adjustments - Normal Use Cases", 10, function() {
 	equal( date.adjust( "D", 1 ).year(), 2013, "Add 1 day to change year from 2012 to 2013" );
 	equal( date.adjust( "D", -1 ).year(), 2012,
 		"Subtract 1 day to change month from 2013 to 2012" );
-
 });
 
 test( "Date Adjustments - Month Overflow Edge Cases", 2, function() {
