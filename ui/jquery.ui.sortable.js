@@ -102,15 +102,17 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_setHandleClassName: function() {
 		$.each( this.items, function() {
-			( this.instance.options.handle ? this.item.find( this.instance.options.handle ) : this.item )
+			( this.instance.options.handle ?
+				this.item.find( this.instance.options.handle ) : this.item )
 				.addClass( "ui-sortable-handle" );
 		});
 	},
 
 	_destroy: function() {
 		this.element
-			.removeClass("ui-sortable ui-sortable-disabled")
-			.find( ".ui-sortable-handle" ).removeClass( "ui-sortable-handle" );
+			.removeClass( "ui-sortable ui-sortable-disabled" )
+			.find( ".ui-sortable-handle" )
+			.removeClass( "ui-sortable-handle" );
 		this._mouseDestroy();
 
 		for ( var i = this.items.length - 1; i >= 0; i-- ) {

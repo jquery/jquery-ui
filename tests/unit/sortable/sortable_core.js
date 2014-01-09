@@ -17,17 +17,20 @@ test( "#9314: Sortable: Items cannot be dragged directly into bottom position", 
 });
 
 test( "ui-sortable-handle applied to appropriate element", function() {
-	expect( 4 );
-	var el = $( "<ul><li><p></p></li></ul>" )
-		.sortable().appendTo( "#qunit-fixture" );
+	expect( 5 );
+	var item = "<li><p></p></li>",
+		el = $( "<ul>" + item + item + "</ul>" )
+			.sortable()
+			.appendTo( "#qunit-fixture" );
 
-	ok( el.find( "li" ).hasClass( "ui-sortable-handle"), "defaults to item" );
+	ok( el.find( "li:first" ).hasClass( "ui-sortable-handle" ), "defaults to item" );
+	ok( el.find( "li:last" ).hasClass( "ui-sortable-handle" ), "both items received class name" );
 
 	el.sortable( "option", "handle", "p" );
-	ok( !el.find( "li" ).hasClass( "ui-sortable-handle"), "removed on change" );
-	ok( el.find( "p" ).hasClass( "ui-sortable-handle"), "applied to handle" );
+	ok( !el.find( "li" ).hasClass( "ui-sortable-handle" ), "removed on change" );
+	ok( el.find( "p" ).hasClass( "ui-sortable-handle" ), "applied to handle" );
 
-	el.sortable( "destroy");
+	el.sortable( "destroy" );
 	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
 });
 

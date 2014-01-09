@@ -312,7 +312,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_removeHandleClassName: function() {
 		this.element.find( ".ui-draggable-handle" )
-			.andSelf()
+			.addBack()
 			.removeClass( "ui-draggable-handle" );
 	},
 
