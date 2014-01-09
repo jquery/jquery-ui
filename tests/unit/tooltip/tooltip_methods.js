@@ -54,7 +54,7 @@ test( "open/close with tracking", function() {
 });
 
 test( "enable/disable", function() {
-	expect( 10 );
+	expect( 11 );
 	$.fx.off = true;
 	var tooltip,
 		element = $( "#tooltipped1" ).tooltip();
@@ -81,6 +81,12 @@ test( "enable/disable", function() {
 
 	element.tooltip( "enable" );
 	equal( element.attr( "title" ), "anchortitle", "title restored on enable" );
+
+	// #9719 - Title should be preserved after disabling twice
+	element.tooltip( "disable" );
+	element.tooltip( "disable" );
+	element.tooltip( "enable" );
+	equal( element.attr( "title" ), "anchortitle", "title restored on enable after being disabled twice" );
 
 	element.tooltip( "open" );
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
