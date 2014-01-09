@@ -30,6 +30,8 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		// option to specify if submit on enter is intended
+		submitOnEnter: false,
 
 		// callbacks
 		change: null,
@@ -109,7 +111,11 @@ $.widget( "ui.autocomplete", {
 						// #6055 - Opera still allows the keypress to occur
 						// which causes forms to submit
 						suppressKeyPress = true;
-						event.preventDefault();
+						// allow user to specify if he wants to submit the selected
+						// option by pressing the Enter Key
+						if(!this.options.submitOnEnter){
+						   event.preventDefault();
+						}
 						this.menu.select( event );
 					}
 					break;
