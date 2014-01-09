@@ -17,7 +17,7 @@ test( "#9314: Sortable: Items cannot be dragged directly into bottom position", 
 });
 
 test( "ui-sortable-handle applied to appropriate element", function() {
-	expect( 5 );
+	expect( 6 );
 	var item = "<li><p></p></li>",
 		el = $( "<ul>" + item + item + "</ul>" )
 			.sortable()
@@ -29,6 +29,9 @@ test( "ui-sortable-handle applied to appropriate element", function() {
 	el.sortable( "option", "handle", "p" );
 	ok( !el.find( "li" ).hasClass( "ui-sortable-handle" ), "removed on change" );
 	ok( el.find( "p" ).hasClass( "ui-sortable-handle" ), "applied to handle" );
+
+	el.append( item ).sortable( "refresh" );
+	ok( el.find( "p:last" ).hasClass( "ui-sortable-handle" ), "class name applied on refresh" );
 
 	el.sortable( "destroy" );
 	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );

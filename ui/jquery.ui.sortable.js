@@ -95,12 +95,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this._super( key, value );
 
 		if ( key === "handle" ) {
-			this.element.find( ".ui-sortable-handle" ).removeClass( "ui-sortable-handle" );
 			this._setHandleClassName();
 		}
 	},
 
 	_setHandleClassName: function() {
+		this.element.find( ".ui-sortable-handle" ).removeClass( "ui-sortable-handle" );
 		$.each( this.items, function() {
 			( this.instance.options.handle ?
 				this.item.find( this.instance.options.handle ) : this.item )
@@ -620,6 +620,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	refresh: function(event) {
 		this._refreshItems(event);
 		this.refreshPositions();
+		this._setHandleClassName();
 		return this;
 	},
 
