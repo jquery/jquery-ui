@@ -122,7 +122,7 @@ $.extend( $.expr[ ":" ], {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo(function( dataName ) {
 			return function( elem ) {
-				return !!$.data( elem, dataName );
+				return $.data( elem, dataName ) !== undefined;
 			};
 		}) :
 		// support: jQuery <1.8
