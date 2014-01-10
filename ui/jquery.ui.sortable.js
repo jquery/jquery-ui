@@ -112,7 +112,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this.element
 			.removeClass( "ui-sortable ui-sortable-disabled" )
 			.find( ".ui-sortable-handle" )
-			.removeClass( "ui-sortable-handle" );
+				.removeClass( "ui-sortable-handle" );
 		this._mouseDestroy();
 
 		for ( var i = this.items.length - 1; i >= 0; i-- ) {
@@ -619,8 +619,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	refresh: function(event) {
 		this._refreshItems(event);
-		this.refreshPositions();
 		this._setHandleClassName();
+		this.refreshPositions();
 		return this;
 	},
 
