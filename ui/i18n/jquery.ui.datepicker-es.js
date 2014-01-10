@@ -11,7 +11,7 @@ jQuery(function($){
 		monthNamesShort: ['ene','feb','mar','abr','may','jun',
 		'jul','ago','sep','oct','nov','dic'],
 		dayNames: ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
-		dayNamesShort: ['dom','lun','mar','mié','juv','vie','sáb'],
+		dayNamesShort: ['dom','lun','mar','mié','jue','vie','sáb'],
 		dayNamesMin: ['D','L','M','X','J','V','S'],
 		weekHeader: 'Sm',
 		dateFormat: 'dd/mm/yy',
