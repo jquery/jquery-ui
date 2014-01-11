@@ -865,16 +865,14 @@ test( "_on() with delegate to descendent", function() {
 });
 
 test( "_on() to common element", function() {
-	expect( 6 );
+	expect( 4 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			this._on( this.document, {
 				"customevent": "_handler",
-				"customevent:withcolon": "_handler",
-				"customevent-withdash": "_handler",
-				"customevent:with:multiple:colons": "_handler",
-				"customevent-with-multiple-dashes": "_handler",
-				"customevent:with:colons-and-dashes": "_handler"
+				"colon:devided": "_handler",
+				"dash-devided": "_handler",
+				"devided-by:both-colons:and-dashes": "_handler"
 			});
 		},
 		_handler: function() {
@@ -885,11 +883,9 @@ test( "_on() to common element", function() {
 	$( "#widget-wrapper" ).testWidget();
 	widget.destroy();
 	$( document ).trigger( "customevent" );
-	$( document ).trigger( "customevent:withcolon" );
-	$( document ).trigger( "customevent-withdash" );
-	$( document ).trigger( "customevent:with:multiple:colons" );
-	$( document ).trigger( "customevent-with-multiple-dashes" );
-	$( document ).trigger( "customevent:with:colons-and-dashes" );
+	$( document ).trigger( "colon:devided" );
+	$( document ).trigger( "dash-devided" );
+	$( document ).trigger( "devided-by:both-colons:and-dashes" );
 });
 
 test( "_off() - single event", function() {
