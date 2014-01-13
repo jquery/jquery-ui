@@ -375,14 +375,19 @@ test( "containment, account for border", function() {
 });
 
 test( "containment, default, switching after initialization", function() {
-	expect( 6 );
+	expect( 8 );
 
-	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false });
+	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false }),
+		po = element.parent().offset(),
+		containment = [ po.left - 100, po.top - 100, po.left + 500, po.top + 500 ];
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: default" );
 
 	element.draggable( "option", "containment", "parent" ).css({ top: 0, left: 0 });
 	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0, "containment: parent as option" );
+
+	element.draggable( "option", "containment", containment ).css({ top: 0, left: 0 });
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: array as option" );
 
 	element.draggable( "option", "containment", false );
 	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: false as option" );
