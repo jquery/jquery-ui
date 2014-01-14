@@ -1181,7 +1181,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// events.
 		if (this !== this.currentContainer) {
 			if(!noPropagation) {
-				delayedTriggers.push(function(event) { this._trigger("remove", event, this._uiHash()); });
+				delayedTriggers.push(function(event) { this._trigger("remove", event, this._uiHash(this)); });
 				delayedTriggers.push((function(c) { return function(event) { c._trigger("receive", event, this._uiHash(this)); };  }).call(this, this.currentContainer));
 				delayedTriggers.push((function(c) { return function(event) { c._trigger("update", event, this._uiHash(this));  }; }).call(this, this.currentContainer));
 			}

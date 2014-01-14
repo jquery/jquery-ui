@@ -227,11 +227,36 @@ test("#4752: link event firing on sortable with connect list", function () {
 test("receive", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
 test("remove", function() {
-	ok(false, "missing test - untested code is broken code.");
+	expect( 8 );
+
+	var hash,
+		removeCount = 0,
+		item = $( "#sortable" ).find( "li:last" );
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith",
+		remove: function( e, ui ) {
+			hash = ui;
+			removeCount++;
+		}
+	});
+
+	item.simulate( "drag", {
+		dy: 40
+	});
+
+	ok( hash, "remove event triggered" );
+	ok( !hash.helper, "UI should not include: helper" );
+	ok( hash.placeholder, "UI hash includes: placeholder" );
+	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );
+	ok( hash.offset && ( hash.offset.top && hash.offset.left ), "UI hash includes: offset" );
+	equal( hash.item.html(), item.html(), "UI hash includes: item" );
+	equal( hash.sender.html(), $( "#sortable" ).html(), "UI hash includes: sender" );
+	equal( removeCount, 1, "remove fires only once" );
 });
-*/
 
 test( "over", function() {
 	expect( 8 );
