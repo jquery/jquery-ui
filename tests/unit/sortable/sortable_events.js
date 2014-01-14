@@ -249,12 +249,12 @@ test( "over", function() {
 	});
 
 	ok( hash, "stop event triggered" );
-	ok( hash.helper, "UI should not include: helper" );
+	ok( hash.helper, "UI includes: helper" );
 	ok( hash.placeholder, "UI hash includes: placeholder" );
 	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );
 	ok( hash.offset && ( hash.offset.top && hash.offset.left ), "UI hash includes: offset" );
 	ok( hash.item, "UI hash includes: item" );
-	ok( hash.sender, "UI hash does not include: sender" );
+	ok( hash.sender, "UI hash includes: sender" );
 	equal( overCount, 1, "over fires only once" );
 });
 
