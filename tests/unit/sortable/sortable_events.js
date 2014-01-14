@@ -258,11 +258,114 @@ test( "over", function() {
 	equal( overCount, 1, "over fires only once" );
 });
 
+// http://bugs.jqueryui.com/ticket/9335
+// Sortable: over & out events does not consistently fire
+test( "over, fires with draggable connected to sortable", function() {
+	expect( 3 );
+
+	var hash,
+		overCount = 0,
+		item = $( "<div></div>" ).text( "6" ).insertAfter( "#sortable" );
+
+	item.draggable({
+		connectToSortable: "#sortable"
+	});
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith",
+		over: function( event, ui ) {
+			hash = ui;
+			overCount++;
+		}
+	});
+
+	item.simulate( "drag", {
+		dy: -20
+	});
+
+	ok( hash, "over event triggered" );
+	ok( !hash.sender, "UI should not include: sender" );
+	equal( overCount, 1, "over fires only once" );
+});
+
+test( "over, with connected sortable", function() {
+	expect( 3 );
+
+	var hash,
+		overCount = 0;
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith"
+	});
+	$( "#sortable2" ).on( "sortover", function( event, ui ) {
+		hash = ui;
+		overCount++;
+	});
+	$( "#sortable" ).find( "li:eq(0)" ).simulate( "drag", {
+		dy: 102
+	});
+
+	ok( hash, "over event triggered" );
+	equal( hash.sender[ 0 ], $(" #sortable" )[ 0 ], "UI includes: sender" );
+	equal( overCount, 1, "over fires only once" );
+});
+
 /*
 test("out", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
+test( "out, with connected sortable", function() {
+	expect( 2 );
+
+	var hash,
+		outCount = 0;
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith"
+	});
+	$( "#sortable" ).on( "sortout", function( event, ui ) {
+		hash = ui;
+		outCount++;
+	});
+	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+		dy: 40
+	});
+
+	ok( hash, "out event triggered" );
+	equal( outCount, 1, "out fires only once" );
+});
+
+test( "repeated out & over between connected sortables", function() {
+	expect( 2 );
+
+	var outCount = 0,
+		overCount = 0;
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith",
+		over: function() {
+			overCount++;
+		},
+		out: function( event, ui ) {
+			// Ignore events that trigger when an item has dropped
+			// checking for the presence of the helper.
+			if ( !ui.helper ) {
+				outCount++;
+			}
+		}
+	});
+	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+		dy: 40
+	}).simulate( "drag", {
+		dy: -40
+	});
+
+	equal( outCount, 2, "out fires twice" );
+	equal( overCount, 4, "over fires four times" );
+});
+
+/*
 test("activate", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
