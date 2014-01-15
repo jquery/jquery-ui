@@ -168,18 +168,19 @@ test( "step", function() {
 //});
 
 test( "values", function() {
-	expect( 2 );
+	expect( 4 );
 
 	// testing multiple ranges on the same page, the object reference to the values
 	// property is preserved via multiple range elements, so updating options.values
 	// of 1 slider updates options.values of all the others
-	var ranges = $([
-		document.createElement( "div" ),
-		document.createElement( "div" )
-	]).slider({
-		range: true,
-		values: [ 25, 75 ]
-	});
+	var element,
+		ranges = $([
+			document.createElement( "div" ),
+			document.createElement( "div" )
+		]).slider({
+			range: true,
+			values: [ 25, 75 ]
+		});
 
 	notStrictEqual(
 		ranges.eq( 0 ).slider( "instance" ).options.values,
@@ -194,6 +195,18 @@ test( "values", function() {
 		ranges.eq( 1 ).slider( "values", 0 ),
 		"the values for multiple sliders should be different"
 	);
+
+	element = $( "<div></div>" ).slider({
+		range: true,
+		min: 10,
+		max: 100,
+		step: 1,
+		values: [ 15, 1 ]
+	});
+	deepEqual( element.slider( "values" ), [ 10, 10 ], "handles restricted properly when set programmatically" );
+
+	element.slider( "option", "values", [ 11, 22, 15, 44 ]);
+	deepEqual( element.slider( "values" ), [ 11, 15, 15, 44 ], "handles restricted properly when set programmatically" );
 });
 
 test( "range", function() {

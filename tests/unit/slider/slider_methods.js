@@ -90,8 +90,31 @@ test( "value", function() {
 	equal( element.slider( "option", "value" ), 1, "value method set respects max" );
 });
 
-//test( "values", function() {
-//	ok(false, "missing test - untested code is broken code." );
-//});
+test( "values", function() {
+	expect( 5 );
+	
+	var element = $( "<div></div>" ).slider({
+		range: true,
+		min: 10,
+		max: 100,
+		step: 1
+	});
+
+	equal( element.slider( "values", 0 ), 10, "get the value of handle" );
+
+	element.slider( "option", "values", [ 10, 25 ] );
+	deepEqual( element.slider( "values" ), [ 10, 25 ], "get value for all handles" );
+
+	element.slider( "values", 0, 50 );
+	equal( element.slider( "values", 0 ), 50, "set the value of handle" );
+
+	element.slider( "values", [ 15, 1 ] );
+	deepEqual( element.slider( "values" ), [ 10, 10 ], "handles restricted properly when set programmatically" );
+
+	element.slider( "option", "values", [ 11, 22, 33, 44 ] );
+	element.slider( "values", [ 11, 22, 15, 44 ] );
+	deepEqual( element.slider( "values" ), [ 11, 15, 15, 44 ], "handles restricted properly when set programmatically" );
+
+});
 
 })( jQuery );
