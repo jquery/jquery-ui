@@ -1002,7 +1002,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_setContainment: function() {
 
-		var ce, co, over,
+		var ce, co, over, maxHeight,
 			o = this.options;
 		if(o.containment === "parent") {
 			o.containment = this.helper[0].parentNode;
@@ -1019,13 +1019,33 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(!(/^(document|window|parent)$/).test(o.containment)) {
 			ce = $(o.containment)[0];
 			co = $(o.containment).offset();
-			over = ($(ce).css("overflow") !== "hidden");
-
+			over = ( $( ce ).css( "overflow" ) !== "hidden" );
+			maxHeight = ( parseInt( $( ce ).css( "max-height" ), 10 ) || 0 );
+			
 			this.containment = [
-				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) + (parseInt($(ce).css("paddingLeft"),10) || 0) - this.margins.left,
-				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) + (parseInt($(ce).css("paddingTop"),10) || 0) - this.margins.top,
-				co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - (parseInt($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left,
-				co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - (parseInt($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top
+				co.left +
+					( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) +
+					( parseInt( $( ce ).css( "paddingLeft" ), 10 ) || 0 ) -
+					this.margins.left,
+				co.top +
+					( parseInt( $( ce ).css( "borderTopWidth" ),10 ) || 0 ) +
+					( parseInt( $( ce ).css( "paddingTop" ), 10 ) || 0 ) -
+					this.margins.top,
+				co.left +
+					( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) -
+					( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) -
+					( parseInt($( ce ).css( "paddingRight" ), 10 ) || 0 ) -
+					this.helperProportions.width -
+					this.margins.left,
+				co.top +
+					( over ?
+						( ( maxHeight && ce.scrollHeight > maxHeight ) ?
+							maxHeight : Math.max( ce.scrollHeight,ce.offsetHeight )
+						) : ce.offsetHeight ) -
+					( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) -
+					( parseInt( $( ce ).css( "paddingBottom" ), 10 ) || 0 ) -
+					this.helperProportions.height -
+					this.margins.top
 			];
 		}
 
