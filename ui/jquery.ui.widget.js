@@ -366,11 +366,16 @@ $.Widget.prototype = {
 	},
 
 	enable: function() {
+		this._enable();
 		return this._setOptions({ disabled: false });
 	},
+	_enable: $.noop,
+
 	disable: function() {
+		this._disable();
 		return this._setOptions({ disabled: true });
 	},
+	_disable: $.noop,
 
 	_on: function( suppressDisabledCheck, element, handlers ) {
 		var delegateElement,
