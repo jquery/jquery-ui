@@ -20,7 +20,7 @@
 	$(function() {
 		$( "#draggable" ).draggable();
 		$( "#droppable" ).droppable({
-			hoverClass: "ui-state-active",
+			hoverClass: "ui-state-hover",
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )
@@ -32,7 +32,7 @@
 		$( "#draggable2" ).draggable();
 		$( "#droppable2" ).droppable({
 			accept: "#draggable2",
-			activeClass: "ui-state-hover",
+			activeClass: "ui-state-default",
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )

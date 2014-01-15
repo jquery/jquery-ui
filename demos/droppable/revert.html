@@ -21,8 +21,8 @@
 		$( "#draggable2" ).draggable({ revert: "invalid" });
 
 		$( "#droppable" ).droppable({
-			activeClass: "ui-state-hover",
-			hoverClass: "ui-state-active",
+			activeClass: "ui-state-default",
+			hoverClass: "ui-state-hover",
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )
