@@ -1,17 +1,12 @@
 /*!
- * jQuery UI Selectable @VERSION
+ * jQuery UI Sortable @VERSION
  * http://jqueryui.com
  *
  * Copyright 2013 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  */
-.ui-selectable {
+.ui-sortable-handle {
 	-ms-touch-action: none;
 	touch-action: none;
-}
-.ui-selectable-helper {
-	position: absolute;
-	z-index: 100;
-	border: 1px dotted black;
 }
