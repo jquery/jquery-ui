@@ -726,4 +726,41 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 	deepEqual( offset1, offset2 );
 });
 
+test( "bug #8710: flip if flipped position fits more", function() {
+	expect( 3 );
+
+	// positions a 10px tall element within 99px height at top 90px
+	collisionTest({
+		within: "#bug-8710-within-smaller",
+		of: "#parentx",
+		collision: "flip",
+		at: "right bottom+30"
+	}, {
+		top: 0,
+		left: 60
+	}, "flip - top fits all" );
+
+	// positions a 10px tall element within 99px height at top 92px
+	collisionTest({
+		within: "#bug-8710-within-smaller",
+		of: "#parentx",
+		collision: "flip",
+		at: "right bottom+32"
+	}, {
+		top: -2,
+		left: 60
+	}, "flip - top fits more" );
+
+	// positions a 10px tall element within 101px height at top 92px
+	collisionTest({
+		within: "#bug-8710-within-bigger",
+		of: "#parentx",
+		collision: "flip",
+		at: "right bottom+32"
+	}, {
+		top: 92,
+		left: 60
+	}, "flip - top fits less" );
+});
+
 }( jQuery ) );
