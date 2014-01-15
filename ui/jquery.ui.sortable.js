@@ -954,7 +954,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
 		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
-		if(this.cssPosition === "absolute" && this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) {
+		//
+		// this.scrollParent[0] !== document.body <-- this condition was added in order to deal with the following WebKit issue:
+		//                                            https://code.google.com/p/chromium/issues/detail?id=157855
+		if(this.cssPosition === "absolute" && this.scrollParent[0] !== document && this.scrollParent[0] !== document.body && $.contains(this.scrollParent[0], this.offsetParent[0])) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
