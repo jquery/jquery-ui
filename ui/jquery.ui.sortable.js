@@ -155,9 +155,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		this.currentContainer = this;
 
-		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
-		this.refreshPositions();
-
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
 
@@ -275,6 +272,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		this.dragging = true;
+
+		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
+		this.refreshPositions();
 
 		this.helper.addClass("ui-sortable-helper");
 		this._mouseDrag(event); //Execute the drag once - this causes the helper not to be visible before getting its correct position
