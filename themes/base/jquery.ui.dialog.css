@@ -58,10 +58,10 @@
 	cursor: pointer;
 }
 .ui-dialog .ui-resizable-se {
-	width: 12px;
-	height: 12px;
-	right: -5px;
-	bottom: -5px;
+	width: 7px;
+	height: 7px;
+	right: 0;
+	bottom: 0;
 	background-position: 16px 16px;
 }
 .ui-draggable .ui-dialog-titlebar {
