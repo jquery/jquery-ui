@@ -686,7 +686,8 @@ test( "helper, default, switching after initialization", function() {
 			for ( k in scrollElements ) {
 				(function( position, helper, scrollElements, scrollElementsTitle ){
 					test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
-						expect( 8 );
+						expect( scrollPositions.length * 2 );
+
 						var i, j,
 							element = $( "#draggable1" ).css({ position: position, top: 0, left: 0 }).draggable({
 								helper: helper,
