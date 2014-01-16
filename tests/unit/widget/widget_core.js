@@ -870,22 +870,31 @@ test( "_on() to common element", function() {
 		_create: function() {
 			this._on( this.document, {
 				"customevent": "_handler",
-				"colon:devided": "_handler",
-				"dash-devided": "_handler",
-				"devided-by:both-colons:and-dashes": "_handler"
+				"with:colons": "_colonHandler",
+				"with-dashes": "_dashHandler",
+				"with-dashes:and-colons": "_commbinedHandler"
 			});
 		},
 		_handler: function() {
 			ok( true, "handler triggered" );
+		},
+		_colonHandler: function() {
+			ok( true, "colon handler triggered" );
+		},
+		_dashHandler: function() {
+			ok( true, "dash handler triggered" );
+		},
+		_commbinedHandler: function() {
+			ok( true, "combined handler triggered" );
 		}
 	});
 	var widget = $( "#widget" ).testWidget().testWidget( "instance" );
 	$( "#widget-wrapper" ).testWidget();
 	widget.destroy();
 	$( document ).trigger( "customevent" );
-	$( document ).trigger( "colon:devided" );
-	$( document ).trigger( "dash-devided" );
-	$( document ).trigger( "devided-by:both-colons:and-dashes" );
+	$( document ).trigger( "with:colons" );
+	$( document ).trigger( "with-dashes" );
+	$( document ).trigger( "with-dashes:and-colons" );
 });
 
 test( "_off() - single event", function() {
