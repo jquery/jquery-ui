@@ -106,6 +106,7 @@ grunt.loadNpmTasks( "grunt-contrib-uglify" );
 grunt.loadNpmTasks( "grunt-contrib-concat" );
 grunt.loadNpmTasks( "grunt-contrib-qunit" );
 grunt.loadNpmTasks( "grunt-contrib-csslint" );
+grunt.loadNpmTasks( "grunt-contrib-connect" );
 grunt.loadNpmTasks( "grunt-jscs-checker" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
@@ -218,6 +219,37 @@ grunt.initConfig({
 			src: "build/**/*.js"
 		},
 		grunt: "Gruntfile.js"
+	},
+	
+	connect: {
+		perf: {
+			options: {
+				hostname: '*',
+				port: '9999',
+				base: ['.']
+			}
+		}
+	},
+	perf: {
+		options: {
+			httpserver: 'http://localhost:9999/',
+			suite: 'Jquery UI - Performance Analysis',
+			BROWSERSTACK_USERNAME: process.env.BROWSERSTACK_USERNAME,
+			BROWSERSTACK_KEY: process.env.BROWSERSTACK_KEY,
+			selenium: "http://hub.browserstack.com:80/wd/hub",
+	        browsers: [{
+	        	browserName: 'chrome',
+	        	version: 31,
+	        	'browserstack.debug': 'true',
+	        	'browserstack.tunnel' : 'true'
+	        }],
+			couchdb: {
+				server: 'http://axemclion.cloudant.com',
+				database: 'jquery-ui-perf'
+			},
+			time: process.env.TRAVIS_JOB_NUMBER,
+			run: process.env.TRAVIS_COMMIT,
+		}
 	}
 });
 
