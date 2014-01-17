@@ -7,12 +7,40 @@
 	<script src="../../jquery-1.10.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
-	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.checkboxradio.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#check" ).button();
-		$( "#format" ).buttonset();
+		$( "form input" ).checkboxradio();
+
+		$(".controls input, .controls select").on( "change", function(){
+			var option = $( this ).attr( "name" ),
+				value = $( this ).val();
+
+			if( $( this ).attr( "type" ) === "checkbox" ) {
+				if( $( this ).is(":checked") ) {
+					value = true;
+				} else {
+					value = false;
+				}
+			}
+			$( "form input" ).checkboxradio( "option", option, value );
+		});
+		$( "#create" ).click( function(){
+			$( "form input" ).checkboxradio();
+		});
+		$( "#destroy" ).click( function(){
+			$( "form input" ).checkboxradio( "destroy" );
+		});
+		$( "#enable" ).click( function(){
+			$( "form input" ).checkboxradio( "enable");
+		});
+		$( "#disable" ).click( function(){
+			$( "form input" ).checkboxradio( "disable" );
+		});
+		$( "#refresh" ).click( function(){
+			$( "form input" ).checkboxradio( "refresh" );
+		});
 	});
 	</script>
 	<style>
@@ -20,18 +48,30 @@
 	</style>
 </head>
 <body>
-
-<input type="checkbox" id="check" /><label for="check">Toggle</label>
-
-<div id="format">
-	<input type="checkbox" id="check1" /><label for="check1">B</label>
-	<input type="checkbox" id="check2" /><label for="check2">I</label>
-	<input type="checkbox" id="check3" /><label for="check3">U</label>
-</div>
-
 <div class="demo-description">
-<p>A checkbox is styled as a toggle button with the button widget. The label element associated with the checkbox is used for the button text.</p>
-<p>This demo also demonstrates three checkboxes styled as a button set by calling <code>.buttonset()</code> on a common container.</p>
+	css for new checkbox widget
+</div>
+	<div class="controls">
+		<button id="create">Create</button>
+		<button id="destroy">Destroy</button>
+		<button id="enable">Enable</button>
+		<button id="disable">Disable</button>
+		<button id="refresh">Refresh</button>
+		<input type="checkbox" id="icon" name="icon"><label for="icon">Icon</label>
+		<input type="checkbox" id="disabled" name="disabled"><label for="disabled">Disabled</label>
+		<input type="text" id="label" name="label"><label for="label">Label</label>
+	</div>
+	<form>
+
+		<input type="checkbox" id="checkbox-1" />
+		<label for="checkbox-1">Checkbox widget sample</label>
+		<label for="checkbox-2">Checkbox widget sample<input type="checkbox" id="checkbox-2" /></label>
+
+		<input type="radio" id="radio-1" name="radio"/>
+		<label for="radio-1">Radio widget sample</label>
+		<label for="radio-2">Radio widget sample 2<input type="radio" id="radio-2" name="radio"/></label>
+		<button type="reset">Reset</button>
+	</form>
 </div>
 </body>
 </html>
