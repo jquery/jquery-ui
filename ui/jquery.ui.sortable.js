@@ -75,9 +75,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 		//Get the items
 		this.refresh();
 
-		//Let's determine if the items are being displayed horizontally
-		this.floating = this.items.length ? o.axis === "x" || this._isFloating(this.items[0].item) : false;
-
 		//Let's determine the parent's offset
 		this.offset = this.element.offset();
 
@@ -304,7 +301,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		var i, item, itemElement, intersection,
+		var i, item, itemElement, intersection, lastItemNotThis, isBelowLastItem
 			o = this.options,
 			scrolled = false;
 
@@ -363,6 +360,17 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(!this.options.axis || this.options.axis !== "x") {
 			this.helper[0].style.top = this.position.top+"px";
 		}
+		
+		
+		//If floating element, see if it's beneath the last element
+		if (this.floating) {
+			for (i = this.items.length - 1; i >= 0; i--) {
+				if (this.items[i].item[0] != this.currentItem[0] && this.items[i].item.parent().is(this.element)) {
+					lastItemNotThis = this.items[i].item[0];
+					break;
+				}
+			}
+		}
 
 		//Rearrange
 		for (i = this.items.length - 1; i >= 0; i--) {
@@ -371,7 +379,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 			item = this.items[i];
 			itemElement = item.item[0];
 			intersection = this._intersectsWithPointer(item);
-			if (!intersection) {
+			isBelowLastItem = this.floating && lastItemNotThis == itemElement && ((this.positionAbs.left > item.left + item.width && this.positionAbs.top > item.top) || (this.positionAbs.top > item.top + item.height));
+			if (!intersection && !isBelowLastItem) {
 				continue;
 			}
 
@@ -619,6 +628,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	refresh: function(event) {
 		this._refreshItems(event);
+		this._setFloating();
 		this._setHandleClassName();
 		this.refreshPositions();
 		return this;
@@ -674,6 +684,11 @@ $.widget("ui.sortable", $.ui.mouse, {
 			return true;
 		});
 
+	},
+	
+	_setFloating: function() {
+		//Let's determine if the items are being displayed horizontally
+		this.floating = this.items.length ? this.options.axis === "x" || this._isFloating(this.items[0].item) : false;
 	},
 
 	_refreshItems: function(event) {
