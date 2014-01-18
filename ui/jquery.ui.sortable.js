@@ -301,6 +301,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
+		
 		var i, item, itemElement, intersection, lastItemNotThis, isBelowLastItem,
 			o = this.options,
 			scrolled = false;
