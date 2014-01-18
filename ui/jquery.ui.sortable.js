@@ -365,8 +365,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		//Rearrange
 		for (i = this.items.length - 1; i >= 0; i--) {
 
-			// Cache variables and intersection, continue if no intersection
-			// or the object is below the last in the grid 
+			//Cache variables and intersection, continue if no intersection
 			item = this.items[i];
 			itemElement = item.item[0];
 			intersection = this._intersectsWithPointer(item);
