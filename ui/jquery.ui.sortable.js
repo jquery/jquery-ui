@@ -301,7 +301,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_mouseDrag: function(event) {
 		
-		var i, item, itemElement, intersection, lastItemNotThis, isBelowLastItem,
+		var i, item, itemElement, intersection,
 			o = this.options,
 			scrolled = false;
 
@@ -361,16 +361,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this.helper[0].style.top = this.position.top+"px";
 		}
 		
-		
-		//If floating element, see if it's beneath the last element
-		if (this.floating) {
-			for (i = this.items.length - 1; i >= 0; i--) {
-				if (this.items[i].item[0] !== this.currentItem[0] && this.items[i].item.parent().is(this.element)) {
-					lastItemNotThis = this.items[i].item[0];
-					break;
-				}
-			}
-		}
 
 		//Rearrange
 		for (i = this.items.length - 1; i >= 0; i--) {
@@ -380,8 +370,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			item = this.items[i];
 			itemElement = item.item[0];
 			intersection = this._intersectsWithPointer(item);
-			isBelowLastItem = this.floating && lastItemNotThis === itemElement && ((this.positionAbs.left > item.left + item.width && this.positionAbs.top > item.top) || (this.positionAbs.top > item.top + item.height));
-			if (!intersection && !isBelowLastItem) {
+			if (!intersection) {
 				continue;
 			}
 
