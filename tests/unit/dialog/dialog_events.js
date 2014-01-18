@@ -361,7 +361,7 @@ test("ensure dialog keeps focus when clicking modal overlay", function() {
 	var element = $( "<div></div>" ).dialog({
 			modal: true
 		});
-	equal( $(document.activeElement ).closest( ".ui-dialog" ).length, 1, "focus is in dialog" );
+	equal( $( document.activeElement ).closest( ".ui-dialog" ).length, 1, "focus is in dialog" );
 	$(".ui-widget-overlay").simulate("mousedown");
 	equal( $( document.activeElement ).closest( ".ui-dialog" ).length, 1, "focus is still in dialog" );
 	element.remove();
