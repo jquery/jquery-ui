@@ -112,7 +112,7 @@ test( "preserve changes to title attributes on close and destroy", function() {
 	// 1. Changes to title attribute are preserved on close()
 	tests[ 0 ] = { title: changed, expected: changed, method: "close" };
 	// 2. Changes to title attribute are preserved on destroy()
-	tests[ 1 ] = { title: changed, expected: changed , method: "destroy" };
+	tests[ 1 ] = { title: changed, expected: changed, method: "destroy" };
 	// 3. Changes to title attribute are NOT preserved when set to empty string on close()
 	tests[ 2 ] = { title: "", expected: original, method: "close" };
 	// 4. Changes to title attribute are NOT preserved when set to empty string on destroy()

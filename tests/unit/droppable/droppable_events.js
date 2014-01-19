@@ -35,8 +35,6 @@ test( "droppable destruction/recreation on drop event", function() {
 	ok( !droppable2.hasClass( "active" ), "subsequent droppable no longer active" );
 });
 
-
-
 // todo: comment the following in when ready to actually test
 /*
 test("activate", function() {

@@ -44,10 +44,10 @@ asyncTest( "focus tabbable", function() {
 	expect( 6 );
 	var element,
 		options = {
-			buttons: [{
+			buttons: [ {
 				text: "Ok",
 				click: $.noop
-			}]
+			} ]
 		};
 
 	function checkFocus( markup, options, testFn, next ) {
@@ -170,7 +170,7 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 
 asyncTest( "#9048: multiple modal dialogs opened and closed in different order", function() {
 	expect( 1 );
-	$( "#dialog1, #dialog2" ).dialog({ autoOpen: false, modal:true });
+	$( "#dialog1, #dialog2" ).dialog({ autoOpen: false, modal: true });
 	$( "#dialog1" ).dialog( "open" );
 	$( "#dialog2" ).dialog( "open" );
 	$( "#dialog1" ).dialog( "close" );
