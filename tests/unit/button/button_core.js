@@ -2,7 +2,6 @@
  * button_core.js
  */
 
-
 (function($) {
 
 module("button: core");

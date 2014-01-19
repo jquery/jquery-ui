@@ -168,7 +168,8 @@ grunt.initConfig({
 		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
 		ui: [ "ui/jquery.ui.*.js", "!ui/jquery.ui.datepicker.js", "!ui/jquery.ui.sortable.js", "!ui/jquery.ui.resizable.js", "!ui/jquery.ui.draggable.js" ],
 		// TODO enable this once we have a tool that can help with fixing formatting of existing files
-		// tests: "tests/unit/**/*.js",
+	        //tests: "tests/unit/**/*.js",
+	        tests: [ "tests/unit/{dialog,spinner,progressbar,tooltip,tabs,slider,autocomplete,accordian,droppable,datepicker,button}/*.js" ],
 		grunt: "Gruntfile.js"
 	},
 	uglify: minify,

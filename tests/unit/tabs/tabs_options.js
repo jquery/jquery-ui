@@ -362,5 +362,4 @@ asyncTest( "hide and show - animation", function() {
 	element.tabs( "option", "active", 1 );
 });
 
-
 }( jQuery ) );

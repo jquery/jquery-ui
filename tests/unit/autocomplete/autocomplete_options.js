@@ -260,7 +260,7 @@ test( "source, custom", function() {
 	expect( 2 );
 	sourceTest(function( request, response ) {
 		equal( request.term, "ja" );
-		response( ["java", "javascript"] );
+		response( [ "java", "javascript" ] );
 	});
 });
 

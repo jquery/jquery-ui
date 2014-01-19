@@ -110,7 +110,7 @@ test("icons", function() {
 	$("#button").button("destroy");
 });
 
-test( "#5295 - button does not remove hoverstate if disabled" , function() {
+test( "#5295 - button does not remove hoverstate if disabled", function() {
 	expect( 1 );
 	var btn = $("#button").button();
 	btn.hover( function() {

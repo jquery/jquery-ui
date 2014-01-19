@@ -1,7 +1,7 @@
 /*
-TestHelpers.commonWidgetTests( "datepicker", {
-	defaults: {
+TestHelpers.commonWidgetTests( "datepicker", { 
+	defaults: { 
 		disabled: false
-	}
-});
+	 } 
+} );
 */

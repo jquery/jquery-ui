@@ -9,7 +9,7 @@ test("open", function() {
 	expect(13);
 
 	var element = $("<div></div>");
-	element.dialog({
+	element.dialog( {
 		open: function(ev, ui) {
 			ok(element.dialog( "instance" )._isOpen, "interal _isOpen flag is set");
 			ok(true, "autoOpen: true fires open callback");
@@ -21,7 +21,7 @@ test("open", function() {
 	element.remove();
 
 	element = $("<div></div>");
-	element.dialog({
+	element.dialog( {
 		autoOpen: false,
 		open: function(ev, ui) {
 			ok(true, ".dialog('open') fires open callback");
@@ -29,16 +29,15 @@ test("open", function() {
 			equal(ev.type, "dialogopen", "event type in callback");
 			deepEqual(ui, {}, "ui hash in callback");
 		}
-	}).bind("dialogopen", function(ev, ui) {
+	} ).bind("dialogopen", function(ev, ui) {
 		ok(element.dialog( "instance" )._isOpen, "interal _isOpen flag is set");
 		ok(true, "dialog('open') fires open event");
 		equal(this, element[0], "context of event");
 		deepEqual(ui, {}, "ui hash in event");
-	});
+	} );
 	element.dialog("open");
 	element.remove();
-});
-
+} );
 
 test( "focus", function() {
 	expect( 5 );
@@ -333,7 +332,7 @@ asyncTest("ensure dialog's container doesn't scroll on resize and focus", functi
 		initialScroll = $(window).scrollTop();
 	element.dialog("option", "height", 600);
 	equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after height change");
-	setTimeout( function(){
+	setTimeout( function() {
 		$(".ui-dialog-titlebar-close").simulate("mousedown");
 		equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after focus moved to dialog");
 		element.dialog("destroy");
