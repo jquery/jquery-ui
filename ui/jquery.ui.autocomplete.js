@@ -339,7 +339,7 @@ $.widget( "ui.autocomplete", {
 				this.document.find( element ).eq( 0 );
 		}
 
-		if ( !element ) {
+		if ( !element || !element[ 0 ] ) {
 			element = this.element.closest( ".ui-front" );
 		}
 

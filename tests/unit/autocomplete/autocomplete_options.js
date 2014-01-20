@@ -5,13 +5,18 @@ module( "autocomplete: options" );
 var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby",
 	"python", "c", "scala", "groovy", "haskell", "perl" ];
 
-test( "appendTo", function() {
-	expect( 8 );
-	var detached = $( "<div>" ),
-		element = $( "#autocomplete" ).autocomplete();
+test( "appendTo: null", function() {
+	expect( 1 );
+	var element = $( "#autocomplete" ).autocomplete();
 	equal( element.autocomplete( "widget" ).parent()[ 0 ], document.body,
 		"defaults to body" );
 	element.autocomplete( "destroy" );
+});
+
+test( "appendTo: explicit", function() {
+	expect( 6 );
+	var detached = $( "<div>" ),
+		element = $( "#autocomplete" );
 
 	element.autocomplete({
 		appendTo: ".autocomplete-wrap"
@@ -21,13 +26,6 @@ test( "appendTo", function() {
 	equal( $( "#autocomplete-wrap2 .ui-autocomplete" ).length, 0,
 		"only appends to one element" );
 	element.autocomplete( "destroy" );
-
-	$( "#autocomplete-wrap2" ).addClass( "ui-front" );
-	element.autocomplete();
-	equal( element.autocomplete( "widget" ).parent()[ 0 ],
-		$( "#autocomplete-wrap2" )[ 0 ], "null, inside .ui-front" );
-	element.autocomplete( "destroy" );
-	$( "#autocomlete-wrap2" ).removeClass( "ui-front" );
 
 	element.autocomplete().autocomplete( "option", "appendTo", "#autocomplete-wrap1" );
 	equal( element.autocomplete( "widget" ).parent()[ 0 ],
@@ -52,6 +50,23 @@ test( "appendTo", function() {
 	equal( element.autocomplete( "widget" ).parent()[ 0 ], detached[ 0 ],
 		"detached DOM element via option()" );
 	element.autocomplete( "destroy" );
+});
+
+test( "appendTo: ui-front", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" );
+
+	$( "#autocomplete-wrap2" ).addClass( "ui-front" );
+	element.autocomplete();
+	equal( element.autocomplete( "widget" ).parent()[ 0 ],
+		$( "#autocomplete-wrap2" )[ 0 ], "null, inside .ui-front" );
+	element.autocomplete( "destroy" );
+
+	element.autocomplete({
+		appendTo: $()
+	});
+	equal( element.autocomplete( "widget" ).parent()[ 0 ],
+		$( "#autocomplete-wrap2" )[ 0 ], "null, inside .ui-front" );
 });
 
 function autoFocusTest( afValue, focusedLength ) {
