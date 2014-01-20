@@ -420,6 +420,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 			o = this.options,
 			document = this.document[ 0 ];
 
+		this.relative_container = null;
+
 		if ( !o.containment ) {
 			this.containment = null;
 			return;
