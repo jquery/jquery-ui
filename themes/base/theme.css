@@ -50,7 +50,10 @@
 ----------------------------------*/
 .ui-state-default,
 .ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
+.ui-widget-header .ui-state-default,
+.ui-button,
+html .ui-button.ui-state-disabled:hover,
+html .ui-button.ui-state-disabled:active {
 	border: 1px solid #c5c5c5/*{borderColorDefault}*/;
 	background: #f6f6f6/*{bgColorDefault}*/ /*{bgImgUrlDefault}*/ /*{bgDefaultXPos}*/ /*{bgDefaultYPos}*/ /*{bgDefaultRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
@@ -58,7 +61,11 @@
 }
 .ui-state-default a,
 .ui-state-default a:link,
-.ui-state-default a:visited {
+.ui-state-default a:visited,
+a.ui-button,
+a:link.ui-button,
+a:visited.ui-button,
+.ui-button {
 	color: #454545/*{fcDefault}*/;
 	text-decoration: none;
 }
@@ -67,7 +74,9 @@
 .ui-widget-header .ui-state-hover,
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
+.ui-widget-header .ui-state-focus,
+.ui-button:hover,
+.ui-button:focus {
 	border: 1px solid #cccccc/*{borderColorHover}*/;
 	background: #ededed/*{bgColorHover}*/ /*{bgImgUrlHover}*/ /*{bgHoverXPos}*/ /*{bgHoverYPos}*/ /*{bgHoverRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
@@ -80,13 +89,17 @@
 .ui-state-focus a,
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
-.ui-state-focus a:visited {
+.ui-state-focus a:visited,
+a.ui-button:hover,
+a.ui-button:focus {
 	color: #2b2b2b/*{fcHover}*/;
 	text-decoration: none;
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active {
 	border: 1px solid #003eff/*{borderColorActive}*/;
 	background: #007fff/*{bgColorActive}*/ /*{bgImgUrlActive}*/ /*{bgActiveXPos}*/ /*{bgActiveYPos}*/ /*{bgActiveRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
@@ -168,14 +181,18 @@
 .ui-widget-header .ui-icon {
 	background-image: url("images/ui-icons_444444_256x240.png")/*{iconsHeader}*/;
 }
-.ui-state-default .ui-icon {
+.ui-state-default .ui-icon,
+.ui-button .ui-icon {
 	background-image: url("images/ui-icons_777777_256x240.png")/*{iconsDefault}*/;
 }
 .ui-state-hover .ui-icon,
-.ui-state-focus .ui-icon {
+.ui-state-focus .ui-icon,
+.ui-button:hover .ui-icon,
+.ui-button:focus .ui-icon {
 	background-image: url("images/ui-icons_555555_256x240.png")/*{iconsHover}*/;
 }
-.ui-state-active .ui-icon {
+.ui-state-active .ui-icon,
+.ui-button:active .ui-icon {
 	background-image: url("images/ui-icons_ffffff_256x240.png")/*{iconsActive}*/;
 }
 .ui-state-highlight .ui-icon {
