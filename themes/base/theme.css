@@ -50,7 +50,8 @@
 ----------------------------------*/
 .ui-state-default,
 .ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
+.ui-widget-header .ui-state-default,
+.ui-button {
 	border: 1px solid #d3d3d3/*{borderColorDefault}*/;
 	background: #e6e6e6/*{bgColorDefault}*/ url("images/ui-bg_glass_75_e6e6e6_1x400.png")/*{bgImgUrlDefault}*/ 50%/*{bgDefaultXPos}*/ 50%/*{bgDefaultYPos}*/ repeat-x/*{bgDefaultRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
@@ -58,7 +59,11 @@
 }
 .ui-state-default a,
 .ui-state-default a:link,
-.ui-state-default a:visited {
+.ui-state-default a:visited,
+a.ui-button,
+a:link.ui-button,
+a:visited.ui-button,
+.ui-button {
 	color: #555555/*{fcDefault}*/;
 	text-decoration: none;
 }
@@ -67,7 +72,9 @@
 .ui-widget-header .ui-state-hover,
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
+.ui-widget-header .ui-state-focus,
+.ui-button:hover,
+.ui-button:focus {
 	border: 1px solid #999999/*{borderColorHover}*/;
 	background: #dadada/*{bgColorHover}*/ url("images/ui-bg_glass_75_dadada_1x400.png")/*{bgImgUrlHover}*/ 50%/*{bgHoverXPos}*/ 50%/*{bgHoverYPos}*/ repeat-x/*{bgHoverRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
@@ -80,13 +87,17 @@
 .ui-state-focus a,
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
-.ui-state-focus a:visited {
+.ui-state-focus a:visited,
+a.ui-button:hover,
+a.ui-button:focus {
 	color: #212121/*{fcHover}*/;
 	text-decoration: none;
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active {
 	border: 1px solid #aaaaaa/*{borderColorActive}*/;
 	background: #ffffff/*{bgColorActive}*/ url("images/ui-bg_glass_65_ffffff_1x400.png")/*{bgImgUrlActive}*/ 50%/*{bgActiveXPos}*/ 50%/*{bgActiveYPos}*/ repeat-x/*{bgActiveRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
@@ -168,15 +179,19 @@
 .ui-widget-header .ui-icon {
 	background-image: url("images/ui-icons_222222_256x240.png")/*{iconsHeader}*/;
 }
-.ui-state-default .ui-icon {
-	background-image: url("images/ui-icons_888888_256x240.png")/*{iconsDefault}*/;
+.ui-state-default .ui-icon,
+.ui-button .ui-icon {
+	background-image: url(images/ui-icons_888888_256x240.png)/*{iconsDefault}*/;
 }
 .ui-state-hover .ui-icon,
-.ui-state-focus .ui-icon {
-	background-image: url("images/ui-icons_454545_256x240.png")/*{iconsHover}*/;
+.ui-state-focus .ui-icon,
+.ui-button:hover .ui-icon,
+.ui-button:focus .ui-icon {
+	background-image: url(images/ui-icons_454545_256x240.png)/*{iconsHover}*/;
 }
-.ui-state-active .ui-icon {
-	background-image: url("images/ui-icons_454545_256x240.png")/*{iconsActive}*/;
+.ui-state-active .ui-icon,
+.ui-button:active .ui-icon {
+	background-image: url(images/ui-icons_454545_256x240.png)/*{iconsActive}*/;
 }
 .ui-state-highlight .ui-icon {
 	background-image: url("images/ui-icons_2e83ff_256x240.png")/*{iconsHighlight}*/;
