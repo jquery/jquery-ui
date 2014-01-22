@@ -49,42 +49,4 @@ test( "refresh: Ensure disabled state is preserved correctly.", function() {
 	ok( !element.button( "option", "disabled" ), "Changing a radio button's disabled property should update the state after refresh.");
 });
 
-test( "ui-state-active should be removed when button is disabled except for :checkbox and :radio", function() {
-	expect( 12 );
-	var elements = [
-			$( "<input type='button'>" ),
-			$( "<button></button>" ),
-			$( "<a></a>" ),
-			$( "<div></div>" ),
-			$( "<input type='checkbox' id='checkbox' checked><label for='checkbox'></label>" ),
-			$( "<input type='radio' id='radio' checked><label for='radio'></label>" )
-		];
-
-	$.each( elements, function() {
-
-		var element = $( this ).first(),
-			buttonElement = element.is( ":checkbox, :radio" ) ? element.next() : element,
-			elementType = element.prop( "tagName" ).toLowerCase();
-
-		if (elementType === "input" ) {
-			elementType += ":" + element.attr( "type" );
-		}
-
-		element.button();
-		element.trigger( "mousedown" );
-
-		ok( buttonElement.hasClass( "ui-state-active" ),
-			"[" + elementType + "] has ui-state-active class after mousedown event." );
-
-		element.button( "disable" );
-		if ( element.is( ":checkbox, :radio" ) ) {
-			ok( buttonElement.hasClass( "ui-state-active" ),
-				"Disabled [" + elementType + "] has preserved ui-state-active class." );
-		} else {
-			ok( !buttonElement.hasClass( "ui-state-active" ),
-				"Disabled [" + elementType + "] has removed ui-state-active class." );
-		}
-	});
-});
-
 })(jQuery);
