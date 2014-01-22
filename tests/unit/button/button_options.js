@@ -78,7 +78,7 @@ test("text false without icon", function() {
 	$("#button").button({
 		text: false
 	});
-	ok( $("#button").is(".ui-button-text-only:not(.ui-button-icon-only)") );
+	ok( $("#button").is(":not(.ui-button-icon-only)") );
 
 	$("#button").button("destroy");
 });
@@ -87,9 +87,7 @@ test("text false with icon", function() {
 	expect( 1 );
 	$("#button").button({
 		text: false,
-		icons: {
-			primary: "iconclass"
-		}
+		icon: "iconclass"
 	});
 	ok( $("#button").is(".ui-button-icon-only:not(.ui-button-text):has(span.ui-icon.iconclass)") );
 
@@ -135,12 +133,9 @@ test("icons", function() {
 	expect( 1 );
 	$("#button").button({
 		text: false,
-		icons: {
-			primary: "iconclass",
-			secondary: "iconclass2"
-		}
+		icon: "iconclass"
 	});
-	ok( $("#button").is(":has(span.ui-icon.ui-button-icon-primary.iconclass):has(span.ui-icon.ui-button-icon-secondary.iconclass2)") );
+	ok( $("#button").is(":has(span.ui-icon.iconclass)") );
 
 	$("#button").button("destroy");
 });
