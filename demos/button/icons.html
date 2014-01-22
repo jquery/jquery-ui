@@ -11,39 +11,58 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "button:first" ).button({
-			icons: {
-				primary: "ui-icon-locked"
-			},
+		$( ".widget button:first" ).button({
+			icon: "ui-icon-gear",
 			text: false
 		}).next().button({
-			icons: {
-				primary: "ui-icon-locked"
-			}
+			icon: "ui-icon-triangle-1-w"
 		}).next().button({
-			icons: {
-				primary: "ui-icon-gear",
-				secondary: "ui-icon-triangle-1-s"
-			}
+			icon: "ui-icon-triangle-1-e",
+			iconPosition: "end"
 		}).next().button({
-			icons: {
-				primary: "ui-icon-gear",
-				secondary: "ui-icon-triangle-1-s"
-			},
-			text: false
+			icon: "ui-icon-triangle-1-s",
+			iconPosition: "bottom"
+		}).next().button({
+			icon: "ui-icon-triangle-1-n",
+			iconPosition: "top"
 		});
 	});
 	</script>
 </head>
 <body>
-
-<button>Button with icon only</button>
-<button>Button with icon on the left</button>
-<button>Button with two icons</button>
-<button>Button with two icons and no text</button>
-
 <div class="demo-description">
 <p>Some buttons with various combinations of text and icons.</p>
+</div>
+<div class="widget">
+	<h1>Widget</h2>
+	<button>Button with icon only</button>
+	<button>Button with icon on the left</button>
+	<button>Button with two icons</button>
+	<button>Button with two icons and no text</button>
+</div>
+<div class="css">
+	<h1>CSS</h2>
+		<button class="ui-button ui-widget ui-corner-all ui-button-icon-only">
+		<span class="ui-icon  ui-icon-gear"></span>
+		Button with icon only
+	</button>
+	<button class="ui-button ui-widget ui-corner-all ui-icon-begining">
+		<span class="ui-icon ui-icon-triangle-1-w"></span>
+		Button with icon on the left
+	</button>
+	<button class="ui-button ui-widget ui-corner-all ui-icon-end">
+		<span class="ui-icon ui-icon-triangle-1-e"></span>
+		Button with icon on the right
+	</button>
+	<button class="ui-button ui-widget ui-corner-all ui-icon-bottom">
+		<span class="ui-icon ui-icon-triangle-1-s"></span>
+		Button with icon on bottom
+	</button>
+	<button class="ui-button ui-widget ui-corner-all ui-icon-top">
+		<span class="ui-icon ui-icon-triangle-1-n"></span>
+		Button with icon on top
+	</button>
+
 </div>
 </body>
 </html>
