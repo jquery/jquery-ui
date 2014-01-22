@@ -1,12 +1,10 @@
 TestHelpers.commonWidgetTests( "button", {
 	defaults: {
 		disabled: null,
-		icons: {
-			primary: null,
-			secondary: null
-		},
-		label: null,
 		text: true,
+		label: null,
+		icon: null,
+		iconPosition: "begining",
 
 		// callbacks
 		create: null

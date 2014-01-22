@@ -71,12 +71,79 @@
 /* Icons
 ----------------------------------*/
 
-/* states and images */
 .ui-icon {
 	display: block;
 	text-indent: -99999px;
 	overflow: hidden;
 	background-repeat: no-repeat;
+}
+
+.ui-button .ui-icon {
+	position: absolute;
+	display: block;
+}
+
+.ui-button.ui-icon-begining {
+	padding-left: 2.1em;
+}
+
+.ui-button.ui-icon-end {
+	padding: .4em 2.1em .4em 1em;
+}
+
+.ui-button.ui-icon-top {
+	padding: 1.1em 1em .4em 1em;
+}
+
+.ui-button.ui-icon-bottom {
+	padding: .4em 1em 1.1em 1em;
+}
+
+.ui-icon {
+	left: .5em;
+	top: .2em;
+}
+
+.ui-icon-end .ui-icon {
+	left: auto;
+	right: .5em;
+}
+
+.ui-icon-top .ui-icon,
+.ui-icon-bottom .ui-icon {
+	left: 50%;
+	margin-left: -11px;
+}
+
+.ui-icon-top .ui-icon {
+	top: .1em;
+}
+
+.ui-icon-bottom .ui-icon {
+	top: auto;
+	bottom: .1em;
+}
+
+.ui-icon-notext .ui-icon {
+	left: 50%;
+	margin-left: -8px;
+}
+
+.ui-button.ui-icon-notext .ui-icon {
+	padding: 0;
+	width: 2.1em;
+	height: 2.1em;
+	text-indent: -9999px;
+	white-space: nowrap;
+
+}
+
+input.ui-button.ui-icon-notext .ui-icon {
+	width: auto;
+	height: auto;
+	text-indent: 0;
+	white-space: normal;
+	padding: .4em 1em;
 }
 
 
