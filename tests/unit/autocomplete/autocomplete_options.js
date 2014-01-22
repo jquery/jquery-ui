@@ -220,7 +220,20 @@ function sourceTest( source, async ) {
 		}),
 		menu = element.autocomplete( "widget" );
 	function result() {
-		equal( menu.find( ".ui-menu-item" ).text(), "javajavascript" );
+		var items = menu.find( ".ui-menu-item" );
+		equal( items.length, 3, "Should find three results." );
+		deepEqual( items.eq( 0 ).data( "ui-autocomplete-item" ), {
+			label: "java",
+			value: "java"
+		});
+		deepEqual( items.eq( 1 ).data( "ui-autocomplete-item" ), {
+			label: "javascript",
+			value: "javascript"
+		});
+		deepEqual( items.eq( 2 ).data( "ui-autocomplete-item" ), {
+			label: "clojure",
+			value: "clojure"
+		});
 		element.autocomplete( "destroy" );
 		if ( async ) {
 			start();
@@ -230,52 +243,58 @@ function sourceTest( source, async ) {
 		stop();
 		$( document ).one( "ajaxStop", result );
 	}
-	element.val( "ja" ).autocomplete( "search" );
+	element.val( "j" ).autocomplete( "search" );
 	if ( !async ) {
 		result();
 	}
 }
 
-test( "source, local object array, only label property", function() {
-	expect( 1 );
+test( "source, local object array, only labels", function() {
+	expect( 4 );
 	sourceTest([
-		{ label: "java" },
-		{ label: "php" },
-		{ label: "coldfusion" },
-		{ label: "javascript" }
+		{ label: "java", value: null },
+		{ label: "php", value: null },
+		{ label: "coldfusion", value: "" },
+		{ label: "javascript", value: "" },
+		{ label: "clojure" }
 	]);
 });
 
-test( "source, local object array, only value property", function() {
-	expect( 1 );
+test( "source, local object array, only values", function() {
+	expect( 4 );
 	sourceTest([
-		{ value: "java" },
-		{ value: "php" },
-		{ value: "coldfusion" },
-		{ value: "javascript" }
+		{ value: "java", label: null },
+		{ value: "php", label: null },
+		{ value: "coldfusion", label: "" },
+		{ value: "javascript", label: "" },
+		{ value: "clojure" }
 	]);
 });
 
 test( "source, url string with remote json string array", function() {
-	expect( 1 );
+	expect( 4 );
 	sourceTest( "remote_string_array.txt", true );
 });
 
 test( "source, url string with remote json object array, only value properties", function() {
-	expect( 1 );
+	expect( 4 );
 	sourceTest( "remote_object_array_values.txt", true );
 });
 
 test( "source, url string with remote json object array, only label properties", function() {
-	expect( 1 );
+	expect( 4 );
 	sourceTest( "remote_object_array_labels.txt", true );
 });
 
 test( "source, custom", function() {
-	expect( 2 );
+	expect( 5 );
 	sourceTest(function( request, response ) {
-		equal( request.term, "ja" );
-		response( ["java", "javascript"] );
+		equal( request.term, "j" );
+		response([
+			"java",
+			{ label: "javascript", value: null },
+			{ value: "clojure", label: null }
+		]);
 	});
 });
 
