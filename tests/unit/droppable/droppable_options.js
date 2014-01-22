@@ -83,16 +83,17 @@ test( "overlapping droppables with changing acceptability", function() {
 
 	var overFired = false,
 		draggableOverlap = $( "#draggableOverlap" ).draggable({ refreshPositions: true }),
-		droppableOverlap1 = $( "#droppableOverlap1" ).droppable({
-			out: function() {
-				draggableOverlap.addClass("acceptable");
-			}
-		}),
 		droppableOverlap2 = $( "#droppableOverlap2" ).droppable({
 			over: function() {
 				overFired = true;
 			}
 		});
+
+	$( "#droppableOverlap1" ).droppable({
+		out: function() {
+			draggableOverlap.addClass( "acceptable" );
+		}
+	});
 
 	// Initial drag so prepareOffsets runs when droppableOverlap2 is accepting draggableOverlap.
 	draggableOverlap.simulate( "drag", { dx: 1, dy: 1 } );
