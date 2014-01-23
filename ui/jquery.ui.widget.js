@@ -17,7 +17,11 @@ $.cleanData = (function( orig ) {
 	return function( elems ) {
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
 			try {
-				$( elem ).triggerHandler( "remove" );
+				var $elem = $( elem );
+				
+				if ( $elem.hasClass('ui-widget') ) {
+					$elem.triggerHandler( "remove" );
+				}
 			// http://bugs.jquery.com/ticket/8235
 			} catch( e ) {}
 		}
