@@ -306,7 +306,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 	_mouseDrag: function(event) {
 		var i, item, itemElement, intersection,
 			o = this.options,
-			scrolled = false;
+			scrolled = false,
+			touchingEdge;
 
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
@@ -364,47 +365,66 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this.helper[0].style.top = this.position.top+"px";
 		}
 
-		//Rearrange
-		for (i = this.items.length - 1; i >= 0; i--) {
-
-			//Cache variables and intersection, continue if no intersection
-			item = this.items[i];
-			itemElement = item.item[0];
-			intersection = this._intersectsWithPointer(item);
-			if (!intersection) {
-				continue;
+		// Check if the helper is touching the edges of the containment.
+		if(this.containment) {
+			if((this.positionAbs.left === this.containment[0] || this.options.axis === "y") &&
+					(this.positionAbs.top === this.containment[1] || this.options.axis === "x")) {
+				touchingEdge = 0;
+				this.direction = "down";
 			}
-
-			// Only put the placeholder inside the current Container, skip all
-			// items from other containers. This works because when moving
-			// an item from one container to another the
-			// currentContainer is switched before the placeholder is moved.
-			//
-			// Without this, moving items in "sub-sortables" can cause
-			// the placeholder to jitter beetween the outer and inner container.
-			if (item.instance !== this.currentContainer) {
-				continue;
+			else if((this.positionAbs.left === this.containment[2] || this.options.axis === "y") &&
+					(this.positionAbs.top === this.containment[3] || this.options.axis === "x")) {
+				touchingEdge = this.items.length - 1;
+				this.direction = "up";
 			}
+		}
 
-			// cannot intersect with itself
-			// no useless actions that have been done before
-			// no action if the item moved is the parent of the item checked
-			if (itemElement !== this.currentItem[0] &&
-				this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
-				!$.contains(this.placeholder[0], itemElement) &&
-				(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
-			) {
+		if(touchingEdge !== undefined && this.placeholder[0] !== this.items[touchingEdge].item[0]) {
+			// Rearrange if the helper is at the edge of the containment and the placeholder is not at that edge.
+			this._rearrange(event, this.items[touchingEdge], false);
+			this._trigger("change", event, this._uiHash());
+		} else {
+			//Rearrange
+			for (i = this.items.length - 1; i >= 0; i--) {
 
-				this.direction = intersection === 1 ? "down" : "up";
-
-				if (this.options.tolerance === "pointer" || this._intersectsWithSides(item)) {
-					this._rearrange(event, item);
-				} else {
-					break;
+				//Cache variables and intersection, continue if no intersection
+				item = this.items[i];
+				itemElement = item.item[0];
+				intersection = this._intersectsWithPointer(item);
+				if (!intersection) {
+					continue;
 				}
 
-				this._trigger("change", event, this._uiHash());
-				break;
+				// Only put the placeholder inside the current Container, skip all
+				// items from other containers. This works because when moving
+				// an item from one container to another the
+				// currentContainer is switched before the placeholder is moved.
+				//
+				// Without this, moving items in "sub-sortables" can cause
+				// the placeholder to jitter beetween the outer and inner container.
+				if (item.instance !== this.currentContainer) {
+					continue;
+				}
+
+				// cannot intersect with itself
+				// no useless actions that have been done before
+				// no action if the item moved is the parent of the item checked
+				if (itemElement !== this.currentItem[0] &&
+					this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
+					!$.contains(this.placeholder[0], itemElement) &&
+					(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
+				) {
+					this.direction = intersection === 1 ? "down" : "up";
+
+					if (this.options.tolerance === "pointer" || this._intersectsWithSides(item)) {
+						this._rearrange(event, item);
+					} else {
+						break;
+					}
+
+					this._trigger("change", event, this._uiHash());
+					break;
+				}
 			}
 		}
 
