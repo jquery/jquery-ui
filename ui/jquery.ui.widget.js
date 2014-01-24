@@ -17,7 +17,9 @@ $.cleanData = (function( orig ) {
 	return function( elems ) {
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
 			try {
-				$( elem ).triggerHandler( "remove" );
+				if ( elem.jquiTriggerRemove ) {
+					$( elem ).triggerHandler( "remove" );
+				}
 			// http://bugs.jquery.com/ticket/8235
 			} catch( e ) {}
 		}
@@ -235,6 +237,7 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
+		element.jquiTriggerRemove = true;
 		this.uuid = widget_uuid++;
 		this.eventNamespace = "." + this.widgetName + this.uuid;
 		this.options = $.widget.extend( {},
