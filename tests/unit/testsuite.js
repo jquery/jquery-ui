@@ -44,7 +44,7 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 	} :
 	function( resources ) {
 		$.each( resources.css || [], function( i, resource ) {
-			includeStyle( "themes/base/jquery." + resource + ".css" );
+			includeStyle( "themes/base/" + resource + ".css" );
 		});
 		$.each( resources.js || [], function( i, resource ) {
 			includeScript( resource );
@@ -79,7 +79,7 @@ TestHelpers.testJshint = function( module ) {
 				dataType: "json"
 			}),
 			$.ajax({
-				url: url("../../../ui/jquery.ui." + module + ".js"),
+				url: url("../../../ui/" + module + ".js"),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
