@@ -280,6 +280,7 @@ $.ui.ddmanager = {
 
 			// No disabled and non-accepted
 			if ( m[ i ].options.disabled || ( t && !m[ i ].accept.call( m[ i ].element[ 0 ], ( t.currentItem || t.element ) ) ) ) {
+				m[ i ].visible = undefined;
 				continue;
 			}
 

@@ -77,6 +77,36 @@ test( "scope", function() {
 	equal( draggableOffset.left, oldDraggableOffset.left );
 	equal( draggableOffset.top, oldDraggableOffset.top );
 });
+
+test( "overlapping droppables with changing acceptability", function() {
+	expect( 1 );
+
+	var overFired = false,
+		draggableOverlap = $( "#draggableOverlap" ).draggable({ refreshPositions: true }),
+		droppableOverlap2 = $( "#droppableOverlap2" ).droppable({
+			over: function() {
+				overFired = true;
+			}
+		});
+
+	$( "#droppableOverlap1" ).droppable({
+		out: function() {
+			draggableOverlap.addClass( "acceptable" );
+		}
+	});
+
+	// Initial drag so prepareOffsets runs when droppableOverlap2 is accepting draggableOverlap.
+	draggableOverlap.simulate( "drag", { dx: 1, dy: 1 } );
+
+	// Now change droppableOverlap2 to not accept draggableOverlap until
+	// draggableOverlap1's out runs and makes draggableOverlap acceptable again,
+	// and drag draggableOverlap over droppableOverlap2.
+	droppableOverlap2.droppable( "option", "accept", ".acceptable" );
+	draggableOverlap.simulate( "drag", { dx: 200, dy: 0 } );
+
+	equal( overFired, true );
+});
+
 /*
 test("greedy", function() {
 	ok(false, 'missing test - untested code is broken code');
