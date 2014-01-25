@@ -54,7 +54,7 @@ test( "disabled, ui-state-active is removed unless checkbox or radio", function(
 			buttonElement = element.button( "widget" ),
 			elementType = element.prop( "tagName" ).toLowerCase();
 
-		if ( element.is( "input") ) {
+		if ( element.is( "input" ) ) {
 			elementType += ":" + element.attr( "type" );
 		}
 
