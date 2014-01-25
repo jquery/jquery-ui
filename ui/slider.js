@@ -547,13 +547,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_calculateNewMax: function() {
-		var max = this._valueMin(),
-			step = this.options.step;
-
-		while ( max + step <= this.options.max ) {
-			max = max + step;
-		}
-		this.max = max;
+		var remainder = ( this.options.max - this._valueMin() ) % this.options.step;
+		this.max = this.options.max - remainder;
 	},
 
 	_valueMin: function() {
