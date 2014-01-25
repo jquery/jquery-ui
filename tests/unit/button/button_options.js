@@ -50,24 +50,20 @@ test( "disabled, ui-state-active is removed unless checkbox or radio", function(
 		];
 
 	$.each( elements, function() {
-
-		var element = $( this ).first(),
-			isRadioOrCheckbox = element.is( "[type=checkbox], [type=radio]" ),
-			buttonElement = isRadioOrCheckbox ? element.next() : element,
+		var element = $( this ).first().button(),
+			buttonElement = element.button( "widget" ),
 			elementType = element.prop( "tagName" ).toLowerCase();
 
-		if ( elementType === "input" ) {
+		if ( element.is( "input") ) {
 			elementType += ":" + element.attr( "type" );
 		}
 
-		element.button();
 		element.trigger( "mousedown" );
-
 		ok( buttonElement.hasClass( "ui-state-active" ),
 			"[" + elementType + "] has ui-state-active class after mousedown." );
 
 		element.button( "disable" );
-		if ( isRadioOrCheckbox ) {
+		if ( element.is( "[type=checkbox], [type=radio]" ) ) {
 			ok( buttonElement.hasClass( "ui-state-active" ),
 				"Disabled [" + elementType + "] has ui-state-active class." );
 		} else {
