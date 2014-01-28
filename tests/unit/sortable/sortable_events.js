@@ -248,13 +248,13 @@ test( "over", function() {
 		dy: 20
 	});
 
-	ok( hash, "stop event triggered" );
-	ok( hash.helper, "UI should not include: helper" );
+	ok( hash, "over event triggered" );
+	ok( hash.helper, "UI includes: helper" );
 	ok( hash.placeholder, "UI hash includes: placeholder" );
 	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );
 	ok( hash.offset && ( hash.offset.top && hash.offset.left ), "UI hash includes: offset" );
 	ok( hash.item, "UI hash includes: item" );
-	ok( hash.sender, "UI hash does not include: sender" );
+	ok( hash.sender, "UI hash includes: sender" );
 	equal( overCount, 1, "over fires only once" );
 });
 
@@ -264,7 +264,7 @@ test( "out", function() {
 	var hash,
 		outCount = 0;
 
-	$('#sortableoutover').sortable({
+	$("#sortableoutover").sortable({
 		out: function( e, ui ) {
 			hash = ui;
 			outCount++;
@@ -295,27 +295,26 @@ test("#9335: over and out firing, including with connectWith and a draggable", f
 	 */
 	
 	var fired = {},
-		firedCount = function (id,type) { var key=id + '-' + type; return (key in fired) ? fired[key] : 0; },
-		fire = function (sortable,type) { var key=$(sortable).attr('id') + '-' + type; fired[key] = ((key in fired) ? fired[key] : 0) + 1; };
-	
-	var sortable_ul=$('#sortableoutover');
-	var drag_el = sortable_ul.find( "li:eq(0)" );
-	var draggable_container=$('#sortableoutoverdraggablelist');
-	var draggable=draggable_container.find('li:eq(0)');
+		firedCount = function (id,type) { var key=id + "-" + type; return (key in fired) ? fired[key] : 0; },
+		fire = function (sortable,type) { var key=$(sortable).attr("id") + "-" + type; fired[key] = ((key in fired) ? fired[key] : 0) + 1; },
+		sortable_ul=$("#sortableoutover"),
+		drag_el = sortable_ul.find( "li:eq(0)" ),
+		draggable_container=$("#sortableoutoverdraggablelist"),
+		draggable=draggable_container.find("li:eq(0)");
 
 	// Initialise with hooks to count how often out and over events fire
 	$("#qunit-fixture ul.sortableoutover").sortable({
 		connectWith: "#qunit-fixture ul.sortableoutover",
-		out: function ( e, ui ) {
-			fire(this,'out');
+		out: function () {
+			fire(this,"out");
 		},
 		over: function () {
-			fire(this,'over');
+			fire(this,"over");
 		}
 	});
 	draggable.draggable({
 		connectToSortable: "#qunit-fixture ul.sortableoutover",
-		revert:'invalid'
+		revert:"invalid"
 	});
 	
 	// Test that after dragging out (but keeping the mouse down)
@@ -324,18 +323,18 @@ test("#9335: over and out firing, including with connectWith and a draggable", f
 	TestHelpers.sortable.dragBegin(drag_el, {
 		dy: 150
 	});
-	equal( firedCount( 'sortableoutover', 'over' ), 1, "Drag outside sortable fires over once initially" );
-	equal( firedCount( 'sortableoutover', 'out' ), 1, "Drag outside sortable fires out once" );
+	equal( firedCount( "sortableoutover", "over" ), 1, "Drag outside sortable fires over once initially" );
+	equal( firedCount( "sortableoutover", "out" ), 1, "Drag outside sortable fires out once" );
 	
 	// Release the mouse button while not over the sortable triggers no 'out' event
 	fired = {};
 	TestHelpers.sortable.dragEnd(drag_el, { });
-	equal( firedCount( 'sortableoutover', 'over' ), 0, "Completion of drag outside sortable fires no over" );
-	equal( firedCount( 'sortableoutover', 'out' ), 0, "Completion of drag outside sortable fires no out" );
+	equal( firedCount( "sortableoutover", "over" ), 0, "Completion of drag outside sortable fires no over" );
+	equal( firedCount( "sortableoutover", "out" ), 0, "Completion of drag outside sortable fires no out" );
 
 	// NB: because the above drag may well have resulted in the drag element being repositioned in the
 	// list we get the current first element again
-	var drag_el = sortable_ul.find( "li:eq(0)" );
+	drag_el = sortable_ul.find( "li:eq(0)" );
 	
 	// Test that dragging out and then back over fires an initial over, the out, and then another over
 	fired = {};
@@ -344,15 +343,15 @@ test("#9335: over and out firing, including with connectWith and a draggable", f
 	});
 	TestHelpers.sortable.dragContinue(drag_el, {
 		dy: -150
-	});	
-	equal( firedCount( 'sortableoutover', 'over' ), 2, "Drag outside and then back over sortable fires over once initially and then a second on return" );
-	equal( firedCount( 'sortableoutover', 'out' ), 1, "Drag outside and then back over sortable fires out once" );
+	});
+	equal( firedCount( "sortableoutover", "over" ), 2, "Drag outside and then back over sortable fires over once initially and then a second on return" );
+	equal( firedCount( "sortableoutover", "out" ), 1, "Drag outside and then back over sortable fires out once" );
 	
 	// Releasing the mouse button while 'over' triggers an 'out'
-	fired = {};	
+	fired = {};
 	TestHelpers.sortable.dragEnd(drag_el, { });
-	equal( firedCount( 'sortableoutover', 'over' ), 0, "Releasing the mouse button after a drag out and then back over triggers no further over" );
-	equal( firedCount( 'sortableoutover', 'out' ), 1, "Releasing the mouse button after a drag out and then back over triggers a final out" );	
+	equal( firedCount( "sortableoutover", "over" ), 0, "Releasing the mouse button after a drag out and then back over triggers no further over" );
+	equal( firedCount( "sortableoutover", "out" ), 1, "Releasing the mouse button after a drag out and then back over triggers a final out" );
 	
 	// Test that dragging out and then over second sortable fires initial over and out on the first
 	// and then an over on the second
@@ -362,17 +361,17 @@ test("#9335: over and out firing, including with connectWith and a draggable", f
 	});
 	TestHelpers.sortable.dragContinue(drag_el, {
 		dy: 100
-	});	
-	equal( firedCount( 'sortableoutover', 'over' ), 1, "Drag outside first and then over second sortable fires over on first sortable" );
-	equal( firedCount( 'sortableoutover', 'out' ), 1, "Drag outside first and then over second sortable fires out on first sortable" );
-	equal( firedCount( 'sortableoutover2', 'over' ), 1, "Drag outside first and then over second sortable fires over on second sortable" );
-	equal( firedCount( 'sortableoutover2', 'out' ), 0, "Drag outside first and then over second sortable fires no out on second sortable" );
+	});
+	equal( firedCount( "sortableoutover", "over" ), 1, "Drag outside first and then over second sortable fires over on first sortable" );
+	equal( firedCount( "sortableoutover", "out" ), 1, "Drag outside first and then over second sortable fires out on first sortable" );
+	equal( firedCount( "sortableoutover2", "over" ), 1, "Drag outside first and then over second sortable fires over on second sortable" );
+	equal( firedCount( "sortableoutover2", "out" ), 0, "Drag outside first and then over second sortable fires no out on second sortable" );
 	
 	// Releasing the mouse button while 'over' triggers an 'out' - this time it should be on the second sortable, not the first
-	fired = {};	
+	fired = {};
 	TestHelpers.sortable.dragEnd(drag_el, { });
-	equal( firedCount( 'sortableoutover', 'out' ), 0, "Releasing the mouse button after a drag out and over the second sortable shouldn't trigger an out on the first" );
-	equal( firedCount( 'sortableoutover2', 'out' ), 1, "Releasing the mouse button after a drag out and over the second sortable should trigger an out on the second" );
+	equal( firedCount( "sortableoutover", "out" ), 0, "Releasing the mouse button after a drag out and over the second sortable shouldn't trigger an out on the first" );
+	equal( firedCount( "sortableoutover2", "out" ), 1, "Releasing the mouse button after a drag out and over the second sortable should trigger an out on the second" );
 	
 	// Dragging draggable over one sorted list and then out and then over another sorted list and then out
 	// should trigger one over and one out on each
@@ -389,26 +388,26 @@ test("#9335: over and out firing, including with connectWith and a draggable", f
 	TestHelpers.sortable.dragContinue(draggable, {
 		dy: 100 // Over space div
 	});
-	equal( firedCount( 'sortableoutover', 'over' ), 1, "Dragging over both sortables and then back out should trigger over on first" );
-	equal( firedCount( 'sortableoutover', 'out' ), 1, "Dragging over both sortables and then back out should trigger out on first" );
-	equal( firedCount( 'sortableoutover2', 'over' ), 1, "Dragging over both sortables and then back out should trigger over on second" );
-	equal( firedCount( 'sortableoutover2', 'out' ), 1, "Dragging over both sortables and then back out should trigger out on second" );
+	equal( firedCount( "sortableoutover", "over" ), 1, "Dragging over both sortables and then back out should trigger over on first" );
+	equal( firedCount( "sortableoutover", "out" ), 1, "Dragging over both sortables and then back out should trigger out on first" );
+	equal( firedCount( "sortableoutover2", "over" ), 1, "Dragging over both sortables and then back out should trigger over on second" );
+	equal( firedCount( "sortableoutover2", "out" ), 1, "Dragging over both sortables and then back out should trigger out on second" );
 
 	// Release the mouse button while outside both sortables shouldn't trigger any further out events
 	fired = {};
 	TestHelpers.sortable.dragEnd(draggable, { });
-	equal( firedCount( 'sortableoutover', 'out' ), 0, "Dragging over both sortables and then back out shouldn't trigger any further out event on first on mouseup" );
-	equal( firedCount( 'sortableoutover2', 'out' ), 0, "Dragging over both sortables and then back out shouldn't trigger any further out event on second on mouseup" );
+	equal( firedCount( "sortableoutover", "out" ), 0, "Dragging over both sortables and then back out shouldn't trigger any further out event on first on mouseup" );
+	equal( firedCount( "sortableoutover2", "out" ), 0, "Dragging over both sortables and then back out shouldn't trigger any further out event on second on mouseup" );
 
 	// At the time of writing this test if you drop a draggable outside of a sortable but it was
 	// over a sortable at some point during the drag then it ends up in the sortable (i.e. it doesn't revert), so reset
 	// the draggable back to being in its container before the next test
 	draggable
-		.draggable('destroy')
+		.draggable("destroy")
 		.appendTo(draggable_container)
 		.draggable({
 			connectToSortable: "#qunit-fixture ul.sortableoutover",
-			revert:'invalid'
+			revert:"invalid"
 		});
 	
 	// Test dragging draggable over connected sortable
@@ -417,15 +416,15 @@ test("#9335: over and out firing, including with connectWith and a draggable", f
 	TestHelpers.sortable.dragBegin(draggable, {
 		dy: 50
 	});
-	equal( firedCount( 'sortableoutover2', 'over' ), 1, "Dragging draggable over sortable should trigger over" );
-	equal( firedCount( 'sortableoutover2', 'out' ), 0, "Dragging draggable over sortable shouldn't trigger out until mouseup" );
+	equal( firedCount( "sortableoutover2", "over" ), 1, "Dragging draggable over sortable should trigger over" );
+	equal( firedCount( "sortableoutover2", "out" ), 0, "Dragging draggable over sortable shouldn't trigger out until mouseup" );
 	
 	// Release the mouse button while over the sortable should trigger out
 	// NB: this will have dropped drag_el on to this second list
 	fired = {};
 	TestHelpers.sortable.dragEnd(draggable, { });
-	equal( firedCount( 'sortableoutover2', 'over' ), 0, "Completion of drag of draggable over sortable shouldn't trigger over" );
-	equal( firedCount( 'sortableoutover2', 'out' ), 1, "Completion of drag of draggable over sortable should trigger out" );
+	equal( firedCount( "sortableoutover2", "over" ), 0, "Completion of drag of draggable over sortable shouldn't trigger over" );
+	equal( firedCount( "sortableoutover2", "out" ), 1, "Completion of drag of draggable over sortable should trigger out" );
 
 });
 

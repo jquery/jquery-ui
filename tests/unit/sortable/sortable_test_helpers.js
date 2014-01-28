@@ -56,15 +56,15 @@ TestHelpers.sortable = {
 			} else {
 				$( document ).simulate( "mouseup", coord );
 			}
-		}		
+		}
 	},
 	dragBegin: function ( target, options ) {
-		TestHelpers.sortable.drag( target, $.extend( {} , options, { 'nomouseup':true } ) );
+		TestHelpers.sortable.drag( target, $.extend( {} , options, { "nomouseup":true } ) );
 	},
 	dragContinue: function ( target, options ) {
-		TestHelpers.sortable.drag( target, $.extend( {} , options, { 'nomouseup':true, 'nomousedown':true } ) );
+		TestHelpers.sortable.drag( target, $.extend( {} , options, { "nomouseup":true, "nomousedown":true } ) );
 	},
 	dragEnd: function ( target, options ) {
-		TestHelpers.sortable.drag( target, $.extend( {} , options, { 'nomousedown':true } ) );
-	}	
+		TestHelpers.sortable.drag( target, $.extend( {} , options, { "nomousedown":true } ) );
+	}
 };
