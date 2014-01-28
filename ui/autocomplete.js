@@ -545,7 +545,11 @@ $.widget( "ui.autocomplete", {
 		}
 		if ( this.menu.isFirstItem() && /^previous/.test( direction ) ||
 				this.menu.isLastItem() && /^next/.test( direction ) ) {
-			this._value( this.term );
+
+			if ( ! this.isMultiLine ) {
+                                this._value( this.term );
+                        }
+
 			this.menu.blur();
 			return;
 		}

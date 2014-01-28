@@ -140,6 +140,29 @@ asyncTest( "cancel focus", function() {
 	}, 50 );
 });
 
+asyncTest( "past end of menu contenteditable", function() {
+	expect( 1 );
+	var customVal = "custom value",
+		element = $( "#autocomplete-contenteditable" ).autocomplete({
+			delay: 0,
+			source: data,
+			focus: function() {
+				$( this ).text( customVal );
+				return false;
+			}
+		});
+
+	element.simulate( "focus" ).text( "ja" ).keydown();
+
+	setTimeout(function() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equal( element.text(), customVal );
+		start();
+	}, 50 );
+});
+
 asyncTest( "cancel select", function() {
 	expect( 1 );
 	var customVal = "custom value",
