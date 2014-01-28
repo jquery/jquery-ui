@@ -53,6 +53,20 @@ test("radio groups", function() {
 	assert(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
+test( "radio groups - ignore elements with same name", function() {
+	expect( 1 );
+	var form = $( "form:first" ),
+		radios = form.find( "[type=radio]" ).button(),
+		checkbox = $( "<input>", {
+			type: "checkbox",
+			name: radios.attr( "name" )
+		});
+
+	form.append( checkbox );
+	radios.button( "refresh" );
+	ok( true, "no exception from accessing button instance of checkbox" );
+});
+
 test("input type submit, don't create child elements", function() {
 	expect( 2 );
 	var input = $("#submit");
