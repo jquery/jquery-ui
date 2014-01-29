@@ -169,4 +169,12 @@ test( "uniqueId / removeUniqueId", function() {
 	ok( !el.attr( "id" ), "unique id has been removed from element" );
 });
 
+test( "scrollParent / #9057", function() {
+	expect( 1 );
+    var el = $('#scrollParentSatellite'),
+		scrollParent = el.scrollParent();
+	
+	equal( "scrollParentScroller", scrollParent.attr( "id" ), "scroll parent found, despite default position (static in IE)");
+});
+
 })( jQuery );
