@@ -41,13 +41,16 @@ test( "content: return string", function() {
 });
 
 test( "content: return jQuery", function() {
-	expect( 1 );
+	expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip({
 		content: function() {
-			return $( "<div>" ).html( "cu<b>s</b>tomstring" );
+			return $( "<div id='unique'>" ).html( "cu<b id='bold'>s</b>tomstring" );
 		}
-	}).tooltip( "open" );
+	}).tooltip( "open" ),
+	liveRegion = element.tooltip( "instance" ).liveRegion;
 	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring" );
+	equal( liveRegion.children().last().html().toLowerCase(), "<div>cu<b>s</b>tomstring</div>",
+		"The accessibility live region will strip the ids but keep the structure" );
 });
 
 asyncTest( "content: sync + async callback", function() {
