@@ -475,13 +475,10 @@ $.Widget.prototype = {
 
 	_trigger: function( type, event, data ) {
 		var typeArr = type.split('.');
-
-	        var prop, orig,
-			callback = this.options[ typeArr[0] ];
-	    
-        	for (var x = 1; x < typeArr.length; x++) {
-	        	callback = callback[typeArr[x]];
-	    	}
+		var prop, orig, callback = this.options[ typeArr[0] ];
+		for (var x = 1; x < typeArr.length; x++) {
+			callback = callback[typeArr[x]];
+		}
 	    
 		data = data || {};
 		event = $.Event( event );
