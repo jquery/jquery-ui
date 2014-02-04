@@ -1,6 +1,5 @@
 {
 	"name": "jquery-ui",
-	"version": "1.11.0pre",
 	"ignore": [
 		"**/.*",
 		"build",
