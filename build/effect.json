@@ -32,7 +32,7 @@
 	},
 	"scale": {
 		"dependencies": [ "effect-size" ],
-		"description": "Grows or shrinks an element and its content. Restores an elemnt to its original size."
+		"description": "Grows or shrinks an element and its content. Restores an element to its original size."
 	},
 	"shake": {
 		"description": "Shakes an element horizontally or vertically n times."
