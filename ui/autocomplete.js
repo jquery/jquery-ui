@@ -130,7 +130,9 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.ESCAPE:
 					if ( this.menu.element.is( ":visible" ) ) {
-						this._value( this.term );
+						if ( !this.isMultiLine ) {
+							this._value( this.term );
+						}
 						this.close( event );
 						// Different browsers have different default behavior for escape
 						// Single press can mean undo or clear
