@@ -1,0 +1,15 @@
+{
+	"name": "jquery-ui",
+	"version": "1.11.0pre",
+	"ignore": [
+		"**/.*",
+		"build",
+		"demos",
+		"dist",
+		"external",
+		"tests"
+	],
+	"dependencies": {
+		"jquery": ">=1.6"
+	}
+}
