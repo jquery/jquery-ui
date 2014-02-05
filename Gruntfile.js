@@ -101,16 +101,7 @@ uiFiles.forEach(function( file ) {
 });
 
 // grunt plugins
-grunt.loadNpmTasks( "grunt-contrib-jshint" );
-grunt.loadNpmTasks( "grunt-contrib-uglify" );
-grunt.loadNpmTasks( "grunt-contrib-concat" );
-grunt.loadNpmTasks( "grunt-contrib-qunit" );
-grunt.loadNpmTasks( "grunt-contrib-csslint" );
-grunt.loadNpmTasks( "grunt-jscs-checker" );
-grunt.loadNpmTasks( "grunt-html" );
-grunt.loadNpmTasks( "grunt-compare-size" );
-grunt.loadNpmTasks( "grunt-git-authors" );
-grunt.loadNpmTasks( "grunt-esformatter" );
+require( "load-grunt-tasks" )( grunt );
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
