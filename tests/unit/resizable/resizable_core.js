@@ -239,4 +239,54 @@ test( "nested resizable", function() {
 	outer.remove();
 });
 
+test( "resizable form elements not overflowed", function() {
+	expect( 6 );
+
+	var select = $( "<select size='3'></select>" ),
+		option1 = $( "<option value='1'>1</option>" ),
+		option2 = $( "<option value='2'>2</option>" ),
+		option3 = $( "<option value='3'>3</option>" ),
+		option4 = $( "<option value='4' selected='selected'>4</option>" ),
+		option5 = $( "<option value='5'>5</option>" ),
+		input = $( "<input type='submit' value='p'/>" ),
+		button = $( "<button>Testing</button>" ),
+		width,
+		height;
+
+	option1.appendTo( select );
+	option2.appendTo( select );
+	option3.appendTo( select );
+	option4.appendTo( select );
+	option5.appendTo( select );
+	select.appendTo( "#qunit-fixture" );
+	input.appendTo( "#qunit-fixture" );
+	button.appendTo( "#qunit-fixture" );
+
+	width = select.width();
+	height = select.height();
+	select.resizable();
+	equal( select.width(), width, "compare width of select element" );
+	equal( select.height(), height, "compare height of select element" );
+
+	width = input.width();
+	height = input.height();
+	input.resizable();
+	equal( input.width(), width, "compare width of input element" );
+	equal( input.height(), height, "compare height of input element" );
+
+	width = button.width();
+	height = button.height();
+	button.resizable();
+	equal( button.width(), width, "compare width of button element" );
+	equal( button.height(), height, "compare height of button element" );
+
+	option1.remove();
+	option2.remove();
+	option3.remove();
+	option4.remove();
+	option5.remove();
+	select.remove();
+	input.remove();
+	button.remove();
+});
 })(jQuery);

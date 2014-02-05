@@ -564,7 +564,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			if (!this.borderDif) {
 				// Bugfix for http://bugs.jqueryui.com/ticket/9654
-				if (this.originalElement[0].nodeName.match(/textarea|input|select|button/i)) {
+				if (this.originalElement[0].nodeName.match(/input|select|button/i)) {
 					this.borderDif = [0, 0, 0, 0];
 				} else {
 					this.borderDif = [];
