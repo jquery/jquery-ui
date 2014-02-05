@@ -525,4 +525,32 @@ test("mouse", function() {
 		"Mouse click inline - next");
 });
 
+asyncTest( "8556: flashes when moving between two fields", function() {
+	expect( 1 );
+
+	var datepicker1 = $( "<input>" ),
+		datepicker2 = $( "<input>" );
+	datepicker1.appendTo( "body" );
+	datepicker2.appendTo( "body" );
+
+	datepicker1.datepicker({
+		onSelect: function () {
+			datepicker2.datepicker( "show" );
+		},
+		duration: 0
+	});
+	datepicker2.datepicker({ duration: 0});
+	datepicker1.datepicker( "show" );
+	$( "td.ui-datepicker-today a" ).trigger( "click" );
+	setTimeout(function() {
+		ok( $( "#ui-datepicker-div" ).is( ":visible" ), "second calendar is not hidden" );
+		datepicker1.datepicker( "destroy" );
+		datepicker2.datepicker( "destroy" );
+		datepicker1.remove();
+		datepicker2.remove();
+		// Needed for "widget method - empty collection" test
+		$( "#ui-datepicker-div" ).remove();
+		start();
+	});
+});
 })(jQuery);

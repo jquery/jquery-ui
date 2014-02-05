@@ -1019,7 +1019,9 @@ $.extend(Datepicker.prototype, {
 	_selectDate: function(id, dateStr) {
 		var onSelect,
 			target = $(id),
-			inst = this._getInst(target[0]);
+			inst = this._getInst(target[0]),
+			currentInst = null,
+			nextInst = null;
 
 		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
 		if (inst.input) {
@@ -1028,8 +1030,10 @@ $.extend(Datepicker.prototype, {
 		this._updateAlternate(inst);
 
 		onSelect = this._get(inst, "onSelect");
+		currentInst = inst;
 		if (onSelect) {
 			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
+			nextInst = this._curInst;
 		} else if (inst.input) {
 			inst.input.trigger("change"); // fire the change event
 		}
@@ -1037,7 +1041,9 @@ $.extend(Datepicker.prototype, {
 		if (inst.inline){
 			this._updateDatepicker(inst);
 		} else {
-			this._hideDatepicker();
+			if (!nextInst || nextInst == currentInst) {
+				this._hideDatepicker();
+			}
 			this._lastInput = inst.input[0];
 			if (typeof(inst.input[0]) !== "object") {
 				inst.input.focus(); // restore focus
