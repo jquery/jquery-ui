@@ -25,7 +25,7 @@
 }(function( $ ) {
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
-	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
+	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only ui-icon-begining ui-icon-end ui-icon-top ui-icon-bottom",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -70,6 +70,11 @@ $.widget( "ui.button", {
 
 		if ( typeof this.options.disabled === "boolean" ) {
 			this.element.prop( "disabled", this.options.disabled );
+		} else {
+			this.options.disabled = !!this.element.prop( "disabled" );
+		}
+		if( this.options.disabled === true ){
+			this._setOption( "disabled", true );
 		}
 
 		this.element
@@ -85,7 +90,6 @@ $.widget( "ui.button", {
 			if( !this.options.text ){
 				this.element.addClass( " ui-button-icon-only" );
 			}
-			console.log( this.icon );
 			this.element.append( this.icon );
 			this._setTitle();
 		}
@@ -93,9 +97,14 @@ $.widget( "ui.button", {
 			if( this.isInput ) {
 				this.element.val( this.options.label );
 			} else {
-				this.element.contents().filter( function() {
+				var textNode = this.element.contents().filter( function() {
 				    return this.nodeType === 3;
-				 })[0].nodeValue = this.options.label;
+				 })[ 0 ];
+				if( textNode !== undefined ) {
+					textNode.nodeValue = this.options.label;
+				} else {
+					this.element.html( this.options.label + this.element.html() );
+				}
 			}
 		}
 
@@ -122,7 +131,7 @@ $.widget( "ui.button", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-helper-hidden-accessible" + baseClasses + " ui-state-active " + typeClasses )
+			.removeClass( "ui-helper-hidden-accessible " + baseClasses + " ui-state-active " + typeClasses )
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" );
 
@@ -155,14 +164,14 @@ $.widget( "ui.button", {
 		this._super( key, value );
 		if ( key === "disabled" ) {
 			this.element.toggleClass( " ui-state-disabled", !!value );
-			this.element.prop( "disabled", !!value );
+			this.element.prop( "disabled", !!value ).blur();
 			return;
 		}
 	},
 
 	refresh: function() {
 		//See #8237 & #8828
-		var isDisabled = this.element.hasClass( "ui-button-disabled" );
+		var isDisabled = this.element.is( "input, button" ) ? this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
 
 		if ( isDisabled !== this.options.disabled ) {
 			this._setOptions( { "disabled": isDisabled } );
