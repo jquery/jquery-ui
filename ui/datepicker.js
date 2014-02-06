@@ -1041,7 +1041,7 @@ $.extend(Datepicker.prototype, {
 		if (inst.inline){
 			this._updateDatepicker(inst);
 		} else {
-			if (!nextInst || nextInst == currentInst) {
+			if (!nextInst || nextInst === currentInst) {
 				this._hideDatepicker();
 			}
 			this._lastInput = inst.input[0];
