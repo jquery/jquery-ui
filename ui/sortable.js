@@ -436,10 +436,10 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 	_mouseStop: function(event, noPropagation) {
 		var that = this,
-				cur = this.placeholder.offset(),
-				axis = this.options.axis,
-				animation = {},
-				prevDisplay = this.currentItem.css("display");
+			cur = this.placeholder.offset(),
+			axis = this.options.axis,
+			animation = {},
+			prevDisplay = this.currentItem.css("display");
 
 		if(!event) {
 			return;
