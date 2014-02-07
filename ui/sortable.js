@@ -445,6 +445,12 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			$.ui.ddmanager.drop(this, event);
 		}
 
+		//Bug #5926: Relatively positioned elements disappear after sort in IE7
+		if (navigator.appVersion.indexOf("MSIE 7.") != -1) {
+			var prevDisplay = this.currentItem.css('display');
+			this.currentItem.toggle().css('display', prevDisplay);
+		}
+
 		if(this.options.revert) {
 			var that = this,
 				cur = this.placeholder.offset(),
