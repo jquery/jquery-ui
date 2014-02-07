@@ -435,6 +435,11 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseStop: function(event, noPropagation) {
+		var that = this,
+			cur = this.placeholder.offset(),
+			axis = this.options.axis,
+			animation = {},
+			prevDisplay = this.currentItem.css("display");
 
 		if(!event) {
 			return;
@@ -445,11 +450,13 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			$.ui.ddmanager.drop(this, event);
 		}
 
+		//Bug #5926: Relatively positioned elements disappear after sort in IE7
+		if (navigator.appVersion.indexOf("MSIE 7.") !== -1) {
+			this.currentItem.toggle().css("display", prevDisplay);
+		}
+
 		if(this.options.revert) {
-			var that = this,
-				cur = this.placeholder.offset(),
-				axis = this.options.axis,
-				animation = {};
+			
 
 			if ( !axis || axis === "x" ) {
 				animation.left = cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === document.body ? 0 : this.offsetParent[0].scrollLeft);
