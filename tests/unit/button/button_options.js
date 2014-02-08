@@ -52,7 +52,7 @@ test( "disabled, ui-state-active is removed unless checkbox or radio", function(
 	$.each( elements, function() {
 		var element = $( this ).first().button(),
 			buttonElement = element.button( "widget" ),
-			elementType = element.prop( "tagName" ).toLowerCase();
+			elementType = element.prop( "nodeName" ).toLowerCase();
 
 		if ( element.is( "input" ) ) {
 			elementType += ":" + element.attr( "type" );
