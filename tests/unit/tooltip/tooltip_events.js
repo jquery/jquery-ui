@@ -54,46 +54,4 @@ test( "focus events", function() {
 	element.trigger( "focusout" );
 });
 
-// http://bugs.jqueryui.com/ticket/8740
-asyncTest( "content: async callback loses focus before load", function() {
-	expect( 1 );
-	var element = $( "#tooltipped1" ).tooltip({
-		content: function( response ) {
-			element.trigger( "mouseleave" );
-			setTimeout(function () {
-				response( "sometext" );
-				setTimeout(function () {
-					ok(!$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ), "Tooltip should not display" );
-					start();
-				});
-			});
-		}
-	});
-	element.trigger( "mouseover" );
-	element.tooltip( "destroy" );
-});
-
-// https://github.com/jquery/jquery-ui/pull/992/files#r5667799
-asyncTest( "content: close should only be called once, even if content is set multiple times", function() {
-	expect( 1 );
-	var element = $( "#tooltipped1" ).tooltip(),
-		closecount = 0;
-	element.bind( "tooltipopen", function() {
-		element.tooltip( "option", "content", "one" );
-		element.tooltip( "option", "content", "two" );
-		element.trigger( "mouseleave" );
-	});
-	element.bind( "tooltipclose", function() {
-		closecount++;
-		if (closecount === 1) {
-			setTimeout(function () {
-				equal( closecount, 1, "Close event handler should be called once" );
-				element.tooltip( "destroy" );
-				start();
-			});
-		}
-	});
-	element.trigger( "mouseover" );
-});
-
 }( jQuery ) );
