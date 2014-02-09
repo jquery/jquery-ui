@@ -535,7 +535,7 @@ test( ".option() - delegate to ._setOptions()", function() {
 });
 
 test( ".option() - delegate to ._setOption()", function() {
-	expect( 2 );
+	expect( 3 );
 	var div,
 		calls = [];
 	$.widget( "ui.testWidget", {
@@ -555,6 +555,11 @@ test( ".option() - delegate to ._setOption()", function() {
 		"_setOption called for single option" );
 
 	calls = [];
+	div.testWidget( "option", "foo", undefined );
+	deepEqual( calls, [{ key: "foo", val: undefined }],
+		"_setOption called for single option where value is undefined" );
+
+	calls = [];
 	div.testWidget( "option", {
 		bar: "qux",
 		quux: "quuux"
@@ -566,9 +571,9 @@ test( ".option() - delegate to ._setOption()", function() {
 });
 
 test( ".option() - deep option setter", function() {
-	expect( 6 );
+	expect( 9 );
 	$.widget( "ui.testWidget", {} );
-	var div = $( "<div>" ).testWidget();
+	var result, div = $( "<div>" ).testWidget();
 	function deepOption( from, to, msg ) {
 		div.testWidget( "instance" ).options.foo = from;
 		$.ui.testWidget.prototype._setOption = function( key, value ) {
@@ -579,6 +584,12 @@ test( ".option() - deep option setter", function() {
 
 	deepOption( { bar: "baz" }, { bar: "qux" }, "one deep" );
 	div.testWidget( "option", "foo.bar", "qux" );
+
+	deepOption( { bar: "baz" }, { bar: undefined }, "one deep - value = undefined" );
+
+	result = div.testWidget( "option", "foo.bar", undefined );
+
+	deepEqual ( result, div, "option should return widget on successful set operation" );
 
 	deepOption( null, { bar: "baz" }, "null" );
 	div.testWidget( "option", "foo.bar", "baz" );
@@ -854,21 +865,36 @@ test( "_on() with delegate to descendent", function() {
 });
 
 test( "_on() to common element", function() {
-	expect( 1 );
+	expect( 4 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			this._on( this.document, {
-				"customevent": "_handler"
+				"customevent": "_handler",
+				"with:colons": "_colonHandler",
+				"with-dashes": "_dashHandler",
+				"with-dashes:and-colons": "_commbinedHandler"
 			});
 		},
 		_handler: function() {
 			ok( true, "handler triggered" );
+		},
+		_colonHandler: function() {
+			ok( true, "colon handler triggered" );
+		},
+		_dashHandler: function() {
+			ok( true, "dash handler triggered" );
+		},
+		_commbinedHandler: function() {
+			ok( true, "combined handler triggered" );
 		}
 	});
 	var widget = $( "#widget" ).testWidget().testWidget( "instance" );
 	$( "#widget-wrapper" ).testWidget();
 	widget.destroy();
 	$( document ).trigger( "customevent" );
+	$( document ).trigger( "with:colons" );
+	$( document ).trigger( "with-dashes" );
+	$( document ).trigger( "with-dashes:and-colons" );
 });
 
 test( "_off() - single event", function() {
@@ -1409,7 +1435,7 @@ asyncTest( "_delay", function() {
 });
 
 test( "$.widget.bridge()", function() {
-	expect( 10 );
+	expect( 14 );
 
 	var instance, ret,
 		elem = $( "<div>" );
@@ -1427,6 +1453,9 @@ test( "$.widget.bridge()", function() {
 		},
 		getter: function() {
 			return "qux";
+		},
+		option: function( options ) {
+			deepEqual( options, {} );
 		}
 	});
 
@@ -1444,6 +1473,14 @@ test( "$.widget.bridge()", function() {
 
 	ret = elem.testWidget( "getter" );
 	equal( ret, "qux", "getter returns value" );
+
+	elem.testWidget();
+	ok( true, "_init is optional" );
+
+	TestWidget.prototype._init = function() {
+		ok( "_init", "_init now exists, so its called" );
+	};
+	elem.testWidget();
 });
 
 test( "$.widget.bridge() - widgetFullName", function() {

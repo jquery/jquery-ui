@@ -144,8 +144,8 @@ test("moveToTop", function() {
 	expect( 5 );
 	function order() {
 		var actual = $( ".ui-dialog" ).map(function() {
-			return +$( this ).find( ".ui-dialog-content" ).attr( "id" ).replace( /\D+/, "" );
-		}).get().reverse();
+			return +$( this ).css( "z-index" );
+		}).get();
 		deepEqual( actual, $.makeArray( arguments ) );
 	}
 	var dialog1, dialog2,
@@ -161,10 +161,23 @@ test("moveToTop", function() {
 			equal( focusOn, "dialog2" );
 		}
 	});
-	order( 2, 1 );
+	order( 100, 101 );
 	focusOn = "dialog1";
 	dialog1.dialog( "moveToTop" );
-	order( 1, 2 );
+	order( 102, 101 );
+});
+
+test( "moveToTop: content scroll stays intact", function() {
+	expect( 2 );
+	var otherDialog = $( "#dialog1" ).dialog(),
+		scrollDialog = $( "#form-dialog" ).dialog({
+			height: 200
+		});
+	scrollDialog.scrollTop( 50 );
+	equal( scrollDialog.scrollTop(), 50 );
+
+	otherDialog.dialog( "moveToTop" );
+	equal( scrollDialog.scrollTop(), 50 );
 });
 
 test("open", function() {
@@ -206,6 +219,11 @@ asyncTest( "#8958: dialog can be opened while opening", function() {
 			start();
 		}
 	});
+
+	// Support: IE8
+	// For some reason the #favorite-color input doesn't get focus if we don't
+	// focus the body first, causing the test to hang.
+	$( "body" ).focus();
 
 	$( "#favorite-animal" )
 		// We focus the input to start the test. Once it receives focus, the

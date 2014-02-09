@@ -43,13 +43,13 @@ test( "element types", function() {
 });
 
 test( "No options, relative", function() {
-	expect( 1 );
-	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable() );
+	expect( 2 );
+	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
 });
 
 test( "No options, absolute", function() {
-	expect( 1 );
-	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable() );
+	expect( 2 );
+	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 
 test( "resizable handle with complex markup (#8756 / #8757)", function() {
@@ -118,14 +118,11 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 					.scrollLeft( 0 );
 			}
 		}),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "10000px",
-			width: "10000px"
-		}),
 		oldOverflowY = $( "html" ).css( "overflow-y" ),
 		oldOverflowX = $( "html" ).css( "overflow-x" );
 
-		contentToForceScroll.appendTo( "#qunit-fixture" );
+		TestHelpers.forceScrollableWindow();
+
 		$( "html" )
 			.css( "overflow-y", "scroll" )
 			.css( "overflow-x", "scroll" )
@@ -139,7 +136,7 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 		});
 });
 
-test( "#9315: Draggable: jumps down with offset of scrollbar", function() {
+test( "#9315: jumps down with offset of scrollbar", function() {
 	expect( 2 );
 
 	var element = $( "#draggable2" ).draggable({
@@ -148,13 +145,10 @@ test( "#9315: Draggable: jumps down with offset of scrollbar", function() {
 				equal( ui.position.top, 11, "top position is correct when position is absolute" );
 				$( "html" ).scrollTop( 0 ).scrollLeft( 0 );
 			}
-		}),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "10000px",
-			width: "10000px"
 		});
 
-		contentToForceScroll.appendTo( "#qunit-fixture" );
+		TestHelpers.forceScrollableWindow();
+
 		$( "html" ).scrollTop( 300 ).scrollLeft( 300 );
 
 		element.simulate( "drag", {
@@ -178,13 +172,11 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 				equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
 				$( document ).scrollTop( 0 ).scrollLeft( 0 );
 			}
-		}),
-		contentToForceScroll = $( "<div>" ).css({
-			height: "20000px",
-			width: "20000px"
 		});
 
-	$( "#qunit-fixture" ).append( contentToForceScroll );
+
+	TestHelpers.forceScrollableWindow();
+
 	$( "#wrapper" ).css( "position", "fixed" );
 
 	element.simulate( "drag", {
@@ -194,20 +186,61 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
-test( "#5727: draggable from iframe" , function() {
+test( "#9379: Draggable: position bug in scrollable div", function() {
 	expect( 2 );
 
-	var iframe = $( "<iframe id='iframe-draggable-container' src='about:blank'></iframe>" ).appendTo( "#qunit-fixture" ),
-		iframeBody = iframe.contents().find( "body" ).append(
-			"<div id='iframe-draggable-1' style='background: green; width: 200px; height: 100px;'>Relative</div>"
-		),
-		draggable1 = iframeBody.find( "#iframe-draggable-1" );
+	$( "#qunit-fixture" ).html( "<div id='o_9379'><div id='i_9379'></div><div id='d_9379'>a</div></div>" );
+	$( "#i_9379" ).css({ position: "absolute", width: "500px", height: "500px" });
+	$( "#o_9379" ).css({ position: "absolute", width: "300px", height: "300px" });
+	$( "#d_9379" ).css({ width: "10px", height: "10px" });
+
+	var moves = 3,
+		startValue = 0,
+		dragDelta = 20,
+		delta = 100,
+
+		// we scroll after each drag event, so subtract 1 from number of moves for expected
+		expected = delta + ( ( moves - 1 ) * dragDelta ),
+		element = $( "#d_9379" ).draggable({
+			drag: function() {
+				startValue += dragDelta;
+				$( "#o_9379" ).scrollTop( startValue ).scrollLeft( startValue );
+			},
+			stop: function( event, ui ) {
+				equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
+				equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
+			}
+		});
+
+	$( "#o_9379" ).css( "overflow", "auto" );
+
+	element.simulate( "drag", {
+		dy: delta,
+		dx: delta,
+		moves: moves
+	});
+});
+
+test( "#5727: draggable from iframe" , function() {
+	expect( 1 );
+
+	var iframeBody, draggable1,
+		iframe = $( "<iframe />" ).appendTo( "#qunit-fixture" ),
+		iframeDoc = ( iframe[ 0 ].contentWindow || iframe[ 0 ].contentDocument ).document;
+
+	iframeDoc.write( "<!doctype html><html><body>" );
+	iframeDoc.close();
+
+	iframeBody = $( iframeDoc.body ).append( "<div style='width: 2px; height: 2px;' />" );
+	draggable1 = iframeBody.find( "div" );
 
 	draggable1.draggable();
 
 	equal( draggable1.closest( iframeBody ).length, 1 );
 
-	TestHelpers.draggable.shouldMove( draggable1 );
+	// TODO: fix draggable within an IFRAME to fire events on the element properly
+	// and these TestHelpers.draggable.shouldMove relies on events for testing
+	//TestHelpers.draggable.shouldMove( draggable1, "draggable from an iframe" );
 });
 
 test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function() {
@@ -238,6 +271,20 @@ asyncTest( "#4261: active element should blur when mousing down on a draggable",
 		notStrictEqual( document.activeElement, textInput.get( 0 ), "ensure the text input is no longer the active element after mousing down on a draggable" );
 		start();
 	});
+});
+
+test( "ui-draggable-handle assigned to appropriate element", function() {
+	expect( 4 );
+
+	var element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
+	ok( element.hasClass( "ui-draggable-handle" ), "handle is element by default" );
+
+	element.draggable( "option", "handle", "p" );
+	ok( !element.hasClass( "ui-draggable-handle" ), "removed from element" );
+	ok( element.find( "p" ).hasClass( "ui-draggable-handle" ), "added to handle" );
+
+	element.draggable( "destroy" );
+	ok( !element.find( "p" ).hasClass( "ui-draggable-handle" ), "removed in destroy()" );
 });
 
 })( jQuery );

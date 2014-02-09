@@ -1,1 +1,5 @@
-[{"value":"java"},{"value":"javascript"}]
+[
+	{ "value": "java", "label": null },
+	{ "value": "javascript", "label": "" },
+	{ "value": "clojure" }
+]

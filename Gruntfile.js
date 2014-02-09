@@ -5,22 +5,22 @@ module.exports = function( grunt ) {
 var
 	// files
 	coreFiles = [
-		"jquery.ui.core.js",
-		"jquery.ui.widget.js",
-		"jquery.ui.mouse.js",
-		"jquery.ui.draggable.js",
-		"jquery.ui.droppable.js",
-		"jquery.ui.resizable.js",
-		"jquery.ui.selectable.js",
-		"jquery.ui.sortable.js",
-		"jquery.ui.effect.js"
+		"core.js",
+		"widget.js",
+		"mouse.js",
+		"draggable.js",
+		"droppable.js",
+		"resizable.js",
+		"selectable.js",
+		"sortable.js",
+		"effect.js"
 	],
 
 	uiFiles = coreFiles.map(function( file ) {
 		return "ui/" + file;
 	}).concat( expandFiles( "ui/*.js" ).filter(function( file ) {
-		return coreFiles.indexOf( file.substring(3) ) === -1;
-	})),
+		return coreFiles.indexOf( file.substring( 3 ) ) === -1;
+	}) ),
 
 	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
 
@@ -35,13 +35,14 @@ var
 		"progressbar",
 		"resizable",
 		"selectable",
+		"selectmenu",
 		"slider",
 		"spinner",
 		"tabs",
 		"tooltip",
 		"theme"
 	].map(function( component ) {
-		return "themes/base/jquery.ui." + component + ".css";
+		return "themes/base/" + component + ".css";
 	}),
 
 	// minified files
@@ -64,19 +65,6 @@ var
 			files: {
 				"dist/i18n/jquery-ui-i18n.min.js": "dist/i18n/jquery-ui-i18n.js"
 			}
-		}
-	},
-
-	minifyCSS = {
-		options: {
-			keepSpecialComments: 0
-		},
-		main: {
-			options: {
-				keepSpecialComments: "*"
-			},
-			src: "dist/jquery-ui.css",
-			dest: "dist/jquery-ui.min.css"
 		}
 	},
 
@@ -107,19 +95,9 @@ uiFiles.concat( allI18nFiles ).forEach(function( file ) {
 	minify[ file ].files[ mapMinFile( file ) ] = file;
 });
 
-cssFiles.forEach(function( file ) {
-	minifyCSS[ file ] = {
-		options: {
-			banner: createBanner()
-		},
-		src: file,
-		dest: "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" )
-	};
-});
-
 uiFiles.forEach(function( file ) {
 	// TODO this doesn't do anything until https://github.com/rwldrn/grunt-compare-size/issues/13
-	compareFiles[ file ] = [ file,  mapMinFile( file ) ];
+	compareFiles[ file ] = [ file, mapMinFile( file ) ];
 });
 
 // grunt plugins
@@ -128,10 +106,11 @@ grunt.loadNpmTasks( "grunt-contrib-uglify" );
 grunt.loadNpmTasks( "grunt-contrib-concat" );
 grunt.loadNpmTasks( "grunt-contrib-qunit" );
 grunt.loadNpmTasks( "grunt-contrib-csslint" );
-grunt.loadNpmTasks( "grunt-contrib-cssmin" );
+grunt.loadNpmTasks( "grunt-jscs-checker" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
 grunt.loadNpmTasks( "grunt-git-authors" );
+grunt.loadNpmTasks( "grunt-esformatter" );
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -145,13 +124,13 @@ function createBanner( files ) {
 	return "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - " +
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\\n' : '' %>" +
-		(files ? "* Includes: " + fileNames.join(", ") + "\n" : "")+
+		(files ? "* Includes: " + fileNames.join(", ") + "\n" : "") +
 		"* Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n";
 }
 
 grunt.initConfig({
-	pkg: grunt.file.readJSON("package.json"),
+	pkg: grunt.file.readJSON( "package.json" ),
 	files: {
 		dist: "<%= pkg.name %>-<%= pkg.version %>"
 	},
@@ -185,20 +164,19 @@ grunt.initConfig({
 			dest: "dist/jquery-ui.css"
 		}
 	},
+	jscs: {
+		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
+		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js", "!ui/draggable.js" ],
+		// TODO enable this once we have a tool that can help with fixing formatting of existing files
+		// tests: "tests/unit/**/*.js",
+		grunt: "Gruntfile.js"
+	},
 	uglify: minify,
-	cssmin: minifyCSS,
 	htmllint: {
 		// ignore files that contain invalid html, used only for ajax content testing
 		all: grunt.file.expand( [ "demos/**/*.html", "tests/**/*.html" ] ).filter(function( file ) {
 			return !/(?:ajax\/content\d\.html|tabs\/data\/test\.html|tests\/unit\/core\/core.*\.html)/.test( file );
 		})
-	},
-	copy: {
-		dist_units_images: {
-			src: "themes/base/images/*",
-			strip: /^themes\/base\//,
-			dest: "dist/"
-		}
 	},
 	qunit: {
 		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
@@ -208,30 +186,15 @@ grunt.initConfig({
 		})
 	},
 	jshint: {
-		ui: {
-			options: {
-				jshintrc: "ui/.jshintrc"
-			},
-			files: {
-				src: "ui/*.js"
-			}
+		options: {
+			jshintrc: true
 		},
-		grunt: {
-			options: {
-				jshintrc: ".jshintrc"
-			},
-			files: {
-				src: [ "Gruntfile.js", "build/**/*.js" ]
-			}
-		},
-		tests: {
-			options: {
-				jshintrc: "tests/.jshintrc"
-			},
-			files: {
-				src: "tests/unit/**/*.js"
-			}
-		}
+		all: [
+			"ui/*.js",
+			"Gruntfile.js",
+			"build/**/*.js",
+			"tests/unit/**/*.js"
+		]
 	},
 	csslint: {
 		base_theme: {
@@ -240,16 +203,28 @@ grunt.initConfig({
 				csslintrc: ".csslintrc"
 			}
 		}
+	},
+
+	esformatter: {
+		options: {
+			preset: "jquery"
+		},
+		ui: "ui/*.js",
+		tests: "tests/unit/**/*.js",
+		build: {
+			options: {
+				skipHashbang: true
+			},
+			src: "build/**/*.js"
+		},
+		grunt: "Gruntfile.js"
 	}
 });
 
-grunt.registerTask( "default", [ "lint", "test" ] );
-grunt.registerTask( "lint", [ "asciilint", "jshint", "csslint", "htmllint" ] );
-grunt.registerTask( "test", [ "qunit" ] );
-grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ] );
-grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ] );
-
-// "copy:dist_units_images" is used by unit tests
-grunt.registerTask( "build", [ "concat", "uglify", "cssmin", "copy:dist_units_images" ] );
+grunt.registerTask( "default", [ "lint", "test" ]);
+grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
+grunt.registerTask( "test", [ "qunit" ]);
+grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ]);
+grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ]);
 
 };

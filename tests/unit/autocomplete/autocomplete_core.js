@@ -16,7 +16,7 @@ test( "prevent form submit on enter when menu is active", function() {
 	event = $.Event( "keydown" );
 	event.keyCode = $.ui.keyCode.DOWN;
 	element.trigger( event );
-	deepEqual( menu.find( ".ui-menu-item:has(.ui-state-focus)" ).length, 1, "menu item is active" );
+	equal( menu.find( ".ui-menu-item.ui-state-focus" ).length, 1, "menu item is active" );
 
 	event = $.Event( "keydown" );
 	event.keyCode = $.ui.keyCode.ENTER;
@@ -163,6 +163,32 @@ test( "allow form submit on enter when menu is not active", function() {
 	}
 })();
 
+asyncTest( "past end of menu in multiline autocomplete", function() {
+	expect( 2 );
+
+	var customVal = "custom value",
+		element = $( "#autocomplete-contenteditable" ).autocomplete({
+			delay: 0,
+			source: [ "javascript" ],
+			focus: function( event, ui ) {
+				equal( ui.item.value, "javascript", "Item gained focus" );
+				$( this ).text( customVal );
+				event.preventDefault();
+			}
+		});
+
+	element
+		.simulate( "focus" )
+		.autocomplete( "search", "ja" );
+
+	setTimeout(function() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equal( element.text(), customVal );
+		start();
+	}, 50 );
+});
+
 asyncTest( "handle race condition", function() {
 	expect( 3 );
 	var count = 0,
@@ -221,40 +247,85 @@ asyncTest( "simultaneous searches (#9334)", function() {
 });
 
 test( "ARIA", function() {
-	expect( 7 );
+	expect( 13 );
 	var element = $( "#autocomplete" ).autocomplete({
 			source: [ "java", "javascript" ]
 		}),
 		liveRegion = element.autocomplete( "instance" ).liveRegion;
 
-	equal( liveRegion.text(), "", "Empty live region on create" );
+	equal( liveRegion.children().length, 0, "Empty live region on create" );
+	equal( liveRegion.attr( "aria-live" ), "assertive",
+		"Live region's aria-live attribute must be assertive" );
+	equal( liveRegion.attr( "aria-relevant" ), "additions",
+		"Live region's aria-relevant attribute must be additions" );
+	equal( liveRegion.attr( "role" ), "status",
+		"Live region's role attribute must be status" );
 
 	element.autocomplete( "search", "j" );
-	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
+	equal( liveRegion.children().first().text(),
+		"2 results are available, use up and down arrow keys to navigate.",
 		"Live region for multiple values" );
 
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
-		"Live region not changed on focus" );
+	equal( liveRegion.children().filter( ":visible" ).text(), "java",
+		"Live region changed on keydown to announce the highlighted value" );
 
 	element.one( "autocompletefocus", function( event ) {
 		event.preventDefault();
 	});
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equal( liveRegion.text(), "javascript",
+	equal( liveRegion.children().filter( ":visible" ).text(), "javascript",
 		"Live region updated when default focus is prevented" );
 
 	element.autocomplete( "search", "javas" );
-	equal( liveRegion.text(), "1 result is available, use up and down arrow keys to navigate.",
+	equal( liveRegion.children().filter( ":visible" ).text(),
+		"1 result is available, use up and down arrow keys to navigate.",
 		"Live region for one value" );
 
 	element.autocomplete( "search", "z" );
-	equal( liveRegion.text(), "No search results.",
+	equal( liveRegion.children().filter( ":visible" ).text(), "No search results.",
 		"Live region for no values" );
 
-	element.autocomplete( "search", "j" );
-	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
-		"Live region for multiple values" );
+	equal( liveRegion.children().length, 5,
+		"Should be five children in the live region after the above" );
+	equal( liveRegion.children().filter( ":visible" ).length, 1,
+		"Only one should be still visible" );
+	ok( liveRegion.children().filter( ":visible" )[ 0 ] === liveRegion.children().last()[ 0 ],
+		"The last one should be the visible one" );
+
+	element.autocomplete( "destroy" );
+	equal( liveRegion.parent().length, 0,
+		"The liveRegion should be detached after destroy" );
+});
+
+test( "ARIA, aria-label announcement", function() {
+	expect( 1 );
+	$.widget( "custom.catcomplete", $.ui.autocomplete, {
+		_renderMenu: function( ul, items ) {
+			var that = this;
+			$.each( items, function( index, item ) {
+				that._renderItemData( ul, item )
+					.attr( "aria-label", item.category + " : " + item.label );
+			});
+		}
+	});
+	var element = $( "#autocomplete" ).catcomplete({
+			source: [ { label: "anders andersson", category: "People" } ]
+		}),
+		liveRegion = element.catcomplete( "instance" ).liveRegion;
+	element.catcomplete( "search", "a" );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	equal( liveRegion.children().filter( ":visible" ).text(), "People : anders andersson",
+		"Live region changed on keydown to announce the highlighted value's aria-label attribute" );
+});
+
+test( "ARIA, init on detached input", function() {
+	expect( 1 );
+	var element = $( "<input>" ).autocomplete({
+			source: [ "java", "javascript" ]
+		}),
+		liveRegion = element.autocomplete( "instance" ).liveRegion;
+	equal( liveRegion.parent().length, 1, "liveRegion must have a parent" );
 });
 
 test( ".replaceWith() (#9172)", function() {

@@ -21,27 +21,47 @@ test( "markup structure", function() {
 });
 
 test( "accessibility", function() {
-	expect( 5 );
+	expect( 15 );
 
-	var tooltipId,
-		tooltip,
-		element = $( "#multiple-describedby" ).tooltip();
+	var tooltipId, tooltip,
+		element = $( "#multiple-describedby" ).tooltip(),
+		liveRegion = element.tooltip( "instance" ).liveRegion;
 
+	equal( liveRegion.find( ">div" ).length, 0 );
+	equal( liveRegion.attr( "role" ), "log" );
+	equal( liveRegion.attr( "aria-live" ), "assertive" );
+	equal( liveRegion.attr( "aria-relevant" ), "additions" );
 	element.tooltip( "open" );
 	tooltipId = element.data( "ui-tooltip-id" );
 	tooltip = $( "#" + tooltipId );
 	equal( tooltip.attr( "role" ), "tooltip", "role" );
 	equal( element.attr( "aria-describedby" ), "fixture-span " + tooltipId,
 		"multiple describedby when open" );
+
 	// strictEqual to distinguish between .removeAttr( "title" ) and .attr( "title", "" )
 	// support: jQuery <1.6.2
 	// support: IE <8
 	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
 	ok( !element.attr( "title" ), "no title when open" );
+	equal( liveRegion.children().length, 1 );
+	equal( liveRegion.children().last().html(), "..." );
 	element.tooltip( "close" );
 	equal( element.attr( "aria-describedby" ), "fixture-span",
 		"correct describedby when closed" );
 	equal( element.attr( "title" ), "...", "title restored when closed" );
+
+	element.tooltip( "open" );
+	equal( liveRegion.children().length, 2,
+		"After the second tooltip show, there should be two children" );
+	equal( liveRegion.children().filter( ":visible" ).length, 1,
+		"Only one of the children should be visible" );
+	ok( liveRegion.children().last().is( ":visible" ),
+		"Only the last child should be visible" );
+	element.tooltip( "close" );
+
+	element.tooltip( "destroy" );
+	equal( liveRegion.parent().length, 0,
+		"Tooltip liveregion element should be removed" );
 });
 
 test( "delegated removal", function() {

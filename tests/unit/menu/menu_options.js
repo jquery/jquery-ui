@@ -66,15 +66,13 @@ test( "{ icons: { submenu: 'custom' } }", function() {
 test( "{ role: 'menu' } ", function() {
 	var element = $( "#menu1" ).menu(),
 		items = element.find( "li" );
-	expect( 2 + 5 * items.length );
+	expect( 2 + 3 * items.length );
 	equal( element.attr( "role" ), "menu" );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
-		equal( $( this ).attr( "role" ), "presentation", "menu item ("+ item + ") role" );
-		equal( $( "a", this ).attr( "role" ), "menuitem", "menu item ("+ item + ") role" );
-		ok( $( "a", this ).hasClass( "ui-corner-all" ), "a element class for menu item ("+ item + ")" );
-		equal( $( "a", this ).attr( "tabindex" ), "-1", "a element tabindex for menu item ("+ item + ")" );
+		equal( $( this ).attr( "role" ), "menuitem", "menu item ("+ item + ") role" );
+		equal( $( this ).attr( "tabindex" ), "-1", "tabindex for menu item ("+ item + ")" );
 	});
 });
 
@@ -83,15 +81,13 @@ test( "{ role: 'listbox' } ", function() {
 			role: "listbox"
 		}),
 		items = element.find( "li" );
-	expect( 2 + 5 * items.length );
+	expect( 2 + 3 * items.length );
 	equal( element.attr( "role" ), "listbox" );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
-		equal( $( this ).attr( "role" ), "presentation", "menu item ("+ item + ") role" );
-		equal( $( "a", this ).attr( "role" ), "option", "menu item ("+ item + ") role" );
-		ok( $( "a", this ).hasClass( "ui-corner-all" ), "a element class for menu item ("+ item + ")" );
-		equal( $( "a", this ).attr( "tabindex" ), "-1", "a element tabindex for menu item ("+ item + ")" );
+		equal( $( this ).attr( "role" ), "option", "menu item ("+ item + ") role" );
+		equal( $( this ).attr( "tabindex" ), "-1", "tabindex for menu item ("+ item + ")" );
 	});
 });
 
@@ -100,15 +96,13 @@ test( "{ role: null }", function() {
 			role: null
 		}),
 		items = element.find( "li" );
-	expect( 2 + 5 * items.length );
+	expect( 2 + 3 * items.length );
 	strictEqual( element.attr( "role" ), undefined );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
-		equal( $( this ).attr( "role" ), "presentation", "menu item ("+ item + ") role" );
-		equal( $( "a", this ).attr( "role" ), undefined, "menu item ("+ item + ") role" );
-		ok( $( "a", this ).hasClass( "ui-corner-all" ), "a element class for menu item ("+ item + ")" );
-		equal( $( "a", this ).attr( "tabindex" ), "-1", "a element tabindex for menu item ("+ item + ")" );
+		equal( $( this ).attr( "role" ), undefined, "menu item ("+ item + ") role" );
+		equal( $( this ).attr( "tabindex" ), "-1", "tabindex for menu item ("+ item + ")" );
 	});
 });
 
