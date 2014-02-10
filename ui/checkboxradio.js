@@ -93,7 +93,7 @@ $.widget( "ui.checkboxradio", {
 			this.label.prepend( this.icon );
 		}
 		if ( this.element.is( ":checked" ) ){
-			this.label.addClass( "ui-" + this.type + "-checked" );
+			this.label.addClass( "ui-" + this.type + "-checked ui-state-active" );
 		}
 		if ( this.options.label ){
 			this.label.html( this.options.label );
@@ -119,21 +119,21 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_getLabel: function() {
-		if ( this.element[0].labels ){
-			this.label = $( this.element[0].labels[0] );
-			return;
+		var ancestor, labelSelector;
+		
+		// we don't search against the document in case the element
+		// is disconnected from the DOM
+		ancestor = this.element.parents().last();
+		labelSelector = "label[for='" + this.element.attr("id") + "']";
+		this.label = ancestor.find( labelSelector );
+		if ( !this.label.length ) {
+			ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
+			this.label = ancestor.filter( labelSelector );
+			if ( !this.label.length ) {
+				this.label = ancestor.find( labelSelector );
+			}
 		}
 
-		var label,
-			id = this.element.attr( "id" );
-
-		label = this.element.closest( "form" ).find( "label[for='" + id + "']" );
-
-		if ( label.length === 0 ){
-			label = this.element.closest( "label" );
-		}
-
-		this.label = label;
 	},
 
 	_toggleClasses: function() {
