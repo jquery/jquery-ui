@@ -217,10 +217,7 @@ asyncTest( "animateClass: css and class changes during animation are not lost (#
 $.each( $.effects.effect, function( effect ) {
 	module( "effects." + effect );
 
-	// puff and size are defined inside scale
-	if ( effect !== "puff" && effect !== "size" ) {
-		TestHelpers.testJshint( "effect-" + effect );
-	}
+	TestHelpers.testJshint( "effect-" + effect );
 
 	if ( effect === "transfer" ) {
 		return;

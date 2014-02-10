@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Dialog Visual Test</title>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<script src="../../../jquery-1.10.2.js"></script>
+	<script src="../../../ui/core.js"></script>
+	<script src="../../../ui/widget.js"></script>
+	<script src="../../../ui/mouse.js"></script>
+	<script src="../../../ui/draggable.js"></script>
+	<script src="../../../ui/position.js"></script>
+	<script src="../../../ui/resizable.js"></script>
+	<script src="../../../ui/button.js"></script>
+	<script src="../../../ui/dialog.js"></script>
+
+	<style>
+	body {
+		font-size: 62.5%;
+	}
+	</style>
+	<script>
+	$(function() {
+		var iframeDialog = $( "#dialog-iframe" ).dialog({
+				position: {
+					my: "right-90 center"
+				},
+				height: 400
+			}),
+
+			scrollingDialog = $( "#dialog-scrolling" ).dialog({
+				maxHeight: 200,
+				position: {
+					my: "left+90 center"
+				}
+			}),
+
+			otherDialog = $( "#dialog-other" ).dialog({
+				width: 200,
+				height: 150
+			});
+	});
+	</script>
+</head>
+<body>
+
+<p>WHAT: Two dialogs, one embedding an iframe, one having just scrollable content.</p>
+<p>EXPECTED: When focusing on one or the other dialog, it shouldn't affect how the content is displayed on the other dialog. It shouldn't reload the iframe or reset the scroll.</p>
+
+
+<div id="dialog-iframe" title="Dialog that embeds an iframe">
+	<iframe src="animated.html" height="400"></iframe>
+</div>
+
+<div id="dialog-scrolling" title="Dialog with scroll">
+	<p style="height:600px;background:#eee">a bunch of content</p>
+</div>
+
+<div id="dialog-other" title="placeholder">Just another dialog to test stacking</div>
+
+</body>
+</html>

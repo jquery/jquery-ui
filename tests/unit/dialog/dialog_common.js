@@ -4,7 +4,7 @@ TestHelpers.commonWidgetTests( "dialog", {
 		autoOpen: true,
 		buttons: [],
 		closeOnEscape: true,
-		closeText: "close",
+		closeText: "Close",
 		disabled: false,
 		dialogClass: "",
 		draggable: true,

@@ -1,6 +1,3 @@
-/*
- * slider_events.js
- */
 (function( $ ) {
 
 module( "slider: events" );

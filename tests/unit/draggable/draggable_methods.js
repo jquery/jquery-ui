@@ -54,7 +54,7 @@ test( "enable", function() {
 	expect( 7 );
 
 	element.draggable({ disabled: true });
-	TestHelpers.draggable.shouldNotMove( element, ".draggable({ disabled: true })" );
+	TestHelpers.draggable.shouldNotDrag( element, ".draggable({ disabled: true })" );
 
 	element.draggable("enable");
 	TestHelpers.draggable.shouldMove( element, ".draggable('enable')" );
@@ -62,7 +62,7 @@ test( "enable", function() {
 
 	element.draggable("destroy");
 	element.draggable({ disabled: true });
-	TestHelpers.draggable.shouldNotMove( element, ".draggable({ disabled: true })" );
+	TestHelpers.draggable.shouldNotDrag( element, ".draggable({ disabled: true })" );
 
 	element.draggable( "option", "disabled", false );
 	equal(element.draggable( "option", "disabled" ), false, "disabled option setter" );
@@ -74,25 +74,29 @@ test( "enable", function() {
 });
 
 test( "disable", function() {
-	expect( 7 );
+	expect( 10 );
 
-	element = $("#draggable2").draggable({ disabled: false });
+	element = $( "#draggable2" ).draggable({ disabled: false });
 	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );
 
-	element.draggable("disable");
-	TestHelpers.draggable.shouldNotMove( element, ".draggable('disable')" );
+	element.draggable( "disable" );
+	TestHelpers.draggable.shouldNotDrag( element, ".draggable('disable')" );
 	equal( element.draggable( "option", "disabled" ), true, "disabled option getter" );
 
-	element.draggable("destroy");
+	element.draggable( "destroy" );
 	element.draggable({ disabled: false });
 	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );
 
 	element.draggable( "option", "disabled", true );
 	equal( element.draggable( "option", "disabled" ), true, "disabled option setter" );
-	TestHelpers.draggable.shouldNotMove( element, ".draggable('option', 'disabled', true)" );
+	TestHelpers.draggable.shouldNotDrag( element, ".draggable('option', 'disabled', true)" );
+
+	ok( !element.draggable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	ok( !element.draggable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	ok( element.draggable( "widget" ).hasClass( "ui-draggable-disabled" ), "element gets ui-draggable-disabled" );
 
 	var expected = element.draggable(),
-		actual = expected.draggable("disable");
+		actual = expected.draggable( "disable" );
 	equal( actual, expected, "disable is chainable" );
 });
 

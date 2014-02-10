@@ -18,15 +18,13 @@ test("start", function() {
 	});
 
 	ok(hash, "start event triggered");
-	ok(hash.helper, "UI hash includes: helper");
-	ok(hash.placeholder, "UI hash includes: placeholder");
+	ok(!hash.helper, "UI hash includes: helper");
 	ok(hash.item, "UI hash includes: item");
 	ok(!hash.sender, "UI hash does not include: sender");
 
 	// todo: see if these events should actually have sane values in them
 	ok("position" in hash, "UI hash includes: position");
 	ok("offset" in hash, "UI hash includes: offset");
-
 
 });
 
@@ -43,8 +41,7 @@ test("sort", function() {
 	});
 
 	ok(hash, "sort event triggered");
-	ok(hash.helper, "UI hash includes: helper");
-	ok(hash.placeholder, "UI hash includes: placeholder");
+	ok(!hash.helper, "UI hash does not includes: helper");
 	ok(hash.position && ("top" in hash.position && "left" in hash.position), "UI hash includes: position");
 	ok(hash.offset && (hash.offset.top && hash.offset.left), "UI hash includes: offset");
 	ok(hash.item, "UI hash includes: item");
@@ -177,28 +174,28 @@ test("#3019: Stop fires too early", function() {
 
 });
 
-test("#4752: link event firing on sortable with connect list", function () {
+test("#4752: link event firing on sortable with connect list", function() {
 	expect( 10 );
 
 	var fired = {},
-		hasFired = function (type) { return (type in fired) && (true === fired[type]); };
+		hasFired = function(type) { return (type in fired) && (true === fired[type]); };
 
 	$("#sortable").clone().attr("id", "sortable2").insertAfter("#sortable");
 
 	$("#qunit-fixture ul").sortable({
 		connectWith: "#qunit-fixture ul",
-		change: function () {
+		change: function() {
 			fired.change = true;
 		},
-		receive: function () {
+		receive: function() {
 			fired.receive = true;
 		},
-		remove: function () {
+		remove: function() {
 			fired.remove = true;
 		}
 	});
 
-	$("#qunit-fixture ul").bind("click.ui-sortable-test", function () {
+	$("#qunit-fixture ul").bind("click.ui-sortable-test", function() {
 		fired.click = true;
 	});
 
@@ -231,11 +228,34 @@ test("receive", function() {
 test("remove", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
-test("over", function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "over", function() {
+	expect( 8 );
+
+	var hash,
+		overCount = 0;
+
+	$( "#sortable" ).sortable({
+		over: function( e, ui ) {
+			hash = ui;
+			overCount++;
+		}
+	}).find( "li:eq(0)" ).simulate( "drag", {
+		dy: 20
+	});
+
+	ok( hash, "over event triggered" );
+	ok( hash.helper, "UI includes: helper" );
+	ok( hash.placeholder, "UI hash includes: placeholder" );
+	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );
+	ok( hash.offset && ( hash.offset.top && hash.offset.left ), "UI hash includes: offset" );
+	ok( hash.item, "UI hash includes: item" );
+	ok( hash.sender, "UI hash includes: sender" );
+	equal( overCount, 1, "over fires only once" );
 });
 
+/*
 test("out", function() {
 	ok(false, "missing test - untested code is broken code.");
 });

@@ -63,21 +63,21 @@ test("destroy", function() {
 	// Don't throw errors when destroying a never opened modal dialog (#9004)
 	$( "#dialog1" ).dialog({ autoOpen: false, modal: true }).dialog( "destroy" );
 	equal( $( ".ui-widget-overlay" ).length, 0, "overlay does not exist" );
-	equal( $.ui.dialog.overlayInstances, 0, "overlayInstances equals the number of open overlays");
+	equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays");
 
 	element = $( "#dialog1" ).dialog({ modal: true }),
 	element2 = $( "#dialog2" ).dialog({ modal: true });
 	equal( $( ".ui-widget-overlay" ).length, 2, "overlays created when dialogs are open" );
-	equal( $.ui.dialog.overlayInstances, 2, "overlayInstances equals the number of open overlays" );
+	equal( $( document ).data( "ui-dialog-overlays" ), 2, "ui-dialog-overlays equals the number of open overlays" );
 	element.dialog( "close" );
 	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after closing one dialog" );
-	equal( $.ui.dialog.overlayInstances, 1, "overlayInstances equals the number of open overlays" );
+	equal( $( document ).data( "ui-dialog-overlays" ), 1, "ui-dialog-overlays equals the number of open overlays" );
 	element.dialog( "destroy" );
 	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after destroying one dialog" );
-	equal( $.ui.dialog.overlayInstances, 1, "overlayInstances equals the number of open overlays" );
+	equal( $( document ).data( "ui-dialog-overlays" ), 1, "ui-dialog-overlays equals the number of open overlays" );
 	element2.dialog( "destroy" );
 	equal( $( ".ui-widget-overlay" ).length, 0, "overlays removed when all dialogs are destoryed" );
-	equal( $.ui.dialog.overlayInstances, 0, "overlayInstances equals the number of open overlays" );
+	equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays" );
 });
 
 asyncTest("#9000: Dialog leaves broken event handler after close/destroy in certain cases", function() {
@@ -101,11 +101,13 @@ test("#4980: Destroy should place element back in original DOM position", functi
 });
 
 test( "enable/disable disabled", function() {
-	expect( 2 );
+	expect( 4 );
 	var element = $( "<div></div>" ).dialog();
 	element.dialog( "disable" );
 	equal(element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
 	ok( !element.dialog( "widget" ).hasClass( "ui-dialog-disabled" ), "disable method doesn't add ui-dialog-disabled class" );
+	ok( !element.dialog( "widget" ).hasClass( "ui-state-disabled" ), "disable method doesn't add ui-state-disabled class" );
+	ok( !element.dialog( "widget" ).attr( "aria-disabled" ), "disable method doesn't add aria-disabled" );
 });
 
 test("close", function() {
@@ -142,8 +144,8 @@ test("moveToTop", function() {
 	expect( 5 );
 	function order() {
 		var actual = $( ".ui-dialog" ).map(function() {
-			return +$( this ).find( ".ui-dialog-content" ).attr( "id" ).replace( /\D+/, "" );
-		}).get().reverse();
+			return +$( this ).css( "z-index" );
+		}).get();
 		deepEqual( actual, $.makeArray( arguments ) );
 	}
 	var dialog1, dialog2,
@@ -159,10 +161,23 @@ test("moveToTop", function() {
 			equal( focusOn, "dialog2" );
 		}
 	});
-	order( 2, 1 );
+	order( 100, 101 );
 	focusOn = "dialog1";
 	dialog1.dialog( "moveToTop" );
-	order( 1, 2 );
+	order( 102, 101 );
+});
+
+test( "moveToTop: content scroll stays intact", function() {
+	expect( 2 );
+	var otherDialog = $( "#dialog1" ).dialog(),
+		scrollDialog = $( "#form-dialog" ).dialog({
+			height: 200
+		});
+	scrollDialog.scrollTop( 50 );
+	equal( scrollDialog.scrollTop(), 50 );
+
+	otherDialog.dialog( "moveToTop" );
+	equal( scrollDialog.scrollTop(), 50 );
 });
 
 test("open", function() {
@@ -204,6 +219,11 @@ asyncTest( "#8958: dialog can be opened while opening", function() {
 			start();
 		}
 	});
+
+	// Support: IE8
+	// For some reason the #favorite-color input doesn't get focus if we don't
+	// focus the body first, causing the test to hang.
+	$( "body" ).focus();
 
 	$( "#favorite-animal" )
 		// We focus the input to start the test. Once it receives focus, the

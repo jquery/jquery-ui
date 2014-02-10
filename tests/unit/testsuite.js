@@ -27,11 +27,15 @@ QUnit.reset = function() {
 
 QUnit.config.requireExpects = true;
 
+/*
+// TODO: Add back the ability to test against minified files
+// see QUnit.urlParams.min usage below
 QUnit.config.urlConfig.push({
 	id: "min",
 	label: "Minified source",
 	tooltip: "Load minified source files instead of the regular unminified ones."
 });
+*/
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
@@ -40,7 +44,7 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 	} :
 	function( resources ) {
 		$.each( resources.css || [], function( i, resource ) {
-			includeStyle( "themes/base/jquery." + resource + ".css" );
+			includeStyle( "themes/base/" + resource + ".css" );
 		});
 		$.each( resources.js || [], function( i, resource ) {
 			includeScript( resource );
@@ -55,7 +59,9 @@ QUnit.config.urlConfig.push({
 
 jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
-	if ( QUnit.urlParams.nojshint ) {
+	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
+	// https://github.com/jshint/jshint/issues/1384
+	if ( QUnit.urlParams.nojshint || !Function.prototype.bind ) {
 		return;
 	}
 
@@ -73,20 +79,26 @@ TestHelpers.testJshint = function( module ) {
 				dataType: "json"
 			}),
 			$.ajax({
-				url: url("../../../ui/jquery.ui." + module + ".js"),
+				url: url("../../../ui/" + module + ".js"),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
-			var passed = JSHINT( srcArgs[ 0 ], hintArgs[ 0 ] ),
-				errors = $.map( JSHINT.errors, function( error ) {
-					// JSHINT may report null if there are too many errors
-					if ( !error ) {
-						return;
-					}
+			var globals, passed, errors,
+				jshintrc = hintArgs[ 0 ],
+				source = srcArgs[ 0 ];
 
-					return "[L" + error.line + ":C" + error.character + "] " +
-						error.reason + "\n" + error.evidence + "\n";
-				}).join( "\n" );
+			globals = jshintrc.globals || {};
+			delete jshintrc.globals;
+			passed = JSHINT( source, jshintrc, globals );
+			errors = $.map( JSHINT.errors, function( error ) {
+				// JSHINT may report null if there are too many errors
+				if ( !error ) {
+					return;
+				}
+
+				return "[L" + error.line + ":C" + error.character + "] " +
+					error.reason + "\n" + error.evidence + "\n";
+			}).join( "\n" );
 			ok( passed, errors );
 			start();
 		})
@@ -169,6 +181,25 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 	});
 };
 
+TestHelpers.onFocus= function( element, onFocus ) {
+	var fn = function( event ){
+		if( !event.originalEvent ) {
+			return;
+		}
+		element.unbind( "focus", fn );
+		onFocus();
+	};
+
+	element.bind( "focus", fn )[ 0 ].focus();
+};
+
+TestHelpers.forceScrollableWindow = function( appendTo ) {
+	return $( "<div>" ).css({
+		height: "10000px",
+		width: "10000px"
+	}).appendTo( appendTo || "#qunit-fixture" );
+};
+
 /*
  * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
  */
@@ -180,7 +211,7 @@ window.closeEnough = function( actual, expected, maxDifference, message ) {
 /*
  * Experimental assertion for comparing DOM objects.
  *
- * Serializes an element and some properties and attributes and it's children if any, otherwise the text.
+ * Serializes an element and some properties and attributes and its children if any, otherwise the text.
  * Then compares the result using deepEqual.
  */
 window.domEqual = function( selector, modifier, message ) {

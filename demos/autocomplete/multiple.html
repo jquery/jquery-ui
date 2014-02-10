@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Multiple values</title>
-	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.9.1.js"></script>
-	<script src="../../ui/jquery.ui.core.js"></script>
-	<script src="../../ui/jquery.ui.widget.js"></script>
-	<script src="../../ui/jquery.ui.position.js"></script>
-	<script src="../../ui/jquery.ui.menu.js"></script>
-	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/position.js"></script>
+	<script src="../../ui/menu.js"></script>
+	<script src="../../ui/autocomplete.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
@@ -48,7 +48,7 @@
 			// don't navigate away from the field on tab when selecting an item
 			.bind( "keydown", function( event ) {
 				if ( event.keyCode === $.ui.keyCode.TAB &&
-						$( this ).data( "ui-autocomplete" ).menu.active ) {
+						$( this ).autocomplete( "instance" ).menu.active ) {
 					event.preventDefault();
 				}
 			})

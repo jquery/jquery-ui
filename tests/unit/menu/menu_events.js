@@ -18,10 +18,10 @@ test( "handle click on menu", function() {
 		}
 	});
 	log( "click", true );
-	click( $( "#menu1" ), "1" );
+	click( element, "1" );
 	log( "afterclick" );
 	click( element, "2" );
-	click( $( "#menu1" ), "3" );
+	click( element, "3" );
 	click( element, "1" );
 	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 });
@@ -35,10 +35,10 @@ test( "handle click on custom item menu", function() {
 		menus: "div"
 	});
 	log( "click", true );
-	click( $( "#menu5" ), "1" );
+	click( element, "1" );
 	log( "afterclick" );
 	click( element, "2" );
-	click( $( "#menu5" ), "3" );
+	click( element, "3" );
 	click( element, "1" );
 	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 });
@@ -91,18 +91,18 @@ asyncTest( "handle focus of menu with active item", function() {
 	expect( 1 );
 	var element = $( "#menu1" ).menu({
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
+			log( $( event.target ).find( ".ui-state-focus" ).index() );
 		}
 	});
 
 	log( "focus", true );
-	element[0].focus();
+	element[ 0 ].focus();
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		element[0].blur();
+		element[ 0 ].blur();
 		setTimeout(function() {
-			element[0].focus();
+			element[ 0 ].focus();
 			setTimeout(function() {
 				equal( logOutput(), "focus,0,1,2,2", "current active item remains active" );
 				start();
@@ -174,15 +174,15 @@ asyncTest( "handle keyboard navigation on menu without scroll and without submen
 	expect( 12 );
 	var element = $( "#menu1" ).menu({
 		select: function( event, ui ) {
-			log( $( ui.item[0] ).text() );
+			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
+			log( $( event.target ).find( ".ui-state-focus" ).index() );
 		}
 	});
 
 	log( "keydown", true );
-	element[0].focus();
+	element[ 0 ].focus();
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -243,7 +243,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 			log( $( ui.item[0] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
+			log( $( event.target ).find( ".ui-state-focus" ).index() );
 		}
 	});
 
@@ -341,7 +341,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-				equal( logOutput(), "keydown,5,6,0,1,0,2,4,0", "Keydown skip dividers and items without anchors" );
+				equal( logOutput(), "keydown,5,6,0,1,0,2,4,0", "Keydown skip dividers" );
 
 				log( "keydown", true );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -360,15 +360,15 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 	expect( 14 );
 	var element = $( "#menu3" ).menu({
 		select: function( event, ui ) {
-			log( $( ui.item[0] ).text() );
+			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
+			log( $( event.target ).find( ".ui-state-focus" ).index());
 		}
 	});
 
 	log( "keydown", true );
-	element[0].focus();
+	element[ 0 ].focus();
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -389,15 +389,15 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,20", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,34", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_UP" );
+		equal( logOutput(), "keydown,17", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
@@ -435,10 +435,10 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	expect( 14 );
 	var element = $( "#menu4" ).menu({
 		select: function( event, ui ) {
-			log( $( ui.item[0] ).text() );
+			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
+			log( $( event.target ).find( ".ui-state-focus" ).index());
 		}
 	});
 
@@ -484,11 +484,11 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	function menukeyboard3() {
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,20", "Keydown PAGE_DOWN" );
+		equal( logOutput(), "keydown,27", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
@@ -533,7 +533,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 			log( $( ui.item[0] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
+			log( $( event.target ).find( ".ui-state-focus" ).index());
 		}
 	});
 
@@ -577,11 +577,42 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 	}
 });
 
+asyncTest( "handle keyboard navigation and mouse click on menu with dividers and group labels", function() {
+	expect( 2 );
+	var element = $( "#menu7" ).menu({
+		items: "> :not('.ui-menu-group')",
+		select: function( event, ui ) {
+			log( $( ui.item[0] ).text() );
+		},
+		focus: function( event ) {
+			log( $( event.target ).find( ".ui-state-focus" ).index());
+		}
+	});
+
+	log( "keydown", true );
+	element.one( "menufocus", function() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		equal( logOutput(), "keydown,2,Ada", "Keydown skips initial group label" );
+		setTimeout( menukeyboard1, 50 );
+	});
+	element.focus();
+
+	function menukeyboard1() {
+		log( "keydown", true );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equal( logOutput(), "keydown,3,4,7", "Keydown focus skips divider and group label" );
+		start();
+	}
+});
+
 asyncTest( "handle keyboard navigation with spelling of menu items", function() {
 	expect( 2 );
 	var element = $( "#menu2" ).menu({
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
+			log( $( event.target ).find( ".ui-state-focus" ).index() );
 		}
 	});
 
@@ -595,7 +626,22 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 		equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
 		start();
 	});
-	element[0].focus();
+	element[ 0 ].focus();
+});
+
+test( "#9469: Stopping propagation in a select event should not suppress subsequent select events.", function() {
+	expect( 1 );
+	var element = $( "#menu1" ).menu({
+		select: function( event ) {
+			log();
+			event.stopPropagation();
+		}
+	});
+
+	click( element, "1" );
+	click( element, "2" );
+
+	equal( logOutput(), "1,2", "Both select events were not triggered." );
 });
 
 })( jQuery );

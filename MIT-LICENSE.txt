@@ -1,4 +1,4 @@
-Copyright 2013 jQuery Foundation and other contributors,
+Copyright 2014 jQuery Foundation and other contributors,
 http://jqueryui.com/
 
 This software consists of voluntary contributions made by many

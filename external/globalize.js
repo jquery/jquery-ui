@@ -43,9 +43,9 @@ Globalize = function( cultureSelector ) {
 	return new Globalize.prototype.init( cultureSelector );
 };
 
-if ( typeof require !== "undefined"
-	&& typeof exports !== "undefined"
-	&& typeof module !== "undefined" ) {
+if ( typeof require !== "undefined" &&
+	typeof exports !== "undefined" &&
+	typeof module !== "undefined" ) {
 	// Assume CommonJS
 	module.exports = Globalize;
 } else {
@@ -66,11 +66,11 @@ Globalize.prototype = {
 };
 Globalize.prototype.init.prototype = Globalize.prototype;
 
-// 1.	 When defining a culture, all fields are required except the ones stated as optional.
-// 2.	 Each culture should have a ".calendars" object with at least one calendar named "standard"
-//		 which serves as the default calendar in use by that culture.
-// 3.	 Each culture should have a ".calendar" object which is the current calendar being used,
-//		 it may be dynamically changed at any time to one of the calendars in ".calendars".
+// 1. When defining a culture, all fields are required except the ones stated as optional.
+// 2. Each culture should have a ".calendars" object with at least one calendar named "standard"
+//    which serves as the default calendar in use by that culture.
+// 3. Each culture should have a ".calendar" object which is the current calendar being used,
+//    it may be dynamically changed at any time to one of the calendars in ".calendars".
 Globalize.cultures[ "default" ] = {
 	// A unique name for the culture in the form <language code>-<country/region code>
 	name: "en",
@@ -120,7 +120,7 @@ Globalize.cultures[ "default" ] = {
 		// symbol used for negative numbers
 		"-": "-",
 		// symbol used for NaN (Not-A-Number)
-		NaN: "NaN",
+		"NaN": "NaN",
 		// symbol used for Negative Infinity
 		negativeInfinity: "-Infinity",
 		// symbol used for Positive Infinity
@@ -262,7 +262,7 @@ Globalize.cultures[ "default" ] = {
 
 Globalize.cultures[ "default" ].calendar = Globalize.cultures[ "default" ].calendars.standard;
 
-Globalize.cultures[ "en" ] = Globalize.cultures[ "default" ];
+Globalize.cultures.en = Globalize.cultures[ "default" ];
 
 Globalize.cultureSelector = "en";
 
@@ -271,8 +271,8 @@ Globalize.cultureSelector = "en";
 //
 
 regexHex = /^0x[a-f0-9]+$/i;
-regexInfinity = /^[+-]?infinity$/i;
-regexParseFloat = /^[+-]?\d*\.?\d*(e[+-]?\d+)?$/;
+regexInfinity = /^[+\-]?infinity$/i;
+regexParseFloat = /^[+\-]?\d*\.?\d*(e[+\-]?\d+)?$/;
 regexTrim = /^\s+|\s+$/g;
 
 //
@@ -295,7 +295,7 @@ endsWith = function( value, pattern ) {
 	return value.substr( value.length - pattern.length ) === pattern;
 };
 
-extend = function( deep ) {
+extend = function() {
 	var options, name, src, copy, copyIsArray, clone,
 		target = arguments[0] || {},
 		i = 1,
@@ -358,8 +358,8 @@ isArray = Array.isArray || function( obj ) {
 };
 
 isFunction = function( obj ) {
-	return Object.prototype.toString.call( obj ) === "[object Function]"
-}
+	return Object.prototype.toString.call( obj ) === "[object Function]";
+};
 
 isObject = function( obj ) {
 	return Object.prototype.toString.call( obj ) === "[object Object]";
@@ -374,7 +374,10 @@ trim = function( value ) {
 };
 
 truncate = function( value ) {
-	return value | 0;
+	if ( isNaN( value ) ) {
+		return NaN;
+	}
+	return Math[ value < 0 ? "ceil" : "floor" ]( value );
 };
 
 zeroPad = function( str, count, left ) {
@@ -444,10 +447,10 @@ expandFormat = function( cal, format ) {
 
 formatDate = function( value, format, culture ) {
 	var cal = culture.calendar,
-		convert = cal.convert;
+		convert = cal.convert,
+		ret;
 
 	if ( !format || !format.length || format === "i" ) {
-		var ret;
 		if ( culture && culture.name.length ) {
 			if ( convert ) {
 				// non-gregorian calendar, so we cannot use built-in toLocaleString()
@@ -507,9 +510,14 @@ formatDate = function( value, format, culture ) {
 			return converted[ part ];
 		}
 		switch ( part ) {
-			case 0: return date.getFullYear();
-			case 1: return date.getMonth();
-			case 2: return date.getDate();
+			case 0:
+				return date.getFullYear();
+			case 1:
+				return date.getMonth();
+			case 2:
+				return date.getDate();
+			default:
+				throw "Invalid part value " + part;
 		}
 	}
 
@@ -563,11 +571,9 @@ formatDate = function( value, format, culture ) {
 				// Month, using the full name
 				var part = getPart( value, 1 );
 				ret.push(
-					( cal.monthsGenitive && hasDay() )
-					?
-					cal.monthsGenitive[ clength === 3 ? "namesAbbr" : "names" ][ part ]
-					:
-					cal.months[ clength === 3 ? "namesAbbr" : "names" ][ part ]
+					( cal.monthsGenitive && hasDay() ) ?
+					( cal.monthsGenitive[ clength === 3 ? "namesAbbr" : "names" ][ part ] ) :
+					( cal.months[ clength === 3 ? "namesAbbr" : "names" ][ part ] )
 				);
 				break;
 			case "M":
@@ -656,10 +662,10 @@ formatDate = function( value, format, culture ) {
 				// Time zone offset with leading zero
 				hour = value.getTimezoneOffset() / 60;
 				ret.push(
-					( hour <= 0 ? "+" : "-" ) + padZeros( Math.floor(Math.abs(hour)), 2 )
+					( hour <= 0 ? "+" : "-" ) + padZeros( Math.floor(Math.abs(hour)), 2 ) +
 					// Hard coded ":" separator, rather than using cal.TimeSeparator
 					// Repeated here for consistency, plus ":" was already assumed in date parsing.
-					+ ":" + padZeros( Math.abs(value.getTimezoneOffset() % 60), 2 )
+					":" + padZeros( Math.abs(value.getTimezoneOffset() % 60), 2 )
 				);
 				break;
 			case "g":
@@ -675,7 +681,6 @@ formatDate = function( value, format, culture ) {
 			break;
 		default:
 			throw "Invalid date format pattern \'" + current + "\'.";
-			break;
 		}
 	}
 	return ret.join( "" );
@@ -706,7 +711,6 @@ formatDate = function( value, format, culture ) {
 		numberString = split[ 0 ];
 		right = split.length > 1 ? split[ 1 ] : "";
 
-		var l;
 		if ( exponent > 0 ) {
 			right = zeroPad( right, exponent, false );
 			numberString += right.slice( 0, exponent );
@@ -714,7 +718,7 @@ formatDate = function( value, format, culture ) {
 		}
 		else if ( exponent < 0 ) {
 			exponent = -exponent;
-			numberString = zeroPad( numberString, exponent + 1 );
+			numberString = zeroPad( numberString, exponent + 1, true );
 			right = numberString.slice( -exponent, numberString.length ) + right;
 			numberString = numberString.slice( 0, -exponent );
 		}
@@ -783,10 +787,10 @@ formatDate = function( value, format, culture ) {
 				break;
 			case "N":
 				formatInfo = nf;
-				// fall through
+				/* falls through */
 			case "C":
 				formatInfo = formatInfo || nf.currency;
-				// fall through
+				/* falls through */
 			case "P":
 				formatInfo = formatInfo || nf.percent;
 				pattern = value < 0 ? formatInfo.pattern[ 0 ] : ( formatInfo.pattern[1] || "n" );
@@ -835,7 +839,7 @@ formatDate = function( value, format, culture ) {
 
 getTokenRegExp = function() {
 	// regular expression for matching date and time tokens in format strings.
-	return /\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g;
+	return (/\/|dddd|ddd|dd|d|MMMM|MMM|MM|M|yyyy|yy|y|hh|h|HH|H|mm|m|ss|s|tt|t|fff|ff|f|zzz|zz|z|gg|g/g);
 };
 
 getEra = function( date, eras ) {
@@ -872,12 +876,12 @@ getEraYear = function( date, cal, era, sortable ) {
 
 	expandYear = function( cal, year ) {
 		// expands 2-digit year into 4 digits.
-		var now = new Date(),
-			era = getEra( now );
 		if ( year < 100 ) {
-			var twoDigitYearMax = cal.twoDigitYearMax;
+			var now = new Date(),
+				era = getEra( now ),
+				curr = getEraYear( now, cal, era ),
+				twoDigitYearMax = cal.twoDigitYearMax;
 			twoDigitYearMax = typeof twoDigitYearMax === "string" ? new Date().getFullYear() % 100 + parseInt( twoDigitYearMax, 10 ) : twoDigitYearMax;
-			var curr = getEraYear( now, cal, era );
 			year += curr - ( curr % 100 );
 			if ( year > twoDigitYearMax ) {
 				year -= 100;
@@ -1004,11 +1008,10 @@ getEraYear = function( date, cal, era, sortable ) {
 					add = "([+-]?\\d\\d?)";
 					break;
 				case "/":
-					add = "(\\" + cal[ "/" ] + ")";
+					add = "(\\/)";
 					break;
 				default:
 					throw "Invalid date format pattern \'" + m + "\'.";
-					break;
 			}
 			if ( add ) {
 				regexp.push( add );
@@ -1212,7 +1215,7 @@ getEraYear = function( date, cal, era, sortable ) {
 		if ( tzMinOffset !== null ) {
 			// adjust timezone to utc before applying local offset.
 			var adjustedMin = result.getMinutes() - ( tzMinOffset + result.getTimezoneOffset() );
-			// Safari limits hours and minutes to the range of -127 to 127.	 We need to use setHours
+			// Safari limits hours and minutes to the range of -127 to 127.  We need to use setHours
 			// to ensure both these fields will not exceed this range.	adjustedMin will range
 			// somewhere between -1440 and 1500, so we only need to split this into hours.
 			result.setHours( result.getHours() + parseInt(adjustedMin / 60, 10), adjustedMin % 60 );
@@ -1229,7 +1232,7 @@ parseNegativePattern = function( value, nf, negativePattern ) {
 		case "n -":
 			neg = " " + neg;
 			pos = " " + pos;
-			// fall through
+			/* falls through */
 		case "n-":
 			if ( endsWith(value, neg) ) {
 				ret = [ "-", value.substr(0, value.length - neg.length) ];
@@ -1241,7 +1244,7 @@ parseNegativePattern = function( value, nf, negativePattern ) {
 		case "- n":
 			neg += " ";
 			pos += " ";
-			// fall through
+			/* falls through */
 		case "-n":
 			if ( startsWith(value, neg) ) {
 				ret = [ "-", value.substr(neg.length) ];
@@ -1329,7 +1332,7 @@ Globalize.addCultureInfo = function( cultureName, baseCultureName, info ) {
 Globalize.findClosestCulture = function( name ) {
 	var match;
 	if ( !name ) {
-		return this.cultures[ this.cultureSelector ] || this.cultures[ "default" ];
+		return this.findClosestCulture( this.cultureSelector ) || this.cultures[ "default" ];
 	}
 	if ( typeof name === "string" ) {
 		name = name.split( "," );
@@ -1361,9 +1364,13 @@ Globalize.findClosestCulture = function( name ) {
 			prioritized.push({ lang: lang, pri: pri });
 		}
 		prioritized.sort(function( a, b ) {
-			return a.pri < b.pri ? 1 : -1;
+			if ( a.pri < b.pri ) {
+				return 1;
+			} else if ( a.pri > b.pri ) {
+				return -1;
+			}
+			return 0;
 		});
-
 		// exact match
 		for ( i = 0; i < l; i++ ) {
 			lang = prioritized[ i ].lang;
@@ -1396,7 +1403,7 @@ Globalize.findClosestCulture = function( name ) {
 			lang = prioritized[ i ].lang;
 			for ( var cultureKey in cultures ) {
 				var culture = cultures[ cultureKey ];
-				if ( culture.language == lang ) {
+				if ( culture.language === lang ) {
 					return culture;
 				}
 			}
@@ -1409,7 +1416,7 @@ Globalize.findClosestCulture = function( name ) {
 };
 
 Globalize.format = function( value, format, cultureSelector ) {
-	culture = this.findClosestCulture( cultureSelector );
+	var culture = this.findClosestCulture( cultureSelector );
 	if ( value instanceof Date ) {
 		value = formatDate( value, format, culture );
 	}
@@ -1478,8 +1485,13 @@ Globalize.parseFloat = function( value, radix, cultureSelector ) {
 		value = value.replace( culture.numberFormat.currency["."], culture.numberFormat["."] );
 	}
 
-	// trim leading and trailing whitespace
-	value = trim( value );
+	//Remove percentage character from number string before parsing
+	if ( value.indexOf(culture.numberFormat.percent.symbol) > -1){
+		value = value.replace( culture.numberFormat.percent.symbol, "" );
+	}
+
+	// remove spaces: leading, trailing and between - and number. Used for negative currency pt-BR
+	value = value.replace( / /g, "" );
 
 	// allow infinity or hexidecimal
 	if ( regexInfinity.test(value) ) {
@@ -1567,7 +1579,7 @@ Globalize.culture = function( cultureSelector ) {
 		this.cultureSelector = cultureSelector;
 	}
 	// getter
-	return this.findClosestCulture( cultureSelector ) || this.culture[ "default" ];
+	return this.findClosestCulture( cultureSelector ) || this.cultures[ "default" ];
 };
 
 }( this ));

@@ -14,10 +14,15 @@ test( "destroy", function() {
 });
 
 test( "enable/disable", function() {
-	expect( 4 );
+	expect( 7 );
 	var element = $( "#list1" ).accordion();
 	state( element, 1, 0, 0 );
 	element.accordion( "disable" );
+
+	ok( element.hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
+	equal( element.attr( "aria-disabled" ), "true", "element gets aria-disabled" );
+	ok( element.hasClass( "ui-accordion-disabled" ), "element gets ui-accordion-disabled" );
+
 	// event does nothing
 	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
 	state( element, 1, 0, 0 );
@@ -30,7 +35,7 @@ test( "enable/disable", function() {
 });
 
 test( "refresh", function() {
-	expect( 17 );
+	expect( 19 );
 	var element = $( "#navigation" )
 		.parent()
 			.height( 300 )
@@ -104,6 +109,15 @@ test( "refresh", function() {
 	element.find( "div.foo" ).eq( 0 ).remove();
 	element.accordion( "refresh" );
 	state( element, 1 );
+
+	// collapse all panels
+	element.accordion( "option", {
+		collapsible: true,
+		active: false
+	});
+	state( element, 0 );
+	element.accordion( "refresh" );
+	state( element, 0 );
 });
 
 test( "widget", function() {

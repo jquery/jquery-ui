@@ -313,11 +313,15 @@ $.extend( $.simulate.prototype, {
 				clientY: Math.round( y )
 			};
 
-			this.simulateEvent( document, "mousemove", coord );
+			this.simulateEvent( target.ownerDocument, "mousemove", coord );
 		}
 
-		this.simulateEvent( target, "mouseup", coord );
-		this.simulateEvent( target, "click", coord );
+		if ( $.contains( document, target ) ) {
+			this.simulateEvent( target, "mouseup", coord );
+			this.simulateEvent( target, "click", coord );
+		} else {
+			this.simulateEvent( document, "mouseup", coord );
+		}
 	}
 });
 

@@ -4,26 +4,28 @@
 	<meta charset="utf-8">
 	<title>Compound Visual Test : All Widgets in Dialog</title>
 	<link rel="stylesheet" href="../visual.css">
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
-	<script src="../../../jquery-1.9.1.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.mouse.js"></script>
-	<script src="../../../ui/jquery.ui.position.js"></script>
-	<script src="../../../ui/jquery.ui.menu.js"></script>
-	<script src="../../../ui/jquery.ui.resizable.js"></script>
-	<script src="../../../ui/jquery.ui.draggable.js"></script>
-	<script src="../../../ui/jquery.ui.accordion.js"></script>
-	<script src="../../../ui/jquery.ui.autocomplete.js"></script>
-	<script src="../../../ui/jquery.ui.button.js"></script>
-	<script src="../../../ui/jquery.ui.datepicker.js"></script>
-	<script src="../../../ui/jquery.ui.dialog.js"></script>
-	<script src="../../../ui/jquery.ui.progressbar.js"></script>
-	<script src="../../../ui/jquery.ui.slider.js"></script>
-	<script src="../../../ui/jquery.ui.tabs.js"></script>
-	<script src="../../../ui/jquery.ui.tooltip.js"></script>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<script src="../../../jquery-1.10.2.js"></script>
+	<script src="../../../ui/core.js"></script>
+	<script src="../../../ui/widget.js"></script>
+	<script src="../../../ui/mouse.js"></script>
+	<script src="../../../ui/position.js"></script>
+	<script src="../../../ui/menu.js"></script>
+	<script src="../../../ui/resizable.js"></script>
+	<script src="../../../ui/draggable.js"></script>
+	<script src="../../../ui/accordion.js"></script>
+	<script src="../../../ui/autocomplete.js"></script>
+	<script src="../../../ui/button.js"></script>
+	<script src="../../../ui/datepicker.js"></script>
+	<script src="../../../ui/dialog.js"></script>
+	<script src="../../../ui/progressbar.js"></script>
+	<script src="../../../ui/slider.js"></script>
+	<script src="../../../ui/tabs.js"></script>
+	<script src="../../../ui/tooltip.js"></script>
+	<script src="../../../ui/selectmenu.js"></script>
 	<script>
 	$(function() {
+		$( "#dialog" ).dialog();
 		$( "[title]" ).tooltip();
 		$( "#accordion" ).accordion();
 		$( "#autocomplete" ).autocomplete({
@@ -45,7 +47,7 @@
 			}
 		});
 		$( "#tabs" ).tabs();
-		$( "#dialog" ).dialog();
+		$( '#select' ).selectmenu();
 		$( "#dialog2" ).dialog({
 			autoOpen: false,
 			width: 100,
@@ -92,6 +94,13 @@
 		<div id="tabs-2">Phasellus mattis tincidunt nibh.</div>
 		<div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
 	</div>
+	<select id="select">
+		<option>Slower</option>
+		<option>Slow</option>
+		<option>Medium</option>
+		<option>Fast</option>
+		<option>Faster</option>
+	</select>
 </div>
 <div id="dialog2">
 	Yay, another dialog.

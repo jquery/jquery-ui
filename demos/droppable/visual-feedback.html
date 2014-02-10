@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Droppable - Visual feedback</title>
-	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.9.1.js"></script>
-	<script src="../../ui/jquery.ui.core.js"></script>
-	<script src="../../ui/jquery.ui.widget.js"></script>
-	<script src="../../ui/jquery.ui.mouse.js"></script>
-	<script src="../../ui/jquery.ui.draggable.js"></script>
-	<script src="../../ui/jquery.ui.droppable.js"></script>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/mouse.js"></script>
+	<script src="../../ui/draggable.js"></script>
+	<script src="../../ui/droppable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#draggable, #draggable2 { width: 90px; height: 90px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
@@ -20,7 +20,7 @@
 	$(function() {
 		$( "#draggable" ).draggable();
 		$( "#droppable" ).droppable({
-			hoverClass: "ui-state-active",
+			hoverClass: "ui-state-hover",
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )
@@ -32,7 +32,7 @@
 		$( "#draggable2" ).draggable();
 		$( "#droppable2" ).droppable({
 			accept: "#draggable2",
-			activeClass: "ui-state-hover",
+			activeClass: "ui-state-default",
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )

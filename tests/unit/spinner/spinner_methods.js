@@ -12,7 +12,7 @@ test( "destroy", function() {
 });
 
 test( "disable", function() {
-	expect( 14 );
+	expect( 16 );
 	var element = $( "#spin" ).val( 2 ).spinner(),
 		wrapper = $( "#spin" ).spinner( "widget" );
 
@@ -21,6 +21,8 @@ test( "disable", function() {
 
 	element.spinner( "disable" );
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "after: wrapper has ui-spinner-disabled class" );
+	ok( wrapper.hasClass( "ui-state-disabled" ), "after: wrapper has ui-state-disabled class" );
+	ok( !wrapper.attr( "aria-disabled" ), "after: wrapper does not have aria-disabled attr" );
 	ok( element.is( ":disabled"), "after: input has disabled attribute" );
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
@@ -69,6 +71,38 @@ test( "enable", function() {
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( 2, element.val(), "keyboard - value changes on key UP" );
+});
+
+test( "isValid", function() {
+	expect( 8 );
+	var element = $( "#spin" ).spinner({
+			min: 0,
+			max: 10,
+			step: 2
+		}),
+		spinner = element.spinner( "instance" );
+	ok( !spinner.isValid(), "initial state is invalid" );
+
+	element.val( "this is not a number" );
+	ok( !spinner.isValid(), "text string is not valid" );
+
+	element.val( "0" );
+	ok( spinner.isValid(), "min value is valid" );
+
+	element.val( "10" );
+	ok( spinner.isValid(), "max value is valid" );
+
+	element.val( "4" );
+	ok( spinner.isValid(), "inbetween step is valid" );
+
+	element.val( "-1" );
+	ok( !spinner.isValid(), "below min is invalid" );
+
+	element.val( "11" );
+	ok( !spinner.isValid(), "above max is invalid" );
+
+	element.val( "1" );
+	ok( !spinner.isValid(), "step mismatch is invalid" );
 });
 
 test( "pageDown", function() {

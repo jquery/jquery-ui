@@ -33,7 +33,7 @@ test( "nested list", function() {
 	expect( 1 );
 
 	var element = $( "#tabs6" ).tabs();
-	equal( element.data( "ui-tabs" ).anchors.length, 2, "should contain 2 tab" );
+	equal( element.tabs( "instance" ).anchors.length, 2, "should contain 2 tab" );
 });
 
 test( "disconnected from DOM", function() {
@@ -67,7 +67,7 @@ test( "aria-controls", function() {
 	tabs = element.find( ".ui-tabs-nav li" );
 	equal( tabs.eq( 0 ).attr( "aria-controls" ), "colon:test" );
 	equal( tabs.eq( 1 ).attr( "aria-controls" ), "inline-style" );
-	ok( /^ui-tabs-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
+	ok( /^ui-id-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
 	equal( tabs.eq( 3 ).attr( "aria-controls" ), "custom-id" );
 });
 
@@ -155,7 +155,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		panels = element.find( ".ui-tabs-panel" ),
 		keyCode = $.ui.keyCode;
 
-	element.data( "ui-tabs" ).delay = 50;
+	element.tabs( "instance" ).delay = 50;
 
 	equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 	tabs.eq( 0 ).simulate( "focus" );
@@ -306,7 +306,7 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		panels = element.find( ".ui-tabs-panel" ),
 		keyCode = $.ui.keyCode;
 
-	element.data( "ui-tabs" ).delay = 50;
+	element.tabs( "instance" ).delay = 50;
 
 	equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 	tabs.eq( 0 ).simulate( "focus" );

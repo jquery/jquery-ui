@@ -221,7 +221,9 @@ test( "of", function() {
 });
 
 test( "offsets", function() {
-	expect( 7 );
+	expect( 9 );
+
+	var offset;
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -261,7 +263,9 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	deepEqual( $( "#elx" ).offset(), { top: 65, left: 37 }, "decimal percentage offsets in my" );
+	offset = $( "#elx" ).offset();
+	equal( Math.round( offset.top ), 65, "decimal percentage offsets in my" );
+	equal( Math.round( offset.left ), 37, "decimal percentage offsets in my" );
 
 	$( "#elx" ).position({
 		my: "left+10.4 top-10.6",
@@ -269,7 +273,9 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	deepEqual( $( "#elx" ).offset(), { top: 49, left: 50 }, "decimal offsets in my" );
+	offset = $( "#elx" ).offset();
+	equal( Math.round( offset.top ), 49, "decimal offsets in my" );
+	equal( Math.round( offset.left ), 50, "decimal offsets in my" );
 
 	$( "#elx" ).position({
 		my: "left+right top-left",
@@ -569,7 +575,14 @@ test( "collision: flip, with margin", function() {
 });
 
 test( "within", function() {
-	expect( 6 );
+	expect( 7 );
+
+	collisionTest({
+		within: document
+	}, {
+		top: 10,
+		left: 10
+	}, "within document" );
 
 	collisionTest({
 		within: "#within",

@@ -11,12 +11,12 @@
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
-		css: [ "ui.core", "ui.resizable" ],
+		css: [ "core", "resizable" ],
 		js: [
-			"ui/jquery.ui.core.js",
-			"ui/jquery.ui.widget.js",
-			"ui/jquery.ui.mouse.js",
-			"ui/jquery.ui.resizable.js"
+			"ui/core.js",
+			"ui/widget.js",
+			"ui/mouse.js",
+			"ui/resizable.js"
 		]
 	});
 	</script>
@@ -44,6 +44,22 @@
 		height: 100px;
 		width: 100px;
 	}
+	#container2 {
+		position: relative;
+		width: 400px;
+		height: 400px;
+		margin: 30px 0 0 30px;
+	}
+	#parent {
+		position: relative;
+		width: 300px;
+		height: 300px;
+	}
+	#child {
+		position: relative;
+		width: 100px;
+		height: 100px;
+	}
 	</style>
 </head>
 <body>
@@ -57,6 +73,12 @@
 
 <div id="container">
 	<div id="resizable1">I'm a resizable.</div>
+</div>
+
+<div id="container2">
+	<div id="parent">
+		<div id="child">I'm a resizable.</div>
+	</div>
 </div>
 <img src="images/test.jpg" id="resizable2" alt="solid gray">
 

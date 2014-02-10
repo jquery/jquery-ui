@@ -4,33 +4,33 @@ module( "draggable: options" );
 
 // TODO: This doesn't actually test whether append happened, possibly remove
 test( "{ appendTo: 'parent' }, default, no clone", function() {
-	expect( 2 );
+	expect( 4 );
 	var element = $( "#draggable2" ).draggable({ appendTo: "parent" });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "absolute appendTo: parent" );
 
 	element = $( "#draggable1" ).draggable({ appendTo: "parent" });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "relative appendTo: parent" );
 });
 
 // TODO: This doesn't actually test whether append happened, possibly remove
 test( "{ appendTo: Element }, no clone", function() {
-	expect( 2 );
+	expect( 4 );
 	var element = $( "#draggable2" ).draggable({ appendTo: $( "#draggable2" ).parent()[ 0 ] });
 
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "absolute appendTo: Element" );
 
 	element = $( "#draggable1" ).draggable({ appendTo: $( "#draggable2" ).parent()[ 0 ] });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "relative appendTo: Element" );
 });
 
 // TODO: This doesn't actually test whether append happened, possibly remove
 test( "{ appendTo: Selector }, no clone", function() {
-	expect( 2 );
+	expect( 4 );
 	var element = $( "#draggable2" ).draggable({ appendTo: "#main" });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "absolute appendTo: Selector" );
 
 	element = $( "#draggable1" ).draggable({ appendTo: "#main" });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "relative appendTo: Selector" );
 });
 
 test( "{ appendTo: 'parent' }, default", function() {
@@ -43,7 +43,7 @@ test( "{ appendTo: 'parent' }, default", function() {
 	equal( element.draggable( "option", "appendTo" ), null );
 
 	TestHelpers.draggable.move( element, 1, 1 );
-	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
+	equal( element.data( "last_dragged_parent" ), $( "#main" )[ 0 ] );
 });
 
 test( "{ appendTo: Element }", function() {
@@ -85,36 +85,36 @@ test( "{ appendTo: Selector }", function() {
 test( "appendTo, default, switching after initialization", function() {
 	expect( 2 );
 
-	var element = $( "#draggable1" ).draggable({ helper : "clone" });
+	var element = $( "#draggable1" ).draggable({ helper: "clone" });
 
 	TestHelpers.draggable.trackAppendedParent( element );
 
 	// Move and make sure element was appended to fixture
 	TestHelpers.draggable.move( element, 1, 1 );
-	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
+	equal( element.data( "last_dragged_parent" ), $( "#main" )[ 0 ] );
 
 	// Move and make sure element was appended to main
-	element.draggable( "option", "appendTo", $( "#main" ) );
+	element.draggable( "option", "appendTo", $( "#qunit-fixture" ) );
 	TestHelpers.draggable.move( element, 2, 2 );
-	equal( element.data( "last_dragged_parent" ), $( "#main" )[ 0 ] );
+	equal( element.data( "last_dragged_parent" ), $( "#qunit-fixture" )[ 0 ] );
 });
 
 test( "{ axis: false }, default", function() {
-	expect( 1 );
+	expect( 2 );
 	var element = $( "#draggable2" ).draggable({ axis: false });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "axis: false" );
 });
 
 test( "{ axis: 'x' }", function() {
-	expect( 1 );
+	expect( 2 );
 	var element = $( "#draggable2" ).draggable({ axis: "x" });
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 0 );
+	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 0, "axis: x" );
 });
 
 test( "{ axis: 'y' }", function() {
-	expect( 1 );
+	expect( 2 );
 	var element = $( "#draggable2" ).draggable({ axis: "y" });
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 0, 50 );
+	TestHelpers.draggable.testDrag( element, element, 50, 50, 0, 50, "axis: y" );
 });
 
 test( "{ axis: ? }, unexpected", function() {
@@ -128,45 +128,45 @@ test( "{ axis: ? }, unexpected", function() {
 			"function() {}": function() {}
 		};
 
-	expect( 6 );
+	expect( 12 );
 
 	$.each(unexpected, function(key, val) {
 		element = $( "#draggable2" ).draggable({ axis: val });
-		TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 50, "axis: " + key );
+		TestHelpers.draggable.shouldMove( element, "axis: " + key );
 		element.draggable( "destroy" );
 	});
 });
 
 test( "axis, default, switching after initialization", function() {
-	expect( 3 );
+	expect( 6 );
 
-	var element = $( "#draggable1" ).draggable({ axis : false });
+	var element = $( "#draggable1" ).draggable({ axis: false });
 
 	// Any Direction
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 50 );
+	TestHelpers.draggable.shouldMove( element, "axis: default" );
 
 	// Only horizontal
 	element.draggable( "option", "axis", "x" );
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 0 );
+	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 0, "axis: x as option" );
 
 	// Vertical only
 	element.draggable( "option", "axis", "y" );
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 0, 50 );
+	TestHelpers.draggable.testDrag( element, element, 50, 50, 0, 50, "axis: y as option" );
 
 });
 
 test( "{ cancel: 'input,textarea,button,select,option' }, default", function() {
 	expect( 2 );
 
-	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#main" );
+	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#qunit-fixture" );
 
 	var element = $( "#draggable-option-cancel-default" ).draggable({ cancel: "input,textarea,button,select,option" });
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "cancel: default, element dragged" );
 
 	element.draggable( "destroy" );
 
 	element = $( "#draggable-option-cancel-default" ).draggable({ cancel: "input,textarea,button,select,option" });
-	TestHelpers.draggable.testDrag( element, "#draggable-option-cancel-default input", 50, 50, 0, 0 );
+	TestHelpers.draggable.shouldNotDrag( element, "cancel: default, input dragged", "#draggable-option-cancel-default input" );
 	element.draggable( "destroy" );
 });
 
@@ -174,16 +174,16 @@ test( "{ cancel: 'span' }", function() {
 	expect( 2 );
 
 	var element = $( "#draggable2" ).draggable();
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 50, 50, 50, 50 );
+	TestHelpers.draggable.shouldMove( element, "cancel: default, span dragged", "#draggable2 span" );
 
 	element.draggable( "destroy" );
 
 	element = $( "#draggable2" ).draggable({ cancel: "span" });
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 50, 50, 0, 0 );
+	TestHelpers.draggable.shouldNotDrag( element, "cancel: span, span dragged","#draggable2 span" );
 });
 
 test( "{ cancel: ? }, unexpected", function() {
-	expect( 6 );
+	expect( 12 );
 
 	var element,
 		unexpected = {
@@ -202,10 +202,10 @@ test( "{ cancel: ? }, unexpected", function() {
 	});
 });
 
-/**
+/*
 test( "{ cancel: Selectors }, matching parent selector", function() {
 
-	expect( 5 );
+	expect( 4 );
 
 	var element = $( "#draggable2" ).draggable({ cancel: "span a" });
 
@@ -215,39 +215,36 @@ test( "{ cancel: Selectors }, matching parent selector", function() {
 
 	$( "#wrapping a" ).append( element );
 
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 50, 50, 50, 50, "drag span child" );
-	TestHelpers.draggable.shouldNotMove( $( "#draggable2 span a" ) );
-	TestHelpers.draggable.shouldNotMove( $( "#wrapping a" ) );
+	TestHelpers.draggable.shouldMove( element, "drag span child", "#draggable2 span" );
+	TestHelpers.draggable.shouldNotDrag( $( "#draggable2 span a" ), "drag span a" );
+	TestHelpers.draggable.shouldNotDrag( $( "#wrapping a" ), "drag wrapping a" );
 
 	$( "#draggable2" ).draggable( "option", "cancel", "span > a" );
 	$( "#draggable2" ).find( "a" ).append( "<a>" );
 
-
-	TestHelpers.draggable.testDrag( element, $( "#draggable2 span a" ).last(), 50, 50, 50, 50, "drag span child" );
-	TestHelpers.draggable.shouldNotMove( $( "#draggable2 span a" ).first() );
-
+	TestHelpers.draggable.shouldMove( element, "drag span child", $( "#draggable2 span a" ).last() );
+	TestHelpers.draggable.shouldNotDrag( $( "#draggable2 span a" ).first(), "drag span a first child" );
 });
 */
 
 test( "cancel, default, switching after initialization", function() {
 	expect( 3 );
 
-	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#main" );
+	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#qunit-fixture" );
 
 	var input = $( "#draggable-option-cancel-default input" ),
 		element = $( "#draggable-option-cancel-default" ).draggable();
 
-	TestHelpers.draggable.testDrag( element, input, 50, 50, 0, 0 );
+	TestHelpers.draggable.shouldNotDrag( element, "cancel: default, input dragged", input );
 
 	element.draggable( "option", "cancel", "textarea" );
-	TestHelpers.draggable.testDrag( element, input, 50, 50, 50, 50 );
+	TestHelpers.draggable.shouldMove( element, "cancel: textarea, input dragged", input );
 
 	element.draggable( "option", "cancel", "input" );
-	TestHelpers.draggable.testDrag( element, input, 50, 50, 0, 0 );
+	TestHelpers.draggable.shouldNotDrag( element, "cancel: input, input dragged", input );
 });
 
 /*
-
 test( "{ connectToSortable: selector }, default", function() {
 	expect( 1 );
 
@@ -296,14 +293,14 @@ test( "{ containment: Selector }", function() {
 });
 
 test( "{ containment: [x1, y1, x2, y2] }", function() {
-	expect( 1 );
+	expect( 2 );
 
 	var element = $( "#draggable1" ).draggable(),
 		eo = element.offset();
 
 	element.draggable( "option", "containment", [ eo.left, eo.top, eo.left + element.width() + 5, eo.top + element.height() + 5 ] );
 
-	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0 );
+	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0, "containment: [x1, y1, x2, y2]" );
 });
 
 test( "{ containment: 'parent' }, relative", function() {
@@ -346,25 +343,54 @@ test( "{ containment: 'parent' }, absolute", function() {
 	deepEqual( offsetAfter, expected, "compare offset to parent" );
 });
 
-test( "containment, default, switching after initialization", function() {
+test( "containment, account for border", function() {
 	expect( 2 );
 
-	var element = $( "#draggable1" ).draggable({ containment: false });
+	var el = $( "#draggable1" ).appendTo( "#scrollParent" ),
+		parent = el.parent().css({
+			height: "100px",
+			width: "100px",
+			borderStyle: "solid",
+			borderWidth: "5px 10px 15px 20px"
+		}),
+		parentBottom = parent.offset().top + parent.outerHeight(),
+		parentRight = parent.offset().left + parent.outerWidth(),
+		parentBorderBottom = TestHelpers.draggable.border( parent, "bottom" ),
+		parentBorderRight = TestHelpers.draggable.border( parent, "right" );
 
-	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100 );
+	el.css({
+		height: "5px",
+		width: "5px"
+	}).draggable({ containment: "parent" });
 
-	element.draggable( "option", "containment", "parent" )
-		.css({
-			top: 0,
-			left: 0
-		})
-		.appendTo( $( "#main" ) );
+	el.simulate( "drag", {
+		dx: 100,
+		dy: 100
+	});
 
-	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0 );
+	closeEnough( el.offset().top, parentBottom - parentBorderBottom - el.height(), 1,
+		"The draggable should be on top of its parent's bottom border" );
+	closeEnough( el.offset().left, parentRight - parentBorderRight - el.width(), 1,
+		"The draggable should be to the right of its parent's right border" );
+});
 
-	// TODO: Switching back to false does not update to false
-	// element.draggable( "option", "containment", false );
-	// TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100 );
+test( "containment, default, switching after initialization", function() {
+	expect( 8 );
+
+	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false }),
+		po = element.parent().offset(),
+		containment = [ po.left - 100, po.top - 100, po.left + 500, po.top + 500 ];
+
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: default" );
+
+	element.draggable( "option", "containment", "parent" ).css({ top: 0, left: 0 });
+	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0, "containment: parent as option" );
+
+	element.draggable( "option", "containment", containment ).css({ top: 0, left: 0 });
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: array as option" );
+
+	element.draggable( "option", "containment", false );
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: false as option" );
 });
 
 test( "{ cursor: 'auto' }, default", function() {
@@ -421,6 +447,38 @@ test( "{ cursor: 'move' }", function() {
 	equal( after, before, "after drag: cursor restored" );
 });
 
+test( "#6889: Cursor doesn't revert to pre-dragging state after revert action when original element is removed", function() {
+	function getCursor() {
+		return $( "body" ).css( "cursor" );
+	}
+
+	expect( 2 );
+
+	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable({
+			cursor: "move",
+			revert: true,
+			revertDuration: 0,
+			start: function() {
+				notEqual( getCursor(), expected, "start callback: cursor '" + expected + "'" );
+				$( "#wrapper" ).remove();
+			},
+			stop: function() {
+				equal( getCursor(), expected, "after drag: cursor restored" );
+			}
+		}),
+		expected = getCursor();
+
+	if ( TestHelpers.draggable.unreliableContains ) {
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+	} else {
+		element.simulate( "drag", {
+			dx: -1,
+			dy: -1
+		});
+	}
+});
+
 test( "cursor, default, switching after initialization", function() {
 	expect( 3 );
 
@@ -446,12 +504,12 @@ test( "cursorAt", function() {
 	var deltaX = -3,
 		deltaY = -3,
 		tests = {
-			"false": { cursorAt : false },
-			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
-			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
-			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
-			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
-			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+			"false": { cursorAt: false },
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt: { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt: [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt: "10 20" },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt: { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } }
 		};
 
 	$.each( tests, function( testName, testData ) {
@@ -459,10 +517,10 @@ test( "cursorAt", function() {
 			var element = $( "#draggable" + ( i + 1 ) ).draggable({
 					cursorAt: testData.cursorAt,
 					drag: function( event, ui ) {
-						if( !testData.cursorAt ) {
+						if ( !testData.cursorAt ) {
 							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
-						} else if( testData.cursorAt.right ) {
+						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
 						} else {
@@ -487,12 +545,12 @@ test( "cursorAt, switching after initialization", function() {
 	var deltaX = -3,
 		deltaY = -3,
 		tests = {
-			"false": { cursorAt : false },
-			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
-			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
-			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
-			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
-			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+			"false": { cursorAt: false },
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt: { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt: [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt: "10 20" },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt: { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } }
 		};
 
 	$.each( tests, function( testName, testData ) {
@@ -501,10 +559,10 @@ test( "cursorAt, switching after initialization", function() {
 
 			element.draggable({
 					drag: function( event, ui ) {
-						if( !testData.cursorAt ) {
+						if ( !testData.cursorAt ) {
 							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
-						} else if( testData.cursorAt.right ) {
+						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
 						} else {
@@ -527,433 +585,148 @@ test( "cursorAt, switching after initialization", function() {
 });
 
 test( "disabled", function() {
-	expect( 3 );
+	expect( 4 );
 
 	var element = $( "#draggable1" ).draggable();
 
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "disabled: default" );
 
 	element.draggable( "option", "disabled", true );
-	TestHelpers.draggable.shouldNotMove( element );
+	TestHelpers.draggable.shouldNotDrag( element, "option: disabled true" );
 
 	element.draggable( "option", "disabled", false );
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "option: disabled false" );
 });
 
 test( "{ grid: [50, 50] }, relative", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var element = $( "#draggable1" ).draggable({ grid: [ 50, 50 ] });
-	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0 );
-	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50 );
+	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0, "grid: [50, 50] relative" );
+	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50, "grid: [50, 50] relative" );
 });
 
 test( "{ grid: [50, 50] }, absolute", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var element = $( "#draggable2" ).draggable({ grid: [ 50, 50 ] });
-	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0 );
-	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50 );
+	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0, "grid: [50, 50] absolute" );
+	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50, "grid: [50, 50] absolute" );
 });
 
 test( "grid, switching after initialization", function() {
-	expect( 4 );
+	expect( 8 );
 
 	var element = $( "#draggable1" ).draggable();
 
 	// Forward
-	TestHelpers.draggable.testDrag( element, element, 24, 24, 24, 24 );
-	TestHelpers.draggable.testDrag( element, element, 0, 0, 0, 0 );
+	TestHelpers.draggable.testDrag( element, element, 24, 24, 24, 24, "grid: default" );
+	TestHelpers.draggable.testDrag( element, element, 0, 0, 0, 0, "grid: default" );
 
 	element.draggable( "option", "grid", [ 50,50 ] );
 
-	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0 );
-	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50 );
+	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0, "grid: [50, 50] as option" );
+	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50, "grid: [50, 50] as option" );
 });
 
 test( "{ handle: 'span' }", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var element = $( "#draggable2" ).draggable({ handle: "span" });
 
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 50, 50, 50, 50, "drag span" );
-	TestHelpers.draggable.shouldNotMove( element, "drag element" );
+	TestHelpers.draggable.shouldMove( element, "handle: span", "#draggable2 span");
+	TestHelpers.draggable.shouldMove( element, "handle: span child", "#draggable2 span em" );
+	TestHelpers.draggable.shouldNotDrag( element, "handle: span element" );
 });
-
-/*
-test( "{ handle: Selectors }, matching parent selector", function() {
-
-	expect( 4 );
-
-	var element = $( "#draggable2" ).draggable({ handle: "span a" });
-
-	$( "#qunit-fixture" ).append( "<span id='wrapping'><a></a></span>" );
-
-	element.find( "span" ).append( "<a>" );
-
-	$( "#wrapping a" ).append( element );
-
-	TestHelpers.draggable.testDrag( element, "#draggable2 span a", 50, 50, 50, 50, "drag span child" );
-	TestHelpers.draggable.shouldNotMove( $( "#wrapping a" ) );
-
-	$( "#draggable2" ).draggable( "option", "handle", "span > a" );
-	$( "#draggable2" ).find( "a" ).append( "<a>" );
-
-	TestHelpers.draggable.testDrag( element, $( "#draggable2 span a" ).first(), 50, 50, 50, 50, "drag span child" );
-	TestHelpers.draggable.shouldNotMove( $( "#draggable2 span a" ).last() );
-
-});
-*/
 
 test( "handle, default, switching after initialization", function() {
-	expect( 6 );
+	expect( 10 );
 
 	var element = $( "#draggable2" ).draggable();
 
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 50 );
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 100, 100, 100, 100 );
+	TestHelpers.draggable.shouldMove( element, "handle: default, element dragged" );
+	TestHelpers.draggable.shouldMove( element, "handle: default, span dragged", "#draggable2 span" );
 
 	// Switch
 	element.draggable( "option", "handle", "span" );
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 0, 0 );
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 100, 100, 100, 100 );
+	TestHelpers.draggable.shouldNotDrag( element, "handle: span as option, element dragged" );
+	TestHelpers.draggable.shouldMove( element, "handle: span as option, span dragged", "#draggable2 span" );
 
 	// And back
 	element.draggable( "option", "handle", false );
-	TestHelpers.draggable.testDrag( element, element, 50, 50, 50, 50 );
-	TestHelpers.draggable.testDrag( element, "#draggable2 span", 100, 100, 100, 100 );
+	TestHelpers.draggable.shouldMove( element, "handle: false as option, element dragged" );
+	TestHelpers.draggable.shouldMove( element, "handle: false as option, span dragged", "#draggable2 span" );
 });
 
 test( "helper, default, switching after initialization", function() {
-	expect( 3 );
+	expect( 6 );
 
 	var element = $( "#draggable1" ).draggable();
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "helper: default" );
 
 	element.draggable( "option", "helper", "clone" );
-	TestHelpers.draggable.shouldNotMove( element );
+	TestHelpers.draggable.shouldMove( element, "helper: clone" );
 
 	element.draggable( "option", "helper", "original" );
-	TestHelpers.draggable.shouldMove( element );
+	TestHelpers.draggable.shouldMove( element, "helper: original" );
 });
 
-test( "{ helper: 'clone' }, relative", function() {
-	expect( 1 );
+/* jshint loopfunc: true */
+(function() {
+	var k, l, m,
+		scrollElements = {
+			"no elements": [],
+			"parent": [ "#main" ],
+			"root": [ document ],
+			"parent and root": [ "#main", document ],
+			"grandparent": [ "#scrollParent" ]
+		},
+		positions = [ "absolute", "fixed", "relative", "static" ],
+		helpers = [ "original", "clone" ],
+		// static is not an option here since the fixture is in an absolute container
+		scrollPositions = [ "relative", "absolute", "fixed" ];
 
-	var element = $( "#draggable1" ).draggable({ helper: "clone" });
-	TestHelpers.draggable.shouldNotMove( element );
-});
+	for ( m = 0 ; m < helpers.length; m++ ) {
+		for ( l = 0; l < positions.length; l++ ) {
+			for ( k in scrollElements ) {
+				(function( position, helper, scrollElements, scrollElementsTitle ) {
+					test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
+						expect( scrollPositions.length * 2 );
 
-test( "{ helper: 'clone' }, absolute", function() {
-	expect( 1 );
+						var i, j,
+							element = $( "#draggable1" ).css({ position: position, top: 0, left: 0 }).draggable({
+								helper: helper,
+								scroll: false
+							});
 
-	var element = $( "#draggable2" ).draggable({ helper: "clone" });
-	TestHelpers.draggable.shouldNotMove( element );
-});
+						if ( scrollElements.length === 1 && scrollElements[ 0 ] === "#scrollParent" ) {
+							TestHelpers.draggable.setScrollable( "#main", false );
+							TestHelpers.draggable.setScrollable( "#scrollParent", true );
+						}
 
-test( "{ helper: 'original' }, relative, with scroll offset on parent", function() {
-	expect( 3 );
+						for ( j = 0; j < scrollPositions.length; j++ ) {
+							for ( i = 0; i < scrollElements.length; i++ ) {
+								TestHelpers.draggable.setScroll( scrollElements[ i ] );
+							}
 
-	var element = $( "#draggable1" ).draggable({ helper: "original" });
+							TestHelpers.draggable.testScroll( element, scrollPositions[ j ] );
 
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "relative" );
+							for ( i = 0; i < scrollElements.length; i++ ) {
+								TestHelpers.draggable.restoreScroll( scrollElements[ i ] );
+							}
+						}
 
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll();
-});
-
-test( "{ helper: 'original' }, relative, with scroll offset on root", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'original' }, relative, with scroll offset on root and parent", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll();
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on parent", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll();
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on root", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'original' }, absolute, with scroll offset on root and parent", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).css({ position: "absolute", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll();
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'original' }, fixed, with scroll offset on parent", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).css({ position: "fixed", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll();
-});
-
-test( "{ helper: 'original' }, fixed, with scroll offset on root", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).css({ position: "fixed", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'original' }, fixed, with scroll offset on root and parent", function() {
-	expect( 3 );
-
-	var element = $( "#draggable1" ).css({ position: "fixed", top: 0, left: 0 }).draggable({ helper: "original" });
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "relative" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "static" );
-
-	TestHelpers.draggable.setScroll();
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.testScroll( element, "absolute" );
-
-	TestHelpers.draggable.restoreScroll();
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'clone' }, absolute", function() {
-	expect( 1 );
-
-	var helperOffset = null,
-		origOffset = $( "#draggable1" ).offset(),
-		element = $( "#draggable1" ).draggable({ helper: "clone", drag: function( event, ui) {
-			helperOffset = ui.helper.offset();
-		} });
-
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-});
-
-test( "{ helper: 'clone' }, absolute with scroll offset on parent", function() {
-	expect( 3 );
-
-	TestHelpers.draggable.setScroll();
-	var helperOffset = null,
-		origOffset = null,
-		element = $( "#draggable1" ).draggable({
-			helper: "clone",
-			drag: function( event, ui) {
-				helperOffset = ui.helper.offset();
+						if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {
+							TestHelpers.draggable.setScrollable( "#main", true );
+							TestHelpers.draggable.setScrollable( "#scrollParent", false );
+						}
+					});
+				})( positions[ l ], helpers[ m ], scrollElements[ k ], k );
 			}
-		});
-
-	$( "#main" ).css( "position", "relative" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	$( "#main" ).css( "position", "static" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	$( "#main" ).css( "position", "absolute" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	TestHelpers.draggable.restoreScroll();
-});
-
-test( "{ helper: 'clone' }, absolute with scroll offset on root", function() {
-	expect( 3 );
-
-	TestHelpers.draggable.setScroll( "root" );
-	var helperOffset = null,
-		origOffset = null,
-		element = $( "#draggable1" ).draggable({
-			helper: "clone",
-			drag: function( event, ui) {
-				helperOffset = ui.helper.offset();
-			}
-		});
-
-	$( "#main" ).css( "position", "relative" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	$( "#main" ).css( "position", "static" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	$( "#main" ).css( "position", "absolute" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	TestHelpers.draggable.restoreScroll( "root" );
-});
-
-test( "{ helper: 'clone' }, absolute with scroll offset on root and parent", function() {
-	expect( 3 );
-
-	TestHelpers.draggable.setScroll( "root" );
-	TestHelpers.draggable.setScroll();
-
-	var helperOffset = null,
-		origOffset = null,
-		element = $( "#draggable1" ).draggable({
-			helper: "clone",
-			drag: function( event, ui) {
-				helperOffset = ui.helper.offset();
-			}
-		});
-
-	$( "#main" ).css( "position", "relative" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	$( "#main" ).css( "position", "static" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	$( "#main" ).css( "position", "absolute" );
-	origOffset = $( "#draggable1" ).offset();
-	element.simulate( "drag", {
-		dx: 1,
-		dy: 1
-	});
-	deepEqual({ top: helperOffset.top - 1, left: helperOffset.left - 1 }, origOffset, "dragged[1, 1]" );
-
-	TestHelpers.draggable.restoreScroll( "root" );
-	TestHelpers.draggable.restoreScroll();
-});
+		}
+	}
+})();
+/* jshint loopfunc: false */
 
 test( "{ opacity: 0.5 }", function() {
 	expect( 1 );
@@ -997,16 +770,16 @@ test( "opacity, default, switching after initialization", function() {
 });
 
 asyncTest( "revert and revertDuration", function() {
-	expect( 4 );
+	expect( 7 );
 
 	var element = $( "#draggable2" ).draggable({
 		revert: true,
 		revertDuration: 0
 	});
-	TestHelpers.draggable.shouldNotMove( element, "revert: true, revertDuration: 0 should revert immediately" );
+	TestHelpers.draggable.shouldMovePositionButNotOffset( element, "revert: true, revertDuration: 0 should revert immediately" );
 
 	$( "#draggable2" ).draggable( "option", "revert", "invalid" );
-	TestHelpers.draggable.shouldNotMove( element, "revert: invalid, revertDuration: 0 should revert immediately" );
+	TestHelpers.draggable.shouldMovePositionButNotOffset( element, "revert: invalid, revertDuration: 0 should revert immediately" );
 
 	$( "#draggable2" ).draggable( "option", "revert", false );
 	TestHelpers.draggable.shouldMove( element, "revert: false should allow movement" );
@@ -1027,7 +800,7 @@ asyncTest( "revert and revertDuration", function() {
 });
 
 test( "revert: valid", function() {
-	expect( 1 );
+	expect( 2 );
 
 	var element = $( "#draggable2" ).draggable({
 			revert: "valid",
@@ -1036,11 +809,11 @@ test( "revert: valid", function() {
 
 	$( "#droppable" ).droppable();
 
-	TestHelpers.draggable.testDrag( element, element, 100, 100, 0, 0, "revert: valid reverts when dropped on a droppable" );
+	TestHelpers.draggable.shouldMovePositionButNotOffset( element, "revert: valid reverts when dropped on a droppable" );
 });
 
 test( "scope", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var element = $( "#draggable2" ).draggable({
 		scope: "tasks",
@@ -1050,18 +823,20 @@ test( "scope", function() {
 
 	$( "#droppable" ).droppable({ scope: "tasks" });
 
-	TestHelpers.draggable.testDrag( element, element, 100, 100, 0, 0, "revert: valid reverts when dropped on a droppable" );
+	TestHelpers.draggable.shouldMovePositionButNotOffset( element, "revert: valid reverts when dropped on a droppable in scope" );
 
 	$( "#droppable" ).droppable( "destroy" ).droppable({ scope: "nottasks" });
 
-	TestHelpers.draggable.testDrag( element, element, 100, 100, 100, 100, "revert: valid reverts when dropped on a droppable" );
+	TestHelpers.draggable.shouldMove( element, "revert: valid reverts when dropped on a droppable out of scope" );
 });
 
 test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 	expect( 2 );
 
+	TestHelpers.draggable.setScrollable( "#main", false );
+
 	var viewportHeight = $( window ).height(),
-		element = $( "#draggable1" ).draggable({ scroll: true }),
+		element = $( "#draggable1" ).draggable({ scroll: true }).appendTo( "#qunit-fixture" ),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
 		scrollSpeed = element.draggable( "option", "scrollSpeed" );
 
@@ -1096,13 +871,51 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 	TestHelpers.draggable.restoreScroll( document );
 });
 
+test( "#6817: auto scroll goes double distance when dragging", function() {
+	expect( 2 );
+
+	TestHelpers.draggable.restoreScroll( document );
+
+	var offsetBefore,
+		distance = 10,
+		viewportHeight = $( window ).height(),
+		element = $( "#draggable1" ).draggable({
+			scroll: true,
+			stop: function( e, ui ) {
+				equal( ui.offset.top, newY, "offset of item matches pointer position after scroll" );
+				// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+				closeEnough( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
+			}
+		}),
+		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
+		oldY = viewportHeight - scrollSensitivity,
+		newY = oldY + distance;
+
+	element.offset({
+		top: oldY,
+		left: 1
+	});
+
+	offsetBefore = element.offset();
+
+	element.simulate( "drag", {
+		handle: "corner",
+		dx: 1,
+		y: newY,
+		moves: 1
+	});
+
+	TestHelpers.draggable.restoreScroll( document );
+});
+
 test( "snap, snapMode, and snapTolerance", function() {
-	expect( 9 );
+	expect( 10 );
 
 	var newX, newY,
 		snapTolerance = 15,
 		element = $( "#draggable1" ).draggable({
 			snap: true,
+			scroll: false,
 			snapMode: "both",
 			snapTolerance: snapTolerance
 		}),
@@ -1123,7 +936,9 @@ test( "snap, snapMode, and snapTolerance", function() {
 		moves: 1
 	});
 
-	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap outside the snapTolerance" );
+	// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+	closeEnough( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
+	closeEnough( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
 
 	newX += 3;
 
@@ -1214,6 +1029,85 @@ test( "snap, snapMode, and snapTolerance", function() {
 	});
 
 	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap on the inner snapTolerance area when snapMode is outer" );
+});
+
+test( "#8459: element can snap to an element that was removed during drag", function() {
+	expect( 2 );
+
+	var newX, newY,
+		snapTolerance = 15,
+		element = $( "#draggable1" ).draggable({
+			snap: true,
+			scroll: false,
+			snapMode: "both",
+			snapTolerance: snapTolerance,
+			start: function() {
+				element2.remove();
+			}
+		}),
+		element2 = $( "#draggable2" ).draggable();
+
+	element.offset({
+		top: 1,
+		left: 1
+	});
+
+	newX = element2.offset().left - element.outerWidth() - snapTolerance + 1;
+	newY = element2.offset().top;
+
+	element.simulate( "drag", {
+		handle: "corner",
+		x: newX,
+		y: newY,
+		moves: 1
+	});
+
+	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
+	if ( TestHelpers.draggable.unreliableContains ) {
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+	} else {
+		// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
+		closeEnough( element.offset().left, newX, 1, "doesn't snap to a removed element" );
+		closeEnough( element.offset().top, newY, 1, "doesn't snap to a removed element" );
+	}
+});
+
+test( "#8165: Snapping large rectangles to small rectangles doesn't snap properly", function() {
+	expect( 1 );
+
+	var snapTolerance = 20,
+		y = 1,
+		element = $( "#draggable1" )
+			.css({
+				width: "50px",
+				height: "200px"
+			}).offset({
+				top: y,
+				left: 1
+			}),
+		element2 = $( "#draggable2" )
+			.css({
+				width: "50px",
+				height: "50px"
+			}).offset({
+				top: y + snapTolerance + 1,
+				left: 200
+			}),
+		newX = element2.offset().left - element.outerWidth() - snapTolerance + 1;
+
+	$( "#draggable1, #draggable2" ).draggable({
+		snap: true,
+		snapTolerance: snapTolerance
+	});
+
+	element.simulate( "drag", {
+		handle: "corner",
+		x: newX,
+		moves: 1
+	});
+
+	notDeepEqual( element.offset(), { top: y, left: newX }, "snaps even if only a side (not a corner) is inside the snapTolerance" );
 });
 
 test( "stack", function() {
