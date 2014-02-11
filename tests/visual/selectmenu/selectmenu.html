@@ -70,7 +70,7 @@
 		$('#disabled1, #disabled2, #disabled3').selectmenu();
 		var disabled4 = $('#disabled4').selectmenu();
 
-		$("#disable_select").on("click", function() {
+		$("#disable_select").bind("click", function() {
 			if (disable_select) {
 				disable_select = false;
 				disabled4.selectmenu("disable");
@@ -82,7 +82,7 @@
 			return false;
 		});
 
-		$("#disable_option").on("click", function() {
+		$("#disable_option").bind("click", function() {
 			if (disable_option) {
 				disable_option = false;
 				disabled4.find("option:eq(0)").attr("disabled", "disabled");
@@ -94,7 +94,7 @@
 			return false;
 		});
 
-		$("#disable_optgroup").on("click", function() {
+		$("#disable_optgroup").bind("click", function() {
 			if (disable_optgroup) {
 				disable_optgroup = false;
 				disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");

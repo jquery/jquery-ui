@@ -154,7 +154,7 @@ test( "allow form submit on enter when menu is not active", function() {
 				delay: 0,
 				minLength: 0
 			});
-		element.on( "keypress", function( e ) {
+		element.bind( "keypress", function( e ) {
 			didMove = !e.isDefaultPrevented();
 		});
 		element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
