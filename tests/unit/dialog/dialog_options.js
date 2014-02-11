@@ -558,7 +558,7 @@ asyncTest( "#4421 - Focus lost from dialog which uses show-effect", function() {
 	var element = $( "<div></div>" ).dialog({
 		show: "blind",
 		focus: function() {
-			equal( element.dialog( "widget" ).find( ":focus" ).length, 1, "dialog maintains focus" );
+			equal( element.dialog( "widget" ).find( document.activeElement ).length, 1, "dialog maintains focus" );
 			element.remove();
 			start();
 		}
