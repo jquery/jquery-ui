@@ -181,7 +181,10 @@ $.effects.define( "size", function( o, done ) {
 		duration: o.duration,
 		easing: o.easing,
 		complete: function() {
-			$.effects.removePlaceholder( placeholder, el );
+
+			if ( restore ) {
+				$.effects.removePlaceholder( placeholder, el );
+			}
 
 			if ( to.opacity === 0 ) {
 				el.css( "opacity", from.opacity );
@@ -205,7 +208,7 @@ $.effects.define( "size", function( o, done ) {
 							var val = parseInt( str, 10 ),
 								toRef = idx ? to.left : to.top;
 
-							// if original was "auto", recalculate the new value from wrapper
+							// if original was "auto", recalculate the new value from placeholder
 							if ( str === "auto" ) {
 								return toRef + "px";
 							}
@@ -214,6 +217,10 @@ $.effects.define( "size", function( o, done ) {
 						});
 					});
 				}
+
+				// the placeholder needs to be removed only after the new position is set
+				// as it's relied upon for correcting "auto" above
+				$.effects.removePlaceholder( placeholder, el );
 			}
 
 			done();
