@@ -1077,16 +1077,30 @@ $.extend( $.effects, {
 	getBaseline: function( origin, original ) {
 		var y, x;
 		switch ( origin[ 0 ] ) {
-			case "top": y = 0; break;
-			case "middle": y = 0.5; break;
-			case "bottom": y = 1; break;
-			default: y = origin[ 0 ] / original.height;
+			case "top":
+				y = 0;
+				break;
+			case "middle":
+				y = 0.5;
+				break;
+			case "bottom":
+				y = 1;
+				break;
+			default:
+				y = origin[ 0 ] / original.height;
 		}
 		switch ( origin[ 1 ] ) {
-			case "left": x = 0; break;
-			case "center": x = 0.5; break;
-			case "right": x = 1; break;
-			default: x = origin[ 1 ] / original.width;
+			case "left":
+				x = 0;
+				break;
+			case "center":
+				x = 0.5;
+				break;
+			case "right":
+				x = 1;
+				break;
+			default:
+				x = origin[ 1 ] / original.width;
 		}
 		return {
 			x: x,
@@ -1105,7 +1119,7 @@ $.extend( $.effects, {
 		// lock in margins first to account for form elements, which
 		// will change margin if you explicitly set height
 		// see: http://jsfiddle.net/JZSMt/3/ https://bugs.webkit.org/show_bug.cgi?id=107380
-		// Support: Chrome
+		// Support: Chrome, Safari
 		element.css({
 			marginTop: element.css("marginTop"),
 			marginBottom: element.css("marginBottom"),
