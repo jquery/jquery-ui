@@ -30,10 +30,10 @@
 }(function( $ ) {
 
 $.effects.define( "puff", function( o, done ) {
-	var options = {
+	var options = $.extend( true, {}, o, {
 		fade: true,
 		percent: parseInt( o.percent, 10 ) || 150
-	};
+	});
 
 	$.effects.effect.scale.call( this, options, done );
 });
