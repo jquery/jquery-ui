@@ -32,8 +32,7 @@
 $.effects.define( "scale", function( o, done ) {
 
 	// Create element
-	var temp,
-		el = $( this ),
+	var el = $( this ),
 		mode = o.mode,
 
 		// this copies the "scale" option, which is normalized in $.effects.effect.size
@@ -71,12 +70,6 @@ $.effects.define( "scale", function( o, done ) {
 			options.from.opacity = 1;
 			options.to.opacity = 0;
 		}
-	}
-
-	if ( mode === "show" ) {
-		temp = options.from;
-		options.from = options.to;
-		options.to = temp;
 	}
 
 	$.effects.effect.size.call( this, options, done );
