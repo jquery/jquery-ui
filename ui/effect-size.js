@@ -31,7 +31,7 @@
 $.effects.define( "size", function( o, done ) {
 
 	// Create element
-	var baseline, factor,
+	var baseline, factor, temp,
 		el = $( this ),
 
 		// Copy for children
@@ -60,25 +60,25 @@ $.effects.define( "size", function( o, done ) {
 			width: el.width(),
 			outerHeight: el.outerHeight(),
 			outerWidth: el.outerWidth()
-		};
+		},
+		from = o.from || original,
+		to = o.to || zero;
 
-	if ( o.mode === "toggle" && mode === "show" ) {
-		el.from = o.to || zero;
-		el.to = o.from || original;
-	} else {
-		el.from = o.from || ( mode === "show" ? zero : original );
-		el.to = o.to || ( mode === "hide" ? zero : original );
+	if ( mode === "show" ) {
+		temp = from;
+		from = to;
+		to = temp;
 	}
 
 	// Set scaling factor
 	factor = {
 		from: {
-			y: el.from.height / original.height,
-			x: el.from.width / original.width
+			y: from.height / original.height,
+			x: from.width / original.width
 		},
 		to: {
-			y: el.to.height / original.height,
-			x: el.to.width / original.width
+			y: to.height / original.height,
+			x: to.width / original.width
 		}
 	};
 
@@ -87,14 +87,14 @@ $.effects.define( "size", function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
-			el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
+			from = $.effects.setTransition( el, vProps, factor.from.y, from );
+			to = $.effects.setTransition( el, vProps, factor.to.y, to );
 		}
 
 		// Horizontal props scaling
 		if ( factor.from.x !== factor.to.x ) {
-			el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
-			el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
+			from = $.effects.setTransition( el, hProps, factor.from.x, from );
+			to = $.effects.setTransition( el, hProps, factor.to.x, to );
 		}
 	}
 
@@ -103,20 +103,20 @@ $.effects.define( "size", function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
-			el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
+			from = $.effects.setTransition( el, cProps, factor.from.y, from );
+			to = $.effects.setTransition( el, cProps, factor.to.y, to );
 		}
 	}
 
 	// Adjust the position properties based on the provided origin points
 	if ( origin ) {
 		baseline = $.effects.getBaseline( origin, original );
-		el.from.top = ( original.outerHeight - el.from.outerHeight ) * baseline.y + pos.top;
-		el.from.left = ( original.outerWidth - el.from.outerWidth ) * baseline.x + pos.left;
-		el.to.top = ( original.outerHeight - el.to.outerHeight ) * baseline.y + pos.top;
-		el.to.left = ( original.outerWidth - el.to.outerWidth ) * baseline.x + pos.left;
+		from.top = ( original.outerHeight - from.outerHeight ) * baseline.y + pos.top;
+		from.left = ( original.outerWidth - from.outerWidth ) * baseline.x + pos.left;
+		to.top = ( original.outerHeight - to.outerHeight ) * baseline.y + pos.top;
+		to.left = ( original.outerWidth - to.outerWidth ) * baseline.x + pos.left;
 	}
-	el.css( el.from );
+	el.css( from );
 
 	// Animate the children if desired
 	if ( scale === "content" || scale === "both" ) {
@@ -176,15 +176,15 @@ $.effects.define( "size", function( o, done ) {
 	}
 
 	// Animate
-	el.animate( el.to, {
+	el.animate( to, {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
 		complete: function() {
 			$.effects.removePlaceholder( placeholder, el );
 
-			if ( el.to.opacity === 0 ) {
-				el.css( "opacity", el.from.opacity );
+			if ( to.opacity === 0 ) {
+				el.css( "opacity", from.opacity );
 			}
 			if ( mode === "hide" ) {
 				el.hide();
@@ -196,14 +196,14 @@ $.effects.define( "size", function( o, done ) {
 				if ( position === "static" ) {
 					el.css({
 						position: "relative",
-						top: el.to.top,
-						left: el.to.left
+						top: to.top,
+						left: to.left
 					});
 				} else {
 					$.each([ "top", "left" ], function( idx, pos ) {
 						el.css( pos, function( _, str ) {
 							var val = parseInt( str, 10 ),
-								toRef = idx ? el.to.left : el.to.top;
+								toRef = idx ? to.left : to.top;
 
 							// if original was "auto", recalculate the new value from wrapper
 							if ( str === "auto" ) {
