@@ -182,6 +182,8 @@ $.effects.define( "size", function( o, done ) {
 		easing: o.easing,
 		complete: function() {
 
+			var offset = el.offset();
+
 			if ( restore ) {
 				$.effects.removePlaceholder( placeholder, el );
 			}
@@ -195,32 +197,13 @@ $.effects.define( "size", function( o, done ) {
 
 			if ( !restore ) {
 
-				// we need to calculate our new positioning based on the scaling
-				if ( position === "static" ) {
-					el.css({
-						position: "relative",
-						top: to.top,
-						left: to.left
-					});
-				} else {
-					$.each([ "top", "left" ], function( idx, pos ) {
-						el.css( pos, function( _, str ) {
-							var val = parseInt( str, 10 ),
-								toRef = idx ? to.left : to.top;
-
-							// if original was "auto", recalculate the new value from placeholder
-							if ( str === "auto" ) {
-								return toRef + "px";
-							}
-
-							return val + toRef + "px";
-						});
-					});
+				if ( placeholder ) {
+					placeholder.remove();
 				}
 
-				// the placeholder needs to be removed only after the new position is set
-				// as it's relied upon for correcting "auto" above
-				$.effects.removePlaceholder( placeholder, el );
+				el.css("position", position === "static" ? "relative" : position );
+
+				el.offset(offset);
 			}
 
 			done();
