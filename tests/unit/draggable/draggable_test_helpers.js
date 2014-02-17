@@ -46,7 +46,7 @@ TestHelpers.draggable = {
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
 		handle = handle || el;
 		TestHelpers.draggable.testDragPosition( el, 100, 100, 100, 100, msg );
-		TestHelpers.draggable.testDragOffset( el, 100, 100, 0, 0, msg );
+		TestHelpers.draggable.testDragHelperOffset( el, 100, 100, 0, 0, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
