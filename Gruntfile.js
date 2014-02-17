@@ -157,7 +157,7 @@ grunt.initConfig({
 	},
 	jscs: {
 		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
-		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js", "!ui/draggable.js" ],
+		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js" ],
 		// TODO enable this once we have a tool that can help with fixing formatting of existing files
 		// tests: "tests/unit/**/*.js",
 		grunt: "Gruntfile.js"
