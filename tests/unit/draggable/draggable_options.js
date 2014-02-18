@@ -835,7 +835,8 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 
 	TestHelpers.draggable.setScrollable( "#main", false );
 
-	var viewportHeight = $( window ).height(),
+	var currentScrollTop,
+		viewportHeight = $( window ).height(),
 		element = $( "#draggable1" ).draggable({ scroll: true }).appendTo( "#qunit-fixture" ),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
 		scrollSpeed = element.draggable( "option", "scrollSpeed" );
@@ -845,13 +846,15 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 		left: 1
 	});
 
+	$( element ).one( "drag", function() {
+		equal( $( window ).scrollTop(), 0, "scroll: true doesn't scroll when the element is dragged outside of scrollSensitivity" );
+	});
+
 	element.simulate( "drag", {
 		dx: 1,
 		y: viewportHeight - scrollSensitivity - 1,
 		moves: 1
 	});
-
-	ok( $( window ).scrollTop() === 0, "scroll: true doesn't scroll when the element is dragged outside of scrollSensitivity" );
 
 	element.draggable( "option", "scrollSensitivity", scrollSensitivity + 10 );
 
@@ -860,13 +863,17 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 		left: 1
 	});
 
+	currentScrollTop = $( window ).scrollTop();
+
+	$( element ).one( "drag", function() {
+		ok( $( window ).scrollTop() - currentScrollTop, scrollSpeed, "scroll: true scrolls when the element is dragged within scrollSensitivity" );
+	});
+
 	element.simulate( "drag", {
 		dx: 1,
 		y: viewportHeight - scrollSensitivity - 1,
 		moves: 1
 	});
-
-	ok( $( window ).scrollTop() === scrollSpeed, "scroll: true scrolls when the element is dragged within scrollSensitivity" );
 
 	TestHelpers.draggable.restoreScroll( document );
 });
