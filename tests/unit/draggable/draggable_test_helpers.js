@@ -2,7 +2,7 @@ TestHelpers.draggable = {
 	// TODO: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
 	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
-	unreliableContains: (function(){
+	unreliableContains: (function() {
 		var element = $( "<div>" );
 		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
 	})(),
@@ -12,7 +12,7 @@ TestHelpers.draggable = {
 		$( el ).one( "dragstop", function( event, ui ) {
 			var positionExpected = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
 			deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
-		} );
+		});
 	},
 	testDragOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
@@ -21,8 +21,18 @@ TestHelpers.draggable = {
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
 		$( el ).one( "dragstop", function( event, ui ) {
+			deepEqual( ui.offset, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+		});
+	},
+	testDragHelperOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+		msg = msg ? msg + "." : "";
+
+		var offsetBefore = el.offset(),
+			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+		$( el ).one( "dragstop", function( event, ui ) {
 			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
-		} );
+		});
 	},
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
 		TestHelpers.draggable.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
@@ -36,7 +46,7 @@ TestHelpers.draggable = {
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
 		handle = handle || el;
 		TestHelpers.draggable.testDragPosition( el, 100, 100, 100, 100, msg );
-		TestHelpers.draggable.testDragOffset( el, 100, 100, 0, 0, msg );
+		TestHelpers.draggable.testDragHelperOffset( el, 100, 100, 0, 0, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
@@ -55,14 +65,14 @@ TestHelpers.draggable = {
 		handle = handle || el;
 		$( el ).bind( "dragstop", function() {
 			ok( false, "should not drag " + msg );
-		} );
+		});
 		$( handle ).simulate( "drag", {
 			dx: 100,
 			dy: 100
 		});
 		$( el ).unbind( "dragstop" );
 	},
-	setScrollable: function ( what, isScrollable ) {
+	setScrollable: function( what, isScrollable ) {
 		var overflow = isScrollable ? "scroll" : "hidden";
 		$( what ).css({ overflow: overflow, overflowX: overflow, overflowY: overflow });
 	},
@@ -90,12 +100,12 @@ TestHelpers.draggable = {
 			dy: y
 		});
 	},
-	trackMouseCss : function( el ) {
+	trackMouseCss: function( el ) {
 		el.bind( "drag", function() {
 			el.data( "last_dragged_cursor", $( "body" ).css( "cursor" ) );
 		});
 	},
-	trackAppendedParent : function( el ) {
+	trackAppendedParent: function( el ) {
 		// TODO: appendTo is currently ignored if helper is original (see #7044)
 		el.draggable( "option", "helper", "clone" );
 
