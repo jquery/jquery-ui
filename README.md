@@ -50,8 +50,8 @@ cd jquery-ui
 # Install the node module dependencies
 npm install
 
-# Run the build task
-grunt build
+# Run the concat task to concatenate files
+grunt concat
 
 # There are many other tasks that can be run through Grunt.
 # For a list of all tasks:

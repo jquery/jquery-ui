@@ -26,6 +26,7 @@ var versions = {
 		"Progressbar": "progressbar/progressbar.html",
 		"Resizable": "resizable/resizable.html",
 		"Selectable": "selectable/selectable.html",
+		"Selectmenu": "selectmenu/selectmenu.html",
 		"Slider": "slider/slider.html",
 		"Sortable": "sortable/sortable.html",
 		"Spinner": "spinner/spinner.html",
@@ -62,7 +63,7 @@ function submit( commit, runs, configFile, extra, done ) {
 		name: "Commit <a href='" + commitUrl + "'>" + commit.substr( 0, 10 ) + "</a>" + extra,
 		runs: runs,
 		runMax: config.runMax,
-		browserSets: config.browserSets
+		browserSets: ["popular-ui"]
 	}, function( error, passed ) {
 		if ( error ) {
 			grunt.log.error( error );

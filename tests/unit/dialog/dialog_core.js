@@ -4,6 +4,7 @@
 
 (function($) {
 
+// TODO add teardown callback to remove dialogs
 module("dialog: core");
 
 test("title id", function() {
@@ -40,7 +41,7 @@ test("widget method", function() {
 });
 
 asyncTest( "focus tabbable", function() {
-	expect( 5 );
+	expect( 6 );
 	var element,
 		options = {
 			buttons: [{
@@ -50,6 +51,12 @@ asyncTest( "focus tabbable", function() {
 		};
 
 	function checkFocus( markup, options, testFn, next ) {
+
+		// Support: IE8
+		// For some reason the focus doesn't get set properly if we don't
+		// focus the body first.
+		$( "body" ).focus();
+
 		element = $( markup ).dialog( options );
 		setTimeout(function() {
 			testFn();
@@ -59,43 +66,57 @@ asyncTest( "focus tabbable", function() {
 	}
 
 	function step1() {
-		checkFocus( "<div><input><input autofocus></div>", options, function() {
-			equal( document.activeElement, element.find( "input" )[ 1 ],
-				"1. first element inside the dialog matching [autofocus]" );
-		}, step2 );
+		element = $( "<div><input><input></div>" ).dialog( options );
+		setTimeout(function() {
+			var input = element.find( "input:last" ).focus().blur();
+			element.dialog( "instance" )._focusTabbable();
+			setTimeout(function() {
+				equal( document.activeElement, input[ 0 ],
+					"1. an element that was focused previously." );
+				element.remove();
+				setTimeout( step2 );
+			});
+		});
 	}
 
 	function step2() {
-		checkFocus( "<div><input><input></div>", options, function() {
-			equal( document.activeElement, element.find( "input" )[ 0 ],
-				"2. tabbable element inside the content element" );
+		checkFocus( "<div><input><input autofocus></div>", options, function() {
+			equal( document.activeElement, element.find( "input" )[ 1 ],
+				"2. first element inside the dialog matching [autofocus]" );
 		}, step3 );
 	}
 
 	function step3() {
-		checkFocus( "<div>text</div>", options, function() {
-			equal( document.activeElement,
-				element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ],
-				"3. tabbable element inside the buttonpane" );
+		checkFocus( "<div><input><input></div>", options, function() {
+			equal( document.activeElement, element.find( "input" )[ 0 ],
+				"3. tabbable element inside the content element" );
 		}, step4 );
 	}
 
 	function step4() {
-		checkFocus( "<div>text</div>", {}, function() {
+		checkFocus( "<div>text</div>", options, function() {
 			equal( document.activeElement,
-				element.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ],
-				"4. the close button" );
+				element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ],
+				"4. tabbable element inside the buttonpane" );
 		}, step5 );
 	}
 
 	function step5() {
+		checkFocus( "<div>text</div>", {}, function() {
+			equal( document.activeElement,
+				element.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ],
+				"5. the close button" );
+		}, step6 );
+	}
+
+	function step6() {
 		element = $( "<div>text</div>" ).dialog({
 			autoOpen: false
 		});
 		element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
 		element.dialog( "open" );
 		setTimeout(function() {
-			equal( document.activeElement, element.parent()[ 0 ], "5. the dialog itself" );
+			equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
 			element.remove();
 			start();
 		});
@@ -160,4 +181,51 @@ asyncTest( "#9048: multiple modal dialogs opened and closed in different order",
 		start();
 	});
 });
+
+asyncTest( "interaction between overlay and other dialogs", function() {
+	$.widget( "ui.testWidget", $.ui.dialog, {
+		options: {
+			modal: true,
+			autoOpen: false
+		}
+	});
+	expect( 2 );
+	var first = $( "<div><input id='input-1'></div>" ).dialog({
+			modal: true
+		}),
+		firstInput = first.find( "input" ),
+		second = $( "<div><input id='input-2'></div>" ).testWidget(),
+		secondInput = second.find( "input" );
+
+	// Support: IE8
+	// For some reason the focus doesn't get set properly if we don't
+	// focus the body first.
+	$( "body" ).focus();
+
+	// Wait for the modal to init
+	setTimeout(function() {
+		second.testWidget( "open" );
+
+		// Simulate user tabbing from address bar to an element outside the dialog
+		$( "#favorite-animal" ).focus();
+		setTimeout(function() {
+			equal( document.activeElement, secondInput[ 0 ] );
+
+			// Last active dialog must receive focus
+			firstInput.focus();
+			$( "#favorite-animal" ).focus();
+			setTimeout(function() {
+				equal( document.activeElement, firstInput[ 0 ] );
+
+				// Cleanup
+				first.remove();
+				second.remove();
+				delete $.ui.testWidget;
+				delete $.fn.testWidget;
+				start();
+			});
+		});
+	});
+});
+
 })(jQuery);

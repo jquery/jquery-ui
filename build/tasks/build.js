@@ -32,7 +32,8 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 
 	Object.keys( base ).forEach(function( type ) {
 		var baseManifest = base[ type ],
-			plugins = grunt.file.readJSON( "build/" + type + ".json" );
+			plugins = grunt.file.readJSON( "build/" + type + ".json" ),
+			bower = grunt.file.readJSON( "bower.json" );
 
 		Object.keys( plugins ).forEach(function( plugin ) {
 			var manifest,
@@ -62,9 +63,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				docs: data.docs || replace( baseManifest.docs ||
 					"http://api.jqueryui.com/{plugin}/" ),
 				download: "http://jqueryui.com/download/",
-				dependencies: {
-					jquery: ">=1.6"
-				},
+				dependencies: bower.dependencies,
 				// custom
 				category: data.category || type
 			};

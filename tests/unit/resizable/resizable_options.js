@@ -123,8 +123,39 @@ test("aspectRatio: 'preserve' (ne)", function() {
 	equal( target.height(), 70, "compare minHeight");
 });
 
+test( "aspectRatio: Resizing can move objects", function() {
+	expect( 7 );
+
+	// http://bugs.jqueryui.com/ticket/7018 - Resizing can move objects
+	var handleW = ".ui-resizable-w",
+		handleNW = ".ui-resizable-nw",
+		target = $( "#resizable1" ).resizable({
+			aspectRatio: true,
+			handles: "all",
+			containment: "parent"
+		});
+
+	$( "#container" ).css({ width: 200, height: 300 });
+	$( "#resizable1" ).css({ width: 100, height: 100, left: 75, top: 200 });
+
+	TestHelpers.resizable.drag( handleW, -20 );
+	equal( target.width(), 100, "compare width - no size change" );
+	equal( target.height(), 100, "compare height - no size change" );
+	equal( target.position().left, 75, "compare left - no movement" );
+
+	// http://bugs.jqueryui.com/ticket/9107 - aspectRatio and containment not handled correctly
+	$( "#container" ).css({ width: 200, height: 300, position: "absolute", left: 100, top: 100 });
+	$( "#resizable1" ).css({ width: 100, height: 100, left: 0, top: 0 });
+
+	TestHelpers.resizable.drag( handleNW, -20, -20 );
+	equal( target.width(), 100, "compare width - no size change" );
+	equal( target.height(), 100, "compare height - no size change" );
+	equal( target.position().left, 0, "compare left - no movement" );
+	equal( target.position().top, 0, "compare top - no movement" );
+});
+
 test( "containment", function() {
-	expect( 4 );
+	expect( 6 );
 	var element = $( "#resizable1" ).resizable({
 		containment: "#container"
 	});
@@ -136,6 +167,19 @@ test( "containment", function() {
 	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
 	equal( element.width(), 300, "constrained width at containment edge" );
 	equal( element.height(), 200, "constrained height at containment edge" );
+
+	// http://bugs.jqueryui.com/ticket/7485 - Resizable: Containment calculation is wrong
+	// when containment element is not the immediate parent
+	element = $( "#child" ).resizable({
+		containment: "#container2",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 300, 0 );
+	equal( element.width(), 400, "element able to resize itself to max allowable width within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
+	equal( element.height(), 400, "element able to resize itself to max allowable height within container" );
 });
 
 test("grid", function() {
@@ -178,6 +222,29 @@ test("grid (wrapped)", function() {
 	TestHelpers.resizable.drag(handle, 15, 11);
 	equal( target.width(), 118, "compare width");
 	equal( target.height(), 120, "compare height");
+});
+
+test( "grid - Resizable: can be moved when grid option is set (#9611)", function() {
+	expect( 6 );
+
+	var oldPosition,
+		handle = ".ui-resizable-nw",
+		target = $( "#resizable1" ).resizable({
+			handles: "all",
+			grid: 50
+		});
+
+	TestHelpers.resizable.drag( handle, 50, 50 );
+	equal( target.width(), 50, "compare width" );
+	equal( target.height(), 50, "compare height" );
+
+	oldPosition = target.position();
+
+	TestHelpers.resizable.drag( handle, 50, 50 );
+	equal( target.width(), 50, "compare width" );
+	equal( target.height(), 50, "compare height" );
+	equal( target.position().top, oldPosition.top, "compare top" );
+	equal( target.position().left, oldPosition.left, "compare left" );
 });
 
 test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
