@@ -1,1 +1,6 @@
-*       text=auto
+*.css -crlf
+*.html -crlf
+*.js -crlf
+*.json -crlf
+*.md -crlf
+*.txt -crlf
