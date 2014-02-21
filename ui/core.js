@@ -48,22 +48,6 @@ $.extend( $.ui, {
 
 // plugins
 $.fn.extend({
-	focus: (function( orig ) {
-		return function( delay, fn ) {
-			return typeof delay === "number" ?
-				this.each(function() {
-					var elem = this;
-					setTimeout(function() {
-						$( elem ).focus();
-						if ( fn ) {
-							fn.call( elem );
-						}
-					}, delay );
-				}) :
-				orig.apply( this, arguments );
-		};
-	})( $.fn.focus ),
-
 	scrollParent: function() {
 		var position = this.css( "position" ),
 			excludeStaticParent = position === "absolute",
@@ -225,6 +209,22 @@ $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 $.support.selectstart = "onselectstart" in document.createElement( "div" );
 $.fn.extend({
+	focus: (function( orig ) {
+		return function( delay, fn ) {
+			return typeof delay === "number" ?
+				this.each(function() {
+					var elem = this;
+					setTimeout(function() {
+						$( elem ).focus();
+						if ( fn ) {
+							fn.call( elem );
+						}
+					}, delay );
+				}) :
+				orig.apply( this, arguments );
+		};
+	})( $.fn.focus ),
+
 	disableSelection: function() {
 		return this.bind( ( $.support.selectstart ? "selectstart" : "mousedown" ) +
 			".ui-disableSelection", function( event ) {
