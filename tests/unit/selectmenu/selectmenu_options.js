@@ -3,7 +3,7 @@
 module( "selectmenu: options" );
 
 test( "appendTo another element", function () {
-	expect( 8 );
+	expect( 9 );
 
 	var detached = $( "<div>" ),
 		element = $( "#speed" ).selectmenu();
@@ -21,6 +21,11 @@ test( "appendTo another element", function () {
 	element.selectmenu();
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ], $( "#selectmenu-wrap2" )[ 0 ], "null, inside .ui-front" );
 	element.selectmenu( "destroy" );
+
+	element.selectmenu({
+		appendTo: $()
+	});
+	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ], $( "#selectmenu-wrap2" )[ 0 ], "empty jQuery object, inside .ui-front" );
 	$( "#selectmenu-wrap2" ).removeClass( "ui-front" );
 
 	element.selectmenu().selectmenu( "option", "appendTo", "#selectmenu-wrap1" );
