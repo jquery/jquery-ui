@@ -66,7 +66,7 @@ test( "appendTo: ui-front", function() {
 		appendTo: $()
 	});
 	equal( element.autocomplete( "widget" ).parent()[ 0 ],
-		$( "#autocomplete-wrap2" )[ 0 ], "null, inside .ui-front" );
+		$( "#autocomplete-wrap2" )[ 0 ], "empty jQuery object, inside .ui-front" );
 });
 
 function autoFocusTest( afValue, focusedLength ) {
