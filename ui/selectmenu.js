@@ -7,14 +7,24 @@
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/selectmenu
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *	jquery.ui.position.js
- *	jquery.ui.menu.js
  */
-(function( $, undefined ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./core",
+			"./widget",
+			"./position",
+			"./menu"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
 
 return $.widget( "ui.selectmenu", {
 	version: "@VERSION",
@@ -533,4 +543,4 @@ return $.widget( "ui.selectmenu", {
 	}
 });
 
-}( jQuery ));
+}));
