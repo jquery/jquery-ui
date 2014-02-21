@@ -58,6 +58,7 @@
 	"devDependencies": {
 		"commitplease": "1.6.0",
 		"grunt": "0.4.2",
+		"grunt-bowercopy": "0.8.0",
 		"grunt-compare-size": "0.4.0",
 		"grunt-contrib-concat": "0.1.3",
 		"grunt-contrib-csslint": "0.2.0",
