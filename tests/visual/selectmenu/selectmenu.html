@@ -108,17 +108,17 @@
 
 		/* empty */
 		$(".empty select").selectmenu();
-		
+
 		/* width */
 		$("#width_auto1, #width_auto2").selectmenu();
-		
+
 		$("#width_js1, #width_js2").selectmenu({
 			width: 200
 		});
-		
+
 		var widthMenu = $("#width_menu").selectmenu();
 		widthMenu.selectmenu("menuWidget").addClass("width-menu");
-		
+
 	});
 	</script>
 	<style>
@@ -128,7 +128,7 @@
 		select { width: 200px; }
 
 		.ui-selectmenu-button  { display: block; margin-bottom: 1em;}
-		
+
 		/* width */
 		.width-menu { width: 196px; }
 	</style>
@@ -267,7 +267,7 @@
 			<option>Width test 2</option>
 			<option>Width test 3 Width test 3 Width test 3</option>
 		</select>
-		
+
 		<label for="width_js1">Width set by JS</label>
 		<select name="width_js1" id="width_js1">
 			<option>Width test 1</option>
@@ -280,14 +280,14 @@
 			<option>Width test 1</option>
 			<option>Width test 2</option>
 			<option>Width test 3 Width test 3 Width test 3</option>
-		</select>		
+		</select>
 
 		<label for="width_menu">Width set by JS with long option</label>
 		<select name="width_menu" id="width_menu">
 			<option>Width test 1</option>
 			<option>Width test 2</option>
 			<option>Width test 3 Width test 3 Width test 3</option>
-		</select>		
+		</select>
 	</fieldset>
 </form>
 
