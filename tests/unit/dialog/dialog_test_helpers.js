@@ -24,17 +24,20 @@ TestHelpers.dialog = {
 		actualDY = offsetAfter.top - offsetBefore.top;
 		ok( expectedDX - actualDX <= 1 && expectedDY - actualDY <= 1, "dragged[" + expectedDX + ", " + expectedDY + "] " + msg);
 	},
+	// TODO switch back to checking the size of the .ui-dialog element (var d)
+	// once we switch to using box-sizing: border-box (#9845) that should work fine
+	// using the element's dimensions to avoid subpixel errors
 	shouldResize: function(element, dw, dh, msg) {
 		var heightAfter, widthAfter, actual, expected,
 			d = element.dialog("widget"),
 			handle = $(".ui-resizable-se", d),
-			heightBefore = d.height(),
-			widthBefore = d.width();
+			heightBefore = element.height(),
+			widthBefore = element.width();
 
 		TestHelpers.dialog.drag(element, handle, 50, 50);
 
-		heightAfter = d.height();
-		widthAfter = d.width();
+		heightAfter = element.height();
+		widthAfter = element.width();
 
 		msg = msg ? msg + "." : "";
 		actual = { width: widthAfter, height: heightAfter },

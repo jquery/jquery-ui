@@ -263,3 +263,13 @@ Jacob McCutcheon <jacob.mccutcheon@gmail.com>
 Monika Piotrowicz <monika.piotrowicz@gmail.com>
 Imants Horsts <imants.horsts@inbox.lv>
 Eric Dahl <eric.c.dahl@gmail.com>
+Dave Stein <dave@behance.com>
+Dylan Barrell <dylan@barrell.com>
+Daniel DeGroff <djdegroff@gmail.com>
+Michael Wiencek <mwtuea@gmail.com>
+Thomas Meyer <meyertee@gmail.com>
+Ruslan Yakhyaev <ruslan@ruslan.io>
+Brian J. Dowling <bjd-dev@simplicity.net>
+Ben Higgins <ben@extrahop.com>
+Yermo <yml@yml.com>
+Patrick Stapleton <github@gdi2290.com>

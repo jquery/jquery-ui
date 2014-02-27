@@ -101,16 +101,7 @@ uiFiles.forEach(function( file ) {
 });
 
 // grunt plugins
-grunt.loadNpmTasks( "grunt-contrib-jshint" );
-grunt.loadNpmTasks( "grunt-contrib-uglify" );
-grunt.loadNpmTasks( "grunt-contrib-concat" );
-grunt.loadNpmTasks( "grunt-contrib-qunit" );
-grunt.loadNpmTasks( "grunt-contrib-csslint" );
-grunt.loadNpmTasks( "grunt-jscs-checker" );
-grunt.loadNpmTasks( "grunt-html" );
-grunt.loadNpmTasks( "grunt-compare-size" );
-grunt.loadNpmTasks( "grunt-git-authors" );
-grunt.loadNpmTasks( "grunt-esformatter" );
+require( "load-grunt-tasks" )( grunt );
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -166,7 +157,7 @@ grunt.initConfig({
 	},
 	jscs: {
 		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
-		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js", "!ui/draggable.js" ],
+		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js" ],
 		// TODO enable this once we have a tool that can help with fixing formatting of existing files
 		// tests: "tests/unit/**/*.js",
 		grunt: "Gruntfile.js"
@@ -180,10 +171,14 @@ grunt.initConfig({
 	},
 	qunit: {
 		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
-			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|index|test|dialog|tooltip)\.html$/ ).test( file );
-		})
+			return !( /(all|index|test)\.html$/ ).test( file );
+		}),
+		options: {
+			page: {
+				viewportSize: { width: 700, height: 500 }
+			}
+		}
 	},
 	jshint: {
 		options: {
