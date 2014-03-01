@@ -1265,7 +1265,7 @@ $.fn.extend({
 			effectPrefilter = function() {
 
 				var el = $( this ),
-					normalizedMode = $.effects.mode( el, mode );
+					normalizedMode = $.effects.mode( el, mode ) || defaultMode;
 
 				// save effect mode for later use,
 				// we can't just call $.effects.mode again later,
@@ -1284,7 +1284,7 @@ $.fn.extend({
 			},
 			queue = args.queue,
 			complete = args.complete,
-			mode = args.mode || defaultMode;
+			mode = args.mode;
 
 		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
