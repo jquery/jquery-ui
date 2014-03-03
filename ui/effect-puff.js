@@ -29,7 +29,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "puff", function( o, done ) {
+$.effects.define( "puff", "hide", function( o, done ) {
 	var options = $.extend( true, {}, o, {
 		fade: true,
 		percent: parseInt( o.percent, 10 ) || 150
