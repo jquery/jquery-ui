@@ -43,7 +43,7 @@ $.effects.define( "size", function( o, done ) {
 		mode = o.mode,
 		restore = o.restore || mode !== "effect",
 		scale = o.scale || "both",
-		origin = o.origin || [ "top", "left" ],
+		origin = o.origin || [ "middle", "center" ],
 		position = el.css( "position" ),
 		pos = el.position(),
 		zero = {
