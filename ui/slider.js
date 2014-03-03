@@ -104,8 +104,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this.handles.each(function( i ) {
 			$( this ).data( "ui-slider-handle-index", i );
-			$( this ).attr("aria-valuemin", that._valueMin() );
-			$( this ).attr("aria-valuemax", that._valueMax() );
+			$( this ).attr( "aria-valuemin", that._valueMin() );
+			$( this ).attr( "aria-valuemax", that._valueMax() );
 		});
 	},
 
@@ -584,7 +584,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				lastValPercent = valPercent;
 				//Update accessibility information
-				$( this ).attr( "aria-valuenow" , that.values(i) );
+				$( this ).attr( "aria-valuenow", that.values(i) );
 			});
 		} else {
 			value = this.value();
@@ -609,7 +609,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this.range[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
 			}
 			//Update accessibility information
-			this.handle.attr( "aria-valuenow" , value );
+			this.handle.attr( "aria-valuenow", value );
 		}
 	},
 
