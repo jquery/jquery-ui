@@ -12,7 +12,7 @@
 	},
 	"devDependencies": {
 		"jquery-mousewheel": "3.1.0",
-		"jshint": "2.3.0",
+		"jshint": "2.4.4",
 		"qunit": "1.14.0"
 	}
 }
