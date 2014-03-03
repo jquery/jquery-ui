@@ -82,8 +82,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	_createHandles: function() {
 		var i, handleCount,
 			options = this.options,
+			that = this,
 			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
-			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
+			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#' role='slider'></a>",
 			handles = [];
 
 		handleCount = ( options.values && options.values.length ) || 1;
@@ -103,6 +104,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this.handles.each(function( i ) {
 			$( this ).data( "ui-slider-handle-index", i );
+			$( this ).attr("aria-valuemin", that._valueMin() );
+			$( this ).attr("aria-valuemax", that._valueMax() );
 		});
 	},
 
@@ -580,6 +583,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 					}
 				}
 				lastValPercent = valPercent;
+				//Update accessibility information
+				$( this ).attr( "aria-valuenow" , that.values(i) );
 			});
 		} else {
 			value = this.value();
@@ -603,6 +608,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			if ( oRange === "max" && this.orientation === "vertical" ) {
 				this.range[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
 			}
+			//Update accessibility information
+			this.handle.attr( "aria-valuenow" , value );
 		}
 	},
 
