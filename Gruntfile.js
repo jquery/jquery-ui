@@ -213,6 +213,28 @@ grunt.initConfig({
 			src: "build/**/*.js"
 		},
 		grunt: "Gruntfile.js"
+	},
+
+	bowercopy: {
+		options: {
+			clean: true
+		},
+		qunit: {
+			files: {
+				"external": "qunit/qunit"
+			}
+		},
+		mousewheel: {
+			files: {
+				"external": "jquery-mousewheel/*.js"
+			}
+		},
+		jshint: {
+			files: {
+				"external": "jshint/dist/jshint.js"
+			}
+		},
+		"jquery.js": "jquery/dist/jquery.js"
 	}
 });
 
