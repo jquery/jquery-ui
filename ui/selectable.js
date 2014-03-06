@@ -131,7 +131,7 @@ return $.widget("ui.selectable", $.ui.mouse, {
 			}
 		});
 
-		$(event.target).parents().addBack().each(function() {
+		$(event.target).closest(":data(selectable-item)").each(function() {
 			var doSelect,
 				selectee = $.data(this, "selectable-item");
 			if (selectee) {
