@@ -149,4 +149,21 @@ test( "mouse based interaction part two: when handles overlap", function() {
 
 });
 
+test( "Ensure default click action prevented on slider handles", function() {
+	expect( 2 );
+	var isDefaultPrevented,
+		element = $( "#slider1" )
+			.slider()
+			.bind( "click", "a", function( event ) {
+				isDefaultPrevented = event.isDefaultPrevented();
+			});
+
+	element.find( "a" ).simulate( "click" );
+	ok( isDefaultPrevented, "click event default prevented" );
+
+	element.slider( "option", "disabled", true );
+	element.find( "a" ).simulate( "click" );
+	ok( isDefaultPrevented, "also prevented on disabled sliders" );
+});
+
 })( jQuery );

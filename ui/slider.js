@@ -152,6 +152,13 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var elements = this.handles.add( this.range ).filter( "a" );
 		this._off( elements );
 		this._on( elements, this._handleEvents );
+
+		// Click events need to be suppressed on disabled sliders (see #9890) 
+		this._on( true, elements, {
+			click: function( event ) {
+				event.preventDefault();
+			}
+		});
 		this._hoverable( elements );
 		this._focusable( elements );
 	},
@@ -672,9 +679,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			this._slide( event, index, newVal );
-		},
-		click: function( event ) {
-			event.preventDefault();
 		},
 		keyup: function( event ) {
 			var index = $( event.target ).data( "ui-slider-handle-index" );
