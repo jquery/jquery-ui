@@ -187,8 +187,11 @@ return $.widget("ui.selectable", $.ui.mouse, {
 				return;
 			}
 
-			if (options.tolerance === "touch") {
+			if (options.tolerance === "touch" || options.tolerance === "border") {
 				hit = ( !(selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1) );
+				if (hit && options.tolerance === "border") {
+					hit = !(selectee.left < x1 && selectee.right > x2 && selectee.top < y1 && selectee.bottom > y2);
+				}
 			} else if (options.tolerance === "fit") {
 				hit = (selectee.left > x1 && selectee.right < x2 && selectee.top > y1 && selectee.bottom < y2);
 			}
