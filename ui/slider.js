@@ -149,11 +149,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_setupEvents: function() {
-		var elements = this.handles.add( this.range ).filter( ".ui-slider-handle" );
-		this._off( elements );
-		this._on( elements, this._handleEvents );
-		this._hoverable( elements );
-		this._focusable( elements );
+		this.handles.add( this.range ).filter( ".ui-slider-handle" );
+		this._off( this.handles );
+		this._on( this.handles, this._handleEvents );
+		this._hoverable( this.handles );
+		this._focusable( this.handles );
 	},
 
 	_destroy: function() {
