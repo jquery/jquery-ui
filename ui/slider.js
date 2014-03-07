@@ -149,7 +149,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_setupEvents: function() {
-		this.handles.add( this.range ).filter( ".ui-slider-handle" );
 		this._off( this.handles );
 		this._on( this.handles, this._handleEvents );
 		this._hoverable( this.handles );
