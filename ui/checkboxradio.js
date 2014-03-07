@@ -120,20 +120,26 @@ $.widget( "ui.checkboxradio", {
 
 	_getLabel: function() {
 		var ancestor, labelSelector;
-		
-		// we don't search against the document in case the element
-		// is disconnected from the DOM
-		ancestor = this.element.parents().last();
-		labelSelector = "label[for='" + this.element.attr("id") + "']";
-		this.label = ancestor.find( labelSelector );
-		if ( !this.label.length ) {
-			ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
-			this.label = ancestor.filter( labelSelector );
+
+		// Check control.labels first
+		if ( this.element[ 0 ].labels !== undefined ){
+			this.label = $( this.element[ 0 ].labels );
+			console.log( this.element[ 0 ].labels );
+		} else {
+
+			// we don't search against the document in case the element
+			// is disconnected from the DOM
+			ancestor = this.element.parents().last();
+			labelSelector = "label[for='" + this.element.attr("id") + "']";
+			this.label = ancestor.find( labelSelector );
 			if ( !this.label.length ) {
-				this.label = ancestor.find( labelSelector );
+				ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
+				this.label = ancestor.filter( labelSelector );
+				if ( !this.label.length ) {
+					this.label = ancestor.find( labelSelector );
+				}
 			}
 		}
-
 	},
 
 	_toggleClasses: function() {
