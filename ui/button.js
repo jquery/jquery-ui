@@ -38,7 +38,7 @@ $.widget( "ui.button", {
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
-		text: true,
+		showLabel: true,
 		label: null,
 		icon: null,
 		iconPosition: "begining"
