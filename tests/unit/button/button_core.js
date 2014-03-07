@@ -18,14 +18,14 @@ test("input type submit, don't create child elements", function() {
 asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
 	expect( 2 );
 	var element = $( "#button1" ).button();
-	element[ 0 ].focus();
+	element.simulate( "focus" );
 	setTimeout(function() {
 		ok( element.is( ":focus" ), "button is focused" );
 		element.button( "disable" );
 		ok( !element.is( ":focus" ),
 			"button has had focus removed" );
 		start();
-	});
+	},100);
 });
 
 })(jQuery);
