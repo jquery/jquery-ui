@@ -62,4 +62,22 @@ test( "mousedown: initial position of helper", function() {
 	$( window ).scrollTop( 0 ).scrollLeft( 0 );
 });
 
+test( "mousedown: select child", function() {
+	expect( 2 );
+
+	var childItemClass,
+		element = $( "#selectable2 #child-item" );
+
+	$( "#selectable2" ).selectable({filter:".item"});
+
+	childItemClass = element.hasClass( "ui-selectee" );
+	ok( childItemClass, "Child item should be selectee." );
+
+	element.simulate( "mousedown" );
+	element.simulate( "mouseup" );
+
+	childItemClass = element.hasClass( "ui-selected" );
+	ok( childItemClass, "Child item should be selected." );
+});
+
 })( jQuery );

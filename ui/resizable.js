@@ -288,7 +288,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 		var curleft, curtop, cursor,
 			o = this.options,
 			iniPos = this.element.position(),
-			el = this.element;
+			el = this.element,
+			borderBox = (el.css('box-sizing') === 'border-box');
 
 		this.resizing = true;
 
@@ -311,8 +312,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		this.offset = this.helper.offset();
 		this.position = { left: curleft, top: curtop };
-		this.size = this._helper ? { width: this.helper.width(), height: this.helper.height() } : { width: el.width(), height: el.height() };
-		this.originalSize = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+		this.size = this._helper ? { width: this.helper.width(), height: this.helper.height() } : borderBox ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+		this.originalSize = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : borderBox ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
 		this.originalPosition = { left: curleft, top: curtop };
 		this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };
 		this.originalMousePosition = { left: event.pageX, top: event.pageY };
