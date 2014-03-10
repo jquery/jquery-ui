@@ -361,6 +361,10 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour) {
 				$.ui.ddmanager.prepareOffsets(this, event);
 			}
+
+			if(scrolled !== false) {
+				this.refreshPositions(true);
+			}
 		}
 
 		//Regenerate the absolute position used for position checks
