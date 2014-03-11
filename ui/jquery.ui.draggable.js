@@ -361,30 +361,42 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_setContainment: function() {
 
 		var o = this.options;
-		if(o.containment == 'parent') o.containment = this.helper[0].parentNode;
-		if(o.containment == 'document' || o.containment == 'window') this.containment = [
-			o.containment == 'document' ? 0 : $(window).scrollLeft() - this.offset.relative.left - this.offset.parent.left,
-			o.containment == 'document' ? 0 : $(window).scrollTop() - this.offset.relative.top - this.offset.parent.top,
-			(o.containment == 'document' ? 0 : $(window).scrollLeft()) + $(o.containment == 'document' ? document : window).width() - this.helperProportions.width - this.margins.left,
-			(o.containment == 'document' ? 0 : $(window).scrollTop()) + ($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
+		var default_containment_object = {
+			container: false,
+			dragInPadding: false,
+			dragInBorder: false
+		};
+		if(!$.isPlainObject(o.containment)){
+			o.containment = $.extend(default_containment_object, {container:o.containment});
+		} else {
+			o.containment = $.extend(default_containment_object, o.containment);
+		}
+
+		
+		if(o.containment.container == 'parent') o.containment.container = this.helper[0].parentNode;
+		if(o.containment.container == 'document' || o.containment.container == 'window') this.containment = [
+			o.containment.container == 'document' ? 0 : $(window).scrollLeft() - this.offset.relative.left - this.offset.parent.left,
+			o.containment.container == 'document' ? 0 : $(window).scrollTop() - this.offset.relative.top - this.offset.parent.top,
+			(o.containment.container == 'document' ? 0 : $(window).scrollLeft()) + $(o.containment.container == 'document' ? document : window).width() - this.helperProportions.width - this.margins.left,
+			(o.containment.container == 'document' ? 0 : $(window).scrollTop()) + ($(o.containment.container == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
 		];
 
-		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
-		        var c = $(o.containment);
+		if(!(/^(document|window|parent)$/).test(o.containment.container) && o.containment.container.constructor != Array) {
+		    var c = $(o.containment.container);
 			var ce = c[0]; if(!ce) return;
 			var co = c.offset();
 			var over = ($(ce).css("overflow") != 'hidden');
 
-			this.containment = [
-				(parseInt($(ce).css("borderLeftWidth"),10) || 0) + (parseInt($(ce).css("paddingLeft"),10) || 0),
-				(parseInt($(ce).css("borderTopWidth"),10) || 0) + (parseInt($(ce).css("paddingTop"),10) || 0),
-				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - (parseInt($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
-				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - (parseInt($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
-			];
+			var x1 = (!o.containment.dragInBorder ? parseInt($(ce).css("borderLeftWidth"),10) || 0 : 0) + (!o.containment.dragInPadding ? (parseInt($(ce).css("paddingLeft"),10) || 0) : 0);
+			var y1 = (!o.containment.dragInBorder ? (parseInt($(ce).css("borderTopWidth"),10) || 0) : 0) + (!o.containment.dragInPadding ? (parseInt($(ce).css("paddingTop"),10) || 0) : 0);
+			var x2 = (over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (!o.containment.dragInBorder ? (parseInt($(ce).css("borderLeftWidth"),10) || 0) : 0) - (!o.containment.dragInPadding ? (parseInt($(ce).css("paddingRight"),10) || 0) : 0) - this.helperProportions.width - this.margins.left - this.margins.right;
+			var y2 = (over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (!o.containment.dragInBorder ? (parseInt($(ce).css("borderTopWidth"),10) || 0) : 0) - (!o.containment.dragInPadding ? (parseInt($(ce).css("paddingBottom"),10) || 0) : 0) - this.helperProportions.height - this.margins.top - this.margins.bottom;
+
+			this.containment = [x1, y1, x2, y2];
 			this.relative_container = c;
 
-		} else if(o.containment.constructor == Array) {
-			this.containment = o.containment;
+		} else if(o.containment.container.constructor == Array) {
+			this.containment = o.containment.container;
 		}
 
 	},

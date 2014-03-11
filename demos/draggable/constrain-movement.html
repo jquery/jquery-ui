@@ -22,7 +22,14 @@
 		$( "#draggable" ).draggable({ axis: "y" });
 		$( "#draggable2" ).draggable({ axis: "x" });
 
-		$( "#draggable3" ).draggable({ containment: "#containment-wrapper", scroll: false });
+		$( "#draggable3" ).draggable({ 
+			containment: {
+				container: "#containment-wrapper",
+				dragInPadding: true,
+				dragInBorder: false,
+			}, 
+			scroll: false 
+		});
 		$( "#draggable4" ).draggable({ containment: "#demo-frame" });
 		$( "#draggable5" ).draggable({ containment: "parent" });
 	});
