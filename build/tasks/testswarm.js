@@ -63,7 +63,7 @@ function submit( commit, runs, configFile, extra, done ) {
 		name: "Commit <a href='" + commitUrl + "'>" + commit.substr( 0, 10 ) + "</a>" + extra,
 		runs: runs,
 		runMax: config.runMax,
-		browserSets: ["popular-ui"]
+		browserSets: [ "popular-ui" ]
 	}, function( error, passed ) {
 		if ( error ) {
 			grunt.log.error( error );

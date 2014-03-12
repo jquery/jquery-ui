@@ -160,7 +160,7 @@ grunt.initConfig({
 		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js" ],
 		// TODO enable this once we have a tool that can help with fixing formatting of existing files
 		// tests: "tests/unit/**/*.js",
-		grunt: "Gruntfile.js"
+		grunt: [ "Gruntfile.js", "build/tasks/*.js" ]
 	},
 	uglify: minify,
 	htmllint: {
