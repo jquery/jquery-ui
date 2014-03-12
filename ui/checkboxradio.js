@@ -22,22 +22,22 @@ var baseClasses = "ui-button ui-widget ui-corner-all",
 		}, 1 );
 	},
 	radioGroup = function( radio ) {
-                var name = radio.name,
-                        form = radio.form,
-                        radios = $( [] );
-                if ( name ) {
-                        name = name.replace( /'/g, "\\'" );
-                        if ( form ) {
-                                radios = $( form ).find( "[name='" + name + "']" );
-                        } else {
-                                radios = $( "[name='" + name + "']", radio.ownerDocument )
-                                        .filter(function() {
-                                                return !this.form;
-                                        });
-                        }
-                }
-                return radios;
-        };
+			var name = radio.name,
+					form = radio.form,
+					radios = $( [] );
+			if ( name ) {
+					name = name.replace( /'/g, "\\'" );
+					if ( form ) {
+							radios = $( form ).find( "[name='" + name + "']" );
+					} else {
+							radios = $( "[name='" + name + "']", radio.ownerDocument )
+									.filter(function() {
+											return !this.form;
+									});
+					}
+			}
+			return radios;
+	};
 
 $.widget( "ui.checkboxradio", {
 	version: "@VERSION",
@@ -78,6 +78,16 @@ $.widget( "ui.checkboxradio", {
 
 		this._getLabel();
 
+		this._enhance();
+
+		this._on({
+			"change" : "_toggleClasses",
+			"focus": "_handleFocus",
+			"blur": "_handleBlur"
+		});
+	},
+
+	enhance: function() {
 		this.element.addClass( "ui-helper-hidden-accessible ui-checkboxradio" );
 
 		this.label.addClass( baseClasses + " ui-" + this.type + "-label" );
@@ -98,12 +108,6 @@ $.widget( "ui.checkboxradio", {
 		if ( this.options.label ){
 			this.label.html( this.options.label );
 		}
-
-		this._on({
-			"change" : "_toggleClasses",
-			"focus": "_handleFocus",
-			"blur": "_handleBlur"
-		});
 	},
 
 	widget: function() {
@@ -124,7 +128,6 @@ $.widget( "ui.checkboxradio", {
 		// Check control.labels first
 		if ( this.element[ 0 ].labels !== undefined ){
 			this.label = $( this.element[ 0 ].labels );
-			console.log( this.element[ 0 ].labels );
 		} else {
 
 			// we don't search against the document in case the element
@@ -154,7 +157,7 @@ $.widget( "ui.checkboxradio", {
 			radioGroup( this.element[0] )
 			.not( this.element )
 			.map(function() {
-			        return $( this ).checkboxradio( "widget" )[ 0 ];
+					return $( this ).checkboxradio( "widget" )[ 0 ];
 			})
 			.removeClass( "ui-state-active ui-radio-checked" );
 		}
