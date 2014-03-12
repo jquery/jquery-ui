@@ -1267,9 +1267,11 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
-		this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
+		if(this.placeholder[0].parentNode) {
+			this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
+		}
 
-		if(this.helper[0] !== this.currentItem[0]) {
+		if(this.helper && (this.helper[0] !== this.currentItem[0])) {
 			this.helper.remove();
 		}
 		this.helper = null;
