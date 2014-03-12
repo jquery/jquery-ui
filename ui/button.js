@@ -25,7 +25,9 @@
 }(function( $ ) {
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
-	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only ui-icon-begining ui-icon-end ui-icon-top ui-icon-bottom",
+	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons" +
+		" ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only" +
+		" ui-icon-begining ui-icon-end ui-icon-top ui-icon-bottom",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -109,8 +111,9 @@ $.widget( "ui.button", {
 		}
 
 		if ( this.element.is("a") ) {
-			this.element.keyup(function(event) {
+			this.element.keyup( function( event ) {
 				if ( event.keyCode === $.ui.keyCode.SPACE ) {
+
 					// TODO pass through original event correctly (just as 2nd argument doesn't work)
 					$( this ).click();
 				}
@@ -131,7 +134,8 @@ $.widget( "ui.button", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-helper-hidden-accessible " + baseClasses + " ui-state-active " + typeClasses )
+			.removeClass( "ui-helper-hidden-accessible " + baseClasses +
+				" ui-state-active " + typeClasses )
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" );
 
@@ -170,6 +174,7 @@ $.widget( "ui.button", {
 	},
 
 	refresh: function() {
+
 		//See #8237 & #8828
 		var isDisabled = this.element.is( "input, button" ) ? this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
 
