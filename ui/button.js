@@ -89,7 +89,7 @@ $.widget( "ui.button", {
 			if( this.options.iconPosition ) {
 				this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 			}
-			if( !this.options.text ){
+			if( !this.options.showLabel ){
 				this.element.addClass( " ui-button-icon-only" );
 			}
 			this.element.append( this.icon );
@@ -125,7 +125,7 @@ $.widget( "ui.button", {
 		this.title = this.element.attr( "title" );
 		this.hasTitle = !!this.title;
 
-		if( !this.options.text ){
+		if( !this.options.showLabel ){
 			if ( !this.hasTitle ) {
 				this.element.attr( "title", this.title );
 			}
@@ -154,7 +154,7 @@ $.widget( "ui.button", {
 				.toggleClass( this.options.iconPosition, !!value );
 			this._setTitle();
 		}
-		if( key === "iconPosition" && this.options.text ) {
+		if( key === "iconPosition" && this.options.showLabel ) {
 			this.element.addClass( value )
 				.removeClass( this.options.iconPosition );
 		}

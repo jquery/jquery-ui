@@ -87,7 +87,7 @@ $.widget( "ui.checkboxradio", {
 		});
 	},
 
-	enhance: function() {
+	_enhance: function() {
 		this.element.addClass( "ui-helper-hidden-accessible ui-checkboxradio" );
 
 		this.label.addClass( baseClasses + " ui-" + this.type + "-label" );
@@ -126,8 +126,8 @@ $.widget( "ui.checkboxradio", {
 		var ancestor, labelSelector;
 
 		// Check control.labels first
-		if ( this.element[ 0 ].labels !== undefined ){
-			this.label = $( this.element[ 0 ].labels );
+		if ( this.element[ 0 ].labels !== undefined && this.element[ 0 ].labels.length > 0 ){
+			this.label = $( this.element[ 0 ].labels[0] );
 		} else {
 
 			// We don't search against the document in case the element
