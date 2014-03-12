@@ -1,7 +1,7 @@
 TestHelpers.commonWidgetTests( "button", {
 	defaults: {
 		disabled: null,
-		text: true,
+		showLabel: true,
 		label: null,
 		icon: null,
 		iconPosition: "begining",

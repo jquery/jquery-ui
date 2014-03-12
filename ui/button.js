@@ -26,8 +26,8 @@
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons" +
-		" ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only" +
-		" ui-icon-begining ui-icon-end ui-icon-top ui-icon-bottom",
+		"ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only" +
+		"ui-icon-begining ui-icon-end ui-icon-top ui-icon-bottom",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -111,9 +111,8 @@ $.widget( "ui.button", {
 		}
 
 		if ( this.element.is("a") ) {
-			this.element.keyup( function( event ) {
+			this.element.keyup(function(event) {
 				if ( event.keyCode === $.ui.keyCode.SPACE ) {
-
 					// TODO pass through original event correctly (just as 2nd argument doesn't work)
 					$( this ).click();
 				}
@@ -149,7 +148,7 @@ $.widget( "ui.button", {
 			this.icon.addClass( " ui-icon " + value )
 				.removeClass( this.options.icon );
 		}
-		if( key === "text" ) {
+		if( key === "showLabel" ) {
 			this.element.toggleClass( ".ui-button-icon-only", !( !!value ) )
 				.toggleClass( this.options.iconPosition, !!value );
 			this._setTitle();
@@ -174,9 +173,9 @@ $.widget( "ui.button", {
 	},
 
 	refresh: function() {
-
 		//See #8237 & #8828
-		var isDisabled = this.element.is( "input, button" ) ? this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
+		var isDisabled = this.element.is( "input, button" ) ?
+			this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
 
 		if ( isDisabled !== this.options.disabled ) {
 			this._setOptions( { "disabled": isDisabled } );

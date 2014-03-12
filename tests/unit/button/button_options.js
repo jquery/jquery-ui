@@ -41,7 +41,7 @@ test("disabled, null", function() {
 test("text false without icon", function() {
 	expect( 1 );
 	$("#button").button({
-		text: false
+		showLabel: false
 	});
 	ok( $("#button").is(":not(.ui-button-icon-only)") );
 
@@ -51,7 +51,7 @@ test("text false without icon", function() {
 test("text false with icon", function() {
 	expect( 1 );
 	$("#button").button({
-		text: false,
+		showLabel: false,
 		icon: "iconclass"
 	});
 	ok( $("#button").is(".ui-button-icon-only:not(.ui-button-text):has(span.ui-icon.iconclass)") );
@@ -97,7 +97,7 @@ test("label with input type submit", function() {
 test("icons", function() {
 	expect( 1 );
 	$("#button").button({
-		text: false,
+		showLabel: false,
 		icon: "iconclass"
 	});
 	ok( $("#button").is(":has(span.ui-icon.iconclass)") );
