@@ -761,24 +761,32 @@ return $.widget( "ui.dialog", {
 	},
 
 	_blockFrames: function() {
-		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
-			var iframe = $( this );
 
-			return $( "<div>" )
+		// The resizing dialog should already be on top so we should be able
+		// to use its z-index to calculate the required z-index of the
+		// overlaying div.
+		var body = $( "body" ),
+			zIndex = this.uiDialog.css( "z-index" ) + 1;
+
+		// Create the overlay. The CSS is adapted from the ui-widget-overlay
+		// class. We cannot use the class itself as our overlay is meant to
+		// be invisible and the ui-widget-overlay is themed.
+		this.iframeBlock = $( "<div>" )
 				.css({
-					position: "absolute",
-					width: iframe.outerWidth(),
-					height: iframe.outerHeight()
+					position: "fixed",
+					left: 0,
+					top: 0,
+					width: "100%",
+					height: "100%",
+					"z-index": zIndex
 				})
-				.appendTo( iframe.parent() )
-				.offset( iframe.offset() )[0];
-		});
+				.appendTo( body );
 	},
 
 	_unblockFrames: function() {
-		if ( this.iframeBlocks ) {
-			this.iframeBlocks.remove();
-			delete this.iframeBlocks;
+		if ( this.iframeBlock ) {
+			this.iframeBlock.remove();
+			delete this.iframeBlock;
 		}
 	},
 
