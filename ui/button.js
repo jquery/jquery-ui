@@ -83,6 +83,14 @@ $.widget( "ui.button", {
 			.addClass( baseClasses )
 			.attr( "role", "button" );
 
+		if ( this.options.label ){
+			if ( this.isInput ) {
+				this.element.val( this.options.label );
+			} else {
+				this.element.html( this.options.label );
+			}
+		}
+
 		if ( this.options.icon ) {
 			this.icon = $( "<span>" );
 			this.icon.addClass( " ui-icon " + this.options.icon );
@@ -94,20 +102,6 @@ $.widget( "ui.button", {
 			}
 			this.element.append( this.icon );
 			this._setTitle();
-		}
-		if ( this.options.label ){
-			if ( this.isInput ) {
-				this.element.val( this.options.label );
-			} else {
-				var textNode = this.element.contents().filter( function() {
-				    return this.nodeType === 3;
-				 })[ 0 ];
-				if ( textNode !== undefined ) {
-					textNode.nodeValue = this.options.label;
-				} else {
-					this.element.html( this.options.label + this.element.html() );
-				}
-			}
 		}
 
 		if ( this.element.is("a") ) {
