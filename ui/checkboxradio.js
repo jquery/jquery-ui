@@ -66,7 +66,7 @@ $.widget( "ui.checkboxradio", {
 	_create: function() {
 		this.element.closest( "form" )
 			.unbind( "reset" + "." + this.widgetName )
-			.bind( "reset" + "."+ this.widgetName, formResetHandler );
+			.bind( "reset" + "." + this.widgetName, formResetHandler );
 
 		if ( typeof this.options.disabled === "boolean" ) {
 			this.element.prop( "disabled", this.options.disabled );
@@ -81,7 +81,7 @@ $.widget( "ui.checkboxradio", {
 		this._enhance();
 
 		this._on({
-			"change" : "_toggleClasses",
+			"change": "_toggleClasses",
 			"focus": "_handleFocus",
 			"blur": "_handleBlur"
 		});

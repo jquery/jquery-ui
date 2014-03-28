@@ -46,7 +46,7 @@ $.widget( "ui.button", {
 		iconPosition: "begining"
 	},
 
-	_getCreateOptions: function () {
+	_getCreateOptions: function() {
 		var label,
 			isDisabled = this.element.prop( "disabled" ),
 			options = {};
@@ -54,11 +54,11 @@ $.widget( "ui.button", {
 		this.isInput = this.element.is( "input" );
 		label = ( this.isInput ? this.element.val() : this.element.html() );
 
-		if( typeof isDisabled !== "undefined" ) {
+		if ( typeof isDisabled !== "undefined" ) {
 			options.disabled = isDisabled;
 		}
 
-		if( typeof label !== "undefined" && label !== "" ) {
+		if ( typeof label !== "undefined" && label !== "" ) {
 			options.label = label;
 		}
 
@@ -75,7 +75,7 @@ $.widget( "ui.button", {
 		} else {
 			this.options.disabled = !!this.element.prop( "disabled" );
 		}
-		if( this.options.disabled === true ){
+		if ( this.options.disabled === true ){
 			this._setOption( "disabled", true );
 		}
 
@@ -83,26 +83,26 @@ $.widget( "ui.button", {
 			.addClass( baseClasses )
 			.attr( "role", "button" );
 
-		if( this.options.icon ) {
+		if ( this.options.icon ) {
 			this.icon = $( "<span>" );
 			this.icon.addClass( " ui-icon " + this.options.icon );
-			if( this.options.iconPosition ) {
+			if ( this.options.iconPosition ) {
 				this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 			}
-			if( !this.options.showLabel ){
+			if ( !this.options.showLabel ){
 				this.element.addClass( " ui-button-icon-only" );
 			}
 			this.element.append( this.icon );
 			this._setTitle();
 		}
-		if( this.options.label ){
-			if( this.isInput ) {
+		if ( this.options.label ){
+			if ( this.isInput ) {
 				this.element.val( this.options.label );
 			} else {
 				var textNode = this.element.contents().filter( function() {
 				    return this.nodeType === 3;
 				 })[ 0 ];
-				if( textNode !== undefined ) {
+				if ( textNode !== undefined ) {
 					textNode.nodeValue = this.options.label;
 				} else {
 					this.element.html( this.options.label + this.element.html() );
@@ -124,7 +124,7 @@ $.widget( "ui.button", {
 		this.title = this.element.attr( "title" );
 		this.hasTitle = !!this.title;
 
-		if( !this.options.showLabel ){
+		if ( !this.options.showLabel ){
 			if ( !this.hasTitle ) {
 				this.element.attr( "title", this.title );
 			}
@@ -144,21 +144,21 @@ $.widget( "ui.button", {
 	},
 
 	_setOption: function( key, value ) {
-		if( key === "icon" ) {
+		if ( key === "icon" ) {
 			this.icon.addClass( " ui-icon " + value )
 				.removeClass( this.options.icon );
 		}
-		if( key === "showLabel" ) {
+		if ( key === "showLabel" ) {
 			this.element.toggleClass( ".ui-button-icon-only", !( !!value ) )
 				.toggleClass( this.options.iconPosition, !!value );
 			this._setTitle();
 		}
-		if( key === "iconPosition" && this.options.showLabel ) {
+		if ( key === "iconPosition" && this.options.showLabel ) {
 			this.element.addClass( value )
 				.removeClass( this.options.iconPosition );
 		}
-		if( key === "label" ) {
-			if( this.element.is( "input" ) ) {
+		if ( key === "label" ) {
+			if ( this.element.is( "input" ) ) {
 				this.element.val( value );
 			} else {
 				this.element.html( value );
