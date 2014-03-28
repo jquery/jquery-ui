@@ -17,7 +17,7 @@ TestHelpers.commonWidgetTests( "dialog", {
 			"ui-widget-overlay": ""
 		},
 		closeOnEscape: true,
-		closeText: "close",
+		closeText: "Close",
 		dialogClass: "",
 		disabled: false,
 		draggable: true,
