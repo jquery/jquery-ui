@@ -181,11 +181,11 @@ return $.widget( "ui.dialog", {
 	disable: $.noop,
 	enable: $.noop,
 
-	close: function( event ) {
+	close: function( event, forceClose ) {
 		var activeElement,
 			that = this;
 
-		if ( !this._isOpen || this._trigger( "beforeClose", event ) === false ) {
+		if ( !this._isOpen || (!forceClose && this._trigger( "beforeClose", event ) === false )) {
 			return;
 		}
 
