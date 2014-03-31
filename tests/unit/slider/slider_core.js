@@ -13,7 +13,7 @@ function handle() {
 module( "slider: core" );
 
 test( "keydown HOME on handle sets value to min", function() {
-	expect( 2 );
+	expect( 4 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -27,6 +27,7 @@ test( "keydown HOME on handle sets value to min", function() {
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	element.slider( "destroy" );
 
@@ -43,12 +44,13 @@ test( "keydown HOME on handle sets value to min", function() {
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
 	equal(element.slider( "value" ), options.min) ;
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	element.slider( "destroy" );
 });
 
 test( "keydown END on handle sets value to max", function() {
-	expect( 2 );
+	expect( 4 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -62,6 +64,7 @@ test( "keydown END on handle sets value to max", function() {
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.END } );
 	equal(element.slider( "value" ), options.max) ;
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	element.slider( "destroy" );
 
@@ -78,12 +81,13 @@ test( "keydown END on handle sets value to max", function() {
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.END } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	element.slider( "destroy" );
 });
 
 test( "keydown PAGE_UP on handle increases value by 1/5 range, not greater than max", function() {
-	expect( 4 );
+	expect( 8 );
 	$.each( [ "horizontal", "vertical" ], function( i, orientation ) {
 		element = $( "<div></div>" );
 		options = {
@@ -98,16 +102,18 @@ test( "keydown PAGE_UP on handle increases value by 1/5 range, not greater than 
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		equal(element.slider( "value" ), 90);
+		equal(handle().attr( "aria-valuenow" ), 90 );
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		equal(element.slider( "value" ), 100);
+		equal(handle().attr( "aria-valuenow" ), 100 );
 
 		element.slider( "destroy" );
 	});
 });
 
 test( "keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than min", function() {
-	expect( 4 );
+	expect( 8 );
 	$.each( [ "horizontal", "vertical" ], function( i, orientation ) {
 		element = $( "<div></div>" );
 		options = {
@@ -122,16 +128,18 @@ test( "keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than m
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		equal(element.slider( "value" ), 10);
+		equal(handle().attr( "aria-valuenow" ), 10 );
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		equal(element.slider( "value" ), 0 );
+		equal(handle().attr( "aria-valuenow" ), 0 );
 
 		element.slider( "destroy" );
 	});
 });
 
 test( "keydown UP on handle increases value by step, not greater than max", function() {
-	expect( 4 );
+	expect( 8 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -145,9 +153,11 @@ test( "keydown UP on handle increases value by step, not greater than max", func
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	element.slider( "destroy" );
 
@@ -164,15 +174,17 @@ test( "keydown UP on handle increases value by step, not greater than max", func
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	element.slider( "destroy" );
 });
 
 test( "keydown RIGHT on handle increases value by step, not greater than max", function() {
-	expect( 4 );
+	expect( 8 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -186,9 +198,11 @@ test( "keydown RIGHT on handle increases value by step, not greater than max", f
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal(element.slider( "value" ), options.max);
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	element.slider( "destroy" );
 
@@ -205,15 +219,17 @@ test( "keydown RIGHT on handle increases value by step, not greater than max", f
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal(element.slider( "value" ), options.max );
+	equal(handle().attr( "aria-valuenow" ), options.max );
 
 	element.slider( "destroy" );
 });
 
 test( "keydown DOWN on handle decreases value by step, not less than min", function() {
-	expect( 4 );
+	expect( 8 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -227,9 +243,11 @@ test( "keydown DOWN on handle decreases value by step, not less than min", funct
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 	equal(element.slider( "value" ), options.min);
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	element.slider( "destroy" );
 
@@ -246,15 +264,17 @@ test( "keydown DOWN on handle decreases value by step, not less than min", funct
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 	equal(element.slider( "value" ), options.min);
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	element.slider( "destroy" );
 });
 
 test( "keydown LEFT on handle decreases value by step, not less than min", function() {
-	expect( 4 );
+	expect( 8 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -268,9 +288,11 @@ test( "keydown LEFT on handle decreases value by step, not less than min", funct
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	element.slider( "destroy" );
 
@@ -287,9 +309,11 @@ test( "keydown LEFT on handle decreases value by step, not less than min", funct
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal(element.slider( "value" ), options.min );
+	equal(handle().attr( "aria-valuenow" ), options.min );
 
 	element.slider( "destroy" );
 });

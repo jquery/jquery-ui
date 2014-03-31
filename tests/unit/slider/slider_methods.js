@@ -3,7 +3,7 @@
 module( "slider: methods" );
 
 test( "init", function() {
-	expect(5);
+	expect( 7 );
 
 	$( "<div></div>" ).appendTo( "body" ).slider().remove();
 	ok( true, ".slider() called on element" );
@@ -21,6 +21,13 @@ test( "init", function() {
 
 	$( "<div></div>" ).slider().slider( "option", "foo", "bar" ).remove();
 	ok( true, "arbitrary option setter after init" );
+
+	element = $( "<div></div>" ).slider();
+	var handle = element.find( ".ui-slider-handle" );
+	ok( element.find( ".ui-slider-handle" ).length === 1, "Handle added for slider" );
+	ok( element.find( ".ui-slider-handle" ).attr( "role" ) === "slider", "Role for handle is set to 'slider'" );
+	element.remove();
+
 });
 
 test( "destroy", function() {
@@ -62,15 +69,17 @@ test( "disable", function() {
 });
 
 test( "value", function() {
-	expect( 17 );
+	expect( 20 );
 	$( [ false, "min", "max" ] ).each(function() {
 		var element = $( "<div></div>" ).slider({
 			range: this,
 			value: 5
 		});
+		var handle = element.find( ".ui-slider-handle" );
 		equal( element.slider( "value" ), 5, "range: " + this + " slider method get" );
 		equal( element.slider( "value", 10), element, "value method is chainable" );
 		equal( element.slider( "value" ), 10, "range: " + this + " slider method set" );
+		equal( handle.attr( "aria-valuenow" ), 10, "range: " + this + " slider method set leads to aria-valuenow update" );
 		element.remove();
 	});
 	var element = $( "<div></div>" ).slider({

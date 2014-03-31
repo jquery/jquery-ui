@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 2 );
+	expect( 3 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -54,12 +54,13 @@ test( "max", function() {
 	element.slider( options );
 	ok(element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
 	ok(element.slider( "value" ) === options.max, "value method is contained by max" );
+	equal( handle().attr( "aria-valuemax" ), options.max, "max option leads to correct aria-valuemax" );
 	element.slider( "destroy" );
 
 });
 
 test( "min", function() {
-	expect( 2 );
+	expect( 3 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -73,6 +74,7 @@ test( "min", function() {
 	element.slider( options );
 	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by min" );
 	ok( element.slider( "value" ) === options.min, "value method is contained by min" );
+	equal( handle().attr( "aria-valuemin" ), options.min, "min option leads to correct aria-valuemin" );
 	element.slider( "destroy" );
 
 });
