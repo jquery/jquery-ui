@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Datepicker - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/datepicker.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#datepicker" ).datepicker({
+			selectRange: true,
+			showButtonPanel: true,
+			autoSize: true,
+			numberOfMonths: 3,
+			altField: "#alt",
+			altFormat: "DD, d MM, yy",
+			rangeDividerText: " until "
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p>Date: <input id="datepicker"></input><input type="text" id="alt">
+
+<div class="demo-description">
+<p>Select the date range by clicking in the datepicker.</p>
+</div>
+</body>
+</html>

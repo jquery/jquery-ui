@@ -14,6 +14,18 @@ TestHelpers.datepicker = {
 		d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
 		equal(d1.toString(), d2.toString(), message);
 	},
+	equalsRange: function(d1, d2, message) {
+		if (!d1 || !d2) {
+			ok(false, message + " - missing ranges");
+			return;
+		}
+		d11 = new Date(d1[0].getFullYear(), d1[0].getMonth(), d1[0].getDate());
+		d12 = new Date(d1[1].getFullYear(), d1[1].getMonth(), d1[1].getDate());
+		d21 = new Date(d2[0].getFullYear(), d2[0].getMonth(), d2[0].getDate());
+		d22 = new Date(d2[1].getFullYear(), d2[1].getMonth(), d2[1].getDate());
+		equal(d11.toString(), d21.toString(), message);
+		equal(d12.toString(), d22.toString(), message);
+	},
 	init: function( id, options ) {
 		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
 		return $( id ).datepicker( $.extend( { showAnim: "" }, options || {} ) );

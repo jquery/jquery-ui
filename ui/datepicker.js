@@ -97,6 +97,8 @@ function Datepicker() {
 			// +/-number for offset from today, null for today
 		appendText: "", // Display text following the input box, e.g. showing the format
 		buttonText: "...", // Text for trigger button
+		selectRange: false, // When set to true, you select a range with start and end time
+		rangeDividerText: " - ", // Divider between dates in range
 		buttonImage: "", // URL for trigger button image
 		buttonImageOnly: false, // True if the image appears alone, false if it appears on a button
 		hideIfNoPrevNext: false, // True to hide next/previous month links
@@ -189,6 +191,7 @@ $.extend(Datepicker.prototype, {
 		var id = target[0].id.replace(/([^A-Za-z0-9_\-])/g, "\\\\$1"); // escape jQuery meta chars
 		return {id: id, input: target, // associated target
 			selectedDay: 0, selectedMonth: 0, selectedYear: 0, // current selection
+			previousDay: 0, previousMonth: 0, previousYear: 0, // previous selection, used when range
 			drawMonth: 0, drawYear: 0, // month being drawn
 			inline: inline, // is datepicker inline or not
 			dpDiv: (!inline ? this.dpDiv : // presentation div
@@ -265,7 +268,7 @@ $.extend(Datepicker.prototype, {
 	/* Apply the maximum length for the date format. */
 	_autoSize: function(inst) {
 		if (this._get(inst, "autoSize") && !inst.inline) {
-			var findMax, max, maxI, i,
+			var findMax, max, maxI, i, maxLength,
 				date = new Date(2009, 12 - 1, 20), // Ensure double digits
 				dateFormat = this._get(inst, "dateFormat");
 
@@ -286,7 +289,11 @@ $.extend(Datepicker.prototype, {
 				date.setDate(findMax(this._get(inst, (dateFormat.match(/DD/) ?
 					"dayNames" : "dayNamesShort"))) + 20 - date.getDay());
 			}
-			inst.input.attr("size", this._formatDate(inst, date).length);
+			maxLength = this._formatDate(inst, date).length;
+			if(this._get(inst, "selectRange")){
+				maxLength = (maxLength*2)+this._get(inst, "rangeDividerText").length;
+			}
+			inst.input.attr("size", maxLength);
 		}
 	},
 
@@ -594,7 +601,7 @@ $.extend(Datepicker.prototype, {
 
 						onSelect = $.datepicker._get(inst, "onSelect");
 						if (onSelect) {
-							dateStr = $.datepicker._formatDate(inst);
+							dateStr = $.datepicker._format(inst);
 
 							// trigger custom callback
 							onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
@@ -1002,17 +1009,26 @@ $.extend(Datepicker.prototype, {
 		}
 
 		inst = this._getInst(target[0]);
+
+		inst.previousDay = inst.currentDay || $("a", td).html();
+		inst.previousMonth = inst.currentMonth || month;
+		inst.previousYear = inst.currentYear || year;
+
 		inst.selectedDay = inst.currentDay = $("a", td).html();
 		inst.selectedMonth = inst.currentMonth = month;
 		inst.selectedYear = inst.currentYear = year;
-		this._selectDate(id, this._formatDate(inst,
-			inst.currentDay, inst.currentMonth, inst.currentYear));
+		this._selectDate(id);
 	},
 
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
-		var target = $(id);
-		this._selectDate(target, "");
+		var target = $(id),
+			inst = this._getInst(target[0]);
+
+		inst.currentDay = inst.previousDay = 0;
+		inst.currentMonth = inst.previousMonth = 0;
+		inst.currentYear = inst.previousYear = 0;
+		this._selectDate(target);
 	},
 
 	/* Update the input field with the selected date. */
@@ -1021,7 +1037,8 @@ $.extend(Datepicker.prototype, {
 			target = $(id),
 			inst = this._getInst(target[0]);
 
-		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
+		dateStr = (dateStr != null ? dateStr : this._format(inst));
+
 		if (inst.input) {
 			inst.input.val(dateStr);
 		}
@@ -1034,7 +1051,7 @@ $.extend(Datepicker.prototype, {
 			inst.input.trigger("change"); // fire the change event
 		}
 
-		if (inst.inline){
+		if (inst.inline || this._get(inst, "selectRange")){
 			this._updateDatepicker(inst);
 		} else {
 			this._hideDatepicker();
@@ -1048,13 +1065,11 @@ $.extend(Datepicker.prototype, {
 
 	/* Update any alternate field to synchronise with the main field. */
 	_updateAlternate: function(inst) {
-		var altFormat, date, dateStr,
+		var dateStr,
 			altField = this._get(inst, "altField");
 
 		if (altField) { // update alternate field too
-			altFormat = this._get(inst, "altFormat") || this._get(inst, "dateFormat");
-			date = this._getDate(inst);
-			dateStr = this.formatDate(altFormat, date, this._getFormatConfig(inst));
+			dateStr = this._format(inst, true);
 			$(altField).each(function() { $(this).val(dateStr); });
 		}
 	},
@@ -1084,6 +1099,43 @@ $.extend(Datepicker.prototype, {
 		checkDate.setDate(1);
 		return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
 	},
+
+	/* Parse a string value into an array of date objects.
+	 * See formatDate below for the possible formats.
+	 *
+	 * @param  format string - the expected format of the date
+	 * @param  divider string - the divider between the dates
+	 * @param  value string - the date in the above format
+	 * @param  settings Object - attributes include:
+	 *					shortYearCutoff  number - the cutoff year for determining the century (optional)
+	 *					dayNamesShort	string[7] - abbreviated names of the days from Sunday (optional)
+	 *					dayNames		string[7] - names of the days from Sunday (optional)
+	 *					monthNamesShort string[12] - abbreviated names of the months (optional)
+	 *					monthNames		string[12] - names of the months (optional)
+	 * @return  Array - the extracted date values or null if value is blank
+	 */
+	parseRange: function(format, divider, value, settings) {
+		if (format == null || divider == null || value == null) {
+      throw "Invalid arguments";
+    }
+    var ds, d1, d2;
+
+    try {
+      if ( value.indexOf(divider) > -1 ) {
+        ds = value.split(divider);
+
+        d1 = $.datepicker.parseDate( format, ds[0], settings );
+        d2 = $.datepicker.parseDate( format, ds[1], settings );
+
+      } else if ( value.length > 0 ) {
+        d1 = d2 = $.datepicker.parseDate( format, value, settings );
+      }
+    } catch ( e ) {
+    }
+    if(d1 && d2) {
+      return [d1, d2];
+    }
+  },
 
 	/* Parse a string value into a date object.
 	 * See formatDate below for the possible formats.
@@ -1449,23 +1501,37 @@ $.extend(Datepicker.prototype, {
 		}
 
 		var dateFormat = this._get(inst, "dateFormat"),
+			divider = this._get(inst, "rangeDividerText"),
 			dates = inst.lastVal = inst.input ? inst.input.val() : null,
 			defaultDate = this._getDefaultDate(inst),
-			date = defaultDate,
-			settings = this._getFormatConfig(inst);
+			date1 = defaultDate,
+			date2 = defaultDate,
+			settings = this._getFormatConfig(inst),
+			dateRange;
 
 		try {
-			date = this.parseDate(dateFormat, dates, settings) || defaultDate;
+			if(this._get(inst, "selectRange")){
+				dateRange = this.parseRange(dateFormat, divider, dates, settings);
+				date1 = dateRange[0];
+				date2 = dateRange[1];
+			}else{
+				date1 = date2 = this.parseDate(dateFormat, dates, settings) || defaultDate;
+			}
 		} catch (event) {
 			dates = (noDefault ? "" : dates);
 		}
-		inst.selectedDay = date.getDate();
-		inst.drawMonth = inst.selectedMonth = date.getMonth();
-		inst.drawYear = inst.selectedYear = date.getFullYear();
-		inst.currentDay = (dates ? date.getDate() : 0);
-		inst.currentMonth = (dates ? date.getMonth() : 0);
-		inst.currentYear = (dates ? date.getFullYear() : 0);
+
+		inst.selectedDay = date2.getDate();
+		inst.drawMonth = inst.selectedMonth = date2.getMonth();
+		inst.drawYear = inst.selectedYear = date2.getFullYear();
+		inst.currentDay = (dates ? date2.getDate() : 0);
+		inst.currentMonth = (dates ? date2.getMonth() : 0);
+		inst.currentYear = (dates ? date2.getFullYear() : 0);
+		inst.previousDay = (dates ? date1.getDate() : 0);
+		inst.previousMonth = (dates ? date1.getMonth() : 0);
+		inst.previousYear = (dates ? date1.getFullYear() : 0);
 		this._adjustInstDate(inst);
+		this._updateAlternate(inst);
 	},
 
 	/* Retrieve the default date shown on opening. */
@@ -1552,6 +1618,10 @@ $.extend(Datepicker.prototype, {
 			origYear = inst.selectedYear,
 			newDate = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
 
+		inst.previousDay = inst.currentDay || newDate.getDate();
+		inst.previousMonth = inst.currentMonth || newDate.getMonth();
+		inst.previousYear = inst.currentYear || newDate.getFullYear();
+
 		inst.selectedDay = inst.currentDay = newDate.getDate();
 		inst.drawMonth = inst.selectedMonth = inst.currentMonth = newDate.getMonth();
 		inst.drawYear = inst.selectedYear = inst.currentYear = newDate.getFullYear();
@@ -1613,10 +1683,10 @@ $.extend(Datepicker.prototype, {
 	_generateHTML: function(inst) {
 		var maxDraw, prevText, prev, nextText, next, currentText, gotoDate,
 			controls, buttonPanel, firstDay, showWeek, dayNames, dayNamesMin,
-			monthNames, monthNamesShort, beforeShowDay, showOtherMonths,
+			monthNames, monthNamesShort, beforeShowDay, showOtherMonths, selectRange,
 			selectOtherMonths, defaultDate, html, dow, row, group, col, selectedDate,
 			cornerClass, calender, thead, day, daysInMonth, leadDays, curRows, numRows,
-			printDate, dRow, tbody, daySettings, otherMonth, unselectable,
+			printDate, dRow, tbody, daySettings, otherMonth, unselectable, printDateIsActive,
 			tempDate = new Date(),
 			today = this._daylightSavingAdjust(
 				new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate())), // clear time
@@ -1630,6 +1700,10 @@ $.extend(Datepicker.prototype, {
 			isMultiMonth = (numMonths[0] !== 1 || numMonths[1] !== 1),
 			currentDate = this._daylightSavingAdjust((!inst.currentDay ? new Date(9999, 9, 9) :
 				new Date(inst.currentYear, inst.currentMonth, inst.currentDay))),
+			previousDate = this._daylightSavingAdjust((!inst.previousDay ? new Date(9999, 9, 9) :
+				new Date(inst.previousYear, inst.previousMonth, inst.previousDay))),
+			previousTime = previousDate.getTime(),
+			currentTime = currentDate.getTime(),
 			minDate = this._getMinMaxDate(inst, "min"),
 			maxDate = this._getMinMaxDate(inst, "max"),
 			drawMonth = inst.drawMonth - showCurrentAtPos,
@@ -1697,6 +1771,7 @@ $.extend(Datepicker.prototype, {
 		beforeShowDay = this._get(inst, "beforeShowDay");
 		showOtherMonths = this._get(inst, "showOtherMonths");
 		selectOtherMonths = this._get(inst, "selectOtherMonths");
+		selectRange = this._get(inst, "selectRange");
 		defaultDate = this._getDefaultDate(inst);
 		html = "";
 		dow;
@@ -1751,6 +1826,9 @@ $.extend(Datepicker.prototype, {
 						daySettings = (beforeShowDay ?
 							beforeShowDay.apply((inst.input ? inst.input[0] : null), [printDate]) : [true, ""]);
 						otherMonth = (printDate.getMonth() !== drawMonth);
+						printDateIsActive = selectRange ?
+							printDate.getTime() >= Math.min(previousTime, currentTime) && printDate.getTime() <= Math.max(previousTime, currentTime) :
+							printDate.getTime() === currentDate.getTime();
 						unselectable = (otherMonth && !selectOtherMonths) || !daySettings[0] ||
 							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
 						tbody += "<td class='" +
@@ -1762,14 +1840,14 @@ $.extend(Datepicker.prototype, {
 							" " + this._dayOverClass : "") + // highlight selected day
 							(unselectable ? " " + this._unselectableClass + " ui-state-disabled": "") +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? "" : " " + daySettings[1] + // highlight custom dates
-							(printDate.getTime() === currentDate.getTime() ? " " + this._currentClass : "") + // highlight selected day
+							(printDateIsActive ? " " + this._currentClass : "") + // highlight selected day
 							(printDate.getTime() === today.getTime() ? " ui-datepicker-today" : "")) + "'" + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? " title='" + daySettings[2].replace(/'/g, "&#39;") + "'" : "") + // cell title
 							(unselectable ? "" : " data-handler='selectDay' data-event='click' data-month='" + printDate.getMonth() + "' data-year='" + printDate.getFullYear() + "'") + ">" + // actions
 							(otherMonth && !showOtherMonths ? "&#xa0;" : // display for other months
 							(unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<a class='ui-state-default" +
 							(printDate.getTime() === today.getTime() ? " ui-state-highlight" : "") +
-							(printDate.getTime() === currentDate.getTime() ? " ui-state-active" : "") + // highlight selected day
+							(printDateIsActive ? " ui-state-active" : "") + // highlight selected day
 							(otherMonth ? " ui-priority-secondary" : "") + // distinguish dates from other months
 							"' href='#'>" + printDate.getDate() + "</a>")) + "</td>"; // display selectable date
 						printDate.setDate(printDate.getDate() + 1);
@@ -1965,6 +2043,37 @@ $.extend(Datepicker.prototype, {
 		return {shortYearCutoff: shortYearCutoff,
 			dayNamesShort: this._get(inst, "dayNamesShort"), dayNames: this._get(inst, "dayNames"),
 			monthNamesShort: this._get(inst, "monthNamesShort"), monthNames: this._get(inst, "monthNames")};
+	},
+
+	_format: function(inst, alternate){
+		var format = (alternate && this._get(inst, "altFormat")) || this._get(inst, "dateFormat");
+		if(this._get(inst, "selectRange")) {
+			return this._formatRange(inst, format);
+		}else{
+			return inst.currentYear ? this.formatDate(format, new Date(inst.currentYear, inst.currentMonth, inst.currentDay), this._getFormatConfig(inst)) : "";
+		}
+	},
+
+	_formatRange: function(inst, format) {
+		var d1, d2, s1, s2;
+
+		if(inst.currentYear){
+			d1 = this._daylightSavingAdjust(new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
+			d2 = this._daylightSavingAdjust(new Date(inst.previousYear, inst.previousMonth, inst.previousDay));
+
+			s1 = this.formatDate( format, d1, this._getFormatConfig(inst) );
+			s2 = this.formatDate( format, d2, this._getFormatConfig(inst) );
+
+			if(s1 !== s2) {
+				if(d1 > d2){
+					return s2+this._get(inst, "rangeDividerText")+s1;
+				}else{
+					return s1+this._get(inst, "rangeDividerText")+s2;
+				}
+			}else{
+				return s1;
+			}
+		}
 	},
 
 	/* Format the given date for display. */
