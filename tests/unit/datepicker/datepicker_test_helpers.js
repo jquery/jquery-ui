@@ -23,8 +23,7 @@ TestHelpers.datepicker = {
 		d12 = new Date(d1[1].getFullYear(), d1[1].getMonth(), d1[1].getDate());
 		d21 = new Date(d2[0].getFullYear(), d2[0].getMonth(), d2[0].getDate());
 		d22 = new Date(d2[1].getFullYear(), d2[1].getMonth(), d2[1].getDate());
-		equal(d11.toString(), d21.toString(), message);
-		equal(d12.toString(), d22.toString(), message);
+		equal(d11.toString()+' - '+d12.toString(), d21.toString()+' - '+d22.toString(), message);
 	},
 	init: function( id, options ) {
 		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );

@@ -580,6 +580,19 @@ $.extend(Datepicker.prototype, {
 		return (inst ? this._getDate(inst) : null);
 	},
 
+	/* Get the range for the first entry in a jQuery selection.
+	 * @param  target element - the target input field or division or span
+	 * @param  noDefault boolean - true if no default date is to be used
+	 * @return Date - the current date
+	 */
+	_getRangeDatepicker: function(target, noDefault) {
+		var inst = this._getInst(target);
+		if (inst && !inst.inline) {
+			this._setDateFromField(inst, noDefault);
+		}
+		return (inst ? this._getRange(inst) : null);
+	},
+
 	/* Handle keystrokes. */
 	_doKeyDown: function(event) {
 		var onSelect, dateStr, sel,
@@ -1642,6 +1655,23 @@ $.extend(Datepicker.prototype, {
 			return startDate;
 	},
 
+	/* Retrieve the range directly. */
+	_getRange: function(inst) {
+		var d1, d2;
+
+		if(inst.currentYear && (inst.input && inst.input.val() != "")){
+			d1 = this._daylightSavingAdjust(new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
+			d2 = this._daylightSavingAdjust(new Date(inst.previousYear, inst.previousMonth, inst.previousDay));
+			if(d1 > d2){
+				return [d2, d1];
+			}else{
+				return [d1, d2];
+			}
+		}else{
+			return null;
+		}
+	},
+
 	/* Attach the onxxx handlers.  These are declared statically so
 	 * they work with static code transformers like Caja.
 	 */
@@ -2154,7 +2184,7 @@ $.fn.datepicker = function(options){
 	}
 
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
-	if (typeof options === "string" && (options === "isDisabled" || options === "getDate" || options === "widget")) {
+	if (typeof options === "string" && (options === "isDisabled" || options === "getDate" || options === "getRange" || options === "widget")) {
 		return $.datepicker["_" + options + "Datepicker"].
 			apply($.datepicker, [this[0]].concat(otherArgs));
 	}

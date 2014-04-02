@@ -525,4 +525,114 @@ test("mouse", function() {
 		"Mouse click inline - next");
 });
 
+test("mouse with range", function() {
+	expect( 16 );
+	var inl,
+		inp = TestHelpers.datepicker.init("#inp", {selectRange: true}),
+		dp = $("#ui-datepicker-div"),
+		date = new Date();
+
+	inp.val("").datepicker("show");
+	$(".ui-datepicker-calendar tbody a:contains(10)", dp).simulate("click", {});
+	date.setDate(10);
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [date, date], "Mouse click");
+	inp.datepicker("hide");
+
+	inp.val("02/04/2008").datepicker("show");
+	$(".ui-datepicker-calendar tbody a:contains(12)", dp).simulate("click", {});
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008, 2 - 1, 4), new Date(2008, 2 - 1, 12)
+		], "Mouse click - preset");
+	inp.datepicker("hide");
+
+	inp.val("02/04/2008").datepicker("show");
+	inp.val("").datepicker("show");
+	$("button.ui-datepicker-close", dp).simulate("click", {});
+	ok(inp.datepicker("getRange") == null, "Mouse click - close");
+	inp.datepicker("hide");
+	inp.val("02/04/2008").datepicker("show");
+	$("button.ui-datepicker-close", dp).simulate("click", {});
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008,2-1,4), new Date(2008,2-1,4)
+		],"Mouse click - close + preset");
+	inp.datepicker("hide");
+	inp.val("02/04/2008").datepicker("show");
+	$("a.ui-datepicker-prev", dp).simulate("click", {});
+	$("button.ui-datepicker-close", dp).simulate("click", {});
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008,2-1,4), new Date(2008,2-1,4)
+		], "Mouse click - abandoned");
+	inp.datepicker("hide");
+	inp.val("02/04/2008").datepicker("show");
+	$(".ui-datepicker-prev", dp).simulate("click");
+	$(".ui-datepicker-calendar tbody a:contains(16)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008,1-1,16), new Date(2008,2-1,4)
+		], "Mouse click - previous");
+	inp.datepicker("hide");
+	inp.val("02/04/2008").datepicker("show");
+	$(".ui-datepicker-next", dp).simulate("click");
+	$(".ui-datepicker-calendar tbody a:contains(18)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008,2-1,4), new Date(2008,3-1,18)
+		],	"Mouse click - next");
+	inp.datepicker("hide");
+	// Previous/next with minimum/maximum
+	inp.datepicker("option", {selectRange: true, minDate: new Date(2008, 2 - 1, 2),
+		maxDate: new Date(2008, 2 - 1, 26)}).val("02/04/2008").datepicker("show");
+	$(".ui-datepicker-prev", dp).simulate("click");
+	$(".ui-datepicker-calendar tbody a:contains(16)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008,2-1,4), new Date(2008,2-1,16)
+		], "Mouse click - previous + min/max");
+	inp.datepicker("hide");
+	inp.val("02/04/2008").datepicker("show");
+	$(".ui-datepicker-next", dp).simulate("click");
+	$(".ui-datepicker-calendar tbody a:contains(18)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inp.datepicker("getRange"), [
+		new Date(2008, 2 - 1, 4), new Date(2008, 2 - 1, 18)
+		], "Mouse click - next + min/max");
+	inp.datepicker("hide");
+	// Inline
+	inl = TestHelpers.datepicker.init("#inl", {selectRange: true});
+	dp = $(".ui-datepicker-inline", inl);
+	date = new Date();
+	inl.datepicker("setDate", date);
+	$(".ui-datepicker-calendar tbody a:contains(10)", dp).simulate("click", {});
+	date.setDate(10);
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [new Date(), date], "Mouse click inline");
+	inl.datepicker("option", {selectRange: true,showButtonPanel: true}).datepicker("setDate", new Date(2008, 2 - 1, 4));
+	$(".ui-datepicker-calendar tbody a:contains(12)", dp).simulate("click", {});
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [
+		new Date(2008, 2 - 1, 4), new Date(2008, 2 - 1, 12)
+		], "Mouse click inline - preset");
+	inl.datepicker("option", {selectRange: true, showButtonPanel: true});
+	$(".ui-datepicker-current", dp).simulate("click", {});
+	$(".ui-datepicker-calendar tbody a:contains(14)", dp).simulate("click", {});
+	date.setDate(14);
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [
+		new Date(2008, 2-1, 12), date
+		], "Mouse click inline - current");
+	inl.datepicker("setDate", new Date(2008, 2 - 1, 4));
+	$(".ui-datepicker-prev", dp).simulate("click");
+	$(".ui-datepicker-calendar tbody a:contains(16)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [
+		new Date(2008, 1 - 1, 16), new Date(2008, 2 - 1, 4)
+		],"Mouse click inline - previous");
+	inl.datepicker("setDate", new Date(2008, 2 - 1, 4));
+	$(".ui-datepicker-next", dp).simulate("click");
+	$(".ui-datepicker-calendar tbody a:contains(18)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [
+		new Date(2008, 2 - 1, 4), new Date(2008, 3 - 1, 18)
+		], "Mouse click inline - next");
+	$(".ui-datepicker-calendar tbody a:contains(17)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [
+		new Date(2008, 3 - 1, 17), new Date(2008, 3 - 1, 18)
+		], "Mouse click inline - next");
+	$(".ui-datepicker-calendar tbody a:contains(17)", dp).simulate("click");
+	TestHelpers.datepicker.equalsRange(inl.datepicker("getRange"), [
+		new Date(2008, 3 - 1, 17), new Date(2008, 3 - 1, 17)
+		], "Mouse click inline - next");
+});
+
 })(jQuery);
