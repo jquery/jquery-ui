@@ -28,7 +28,7 @@ test( "disabled, explicit value", function() {
 test("disabled, null", function() {
 	expect( 4 );
 	$("#radio01").button({ disabled: null });
-	deepEqual(false, $("#radio01").button("option", "disabled"),
+	deepEqual( $("#radio01").button("option", "disabled"), false,
 		"disabled option set to false");
 	deepEqual(false, $("#radio01").prop("disabled"), "element is disabled");
 

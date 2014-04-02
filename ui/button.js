@@ -66,22 +66,19 @@ $.widget( "ui.button", {
 	},
 
 	_create: function() {
-		this.element.closest( "form" )
-			.unbind( "reset" + this.eventNamespace )
-			.bind( "reset" + this.eventNamespace, formResetHandler );
+		this._off( this.element.closest( "form" ),  "reset" );
+		this._on( this.element.closest( "form" ), {
+				"reset": formResetHandler
+			});
 
 		if ( typeof this.options.disabled === "boolean" ) {
 			this.element.prop( "disabled", this.options.disabled );
-		} else {
-			this.options.disabled = !!this.element.prop( "disabled" );
 		}
 		if ( this.options.disabled === true ){
 			this._setOption( "disabled", true );
 		}
 
-		this.element
-			.addClass( baseClasses )
-			.attr( "role", "button" );
+		this.element.addClass( baseClasses ).attr( "role", "button" );
 
 		if ( this.options.label ){
 			if ( this.isInput ) {
@@ -93,44 +90,43 @@ $.widget( "ui.button", {
 
 		if ( this.options.icon ) {
 			this.icon = $( "<span>" );
-			this.icon.addClass( " ui-icon " + this.options.icon );
+			this.icon.addClass( "ui-icon " + this.options.icon );
 			if ( this.options.iconPosition ) {
 				this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 			}
 			if ( !this.options.showLabel ){
-				this.element.addClass( " ui-button-icon-only" );
+				this.element.addClass( "ui-button-icon-only" );
 			}
 			this.element.append( this.icon );
-			this._setTitle();
+			this._updateTooltip();
 		}
 
 		if ( this.element.is("a") ) {
-			this.element.keyup(function(event) {
-				if ( event.keyCode === $.ui.keyCode.SPACE ) {
-					// TODO pass through original event correctly (just as 2nd argument doesn't work)
-					$( this ).click();
+			this._on({
+				"keyup": function(event) {
+					if ( event.keyCode === $.ui.keyCode.SPACE ) {
+						event.type = "click";
+						this.element.trigger( event );
+					}
 				}
 			});
 		}
 	},
 
-	_setTitle: function() {
+	_updateTooltip: function() {
 		this.title = this.element.attr( "title" );
 		this.hasTitle = !!this.title;
 
-		if ( !this.options.showLabel ){
-			if ( !this.hasTitle ) {
-				this.element.attr( "title", this.title );
-			}
+		if ( !this.options.showLabel && !this.hasTitle ){
+			this.element.attr( "title", this.title );
 		}
 	},
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-helper-hidden-accessible " + baseClasses +
+			.removeClass( baseClasses +
 				" ui-state-active " + typeClasses )
-			.removeAttr( "role" )
-			.removeAttr( "aria-pressed" );
+			.removeAttr( "role" );
 
 		if ( !this.hasTitle ) {
 			this.element.removeAttr( "title" );
@@ -139,13 +135,20 @@ $.widget( "ui.button", {
 
 	_setOption: function( key, value ) {
 		if ( key === "icon" ) {
-			this.icon.addClass( " ui-icon " + value )
-				.removeClass( this.options.icon );
+			if ( value !== null ) {
+				if ( this.icon === undefined ) {
+					this.icon = $( "<span>" );
+				}
+				this.icon.addClass( "ui-icon " + value ).removeClass( this.options.icon );
+			} else {
+				this.icon.remove();
+				this.element.removeClass( this.options.iconPosition );
+			}
 		}
 		if ( key === "showLabel" ) {
-			this.element.toggleClass( ".ui-button-icon-only", !( !!value ) )
+			this.element.toggleClass( "ui-button-icon-only", !value )
 				.toggleClass( this.options.iconPosition, !!value );
-			this._setTitle();
+			this._updateTooltip();
 		}
 		if ( key === "iconPosition" && this.options.showLabel ) {
 			this.element.addClass( value )
@@ -155,13 +158,14 @@ $.widget( "ui.button", {
 			if ( this.element.is( "input" ) ) {
 				this.element.val( value );
 			} else {
-				this.element.html( value );
+				console.log( this.icon );
+				this.element.html( ( ( !!this.icon ) ? "" : this.icon ) + value );
 			}
 		}
 		this._super( key, value );
 		if ( key === "disabled" ) {
-			this.element.toggleClass( " ui-state-disabled", !!value );
-			this.element.prop( "disabled", !!value ).blur();
+			this.element.toggleClass( "ui-state-disabled", value );
+			this.element.prop( "disabled", value ).blur();
 			return;
 		}
 	},
@@ -175,7 +179,7 @@ $.widget( "ui.button", {
 			this._setOptions( { "disabled": isDisabled } );
 		}
 
-		this._setTitle();
+		this._updateTooltip();
 	}
 
 });
