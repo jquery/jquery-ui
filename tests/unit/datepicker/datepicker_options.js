@@ -631,7 +631,57 @@ test("altField", function() {
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
 	equal(inp.val(), "06/04/2008", "Alt field - dp - pgdn/esc");
-	equal(alt.val(), "", "Alt field - alt - pgdn/esc");
+	equal(alt.val(), "2008-06-04", "Alt field - alt - pgdn/esc");
+	// Clear date and alternate
+	alt.val("");
+	inp.val("06/04/2008").datepicker("show");
+	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.END});
+	equal(inp.val(), "", "Alt field - dp - ctrl+end");
+	equal(alt.val(), "", "Alt field - alt - ctrl+end");
+});
+
+test("alternate with range selection", function(){
+	expect( 12 );
+	var inp = TestHelpers.datepicker.init("#inp"),
+		alt = $("#alt");
+	// No alternate field set
+	alt.val("");
+	inp.datepicker("option", {selectRange: true}).
+		val("06/04/2008").datepicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	equal(inp.val(), "06/04/2008", "Alt field - dp - enter");
+	equal(alt.val(), "", "Alt field - alt not set");
+
+	// Alternate field set
+	alt.val("");
+	inp.datepicker("option", {selectRange: true, altField: "#alt", altFormat: "yy-mm-dd"}).
+		val("06/04/2008").datepicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	equal(inp.val(), "06/04/2008", "Alt field - dp - enter");
+	equal(alt.val(), "2008-06-04", "Alt field - alt - enter");
+
+	// Alternate field set with range
+	alt.val("");
+	inp.datepicker("option", {selectRange: true, altField: "#alt", altFormat: "yy-mm-dd"}).
+		val("06/04/2008 - 10/04/2008").datepicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	equal(inp.val(), "06/04/2008 - 10/04/2008", "Alt field - dp - enter");
+	equal(alt.val(), "2008-06-04 - 2008-10-04", "Alt field - alt - enter");
+
+	// Move from initial date
+	alt.val("");
+	inp.val("06/04/2008").datepicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	equal(inp.val(), "06/04/2008 - 07/04/2008", "Alt field - dp - pgdn");
+	equal(alt.val(), "2008-06-04 - 2008-07-04", "Alt field - alt - pgdn");
+	// Alternate field set - closed
+	alt.val("");
+	inp.val("06/04/2008").datepicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
+	equal(inp.val(), "06/04/2008", "Alt field - dp - pgdn/esc");
+	equal(alt.val(), "2008-06-04", "Alt field - alt - pgdn/esc");
 	// Clear date and alternate
 	alt.val("");
 	inp.val("06/04/2008").datepicker("show");
@@ -641,7 +691,7 @@ test("altField", function() {
 });
 
 test("autoSize", function() {
-	expect( 15 );
+	expect( 19 );
 	var inp = TestHelpers.datepicker.init("#inp");
 	equal(inp.prop("size"), 20, "Auto size - default");
 	inp.datepicker("option", "autoSize", true);
@@ -652,6 +702,18 @@ test("autoSize", function() {
 	equal(inp.prop("size"), 15, "Auto size - D M d yy");
 	inp.datepicker("option", "dateFormat", "DD, MM dd, yy");
 	equal(inp.prop("size"), 29, "Auto size - DD, MM dd, yy");
+
+	// Date range
+	inp.datepicker("option", "selectRange", true);
+	inp.datepicker("option", "dateFormat", "mm/dd/yy");
+	equal(inp.prop("size"), 23, "Auto size - mm/dd/yy");
+	inp.datepicker("option", "dateFormat", "m/d/yy");
+	equal(inp.prop("size"), 23, "Auto size - m/d/yy");
+	inp.datepicker("option", "dateFormat", "D M d yy");
+	equal(inp.prop("size"), 33, "Auto size - D M d yy");
+	inp.datepicker("option", "dateFormat", "DD, MM dd, yy");
+	equal(inp.prop("size"), 61, "Auto size - DD, MM dd, yy");
+	inp.datepicker("option", "selectRange", false);
 
 	// French
 	inp.datepicker("option", $.extend({autoSize: false}, $.datepicker.regional.fr));
@@ -676,6 +738,9 @@ test("autoSize", function() {
 	equal(inp.prop("size"), 16, "Auto size - he - D M d yy");
 	inp.datepicker("option", "dateFormat", "DD, MM dd, yy");
 	equal(inp.prop("size"), 23, "Auto size - he - DD, MM dd, yy");
+
+
+
 });
 
 test("daylightSaving", function() {
@@ -959,6 +1024,17 @@ test("parseDate", function() {
 	zh = $.datepicker.regional["zh-CN"];
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("yy M d", "2011 十一月 22", zh),
 		new Date(2011, 11 - 1, 22), "Parse date yy M d with zh-CN");
+});
+
+test("parseRange", function(){
+	expect( 5 );
+	TestHelpers.datepicker.init("#inp");
+	ok($.datepicker.parseRange("d m y", " : ", "") == null, "Parse range empty");
+	TestHelpers.datepicker.equalsRange($.datepicker.parseRange("d m y", " : ", "3 2 01 : 4 4 01"),
+		[new Date(2001, 2 - 1, 3), new Date(2001, 4 - 1, 4)], "Parse date d m y");
+
+	TestHelpers.datepicker.equalsRange($.datepicker.parseRange("d m y", " : ", "3 2 01"),
+		[new Date(2001, 2 - 1, 3), new Date(2001, 2 - 1, 3)], "Parse date d m y");
 });
 
 test("parseDateErrors", function() {
