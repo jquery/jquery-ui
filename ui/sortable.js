@@ -136,6 +136,17 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		var currentItem = null,
 			validHandle = false,
 			that = this;
+			
+		// support: IE9
+		// IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
+		try {
+			// Support: IE9+
+			// If the <body> is blurred, IE will switch windows, see #9520
+			if ( document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body" ) {
+				// Blur any element that currently has focus, see #4261
+				$( document.activeElement ).blur();
+			}
+		} catch ( error ) {}
 
 		if (this.reverting) {
 			return false;
