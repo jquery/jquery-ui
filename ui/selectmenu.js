@@ -223,11 +223,10 @@ return $.widget( "ui.selectmenu", {
 		if ( !this.menuItems ) {
 			this._refreshMenu();
 		} else {
-			// TODO: Why is this necessary?
-			// Shouldn't the underlying menu always have accurate state?
+
+			// Menu clears focus on close, reset focus to selected item
 			this.menu.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
 			this.menuInstance.focus( null, this._getSelectedItem() );
-			this.menuItems.eq( this.element[ 0 ].selectedIndex ).addClass( "ui-state-active" );
 		}
 
 		this.isOpen = true;
@@ -251,11 +250,6 @@ return $.widget( "ui.selectmenu", {
 
 		this.isOpen = false;
 		this._toggleAttr();
-
-		// Check if we have an item to select
-		if ( this.menuItems ) {
-			this.menuInstance.active = this._getSelectedItem();
-		}
 
 		this._off( this.document );
 
