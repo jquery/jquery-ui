@@ -185,36 +185,36 @@ $.each([
 	});
 
 	asyncTest( "item focus and active state - " + settings.type, function () {
-		expect( 8 );
+		expect( 4 );
 
-		var element = $( settings.selector ).selectmenu(),
+		var items, focusedItem, activeItem,
+			element = $( settings.selector ).selectmenu(),
 			button = element.selectmenu( "widget" ),
-			menu = element.selectmenu( "menuWidget" ),
-			links, focusedItem, activeItem;
+			menu = element.selectmenu( "menuWidget" );
 
-		// init menu
+		// Initialize menu
 		button.simulate( "focus" );
 
 		setTimeout(function() {
-			links = menu.find( "li.ui-menu-item" );
+			items = menu.find( "li.ui-menu-item" );
 
 			button.trigger( "click" );
 			setTimeout(function() {
 				checkItemClasses();
 
-				links.eq( 3 ).simulate( "mouseover" ).trigger( "click" );
+				items.eq( 3 ).simulate( "mouseover" ).trigger( "click" );
 
 				button.trigger( "click" );
-				links.eq( 2 ).simulate( "mouseover" );
+				items.eq( 2 ).simulate( "mouseover" );
 				$( document ).trigger( "click" );
 
 				button.trigger( "click" );
-				links.eq( 1 ).simulate( "mouseover" );
+				items.eq( 1 ).simulate( "mouseover" );
 				$( document ).trigger( "click" );
 
 				button.trigger( "click" );
 				setTimeout(function() {
-					 checkItemClasses();
+					checkItemClasses();
 					start();
 				}, 350 );
 			}, 350 );
@@ -223,11 +223,7 @@ $.each([
 		function checkItemClasses() {
 			focusedItem = menu.find( "li.ui-state-focus" );
 			equal( focusedItem.length, 1, "only one item has ui-state-focus class" );
-			equal( focusedItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-focus class" );
-
-			activeItem = menu.find( "li.ui-state-active" );
-			equal( activeItem.length, 1, "only one item has ui-state-active class" );
-			equal( activeItem.attr( "id" ), links.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-active class" );
+			equal( focusedItem.attr( "id" ), items.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-focus class" );
 		}
 	});
 
