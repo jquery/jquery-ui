@@ -363,7 +363,7 @@ return $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.isOpen ) {
-						this._selectMenu( event );
+						this._selectFocusedItem( event );
 					}
 					break;
 				case $.ui.keyCode.UP:
@@ -382,7 +382,7 @@ return $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.SPACE:
 					if ( this.isOpen ) {
-						this._selectMenu( event );
+						this._selectFocusedItem( event );
 					} else {
 						this._toggle( event );
 					}
@@ -412,9 +412,10 @@ return $.widget( "ui.selectmenu", {
 		}
 	},
 
-	_selectMenu: function( event ) {
-		if ( !this.menuItems.eq( this.focusIndex ).hasClass( "ui-state-disabled" ) ) {
-			this.menuInstance.select( event );
+	_selectFocusedItem: function( event ) {
+		var item = this.menuItems.eq( this.focusIndex );
+		if ( !item.hasClass( "ui-state-disabled" ) ) {
+			this._select( item.data( "ui-selectmenu-item" ), event );
 		}
 	},
 
