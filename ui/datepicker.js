@@ -2035,7 +2035,8 @@ $.fn.datepicker = function(options){
 
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
-		$(document).mousedown($.datepicker._checkExternalClick);
+		$(document).mousedown($.datepicker._checkExternalClick)
+			.find(document.body).append($.datepicker.dpDiv);;
 		$.datepicker.initialized = true;
 	}
 
