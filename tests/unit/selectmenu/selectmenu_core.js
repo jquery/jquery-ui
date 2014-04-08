@@ -222,9 +222,6 @@ $.each([
 
 		function checkItemClasses() {
 			focusedItem = menu.find( "li.ui-state-focus" );
-			focusedItem.each(function() {
-				console.log( this.innerHTML );
-			})
 			equal( focusedItem.length, 1, "only one item has ui-state-focus class" );
 			equal( focusedItem.attr( "id" ), items.eq( element[ 0 ].selectedIndex ).attr( "id" ), "selected item has ui-state-focus class" );
 		}
