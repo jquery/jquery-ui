@@ -106,7 +106,7 @@ $.widget( "ui.button", {
 				"keyup": function(event) {
 					if ( event.keyCode === $.ui.keyCode.SPACE ) {
 						event.type = "click";
-						this.element.trigger( event );
+						this.element[0].click();
 					}
 				}
 			});

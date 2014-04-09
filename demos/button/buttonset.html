@@ -8,13 +8,18 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/position.js"></script>
+	<script src="../../ui/menu.js"></script>
+	<script src="../../ui/selectmenu.js"></script>
 	<script src="../../ui/checkboxradio.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
 		$( ".widget input[type=submit], .widget a, .widget button" )
 			.button();
-		$("#checkbox").checkboxradio();
+			$("#checkbox").checkboxradio();
+			$("select").selectmenu();
+			$(".ui-selectmenu-button").removeClass("ui-selectmenu-button").addClass("ui-button");
 	});
 	</script>
 </head>
@@ -28,14 +33,17 @@
 	<a href="#">An anchor</a>
 </div>
 <h1>CSS Buttons</h1>
-<button class="ui-button ui-widget ui-corner-all">A button element</button>
+<div class="ui-buttonset">
+	<button class="ui-button ui-widget ui-corner-left">A button element</button>
 
-<input class="ui-button ui-widget ui-corner-all" type="submit" value="A submit button">
-<label for="checkbox">checkbox</label>
-<input type="checkbox" name="checkbox" id="checkbox"/>
-<a class="ui-button ui-widget ui-corner-all" href="#">An anchor</a>
-
+	<input class="ui-button ui-widget" type="submit" value="A submit button">
+	<label for="checkbox">checkbox</label>
+	<input type="checkbox" name="checkbox" id="checkbox"/>
+	<select id="select" name="Select"><option>foo</option><option>bar</option></select>
+	<a class="ui-button ui-widget ui-corner-right" href="#">An anchor</a>
+</div>
 <div class="demo-description">
+	<select name="Select" id="bar"><option>foo</option><option>bar</option></select>
 <p>Examples of the markup that can be used for buttons: A button element, an input of type submit and an anchor.</p>
 </div>
 </body>

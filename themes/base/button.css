@@ -72,6 +72,7 @@ input.ui-button {
 .ui-buttonset .ui-button {
 	margin-left: 0;
 	margin-right: -.3em;
+	border-radius: 0;
 }
 
 /* workarounds */

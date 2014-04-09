@@ -83,7 +83,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Create button
 		this.button = $( "<span>", {
-			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
+			"class": "ui-button ui-widget ui-state-default ui-icon-beginning ui-corner-all",
 			tabindex: tabindex || this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			role: "combobox",
@@ -94,16 +94,11 @@ return $.widget( "ui.selectmenu", {
 		})
 		.insertAfter( this.element );
 
-		$( "<span>", {
+		this.icon = $( "<span>", {
 			"class": "ui-icon " + this.options.icons.button
 		}).prependTo( this.button );
 
-		this.buttonText = $( "<span>", {
-			"class": "ui-selectmenu-text"
-		})
-		.appendTo( this.button );
-
-		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
+		this._setText( this.button, this.element.find( "option:selected" ).text() );
 		this._setOption( "width", this.options.width );
 
 		this._on( this.button, this._buttonEvents );
@@ -177,7 +172,7 @@ return $.widget( "ui.selectmenu", {
 
 	refresh: function() {
 		this._refreshMenu();
-		this._setText( this.buttonText, this._getSelectedItem().text() );
+		this._setText( this.button, this._getSelectedItem().text() );
 		this._setOption( "width", this.options.width );
 	},
 
@@ -299,8 +294,12 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_setText: function( element, value ) {
+		if ( element === this.button ) {
+			console.log( value )
+			value = ( this.icon[ 0 ].outerHTML  ) + value;
+		}
 		if ( value ) {
-			element.text( value );
+			element.html( value );
 		} else {
 			element.html( "&#160;" );
 		}
@@ -420,7 +419,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
-		this._setText( this.buttonText, item.label );
+		this._setText( this.element, item.label );
 		this._setAria( item );
 		this._trigger( "select", event, { item: item } );
 
