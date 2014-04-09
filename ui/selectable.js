@@ -252,11 +252,13 @@ return $.widget("ui.selectable", $.ui.mouse, {
 	},
 
 	_mouseStop: function(event) {
-		var that = this;
+		var that = this,
+			$unselectedItems = $(".ui-unselecting", this.element[0]),
+			$selectedItems = $(".ui-selecting", this.element[0]);
 
 		this.dragged = false;
 
-		$(".ui-unselecting", this.element[0]).each(function() {
+		$unselectedItems.each(function() {
 			var selectee = $.data(this, "selectable-item");
 			selectee.$element.removeClass("ui-unselecting");
 			selectee.unselecting = false;
@@ -265,7 +267,11 @@ return $.widget("ui.selectable", $.ui.mouse, {
 				unselected: selectee.element
 			});
 		});
-		$(".ui-selecting", this.element[0]).each(function() {
+		that._trigger("unselectedItems", event, {
+			unselectedItems: $unselectedItems
+		});
+
+		$selectedItems.each(function() {
 			var selectee = $.data(this, "selectable-item");
 			selectee.$element.removeClass("ui-selecting").addClass("ui-selected");
 			selectee.selecting = false;
@@ -275,6 +281,10 @@ return $.widget("ui.selectable", $.ui.mouse, {
 				selected: selectee.element
 			});
 		});
+		that._trigger("selectedItems", event, {
+			selectedItems: $selectedItems
+		});
+
 		this._trigger("stop", event);
 
 		this.helper.remove();
