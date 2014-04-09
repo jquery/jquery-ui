@@ -700,7 +700,7 @@ $.ui.plugin.add("resizable", "animate", {
 					that._propagate("resize", event);
 
 				}
-			}
+			}, $.isPlainObject(o.animate) ? o.animate : {}
 		);
 	}
 
