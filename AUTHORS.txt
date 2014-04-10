@@ -273,3 +273,4 @@ Brian J. Dowling <bjd-dev@simplicity.net>
 Ben Higgins <ben@extrahop.com>
 Yermo <yml@yml.com>
 Patrick Stapleton <github@gdi2290.com>
+Jarrod Ribble <jarrod.ribble@gmail.com>

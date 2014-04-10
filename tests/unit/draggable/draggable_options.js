@@ -915,6 +915,114 @@ test( "#6817: auto scroll goes double distance when dragging", function() {
 	TestHelpers.draggable.restoreScroll( document );
 });
 
+test( "#9974: scrolling while dragging causes grid misalignment", function() {
+    expect( 5 );
+
+    $( "<div id='9974ScrollParent' style='width:500px; height: 500px; overflow: scroll;'>" +
+       "    <div id='9974Container' style='position: relative; width: 4000px; height: 2000px;'>" +
+       "        <div id='9974Draggable' style='top:0px; left:0px; height:150px; width:150px;'>" +
+       "            <p>Drag me around</p>" +
+       "        </div>" +
+       "    </div>" +
+       "</div>" ).appendTo( "#qunit-fixture" );
+
+    var scrollParent = $( "#9974ScrollParent" ),
+        element = $( "#9974Draggable" ).draggable({ scroll: true, grid: [ 50, 50 ], scrollSpeed: 17 }),
+        currentScrollTop = scrollParent.scrollTop(),
+        viewportHeight = scrollParent.height(),
+        scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
+        scrollSpeed = element.draggable( "option", "scrollSpeed" );
+
+    // first make sure we snap to the grid without scrolling
+    $( element ).one( "dragstop", function() {
+        ok( scrollParent.scrollTop() === currentScrollTop, "scroll: didn't scroll during drag when it shouldn't");
+        ok( ( element.position().top % 50 ) === 0, "scroll: element aligns to grid when not scrolling (element top:" + element.position().top + ")" );
+    });
+
+    element.simulate( "drag", {
+        dx: 1,
+        dy: viewportHeight - scrollSensitivity - 150,
+        moves: 1
+    });
+
+    // scroll like a real page - lots of events
+    element.simulate( "drag", {
+        dx: 1,
+        dy: 111, // trying to make sure not inadvertently a multiple of 10 or 5
+        moves: 111
+    });
+
+    // we should have scrolled a multiple of the scrollSpeed
+    ok( scrollParent.scrollTop() > 0, "scroll: scrolls when the element is dragged within scrollSensitivity(scrollTop: " + scrollParent.scrollTop() + ")" );
+    equal( scrollParent.scrollTop() % scrollSpeed, 0, "scroll: scrolls a multiple of scrollSpeed" );
+    // and the element should still be positioned at a grid line
+    equal( element.position().top % 50, 0, "scroll: element still aligns to grid when scroll parent scrolls during drag (element top:" + element.position().top + ")" );
+
+});
+
+test( "#9974: starting drag when scroll is not aligned to grid makes dragged element also misaligned", function() {
+    expect( 20 );
+
+    $( "<div id='9974ScrollParent' style='width:500px; height: 500px; overflow: scroll;'>" +
+       "    <div id='9974Container' style='position: relative; width: 4000px; height: 2000px;'>" +
+       "        <div id='9974Draggable' style='top:0px; left:0px; height:150px; width:150px;'>" +
+       "            <p>Drag me around</p>" +
+       "        </div>" +
+       "    </div>" +
+       "</div>" ).appendTo( "#qunit-fixture" );
+
+    var scrollParent = $( "#9974ScrollParent" ),
+        element = $( "#9974Draggable" ).draggable({ scroll: true, grid: [ 50, 50 ], scrollSpeed: 17 });
+
+    // place element at valid grid location
+    element[0].style.top = "50px";
+    // scroll parent to not align with grid
+    scrollParent.scrollTop(17);
+
+    // make sure we snap to the grid while draggin
+    $( element ).on( "drag", function() {
+        ok( ( element.position().top % 50 ) === 0, "scroll: element aligns to grid when dragging (element top:" + element.position().top + ")" );
+    });
+
+    element.simulate( "drag", {
+        dx: 1,
+        dy: 500,
+        moves: 20
+    });
+
+});
+
+test( "dragging to containment edge while scrolled ", function() {
+    expect( 1 );
+
+    $( "<div id='9974ScrollParent' style='width:500px; height: 500px; overflow: scroll;'>" +
+        "    <div id='9974Container' style='position: relative; width: 750px; height: 750px;'>" +
+        "        <div id='9974Draggable' style='top:0px; left:0px; height:150px; width:150px;'>" +
+        "            <p>Drag me around</p>" +
+        "        </div>" +
+        "    </div>" +
+        "</div>" ).appendTo( "#qunit-fixture" );
+
+    var scrollParent = $( "#9974ScrollParent" ),
+        container = $( "#9974Container"),
+        element = $( "#9974Draggable" ).draggable({ scroll: true, scrollSpeed: 17, containment: container });
+
+    // scroll parent to not align with grid
+    scrollParent.scrollTop(281);
+    // place element at valid grid location
+    element[0].style.top = "600px";
+
+    element.simulate( "drag", {
+        dx: 1,
+        dy: 1,
+        moves: 1
+    });
+
+    // make sure we snap to the grid while dragging
+    equal( element.position().top, 600, "scroll: bound by containment and aligns to grid when dragging in scrolled container (element top:" + element.position().top + ")" );
+
+});
+
 test( "snap, snapMode, and snapTolerance", function() {
 	expect( 10 );
 
