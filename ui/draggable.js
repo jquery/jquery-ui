@@ -172,7 +172,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 		};
 
 		//Reset scroll cache
-		this.offset.scroll = false;
+		this.offset.scroll = {
+            top: this.scrollParent.scrollTop(),
+            left: this.scrollParent.scrollLeft()
+        };
 
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
@@ -183,10 +186,32 @@ $.widget("ui.draggable", $.ui.mouse, {
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
 		});
 
-		//Generate the original position
-		this.originalPosition = this.position = this._generatePosition( event, false );
-		this.originalPageX = event.pageX;
-		this.originalPageY = event.pageY;
+        // we want the true original position of the element
+        // based on what's it's set to in the css
+        this.originalPosition = {
+            left: parseInt(this.element.css("left"), 10),
+            top: parseInt(this.element.css("top"), 10)
+        };
+        if ( isNaN( this.originalPosition.left ) ) {
+            this.originalPosition.left = 0;
+        }
+        if ( isNaN( this.originalPosition.top ) ) {
+            this.originalPosition.top = 0;
+        }
+        this.position = this.originalPosition;
+
+        // and figure out from the true original position the pageX and pageY that would represent that position
+        // this needs to be the inverse of figuring out position from pageX and Y from _generatePosition
+		this.originalPageX = this.originalPosition.left +
+                             this.offset.click.left +
+                             this.offset.relative.left +
+                             this.offset.parent.left +
+                             ( this.cssPosition === "fixed" && this._isRootNode( this.scrollParent[ 0 ] ) ? +this.offset.scroll.left : 0);
+		this.originalPageY = this.originalPosition.top +
+                             this.offset.click.top +
+                             this.offset.relative.top +
+                             this.offset.parent.top +
+                             ( this.cssPosition === "fixed" && this._isRootNode( this.scrollParent[ 0 ] ) ? +this.offset.scroll.top : 0);
 
 		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
 		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
@@ -518,11 +543,18 @@ $.widget("ui.draggable", $.ui.mouse, {
 			pageY = event.pageY;
 
 		// Cache the scroll
-		if ( !scrollIsRootNode || !this.offset.scroll ) {
-			this.offset.scroll = {
-				top: this.scrollParent.scrollTop(),
-				left: this.scrollParent.scrollLeft()
-			};
+		if ( !scrollIsRootNode ) {
+            this.offset.scroll = {
+                top: this.scrollParent.scrollTop(),
+                left: this.scrollParent.scrollLeft()
+            };
+
+            // adjust to scroll position - do this before constraining
+            if ( !scrollIsRootNode ) {
+                pageX += ( this.cssPosition === "fixed" ? -this.offset.scroll.left : this.offset.scroll.left );
+                pageY += ( this.cssPosition === "fixed" ? -this.offset.scroll.top : this.offset.scroll.top );
+            }
+
 		}
 
 		/*
@@ -546,16 +578,16 @@ $.widget("ui.draggable", $.ui.mouse, {
 				}
 
 				if (event.pageX - this.offset.click.left < containment[0]) {
-					pageX = containment[0] + this.offset.click.left;
+					pageX = containment[0] + this.offset.click.left + (!scrollIsRootNode ? ( this.cssPosition === "fixed" ? -this.offset.scroll.left : this.offset.scroll.left ) : 0 );
 				}
 				if (event.pageY - this.offset.click.top < containment[1]) {
-					pageY = containment[1] + this.offset.click.top;
+					pageY = containment[1] + this.offset.click.top + (!scrollIsRootNode ? ( this.cssPosition === "fixed" ? -this.offset.scroll.top : this.offset.scroll.top ) : 0 );
 				}
 				if (event.pageX - this.offset.click.left > containment[2]) {
-					pageX = containment[2] + this.offset.click.left;
+					pageX = containment[2] + this.offset.click.left + (!scrollIsRootNode ? ( this.cssPosition === "fixed" ? -this.offset.scroll.left : this.offset.scroll.left ) : 0 );
 				}
 				if (event.pageY - this.offset.click.top > containment[3]) {
-					pageY = containment[3] + this.offset.click.top;
+					pageY = containment[3] + this.offset.click.top + (!scrollIsRootNode ? ( this.cssPosition === "fixed" ? -this.offset.scroll.top : this.offset.scroll.top ) : 0 );
 				}
 			}
 
@@ -583,14 +615,14 @@ $.widget("ui.draggable", $.ui.mouse, {
 				this.offset.click.top	-												// Click offset (relative to the element)
 				this.offset.relative.top -												// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.top +												// The offsetParent's offset without borders (offset + border)
-				( this.cssPosition === "fixed" ? -this.offset.scroll.top : ( scrollIsRootNode ? 0 : this.offset.scroll.top ) )
+				( this.cssPosition === "fixed" && scrollIsRootNode ? -this.offset.scroll.top : 0 )
 			),
 			left: (
 				pageX -																	// The absolute mouse position
 				this.offset.click.left -												// Click offset (relative to the element)
 				this.offset.relative.left -												// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.left +												// The offsetParent's offset without borders (offset + border)
-				( this.cssPosition === "fixed" ? -this.offset.scroll.left : ( scrollIsRootNode ? 0 : this.offset.scroll.left ) )
+				( this.cssPosition === "fixed" && scrollIsRootNode ? -this.offset.scroll.left : 0 )
 			)
 		};
 
