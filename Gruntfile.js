@@ -31,11 +31,13 @@ var
 		"button",
 		"datepicker",
 		"dialog",
+		"draggable",
 		"menu",
 		"progressbar",
 		"resizable",
 		"selectable",
 		"selectmenu",
+		"sortable",
 		"slider",
 		"spinner",
 		"tabs",
@@ -160,7 +162,7 @@ grunt.initConfig({
 		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js" ],
 		// TODO enable this once we have a tool that can help with fixing formatting of existing files
 		// tests: "tests/unit/**/*.js",
-		grunt: "Gruntfile.js"
+		grunt: [ "Gruntfile.js", "build/tasks/*.js" ]
 	},
 	uglify: minify,
 	htmllint: {
@@ -213,6 +215,28 @@ grunt.initConfig({
 			src: "build/**/*.js"
 		},
 		grunt: "Gruntfile.js"
+	},
+
+	bowercopy: {
+		options: {
+			clean: true
+		},
+		qunit: {
+			files: {
+				"external": "qunit/qunit"
+			}
+		},
+		mousewheel: {
+			files: {
+				"external": "jquery-mousewheel/jquery.mousewheel.js"
+			}
+		},
+		jshint: {
+			files: {
+				"external": "jshint/dist/jshint.js"
+			}
+		},
+		"jquery.js": "jquery/dist/jquery.js"
 	}
 });
 
