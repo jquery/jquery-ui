@@ -187,7 +187,7 @@ $.each([
 	asyncTest( "item focus and active state - " + settings.type, function () {
 		expect( 4 );
 
-		var items, focusedItem, activeItem,
+		var items, focusedItem,
 			element = $( settings.selector ).selectmenu(),
 			button = element.selectmenu( "widget" ),
 			menu = element.selectmenu( "menuWidget" );
