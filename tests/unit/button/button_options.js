@@ -41,13 +41,13 @@ test("disabled, null", function() {
 test( "disabled, ui-state-active is removed unless checkbox or radio", function() {
 	expect( 12 );
 	var elements = [
-			$( "<input type='button'>" ),
-			$( "<button></button>" ),
-			$( "<a></a>" ),
-			$( "<div></div>" ),
-			$( "<input type='checkbox' id='checkbox' checked><label for='checkbox'></label>" ),
-			$( "<input type='radio' id='radio' checked><label for='radio'></label>" )
-		];
+		$( "<input type='button'>" ),
+		$( "<button></button>" ),
+		$( "<a></a>" ),
+		$( "<div></div>" ),
+		$( "<input type='checkbox' id='checkbox' checked><label for='checkbox'></label>" ),
+		$( "<input type='radio' id='radio' checked><label for='radio'></label>" )
+	];
 
 	$.each( elements, function() {
 		var element = $( this ).first().button(),
