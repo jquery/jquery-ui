@@ -31,6 +31,7 @@ return $.widget( "ui.selectmenu", {
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,
+		disabled: null,
 		icons: {
 			button: "ui-icon-triangle-1-s"
 		},
