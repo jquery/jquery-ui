@@ -35,7 +35,6 @@ asyncTest( "change", function() {
 	});
 });
 
-
 test( "close", function() {
 	expect( 2 );
 
@@ -48,7 +47,7 @@ test( "close", function() {
 	});
 
 	shouldFire = false;
-	this.element.selectmenu( "open" )
+	this.element.selectmenu( "open" );
 	shouldFire = true;
 	this.element.selectmenu( "close" );
 	shouldFire = false;
@@ -56,7 +55,6 @@ test( "close", function() {
 	shouldFire = true;
 	$( "body" ).trigger( "mousedown" );
 });
-
 
 asyncTest( "focus", function() {
 	expect( 9 );
@@ -95,7 +93,6 @@ asyncTest( "focus", function() {
 	});
 });
 
-
 test( "open", function() {
 	expect( 1 );
 
@@ -107,7 +104,6 @@ test( "open", function() {
 
 	this.element.selectmenu( "open" );
 });
-
 
 asyncTest( "select", function() {
 	expect( 3 );
