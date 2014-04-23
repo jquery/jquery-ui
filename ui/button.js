@@ -43,7 +43,7 @@ $.widget( "ui.button", {
 		showLabel: true,
 		label: null,
 		icon: null,
-		iconPosition: "begining"
+		iconPosition: "beginning"
 	},
 
 	_getCreateOptions: function() {
@@ -158,7 +158,6 @@ $.widget( "ui.button", {
 			if ( this.element.is( "input" ) ) {
 				this.element.val( value );
 			} else {
-				console.log( this.icon );
 				this.element.html( ( ( !!this.icon ) ? "" : this.icon ) + value );
 			}
 		}

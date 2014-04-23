@@ -12,35 +12,27 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "form input" ).checkboxradio();
+		var checkboxes = $( "form input" ).checkboxradio();
 
-		$(".controls input, .controls select").on( "change", function(){
+		$( ".controls input, .controls select" ).on( "change keyup", function(){
 			var option = $( this ).attr( "name" ),
 				value = $( this ).val();
 
-			if( $( this ).attr( "type" ) === "checkbox" ) {
+			if( $( this ).is( "[type=checkbox] ") ) {
 				if( $( this ).is(":checked") ) {
 					value = true;
 				} else {
 					value = false;
 				}
 			}
-			$( "form input" ).checkboxradio( "option", option, value );
+			checkboxes.checkboxradio( "option", option, value );
 		});
 		$( "#create" ).click( function(){
-			$( "form input" ).checkboxradio();
-		});
-		$( "#destroy" ).click( function(){
-			$( "form input" ).checkboxradio( "destroy" );
-		});
-		$( "#enable" ).click( function(){
-			$( "form input" ).checkboxradio( "enable");
-		});
-		$( "#disable" ).click( function(){
-			$( "form input" ).checkboxradio( "disable" );
-		});
-		$( "#refresh" ).click( function(){
-			$( "form input" ).checkboxradio( "refresh" );
+			if( this.id !== "create" ){
+				checkboxes.checkboxradio( this.id );
+			} else {
+				checkboxes.checkboxradio();
+			}
 		});
 	});
 	</script>
