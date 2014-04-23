@@ -52,6 +52,7 @@ $.widget( "ui.datepicker", {
 		open: null,
 		select: null
 	},
+
 	_create: function() {
 		this.options.dateFormat = this.options.dateFormat || { date: "short" };
 		this.date = $.date( null, this.options.dateFormat );
@@ -167,6 +168,7 @@ $.widget( "ui.datepicker", {
 			newCell.children( "a" ).addClass( "ui-state-focus" );
 		}
 	},
+
 	_createPicker: function() {
 		this.picker = $( "<div>" )
 			.addClass( "ui-front" )
@@ -200,10 +202,10 @@ $.widget( "ui.datepicker", {
 					case $.ui.keyCode.DOWN:
 					case $.ui.keyCode.UP:
 						clearTimeout( this.closeTimer );
-						this._delay(function() {
+						this._delay( function() {
 							this.open( event );
 							this.grid.focus( 1 );
-						}, 1);
+						}, 1 );
 						break;
 					case $.ui.keyCode.HOME:
 						if ( event.ctrlKey ) {
@@ -252,7 +254,7 @@ $.widget( "ui.datepicker", {
 				}
 				this._delay( function() {
 					suppressExpandOnFocus = false;
-				}, 100);
+				}, 100 );
 			},
 			blur: function() {
 				suppressExpandOnFocus = false;
@@ -266,7 +268,7 @@ $.widget( "ui.datepicker", {
 				// also allows tabbing inside the calendar without it closing
 				this.closeTimer = this._delay( function() {
 					this.close( event );
-				}, 150);
+				}, 150 );
 			},
 			focusin: function() {
 				clearTimeout( this.closeTimer );
@@ -291,6 +293,7 @@ $.widget( "ui.datepicker", {
 			}
 		});
 	},
+
 	_appendTo: function() {
 		var element = this.options.appendTo;
 
@@ -305,7 +308,7 @@ $.widget( "ui.datepicker", {
 		}
 
 		if ( !element.length ) {
-			element = this.document[0].body;
+			element = this.document[ 0 ].body;
 		}
 
 		return element;
@@ -358,10 +361,10 @@ $.widget( "ui.datepicker", {
 
 			html += "<div class='ui-datepicker-group'>" +
 				"<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix " + headerClass + "'>";
-			if ( months[i].first ) {
+			if ( months[ i ].first ) {
 				html += this._buildPreviousLink();
 			}
-			if ( months[i].last ) {
+			if ( months[ i ].last ) {
 				html += this._buildNextLink();
 			}
 
@@ -375,8 +378,10 @@ $.widget( "ui.datepicker", {
 		html += this._buildButtons();
 
 		this.date = currentDate;
+
 		return html;
 	},
+
 	_buildHeader: function() {
 		return "<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
 			this._buildPreviousLink() +
@@ -384,8 +389,10 @@ $.widget( "ui.datepicker", {
 			this._buildTitlebar() +
 		"</div>";
 	},
+
 	_buildPreviousLink: function() {
 		var labels = Globalize.translate( "datepicker" );
+
 		return "<button class='ui-datepicker-prev ui-corner-all' " +
 			"title='" + labels.prevText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-w'>" +
@@ -393,8 +400,10 @@ $.widget( "ui.datepicker", {
 				"</span>" +
 			"</button>";
 	},
+
 	_buildNextLink: function() {
 		var labels = Globalize.translate( "datepicker" );
+
 		return "<button class='ui-datepicker-next ui-corner-all' " +
 			"title='" + labels.nextText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-e'>" +
@@ -402,8 +411,10 @@ $.widget( "ui.datepicker", {
 				"</span>" +
 			"</button>";
 	},
+
 	_buildTitlebar: function() {
 		var labels = Globalize.translate( "datepicker" );
+
 		return "<div role='header' id='" + this.id + "-title'>" +
 			"<div id='" + this.id + "-month-lbl' class='ui-datepicker-title'>" +
 				this._buildTitle() +
@@ -411,6 +422,7 @@ $.widget( "ui.datepicker", {
 			"<span class='ui-helper-hidden-accessible'>, " + labels.datePickerRole + "</span>" +
 		"</div>";
 	},
+
 	_buildTitle: function() {
 		return "<span class='ui-datepicker-month'>" +
 				this.date.monthName() +
@@ -419,6 +431,7 @@ $.widget( "ui.datepicker", {
 				this.date.year() +
 			"</span>";
 	},
+
 	_buildGrid: function() {
 		return "<table class='ui-datepicker-calendar' role='grid' aria-readonly='true' " +
 			"aria-labelledby='" + this.id + "-month-lbl' tabindex='0' aria-activedescendant='" + this.id + "-" + this.date.day() + "'>" +
@@ -426,6 +439,7 @@ $.widget( "ui.datepicker", {
 			this._buildGridBody() +
 		"</table>";
 	},
+
 	_buildGridHeading: function() {
 		var cells = "",
 			i = 0,
@@ -437,10 +451,12 @@ $.widget( "ui.datepicker", {
 		for ( i; i < this.date.weekdays().length; i++ ) {
 			cells += this._buildGridHeaderCell( this.date.weekdays()[i] );
 		}
+
 		return "<thead role='presentation'>" +
 			"<tr role='row'>" + cells + "</tr>" +
 		"</thead>";
 	},
+
 	_buildGridHeaderCell: function( day ) {
 		return "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
 			"<span title='" + day.fullname + "'>" +
@@ -448,16 +464,20 @@ $.widget( "ui.datepicker", {
 			"</span>" +
 		"</th>";
 	},
+
 	_buildGridBody: function() {
 		// this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times. So, it equals O(n^3). Not good at all. Caching.
 		var days = this.date.days(),
 			i = 0,
 			rows = "";
+
 		for ( i; i < days.length; i++ ) {
-			rows += this._buildWeekRow( days[i] );
+			rows += this._buildWeekRow( days[ i ] );
 		}
+
 		return "<tbody role='presentation'>" + rows + "</tbody>";
 	},
+
 	_buildWeekRow: function( week ) {
 		var cells = "",
 			i = 0;
@@ -470,6 +490,7 @@ $.widget( "ui.datepicker", {
 		}
 		return "<tr role='row'>" + cells + "</tr>";
 	},
+
 	_buildDayCell: function( day ) {
 		var contents = "",
 			idAttribute = day.render ? ( "id=" + this.id + "-" + day.date ) : "",
@@ -488,6 +509,7 @@ $.widget( "ui.datepicker", {
 			contents +
 		"</td>";
 	},
+
 	_buildDayLink: function( day ) {
 		var link,
 			classes = [ "ui-state-default" ],
@@ -511,10 +533,13 @@ $.widget( "ui.datepicker", {
 		if ( day.today ) {
 			link += "<span class='ui-helper-hidden-accessible'>, " + labels.currentText + "</span>";
 		}
+
 		return link;
 	},
+
 	_buildDayDisplay: function( day ) {
 		var classes = [];
+
 		if ( day.current ) {
 			classes.push( "ui-state-active" );
 		}
@@ -525,20 +550,23 @@ $.widget( "ui.datepicker", {
 			classes.push( day.extraClasses.split( " " ) );
 		}
 
-		return "<span class='" + classes.join( "" ) + "'>" +
-					day.date + "</span>";
+		return "<span class='" + classes.join( "" ) + "'>" + day.date + "</span>";
 	},
+
 	_buildButtons: function() {
 		var labels = Globalize.translate( "datepicker" );
+
 		return "<div class='ui-datepicker-buttonpane ui-widget-content'>" +
 			"<button class='ui-datepicker-current'>" + labels.currentText + "</button>" +
 			"<button class='ui-datepicker-close'>" + labels.closeText + "</button>" +
 		"</div>";
 	},
+
 	_focusTrigger: function() {
 		suppressExpandOnFocus = true;
 		this.element.focus();
 	},
+
 	// Refreshing the entire datepicker during interaction confuses screen readers, specifically
 	// because the grid heading is marked up as a live region and will often not update if it's
 	// destroyed and recreated instead of just having its text change. Additionally, interacting
@@ -555,6 +583,7 @@ $.widget( "ui.datepicker", {
 			this._refreshMultiplePicker();
 		}
 	},
+
 	_refreshMultiplePicker: function() {
 		for ( var i = 0; i < this.options.numberOfMonths; i++ ) {
 			$( ".ui-datepicker-title", this.picker ).eq( i ).html( this._buildTitle() );
@@ -568,6 +597,7 @@ $.widget( "ui.datepicker", {
 		// to maintain the currently focused grid and base queries like this off of it.
 		$( this.picker ).find( ".ui-state-focus" ).not( ":first" ).removeClass( "ui-state-focus" );
 	},
+
 	open: function( event ) {
 		if ( this.inline || this.isOpen ) {
 			return;
@@ -598,6 +628,7 @@ $.widget( "ui.datepicker", {
 
 		this._trigger( "open", event );
 	},
+
 	close: function( event ) {
 		if ( this.inline ) {
 			return;
@@ -611,16 +642,19 @@ $.widget( "ui.datepicker", {
 		this.isOpen = false;
 		this._trigger( "close", event );
 	},
+
 	_setHiddenPicker: function() {
 		this.picker
 			.attr( "aria-hidden", "true" )
 			.attr( "aria-expanded", "false" );
 	},
+
 	_buildPosition: function() {
 		return $.extend( {}, {
 			of: this.element
 		}, this.options.position );
 	},
+
 	select: function( event, time ) {
 		this.date.setTime( time ).select();
 		this.refresh();
@@ -634,6 +668,7 @@ $.widget( "ui.datepicker", {
 			date: this.date.format()
 		});
 	},
+
 	_value: function( value ) {
 		this.date.setTime( value ).select();
 		if ( !this.inline ) {
@@ -641,6 +676,7 @@ $.widget( "ui.datepicker", {
 		}
 		this.refresh();
 	},
+
 	value: function( value ) {
 		if ( arguments.length ) {
 			this._value( value );
@@ -648,6 +684,7 @@ $.widget( "ui.datepicker", {
 			return this.isValid() ? this.date.format() : this.element.val();
 		}
 	},
+
 	valueAsDate: function( value ) {
 		if ( arguments.length ) {
 			this._value( value );
@@ -655,12 +692,15 @@ $.widget( "ui.datepicker", {
 			return this.isValid() ? this.date.date() : null;
 		}
 	},
+
 	isValid: function() {
 		if ( this.inline ) {
 			return true;
 		}
+
 		return Globalize.parseDate( this.element.val(), this.options.dateFormat ) !== null;
 	},
+
 	_destroy: function() {
 		if ( this.inline ) {
 			this.picker.empty();
@@ -671,9 +711,11 @@ $.widget( "ui.datepicker", {
 				.removeAttr( "aria-owns" );
 		}
 	},
+
 	widget: function() {
 		return this.picker;
 	},
+
 	_setOption: function( key, value ) {
 		this._super( key, value );
 

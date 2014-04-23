@@ -126,7 +126,7 @@ $.date.prototype = {
 			var day = ( dow + weekdaysRev[ Globalize.locale().supplemental.weekData.firstDay() ] ) % 7;
 			result.push({
 				shortname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/abbreviated", weekdays[ day ] ]),
-				fullname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/wide", weekdays[ day ] ]),
+				fullname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/wide", weekdays[ day ] ])
 			});
 		}
 		return result;
