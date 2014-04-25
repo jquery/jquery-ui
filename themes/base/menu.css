@@ -19,9 +19,9 @@
 	position: absolute;
 }
 .ui-menu .ui-menu-item {
+	position: relative;
 	margin: 0;
-	display: block;
-	padding: 3px .4em;
+	padding: 3px 1em 3px .4em;
 	cursor: pointer;
 	min-height: 0; /* support: IE7 */
 	/* support: IE10, see #8844 */
@@ -44,20 +44,20 @@
 	position: relative;
 }
 .ui-menu-icons .ui-menu-item {
-	position: relative;
 	padding-left: 2em;
 }
 
 /* left-aligned */
 .ui-menu .ui-icon {
 	position: absolute;
-	top: .2em;
+	top: 0;
+	bottom: 0;
 	left: .2em;
+	margin: auto 0;
 }
 
 /* right-aligned */
 .ui-menu .ui-menu-icon {
-	position: relative;
-	top: -.2em;
-	float: right;
+	left: auto;
+	right: 0;
 }
