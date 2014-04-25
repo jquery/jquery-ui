@@ -51,7 +51,7 @@ test( "enable / disable", function() {
 test( "widget", function() {
 	expect( 1 );
 	var actual = $( "#datepicker" ).datepicker().datepicker( "widget" );
-	deepEqual( $("body > .ui-front" )[ 0 ],  actual[ 0 ] );
+	deepEqual( $( "body > .ui-front" )[ 0 ],  actual[ 0 ] );
 	actual.remove();
 });
 
