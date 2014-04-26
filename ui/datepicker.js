@@ -34,7 +34,7 @@ var idIncrement = 0,
 $.widget( "ui.datepicker", {
 	options: {
 		appendTo: null,
-		dateFormat: null,
+		dateFormat: { date: "short" },
 		// TODO review
 		eachDay: $.noop,
 		numberOfMonths: 1,
@@ -54,7 +54,6 @@ $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
-		this.options.dateFormat = this.options.dateFormat || { date: "short" };
 		this.date = $.date( null, this.options.dateFormat );
 
 		this.date.eachDay = this.options.eachDay;
