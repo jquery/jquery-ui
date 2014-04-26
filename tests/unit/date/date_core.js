@@ -64,13 +64,13 @@ test( "Date Adjustments - Leap Year Edge Cases", 1, function() {
 test( "List days of Week", 2, function() {
 	var date = $.date(),
 		offset0 = [
-			{ "fullname": "Sunday", "shortname": "Sun" },
-			{ "fullname": "Monday", "shortname": "Mon" },
-			{ "fullname": "Tuesday", "shortname": "Tue" },
-			{ "fullname": "Wednesday", "shortname": "Wed" },
-			{ "fullname": "Thursday", "shortname": "Thu" },
-			{ "fullname": "Friday", "shortname": "Fri" },
-			{ "fullname": "Saturday", "shortname": "Sat" }
+			{ "fullname": "Sunday", "shortname": "Su" },
+			{ "fullname": "Monday", "shortname": "Mo" },
+			{ "fullname": "Tuesday", "shortname": "Tu" },
+			{ "fullname": "Wednesday", "shortname": "We" },
+			{ "fullname": "Thursday", "shortname": "Th" },
+			{ "fullname": "Friday", "shortname": "Fr" },
+			{ "fullname": "Saturday", "shortname": "Sa" }
 		],
 		offset1 = [
 			{ "fullname": "Montag", "shortname": "Mo." },
