@@ -16,21 +16,22 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		var allowOpen = false;
-		var datepicker = $( "#datepicker" ).datepicker({
-			beforeOpen: function() {
-				return allowOpen;
-			}
-		});
-		$( "<img src='images/calendar.gif' alt='Open Datepicker'>")
-			.insertAfter( datepicker )
-			.click(function() {
-				allowOpen = true;
-				datepicker.focus();
-				setTimeout(function() {
-					allowOpen = false;
-				});
-			});
+        var allowOpen = false,
+            datepicker = $( "#datepicker" ).datepicker({
+                beforeOpen: function() {
+                    return allowOpen;
+                },
+                open: function() {
+                    allowOpen = false;
+                }
+            });
+
+        $( "<img src='images/calendar.gif' alt='Open Datepicker'>")
+            .insertAfter( datepicker )
+            .click( function() {
+                allowOpen = true;
+                datepicker.focus();
+            });
 	});
 	</script>
 </head>
