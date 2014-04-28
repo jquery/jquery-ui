@@ -18,8 +18,8 @@
 	$(function() {
 		$( "#datepicker" ).datepicker({
 			select: function( event, ui ) {
-				var date = Globalize.parseDate( ui.date );
-				$( "#alternate" ).val( Globalize.format( date, "dddd, d MMMM, yyyy" ) );
+				var date = Globalize.parseDate( ui.date, { date: "short" } );
+				$( "#alternate" ).val( Globalize.format( date, { date: "long" } ) );
 			}
 		});
 	});

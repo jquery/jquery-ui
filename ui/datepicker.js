@@ -34,7 +34,7 @@ var idIncrement = 0,
 return $.widget( "ui.datepicker", {
 	options: {
 		appendTo: null,
-		dateFormat: null,
+		dateFormat: { date: "short" },
 		// TODO review
 		eachDay: $.noop,
 		numberOfMonths: 1,
@@ -54,7 +54,6 @@ return $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
-		this.options.dateFormat = this.options.dateFormat || { date: "short" };
 		this.date = $.date( null, this.options.dateFormat );
 
 		this.date.eachDay = this.options.eachDay;
@@ -79,7 +78,7 @@ return $.widget( "ui.datepicker", {
 			},
 			"click .ui-datepicker-current": function( event ) {
 				event.preventDefault();
-				this.select( event, new Date().getTime() );
+				this._select( event, new Date().getTime() );
 			},
 			"click .ui-datepicker-close": function( event ) {
 				event.preventDefault();
@@ -89,7 +88,7 @@ return $.widget( "ui.datepicker", {
 				event.preventDefault();
 				// TODO exclude clicks on lead days or handle them correctly
 				// TODO store/read more then just date, also required for multi month picker
-				this.select( event, $( event.currentTarget ).data( "timestamp" ) );
+				this._select( event, $( event.currentTarget ).data( "timestamp" ) );
 				if ( this.inline ) {
 					this.grid.focus( 1 );
 				}
@@ -656,7 +655,7 @@ return $.widget( "ui.datepicker", {
 		}, this.options.position );
 	},
 
-	select: function( event, time ) {
+	_select: function( event, time ) {
 		this.date.setTime( time ).select();
 		this.refresh();
 		if ( !this.inline ) {
