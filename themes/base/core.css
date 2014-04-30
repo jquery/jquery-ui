@@ -78,11 +78,6 @@
 	background-repeat: no-repeat;
 }
 
-.ui-button .ui-icon {
-	position: absolute;
-	display: block;
-}
-
 .ui-button.ui-icon-beginning {
 	padding-left: 2.4em;
 }
