@@ -10,11 +10,11 @@ test("checkbox", function() {
 	expect( 4 );
 	var input = $("#check"),
 		label = $("label[for=check]");
-	ok( input.is(":visible") );
-	ok( label.is(":not(.ui-button)") );
+	ok( input.is( ":visible" ) );
+	ok( !label.hasClass(".ui-button)") );
 	input.checkboxradio();
-	ok( input.is(".ui-helper-hidden-accessible") );
-	ok( label.is(".ui-button") );
+	strictEqual( input.attr( "class" ), "ui-helper-hidden-accessible ui-checkboxradio" );
+	strictEqual( label.attr( "class" ), "ui-button ui-widget ui-corner-all ui-checkbox-label" );
 });
 
 test("radios", function() {

@@ -11,7 +11,7 @@
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
-		css: [ "ui.core", "ui.button", "ui.checkboxradio" ],
+		css: [ "core", "ui.button", "ui.checkboxradio" ],
 		js: [
 			"ui/core.js",
 			"ui/widget.js",
@@ -27,14 +27,10 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Button Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
 
-<div id="radio0" style="margin-top: 2em;">
+<div id="radio0">
 	<input type="radio" id="radio01" name="radio" checked="checked"><label for="radio01">Choice 1</label>
 	<input type="radio" id="radio02" name="radio"><label for="radio02">Choice 2</label>
 	<input type="radio" id="radio03" name="radio"><label for="radio03">Choice 3</label>

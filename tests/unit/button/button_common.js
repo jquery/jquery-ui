@@ -4,9 +4,9 @@ TestHelpers.commonWidgetTests( "button", {
 		showLabel: true,
 		label: null,
 		icon: null,
-		iconPosition: "begining",
+		iconPosition: "beginning",
 
-		// callbacks
+		// Callbacks
 		create: null
 	}
 });

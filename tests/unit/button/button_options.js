@@ -28,9 +28,9 @@ test( "disabled, explicit value", function() {
 test("disabled, null", function() {
 	expect( 4 );
 	$("#radio01").button({ disabled: null });
-	deepEqual( $("#radio01").button("option", "disabled"), false,
+	strictEqual( $("#radio01").button("option", "disabled"), false,
 		"disabled option set to false");
-	deepEqual(false, $("#radio01").prop("disabled"), "element is disabled");
+	strictEqual( $("#radio01").prop("disabled"), false, "element is disabled");
 
 	$("#radio02").prop("disabled", true).button({ disabled: null });
 	deepEqual(true, $("#radio02").button("option", "disabled"),
@@ -38,23 +38,23 @@ test("disabled, null", function() {
 	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
-test("text false without icon", function() {
+test("showLabel false without icon", function() {
 	expect( 1 );
 	$("#button").button({
 		showLabel: false
 	});
-	ok( $("#button").is(":not(.ui-button-icon-only)") );
+	strictEqual( $("#button").attr( "class" ), "ui-button ui-widget ui-corner-all" );
 
 	$("#button").button("destroy");
 });
 
-test("text false with icon", function() {
+test("showLabel false with icon", function() {
 	expect( 1 );
 	$("#button").button({
 		showLabel: false,
 		icon: "iconclass"
 	});
-	ok( $("#button").is(".ui-button-icon-only:not(.ui-button-text):has(span.ui-icon.iconclass)") );
+	strictEqual( $("#button").attr( "class" ), "ui-button ui-widget ui-corner-all ui-icon-beginning ui-button-icon-only" );
 
 	$("#button").button("destroy");
 });
@@ -100,20 +100,9 @@ test("icons", function() {
 		showLabel: false,
 		icon: "iconclass"
 	});
-	ok( $("#button").is(":has(span.ui-icon.iconclass)") );
+	strictEqual( $("#button").find("span.ui-icon.iconclass").length, 1 );
 
 	$("#button").button("destroy");
-});
-
-test( "#5295 - button does not remove hoverstate if disabled" , function() {
-	expect( 1 );
-	var btn = $("#button").button();
-	btn.hover( function() {
-		btn.button( "disable" );
-	});
-	btn.trigger( "mouseenter" );
-	btn.trigger( "mouseleave" );
-	ok( !btn.is( ".ui-state-hover") );
 });
 
 })(jQuery);

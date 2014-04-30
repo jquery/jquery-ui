@@ -45,7 +45,7 @@ $.widget( "ui.checkboxradio", {
 	options: {
 		disabled: null,
 		label: null,
-		icon: null
+		icon: false
 	},
 
 	_getCreateOptions: function() {

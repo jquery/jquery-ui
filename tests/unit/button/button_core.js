@@ -25,7 +25,7 @@ asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
 		ok( !element.is( ":focus" ),
 			"button has had focus removed" );
 		start();
-	},100);
+	});
 });
 
 })(jQuery);
