@@ -19,6 +19,7 @@
 	text-align: center;
 	overflow: visible; /* removes extra width in IE */
 }
+
 .ui-button,
 .ui-button:link,
 .ui-button:visited,
@@ -33,6 +34,10 @@
 	height: 2.1em;
 	text-indent: -9999px;
 	white-space: nowrap;
+}
+.ui-button .ui-icon {
+	position: absolute;
+	display: block;
 }
 /* button elements seem to need a little more width */
 button.ui-button-icon-only {

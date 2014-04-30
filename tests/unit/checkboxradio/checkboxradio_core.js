@@ -52,17 +52,19 @@ test("radio groups", function() {
 	assert(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
-asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+asyncTest( "Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
 	expect( 2 );
 	var check = $( "#check" ).checkboxradio(),
 		label = $( "label[for='check']" );
-	ok( !label.is( ".ui-state-focus" ) );
+	( !label.is( ".ui-state-focus" ) );
 	check.focus();
 	setTimeout(function() {
 		ok( label.is( ".ui-state-focus" ) );
 		start();
 	});
 });
+		ok( slider.hasClass( "ui-state-disabled" ), "disabling a slider should also disable the input " );
+
 // TODO: simulated click events don't behave like real click events in IE
 // remove this when simulate properly simulates this
 // see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
@@ -70,20 +72,21 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
 		expect( 2 );
 
-		$("#check2").checkboxradio().change( function() {
-			var lbl = $( this ).checkboxradio("widget");
+		$( "#check2" ).checkboxradio().change( function() {
+			var label = $( this ).checkboxradio( "widget" );
 			ok( this.checked, "checked ok" );
+
 			// The following test is commented out for now because with new markup we are trying to avoid aria
 			//ok( lbl.attr("aria-pressed") === "true", "aria ok" );
-			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+			ok( label.hasClass( "ui-state-active" ), "ui-state-active ok" );
 		});
 
-		// support: Opera
+		// Support: Opera
 		// Opera doesn't trigger a change event when this is done synchronously.
 		// This seems to be a side effect of another test, but until that can be
 		// tracked down, this delay will have to do.
 		setTimeout(function() {
-			$("#check2").checkboxradio("widget").simulate("click");
+			$( "#check2" ).checkboxradio( "widget" ).simulate( "click" );
 			start();
 		}, 1 );
 	});

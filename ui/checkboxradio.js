@@ -93,7 +93,7 @@ $.widget( "ui.checkboxradio", {
 		this.label.addClass( baseClasses + " ui-" + this.type + "-label" );
 
 		if ( this.options.icon ) {
-			this.label.addClass( "ui-icon-begining" );
+			this.label.addClass( "ui-icon-beginning" );
 			this.icon = $( "<span>" );
 			if ( this.element.is( ":checked" ) && this.type === "checkbox" ){
 				this.icon.addClass( "ui-icon ui-icon-background ui-corner-all ui-icon-check" );
@@ -192,7 +192,7 @@ $.widget( "ui.checkboxradio", {
 	_setClasses: function() {
 		var checked = this.element.is( ":checked" );
 		if ( this.options.icon === true ){
-			this.label.addClass( "ui-icon-begining" );
+			this.label.addClass( "ui-icon-beginning" );
 			if ( this.icon === undefined ) {
 				this.icon = $( "<span>" );
 				this.label.prepend( this.icon );
@@ -203,7 +203,7 @@ $.widget( "ui.checkboxradio", {
 				this.icon.addClass( "ui-icon ui-icon-background ui-corner-all ui-icon-blank" );
 			}
 		} else if ( this.icon !== undefined ) {
-			this.label.removeClass( "ui-icon-begining" );
+			this.label.removeClass( "ui-icon-beginning" );
 			this.icon.remove();
 			delete this.icon;
 		}
