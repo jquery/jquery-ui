@@ -103,9 +103,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this.handle = this.handles.eq( 0 );
 
 		this.handles.each(function( i ) {
-			$( this ).data( "ui-slider-handle-index", i );
-			$( this ).attr( "aria-valuemin", that._valueMin() );
-			$( this ).attr( "aria-valuemax", that._valueMax() );
+			$( this ).data( "ui-slider-handle-index", i ).attr( { "aria-valuemin" : that._valueMin(), "aria-valuemax" : that._valueMax() } );
 		});
 	},
 
