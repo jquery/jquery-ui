@@ -195,10 +195,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		normValue = this._normValueFromMouse( position );
 		distance = this._valueMax() - this._valueMin() + 1;
 		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - that.values( i ) );
+			var thisDistance = Math.abs( normValue - that.values(i) );
 			if (( distance > thisDistance ) ||
 				( distance === thisDistance &&
-					(i === that._lastChangedValue || that.values( i ) === o.min ))) {
+					(i === that._lastChangedValue || that.values(i) === o.min ))) {
 				distance = thisDistance;
 				closestHandle = $( this );
 				index = i;
@@ -562,7 +562,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		if ( this.options.values && this.options.values.length ) {
 			this.handles.each(function( i ) {
-				valPercent = ( that.values( i ) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
+				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 				if ( that.options.range === true ) {
