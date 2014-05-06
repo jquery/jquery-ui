@@ -3,50 +3,6 @@ module.exports = function( Release ) {
 var shell = require( "shelljs" ),
 	path = require( "path" );
 
-function buildPreReleasePackage( callback ) {
-	var builder, files, jqueryUi, packer, target,
-		downloadBuilder = require( "download.jqueryui.com" );
-	jqueryUi = new downloadBuilder.JqueryUi( path.resolve( "." ) );
-	builder = new downloadBuilder.Builder( jqueryUi, ":all:" );
-	packer = new downloadBuilder.Packer( builder, null, {
-		addTests: true,
-		bundleSuffix: "",
-		skipDocs: true,
-		skipTheme: true
-	});
-	target = "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version + "-cdn.zip";
-
-	console.log( "Building release files" );
-	packer.pack(function( error, _files ) {
-		if ( error ) {
-			Release.abort( "Failed packing pre-release package", error );
-		}
-		files = _files.map(function( file ) {
-
-			// Strip first path
-			file.path = file.path.replace( /^[^\/]*\//, "" );
-			return file;
-		}).filter(function( file ) {
-
-			// Filter development-bundle content only
-			return (/^development-bundle/).test( file.path );
-		}).map(function( file ) {
-
-			// Strip development-bundle
-			file.path = file.path.replace( /^development-bundle\//, "" );
-			return file;
-		});
-
-		downloadBuilder.util.createZip( files, target, function( error ) {
-			if ( error ) {
-				Release.abort( "Failed create pre-release zip", error );
-			}
-			console.log( "Built zip package at " + path.relative( "../..", target ).cyan );
-			return callback();
-		});
-	});
-}
-
 function buildCDNPackage( callback ) {
 	console.log( "Building CDN package" );
 	var downloadBuilder = require( "download.jqueryui.com" ),
@@ -99,13 +55,7 @@ Release.define({
 
 		Release.exec( "grunt manifest" );
 		manifestFiles = shell.ls( "*.jquery.json" );
-		if ( Release.preRelease ) {
-
-			// TODO no need to create a zip file here, just copy the needed files to dist/cdn
-			buildPreReleasePackage( copyCdnFiles );
-		} else {
-			buildCDNPackage( copyCdnFiles );
-		}
+		buildCDNPackage( copyCdnFiles );
 	}
 });
 
