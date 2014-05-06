@@ -408,7 +408,7 @@ return $.widget( "ui.menu", {
 			offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop;
 			scroll = this.activeMenu.scrollTop();
 			elementHeight = this.activeMenu.height();
-			itemHeight = item.height();
+			itemHeight = item.outerHeight();
 
 			if ( offset < 0 ) {
 				this.activeMenu.scrollTop( scroll + offset );
