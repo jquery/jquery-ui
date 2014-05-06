@@ -1,7 +1,38 @@
 module.exports = function( Release ) {
 
 var shell = require( "shelljs" ),
-	path = require( "path" );
+	path = require( "path" ),
+	fs = require( "fs" );
+
+function replaceAtVersion() {
+	console.log( "Replacing @VERSION..." );
+	var matches = [];
+
+	function recurse( folder ) {
+		fs.readdirSync( folder ).forEach(function( fileName ) {
+			var content,
+				fullPath = folder + "/" + fileName;
+			if ( fs.statSync( fullPath ).isDirectory() ) {
+				recurse( fullPath );
+				return;
+			}
+			content = fs.readFileSync( fullPath, {
+				encoding: "utf-8"
+			});
+			if ( !/@VERSION/.test( content ) ) {
+				return;
+			}
+			matches.push( fullPath );
+			fs.writeFileSync( fullPath, content.replace( /@VERSION/g, Release.newVersion ) );
+		});
+	}
+
+	[ "ui", "themes" ].forEach( recurse );
+
+	console.log( "Replaced @VERSION in " + matches.length + " files." );
+
+	return matches;
+}
 
 function buildCDNPackage( callback ) {
 	console.log( "Building CDN package" );
@@ -34,7 +65,7 @@ Release.define({
 			"}</script>\n\nReleased on " + monthNames[ now.getMonth() ] + " " + now.getDate() + ", " + now.getFullYear() + "\n\n";
 	},
 	generateArtifacts: function( fn ) {
-		var manifestFiles;
+		var files;
 		function copyCdnFiles() {
 			var zipFile = shell.ls( "../jquery*-cdn.zip" )[ 0 ],
 				tmpFolder = "../tmp-zip-output",
@@ -50,11 +81,11 @@ Release.define({
 			shell.mkdir( "-p", "dist/cdn" );
 			shell.cp( tmpFolder + "/jquery-ui*.js", "dist/cdn" );
 			shell.cp( "-r", tmpFolder + "/themes", "dist/cdn" );
-			fn( manifestFiles );
+			fn( files );
 		}
 
 		Release.exec( "grunt manifest" );
-		manifestFiles = shell.ls( "*.jquery.json" );
+		files = shell.ls( "*.jquery.json" ).concat( replaceAtVersion() );
 		buildCDNPackage( copyCdnFiles );
 	}
 });
