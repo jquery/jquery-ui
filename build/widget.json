@@ -61,6 +61,14 @@
 			"status"
 		]
 	},
+	"selectmenu": {
+		"dependencies": [ "position", "menu" ],
+		"description": "Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.",
+		"keywords": [
+			"form",
+			"select"
+		]
+	},
 	"slider": {
 		"dependencies": [ "mouse" ],
 		"description": "Displays a flexible slider with ranges and accessibility via keyboard.",
