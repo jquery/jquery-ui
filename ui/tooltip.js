@@ -320,7 +320,10 @@ return $.widget( "ui.tooltip", {
 					fakeEvent.currentTarget = target[0];
 					this.close( fakeEvent, true );
 				}
-			}
+			},
+			
+			//when click link with attribute target="_blank"
+			click: "close"
 		};
 
 		// Only bind remove handler for delegated targets. Non-delegated
