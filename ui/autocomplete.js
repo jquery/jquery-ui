@@ -62,11 +62,11 @@ $.widget( "ui.autocomplete", {
 		// so we use the suppressKeyPressRepeat flag to avoid handling keypress
 		// events when we know the keydown event was used to modify the
 		// search term. #7799
-		var suppressKeyPress=true, suppressKeyPressRepeat, suppressInput,
+		var suppressKeyPress=true, suppressKeyPressRepeat=true, suppressInput=true,
 			nodeName = this.element[ 0 ].nodeName.toLowerCase(),
 			isTextarea = nodeName === "textarea",
 			isInput = nodeName === "input";
-
+			
 		this.isMultiLine =
 			// Textareas are always multi-line
 			isTextarea ? true :
