@@ -187,14 +187,7 @@ $.widget( "ui.autocomplete", {
 				this.previous = this._value();
 			},
 			blur: function( event ) {
-				if ( this.cancelBlur ) {
-					delete this.cancelBlur;
-					return;
-				}
-
-				clearTimeout( this.searching );
-				this.close( event );
-				this._change( event );
+				this._blur( event );
 			}
 		});
 
@@ -571,6 +564,17 @@ $.widget( "ui.autocomplete", {
 			// prevents moving cursor to beginning/end of the text field in some browsers
 			event.preventDefault();
 		}
+	},
+	
+	_blur: function( event ) {
+		if ( this.cancelBlur ) {
+			delete this.cancelBlur;
+			return;
+		}
+
+		clearTimeout( this.searching );
+		this.close( event );
+		this._change( event );
 	}
 });
 
