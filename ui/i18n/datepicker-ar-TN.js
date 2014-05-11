@@ -1,6 +1,6 @@
 /* Arabic Translation for jQuery UI date picker plugin. */
 /* Based on Common Locale Data Repository (CLDR) data v25 by unicode.org. */
-/* Written by Mohammed Alshehri -- m@dralshehri.com */
+/* Mohamed Cherif BOUCHELAGHEM -- m@dralshehri.com */
 
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -14,7 +14,7 @@
 	}
 }(function( datepicker ) {
 
-datepicker.regional['ar-DZ'] = {
+datepicker.regional['ar-TN'] = {
 	closeText: 'إغلاق',
 	prevText: '&#x3C;السابق',
 	nextText: 'التالي&#x3E;',
@@ -26,13 +26,13 @@ datepicker.regional['ar-DZ'] = {
 	dayNamesShort: ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
 	dayNamesMin: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
 	weekHeader: 'أسبوع',
-	dateFormat: 'dd/mm/yyyy',
-	firstDay: 0,
+	dateFormat: 'dd/mm/yy',
+	firstDay: 1,
 		isRTL: true,
 	showMonthAfterYear: false,
 	yearSuffix: ''};
-datepicker.setDefaults(datepicker.regional['ar-DZ']);
+datepicker.setDefaults(datepicker.regional['ar-TN']);
 
-return datepicker.regional['ar-DZ'];
+return datepicker.regional['ar-TN'];
 
 }));
