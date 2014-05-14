@@ -63,7 +63,6 @@ asyncTest( "Checkbox/Radiobutton do not Show Focused State when using Keyboard N
 		start();
 	});
 });
-		ok( slider.hasClass( "ui-state-disabled" ), "disabling a slider should also disable the input " );
 
 // TODO: simulated click events don't behave like real click events in IE
 // remove this when simulate properly simulates this
