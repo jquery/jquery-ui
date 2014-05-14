@@ -399,7 +399,6 @@ $.Widget.prototype = {
 			element = this.element;
 			delegateElement = this.widget();
 		} else {
-			// accept selectors, DOM elements
 			element = delegateElement = $( element );
 			this.bindings = this.bindings.add( element );
 		}
