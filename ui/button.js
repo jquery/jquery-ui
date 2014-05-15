@@ -71,11 +71,12 @@ $.widget( "ui.button", {
 	},
 
 	_create: function() {
-		var formElement = this.element.closest( "form" )
-		this._off( formElement,  "reset" );
-		this._on( formElement, {
-			"reset": formResetHandler
-		});
+		var formElement = $( this.element[ 0 ].form );
+
+		// We don't use _on and _off here because we want all the checkboxes in the same form to use
+		// single handler which handles all the checkboxradio widgets in the form
+		formElement.off( "reset" + this.eventNamespace, formResetHandler );
+		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
 		// If the option is a boolean its been set by either user or by
 		// _getCreateOptions so we need to make sure the prop matches
@@ -184,7 +185,7 @@ $.widget( "ui.button", {
 			if ( this.isInput ) {
 				this.element.val( value );
 			} else {
-				this.element.html( ( ( !!this.icon ) ? "" : this.icon ) + value );
+				this.element.html( !!this.icon ? "" : this.icon ).append( value );
 			}
 		}
 		this._super( key, value );
@@ -195,12 +196,14 @@ $.widget( "ui.button", {
 	},
 
 	refresh: function() {
-		//See #8237 & #8828
+
+		// Make sure to only check disabled if its an element that supports this otherwise
+		// check for the disabled class to determine state
 		var isDisabled = this.element.is( "input, button" ) ?
 			this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
 
 		if ( isDisabled !== this.options.disabled ) {
-			this._setOptions( { "disabled": isDisabled } );
+			this._setOptions({ "disabled": isDisabled });
 		}
 
 		this._updateTooltip();

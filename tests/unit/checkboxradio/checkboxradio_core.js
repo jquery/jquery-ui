@@ -56,7 +56,7 @@ asyncTest( "Checkbox/Radiobutton do not Show Focused State when using Keyboard N
 	expect( 2 );
 	var check = $( "#check" ).checkboxradio(),
 		label = $( "label[for='check']" );
-	( !label.is( ".ui-state-focus" ) );
+	ok( !label.is( ".ui-state-focus" ) );
 	check.focus();
 	setTimeout(function() {
 		ok( label.is( ".ui-state-focus" ) );
@@ -116,20 +116,14 @@ test( "#7092 - button creation that requires a matching label does not find labe
 asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function() {
 	expect( 2 );
 	var form = $( "<form>" +
-		"<button></button>" +
 		"<label for='c1'></label><input id='c1' type='checkbox' checked>" +
 		"</form>" ),
-		button = form.find( "button" ).checkboxradio(),
 		checkbox = form.find( "input[type=checkbox]" ).checkboxradio();
 
 	checkbox.prop( "checked", false ).checkboxradio( "refresh" );
 	ok( !checkbox.checkboxradio( "widget" ).hasClass( "ui-state-active" ) );
 
 	form.get( 0 ).reset();
-
-	// #9213: If a button has been removed, refresh should not be called on it when
-	// its corresponding form is reset.
-	button.remove();
 
 	setTimeout(function() {
 		ok( checkbox.checkboxradio( "widget" ).hasClass( "ui-state-active" ));
