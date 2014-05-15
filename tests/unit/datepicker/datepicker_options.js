@@ -962,7 +962,7 @@ test("parseDate", function() {
 });
 
 test("parseDateErrors", function() {
-	expect( 17 );
+	expect( 18 );
 	TestHelpers.datepicker.init("#inp");
 	var fr, settings;
 	function expectError(expr, value, error) {
@@ -986,6 +986,8 @@ test("parseDateErrors", function() {
 		"3 Feb 01 - d m y", "Missing number at position 2");
 	expectError(function() { $.datepicker.parseDate("dd mm yy", "3 Feb 01"); },
 		"3 Feb 01 - dd mm yy", "Missing number at position 2");
+	expectError(function() { $.datepicker.parseDate("mm dd yy", "2 1 01"); },
+		"2 1 01 - dd mm yy", "Missing number at position 4");
 	expectError(function() { $.datepicker.parseDate("d m y", "3 2 AD01"); },
 		"3 2 AD01 - d m y", "Missing number at position 4");
 	expectError(function() { $.datepicker.parseDate("d m yy", "3 2 AD01"); },
