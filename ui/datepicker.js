@@ -33,14 +33,14 @@
 
 // TODO use uniqueId, if possible
 var idIncrement = 0,
-	// TODO move this to the instance
+	// TODO Move this to the instance
 	suppressExpandOnFocus = false;
 
 $.widget( "ui.datepicker", {
 	options: {
 		appendTo: null,
 		dateFormat: { date: "short" },
-		// TODO review
+		// TODO Review
 		eachDay: $.noop,
 		numberOfMonths: 1,
 		position: {
@@ -50,6 +50,7 @@ $.widget( "ui.datepicker", {
 		showWeek: false,
 		show: true,
 		hide: true,
+		value: null,
 
 		// callbacks
 		beforeOpen: null,
@@ -59,17 +60,22 @@ $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
-		this.date = $.date( null, this.options.dateFormat );
-
-		this.date.eachDay = this.options.eachDay;
 		this.id = "ui-datepicker-" + idIncrement;
 		idIncrement++;
+
 		if ( this.element.is( "input" ) ) {
+			if ( !this.options.value && this.isValid() ) {
+				this.options.value = this._getParsedValue();
+			}
 			this._createPicker();
 		} else {
 			this.inline = true;
 			this.picker = this.element;
 		}
+
+		this.date = $.date( this.options.value, this.options.dateFormat ).select();
+		this.date.eachDay = this.options.eachDay;
+
 		this._on( this.picker, {
 			"click .ui-datepicker-prev": function( event ) {
 				event.preventDefault();
@@ -91,8 +97,9 @@ $.widget( "ui.datepicker", {
 			},
 			"mousedown .ui-datepicker-calendar a": function( event ) {
 				event.preventDefault();
-				// TODO exclude clicks on lead days or handle them correctly
-				// TODO store/read more then just date, also required for multi month picker
+
+				// TODO Exclude clicks on lead days or handle them correctly
+				// TODO Store/read more then just date, also required for multi month picker
 				this._select( event, $( event.currentTarget ).data( "timestamp" ) );
 				if ( this.inline ) {
 					this.grid.focus();
@@ -101,7 +108,7 @@ $.widget( "ui.datepicker", {
 			"keydown .ui-datepicker-calendar": "_handleKeydown"
 		});
 
-		// TODO use hoverable (no delegation support)? convert to _on?
+		// TODO Use hoverable (no delegation support)? convert to _on?
 		this.picker.delegate( ".ui-datepicker-header a, .ui-datepicker-calendar a", "mouseenter.datepicker mouseleave.datepicker", function() {
 			$( this ).toggleClass( "ui-state-hover" );
 		});
@@ -111,7 +118,8 @@ $.widget( "ui.datepicker", {
 
 	_handleKeydown: function( event ) {
 		if ( jQuery.inArray( event.keyCode, [ 13, 33, 34, 35, 36, 37, 38, 39, 40 ] ) === -1 ) {
-			//only interested navigation keys
+
+			// Only interested navigation keys
 			return;
 		}
 		event.preventDefault();
@@ -161,7 +169,7 @@ $.widget( "ui.datepicker", {
 			newId = this.id + "-" + this.date.day();
 			newCell = $( "#" + newId );
 
-			// TODO unnecessary optimization? is it really needed?
+			// TODO Unnecessary optimization? is it really needed?
 			if ( !newCell.length ) {
 				return;
 			}
@@ -176,7 +184,8 @@ $.widget( "ui.datepicker", {
 	_createPicker: function() {
 		this.picker = $( "<div>" )
 			.addClass( "ui-front" )
-			// TODO add a ui-datepicker-popup class, move position:absolte to that
+
+			// TODO Add a ui-datepicker-popup class, move position:absolute to that
 			.css( "position", "absolute" )
 			.uniqueId()
 			.hide();
@@ -191,6 +200,7 @@ $.widget( "ui.datepicker", {
 			keydown: function( event ) {
 				switch ( event.keyCode ) {
 					case $.ui.keyCode.TAB:
+
 						// Waiting for close() will make popup hide too late, which breaks tab key behavior
 						this.picker.hide();
 						this.close( event );
@@ -235,12 +245,12 @@ $.widget( "ui.datepicker", {
 			},
 			keyup: function() {
 				if ( this.isValid() && !this.inline ) {
-					this.date.setTime( this.element.val() ).select();
+					this.date.setTime( this._getParsedValue() ).select();
 					this.refresh();
 				}
 			},
 			mousedown: function( event ) {
-				if (this.isOpen) {
+				if ( this.isOpen ) {
 					suppressExpandOnFocus = true;
 					this.close();
 					return;
@@ -267,7 +277,8 @@ $.widget( "ui.datepicker", {
 
 		this._on( this.picker, {
 			focusout: function( event ) {
-				// use a timer to allow click to clear it and letting that
+
+				// Use a timer to allow click to clear it and letting that
 				// handle the closing instead of opening again
 				// also allows tabbing inside the calendar without it closing
 				this.closeTimer = this._delay( function() {
@@ -280,7 +291,8 @@ $.widget( "ui.datepicker", {
 			mouseup: function() {
 				clearTimeout( this.closeTimer );
 			},
-			// TODO on TAB (or shift TAB), make sure it ends up on something useful in DOM order
+
+			// TODO On TAB (or shift TAB), make sure it ends up on something useful in DOM order
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.picker.is( ":visible" ) ) {
 					this.close( event );
@@ -317,6 +329,7 @@ $.widget( "ui.datepicker", {
 
 		return element;
 	},
+
 	_createTmpl: function() {
 		this._createDatepicker();
 		this.picker.find( "button" ).button();
@@ -324,10 +337,12 @@ $.widget( "ui.datepicker", {
 		if ( this.inline ) {
 			this.picker.children().addClass( "ui-datepicker-inline" );
 		}
-		// against display:none in datepicker.css
+
+		// Against display:none in datepicker.css
 		this.picker.find( ".ui-datepicker" ).css( "display", "block" );
 		this.grid = this.picker.find( ".ui-datepicker-calendar" );
 	},
+
 	_createDatepicker: function() {
 		var multiClasses = [],
 			pickerHtml = "";
@@ -350,6 +365,7 @@ $.widget( "ui.datepicker", {
 			.html( pickerHtml )
 			.appendTo( this.picker );
 	},
+
 	_buildMultiplePicker: function() {
 		var headerClass,
 			html = "",
@@ -358,6 +374,7 @@ $.widget( "ui.datepicker", {
 			i = 0;
 
 		for ( i; i < months.length; i++ ) {
+
 			// TODO Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
 			this.date = months[ i ];
 			headerClass = months[ i ].first ? "ui-corner-left" :
@@ -470,6 +487,7 @@ $.widget( "ui.datepicker", {
 	},
 
 	_buildGridBody: function() {
+
 		// this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times. So, it equals O(n^3). Not good at all. Caching.
 		var days = this.date.days(),
 			i = 0,
@@ -577,8 +595,9 @@ $.widget( "ui.datepicker", {
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
-		//determine which day gridcell to focus after refresh
-		//TODO: Prevent disabled cells from being focused
+
+		// Determine which day gridcell to focus after refresh
+		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
 			this.grid = $( this._buildGrid() );
 			$( ".ui-datepicker-title", this.picker ).html( this._buildTitle() );
@@ -610,10 +629,6 @@ $.widget( "ui.datepicker", {
 			return;
 		}
 
-		// TODO explain this
-		this.date = $.date( this.element.val(), this.options.dateFormat );
-		this.date.eachDay = this.options.eachDay;
-		this.date.select();
 		this.refresh();
 
 		this.picker
@@ -625,8 +640,8 @@ $.widget( "ui.datepicker", {
 
 		this._show( this.picker, this.options.show );
 
-		// take trigger out of tab order to allow shift-tab to skip trigger
-		// TODO does this really make sense? related bug: tab-shift moves focus to last element on page
+		// Take trigger out of tab order to allow shift-tab to skip trigger
+		// TODO Does this really make sense? related bug: tab-shift moves focus to last element on page
 		this.element.attr( "tabindex", -1 );
 		this.isOpen = true;
 
@@ -654,46 +669,39 @@ $.widget( "ui.datepicker", {
 	},
 
 	_buildPosition: function() {
-		return $.extend( {}, {
-			of: this.element
-		}, this.options.position );
+		return $.extend( { of: this.element }, this.options.position );
 	},
 
 	_select: function( event, time ) {
-		this.date.setTime( time ).select();
-		this.refresh();
+		this._setOption( "value", new Date( time ) );
 		if ( !this.inline ) {
-			this.element.val( this.date.format() );
 			this.close();
 			this._focusTrigger();
 		}
 		this._trigger( "select", event, {
-			// TODO replace with value option to initialise and read
-			date: this.date.format()
-		});
-	},
 
-	_value: function( value ) {
-		this.date.setTime( value ).select();
-		if ( !this.inline ) {
-			this.element.val( this.date.format() );
-		}
-		this.refresh();
+			// TODO Replace with value option to initialise and read
+			date: this.value()
+		});
 	},
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this._value( value );
+			this._setOption( "value", Globalize.parseDate( value, this.options.dateFormat ) );
 		} else {
-			return this.isValid() ? this.date.format() : this.element.val();
+			if ( this.inline ) {
+				return Globalize.format( this.date.selected(), this.options.dateFormat );
+			} else {
+				return this.element.val();
+			}
 		}
 	},
 
 	valueAsDate: function( value ) {
 		if ( arguments.length ) {
-			this._value( value );
+			this._setOption( "value", value );
 		} else {
-			return this.isValid() ? this.date.date() : null;
+			return this.option( "value" );
 		}
 	},
 
@@ -702,7 +710,7 @@ $.widget( "ui.datepicker", {
 			return true;
 		}
 
-		return Globalize.parseDate( this.element.val(), this.options.dateFormat ) !== null;
+		return this._getParsedValue() !== null;
 	},
 
 	_destroy: function() {
@@ -720,7 +728,28 @@ $.widget( "ui.datepicker", {
 		return this.picker;
 	},
 
+	_getParsedValue: function() {
+		return Globalize.parseDate( this.element.val(), this.options.dateFormat );
+	},
+
+	option: function( key ) {
+		if ( arguments.length === 0 || ( arguments.length === 1 && key === "value" ) ) {
+			this.options.value = this.inline ? this.date.selected() : this._getParsedValue();
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOption: function( key, value ) {
+		if ( key === "value" ) {
+			if ( $.type( value ) === "date" ) {
+				this.date.setTime( value.getTime() ).select();
+				this.refresh();
+				if ( !this.inline ) {
+					this.element.val( this.date.format() );
+				}
+			}
+		}
+
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
