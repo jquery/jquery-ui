@@ -45,6 +45,7 @@ $.widget( "ui.datepicker", {
 		showWeek: false,
 		show: true,
 		hide: true,
+		value: null,
 
 		// callbacks
 		beforeOpen: null,
@@ -54,17 +55,22 @@ $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
-		this.date = $.date( null, this.options.dateFormat );
-
-		this.date.eachDay = this.options.eachDay;
 		this.id = "ui-datepicker-" + idIncrement;
 		idIncrement++;
+
 		if ( this.element.is( "input" ) ) {
+			if ( !this.options.value && this.isValid() ) {
+				this.options.value = this._getParsedValue();
+			}
 			this._createPicker();
 		} else {
 			this.inline = true;
 			this.picker = this.element;
 		}
+
+		this.date = $.date( this.options.value, this.options.dateFormat ).select();
+		this.date.eachDay = this.options.eachDay;
+
 		this._on( this.picker, {
 			"click .ui-datepicker-prev": function( event ) {
 				event.preventDefault();
@@ -106,7 +112,7 @@ $.widget( "ui.datepicker", {
 
 	_handleKeydown: function( event ) {
 		if ( jQuery.inArray( event.keyCode, [ 13, 33, 34, 35, 36, 37, 38, 39, 40 ] ) === -1 ) {
-			//only interested navigation keys
+			// only interested navigation keys
 			return;
 		}
 		event.preventDefault();
@@ -171,7 +177,7 @@ $.widget( "ui.datepicker", {
 	_createPicker: function() {
 		this.picker = $( "<div>" )
 			.addClass( "ui-front" )
-			// TODO add a ui-datepicker-popup class, move position:absolte to that
+			// TODO add a ui-datepicker-popup class, move position:absolute to that
 			.css( "position", "absolute" )
 			.uniqueId()
 			.hide();
@@ -217,6 +223,7 @@ $.widget( "ui.datepicker", {
 							}
 						}
 						break;
+					// TODO this is not in specs, keep?
 					case $.ui.keyCode.END:
 						if ( event.ctrlKey ) {
 							this.element.val( "" );
@@ -230,12 +237,12 @@ $.widget( "ui.datepicker", {
 			},
 			keyup: function() {
 				if ( this.isValid() && !this.inline ) {
-					this.date.setTime( this.element.val() ).select();
+					this.date.setTime( this._getParsedValue() ).select();
 					this.refresh();
 				}
 			},
 			mousedown: function( event ) {
-				if (this.isOpen) {
+				if ( this.isOpen ) {
 					suppressExpandOnFocus = true;
 					this.close();
 					return;
@@ -312,6 +319,7 @@ $.widget( "ui.datepicker", {
 
 		return element;
 	},
+
 	_createTmpl: function() {
 		this._createDatepicker();
 		this.picker.find( "button" ).button();
@@ -323,6 +331,7 @@ $.widget( "ui.datepicker", {
 		this.picker.find( ".ui-datepicker" ).css( "display", "block" );
 		this.grid = this.picker.find( ".ui-datepicker-calendar" );
 	},
+
 	_createDatepicker: function() {
 		var multiClasses = [],
 			pickerHtml = "";
@@ -345,6 +354,7 @@ $.widget( "ui.datepicker", {
 			.html( pickerHtml )
 			.appendTo( this.picker );
 	},
+
 	_buildMultiplePicker: function() {
 		var headerClass,
 			html = "",
@@ -572,8 +582,8 @@ $.widget( "ui.datepicker", {
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
-		//determine which day gridcell to focus after refresh
-		//TODO: Prevent disabled cells from being focused
+		// determine which day gridcell to focus after refresh
+		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
 			this.grid = $( this._buildGrid() );
 			$( ".ui-datepicker-title", this.picker ).html( this._buildTitle() );
@@ -605,10 +615,6 @@ $.widget( "ui.datepicker", {
 			return;
 		}
 
-		// TODO explain this
-		this.date = $.date( this.element.val(), this.options.dateFormat );
-		this.date.eachDay = this.options.eachDay;
-		this.date.select();
 		this.refresh();
 
 		this.picker
@@ -649,46 +655,38 @@ $.widget( "ui.datepicker", {
 	},
 
 	_buildPosition: function() {
-		return $.extend( {}, {
-			of: this.element
-		}, this.options.position );
+		return $.extend( { of: this.element }, this.options.position );
 	},
 
 	_select: function( event, time ) {
-		this.date.setTime( time ).select();
-		this.refresh();
+		this._setOption( "value", new Date( time ) );
 		if ( !this.inline ) {
-			this.element.val( this.date.format() );
 			this.close();
 			this._focusTrigger();
 		}
 		this._trigger( "select", event, {
 			// TODO replace with value option to initialise and read
-			date: this.date.format()
+			date: this.value()
 		});
-	},
-
-	_value: function( value ) {
-		this.date.setTime( value ).select();
-		if ( !this.inline ) {
-			this.element.val( this.date.format() );
-		}
-		this.refresh();
 	},
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this._value( value );
+			this._setOption( "value", Globalize.parseDate( value, this.options.dateFormat ) );
 		} else {
-			return this.isValid() ? this.date.format() : this.element.val();
+			if ( this.inline ) {
+				return Globalize.format( this.date.selected(), this.options.dateFormat );
+			} else {
+				return this.element.val();
+			}
 		}
 	},
 
 	valueAsDate: function( value ) {
 		if ( arguments.length ) {
-			this._value( value );
+			this._setOption( "value", value );
 		} else {
-			return this.isValid() ? this.date.date() : null;
+			return this.option( "value" );
 		}
 	},
 
@@ -697,7 +695,7 @@ $.widget( "ui.datepicker", {
 			return true;
 		}
 
-		return Globalize.parseDate( this.element.val(), this.options.dateFormat ) !== null;
+		return this._getParsedValue() !== null;
 	},
 
 	_destroy: function() {
@@ -715,7 +713,28 @@ $.widget( "ui.datepicker", {
 		return this.picker;
 	},
 
+	_getParsedValue: function() {
+		return Globalize.parseDate( this.element.val(), this.options.dateFormat );
+	},
+
+	option: function( key ) {
+		if ( arguments.length === 0 || ( arguments.length === 1 && key === "value" ) ) {
+			this.options.value = this.inline ? this.date.selected() : this._getParsedValue();
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOption: function( key, value ) {
+		if ( key === "value" ) {
+			if ( $.type( value ) === "date" ) {
+				this.date.setTime( value.getTime() ).select();
+				this.refresh();
+				if ( !this.inline ) {
+					this.element.val( this.date.format() );
+				}
+			}
+		}
+
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
