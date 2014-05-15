@@ -64,54 +64,43 @@ test( "open", function() {
 });
 
 test( "value", function() {
-	expect( 6 );
+	expect( 4 );
+
 	var input = $( "#datepicker" ).datepicker(),
-		picker = input.datepicker( "widget" ),
-		inline = $( "#inline" ).datepicker();
+		picker = input.datepicker( "widget" );
 
 	input.datepicker( "value", "1/1/14" );
 	equal( input.val(), "1/1/14", "input's value set" );
-	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
+
+	input.datepicker( "open" );
+	ok( picker.find( "a[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ), "first day marked as selected" );
 	equal( input.datepicker( "value" ), "1/1/14", "getter" );
 
 	input.val( "abc" );
-	equal( input.datepicker( "value" ), "abc",
-		"Invalid values should be returned without formatting." );
-
-	inline.datepicker( "value", "1/1/14" );
-	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	equal( inline.datepicker( "value" ), "1/1/14", "getter" );
-
-	input.datepicker( "destroy" );
-	inline.datepicker( "destroy" );
+	equal( input.datepicker( "value" ), "abc", "Invalid values should be returned without formatting." );
 });
 
 test( "valueAsDate", function() {
 	expect( 6 );
-	var input = $( "#datepicker" ).datepicker(),
+
+	var input = TestHelpers.datepicker.init( "#datepicker" ),
 		picker = input.datepicker( "widget" ),
-		inline = $( "#inline" ).datepicker();
+		date1 = new Date( 2008, 6 - 1, 4 );
 
 	input.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
-	equal( input.val(), "1/1/14", "input's value set" );
-	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ),
-		new Date( 2014, 0, 1 ), "getter" );
+	equal( input.val(), "1/1/14", "Input's value set" );
+	ok( picker.find( "a[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ), "First day marked as selected" );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
 
 	input.val( "a/b/c" );
 	equal( input.datepicker( "valueAsDate" ), null, "Invalid dates return null" );
 
-	inline.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
-	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ),
-		new Date( 2014, 0, 1 ), "getter" );
+	input.val( "" ).datepicker( "destroy" );
+	input = TestHelpers.datepicker.init( "#datepicker" );
 
-	input.datepicker( "destroy" );
-	inline.datepicker( "destroy" );
+	strictEqual( input.datepicker( "valueAsDate" ), null, "Set date - default" );
+	input.datepicker( "valueAsDate", date1 );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date1, "Set date - 2008-06-04" );
 });
 
 test( "isValid", function() {
