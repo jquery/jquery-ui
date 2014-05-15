@@ -44,6 +44,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		refreshPositions: false,
 		revert: false,
 		revertDuration: 500,
+		revertTo: 'original',
 		scope: "default",
 		scroll: true,
 		scrollSensitivity: 20,
@@ -264,7 +265,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		if ((this.options.revert === "invalid" && !dropped) || (this.options.revert === "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
-			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
+			var revertPosition = this.originalPosition;
+			//If the revertTo option is center to "center", we revert the helper object to the center of the original element
+			if(this.options.revertTo === "center"){
+				revertPosition.left -= (this.helper.width() - this.element.width())/2;
+				revertPosition.top -= (this.helper.height() - this.element.height())/2;
+			}
+			$(this.helper).animate(revertPosition, parseInt(this.options.revertDuration, 10), function() {
 				if (that._trigger("stop", event) !== false) {
 					that._clear();
 				}
