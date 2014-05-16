@@ -15,6 +15,7 @@ TestHelpers.commonWidgetTests( "draggable", {
 		refreshPositions: false,
 		revert: false,
 		revertDuration: 500,
+		revertTo: "original",
 		scroll: true,
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
