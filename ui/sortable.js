@@ -52,6 +52,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		scope: "default",
 		tolerance: "intersect",
 		zIndex: 1000,
+		compareZIndex: false,
 
 		// callbacks
 		activate: null,
@@ -833,6 +834,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	_contactContainers: function(event) {
 		var i, j, dist, itemWithLeastDistance, posProperty, sizeProperty, cur, nearBottom, floating, axis,
 			innermostContainer = null,
+			innermostZIndex = 0,
 			innermostIndex = null;
 
 		// get innermost container that intersects with item
@@ -845,12 +847,16 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 			if(this._intersectsWith(this.containers[i].containerCache)) {
 
-				// if we've already found a container and it's more "inner" than this, then continue
-				if(innermostContainer && $.contains(this.containers[i].element[0], innermostContainer.element[0])) {
+				if(innermostContainer &&
+				  // if we've already found a container and it's more "inner" than this, then continue
+				  ($.contains(this.containers[i].element[0], innermostContainer.element[0]) ||
+				  // or if we've already found a container that has a z-index larger than this, then also continue
+				  (this.options.compareZIndex && $(this.containers[i].element[0]).zIndex() < innermostZIndex))) {
 					continue;
 				}
 
 				innermostContainer = this.containers[i];
+				innermostZIndex = $(this.containers[i].element[0]).zIndex();
 				innermostIndex = i;
 
 			} else {
