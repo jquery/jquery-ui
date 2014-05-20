@@ -403,7 +403,6 @@ return $.widget( "ui.spinner", {
 
 	_setOptions: spinner_modifier(function( options ) {
 		this._super( options );
-		this._value( this.element.val() );
 	}),
 
 	_parse: function( val ) {
