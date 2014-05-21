@@ -154,6 +154,9 @@ $.widget( "ui.button", {
 				" ui-state-active " + typeClasses )
 			.removeAttr( "role" );
 
+		if ( this.icon !== undefined ) {
+			this.icon.remove();
+		}
 		if ( !this.hasTitle ) {
 			this.element.removeAttr( "title" );
 		}
@@ -174,7 +177,7 @@ $.widget( "ui.button", {
 			this.element.toggleClass( "ui-button-icon-only", !value )
 				.toggleClass( this.options.iconPosition, !!value );
 			this._updateTooltip();
-		} else if( key === "showLabel" ) {
+		} else if ( key === "showLabel" ) {
 			value = true;
 		}
 		if ( key === "iconPosition" && this.options.icon ) {

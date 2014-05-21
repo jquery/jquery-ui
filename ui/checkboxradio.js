@@ -1,12 +1,12 @@
 /*!
- * jQuery UI Button @VERSION
+ * jQuery UI Checkboxradio @VERSION
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://api.jqueryui.com/button/
+ * http://api.jqueryui.com/checkboxradio/
  */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -25,6 +25,8 @@
 }(function( $ ) {
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
+	typeClasses = " ui-icon ui-icon-background ui-state-focus ui-icon-check ui-icon-blank" +
+		"ui-radio-label ui-checkbox-label ui-radio-checked ui-checkbox-checked",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -184,7 +186,7 @@ $.widget( "ui.checkboxradio", {
 			this.label.addClass( "ui-" + this.type + "-checked ui-state-active" );
 		}
 		if ( this.options.label ){
-			this.label.html( this.options.label );
+			this.label.html( this.icon ).append( this.options.label );
 		}
 	},
 
@@ -194,7 +196,6 @@ $.widget( "ui.checkboxradio", {
 
 	_toggleClasses: function() {
 		var checked = this.element.is( ":checked" );
-		console.log( this.element.is( ":checked" ) )
 		this.label.toggleClass( "ui-" + this.type + "-checked ui-state-active", checked );
 		if ( this.options.icon && this.type === "checkbox" ) {
 			this.icon.toggleClass( "ui-icon-check ui-icon-blank", checked );
@@ -215,16 +216,17 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_destroy: function() {
-		this.label.removeClass( "ui-button ui-corner-all ui-icon ui-icon-background" +
-			" ui-state-focus ui-icon-check ui-icon-blank ui-radio-label ui-checkbox-label" +
-			" ui-radio-checked ui-checkbox-checked" );
-		this.element.removeClass( "ui-helper-hidden-accessible" );
+		this.label.removeClass( baseClasses + " " + typeClasses );
+		if ( this.icon !== undefined ) {
+			this.icon.remove();
+		}
+		this.element.removeClass( "ui-checkboxradio ui-helper-hidden-accessible" );
 	},
 
 	_setOption: function( key, value ) {
 		this._super( key, value );
 		if ( key === "disabled" ) {
-			this.label.toggleClass( " ui-state-disabled", !!value );
+			this.label.toggleClass( "ui-state-disabled", !!value );
 			this.element.prop( "disabled", !!value );
 			return;
 		}

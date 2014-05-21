@@ -90,7 +90,7 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 		}, 1 );
 	});
 }
-test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
+test( "button creation that requires a matching label does not find label in all cases", function() {
 	expect( 5 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
 	group.find( "input[type=checkbox]" ).checkboxradio();
@@ -136,4 +136,5 @@ test( "#7534 - Checkbox label selector works for ids with \":\"", function() {
 	group.find( "input" ).checkboxradio();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
+
 })(jQuery);
