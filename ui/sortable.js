@@ -235,8 +235,8 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
 		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
 
-		//Cache the former DOM position
-		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };
+		//Cache the former DOM position including capturing nextSibling as needed for compatibility with Meteor.js
+		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0], nextSibling: this.currentItem[0].nextSibling };
 
 		//If the helper is not the original, hide the original so it's not playing any role during the drag, won't cause anything bad this way
 		if(this.helper[0] !== this.currentItem[0]) {
@@ -508,10 +508,20 @@ return $.widget("ui.sortable", $.ui.mouse, {
 				_noFinalSort: null
 			});
 
-			if(this.domPosition.prev) {
-				$(this.domPosition.prev).after(this.currentItem);
-			} else {
-				$(this.domPosition.parent).prepend(this.currentItem);
+			// For compatibility with Meteor UI, it is necessary on a "cancel" operation to return the DOM precisely to its
+			// state prior to the beginning of the drag function.  Specfically, the dragged item must be inserted back into the
+			// original position immediately prior to a saved nextSibling.  This will ensure that the dragged node stays
+			// within the proper range specified in Meteor's DomRange metadata. 
+			if (this.domPosition.nextSibling) {
+				this.domPosition.nextSibling.parentNode.insertBefore(this.currentItem[0], this.domPosition.nextSibling);
+			}
+			else {		
+				if(this.domPosition.prev) {
+					$(this.domPosition.prev).after(this.currentItem);
+				}
+				else {
+					$(this.domPosition.parent).prepend(this.currentItem);
+				}
 			}
 		}
 
@@ -1187,7 +1197,22 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		// We first have to update the dom position of the actual currentItem
 		// Note: don't do it if the current item is already removed (by a user), or it gets reappended (see #4088)
 		if(!this._noFinalSort && this.currentItem.parent().length) {
-			this.placeholder.before(this.currentItem);
+			// Special logic for Meteor, if the item is being returned to its original position,
+			// the element must be re-inserted back precisely in the same place, next to a saved nextSibling node:
+			var originalPrev = this.domPosition.prev;
+			var $currentPrev = this.placeholder.prev();
+			while ($currentPrev.hasClass("ui-sortable-helper") || $currentPrev.hasClass("ui-sortable-placeholder")) {
+				$currentPrev = $currentPrev.prev();
+			}
+			
+			var backToOriginalPosition = originalPrev === $currentPrev[0];
+			if (backToOriginalPosition && this.domPosition.nextSibling) {
+				this.domPosition.nextSibling.parentNode.insertBefore(this.currentItem[0], this.domPosition.nextSibling);
+			}
+			else {		
+				// Standard behavior:
+				this.placeholder.before(this.currentItem);
+			}
 		}
 		this._noFinalSort = null;
 
