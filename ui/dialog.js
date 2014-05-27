@@ -843,7 +843,7 @@ return $.widget( "ui.dialog", {
 
 			if ( !overlays ) {
 				this.document
-					.off( "focusin" )
+					.unbind( "focusin" )
 					.removeData( "ui-dialog-overlays" );
 			} else {
 				this.document.data( "ui-dialog-overlays", overlays );
