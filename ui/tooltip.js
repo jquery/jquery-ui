@@ -250,15 +250,10 @@ return $.widget( "ui.tooltip", {
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
 		//
-		// We use removeAttr only for key events, to allow IE to export the correct
-		// accessible attributes. For mouse events, set to empty string to avoid
-		// native tooltip showing up (happens only when removing inside mouseover).
+		// We use removeAttr to allow IE to export the correct accessible
+		// attributes.
 		if ( target.is( "[title]" ) ) {
-			if ( event && event.type === "mouseover" ) {
-				target.attr( "title", "" );
-			} else {
-				target.removeAttr( "title" );
-			}
+			target.removeAttr( "title" );
 		}
 
 		tooltip = this._tooltip( target );
@@ -356,7 +351,7 @@ return $.widget( "ui.tooltip", {
 
 		// only set title if we had one before (see comment in _open())
 		// If the title attribute has changed since open(), don't restore
-		if ( target.data( "ui-tooltip-title" ) && !target.attr( "title" ) ) {
+		if ( target.data( "ui-tooltip-title" ) && !target[0].hasAttribute( "title" ) ) {
 			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
 
@@ -431,7 +426,7 @@ return $.widget( "ui.tooltip", {
 			// Restore the title
 			if ( element.data( "ui-tooltip-title" ) ) {
 				// If the title attribute has changed since open(), don't restore
-				if ( !element.attr( "title" ) ) {
+				if ( !element[0].hasAttribute( "title" ) ) {
 					element.attr( "title", element.data( "ui-tooltip-title" ) );
 				}
 				element.removeData( "ui-tooltip-title" );
