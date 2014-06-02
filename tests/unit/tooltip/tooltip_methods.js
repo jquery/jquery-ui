@@ -120,7 +120,7 @@ test( "preserve changes to title attributes on close and destroy", function() {
 		
 		element.attr( "title", original ).tooltip()
 			.tooltip( "open", $.Event( "mouseover", { target: element[ 0 ] } ) );
-		if ( test.title != undefined) {
+		if ( test.title !== undefined) {
 			element.attr( "title", test.title );
 		} else{
 			element.removeAttr( "title" );
