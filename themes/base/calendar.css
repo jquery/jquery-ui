@@ -1,0 +1,178 @@
+/*!
+ * jQuery UI Calendar @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2014 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/calendar/#theming
+ */
+.ui-calendar {
+	width: 17em;
+	padding: .2em .2em 0;
+}
+.ui-calendar .ui-calendar-header {
+	position: relative;
+	padding: .2em 0;
+}
+.ui-calendar .ui-calendar-prev,
+.ui-calendar .ui-calendar-next {
+	position: absolute;
+	top: 2px;
+	width: 19px;
+	height: 18px;
+}
+.ui-calendar .ui-calendar-prev:not(.ui-state-hover):not(.ui-state-focus),
+.ui-calendar .ui-calendar-next:not(.ui-state-hover):not(.ui-state-focus) {
+	background: none;
+	border: none;
+}
+.ui-calendar .ui-calendar-prev-hover,
+.ui-calendar .ui-calendar-next-hover {
+	top: 1px;
+}
+.ui-calendar .ui-calendar-prev {
+	left: 2px;
+}
+.ui-calendar .ui-calendar-next {
+	right: 2px;
+}
+.ui-calendar .ui-calendar-prev-hover {
+	left: 1px;
+}
+.ui-calendar .ui-calendar-next-hover {
+	right: 1px;
+}
+.ui-calendar .ui-calendar-prev .ui-icon,
+.ui-calendar .ui-calendar-next .ui-icon {
+	display: block;
+	position: absolute;
+	left: 50%;
+	margin-left: -8px;
+	top: 50%;
+	margin-top: -8px;
+}
+.ui-calendar .ui-calendar-title {
+	line-height: 1.8em;
+	text-align: center;
+}
+.ui-calendar .ui-calendar-title select {
+	font-size: 1em;
+	margin: 1px 0;
+}
+.ui-calendar select.ui-calendar-month,
+.ui-calendar select.ui-calendar-year {
+	width: 49%;
+}
+.ui-calendar table {
+	width: 100%;
+	font-size: .9em;
+	border-collapse: collapse;
+	margin: 0 0 .4em;
+}
+.ui-calendar th {
+	padding: .7em .3em;
+	text-align: center;
+	font-weight: bold;
+	border: 0;
+}
+.ui-calendar td {
+	border: 0;
+	padding: 1px;
+}
+.ui-calendar td span,
+.ui-calendar td a {
+	display: block;
+	padding: .2em;
+	text-align: right;
+	text-decoration: none;
+}
+.ui-calendar .ui-calendar-buttonpane {
+	background-image: none;
+	margin: .7em 0 0 0;
+	padding: 0 .2em;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 0;
+}
+.ui-calendar .ui-calendar-buttonpane button {
+	float: right;
+	margin: .5em .2em .4em;
+	cursor: pointer;
+	padding: .2em .6em .3em .6em;
+	width: auto;
+	overflow: visible;
+}
+.ui-calendar .ui-calendar-buttonpane button.ui-calendar-current {
+	float: left;
+}
+
+/* with multiple calendars */
+.ui-calendar.ui-calendar-multi {
+	width: 100%;
+}
+.ui-calendar-multi .ui-calendar-group {
+	float: left;
+}
+.ui-calendar-multi .ui-calendar-group table {
+	width: 95%;
+	margin: 0 auto .4em;
+}
+.ui-calendar-multi-2 .ui-calendar-group {
+	width: 50%;
+}
+.ui-calendar-multi-3 .ui-calendar-group {
+	width: 33.3%;
+}
+.ui-calendar-multi-4 .ui-calendar-group {
+	width: 25%;
+}
+.ui-calendar-multi .ui-calendar-group-last .ui-calendar-header,
+.ui-calendar-multi .ui-calendar-group-middle .ui-calendar-header {
+	border-left-width: 0;
+}
+.ui-calendar-multi .ui-calendar-buttonpane {
+	clear: left;
+}
+.ui-calendar-row-break {
+	clear: both;
+	width: 100%;
+	font-size: 0;
+}
+
+/* RTL support */
+.ui-calendar-rtl {
+	direction: rtl;
+}
+.ui-calendar-rtl .ui-calendar-prev {
+	right: 2px;
+	left: auto;
+}
+.ui-calendar-rtl .ui-calendar-next {
+	left: 2px;
+	right: auto;
+}
+.ui-calendar-rtl .ui-calendar-prev:hover {
+	right: 1px;
+	left: auto;
+}
+.ui-calendar-rtl .ui-calendar-next:hover {
+	left: 1px;
+	right: auto;
+}
+.ui-calendar-rtl .ui-calendar-buttonpane {
+	clear: right;
+}
+.ui-calendar-rtl .ui-calendar-buttonpane button {
+	float: left;
+}
+.ui-calendar-rtl .ui-calendar-buttonpane button.ui-calendar-current,
+.ui-calendar-rtl .ui-calendar-group {
+	float: right;
+}
+.ui-calendar-rtl .ui-calendar-group-last .ui-calendar-header,
+.ui-calendar-rtl .ui-calendar-group-middle .ui-calendar-header {
+	border-right-width: 0;
+	border-left-width: 1px;
+}
