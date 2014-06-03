@@ -1,4 +1,4 @@
-TestHelpers.datepicker = {
+TestHelpers.calendar = {
 	addMonths: function( date, offset ) {
 		var maxDay = 32 - new Date( date.getFullYear(), date.getMonth() + offset, 32 ).getDate();
 		date.setDate( Math.min( date.getDate(), maxDay ) );
@@ -14,15 +14,9 @@ TestHelpers.datepicker = {
 		d2 = new Date( d2.getFullYear(), d2.getMonth(), d2.getDate() );
 		equal( d1.toString(), d2.toString(), message );
 	},
-	init: function( id, options ) {
-		options = $.extend( { show: false }, options || {} );
-		return $( id ).datepicker( options );
-	},
-	initNewInput: function( options ) {
-		options = $.extend( { show: false, hide: false }, options || {} );
-		return $( "<input>" ).datepicker( options )
-			.appendTo( "#qunit-fixture" );
-	},
-	onFocus: TestHelpers.onFocus,
-	PROP_NAME: "datepicker"
+	focusGrid: function( element ) {
+		element.find( "table:tabbable" ).simulate( "focus" );
+
+		return $( ":focus" );
+	}
 };

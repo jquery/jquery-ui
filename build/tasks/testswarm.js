@@ -14,6 +14,7 @@ var versions = {
 		"Accordion": "accordion/accordion.html",
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
+		"Calendar": "calendar/calendar.html",
 		"Core": "core/core.html",
 		"Core_deprecated": "core/core_deprecated.html",
 		"Datepicker": "datepicker/datepicker.html",

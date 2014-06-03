@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Calendar Test Suite</title>
+
+	<script src="../../jquery.js"></script>
+	<script src="../../../external/globalize/globalize.js"></script>
+	<script src="../../../external/localization.js"></script>
+	<script src="../../../external/date.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		css: [ "core", "calendar" ],
+		js: [
+			"ui/core.js",
+			"ui/widget.js",
+			"ui/button.js",
+			"ui/calendar.js"
+		]
+	});
+	</script>
+
+	<script src="calendar_common.js"></script>
+	<script src="calendar_core.js"></script>
+	<script src="calendar_events.js"></script>
+	<script src="calendar_methods.js"></script>
+	<script src="calendar_options.js"></script>
+	<script src="calendar_test_helpers.js"></script>
+
+	<script src="../swarminject.js"></script>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+<div id="calendar"></div>
+<div id="calendar2"></div>
+
+</div>
+</body>
+</html>
