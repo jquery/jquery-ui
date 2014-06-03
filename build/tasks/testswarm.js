@@ -13,6 +13,7 @@ var versions = {
 		"Accordion": "accordion/accordion.html",
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
+		"Calendar": "calendar/calendar.html",
 		"Core": "core/core.html",
 		"Datepicker": "datepicker/datepicker.html",
 		"Dialog": "dialog/dialog.html",

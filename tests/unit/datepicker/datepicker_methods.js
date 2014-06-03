@@ -3,64 +3,41 @@
 module( "datepicker: methods" );
 
 test( "destroy", function() {
-	expect( 10 );
-	var input = $( "#datepicker" ).datepicker(),
-		inline = $( "#inline" ).datepicker();
+	expect( 3 );
 
-	ok( input.datepicker( "instance" ), "instance created" );
-	ok( input.attr( "aria-owns" ), "aria-owns attribute added" );
-	ok( input.attr( "aria-haspopup" ), "aria-haspopup attribute added" );
-	input.datepicker( "destroy" );
-	ok( !input.datepicker( "instance" ), "instance removed" );
-	ok( !input.attr( "aria-owns" ), "aria-owns attribute removed" );
-	ok( !input.attr( "aria-haspopup" ), "aria-haspopup attribute removed" );
-
-	ok( inline.datepicker( "instance" ), "instance created" );
-	ok( inline.children().length > 0, "inline datepicker has children" );
-	inline.datepicker( "destroy" );
-	ok( !inline.datepicker( "instance" ), "instance removed" );
-	ok( inline.children().length === 0, "inline picker no longer has children" );
+	var input = $( "#datepicker" );
+	domEqual( input, function() {
+		input.datepicker();
+		ok( input.attr( "aria-owns" ), "aria-owns attribute added" );
+		ok( input.attr( "aria-haspopup" ), "aria-haspopup attribute added" );
+		input.datepicker( "destroy" );
+	});
 });
 
 test( "enable / disable", function() {
 	expect( 6 );
-	var inl,
-		inp = TestHelpers.datepicker.init( "#datepicker" ),
-		dp = inp.datepicker( "widget" );
 
-	ok( !inp.datepicker( "option", "disabled" ), "initially enabled" );
-	ok( !dp.hasClass( "ui-datepicker-disabled" ), "does not have disabled class name" );
+	var input = TestHelpers.datepicker.init( "#datepicker" ),
+		widget = input.datepicker( "widget" );
 
-	inp.datepicker( "disable" );
-	ok( inp.datepicker( "option", "disabled" ), "disabled option is set" );
-	ok( dp.hasClass( "ui-datepicker-disabled" ), "datepicker has disabled class name" );
+	ok( !input.datepicker( "option", "disabled" ), "initially enabled" );
+	ok( !widget.hasClass( "ui-datepicker-disabled" ), "does not have disabled class name" );
 
-	inp.datepicker( "enable" );
-	ok( !inp.datepicker( "option", "disabled" ), "enabled after enable() call" );
-	ok( !dp.hasClass( "ui-datepicker-disabled" ), "no longer has disabled class name" );
+	input.datepicker( "disable" );
+	ok( input.datepicker( "option", "disabled" ), "disabled option is set" );
+	ok( widget.hasClass( "ui-datepicker-disabled" ), "datepicker has disabled class name" );
 
-	// Inline
-	inl = TestHelpers.datepicker.init( "#inline" );
-	dp = inl.datepicker( "instance" );
-
-	// TODO: Disabling inline pickers does not work.
-	// TODO: When changeMonth and changeYear options are implemented ensure their dropdowns
-	// are properly disabled when in an inline picker.
+	input.datepicker( "enable" );
+	ok( !input.datepicker( "option", "disabled" ), "enabled after enable() call" );
+	ok( !widget.hasClass( "ui-datepicker-disabled" ), "no longer has disabled class name" );
 });
 
 test( "widget", function() {
 	expect( 1 );
+
 	var actual = $( "#datepicker" ).datepicker().datepicker( "widget" );
 	deepEqual( $( "body > .ui-front" )[ 0 ],  actual[ 0 ] );
 	actual.remove();
-});
-
-test( "close", function() {
-	expect( 0 );
-});
-
-test( "open", function() {
-	expect( 0 );
 });
 
 test( "value", function() {
@@ -77,7 +54,7 @@ test( "value", function() {
 	equal( input.datepicker( "value" ), "1/1/14", "getter" );
 
 	input.val( "abc" );
-	equal( input.datepicker( "value" ), "abc", "Invalid values should be returned without formatting." );
+	strictEqual( input.datepicker( "value" ), null, "Invalid values should return null." );
 });
 
 test( "valueAsDate", function() {
