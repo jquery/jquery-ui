@@ -183,7 +183,7 @@ $.date.prototype = {
 		this.selected = this.clone();
 		return this;
 	},
-	selected: function() {
+	selectedDate: function() {
 		return this.selected;
 	},
 	clone: function() {
