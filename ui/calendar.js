@@ -89,8 +89,7 @@ return $.widget( "ui.calendar", {
 		}
 		event.preventDefault();
 
-		var newId, newCell,
-			activeCell = $( "#" + this.grid.attr( "aria-activedescendant" ) ),
+		var activeCell = $( "#" + this.grid.attr( "aria-activedescendant" ) ),
 			oldMonth = this.date.month(),
 			oldYear = this.date.year();
 
@@ -131,19 +130,17 @@ return $.widget( "ui.calendar", {
 			this.refresh();
 			this.grid.focus( 1 );
 		}
-		else {
-			newId = this.id + "-" + this.date.day();
+
+		this._setActiveDescendant();
+	},
+
+	_setActiveDescendant: function() {
+		var newId = this.id + "-" + this.date.day(),
 			newCell = $( "#" + newId );
 
-			// TODO unnecessary optimization? is it really needed?
-			if ( !newCell.length ) {
-				return;
-			}
-			this.grid.attr("aria-activedescendant", newId);
-
-			this.grid.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
-			newCell.children( "a" ).addClass( "ui-state-focus" );
-		}
+		this.grid.attr( "aria-activedescendant", newId );
+		this.grid.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
+		newCell.children( "a" ).addClass( "ui-state-focus" );
 	},
 
 	_createTmpl: function() {
@@ -345,7 +342,7 @@ return $.widget( "ui.calendar", {
 			classes = [ "ui-state-default" ],
 			labels = Globalize.translate( "datepicker" );
 
-		if ( day.date === this.date.day() ) {
+		if ( day === this.date ) {
 			classes.push( "ui-state-focus" );
 		}
 		if ( day.current ) {
