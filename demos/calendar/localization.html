@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Calendar - Localize calendar</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../external/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
+	<script src="../../ui/position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		Globalize.locale( "de-DE" );
+		$( "#calendar" ).calendar();
+		$( "#locale" ).change(function() {
+			// TODO refresh the current value to convert to the selected locale
+			Globalize.locale( $(this).val() );
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p>Date: <input type="text" id="calendar"/>&nbsp;
+	<select id="locale">
+		<option value="de-DE" selected>German (Deutsch)</option>
+		<option value="en">English</option>
+	</select></p>
+
+<div class="demo-description">
+<p>Localize the calendar calendar language and format (English / Western formatting is the default).  The calendar includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
+</div>
+</body>
+</html>

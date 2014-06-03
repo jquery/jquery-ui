@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Calendar - Display month &amp; year menus</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../external/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
+	<script src="../../ui/position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#calendar" ).calendar({
+			changeMonth: true,
+			changeYear: true
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p>Date: <input type="text" id="calendar"></p>
+
+<div class="demo-description">
+<p>Show month and year dropdowns in place of the static month/year header to facilitate navigation through large timeframes.  Add the boolean <code>changeMonth</code> and <code>changeYear</code> options.</p>
+</div>
+</body>
+</html>
