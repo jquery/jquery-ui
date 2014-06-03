@@ -28,6 +28,7 @@ var
 		"core",
 		"accordion",
 		"autocomplete",
+		"calendar",
 		"button",
 		"datepicker",
 		"dialog",

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Calendar - Show week of the year</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../external/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
+	<script src="../../ui/position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#calendar" ).calendar({
+			showWeek: true
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p>Date: <input type="text" id="calendar"></p>
+
+<div class="demo-description">
+<p>The calendar can show the week of the year. The calculation follows
+	<a href="http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table">Unicode CLDR specification</a>.
+	This means that some days from one year may be placed into weeks 'belonging' to another year.</p>
+</div>
+</body>
+</html>

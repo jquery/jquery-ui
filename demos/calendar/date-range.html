@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Calendar - Select a Date Range</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../external/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
+	<script src="../../ui/position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#from" ).calendar({
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 3,
+			onClose: function( selectedDate ) {
+				$( "#to" ).calendar( "option", "minDate", selectedDate );
+			}
+		});
+		$( "#to" ).calendar({
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 3,
+			onClose: function( selectedDate ) {
+				$( "#from" ).calendar( "option", "maxDate", selectedDate );
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<label for="from">From</label>
+<input type="text" id="from" name="from"/>
+<label for="to">to</label>
+<input type="text" id="to" name="to"/>
+
+<div class="demo-description">
+<p>Select the date range to search for.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Calendar - Display multiple months</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../external/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
+	<script src="../../ui/position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#calendar" ).calendar({
+			numberOfMonths: 3,
+			showButtonPanel: true
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p>Date: <input type="text" id="calendar"></p>
+
+<div class="demo-description">
+<p>Set the <code>numberOfMonths</code> option to an integer of 2 or more to show multiple months in a single calendar.</p>
+</div>
+</body>
+</html>
