@@ -26,9 +26,6 @@
 	}
 }(function( $ ) {
 
-// TODO use uniqueId, if possible
-var idIncrement = 0;
-
 return $.widget( "ui.calendar", {
 	options: {
 		dateFormat: { date: "short" },
@@ -43,8 +40,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_create: function() {
-		this.id = "ui-calendar-" + idIncrement;
-		idIncrement++;
+		this.id = this.element.uniqueId().attr( "id" );
 
 		this.date = $.date( this.options.value, this.options.dateFormat ).select();
 		this.date.eachDay = this.options.eachDay;
@@ -453,8 +449,7 @@ return $.widget( "ui.calendar", {
 	_destroy: function() {
 		this.element
 			.empty()
-			.removeAttr( "aria-haspopup" )
-			.removeAttr( "aria-owns" );
+			.removeUniqueId();
 	},
 
 	option: function( key ) {
