@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Datepicker - Dates in other months</title>
+	<title>jQuery UI Calendar - Localize calendar</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../external/globalize/globalize.js"></script>
@@ -11,30 +11,31 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/position.js"></script>
-	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker({
-			eachDay: function( day ) {
-				if ( day.lead ) {
-					day.render = true;
-					day.selectable = true;
-					day.extraClasses = "ui-priority-secondary";
-				}
-			}
+		var calendar = $( "#calendar" ).calendar(),
+			date = calendar.calendar( "valueAsDate" );
+
+		$( "#locale" ).change( function() {
+			Globalize.locale( $( this ).val() );
+			calendar.calendar( "valueAsDate", date );
 		});
 	});
 	</script>
 </head>
 <body>
 
-<p>Date: <input type="text" id="datepicker"></p>
+<div id="calendar"></div>
+<select id="locale">
+	<option value="de-DE" selected>German (Deutsch)</option>
+	<option value="en">English</option>
+</select>
 
 <div class="demo-description">
-<p>The datepicker can show dates that come from other than the main month
-	being displayed. These other dates can also be made selectable.</p>
+<p>Localize the calendar calendar language and format (English / Western formatting is the default). The calendar includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
 </div>
 </body>
 </html>

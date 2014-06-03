@@ -12,29 +12,21 @@
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
 	<script src="../../ui/position.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker();
-		$( "#format" ).change(function() {
-			var format;
-			switch( $( this ).val() ) {
-				case "short":
-					$( "#datepicker" ).datepicker( "option", "dateFormat", {
-						date: "short"
-					});
-					break;
-				case "long":
-					$( "#datepicker" ).datepicker( "option", "dateFormat", {
-						date: "long"
-					});
-					break;
-				case "iso":
-					$( "#datepicker" ).datepicker( "option", "dateFormat", {
-						pattern: "yyyy-MM-dd"
-					});
-					break;
+		var value,
+			datepicker = $( "#datepicker" ).datepicker();
+
+		$( "#format" ).change( function() {
+			value = $( this ).val();
+
+			if ( value === "iso" ) {
+				datepicker.datepicker( "option", "dateFormat", { pattern: "yyyy-MM-dd" } );
+			} else {
+				datepicker.datepicker( "option", "dateFormat", { date: value } );
 			}
 		});
 	});
