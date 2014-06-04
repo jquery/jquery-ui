@@ -83,8 +83,48 @@ test( "showWeek", function() {
 });
 
 test( "min / max", function() {
-	expect( 0 );
-});
+	expect( 7 );
+
+	// With existing date
+	var element = $( "#calendar" ).calendar(),
+		minDate = new Date( 2008, 2 - 1, 29 ),
+		maxDate = new Date( 2008, 12 - 1, 7 );
+
+	element
+		.calendar( "option", { min: minDate } )
+		.calendar( "value", "6/4/08" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+
+	element
+		.calendar( "option", { min: minDate } )
+		.calendar( "value", "1/4/08" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+
+	element
+		.calendar( "option", { min: null } )
+		.calendar( "value", "6/4/08" )
+		.calendar( "option", { max: maxDate } );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+
+	element
+		.calendar( "option", { max: maxDate } )
+		.calendar( "value", "1/4/09" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - setDate > max" );
+
+	element
+		.calendar( "option", { min: minDate, max: maxDate } )
+		.calendar( "value", "1/4/08" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+
+	element
+		.calendar( "option", { min: minDate, max: maxDate } )
+		.calendar( "value", "6/4/08" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+
+	element
+		.calendar( "option", { min: minDate, max: maxDate } )
+		.calendar( "value", "1/4/09" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );});
 
 /*
 // TODO: Move this to $.date, Globalize or calendar widget

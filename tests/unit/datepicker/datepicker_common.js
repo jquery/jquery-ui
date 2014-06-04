@@ -4,6 +4,8 @@ TestHelpers.commonWidgetTests( "datepicker", {
 		dateFormat: { date: "short" },
 		disabled: false,
 		eachDay: $.noop,
+		max: null,
+		min: null,
 		numberOfMonths: 1,
 		position: {
 			my: "left top",
