@@ -57,6 +57,16 @@ $.widget( "ui.datepicker", {
 			return;
 		}
 
+		var max = this.element.attr( "max" ),
+			min = this.element.attr( "min" );
+
+		if ( this.options.max === null && max ) {
+			this.options.max = this._parseDate( max );
+		}
+		if ( this.options.min === null && min ) {
+			this.options.min = this._parseDate( min );
+		}
+
 		this._createCalendar();
 	},
 
@@ -286,7 +296,7 @@ $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			var date = Globalize.parseDate( value, this.options.dateFormat );
+			var date = this._parseDate( value );
 			if ( this.calendarInstance._isValid( date ) ) {
 				this.valueAsDate( date );
 				this.element.val( value );
@@ -323,7 +333,11 @@ $.widget( "ui.datepicker", {
 	},
 
 	_getParsedValue: function() {
-		return Globalize.parseDate( this.element.val(), this.options.dateFormat );
+		return this._parseDate( this.element.val() );
+	},
+
+	_parseDate: function( string ) {
+		return Globalize.parseDate( string , this.options.dateFormat );
 	},
 
 	_setOption: function( key, value ) {
@@ -335,6 +349,10 @@ $.widget( "ui.datepicker", {
 
 		if ( key === "dateFormat" ) {
 			this.element.val( this.date.format() );
+		}
+
+		if ( key === "max" || key === "min" ) {
+			this.element.attr( key, Globalize.format( value, this.options.dateFormat ) );
 		}
 
 		if ( key === "position" ) {
