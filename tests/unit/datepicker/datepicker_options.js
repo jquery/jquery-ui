@@ -149,6 +149,42 @@ test( "showWeek", function() {
 	input.datepicker( "option", "showWeek", true );
 	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
 });
+	
+test( "min / max", function() {
+	expect( 14 );
+
+	var inp = TestHelpers.datepicker.init( "#datepicker" ),
+		minDate = new Date( 2008, 2 - 1, 29 ),
+		maxDate = new Date( 2008, 12 - 1, 7 );
+
+	inp.val( "6/4/08" ).datepicker( "option", { min: minDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+	ok( inp.datepicker( "isValid" ) );
+
+	inp.datepicker( "option", { min: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 4 ), "Min/max - value < min" );
+	ok( !inp.datepicker( "isValid" ) );
+
+	inp.datepicker( "option", { min: null } ).val( "6/4/08" ).datepicker( "option", { max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+	ok( inp.datepicker( "isValid" ) );
+
+	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2009, 1 - 1, 4 ), "Min/max - setDate > max" );
+	ok( !inp.datepicker( "isValid" ) );
+
+	inp.datepicker( "option", { max: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 4 ), "Min/max - value < min" );
+	ok( !inp.datepicker( "isValid" ) );
+
+	inp.datepicker( "option", { max: null } ).val( "6/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+	ok( inp.datepicker( "isValid" ) );
+
+	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { min: minDate, max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2009, 1 - 1, 4 ), "Min/max - value > max" );
+	ok( !inp.datepicker( "isValid" ) );
+});
 
 test( "Stop datepicker from appearing with beforeOpen event handler", function() {
 	expect( 3 );
