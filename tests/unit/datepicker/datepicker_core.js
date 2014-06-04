@@ -20,8 +20,8 @@ test( "input's value determines starting date", function() {
 });
 
 asyncTest( "baseStructure", function() {
-	expect( 42 );
-	var header, title, table, thead, week, panel, inl, child,
+	expect( 29 );
+	var header, title, table, thead, week, panel, child,
 		inp = TestHelpers.datepicker.initNewInput(),
 		dp = inp.datepicker( "widget" ).find( ".ui-datepicker" );
 
@@ -163,55 +163,8 @@ asyncTest( "baseStructure", function() {
 			ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2,2] - row break" );
 			*/
 			inp.datepicker( "close" ).datepicker( "destroy" );
-			step6();
+			start();
 		});
-	}
-
-	function step6() {
-		// Inline
-		inl = TestHelpers.datepicker.init( "#inline" );
-		dp = inl.children();
-
-		ok( dp.is( ".ui-datepicker-inline" ), "Structure inline - main div" );
-		ok( !dp.is( ".ui-datepicker-rtl" ), "Structure inline - not right-to-left" );
-		ok( !dp.is( ".ui-datepicker-multi" ), "Structure inline - not multi-month" );
-		equal( dp.children().length, 3, "Structure inline - child count (header, calendar, buttonpane)" );
-
-		header = dp.children( ":first" );
-		ok( header.is( "div.ui-datepicker-header" ), "Structure inline - header division" );
-		equal( header.children().length, 3, "Structure inline - header child count" );
-
-		table = dp.children( ":eq(1)" );
-		ok( table.is( "table.ui-datepicker-calendar" ), "Structure inline - month table" );
-		ok( table.children( ":first" ).is( "thead" ), "Structure inline - month table thead" );
-		ok( table.children( ":eq(1)" ).is( "tbody" ), "Structure inline - month table body" );
-
-		inl.datepicker( "destroy" );
-
-		step7();
-	}
-
-	function step7() {
-		// Inline multi-month
-		inl = TestHelpers.datepicker.init( "#inline", { numberOfMonths: 2 } );
-		dp = inl.datepicker( "widget" ).find( ".ui-datepicker" );
-
-		ok( dp.is( ".ui-datepicker-inline" ) && dp.is( ".ui-datepicker-multi" ), "Structure inline multi - main div" );
-		equal( dp.children().length, 4, "Structure inline multi - child count" );
-
-		child = dp.children( ":first" );
-		// TODO: Implement ui-datepicker-group-first class name
-		// ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-first" ), "Structure inline multi - first month division" );
-
-		child = dp.children( ":eq(1)" );
-		// TODO: Implement ui-datepicker-group-last class name
-		// ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-last" ), "Structure inline multi - second month division" );
-
-		child = dp.children( ":eq(2)" );
-		ok( child.is( "div.ui-datepicker-row-break" ), "Structure inline multi - row break" );
-
-		inl.datepicker( "destroy" );
-		start();
 	}
 
 	step1();
@@ -503,10 +456,9 @@ asyncTest( "keyboard handling", function() {
 */
 
 test( "mouse", function() {
-	expect( 13 );
+	expect( 8 );
 	var input = $( "#datepicker" ).datepicker(),
 		picker = input.datepicker( "widget" ),
-		inline = $( "#inline" ).datepicker,
 		date = new Date();
 
 	input.val( "" ).datepicker( "open" );
@@ -570,42 +522,6 @@ test( "mouse", function() {
 	TestHelpers.datepicker.equalsDate(input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 18 ),
 		"Mouse click - next + min/max" );
 	*/
-
-	// Inline
-	inline = TestHelpers.datepicker.init( "#inline" );
-	picker = $( ".ui-datepicker-inline", inline );
-	date = new Date();
-	inline.datepicker( "valueAsDate", date );
-	$( ".ui-datepicker-calendar tbody a:contains(10)", picker ).simulate( "mousedown", {} );
-	date.setDate( 10 );
-	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ), date, "Mouse click inline" );
-
-	inline.datepicker( "option", { showButtonPanel: true } )
-		.datepicker( "valueAsDate", new Date( 2008, 2 - 1, 4 ));
-	$( ".ui-datepicker-calendar tbody a:contains(12)", picker ).simulate( "mousedown", {} );
-	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 12 ),
-		"Mouse click inline - preset" );
-
-	inline.datepicker( "option", { showButtonPanel: true } );
-	$( ".ui-datepicker-current", picker ).simulate( "click", {} );
-	$( ".ui-datepicker-calendar tbody a:contains(14)", picker ).simulate( "mousedown", {} );
-	date.setDate( 14 );
-	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ), date, "Mouse click inline - current" );
-
-	inline.datepicker( "valueAsDate", new Date( 2008, 2 - 1, 4) );
-	$( ".ui-datepicker-prev", picker ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(16)", picker ).simulate( "mousedown" );
-	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 16 ),
-		"Mouse click inline - previous" );
-
-	inline.datepicker( "valueAsDate", new Date( 2008, 2 - 1, 4) );
-	$( ".ui-datepicker-next", picker ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(18)", picker ).simulate( "mousedown" );
-	TestHelpers.datepicker.equalsDate( inline.datepicker( "valueAsDate" ), new Date( 2008, 3 - 1, 18 ),
-		"Mouse click inline - next" );
-
-	input.datepicker( "destroy" );
-	inline.datepicker( "destroy" );
 });
 
 })( jQuery );

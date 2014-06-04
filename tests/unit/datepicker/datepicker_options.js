@@ -701,24 +701,6 @@ test( "setDate", function() {
 	date1.setDate(date1.getDate() - 21);
 	inp.datepicker( "setDate", "c -3 w" );
 	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - c -3 w" );
-	// Inline
-	inl = TestHelpers.datepicker.init( "#inl" );
-	date1 = new Date(2008, 6 - 1, 4);
-	date2 = new Date();
-	TestHelpers.datepicker.equalsDate(inl.datepicker( "getDate" ), date2, "Set date inline - default" );
-	inl.datepicker( "setDate", date1);
-	TestHelpers.datepicker.equalsDate(inl.datepicker( "getDate" ), date1, "Set date inline - 2008-06-04" );
-	date1 = new Date();
-	date1.setDate(date1.getDate() + 7);
-	inl.datepicker( "setDate", +7);
-	TestHelpers.datepicker.equalsDate(inl.datepicker( "getDate" ), date1, "Set date inline - +7" );
-	date2.setFullYear(date2.getFullYear() + 2);
-	inl.datepicker( "setDate", "+2y" );
-	TestHelpers.datepicker.equalsDate(inl.datepicker( "getDate" ), date2, "Set date inline - +2y" );
-	inl.datepicker( "setDate", date1, date2);
-	TestHelpers.datepicker.equalsDate(inl.datepicker( "getDate" ), date1, "Set date inline - two dates" );
-	inl.datepicker( "setDate" );
-	ok(inl.datepicker( "getDate" ) == null, "Set date inline - null" );
 	// Alternate field
 	alt = $( "#alt" );
 	inp.datepicker( "option", {altField: "#alt", altFormat: "yy-mm-dd"});
