@@ -450,7 +450,7 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( this.options.min instanceof Date ) {
-			if ( value < $.date( this.options.min ).adjust( "D", -1 ).date() ) {
+			if ( value < this.options.min ) {
 				return false;
 			}
 		}
@@ -480,20 +480,22 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( key === "max" || key === "min" ) {
-			if ( !( value instanceof Date ) ) {
-				return;
+			if ( value instanceof Date ) {
+				this._super( key, value );
+				this.refresh();
 			}
+			return;
 		}
 
 		this._super( key, value );
 
 		if ( key === "eachDay" ) {
-			this.date.eachDay = this.options.eachDay;
+			this.date.eachDay = value;
 			this.refresh();
 		}
 
 		if ( key === "dateFormat" ) {
-			this.date.setFormat( this.options.dateFormat );
+			this.date.setFormat( value );
 		}
 
 		if ( key === "showWeek" ) {
