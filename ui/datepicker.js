@@ -35,6 +35,8 @@ $.widget( "ui.datepicker", {
 		appendTo: null,
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
+		max: null,
+		min: null,
 		numberOfMonths: 1,
 		position: {
 			my: "left top",
@@ -52,7 +54,21 @@ $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
+		if ( $.type( this.options.max ) === "string" ) {
+			this.options.max = Globalize.parseDate( this.options.max , { pattern: "yyyy-MM-dd" } );
+		}
+		if ( $.type( this.options.min ) === "string" ) {
+			this.options.min = Globalize.parseDate( this.options.min , { pattern: "yyyy-MM-dd" } );
+		}
+
 		this._createCalendar();
+	},
+
+	_getCreateOptions: function() {
+		return {
+			max: this.element.attr( "max" ),
+			min: this.element.attr( "min" )
+		};
 	},
 
 	_createCalendar: function() {
@@ -67,6 +83,8 @@ $.widget( "ui.datepicker", {
 			.calendar({
 				dateFormat: this.options.dateFormat,
 				eachDay: this.options.eachDay,
+				max: this.options.max,
+				min: this.options.min,
 				numberOfMonths: this.options.numberOfMonths,
 				showWeek: this.options.showWeek,
 				value: this._getParsedValue(),
@@ -275,11 +293,7 @@ $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			var date = Globalize.parseDate( value, this.options.dateFormat );
-			if ( $.type( date ) === "date" ) {
-				this.valueAsDate( date );
-				this.element.val( value );
-			}
+			this.valueAsDate( Globalize.parseDate( value , this.options.dateFormat ) );
 		} else {
 			return ( this._getParsedValue() !== null ) ? this.element.val() : null;
 		}
@@ -287,7 +301,7 @@ $.widget( "ui.datepicker", {
 
 	valueAsDate: function( value ) {
 		if ( arguments.length ) {
-			if ( $.type( value ) === "date" ) {
+			if ( this.calendarInstance._isValid( value ) ) {
 				this.calendarInstance.valueAsDate( value );
 				this.element.val( Globalize.format( value, this.options.dateFormat ) );
 			}
@@ -297,7 +311,7 @@ $.widget( "ui.datepicker", {
 	},
 
 	isValid: function() {
-		return this._getParsedValue() !== null;
+		return this.calendarInstance._isValid( this._getParsedValue() );
 	},
 
 	_destroy: function() {
@@ -313,7 +327,7 @@ $.widget( "ui.datepicker", {
 	},
 
 	_getParsedValue: function() {
-		return Globalize.parseDate( this.element.val(), this.options.dateFormat );
+		return Globalize.parseDate( this.element.val() , this.options.dateFormat );
 	},
 
 	_setOption: function( key, value ) {
@@ -336,5 +350,4 @@ $.widget( "ui.datepicker", {
 		}
 	}
 });
-
 }));

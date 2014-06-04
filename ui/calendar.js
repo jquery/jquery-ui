@@ -32,6 +32,8 @@ return $.widget( "ui.calendar", {
 		dateFormat: { date: "short" },
 		// TODO review
 		eachDay: $.noop,
+		max: null,
+		min: null,
 		numberOfMonths: 1,
 		showWeek: false,
 		value: null,
@@ -308,30 +310,33 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildDayCell: function( day ) {
-		var contents = "",
-			idAttribute = day.render ? ( "id=" + this.id + "-" + day.date ) : "",
-			ariaSelectedAttribute = "aria-selected=" + ( day.current ? "true" : "false" ),
-			ariaDisabledAttribute = day.selectable ? "" : "aria-disabled=true";
+		var content = "",
+			attributes = [
+				"role='gridcell'",
+				"aria-selected='" + day.current ? true : false + "'"
+			],
+			selectable = ( day.selectable && this._isValid( new Date( day.timestamp ) ) );
 
 		if ( day.render ) {
-			if ( day.selectable ) {
-				contents = this._buildDayLink( day );
-			} else {
-				contents = this._buildDayDisplay( day );
+			attributes.push( "id='" + this.id + "-" + day.date + "'" );
+
+			if ( !selectable ) {
+				attributes.push( "aria-disabled='true'" );
+				attributes.push( "class='ui-state-disabled'" );
 			}
+
+			content = this._buildDayElement( day, selectable );
 		}
 
-		return "<td role='gridcell' " + idAttribute + " " + ariaSelectedAttribute + " " + ariaDisabledAttribute + ">" +
-			contents +
-		"</td>";
+		return "<td " + attributes.join( " " ) + ">" + content + "</td>";
 	},
 
-	_buildDayLink: function( day ) {
-		var link,
-			classes = [ "ui-state-default" ],
-			labels = Globalize.translate( "datepicker" );
+	_buildDayElement: function( day, selectable ) {
+		var classes = [ "ui-state-default" ],
+			labels = Globalize.translate( "datepicker" ),
+			content = "";
 
-		if ( day === this.date ) {
+		if ( day === this.date && selectable ) {
 			classes.push( "ui-state-focus" );
 		}
 		if ( day.current ) {
@@ -340,33 +345,23 @@ return $.widget( "ui.calendar", {
 		if ( day.today ) {
 			classes.push( "ui-state-highlight" );
 		}
+		// ToDo Explain and document this
 		if ( day.extraClasses ) {
 			classes.push( day.extraClasses.split( " " ) );
 		}
 
-		link = "<a href='#' tabindex='-1' data-timestamp='" + day.timestamp + "' class='" + classes.join( " " ) + "'>" +
-				day.date + "</a>";
+		classes = " class='" + classes.join( " " ) + "'";
+		if ( selectable ) {
+			content = "<a href='#' tabindex='-1' data-timestamp='" + day.timestamp + "'" + classes + ">" + day.date + "</a>";
+		} else {
+			content = "<span" + classes + ">" + day.date + "</span>";
+		}
+
 		if ( day.today ) {
-			link += "<span class='ui-helper-hidden-accessible'>, " + labels.currentText + "</span>";
+			content += "<span class='ui-helper-hidden-accessible'>, " + labels.currentText + "</span>";
 		}
 
-		return link;
-	},
-
-	_buildDayDisplay: function( day ) {
-		var classes = [];
-
-		if ( day.current ) {
-			classes.push( "ui-state-active" );
-		}
-		if ( day.today ) {
-			classes.push( "ui-state-highlight" );
-		}
-		if ( day.extraClasses ) {
-			classes.push( day.extraClasses.split( " " ) );
-		}
-
-		return "<span class='" + classes.join( "" ) + "'>" + day.date + "</span>";
+		return content;
 	},
 
 	_buildButtons: function() {
@@ -418,7 +413,6 @@ return $.widget( "ui.calendar", {
 	_select: function( event, time ) {
 		this._setOption( "value", new Date( time ) );
 		this._trigger( "select", event, {
-			// TODO replace with value option to initialise and read
 			date: this.value()
 		});
 	},
@@ -439,6 +433,26 @@ return $.widget( "ui.calendar", {
 		}
 	},
 
+	_isValid: function( value ) {
+		if ( $.type( value ) !== "date" ) {
+			return false;
+		}
+
+		if ( $.type( this.options.max ) === "date" ) {
+			if ( value > this.options.max ) {
+				return false;
+			}
+		}
+
+		if ( $.type( this.options.min ) === "date" ) {
+			if ( value < this.options.min ) {
+				return false;
+			}
+		}
+
+		return true;
+	},
+
 	_destroy: function() {
 		this.element
 			.removeClass( "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-calendar-multi" )
@@ -455,21 +469,29 @@ return $.widget( "ui.calendar", {
 
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
-			if ( value instanceof Date ) {
+			if ( this._isValid( value ) ) {
 				this.date.setTime( value.getTime() ).select();
 				this.refresh();
 			}
 		}
 
+		if ( key === "max" || key === "min" ) {
+			if ( $.type( value ) === "date" || value === null ) {
+				this._super( key, value );
+				this.refresh();
+			}
+			return;
+		}
+
 		this._super( key, value );
 
 		if ( key === "eachDay" ) {
-			this.date.eachDay = this.options.eachDay;
+			this.date.eachDay = value;
 			this.refresh();
 		}
 
 		if ( key === "dateFormat" ) {
-			this.date.setFormat( this.options.dateFormat );
+			this.date.setFormat( value );
 		}
 
 		if ( key === "showWeek" ) {

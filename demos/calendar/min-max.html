@@ -16,7 +16,14 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#calendar" ).calendar({ minDate: -20, maxDate: "+1M +10D" });
+		var now = new Date(),
+			dateMin = new Date( now.getFullYear(), now.getMonth(), now.getDay() + 1 ),
+			dateMax = new Date( now.getFullYear(), now.getMonth(), now.getDay() + 8 );
+
+		$( "#calendar" ).calendar({
+			min: dateMin,
+			max: dateMax
+		});
 	});
 	</script>
 </head>
@@ -25,7 +32,7 @@
 <div id="calendar"></div>
 
 <div class="demo-description">
-<p>Restrict the range of selectable dates with the <code>minDate</code> and <code>maxDate</code> options.  Set the beginning and end dates as actual dates (new Date(2009, 1 - 1, 26)), as a numeric offset from today (-20), or as a string of periods and units ('+1M +10D').  For the last, use 'D' for days, 'W' for weeks, 'M' for months, or 'Y' for years.</p>
+<p>Restrict the range of selectable dates with the <code>min</code> and <code>max</code> options. Set the beginning and end dates as actual dates (new Date(2009, 1 - 1, 26)).</p>
 </div>
 </body>
 </html>
