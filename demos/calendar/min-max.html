@@ -16,12 +16,11 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-        var dateMin = new Date(),
-            dateMax = new Date();
+        var now = new Date(),
+            dateMin = new Date( now.getFullYear(), now.getMonth(), now.getDay() + 1 ),
+            dateMax = new Date( now.getFullYear(), now.getMonth(), now.getDay() + 8 );
 
-        dateMax.setDate( dateMin.getDate() + 7 );
-
-		$( "#calendar" ).calendar({
+        $( "#calendar" ).calendar({
             min: dateMin,
             max: dateMax
         });
