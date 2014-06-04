@@ -58,11 +58,13 @@ test( "value", function() {
 });
 
 test( "valueAsDate", function() {
-	expect( 6 );
+	expect( 13 );
 
-	var input = TestHelpers.datepicker.init( "#datepicker" ),
+	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
+		input = TestHelpers.datepicker.init( "#datepicker" ),
 		picker = input.datepicker( "widget" ),
-		date1 = new Date( 2008, 6 - 1, 4 );
+		date1 = new Date( 2008, 6 - 1, 4 ),
+		date2 = new Date();
 
 	input.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
 	equal( input.val(), "1/1/14", "Input's value set" );
@@ -78,6 +80,36 @@ test( "valueAsDate", function() {
 	strictEqual( input.datepicker( "valueAsDate" ), null, "Set date - default" );
 	input.datepicker( "valueAsDate", date1 );
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date1, "Set date - 2008-06-04" );
+
+	// With minimum/maximum
+	input = TestHelpers.datepicker.init( "#datepicker" );
+	date1 = new Date( 2008, 1 - 1, 4 );
+	date2 = new Date( 2008, 6 - 1, 4 );
+	minDate = new Date( 2008, 2 - 1, 29 );
+	maxDate = new Date( 2008, 3 - 1, 28 );
+
+	input.val( "" ).datepicker( "option", { min: minDate } ).datepicker( "valueAsDate", date2 );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date2, "Set date min/max - value > min" );
+
+	input.datepicker( "valueAsDate", date1 );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date2, "Set date min/max - value < min" );
+
+	input.val( "" ).datepicker( "option", { max: maxDate, min: null } ).datepicker( "valueAsDate", date1 );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date1, "Set date min/max - value < max" );
+
+	input.datepicker( "valueAsDate", date2 );
+	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date1, "Set date min/max - value > max" );
+
+	input.val( "" ).datepicker( "option", { min: minDate } ).datepicker( "valueAsDate", date1 );
+	ok( input.datepicker( "valueAsDate" ) === null, "Set date min/max - value < min" );
+
+	input.datepicker( "valueAsDate", date2 );
+	ok( input.datepicker( "valueAsDate" ) === null, "Set date min/max - value > max" );
+
+	dateAndTimeToSet = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	dateAndTimeClone = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	input.datepicker( "valueAsDate", dateAndTimeToSet );
+	equal( dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), "Date object passed should not be changed by valueAsDate" );
 });
 
 test( "isValid", function() {
