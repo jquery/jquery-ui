@@ -16,8 +16,7 @@
 			"jquery",
 			"./core",
 			"./widget",
-			"./button",
-			"./position"
+			"./button"
 		], factory );
 	} else {
 
