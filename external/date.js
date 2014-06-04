@@ -184,7 +184,7 @@ $.date.prototype = {
 		return this;
 	},
 	selectedDate: function() {
-		return this.selected;
+		return this.selected.date();
 	},
 	clone: function() {
 		var date = this.dateObject;
