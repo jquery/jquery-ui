@@ -55,7 +55,6 @@
 	margin-top: -8px;
 }
 .ui-calendar .ui-calendar-title {
-	margin: 0 2.3em;
 	line-height: 1.8em;
 	text-align: center;
 }
@@ -112,7 +111,7 @@
 
 /* with multiple calendars */
 .ui-calendar.ui-calendar-multi {
-	width: auto;
+	width: 100%;
 }
 .ui-calendar-multi .ui-calendar-group {
 	float: left;
