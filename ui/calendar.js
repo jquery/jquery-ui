@@ -419,9 +419,7 @@ return $.widget( "ui.calendar", {
 
 	_select: function( event, time ) {
 		this._setOption( "value", new Date( time ) );
-		this._trigger( "select", event, {
-			date: this.value()
-		});
+		this._trigger( "select", event );
 	},
 
 	value: function( value ) {
