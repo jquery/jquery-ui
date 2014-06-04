@@ -57,11 +57,14 @@ return $.widget( "ui.datepicker", {
 			return;
 		}
 
-		if ( this.options.max === null ) {
-			this.options.max = this._parseDate( this.element.attr( "max" ) );
+		var max = this.element.attr( "max" ),
+			min = this.element.attr( "min" );
+
+		if ( this.options.max === null && max ) {
+			this.options.max = this._parseDate( max );
 		}
-		if ( this.options.min === null ) {
-			this.options.min = this._parseDate( this.element.attr( "min" ) );
+		if ( this.options.min === null && min ) {
+			this.options.min = this._parseDate( min );
 		}
 
 		this._createCalendar();
