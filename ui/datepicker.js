@@ -34,6 +34,8 @@ $.widget( "ui.datepicker", {
 		appendTo: null,
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
+		max: null,
+		min: null,
 		numberOfMonths: 1,
 		position: {
 			my: "left top",
@@ -68,6 +70,8 @@ $.widget( "ui.datepicker", {
 			.calendar({
 				dateFormat: this.options.dateFormat,
 				eachDay: this.options.eachDay,
+				max: this.options.max,
+				min: this.options.min,
 				numberOfMonths: this.options.numberOfMonths,
 				showWeek: this.options.showWeek,
 				value: this._getParsedValue(),
@@ -337,7 +341,7 @@ $.widget( "ui.datepicker", {
 			this.calendar.position( this._buildPosition() );
 		}
 
-		if ( $.inArray( key, [ "showWeek", "numberOfMonths", "dateFormat", "eachDay" ] ) ) {
+		if ( $.inArray( key, [ "showWeek", "numberOfMonths", "dateFormat", "eachDay", "min", "max" ] ) ) {
 			this.calendarInstance._setOption( key, value );
 		}
 	}
