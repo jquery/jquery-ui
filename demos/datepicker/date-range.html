@@ -11,25 +11,22 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/position.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
 		$( "#from" ).datepicker({
-			defaultDate: "+1w",
-			changeMonth: true,
 			numberOfMonths: 3,
-			onClose: function( selectedDate ) {
-				$( "#to" ).datepicker( "option", "minDate", selectedDate );
+			select: function() {
+				$( "#to" ).datepicker( "option", "min", $( "#from" ).datepicker( "valueAsDate" ) );
 			}
 		});
 		$( "#to" ).datepicker({
-			defaultDate: "+1w",
-			changeMonth: true,
 			numberOfMonths: 3,
-			onClose: function( selectedDate ) {
-				$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+			select: function() {
+				$( "#from" ).datepicker( "option", "max", $( "#to" ).datepicker( "valueAsDate" ) );
 			}
 		});
 	});
