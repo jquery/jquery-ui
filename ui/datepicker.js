@@ -93,11 +93,11 @@ $.widget( "ui.datepicker", {
 				numberOfMonths: this.options.numberOfMonths,
 				showWeek: this.options.showWeek,
 				value: this._getParsedValue(),
-				select: function( event, data ) {
-					that.element.val( data.date );
+				select: function( event ) {
+					that.element.val( that.calendarInstance.value() );
 					that.close();
 					that._focusTrigger();
-					that._trigger( "select", event, data);
+					that._trigger( "select", event );
 				}
 			})
 			.calendar( "instance" );
