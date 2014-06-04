@@ -49,9 +49,10 @@ test( "value", function() {
 });
 
 test( "valueAsDate", function() {
-	expect( 4 );
+	expect( 11 );
 
-	var element = $( "#calendar" ).calendar(),
+	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
+		element = $( "#calendar" ).calendar(),
 		date1 = new Date( 2008, 6 - 1, 4 ),
 		date2 = new Date();
 
@@ -66,6 +67,68 @@ test( "valueAsDate", function() {
 
 	element.calendar( "valueAsDate", date1 );
 	TestHelpers.calendar.equalsDate(element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
+
+	// With minimum/maximum
+	element = $( "#calendar" ).calendar();
+	date1 = new Date( 2008, 1 - 1, 4 );
+	date2 = new Date( 2008, 6 - 1, 4 );
+	minDate = new Date( 2008, 2 - 1, 29 );
+	maxDate = new Date( 2008, 3 - 1, 28 );
+
+	element
+		.calendar( "option", { min: minDate } )
+		.calendar( "valueAsDate", date2 );
+	TestHelpers.calendar.equalsDate(
+		element.calendar( "valueAsDate" ),
+		date2, "Set date min/max - value > min"
+	);
+
+	element.calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate(
+		element.calendar( "valueAsDate" ),
+		date2,
+		"Set date min/max - value < min"
+	);
+
+	element
+		.calendar( "option", { max: maxDate, min: null } )
+		.calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate(
+		element.calendar( "valueAsDate" ),
+		date1,
+		"Set date min/max - value < max"
+	);
+
+	element.calendar( "valueAsDate", date2 );
+	TestHelpers.calendar.equalsDate(
+		element.calendar( "valueAsDate" ),
+		date1,
+		"Set date min/max - value > max"
+	);
+
+	element
+		.calendar( "option", { min: minDate } )
+		.calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate(
+		element.calendar( "valueAsDate" ),
+		date1,
+		"Set date min/max - value < min"
+	);
+
+	element.calendar( "valueAsDate", date2 );
+	TestHelpers.calendar.equalsDate(
+		element.calendar( "valueAsDate" ),
+		date1, "Set date min/max - value > max"
+	);
+
+	dateAndTimeToSet = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	dateAndTimeClone = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	element.calendar( "valueAsDate", dateAndTimeToSet );
+	equal(
+		dateAndTimeToSet.getTime(),
+		dateAndTimeClone.getTime(),
+		"Date object passed should not be changed by valueAsDate"
+	);
 });
 
 })( jQuery );

@@ -3,6 +3,8 @@ TestHelpers.commonWidgetTests( "calendar", {
 		dateFormat: { date: "short" },
 		disabled: false,
 		eachDay: $.noop,
+		max: null,
+		min: null,
 		numberOfMonths: 1,
 		showWeek: false,
 		value: null,
