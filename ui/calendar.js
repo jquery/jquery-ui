@@ -425,7 +425,6 @@ return $.widget( "ui.calendar", {
 	_select: function( event, time ) {
 		this._setOption( "value", new Date( time ) );
 		this._trigger( "select", event, {
-			// TODO replace with value option to initialise and read
 			date: this.value()
 		});
 	},
@@ -446,6 +445,11 @@ return $.widget( "ui.calendar", {
 		}
 	},
 
+	_isValid: function( value ) {
+		// ToDo implement min / max option
+		return ( value instanceof Date );
+	},
+
 	_destroy: function() {
 		this.element
 			.empty()
@@ -461,7 +465,7 @@ return $.widget( "ui.calendar", {
 
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
-			if ( value instanceof Date ) {
+			if ( this._isValid( value ) ) {
 				this.date.setTime( value.getTime() ).select();
 				this.refresh();
 			}
