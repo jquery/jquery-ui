@@ -329,6 +329,10 @@ $.widget( "ui.datepicker", {
 	_setOption: function( key, value ) {
 		this._super( key, value );
 
+		if ( $.inArray( key, [ "showWeek", "numberOfMonths", "dateFormat", "eachDay", "min", "max" ] ) ) {
+			this.calendarInstance._setOption( key, value );
+		}
+
 		if ( key === "appendTo" ) {
 			this.calendar.appendTo( this._appendTo() );
 		}
@@ -343,10 +347,6 @@ $.widget( "ui.datepicker", {
 
 		if ( key === "position" ) {
 			this.calendar.position( this._buildPosition() );
-		}
-
-		if ( $.inArray( key, [ "showWeek", "numberOfMonths", "dateFormat", "eachDay", "min", "max" ] ) ) {
-			this.calendarInstance._setOption( key, value );
 		}
 	}
 });
