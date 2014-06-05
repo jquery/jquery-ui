@@ -126,9 +126,6 @@ $.widget( "ui.datepicker", {
 					this.close( event );
 				}
 				break;
-			case $.ui.keyCode.ENTER:
-				this.calendarInstance._handleKeydown( event );
-				break;
 			case $.ui.keyCode.DOWN:
 			case $.ui.keyCode.UP:
 				clearTimeout( this.closeTimer );
@@ -136,26 +133,6 @@ $.widget( "ui.datepicker", {
 					this.open( event );
 					this.calendarInstance.grid.focus( 1 );
 				}, 1 );
-				break;
-			case $.ui.keyCode.HOME:
-				if ( event.ctrlKey ) {
-					this.valueAsDate( new Date() );
-					event.preventDefault();
-					if ( this.isOpen ) {
-							this.calendarInstance.refresh();
-					} else {
-						this.open( event );
-					}
-				}
-				break;
-			case $.ui.keyCode.END:
-				if ( event.ctrlKey ) {
-					this.element.val( "" );
-					event.preventDefault();
-					if ( this.isOpen ) {
-						this.close( event );
-					}
-				}
 				break;
 			}
 		},
