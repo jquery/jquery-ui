@@ -77,7 +77,7 @@ return $.widget( "ui.calendar", {
 			$( this ).toggleClass( "ui-state-hover" );
 		});
 
-		this._createTmpl();
+		this._createCalendar();
 	},
 
 	_handleKeydown: function( event ) {
@@ -141,36 +141,28 @@ return $.widget( "ui.calendar", {
 		newCell.children( "a" ).addClass( "ui-state-focus" );
 	},
 
-	_createTmpl: function() {
-		this._createDatepicker();
-		this.element.find( "button" ).button();
-
-		// against display:none in calendar.css
-		this.element.find( ".ui-calendar" ).css( "display", "block" );
-		this.grid = this.element.find( ".ui-calendar-calendar" );
-	},
-
-	_createDatepicker: function() {
-		var multiClasses = [],
+	_createCalendar: function() {
+		var classes = "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all",
 			pickerHtml = "";
 
-		if (this.options.numberOfMonths === 1 ) {
+		if ( this.options.numberOfMonths === 1 ) {
 			pickerHtml = this._buildHeader() + this._buildGrid() + this._buildButtons();
 		} else {
 			pickerHtml = this._buildMultiplePicker();
-			multiClasses.push( "ui-calendar-multi" );
-			multiClasses.push( "ui-calendar-multi-" + this.options.numberOfMonths );
+			classes += " ui-calendar-multi";
 		}
 
-		$( "<div>" )
-			.addClass( "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-			.addClass( multiClasses.join( " " ) )
+		this.element
+			.addClass( classes )
 			.attr({
 				role: "region",
 				"aria-labelledby": this.id + "-title"
 			})
-			.html( pickerHtml )
-			.appendTo( this.element );
+			.html( pickerHtml );
+
+		this.element.find( "button" ).button();
+
+		this.grid = this.element.find( ".ui-calendar-calendar" );
 	},
 
 	_buildMultiplePicker: function() {
@@ -460,8 +452,10 @@ return $.widget( "ui.calendar", {
 
 	_destroy: function() {
 		this.element
-			.empty()
-			.removeUniqueId();
+			.removeClass( "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-calendar-multi" )
+			.removeAttr( "role aria-labelledby" )
+			.removeUniqueId()
+			.empty();
 	},
 
 	option: function( key ) {
