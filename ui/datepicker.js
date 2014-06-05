@@ -73,7 +73,9 @@ $.widget( "ui.datepicker", {
 	_createCalendar: function() {
 		var that = this;
 
-		this.calendar = $( "<div>" );
+		this.calendar = $( "<div>" )
+			.addClass( "ui-front ui-datepicker" )
+			.appendTo( this._appendTo() );
 
 		// Initialize calendar widget
 		this.calendarInstance = this.calendar
@@ -94,14 +96,7 @@ $.widget( "ui.datepicker", {
 			})
 			.calendar( "instance" );
 
-		this.calendar
-			.addClass( "ui-front" )
-			// TODO add a ui-datepicker-popup class, move position:absolute to that
-			.css( "position", "absolute" )
-			.hide();
-
 		this._setHiddenPicker();
-		this.calendar.appendTo( this._appendTo() );
 
 		this.element
 			.attr( "aria-haspopup", "true" )
@@ -323,6 +318,7 @@ $.widget( "ui.datepicker", {
 
 	_destroy: function() {
 		this.calendarInstance.destroy();
+		this.calendar.remove();
 		this.element
 			.removeAttr( "aria-haspopup" )
 			.removeAttr( "aria-owns" );
