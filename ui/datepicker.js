@@ -146,16 +146,6 @@ $.widget( "ui.datepicker", {
 						}
 					}
 					break;
-				// TODO This is not in specs, keep?
-				case $.ui.keyCode.END:
-					if ( event.ctrlKey ) {
-						this.element.val( "" );
-						event.preventDefault();
-						if ( this.isOpen ) {
-							this.close( event );
-						}
-					}
-					break;
 			}
 		},
 		keyup: function() {
