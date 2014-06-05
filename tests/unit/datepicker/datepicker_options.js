@@ -134,16 +134,16 @@ test( "showWeek", function() {
 		container = input.datepicker( "widget" );
 
 	equal( container.find( "thead th" ).length, 7, "just 7 days, no column cell" );
-	equal( container.find( ".ui-datepicker-week-col" ).length, 0,
+	equal( container.find( ".ui-calendar-week-col" ).length, 0,
 		"no week column cells present" );
 	input.datepicker( "destroy" );
 
 	input = $( "#datepicker" ).datepicker({ showWeek: true });
 	container = input.datepicker( "widget" );
 	equal( container.find( "thead th" ).length, 8, "7 days + a column cell" );
-	ok( container.find( "thead th:first" ).is( ".ui-datepicker-week-col" ),
+	ok( container.find( "thead th:first" ).is( ".ui-calendar-week-col" ),
 		"first cell should have ui-datepicker-week-col class name" );
-	equal( container.find( ".ui-datepicker-week-col" ).length,
+	equal( container.find( ".ui-calendar-week-col" ).length,
 		container.find( "tr" ).length, "one week cell for each week" );
 	input.datepicker( "destroy" );
 
@@ -517,49 +517,49 @@ test( "miscellaneous", function() {
 	}
 	curYear = new Date().getFullYear();
 	inp.val( "02/04/2008" ).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), "2008", "Year range - read-only default" );
+	equal(dp.find( ".ui-calendar-year" ).text(), "2008", "Year range - read-only default" );
 	inp.datepicker( "hide" ).datepicker( "option", {changeYear: true}).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), genRange(2008 - 10, 21), "Year range - changeable default" );
+	equal(dp.find( ".ui-calendar-year" ).text(), genRange(2008 - 10, 21), "Year range - changeable default" );
 	inp.datepicker( "hide" ).datepicker( "option", {yearRange: "c-6:c+2", changeYear: true}).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), genRange(2008 - 6, 9), "Year range - c-6:c+2" );
+	equal(dp.find( ".ui-calendar-year" ).text(), genRange(2008 - 6, 9), "Year range - c-6:c+2" );
 	inp.datepicker( "hide" ).datepicker( "option", {yearRange: "2000:2010", changeYear: true}).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), genRange(2000, 11), "Year range - 2000:2010" );
+	equal(dp.find( ".ui-calendar-year" ).text(), genRange(2000, 11), "Year range - 2000:2010" );
 	inp.datepicker( "hide" ).datepicker( "option", {yearRange: "-5:+3", changeYear: true}).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), genRange(curYear - 5, 9), "Year range - -5:+3" );
+	equal(dp.find( ".ui-calendar-year" ).text(), genRange(curYear - 5, 9), "Year range - -5:+3" );
 	inp.datepicker( "hide" ).datepicker( "option", {yearRange: "2000:-5", changeYear: true}).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), genRange(2000, curYear - 2004), "Year range - 2000:-5" );
+	equal(dp.find( ".ui-calendar-year" ).text(), genRange(2000, curYear - 2004), "Year range - 2000:-5" );
 	inp.datepicker( "hide" ).datepicker( "option", {yearRange: "", changeYear: true}).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-year" ).text(), genRange(curYear, 1), "Year range - -6:+2" );
+	equal(dp.find( ".ui-calendar-year" ).text(), genRange(curYear, 1), "Year range - -6:+2" );
 
 	// Navigation as date format
 	inp.datepicker( "option", {showButtonPanel: true});
-	equal(dp.find( ".ui-datepicker-prev" ).text(), "Prev", "Navigation prev - default" );
-	equal(dp.find( ".ui-datepicker-current" ).text(), "Today", "Navigation current - default" );
-	equal(dp.find( ".ui-datepicker-next" ).text(), "Next", "Navigation next - default" );
+	equal(dp.find( ".ui-calendar-prev" ).text(), "Prev", "Navigation prev - default" );
+	equal(dp.find( ".ui-calendar-current" ).text(), "Today", "Navigation current - default" );
+	equal(dp.find( ".ui-calendar-next" ).text(), "Next", "Navigation next - default" );
 	inp.datepicker( "hide" ).datepicker( "option", {navigationAsDateFormat: true, prevText: "< M", currentText: "MM", nextText: "M >"}).
 		val( "02/04/2008" ).datepicker( "show" );
 	longNames = $.datepicker.regional[""].monthNames;
 	shortNames = $.datepicker.regional[""].monthNamesShort;
 	date = new Date();
-	equal(dp.find( ".ui-datepicker-prev" ).text(), "< " + shortNames[0], "Navigation prev - as date format" );
-	equal(dp.find( ".ui-datepicker-current" ).text(),
+	equal(dp.find( ".ui-calendar-prev" ).text(), "< " + shortNames[0], "Navigation prev - as date format" );
+	equal(dp.find( ".ui-calendar-current" ).text(),
 		longNames[date.getMonth()], "Navigation current - as date format" );
-	equal(dp.find( ".ui-datepicker-next" ).text(),
+	equal(dp.find( ".ui-calendar-next" ).text(),
 		shortNames[2] + " >", "Navigation next - as date format" );
 	inp.simulate( "keydown", {keyCode: $.ui.keyCode.PAGE_DOWN});
-	equal(dp.find( ".ui-datepicker-prev" ).text(),
+	equal(dp.find( ".ui-calendar-prev" ).text(),
 		"< " + shortNames[1], "Navigation prev - as date format + pgdn" );
-	equal(dp.find( ".ui-datepicker-current" ).text(),
+	equal(dp.find( ".ui-calendar-current" ).text(),
 		longNames[date.getMonth()], "Navigation current - as date format + pgdn" );
-	equal(dp.find( ".ui-datepicker-next" ).text(),
+	equal(dp.find( ".ui-calendar-next" ).text(),
 		shortNames[3] + " >", "Navigation next - as date format + pgdn" );
 	inp.datepicker( "hide" ).datepicker( "option", {gotoCurrent: true}).
 		val( "02/04/2008" ).datepicker( "show" );
-	equal(dp.find( ".ui-datepicker-prev" ).text(),
+	equal(dp.find( ".ui-calendar-prev" ).text(),
 		"< " + shortNames[0], "Navigation prev - as date format + goto current" );
-	equal(dp.find( ".ui-datepicker-current" ).text(),
+	equal(dp.find( ".ui-calendar-current" ).text(),
 		longNames[1], "Navigation current - as date format + goto current" );
-	equal(dp.find( ".ui-datepicker-next" ).text(),
+	equal(dp.find( ".ui-calendar-next" ).text(),
 		shortNames[2] + " >", "Navigation next - as date format + goto current" );
 });
 
@@ -649,25 +649,25 @@ test( "minMax", function() {
 	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate, "Min/max - setDate > max" );
 
 	inp.datepicker( "option", {yearRange: "-0:+1"}).val( "01/01/" + new Date().getFullYear());
-	ok(dp.find( ".ui-datepicker-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - previous button disabled at 1/1/minYear" );
+	ok(dp.find( ".ui-calendar-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - previous button disabled at 1/1/minYear" );
 	inp.datepicker( "setDate", "12/30/" + new Date().getFullYear());
-	ok(dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled at 12/30/maxYear" );
+	ok(dp.find( ".ui-calendar-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled at 12/30/maxYear" );
 
 	inp.datepicker( "option", {
 		minDate: new Date(1900, 0, 1),
 		maxDate: "-6Y",
 		yearRange: "1900:-6"
 	}).val( "" );
-	ok(dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled" );
-	ok(!dp.find( ".ui-datepicker-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - prev button enabled" );
+	ok(dp.find( ".ui-calendar-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled" );
+	ok(!dp.find( ".ui-calendar-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - prev button enabled" );
 
 	inp.datepicker( "option", {
 		minDate: new Date(1900, 0, 1),
 		maxDate: "1/25/2007",
 		yearRange: "1900:2007"
 	}).val( "" );
-	ok(dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled" );
-	ok(!dp.find( ".ui-datepicker-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - prev button enabled" );
+	ok(dp.find( ".ui-calendar-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled" );
+	ok(!dp.find( ".ui-calendar-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - prev button enabled" );
 });
 
 test( "setDate", function() {
@@ -816,79 +816,79 @@ test( "daylightSaving", function() {
 	ok(true, "Daylight saving - " + new Date());
 	// Australia, Sydney - AM change, southern hemisphere
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(6) a", dp).simulate( "click" );
 	equal(inp.val(), "04/05/2008", "Daylight saving - Australia 04/05/2008" );
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(7) a", dp).simulate( "click" );
 	equal(inp.val(), "04/06/2008", "Daylight saving - Australia 04/06/2008" );
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(8) a", dp).simulate( "click" );
 	equal(inp.val(), "04/07/2008", "Daylight saving - Australia 04/07/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(6) a", dp).simulate( "click" );
 	equal(inp.val(), "10/04/2008", "Daylight saving - Australia 10/04/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(7) a", dp).simulate( "click" );
 	equal(inp.val(), "10/05/2008", "Daylight saving - Australia 10/05/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(8) a", dp).simulate( "click" );
 	equal(inp.val(), "10/06/2008", "Daylight saving - Australia 10/06/2008" );
 	// Brasil, Brasilia - midnight change, southern hemisphere
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(20) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(20) a", dp).simulate( "click" );
 	equal(inp.val(), "02/16/2008", "Daylight saving - Brasil 02/16/2008" );
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(21) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(21) a", dp).simulate( "click" );
 	equal(inp.val(), "02/17/2008", "Daylight saving - Brasil 02/17/2008" );
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(22) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(22) a", dp).simulate( "click" );
 	equal(inp.val(), "02/18/2008", "Daylight saving - Brasil 02/18/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(13) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(13) a", dp).simulate( "click" );
 	equal(inp.val(), "10/11/2008", "Daylight saving - Brasil 10/11/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(14) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(14) a", dp).simulate( "click" );
 	equal(inp.val(), "10/12/2008", "Daylight saving - Brasil 10/12/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(15) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(15) a", dp).simulate( "click" );
 	equal(inp.val(), "10/13/2008", "Daylight saving - Brasil 10/13/2008" );
 	// Lebanon, Beirut - midnight change, northern hemisphere
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(34) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(34) a", dp).simulate( "click" );
 	equal(inp.val(), "03/29/2008", "Daylight saving - Lebanon 03/29/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(35) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(35) a", dp).simulate( "click" );
 	equal(inp.val(), "03/30/2008", "Daylight saving - Lebanon 03/30/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(36) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(36) a", dp).simulate( "click" );
 	equal(inp.val(), "03/31/2008", "Daylight saving - Lebanon 03/31/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(27) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(27) a", dp).simulate( "click" );
 	equal(inp.val(), "10/25/2008", "Daylight saving - Lebanon 10/25/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(28) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(28) a", dp).simulate( "click" );
 	equal(inp.val(), "10/26/2008", "Daylight saving - Lebanon 10/26/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(29) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(29) a", dp).simulate( "click" );
 	equal(inp.val(), "10/27/2008", "Daylight saving - Lebanon 10/27/2008" );
 	// US, Eastern - AM change, northern hemisphere
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(13) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(13) a", dp).simulate( "click" );
 	equal(inp.val(), "03/08/2008", "Daylight saving - US 03/08/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(14) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(14) a", dp).simulate( "click" );
 	equal(inp.val(), "03/09/2008", "Daylight saving - US 03/09/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(15) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(15) a", dp).simulate( "click" );
 	equal(inp.val(), "03/10/2008", "Daylight saving - US 03/10/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(6) a", dp).simulate( "click" );
 	equal(inp.val(), "11/01/2008", "Daylight saving - US 11/01/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(7) a", dp).simulate( "click" );
 	equal(inp.val(), "11/02/2008", "Daylight saving - US 11/02/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp).simulate( "click" );
+	$( ".ui-calendar-calendar td:eq(8) a", dp).simulate( "click" );
 	equal(inp.val(), "11/03/2008", "Daylight saving - US 11/03/2008" );
 });
 
@@ -933,10 +933,10 @@ test( "callbacks", function() {
 	inp.val( "02/04/2008" ).datepicker( "show" );
 	ok(beforeShowDayThis.id === inp[0].id, "Before show day - this OK" );
 	ok(beforeShowDayOK, "Before show day - dates OK" );
-	day20 = dp.find( ".ui-datepicker-calendar td:contains('20')" );
-	day21 = dp.find( ".ui-datepicker-calendar td:contains('21')" );
-	ok(!day20.is( ".ui-datepicker-unselectable" ), "Before show day - unselectable 20" );
-	ok(day21.is( ".ui-datepicker-unselectable" ), "Before show day - unselectable 21" );
+	day20 = dp.find( ".ui-calendar-calendar td:contains('20')" );
+	day21 = dp.find( ".ui-calendar-calendar td:contains('21')" );
+	ok(!day20.is( ".ui-calendar-unselectable" ), "Before show day - unselectable 20" );
+	ok(day21.is( ".ui-calendar-unselectable" ), "Before show day - unselectable 21" );
 	ok(day20.is( ".day10" ), "Before show day - CSS 20" );
 	ok(!day21.is( ".day10" ), "Before show day - CSS 21" );
 	ok(!day20.attr( "title" ), "Before show day - title 20" );
@@ -955,7 +955,7 @@ test( "beforeShowDay - tooltips with quotes", function() {
 	dp = $( "#ui-datepicker-div" );
 
 	inp.datepicker( "show" );
-	equal( dp.find( ".ui-datepicker-calendar td:contains('9')" ).attr( "title" ), "'" );
+	equal( dp.find( ".ui-calendar-calendar td:contains('9')" ).attr( "title" ), "'" );
 	inp.datepicker( "hide" ).datepicker( "destroy" );
 });
 
@@ -965,19 +965,19 @@ test( "localisation", function() {
 		inp = TestHelpers.datepicker.init( "#inp", $.datepicker.regional.fr);
 	inp.datepicker( "option", {dateFormat: "DD, d MM yy", showButtonPanel:true, changeMonth:true, changeYear:true}).val( "" ).datepicker( "show" );
 	dp = $( "#ui-datepicker-div" );
-	equal($( ".ui-datepicker-close", dp).text(), "Fermer", "Localisation - close" );
-	$( ".ui-datepicker-close", dp).simulate( "mouseover" );
-	equal($( ".ui-datepicker-prev", dp).text(), "Précédent", "Localisation - previous" );
-	equal($( ".ui-datepicker-current", dp).text(), "Aujourd'hui", "Localisation - current" );
-	equal($( ".ui-datepicker-next", dp).text(), "Suivant", "Localisation - next" );
+	equal($( ".ui-calendar-close", dp).text(), "Fermer", "Localisation - close" );
+	$( ".ui-calendar-close", dp).simulate( "mouseover" );
+	equal($( ".ui-calendar-prev", dp).text(), "Précédent", "Localisation - previous" );
+	equal($( ".ui-calendar-current", dp).text(), "Aujourd'hui", "Localisation - current" );
+	equal($( ".ui-calendar-next", dp).text(), "Suivant", "Localisation - next" );
 	month = 0;
-	$( ".ui-datepicker-month option", dp).each(function() {
+	$( ".ui-calendar-month option", dp).each(function() {
 		equal($(this).text(), $.datepicker.regional.fr.monthNamesShort[month],
 			"Localisation - month " + month);
 		month++;
 	});
 	day = 1;
-	$( ".ui-datepicker-calendar th", dp).each(function() {
+	$( ".ui-calendar-calendar th", dp).each(function() {
 		equal($(this).text(), $.datepicker.regional.fr.dayNamesMin[day],
 			"Localisation - day " + day);
 		day = (day + 1) % 7;
