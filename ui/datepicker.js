@@ -53,10 +53,6 @@ $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
-		if ( !this.element.is( "input" ) ) {
-			return;
-		}
-
 		var max = this.element.attr( "max" ),
 			min = this.element.attr( "min" );
 
