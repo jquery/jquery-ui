@@ -58,6 +58,10 @@ $.widget( "ui.datepicker", {
 
 	_create: function() {
 		this._createCalendar();
+
+		this._on( this._inputEvents );
+		this._on( this.calendar, this._calendarEvents );
+		this._on( this.document, this._documentEvents );
 	},
 
 	_getCreateOptions: function() {
@@ -107,118 +111,115 @@ $.widget( "ui.datepicker", {
 		this.element
 			.attr( "aria-haspopup", "true" )
 			.attr( "aria-owns", this.calendar.attr( "id" ) );
+	},
 
-		this._on({
-			keydown: function( event ) {
-				switch ( event.keyCode ) {
-					case $.ui.keyCode.TAB:
-
-						// Waiting for close() will make popup hide too late, which breaks tab key behavior
-						this.calendar.hide();
-						this.close( event );
-						break;
-					case $.ui.keyCode.ESCAPE:
-						if ( this.isOpen ) {
-							this.close( event );
-						}
-						break;
-					case $.ui.keyCode.ENTER:
-						this.calendarInstance._handleKeydown( event );
-						break;
-					case $.ui.keyCode.DOWN:
-					case $.ui.keyCode.UP:
-						clearTimeout( this.closeTimer );
-						this._delay( function() {
-							this.open( event );
-							this.calendarInstance.grid.focus( 1 );
-						}, 1 );
-						break;
-					case $.ui.keyCode.HOME:
-						if ( event.ctrlKey ) {
-							this.valueAsDate( new Date() );
-							event.preventDefault();
-							if ( this.isOpen ) {
-								this.calendarInstance.refresh();
-							} else {
-								this.open( event );
-							}
-						}
-						break;
-					case $.ui.keyCode.END:
-						if ( event.ctrlKey ) {
-							this.element.val( "" );
-							event.preventDefault();
-							if ( this.isOpen ) {
-								this.close( event );
-							}
-						}
-						break;
-				}
-			},
-			keyup: function() {
-				if ( this.isValid() ) {
-					this.refresh();
-				}
-			},
-			mousedown: function( event ) {
+	_inputEvents: {
+		keydown: function( event ) {
+			switch ( event.keyCode ) {
+			case $.ui.keyCode.TAB:
+				// Waiting for close() will make popup hide too late, which breaks tab key behavior
+				this.calendar.hide();
+				this.close( event );
+				break;
+			case $.ui.keyCode.ESCAPE:
 				if ( this.isOpen ) {
-					suppressExpandOnFocus = true;
-					this.close();
-					return;
+					this.close( event );
 				}
-				this.open( event );
+				break;
+			case $.ui.keyCode.ENTER:
+				this.calendarInstance._handleKeydown( event );
+				break;
+			case $.ui.keyCode.DOWN:
+			case $.ui.keyCode.UP:
 				clearTimeout( this.closeTimer );
-			},
-			focus: function( event ) {
-				if ( !suppressExpandOnFocus ) {
-					this._delay( function() {
-						if ( !this.isOpen ) {
-							this.open( event );
-						}
-					}, 1);
-				}
 				this._delay( function() {
-					suppressExpandOnFocus = false;
-				}, 100 );
-			},
-			blur: function() {
+					this.open( event );
+					this.calendarInstance.grid.focus( 1 );
+				}, 1 );
+				break;
+			case $.ui.keyCode.HOME:
+				if ( event.ctrlKey ) {
+					this.valueAsDate( new Date() );
+					event.preventDefault();
+					if ( this.isOpen ) {
+							this.calendarInstance.refresh();
+					} else {
+						this.open( event );
+					}
+				}
+				break;
+			case $.ui.keyCode.END:
+				if ( event.ctrlKey ) {
+					this.element.val( "" );
+					event.preventDefault();
+					if ( this.isOpen ) {
+						this.close( event );
+					}
+				}
+				break;
+			}
+		},
+		keyup: function() {
+			if ( this.isValid() ) {
+				this.refresh();
+			}
+		},
+		mousedown: function( event ) {
+			if ( this.isOpen ) {
+				suppressExpandOnFocus = true;
+				this.close();
+				return;
+			}
+			this.open( event );
+			clearTimeout( this.closeTimer );
+		},
+		focus: function( event ) {
+			if ( !suppressExpandOnFocus ) {
+				this._delay( function() {
+					if ( !this.isOpen ) {
+						this.open( event );
+					}
+				});
+			}
+			this._delay( function() {
 				suppressExpandOnFocus = false;
+			}, 100 );
+		},
+		blur: function() {
+			suppressExpandOnFocus = false;
+		}
+	},
+
+	_calendarEvents: {
+		focusout: function( event ) {
+			// use a timer to allow click to clear it and letting that
+			// handle the closing instead of opening again
+			// also allows tabbing inside the calendar without it closing
+			this.closeTimer = this._delay( function() {
+				this.close( event );
+			}, 150 );
+		},
+		focusin: function() {
+			clearTimeout( this.closeTimer );
+		},
+		mouseup: function() {
+			clearTimeout( this.closeTimer );
+		},
+		// TODO on TAB (or shift TAB), make sure it ends up on something useful in DOM order
+		keyup: function( event ) {
+			if ( event.keyCode === $.ui.keyCode.ESCAPE && this.calendar.is( ":visible" ) ) {
+				this.close( event );
+				this._focusTrigger();
 			}
-		});
+		}
+	},
 
-		this._on( this.calendar, {
-			focusout: function( event ) {
-
-				// Use a timer to allow click to clear it and letting that
-				// handle the closing instead of opening again
-				// also allows tabbing inside the calendar without it closing
-				this.closeTimer = this._delay( function() {
-					this.close( event );
-				}, 150 );
-			},
-			focusin: function() {
-				clearTimeout( this.closeTimer );
-			},
-			mouseup: function() {
-				clearTimeout( this.closeTimer );
-			},
-
-			// TODO On TAB (or shift TAB), make sure it ends up on something useful in DOM order
-			keyup: function( event ) {
-				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.calendar.is( ":visible" ) ) {
-					this.close( event );
-					this._focusTrigger();
-				}
+	_documentEvents: {
+		click: function( event ) {
+			if ( this.isOpen && !$( event.target ).closest( this.element.add( this.calendar ) ).length ) {
+				this.close( event );
 			}
-		});
-
-		this._on( this.document, {
-			click: function( event ) {
-				if ( this.isOpen && !$( event.target ).closest( this.element.add( this.calendar ) ).length ) {
-					this.close( event );
-				}
-			}
-		});
+		}
 	},
 
 	_appendTo: function() {
