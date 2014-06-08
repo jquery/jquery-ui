@@ -1120,44 +1120,47 @@ test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler
 	inp.datepicker( "destroy" );
 });
 
-test('Ticket #7098: Broken handling of four digit years before year 100', function() {
+test("Ticket #7098: Broken handling of four digit years before year 100", function() {
 	expect(120);
 	
-	var inp = TestHelpers.datepicker.init('#inp', {
-		changeMonth: true,
-		changeYear: true,
-		shortYearCutoff: 0,
-		yearRange: '0:2100'
-	});
+	var year = null,
+		someDate = null,
+		parsedHDate = null,
+		inp = TestHelpers.datepicker.init("#inp", {
+			changeMonth: true,
+			changeYear: true,
+			shortYearCutoff: 0,
+			yearRange: "0:2100"
+		});
 	
-	for (var year=0; year<100; year++) { // loop 100
-		var someDate = new Date(year, 2 - 1, 3),
-			parsedHDate = $.datepicker.parseDate("y-m-d", year + "-10-23", {shortYearCutoff: 0});
+	for (year=0; year<100; year++) { // loop 100
+		parsedHDate = $.datepicker.parseDate("y-m-d", year + "-10-23", {shortYearCutoff: 0});
+		someDate = new Date(year, 2 - 1, 3);
 		someDate.setFullYear(year);
 		equal(
-			someDate.getFullYear(), parsedHDate.getFullYear(), 
-			'parseDate return date obj with the correct year'
+			someDate.getFullYear(), parsedHDate.getFullYear(),
+			"parseDate return date obj with the correct year"
 		);
 	}
 	
-	for (var year=1; year<100; year+=10) { // loop 10
-		var someDate = new Date(year, 2, 3);
+	for (year=1; year<100; year+=10) { // loop 10
+		someDate = new Date(year, 2, 3);
 		someDate.setFullYear(year);
-		inp.datepicker('option', 'defaultDate', someDate);
-		inp.datepicker('show');
-		$('td[data-handler="selectDay"] a').first().click();
-		inp.datepicker('show');
+		inp.datepicker("option", "defaultDate", someDate);
+		inp.datepicker("show");
+		$("td[data-handler='selectDay'] a").first().click();
+		inp.datepicker("show");
 		equal(
-			$('.ui-datepicker-year option:selected').val(), 
+			$(".ui-datepicker-year option:selected").val(),
 			someDate.getFullYear(),
-			'Selected year stays the same as the default'
+			"Selected year stays the same as the default"
 		);
-		inp.datepicker('hide');
+		inp.datepicker("hide");
 		ok(
-			inp.val().indexOf(someDate.getFullYear()) !== -1, 
-			'inp val has the default/selected year'
+			inp.val().indexOf(someDate.getFullYear()) !== -1,
+			"inp val has the default/selected year"
 		);
-		inp.datepicker('setDate', null);
+		inp.datepicker("setDate", null);
 	}
 });
 
