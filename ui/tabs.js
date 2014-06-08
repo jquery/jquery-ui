@@ -76,23 +76,26 @@ return $.widget( "ui.tabs", {
 		this.element
 			.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" )
 			.toggleClass( "ui-tabs-collapsible", options.collapsible )
-			// Prevent users from focusing disabled tabs via click
-			.delegate( ".ui-tabs-nav > li", "mousedown" + this.eventNamespace, function( event ) {
-				if ( $( this ).is( ".ui-state-disabled" ) ) {
-					event.preventDefault();
-				}
-			})
-			// support: IE <9
-			// Preventing the default action in mousedown doesn't prevent IE
-			// from focusing the element, so if the anchor gets focused, blur.
-			// We don't have to worry about focusing the previously focused
-			// element since clicking on a non-focusable element should focus
-			// the body anyway.
-			.delegate( ".ui-tabs-anchor", "focus" + this.eventNamespace, function() {
-				if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
-					this.blur();
-				}
-			});
+
+			// bind events to ul for better Voiceover announcement
+			.find(".ui-tabs-nav")
+				// Prevent users from focusing disabled tabs via click
+			 .delegate( " > li", "mousedown" + this.eventNamespace, function( event ) {
+					if ( $( this ).is( ".ui-state-disabled" ) ) {
+						event.preventDefault();
+					}
+				})
+				// support: IE <9
+				// Preventing the default action in mousedown doesn't prevent IE
+				// from focusing the element, so if the anchor gets focused, blur.
+				// We don't have to worry about focusing the previously focused
+				// element since clicking on a non-focusable element should focus
+				// the body anyway.
+				.delegate( ".ui-tabs-anchor", "focus" + this.eventNamespace, function() {
+					if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
+						this.blur();
+					}
+				});
 
 		this._processTabs();
 		options.active = this._initialActive();
