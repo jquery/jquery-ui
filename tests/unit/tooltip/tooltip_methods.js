@@ -109,15 +109,41 @@ test( "preserve changes to title attributes on close and destroy", function() {
 		original = "original title text",
 		tests = [];
 
-	tests[ 0 ] = { name: "Changes to title attribute are preserved on close()", title: changed, expected: changed, method: "close" };
-	tests[ 1 ] = { name: "Changes to title attribute are preserved on destroy()", title: changed, expected: changed , method: "destroy" };
-	tests[ 2 ] = { name: "Changes to title attribute are preserved when set to empty string on close()", title: "", expected: "", method: "close" };
-	tests[ 3 ] = { name: "Changes to title attribute are preserved when set to empty string on destroy()", title: "", expected: "", method: "destroy" };
-	tests[ 4 ] = { name: "Changes to title attribute are NOT preserved when attribute has been removed on close()", expected: original, method: "close" };
-	tests[ 5 ] = { name: "Changes to title attribute are NOT preserved when attribute has been removed on destroy()", expected: original, method: "destroy" };
+	tests[ 0 ] = {
+		name: "Changes to title attribute are preserved on close()",
+		title: changed,
+		expected: changed,
+		method: "close"
+	};
+	tests[ 1 ] = {
+		name: "Changes to title attribute are preserved on destroy()",
+		title: changed,
+		expected: changed,
+		method: "destroy"
+	};
+	tests[ 2 ] = {
+		name: "Changes to title attribute are NOT preserved when set to empty string on close()",
+		title: "",
+		expected: original,
+		method: "close"
+	};
+	tests[ 3 ] = {
+		name: "Changes to title attribute are NOT preserved when set to empty string on destroy()",
+		title: "",
+		expected: original,
+		method: "destroy" };
+	tests[ 4 ] = {
+		name: "Changes to title attribute are preserved when attribute has been removed on close()",
+		expected: undefined,
+		method: "close"
+	};
+	tests[ 5 ] = {
+		name: "Changes to title attribute are preserved when attribute has been removed on destroy()",
+		expected: undefined,
+		method: "destroy"
+	};
 
 	$.each( tests, function( index, test ) {
-		
 		element.attr( "title", original ).tooltip()
 			.tooltip( "open", $.Event( "mouseover", { target: element[ 0 ] } ) );
 		if ( test.title !== undefined) {
@@ -126,9 +152,8 @@ test( "preserve changes to title attributes on close and destroy", function() {
 			element.removeAttr( "title" );
 		}
 		element.tooltip( test.method );
-		equal( $( "#tooltipped1" ).attr( "title" ), test.expected, test.name );
-		
-	} );
+		equal( $( "#tooltipped1" ).attr( "title" ), test.expected, test.name );	
+	});
 });
 
 }( jQuery ) );
