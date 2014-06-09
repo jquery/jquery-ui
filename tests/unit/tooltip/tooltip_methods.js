@@ -152,7 +152,7 @@ test( "preserve changes to title attributes on close and destroy", function() {
 			element.removeAttr( "title" );
 		}
 		element.tooltip( test.method );
-		equal( $( "#tooltipped1" ).attr( "title" ), test.expected, test.name );	
+		equal( $( "#tooltipped1" ).attr( "title" ), test.expected, test.name );
 	});
 });
 
