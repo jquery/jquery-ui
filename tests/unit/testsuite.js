@@ -77,7 +77,7 @@ TestHelpers.testJshint = function( module ) {
 	}
 
 	if ( !jshintLoaded ) {
-		includeScript( "external/jshint.js" );
+		includeScript( "external/jshint/jshint.js" );
 		jshintLoaded = true;
 	}
 
