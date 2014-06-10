@@ -218,25 +218,25 @@ grunt.initConfig({
 	},
 
 	bowercopy: {
-		options: {
-			clean: true
-		},
-		qunit: {
+		all: {
+			options: {
+				clean: true,
+				destPrefix: "external"
+			},
 			files: {
-				"external": "qunit/qunit"
+				"qunit/qunit.js": "qunit/qunit/qunit.js",
+				"qunit/qunit.css": "qunit/qunit/qunit.css",
+				"qunit/MIT-LICENSE.txt": "qunit/MIT-LICENSE.txt",
+
+				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
+
+				"jshint/jshint.js": "jshint/dist/jshint.js",
+				"jshint/LICENSE": "jshint/LICENSE",
+
+				"jquery/jquery.js": "jquery/jquery.js",
+				"jquery/MIT-LICENSE.txt": "jquery/MIT-LICENSE.txt"
 			}
-		},
-		mousewheel: {
-			files: {
-				"external": "jquery-mousewheel/jquery.mousewheel.js"
-			}
-		},
-		jshint: {
-			files: {
-				"external": "jshint/dist/jshint.js"
-			}
-		},
-		"jquery.js": "jquery/dist/jquery.js"
+		}
 	}
 });
 
