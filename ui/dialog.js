@@ -348,7 +348,7 @@ return $.widget( "ui.dialog", {
 					event.preventDefault();
 				} else if ( ( event.target === first[0] || event.target === this.uiDialog[0] ) && event.shiftKey ) {
 					this._delay(function() {
-						first.focus();
+						last.focus();
 					});
 					event.preventDefault();
 				}
