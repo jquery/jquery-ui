@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Datagrid - Clickable</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../jquery.js"></script>
+	<script src="../../external/jquery.mousewheel.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/datagrid.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	
+	<style>
+		tr.datagrid-row:hover {
+			background-color:#efefef;
+			cursor:default;
+		}
+	</style>
+	<script>
+	
+	function clickDatagrid(item, tr) {
+		alert("uid: " + item.uid);
+	}
+	
+	var columns = [	
+		{label : "ID", 		field : "uid", 			width:10},
+		{label : "USER", 	field : "createdBy", 	width:15},
+		{label : "NAME", 	field : "name", 		width:40},
+		{label : "ISSUE", 	field : "pm", 			width:20},
+		{label : "TYPE", 	field : "pmType", 		width:15},
+	];
+	
+	function renderDatagrid(dataProvider) {
+	
+		$( "#demo" ).datagrid({
+			dataProvider: dataProvider,
+			columns: columns,
+			onclick:clickDatagrid
+			
+		});
+		
+	}
+	
+	$(function() {
+		$.ajax({url: "data.json", dataType: "json", success: renderDatagrid, error: function() {alert("GET_DATA_ERROR")}});
+	});
+	
+	</script>
+</head>
+<body>
+
+<div id="demo" style="height:300px;">
+
+</div>
+</body>
+</html>
