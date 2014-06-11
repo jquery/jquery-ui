@@ -53,14 +53,11 @@ $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
-		var max = this.element.attr( "max" ),
-			min = this.element.attr( "min" );
-
-		if ( this.options.max === null && max ) {
-			this.options.max = this._parseDate( max );
+		if ( typeof this.options.max === "string" ) {
+			this.options.max = this._parseDate( this.options.max );
 		}
-		if ( this.options.min === null && min ) {
-			this.options.min = this._parseDate( min );
+		if ( typeof this.options.min === "string" ) {
+			this.options.min = this._parseDate( this.options.min );
 		}
 
 		this._createCalendar();
@@ -68,6 +65,13 @@ $.widget( "ui.datepicker", {
 		this._on( this._inputEvents );
 		this._on( this.calendar, this._calendarEvents );
 		this._on( this.document, this._documentEvents );
+	},
+
+	_getCreateOptions: function() {
+		return {
+			max: this.element.attr( "max" ),
+			min: this.element.attr( "min" )
+		};
 	},
 
 	_createCalendar: function() {
