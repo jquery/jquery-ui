@@ -54,10 +54,10 @@ $.widget( "ui.datepicker", {
 
 	_create: function() {
 		if ( typeof this.options.max === "string" ) {
-			this.options.max = this._parseDate( this.options.max );
+			this.options.max = Globalize.parseDate( this.options.max , { pattern: "yyyy-MM-dd" } );
 		}
 		if ( typeof this.options.min === "string" ) {
-			this.options.min = this._parseDate( this.options.min );
+			this.options.min = Globalize.parseDate( this.options.min , { pattern: "yyyy-MM-dd" } );
 		}
 
 		this._createCalendar();
@@ -285,7 +285,7 @@ $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			var date = this._parseDate( value );
+			var date = Globalize.parseDate( value , this.options.dateFormat );
 			if ( this.calendarInstance._isValid( date ) ) {
 				this.valueAsDate( date );
 				this.element.val( value );
@@ -323,11 +323,7 @@ $.widget( "ui.datepicker", {
 	},
 
 	_getParsedValue: function() {
-		return this._parseDate( this.element.val() );
-	},
-
-	_parseDate: function( string ) {
-		return Globalize.parseDate( string , this.options.dateFormat );
+		return Globalize.parseDate( this.element.val() , this.options.dateFormat );
 	},
 
 	_setOption: function( key, value ) {
@@ -346,7 +342,7 @@ $.widget( "ui.datepicker", {
 		}
 
 		if ( key === "max" || key === "min" ) {
-			this.element.attr( key, Globalize.format( value, this.options.dateFormat ) );
+			this.element.attr( key, Globalize.format( value, { pattern: "yyyy-MM-dd" } ) );
 		}
 
 		if ( key === "position" ) {
