@@ -111,7 +111,7 @@ widget = $.widget( "ui.datepicker", {
 					}
 					break;
 				case $.ui.keyCode.ENTER:
-					this._handleKeydown( event );
+					this.calendarInstance._handleKeydown( event );
 					break;
 				case $.ui.keyCode.DOWN:
 				case $.ui.keyCode.UP:
@@ -123,7 +123,7 @@ widget = $.widget( "ui.datepicker", {
 					break;
 				case $.ui.keyCode.HOME:
 					if ( event.ctrlKey ) {
-						this.date.setTime( new Date() );
+						this.valueAsDate( new Date() );
 						event.preventDefault();
 						if ( this.isOpen ) {
 							this.refresh();
