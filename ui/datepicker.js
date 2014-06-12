@@ -26,23 +26,19 @@
 	}
 }(function( $ ) {
 
-// TODO move this to the instance
-var suppressExpandOnFocus = false;
+var widget,
+	calendarOptions = [ "dateFormat", "eachDay", "max", "min", "numberOfMonths", "showWeek" ],
+	// TODO move this to the instance?
+	suppressExpandOnFocus = false;
 
-$.widget( "ui.datepicker", {
+widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
 	options: {
 		appendTo: null,
-		dateFormat: { date: "short" },
-		eachDay: $.noop,
-		max: null,
-		min: null,
-		numberOfMonths: 1,
 		position: {
 			my: "left top",
 			at: "left bottom"
 		},
-		showWeek: false,
 		show: true,
 		hide: true,
 
@@ -84,13 +80,7 @@ $.widget( "ui.datepicker", {
 
 		// Initialize calendar widget
 		this.calendarInstance = this.calendar
-			.calendar({
-				dateFormat: this.options.dateFormat,
-				eachDay: this.options.eachDay,
-				max: this.options.max,
-				min: this.options.min,
-				numberOfMonths: this.options.numberOfMonths,
-				showWeek: this.options.showWeek,
+			.calendar( $.extend( {}, this.options, {
 				value: this._getParsedValue(),
 				select: function( event ) {
 					that.element.val( that.calendarInstance.value() );
@@ -98,7 +88,7 @@ $.widget( "ui.datepicker", {
 					that._focusTrigger();
 					that._trigger( "select", event );
 				}
-			})
+			}) )
 			.calendar( "instance" );
 
 		this._setHiddenPicker();
@@ -327,7 +317,7 @@ $.widget( "ui.datepicker", {
 	_setOption: function( key, value ) {
 		this._super( key, value );
 
-		if ( $.inArray( key, [ "showWeek", "numberOfMonths", "dateFormat", "eachDay", "min", "max" ] ) !== -1 ) {
+		if ( $.inArray( key, calendarOptions ) !== -1 ) {
 			this.calendarInstance._setOption( key, value );
 		}
 
@@ -344,4 +334,11 @@ $.widget( "ui.datepicker", {
 		}
 	}
 });
+	
+$.each( calendarOptions, function( index, option ) {
+	$.ui.datepicker.prototype.options[ option ] = $.ui.calendar.prototype.options[ option ];
+});
+
+return widget;
+
 }));
