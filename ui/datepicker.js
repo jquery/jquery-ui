@@ -126,7 +126,7 @@ widget = $.widget( "ui.datepicker", {
 						this.valueAsDate( new Date() );
 						event.preventDefault();
 						if ( this.isOpen ) {
-							this.refresh();
+							this.calendarInstance.refresh();
 						} else {
 							this.open( event );
 						}
@@ -223,6 +223,7 @@ widget = $.widget( "ui.datepicker", {
 	},
 
 	refresh: function() {
+		this.calendarInstance.valueAsDate( this._getParsedValue() );
 		this.calendarInstance.refresh();
 	},
 
@@ -234,7 +235,7 @@ widget = $.widget( "ui.datepicker", {
 			return;
 		}
 
-		this.refresh();
+		this.calendarInstance.refresh();
 
 		this.calendar
 			.attr( "aria-hidden", "false" )
