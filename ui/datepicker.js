@@ -276,11 +276,7 @@ widget = $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			var date = Globalize.parseDate( value , this.options.dateFormat );
-			if ( this.calendarInstance._isValid( date ) ) {
-				this.valueAsDate( date );
-				this.element.val( value );
-			}
+			this.valueAsDate( Globalize.parseDate( value , this.options.dateFormat ) );
 		} else {
 			return ( this._getParsedValue() !== null ) ? this.element.val() : null;
 		}
