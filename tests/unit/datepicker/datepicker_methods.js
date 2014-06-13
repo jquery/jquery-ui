@@ -40,10 +40,12 @@ test( "widget", function() {
 });
 
 test( "close", function() {
+	// ToDo implement this
 	expect( 0 );
 });
 
 test( "open", function() {
+	// ToDo implement this
 	expect( 0 );
 });
 
@@ -54,12 +56,13 @@ test( "value", function() {
 
 	input.datepicker( "value", "1/1/14" );
 	equal( input.val(), "1/1/14", "input's value set" );
-	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
+	input.datepicker( "open" );
+	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ),
 		"first day marked as selected" );
 	equal( input.datepicker( "value" ), "1/1/14", "getter" );
 
 	input.val( "abc" );
-	equal( input.datepicker( "value" ), "abc",
+	equal( input.datepicker( "value" ), null,
 		"Invalid values should be returned without formatting." );
 });
 
@@ -70,7 +73,7 @@ test( "valueAsDate", function() {
 
 	input.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
 	equal( input.val(), "1/1/14", "input's value set" );
-	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
+	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ),
 		"first day marked as selected" );
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ),
 		new Date( 2014, 0, 1 ), "getter" );
