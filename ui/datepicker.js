@@ -316,7 +316,7 @@ widget = $.widget( "ui.datepicker", {
 	_setOption: function( key, value ) {
 		this._super( key, value );
 
-		if ( $.inArray( key, calendarOptions ) ) {
+		if ( $.inArray( key, calendarOptions ) !== -1 ) {
 			this.calendarInstance._setOption( key, value );
 		}
 
@@ -325,7 +325,7 @@ widget = $.widget( "ui.datepicker", {
 		}
 
 		if ( key === "dateFormat" ) {
-			this.element.val( this.date.format() );
+			this.element.val( this.calendarInstance.value() );
 		}
 
 		if ( key === "max" || key === "min" ) {
