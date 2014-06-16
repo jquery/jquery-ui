@@ -40,6 +40,25 @@ test( "widget", function() {
 	actual.remove();
 });
 
+test( "open / close", function() {
+	expect( 7 );
+
+	var input = TestHelpers.datepicker.initNewInput({ show: false, hide: false }),
+		calendar = input.datepicker( "widget" );
+
+	ok( calendar.is( ":hidden" ), "calendar hidden on init" );
+
+	input.datepicker( "open" );
+	ok( calendar.is( ":visible" ), "open: calendar visible" );
+	equal( calendar.attr( "aria-hidden" ), "false", "open: calendar aria-hidden" );
+	equal( calendar.attr( "aria-expanded" ), "true", "close: calendar aria-expanded" );
+
+	input.datepicker( "close" );
+	ok( !calendar.is( ":visible" ), "close: calendar hidden" );
+	equal( calendar.attr( "aria-hidden" ), "true", "close: calendar aria-hidden" );
+	equal( calendar.attr( "aria-expanded" ), "false", "close: calendar aria-expanded" );
+});
+
 test( "value", function() {
 	expect( 4 );
 
