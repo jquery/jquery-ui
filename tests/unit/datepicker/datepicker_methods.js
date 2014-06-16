@@ -39,14 +39,23 @@ test( "widget", function() {
 	actual.remove();
 });
 
-test( "close", function() {
-	// TODO: implement this
-	expect( 0 );
-});
+test( "open / close", function() {
+	expect( 7 );
 
-test( "open", function() {
-	// TODO: implement this
-	expect( 0 );
+	var input = TestHelpers.datepicker.initNewInput({ show: false, hide: false }),
+		calendar = input.datepicker( "widget" );
+
+	ok( calendar.is( ":hidden" ), "calendar hidden on init" );
+
+	input.datepicker( "open" );
+	ok( calendar.is( ":visible" ), "open: calendar visible" );
+	equal( calendar.attr( "aria-hidden" ), "false", "open: calendar aria-disabled" );
+	equal( calendar.attr( "aria-expanded" ), "true", "close: calendar aria-expanded" );
+
+	input.datepicker( "close" );
+	ok( !calendar.is( ":visible" ), "close: calendar hidden" );
+	equal( calendar.attr( "aria-hidden" ), "true", "close: calendar aria-disabled" );
+	equal( calendar.attr( "aria-expanded" ), "false", "close: calendar aria-expanded" );
 });
 
 test( "value", function() {
