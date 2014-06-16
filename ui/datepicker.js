@@ -32,6 +32,7 @@ var widget,
 	suppressExpandOnFocus = false;
 
 widget = $.widget( "ui.datepicker", {
+	version: "@VERSION",
 	options: {
 		appendTo: null,
 		position: {
