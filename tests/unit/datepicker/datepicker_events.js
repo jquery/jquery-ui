@@ -14,15 +14,48 @@ test( "beforeOpen", function() {
 });
 
 test( "close", function() {
-	expect( 0 );
+	expect( 4 );
+
+	var shouldFire,
+		input = TestHelpers.datepicker.init( "#datepicker", {
+			close: function() {
+				ok( shouldFire, "close event fired" );
+			}
+		});
+
+	shouldFire = false;
+	input.datepicker( "open" );
+	shouldFire = true;
+	input.datepicker( "close" );
+
+	shouldFire = false;
+	input.datepicker( "open" );
+	shouldFire = true;
+	$( "body" ).trigger( "mousedown" );
+
+	shouldFire = false;
+	input.datepicker( "open" );
+	shouldFire = true;
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+
+	shouldFire = false;
+	input.datepicker( "open" );
+	shouldFire = true;
+	input.datepicker( "widget" ).find( "tbody tr:first a:first" ).simulate( "mousedown" );
 });
 
 test( "open", function() {
-	expect( 0 );
-});
+	expect( 2 );
 
-test( "select", function() {
-	expect( 0 );
+	var input = TestHelpers.datepicker.init( "#datepicker", {
+			open: function() {
+				ok( true, "open event fired on open" );
+				ok( widget.is( ":visible" ), "calendar open on open" );
+			}
+		}),
+		widget = input.datepicker( "widget" );
+
+	input.datepicker( "open" );
 });
 
 var selectedThis = null,
