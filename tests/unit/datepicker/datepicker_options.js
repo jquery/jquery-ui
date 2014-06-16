@@ -557,42 +557,38 @@ test( "localisation", function() {
 		" " + date.getFullYear(), "Localisation - formatting" );
 });
 
-// TODO: Rewrite this for beforeOpen
-test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler", function() {
+ */
+
+test( "Ticket 7602: Stop datepicker from appearing with beforeOpen event handler", function() {
 	expect( 3 );
 
-	var inp, dp;
+	var input;
 
-	inp = TestHelpers.datepicker.init( "#inp", {
-		beforeShow: function() {
+	input = TestHelpers.datepicker.init( "#datepicker", {
+		beforeOpen: function() {
 		}
 	});
-	dp = $( "#ui-datepicker-div" );
-	inp.datepicker( "show" );
-	equal( dp.css( "display" ), "block", "beforeShow returns nothing" );
-	inp.datepicker( "hide" ).datepicker( "destroy" );
+	input.datepicker( "open" );
+	equal( input.datepicker( "widget" ).css( "display" ), "block", "beforeOpen returns nothing" );
+	input.datepicker( "close" ).datepicker( "destroy" );
 
-	inp = TestHelpers.datepicker.init( "#inp", {
-		beforeShow: function() {
+	input = TestHelpers.datepicker.init( "#datepicker", {
+		beforeOpen: function() {
 			return true;
 		}
 	});
-	dp = $( "#ui-datepicker-div" );
-	inp.datepicker( "show" );
-	equal( dp.css( "display" ), "block", "beforeShow returns true" );
-	inp.datepicker( "hide" );
-	inp.datepicker( "destroy" );
+	input.datepicker( "open" );
+	equal( input.datepicker( "widget" ).css( "display" ), "block", "beforeOpen returns true" );
+	input.datepicker( "close" ).datepicker( "destroy" );
 
-	inp = TestHelpers.datepicker.init( "#inp", {
-		beforeShow: function() {
+	input = TestHelpers.datepicker.init( "#datepicker", {
+		beforeOpen: function() {
 			return false;
 		}
 	});
-	dp = $( "#ui-datepicker-div" );
-	inp.datepicker( "show" );
-	equal( dp.css( "display" ), "none", "beforeShow returns false" );
-	inp.datepicker( "destroy" );
+	input.datepicker( "open" );
+	equal( input.datepicker( "widget" ).css( "display" ), "none", "beforeOpen returns false" );
+	input.datepicker( "destroy" );
 });
-*/
 
 })(jQuery);
