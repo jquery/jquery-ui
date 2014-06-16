@@ -54,7 +54,6 @@
 		// set effect from select menu value
 		$( "#button" ).click(function() {
 			runEffect();
-			return false;
 		});
 
 		$( "#effect" ).hide();
@@ -88,7 +87,7 @@
 	<option value="slide">Slide</option>
 </select>
 
-<a href="#" id="button" class="ui-state-default ui-corner-all">Run Effect</a>
+<button id="button" class="ui-state-default ui-corner-all">Run Effect</button>
 
 <div class="demo-description">
 <p>Click the button above to preview the effect.</p>

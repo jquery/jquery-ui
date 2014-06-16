@@ -76,7 +76,8 @@ var
 			"dist/jquery-ui.js",
 			"dist/jquery-ui.min.js"
 		]
-	};
+	},
+	component = grunt.option( "component" ) || "**";
 
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
@@ -173,8 +174,7 @@ grunt.initConfig({
 		})
 	},
 	qunit: {
-		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
-			// TODO except for all|index|test, try to include more as we go
+		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
 			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
 		options: {

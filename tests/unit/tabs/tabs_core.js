@@ -98,34 +98,34 @@ test( "accessibility", function() {
 	equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
 	equal( tabs.eq( 1 ).attr( "tabindex" ), 0, "active tab has tabindex=0" );
 	equal( tabs.eq( 1 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
-	equal( panels.eq( 1 ).attr( "aria-expanded" ), "true", "active panel has aria-expanded=true" );
+	equal( tabs.eq( 1 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded=true" );
 	equal( panels.eq( 1 ).attr( "aria-hidden" ), "false", "active panel has aria-hidden=false" );
 	equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
 	equal( tabs.eq( 0 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
 	equal( tabs.eq( 0 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
-	equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
 	equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
 	equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
 	equal( tabs.eq( 2 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
 	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
-	equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
 
 	element.tabs( "option", "active", 0 );
 	equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
 	equal( tabs.eq( 0 ).attr( "tabindex" ), 0, "active tab has tabindex=0" );
 	equal( tabs.eq( 0 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
-	equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "active panel has aria-expanded=true" );
+	equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded=true" );
 	equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "active panel has aria-hidden=false" );
 	equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
 	equal( tabs.eq( 1 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
 	equal( tabs.eq( 1 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
-	equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
 	equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
 	equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
 	equal( tabs.eq( 2 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
 	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
-	equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
 });
 
@@ -172,10 +172,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT } );
@@ -183,10 +183,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
@@ -194,7 +194,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
@@ -202,10 +202,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step2, 100 );
@@ -216,10 +216,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is hidden" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
@@ -227,10 +227,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is still visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
@@ -238,10 +238,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is still hidden" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is still visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 
 		// SPACE activates, cancels delay
@@ -254,10 +254,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tabs has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
@@ -265,10 +265,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tabs has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		// ENTER activates, cancels delay
@@ -280,17 +280,17 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 	function step4() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is hidden" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
 		// ENTER collapses if active
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		setTimeout( start, 1 );
@@ -323,10 +323,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step2, 100 );
@@ -336,10 +336,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step2() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT, ctrlKey: true } );
@@ -347,10 +347,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step3, 100 );
@@ -360,17 +360,17 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step3() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN, ctrlKey: true } );
 		ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first tab" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step4, 100 );
@@ -380,7 +380,7 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step4() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
@@ -388,10 +388,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step5, 100 );
@@ -401,10 +401,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step5() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT, ctrlKey: true } );
@@ -412,10 +412,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step6, 100 );
@@ -425,10 +425,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step6() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME, ctrlKey: true } );
@@ -436,10 +436,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step7, 100 );
@@ -449,7 +449,7 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step7() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END, ctrlKey: true } );
@@ -457,10 +457,10 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		setTimeout( step8, 100 );
@@ -470,20 +470,20 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 	function step8() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.SPACE } );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is hidden" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
 		setTimeout( start, 1 );
@@ -511,10 +511,10 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "ALT+PAGE_DOWN moves focus to next tab" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		ok( panels.eq( 1 ).is( ":visible" ), "second panel is visible" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "true", "second panel has aria-expanded=true" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "true", "second tab has aria-expanded=true" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "false", "second panel has aria-hidden=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is hidden" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.PAGE_DOWN, altKey: true } );
@@ -522,10 +522,10 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "ALT+PAGE_DOWN moves focus to next tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is hidden" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "second panel has aria-expanded=false" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "false", "second tab has aria-expanded=false" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.PAGE_DOWN, altKey: true } );
@@ -533,10 +533,10 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "ALT+PAGE_DOWN wraps focus to first tab" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "first panel has aria-expanded=true" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		panels.eq( 0 ).simulate( "focus" );
@@ -551,10 +551,10 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "ALT+PAGE_UP wraps focus to last tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "true", "third panel has aria-expanded=true" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is hidden" );
-		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
+		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.PAGE_UP, altKey: true } );
@@ -562,10 +562,10 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "ALT+PAGE_UP moves focus to previous tab" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		ok( panels.eq( 1 ).is( ":visible" ), "second panel is visible" );
-		equal( panels.eq( 1 ).attr( "aria-expanded" ), "true", "second panel has aria-expanded=true" );
+		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "true", "second tab has aria-expanded=true" );
 		equal( panels.eq( 1 ).attr( "aria-hidden" ), "false", "second panel has aria-hidden=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
-		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
+		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		panels.eq( 1 ).simulate( "focus" );

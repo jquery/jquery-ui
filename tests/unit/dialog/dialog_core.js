@@ -41,7 +41,7 @@ test("widget method", function() {
 });
 
 asyncTest( "focus tabbable", function() {
-	expect( 6 );
+	expect( 8 );
 	var element,
 		options = {
 			buttons: [{
@@ -118,7 +118,30 @@ asyncTest( "focus tabbable", function() {
 		setTimeout(function() {
 			equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
 			element.remove();
-			start();
+			setTimeout( step7 );
+		});
+	}
+
+	function step7() {
+		element = $( "<div><input name='0'><input name='1' autofocus></div>" ).dialog({
+			open: function() {
+				var inputs = $( this ).find( "input" );
+				inputs.last().keydown(function( event ) {
+					event.preventDefault();
+					inputs.first().focus();
+				});
+			}
+		});
+		setTimeout(function() {
+			var inputs = element.find( "input" );
+			equal( document.activeElement, inputs[ 1 ], "Focus starts on second input" );
+			inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
+			setTimeout(function() {
+				equal( document.activeElement, inputs[ 0 ],
+					"Honor preventDefault, allowing custom focus management" );
+				element.remove();
+				start();
+			}, 50 );
 		});
 	}
 
@@ -140,12 +163,14 @@ test( "#7960: resizable handles below modal overlays", function() {
 asyncTest( "Prevent tabbing out of dialogs", function() {
 	expect( 3 );
 
-	var element = $( "<div><input><input></div>" ).dialog(),
-		inputs = element.find( "input" ),
-		widget = element.dialog( "widget" )[ 0 ];
+	var element = $( "<div><input name='0'><input name='1'></div>" ).dialog(),
+		inputs = element.find( "input" );
+
+	// Remove close button to test focus on just the two buttons
+	element.dialog( "widget" ).find( ".ui-button").remove();
 
 	function checkTab() {
-		ok( $.contains( widget, document.activeElement ), "Tab key event moved focus within the modal" );
+		equal( document.activeElement, inputs[ 0 ], "Tab key event moved focus within the modal" );
 
 		// check shift tab
 		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB, shiftKey: true });
@@ -153,15 +178,15 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	}
 
 	function checkShiftTab() {
-		ok( $.contains( widget, document.activeElement ), "Shift-Tab key event moved focus within the modal" );
+		equal( document.activeElement, inputs[ 1 ], "Shift-Tab key event moved focus back to second input" );
 
 		element.remove();
 		setTimeout( start );
 	}
 
-	inputs[1].focus();
+	inputs[ 1 ].focus();
 	setTimeout(function() {
-		equal( document.activeElement, inputs[1], "Focus set on second input" );
+		equal( document.activeElement, inputs[ 1 ], "Focus set on second input" );
 		inputs.eq( 1 ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
 
 		setTimeout( checkTab );

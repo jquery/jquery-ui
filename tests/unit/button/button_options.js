@@ -38,6 +38,41 @@ test("disabled, null", function() {
 	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
+test( "disabled, ui-state-active is removed unless checkbox or radio", function() {
+	expect( 12 );
+	var elements = [
+		$( "<input type='button'>" ),
+		$( "<button></button>" ),
+		$( "<a></a>" ),
+		$( "<div></div>" ),
+		$( "<input type='checkbox' id='checkbox' checked><label for='checkbox'></label>" ),
+		$( "<input type='radio' id='radio' checked><label for='radio'></label>" )
+	];
+
+	$.each( elements, function() {
+		var element = $( this ).first().button(),
+			buttonElement = element.button( "widget" ),
+			elementType = element.prop( "nodeName" ).toLowerCase();
+
+		if ( element.is( "input" ) ) {
+			elementType += ":" + element.attr( "type" );
+		}
+
+		element.trigger( "mousedown" );
+		ok( buttonElement.hasClass( "ui-state-active" ),
+			"[" + elementType + "] has ui-state-active class after mousedown." );
+
+		element.button( "disable" );
+		if ( element.is( "[type=checkbox], [type=radio]" ) ) {
+			ok( buttonElement.hasClass( "ui-state-active" ),
+				"Disabled [" + elementType + "] has ui-state-active class." );
+		} else {
+			ok( !buttonElement.hasClass( "ui-state-active" ),
+				"Disabled [" + elementType + "] does not have ui-state-active class." );
+		}
+	});
+});
+
 test("text false without icon", function() {
 	expect( 1 );
 	$("#button").button({
