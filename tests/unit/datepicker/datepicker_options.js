@@ -156,25 +156,6 @@ test( "showWeek", function() {
 });
 
 /*
-// TODO: Rewrite
-test( "disabled", function() {
-	expect(8);
-	var inp = TestHelpers.datepicker.init( "#inp" );
-	ok(!inp.datepicker( "isDisabled" ), "Initially marked as enabled" );
-	ok(!inp[0].disabled, "Field initially enabled" );
-	inp.datepicker( "option", "disabled", true);
-	ok(inp.datepicker( "isDisabled" ), "Marked as disabled" );
-	ok(inp[0].disabled, "Field now disabled" );
-	inp.datepicker( "option", "disabled", false);
-	ok(!inp.datepicker( "isDisabled" ), "Marked as enabled" );
-	ok(!inp[0].disabled, "Field now enabled" );
-	inp.datepicker( "destroy" );
-
-	inp = TestHelpers.datepicker.init( "#inp", { disabled: true });
-	ok(inp.datepicker( "isDisabled" ), "Initially marked as disabled" );
-	ok(inp[0].disabled, "Field initially disabled" );
-});
-
 // TODO: Rewrite for value option
 test( "defaultDate", function() {
 	expect( 16 );
