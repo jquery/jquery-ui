@@ -274,7 +274,7 @@ test( "defaultDate", function() {
 */
 
 test( "min / max", function() {
-	expect( 7 );
+	expect( 14 );
 
 	/*
 	 // TODO CTRL + PgUp / PgDn is not implemented yet, see wiki
@@ -353,24 +353,31 @@ test( "min / max", function() {
 
 	inp.val( "6/4/08" ).datepicker( "option", { min: minDate } );
 	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+	ok( inp.datepicker( "isValid" ) );
 
 	inp.datepicker( "option", { min: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), minDate, "Min/max - value < min" );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 4 ), "Min/max - value < min" );
+	ok( !inp.datepicker( "isValid" ) );
 
 	inp.datepicker( "option", { min: null } ).val( "6/4/08" ).datepicker( "option", { max: maxDate } );
 	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+	ok( inp.datepicker( "isValid" ) );
 
 	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), maxDate, "Min/max - setDate > max" );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2009, 1 - 1, 4 ), "Min/max - setDate > max" );
+	ok( !inp.datepicker( "isValid" ) );
 
 	inp.datepicker( "option", { max: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), minDate, "Min/max - value < min" );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 4 ), "Min/max - value < min" );
+	ok( !inp.datepicker( "isValid" ) );
 
 	inp.datepicker( "option", { max: null } ).val( "6/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
 	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+	ok( inp.datepicker( "isValid" ) );
 
 	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { min: minDate, max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), maxDate, "Min/max - value > max" );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2009, 1 - 1, 4 ), "Min/max - value > max" );
+	ok( !inp.datepicker( "isValid" ) );
 
 	/*
 	 // TODO: enable when yearRange option is implemented
