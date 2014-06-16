@@ -27,6 +27,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.calendar", {
+	version: "@VERSION",
 	options: {
 		dateFormat: { date: "short" },
 		// TODO review
