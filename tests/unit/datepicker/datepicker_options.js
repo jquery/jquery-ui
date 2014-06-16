@@ -97,6 +97,7 @@ test( "eachDay", function() {
 });
 
 test( "numberOfMonths", function() {
+	// TODO implement this
 	expect( 0 );
 });
 
@@ -270,114 +271,133 @@ test( "defaultDate", function() {
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date, "Default date 01/26/2007" );
 });
+*/
 
-// TODO: Rewrite
-test( "minMax", function() {
-	expect( 23 );
+test( "min / max", function() {
+	expect( 7 );
+
+	/*
+	 // TODO CTRL + PgUp / PgDn is not implemented yet, see wiki
 	var date,
-		inp = TestHelpers.datepicker.init( "#inp" ),
-		dp = $( "#ui-datepicker-div" ),
-		lastYear = new Date(2007, 6 - 1, 4),
-		nextYear = new Date(2009, 6 - 1, 4),
-		minDate = new Date(2008, 2 - 1, 29),
-		maxDate = new Date(2008, 12 - 1, 7);
-	inp.val( "06/04/2008" ).datepicker( "show" );
-	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
-		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), lastYear,
-		"Min/max - null, null - ctrl+pgup" );
-	inp.val( "06/04/2008" ).datepicker( "show" );
+		inp = TestHelpers.datepicker.init( "#datepicker" ),
+		dp = inp.datepicker( "widget" ),
+		lastYear = new Date( 2007, 6 - 1, 4 ),
+		nextYear = new Date( 2009, 6 - 1, 4 ),
+		minDate = new Date( 2008, 2 - 1, 29 ),
+		maxDate = new Date( 2008, 12 - 1, 7 );
+
+	inp.val( "06/04/2008" ).datepicker( "refresh" ).datepicker( "open" );
+	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP } ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), lastYear, "Min/max - null, null - ctrl+pgup" );
+
+	inp.val( "06/04/2008" ).datepicker( "refresh" ).datepicker( "open" );
+	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN } ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), nextYear, "Min/max - null, null - ctrl+pgdn" );
+
+	inp.datepicker( "option", { min: minDate } ).
+		datepicker( "close" ).val( "06/04/2008" ).datepicker( "refresh" ).datepicker( "open" );
+	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP } ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), minDate, "Min/max - 02/29/2008, null - ctrl+pgup" );
+
+	inp.val( "06/04/2008" ).datepicker( "refresh" ).datepicker( "open" );
 	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), nextYear,
-		"Min/max - null, null - ctrl+pgdn" );
-	inp.datepicker( "option", {minDate: minDate}).
-		datepicker( "hide" ).val( "06/04/2008" ).datepicker( "show" );
-	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
-		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate,
-		"Min/max - 02/29/2008, null - ctrl+pgup" );
-	inp.val( "06/04/2008" ).datepicker( "show" );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), nextYear, "Min/max - 02/29/2008, null - ctrl+pgdn" );
+
+	inp.datepicker( "option", { max: maxDate } ).
+		datepicker( "hide" ).val( "06/04/2008" ).datepicker( "open" );
+	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP } ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate, "Min/max - 02/29/2008, 12/07/2008 - ctrl+pgup" );
+
+	inp.val( "06/04/2008" ).datepicker( "open" );
 	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), nextYear,
-		"Min/max - 02/29/2008, null - ctrl+pgdn" );
-	inp.datepicker( "option", {maxDate: maxDate}).
-		datepicker( "hide" ).val( "06/04/2008" ).datepicker( "show" );
-	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
-		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate,
-		"Min/max - 02/29/2008, 12/07/2008 - ctrl+pgup" );
-	inp.val( "06/04/2008" ).datepicker( "show" );
-	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
-		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate,
-		"Min/max - 02/29/2008, 12/07/2008 - ctrl+pgdn" );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "valueAsDate" ), maxDate, "Min/max - 02/29/2008, 12/07/2008 - ctrl+pgdn" );
+
 	inp.datepicker( "option", {minDate: null}).
-		datepicker( "hide" ).val( "06/04/2008" ).datepicker( "show" );
+		datepicker( "hide" ).val( "06/04/2008" ).datepicker( "open" );
 	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), lastYear,
-		"Min/max - null, 12/07/2008 - ctrl+pgup" );
-	inp.val( "06/04/2008" ).datepicker( "show" );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "valueAsDate" ), lastYear, "Min/max - null, 12/07/2008 - ctrl+pgup" );
+
+	inp.val( "06/04/2008" ).datepicker( "open" );
 	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate,
-		"Min/max - null, 12/07/2008 - ctrl+pgdn" );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "valueAsDate" ), maxDate, "Min/max - null, 12/07/2008 - ctrl+pgdn" );
+
 	// Relative dates
 	date = new Date();
 	date.setDate(date.getDate() - 7);
 	inp.datepicker( "option", {minDate: "-1w", maxDate: "+1 M +10 D "}).
-		datepicker( "hide" ).val( "" ).datepicker( "show" );
+		datepicker( "hide" ).val( "" ).datepicker( "open" );
 	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date,
-		"Min/max - -1w, +1 M +10 D - ctrl+pgup" );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "valueAsDate" ), date, "Min/max - -1w, +1 M +10 D - ctrl+pgup" );
+
 	date = TestHelpers.datepicker.addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	inp.val( "" ).datepicker( "show" );
 	inp.simulate( "keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date,
-		"Min/max - -1w, +1 M +10 D - ctrl+pgdn" );
-	// With existing date
-	inp = TestHelpers.datepicker.init( "#inp" );
-	inp.val( "06/04/2008" ).datepicker( "option", {minDate: minDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), new Date(2008, 6 - 1, 4), "Min/max - setDate > min" );
-	inp.datepicker( "option", {minDate: null}).val( "01/04/2008" ).datepicker( "option", {minDate: minDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate, "Min/max - setDate < min" );
-	inp.datepicker( "option", {minDate: null}).val( "06/04/2008" ).datepicker( "option", {maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), new Date(2008, 6 - 1, 4), "Min/max - setDate < max" );
-	inp.datepicker( "option", {maxDate: null}).val( "01/04/2009" ).datepicker( "option", {maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate, "Min/max - setDate > max" );
-	inp.datepicker( "option", {maxDate: null}).val( "01/04/2008" ).datepicker( "option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate, "Min/max - setDate < min" );
-	inp.datepicker( "option", {maxDate: null}).val( "06/04/2008" ).datepicker( "option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), new Date(2008, 6 - 1, 4), "Min/max - setDate > min, < max" );
-	inp.datepicker( "option", {maxDate: null}).val( "01/04/2009" ).datepicker( "option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate, "Min/max - setDate > max" );
+	TestHelpers.datepicker.equalsDate(inp.datepicker( "valueAsDate" ), date, "Min/max - -1w, +1 M +10 D - ctrl+pgdn" );
+	 */
 
+	// With existing date
+	var inp = TestHelpers.datepicker.init( "#datepicker" ),
+		minDate = new Date( 2008, 2 - 1, 29 ),
+		maxDate = new Date( 2008, 12 - 1, 7 );
+
+	inp.val( "6/4/08" ).datepicker( "option", { min: minDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+
+	inp.datepicker( "option", { min: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), minDate, "Min/max - value < min" );
+
+	inp.datepicker( "option", { min: null } ).val( "6/4/08" ).datepicker( "option", { max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+
+	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), maxDate, "Min/max - setDate > max" );
+
+	inp.datepicker( "option", { max: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), minDate, "Min/max - value < min" );
+
+	inp.datepicker( "option", { max: null } ).val( "6/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+
+	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { min: minDate, max: maxDate } );
+	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), maxDate, "Min/max - value > max" );
+
+	/*
+	 // TODO: enable when yearRange option is implemented
 	inp.datepicker( "option", {yearRange: "-0:+1"}).val( "01/01/" + new Date().getFullYear());
 	ok(dp.find( ".ui-calendar-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - previous button disabled at 1/1/minYear" );
 	inp.datepicker( "setDate", "12/30/" + new Date().getFullYear());
 	ok(dp.find( ".ui-calendar-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled at 12/30/maxYear" );
 
 	inp.datepicker( "option", {
-		minDate: new Date(1900, 0, 1),
-		maxDate: "-6Y",
+		min: new Date(1900, 0, 1),
+		max: "-6Y",
 		yearRange: "1900:-6"
 	}).val( "" );
 	ok(dp.find( ".ui-calendar-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled" );
 	ok(!dp.find( ".ui-calendar-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - prev button enabled" );
 
 	inp.datepicker( "option", {
-		minDate: new Date(1900, 0, 1),
-		maxDate: "1/25/2007",
+		min: new Date(1900, 0, 1),
+		max: "1/25/2007",
 		yearRange: "1900:2007"
 	}).val( "" );
 	ok(dp.find( ".ui-calendar-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled" );
 	ok(!dp.find( ".ui-calendar-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - prev button enabled" );
+	*/
 });
+
+/*
 
 // TODO: Rewrite for valueAsDate / value
 test( "setDate", function() {
