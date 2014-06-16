@@ -322,6 +322,10 @@ $.ui.ddmanager = {
 		var dropped = false;
 		// Create a copy of the droppables in case the list changes during the drop (#9116)
 		$.each( ( $.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice(), function() {
+			
+			if ( this.greedyChild ) {
+				this.greedyChild = false;
+			}
 
 			if ( !this.options ) {
 				return;
