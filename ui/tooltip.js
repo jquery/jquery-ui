@@ -192,6 +192,17 @@ return $.widget( "ui.tooltip", {
 				}
 			});
 		}
+		
+		// Set mouseover events so we can actually call close even before the _open function is called
+		// This is needed voor async ajax requests
+		var events = {};
+		if ( !event || event.type === "mouseover" ) {
+			events.mouseleave = "close";
+		}
+		if ( !event || event.type === "focusin" ) {
+			events.focusout = "close";
+		}
+		this._on( true, target, events );
 
 		this._updateContent( target, event );
 	},
@@ -207,10 +218,6 @@ return $.widget( "ui.tooltip", {
 		}
 
 		content = contentOption.call( target[0], function( response ) {
-			// ignore async response if tooltip was closed already
-			if ( !target.data( "ui-tooltip-open" ) ) {
-				return;
-			}
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			that._delay(function() {
@@ -231,6 +238,11 @@ return $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
+		// ignore async response if tooltip was closed already
+		if ( !target.data( "ui-tooltip-open" ) ) {
+			return;
+		}
+			
 		var tooltip, events, delayedShow, a11yContent,
 			positionOption = $.extend( {}, this.options.position );
 
