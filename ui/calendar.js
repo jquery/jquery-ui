@@ -475,7 +475,7 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( key === "max" || key === "min" ) {
-			if ( value instanceof Date ) {
+			if ( value instanceof Date || value === null ) {
 				this._super( key, value );
 				this.refresh();
 			}
