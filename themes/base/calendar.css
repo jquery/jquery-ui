@@ -109,15 +109,16 @@
 }
 
 /* with multiple calendars */
-.ui-calendar.ui-calendar-multi {
-	width: 100%;
+.ui-calendar-multi {
+	width: auto;
+	display: inline-block;
 }
 .ui-calendar-multi .ui-calendar-group {
 	float: left;
 }
 .ui-calendar-multi .ui-calendar-group table {
 	width: 95%;
-	margin: 0 auto .4em;
+	margin: 0 2.5% .4em;
 }
 .ui-calendar-multi-2 .ui-calendar-group {
 	width: 50%;
@@ -176,3 +177,4 @@
 	border-right-width: 0;
 	border-left-width: 1px;
 }
+
