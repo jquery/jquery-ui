@@ -89,7 +89,7 @@ test( "Localization", function() {
 			);
 			equal(
 				element.find( ".ui-calendar-prev" ).text(),
-				"<zurück", message + "header prev"
+				"<Zurück", message + "header prev"
 			);
 			equal(
 				element.find( ".ui-calendar-next" ).text(),
