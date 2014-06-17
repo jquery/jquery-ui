@@ -2767,10 +2767,10 @@ var regions = {
 		"dateFormat": "d"
 	},
 	"de": {
-		"closeText": "schlie\u00dfen",
-		"prevText": "&#x3c;zur\u00fcck",
+		"closeText": "Schlie\u00dfen",
+		"prevText": "&#x3c;Zur\u00fcck",
 		"nextText": "Vor&#x3e;",
-		"currentText": "heute",
+		"currentText": "Heute",
 		"weekHeader": "Wo",
 		"dateFormat": "d"
 	},
