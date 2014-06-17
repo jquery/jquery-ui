@@ -156,7 +156,7 @@ test( "showWeek", function() {
 });
 
 /*
-// TODO: Rewrite for value option
+// TODO: Move to calendar and rewrite for value option
 test( "defaultDate", function() {
 	expect( 16 );
 	var inp = TestHelpers.datepicker.init( "#inp" ),
@@ -386,70 +386,6 @@ test( "min / max", function() {
 });
 
 /*
-
-// TODO: Rewrite for valueAsDate / value
-test( "setDate", function() {
-	expect( 24 );
-	var inl, alt, minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
-		inp = TestHelpers.datepicker.init( "#inp" ),
-		date1 = new Date(2008, 6 - 1, 4),
-		date2 = new Date();
-	ok(inp.datepicker( "getDate" ) == null, "Set date - default" );
-	inp.datepicker( "setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - 2008-06-04" );
-	date1 = new Date();
-	date1.setDate(date1.getDate() + 7);
-	inp.datepicker( "setDate", +7);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - +7" );
-	date2.setFullYear(date2.getFullYear() + 2);
-	inp.datepicker( "setDate", "+2y" );
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date2, "Set date - +2y" );
-	inp.datepicker( "setDate", date1, date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - two dates" );
-	inp.datepicker( "setDate" );
-	ok(inp.datepicker( "getDate" ) == null, "Set date - null" );
-	// Relative to current date
-	date1 = new Date();
-	date1.setDate(date1.getDate() + 7);
-	inp.datepicker( "setDate", "c +7" );
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - c +7" );
-	date1.setDate(date1.getDate() + 7);
-	inp.datepicker( "setDate", "c+7" );
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - c+7" );
-	date1.setDate(date1.getDate() - 21);
-	inp.datepicker( "setDate", "c -3 w" );
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date - c -3 w" );
-	// Alternate field
-	alt = $( "#alt" );
-	inp.datepicker( "option", {altField: "#alt", altFormat: "yy-mm-dd"});
-	date1 = new Date(2008, 6 - 1, 4);
-	inp.datepicker( "setDate", date1);
-	equal(inp.val(), "06/04/2008", "Set date alternate - 06/04/2008" );
-	equal(alt.val(), "2008-06-04", "Set date alternate - 2008-06-04" );
-	// With minimum/maximum
-	inp = TestHelpers.datepicker.init( "#inp" );
-	date1 = new Date(2008, 1 - 1, 4);
-	date2 = new Date(2008, 6 - 1, 4);
-	minDate = new Date(2008, 2 - 1, 29);
-	maxDate = new Date(2008, 3 - 1, 28);
-	inp.val( "" ).datepicker( "option", {minDate: minDate}).datepicker( "setDate", date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date2, "Set date min/max - setDate > min" );
-	inp.datepicker( "setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate, "Set date min/max - setDate < min" );
-	inp.val( "" ).datepicker( "option", {maxDate: maxDate, minDate: null}).datepicker( "setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), date1, "Set date min/max - setDate < max" );
-	inp.datepicker( "setDate", date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate, "Set date min/max - setDate > max" );
-	inp.val( "" ).datepicker( "option", {minDate: minDate}).datepicker( "setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), minDate, "Set date min/max - setDate < min" );
-	inp.datepicker( "setDate", date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker( "getDate" ), maxDate, "Set date min/max - setDate > max" );
-	dateAndTimeToSet = new Date(2008, 3 - 1, 28, 1, 11, 0);
-	dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
-	inp.datepicker( "setDate", dateAndTimeToSet);
-	equal(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), "Date object passed should not be changed by setDate" );
-});
-
 // TODO: Move this to $.date, Globalize or calendar widget
 test( "daylightSaving", function() {
 	expect( 25 );
@@ -535,7 +471,7 @@ test( "daylightSaving", function() {
 });
 
 // TODO: Move to calendar. Perhaps adda calendar_external test file?
-test( "localisation", function() {
+test( "localization", function() {
 	expect( 24 );
 	var dp, month, day, date,
 		inp = TestHelpers.datepicker.init( "#inp", $.datepicker.regional.fr);
@@ -564,7 +500,6 @@ test( "localisation", function() {
 		date.getDate() + " " + $.datepicker.regional.fr.monthNames[date.getMonth()] +
 		" " + date.getFullYear(), "Localisation - formatting" );
 });
-
  */
 
 test( "Ticket 7602: Stop datepicker from appearing with beforeOpen event handler", function() {
