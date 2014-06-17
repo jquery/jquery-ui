@@ -313,7 +313,7 @@ return $.widget( "ui.calendar", {
 		var content = "",
 			attributes = [
 				"role='gridcell'",
-				"aria-selected='" + day.current ? true : false + "'"
+				"aria-selected='" + ( day.current ? true : false ) + "'"
 			],
 			selectable = ( day.selectable && this._isValid( new Date( day.timestamp ) ) );
 
