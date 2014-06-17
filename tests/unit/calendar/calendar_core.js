@@ -79,7 +79,7 @@ test( "Localization", function() {
 			equal( element.find( ".ui-calendar-month" ).text(), "Januar", message + "titlebar year" );
 			equal( element.find( "thead th:first" ).text(), "Mo.", message + "teader first day" );
 			equal( element.find( "thead th:last" ).text(), "So.", message + "header last day" );
-			equal( element.find( ".ui-calendar-prev" ).text(), "<zurück", message + "header prev" );
+			equal( element.find( ".ui-calendar-prev" ).text(), "<Zurück", message + "header prev" );
 			equal( element.find( ".ui-calendar-next" ).text(), "Vor>", message + "header next" );
 		};
 
