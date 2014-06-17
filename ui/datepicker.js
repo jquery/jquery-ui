@@ -179,8 +179,12 @@ widget = $.widget( "ui.datepicker", {
 	},
 
 	_documentEvents: {
-		click: function( event ) {
-			if ( this.isOpen && !$( event.target ).closest( this.element.add( this.calendar ) ).length ) {
+		mousedown: function( event ) {
+			if ( !this.isOpen ) {
+				return;
+			}
+
+			if ( !$( event.target ).closest( this.element.add( this.calendar ) ).length ) {
 				this.close( event );
 			}
 		}
