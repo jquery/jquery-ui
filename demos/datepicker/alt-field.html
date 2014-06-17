@@ -11,14 +11,15 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/position.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker({
-			select: function( event, ui ) {
-				var date = Globalize.parseDate( ui.date, { date: "short" } );
+			select: function( event ) {
+				var date = $( "#datepicker" ).datepicker( "valueAsDate" );
 				$( "#alternate" ).val( Globalize.format( date, { date: "long" } ) );
 			}
 		});
