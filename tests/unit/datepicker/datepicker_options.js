@@ -505,12 +505,11 @@ test( "localization", function() {
 test( "Ticket 7602: Stop datepicker from appearing with beforeOpen event handler", function() {
 	expect( 3 );
 
-	var input;
-
-	input = TestHelpers.datepicker.init( "#datepicker", {
+	var input = TestHelpers.datepicker.init( "#datepicker", {
 		beforeOpen: function() {
 		}
 	});
+
 	input.datepicker( "open" );
 	equal( input.datepicker( "widget" ).css( "display" ), "block", "beforeOpen returns nothing" );
 	input.datepicker( "close" ).datepicker( "destroy" );
