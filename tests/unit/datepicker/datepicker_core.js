@@ -406,70 +406,132 @@ test( "ARIA", function() {
 	expect( 0 );
 });
 
-test( "mouse", function() {
+asyncTest( "mouse", function() {
 	expect( 10 );
-	var input = $( "#datepicker" ).datepicker(),
+
+	var input = TestHelpers.datepicker.init( $( "#datepicker" ).val( "" ) ),
 		picker = input.datepicker( "widget" ),
 		date = new Date();
 
-	input.val( "" ).datepicker( "open" );
-	$( ".ui-calendar-calendar tbody a:contains(10)", picker ).simulate( "mousedown", {} );
-	date.setDate( 10 );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Mouse click" );
+	function step1() {
+		input.datepicker( "open" );
 
-	input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
-	$( ".ui-calendar-calendar tbody a:contains(12)", picker ).simulate( "mousedown", {} );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 12 ),
-		"Mouse click - preset" ) ;
+		setTimeout(function() {
+			$( "tbody a:contains(10)", picker ).simulate( "mousedown", {} );
+			date.setDate( 10 );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				date,
+				"Mouse click"
+			);
 
-	input.val( "" ).datepicker( "refresh" ).datepicker( "open" );
-	$( "button.ui-calendar-close", picker ).simulate( "click", {} );
-	ok( input.datepicker( "valueAsDate" ) == null, "Mouse click - close" );
+			input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
+			$( ".ui-calendar-calendar tbody a:contains(12)", picker ).simulate( "mousedown", {} );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 2 - 1, 12 ),
+				"Mouse click - preset"
+			);
 
-	input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
-	$( "button.ui-calendar-close", picker ).simulate( "click", {} );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 4 ),
-		"Mouse click - close + preset" );
+			input.val( "" ).datepicker( "refresh" ).datepicker( "open" );
+			$( "button.ui-calendar-close", picker ).simulate( "click", {} );
+			ok( input.datepicker( "valueAsDate" ) == null, "Mouse click - close" );
 
-	input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
-	$( "a.ui-calendar-prev", picker ).simulate( "click", {} );
-	$( "button.ui-calendar-close", picker ).simulate( "click", {} );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 4 ),
-		"Mouse click - abandoned" );
+			input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
+			$( "button.ui-calendar-close", picker ).simulate( "click", {} );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 2 - 1, 4 ),
+				"Mouse click - close + preset"
+			);
 
-	// Current/previous/next
-	input.val( "" ).datepicker( "refresh" ).datepicker( "open" );
-	$( ".ui-calendar-current", picker ).simulate( "click", {} );
-	date.setDate( new Date().getDate() );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Mouse click - current" );
+			input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
+			$( "a.ui-calendar-prev", picker ).simulate( "click", {} );
+			$( "button.ui-calendar-close", picker ).simulate( "click", {} );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 2 - 1, 4 ),
+				"Mouse click - abandoned"
+			);
 
-	input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
-	$( ".ui-calendar-prev", picker ).simulate( "click" );
-	$( ".ui-calendar-calendar tbody a:contains(16)", picker ).simulate( "mousedown" );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 16 ),
-		"Mouse click - previous" );
+			// Current/previous/next
+			input.val( "" ).datepicker( "refresh" ).datepicker( "open" );
+			$( ".ui-calendar-current", picker ).simulate( "click", {} );
+			date.setDate( new Date().getDate() );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				date,
+				"Mouse click - current"
+			);
 
-	input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
-	$( ".ui-calendar-next", picker ).simulate( "click" );
-	$( ".ui-calendar-calendar tbody a:contains(18)", picker ).simulate( "mousedown" );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 3 - 1, 18 ),
-		"Mouse click - next" );
+			input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
+			$( ".ui-calendar-prev", picker ).simulate( "click" );
+			$( ".ui-calendar-calendar tbody a:contains(16)", picker ).simulate( "mousedown" );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 1 - 1, 16 ),
+				"Mouse click - previous"
+			);
+
+			input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
+			$( ".ui-calendar-next", picker ).simulate( "click" );
+			$( ".ui-calendar-calendar tbody a:contains(18)", picker ).simulate( "mousedown" );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 3 - 1, 18 ),
+				"Mouse click - next"
+			);
+
+			step2();
+		}, 100 );
+	}
 
 	// Previous/next with minimum/maximum
-	input.datepicker( "option", {
-		min: new Date( 2008, 2 - 1, 2 ),
-		max: new Date( 2008, 2 - 1, 26 )
-	}).val( "2/4/08" ).datepicker( "open" );
-	$( ".ui-calendar-prev", picker ).simulate( "click" );
-	$( ".ui-calendar-calendar tbody a:contains(16)", picker ).simulate( "mousedown" );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 16 ),
-		"Mouse click - previous + min/max" );
+	function step2() {
+		input
+			.datepicker( "destroy" )
+			.val( "3/4/08" );
+		input = TestHelpers.datepicker.init( "#datepicker", {
+			min: new Date( 2008, 2 - 1, 2 ),
+			max: new Date( 2008, 2 - 1, 26 )
+		});
+		picker = input.datepicker( "widget" );
+		input.datepicker( "open" );
+		setTimeout(function() {
+			$( ".ui-calendar-prev", picker ).simulate( "click" );
+			$( "tbody a:contains(16)", picker ).simulate( "mousedown" );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 2 - 1, 16 ),
+				"Mouse click - previous + min/max"
+			);
+			step3();
+		}, 100 );
+	}
 
-	input.val( "2/4/08" ).datepicker( "open" );
-	$( ".ui-calendar-next", picker ).simulate( "click" );
-	$( ".ui-calendar-calendar tbody a:contains(18)", picker ).simulate( "mousedown" );
-	TestHelpers.datepicker.equalsDate(input.datepicker( "valueAsDate" ), new Date( 2008, 2 - 1, 18 ),
-		"Mouse click - next + min/max" );
+	function step3() {
+		input
+			.datepicker( "destroy" )
+			.val( "1/4/08" );
+		input = TestHelpers.datepicker.init( "#datepicker", {
+			min: new Date( 2008, 2 - 1, 2 ),
+			max: new Date( 2008, 2 - 1, 26 )
+		});
+		picker = input.datepicker( "widget" );
+		input.datepicker( "open" );
+		setTimeout(function() {
+			$( ".ui-calendar-next", picker ).simulate( "click" );
+			$( "tbody a:contains(18)", picker ).simulate( "mousedown" );
+			TestHelpers.datepicker.equalsDate(
+				input.datepicker( "valueAsDate" ),
+				new Date( 2008, 2 - 1, 18 ),
+				"Mouse click - next + min/max"
+			);
+			start();
+		}, 100 );
+	}
+
+	step1();
 });
 
 })( jQuery );
