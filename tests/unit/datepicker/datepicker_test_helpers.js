@@ -19,7 +19,7 @@ TestHelpers.datepicker = {
 		return $( id ).datepicker( options );
 	},
 	initNewInput: function( options ) {
-		options = $.extend( { show: false }, options || {} );
+		options = $.extend( { show: false, hide: false }, options || {} );
 		return $( "<input>" ).datepicker( options )
 			.appendTo( "#qunit-fixture" );
 	}
