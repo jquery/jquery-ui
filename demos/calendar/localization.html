@@ -16,12 +16,15 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		var calendar = $( "#calendar" ).calendar(),
-			date = calendar.calendar( "valueAsDate" );
+		var calendar = $( "#calendar" ),
+			select = $( "#locale" );
 
-		$( "#locale" ).change( function() {
+		Globalize.locale( select.val() );
+		calendar.calendar();
+
+		select.change( function() {
 			Globalize.locale( $( this ).val() );
-			calendar.calendar( "valueAsDate", date );
+			calendar.calendar( "valueAsDate", calendar.calendar( "valueAsDate" ) );
 		});
 	});
 	</script>
