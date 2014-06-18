@@ -237,9 +237,7 @@ grunt.initConfig({
 				"external": "jshint/dist/jshint.js"
 			}
 		},
-		// TODO need to change this path to jquery/dist/jquery.js
-		// once we upgrade to 1.11+
-		"jquery.js": "jquery/jquery.js"
+		"jquery.js": "jquery/dist/jquery.js"
 	}
 });
 
