@@ -219,7 +219,8 @@ grunt.initConfig({
 
 	bowercopy: {
 		options: {
-			clean: true
+			clean: true,
+			runBower: false
 		},
 		qunit: {
 			files: {
@@ -245,5 +246,6 @@ grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllin
 grunt.registerTask( "test", [ "qunit" ]);
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ]);
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ]);
+grunt.registerTask( "bower", [ "bowerinstall", "bowercopy" ]);
 
 };

@@ -131,4 +131,22 @@ grunt.registerTask( "asciilint", function() {
 	return valid;
 });
 
+// Replace once https://github.com/timmywil/grunt-bowercopy/issues/19 is implemented
+grunt.registerTask( "bowerinstall", function() {
+	var version = grunt.file.readJSON( "bower.json" ).devDependencies.jquery,
+		// bower install <endpoint> also installs project dependencies
+		args = [ "install", "jquery#" + version ],
+		done = this.async();
+	grunt.log.writeln( "Running 'bower " + args.join( " " ) + "'" );
+	grunt.util.spawn({
+		cmd: "bower",
+		args: args
+	}, function( error ) {
+		if ( error ) {
+			grunt.log.error( error );
+		}
+		done( !error );
+	});
+});
+
 };
