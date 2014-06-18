@@ -32,9 +32,7 @@
 }(function( $ ) {
 
 var widget,
-	calendarOptions = [ "dateFormat", "eachDay", "max", "min", "numberOfMonths", "showWeek" ],
-	// TODO Move this to the instance?
-	suppressExpandOnFocus = false;
+	calendarOptions = [ "dateFormat", "eachDay", "max", "min", "numberOfMonths", "showWeek" ];
 
 widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
@@ -55,6 +53,7 @@ widget = $.widget( "ui.datepicker", {
 	},
 
 	_create: function() {
+		this.suppressExpandOnFocus = false;
 		this._createCalendar();
 
 		this._on( this._inputEvents );
@@ -100,9 +99,10 @@ widget = $.widget( "ui.datepicker", {
 
 		this._setHiddenPicker();
 
-		this.element
-			.attr( "aria-haspopup", "true" )
-			.attr( "aria-owns", this.calendar.attr( "id" ) );
+		this.element.attr({
+			"aria-haspopup": true,
+			"aria-owns": this.calendar.attr( "id" )
+		});
 	},
 
 	_inputEvents: {
@@ -135,7 +135,7 @@ widget = $.widget( "ui.datepicker", {
 		},
 		mousedown: function( event ) {
 			if ( this.isOpen ) {
-				suppressExpandOnFocus = true;
+				this.suppressExpandOnFocus = true;
 				this.close();
 				return;
 			}
@@ -143,19 +143,17 @@ widget = $.widget( "ui.datepicker", {
 			clearTimeout( this.closeTimer );
 		},
 		focus: function( event ) {
-			if ( !suppressExpandOnFocus ) {
+			if ( !this.suppressExpandOnFocus && !this.isOpen ) {
 				this._delay( function() {
-					if ( !this.isOpen ) {
-						this.open( event );
-					}
+					this.open( event );
 				});
 			}
 			this._delay( function() {
-				suppressExpandOnFocus = false;
+				this.suppressExpandOnFocus = false;
 			}, 100 );
 		},
 		blur: function() {
-			suppressExpandOnFocus = false;
+			this.suppressExpandOnFocus = false;
 		}
 	},
 
@@ -216,7 +214,7 @@ widget = $.widget( "ui.datepicker", {
 	},
 
 	_focusTrigger: function() {
-		suppressExpandOnFocus = true;
+		this.suppressExpandOnFocus = true;
 		this.element.focus();
 	},
 
@@ -233,14 +231,14 @@ widget = $.widget( "ui.datepicker", {
 		}
 
 		this.calendarInstance.refresh();
-
 		this.calendar
-			.attr( "aria-hidden", "false" )
-			.attr( "aria-expanded", "true" )
+			.attr({
+				"aria-hidden": false,
+				"aria-expanded": true
+			})
 			.show()
 			.position( this._buildPosition() )
 			.hide();
-
 		this._show( this.calendar, this.options.show );
 
 		// Take trigger out of tab order to allow shift-tab to skip trigger
@@ -262,9 +260,10 @@ widget = $.widget( "ui.datepicker", {
 	},
 
 	_setHiddenPicker: function() {
-		this.calendar
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
+		this.calendar.attr({
+			"aria-hidden": true,
+			"aria-expanded": false
+		});
 	},
 
 	_buildPosition: function() {
@@ -297,9 +296,7 @@ widget = $.widget( "ui.datepicker", {
 	_destroy: function() {
 		this.calendarInstance.destroy();
 		this.calendar.remove();
-		this.element
-			.removeAttr( "aria-haspopup" )
-			.removeAttr( "aria-owns" );
+		this.element.removeAttr( "aria-haspopup aria-owns" );
 	},
 
 	widget: function() {
@@ -330,7 +327,7 @@ widget = $.widget( "ui.datepicker", {
 		}
 	}
 });
-	
+
 $.each( calendarOptions, function( index, option ) {
 	$.ui.datepicker.prototype.options[ option ] = $.ui.calendar.prototype.options[ option ];
 });

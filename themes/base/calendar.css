@@ -18,6 +18,7 @@
 }
 .ui-calendar .ui-calendar-prev,
 .ui-calendar .ui-calendar-next {
+	cursor: pointer;
 	position: absolute;
 	top: 2px;
 	width: 19px;
