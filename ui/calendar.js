@@ -73,8 +73,7 @@ return $.widget( "ui.calendar", {
 			"keydown .ui-calendar-calendar": "_handleKeydown"
 		});
 
-		// TODO Use hoverable (no delegation support)? convert to _on?
-		this.element.delegate( ".ui-calendar-header button, .ui-calendar-calendar a", "mouseenter.calendar mouseleave.calendar", function() {
+		this.element.on( "mouseenter.calendar mouseleave.calendar", ".ui-calendar-header button, .ui-calendar-calendar a", function() {
 			$( this ).toggleClass( "ui-state-hover" );
 		});
 
