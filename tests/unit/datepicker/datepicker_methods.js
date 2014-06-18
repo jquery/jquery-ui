@@ -49,12 +49,12 @@ test( "open / close", function() {
 
 	input.datepicker( "open" );
 	ok( calendar.is( ":visible" ), "open: calendar visible" );
-	equal( calendar.attr( "aria-hidden" ), "false", "open: calendar aria-disabled" );
+	equal( calendar.attr( "aria-hidden" ), "false", "open: calendar aria-hidden" );
 	equal( calendar.attr( "aria-expanded" ), "true", "close: calendar aria-expanded" );
 
 	input.datepicker( "close" );
 	ok( !calendar.is( ":visible" ), "close: calendar hidden" );
-	equal( calendar.attr( "aria-hidden" ), "true", "close: calendar aria-disabled" );
+	equal( calendar.attr( "aria-hidden" ), "true", "close: calendar aria-hidden" );
 	equal( calendar.attr( "aria-expanded" ), "false", "close: calendar aria-expanded" );
 });
 
