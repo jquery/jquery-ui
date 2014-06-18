@@ -17,24 +17,17 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker();
+		var datepicker = $( "#datepicker" ).datepicker(),
+			value;
+
 		$( "#format" ).change(function() {
-			var format;
-			switch( $( this ).val() ) {
-				case "short":
-					$( "#datepicker" ).datepicker( "option", "dateFormat", {
-						date: "short"
-					});
-					break;
-				case "long":
-					$( "#datepicker" ).datepicker( "option", "dateFormat", {
-						date: "long"
-					});
-					break;
+			value = $( this ).val();
+			switch( value ) {
 				case "iso":
-					$( "#datepicker" ).datepicker( "option", "dateFormat", {
-						pattern: "yyyy-MM-dd"
-					});
+					datepicker.datepicker( "option", "dateFormat", { pattern: "yyyy-MM-dd" } );
+					break;
+				default:
+					datepicker.datepicker( "option", "dateFormat", { date: value } );
 					break;
 			}
 		});
