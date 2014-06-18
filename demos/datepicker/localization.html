@@ -17,11 +17,15 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		Globalize.locale( "de-DE" );
-		$( "#datepicker" ).datepicker();
-		$( "#locale" ).change(function() {
-			// TODO refresh the current value to convert to the selected locale
-			Globalize.locale( $(this).val() );
+		var datepicker = $( "#datepicker" ),
+			select = $( "#locale" );
+
+		Globalize.locale( select.val() );
+		datepicker.datepicker();
+
+		select.change( function() {
+			Globalize.locale( $( this ).val() );
+			datepicker.datepicker( "valueAsDate", datepicker.datepicker( "valueAsDate" ) );
 		});
 	});
 	</script>
