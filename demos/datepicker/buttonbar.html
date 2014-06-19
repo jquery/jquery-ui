@@ -18,7 +18,16 @@
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker({
-			showButtonPanel: true
+			buttons: {
+				"Today": function() {
+					$( this )
+						.datepicker( "valueAsDate", new Date() )
+						.datepicker( "close" );
+				},
+				"Close": function() {
+					$( this ).datepicker( "close" );
+				}
+			}
 		});
 	});
 	</script>
