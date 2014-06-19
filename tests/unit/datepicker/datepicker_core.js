@@ -86,6 +86,43 @@ asyncTest( "baseStructure", function() {
 	step1();
 });
 
+test( "Localization", function() {
+	expect( 10 );
+
+	var defaultLocale = Globalize.locale(),
+		input = $( "#datepicker" ),
+		date = new Date( 2014, 0, 1 ),
+		initDatepicker = function() {
+			input
+				.datepicker()
+				.datepicker( "valueAsDate", date )
+				.datepicker( "open" );
+		},
+		testLocalization = function( message ) {
+			picker = input.datepicker( "widget" );
+
+			equal( picker.find( ".ui-calendar-month" ).text(), "Januar", message + "titlebar year" );
+			equal( picker.find( "thead th:first" ).text(), "Mo.", message + "teader first day" );
+			equal( picker.find( "thead th:last" ).text(), "So.", message + "header last day" );
+			equal( picker.find( ".ui-calendar-prev" ).text(), "<Zurück", message + "header prev" );
+			equal( picker.find( ".ui-calendar-next" ).text(), "Vor>", message + "header next" );
+		},
+		picker;
+
+	Globalize.locale( "de-DE" );
+	initDatepicker();
+	testLocalization( "Init: " );
+	input.datepicker( "destroy" );
+
+	Globalize.locale( defaultLocale.locale );
+	initDatepicker();
+	Globalize.locale( "de-DE" );
+	input.datepicker( "refresh" );
+	testLocalization( "After init: " );
+
+	Globalize.locale( defaultLocale.locale );
+});
+
 test( "Keyboard handling: input", function() {
 	expect( 6 );
 	var input = $( "#datepicker" ).datepicker(),
