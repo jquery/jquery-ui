@@ -112,9 +112,6 @@ widget = $.widget( "ui.datepicker", {
 						this.close( event );
 					}
 					break;
-				case $.ui.keyCode.ENTER:
-					this.calendarInstance._handleKeydown( event );
-					break;
 				case $.ui.keyCode.DOWN:
 				case $.ui.keyCode.UP:
 					clearTimeout( this.closeTimer );

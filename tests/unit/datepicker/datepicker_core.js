@@ -87,16 +87,9 @@ asyncTest( "baseStructure", function() {
 });
 
 test( "Keyboard handling: input", function() {
-	expect( 7 );
+	expect( 6 );
 	var input = $( "#datepicker" ).datepicker(),
-		instance = input.datepicker( "instance" ),
-		date = new Date();
-
-	// Enter = Select today's date by default
-	input
-		.datepicker( "open" )
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke enter" );
+		instance = input.datepicker( "instance" );
 
 	// Enter = Select preset date
 	input
