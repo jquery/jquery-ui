@@ -110,7 +110,8 @@
 
 /* with multiple calendars */
 .ui-calendar.ui-calendar-multi {
-	width: auto
+	width: auto;
+	display: inline-block;
 }
 .ui-calendar-multi .ui-calendar-group {
 	float: left;

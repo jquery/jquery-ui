@@ -8,7 +8,7 @@
  *
  * http://api.jqueryui.com/datepicker/#theming
  */
-.ui-datepicker {
+.ui-datepicker.ui-calendar {
     display: none;
     position: absolute;
 }
