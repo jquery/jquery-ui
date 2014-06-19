@@ -123,17 +123,6 @@ widget = $.widget( "ui.datepicker", {
 						this.calendarInstance.grid.focus( 1 );
 					}, 1 );
 					break;
-				case $.ui.keyCode.HOME:
-					if ( event.ctrlKey ) {
-						this.valueAsDate( new Date() );
-						event.preventDefault();
-						if ( this.isOpen ) {
-							this.calendarInstance.refresh();
-						} else {
-							this.open( event );
-						}
-					}
-					break;
 			}
 		},
 		keyup: function() {
