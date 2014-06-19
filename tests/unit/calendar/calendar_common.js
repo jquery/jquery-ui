@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "calendar", {
 	defaults: {
+		buttons: [],
 		dateFormat: { date: "short" },
 		disabled: false,
 		eachDay: $.noop,

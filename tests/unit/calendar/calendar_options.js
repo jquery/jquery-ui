@@ -2,6 +2,111 @@
 
 module( "calendar: options" );
 
+test("buttons", function() {
+	expect( 21 );
+
+	var btn, i, newButtons,
+		buttons = {
+			"Ok": function( event ) {
+				ok(true, "button click fires callback" );
+				equal( this, element[ 0 ], "context of callback" );
+				equal( event.target, btn[ 0 ], "event target" );
+			},
+			"Cancel": function( event ) {
+				ok( true, "button click fires callback" );
+				equal( this, element[ 0 ], "context of callback" );
+				equal( event.target, btn[ 1 ], "event target" );
+			}
+		},
+		element = $( "#calendar" ).calendar({ buttons: buttons });
+
+	btn = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	equal( btn.length, 2, "number of buttons" );
+
+	i = 0;
+	$.each( buttons, function( key ) {
+		equal( btn.eq( i ).text(), key, "text of button " + ( i + 1 ) );
+		i++;
+	});
+
+	ok( btn.parent().hasClass( "ui-calendar-buttonset" ), "buttons in container" );
+	ok(
+		element.calendar( "widget" ).hasClass( "ui-calendar-buttons" ),
+		"calendar wrapper adds class about having buttons"
+	);
+
+	btn.trigger( "click" );
+
+	newButtons = {
+		"Close": function( event ) {
+			ok( true, "button click fires callback" );
+			equal( this, element[ 0 ], "context of callback" );
+			equal( event.target, btn[ 0 ], "event target" );
+		}
+	};
+
+	deepEqual(
+		element.calendar( "option", "buttons" ),
+		buttons,
+		".calendar('option', 'buttons') getter"
+	);
+	element.calendar( "option", "buttons", newButtons );
+	deepEqual(
+		element.calendar( "option", "buttons" ),
+		newButtons,
+		".calendar('option', 'buttons', ...) setter"
+	);
+
+	btn = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	equal( btn.length, 1, "number of buttons after setter" );
+	btn.trigger( "click" );
+
+	i = 0;
+	$.each( newButtons, function( key ) {
+		equal( btn.eq( i ).text(), key, "text of button " + ( i + 1 ) );
+		i += 1;
+	});
+
+	element.calendar( "option", "buttons", null );
+	btn = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	equal( btn.length, 0, "all buttons have been removed" );
+	equal( element.find( ".ui-calendar-buttonset").length, 0, "buttonset has been removed" );
+	equal( element.parent().hasClass( "ui-calendar-buttons" ), false, "dialog wrapper removes class about having buttons" );
+
+	element.remove();
+});
+
+test( "buttons - advanced", function() {
+	expect( 7 );
+
+	var buttons,
+		element = $( "#calendar" ).calendar({
+			buttons: [{
+				text: "a button",
+				"class": "additional-class",
+				id: "my-button-id",
+				click: function() {
+					equal(this, element[ 0 ], "correct context");
+				},
+				icons: {
+					primary: "ui-icon-cancel"
+				},
+				showText: false
+			}]
+		});
+
+	buttons = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	equal( buttons.length, 1, "correct number of buttons" );
+	equal( buttons.attr( "id" ), "my-button-id", "correct id" );
+	equal (buttons.text(), "a button", "correct label" );
+	ok( buttons.hasClass( "additional-class" ), "additional classes added" );
+	deepEqual( buttons.button( "option", "icons" ), { primary: "ui-icon-cancel", secondary: null } );
+	equal( buttons.button( "option", "text" ), false );
+	buttons.click();
+
+	element.remove();
+});
+
 test( "dateFormat", function() {
 	expect( 2 );
 	var element = $( "#calendar" ).calendar({

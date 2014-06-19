@@ -15,7 +15,9 @@ TestHelpers.calendar = {
 		equal( d1.toString(), d2.toString(), message );
 	},
 	focusGrid: function( element ) {
-		element.find( "table:tabbable" ).simulate( "focus" );
+		element.find( ":tabbable" ).last().simulate( "focus" );
+		$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+		$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
 
 		return $( ":focus" );
 	}

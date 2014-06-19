@@ -13,6 +13,7 @@
 
 		// AMD. Register as an anonymous module.
 		// TODO: Add globalize and $.date?
+		// TODO: Keep button even if its optional?
 		define([
 			"jquery",
 			"./core",
@@ -29,6 +30,7 @@
 return $.widget( "ui.calendar", {
 	version: "@VERSION",
 	options: {
+		buttons: [],
 		dateFormat: { date: "short" },
 		// TODO: review
 		eachDay: $.noop,
@@ -59,10 +61,6 @@ return $.widget( "ui.calendar", {
 				event.preventDefault();
 				this.date.adjust( "M", this.options.numberOfMonths );
 				this.refresh();
-			},
-			"click .ui-calendar-current": function( event ) {
-				event.preventDefault();
-				this._select( event, new Date().getTime() );
 			},
 			"mousedown .ui-calendar-calendar a": function( event ) {
 				event.preventDefault();
@@ -148,7 +146,7 @@ return $.widget( "ui.calendar", {
 			pickerHtml = "";
 
 		if ( this.options.numberOfMonths === 1 ) {
-			pickerHtml = this._buildHeader() + this._buildGrid() + this._buildButtons();
+			pickerHtml = this._buildHeader() + this._buildGrid();
 		} else {
 			pickerHtml = this._buildMultiplePicker();
 			classes += " ui-calendar-multi";
@@ -161,6 +159,8 @@ return $.widget( "ui.calendar", {
 				"aria-labelledby": this.id + "-title"
 			})
 			.html( pickerHtml );
+
+		this._createButtonPane();
 
 		this.grid = this.element.find( ".ui-calendar-calendar" );
 	},
@@ -194,7 +194,6 @@ return $.widget( "ui.calendar", {
 		}
 
 		html += "<div class='ui-calendar-row-break'></div>";
-		html += this._buildButtons();
 
 		this.date = currentDate;
 
@@ -362,10 +361,58 @@ return $.widget( "ui.calendar", {
 		return content;
 	},
 
-	_buildButtons: function() {
-		return "<div class='ui-calendar-buttonpane ui-widget-content'>" +
-				"<button class='ui-calendar-current'>" + this.labels.currentText + "</button>" +
-			"</div>";
+	_createButtonPane: function() {
+		this.buttonPane = $( "<div>" )
+			.addClass( "ui-calendar-buttonpane ui-widget-content ui-helper-clearfix" );
+
+		this.buttonSet = $( "<div>" )
+			.addClass( "ui-calendar-buttonset" )
+			.appendTo( this.buttonPane );
+
+		this._createButtons();
+	},
+
+	_createButtons: function() {
+		var that = this,
+			buttons = this.options.buttons;
+
+		// if we already have a button pane, remove it
+		this.buttonPane.remove();
+		this.buttonSet.empty();
+
+		if ( $.isEmptyObject( buttons ) || ( $.isArray( buttons ) && !buttons.length ) ) {
+			this.element.removeClass( "ui-calendar-buttons" );
+			return;
+		}
+
+		$.each( buttons, function( name, props ) {
+			var click, buttonOptions;
+			props = $.isFunction( props ) ?
+			{ click: props, text: name } :
+				props;
+			// Default to a non-submitting button
+			props = $.extend( { type: "button" }, props );
+			// Change the context for the click callback to be the main element
+			click = props.click;
+			props.click = function() {
+				click.apply( that._buttonClickContext(), arguments );
+			};
+			buttonOptions = {
+				icons: props.icons,
+				text: props.showText
+			};
+			delete props.icons;
+			delete props.showText;
+			$( "<button></button>", props )
+				.button( buttonOptions )
+				.appendTo( that.buttonSet );
+		});
+		this.element.addClass( "ui-calendar-buttons" );
+		this.buttonPane.appendTo( this.element );
+	},
+
+	_buttonClickContext: function() {
+		return this.element[ 0 ];
 	},
 
 	// Refreshing the entire calendar during interaction confuses screen readers, specifically
@@ -385,6 +432,7 @@ return $.widget( "ui.calendar", {
 				.children().html( this.labels.prevText );
 			$( ".ui-calendar-next", this.element ).attr( "title", this.labels.nextText )
 				.children().html( this.labels.nextText );
+			this._createButtons();
 		} else {
 			this._refreshMultiplePicker();
 		}
@@ -479,6 +527,10 @@ return $.widget( "ui.calendar", {
 		}
 
 		this._super( key, value );
+
+		if ( key === "buttons" ) {
+			this._createButtons();
+		}
 
 		if ( key === "eachDay" ) {
 			this.date.eachDay = value;
