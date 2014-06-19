@@ -87,7 +87,7 @@ asyncTest( "baseStructure", function() {
 });
 
 test( "Keyboard handling: input", function() {
-	expect( 8 );
+	expect( 7 );
 	var input = $( "#datepicker" ).datepicker(),
 		instance = input.datepicker( "instance" ),
 		date = new Date();
@@ -106,13 +106,6 @@ test( "Keyboard handling: input", function() {
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 		"Keystroke enter - preset" );
-
-	// Control + Home = Change the calendar to the current month
-	input
-		.val( "1/1/14" ).datepicker( "open" )
-		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.HOME } )
-		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), date, "Keystroke ctrl+home" );
 
 	input
 		.val( "" )
