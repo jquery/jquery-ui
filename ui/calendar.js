@@ -12,7 +12,7 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		// ToDo Add globalize and $.date?
+		// TODO: Add globalize and $.date?
 		define([
 			"jquery",
 			"./core",
@@ -30,7 +30,7 @@ return $.widget( "ui.calendar", {
 	version: "@VERSION",
 	options: {
 		dateFormat: { date: "short" },
-		// TODO review
+		// TODO: review
 		eachDay: $.noop,
 		max: null,
 		min: null,
@@ -65,8 +65,8 @@ return $.widget( "ui.calendar", {
 			},
 			"mousedown .ui-calendar-calendar a": function( event ) {
 				event.preventDefault();
-				// TODO exclude clicks on lead days or handle them correctly
-				// TODO store/read more then just date, also required for multi month picker
+				// TODO: exclude clicks on lead days or handle them correctly
+				// TODO: store/read more then just date, also required for multi month picker
 				this._select( event, $( event.currentTarget ).data( "timestamp" ) );
 				this.grid.focus( 1 );
 			},
@@ -133,12 +133,12 @@ return $.widget( "ui.calendar", {
 	},
 
 	_setActiveDescendant: function() {
-		var newId = this.id + "-" + this.date.day(),
-			newCell = $( "#" + newId );
+		var id = this.id + "-" + this.date.day();
 
-		this.grid.attr( "aria-activedescendant", newId );
-		this.grid.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
-		newCell.children( "a" ).addClass( "ui-state-focus" );
+		this.grid
+			.attr( "aria-activedescendant", id )
+			.removeClass( "ui-state-focus" );
+		$( "#" + id + " a" ).addClass( "ui-state-focus" );
 	},
 
 	_createCalendar: function() {
@@ -173,7 +173,7 @@ return $.widget( "ui.calendar", {
 			i = 0;
 
 		for ( i; i < months.length; i++ ) {
-			// TODO Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
+			// TODO: Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
 			this.date = months[ i ];
 			headerClass = months[ i ].first ? "ui-corner-left" :
 				months[ i ].last ? "ui-corner-right" : "";
@@ -305,6 +305,7 @@ return $.widget( "ui.calendar", {
 		for ( i; i < week.days.length; i++ ) {
 			cells += this._buildDayCell( week.days[i] );
 		}
+
 		return "<tr role='row'>" + cells + "</tr>";
 	},
 
@@ -344,7 +345,7 @@ return $.widget( "ui.calendar", {
 		if ( day.today ) {
 			classes.push( "ui-state-highlight" );
 		}
-		// ToDo Explain and document this
+		// TODO: Explain and document this
 		if ( day.extraClasses ) {
 			classes.push( day.extraClasses.split( " " ) );
 		}
@@ -403,12 +404,6 @@ return $.widget( "ui.calendar", {
 		$( this.element ).find( ".ui-state-focus" ).not( ":first" ).removeClass( "ui-state-focus" );
 	},
 
-	_setHiddenPicker: function() {
-		this.element
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
-	},
-
 	_select: function( event, time ) {
 		this._setOption( "value", new Date( time ) );
 		this._trigger( "select", event );
@@ -462,6 +457,7 @@ return $.widget( "ui.calendar", {
 		if ( arguments.length === 0 || ( arguments.length === 1 && key === "value" ) ) {
 			this.options.value = this.date.selectedDate();
 		}
+
 		return this._superApply( arguments );
 	},
 
