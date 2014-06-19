@@ -40,6 +40,22 @@ test( "appendTo", function() {
 	input.datepicker( "destroy" );
 });
 
+test("buttons", function() {
+	expect( 3 );
+
+	var button,
+		buttons = {
+			"Ok": function() {},
+			"Cancel": function() {}
+		},
+		element = $( "#datepicker" ).datepicker({ buttons: buttons });
+
+	button = element.datepicker( "widget" ).find( ".ui-calendar-buttonpane button" );
+	equal( button.length, 2, "number of buttons" );
+	ok( button.parent().hasClass( "ui-calendar-buttonset" ), "buttons in container");
+	ok( element.datepicker( "widget" ).hasClass( "ui-calendar-buttons" ), "calendar wrapper adds class about having buttons" );
+});
+
 test( "dateFormat", function() {
 	expect( 2 );
 	var input = $( "#datepicker" ).val( "1/1/14" ).datepicker(),
@@ -149,7 +165,7 @@ test( "showWeek", function() {
 	input.datepicker( "option", "showWeek", true );
 	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
 });
-	
+
 test( "min / max", function() {
 	expect( 14 );
 
