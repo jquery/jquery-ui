@@ -76,7 +76,7 @@ test( "open", function() {
 });
 
 asyncTest( "select", function() {
-	expect( 6 );
+	expect( 4 );
 
 	var input = TestHelpers.datepicker.init( "#datepicker", {
 			select: function( event ) {
@@ -92,15 +92,6 @@ asyncTest( "select", function() {
 		message = "";
 
 	function step1() {
-		message = "on input enter";
-		input
-			.simulate( "focus" )
-			.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		input.datepicker( "close" );
-		step2();
-	}
-
-	function step2() {
 		message = "on calendar cell click";
 		input
 			.simulate( "focus" )
@@ -108,11 +99,11 @@ asyncTest( "select", function() {
 		setTimeout(function() {
 			widget.find( "tbody tr:first td:first a" ).simulate( "mousedown" );
 			input.datepicker( "close" );
-			step3();
+			step2();
 		}, 100 );
 	}
 
-	function step3() {
+	function step2() {
 		message = "on calendar cell enter";
 		input
 			.simulate( "focus" )
@@ -122,11 +113,11 @@ asyncTest( "select", function() {
 				.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			input.datepicker( "close" );
-			step4();
+			step3();
 		}, 100 );
 	}
 
-	function step4() {
+	function step3() {
 		message = "on calendar escape (not expected)";
 		input
 			.simulate( "focus" )
