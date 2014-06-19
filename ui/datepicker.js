@@ -32,7 +32,7 @@
 }(function( $ ) {
 
 var widget,
-	calendarOptions = [ "dateFormat", "eachDay", "max", "min", "numberOfMonths", "showWeek" ];
+	calendarOptions = [ "buttons", "dateFormat", "eachDay", "max", "min", "numberOfMonths", "showWeek" ];
 
 widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
@@ -96,6 +96,8 @@ widget = $.widget( "ui.datepicker", {
 				}
 			}) )
 			.calendar( "instance" );
+
+		this.calendarInstance.buttonClickContext = that.element[ 0 ];
 
 		this._setHiddenPicker();
 
