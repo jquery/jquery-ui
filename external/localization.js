@@ -2768,7 +2768,7 @@ var regions = {
 	},
 	"de": {
 		"closeText": "Schlie\u00dfen",
-		"prevText": "&#x3c;zur\u00fcck",
+		"prevText": "&#x3c;Zur\u00fcck",
 		"nextText": "Vor&#x3e;",
 		"currentText": "Heute",
 		"weekHeader": "Wo",
