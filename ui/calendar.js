@@ -44,6 +44,7 @@ return $.widget( "ui.calendar", {
 
 	_create: function() {
 		this.id = this.element.uniqueId().attr( "id" );
+		this.labels = Globalize.translate( "datepicker" );
 
 		this.date = $.date( this.options.value, this.options.dateFormat ).select();
 		this.date.eachDay = this.options.eachDay;
@@ -204,41 +205,39 @@ return $.widget( "ui.calendar", {
 
 	_buildHeader: function() {
 		return "<div class='ui-calendar-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
-			this._buildPreviousLink() +
-			this._buildNextLink() +
-			this._buildTitlebar() +
-		"</div>";
+				this._buildPreviousLink() +
+				this._buildNextLink() +
+				this._buildTitlebar() +
+			"</div>";
 	},
 
 	_buildPreviousLink: function() {
-		var labels = Globalize.translate( "datepicker" );
-
-		return "<button class='ui-calendar-prev ui-corner-all' title='" + labels.prevText + "'>" +
+		return "<button class='ui-calendar-prev ui-corner-all' title='" +
+					this.labels.prevText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-w'>" +
-					labels.prevText +
+					this.labels.prevText +
 				"</span>" +
 			"</button>";
 	},
 
 	_buildNextLink: function() {
-		var labels = Globalize.translate( "datepicker" );
-
-		return "<button class='ui-calendar-next ui-corner-all' title='" + labels.nextText + "'>" +
+		return "<button class='ui-calendar-next ui-corner-all' " +
+				"title='" + this.labels.nextText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-e'>" +
-					labels.nextText +
+					this.labels.nextText +
 				"</span>" +
 			"</button>";
 	},
 
 	_buildTitlebar: function() {
-		var labels = Globalize.translate( "datepicker" );
-
 		return "<div role='header' id='" + this.id + "-title'>" +
-			"<div id='" + this.id + "-month-lbl' class='ui-calendar-title'>" +
-				this._buildTitle() +
-			"</div>" +
-			"<span class='ui-helper-hidden-accessible'>, " + labels.datePickerRole + "</span>" +
-		"</div>";
+				"<div id='" + this.id + "-month-lbl' class='ui-calendar-title'>" +
+					this._buildTitle() +
+				"</div>" +
+				"<span class='ui-helper-hidden-accessible'>, " +
+					this.labels.datePickerRole +
+				"</span>" +
+			"</div>";
 	},
 
 	_buildTitle: function() {
@@ -260,27 +259,26 @@ return $.widget( "ui.calendar", {
 
 	_buildGridHeading: function() {
 		var cells = "",
-			i = 0,
-			labels = Globalize.translate( "datepicker" );
+			i = 0;
 
 		if ( this.options.showWeek ) {
-			cells += "<th class='ui-calendar-week-col'>" + labels.weekHeader + "</th>";
+			cells += "<th class='ui-calendar-week-col'>" + this.labels.weekHeader + "</th>";
 		}
 		for ( i; i < this.date.weekdays().length; i++ ) {
 			cells += this._buildGridHeaderCell( this.date.weekdays()[i] );
 		}
 
 		return "<thead role='presentation'>" +
-			"<tr role='row'>" + cells + "</tr>" +
-		"</thead>";
+				"<tr role='row'>" + cells + "</tr>" +
+			"</thead>";
 	},
 
 	_buildGridHeaderCell: function( day ) {
 		return "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
-			"<span title='" + day.fullname + "'>" +
-				day.shortname +
-			"</span>" +
-		"</th>";
+				"<span title='" + day.fullname + "'>" +
+					day.shortname +
+				"</span>" +
+			"</th>";
 	},
 
 	_buildGridBody: function() {
@@ -334,7 +332,6 @@ return $.widget( "ui.calendar", {
 
 	_buildDayElement: function( day, selectable ) {
 		var classes = [ "ui-state-default" ],
-			labels = Globalize.translate( "datepicker" ),
 			content = "";
 
 		if ( day === this.date && selectable ) {
@@ -359,18 +356,16 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( day.today ) {
-			content += "<span class='ui-helper-hidden-accessible'>, " + labels.currentText + "</span>";
+			content += "<span class='ui-helper-hidden-accessible'>, " + this.labels.currentText + "</span>";
 		}
 
 		return content;
 	},
 
 	_buildButtons: function() {
-		var labels = Globalize.translate( "datepicker" );
-
 		return "<div class='ui-calendar-buttonpane ui-widget-content'>" +
-			"<button class='ui-calendar-current'>" + labels.currentText + "</button>" +
-		"</div>";
+				"<button class='ui-calendar-current'>" + this.labels.currentText + "</button>" +
+			"</div>";
 	},
 
 	// Refreshing the entire calendar during interaction confuses screen readers, specifically
