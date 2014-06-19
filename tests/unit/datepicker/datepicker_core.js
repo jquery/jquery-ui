@@ -29,7 +29,7 @@ asyncTest( "base structure", function() {
 
 	setTimeout(function() {
 		ok( widget.is( ":visible" ), "Datepicker visible" );
-		equal( widget.children().length, 3, "Child count" );
+		equal( widget.children().length, 2, "Child count" );
 		ok( widget.is( ".ui-calendar" ), "Class ui-calendar" );
 		ok( widget.is( ".ui-datepicker" ), "Class ui-datepicker" );
 		ok( widget.is( ".ui-front" ), "Class ui-front" );
