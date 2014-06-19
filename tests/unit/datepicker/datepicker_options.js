@@ -469,37 +469,6 @@ test( "daylightSaving", function() {
 	$( ".ui-calendar-calendar td:eq(8) a", dp).simulate( "click" );
 	equal(inp.val(), "11/03/2008", "Daylight saving - US 11/03/2008" );
 });
-
-// TODO: Move to calendar. Perhaps adda calendar_external test file?
-test( "localization", function() {
-	expect( 24 );
-	var dp, month, day, date,
-		inp = TestHelpers.datepicker.init( "#inp", $.datepicker.regional.fr);
-	inp.datepicker( "option", {dateFormat: "DD, d MM yy", showButtonPanel:true, changeMonth:true, changeYear:true}).val( "" ).datepicker( "show" );
-	dp = $( "#ui-datepicker-div" );
-	equal($( ".ui-calendar-close", dp).text(), "Fermer", "Localisation - close" );
-	$( ".ui-calendar-close", dp).simulate( "mouseover" );
-	equal($( ".ui-calendar-prev", dp).text(), "Précédent", "Localisation - previous" );
-	equal($( ".ui-calendar-current", dp).text(), "Aujourd'hui", "Localisation - current" );
-	equal($( ".ui-calendar-next", dp).text(), "Suivant", "Localisation - next" );
-	month = 0;
-	$( ".ui-calendar-month option", dp).each(function() {
-		equal($(this).text(), $.datepicker.regional.fr.monthNamesShort[month],
-			"Localisation - month " + month);
-		month++;
-	});
-	day = 1;
-	$( ".ui-calendar-calendar th", dp).each(function() {
-		equal($(this).text(), $.datepicker.regional.fr.dayNamesMin[day],
-			"Localisation - day " + day);
-		day = (day + 1) % 7;
-	});
-	inp.simulate( "keydown", {keyCode: $.ui.keyCode.ENTER});
-	date = new Date();
-	equal(inp.val(), $.datepicker.regional.fr.dayNames[date.getDay()] + ", " +
-		date.getDate() + " " + $.datepicker.regional.fr.monthNames[date.getMonth()] +
-		" " + date.getFullYear(), "Localisation - formatting" );
-});
  */
 
 test( "Ticket 7602: Stop datepicker from appearing with beforeOpen event handler", function() {
