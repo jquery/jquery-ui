@@ -44,6 +44,7 @@ return $.widget( "ui.calendar", {
 
 	_create: function() {
 		this.id = this.element.uniqueId().attr( "id" );
+		this.labels = Globalize.translate( "datepicker" );
 
 		this.date = $.date( this.options.value, this.options.dateFormat ).select();
 		this.date.eachDay = this.options.eachDay;
@@ -73,7 +74,7 @@ return $.widget( "ui.calendar", {
 			"keydown .ui-calendar-calendar": "_handleKeydown"
 		});
 
-		this.element.on( "mouseenter.calendar mouseleave.calendar", ".ui-calendar-header a, .ui-calendar-calendar a", function() {
+		this.element.on( "mouseenter.calendar mouseleave.calendar", ".ui-calendar-header button, .ui-calendar-calendar a", function() {
 			$( this ).toggleClass( "ui-state-hover" );
 		});
 
@@ -161,8 +162,6 @@ return $.widget( "ui.calendar", {
 			})
 			.html( pickerHtml );
 
-		this.element.find( "button" ).button();
-
 		this.grid = this.element.find( ".ui-calendar-calendar" );
 	},
 
@@ -204,41 +203,39 @@ return $.widget( "ui.calendar", {
 
 	_buildHeader: function() {
 		return "<div class='ui-calendar-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
-			this._buildPreviousLink() +
-			this._buildNextLink() +
-			this._buildTitlebar() +
-		"</div>";
+				this._buildPreviousLink() +
+				this._buildNextLink() +
+				this._buildTitlebar() +
+			"</div>";
 	},
 
 	_buildPreviousLink: function() {
-		var labels = Globalize.translate( "datepicker" );
-
-		return "<button class='ui-calendar-prev ui-corner-all' title='" + labels.prevText + "'>" +
+		return "<button class='ui-calendar-prev ui-corner-all' title='" +
+					this.labels.prevText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-w'>" +
-					labels.prevText +
+					this.labels.prevText +
 				"</span>" +
 			"</button>";
 	},
 
 	_buildNextLink: function() {
-		var labels = Globalize.translate( "datepicker" );
-
-		return "<button class='ui-calendar-next ui-corner-all' title='" + labels.nextText + "'>" +
+		return "<button class='ui-calendar-next ui-corner-all' title='" +
+					this.labels.nextText + "'>" +
 				"<span class='ui-icon ui-icon-circle-triangle-e'>" +
-					labels.nextText +
+					this.labels.nextText +
 				"</span>" +
 			"</button>";
 	},
 
 	_buildTitlebar: function() {
-		var labels = Globalize.translate( "datepicker" );
-
 		return "<div role='header' id='" + this.id + "-title'>" +
-			"<div id='" + this.id + "-month-lbl' class='ui-calendar-title'>" +
-				this._buildTitle() +
-			"</div>" +
-			"<span class='ui-helper-hidden-accessible'>, " + labels.datePickerRole + "</span>" +
-		"</div>";
+				"<div id='" + this.id + "-month-lbl' class='ui-calendar-title'>" +
+					this._buildTitle() +
+				"</div>" +
+				"<span class='ui-helper-hidden-accessible'>, " +
+					this.labels.datePickerRole +
+				"</span>" +
+			"</div>";
 	},
 
 	_buildTitle: function() {
@@ -252,39 +249,40 @@ return $.widget( "ui.calendar", {
 
 	_buildGrid: function() {
 		return "<table class='ui-calendar-calendar' role='grid' aria-readonly='true' " +
-			"aria-labelledby='" + this.id + "-month-lbl' tabindex='0' aria-activedescendant='" + this.id + "-" + this.date.day() + "'>" +
-			this._buildGridHeading() +
-			this._buildGridBody() +
-		"</table>";
+				"aria-labelledby='" + this.id + "-month-lbl' tabindex='0' " +
+				"aria-activedescendant='" + this.id + "-" + this.date.day() + "'>" +
+				this._buildGridHeading() +
+				this._buildGridBody() +
+			"</table>";
 	},
 
 	_buildGridHeading: function() {
 		var cells = "",
-			i = 0,
-			labels = Globalize.translate( "datepicker" );
+			i = 0;
 
 		if ( this.options.showWeek ) {
-			cells += "<th class='ui-calendar-week-col'>" + labels.weekHeader + "</th>";
+			cells += "<th class='ui-calendar-week-col'>" + this.labels.weekHeader + "</th>";
 		}
 		for ( i; i < this.date.weekdays().length; i++ ) {
 			cells += this._buildGridHeaderCell( this.date.weekdays()[i] );
 		}
 
 		return "<thead role='presentation'>" +
-			"<tr role='row'>" + cells + "</tr>" +
-		"</thead>";
+				"<tr role='row'>" + cells + "</tr>" +
+			"</thead>";
 	},
 
 	_buildGridHeaderCell: function( day ) {
 		return "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
-			"<span title='" + day.fullname + "'>" +
-				day.shortname +
-			"</span>" +
-		"</th>";
+				"<span title='" + day.fullname + "'>" +
+					day.shortname +
+				"</span>" +
+			"</th>";
 	},
 
 	_buildGridBody: function() {
-		// this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times. So, it equals O(n^3). Not good at all. Caching.
+		// TODO: this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times.
+		// So, it equals O(n^3). Not good at all. Caching.
 		var days = this.date.days(),
 			i = 0,
 			rows = "";
@@ -334,7 +332,6 @@ return $.widget( "ui.calendar", {
 
 	_buildDayElement: function( day, selectable ) {
 		var classes = [ "ui-state-default" ],
-			labels = Globalize.translate( "datepicker" ),
 			content = "";
 
 		if ( day === this.date && selectable ) {
@@ -359,18 +356,16 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( day.today ) {
-			content += "<span class='ui-helper-hidden-accessible'>, " + labels.currentText + "</span>";
+			content += "<span class='ui-helper-hidden-accessible'>, " + this.labels.currentText + "</span>";
 		}
 
 		return content;
 	},
 
 	_buildButtons: function() {
-		var labels = Globalize.translate( "datepicker" );
-
 		return "<div class='ui-calendar-buttonpane ui-widget-content'>" +
-			"<button class='ui-calendar-current'>" + labels.currentText + "</button>" +
-		"</div>";
+				"<button class='ui-calendar-current'>" + this.labels.currentText + "</button>" +
+			"</div>";
 	},
 
 	// Refreshing the entire calendar during interaction confuses screen readers, specifically
@@ -379,12 +374,17 @@ return $.widget( "ui.calendar", {
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
+		this.labels = Globalize.translate( "datepicker" );
 		// determine which day gridcell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
 			this.grid = $( this._buildGrid() );
 			$( ".ui-calendar-title", this.element ).html( this._buildTitle() );
 			$( ".ui-calendar-calendar", this.element ).replaceWith( this.grid );
+			$( ".ui-calendar-prev", this.element ).attr( "title", this.labels.prevText )
+				.children().html( this.labels.prevText );
+			$( ".ui-calendar-next", this.element ).attr( "title", this.labels.nextText )
+				.children().html( this.labels.nextText );
 		} else {
 			this._refreshMultiplePicker();
 		}

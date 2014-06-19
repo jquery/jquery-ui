@@ -65,7 +65,7 @@ test( "baseStructure", function() {
 });
 
 test( "Localization", function() {
-	expect( 5 );
+	expect( 10 );
 
 	var defaultLocale = Globalize.locale(),
 		element = $( "#calendar" ),
@@ -87,6 +87,12 @@ test( "Localization", function() {
 	initCalendar();
 	testLocalization( "Init: " );
 	element.calendar( "destroy" );
+
+	Globalize.locale( defaultLocale.locale );
+	initCalendar();
+	Globalize.locale( "de-DE" );
+	element.calendar( "refresh" );
+	testLocalization( "After init: " );
 
 	Globalize.locale( defaultLocale.locale );
 });
