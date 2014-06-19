@@ -38,7 +38,7 @@ asyncTest( "#3173: Sortable: connected sortables do not scroll on transfer", fun
 	setTimeout(function() {
 		var top = element2.scrollTop();
 		ok( top > 0, "sortable list scrolls down" );
-        start()
+		start();
 	}, 200 );  
 });
 
