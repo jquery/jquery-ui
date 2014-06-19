@@ -374,6 +374,7 @@ return $.widget( "ui.calendar", {
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
+		this.labels = Globalize.translate( "datepicker" );
 		// determine which day gridcell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
