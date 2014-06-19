@@ -137,8 +137,9 @@ return $.widget( "ui.calendar", {
 
 		this.grid
 			.attr( "aria-activedescendant", id )
+			.find( ".ui-state-focus" )
 			.removeClass( "ui-state-focus" );
-		$( "#" + id + " a" ).addClass( "ui-state-focus" );
+		$( "#" + id + " > a" ).addClass( "ui-state-focus" );
 	},
 
 	_createCalendar: function() {
