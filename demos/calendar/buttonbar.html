@@ -17,7 +17,11 @@
 	<script>
 	$(function() {
 		$( "#calendar" ).calendar({
-			showButtonPanel: true
+			buttons: {
+				"Today": function() {
+					$( this ).calendar( "valueAsDate", new Date() );
+				}
+			}
 		});
 	});
 	</script>
