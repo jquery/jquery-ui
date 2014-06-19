@@ -381,7 +381,7 @@ return $.widget( "ui.calendar", {
 		this.buttonSet.empty();
 
 		if ( $.isEmptyObject( buttons ) || ( $.isArray( buttons ) && !buttons.length ) ) {
-			this.element.removeClass( "ui-dialog-buttons" );
+			this.element.removeClass( "ui-calendar-buttons" );
 			return;
 		}
 
@@ -407,7 +407,7 @@ return $.widget( "ui.calendar", {
 				.button( buttonOptions )
 				.appendTo( that.buttonSet );
 		});
-		this.element.addClass( "ui-dialog-buttons" );
+		this.element.addClass( "ui-calendar-buttons" );
 		this.buttonPane.appendTo( this.element );
 	},
 
