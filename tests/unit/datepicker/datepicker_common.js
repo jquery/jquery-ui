@@ -1,6 +1,7 @@
 TestHelpers.commonWidgetTests( "datepicker", {
 	defaults: {
 		appendTo: null,
+		buttons: [],
 		dateFormat: { date: "short" },
 		disabled: false,
 		eachDay: $.noop,
