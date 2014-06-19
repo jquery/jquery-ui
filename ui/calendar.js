@@ -282,7 +282,8 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildGridBody: function() {
-		// this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times. So, it equals O(n^3). Not good at all. Caching.
+		// TODO: this.date.days() is not cached, and it has O(n^2) complexity. It is run O(n) times.
+		// So, it equals O(n^3). Not good at all. Caching.
 		var days = this.date.days(),
 			i = 0,
 			rows = "";
