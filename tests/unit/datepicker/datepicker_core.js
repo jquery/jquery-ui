@@ -20,9 +20,9 @@ test( "input's value determines starting date", function() {
 });
 
 asyncTest( "baseStructure", function() {
-	expect( 23 );
+	expect( 27 );
 
-	var header, title, table, thead, week, child,
+	var header, title, table, thead, week, child, buttonpane,
 		inp = TestHelpers.datepicker.initNewInput(),
 		dp = inp.datepicker( "widget" );
 
@@ -33,7 +33,7 @@ asyncTest( "baseStructure", function() {
 			ok( dp.is( ":visible" ), "Structure - datepicker visible" );
 			ok( !dp.is( ".ui-calendar-rtl" ), "Structure - not right-to-left" );
 			ok( !dp.is( ".ui-calendar-multi" ), "Structure - not multi-month" );
-			equal( dp.children().length, 3, "Structure - child count (header, calendar, buttonpane)" );
+			equal( dp.children().length, 2, "Structure - child count (header, calendar)" );
 
 			header = dp.children( ":first" );
 			ok( header.is( "div.ui-calendar-header" ), "Structure - header division" );
@@ -61,19 +61,39 @@ asyncTest( "baseStructure", function() {
 			ok( week.is( "tr" ), "Structure - month table week row" );
 			equal( week.children().length, 7, "Structure - week child count" );
 
-			inp.datepicker( "close" ).datepicker( "destroy" );
+			inp.datepicker( "close" );
 			step2();
 		}, 50 );
 	}
 
 	function step2() {
+		inp.datepicker( "option", "buttons", {
+			"test": function() {},
+			"test button": function() {}
+		});
+		inp.focus();
+
+		setTimeout(function() {
+			equal( dp.children().length, 3, "Structure buttons - child count (header, calendar, buttonpane)" );
+
+			buttonpane = dp.children( ".ui-calendar-buttonpane" );
+			equal( buttonpane.children( "div.ui-calendar-buttonset" ).length, 1, "Structure buttons - buttonset" );
+			equal( buttonpane.find( "button.ui-button:first" ).text(), "test", "Structure buttons - buttonset" );
+			equal( buttonpane.find( "button.ui-button:eq(1)" ).text(), "test button", "Structure buttons - buttonset" );
+
+			inp.datepicker( "close" ).datepicker( "destroy" );
+			step3();
+		}, 50 );
+	}
+
+	function step3() {
 		// Multi-month 2
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: 2 } );
 		dp = inp.datepicker( "widget" );
 		inp.focus();
 		setTimeout(function() {
 			ok( dp.is( ".ui-calendar-multi" ), "Structure multi [2] - multi-month" );
-			equal( dp.children().length, 4, "Structure multi [2] - child count" );
+			equal( dp.children().length, 3, "Structure multi [2] - child count" );
 
 			child = dp.children( ":eq(2)" );
 			ok( child.is( "div.ui-calendar-row-break" ), "Structure multi [2] - row break" );
@@ -430,7 +450,7 @@ test( "ARIA", function() {
 });
 
 asyncTest( "mouse", function() {
-	expect( 10 );
+	expect( 9 );
 
 	var input = TestHelpers.datepicker.init( $( "#datepicker" ).val( "" ) ),
 		picker = input.datepicker( "widget" ),
@@ -477,16 +497,7 @@ asyncTest( "mouse", function() {
 				"Mouse click - abandoned"
 			);
 
-			// Current/previous/next
-			input.val( "" ).datepicker( "refresh" ).datepicker( "open" );
-			$( ".ui-calendar-current", picker ).simulate( "click", {} );
-			date.setDate( new Date().getDate() );
-			TestHelpers.datepicker.equalsDate(
-				input.datepicker( "valueAsDate" ),
-				date,
-				"Mouse click - current"
-			);
-
+			// Previous/next
 			input.val( "2/4/08" ).datepicker( "refresh" ).datepicker( "open" );
 			$( ".ui-calendar-prev", picker ).simulate( "click" );
 			$( ".ui-calendar-calendar tbody a:contains(16)", picker ).simulate( "mousedown" );
