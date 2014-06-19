@@ -16,24 +16,17 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#calendar" ).calendar();
+		var calendar = $( "#calendar" ).calendar(),
+			value;
+
 		$( "#format" ).change(function() {
-			var format;
-			switch( $( this ).val() ) {
-				case "short":
-					$( "#calendar" ).calendar( "option", "dateFormat", {
-						date: "short"
-					});
-					break;
-				case "long":
-					$( "#calendar" ).calendar( "option", "dateFormat", {
-						date: "long"
-					});
-					break;
+			value = $( this ).val();
+			switch( value ) {
 				case "iso":
-					$( "#calendar" ).calendar( "option", "dateFormat", {
-						pattern: "yyyy-MM-dd"
-					});
+					calendar.calendar( "option", "dateFormat", { pattern: "yyyy-MM-dd" } );
+					break;
+				default:
+					calendar.calendar( "option", "dateFormat", { date: value } );
 					break;
 			}
 		});
@@ -42,7 +35,7 @@
 </head>
 <body>
 
-<p>Date: <input type="text" id="calendar" size="30"/></p>
+<div id="calendar"></div>
 
 <p>Format options:<br />
 	<select id="format">

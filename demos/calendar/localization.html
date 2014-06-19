@@ -16,22 +16,23 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		Globalize.locale( "de-DE" );
-		$( "#calendar" ).calendar();
+		var calendar = $( "#calendar" ).calendar(),
+			date = calendar.calendar( "valueAsDate" );
+
 		$( "#locale" ).change(function() {
-			// TODO refresh the current value to convert to the selected locale
 			Globalize.locale( $(this).val() );
+			calendar.calendar( "valueAsDate", date );
 		});
 	});
 	</script>
 </head>
 <body>
 
-<p>Date: <input type="text" id="calendar"/>&nbsp;
-	<select id="locale">
-		<option value="de-DE" selected>German (Deutsch)</option>
-		<option value="en">English</option>
-	</select></p>
+<div id="calendar"></div>
+<select id="locale">
+	<option value="de-DE" selected>German (Deutsch)</option>
+	<option value="en">English</option>
+</select></p>
 
 <div class="demo-description">
 <p>Localize the calendar calendar language and format (English / Western formatting is the default).  The calendar includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
