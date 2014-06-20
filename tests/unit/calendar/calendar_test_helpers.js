@@ -14,15 +14,11 @@ TestHelpers.calendar = {
 		d2 = new Date( d2.getFullYear(), d2.getMonth(), d2.getDate() );
 		equal( d1.toString(), d2.toString(), message );
 	},
-	init: function( id, options ) {
-		options = $.extend( { show: false }, options || {} );
-		return $( id ).calendar( options );
-	},
-	initNewInput: function( options ) {
-		options = $.extend( { show: false }, options || {} );
-		return $( "<input>" ).calendar( options )
-			.appendTo( "#qunit-fixture" );
-	},
-	onFocus: TestHelpers.onFocus,
-	PROP_NAME: "calendar"
+	focusGrid: function( element ) {
+		element.find( ":tabbable" ).last().simulate( "focus" );
+		$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+		$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+
+		return $( ":focus" );
+	}
 };
