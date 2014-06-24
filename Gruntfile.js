@@ -221,6 +221,7 @@ grunt.initConfig({
 		all: {
 			options: {
 				clean: true,
+				ignore: [ "jquery" ],
 				destPrefix: "external"
 			},
 			files: {
@@ -233,8 +234,8 @@ grunt.initConfig({
 				"jshint/jshint.js": "jshint/dist/jshint.js",
 				"jshint/LICENSE": "jshint/LICENSE",
 
-				"jquery/jquery.js": "jquery/jquery.js",
-				"jquery/MIT-LICENSE.txt": "jquery/MIT-LICENSE.txt",
+				"jquery/jquery.js": "jquery-1.x/jquery.js",
+				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",
 
 				"jquery-1.6.0/jquery.js": "jquery-1.6.0/jquery.js",
 				"jquery-1.6.0/MIT-LICENSE.txt": "jquery-1.6.0/MIT-LICENSE.txt",
