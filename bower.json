@@ -8,7 +8,7 @@
 		"tests"
 	],
 	"dependencies": {
-		"jquery": ">=1.6 <1.11"
+		"jquery": ">=1.6"
 	},
 	"devDependencies": {
 		"jquery-mousewheel": "3.1.11",
@@ -32,7 +32,7 @@
 		"jquery-1.10.0": "jquery#1.10.0",
 		"jquery-1.10.1": "jquery#1.10.1",
 		"jquery-1.10.2": "jquery#1.10.2",
-		"jquery": "jquery#1.10.2",
+		"jquery-1.x": "jquery#1.10.2",
 		"jquery-2.0.0": "jquery#2.0.0",
 		"jquery-2.0.1": "jquery#2.0.1",
 		"jquery-2.0.2": "jquery#2.0.2",
