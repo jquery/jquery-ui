@@ -5,34 +5,7 @@
 	<title>jQuery UI Spinner - Map</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="../../jquery.js"></script>
-	<script src="../../external/jquery.mousewheel.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/spinner.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
-		function latlong() {
-			return new google.maps.LatLng( $("#lat").val(), $("#lng").val() );
-		}
-		function position() {
-			map.setCenter( latlong() );
-		}
-		$( "#lat, #lng" ).spinner({
-			step: .001,
-			change: position,
-			stop: position
-		});
-
-		var map = new google.maps.Map( $("#map")[0], {
-			zoom: 8,
-			center: latlong(),
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		});
-	});
-	</script>
 	<style>
 	#map {
 		width:500px;
@@ -53,5 +26,64 @@
 <div class="demo-description">
 <p>Google Maps integration, using spinners to change latitude and longitude.</p>
 </div>
+
+<script src="../../deleteme/requirejs/require.js"></script>
+<script>
+
+require.config({
+	paths: {
+		cldr: "../../deleteme/cldrjs/dist/cldr",
+		"cldr-data": "../../deleteme/cldr",
+		globalize: "../../deleteme/globalize/dist/globalize",
+		jquery: "../../deleteme/jquery/dist/jquery",
+		"jquery-mousewheel": "../../deleteme/jquery-mousewheel/jquery.mousewheel",
+		json: "../../deleteme/requirejs-plugins/src/json",
+		text: "../../deleteme/requirejs-text/text",
+		ui: "../../ui"
+	}
+});
+
+require([
+	"jquery",
+	"globalize",
+	"json!cldr-data/main/ar/numbers.json",
+	"json!cldr-data/main/en/numbers.json",
+	"json!cldr-data/main/es/numbers.json",
+	"json!cldr-data/supplemental/likelySubtags.json",
+	"globalize/number",
+	"ui/spinner"
+], function( $, Globalize, arNumbers, enNumbers, esNumbers, likelySubtags ) {
+
+	Globalize.load( arNumbers );
+	Globalize.load( enNumbers );
+	Globalize.load( esNumbers );
+	Globalize.load( likelySubtags );
+	Globalize.locale( "en" );
+
+	function latlong() {
+		return new google.maps.LatLng( $("#lat").val(), $("#lng").val() );
+	}
+	function position() {
+		map.setCenter( latlong() );
+	}
+	$( "#lat, #lng" ).spinner({
+		step: .001,
+		change: position,
+		stop: position,
+		numberFormat: {
+			minimumFractionDigits: 3
+		}
+	});
+
+	var map = new google.maps.Map( $("#map")[0], {
+		zoom: 8,
+		center: latlong(),
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	});
+
+});
+
+</script>
+
 </body>
 </html>

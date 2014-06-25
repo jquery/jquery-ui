@@ -4,41 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Spinner - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../jquery.js"></script>
-	<script src="../../external/jquery.mousewheel.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/spinner.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
-		var spinner = $( "#spinner" ).spinner();
-
-		$( "#disable" ).click(function() {
-			if ( spinner.spinner( "option", "disabled" ) ) {
-				spinner.spinner( "enable" );
-			} else {
-				spinner.spinner( "disable" );
-			}
-		});
-		$( "#destroy" ).click(function() {
-			if ( spinner.spinner( "instance" ) ) {
-				spinner.spinner( "destroy" );
-			} else {
-				spinner.spinner();
-			}
-		});
-		$( "#getvalue" ).click(function() {
-			alert( spinner.spinner( "value" ) );
-		});
-		$( "#setvalue" ).click(function() {
-			spinner.spinner( "value", 5 );
-		});
-
-		$( "button" ).button();
-	});
-	</script>
 </head>
 <body>
 
@@ -60,5 +26,68 @@
 <div class="demo-description">
 <p>Default spinner.</p>
 </div>
+
+<script src="../../deleteme/requirejs/require.js"></script>
+<script>
+
+require.config({
+	paths: {
+		cldr: "../../deleteme/cldrjs/dist/cldr",
+		"cldr-data": "../../deleteme/cldr",
+		globalize: "../../deleteme/globalize/dist/globalize",
+		jquery: "../../deleteme/jquery/dist/jquery",
+		"jquery-mousewheel": "../../deleteme/jquery-mousewheel/jquery.mousewheel",
+		json: "../../deleteme/requirejs-plugins/src/json",
+		text: "../../deleteme/requirejs-text/text",
+		ui: "../../ui"
+	}
+});
+
+require([
+	"jquery",
+	"globalize",
+	"json!cldr-data/main/ar/numbers.json",
+	"json!cldr-data/main/en/numbers.json",
+	"json!cldr-data/main/es/numbers.json",
+	"json!cldr-data/supplemental/likelySubtags.json",
+	"globalize/number",
+	"ui/spinner"
+], function( $, Globalize, arNumbers, enNumbers, esNumbers, likelySubtags ) {
+
+	Globalize.load( arNumbers );
+	Globalize.load( enNumbers );
+	Globalize.load( esNumbers );
+	Globalize.load( likelySubtags );
+	Globalize.locale( "en" );
+
+	var spinner = $( "#spinner" ).spinner();
+
+	$( "#disable" ).click(function() {
+		if ( spinner.spinner( "option", "disabled" ) ) {
+			spinner.spinner( "enable" );
+		} else {
+			spinner.spinner( "disable" );
+		}
+	});
+	$( "#destroy" ).click(function() {
+		if ( spinner.spinner( "instance" ) ) {
+			spinner.spinner( "destroy" );
+		} else {
+			spinner.spinner();
+		}
+	});
+	$( "#getvalue" ).click(function() {
+		alert( spinner.spinner( "value" ) );
+	});
+	$( "#setvalue" ).click(function() {
+		spinner.spinner( "value", 5 );
+	});
+
+	$( "button" ).button();
+
+});
+
+</script>
+
 </body>
 </html>

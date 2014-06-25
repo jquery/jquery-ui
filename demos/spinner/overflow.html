@@ -4,28 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Spinner - Overflow</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../jquery.js"></script>
-	<script src="../../external/jquery.mousewheel.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/spinner.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
-		$( "#spinner" ).spinner({
-			spin: function( event, ui ) {
-				if ( ui.value > 10 ) {
-					$( this ).spinner( "value", -10 );
-					return false;
-				} else if ( ui.value < -10 ) {
-					$( this ).spinner( "value", 10 );
-					return false;
-				}
-			}
-		});
-	});
-	</script>
 </head>
 <body>
 
@@ -40,5 +19,55 @@ Overflowing spinner restricted to a range of -10 to 10.
 For anything above 10, it'll overflow to -10, and the other way round.
 </p>
 </div>
+
+<script src="../../deleteme/requirejs/require.js"></script>
+<script>
+
+require.config({
+	paths: {
+		cldr: "../../deleteme/cldrjs/dist/cldr",
+		"cldr-data": "../../deleteme/cldr",
+		globalize: "../../deleteme/globalize/dist/globalize",
+		jquery: "../../deleteme/jquery/dist/jquery",
+		"jquery-mousewheel": "../../deleteme/jquery-mousewheel/jquery.mousewheel",
+		json: "../../deleteme/requirejs-plugins/src/json",
+		text: "../../deleteme/requirejs-text/text",
+		ui: "../../ui"
+	}
+});
+
+require([
+	"jquery",
+	"globalize",
+	"json!cldr-data/main/ar/numbers.json",
+	"json!cldr-data/main/en/numbers.json",
+	"json!cldr-data/main/es/numbers.json",
+	"json!cldr-data/supplemental/likelySubtags.json",
+	"globalize/number",
+	"ui/spinner"
+], function( $, Globalize, arNumbers, enNumbers, esNumbers, likelySubtags ) {
+
+	Globalize.load( arNumbers );
+	Globalize.load( enNumbers );
+	Globalize.load( esNumbers );
+	Globalize.load( likelySubtags );
+	Globalize.locale( "en" );
+
+	$( "#spinner" ).spinner({
+		spin: function( event, ui ) {
+			if ( ui.value > 10 ) {
+				$( this ).spinner( "value", -10 );
+				return false;
+			} else if ( ui.value < -10 ) {
+				$( this ).spinner( "value", 10 );
+				return false;
+			}
+		}
+	});
+
+});
+
+</script>
+
 </body>
 </html>

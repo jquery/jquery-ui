@@ -1,18 +1,22 @@
 {
-	"name": "jquery-ui",
-	"ignore": [
-		"**/.*",
-		"build",
-		"demos",
-		"external",
-		"tests"
-	],
-	"dependencies": {
-		"jquery": ">=1.6 <1.11"
-	},
-	"devDependencies": {
-		"jquery-mousewheel": "3.1.11",
-		"jshint": "2.4.4",
-		"qunit": "1.14.0"
-	}
+  "name": "jquery-ui",
+  "ignore": [
+    "**/.*",
+    "build",
+    "demos",
+    "external",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">1.6",
+    "requirejs": "~2.1.14",
+    "globalize": "1.x",
+    "requirejs-plugins": "~1.0.2",
+    "requirejs-text": "~2.0.12"
+  },
+  "devDependencies": {
+    "jquery-mousewheel": "3.1.11",
+    "jshint": "2.4.4",
+    "qunit": "1.14.0"
+  }
 }
