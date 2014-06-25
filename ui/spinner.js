@@ -14,6 +14,7 @@
 		// AMD. Register as an anonymous module.
 		define([
 			"jquery",
+			"globalize",
 			"./core",
 			"./widget",
 			"./button"
@@ -23,7 +24,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}(function( $, Globalize ) {
 
 function spinner_modifier( fn ) {
 	return function() {
@@ -407,9 +408,10 @@ return $.widget( "ui.spinner", {
 
 	_parse: function( val ) {
 		if ( typeof val === "string" && val !== "" ) {
-			val = window.Globalize && this.options.numberFormat ?
-				Globalize.parseFloat( val, 10, this.options.culture ) : +val;
+			// FIXME handle optional different locales
+			val = Globalize ? Globalize.parseNumber( val ) : +val;
 		}
+		// TODO: Why not to return NaN?
 		return val === "" || isNaN( val ) ? null : val;
 	},
 
@@ -417,9 +419,8 @@ return $.widget( "ui.spinner", {
 		if ( value === "" ) {
 			return "";
 		}
-		return window.Globalize && this.options.numberFormat ?
-			Globalize.format( value, this.options.numberFormat, this.options.culture ) :
-			value;
+		// FIXME handle optional different locales
+		return Globalize ? Globalize.formatNumber( value, this.options.numberFormat ) : value;
 	},
 
 	_refresh: function() {
