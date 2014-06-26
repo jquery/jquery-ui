@@ -14,7 +14,6 @@
 		"jquery-mousewheel": "3.1.11",
 		"jshint": "2.4.4",
 		"qunit": "1.14.0",
-
 		"jquery-1.6.0": "jquery#1.6.0",
 		"jquery-1.6.1": "jquery#1.6.1",
 		"jquery-1.6.2": "jquery#1.6.2",
@@ -37,5 +36,6 @@
 		"jquery-2.0.1": "jquery#2.0.1",
 		"jquery-2.0.2": "jquery#2.0.2",
 		"jquery-2.0.3": "jquery#2.0.3"
-	}
+	},
+	"version": "1.11.0"
 }

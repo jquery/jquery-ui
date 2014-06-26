@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Fade @VERSION
+ * jQuery UI Effects Fade 1.11.0
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors

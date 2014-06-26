@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Position @VERSION
+ * jQuery UI Position 1.11.0
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors

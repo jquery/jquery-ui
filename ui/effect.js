@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects @VERSION
+ * jQuery UI Effects 1.11.0
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -900,7 +900,7 @@ $.fn.extend({
 (function() {
 
 $.extend( $.effects, {
-	version: "@VERSION",
+	version: "1.11.0",
 
 	// Saves a set of properties in a data storage
 	save: function( element, set ) {
