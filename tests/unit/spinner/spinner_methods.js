@@ -179,7 +179,7 @@ test( "stepUp", function() {
 	equal( element.val(), 12, "stepUp 5 steps" );
 
 	element.spinner( "stepUp", 4 );
-	equal( element.val(), 16, "close to min and stepUp 4 steps" );
+	equal( element.val(), 16, "close to max and stepUp 4 steps" );
 
 	element.spinner( "stepUp" );
 	equal( element.val(), 16, "at max and stepUp 1 step" );

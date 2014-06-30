@@ -248,7 +248,7 @@ test( "over", function() {
 		dy: 20
 	});
 
-	ok( hash, "stop event triggered" );
+	ok( hash, "over event triggered" );
 	ok( hash.helper, "UI includes: helper" );
 	ok( hash.placeholder, "UI hash includes: placeholder" );
 	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );

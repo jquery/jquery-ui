@@ -44,7 +44,7 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 	} :
 	function( resources ) {
 		$.each( resources.css || [], function( i, resource ) {
-			includeStyle( "themes/base/jquery." + resource + ".css" );
+			includeStyle( "themes/base/" + resource + ".css" );
 		});
 		$.each( resources.js || [], function( i, resource ) {
 			includeScript( resource );
@@ -57,6 +57,17 @@ QUnit.config.urlConfig.push({
 	tooltip: "Skip running JSHint, e.g. within TestSwarm, where Jenkins runs it already"
 });
 
+QUnit.config.urlConfig.push({
+	id: "jquery",
+	label: "jQuery version",
+	value: [
+		"1.6", "1.6.1", "1.6.2", "1.6.3", "1.6.4", "1.7", "1.7.1", "1.7.2",
+		"1.8.0", "1.8.1", "1.8.2", "1.8.3", "1.9.0", "1.9.1", "1.10.0",
+		"1.10.1", "1.10.2", "2.0.0", "2.0.1", "2.0.2", "2.0.3", "git"
+	],
+	tooltip: "Which jQuery Core version to test against"
+});
+
 jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
 	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
@@ -66,7 +77,7 @@ TestHelpers.testJshint = function( module ) {
 	}
 
 	if ( !jshintLoaded ) {
-		includeScript( "external/jshint.js" );
+		includeScript( "external/jshint/jshint.js" );
 		jshintLoaded = true;
 	}
 
@@ -79,7 +90,7 @@ TestHelpers.testJshint = function( module ) {
 				dataType: "json"
 			}),
 			$.ajax({
-				url: url("../../../ui/jquery.ui." + module + ".js"),
+				url: url("../../../ui/" + module + ".js"),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {

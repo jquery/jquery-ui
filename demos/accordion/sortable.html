@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion - Sortable</title>
-	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.10.2.js"></script>
-	<script src="../../ui/jquery.ui.core.js"></script>
-	<script src="../../ui/jquery.ui.widget.js"></script>
-	<script src="../../ui/jquery.ui.mouse.js"></script>
-	<script src="../../ui/jquery.ui.sortable.js"></script>
-	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/mouse.js"></script>
+	<script src="../../ui/sortable.js"></script>
+	<script src="../../ui/accordion.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	/* IE has layout issues when sorting (see #5413) */
@@ -28,6 +28,9 @@
 					// IE doesn't register the blur when sorting
 					// so trigger focusout handlers to remove .ui-state-focus
 					ui.item.children( "h3" ).triggerHandler( "focusout" );
+
+					// Refresh accordion to handle new order
+					$( this ).accordion( "refresh" );
 				}
 			});
 	});

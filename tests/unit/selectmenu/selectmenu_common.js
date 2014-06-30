@@ -1,7 +1,7 @@
 TestHelpers.commonWidgetTests( "selectmenu", {
 	defaults: {
 		appendTo: null,
-		disabled: false,
+		disabled: null,
 		icons: {
 			button: "ui-icon-triangle-1-s"
 		},
@@ -13,9 +13,9 @@ TestHelpers.commonWidgetTests( "selectmenu", {
 		width: null,
 
 		// callbacks
-		create: null,
 		change: null,
 		close: null,
+		create: null,
 		focus: null,
 		open: null,
 		select: null

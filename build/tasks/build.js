@@ -3,7 +3,9 @@ module.exports = function( grunt ) {
 "use strict";
 
 grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
-	var pkg = grunt.config( "pkg" ),
+	var uiFiles,
+		totalManifests = 0,
+		pkg = grunt.config( "pkg" ),
 		base = {
 			core: {
 				name: "ui.{plugin}",
@@ -32,10 +34,11 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 
 	Object.keys( base ).forEach(function( type ) {
 		var baseManifest = base[ type ],
-			plugins = grunt.file.readJSON( "build/" + type + ".json" );
+			plugins = grunt.file.readJSON( "build/" + type + ".json" ),
+			bower = grunt.file.readJSON( "bower.json" );
 
 		Object.keys( plugins ).forEach(function( plugin ) {
-			var manifest,
+			var manifest, bowerKey,
 				data = plugins[ plugin ],
 				name = plugin.charAt( 0 ).toUpperCase() + plugin.substr( 1 );
 
@@ -62,12 +65,14 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				docs: data.docs || replace( baseManifest.docs ||
 					"http://api.jqueryui.com/{plugin}/" ),
 				download: "http://jqueryui.com/download/",
-				dependencies: {
-					jquery: ">=1.6"
-				},
+				dependencies: {},
 				// custom
 				category: data.category || type
 			};
+
+			for ( bowerKey in bower.dependencies ) {
+				manifest.dependencies[ bowerKey ] = bower.dependencies[ bowerKey ];
+			}
 
 			(baseManifest.dependencies || [])
 				.concat(data.dependencies || [])
@@ -77,8 +82,16 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 
 			grunt.file.write( manifest.name + ".jquery.json",
 				JSON.stringify( manifest, null, "\t" ) + "\n" );
+			totalManifests += 1;
 		});
 	});
+
+	uiFiles = grunt.file.expand( "ui/*.js" ).length;
+	if ( totalManifests !== uiFiles ) {
+		grunt.log.error( "Generated " + totalManifests + " manifest files, but there are " +
+			uiFiles + " ui/*.js files. Do all of them have entries?" );
+		return false;
+	}
 });
 
 grunt.registerTask( "clean", function() {

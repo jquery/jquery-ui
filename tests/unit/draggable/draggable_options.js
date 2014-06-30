@@ -85,7 +85,7 @@ test( "{ appendTo: Selector }", function() {
 test( "appendTo, default, switching after initialization", function() {
 	expect( 2 );
 
-	var element = $( "#draggable1" ).draggable({ helper : "clone" });
+	var element = $( "#draggable1" ).draggable({ helper: "clone" });
 
 	TestHelpers.draggable.trackAppendedParent( element );
 
@@ -140,7 +140,7 @@ test( "{ axis: ? }, unexpected", function() {
 test( "axis, default, switching after initialization", function() {
 	expect( 6 );
 
-	var element = $( "#draggable1" ).draggable({ axis : false });
+	var element = $( "#draggable1" ).draggable({ axis: false });
 
 	// Any Direction
 	TestHelpers.draggable.shouldMove( element, "axis: default" );
@@ -375,14 +375,19 @@ test( "containment, account for border", function() {
 });
 
 test( "containment, default, switching after initialization", function() {
-	expect( 6 );
+	expect( 8 );
 
-	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false });
+	var element = $( "#draggable1" ).draggable({ containment: false, scroll: false }),
+		po = element.parent().offset(),
+		containment = [ po.left - 100, po.top - 100, po.left + 500, po.top + 500 ];
 
 	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: default" );
 
 	element.draggable( "option", "containment", "parent" ).css({ top: 0, left: 0 });
 	TestHelpers.draggable.testDrag( element, element, -100, -100, 0, 0, "containment: parent as option" );
+
+	element.draggable( "option", "containment", containment ).css({ top: 0, left: 0 });
+	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: array as option" );
 
 	element.draggable( "option", "containment", false );
 	TestHelpers.draggable.testDrag( element, element, -100, -100, -100, -100, "containment: false as option" );
@@ -499,12 +504,12 @@ test( "cursorAt", function() {
 	var deltaX = -3,
 		deltaY = -3,
 		tests = {
-			"false": { cursorAt : false },
-			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
-			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
-			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
-			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
-			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+			"false": { cursorAt: false },
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt: { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt: [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt: "10 20" },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt: { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } }
 		};
 
 	$.each( tests, function( testName, testData ) {
@@ -512,10 +517,10 @@ test( "cursorAt", function() {
 			var element = $( "#draggable" + ( i + 1 ) ).draggable({
 					cursorAt: testData.cursorAt,
 					drag: function( event, ui ) {
-						if( !testData.cursorAt ) {
+						if ( !testData.cursorAt ) {
 							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
-						} else if( testData.cursorAt.right ) {
+						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
 						} else {
@@ -540,12 +545,12 @@ test( "cursorAt, switching after initialization", function() {
 	var deltaX = -3,
 		deltaY = -3,
 		tests = {
-			"false": { cursorAt : false },
-			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt : { left: -5, top: -5 } },
-			"[ 10, 20 ]": { x: 10, y: 20, cursorAt : [ 10, 20 ] },
-			"'10 20'": { x: 10, y: 20, cursorAt : "10 20" },
-			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt : { left: 20, top: 40 } },
-			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt : { right: 10, bottom: 20 } }
+			"false": { cursorAt: false },
+			"{ left: -5, top: -5 }": { x: -5, y: -5, cursorAt: { left: -5, top: -5 } },
+			"[ 10, 20 ]": { x: 10, y: 20, cursorAt: [ 10, 20 ] },
+			"'10 20'": { x: 10, y: 20, cursorAt: "10 20" },
+			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt: { left: 20, top: 40 } },
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } }
 		};
 
 	$.each( tests, function( testName, testData ) {
@@ -554,10 +559,10 @@ test( "cursorAt, switching after initialization", function() {
 
 			element.draggable({
 					drag: function( event, ui ) {
-						if( !testData.cursorAt ) {
+						if ( !testData.cursorAt ) {
 							equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
-						} else if( testData.cursorAt.right ) {
+						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
 						} else {
@@ -667,7 +672,7 @@ test( "helper, default, switching after initialization", function() {
 });
 
 /* jshint loopfunc: true */
-(function(){
+(function() {
 	var k, l, m,
 		scrollElements = {
 			"no elements": [],
@@ -684,7 +689,7 @@ test( "helper, default, switching after initialization", function() {
 	for ( m = 0 ; m < helpers.length; m++ ) {
 		for ( l = 0; l < positions.length; l++ ) {
 			for ( k in scrollElements ) {
-				(function( position, helper, scrollElements, scrollElementsTitle ){
+				(function( position, helper, scrollElements, scrollElementsTitle ) {
 					test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
 						expect( scrollPositions.length * 2 );
 
@@ -830,7 +835,8 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 
 	TestHelpers.draggable.setScrollable( "#main", false );
 
-	var viewportHeight = $( window ).height(),
+	var currentScrollTop,
+		viewportHeight = $( window ).height(),
 		element = $( "#draggable1" ).draggable({ scroll: true }).appendTo( "#qunit-fixture" ),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
 		scrollSpeed = element.draggable( "option", "scrollSpeed" );
@@ -840,13 +846,15 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 		left: 1
 	});
 
+	$( element ).one( "drag", function() {
+		equal( $( window ).scrollTop(), 0, "scroll: true doesn't scroll when the element is dragged outside of scrollSensitivity" );
+	});
+
 	element.simulate( "drag", {
 		dx: 1,
 		y: viewportHeight - scrollSensitivity - 1,
 		moves: 1
 	});
-
-	ok( $( window ).scrollTop() === 0, "scroll: true doesn't scroll when the element is dragged outside of scrollSensitivity" );
 
 	element.draggable( "option", "scrollSensitivity", scrollSensitivity + 10 );
 
@@ -855,13 +863,17 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 		left: 1
 	});
 
+	currentScrollTop = $( window ).scrollTop();
+
+	$( element ).one( "drag", function() {
+		ok( $( window ).scrollTop() - currentScrollTop, scrollSpeed, "scroll: true scrolls when the element is dragged within scrollSensitivity" );
+	});
+
 	element.simulate( "drag", {
 		dx: 1,
 		y: viewportHeight - scrollSensitivity - 1,
 		moves: 1
 	});
-
-	ok( $( window ).scrollTop() === scrollSpeed, "scroll: true scrolls when the element is dragged within scrollSensitivity" );
 
 	TestHelpers.draggable.restoreScroll( document );
 });

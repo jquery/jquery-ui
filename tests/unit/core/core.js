@@ -4,34 +4,6 @@ module( "core - jQuery extensions" );
 
 TestHelpers.testJshint( "core" );
 
-asyncTest( "focus - original functionality", function() {
-	expect( 1 );
-	$( "#inputTabindex0" )
-		.one( "focus", function() {
-			ok( true, "event triggered" );
-			start();
-		})
-		.focus();
-});
-
-asyncTest( "focus", function() {
-	expect( 2 );
-
-	// support: IE 8
-	// IE sometimes gets confused about what's focused if we don't explicitly
-	// focus a different element first
-	$( "body" ).focus();
-
-	$( "#inputTabindex0" )
-		.one( "focus", function() {
-			ok( true, "event triggered" );
-			start();
-		})
-		.focus( 500, function() {
-			ok( true, "callback triggered" );
-		});
-});
-
 test( "innerWidth - getter", function() {
 	expect( 2 );
 	var el = $( "#dimensions" );

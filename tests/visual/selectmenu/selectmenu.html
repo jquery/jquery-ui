@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>Selectmenu Visual Test: Default</title>
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
-	<script src="../../../jquery-1.10.2.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.position.js"></script>
-	<script src="../../../ui/jquery.ui.menu.js"></script>
-	<script src="../../../ui/jquery.ui.selectmenu.js"></script>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<script src="../../../external/jquery/jquery.js"></script>
+	<script src="../../../ui/core.js"></script>
+	<script src="../../../ui/widget.js"></script>
+	<script src="../../../ui/position.js"></script>
+	<script src="../../../ui/menu.js"></script>
+	<script src="../../../ui/selectmenu.js"></script>
 	<script>
 	$(function() {
 		var log = $("#log"),
@@ -70,7 +70,7 @@
 		$('#disabled1, #disabled2, #disabled3').selectmenu();
 		var disabled4 = $('#disabled4').selectmenu();
 
-		$("#disable_select").on("click", function() {
+		$("#disable_select").bind("click", function() {
 			if (disable_select) {
 				disable_select = false;
 				disabled4.selectmenu("disable");
@@ -82,7 +82,7 @@
 			return false;
 		});
 
-		$("#disable_option").on("click", function() {
+		$("#disable_option").bind("click", function() {
 			if (disable_option) {
 				disable_option = false;
 				disabled4.find("option:eq(0)").attr("disabled", "disabled");
@@ -94,7 +94,7 @@
 			return false;
 		});
 
-		$("#disable_optgroup").on("click", function() {
+		$("#disable_optgroup").bind("click", function() {
 			if (disable_optgroup) {
 				disable_optgroup = false;
 				disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");
@@ -108,17 +108,17 @@
 
 		/* empty */
 		$(".empty select").selectmenu();
-		
+
 		/* width */
 		$("#width_auto1, #width_auto2").selectmenu();
-		
+
 		$("#width_js1, #width_js2").selectmenu({
 			width: 200
 		});
-		
+
 		var widthMenu = $("#width_menu").selectmenu();
 		widthMenu.selectmenu("menuWidget").addClass("width-menu");
-		
+
 	});
 	</script>
 	<style>
@@ -128,7 +128,7 @@
 		select { width: 200px; }
 
 		.ui-selectmenu-button  { display: block; margin-bottom: 1em;}
-		
+
 		/* width */
 		.width-menu { width: 196px; }
 	</style>
@@ -226,7 +226,7 @@
 
 		<label for="empty2">Select with one empty option element</label>
 		<select name="empty2" id="empty2">
-			<option value=""></option>
+			<option value="" label="empty"></option>
 		</select>
 
 		<label for="empty3">Select with some empty option elements</label>
@@ -235,10 +235,10 @@
 			<option value="2" selected="selected">2</option>
 			<option value="3">3</option>
 			<option value="4">4</option>
-			<option value=""></option>
+			<option value="" label="empty"></option>
 			<option value="6">6</option>
 			<option value="7">7</option>
-			<option value=""></option>
+			<option value="" label="empty"></option>
 			<option value="9">9</option>
 		</select>
 
@@ -267,7 +267,7 @@
 			<option>Width test 2</option>
 			<option>Width test 3 Width test 3 Width test 3</option>
 		</select>
-		
+
 		<label for="width_js1">Width set by JS</label>
 		<select name="width_js1" id="width_js1">
 			<option>Width test 1</option>
@@ -280,14 +280,14 @@
 			<option>Width test 1</option>
 			<option>Width test 2</option>
 			<option>Width test 3 Width test 3 Width test 3</option>
-		</select>		
+		</select>
 
 		<label for="width_menu">Width set by JS with long option</label>
 		<select name="width_menu" id="width_menu">
 			<option>Width test 1</option>
 			<option>Width test 2</option>
 			<option>Width test 3 Width test 3 Width test 3</option>
-		</select>		
+		</select>
 	</fieldset>
 </form>
 

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Selectmenu - Product Selection</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/position.js"></script>
+	<script src="../../ui/menu.js"></script>
+	<script src="../../ui/selectmenu.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		var circle = $( "#circle" );
+
+		$( "#radius" ).selectmenu({
+			change: function( event, data ) {
+				circle.css({
+					width: data.item.value,
+					height: data.item.value
+				});
+			}
+		 });
+
+		$( "#color" ).selectmenu({
+			 change: function( event, data ) {
+				 circle.css( "background", data.item.value );
+			 }
+		 });
+	});
+	</script>
+	<style>
+		fieldset {
+			border: 0;
+			margin-left: 300px;
+		}
+		label {
+			display: block;
+			margin: 20px 0 0 0;
+		}
+		select {
+			width: 200px;
+		}
+
+		#circle {
+			float: left;
+			background: yellow;
+			border-radius: 50%;
+			width: 150px;
+			height: 150px;
+		}
+	</style>
+</head>
+<body>
+
+<div class="demo">
+
+<form action="#">
+
+	<div id="circle"></div>
+
+	<fieldset>
+		<label for="radius">Circle radius</label>
+		<select name="radius" id="radius">
+			<option value="50">50px</option>
+			<option value="100">100px</option>
+			<option value="150" selected="selected">150px</option>
+			<option value="200">200px</option>
+			<option value="250">250px</option>
+		</select>
+
+		<label for="color">Circle color</label>
+		<select name="color" id="color">
+			<option value="black">Black</option>
+			<option value="red">Red</option>
+			<option value="yellow" selected="selected">Yellow</option>
+			<option value="blue">Blue</option>
+			<option value="green">Green</option>
+		</select>
+	</fieldset>
+
+</form>
+
+</div>
+
+<div class="demo-description">
+<p>This Selectmenu Widget demo changes color and radius of a CSS circle. This demo is using the provided callback events.</p>
+</div>
+</body>
+</html>

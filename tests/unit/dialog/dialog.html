@@ -8,26 +8,26 @@
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
-		css: [ "ui.core", "ui.dialog" ],
+		css: [ "core", "dialog" ],
 		js: [
-			"ui/jquery.ui.core.js",
-			"ui/jquery.ui.widget.js",
-			"ui/jquery.ui.position.js",
-			"ui/jquery.ui.mouse.js",
-			"ui/jquery.ui.draggable.js",
-			"ui/jquery.ui.resizable.js",
-			"ui/jquery.ui.button.js",
-			"ui/jquery.ui.effect.js",
-			"ui/jquery.ui.effect-blind.js",
-			"ui/jquery.ui.effect-clip.js",
-			"ui/jquery.ui.effect-explode.js",
-			"ui/jquery.ui.dialog.js"
+			"ui/core.js",
+			"ui/widget.js",
+			"ui/position.js",
+			"ui/mouse.js",
+			"ui/draggable.js",
+			"ui/resizable.js",
+			"ui/button.js",
+			"ui/effect.js",
+			"ui/effect-blind.js",
+			"ui/effect-clip.js",
+			"ui/effect-explode.js",
+			"ui/dialog.js"
 		]
 	});
 	</script>
@@ -43,11 +43,7 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Dialog Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
 	<div id="dialog1"></div>
 	<div id="dialog2"></div>

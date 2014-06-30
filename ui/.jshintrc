@@ -18,6 +18,7 @@
 	"jquery": true,
 
 	"globals": {
+		"define": false,
 		"Globalize": false
 	}
 }
