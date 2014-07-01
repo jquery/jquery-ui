@@ -32,6 +32,7 @@ $.date = function( date, globalFormat ) {
 
 	this.dateObject = this.dateObject || new Date();
 	this.globalFormat = globalFormat;
+	this.selected = null;
 };
 
 $.date.prototype = {
