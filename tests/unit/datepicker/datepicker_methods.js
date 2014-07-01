@@ -4,6 +4,7 @@ module( "datepicker: methods" );
 
 test( "destroy", function() {
 	expect( 6 );
+
 	var input = $( "#datepicker" ).datepicker();
 
 	ok( input.datepicker( "instance" ), "instance created" );
@@ -17,6 +18,7 @@ test( "destroy", function() {
 
 test( "enable / disable", function() {
 	expect( 6 );
+
 	var inp = TestHelpers.datepicker.init( "#datepicker" ),
 		dp = inp.datepicker( "widget" );
 
@@ -34,6 +36,7 @@ test( "enable / disable", function() {
 
 test( "widget", function() {
 	expect( 1 );
+
 	var actual = $( "#datepicker" ).datepicker().datepicker( "widget" );
 	deepEqual( $( "body > .ui-front" )[ 0 ],  actual[ 0 ] );
 	actual.remove();
@@ -60,11 +63,13 @@ test( "open / close", function() {
 
 test( "value", function() {
 	expect( 4 );
+
 	var input = $( "#datepicker" ).datepicker(),
 		picker = input.datepicker( "widget" );
 
 	input.datepicker( "value", "1/1/14" );
 	equal( input.val(), "1/1/14", "input's value set" );
+
 	input.datepicker( "open" );
 	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ), "first day marked as selected" );
 	equal( input.datepicker( "value" ), "1/1/14", "getter" );
@@ -74,7 +79,7 @@ test( "value", function() {
 });
 
 test( "valueAsDate", function() {
-	expect( 14 );
+	expect( 13 );
 
 	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		input = TestHelpers.datepicker.init( "#datepicker" ),
@@ -93,12 +98,9 @@ test( "valueAsDate", function() {
 	input.val( "" ).datepicker( "destroy" );
 	input = TestHelpers.datepicker.init( "#datepicker" );
 
-	ok(input.datepicker( "valueAsDate" ) == null, "Set date - default" );
+	ok(input.datepicker( "valueAsDate" ) === null, "Set date - default" );
 	input.datepicker( "valueAsDate", date1);
 	TestHelpers.datepicker.equalsDate(input.datepicker( "valueAsDate" ), date1, "Set date - 2008-06-04" );
-
-	input.datepicker( "valueAsDate", date1, date2);
-	TestHelpers.datepicker.equalsDate(input.datepicker( "valueAsDate" ), date1, "Set date - two dates" );
 
 	// With minimum/maximum
 	input = TestHelpers.datepicker.init( "#datepicker" );
