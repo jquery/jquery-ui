@@ -3,128 +3,107 @@
 module( "calendar: methods" );
 
 test( "destroy", function() {
-	expect( 10 );
-	var input = $( "#calendar" ).calendar(),
-		inline = $( "#inline" ).calendar();
+	expect( 4 );
 
-	ok( input.calendar( "instance" ), "instance created" );
-	ok( input.attr( "aria-owns" ), "aria-owns attribute added" );
-	ok( input.attr( "aria-haspopup" ), "aria-haspopup attribute added" );
-	input.calendar( "destroy" );
-	ok( !input.calendar( "instance" ), "instance removed" );
-	ok( !input.attr( "aria-owns" ), "aria-owns attribute removed" );
-	ok( !input.attr( "aria-haspopup" ), "aria-haspopup attribute removed" );
+	var element = $( "#calendar" ).calendar();
 
-	ok( inline.calendar( "instance" ), "instance created" );
-	ok( inline.children().length > 0, "inline calendar has children" );
-	inline.calendar( "destroy" );
-	ok( !inline.calendar( "instance" ), "instance removed" );
-	ok( inline.children().length === 0, "inline picker no longer has children" );
+	ok( element.calendar( "instance" ), "instance created" );
+	element.calendar( "destroy" );
+	ok( !element.calendar( "instance" ), "instance removed" );
+	ok( !element.attr( "role" ), "role attribute removed" );
+	ok( !element.attr( "aria-labelledby" ), "aria-labelledby attribute removed" );
 });
 
 test( "enable / disable", function() {
 	expect( 6 );
-	var inl,
-		inp = TestHelpers.calendar.init( "#calendar" ),
-		dp = inp.calendar( "widget" );
 
-	ok( !inp.calendar( "option", "disabled" ), "initially enabled" );
-	ok( !dp.hasClass( "ui-calendar-disabled" ), "does not have disabled class name" );
+	var element = $( "#calendar" ).calendar();
 
-	inp.calendar( "disable" );
-	ok( inp.calendar( "option", "disabled" ), "disabled option is set" );
-	ok( dp.hasClass( "ui-calendar-disabled" ), "calendar has disabled class name" );
+	ok( !element.calendar( "option", "disabled" ), "initially enabled" );
+	ok( !element.hasClass( "ui-calendar-disabled" ), "does not have disabled class name" );
 
-	inp.calendar( "enable" );
-	ok( !inp.calendar( "option", "disabled" ), "enabled after enable() call" );
-	ok( !dp.hasClass( "ui-calendar-disabled" ), "no longer has disabled class name" );
+	element.calendar( "disable" );
+	ok( element.calendar( "option", "disabled" ), "disabled option is set" );
+	ok( element.hasClass( "ui-calendar-disabled" ), "calendar has disabled class name" );
 
-	// Inline
-	inl = TestHelpers.calendar.init( "#inline" );
-	dp = inl.calendar( "instance" );
-
-	// TODO: Disabling inline pickers does not work.
-	// TODO: When changeMonth and changeYear options are implemented ensure their dropdowns
-	// are properly disabled when in an inline picker.
+	element.calendar( "enable" );
+	ok( !element.calendar( "option", "disabled" ), "enabled after enable() call" );
+	ok( !element.hasClass( "ui-calendar-disabled" ), "no longer has disabled class name" );
 });
 
 test( "widget", function() {
 	expect( 1 );
-	var actual = $( "#calendar" ).calendar().calendar( "widget" );
-	deepEqual( $( "body > .ui-front" )[ 0 ],  actual[ 0 ] );
-	actual.remove();
-});
 
-test( "close", function() {
-	expect( 0 );
-});
+	var element = $( "#calendar" ).calendar(),
+		widget = element.calendar( "widget" );
 
-test( "open", function() {
-	expect( 0 );
+	deepEqual( widget[ 0 ],  element[ 0 ] );
 });
 
 test( "value", function() {
-	expect( 6 );
-	var input = $( "#calendar" ).calendar(),
-		picker = input.calendar( "widget" ),
-		inline = $( "#inline" ).calendar();
+	expect( 3 );
+	var element = $( "#calendar" ).calendar();
 
-	input.calendar( "value", "1/1/14" );
-	equal( input.val(), "1/1/14", "input's value set" );
-	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	equal( input.calendar( "value" ), "1/1/14", "getter" );
+	element.calendar( "value", "1/1/14" );
+	ok( element.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ), "first day marked as selected" );
+	equal( element.calendar( "value" ), "1/1/14", "getter" );
 
-	input.val( "abc" );
-	equal( input.calendar( "value" ), "abc",
-		"Invalid values should be returned without formatting." );
-
-	inline.calendar( "value", "1/1/14" );
-	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	equal( inline.calendar( "value" ), "1/1/14", "getter" );
-
-	input.calendar( "destroy" );
-	inline.calendar( "destroy" );
+	element.calendar( "value", "abc" );
+	equal( element.calendar( "value" ), "1/1/14", "Setting invalid values should be ignored." );
 });
 
 test( "valueAsDate", function() {
-	expect( 6 );
-	var input = $( "#calendar" ).calendar(),
-		picker = input.calendar( "widget" ),
-		inline = $( "#inline" ).calendar();
+	expect( 12 );
 
-	input.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
-	equal( input.val(), "1/1/14", "input's value set" );
-	ok( picker.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	TestHelpers.calendar.equalsDate( input.calendar( "valueAsDate" ),
-		new Date( 2014, 0, 1 ), "getter" );
+	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
+		element = $( "#calendar" ).calendar(),
+		date1 = new Date(2008, 6 - 1, 4),
+		date2 = new Date();
 
-	input.val( "a/b/c" );
-	equal( input.calendar( "valueAsDate" ), null, "Invalid dates return null" );
+	element.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
+	ok( element.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ), "First day marked as selected" );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
 
-	inline.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
-	ok( inline.find( "a[data-timestamp]:first" ).hasClass( "ui-state-focus" ),
-		"first day marked as selected" );
-	TestHelpers.calendar.equalsDate( inline.calendar( "valueAsDate" ),
-		new Date( 2014, 0, 1 ), "getter" );
+	element.calendar( "destroy" );
 
-	input.calendar( "destroy" );
-	inline.calendar( "destroy" );
-});
+	element.calendar();
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date(), "Set date - default" );
 
-test( "isValid", function() {
-	expect( 2 );
-	var input = $( "#calendar" ).calendar();
+	element.calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate(element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
 
-	input.val( "1/1/14" );
-	ok( input.calendar( "isValid" ) );
+	element.calendar( "valueAsDate", date1, date2);
+	TestHelpers.calendar.equalsDate(element.calendar( "valueAsDate" ), date1, "Set date - two dates" );
 
-	input.val( "1/1/abc" );
-	ok( !input.calendar( "isValid" ) );
+	// With minimum/maximum
+	element = $( "#calendar" ).calendar();
+	date1 = new Date( 2008, 1 - 1, 4 );
+	date2 = new Date( 2008, 6 - 1, 4 );
+	minDate = new Date( 2008, 2 - 1, 29 );
+	maxDate = new Date( 2008, 3 - 1, 28 );
 
-	input.calendar( "destroy" );
+	element.calendar( "option", { min: minDate } ).calendar( "valueAsDate", date2 );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date2, "Set date min/max - value > min" );
+
+	element.calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date2, "Set date min/max - value < min" );
+
+	element.calendar( "option", { max: maxDate, min: null } ).calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date1, "Set date min/max - value < max" );
+
+	element.calendar( "valueAsDate", date2 );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date1, "Set date min/max - value > max" );
+
+	element.calendar( "option", { min: minDate } ).calendar( "valueAsDate", date1 );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date1, "Set date min/max - value < min" );
+
+	element.calendar( "valueAsDate", date2 );
+	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date1, "Set date min/max - value > max" );
+
+	dateAndTimeToSet = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	dateAndTimeClone = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	element.calendar( "valueAsDate", dateAndTimeToSet );
+	equal( dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), "Date object passed should not be changed by valueAsDate" );
 });
 
 })( jQuery );
