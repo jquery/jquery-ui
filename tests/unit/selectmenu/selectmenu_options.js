@@ -98,7 +98,7 @@ test( "Width", function() {
 
 	equal( button.outerWidth(), element.outerWidth(), "button width auto" );
 	element.selectmenu( "open" );
-	equal( menu.outerWidth(), element.outerWidth(), "menu width auto" );
+	closeEnough( menu.outerWidth(), element.outerWidth(), 2, "menu width auto" );
 
 	element.outerWidth( 100 );
 	element.selectmenu( "refresh" );
