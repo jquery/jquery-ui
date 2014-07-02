@@ -122,7 +122,7 @@ test( "stop", function() {
 });
 
 asyncTest( "change", function() {
-	expect( 14 );
+	expect( 12 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldChange( expectation, msg ) {
@@ -239,13 +239,13 @@ asyncTest( "change", function() {
 		shouldChange( false, "value, same value" );
 		element.spinner( "value", 999 );
 
-		shouldChange( true, "max, value changed" );
+		shouldChange( false, "max, value not changed" );
 		element.spinner( "option", "max", 900 );
 
 		shouldChange( false, "max, value not changed" );
 		element.spinner( "option", "max", 1000 );
 
-		shouldChange( true, "min, value changed" );
+		shouldChange( false, "min, value not changed" );
 		element.spinner( "option", "min", 950 );
 
 		shouldChange( false, "min, value not changed" );

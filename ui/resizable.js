@@ -287,17 +287,9 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		var curleft, curtop, cursor,
 			o = this.options,
-			iniPos = this.element.position(),
 			el = this.element;
 
 		this.resizing = true;
-
-		// Bugfix for http://bugs.jqueryui.com/ticket/1749
-		if ( (/absolute/).test( el.css("position") ) ) {
-			el.css({ position: "absolute", top: el.css("top"), left: el.css("left") });
-		} else if (el.is(".ui-draggable")) {
-			el.css({ position: "absolute", top: iniPos.top, left: iniPos.left });
-		}
 
 		this._renderProxy();
 

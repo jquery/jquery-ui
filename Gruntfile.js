@@ -28,6 +28,7 @@ var
 		"core",
 		"accordion",
 		"autocomplete",
+		"calendar",
 		"button",
 		"datepicker",
 		"dialog",
@@ -75,7 +76,8 @@ var
 			"dist/jquery-ui.js",
 			"dist/jquery-ui.min.js"
 		]
-	};
+	},
+	component = grunt.option( "component" ) || "**";
 
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
@@ -172,8 +174,7 @@ grunt.initConfig({
 		})
 	},
 	qunit: {
-		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
-			// TODO except for all|index|test, try to include more as we go
+		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
 			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
 		options: {
@@ -218,25 +219,89 @@ grunt.initConfig({
 	},
 
 	bowercopy: {
-		options: {
-			clean: true
-		},
-		qunit: {
+		all: {
+			options: {
+				clean: true,
+				ignore: [ "jquery" ],
+				destPrefix: "external"
+			},
 			files: {
-				"external": "qunit/qunit"
+				"qunit/qunit.js": "qunit/qunit/qunit.js",
+				"qunit/qunit.css": "qunit/qunit/qunit.css",
+				"qunit/MIT-LICENSE.txt": "qunit/MIT-LICENSE.txt",
+
+				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
+
+				"jshint/jshint.js": "jshint/dist/jshint.js",
+				"jshint/LICENSE": "jshint/LICENSE",
+
+				"jquery/jquery.js": "jquery-1.x/jquery.js",
+				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",
+
+				"jquery-1.6.0/jquery.js": "jquery-1.6.0/jquery.js",
+				"jquery-1.6.0/MIT-LICENSE.txt": "jquery-1.6.0/MIT-LICENSE.txt",
+
+				"jquery-1.6.1/jquery.js": "jquery-1.6.1/jquery.js",
+				"jquery-1.6.1/MIT-LICENSE.txt": "jquery-1.6.1/MIT-LICENSE.txt",
+
+				"jquery-1.6.2/jquery.js": "jquery-1.6.2/jquery.js",
+				"jquery-1.6.2/MIT-LICENSE.txt": "jquery-1.6.2/MIT-LICENSE.txt",
+
+				"jquery-1.6.3/jquery.js": "jquery-1.6.3/jquery.js",
+				"jquery-1.6.3/MIT-LICENSE.txt": "jquery-1.6.3/MIT-LICENSE.txt",
+
+				"jquery-1.6.4/jquery.js": "jquery-1.6.4/jquery.js",
+				"jquery-1.6.4/MIT-LICENSE.txt": "jquery-1.6.4/MIT-LICENSE.txt",
+
+				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
+				"jquery-1.7.0/MIT-LICENSE.txt": "jquery-1.7.0/MIT-LICENSE.txt",
+
+				"jquery-1.7.1/jquery.js": "jquery-1.7.1/jquery.js",
+				"jquery-1.7.1/MIT-LICENSE.txt": "jquery-1.7.1/MIT-LICENSE.txt",
+
+				"jquery-1.7.2/jquery.js": "jquery-1.7.2/jquery.js",
+				"jquery-1.7.2/MIT-LICENSE.txt": "jquery-1.7.2/MIT-LICENSE.txt",
+
+				"jquery-1.8.0/jquery.js": "jquery-1.8.0/jquery.js",
+				"jquery-1.8.0/MIT-LICENSE.txt": "jquery-1.8.0/MIT-LICENSE.txt",
+
+				"jquery-1.8.1/jquery.js": "jquery-1.8.1/jquery.js",
+				"jquery-1.8.1/MIT-LICENSE.txt": "jquery-1.8.1/MIT-LICENSE.txt",
+
+				"jquery-1.8.2/jquery.js": "jquery-1.8.2/jquery.js",
+				"jquery-1.8.2/MIT-LICENSE.txt": "jquery-1.8.2/MIT-LICENSE.txt",
+
+				"jquery-1.8.3/jquery.js": "jquery-1.8.3/jquery.js",
+				"jquery-1.8.3/MIT-LICENSE.txt": "jquery-1.8.3/MIT-LICENSE.txt",
+
+				"jquery-1.9.0/jquery.js": "jquery-1.9.0/jquery.js",
+				"jquery-1.9.0/MIT-LICENSE.txt": "jquery-1.9.0/MIT-LICENSE.txt",
+
+				"jquery-1.9.1/jquery.js": "jquery-1.9.1/jquery.js",
+				"jquery-1.9.1/MIT-LICENSE.txt": "jquery-1.9.1/MIT-LICENSE.txt",
+
+				"jquery-1.10.0/jquery.js": "jquery-1.10.0/jquery.js",
+				"jquery-1.10.0/MIT-LICENSE.txt": "jquery-1.10.0/MIT-LICENSE.txt",
+
+				"jquery-1.10.1/jquery.js": "jquery-1.10.1/jquery.js",
+				"jquery-1.10.1/MIT-LICENSE.txt": "jquery-1.10.1/MIT-LICENSE.txt",
+
+				"jquery-1.10.2/jquery.js": "jquery-1.10.2/jquery.js",
+				"jquery-1.10.2/MIT-LICENSE.txt": "jquery-1.10.2/MIT-LICENSE.txt",
+
+				"jquery-2.0.0/jquery.js": "jquery-2.0.0/jquery.js",
+				"jquery-2.0.0/MIT-LICENSE.txt": "jquery-2.0.0/MIT-LICENSE.txt",
+
+				"jquery-2.0.1/jquery.js": "jquery-2.0.1/jquery.js",
+				"jquery-2.0.1/MIT-LICENSE.txt": "jquery-2.0.1/MIT-LICENSE.txt",
+
+				"jquery-2.0.2/jquery.js": "jquery-2.0.2/jquery.js",
+				"jquery-2.0.2/MIT-LICENSE.txt": "jquery-2.0.2/MIT-LICENSE.txt",
+
+				"jquery-2.0.3/jquery.js": "jquery-2.0.3/jquery.js",
+				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt"
 			}
-		},
-		mousewheel: {
-			files: {
-				"external": "jquery-mousewheel/jquery.mousewheel.js"
-			}
-		},
-		jshint: {
-			files: {
-				"external": "jshint/dist/jshint.js"
-			}
-		},
-		"jquery.js": "jquery/dist/jquery.js"
+		}
 	}
 });
 

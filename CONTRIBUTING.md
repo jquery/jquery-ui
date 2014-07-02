@@ -76,7 +76,7 @@ To lint the JavaScript, HTML, and CSS, as well as run a smoke test in PhantomJS,
 $ grunt
 ```
 
-To run the tests for a specific plugin in your browser, open the approriate file from the `/tests/unit/` directory, for example: `http://localhost/tests/unit/accordion/accordion.html`. The domain will be dependent on your local server configuation; if there is a port, be sure to include it.
+To run the tests for a specific plugin in your browser, open the appropriate file from the `/tests/unit/` directory, for example: `http://localhost/tests/unit/accordion/accordion.html`. The domain will be dependent on your local server configuration; if there is a port, be sure to include it.
 
 Ideally you would test in all of our [supported browsers](http://jqueryui.com/browser-support/), but if you don't have all of these browsers available, that's ok.
 
