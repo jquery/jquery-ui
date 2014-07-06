@@ -544,11 +544,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_valueMin: function() {
-		return this.options.min;
+		return parseInt(this.options.min, 10);
 	},
 
 	_valueMax: function() {
-		return this.options.max;
+		return parseInt(this.options.max, 10);
 	},
 
 	_refreshValue: function() {
