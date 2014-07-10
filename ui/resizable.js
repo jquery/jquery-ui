@@ -645,9 +645,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 			position: this.position,
 			size: this.size,
 			originalSize: this.originalSize,
-			originalPosition: this.originalPosition,
-			prevSize: this.prevSize,
-			prevPosition: this.prevPosition
+			originalPosition: this.originalPosition
 		};
 	}
 
@@ -761,7 +759,7 @@ $.ui.plugin.add( "resizable", "containment", {
 		}
 	},
 
-	resize: function( event, ui ) {
+	resize: function( event ) {
 		var woset, hoset, isParent, isOffsetRelative,
 			that = $( this ).resizable( "instance" ),
 			o = that.options,
@@ -827,10 +825,10 @@ $.ui.plugin.add( "resizable", "containment", {
 		}
 
 		if ( !continueResize ){
-			that.position.left = ui.prevPosition.left;
-			that.position.top = ui.prevPosition.top;
-			that.size.width = ui.prevSize.width;
-			that.size.height = ui.prevSize.height;
+			that.position.left = that.prevPosition.left;
+			that.position.top = that.prevPosition.top;
+			that.size.width = that.prevSize.width;
+			that.size.height = that.prevSize.height;
 		}
 	},
 
