@@ -20,7 +20,10 @@
 	}
 }(function( $ ) {
 
-var dataSpace = "ui-effects-";
+var dataSpace = "ui-effects-",
+
+	// Create a local jQuery because jQuery Color relies on it
+	jQuery = $;
 
 $.effects = {
 	effect: {}
