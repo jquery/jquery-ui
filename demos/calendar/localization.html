@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Datepicker - Display month &amp; year menus</title>
+	<title>jQuery UI Calendar - Localize calendar</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../external/globalize/globalize.js"></script>
@@ -11,24 +11,31 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/position.js"></script>
-	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker({
-			changeMonth: true,
-			changeYear: true
+		var calendar = $( "#calendar" ).calendar(),
+			date = calendar.calendar( "valueAsDate" );
+
+		$( "#locale" ).change(function() {
+			Globalize.locale( $(this).val() );
+			calendar.calendar( "valueAsDate", date );
 		});
 	});
 	</script>
 </head>
 <body>
 
-<p>Date: <input type="text" id="datepicker"></p>
+<div id="calendar"></div>
+<select id="locale">
+	<option value="de-DE" selected>German (Deutsch)</option>
+	<option value="en">English</option>
+</select></p>
 
 <div class="demo-description">
-<p>Show month and year dropdowns in place of the static month/year header to facilitate navigation through large timeframes.  Add the boolean <code>changeMonth</code> and <code>changeYear</code> options.</p>
+<p>Localize the calendar calendar language and format (English / Western formatting is the default).  The calendar includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
 </div>
 </body>
 </html>

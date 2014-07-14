@@ -11,16 +11,18 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/position.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		Globalize.locale( "de-DE" );
-		$( "#datepicker" ).datepicker();
+		var datepicker = $( "#datepicker" ).datepicker(),
+			date = datepicker.datepicker( "valueAsDate" );
+
 		$( "#locale" ).change(function() {
-			// TODO refresh the current value to convert to the selected locale
 			Globalize.locale( $(this).val() );
+			datepicker.datepicker( "valueAsDate", date );
 		});
 	});
 	</script>

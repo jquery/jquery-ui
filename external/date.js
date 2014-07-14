@@ -26,9 +26,13 @@ $.date = function( date, globalFormat ) {
 	if ( typeof date === "string" && date.length ) {
 		this.dateObject = Globalize.parseDate( date, globalFormat );
 	}
+	if ( date instanceof Date ) {
+		this.dateObject = date;
+	}
 
 	this.dateObject = this.dateObject || new Date();
 	this.globalFormat = globalFormat;
+	this.selected = null;
 };
 
 $.date.prototype = {
@@ -179,6 +183,9 @@ $.date.prototype = {
 	select: function() {
 		this.selected = this.clone();
 		return this;
+	},
+	selectedDate: function() {
+		return this.selected.date();
 	},
 	clone: function() {
 		var date = this.dateObject;

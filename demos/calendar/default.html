@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Datepicker - Dates in other months</title>
+	<title>jQuery UI Calendar - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../external/globalize/globalize.js"></script>
@@ -11,30 +11,21 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/position.js"></script>
-	<script src="../../ui/datepicker.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#datepicker" ).datepicker({
-			eachDay: function( day ) {
-				if ( day.lead ) {
-					day.render = true;
-					day.selectable = true;
-					day.extraClasses = "ui-priority-secondary";
-				}
-			}
-		});
+		$( "#calendar" ).calendar();
 	});
 	</script>
 </head>
 <body>
 
-<p>Date: <input type="text" id="datepicker"></p>
+<div id="calendar"></div>
 
 <div class="demo-description">
-<p>The datepicker can show dates that come from other than the main month
-	being displayed. These other dates can also be made selectable.</p>
+<p>The calendar is tied to a standard form input field.  Focus on the input (click, or use the tab key) to open an interactive calendar in a small overlay.  Choose a date, click elsewhere on the page (blur the input), or hit the Esc key to close. If a date is chosen, feedback is shown as the input's value.</p>
 </div>
 </body>
 </html>
