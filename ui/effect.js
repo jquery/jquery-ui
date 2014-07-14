@@ -20,7 +20,11 @@
 	}
 }(function( $ ) {
 
-var dataSpace = "ui-effects-";
+var dataSpace = "ui-effects-",
+
+	// Create a local jQuery because jQuery Color relies on it and the
+	// global may not exist with AMD and a custom build (#10199)
+	jQuery = $;
 
 $.effects = {
 	effect: {}
