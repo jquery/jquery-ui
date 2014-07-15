@@ -291,4 +291,17 @@ test( "ui-draggable-handle assigned to appropriate element", function() {
 	ok( !element.find( "p" ).hasClass( "ui-draggable-handle" ), "removed in destroy()" );
 });
 
+test( "ui-draggable-handle managed correctly in nested draggables", function() {
+	expect( 4 );
+	var parent = $( "<div><div></div></div>" ).draggable().appendTo( "#qunit-fixture" ),
+		child = parent.find( "div" ).draggable();
+
+	ok( parent.hasClass( "ui-draggable-handle" ), "parent has class name on init" );
+	ok( child.hasClass( "ui-draggable-handle" ), "child has class name on init" );
+
+	parent.draggable( "destroy" );
+	ok( !parent.hasClass( "ui-draggable-handle" ), "parent loses class name on destroy" );
+	ok( child.hasClass( "ui-draggable-handle" ), "child retains class name on destroy" );
+});
+
 })( jQuery );
