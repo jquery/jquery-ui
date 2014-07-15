@@ -351,10 +351,13 @@ return $.widget( "ui.accordion", {
 		} else if ( heightStyle === "auto" ) {
 			maxHeight = 0;
 			this.headers.next()
+				.show()
 				.each(function() {
-					maxHeight = Math.max( maxHeight, $( this ).css( "height", "" ).height() );
+					maxHeight = Math.max( maxHeight, $( this ).outerHeight() );
 				})
-				.height( maxHeight );
+				.height( maxHeight )
+				.not( this.active.next() )
+				.hide();
 		}
 	},
 
