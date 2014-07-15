@@ -314,8 +314,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_setHandleClassName: function() {
+		var handle =  this.options.handle ?
+			this.element.find( this.options.handle ) : this.element;
 		this._removeHandleClassName();
-		$( this.options.handle || this.element ).addClass( "ui-draggable-handle" );
+		handle.addClass( "ui-draggable-handle" );
 	},
 
 	_removeHandleClassName: function() {
