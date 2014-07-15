@@ -315,7 +315,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_setHandleClassName: function() {
 		var handle =  this.options.handle ?
-			$( this.options.handle, this.element ) : this.element;
+			this.element.find( this.options.handle ) : this.element;
 		this._removeHandleClassName();
 		handle.addClass( "ui-draggable-handle" );
 	},
