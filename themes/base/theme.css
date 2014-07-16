@@ -394,29 +394,25 @@ a.ui-button:active,
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-left,
-.ui-corner-tl,
-.ui-buttonset .ui-button:first-child {
+.ui-corner-tl {
 	border-top-left-radius: 4px/*{cornerRadius}*/;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
-.ui-corner-tr,
-.ui-buttonset .ui-button:last-child {
+.ui-corner-tr {
 	border-top-right-radius: 4px/*{cornerRadius}*/;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
-.ui-corner-bl,
-.ui-buttonset .ui-button:first-child {
+.ui-corner-bl {
 	border-bottom-left-radius: 4px/*{cornerRadius}*/;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
-.ui-corner-br,
-.ui-buttonset .ui-button:last-child {
+.ui-corner-br {
 	border-bottom-right-radius: 4px/*{cornerRadius}*/;
 }
 

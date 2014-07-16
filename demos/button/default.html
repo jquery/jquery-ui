@@ -8,13 +8,14 @@
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
-	<script src="../../ui/checkboxradio.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
 		$( ".widget input[type=submit], .widget a, .widget button" )
-			.button();
-		$("#checkbox").checkboxradio();
+			.button()
+			.click(function( event ) {
+				event.preventDefault();
+			});
 	});
 	</script>
 </head>
@@ -31,8 +32,7 @@
 <button class="ui-button ui-widget ui-corner-all">A button element</button>
 
 <input class="ui-button ui-widget ui-corner-all" type="submit" value="A submit button">
-<label for="checkbox">checkbox</label>
-<input type="checkbox" name="checkbox" id="checkbox"/>
+
 <a class="ui-button ui-widget ui-corner-all" href="#">An anchor</a>
 
 <div class="demo-description">
