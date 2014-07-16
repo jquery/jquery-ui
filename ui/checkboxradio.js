@@ -26,7 +26,7 @@
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
 	typeClasses = " ui-icon ui-icon-background ui-state-focus ui-icon-check ui-icon-blank" +
-		"ui-radio-label ui-checkbox-label ui-radio-checked ui-checkbox-checked",
+		" ui-radio-label ui-checkbox-label ui-radio-checked ui-checkbox-checked",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -63,7 +63,9 @@ $.widget( "ui.checkboxradio", {
 	_getCreateOptions: function() {
 		var options = {};
 
-		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
+		this._readLabel();
+
+		this.originalLabel = this.label.html();
 
 		this._isDisabled( options );
 
@@ -108,8 +110,6 @@ $.widget( "ui.checkboxradio", {
 		}
 
 		this._readType();
-
-		this._readLabel();
 
 		this._enhance();
 
@@ -164,29 +164,32 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_enhance: function() {
+		var toAdd = "ui-icon ui-icon-background ui-corner-all ",
+			checked = this.element.is( ":checked" );
+
 		this.element.addClass( "ui-helper-hidden-accessible ui-checkboxradio" );
 
 		this.label.addClass( baseClasses + " ui-" + this.type + "-label" );
 
 		if ( this.options.icon ) {
-			var toAdd = "ui-icon ui-icon-background ui-corner-all ";
-
 			this.label.addClass( "ui-icon-beginning" );
 			this.icon = $( "<span>" );
 
-			if ( this.element.is( ":checked" ) && this.type === "checkbox" ) {
+			if ( checked && this.type === "checkbox" ) {
 				toAdd += "ui-icon-check";
 			} else {
 				toAdd += "ui-icon-blank";
 			}
 			this.icon.addClass( toAdd );
-			this.label.prepend( this.icon );
+			this.icon.appendTo( this.label );
 		}
-		if ( this.element.is( ":checked" ) ){
+		if ( checked ) {
 			this.label.addClass( "ui-" + this.type + "-checked ui-state-active" );
 		}
-		if ( this.options.label ){
-			this.label.html( this.icon ).append( this.options.label );
+		if ( this.options.label && this.options.label !== this.originalLabel ) {
+			this.label.html( this.icon ? this.icon : "" ).append( this.options.label );
+		} else if ( this.originalLabel ) {
+			this.options.label = this.originalLabel;
 		}
 	},
 
@@ -198,7 +201,7 @@ $.widget( "ui.checkboxradio", {
 		var checked = this.element.is( ":checked" );
 		this.label.toggleClass( "ui-" + this.type + "-checked ui-state-active", checked );
 		if ( this.options.icon && this.type === "checkbox" ) {
-			this.icon.toggleClass( "ui-icon-check ui-icon-blank", checked );
+			this.icon.toggleClass( "ui-icon-check", checked ).toggleClass( "ui-icon-blank", !checked );
 		}
 		if ( this.type === "radio" ) {
 			if ( this.options.disabled ) {
@@ -224,11 +227,18 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_setOption: function( key, value ) {
+		var original;
+		if ( key === "label" && value === "null" ) {
+			original = this.options[ key ];
+		}
 		this._super( key, value );
 		if ( key === "disabled" ) {
 			this.label.toggleClass( "ui-state-disabled", !!value );
 			this.element.prop( "disabled", !!value );
 			return;
+		}
+		if ( key === "label" && value === "null" ) {
+			this.options[ key ] = original;
 		}
 		this.refresh();
 	},
@@ -239,10 +249,10 @@ $.widget( "ui.checkboxradio", {
 			this.label.addClass( "ui-icon-beginning" );
 			if ( this.icon === undefined ) {
 				this.icon = $( "<span>" );
-				this.label.prepend( this.icon );
+				this.icon.appendTo( this.label );
 			}
 			this.icon.addClass( "ui-icon ui-icon-background ui-corner-all" +
-				 ( this.type === "checkbox" && checked ) ? " ui-icon-blank" : " ui-icon-check" );
+				( ( this.type === "checkbox" && checked ) ?  " ui-icon-check" : " ui-icon-blank" ) );
 
 		} else if ( this.icon !== undefined ) {
 			this.label.removeClass( "ui-icon-beginning" );
@@ -251,7 +261,7 @@ $.widget( "ui.checkboxradio", {
 		}
 		this.label.toggleClass( "ui-state-active ui-" + this.type + "-checked", checked );
 		if ( this.options.label !== null ) {
-			this.label.html( !!this.icon ? "" : this.icon ).append( this.options.label );
+			this.label.html( !!this.icon ? this.icon : "" ).append( this.options.label );
 		}
 	},
 

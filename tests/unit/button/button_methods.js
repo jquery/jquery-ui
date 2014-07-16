@@ -4,9 +4,9 @@
 (function($) {
 
 
-module("button: methods");
+module( "Button: methods" );
 
-test("destroy", function() {
+test( "destroy", function() {
 	expect( 1 );
 	domEqual( "#button", function() {
 		$( "#button" ).button().button( "destroy" );

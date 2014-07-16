@@ -3,16 +3,16 @@
  */
 (function($) {
 
-module("button: events");
+module( "Button: events" );
 
-asyncTest( "when button loses focus, ensure active state is removed (#8559)", function() {
+asyncTest( "When button loses focus, ensure active state is removed", function() {
 	expect( 1 );
 
 	var element = $( "#button" ).button();
 
 	element.one( "keypress", function() {
 		element.one( "blur", function() {
-			ok( !element.is(".ui-state-active"), "button loses active state appropriately" );
+			ok( !element.is( ".ui-state-active" ), "button loses active state appropriately" );
 			start();
 		}).blur();
 	});
