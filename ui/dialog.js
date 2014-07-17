@@ -262,7 +262,7 @@ return $.widget( "ui.dialog", {
 		this._moveToTop( null, true );
 
 		// Ensure the overlay is moved to the top with the dialog, but only when
-		// opening. The overlay shoudln't move after the dialog is open so that
+		// opening. The overlay shouldn't move after the dialog is open so that
 		// modeless dialogs opened after the modal dialog stack properly.
 		if ( this.overlay ) {
 			this.overlay.css( "z-index", this.uiDialog.css( "z-index" ) - 1 );
