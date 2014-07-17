@@ -78,6 +78,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_setOption: function( key, value ) {
 		this._super( key, value );
 		if ( key === "handle" ) {
+			this._removeHandleClassName();
 			this._setHandleClassName();
 		}
 	},
@@ -314,14 +315,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_setHandleClassName: function() {
-		this._removeHandleClassName();
-		$( this.options.handle || this.element ).addClass( "ui-draggable-handle" );
+		this.handleElement = this.options.handle ?
+			this.element.find( this.options.handle ) : this.element;
+		this.handleElement.addClass( "ui-draggable-handle" );
 	},
 
 	_removeHandleClassName: function() {
-		this.element.find( ".ui-draggable-handle" )
-			.addBack()
-			.removeClass( "ui-draggable-handle" );
+		this.handleElement.removeClass( "ui-draggable-handle" );
 	},
 
 	_createHelper: function(event) {

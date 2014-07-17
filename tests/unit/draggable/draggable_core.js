@@ -274,17 +274,34 @@ asyncTest( "#4261: active element should blur when mousing down on a draggable",
 });
 
 test( "ui-draggable-handle assigned to appropriate element", function() {
-	expect( 4 );
+	expect( 5 );
 
-	var element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
+	var p = $( "<p>" ).appendTo( "#qunit-fixture" ),
+		element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
 	ok( element.hasClass( "ui-draggable-handle" ), "handle is element by default" );
 
 	element.draggable( "option", "handle", "p" );
 	ok( !element.hasClass( "ui-draggable-handle" ), "removed from element" );
 	ok( element.find( "p" ).hasClass( "ui-draggable-handle" ), "added to handle" );
 
+	ok( !p.hasClass( "ui-draggable-handle" ),
+		"ensure handle class name is constrained within the draggble (#10212)" );
+
 	element.draggable( "destroy" );
 	ok( !element.find( "p" ).hasClass( "ui-draggable-handle" ), "removed in destroy()" );
+});
+
+test( "ui-draggable-handle managed correctly in nested draggables", function() {
+	expect( 4 );
+	var parent = $( "<div><div></div></div>" ).draggable().appendTo( "#qunit-fixture" ),
+		child = parent.find( "div" ).draggable();
+
+	ok( parent.hasClass( "ui-draggable-handle" ), "parent has class name on init" );
+	ok( child.hasClass( "ui-draggable-handle" ), "child has class name on init" );
+
+	parent.draggable( "destroy" );
+	ok( !parent.hasClass( "ui-draggable-handle" ), "parent loses class name on destroy" );
+	ok( child.hasClass( "ui-draggable-handle" ), "child retains class name on destroy" );
 });
 
 })( jQuery );
