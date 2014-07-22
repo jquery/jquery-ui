@@ -353,7 +353,7 @@ return $.widget( "ui.accordion", {
 			this.headers.next()
 				.show()
 				.each(function() {
-					maxHeight = Math.max( maxHeight, $( this ).outerHeight() );
+					maxHeight = Math.max( maxHeight, $( this ).css( "height", "" ).height() );
 				})
 				.height( maxHeight )
 				.not( this.active.next() )
