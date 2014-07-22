@@ -11,7 +11,7 @@
 		"jquery": ">=1.6"
 	},
 	"devDependencies": {
-		"jquery-mousewheel": "3.1.11",
+		"jquery-mousewheel": "3.1.12",
 		"jshint": "2.4.4",
 		"qunit": "1.14.0",
 
