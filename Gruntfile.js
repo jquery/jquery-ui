@@ -230,6 +230,7 @@ grunt.initConfig({
 				"qunit/MIT-LICENSE.txt": "qunit/MIT-LICENSE.txt",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
+				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
 
 				"jshint/jshint.js": "jshint/dist/jshint.js",
 				"jshint/LICENSE": "jshint/LICENSE",
