@@ -54,7 +54,6 @@ var baseClasses = "ui-button ui-widget ui-corner-all",
 
 $.widget( "ui.checkboxradio", {
 	version: "@VERSION",
-	defaultElement: "<input type='checkbox'>",
 	options: {
 		disabled: null,
 		label: null,
@@ -62,13 +61,17 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_getCreateOptions: function() {
-		var options = {};
+		var disabled,
+			options = {};
 
 		this._readLabel();
 
 		this.originalLabel = this.label.html();
 
-		this._readDisabled( options );
+		disabled = this.element.prop( "disabled" );
+		if ( disabled != null ) {
+			options.disabled = disabled;
+		}
 
 		if ( this.originalLabel ) {
 			options.label = this.originalLabel;
@@ -95,13 +98,9 @@ $.widget( "ui.checkboxradio", {
 		formElement.off( "reset" + this.eventNamespace, formResetHandler );
 		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
-		// If the option is a boolean its been set by either user or by
-		// _getCreateOptions so we need to make sure the prop matches
-		// If it is not a boolean the user set it explicitly to null so we need to check the dom
-		if ( typeof this.options.disabled === "boolean" ) {
-			this.element.prop( "disabled", this.options.disabled );
-		} else {
-			this._readDisabled( this.options );
+		// If it is null the user set it explicitly to null so we need to check the dom
+		if ( this.options.disabled == null ) {
+			this.options.disabled = this.element.prop( "disabled" ) || false;
 		}
 
 		// If the option is true we call set options to add the disabled
@@ -133,12 +132,12 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_readLabel: function() {
-		var ancestor, labelSelector,
-			labels = this.element[ 0 ].labels;
-
+		var ancestor, labelSelector, parent = this.element.closest( "label" );
 		// Check control.labels first
-		if ( labels !== undefined && labels.length > 0 ) {
-			this.label = $( labels[ 0 ] );
+		if ( this.element[ 0 ].labels !== undefined && this.element[ 0 ].labels.length > 0 ){
+			this.label = $( this.element[ 0 ].labels[ 0 ] );
+		} else if ( parent.length > 0 ) {
+			this.label = parent;
 		} else {
 
 			// We don't search against the document in case the element
@@ -241,6 +240,8 @@ $.widget( "ui.checkboxradio", {
 
 			if ( this.type === "checkbox" ) {
 				toAdd += checked ? "ui-icon-check" : "ui-icon-blank";
+			} else {
+				toAdd += "ui-icon-blank";
 			}
 			this.icon.addClass( toAdd ).appendTo( this.label );
 		} else if ( this.icon !== undefined ) {

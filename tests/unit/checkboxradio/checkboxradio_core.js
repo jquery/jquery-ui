@@ -90,8 +90,8 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 		}, 1 );
 	});
 }
-test( "Checkbox creation that requires a matching label does not find label in all cases", function() {
-	expect( 5 );
+test( "Checkbox creation that requires a matching finds label in all cases", function() {
+	expect( 6 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
 	group.find( "input[type=checkbox]" ).checkboxradio();
 	ok( group.find( "label" ).is( ".ui-button" ) );
@@ -110,6 +110,10 @@ test( "Checkbox creation that requires a matching label does not find label in a
 
 	group = $( "<input type='checkbox' id='t7092e'><span><label for='t7092e'></label></span>" );
 	group.filter( "input[type=checkbox]" ).checkboxradio();
+	ok( group.find( "label" ).is( ".ui-button" ) );
+
+	group = $( "<span><label><input type='checkbox' id='t7092f'></label></span>" );
+	group.find( "input[type=checkbox]" ).checkboxradio();
 	ok( group.find( "label" ).is( ".ui-button" ) );
 });
 
