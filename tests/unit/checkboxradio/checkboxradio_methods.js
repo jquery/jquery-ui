@@ -40,7 +40,7 @@ module( "Checkboxradio: methods" );
 			"label classes match original after destroy" );
 	});
 
-	test( "Checkbox: disable / enable", function(){
+	test( "Checkbox: disable / enable", function() {
 		var checkbox = $( "#checkbox-method-disable" );
 
 		expect( 4 );
@@ -101,7 +101,7 @@ module( "Checkboxradio: methods" );
 			"label classes match original after destroy" );
 	});
 
-	test( "Radio: disable / enable", function(){
+	test( "Radio: disable / enable", function() {
 		var radio = $( "#checkbox-method-disable" );
 
 		expect( 4 );
@@ -126,6 +126,15 @@ module( "Checkboxradio: methods" );
 		radio.checkboxradio();
 		strictEqual( radio.checkboxradio( "widget" ).attr( "id" ), label.attr( "id" ),
 			"widget method returns label" );
+	});
+	test( "Input wrapped in a label preserved on refresh", function() {
+		var input = $( "#label-with-no-for" ).checkboxradio(),
+			element = input.checkboxradio( "widget" );
+
+		expect( 1 );
+
+		input.checkboxradio( "refresh" );
+		strictEqual( input.parent().is( element ), true, "Input preserved" );
 	});
 
 })(jQuery);
