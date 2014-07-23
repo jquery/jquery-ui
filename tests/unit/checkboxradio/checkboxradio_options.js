@@ -1,4 +1,4 @@
-/*
+-/*
  * checkboxradio_methods.js
  */
 
@@ -130,7 +130,7 @@ module( "Checkboxradio: checkbox: options" );
 
 		strictEqual( checkbox.checkboxradio( "option", "label" ),
 			"checkbox label", "When no value passed on create text from dom is used for option" );
-		strictEqual( widget.text(),
+		strictEqual( widget.contents().not( this.element ),
 			"checkbox label", "When no value passed on create text from dom is used in dom" );
 
 		checkbox.checkboxradio( "destroy" );
@@ -141,7 +141,7 @@ module( "Checkboxradio: checkbox: options" );
 
 		strictEqual( checkbox.checkboxradio( "option", "label" ),
 			"foo", "When value is passed on create value is used for option" );
-		strictEqual( widget.text(),
+		strictEqual( widget.contents().not( this.element ),
 			"foo", "When value is passed on create value is used in dom" );
 
 		checkbox.checkboxradio( "destroy" );
@@ -151,21 +151,21 @@ module( "Checkboxradio: checkbox: options" );
 
 		strictEqual( checkbox.checkboxradio( "option", "label" ),
 			"foo", "When null is passed on create text from dom is used for option" );
-		strictEqual( widget.text(),
+		strictEqual( widget.contents().not( this.element ),
 			"foo", "When null is passed on create text from dom is used in dom" );
 
 		checkbox.checkboxradio( "option", "label", "bar" );
 
 		strictEqual( checkbox.checkboxradio( "option", "label" ),
 			"bar", "When value is passed value is used for option" );
-		strictEqual( widget.text(),
+		strictEqual( widget.contents().not( this.element ),
 			"bar", "When value is passed value is used in dom" );
 
 		checkbox.checkboxradio( "option", "label", null );
 
 		strictEqual( checkbox.checkboxradio( "option", "label" ),
 			"bar", "When null is passed text from dom is used for option" );
-		strictEqual( widget.text(),
+		strictEqual( widget.contents().not( this.element ),
 			"bar", "When null is passed text from dom is used in dom" );
 
 	});
