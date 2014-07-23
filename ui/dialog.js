@@ -273,6 +273,11 @@ return $.widget( "ui.dialog", {
 			that._trigger( "focus" );
 		});
 
+		// Track the dialog immediately upon openening in case a focus event
+		// somehow occurs outside of the dialog before an element inside the
+		// dialog is focused (#10152)
+		this._makeFocusTarget();
+
 		this._trigger( "open" );
 	},
 
@@ -584,12 +589,16 @@ return $.widget( "ui.dialog", {
 
 	_trackFocus: function() {
 		this._on( this.widget(), {
-			"focusin": function( event ) {
-				this._untrackInstance();
-				this._trackingInstances().unshift( this );
+			focusin: function( event ) {
+				this._makeFocusTarget();
 				this._focusedElement = $( event.target );
 			}
 		});
+	},
+
+	_makeFocusTarget: function() {
+		this._untrackInstance();
+		this._trackingInstances().unshift( this );
 	},
 
 	_untrackInstance: function() {
