@@ -27,7 +27,10 @@ $.cleanData = (function( orig ) {
 	return function( elems ) {
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
 			try {
-				$( elem ).triggerHandler( "remove" );
+				// Only trigger remove when necessary to save time
+				if( $._data( elem ,"events" ) ){
+					$( elem ).triggerHandler( "remove" );
+				}
 			// http://bugs.jquery.com/ticket/8235
 			} catch( e ) {}
 		}
