@@ -98,6 +98,9 @@ a.ui-button:focus {
 	color: #212121/*{fcHover}*/;
 	text-decoration: none;
 }
+.ui-visual-focus {
+	box-shadow: 0 0 3px 1px rgb(94, 158, 214);
+}
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active,
