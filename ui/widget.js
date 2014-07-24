@@ -27,7 +27,11 @@ $.cleanData = (function( orig ) {
 	return function( elems ) {
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
 			try {
-				$( elem ).triggerHandler( "remove" );
+				// Only trigger remove when necessary to save time
+				var events = $._data( elem, "events" );
+				if( events !== undefined && events.remove ){
+					$( elem ).triggerHandler( "remove" );
+				}
 			// http://bugs.jquery.com/ticket/8235
 			} catch( e ) {}
 		}
