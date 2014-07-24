@@ -333,6 +333,8 @@ $.widget( "ui.autocomplete", {
 		this._super( key, value );
 		if ( key === "source" ) {
 			this._initSource();
+			this.term = '';
+			this.previous = '';
 		}
 		if ( key === "appendTo" ) {
 			this.menu.element.appendTo( this._appendTo() );
