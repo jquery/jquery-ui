@@ -117,10 +117,10 @@ $.widget( "ui.checkboxradio", {
 		this._on({
 			"change": "_toggleClasses",
 			"focus": function() {
-				this.label.addClass( "ui-state-focus" );
+				this.label.addClass( "ui-state-focus ui-visual-focus" );
 			},
 			"blur": function() {
-				this.label.removeClass( "ui-state-focus" );
+				this.label.removeClass( "ui-state-focus ui-visual-focus" );
 			}
 		});
 	},
