@@ -55,6 +55,9 @@
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default,
 .ui-button,
+
+/* We use html here because we need a greater specificity to make sure disabled
+works properly when clicked or hovered */
 html .ui-button.ui-state-disabled:hover,
 html .ui-button.ui-state-disabled:active {
 	border: 1px solid #c5c5c5/*{borderColorDefault}*/;
@@ -97,6 +100,11 @@ a.ui-button:hover,
 a.ui-button:focus {
 	color: #2b2b2b/*{fcHover}*/;
 	text-decoration: none;
+}
+
+/* This cant be configured with themeroller because its new may end up added later */
+.ui-visual-focus {
+	box-shadow: 0 0 3px 1px rgb(94, 158, 214);
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
@@ -196,7 +204,8 @@ a.ui-button:active,
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
-.ui-button:focus .ui-icon {
+.ui-button:focus .ui-icon,
+.ui-state-default .ui-icon {
 	background-image: url("images/ui-icons_555555_256x240.png")/*{iconsHover}*/;
 }
 .ui-state-active .ui-icon,
