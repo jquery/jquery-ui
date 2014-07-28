@@ -45,6 +45,42 @@ asyncTest( "accessibility", function() {
 });
 
 
+test( "extend _renderButtonItem method", function() {
+	expect( 4 );
+
+	var links, option,
+		element = $( "#speed" ).selectmenu(),
+		instance = element.selectmenu( "instance" ),
+		button = element.selectmenu( "widget" ),
+		menu = element.selectmenu( "menuWidget" );
+
+	instance._renderButtonItem = function( buttonItem, item ) {
+		buttonItem.parent().data( "test", item.value );
+		this._setText( buttonItem, item.label + item.index );
+	};
+
+	element.selectmenu( "refresh" );
+	links = menu.find( "li.ui-menu-item" );
+
+	option = element.find( "option:selected" );
+	equal(
+		option.text() + element[ 0 ].selectedIndex,
+		button.text(),
+		"refresh: button item text"
+	);
+	equal( button.data( "test" ), option.val(), "refresh: button item data" );
+
+	button.trigger( "click" );
+	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
+	option = element.find( "option" ).last();
+	equal(
+		option.text() + element[ 0 ].selectedIndex,
+		button.text(),
+		"click: button item text"
+	);
+	equal( button.data( "test" ), option.val(), "click: button item data" );
+});
+
 $.each([
 	{
 		type: "default",

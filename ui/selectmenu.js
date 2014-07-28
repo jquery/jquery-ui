@@ -67,7 +67,11 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_drawButton: function() {
-		var that = this;
+		var that = this,
+			item = this._parseOption(
+				this.element.find( "option:selected" ),
+				this.element[ 0 ].selectedIndex
+			);
 
 		// Associate existing label with the new button
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
@@ -99,12 +103,12 @@ return $.widget( "ui.selectmenu", {
 		})
 			.prependTo( this.button );
 
-		this.buttonText = $( "<span>", {
+		this.buttonItem = $( "<span>", {
 			"class": "ui-selectmenu-text"
 		})
 			.appendTo( this.button );
 
-		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
+		this._renderButtonItem( this.buttonItem, item );
 		this._resizeButton();
 
 		this._on( this.button, this._buttonEvents );
@@ -190,7 +194,7 @@ return $.widget( "ui.selectmenu", {
 
 	refresh: function() {
 		this._refreshMenu();
-		this._setText( this.buttonText, this._getSelectedItem().text() );
+		this._renderButtonItem( this.buttonItem, this._getSelectedItem().data( "ui-selectmenu-item" ) );
 		if ( !this.options.width ) {
 			this._resizeButton();
 		}
@@ -273,6 +277,10 @@ return $.widget( "ui.selectmenu", {
 
 	menuWidget: function() {
 		return this.menu;
+	},
+
+	_renderButtonItem: function( buttonItem, item ) {
+		this._setText( buttonItem, item.label );
 	},
 
 	_renderMenu: function( ul, items ) {
@@ -480,7 +488,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
-		this._setText( this.buttonText, item.label );
+		this._renderButtonItem( this.buttonItem, item );
 		this._setAria( item );
 		this._trigger( "select", event, { item: item } );
 
@@ -590,20 +598,25 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_parseOptions: function( options ) {
-		var data = [];
+		var that = this,
+			data = [];
 		options.each(function( index, item ) {
-			var option = $( item ),
-				optgroup = option.parent( "optgroup" );
-			data.push({
-				element: option,
-				index: index,
-				value: option.attr( "value" ),
-				label: option.text(),
-				optgroup: optgroup.attr( "label" ) || "",
-				disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" )
-			});
+			data.push( that._parseOption( $( item ), index ) );
 		});
 		this.items = data;
+	},
+
+	_parseOption: function( option, index ) {
+		var optgroup = option.parent( "optgroup" );
+
+		return {
+			element: option,
+			index: index,
+			value: option.attr( "value" ),
+			label: option.text(),
+			optgroup: optgroup.attr( "label" ) || "",
+			disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" )
+		};
 	},
 
 	_destroy: function() {
