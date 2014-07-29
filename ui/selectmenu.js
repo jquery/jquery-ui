@@ -106,7 +106,7 @@ return $.widget( "ui.selectmenu", {
 			.appendTo( this.button );
 
 		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
-		this._setOption( "width", this.options.width );
+		this._resizeButton();
 
 		this._on( this.button, this._buttonEvents );
 		this.button.one( "focusin", function() {
@@ -186,7 +186,9 @@ return $.widget( "ui.selectmenu", {
 	refresh: function() {
 		this._refreshMenu();
 		this._setText( this.buttonText, this._getSelectedItem().text() );
-		this._setOption( "width", this.options.width );
+		if ( !this.options.width ) {
+			this._resizeButton();
+		}
 	},
 
 	_refreshMenu: function() {
@@ -475,10 +477,7 @@ return $.widget( "ui.selectmenu", {
 		}
 
 		if ( key === "width" ) {
-			if ( !value ) {
-				value = this.element.outerWidth();
-			}
-			this.button.outerWidth( value );
+			this._resizeButton();
 		}
 	},
 
@@ -509,6 +508,17 @@ return $.widget( "ui.selectmenu", {
 			.attr( "aria-expanded", this.isOpen );
 		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
 		this.menu.attr( "aria-hidden", !this.isOpen );
+	},
+
+	_resizeButton: function() {
+		var width = this.options.width;
+
+		if ( !width ) {
+			width = this.element.show().outerWidth();
+			this.element.hide();
+		}
+
+		this.button.outerWidth( width );
 	},
 
 	_resizeMenu: function() {

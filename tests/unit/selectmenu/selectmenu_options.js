@@ -86,8 +86,8 @@ test( "CSS styles", function() {
 });
 
 
-test( "Width", function() {
-	expect( 8 );
+test( "width", function() {
+	expect( 9 );
 
 	var button, menu,
 		element = $( "#speed" );
@@ -124,6 +124,14 @@ test( "Width", function() {
 	equal( button.outerWidth(), element.outerWidth(), "button width with long option" );
 	element.selectmenu( "open" );
 	ok( menu.outerWidth() >= element.outerWidth(), "menu width with long option" );
+
+	element.parent().outerWidth( 300 );
+	element
+		.selectmenu( "destroy" )
+		.css( "width", "100%" )
+		.selectmenu();
+	button = element.selectmenu( "widget" );
+	equal( button.outerWidth(), 300, "button width fills container" );
 });
 
 })( jQuery );
