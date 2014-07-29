@@ -87,43 +87,31 @@ test( "CSS styles", function() {
 
 
 test( "width", function() {
-	expect( 9 );
+	expect( 5 );
 
 	var button, menu,
 		element = $( "#speed" );
 
 	element.selectmenu();
 	button = element.selectmenu( "widget" );
-	menu = element.selectmenu( "menuWidget" );
 
 	equal( button.outerWidth(), element.outerWidth(), "button width auto" );
-	element.selectmenu( "open" );
-	closeEnough( menu.outerWidth(), element.outerWidth(), 2, "menu width auto" );
 
 	element.outerWidth( 100 );
 	element.selectmenu( "refresh" );
-
 	equal( button.outerWidth(), 100, "button width set by CSS" );
-	element.selectmenu( "open" );
-	equal( menu.outerWidth(), 100, "menu width set by CSS" );
 
 	element
 		.width( "" )
 		.selectmenu( "option", "width", 100 )
 		.selectmenu( "refresh" );
-
 	equal( button.outerWidth(), 100, "button width set by JS option" );
-	element.selectmenu( "open" );
-	equal( menu.outerWidth(), 100, "menu width set by JS option" );
 
 	element
 		.append( $( "<option>", { text: "Option with a little longer text" } ) )
 		.selectmenu( "option", "width", "" )
 		.selectmenu( "refresh" );
-
 	equal( button.outerWidth(), element.outerWidth(), "button width with long option" );
-	element.selectmenu( "open" );
-	ok( menu.outerWidth() >= element.outerWidth(), "menu width with long option" );
 
 	element.parent().outerWidth( 300 );
 	element
