@@ -353,7 +353,14 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_buttonEvents: {
+
+		// Prevent text selection from being reset when interacting with the selectmenu (#10144)
+		mousedown: function( event ) {
+			event.preventDefault();
+		},
+
 		click: "_toggle",
+
 		keydown: function( event ) {
 			var preventDefault = true;
 			switch ( event.keyCode ) {
