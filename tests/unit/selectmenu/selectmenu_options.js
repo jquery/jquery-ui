@@ -125,11 +125,11 @@ test( "width", function() {
 	element.selectmenu( "open" );
 	ok( menu.outerWidth() >= element.outerWidth(), "menu width with long option" );
 
-	element = $( "#selectmenu-wrap2" )
-		.outerWidth( 300 )
-		.children( "select" )
-			.css( "width", "100%" )
-			.selectmenu();
+	element.parent().outerWidth( 300 );
+	element
+		.selectmenu( "destroy" )
+		.css( "width", "100%" )
+		.selectmenu();
 	button = element.selectmenu( "widget" );
 	equal( button.outerWidth(), 300, "button width fills container" );
 });
