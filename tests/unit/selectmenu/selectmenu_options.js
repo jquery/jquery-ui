@@ -89,7 +89,7 @@ test( "CSS styles", function() {
 test( "width", function() {
 	expect( 5 );
 
-	var button, menu,
+	var button,
 		element = $( "#speed" );
 
 	element.selectmenu();
