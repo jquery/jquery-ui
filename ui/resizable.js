@@ -321,22 +321,14 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	_mouseDrag: function(event) {
 
-		var data,
-			el = this.helper, props = {},
+		var data, props,
 			smp = this.originalMousePosition,
 			a = this.axis,
 			dx = (event.pageX-smp.left)||0,
 			dy = (event.pageY-smp.top)||0,
 			trigger = this._change[a];
 
-		this.prevPosition = {
-			top: this.position.top,
-			left: this.position.left
-		};
-		this.prevSize = {
-			width: this.size.width,
-			height: this.size.height
-		};
+		this._updatePrevProperties();
 
 		if (!trigger) {
 			return false;
@@ -355,26 +347,16 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		this._propagate("resize", event);
 
-		if ( this.position.top !== this.prevPosition.top ) {
-			props.top = this.position.top + "px";
-		}
-		if ( this.position.left !== this.prevPosition.left ) {
-			props.left = this.position.left + "px";
-		}
-		if ( this.size.width !== this.prevSize.width ) {
-			props.width = this.size.width + "px";
-		}
-		if ( this.size.height !== this.prevSize.height ) {
-			props.height = this.size.height + "px";
-		}
-		el.css( props );
+		props = this._applyChanges();
 
 		if ( !this._helper && this._proportionallyResizeElements.length ) {
 			this._proportionallyResize();
 		}
 
 		if ( !$.isEmptyObject( props ) ) {
+			this._updatePrevProperties();
 			this._trigger( "resize", event, this.ui() );
+			this._applyChanges();
 		}
 
 		return false;
@@ -421,6 +403,38 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		return false;
 
+	},
+
+	_updatePrevProperties: function() {
+		this.prevPosition = {
+			top: this.position.top,
+			left: this.position.left
+		};
+		this.prevSize = {
+			width: this.size.width,
+			height: this.size.height
+		};
+	},
+
+	_applyChanges: function() {
+		var props = {};
+
+		if ( this.position.top !== this.prevPosition.top ) {
+			props.top = this.position.top + "px";
+		}
+		if ( this.position.left !== this.prevPosition.left ) {
+			props.left = this.position.left + "px";
+		}
+		if ( this.size.width !== this.prevSize.width ) {
+			props.width = this.size.width + "px";
+		}
+		if ( this.size.height !== this.prevSize.height ) {
+			props.height = this.size.height + "px";
+		}
+
+		this.helper.css( props );
+
+		return props;
 	},
 
 	_updateVirtualBoundaries: function(forceAspectRatio) {

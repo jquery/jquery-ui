@@ -189,6 +189,34 @@ asyncTest( "past end of menu in multiline autocomplete", function() {
 	}, 50 );
 });
 
+asyncTest( "ESCAPE in multiline autocomplete", function() {
+        expect( 2 );
+
+        var customVal = "custom value",
+                element = $( "#autocomplete-contenteditable" ).autocomplete({
+                        delay: 0,
+                        source: [ "javascript" ],
+                        focus: function( event, ui ) {
+                                equal( ui.item.value, "javascript", "Item gained focus" );
+                                $( this ).text( customVal );
+                                event.preventDefault();
+                        }
+                });
+
+        element
+                .simulate( "focus" )
+                .autocomplete( "search", "ja" );
+
+        setTimeout(function() {
+                element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+                element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+                equal( element.text(), customVal );
+                start();
+        }, 50 );
+});
+
+
+
 asyncTest( "handle race condition", function() {
 	expect( 3 );
 	var count = 0,
