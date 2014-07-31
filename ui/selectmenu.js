@@ -67,8 +67,7 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_drawButton: function() {
-		var that = this,
-			tabindex = this.element.attr( "tabindex" );
+		var that = this;
 
 		// Associate existing label with the new button
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
@@ -83,28 +82,7 @@ return $.widget( "ui.selectmenu", {
 		this.element.hide();
 
 		// Create button
-		this.button = $( "<span>", {
-			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
-			tabindex: tabindex || this.options.disabled ? -1 : 0,
-			id: this.ids.button,
-			role: "combobox",
-			"aria-expanded": "false",
-			"aria-autocomplete": "list",
-			"aria-owns": this.ids.menu,
-			"aria-haspopup": "true"
-		})
-			.insertAfter( this.element );
-
-		$( "<span>", {
-			"class": "ui-icon " + this.options.icons.button
-		})
-			.prependTo( this.button );
-
-		this.buttonText = $( "<span>", {
-			"class": "ui-selectmenu-text"
-		})
-			.appendTo( this.button );
-
+		this._renderButton();
 		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
 		this._resizeButton();
 
@@ -265,6 +243,30 @@ return $.widget( "ui.selectmenu", {
 
 	menuWidget: function() {
 		return this.menu;
+	},
+
+	_renderButton: function() {
+		this.button = $( "<span>", {
+			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
+			tabindex: this.element.attr( "tabindex" ) || this.options.disabled ? -1 : 0,
+			id: this.ids.button,
+			role: "combobox",
+			"aria-expanded": "false",
+			"aria-autocomplete": "list",
+			"aria-owns": this.ids.menu,
+			"aria-haspopup": "true"
+		})
+			.insertAfter( this.element );
+
+		$( "<span>", {
+			"class": "ui-icon " + this.options.icons.button
+		})
+			.prependTo( this.button );
+
+		this.buttonText = $( "<span>", {
+			"class": "ui-selectmenu-text"
+		})
+			.appendTo( this.button );
 	},
 
 	_renderMenu: function( ul, items ) {
