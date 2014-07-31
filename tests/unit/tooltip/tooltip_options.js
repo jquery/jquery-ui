@@ -1,6 +1,10 @@
 (function( $ ) {
 
-module( "tooltip: options" );
+module( "tooltip: options", {
+	teardown: function() {
+		$( "#qunit-fixture" ).empty();
+	}
+});
 
 test( "disabled: true", function() {
 	expect( 1 );

@@ -16,11 +16,6 @@ function url( value ) {
 	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
 }
 
-QUnit.testDone(function() {
-	jQuery("#qunit-fixture").empty();
-	QUnit.reset();
-});
-
 QUnit.config.requireExpects = true;
 
 /*
@@ -176,7 +171,11 @@ function testBasicUsage( widget ) {
 }
 
 TestHelpers.commonWidgetTests = function( widget, settings ) {
-	module( widget + ": common widget" );
+	module( widget + ": common widget", {
+		teardown: function() {
+			$( "#qunit-fixture" ).empty();
+		}
+	});
 
 	TestHelpers.testJshint( widget );
 	testWidgetDefaults( widget, settings.defaults );
