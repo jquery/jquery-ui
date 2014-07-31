@@ -3,15 +3,21 @@
 module( "selectmenu: core" );
 
 asyncTest( "accessibility", function() {
-	var wrappers,
-		element = $( "#speed" ).selectmenu(),
-		button = element.selectmenu( "widget" ),
-		menu = element.selectmenu( "menuWidget" );
+	var wrappers, button, menu,
+		element = $( "#speed" ).attr( "title", "A demo title" );
+
+	element.find( "option" ).each(function( index ) {
+		$( this ).attr( "title", "A demo title #" + index );
+	});
+
+	element.selectmenu();
+	button = element.selectmenu( "widget" );
+	menu = element.selectmenu( "menuWidget" );
 
 	button.simulate( "focus" );
 	wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
-	expect( 12 + wrappers.length * 2 );
+	expect( 13 + wrappers.length * 3 );
 
 	setTimeout(function() {
 		equal( button.attr( "role" ), "combobox", "button role" );
@@ -25,6 +31,7 @@ asyncTest( "accessibility", function() {
 			"button link aria-labelledby"
 		);
 		equal( button.attr( "tabindex" ), 0, "button link tabindex" );
+		equal( button.attr( "title" ), "A demo title", "button title" );
 
 		equal( menu.attr( "role" ), "listbox", "menu role" );
 		equal( menu.attr( "aria-labelledby" ), button.attr( "id" ), "menu aria-labelledby" );
@@ -36,9 +43,10 @@ asyncTest( "accessibility", function() {
 			"menu aria-activedescendant"
 		);
 		$.each( wrappers, function( index ) {
-			var link = $( this );
-			equal( link.attr( "role" ), "option", "menu link #" + index +" role" );
-			equal( link.attr( "tabindex" ), -1, "menu link #" + index +" tabindex" );
+			var item = $( this );
+			equal( item.attr( "role" ), "option", "menu item #" + index +" role" );
+			equal( item.attr( "tabindex" ), -1, "menu item #" + index +" tabindex" );
+			equal( item.attr( "title" ), "A demo title #" + index, "menu item #" + index + " title" );
 		});
 		start();
 	});
