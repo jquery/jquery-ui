@@ -1,6 +1,6 @@
 (function( $ ) {
 
-var reset, jshintLoaded;
+var jshintLoaded;
 
 window.TestHelpers = {};
 
@@ -16,14 +16,10 @@ function url( value ) {
 	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
 }
 
-reset = QUnit.reset;
-QUnit.reset = function() {
-	// Ensure jQuery events and data on the fixture are properly removed
+QUnit.testDone(function() {
 	jQuery("#qunit-fixture").empty();
-	// Let QUnit reset the fixture
-	reset.apply( this, arguments );
-};
-
+	QUnit.reset();
+});
 
 QUnit.config.requireExpects = true;
 
