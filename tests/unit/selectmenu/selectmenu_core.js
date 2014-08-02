@@ -46,7 +46,7 @@ asyncTest( "accessibility", function() {
 
 
 test( "extend _renderButtonItem method", function() {
-	expect( 4 );
+	expect( 2 );
 
 	var links, option,
 		element = $( "#speed" ).selectmenu(),
@@ -54,9 +54,11 @@ test( "extend _renderButtonItem method", function() {
 		button = element.selectmenu( "widget" ),
 		menu = element.selectmenu( "menuWidget" );
 
-	instance._renderButtonItem = function( buttonItem, item ) {
-		buttonItem.parent().data( "test", item.value );
+	instance._renderButtonItem = function( item ) {
+		var buttonItem = $( "<span>" );
 		this._setText( buttonItem, item.label + item.index );
+
+		return buttonItem;
 	};
 
 	element.selectmenu( "refresh" );
@@ -68,7 +70,6 @@ test( "extend _renderButtonItem method", function() {
 		button.text(),
 		"refresh: button item text"
 	);
-	equal( button.data( "test" ), option.val(), "refresh: button item data" );
 
 	button.trigger( "click" );
 	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
@@ -78,7 +79,6 @@ test( "extend _renderButtonItem method", function() {
 		button.text(),
 		"click: button item text"
 	);
-	equal( button.data( "test" ), option.val(), "click: button item data" );
 });
 
 $.each([

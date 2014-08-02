@@ -103,12 +103,9 @@ return $.widget( "ui.selectmenu", {
 		})
 			.prependTo( this.button );
 
-		this.buttonItem = $( "<span>", {
-			"class": "ui-selectmenu-text"
-		})
+		this.buttonItem = this._renderButtonItem( item )
 			.appendTo( this.button );
 
-		this._renderButtonItem( this.buttonItem, item );
 		this._resizeButton();
 
 		this._on( this.button, this._buttonEvents );
@@ -194,7 +191,11 @@ return $.widget( "ui.selectmenu", {
 
 	refresh: function() {
 		this._refreshMenu();
-		this._renderButtonItem( this.buttonItem, this._getSelectedItem().data( "ui-selectmenu-item" ) );
+		this.buttonItem.replaceWith(
+			this.buttonItem = this._renderButtonItem(
+				this._getSelectedItem().data( "ui-selectmenu-item" )
+			)
+		);
 		if ( !this.options.width ) {
 			this._resizeButton();
 		}
@@ -279,8 +280,13 @@ return $.widget( "ui.selectmenu", {
 		return this.menu;
 	},
 
-	_renderButtonItem: function( buttonItem, item ) {
+	_renderButtonItem: function( item ) {
+		var buttonItem = $( "<span>", {
+			"class": "ui-selectmenu-text"
+		});
 		this._setText( buttonItem, item.label );
+
+		return buttonItem;
 	},
 
 	_renderMenu: function( ul, items ) {
@@ -488,7 +494,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
-		this._renderButtonItem( this.buttonItem, item );
+		this.buttonItem.replaceWith( this.buttonItem = this._renderButtonItem( item ) );
 		this._setAria( item );
 		this._trigger( "select", event, { item: item } );
 
