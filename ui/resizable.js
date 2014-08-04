@@ -569,12 +569,17 @@ $.widget("ui.resizable", $.ui.mouse, {
 			prel = this._proportionallyResizeElements[i];
 
 			if (!this.borderDif) {
-				this.borderDif = [];
-				borders = [prel.css("borderTopWidth"), prel.css("borderRightWidth"), prel.css("borderBottomWidth"), prel.css("borderLeftWidth")];
-				paddings = [prel.css("paddingTop"), prel.css("paddingRight"), prel.css("paddingBottom"), prel.css("paddingLeft")];
+				// Bugfix for http://bugs.jqueryui.com/ticket/9654
+				if (this.originalElement[0].nodeName.match(/input|select|button/i)) {
+					this.borderDif = [0, 0, 0, 0];
+				} else {
+					this.borderDif = [];
+					borders = [prel.css("borderTopWidth"), prel.css("borderRightWidth"), prel.css("borderBottomWidth"), prel.css("borderLeftWidth")];
+					paddings = [prel.css("paddingTop"), prel.css("paddingRight"), prel.css("paddingBottom"), prel.css("paddingLeft")];
 
-				for ( j = 0; j < borders.length; j++ ) {
-					this.borderDif[ j ] = ( parseInt( borders[ j ], 10 ) || 0 ) + ( parseInt( paddings[ j ], 10 ) || 0 );
+					for ( j = 0; j < borders.length; j++ ) {
+						this.borderDif[ j ] = ( parseInt( borders[ j ], 10 ) || 0 ) + ( parseInt( paddings[ j ], 10 ) || 0 );
+					}
 				}
 			}
 
