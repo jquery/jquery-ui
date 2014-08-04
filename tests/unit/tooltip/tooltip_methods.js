@@ -1,6 +1,10 @@
 (function( $ ) {
 
-module( "tooltip: methods" );
+module( "tooltip: methods", {
+	teardown: function() {
+		$( "#qunit-fixture" ).empty();
+	}
+});
 
 test( "destroy", function() {
 	expect( 3 );

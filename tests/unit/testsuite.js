@@ -1,6 +1,6 @@
 (function( $ ) {
 
-var reset, jshintLoaded;
+var jshintLoaded;
 
 window.TestHelpers = {};
 
@@ -15,15 +15,6 @@ function includeScript( url ) {
 function url( value ) {
 	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
 }
-
-reset = QUnit.reset;
-QUnit.reset = function() {
-	// Ensure jQuery events and data on the fixture are properly removed
-	jQuery("#qunit-fixture").empty();
-	// Let QUnit reset the fixture
-	reset.apply( this, arguments );
-};
-
 
 QUnit.config.requireExpects = true;
 
@@ -180,7 +171,11 @@ function testBasicUsage( widget ) {
 }
 
 TestHelpers.commonWidgetTests = function( widget, settings ) {
-	module( widget + ": common widget" );
+	module( widget + ": common widget", {
+		teardown: function() {
+			$( "#qunit-fixture" ).empty();
+		}
+	});
 
 	TestHelpers.testJshint( widget );
 	testWidgetDefaults( widget, settings.defaults );

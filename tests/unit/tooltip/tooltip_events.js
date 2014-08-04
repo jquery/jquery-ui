@@ -1,6 +1,10 @@
 (function( $ ) {
 
-module( "tooltip: events" );
+module( "tooltip: events", {
+	teardown: function() {
+		$( "#qunit-fixture" ).empty();
+	}
+});
 
 test( "programmatic triggers", function() {
 	expect( 4 );

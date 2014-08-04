@@ -1,6 +1,10 @@
 (function( $ ) {
 
-module( "tooltip: core" );
+module( "tooltip: core", {
+	teardown: function() {
+		$( "#qunit-fixture" ).empty();
+	}
+});
 
 test( "markup structure", function() {
 	expect( 7 );
