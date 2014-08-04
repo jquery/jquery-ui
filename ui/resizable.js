@@ -774,7 +774,7 @@ $.ui.plugin.add( "resizable", "containment", {
 	},
 
 	resize: function( event ) {
-		var woset, hoset, isParent, isOffsetRelative,
+		var woset, hoset,
 			that = $( this ).resizable( "instance" ),
 			o = that.options,
 			co = that.containerOffset,
@@ -814,13 +814,6 @@ $.ui.plugin.add( "resizable", "containment", {
 
 		woset = Math.abs( ( that._helper ? that.offset.left - cop.left : ( that.offset.left - co.left ) ) + that.sizeDiff.width );
 		hoset = Math.abs( ( that._helper ? that.offset.top - cop.top : ( that.offset.top - co.top ) ) + that.sizeDiff.height );
-
-		isParent = that.containerElement.get( 0 ) === that.element.parent().get( 0 );
-		isOffsetRelative = /relative|absolute/.test( that.containerElement.css( "position" ) );
-
-		if ( isParent && isOffsetRelative ) {
-			woset -= Math.abs( that.parentData.left );
-		}
 
 		if ( woset + that.size.width >= that.parentData.width ) {
 			that.size.width = that.parentData.width - woset;

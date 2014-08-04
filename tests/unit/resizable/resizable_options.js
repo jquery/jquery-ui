@@ -155,7 +155,8 @@ test( "aspectRatio: Resizing can move objects", function() {
 });
 
 test( "containment", function() {
-	expect( 6 );
+	expect( 8 );
+
 	var element = $( "#resizable1" ).resizable({
 		containment: "#container"
 	});
@@ -180,6 +181,19 @@ test( "containment", function() {
 
 	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
 	equal( element.height(), 400, "element able to resize itself to max allowable height within container" );
+
+	// http://bugs.jqueryui.com/ticket/10140 - Resizable: Width calculation is wrong
+	// when containment element is "position: relative"
+	element = $( "#child" ).resizable({
+		containment: "parent",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 300, 0 );
+	equal( element.width(), 300, "element able to resize itself to max allowable width within container" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
+	equal( element.height(), 300, "element able to resize itself to max allowable height within container" );
 });
 
 test("grid", function() {
