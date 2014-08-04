@@ -155,7 +155,7 @@ test( "aspectRatio: Resizing can move objects", function() {
 });
 
 test( "containment", function() {
-	expect( 6 );
+	expect( 12 );
 	var element = $( "#resizable1" ).resizable({
 		containment: "#container"
 	});
@@ -176,10 +176,63 @@ test( "containment", function() {
 	});
 
 	TestHelpers.resizable.drag( ".ui-resizable-e", 300, 0 );
-	equal( element.width(), 400, "element able to resize itself to max allowable width within container" );
+	equal( element.width(), 400, "Relative Position ,Containment not parent - containment within container width" );
 
 	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
-	equal( element.height(), 400, "element able to resize itself to max allowable height within container" );
+	equal( element.height(), 400, "Relative Position ,Containment not parent - containment within container height" );
+
+	$("#container2").remove();
+	element = $( "<div id='container2'><div id='parent'><div id='child'>I m a resizable.</div></div></div>" ).appendTo( "body" );
+
+	$( "#child" ).css( { left : 50, top : 50 } );
+	$( "#parent" ).css( { left : 50, top : 50 } );
+	$( "#container2" ).css( { left : 50, top : 50 } );
+
+	element = $( "#child" ).resizable({
+		containment: "#container2",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 300, "Relative Position with Left location , Containment not parent  - containment within container width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 300, "Relative Position with Top location , Containment not parent - containment within container height" );
+
+	$("#container2").remove();
+	element = $( "<div id='container2'><div id='parent'><div id='child'>I m a resizable.</div></div></div>" ).appendTo( "body" );
+
+
+	// http://bugs.jqueryui.com/ticket/10140 - Resizable: Width calculation is wrong when containment element is "position: relative"
+	// when containment element is  immediate parent
+	element = $( "#child" ).resizable({
+		containment: "parent",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 300, "Relative Position Containment is parent  - containment within container width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 300, "Relative Position ,Containment is parent - containment within container height" );
+
+	$("#container2").remove();
+	element = $( "<div id='container2'><div id='parent'><div id='child'>I m a resizable.</div></div></div>" ).appendTo( "body" );
+
+	$( "#child" ).css( { left : 50, top : 50 } );
+	$( "#parent" ).css( { left : 50, top : 50 } );
+	$( "#container2" ).css( { left : 50, top : 50 } );
+
+	element = $( "#child" ).resizable({
+		containment: "parent",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 250, "Relative Position with Left location, Containment is parent  - containment within container width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 250, "Relative Position with Top location, Containment is parent - containment within container height" );
 });
 
 test("grid", function() {
