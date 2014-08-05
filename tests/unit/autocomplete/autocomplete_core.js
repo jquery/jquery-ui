@@ -190,29 +190,29 @@ asyncTest( "past end of menu in multiline autocomplete", function() {
 });
 
 asyncTest( "ESCAPE in multiline autocomplete", function() {
-        expect( 2 );
+	expect( 2 );
 
-        var customVal = "custom value",
-                element = $( "#autocomplete-contenteditable" ).autocomplete({
-                        delay: 0,
-                        source: [ "javascript" ],
-                        focus: function( event, ui ) {
-                                equal( ui.item.value, "javascript", "Item gained focus" );
-                                $( this ).text( customVal );
-                                event.preventDefault();
-                        }
-                });
+	var customVal = "custom value",
+		element = $( "#autocomplete-contenteditable" ).autocomplete({
+			delay: 0,
+			source: [ "javascript" ],
+			focus: function( event, ui ) {
+				equal( ui.item.value, "javascript", "Item gained focus" );
+				$( this ).text( customVal );
+				event.preventDefault();
+			}
+		});
 
-        element
-                .simulate( "focus" )
-                .autocomplete( "search", "ja" );
+	element
+		.simulate( "focus" )
+		.autocomplete( "search", "ja" );
 
-        setTimeout(function() {
-                element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-                element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-                equal( element.text(), customVal );
-                start();
-        }, 50 );
+	setTimeout(function() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+		equal( element.text(), customVal );
+		start();
+	}, 50 );
 });
 
 

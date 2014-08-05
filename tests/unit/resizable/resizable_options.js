@@ -155,7 +155,8 @@ test( "aspectRatio: Resizing can move objects", function() {
 });
 
 test( "containment", function() {
-	expect( 6 );
+	expect( 4 );
+
 	var element = $( "#resizable1" ).resizable({
 		containment: "#container"
 	});
@@ -167,19 +168,70 @@ test( "containment", function() {
 	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
 	equal( element.width(), 300, "constrained width at containment edge" );
 	equal( element.height(), 200, "constrained height at containment edge" );
+});
+
+test( "containment - not immediate parent", function() {
+	expect( 4 );
 
 	// http://bugs.jqueryui.com/ticket/7485 - Resizable: Containment calculation is wrong
 	// when containment element is not the immediate parent
-	element = $( "#child" ).resizable({
+	var element = $( "#child" ).resizable({
 		containment: "#container2",
 		handles: "all"
 	});
 
 	TestHelpers.resizable.drag( ".ui-resizable-e", 300, 0 );
-	equal( element.width(), 400, "element able to resize itself to max allowable width within container" );
+	equal( element.width(), 400, "Relative, contained within container width" );
 
 	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
-	equal( element.height(), 400, "element able to resize itself to max allowable height within container" );
+	equal( element.height(), 400, "Relative, contained within container height" );
+
+	$( "#child" ).css( { left: 50, top: 50 } );
+	$( "#parent" ).css( { left: 50, top: 50 } );
+	$( "#container2" ).css( { left: 50, top: 50 } );
+
+	element = $( "#child" ).resizable({
+		containment: "#container2",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 300, "Relative with Left, contained within container width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 300, "Relative with Top, contained within container height" );
+});
+
+test( "containment - immediate parent", function() {
+	expect( 4 );
+
+	// http://bugs.jqueryui.com/ticket/10140 - Resizable: Width calculation is wrong when containment element is "position: relative"
+	// when containment element is  immediate parent
+	var element = $( "#child" ).resizable({
+		containment: "parent",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 300, "Relative, contained within container width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 300, "Relative, contained within container height" );
+
+	$( "#child" ).css( { left: 50, top: 50 } );
+	$( "#parent" ).css( { left: 50, top: 50 } );
+	$( "#container2" ).css( { left: 50, top: 50 } );
+
+	element = $( "#child" ).resizable({
+		containment: "parent",
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 250, "Relative with Left, contained within container width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 250, "Relative with Top, contained within container height" );
 });
 
 test("grid", function() {
