@@ -555,32 +555,56 @@ $.widget("ui.resizable", $.ui.mouse, {
 		return data;
 	},
 
+	_getPaddingPlusBorderDimensions: function( element ) {
+		var i = 0,
+			widths = [],
+			borders = [
+				element.css( "borderTopWidth" ),
+				element.css( "borderRightWidth" ),
+				element.css( "borderBottomWidth" ),
+				element.css( "borderLeftWidth" )
+			],
+			paddings = [
+				element.css( "paddingTop" ),
+				element.css( "paddingRight" ),
+				element.css( "paddingBottom" ),
+				element.css( "paddingLeft" )
+			];
+
+		for ( ; i < 4; i++ ) {
+			widths[ i ] = ( parseInt( borders[ i ], 10 ) || 0 );
+			widths[ i ] += ( parseInt( paddings[ i ], 10 ) || 0 );
+		}
+
+		return {
+			height: widths[ 0 ] + widths[ 2 ],
+			width: widths[ 1 ] + widths[ 3 ]
+		};
+	},
+
 	_proportionallyResize: function() {
 
 		if (!this._proportionallyResizeElements.length) {
 			return;
 		}
 
-		var i, j, borders, paddings, prel,
+		var prel,
+			i = 0,
 			element = this.helper || this.element;
 
-		for ( i=0; i < this._proportionallyResizeElements.length; i++) {
+		for ( ; i < this._proportionallyResizeElements.length; i++) {
 
 			prel = this._proportionallyResizeElements[i];
 
-			if (!this.borderDif) {
-				this.borderDif = [];
-				borders = [prel.css("borderTopWidth"), prel.css("borderRightWidth"), prel.css("borderBottomWidth"), prel.css("borderLeftWidth")];
-				paddings = [prel.css("paddingTop"), prel.css("paddingRight"), prel.css("paddingBottom"), prel.css("paddingLeft")];
-
-				for ( j = 0; j < borders.length; j++ ) {
-					this.borderDif[ j ] = ( parseInt( borders[ j ], 10 ) || 0 ) + ( parseInt( paddings[ j ], 10 ) || 0 );
-				}
+			// TODO: Seems like a bug to cache this.outerDimensions
+			// considering that we are in a loop.
+			if (!this.outerDimensions) {
+				this.outerDimensions = this._getPaddingPlusBorderDimensions( prel );
 			}
 
 			prel.css({
-				height: (element.height() - this.borderDif[0] - this.borderDif[2]) || 0,
-				width: (element.width() - this.borderDif[1] - this.borderDif[3]) || 0
+				height: (element.height() - this.outerDimensions.height) || 0,
+				width: (element.width() - this.outerDimensions.width) || 0
 			});
 
 		}
@@ -972,7 +996,8 @@ $.ui.plugin.add("resizable", "ghost", {
 $.ui.plugin.add("resizable", "grid", {
 
 	resize: function() {
-		var that = $(this).resizable( "instance" ),
+		var outerDimensions,
+			that = $(this).resizable( "instance" ),
 			o = that.options,
 			cs = that.size,
 			os = that.originalSize,
@@ -993,16 +1018,16 @@ $.ui.plugin.add("resizable", "grid", {
 		o.grid = grid;
 
 		if (isMinWidth) {
-			newWidth = newWidth + gridX;
+			newWidth += gridX;
 		}
 		if (isMinHeight) {
-			newHeight = newHeight + gridY;
+			newHeight += gridY;
 		}
 		if (isMaxWidth) {
-			newWidth = newWidth - gridX;
+			newWidth -= gridX;
 		}
 		if (isMaxHeight) {
-			newHeight = newHeight - gridY;
+			newHeight -= gridY;
 		}
 
 		if (/^(se|s|e)$/.test(a)) {
@@ -1017,19 +1042,25 @@ $.ui.plugin.add("resizable", "grid", {
 			that.size.height = newHeight;
 			that.position.left = op.left - ox;
 		} else {
+			if ( newHeight - gridY <= 0 || newWidth - gridX <= 0) {
+				outerDimensions = that._getPaddingPlusBorderDimensions( this );
+			}
+
 			if ( newHeight - gridY > 0 ) {
 				that.size.height = newHeight;
 				that.position.top = op.top - oy;
 			} else {
-				that.size.height = gridY;
-				that.position.top = op.top + os.height - gridY;
+				newHeight = gridY - outerDimensions.height;
+				that.size.height = newHeight;
+				that.position.top = op.top + os.height - newHeight;
 			}
 			if ( newWidth - gridX > 0 ) {
 				that.size.width = newWidth;
 				that.position.left = op.left - ox;
 			} else {
-				that.size.width = gridX;
-				that.position.left = op.left + os.width - gridX;
+				newWidth = gridY - outerDimensions.height;
+				that.size.width = newWidth;
+				that.position.left = op.left + os.width - newWidth;
 			}
 		}
 	}
