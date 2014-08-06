@@ -179,7 +179,7 @@ test( "{ cancel: 'span' }", function() {
 	element.draggable( "destroy" );
 
 	element = $( "#draggable2" ).draggable({ cancel: "span" });
-	TestHelpers.draggable.shouldNotDrag( element, "cancel: span, span dragged","#draggable2 span" );
+	TestHelpers.draggable.shouldNotDrag( element, "cancel: span, span dragged", "#draggable2 span" );
 });
 
 test( "{ cancel: ? }, unexpected", function() {
@@ -522,7 +522,7 @@ test( "cursorAt", function() {
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
 						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
-							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
 						} else {
 							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
@@ -564,7 +564,7 @@ test( "cursorAt, switching after initialization", function() {
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
 						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
-							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
 						} else {
 							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
@@ -623,7 +623,7 @@ test( "grid, switching after initialization", function() {
 	TestHelpers.draggable.testDrag( element, element, 24, 24, 24, 24, "grid: default" );
 	TestHelpers.draggable.testDrag( element, element, 0, 0, 0, 0, "grid: default" );
 
-	element.draggable( "option", "grid", [ 50,50 ] );
+	element.draggable( "option", "grid", [ 50, 50 ] );
 
 	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0, "grid: [50, 50] as option" );
 	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50, "grid: [50, 50] as option" );
