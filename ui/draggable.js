@@ -386,8 +386,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		return {
-			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
-			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
+			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"), 10) || 0),
+			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"), 10) || 0)
 		};
 
 	},
@@ -409,10 +409,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_cacheMargins: function() {
 		this.margins = {
-			left: (parseInt(this.element.css("marginLeft"),10) || 0),
-			top: (parseInt(this.element.css("marginTop"),10) || 0),
-			right: (parseInt(this.element.css("marginRight"),10) || 0),
-			bottom: (parseInt(this.element.css("marginBottom"),10) || 0)
+			left: (parseInt(this.element.css("marginLeft"), 10) || 0),
+			top: (parseInt(this.element.css("marginTop"), 10) || 0),
+			right: (parseInt(this.element.css("marginRight"), 10) || 0),
+			bottom: (parseInt(this.element.css("marginBottom"), 10) || 0)
 		};
 	},
 
@@ -429,7 +429,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			o = this.options,
 			document = this.document[ 0 ];
 
-		this.relative_container = null;
+		this.relativeContainer = null;
 
 		if ( !o.containment ) {
 			this.containment = null;
@@ -480,7 +480,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) - ( parseInt( c.css( "borderRightWidth" ), 10 ) || 0 ) - ( parseInt( c.css( "paddingRight" ), 10 ) || 0 ) - this.helperProportions.width - this.margins.left - this.margins.right,
 			( over ? Math.max( ce.scrollHeight, ce.offsetHeight ) : ce.offsetHeight ) - ( parseInt( c.css( "borderBottomWidth" ), 10 ) || 0 ) - ( parseInt( c.css( "paddingBottom" ), 10 ) || 0 ) - this.helperProportions.height - this.margins.top  - this.margins.bottom
 		];
-		this.relative_container = c;
+		this.relativeContainer = c;
 	},
 
 	_convertPositionTo: function(d, pos) {
@@ -533,8 +533,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		// If we are not dragging yet, we won't check for options
 		if ( constrainPosition ) {
 			if ( this.containment ) {
-				if ( this.relative_container ){
-					co = this.relative_container.offset();
+				if ( this.relativeContainer ){
+					co = this.relativeContainer.offset();
 					containment = [
 						this.containment[ 0 ] + co.left,
 						this.containment[ 1 ] + co.top,
@@ -978,8 +978,8 @@ $.ui.plugin.add("draggable", "stack", {
 	start: function( event, ui, instance ) {
 		var min,
 			o = instance.options,
-			group = $.makeArray($(o.stack)).sort(function(a,b) {
-				return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
+			group = $.makeArray($(o.stack)).sort(function(a, b) {
+				return (parseInt($(a).css("zIndex"), 10) || 0) - (parseInt($(b).css("zIndex"), 10) || 0);
 			});
 
 		if (!group.length) { return; }
