@@ -174,7 +174,6 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 			}
 		});
 
-
 	TestHelpers.forceScrollableWindow();
 
 	$( "#wrapper" ).css( "position", "fixed" );
@@ -221,7 +220,7 @@ test( "#9379: Draggable: position bug in scrollable div", function() {
 	});
 });
 
-test( "#5727: draggable from iframe" , function() {
+test( "#5727: draggable from iframe", function() {
 	expect( 1 );
 
 	var iframeBody, draggable1,
