@@ -268,7 +268,7 @@ $.widget( "ui.autocomplete", {
 
 				// Announce the value in the liveRegion
 				label = ui.item.attr( "aria-label" ) || item.value;
-				if ( label && jQuery.trim( label ).length ) {
+				if ( label && $.trim( label ).length ) {
 					this.liveRegion.children().hide();
 					$( "<div>" ).text( label ).appendTo( this.liveRegion );
 				}
