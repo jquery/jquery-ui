@@ -1,5 +1,6 @@
 {
 	"name": "jquery-ui",
+	"main": "jquery-ui",
 	"ignore": [
 		"**/.*",
 		"build",
