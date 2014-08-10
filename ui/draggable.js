@@ -838,19 +838,19 @@ $.ui.plugin.add("draggable", "scroll", {
 			document = i.document[ 0 ];
 
 		if ( i.scrollParent[ 0 ] !== document && i.scrollParent[ 0 ].tagName !== "HTML" ) {
-			if (!o.axis || o.axis !== "x") {
-				if ((i.overflowOffset.top + i.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity) {
-					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop + o.scrollSpeed;
-				} else if (event.pageY - i.overflowOffset.top < o.scrollSensitivity) {
-					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
+			if ( !o.axis || o.axis !== "x" ) {
+				if ( ( i.overflowOffset.top + i.scrollParent[ 0 ].offsetHeight ) - event.pageY < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollTop = scrolled = i.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
+				} else if ( event.pageY - i.overflowOffset.top < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollTop = scrolled = i.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
 				}
 			}
 
-			if (!o.axis || o.axis !== "y") {
-				if ((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity) {
-					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
-				} else if (event.pageX - i.overflowOffset.left < o.scrollSensitivity) {
-					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;
+			if ( !o.axis || o.axis !== "y" ) {
+				if ( ( i.overflowOffset.left + i.scrollParent[ 0 ].offsetWidth ) - event.pageX < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollLeft = scrolled = i.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
+				} else if ( event.pageX - i.overflowOffset.left < o.scrollSensitivity ) {
+					i.scrollParent[ 0 ].scrollLeft = scrolled = i.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
 				}
 			}
 
