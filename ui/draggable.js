@@ -827,30 +827,35 @@ $.ui.plugin.add("draggable", "opacity", {
 
 $.ui.plugin.add("draggable", "scroll", {
 	start: function( event, ui, i ) {
-		if ( i.scrollParent[ 0 ] !== i.document[ 0 ] && i.scrollParent[ 0 ].tagName !== "HTML" ) {
-			i.overflowOffset = i.scrollParent.offset();
+		if ( !i.scrollParentNotHidden ) {
+			i.scrollParentNotHidden = i.helper.scrollParent( false );
+		}
+
+		if ( i.scrollParentNotHidden[ 0 ] !== i.document[ 0 ] && i.scrollParentNotHidden[ 0 ].tagName !== "HTML" ) {
+			i.overflowOffset = i.scrollParentNotHidden.offset();
 		}
 	},
 	drag: function( event, ui, i  ) {
 
 		var o = i.options,
 			scrolled = false,
+			scrollParent = i.scrollParentNotHidden[ 0 ],
 			document = i.document[ 0 ];
 
-		if ( i.scrollParent[ 0 ] !== document && i.scrollParent[ 0 ].tagName !== "HTML" ) {
+		if ( scrollParent !== document && scrollParent.tagName !== "HTML" ) {
 			if ( !o.axis || o.axis !== "x" ) {
-				if ( ( i.overflowOffset.top + i.scrollParent[ 0 ].offsetHeight ) - event.pageY < o.scrollSensitivity ) {
-					i.scrollParent[ 0 ].scrollTop = scrolled = i.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
+				if ( ( i.overflowOffset.top + scrollParent.offsetHeight ) - event.pageY < o.scrollSensitivity ) {
+					scrollParent.scrollTop = scrolled = scrollParent.scrollTop + o.scrollSpeed;
 				} else if ( event.pageY - i.overflowOffset.top < o.scrollSensitivity ) {
-					i.scrollParent[ 0 ].scrollTop = scrolled = i.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
+					scrollParent.scrollTop = scrolled = scrollParent.scrollTop - o.scrollSpeed;
 				}
 			}
 
 			if ( !o.axis || o.axis !== "y" ) {
-				if ( ( i.overflowOffset.left + i.scrollParent[ 0 ].offsetWidth ) - event.pageX < o.scrollSensitivity ) {
-					i.scrollParent[ 0 ].scrollLeft = scrolled = i.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
+				if ( ( i.overflowOffset.left + scrollParent.offsetWidth ) - event.pageX < o.scrollSensitivity ) {
+					scrollParent.scrollLeft = scrolled = scrollParent.scrollLeft + o.scrollSpeed;
 				} else if ( event.pageX - i.overflowOffset.left < o.scrollSensitivity ) {
-					i.scrollParent[ 0 ].scrollLeft = scrolled = i.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
+					scrollParent.scrollLeft = scrolled = scrollParent.scrollLeft - o.scrollSpeed;
 				}
 			}
 
