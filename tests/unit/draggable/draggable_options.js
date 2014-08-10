@@ -878,6 +878,20 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 	TestHelpers.draggable.restoreScroll( document );
 });
 
+test( "scroll ignores containers that are overflow: hidden", function() {
+	expect( 2 );
+
+	var element = $( "#draggable1" ).draggable({ scroll: true }).appendTo( "#scrollParent" );
+
+	element.simulate( "drag", {
+		dx: 1300,
+		dy: 1300
+	});
+
+	equal( $( "#scrollParent" ).scrollTop(), 0, "container doesn't scroll vertically" );
+	equal( $( "#scrollParent" ).scrollLeft(), 0, "container doesn't scroll horizontally" );
+});
+
 test( "#6817: auto scroll goes double distance when dragging", function() {
 	expect( 2 );
 
