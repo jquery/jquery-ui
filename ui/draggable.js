@@ -161,7 +161,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		//Store the helper's css position
 		this.cssPosition = this.helper.css( "position" );
-		this.scrollParent = this.helper.scrollParent();
+		this.scrollParent = this.helper.scrollParent( true );
 		this.offsetParent = this.helper.offsetParent();
 		this.offsetParentCssPosition = this.offsetParent.css( "position" );
 

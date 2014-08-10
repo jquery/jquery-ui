@@ -361,7 +361,7 @@ test( "containment, account for border", function() {
 	el.css({
 		height: "5px",
 		width: "5px"
-	}).draggable({ containment: "parent" });
+	}).draggable({ containment: "parent", scroll: false });
 
 	el.simulate( "drag", {
 		dx: 100,
