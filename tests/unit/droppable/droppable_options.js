@@ -3,46 +3,46 @@
  */
 (function($) {
 
-module("droppable: options");
+module( "droppable: options" );
 
 /*
-test("{ accept '*' }, default ", function() {
+test( "{ accept '*' }, default ", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("{ accept: Selector }", function() {
+test( "{ accept: Selector }", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("{ accept: function(draggable) }", function() {
+test( "{ accept: function(draggable) }", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("activeClass", function() {
+test( "activeClass", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
-test("{ addClasses: true }, default", function() {
+test( "{ addClasses: true }, default", function() {
 	expect( 1 );
-	var el = $("<div></div>").droppable({ addClasses: true });
-	ok(el.is(".ui-droppable"), "'ui-droppable' class added");
-	el.droppable("destroy");
+	var el = $( "<div />" ).droppable({ addClasses: true });
+	ok( el.is( ".ui-droppable" ), "'ui-droppable' class added" );
+	el.droppable( "destroy" );
 });
 
-test("{ addClasses: false }", function() {
+test( "{ addClasses: false }", function() {
 	expect( 1 );
-	var el = $("<div></div>").droppable({ addClasses: false });
-	ok(!el.is(".ui-droppable"), "'ui-droppable' class not added");
-	el.droppable("destroy");
+	var el = $( "<div />" ).droppable({ addClasses: false });
+	ok( !el.is( ".ui-droppable" ), "'ui-droppable' class not added" );
+	el.droppable( "destroy" );
 });
 
 test( "scope", function() {
 	expect( 4 );
 	var droppableOffset, draggableOffset, oldDraggableOffset, dx, dy,
-			draggable1 = $("<div></div>").appendTo( "#qunit-fixture" ).draggable({ revert: "invalid" }),
-			draggable2 = $("<div></div>").appendTo( "#qunit-fixture" ).droppable(),
-			droppable = $("<div></div>").appendTo( "#qunit-fixture" ).droppable(),
-			newScope = "test";
+		draggable1 = $( "<div />" ).appendTo( "#qunit-fixture" ).draggable({ revert: "invalid" }),
+		draggable2 = $( "<div />" ).appendTo( "#qunit-fixture" ).droppable(),
+		droppable = $( "<div />" ).appendTo( "#qunit-fixture" ).droppable(),
+		newScope = "test";
 
 	draggable1.draggable( "option", "scope", newScope );
 	droppable.droppable( "option", "scope", newScope );
@@ -78,19 +78,19 @@ test( "scope", function() {
 	equal( draggableOffset.top, oldDraggableOffset.top );
 });
 /*
-test("greedy", function() {
+test( "greedy", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("hoverClass", function() {
+test( "hoverClass", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("tolerance, fit", function() {
+test( "tolerance, fit", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("tolerance, intersect", function() {
+test( "tolerance, intersect", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
@@ -135,7 +135,7 @@ test( "tolerance, pointer", function() {
 });
 
 /*
-test("tolerance, touch", function() {
+test( "tolerance, touch", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
