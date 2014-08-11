@@ -93,11 +93,48 @@ test("tolerance, fit", function() {
 test("tolerance, intersect", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
+*/
 
-test("tolerance, pointer", function() {
-	ok(false, 'missing test - untested code is broken code');
+test( "tolerance, pointer", function() {
+	expect( 2 );
+
+	var draggable, droppable,
+		dataset = [
+			[ -1, -1, false, "too far up and left" ],
+			[ -1, 0, false, "too far left" ],
+			[ 0, -1, false, "too far up" ],
+			[ 0, 0, true, "top left corner" ],
+			[ 9, 9, true, "bottom right corner" ],
+			[ 10, 9, false, "too far right" ],
+			[ 9, 10, false, "too far down" ],
+			[ 10, 10, false, "too far down and right" ]
+		];
+
+	draggable = $( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.css({ width: 10, height: 10, position: "absolute" })
+		.draggable();
+
+	droppable = $( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.css({ width: 10, height: 10, position: "absolute", top: 5, left: 5 })
+		.droppable({ tolerance: "pointer" });
+
+	$.each( dataset, function() {
+		var data = this;
+
+		droppable.unbind( "drop" ).bind( "drop", function() {
+			equal( true, data[ 2 ], data[ 3 ] );
+		});
+
+		$( draggable ).simulate( "drag", {
+			dx: ( data[ 0 ] - $( draggable ).position().left ),
+			dy: ( data[ 1 ] - $( draggable ).position().top )
+		});
+	});
 });
 
+/*
 test("tolerance, touch", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
