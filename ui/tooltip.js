@@ -271,7 +271,9 @@ return $.widget( "ui.tooltip", {
 		this.liveRegion.children().hide();
 		if ( content.clone ) {
 			a11yContent = content.clone();
-			a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
+			if ( a11yContent.removeAttr ) {
+				a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
+			}
 		} else {
 			a11yContent = content;
 		}
