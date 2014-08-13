@@ -235,8 +235,8 @@ $.ui.intersect = (function() {
 			return false;
 		}
 
-		var x1 = ( draggable.positionAbs || draggable.position.absolute ).left,
-			y1 = ( draggable.positionAbs || draggable.position.absolute ).top,
+		var x1 = ( draggable.positionAbs || draggable.position.absolute ).left + draggable.margins.left,
+			y1 = ( draggable.positionAbs || draggable.position.absolute ).top + draggable.margins.top,
 			x2 = x1 + draggable.helperProportions.width,
 			y2 = y1 + draggable.helperProportions.height,
 			l = droppable.offset.left,

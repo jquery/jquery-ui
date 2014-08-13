@@ -89,11 +89,60 @@ test( "hoverClass", function() {
 test( "tolerance, fit", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
+*/
 
 test( "tolerance, intersect", function() {
-	ok(false, 'missing test - untested code is broken code');
+	expect( 2 );
+
+	var draggable, droppable,
+		dataset = [
+			[ 0, 0, false, "too far up and left" ],
+			[ 6, 0, false, "too far up" ],
+			[ 0, 6, false, "too far left" ],
+			[ 6, 6, true, "top left corner" ],
+			[ 14, 14, true, "bottom right corner" ],
+			[ 15, 6, false, "too far right" ],
+			[ 6, 15, false, "too far down" ],
+			[ 15, 15, false, "too far down and right" ]
+		];
+
+	draggable = $( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.css({
+			width: 10,
+			height: 10,
+			position: "absolute",
+
+			// http://bugs.jqueryui.com/ticket/6876
+			// Droppable: droppable region is offset by draggables margin
+			marginTop: 3,
+			marginLeft: 3
+		})
+		.draggable();
+
+	droppable = $( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.css({ width: 10, height: 10, position: "absolute", top: 13, left: 13 })
+		.droppable({ tolerance: "intersect" });
+
+	$.each( dataset, function() {
+		var data = this;
+
+		draggable.css({
+			top: 0,
+			left: 0
+		});
+
+		droppable.unbind( "drop" ).bind( "drop", function() {
+			equal( true, data[ 2 ], data[ 3 ] );
+		});
+
+		$( draggable ).simulate( "drag", {
+			dx: data[ 0 ],
+			dy: data[ 1 ]
+		});
+	});
 });
-*/
 
 test( "tolerance, pointer", function() {
 	expect( 3 );
