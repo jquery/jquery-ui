@@ -22,6 +22,7 @@
 	border-radius: 1em;
 	overflow: visible;
 	border: none;
+	background-color: rgb( 0, 0, 0 );
 	background-color: rgba( 0, 0, 0, .3 );
 	opacity: .3;
 }

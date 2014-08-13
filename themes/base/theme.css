@@ -97,7 +97,7 @@ a.ui-button:focus {
 	text-decoration: none;
 }
 .ui-visual-focus {
-	box-shadow: 0px 0px 5px 3px rgb(94, 158, 214);
+	box-shadow: 0 0 5px 3px rgb(94, 158, 214);
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
