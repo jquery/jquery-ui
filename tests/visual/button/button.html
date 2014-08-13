@@ -14,18 +14,14 @@
 			$( this ).children()
 				.eq( 0 )
 					.button({
-						text: false,
-						icons: {
-							primary: "ui-icon-help"
-						}
+						showLabel: false,
+						icon:  "ui-icon-help"
 					})
 				.end()
 				.eq( 1 )
 					.button({
-						icons: {
-							primary: "ui-icon-help"
-						},
-						disabled: true
+						icon:  "ui-icon-help",
+						disabled: false
 					})
 				.end()
 				.eq( 2 )
@@ -64,24 +60,6 @@
 	<input type="submit" value="input submit">
 	<input type="submit" value="input submit">
 	<input type="submit" value="input submit">
-</div>
-
-<div class="buttons">
-	<input type="checkbox" id="input-checkbox0">
-	<input type="checkbox" id="input-checkbox1">
-	<input type="checkbox" id="input-checkbox2">
-	<label for="input-checkbox0">input checkbox</label>
-	<label for="input-checkbox1">input checkbox</label>
-	<label for="input-checkbox2">input checkbox</label>
-</div>
-
-<div class="buttons">
-	<input type="radio" id="input-radio0" name="radio">
-	<input type="radio" id="input-radio1" name="radio">
-	<input type="radio" id="input-radio2" name="radio">
-	<label for="input-radio0">input radio</label>
-	<label for="input-radio1">input radio</label>
-	<label for="input-radio2">input radio</label>
 </div>
 
 <div class="buttons">
