@@ -50,7 +50,7 @@ function submit( commit, runs, configFile, extra, done ) {
 	}
 
 	testswarm.createClient({
-		url: config.swarmUrl,
+		url: config.swarmUrl
 	})
 	.addReporter( testswarm.reporters.cli )
 	.auth({

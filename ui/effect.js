@@ -633,7 +633,7 @@ color.hook = function( hook ) {
 				}
 				try {
 					elem.style[ hook ] = value;
-				} catch( e ) {
+				} catch ( e ) {
 					// wrapped to prevent IE from throwing errors on "invalid" values like 'auto' or 'inherit'
 				}
 			}
@@ -998,7 +998,7 @@ $.extend( $.effects, {
 		// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
 		try {
 			active.id;
-		} catch( e ) {
+		} catch ( e ) {
 			active = document.body;
 		}
 
