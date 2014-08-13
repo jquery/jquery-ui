@@ -25,7 +25,9 @@
 					value = false;
 				}
 			}
-			checkboxes.checkboxradio( "option", option, value );
+			if( option != "label" || value !== "" ) {
+				checkboxes.checkboxradio( "option", option, value );
+			}
 		});
 		$( ".controls>button" ).click( function(){
 			if( this.id !== "create" ){
