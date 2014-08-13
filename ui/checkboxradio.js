@@ -26,7 +26,8 @@
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
 	typeClasses = " ui-icon ui-icon-background ui-state-focus ui-icon-check ui-icon-blank" +
-		" ui-radio-label ui-checkbox-label ui-state-active ui-radio-checked ui-checkbox-checked",
+		" ui-radio-label ui-checkbox-label ui-state-active ui-icon-beginning ui-icon-end" +
+		" ui-icon-top ui-icon-bottom ui-radio-checked ui-checkbox-checked",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
