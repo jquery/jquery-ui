@@ -961,6 +961,10 @@ test( "snap, snapMode, and snapTolerance", function() {
 		}),
 		element2 = $( "#draggable2" ).draggable();
 
+	// http://bugs.jqueryui.com/ticket/9724
+	// Draggable: Snapping coordinates thrown off by margin on draggable
+	element.css( "margin", "3px" );
+
 	element.offset({
 		top: 1,
 		left: 1
