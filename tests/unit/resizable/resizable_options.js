@@ -306,7 +306,7 @@ test( "grid - maintains grid with padding and border when approaching no dimensi
 	var handle = ".ui-resizable-nw",
 		target = $( "#resizable1" ).css({
 			padding: 5,
-			borderWidth: 5,
+			border: "5px solid black",
 			width: 80,
 			height: 80
 		}).resizable({
