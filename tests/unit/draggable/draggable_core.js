@@ -174,7 +174,6 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 			}
 		});
 
-
 	TestHelpers.forceScrollableWindow();
 
 	$( "#wrapper" ).css( "position", "fixed" );
@@ -186,42 +185,48 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
-test( "#9379: Draggable: position bug in scrollable div", function() {
-	expect( 2 );
+$( [ "hidden", "auto", "scroll" ] ).each(function() {
+	var overflow = this;
 
-	$( "#qunit-fixture" ).html( "<div id='o_9379'><div id='i_9379'></div><div id='d_9379'>a</div></div>" );
-	$( "#i_9379" ).css({ position: "absolute", width: "500px", height: "500px" });
-	$( "#o_9379" ).css({ position: "absolute", width: "300px", height: "300px" });
-	$( "#d_9379" ).css({ width: "10px", height: "10px" });
+	// http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
+	// http://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
+	test( "position in scrollable parent with overflow: " + overflow, function() {
+		expect( 2 );
 
-	var moves = 3,
-		startValue = 0,
-		dragDelta = 20,
-		delta = 100,
+		$( "#qunit-fixture" ).html( "<div id='outer'><div id='inner'></div><div id='dragged'>a</div></div>" );
+		$( "#inner" ).css({ position: "absolute", width: "500px", height: "500px" });
+		$( "#outer" ).css({ position: "absolute", width: "300px", height: "300px" });
+		$( "#dragged" ).css({ width: "10px", height: "10px" });
 
-		// we scroll after each drag event, so subtract 1 from number of moves for expected
-		expected = delta + ( ( moves - 1 ) * dragDelta ),
-		element = $( "#d_9379" ).draggable({
-			drag: function() {
-				startValue += dragDelta;
-				$( "#o_9379" ).scrollTop( startValue ).scrollLeft( startValue );
-			},
-			stop: function( event, ui ) {
-				equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
-				equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
-			}
+		var moves = 3,
+			startValue = 0,
+			dragDelta = 20,
+			delta = 100,
+
+			// we scroll after each drag event, so subtract 1 from number of moves for expected
+			expected = delta + ( ( moves - 1 ) * dragDelta ),
+			element = $( "#dragged" ).draggable({
+				drag: function() {
+					startValue += dragDelta;
+					$( "#outer" ).scrollTop( startValue ).scrollLeft( startValue );
+				},
+				stop: function( event, ui ) {
+					equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
+					equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
+				}
+			});
+
+		$( "#outer" ).css( "overflow", overflow );
+
+		element.simulate( "drag", {
+			dy: delta,
+			dx: delta,
+			moves: moves
 		});
-
-	$( "#o_9379" ).css( "overflow", "auto" );
-
-	element.simulate( "drag", {
-		dy: delta,
-		dx: delta,
-		moves: moves
 	});
 });
 
-test( "#5727: draggable from iframe" , function() {
+test( "#5727: draggable from iframe", function() {
 	expect( 1 );
 
 	var iframeBody, draggable1,

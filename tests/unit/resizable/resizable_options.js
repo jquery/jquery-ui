@@ -299,6 +299,26 @@ test( "grid - Resizable: can be moved when grid option is set (#9611)", function
 	equal( target.position().left, oldPosition.left, "compare left" );
 });
 
+test( "grid - maintains grid with padding and border when approaching no dimensions", function() {
+	expect( 2 );
+
+	// http://bugs.jqueryui.com/ticket/10437 - Resizable: border with grid option working wrong
+	var handle = ".ui-resizable-nw",
+		target = $( "#resizable1" ).css({
+			padding: 5,
+			border: "5px solid black",
+			width: 80,
+			height: 80
+		}).resizable({
+			handles: "all",
+			grid: 50
+		});
+
+	TestHelpers.resizable.drag( handle, 50, 50 );
+	equal( target.outerWidth(), 50, "compare width" );
+	equal( target.outerHeight(), 50, "compare height" );
+});
+
 test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 	expect(4);
 

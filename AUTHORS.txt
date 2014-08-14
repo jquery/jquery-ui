@@ -271,6 +271,11 @@ Thomas Meyer <meyertee@gmail.com>
 Ruslan Yakhyaev <ruslan@ruslan.io>
 Brian J. Dowling <bjd-dev@simplicity.net>
 Ben Higgins <ben@extrahop.com>
-Yermo <yml@yml.com>
+Yermo Lamers <yml@yml.com>
 Patrick Stapleton <github@gdi2290.com>
 Trisha Crowley <trisha.crowley@gmail.com>
+Usman Akeju <akeju00+github@gmail.com>
+Rodrigo Menezes <rod333@gmail.com>
+Jacques Perrault <jacques_perrault@us.ibm.com>
+Frederik Elvhage <frederik.elvhage@googlemail.com>
+Will Holley <willholley@gmail.com>

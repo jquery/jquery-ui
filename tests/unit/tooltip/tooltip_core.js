@@ -154,4 +154,24 @@ asyncTest( "programmatic focus with async content", function() {
 	element.focus();
 });
 
+asyncTest( "destroy during hide animation; only one close event", function() {
+	expect( 1 );
+
+	var element = $( "#tooltipped1" ).tooltip({
+		show: false,
+		hide: true
+	});
+
+	element.bind( "tooltipclose", function() {
+		ok( true, "tooltip closed" );
+	});
+
+	element.tooltip( "open" );
+	element.tooltip( "close" );
+	setTimeout(function() {
+		element.tooltip( "destroy" );
+		start();
+	});
+});
+
 }( jQuery ) );

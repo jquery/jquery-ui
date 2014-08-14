@@ -179,7 +179,7 @@ test( "{ cancel: 'span' }", function() {
 	element.draggable( "destroy" );
 
 	element = $( "#draggable2" ).draggable({ cancel: "span" });
-	TestHelpers.draggable.shouldNotDrag( element, "cancel: span, span dragged","#draggable2 span" );
+	TestHelpers.draggable.shouldNotDrag( element, "cancel: span, span dragged", "#draggable2 span" );
 });
 
 test( "{ cancel: ? }, unexpected", function() {
@@ -361,7 +361,7 @@ test( "containment, account for border", function() {
 	el.css({
 		height: "5px",
 		width: "5px"
-	}).draggable({ containment: "parent" });
+	}).draggable({ containment: "parent", scroll: false });
 
 	el.simulate( "drag", {
 		dx: 100,
@@ -522,7 +522,7 @@ test( "cursorAt", function() {
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
 						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
-							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
 						} else {
 							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
@@ -564,7 +564,7 @@ test( "cursorAt, switching after initialization", function() {
 							equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
 						} else if ( testData.cursorAt.right ) {
 							equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
-							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " +position + " top" );
+							equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
 						} else {
 							equal( event.clientX - ui.offset.left, testData.x + TestHelpers.draggable.unreliableOffset, testName + " " + position + " left" );
 							equal( event.clientY - ui.offset.top, testData.y + TestHelpers.draggable.unreliableOffset, testName + " " + position + " top" );
@@ -623,7 +623,7 @@ test( "grid, switching after initialization", function() {
 	TestHelpers.draggable.testDrag( element, element, 24, 24, 24, 24, "grid: default" );
 	TestHelpers.draggable.testDrag( element, element, 0, 0, 0, 0, "grid: default" );
 
-	element.draggable( "option", "grid", [ 50,50 ] );
+	element.draggable( "option", "grid", [ 50, 50 ] );
 
 	TestHelpers.draggable.testDrag( element, element, 24, 24, 0, 0, "grid: [50, 50] as option" );
 	TestHelpers.draggable.testDrag( element, element, 26, 25, 50, 50, "grid: [50, 50] as option" );
@@ -878,6 +878,39 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 	TestHelpers.draggable.restoreScroll( document );
 });
 
+test( "scroll ignores containers that are overflow: hidden", function() {
+	expect( 2 );
+
+	var scrollParent = $( "#scrollParent" ),
+		element = $( "#draggable1" ).draggable().appendTo( scrollParent );
+
+	element.draggable( "option", "scroll", false );
+
+	element.simulate( "drag", {
+		dx: 1300,
+		dy: 1300
+	});
+
+	// IE8 natively scrolls when dragging an element inside a overflow:hidden
+	// container, so skip this test if native scroll occurs.
+	// Support: IE <9
+	if ( scrollParent.scrollTop() > 0 ) {
+		ok( true, "overflow:hidden container natively scrolls" );
+		ok( true, "overflow:hidden container natively scrolls" );
+		return;
+	}
+
+	element.css({ top: 0, left: 0 }).draggable( "option", "scroll", true );
+
+	element.simulate( "drag", {
+		dx: 1300,
+		dy: 1300
+	});
+
+	equal( scrollParent.scrollTop(), 0, "container doesn't scroll vertically" );
+	equal( scrollParent.scrollLeft(), 0, "container doesn't scroll horizontally" );
+});
+
 test( "#6817: auto scroll goes double distance when dragging", function() {
 	expect( 2 );
 
@@ -927,6 +960,10 @@ test( "snap, snapMode, and snapTolerance", function() {
 			snapTolerance: snapTolerance
 		}),
 		element2 = $( "#draggable2" ).draggable();
+
+	// http://bugs.jqueryui.com/ticket/9724
+	// Draggable: Snapping coordinates thrown off by margin on draggable
+	element.css( "margin", "3px" );
 
 	element.offset({
 		top: 1,
