@@ -881,15 +881,34 @@ test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 test( "scroll ignores containers that are overflow: hidden", function() {
 	expect( 2 );
 
-	var element = $( "#draggable1" ).draggable({ scroll: true }).appendTo( "#scrollParent" );
+	var scrollParent = $( "#scrollParent" ),
+		element = $( "#draggable1" ).draggable().appendTo( scrollParent );
+
+	element.draggable( "option", "scroll", false );
 
 	element.simulate( "drag", {
 		dx: 1300,
 		dy: 1300
 	});
 
-	equal( $( "#scrollParent" ).scrollTop(), 0, "container doesn't scroll vertically" );
-	equal( $( "#scrollParent" ).scrollLeft(), 0, "container doesn't scroll horizontally" );
+	// IE8 natively scrolls when dragging an element inside a overflow:hidden
+	// container, so skip this test if native scroll occurs.
+	// Support: IE <9
+	if ( scrollParent.scrollTop() > 0 ) {
+		ok( true, "overflow:hidden container natively scrolls" );
+		ok( true, "overflow:hidden container natively scrolls" );
+		return;
+	}
+
+	element.css({ top: 0, left: 0 }).draggable( "option", "scroll", true );
+
+	element.simulate( "drag", {
+		dx: 1300,
+		dy: 1300
+	});
+
+	equal( scrollParent.scrollTop(), 0, "container doesn't scroll vertically" );
+	equal( scrollParent.scrollLeft(), 0, "container doesn't scroll horizontally" );
 });
 
 test( "#6817: auto scroll goes double distance when dragging", function() {
