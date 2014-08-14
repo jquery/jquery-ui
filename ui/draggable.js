@@ -94,18 +94,23 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_mouseCapture: function(event) {
-
 		var document = this.document[ 0 ],
 			o = this.options;
 
 		// support: IE9
 		// IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
 		try {
-			// Support: IE9+
+
+			// Support: IE9, IE10
 			// If the <body> is blurred, IE will switch windows, see #9520
 			if ( document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body" ) {
-				// Blur any element that currently has focus, see #4261
-				$( document.activeElement ).blur();
+
+				// Support IE8 (for synchronous blur, see #10527)
+				setTimeout(function() {
+
+					// Blur any element that currently has focus, see #4261
+					$( document.activeElement ).blur();
+				});
 			}
 		} catch ( error ) {}
 
