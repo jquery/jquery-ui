@@ -671,10 +671,42 @@ test( "helper, default, switching after initialization", function() {
 	TestHelpers.draggable.shouldMove( element, "helper: original" );
 });
 
-/* jshint loopfunc: true */
+function testHelperPosition( scrollPositions, position, helper, scrollElements, scrollElementsTitle ) {
+	test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
+		expect( scrollPositions.length * 2 );
+
+		var i, j,
+			element = $( "#draggable1" ).css({ position: position, top: 0, left: 0 }).draggable({
+				helper: helper,
+				scroll: false
+			});
+
+		if ( scrollElements.length === 1 && scrollElements[ 0 ] === "#scrollParent" ) {
+			TestHelpers.draggable.setScrollable( "#main", false );
+			TestHelpers.draggable.setScrollable( "#scrollParent", true );
+		}
+
+		for ( j = 0; j < scrollPositions.length; j++ ) {
+			for ( i = 0; i < scrollElements.length; i++ ) {
+				TestHelpers.draggable.setScroll( scrollElements[ i ] );
+			}
+
+			TestHelpers.draggable.testScroll( element, scrollPositions[ j ] );
+
+			for ( i = 0; i < scrollElements.length; i++ ) {
+				TestHelpers.draggable.restoreScroll( scrollElements[ i ] );
+			}
+		}
+
+		if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {
+			TestHelpers.draggable.setScrollable( "#main", true );
+			TestHelpers.draggable.setScrollable( "#scrollParent", false );
+		}
+	});
+}
+
 (function() {
-	var k, l, m,
-		scrollElements = {
+	var scrollElementsMap = {
 			"no elements": [],
 			"parent": [ "#main" ],
 			"root": [ document ],
@@ -686,47 +718,16 @@ test( "helper, default, switching after initialization", function() {
 		// static is not an option here since the fixture is in an absolute container
 		scrollPositions = [ "relative", "absolute", "fixed" ];
 
-	for ( m = 0 ; m < helpers.length; m++ ) {
-		for ( l = 0; l < positions.length; l++ ) {
-			for ( k in scrollElements ) {
-				(function( position, helper, scrollElements, scrollElementsTitle ) {
-					test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
-						expect( scrollPositions.length * 2 );
-
-						var i, j,
-							element = $( "#draggable1" ).css({ position: position, top: 0, left: 0 }).draggable({
-								helper: helper,
-								scroll: false
-							});
-
-						if ( scrollElements.length === 1 && scrollElements[ 0 ] === "#scrollParent" ) {
-							TestHelpers.draggable.setScrollable( "#main", false );
-							TestHelpers.draggable.setScrollable( "#scrollParent", true );
-						}
-
-						for ( j = 0; j < scrollPositions.length; j++ ) {
-							for ( i = 0; i < scrollElements.length; i++ ) {
-								TestHelpers.draggable.setScroll( scrollElements[ i ] );
-							}
-
-							TestHelpers.draggable.testScroll( element, scrollPositions[ j ] );
-
-							for ( i = 0; i < scrollElements.length; i++ ) {
-								TestHelpers.draggable.restoreScroll( scrollElements[ i ] );
-							}
-						}
-
-						if ( scrollElements.length === 1 && scrollElements[ 1 ] === "#scrollParent" ) {
-							TestHelpers.draggable.setScrollable( "#main", true );
-							TestHelpers.draggable.setScrollable( "#scrollParent", false );
-						}
-					});
-				})( positions[ l ], helpers[ m ], scrollElements[ k ], k );
-			}
-		}
-	}
+	$.each( helpers, function() {
+		var helper = this;
+		$.each( positions, function() {
+			var position = this;
+			$.each( scrollElementsMap, function( scrollElementsTitle, scrollElements ) {
+				testHelperPosition( scrollPositions, position, helper, scrollElements, scrollElementsTitle );
+			});
+		});
+	});
 })();
-/* jshint loopfunc: false */
 
 test( "{ opacity: 0.5 }", function() {
 	expect( 1 );
