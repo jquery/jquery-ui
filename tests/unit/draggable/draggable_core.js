@@ -273,8 +273,12 @@ asyncTest( "#4261: active element should blur when mousing down on a draggable",
 
 		TestHelpers.draggable.move( element, 50, 50 );
 
-		notStrictEqual( document.activeElement, textInput.get( 0 ), "ensure the text input is no longer the active element after mousing down on a draggable" );
-		start();
+		// Support: IE8 (see #10527)
+		setTimeout(function() {
+			notStrictEqual( document.activeElement, textInput.get( 0 ),
+				"ensure the text input is no longer the active element after mousing down on a draggable" );
+			start();
+		});
 	});
 });
 
