@@ -701,6 +701,25 @@ test( "helper, default, switching after initialization", function() {
 	TestHelpers.draggable.shouldMove( element, "helper: original" );
 });
 
+// http://bugs.jqueryui.com/ticket/9446
+// Draggable: helper function cannot emulate default behavior
+test( "helper, function returning original element", function() {
+	expect( 1 );
+
+	var element = $( "#draggable1" ).css( "position", "static" ).draggable({
+		helper: function() {
+			return this;
+		}
+	});
+
+	TestHelpers.draggable.testDragHelperOffset( element, 100, 100, 100, 100, "original element is draggable" );
+
+	element.simulate( "drag", {
+		dx: 100,
+		dy: 100
+	});
+});
+
 function testHelperPosition( scrollPositions, position, helper, scrollElements, scrollElementsTitle ) {
 	test( "{ helper: '" + helper + "' }, " + position + ", with scroll offset on " + scrollElementsTitle, function() {
 		expect( scrollPositions.length * 2 );
