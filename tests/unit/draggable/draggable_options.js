@@ -374,6 +374,36 @@ test( "containment, account for border", function() {
 		"The draggable should be to the right of its parent's right border" );
 });
 
+// http://bugs.jqueryui.com/ticket/7016
+// draggable can be pulled out of containment in Chrome and IE8
+test( "containment, element cant be pulled out of container", function() {
+	expect( 1 );
+
+	var offsetBefore,
+		parent = $( "<div>").css({ width: 200, height: 200 }).appendTo( "#qunit-fixture" ),
+		element = $( "#draggable1" ).appendTo( parent );
+
+	element
+		.css({
+			height: "5px",
+			width: "5px"
+		})
+		.draggable({ containment: "parent" })
+		.simulate( "drag", {
+			dx: 200,
+			dy: 200
+		});
+
+	offsetBefore = element.offset();
+
+	element.simulate( "drag", {
+		dx: 200,
+		dy: 200
+	});
+
+	deepEqual( element.offset(), offsetBefore, "The draggable should not move past bottom right edge" );
+});
+
 test( "containment, default, switching after initialization", function() {
 	expect( 8 );
 
