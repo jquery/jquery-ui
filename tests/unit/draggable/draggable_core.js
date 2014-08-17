@@ -263,18 +263,28 @@ test( "#8399: A draggable should become the active element after you are finishe
 });
 
 asyncTest( "#4261: active element should blur when mousing down on a draggable", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var textInput = $( "<input>" ).appendTo( "#qunit-fixture" ),
-		element = $( "#draggable1" ).draggable();
+		element = $( "#draggable1" ).draggable(),
+		div = $( "<div tabindex='0'>" );
 
 	TestHelpers.onFocus( textInput, function() {
-		strictEqual( document.activeElement, textInput.get( 0 ), "ensure that a focussed text input is the active element before mousing down on a draggable" );
-
+		strictEqual( document.activeElement, textInput.get( 0 ),
+			"ensure that a focussed text input is the active element before mousing down on a draggable" );
 		TestHelpers.draggable.move( element, 50, 50 );
+		notStrictEqual( document.activeElement, textInput.get( 0 ),
+			"ensure the text input is no longer the active element after mousing down on a draggable" );
 
-		notStrictEqual( document.activeElement, textInput.get( 0 ), "ensure the text input is no longer the active element after mousing down on a draggable" );
-		start();
+		div.appendTo( element );
+		TestHelpers.onFocus( div, function() {
+			strictEqual( document.activeElement, div.get( 0 ),
+				"ensure the div is the active element before mousing down on a draggable" );
+			div.trigger( "mousedown" );
+			strictEqual( document.activeElement, div.get( 0 ),
+				"ensure the div remains active after the mouse event starts on itself (see #10527)" );
+			start();
+		});
 	});
 });
 
