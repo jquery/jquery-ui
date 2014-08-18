@@ -550,11 +550,11 @@ return $.widget( "ui.accordion", {
 					fx.now = Math.round( now );
 					if ( fx.prop !== "height" ) {
 						adjust += fx.now;
-					} else if ( that.options.heightStyle === "auto" && 
+					} else if ( that.options.heightStyle === "auto" &&
 							toHide.css( "box-sizing" ) === "border-box") {
 						fx.now = Math.round( total - toHide.outerHeight());
 						adjust = 0;
-					} else if ( that.options.heightStyle != "content" ) {
+					} else if ( that.options.heightStyle !== "content" ) {
 						fx.now = Math.round( total - toHide.outerHeight() - adjust);
 						adjust = 0;
 					}
