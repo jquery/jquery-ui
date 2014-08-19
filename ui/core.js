@@ -117,12 +117,12 @@ $.extend( $.expr[ ":" ], {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo(function( dataName ) {
 			return function( elem ) {
-				return !!$.data( elem, dataName );
+				return $.hasData( elem ) && !!$.data( elem, dataName );
 			};
 		}) :
 		// support: jQuery <1.8
 		function( elem, i, match ) {
-			return !!$.data( elem, match[ 3 ] );
+			return $.hasData( elem ) && !!$.data( elem, match[ 3 ] );
 		},
 
 	focusable: function( element ) {

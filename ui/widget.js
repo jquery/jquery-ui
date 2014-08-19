@@ -59,7 +59,7 @@ $.widget = function( name, base, prototype ) {
 
 	// create selector for plugin
 	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
-		return !!$.data( elem, fullName );
+		return $.hasData( elem ) && !!$.data( elem, fullName );
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
