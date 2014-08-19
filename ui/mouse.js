@@ -70,6 +70,8 @@ return $.widget("ui.mouse", {
 			return;
 		}
 
+		this._mouseMoved = false;
+
 		// we may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
 
@@ -123,13 +125,23 @@ return $.widget("ui.mouse", {
 	},
 
 	_mouseMove: function(event) {
-		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
-			return this._mouseUp(event);
+		// Only check for mouseups outside the document if you've moved inside the document
+		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
+		// fire a mousemove event if content is placed under the cursor. See #7778
+		// Support: IE <9
+		if ( this._mouseMoved ) {
+			// IE mouseup check - mouseup happened when mouse was out of window
+			if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
+				return this._mouseUp(event);
 
-		// Iframe mouseup check - mouseup occurred in another document
-		} else if ( !event.which ) {
-			return this._mouseUp( event );
+			// Iframe mouseup check - mouseup occurred in another document
+			} else if ( !event.which ) {
+				return this._mouseUp( event );
+			}
+		}
+
+		if ( event.which || event.button ) {
+			this._mouseMoved = true;
 		}
 
 		if (this._mouseStarted) {

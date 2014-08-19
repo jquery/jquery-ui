@@ -111,6 +111,23 @@ test( "#8269: Removing draggable element on drop", function() {
 	}
 });
 
+// http://bugs.jqueryui.com/ticket/7778
+// drag element breaks in IE8 when its content is replaced onmousedown
+test( "Stray mousemove after mousedown still drags", function() {
+	expect( 2 );
+
+	var element = $( "#draggable1" ).draggable({ scroll: false });
+
+	// In IE8, when content is placed under the mouse (e.g. when draggable content is replaced
+	// on mousedown), mousemove is triggered on those elements even though the mouse hasn't moved.
+	// Support: IE <9
+	element.bind( "mousedown", function() {
+		$( document ).simulate( "mousemove", { button: -1 });
+	});
+
+	TestHelpers.draggable.shouldMove( element, "element is draggable" );
+});
+
 test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
 	expect( 2 );
 
