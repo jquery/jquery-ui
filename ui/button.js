@@ -26,13 +26,12 @@
 
 var baseClasses = "ui-button ui-widget ui-corner-all",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons" +
-		" ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only" +
-		" ui-icon-begining ui-icon-end ui-icon-top ui-icon-bottom",
+		" ui-button-text-only ui-icon-beginning ui-icon-end ui-icon-top ui-icon-bottom",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
-			form.find( ":ui-button" ).button( "refresh" );
-		}, 1 );
+			form.find( ".ui-button" ).filter( ":ui-button" ).button( "refresh" );
+		});
 	};
 
 $.widget( "ui.button", {
@@ -43,146 +42,171 @@ $.widget( "ui.button", {
 		showLabel: true,
 		label: null,
 		icon: null,
-		iconPosition: "begining"
+		iconPosition: "beginning"
 	},
 
-	_getCreateOptions: function () {
-		var label,
-			isDisabled = this.element.prop( "disabled" ),
-			options = {};
+	_getCreateOptions: function() {
+		var options = {};
 
 		this.isInput = this.element.is( "input" );
-		label = ( this.isInput ? this.element.val() : this.element.html() );
+		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
 
-		if( typeof isDisabled !== "undefined" ) {
-			options.disabled = isDisabled;
-		}
+		this._readDisabled( options );
 
-		if( typeof label !== "undefined" && label !== "" ) {
-			options.label = label;
+		if ( this.originalLabel ) {
+			options.label = this.originalLabel;
 		}
 
 		return options;
 	},
 
-	_create: function() {
-		this.element.closest( "form" )
-			.unbind( "reset" + this.eventNamespace )
-			.bind( "reset" + this.eventNamespace, formResetHandler );
+	_readDisabled: function( options ) {
+		var isDisabled = this.element.prop( "disabled" );
 
+		if ( isDisabled !== undefined ) {
+			options.disabled = isDisabled;
+		} else {
+			options.disabled = false;
+		}
+	},
+
+	_create: function() {
+		var formElement = $( this.element[ 0 ].form );
+
+		// We don't use _on and _off here because we want all the checkboxes in the same form to use
+		// single handler which handles all the checkboxradio widgets in the form
+		formElement.off( "reset" + this.eventNamespace, formResetHandler );
+		formElement.on( "reset" + this.eventNamespace, formResetHandler );
+
+		// If the option is a boolean its been set by either user or by
+		// _getCreateOptions so we need to make sure the prop matches
+		// If it is not a boolean the user set it explicitly to null so we need to check the dom
 		if ( typeof this.options.disabled === "boolean" ) {
 			this.element.prop( "disabled", this.options.disabled );
 		} else {
-			this.options.disabled = !!this.element.prop( "disabled" );
+			this._readDisabled( this.options );
 		}
-		if( this.options.disabled === true ){
+
+		// If the option is true we call set options to add the disabled
+		// classes and ensure the element is not focused
+		if ( this.options.disabled === true ){
 			this._setOption( "disabled", true );
 		}
 
-		this.element
-			.addClass( baseClasses )
-			.attr( "role", "button" );
+		this.element.addClass( baseClasses ).attr( "role", "button" );
 
-		if( this.options.icon ) {
-			this.icon = $( "<span>" );
-			this.icon.addClass( " ui-icon " + this.options.icon );
-			if( this.options.iconPosition ) {
-				this.element.addClass(  "ui-icon-" + this.options.iconPosition );
-			}
-			if( !this.options.text ){
-				this.element.addClass( " ui-button-icon-only" );
-			}
-			this.element.append( this.icon );
-			this._setTitle();
-		}
-		if( this.options.label ){
-			if( this.isInput ) {
+		// Check to see if the label needs to be set or if its already correct
+		if ( this.options.label && this.options.label !== this.originalLabel ) {
+			if ( this.isInput ) {
 				this.element.val( this.options.label );
 			} else {
-				var textNode = this.element.contents().filter( function() {
-				    return this.nodeType === 3;
-				 })[ 0 ];
-				if( textNode !== undefined ) {
-					textNode.nodeValue = this.options.label;
-				} else {
-					this.element.html( this.options.label + this.element.html() );
-				}
+				this.element.html( this.options.label );
 			}
 		}
 
-		if ( this.element.is("a") ) {
-			this.element.keyup( function( event ) {
-				if ( event.keyCode === $.ui.keyCode.SPACE ) {
+		if ( this.options.icon ) {
+			this._updateIcon( this.options.icon )._updateTooltip();
+		}
 
-					// TODO pass through original event correctly (just as 2nd argument doesn't work)
-					$( this ).click();
+		if ( this.element.is( "a" ) ) {
+			this._on({
+				"keyup": function( event ) {
+					if ( event.keyCode === $.ui.keyCode.SPACE ) {
+						this.element[0].click();
+					}
 				}
 			});
 		}
 	},
 
-	_setTitle: function() {
+	_updateTooltip: function() {
 		this.title = this.element.attr( "title" );
-		this.hasTitle = !!this.title;
+		this.noTitle = !this.title;
 
-		if( !this.options.text ){
-			if ( !this.hasTitle ) {
-				this.element.attr( "title", this.title );
-			}
+		if ( !this.options.showLabel && !this.noTitle ){
+			this.element.attr( "title", this.options.label );
 		}
+	},
+
+	_updateIcon: function( icon ) {
+		if ( !this.icon ) {
+			this.icon = $( "<span>" ).addClass( "ui-icon" );
+			this.element.addClass(  "ui-icon-" + this.options.iconPosition );
+
+			if ( !this.options.showLabel ){
+				this.element.addClass( "ui-button-icon-only" );
+			}
+		} else {
+			this.icon.removeClass( this.options.icon );
+		}
+
+		this.icon.addClass( icon ).appendTo( this.element );
+		return this;
 	},
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-helper-hidden-accessible " + baseClasses +
-				" ui-state-active " + typeClasses )
-			.removeAttr( "role" )
-			.removeAttr( "aria-pressed" );
+			.removeClass( baseClasses + " ui-state-active " + typeClasses )
+			.removeAttr( "role" );
 
+		if ( this.icon !== undefined ) {
+			this.icon.remove();
+		}
 		if ( !this.hasTitle ) {
 			this.element.removeAttr( "title" );
 		}
 	},
 
 	_setOption: function( key, value ) {
-		if( key === "icon" ) {
-			this.icon.addClass( " ui-icon " + value )
-				.removeClass( this.options.icon );
+		if ( key === "icon" ) {
+			if ( value !== null ) {
+				this._updateIcon( value );
+			} else {
+				this.icon.remove();
+				this.element.removeClass( "ui-icon-" + this.options.iconPosition );
+			}
 		}
-		if( key === "text" ) {
-			this.element.toggleClass( ".ui-button-icon-only", !( !!value ) )
-				.toggleClass( this.options.iconPosition, !!value );
-			this._setTitle();
+
+		// Make sure we cant end up with a button that has no text nor icon
+		if ( key === "showLabel" ) {
+			if ( ( !value && !this.options.icon ) || value ) {
+				this.element.toggleClass( "ui-button-icon-only", !value )
+					.toggleClass( this.options.iconPosition, !!value );
+				this._updateTooltip();
+			} else {
+				value = true;
+			}
 		}
-		if( key === "iconPosition" && this.options.text ) {
-			this.element.addClass( value )
-				.removeClass( this.options.iconPosition );
+		if ( key === "iconPosition" && this.options.icon ) {
+			this.element.addClass( value ).removeClass( this.options.iconPosition );
 		}
-		if( key === "label" ) {
-			if( this.element.is( "input" ) ) {
+		if ( key === "label" ) {
+			if ( this.isInput ) {
 				this.element.val( value );
 			} else {
-				this.element.html( value );
+				// If there us an icon append it else nothing then append the value
+				// this avoids removal of the icon when setting label text
+				this.element.html( !!this.icon ? "" : this.icon ).append( value );
 			}
 		}
 		this._super( key, value );
 		if ( key === "disabled" ) {
-			this.element.toggleClass( " ui-state-disabled", !!value );
-			this.element.prop( "disabled", !!value ).blur();
-			return;
+			this.element.toggleClass( "ui-state-disabled", value ).prop( "disabled", value ).blur();
 		}
 	},
 
 	refresh: function() {
 
-		//See #8237 & #8828
-		var isDisabled = this.element.is( "input, button" ) ? this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
+		// Make sure to only check disabled if its an element that supports this otherwise
+		// check for the disabled class to determine state
+		var isDisabled = this.element.is( "input, button" ) ?
+			this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
 
 		if ( isDisabled !== this.options.disabled ) {
-			this._setOptions( { "disabled": isDisabled } );
+			this._setOptions({ "disabled": isDisabled });
 		}
 
-		this._setTitle();
+		this._updateTooltip();
 	}
 
 });

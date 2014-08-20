@@ -13,7 +13,7 @@
 	$(function() {
 		$( ".widget button:first" ).button({
 			icon: "ui-icon-gear",
-			text: false
+			showLabel: false
 		}).next().button({
 			icon: "ui-icon-triangle-1-w"
 		}).next().button({
@@ -34,19 +34,19 @@
 <p>Some buttons with various combinations of text and icons.</p>
 </div>
 <div class="widget">
-	<h1>Widget</h2>
+	<h1>Widget</h1>
 	<button>Button with icon only</button>
 	<button>Button with icon on the left</button>
-	<button>Button with two icons</button>
-	<button>Button with two icons and no text</button>
+	<button>Button with icon on the right</button>
+	<button>Button with icon on the bottom</button>
 </div>
 <div class="css">
-	<h1>CSS</h2>
-		<button class="ui-button ui-widget ui-corner-all ui-button-icon-only">
-		<span class="ui-icon  ui-icon-gear"></span>
+	<h1>CSS</h1>
+	<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" title="Button with icon only">
+		<span class="ui-icon ui-icon-gear"></span>
 		Button with icon only
 	</button>
-	<button class="ui-button ui-widget ui-corner-all ui-icon-begining">
+	<button class="ui-button ui-widget ui-corner-all ui-icon-beginning">
 		<span class="ui-icon ui-icon-triangle-1-w"></span>
 		Button with icon on the left
 	</button>
