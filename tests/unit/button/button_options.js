@@ -25,130 +25,84 @@ test( "disabled, explicit value", function() {
 	deepEqual( element.prop( "disabled" ), true, "element is not disabled" );
 });
 
-test("disabled, null", function() {
+test( "disabled, null", function() {
 	expect( 4 );
-	$("#radio01").button({ disabled: null });
-	deepEqual(false, $("#radio01").button("option", "disabled"),
+	$( "#radio01" ).button({ disabled: null });
+	strictEqual( $("#radio01").button("option", "disabled"), false,
 		"disabled option set to false");
-	deepEqual(false, $("#radio01").prop("disabled"), "element is disabled");
+	strictEqual( $("#radio01").prop("disabled"), false, "element is disabled");
 
-	$("#radio02").prop("disabled", true).button({ disabled: null });
-	deepEqual(true, $("#radio02").button("option", "disabled"),
-		"disabled option set to true");
-	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
+	$( "#radio02" ).prop( "disabled", true ).button({ disabled: null });
+	deepEqual( true, $( "#radio02" ).button( "option", "disabled" ),
+		"disabled option set to true" );
+	deepEqual( true, $( "#radio02" ).prop( "disabled" ), "element is not disabled" );
 });
 
-test( "disabled, ui-state-active is removed unless checkbox or radio", function() {
-	expect( 12 );
-	var elements = [
-		$( "<input type='button'>" ),
-		$( "<button></button>" ),
-		$( "<a></a>" ),
-		$( "<div></div>" ),
-		$( "<input type='checkbox' id='checkbox' checked><label for='checkbox'></label>" ),
-		$( "<input type='radio' id='radio' checked><label for='radio'></label>" )
-	];
-
-	$.each( elements, function() {
-		var element = $( this ).first().button(),
-			buttonElement = element.button( "widget" ),
-			elementType = element.prop( "nodeName" ).toLowerCase();
-
-		if ( element.is( "input" ) ) {
-			elementType += ":" + element.attr( "type" );
-		}
-
-		element.trigger( "mousedown" );
-		ok( buttonElement.hasClass( "ui-state-active" ),
-			"[" + elementType + "] has ui-state-active class after mousedown." );
-
-		element.button( "disable" );
-		if ( element.is( "[type=checkbox], [type=radio]" ) ) {
-			ok( buttonElement.hasClass( "ui-state-active" ),
-				"Disabled [" + elementType + "] has ui-state-active class." );
-		} else {
-			ok( !buttonElement.hasClass( "ui-state-active" ),
-				"Disabled [" + elementType + "] does not have ui-state-active class." );
-		}
+test( "showLabel false without icon", function() {
+	expect( 1 );
+	$( "#button" ).button({
+		showLabel: false
 	});
+	strictEqual( $( "#button" ).attr( "class" ), "ui-button ui-widget ui-corner-all" );
+
+	$( "#button" ).button( "destroy" );
 });
 
-test("text false without icon", function() {
+test("showLabel false with icon", function() {
 	expect( 1 );
 	$("#button").button({
-		text: false
-	});
-	ok( $("#button").is(":not(.ui-button-icon-only)") );
-
-	$("#button").button("destroy");
-});
-
-test("text false with icon", function() {
-	expect( 1 );
-	$("#button").button({
-		text: false,
+		showLabel: false,
 		icon: "iconclass"
 	});
-	ok( $("#button").is(".ui-button-icon-only:not(.ui-button-text):has(span.ui-icon.iconclass)") );
+	strictEqual( $( "#button" ).attr( "class" ), "ui-button ui-widget ui-corner-all ui-icon-beginning ui-button-icon-only" );
 
-	$("#button").button("destroy");
+	$( "#button" ).button( "destroy" );
 });
 
-test("label, default", function() {
+test( "label, default", function() {
 	expect( 2 );
-	$("#button").button();
-	deepEqual( $("#button").text(), "Label" );
-	deepEqual( $( "#button").button( "option", "label" ), "Label" );
+	$( "#button" ).button();
+	deepEqual( $( "#button" ).text(), "Label" );
+	deepEqual( $( "#button" ).button( "option", "label" ), "Label" );
 
-	$("#button").button("destroy");
+	$( "#button" ).button( "destroy" );
 });
 
-test("label", function() {
+test( "label", function() {
 	expect( 2 );
-	$("#button").button({
+	$( "#button" ).button({
 		label: "xxx"
 	});
-	deepEqual( $("#button").text(), "xxx" );
-	deepEqual( $("#button").button( "option", "label" ), "xxx" );
+	deepEqual( $( "#button" ).text(), "xxx" );
+	deepEqual( $( "#button" ).button( "option", "label" ), "xxx" );
 
-	$("#button").button("destroy");
+	$( "#button" ).button( "destroy" );
 });
 
-test("label default with input type submit", function() {
+test( "label default with input type submit", function() {
 	expect( 2 );
-	deepEqual( $("#submit").button().val(), "Label" );
-	deepEqual( $("#submit").button( "option", "label" ), "Label" );
+	deepEqual( $( "#submit" ).button().val(), "Label" );
+	deepEqual( $( "#submit" ).button( "option", "label" ), "Label" );
 });
 
-test("label with input type submit", function() {
+test( "label with input type submit", function() {
 	expect( 2 );
-	var label = $("#submit").button({
+	var label = $( "#submit" ).button({
 		label: "xxx"
 	}).val();
 	deepEqual( label, "xxx" );
-	deepEqual( $("#submit").button( "option", "label" ), "xxx" );
+	deepEqual( $( "#submit" ).button( "option", "label" ), "xxx" );
 });
 
-test("icons", function() {
+test( "icons", function() {
 	expect( 1 );
 	$("#button").button({
-		text: false,
+		showLabel: false,
 		icon: "iconclass"
 	});
-	ok( $("#button").is(":has(span.ui-icon.iconclass)") );
+	strictEqual( $( "#button" ).find( "span.ui-icon.iconclass" ).length, 1 );
 
-	$("#button").button("destroy");
-});
-
-test( "#5295 - button does not remove hoverstate if disabled" , function() {
-	expect( 1 );
-	var btn = $("#button").button();
-	btn.hover( function() {
-		btn.button( "disable" );
-	});
-	btn.trigger( "mouseenter" );
-	btn.trigger( "mouseleave" );
-	ok( !btn.is( ".ui-state-hover") );
+	$( "#button" ).button( "destroy" );
 });
 
 })(jQuery);
