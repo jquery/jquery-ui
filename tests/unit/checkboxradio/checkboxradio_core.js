@@ -1,23 +1,23 @@
 /*
- * button_core.js
+ * checkboxradio_core.js
  */
 
 
 (function($) {
 
-module("checkboxradio: core");
-test("checkbox", function() {
+module("Checkboxradio: core");
+test("Checkbox", function() {
 	expect( 4 );
 	var input = $("#check"),
 		label = $("label[for=check]");
-	ok( input.is(":visible") );
-	ok( label.is(":not(.ui-button)") );
+	ok( input.is( ":visible" ) );
+	ok( !label.hasClass(".ui-button)") );
 	input.checkboxradio();
-	ok( input.is(".ui-helper-hidden-accessible") );
-	ok( label.is(".ui-button") );
+	strictEqual( input.attr( "class" ), "ui-helper-hidden-accessible ui-checkboxradio" );
+	strictEqual( label.attr( "class" ), "ui-button ui-widget ui-corner-all ui-checkbox-label" );
 });
 
-test("radios", function() {
+test("Radios", function() {
 	expect( 4 );
 	var inputs = $("#radio0 input"),
 		labels = $("#radio0 label");
@@ -52,7 +52,7 @@ test("radio groups", function() {
 	assert(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
-asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+asyncTest( "Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
 	expect( 2 );
 	var check = $( "#check" ).checkboxradio(),
 		label = $( "label[for='check']" );
@@ -63,32 +63,34 @@ asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyb
 		start();
 	});
 });
+
 // TODO: simulated click events don't behave like real click events in IE
 // remove this when simulate properly simulates this
 // see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
 if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+	asyncTest( "Ensure checked after single click on checkbox label button", function() {
 		expect( 2 );
 
-		$("#check2").checkboxradio().change( function() {
-			var lbl = $( this ).checkboxradio("widget");
+		$( "#check2" ).checkboxradio().change( function() {
+			var label = $( this ).checkboxradio( "widget" );
 			ok( this.checked, "checked ok" );
+
 			// The following test is commented out for now because with new markup we are trying to avoid aria
 			//ok( lbl.attr("aria-pressed") === "true", "aria ok" );
-			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+			ok( label.hasClass( "ui-state-active" ), "ui-state-active ok" );
 		});
 
-		// support: Opera
+		// Support: Opera
 		// Opera doesn't trigger a change event when this is done synchronously.
 		// This seems to be a side effect of another test, but until that can be
 		// tracked down, this delay will have to do.
 		setTimeout(function() {
-			$("#check2").checkboxradio("widget").simulate("click");
+			$( "#check2" ).checkboxradio( "widget" ).simulate( "click" );
 			start();
 		}, 1 );
 	});
 }
-test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
+test( "Checkbox creation that requires a matching label does not find label in all cases", function() {
 	expect( 5 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
 	group.find( "input[type=checkbox]" ).checkboxradio();
@@ -114,10 +116,8 @@ test( "#7092 - button creation that requires a matching label does not find labe
 asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function() {
 	expect( 2 );
 	var form = $( "<form>" +
-		"<button></button>" +
 		"<label for='c1'></label><input id='c1' type='checkbox' checked>" +
 		"</form>" ),
-		button = form.find( "button" ).checkboxradio(),
 		checkbox = form.find( "input[type=checkbox]" ).checkboxradio();
 
 	checkbox.prop( "checked", false ).checkboxradio( "refresh" );
@@ -125,19 +125,16 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 
 	form.get( 0 ).reset();
 
-	// #9213: If a button has been removed, refresh should not be called on it when
-	// its corresponding form is reset.
-	button.remove();
-
 	setTimeout(function() {
 		ok( checkbox.checkboxradio( "widget" ).hasClass( "ui-state-active" ));
 		start();
 	}, 1 );
 });
-test( "#7534 - Checkbox label selector works for ids with \":\"", function() {
+test( "Checkbox label selector works for ids with \":\"", function() {
 	expect( 1 );
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).checkboxradio();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
+
 })(jQuery);

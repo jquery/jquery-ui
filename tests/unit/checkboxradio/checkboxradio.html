@@ -5,36 +5,33 @@
 	<title>jQuery UI Checkboxradio Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
-		css: [ "ui.core", "ui.button", "ui.checkboxradio" ],
+		css: [ "core", "ui.button", "ui.checkboxradio" ],
 		js: [
-			"ui/jquery.ui.core.js",
-			"ui/jquery.ui.widget.js",
-			"ui/jquery.ui.checkboxradio.js"
+			"ui/core.js",
+			"ui/widget.js",
+			"ui/checkboxradio.js"
 		]
 	});
 	</script>
 
 	<script src="checkboxradio_common.js"></script>
 	<script src="checkboxradio_core.js"></script>
-
+	<script src="checkboxradio_methods.js"></script>
+	<script src="checkboxradio_options.js"></script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Button Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
 
-<div id="radio0" style="margin-top: 2em;">
+<div id="radio0">
 	<input type="radio" id="radio01" name="radio" checked="checked"><label for="radio01">Choice 1</label>
 	<input type="radio" id="radio02" name="radio"><label for="radio02">Choice 2</label>
 	<input type="radio" id="radio03" name="radio"><label for="radio03">Choice 3</label>
@@ -63,7 +60,26 @@
 
 <input type="checkbox" id="check"><label for="check">Toggle</label>
 <input type="checkbox" id="check2"><label for="check2">Checkbox</label>
+<label for="checkbox-method-refresh" id="checkbox-method-refresh-label">checkbox refresh</label>
+<input type="checkbox" id="checkbox-method-refresh"/>
+<label for="checkbox-method-destroy" class="bar" id="checkbox-method-destroy-label">checkbox refresh</label>
+<input type="checkbox" class="foo" id="checkbox-method-destroy"/>
+<label for="checkbox-method-disable">checkbox refresh</label>
+<input type="checkbox" class="foo" id="checkbox-method-disable"/>
 
+<label for="radio-method-refresh" id="radio-method-refresh-label">radio refresh</label>
+<input type="radio" id="radio-method-refresh"/>
+<label for="radio-method-destroy" class="bar" id="radio-method-destroy-label">radio refresh</label>
+<input type="radio" class="foo" id="radio-method-destroy"/>
+<label for="radio-method-disable">radio refresh</label>
+<input type="radio" class="foo" id="radio-method-disable"/>
+
+<label for="checkbox-option-disabled">checkbox disabled</label>
+<input type="checkbox" class="foo" id="checkbox-option-disabled"/>
+<label for="checkbox-option-icon">checkbox icon</label>
+<input type="checkbox" class="foo" id="checkbox-option-icon"/>
+<label for="checkbox-option-label">checkbox label</label>
+<input type="checkbox" class="foo" id="checkbox-option-label"/>
 </div>
 </body>
 </html>

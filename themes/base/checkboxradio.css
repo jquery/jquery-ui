@@ -9,28 +9,32 @@
  * http://api.jqueryui.com/checkboxradio/#theming
  */
 
-.ui-checkbox{
-	display:none;
+.ui-checkbox {
+	display: none;
 }
-span.ui-icon-background{
+.ui-checkbox-label .ui-icon-background {
 	border-radius: .12em;
 	border: none;
 }
-.ui-radio-label .ui-icon.ui-icon-background{
+.ui-radio-label .ui-icon.ui-icon-background {
 	width: 16px;
 	height: 16px;
 	border-radius: 1em;
 	overflow: visible;
 	border: none;
+	background-color: rgb( 0, 0, 0 );
 	background-color: rgba( 0, 0, 0, .3 );
 	opacity: .3;
 }
-label.ui-radio-label.ui-radio-checked .ui-icon,
-label.ui-radio-label.ui-radio-checked:hover .ui-icon{
+.ui-radio-label.ui-radio-checked .ui-icon,
+.ui-radio-label.ui-radio-checked:hover .ui-icon {
 	background-image: none;
 	background-color: #fff;
 	width: 8px;
 	height: 8px;
 	border-width: 4px;
 	border-style: solid;
+}
+.ui-checkboxradio-disabled {
+	pointer-events: none;
 }
