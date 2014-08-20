@@ -2,8 +2,9 @@ TestHelpers.commonWidgetTests( "checkboxradio", {
 	defaults: {
 		disabled: null,
 		label: null,
-		icon: null,
-		// callbacks
+		icon: false,
+
+		// Callbacks
 		create: null
 	}
 });
