@@ -5,9 +5,9 @@
 
 (function($) {
 
-module("button: core");
+module( "Button: core" );
 
-test("input type submit, don't create child elements", function() {
+test( "Input type submit, don't create child elements", function() {
 	expect( 2 );
 	var input = $("#submit");
 	deepEqual( input.children().length, 0 );
@@ -15,17 +15,17 @@ test("input type submit, don't create child elements", function() {
 	deepEqual( input.children().length, 0 );
 });
 
-asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
+asyncTest( "Disabled button maintains ui-state-focus", function() {
 	expect( 2 );
 	var element = $( "#button1" ).button();
 	element.simulate( "focus" );
 	setTimeout(function() {
-		ok( element.is( ":focus" ), "button is focused" );
+		ok( element.is( ":focus" ), "Button is focused" );
 		element.button( "disable" );
 		ok( !element.is( ":focus" ),
-			"button has had focus removed" );
+			"Button has had focus removed" );
 		start();
-	},100);
+	});
 });
 
 })(jQuery);
