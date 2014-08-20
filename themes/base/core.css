@@ -81,6 +81,8 @@
 .ui-button .ui-icon {
 	position: absolute;
 	display: block;
+	top: 50%;
+	margin-top: -8px;
 }
 
 .ui-button.ui-icon-begining {
@@ -116,12 +118,12 @@
 }
 
 .ui-icon-top .ui-icon {
-	top: .1em;
+	top: .6em;
 }
 
 .ui-icon-bottom .ui-icon {
 	top: auto;
-	bottom: .1em;
+	bottom: .05em;
 }
 
 .ui-icon-notext .ui-icon {
