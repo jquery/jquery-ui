@@ -144,7 +144,7 @@ $.extend( $.simulate.prototype, {
 				0: 1,
 				1: 4,
 				2: 2
-			}[ event.button ] || event.button;
+			}[ event.button ] || ( event.button === -1 ? 0 : event.button );
 		}
 
 		return event;

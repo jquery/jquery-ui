@@ -25,6 +25,13 @@ test( "element types", function() {
 			el.append("<tr><td>content</td></tr>");
 		}
 
+		// intrinsic height is incorrect in FF for buttons with no content
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=471763
+		// Support: FF
+		if ( typeName === "button" ) {
+			el.text( "button" );
+		}
+
 		el.draggable({ cancel: "" });
 		offsetBefore = el.offset();
 		el.simulate( "drag", {
@@ -35,8 +42,8 @@ test( "element types", function() {
 
 		// Support: FF, Chrome, and IE9,
 		// there are some rounding errors in so we can't say equal, we have to settle for close enough
-		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
-		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
+		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
+		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
 		el.draggable("destroy");
 		el.remove();
 	});
@@ -102,6 +109,23 @@ test( "#8269: Removing draggable element on drop", function() {
 			y: dropOffset.top
 		});
 	}
+});
+
+// http://bugs.jqueryui.com/ticket/7778
+// drag element breaks in IE8 when its content is replaced onmousedown
+test( "Stray mousemove after mousedown still drags", function() {
+	expect( 2 );
+
+	var element = $( "#draggable1" ).draggable({ scroll: false });
+
+	// In IE8, when content is placed under the mouse (e.g. when draggable content is replaced
+	// on mousedown), mousemove is triggered on those elements even though the mouse hasn't moved.
+	// Support: IE <9
+	element.bind( "mousedown", function() {
+		$( document ).simulate( "mousemove", { button: -1 });
+	});
+
+	TestHelpers.draggable.shouldMove( element, "element is draggable" );
 });
 
 test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
@@ -315,6 +339,30 @@ test( "ui-draggable-handle managed correctly in nested draggables", function() {
 	parent.draggable( "destroy" );
 	ok( !parent.hasClass( "ui-draggable-handle" ), "parent loses class name on destroy" );
 	ok( child.hasClass( "ui-draggable-handle" ), "child retains class name on destroy" );
+});
+
+// http://bugs.jqueryui.com/ticket/7772
+// when css 'right' is set, element resizes on drag
+test( "setting right/bottom css shouldn't cause resize", function() {
+	expect( 3 );
+
+	var finalOffset,
+		element = $( "#draggable3" ),
+		origWidth = element.width(),
+		origHeight = element.height(),
+		origOffset = element.offset();
+
+	element.draggable();
+
+	TestHelpers.draggable.move( element, -50, -50 );
+
+	finalOffset = element.offset();
+	finalOffset.left += 50;
+	finalOffset.top += 50;
+
+	equal( element.width(), origWidth, "element retains width" );
+	equal( element.height(), origHeight, "element retains height" );
+	deepEqual( finalOffset, origOffset, "element moves the correct distance" );
 });
 
 })( jQuery );
