@@ -360,8 +360,8 @@ test( "setting right/bottom css shouldn't cause resize", function() {
 	finalOffset.left += 50;
 	finalOffset.top += 50;
 
-	equal( element.width(), origWidth, "element retains width" );
-	equal( element.height(), origHeight, "element retains height" );
+	closeEnough( element.width(), origWidth, 1, "element retains width" );
+	closeEnough( element.height(), origHeight, 1, "element retains height" );
 	deepEqual( finalOffset, origOffset, "element moves the correct distance" );
 });
 
