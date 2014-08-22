@@ -1,12 +1,12 @@
  /*!
- * jQuery Simulate v0.0.1 - simulate browser mouse and keyboard events
+ * jQuery Simulate v1.0.0 - simulate browser mouse and keyboard events
  * https://github.com/jquery/jquery-simulate
  *
  * Copyright 2012 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * Date: Sun Dec 9 12:15:33 2012 -0500
+ * Date: 2014-08-22
  */
 
 ;(function( $, undefined ) {
@@ -201,7 +201,9 @@ $.extend( $.simulate.prototype, {
 	},
 
 	dispatchEvent: function( elem, type, event ) {
-		if ( elem.dispatchEvent ) {
+		if ( elem[ type ] ) {
+			elem[ type ]();
+		} else if ( elem.dispatchEvent ) {
 			elem.dispatchEvent( event );
 		} else if ( elem.fireEvent ) {
 			elem.fireEvent( "on" + type, event );
