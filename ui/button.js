@@ -76,6 +76,20 @@ $.widget( "ui.button", {
 			this.options.disabled = this.element.prop( "disabled" ) || false;
 		}
 
+		this._enhance();
+
+		if ( this.element.is( "a" ) ) {
+			this._on({
+				"keyup": function( event ) {
+					if ( event.keyCode === $.ui.keyCode.SPACE ) {
+						this.element[0].click();
+					}
+				}
+			});
+		}
+	},
+
+	_enhance: function() {
 		this._setOption( "disabled", this.options.disabled );
 
 		this.element.addClass( baseClasses ).attr( "role", "button" );
@@ -88,19 +102,8 @@ $.widget( "ui.button", {
 				this.element.html( this.options.label );
 			}
 		}
-
 		if ( this.options.icon ) {
 			this._updateIcon( this.options.icon )._updateTooltip();
-		}
-
-		if ( this.element.is( "a" ) ) {
-			this._on({
-				"keyup": function( event ) {
-					if ( event.keyCode === $.ui.keyCode.SPACE ) {
-						this.element[0].click();
-					}
-				}
-			});
 		}
 	},
 
