@@ -156,7 +156,7 @@ test( "axis, default, switching after initialization", function() {
 });
 
 test( "{ cancel: 'input,textarea,button,select,option' }, default", function() {
-	expect( 2 );
+	expect( 4 );
 
 	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#qunit-fixture" );
 
@@ -171,7 +171,7 @@ test( "{ cancel: 'input,textarea,button,select,option' }, default", function() {
 });
 
 test( "{ cancel: 'span' }", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var element = $( "#draggable2" ).draggable();
 	TestHelpers.draggable.shouldMove( element, "cancel: default, span dragged", "#draggable2 span" );
@@ -228,7 +228,7 @@ test( "{ cancel: Selectors }, matching parent selector", function() {
 */
 
 test( "cancelement, default, switching after initialization", function() {
-	expect( 2 );
+	expect( 6 );
 
 	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#qunit-fixture" );
 
@@ -615,7 +615,7 @@ test( "cursorAt, switching after initialization", function() {
 });
 
 test( "disabled", function() {
-	expect( 4 );
+	expect( 6 );
 
 	var element = $( "#draggable1" ).draggable();
 
@@ -660,7 +660,7 @@ test( "grid, switching after initialization", function() {
 });
 
 test( "{ handle: 'span' }", function() {
-	expect( 4 );
+	expect( 6 );
 
 	var element = $( "#draggable2" ).draggable({ handle: "span" });
 
@@ -670,7 +670,7 @@ test( "{ handle: 'span' }", function() {
 });
 
 test( "handle, default, switching after initialization", function() {
-	expect( 10 );
+	expect( 12 );
 
 	var element = $( "#draggable2" ).draggable();
 
