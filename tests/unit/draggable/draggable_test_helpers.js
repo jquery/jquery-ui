@@ -63,14 +63,28 @@ TestHelpers.draggable = {
 	},
 	shouldNotDrag: function( el, msg, handle ) {
 		handle = handle || el;
-		$( el ).bind( "dragstop", function() {
+
+		var newOffset,
+			element = $( el ),
+			beginOffset = element.offset();
+
+		element.bind( "dragstop", function() {
 			ok( false, "should not drag " + msg );
 		});
+
 		$( handle ).simulate( "drag", {
 			dx: 100,
 			dy: 100
 		});
-		$( el ).unbind( "dragstop" );
+
+		newOffset = element.offset();
+
+		// Also assert that draggable did not move, to ensure it isn't just
+		// that drag did not fire and draggable still somehow moved
+		equal( newOffset.left, beginOffset.left, "Offset left should not be different" );
+		equal( newOffset.top, beginOffset.top, "Offset top should not be different" );
+
+		element.unbind( "dragstop" );
 	},
 	setScrollable: function( what, isScrollable ) {
 		var overflow = isScrollable ? "scroll" : "hidden";

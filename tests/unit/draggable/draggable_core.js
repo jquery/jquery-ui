@@ -344,7 +344,7 @@ test( "ui-draggable-handle managed correctly in nested draggables", function() {
 // http://bugs.jqueryui.com/ticket/7772
 // when css 'right' is set, element resizes on drag
 test( "setting right/bottom css shouldn't cause resize", function() {
-	expect( 3 );
+	expect( 4 );
 
 	var finalOffset,
 		element = $( "#draggable3" ),
@@ -362,7 +362,8 @@ test( "setting right/bottom css shouldn't cause resize", function() {
 
 	closeEnough( element.width(), origWidth, 1, "element retains width" );
 	closeEnough( element.height(), origHeight, 1, "element retains height" );
-	deepEqual( finalOffset, origOffset, "element moves the correct distance" );
+	closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
+	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
 })( jQuery );
