@@ -60,7 +60,7 @@ test( "refresh", function() {
 
 	// don't add multiple icons
 	element.accordion( "refresh" );
-	equal( element.find( ".ui-accordion-header-icon" ).length, 3 );
+	equal( element.find( ".ui-icon-beginning" ).length, 3 );
 
 	// add a panel
 	element

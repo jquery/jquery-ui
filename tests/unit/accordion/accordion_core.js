@@ -10,11 +10,11 @@ $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( typ
 		expect( 4 );
 		var element = $( selector ).accordion();
 		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
-		equal( element.find( ".ui-accordion-header" ).length, 3,
-			".ui-accordion-header elements exist, correct number" );
+		equal( element.find( ".ui-button" ).length, 3,
+			".ui-button elements exist, correct number" );
 		equal( element.find( ".ui-accordion-content" ).length, 3,
 			".ui-accordion-content elements exist, correct number" );
-		deepEqual( element.find( ".ui-accordion-header" ).next().get(),
+		deepEqual( element.find( ".ui-button" ).next().get(),
 			element.find( ".ui-accordion-content" ).get(),
 			"content panels come immediately after headers" );
 	});
@@ -32,7 +32,7 @@ test( "accessibility", function () {
 	var element = $( "#list1" ).accordion({
 			active: 1
 		}),
-		headers = element.find( ".ui-accordion-header" );
+		headers = element.find( ".ui-button" );
 
 	equal( element.attr( "role" ), "tablist", "element role" );
 	headers.each(function( i ) {
@@ -75,29 +75,29 @@ test( "accessibility", function () {
 asyncTest( "keyboard support", function() {
 	expect( 13 );
 	var element = $( "#list1" ).accordion(),
-		headers = element.find( ".ui-accordion-header" ),
+		headers = element.find( ".ui-button" ),
 		anchor = headers.eq( 1 ).next().find( "a" ).eq( 0 ),
 		keyCode = $.ui.keyCode;
-	equal( headers.filter( ".ui-state-focus" ).length, 0, "no headers focused on init" );
-	headers.eq( 0 ).simulate( "focus" );
+	equal( headers.filter( ":focus" ).length, 0, "no headers focused on init" );
+	headers.eq( 0 ).trigger( "focus" );
 	setTimeout(function() {
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "first header has focus" );
+		ok( headers.eq( 0 ).is( ":focus" ), "first header has focus" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "DOWN moves focus to next header" );
+		ok( headers.eq( 1 ).is( ":focus" ), "DOWN moves focus to next header" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next header" );
+		ok( headers.eq( 2 ).is( ":focus" ), "RIGHT moves focus to next header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first header" );
+		ok( headers.eq( 0 ).is( ":focus" ), "DOWN wraps focus to first header" );
 
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last header" );
+		ok( headers.eq( 2 ).is( ":focus" ), "UP wraps focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous header" );
+		ok( headers.eq( 1 ).is( ":focus" ), "LEFT moves focus to previous header" );
 
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first header" );
+		ok( headers.eq( 0 ).is( ":focus" ), "HOME moves focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last header" );
+		ok( headers.eq( 2 ).is( ":focus" ), "END moves focus to last header" );
 
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
 		equal( element.accordion( "option", "active" ) , 2, "ENTER activates panel" );
@@ -106,9 +106,9 @@ asyncTest( "keyboard support", function() {
 
 		anchor.simulate( "focus" );
 		setTimeout(function() {
-			ok( !headers.eq( 1 ).is( ".ui-state-focus" ), "header loses focus when focusing inside the panel" );
+			ok( !headers.eq( 1 ).is( ":focus" ), "header loses focus when focusing inside the panel" );
 			anchor.simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
-			ok( headers.eq( 1 ).is( ".ui-state-focus" ), "CTRL+UP moves focus to header" );
+			ok( headers.eq( 1 ).is( ":focus" ), "CTRL+UP moves focus to header" );
 			start();
 		}, 1 );
 	}, 1 );

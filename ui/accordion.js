@@ -90,19 +90,19 @@ return $.widget( "ui.accordion", {
 		var icons = this.options.icons;
 		if ( icons ) {
 			$( "<span>" )
-				.addClass( "ui-accordion-header-icon ui-icon " + icons.header )
+				.addClass( "ui-icon " + icons.header )
 				.prependTo( this.headers );
-			this.active.children( ".ui-accordion-header-icon" )
+			this.active.children( ".ui-icon" )
 				.removeClass( icons.header )
 				.addClass( icons.activeHeader );
-			this.headers.addClass( "ui-accordion-icons" );
+			this.headers.addClass( "ui-icon-beginning" );
 		}
 	},
 
 	_destroyIcons: function() {
 		this.headers
-			.removeClass( "ui-accordion-icons" )
-			.children( ".ui-accordion-header-icon" )
+			.removeClass( "ui-icon-beginning" )
+			.children( ".ui-icon" )
 				.remove();
 	},
 
@@ -116,7 +116,7 @@ return $.widget( "ui.accordion", {
 
 		// clean up headers
 		this.headers
-			.removeClass( "ui-accordion-header ui-accordion-header-active ui-state-default " +
+			.removeClass( "ui-button ui-accordion-header-active ui-state-default " +
 				"ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
@@ -260,7 +260,7 @@ return $.widget( "ui.accordion", {
 
 	_processPanels: function() {
 		this.headers = this.element.find( this.options.header )
-			.addClass( "ui-accordion-header ui-state-default ui-corner-all" );
+			.addClass( "ui-button ui-state-default ui-corner-all" );
 
 		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" )
@@ -393,8 +393,6 @@ return $.widget( "ui.accordion", {
 		this._off( this.headers.add( this.headers.next() ) );
 		this._on( this.headers, events );
 		this._on( this.headers.next(), { keydown: "_panelKeyDown" });
-		this._hoverable( this.headers );
-		this._focusable( this.headers );
 	},
 
 	_eventHandler: function( event ) {
@@ -433,7 +431,7 @@ return $.widget( "ui.accordion", {
 		// corner classes on the previously active header stay after the animation
 		active.removeClass( "ui-accordion-header-active ui-state-active" );
 		if ( options.icons ) {
-			active.children( ".ui-accordion-header-icon" )
+			active.children( ".ui-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
 		}
@@ -443,7 +441,7 @@ return $.widget( "ui.accordion", {
 				.removeClass( "ui-corner-all" )
 				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" );
 			if ( options.icons ) {
-				clicked.children( ".ui-accordion-header-icon" )
+				clicked.children( ".ui-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
 			}
