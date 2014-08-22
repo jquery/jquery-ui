@@ -252,6 +252,72 @@ test( "{ connectToSortable: selector }, default", function() {
 });
 */
 
+test( "connectToSortable, dragging out of a sortable", function() {
+	expect( 3 );
+
+	var sortItem, dragHelper,
+		element = $( "#draggableSortable" ).draggable({
+			scroll: false,
+			connectToSortable: "#sortable"
+		}),
+		sortable = $( "#sortable" ).sortable(),
+		dx = 50,
+		dy = 50,
+		offsetBefore = element.offset(),
+		offsetExpected = {
+			left: offsetBefore.left + dx,
+			top: offsetBefore.top + dy
+		};
+
+	$( sortable ).one( "sortstart", function( event, ui ) {
+		sortItem = ui.item;
+	});
+
+	$( element ).one( "drag", function( event, ui ) {
+		dragHelper = ui.helper;
+	});
+
+	$( element ).one( "dragstop", function( event, ui ) {
+		// http://bugs.jqueryui.com/ticket/8809
+		// Position issue when connected to sortable
+		deepEqual( ui.helper.offset(), offsetExpected, "draggable offset is correct" );
+
+		// http://bugs.jqueryui.com/ticket/7734
+		// HTML IDs are removed when dragging to a Sortable
+		equal( sortItem[ 0 ], dragHelper[ 0 ], "both have the same helper" );
+		equal( sortItem.attr( "id" ), dragHelper.attr( "id" ), "both have the same id" );
+	});
+
+	element.simulate( "drag", {
+		dx: dx,
+		dy: dy
+	});
+});
+
+test( "connectToSortable, dragging clone into sortable", function() {
+	expect( 1 );
+
+	var element = $( "#draggableSortableClone" ).draggable({
+			scroll: false,
+			connectToSortable: "#sortable",
+			helper: "clone"
+		}),
+		sortable = $( "#sortable" ).sortable(),
+		offsetSortable = sortable.offset();
+
+	$( sortable ).one( "sortbeforestop", function( event, ui ) {
+		// http://bugs.jqueryui.com/ticket/8809
+		// Position issue when connected to sortable
+		deepEqual( ui.helper.offset(), offsetSortable, "sortable offset is correct" );
+	});
+
+	element.simulate( "drag", {
+		x: offsetSortable.left + 1,
+		y: offsetSortable.top + 1,
+		moves: 1
+	});
+});
+
 test( "{ containment: Element }", function() {
 	expect( 1 );
 

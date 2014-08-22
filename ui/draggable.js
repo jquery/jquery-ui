@@ -177,23 +177,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.offsetParentCssPosition = this.offsetParent.css( "position" );
 
 		//The element's absolute position on the page minus margins
-		this.offset = this.positionAbs = this.element.offset();
-		this.offset = {
-			top: this.offset.top - this.margins.top,
-			left: this.offset.left - this.margins.left
-		};
-
-		//Reset scroll cache
-		this.offset.scroll = false;
-
-		$.extend(this.offset, {
-			click: { //Where the click happened, relative to the element
-				left: event.pageX - this.offset.left,
-				top: event.pageY - this.offset.top
-			},
-			parent: this._getParentOffset(),
-			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
-		});
+		this.positionAbs = this.element.offset();
+		this._refreshOffsets( event );
 
 		//Generate the original position
 		this.originalPosition = this.position = this._generatePosition( event, false );
@@ -232,6 +217,21 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		return true;
+	},
+
+	_refreshOffsets: function( event ) {
+		this.offset = {
+			top: this.positionAbs.top - this.margins.top,
+			left: this.positionAbs.left - this.margins.left,
+			scroll: false,
+			parent: this._getParentOffset(),
+			relative: this._getRelativeOffset()
+		};
+
+		this.offset.click = {
+			left: event.pageX - this.offset.left,
+			top: event.pageY - this.offset.top
+		};
 	},
 
 	_mouseDrag: function(event, noPropagation) {
@@ -736,11 +736,13 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 				this.instance.options.helper = this.instance.options._helper;
 
-				//If the helper has been the original item, restore properties in the sortable
-				if (inst.options.helper === "original") {
-					this.instance.currentItem.css({ top: "auto", left: "auto" });
-				}
-
+				// restore properties in the sortable, since the draggable may have
+				// modified them in unexpected ways (#8809)
+				this.instance.currentItem.css({
+					position: this.instance.placeholder.css( "position" ),
+					top: "",
+					left: ""
+				});
 			} else {
 				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
 				this.instance._trigger("deactivate", event, uiSortable);
@@ -750,8 +752,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 	},
 	drag: function( event, ui, draggable ) {
-		var dragElement = this;
-
 		$.each( draggable.sortables, function() {
 			var innermostIntersecting = false,
 				thisSortable = this,
@@ -787,9 +787,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					sortable.isOver = 1;
 
-					sortable.currentItem = $( dragElement )
-						.clone()
-						.removeAttr( "id" )
+					sortable.currentItem = ui.helper
 						.appendTo( sortable.element )
 						.data( "ui-sortable-item", true );
 
@@ -827,6 +825,10 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 				if ( sortable.currentItem ) {
 					sortable._mouseDrag( event );
+					// Copy the sortable's position because the draggable's can potentially reflect
+					// a relative position, while sortable is always absolute, which the dragged
+					// element has now become. (#8809)
+					ui.position = sortable.position;
 				}
 
 			} else {
@@ -846,10 +848,14 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					sortable._mouseStop( event, true );
 					sortable.options.helper = sortable.options._helper;
 
-					sortable.currentItem.remove();
 					if ( sortable.placeholder ) {
 						sortable.placeholder.remove();
 					}
+
+					// Recalculate the draggable's offset considering the sortable
+					// may have modified them in unexpected ways (#8809)
+					draggable._refreshOffsets( event );
+					ui.position = draggable._generatePosition( event, true );
 
 					draggable._trigger( "fromSortable", event );
 
