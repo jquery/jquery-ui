@@ -162,7 +162,7 @@ test( "widget and menuWidget", function() {
 		menu = element.selectmenu( "menuWidget" );
 
 	equal( button.length, 1, "button: one element" );
-	ok( button.is( ".ui-selectmenu-button" ), "button: class" );
+	ok( button.is( ".ui-button" ), "button: class" );
 
 	equal( menu.length, 1, "Menu Widget: one element" );
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
