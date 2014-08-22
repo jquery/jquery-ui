@@ -46,28 +46,22 @@ $.widget( "ui.button", {
 	},
 
 	_getCreateOptions: function() {
-		var options = {};
+		var disabled,
+			options = {};
 
 		this.isInput = this.element.is( "input" );
 		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
 
-		this._readDisabled( options );
+		disabled = this.element.prop( "disabled" );
+		if ( disabled != null ) {
+			options.disabled = disabled;
+		}
 
 		if ( this.originalLabel ) {
 			options.label = this.originalLabel;
 		}
 
 		return options;
-	},
-
-	_readDisabled: function( options ) {
-		var isDisabled = this.element.prop( "disabled" );
-
-		if ( isDisabled !== undefined ) {
-			options.disabled = isDisabled;
-		} else {
-			options.disabled = false;
-		}
 	},
 
 	_create: function() {
@@ -78,20 +72,11 @@ $.widget( "ui.button", {
 		formElement.off( "reset" + this.eventNamespace, formResetHandler );
 		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
-		// If the option is a boolean its been set by either user or by
-		// _getCreateOptions so we need to make sure the prop matches
-		// If it is not a boolean the user set it explicitly to null so we need to check the dom
-		if ( typeof this.options.disabled === "boolean" ) {
-			this.element.prop( "disabled", this.options.disabled );
-		} else {
-			this._readDisabled( this.options );
+		if ( this.options.disabled == null ) {
+			this.options.disabled = this.element.prop( "disabled" ) || false;
 		}
 
-		// If the option is true we call set options to add the disabled
-		// classes and ensure the element is not focused
-		if ( this.options.disabled === true ){
-			this._setOption( "disabled", true );
-		}
+		this._setOption( "disabled", this.options.disabled );
 
 		this.element.addClass( baseClasses ).attr( "role", "button" );
 
