@@ -13,7 +13,7 @@
 //>>docs: http://api.jqueryui.com/selectmenu/
 //>>demos: http://jqueryui.com/selectmenu/
 //>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/selectmenu.css
+//>>css.structure: ../themes/base/selectmenu.css, ../themes/base/button.css
 //>>css.theme: ../themes/base/theme.css
 
 ( function( factory ) {
@@ -82,7 +82,7 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_drawButton: function() {
-		var icon,
+		var icon, space,
 			that = this,
 			item = this._parseOption(
 				this.element.find( "option:selected" ),
@@ -115,10 +115,13 @@ return $.widget( "ui.selectmenu", {
 			.insertAfter( this.element );
 
 		this._addClass( this.button, "ui-selectmenu-button ui-selectmenu-button-closed",
-			"ui-widget ui-state-default" );
+			"ui-button ui-widget" );
 
 		icon = $( "<span>" ).prependTo( this.button );
+		space = $( "<span> </span>" );
+		this._addClass( space, "ui-selectmenu-icon-space" );
 		this._addClass( icon, null, "ui-icon " + this.options.icons.button );
+		icon.after( space );
 
 		this.buttonItem = this._renderButtonItem( item )
 			.appendTo( this.button );
@@ -136,8 +139,6 @@ return $.widget( "ui.selectmenu", {
 				that._refreshMenu();
 			}
 		} );
-		this._hoverable( this.button );
-		this._focusable( this.button );
 	},
 
 	_drawMenu: function() {
@@ -606,7 +607,7 @@ return $.widget( "ui.selectmenu", {
 		// we always remove classes first and add them second, otherwise if both classes have the
 		// same theme class, it will be removed after we add it.
 		this._removeClass( this.button, "ui-selectmenu-button-" +
-				( this.isOpen ? "closed" : "open" ) )
+			( this.isOpen ? "closed" : "open" ) )
 			._addClass( this.button, "ui-selectmenu-button-" +
 				( this.isOpen ? "open" : "closed" ) )
 			._toggleClass( this.menuWrap, "ui-selectmenu-open", null, this.isOpen );
