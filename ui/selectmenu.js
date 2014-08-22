@@ -130,8 +130,6 @@ return $.widget( "ui.selectmenu", {
 				that._refreshMenu();
 			}
 		});
-		this._hoverable( this.button );
-		this._focusable( this.button );
 	},
 
 	_drawMenu: function() {

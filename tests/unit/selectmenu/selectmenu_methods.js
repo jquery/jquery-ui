@@ -177,7 +177,7 @@ test( "widget and menuWidget", function( assert ) {
 		menu = element.selectmenu( "menuWidget" );
 
 	equal( button.length, 1, "button: one element" );
-	assert.hasClasses( button, "ui-selectmenu-button" );
+	assert.hasClasses( button, "ui-button" );
 
 	equal( menu.length, 1, "Menu Widget: one element" );
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
