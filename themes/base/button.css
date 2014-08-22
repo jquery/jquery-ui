@@ -35,7 +35,7 @@
 	text-indent: -9999px;
 	white-space: nowrap;
 }
-.ui-button .ui-icon {
+.ui-icon {
 	position: absolute;
 	display: block;
 }
