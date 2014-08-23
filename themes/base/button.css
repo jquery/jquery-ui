@@ -70,6 +70,7 @@ input.ui-button.ui-button-icon-only {
 .ui-button.ui-icon-bottom .ui-icon {
 	top: auto;
 	bottom: .05em;
+
 }
 
 .ui-button-icon-only .ui-icon {
@@ -90,6 +91,36 @@ input.ui-button.ui-button-icon-only {
 
 .ui-button.ui-icon-end {
 	padding: .4em 2.1em .4em 1em;
+}
+
+.ui-button.ui-icon-top {
+	padding: 1.1em 1em .4em 1em;
+}
+
+.ui-button.ui-icon-bottom {
+	padding: .4em 1em 1.1em 1em;
+}
+
+.ui-button.ui-icon-notext .ui-icon {
+	padding: 0;
+	width: 2.1em;
+	height: 2.1em;
+	text-indent: -9999px;
+	white-space: nowrap;
+
+}
+
+input.ui-button.ui-icon-notext .ui-icon {
+	width: auto;
+	height: auto;
+	text-indent: 0;
+	white-space: normal;
+	padding: .4em 1em;
+}
+/* button sets */
+.ui-buttonset {
+	margin-right: 7px;
+>>>>>>> 781d4cb... Controlgroup: Inital commit of new widget
 }
 
 .ui-button.ui-icon-top {
