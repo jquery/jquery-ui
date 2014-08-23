@@ -1,0 +1,26 @@
+/*!
+ * jQuery UI Controlgroup @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/controlgroup/#theming
+ */
+
+
+.ui-controlgroup > .ui-button {
+	margin-left: -2px;
+	margin-right: -1px;
+}
+.ui-controlgroup.ui-controlgroup-vertical > .ui-button {
+	display: block;
+	width: 100%;
+	margin-top: -1px;
+	margin-bottom: -1px;
+	text-align: left;
+}
+.ui-controlgroup-vertical label.ui-button {
+	box-sizing: border-box;
+}
