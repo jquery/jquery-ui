@@ -1,8 +1,12 @@
-module( "Controlgroup: Core" );
+define( [
+	"jquery",
+	"ui/controlgroup",
+	"ui/checkboxradio",
+	"ui/selectmenu",
+	"ui/button"
+], function( $ ) {
 
-function hasCornerClass( element ) {
-	return !!element.attr( "class" ).match( /ui-corner/g );
-}
+module( "Controlgroup: Core" );
 
 test( "selectmenu: open/close corners", function( assert ) {
 	expect( 1 );
@@ -22,12 +26,10 @@ test( "selectmenu: open/close corners", function( assert ) {
 
 	selectButton = selects.eq( 1 ).selectmenu( "widget" );
 	selects.eq( 1 ).selectmenu( "open" );
-	strictEqual( hasCornerClass( selectButton ), false,
-		"Horizontal: Middle selectmenu does not get corner class when opened" );
+	assert.lacksClassStart( selectButton, "ui-corner" );
 
 	selects.eq( 1 ).selectmenu( "close" );
-	strictEqual( hasCornerClass( selectButton ), false,
-		"Horizontal: Middle selectmenu does not get corner class when closed" );
+	assert.lacksClassStart( selectButton, "ui-corner" );
 
 	selectButton = selects.eq( 2 ).selectmenu( "widget" );
 	selects.eq( 2 ).selectmenu( "open" );
@@ -50,28 +52,18 @@ test( "selectmenu: open/close corners", function( assert ) {
 
 	selectButton = selects.eq( 1 ).selectmenu( "widget" );
 	selects.eq( 1 ).selectmenu( "open" );
-	strictEqual( hasCornerClass( selectButton ), false,
-		"vertical: Middle selectmenu does not get corner class when opened" );
+	assert.lacksClassStart( selectButton, "ui-corner" );
 
 	selects.eq( 1 ).selectmenu( "close" );
-	strictEqual( hasCornerClass( selectButton ), false,
-		"vertical: Middle selectmenu does not get corner class when closed" );
+	assert.lacksClassStart( selectButton, "ui-corner" );
 
 	selectButton = selects.eq( 2 ).selectmenu( "widget" );
 	selects.eq( 2 ).selectmenu( "open" );
-	strictEqual( hasCornerClass( selectButton ), false,
-		"vertical: Last selectmenu does not get corner class when opened" );
+	assert.lacksClassStart( selectButton, "ui-corner" );
 
 	selects.eq( 2 ).selectmenu( "close" );
 	assert.hasClasses( selectButton, "ui-corner-bottom",
 		"vertical: Last selectmenu gets ui-corner-bottom when closed" );
 });
-test( "invisibles excluded from corner classes", function( assert ) {
-	expect( 2 );
-	var element = $( ".controlgroup" ).controlgroup(),
-		buttons = element.children( ".ui-button" );
-	strictEqual( hasCornerClass( buttons.eq( 0 ) ), false,
-		"ExcludeInvisible: true: Hidden first element does not get a corner class" );
-	assert.hasClasses( buttons.eq( 1 ), "ui-corner-left",
-		"ExcludeInvisible: true: First button is hidden second button get corner class" );
-});
+
+} );

@@ -19,10 +19,11 @@
 		var iframe = $( "<iframe id='display' contenteditable='true'>" ),
 			contents = iframe.appendTo( "body" );
 
-		// Firefox and IE require us to wait for next tick before interacting with the iframe
+		// Support: Firefox <= 36, IE <= 11
+		// These browsers require us to wait for next tick before interacting with the iframe
 		setTimeout(function(){
 
-			contents = contents.contents()
+			contents = contents.contents();
 			contents[ 0 ].designMode = "On";
 			contents[ 0 ].contenteditable = true;
 			contents.find( "body" ).append( $( "#input" ).clone().attr( "id", "output" ) );
@@ -43,7 +44,7 @@
 				contents[ 0 ].execCommand( this.id );
 			});
 			$( "#fontsize, #forecolor, #hilitecolor, #backcolor, #fontname" ).on( "change selectmenuchange", function() {
-				contents[ 0 ].execCommand( this.id ,false, $( this ).val() );
+				contents[ 0 ].execCommand( this.id, false, $( this ).val() );
 			});
 			$( ".toolbar" ).controlgroup();
 			$( "#zoom" ).on( "selectmenuchange", function() {
@@ -57,7 +58,7 @@
 	</script>
 	<style>
 		#zoom, #fontsize {
-			min-width:75px;
+			min-width: 75px;
 		}
 		#input {
 			display: none;
@@ -74,75 +75,72 @@
 	</style>
 </head>
 <body>
-<div class="demo-description">
-<p>A sample editor toolbar</p>
-<p>Highlight text and edit it using the buttons and dropdowns in the toolbar</p>
-</div>
-	<div class="toolbar">
-			<button id="print">Print</button>
-			<button id="undo">Undo</button>
-			<button id="redo">Redo</button>
-			<select id="zoom">
-				<option>50%</option>
-				<option>75%</option>
-				<option>90%</option>
-				<option selected>100%</option>
-				<option>125%</option>
-				<option>150%</option>
-				<option>200%</option>
-			</select>
-			<select id="fontname">
-				<option>Arial</option>
-				<option>Comic Sans MS</option>
-				<option>Courier New</option>
-				<option>Georgia</option>
-				<option>Impact</option>
-				<option selected>Lucida Grande</option>
-				<option>Times New Roman</option>
-				<option>Verdana</option>
-			</select>
-			<select id="fontsize">
-				<option value="1">8px</option>
-				<option value="2">9px</option>
-				<option value="3" selected>10px</option>
-				<option value="4">11px</option>
-				<option value="5">12px</option>
-				<option value="6">14px</option>
-				<option value="7">18px</option>
-				<option value="8">24px</option>
-				<option value="9">30px</option>
-				<option value="10">36px</option>
-			</select>
-			<select id="hilitecolor">
-				<option value="white">Highlight: None</option>
-				<option value="red">Highlight: Red</option>
-				<option value="yellow">Highlight: Yellow</option>
-				<option value="green">Highlight: Green</option>
-				<option value="blue">Highlight: Blue</option>
-				<option value="grey">Highlight: Grey</option>
-				<option value="purple">Highlight: Purple</option>
-				<option value="orange">Highlight: Orange</option>
-			</select>
-			<select id="forecolor">
-				<option value="white">Font: None</option>
-				<option value="red">Font: Red</option>
-				<option value="yellow">Font: Yellow</option>
-				<option value="green">Font: Green</option>
-				<option value="blue">Font: Blue</option>
-				<option value="#ccc">Font: Grey</option>
-				<option value="purple">Font: Purple</option>
-				<option value="orange">Font: Orange</option>
-			</select>
-			<button id="bold">B</button>
-			<button id="italic">I</button>
-			<button id="underline">U</button>
+<div class="toolbar">
+		<button id="print">Print</button>
+		<button id="undo">Undo</button>
+		<button id="redo">Redo</button>
+		<select id="zoom">
+			<option>50%</option>
+			<option>75%</option>
+			<option>90%</option>
+			<option selected>100%</option>
+			<option>125%</option>
+			<option>150%</option>
+			<option>200%</option>
+		</select>
+		<select id="fontname">
+			<option>Arial</option>
+			<option>Comic Sans MS</option>
+			<option>Courier New</option>
+			<option>Georgia</option>
+			<option>Impact</option>
+			<option selected>Lucida Grande</option>
+			<option>Times New Roman</option>
+			<option>Verdana</option>
+		</select>
+		<select id="fontsize">
+			<option value="1">8px</option>
+			<option value="2">9px</option>
+			<option value="3" selected>10px</option>
+			<option value="4">11px</option>
+			<option value="5">12px</option>
+			<option value="6">14px</option>
+			<option value="7">18px</option>
+			<option value="8">24px</option>
+			<option value="9">30px</option>
+			<option value="10">36px</option>
+		</select>
+		<select id="hilitecolor" title="Background color">
+			<option value="white">Highlight: None</option>
+			<option value="red">Highlight: Red</option>
+			<option value="yellow">Highlight: Yellow</option>
+			<option value="green">Highlight: Green</option>
+			<option value="blue">Highlight: Blue</option>
+			<option value="grey">Highlight: Grey</option>
+			<option value="purple">Highlight: Purple</option>
+			<option value="orange">Highlight: Orange</option>
+		</select>
+		<select id="forecolor">
+			<option value="black" selected>Font: Black</option>
+			<option value="white">Font: White</option>
+			<option value="red">Font: Red</option>
+			<option value="yellow">Font: Yellow</option>
+			<option value="green">Font: Green</option>
+			<option value="blue">Font: Blue</option>
+			<option value="#ccc">Font: Grey</option>
+			<option value="purple">Font: Purple</option>
+			<option value="orange">Font: Orange</option>
+		</select>
+		<button id="bold">B</button>
+		<button id="italic">I</button>
+		<button id="underline">U</button>
 
-	</div>
-	<br/><br/>
+</div>
+<br/><br/>
 <pre id="input">
 The Rime of the Ancient Mariner (text of 1834)
 BY SAMUEL TAYLOR COLERIDGE
-Argument 
+Argument
 
 How a Ship having passed the Line was driven by storms to the cold Country towards the South Pole;
 and how from thence she made her course to the tropical Latitude of the Great Pacific Ocean; and 
@@ -252,5 +250,9 @@ From the fiends, that plague thee thus!—
 Why look'st thou so?'—With my cross-bow
 I shot the ALBATROSS.
 </pre>
+<div class="demo-description">
+	<p>A sample editor toolbar</p>
+	<p>Highlight text and edit it using the buttons and dropdowns in the toolbar</p>
+</div>
 </body>
 </html>

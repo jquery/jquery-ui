@@ -16,18 +16,15 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( ".controlgroup" ).eq( 0 ).controlgroup()
-			.end().eq( 1 ).controlgroup({
-				"direction": "vertical"
-			});
+		$( ".controlgroup" ).controlgroup()
+		$( ".controlgroup-vertical" ).controlgroup({
+			"direction": "vertical"
+		});
 	});
 	</script>
 	<style>
 		.ui-controlgroup-vertical {
-			width: 300px;
-		}
-		.ui-controlgroup-vertical select {
-			width: 100%;
+			width: 150px;
 		}
 		.ui-controlgroup.ui-controlgroup-vertical > button.ui-button {
 			text-align: center;
@@ -35,9 +32,6 @@
 	</style>
 </head>
 <body>
-<div class="demo-description">
-<p>A Controlgroup featuring various form controls</p>
-</div>
 <div class="widget">
 	<h1>Controlgroup</h1>
 	<fieldset>
@@ -64,7 +58,7 @@
 	<br/>
 	<fieldset>
 		<legend>Rental Car</legend>
-		<div class="controlgroup-horizontal">
+		<div class="controlgroup-vertical">
 			<select>
 				<option>Compact car</option>
 				<option>Midsize car</option>
@@ -83,8 +77,9 @@
 			<button>Book Now!</button>
 		</div>
 	</fieldset>
->>>>>>> 423b976... Checkboxradio: Fixed demos and tests
 </div>
-
+<div class="demo-description">
+<p>A controlgroup featuring various form controls. The first features a horizontal toolbar like orientation, the second is in a space saving vertical orientation for usages like mobile devices and panels.</p>
+</div>
 </body>
 </html>
