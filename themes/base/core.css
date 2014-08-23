@@ -76,37 +76,11 @@
 	text-indent: -99999px;
 	overflow: hidden;
 	background-repeat: no-repeat;
-}
-
-.ui-icon {
 	left: .5em;
 	top: .3em;
 }
 
-.ui-icon-end .ui-icon {
-	left: auto;
-	right: .5em;
-}
 
-.ui-icon-top .ui-icon,
-.ui-icon-bottom .ui-icon {
-	left: 50%;
-	margin-left: -11px;
-}
-
-.ui-icon-top .ui-icon {
-	top: .6em;
-}
-
-.ui-icon-bottom .ui-icon {
-	top: auto;
-	bottom: .05em;
-}
-
-.ui-icon-notext .ui-icon {
-	left: 50%;
-	margin-left: -8px;
-}
 
 /* Misc visuals
 ----------------------------------*/

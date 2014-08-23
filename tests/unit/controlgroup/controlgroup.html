@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Controlgroup Test Suite</title>
+
+	<script src="../../jquery.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		css: [ "core", "button", "menu", "selectmenu", "checkboxradio", "controlgroup" ],
+		js: [
+			"ui/core.js",
+			"ui/widget.js",
+			"ui/button.js",
+			"ui/menu.js",
+			"ui/position.js",
+			"ui/selectmenu.js",
+			"ui/checkboxradio.js",
+			"ui/controlgroup.js",
+		]
+	});
+	</script>
+
+	<script src="controlgroup_common.js"></script>
+	<script src="controlgroup_methods.js"></script>
+	<script src="controlgroup_core.js"></script>
+	<script src="controlgroup_options.js"></script>
+	<script src="../swarminject.js"></script>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<div class="controlgroup">
+		<button style="display:none">Button with icon only</button>
+		<select>
+			<option>Fast</option>
+			<option>Medium</option>
+			<option>Slow</option>
+		</select>
+		<label for="checkbox">Checkbox</label>
+		<input type="checkbox" value="checkbox" id="checkbox" />
+		<select>
+			<option>Fast</option>
+			<option>Medium</option>
+			<option>Slow</option>
+		</select>
+		<button>Button with icon on the bottom</button>
+		<select>
+			<option>Fast</option>
+			<option>Medium</option>
+			<option>Slow</option>
+		</select>
+	</div>
+</div>
+</body>
+</html>
