@@ -31,6 +31,15 @@ return $.widget( "ui.selectmenu", {
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,
+		classes: {
+			"ui-selectmenu-button": "",
+			"ui-selectmenu-button-open": "ui-corner-top",
+			"ui-selectmenu-button-closed": "ui-corner-all",
+			"ui-selectmenu-text": null,
+			"ui-selectmenu-menu": null,
+			"ui-selectmenu-optgroup": null,
+			"ui-selectmenu-open": null
+		},
 		disabled: null,
 		icons: {
 			button: "ui-icon-triangle-1-s"
@@ -84,7 +93,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Create button
 		this.button = $( "<span>", {
-			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
+			"class": this._classes( "ui-selectmenu-button ui-selectmenu-button-closed" ) + " ui-widget ui-state-default",
 			tabindex: tabindex || this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			role: "combobox",
@@ -101,7 +110,7 @@ return $.widget( "ui.selectmenu", {
 			.prependTo( this.button );
 
 		this.buttonText = $( "<span>", {
-			"class": "ui-selectmenu-text"
+			"class": this._classes( "ui-selectmenu-text" )
 		})
 			.appendTo( this.button );
 
@@ -133,7 +142,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Wrap menu
 		this.menuWrap = $( "<div>", {
-			"class": "ui-selectmenu-menu ui-front"
+			"class": this._classes( "ui-selectmenu-menu" ) + " ui-front"
 		})
 			.append( this.menu )
 			.appendTo( this._appendTo() );
@@ -141,6 +150,10 @@ return $.widget( "ui.selectmenu", {
 		// Initialize menu widget
 		this.menuInstance = this.menu
 			.menu({
+				// Adjust menu styles to dropdown
+				classes: {
+					"ui-menu": "ui-corner-bottom"
+				},
 				role: "listbox",
 				select: function( event, ui ) {
 					event.preventDefault();
@@ -163,11 +176,6 @@ return $.widget( "ui.selectmenu", {
 				}
 			})
 			.menu( "instance" );
-
-		// Adjust menu styles to dropdown
-		this.menu
-			.addClass( "ui-corner-bottom" )
-			.removeClass( "ui-corner-all" );
 
 		// Don't close the menu on mouseleave
 		this.menuInstance._off( this.menu, "mouseleave" );
@@ -274,7 +282,7 @@ return $.widget( "ui.selectmenu", {
 		$.each( items, function( index, item ) {
 			if ( item.optgroup !== currentOptgroup ) {
 				$( "<li>", {
-					"class": "ui-selectmenu-optgroup ui-menu-divider" +
+					"class": that._classes( "ui-selectmenu-optgroup" ) + " ui-menu-divider" +
 						( item.element.parent( "optgroup" ).prop( "disabled" ) ?
 							" ui-state-disabled" :
 							"" ),
@@ -510,10 +518,10 @@ return $.widget( "ui.selectmenu", {
 
 	_toggleAttr: function() {
 		this.button
-			.toggleClass( "ui-corner-top", this.isOpen )
-			.toggleClass( "ui-corner-all", !this.isOpen )
+			.toggleClass( this._classes( "ui-selectmenu-button-open" ), this.isOpen )
+			.toggleClass( this._classes( "ui-selectmenu-button-closed" ), !this.isOpen )
 			.attr( "aria-expanded", this.isOpen );
-		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
+		this.menuWrap.toggleClass( this._classes( "ui-selectmenu-open" ), this.isOpen );
 		this.menu.attr( "aria-hidden", !this.isOpen );
 	},
 
