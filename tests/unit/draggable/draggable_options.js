@@ -1334,4 +1334,46 @@ test( "zIndex, default, switching after initialization", function() {
 
 });
 
+test( "iframeFix", function() {
+	expect( 5 );
+
+	var element = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable({ iframeFix: true }),
+		element2 = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable({ iframeFix: ".iframe" }),
+		iframe = $( "<iframe>" ).appendTo( element );
+
+	element2
+		.append( "<iframe class='iframe'></iframe>" )
+		.append( "<iframe>" );
+
+	iframe.css({
+		width: 1,
+		height: 1
+	});
+
+	element.one( "drag", function() {
+		var div = $( this ).children().not( "iframe" );
+		// http://bugs.jqueryui.com/ticket/9671
+		// iframeFix doesn't handle iframes that move
+		equal( div.length, 1, "blocking div added as sibling" );
+		equal( div.outerWidth(), iframe.outerWidth(), "blocking div is wide enough" );
+		equal( div.outerHeight(), iframe.outerHeight(), "blocking div is tall enough" );
+		deepEqual( div.offset(), iframe.offset(), "blocking div is tall enough" );
+	});
+
+	element.simulate( "drag", {
+		dx: 1,
+		dy: 1
+	});
+
+	element2.one( "drag", function() {
+		var div = $( this ).children().not( "iframe" );
+		equal( div.length, 1, "blocking div added as sibling only to matching selector" );
+	});
+
+	element2.simulate( "drag", {
+		dx: 1,
+		dy: 1
+	});
+});
+
 })( jQuery );
