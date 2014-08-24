@@ -729,13 +729,16 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 			item: inst.element
 		});
 
+		inst.cancelHelperRemoval = false;
+
 		$.each(inst.sortables, function() {
 			if (this.instance.isOver) {
 
 				this.instance.isOver = 0;
 
-				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
-				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
+				// Allow this sortable to handle removing the helper
+				inst.cancelHelperRemoval = true;
+				this.instance.cancelHelperRemoval = false;
 
 				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert: "valid/invalid"
 				if (this.shouldRevert) {
@@ -755,7 +758,11 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					left: ""
 				});
 			} else {
-				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
+				// Prevent this Sortable from removing the helper.
+				// However, don't set the draggable to remove the helper
+				// either as another connected Sortable may yet handle the removal.
+				this.instance.cancelHelperRemoval = true;
+
 				this.instance._trigger("deactivate", event, uiSortable);
 			}
 
