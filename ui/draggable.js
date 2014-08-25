@@ -834,6 +834,12 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					// used solely in the revert option to handle "valid/invalid".
 					draggable.dropped = sortable.element;
 
+					// Need to refreshPositions of all sortables in the case that
+					// adding to one sortable changes the location of the other sortables (#9675)
+					$.each( draggable.sortables, function() {
+						this.refreshPositions();
+					});
+
 					// hack so receive/update callbacks work (mostly)
 					draggable.currentItem = draggable.element;
 					sortable.fromOutside = draggable;
@@ -882,6 +888,12 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					// Inform draggable that the helper is no longer in a valid drop zone
 					draggable.dropped = false;
+
+					// Need to refreshPositions of all sortables just in case removing
+					// from one sortable changes the location of other sortables (#9675)
+					$.each( draggable.sortables, function() {
+						this.refreshPositions();
+					});
 				}
 			}
 		});
