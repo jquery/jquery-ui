@@ -744,19 +744,20 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				if (this.shouldRevert) {
 					this.instance.options.revert = this.shouldRevert;
 				}
+				// Use _storedCSS To restore properties in the sortable,
+				// as this also handles revert (#9675) since the draggable
+				// may have modified them in unexpected ways (#8809)
+				this.instance._storedCSS = {
+					position: this.instance.placeholder.css( "position" ),
+					top: this.instance.placeholder.css( "top" ),
+					left: this.instance.placeholder.css( "left" )
+				};
 
 				//Trigger the stop of the sortable
 				this.instance._mouseStop(event);
 
 				this.instance.options.helper = this.instance.options._helper;
 
-				// restore properties in the sortable, since the draggable may have
-				// modified them in unexpected ways (#8809)
-				this.instance.currentItem.css({
-					position: this.instance.placeholder.css( "position" ),
-					top: "",
-					left: ""
-				});
 			} else {
 				// Prevent this Sortable from removing the helper.
 				// However, don't set the draggable to remove the helper
