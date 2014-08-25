@@ -732,7 +732,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 		$.each(inst.sortables, function() {
 			if (this.instance.isOver) {
-
 				this.instance.isOver = 0;
 
 				// Allow this sortable to handle removing the helper
@@ -751,6 +750,8 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				//Trigger the stop of the sortable
 				this.instance._mouseStop(event);
 
+				// Once drag has ended, the sortable should return to using
+				// its original helper, not the shared helper from draggable
 				this.instance.options.helper = this.instance.options._helper;
 
 			} else {
@@ -812,7 +813,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 						return ui.helper[ 0 ];
 					};
 
-					// Fire the start event of the sortable with our passed browser event,
+					// Fire the start events of the sortable with our passed browser event,
 					// and our own helper (so it doesn't create a new one)
 					event.target = sortable.currentItem[ 0 ];
 					sortable._mouseCapture( event, true );
@@ -829,7 +830,8 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					draggable._trigger( "toSortable", event );
 
-					// draggable revert needs this variable
+					// Inform draggable that the helper is in a valid drop zone,
+					// used solely in the revert option to handle "valid/invalid".
 					draggable.dropped = sortable.element;
 
 					// hack so receive/update callbacks work (mostly)
@@ -860,7 +862,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					sortable.options.revert = false;
 
 					sortable._trigger( "out", event, sortable._uiHash( sortable ) );
-
 					sortable._mouseStop( event, true );
 
 					// restore sortable behaviors that were modfied
@@ -879,7 +880,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					draggable._trigger( "fromSortable", event );
 
-					// draggable revert needs that
+					// Inform draggable that the helper is no longer in a valid drop zone
 					draggable.dropped = false;
 				}
 			}
