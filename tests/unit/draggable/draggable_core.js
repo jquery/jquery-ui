@@ -182,25 +182,33 @@ test( "#9315: jumps down with offset of scrollbar", function() {
 		});
 });
 
-test( "#5009: scroll not working with parent's position fixed", function() {
+test( "scroll offset with fixed ancestors", function() {
 	expect( 2 );
 
 	var startValue = 300,
-		element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable({
-			drag: function() {
-				startValue += 100;
-				$( document ).scrollTop( startValue ).scrollLeft( startValue );
-			},
-			stop: function( event, ui ) {
-				equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
-				equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
-				$( document ).scrollTop( 0 ).scrollLeft( 0 );
-			}
-		});
+		element = $( "#draggable1" )
+			// http://bugs.jqueryui.com/ticket/5009
+			// scroll not working with parent's position fixed
+			.wrap( "<div id='wrapper' />" )
+			// http://bugs.jqueryui.com/ticket/9612
+			// abspos elements inside of fixed elements moving away from the mouse when scrolling
+			.wrap( "<div id='wrapper2' />" )
+			.draggable({
+				drag: function() {
+					startValue += 100;
+					$( document ).scrollTop( startValue ).scrollLeft( startValue );
+				},
+				stop: function( event, ui ) {
+					equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
+					equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
+					$( document ).scrollTop( 0 ).scrollLeft( 0 );
+				}
+			});
 
 	TestHelpers.forceScrollableWindow();
 
 	$( "#wrapper" ).css( "position", "fixed" );
+	$( "#wrapper2" ).css( "position", "absolute" );
 
 	element.simulate( "drag", {
 		dx: 10,
@@ -344,7 +352,7 @@ test( "ui-draggable-handle managed correctly in nested draggables", function() {
 // http://bugs.jqueryui.com/ticket/7772
 // when css 'right' is set, element resizes on drag
 test( "setting right/bottom css shouldn't cause resize", function() {
-	expect( 3 );
+	expect( 4 );
 
 	var finalOffset,
 		element = $( "#draggable3" ),
@@ -360,9 +368,10 @@ test( "setting right/bottom css shouldn't cause resize", function() {
 	finalOffset.left += 50;
 	finalOffset.top += 50;
 
-	equal( element.width(), origWidth, "element retains width" );
-	equal( element.height(), origHeight, "element retains height" );
-	deepEqual( finalOffset, origOffset, "element moves the correct distance" );
+	closeEnough( element.width(), origWidth, 1, "element retains width" );
+	closeEnough( element.height(), origHeight, 1, "element retains height" );
+	closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
+	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
 })( jQuery );

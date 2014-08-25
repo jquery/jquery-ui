@@ -46,10 +46,35 @@
 		#draggable3, #draggable4 {
 			z-index: 100;
 		}
+		#sortable {
+			position: relative;
+			top: 8000px;
+			left: 10px;
+		}
+		#sortable2 {
+			position: relative;
+			top: 9000px;
+			left: 10px;
+		}
+		.sortable {
+			width: 300px;
+			height: 100px;
+			padding: 0;
+			margin: 0;
+			border: 0;
+		}
+		.sortable li {
+			height: 100px;
+			padding: 0;
+			margin: 0;
+			border: 0;
+			list-style: none;
+			display: inline-block;
+		}
 	</style>
 
 	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
+	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
@@ -60,7 +85,8 @@
 			"ui/mouse.js",
 			"ui/resizable.js",
 			"ui/draggable.js",
-			"ui/droppable.js"
+			"ui/droppable.js",
+			"ui/sortable.js"
 		]
 	});
 	</script>
@@ -90,6 +116,18 @@
 	</div>
 	<div style="width: 1px; height: 1000px;"></div>
 	<div style="position: absolute; width: 1px; height: 2000px;"></div>
+	<ul id="sortable" class="sortable">
+		    <li>Item 0</li>
+		    <li id="draggableSortable">Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		  </ul>
+		  <ul id="sortable2" class="sortable">
+		    <li id="draggableSortableClone">Item 0</li>
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		  </ul>
 </div>
 
 </body>

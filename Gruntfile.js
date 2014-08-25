@@ -232,6 +232,9 @@ grunt.initConfig({
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
 
+				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
+				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
+
 				"jshint/jshint.js": "jshint/dist/jshint.js",
 				"jshint/LICENSE": "jshint/LICENSE",
 

@@ -156,7 +156,7 @@ test( "axis, default, switching after initialization", function() {
 });
 
 test( "{ cancel: 'input,textarea,button,select,option' }, default", function() {
-	expect( 2 );
+	expect( 4 );
 
 	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#qunit-fixture" );
 
@@ -171,7 +171,7 @@ test( "{ cancel: 'input,textarea,button,select,option' }, default", function() {
 });
 
 test( "{ cancel: 'span' }", function() {
-	expect( 2 );
+	expect( 4 );
 
 	var element = $( "#draggable2" ).draggable();
 	TestHelpers.draggable.shouldMove( element, "cancel: default, span dragged", "#draggable2 span" );
@@ -228,7 +228,7 @@ test( "{ cancel: Selectors }, matching parent selector", function() {
 */
 
 test( "cancelement, default, switching after initialization", function() {
-	expect( 2 );
+	expect( 6 );
 
 	$( "<div id='draggable-option-cancel-default'><input type='text'></div>" ).appendTo( "#qunit-fixture" );
 
@@ -251,6 +251,72 @@ test( "{ connectToSortable: selector }, default", function() {
 	ok(false, "missing test - untested code is broken code" );
 });
 */
+
+test( "connectToSortable, dragging out of a sortable", function() {
+	expect( 3 );
+
+	var sortItem, dragHelper,
+		element = $( "#draggableSortable" ).draggable({
+			scroll: false,
+			connectToSortable: "#sortable"
+		}),
+		sortable = $( "#sortable" ).sortable(),
+		dx = 50,
+		dy = 50,
+		offsetBefore = element.offset(),
+		offsetExpected = {
+			left: offsetBefore.left + dx,
+			top: offsetBefore.top + dy
+		};
+
+	$( sortable ).one( "sortstart", function( event, ui ) {
+		sortItem = ui.item;
+	});
+
+	$( element ).one( "drag", function( event, ui ) {
+		dragHelper = ui.helper;
+	});
+
+	$( element ).one( "dragstop", function( event, ui ) {
+		// http://bugs.jqueryui.com/ticket/8809
+		// Position issue when connected to sortable
+		deepEqual( ui.helper.offset(), offsetExpected, "draggable offset is correct" );
+
+		// http://bugs.jqueryui.com/ticket/7734
+		// HTML IDs are removed when dragging to a Sortable
+		equal( sortItem[ 0 ], dragHelper[ 0 ], "both have the same helper" );
+		equal( sortItem.attr( "id" ), dragHelper.attr( "id" ), "both have the same id" );
+	});
+
+	element.simulate( "drag", {
+		dx: dx,
+		dy: dy
+	});
+});
+
+test( "connectToSortable, dragging clone into sortable", function() {
+	expect( 1 );
+
+	var element = $( "#draggableSortableClone" ).draggable({
+			scroll: false,
+			connectToSortable: "#sortable",
+			helper: "clone"
+		}),
+		sortable = $( "#sortable" ).sortable(),
+		offsetSortable = sortable.offset();
+
+	$( sortable ).one( "sortbeforestop", function( event, ui ) {
+		// http://bugs.jqueryui.com/ticket/8809
+		// Position issue when connected to sortable
+		deepEqual( ui.helper.offset(), offsetSortable, "sortable offset is correct" );
+	});
+
+	element.simulate( "drag", {
+		x: offsetSortable.left + 1,
+		y: offsetSortable.top + 1,
+		moves: 1
+	});
+});
 
 test( "{ containment: Element }", function() {
 	expect( 1 );
@@ -615,7 +681,7 @@ test( "cursorAt, switching after initialization", function() {
 });
 
 test( "disabled", function() {
-	expect( 4 );
+	expect( 6 );
 
 	var element = $( "#draggable1" ).draggable();
 
@@ -660,7 +726,7 @@ test( "grid, switching after initialization", function() {
 });
 
 test( "{ handle: 'span' }", function() {
-	expect( 4 );
+	expect( 6 );
 
 	var element = $( "#draggable2" ).draggable({ handle: "span" });
 
@@ -670,7 +736,7 @@ test( "{ handle: 'span' }", function() {
 });
 
 test( "handle, default, switching after initialization", function() {
-	expect( 10 );
+	expect( 12 );
 
 	var element = $( "#draggable2" ).draggable();
 
@@ -1266,6 +1332,48 @@ test( "zIndex, default, switching after initialization", function() {
 	TestHelpers.draggable.move( element, 3, 1 );
 	equal( zindex, 1 );
 
+});
+
+test( "iframeFix", function() {
+	expect( 5 );
+
+	var element = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable({ iframeFix: true }),
+		element2 = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable({ iframeFix: ".iframe" }),
+		iframe = $( "<iframe>" ).appendTo( element );
+
+	element2
+		.append( "<iframe class='iframe'></iframe>" )
+		.append( "<iframe>" );
+
+	iframe.css({
+		width: 1,
+		height: 1
+	});
+
+	element.one( "drag", function() {
+		var div = $( this ).children().not( "iframe" );
+		// http://bugs.jqueryui.com/ticket/9671
+		// iframeFix doesn't handle iframes that move
+		equal( div.length, 1, "blocking div added as sibling" );
+		equal( div.outerWidth(), iframe.outerWidth(), "blocking div is wide enough" );
+		equal( div.outerHeight(), iframe.outerHeight(), "blocking div is tall enough" );
+		deepEqual( div.offset(), iframe.offset(), "blocking div is tall enough" );
+	});
+
+	element.simulate( "drag", {
+		dx: 1,
+		dy: 1
+	});
+
+	element2.one( "drag", function() {
+		var div = $( this ).children().not( "iframe" );
+		equal( div.length, 1, "blocking div added as sibling only to matching selector" );
+	});
+
+	element2.simulate( "drag", {
+		dx: 1,
+		dy: 1
+	});
 });
 
 })( jQuery );
