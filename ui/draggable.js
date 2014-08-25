@@ -713,8 +713,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 			var sortable = $( this ).sortable( "instance" );
 			if (sortable && !sortable.options.disabled) {
 				inst.sortables.push({
-					instance: sortable,
-					shouldRevert: sortable.options.revert
+					instance: sortable
 				});
 				sortable.refreshPositions();	// Call the sortable's refreshPositions at drag start to refresh the containerCache since the sortable container cache is used in drag and needs to be up to date (this will ensure it's initialised as well as being kept in step with any changes that might have happened on the page).
 				sortable._trigger("activate", event, uiSortable);
@@ -740,10 +739,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				inst.cancelHelperRemoval = true;
 				this.instance.cancelHelperRemoval = false;
 
-				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert: "valid/invalid"
-				if (this.shouldRevert) {
-					this.instance.options.revert = this.shouldRevert;
-				}
 				// Use _storedCSS To restore properties in the sortable,
 				// as this also handles revert (#9675) since the draggable
 				// may have modified them in unexpected ways (#8809)
@@ -859,12 +854,18 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					sortable.isOver = 0;
 					sortable.cancelHelperRemoval = true;
 
-					// Prevent reverting on this forced stop
+					// Calling sortable's mouseStop would trigger a revert,
+					// so revert must be temporarily false until after mouseStop is called.
+					sortable.options._revert = sortable.options.revert;
 					sortable.options.revert = false;
 
 					sortable._trigger( "out", event, sortable._uiHash( sortable ) );
 
 					sortable._mouseStop( event, true );
+
+					// restore sortable behaviors that were modfied
+					// when the draggable entered the sortable area (#9481)
+					sortable.options.revert = sortable.options._revert;
 					sortable.options.helper = sortable.options._helper;
 
 					if ( sortable.placeholder ) {
