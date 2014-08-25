@@ -305,7 +305,7 @@ test( "connectToSortable, dragging clone into sortable", function() {
 		sortable = $( "#sortable" ).sortable(),
 		offsetSortable = sortable.offset();
 
-	$( sortable ).one( "sortbeforestop", function( event, ui ) {
+	$( sortable ).one( "sort", function( event, ui ) {
 		// http://bugs.jqueryui.com/ticket/8809
 		// Position issue when connected to sortable
 		deepEqual( ui.helper.offset(), offsetSortable, "sortable offset is correct" );

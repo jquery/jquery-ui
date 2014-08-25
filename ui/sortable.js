@@ -1253,18 +1253,6 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		this.dragging = false;
-		if(this.cancelHelperRemoval) {
-			if(!noPropagation) {
-				this._trigger("beforeStop", event, this._uiHash());
-				for (i=0; i < delayedTriggers.length; i++) {
-					delayedTriggers[i].call(this, event);
-				} //Trigger all delayed events
-				this._trigger("stop", event, this._uiHash());
-			}
-
-			this.fromOutside = false;
-			return false;
-		}
 
 		if(!noPropagation) {
 			this._trigger("beforeStop", event, this._uiHash());
@@ -1273,10 +1261,12 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
 		this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
 
-		if(this.helper[0] !== this.currentItem[0]) {
-			this.helper.remove();
+		if ( !this.cancelHelperRemoval ) {
+			if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
+				this.helper.remove();
+			}
+			this.helper = null;
 		}
-		this.helper = null;
 
 		if(!noPropagation) {
 			for (i=0; i < delayedTriggers.length; i++) {
@@ -1286,7 +1276,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		this.fromOutside = false;
-		return true;
+		return !this.cancelHelperRemoval;
 
 	},
 
