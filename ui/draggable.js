@@ -703,74 +703,72 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 });
 
-$.ui.plugin.add("draggable", "connectToSortable", {
-	start: function( event, ui, inst ) {
+$.ui.plugin.add( "draggable", "connectToSortable", {
+	start: function( event, ui, draggable ) {
+		var uiSortable = $.extend( {}, ui, {
+			item: draggable.element
+		});
 
-		var o = inst.options,
-			uiSortable = $.extend({}, ui, { item: inst.element });
-		inst.sortables = [];
-		$(o.connectToSortable).each(function() {
+		draggable.sortables = [];
+		$( draggable.options.connectToSortable ).each(function() {
 			var sortable = $( this ).sortable( "instance" );
-			if (sortable && !sortable.options.disabled) {
-				inst.sortables.push({
-					instance: sortable
-				});
-				sortable.refreshPositions();	// Call the sortable's refreshPositions at drag start to refresh the containerCache since the sortable container cache is used in drag and needs to be up to date (this will ensure it's initialised as well as being kept in step with any changes that might have happened on the page).
+
+			if ( sortable && !sortable.options.disabled ) {
+				draggable.sortables.push( sortable );
+
+				// refreshPositions is called at drag start to refresh the containerCache
+				// which is used in drag. This ensures it's initialized and synchronized
+				// with any changes that might have happened on the page since initialization.
+				sortable.refreshPositions();
 				sortable._trigger("activate", event, uiSortable);
 			}
 		});
-
 	},
-	stop: function( event, ui, inst ) {
-
-		//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
+	stop: function( event, ui, draggable ) {
 		var uiSortable = $.extend( {}, ui, {
-			item: inst.element
+			item: draggable.element
 		});
 
-		inst.cancelHelperRemoval = false;
+		draggable.cancelHelperRemoval = false;
 
-		$.each(inst.sortables, function() {
-			if (this.instance.isOver) {
-				this.instance.isOver = 0;
+		$.each( draggable.sortables, function() {
+			var sortable = this;
+
+			if ( sortable.isOver ) {
+				sortable.isOver = 0;
 
 				// Allow this sortable to handle removing the helper
-				inst.cancelHelperRemoval = true;
-				this.instance.cancelHelperRemoval = false;
+				draggable.cancelHelperRemoval = true;
+				sortable.cancelHelperRemoval = false;
 
 				// Use _storedCSS To restore properties in the sortable,
 				// as this also handles revert (#9675) since the draggable
 				// may have modified them in unexpected ways (#8809)
-				this.instance._storedCSS = {
-					position: this.instance.placeholder.css( "position" ),
-					top: this.instance.placeholder.css( "top" ),
-					left: this.instance.placeholder.css( "left" )
+				sortable._storedCSS = {
+					position: sortable.placeholder.css( "position" ),
+					top: sortable.placeholder.css( "top" ),
+					left: sortable.placeholder.css( "left" )
 				};
 
-				//Trigger the stop of the sortable
-				this.instance._mouseStop(event);
+				sortable._mouseStop(event);
 
 				// Once drag has ended, the sortable should return to using
 				// its original helper, not the shared helper from draggable
-				this.instance.options.helper = this.instance.options._helper;
-
+				sortable.options.helper = sortable.options._helper;
 			} else {
 				// Prevent this Sortable from removing the helper.
 				// However, don't set the draggable to remove the helper
 				// either as another connected Sortable may yet handle the removal.
-				this.instance.cancelHelperRemoval = true;
+				sortable.cancelHelperRemoval = true;
 
-				this.instance._trigger("deactivate", event, uiSortable);
+				sortable._trigger( "deactivate", event, uiSortable );
 			}
-
 		});
-
 	},
 	drag: function( event, ui, draggable ) {
 		$.each( draggable.sortables, function() {
 			var innermostIntersecting = false,
-				thisSortable = this,
-				sortable = this.instance;
+				sortable = this;
 
 			// Copy over variables that sortable's _intersectsWith uses
 			sortable.positionAbs = draggable.positionAbs;
@@ -782,15 +780,16 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 				$.each( draggable.sortables, function() {
 					// Copy over variables that sortable's _intersectsWith uses
-					this.instance.positionAbs = draggable.positionAbs;
-					this.instance.helperProportions = draggable.helperProportions;
-					this.instance.offset.click = draggable.offset.click;
+					this.positionAbs = draggable.positionAbs;
+					this.helperProportions = draggable.helperProportions;
+					this.offset.click = draggable.offset.click;
 
-					if ( this !== thisSortable &&
-							this.instance._intersectsWith( this.instance.containerCache ) &&
-							$.contains( sortable.element[ 0 ], this.instance.element[ 0 ] ) ) {
+					if ( this !== sortable &&
+							this._intersectsWith( this.containerCache ) &&
+							$.contains( sortable.element[ 0 ], this.element[ 0 ] ) ) {
 						innermostIntersecting = false;
 					}
+
 					return innermostIntersecting;
 				});
 			}
@@ -799,7 +798,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				// If it intersects, we use a little isOver variable and set it once,
 				// so that the move-in stuff gets fired only once.
 				if ( !sortable.isOver ) {
-
 					sortable.isOver = 1;
 
 					sortable.currentItem = ui.helper
@@ -852,7 +850,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					// element has now become. (#8809)
 					ui.position = sortable.position;
 				}
-
 			} else {
 				// If it doesn't intersect with the sortable, and it intersected before,
 				// we fake the drag stop of the sortable, but make sure it doesn't remove
