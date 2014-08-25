@@ -557,15 +557,19 @@ return $.widget( "ui.accordion", {
 				complete: complete,
 				step: function( now, fx ) {
 					fx.now = Math.round( now );
-					if ( fx.prop !== "height" ) {
-						adjust += fx.now;
-					} else if ( that.options.heightStyle === "auto" &&
-							toHide.css( "box-sizing" ) === "border-box") {
-						fx.now = Math.round( total - toHide.outerHeight());
-						adjust = 0;
-					} else if ( that.options.heightStyle !== "content" ) {
-						fx.now = Math.round( total - toHide.outerHeight() - adjust);
-						adjust = 0;
+					if ( !fx.adjustInit ) {
+						if ( fx.prop !== "height" ) {
+							adjust += fx.now;
+						} else if ( that.options.heightStyle !== "content" &&
+								( toHide.css( "box-sizing" ) === "border-box" ||
+								toHide.css( "box-sizing" ) === "padding-box" ) ) {
+							fx.now = Math.round( total - toHide.outerHeight() );
+							adjust = 0;
+						} else if ( that.options.heightStyle !== "content" ) {
+							fx.now = Math.round( total - toHide.outerHeight() - adjust);
+							adjust = 0;
+						}
+						fx.adjustInit = true;
 					}
 				}
 			});
