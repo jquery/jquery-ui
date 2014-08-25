@@ -994,19 +994,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 					});
 				});
 			};
-
-		if (typeof(o.alsoResize) === "object" && !o.alsoResize.parentNode) {
-			if (o.alsoResize.length) {
-				o.alsoResize = o.alsoResize[0];
-				_store(o.alsoResize);
-			} else {
-				$.each(o.alsoResize, function(exp) {
-					_store(exp);
-				});
-			}
-		} else {
-			_store(o.alsoResize);
-		}
+		_store(o.alsoResize);
 	},
 
 	resize: function(event, ui) {
@@ -1040,14 +1028,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 					el.css(style);
 				});
 			};
-
-		if (typeof(o.alsoResize) === "object" && !o.alsoResize.nodeType) {
-			$.each(o.alsoResize, function(exp, c) {
-				_alsoResize(exp, c);
-			});
-		} else {
-			_alsoResize(o.alsoResize);
-		}
+		_alsoResize(o.alsoResize);
 	},
 
 	stop: function() {
