@@ -268,7 +268,10 @@ test( "._getCreateOptions()", function() {
 			option3: "value3"
 		},
 		_getCreateOptions: function() {
-			strictEqual( this.window[ 0 ], window, "this.window is properly defined" );
+
+			// Support: IE8
+			// Strict equality fails when comparing this.window in ie8
+			equal( this.window[ 0 ], window, "this.window is properly defined" );
 			strictEqual( this.document[ 0 ], document, "this.document is properly defined" );
 
 			return {
