@@ -419,7 +419,7 @@ test( "alsoResize + multiple selection", function() {
 				width: 50,
 				height: 50
 			})
-			.appendTo( "body" )
+			.appendTo( "body"),
 		element = $( "#resizable1" ).resizable({
 			alsoResize: $.merge(other1, other2),
 			containment: "#container"
