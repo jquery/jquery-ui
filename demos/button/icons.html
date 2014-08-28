@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( ".widget button:first" ).button({
+		$( ".widget button, .widget a" ).first().button({
 			icon: "ui-icon-gear",
 			showLabel: false
 		}).next().button({
@@ -35,7 +35,7 @@
 </div>
 <div class="widget">
 	<h1>Widget</h1>
-	<button>Button with icon only</button>
+	<a>Button with icon only</a>
 	<button>Button with icon on the left</button>
 	<button>Button with icon on the right</button>
 	<button>Button with icon on the bottom</button>
