@@ -7,6 +7,7 @@
 	<script src="../../../external/jquery/jquery.js"></script>
 	<script src="../../../ui/effect.js"></script>
 	<script src="../../../ui/effect-scale.js"></script>
+	<script src="../../../ui/effect-size.js"></script>
 	<script>
 	$(function() {
 		var test = $( "#testBox" ),
@@ -14,7 +15,6 @@
 			optsRev = $( opts.get().reverse() ),
 			doer = $( "#doAnim" ),
 			current = $( "#current" ),
-			cleanStyle = test[0].style,
 			total = 1;
 
 		opts.each(function() {
@@ -34,32 +34,34 @@
 			optsRev.each(function() {
 				var cur = this.selectedIndex,
 					next = cur + direction,
-					len = this.options.length;
+					len = this.options.length,
+					newIndex = ( next + len ) % len;
 
-				this.selectedIndex = ( next + len ) % len;
+				this.selectedIndex = newIndex;
 
-				if ( ( next+len ) % len === next ) return false;
+				if ( newIndex === next ) {
+					return false;
+				}
 			});
 			doAnim();
 		}
 
-
 		function doAnim() {
 			var cur = 0;
 			opts.each(function() {
-				cur *= this.options.length
+				cur *= this.options.length;
 				cur += this.selectedIndex;
 			});
 			cur++;
 			current.text( "Configuration: " + cur + " of " + total );
-			run.apply(test, opts.map(function() {
-				return $(this).val();
-			}).get());
+			run.apply( test, opts.map(function() {
+				return $( this ).val();
+			}).get() );
 		}
 
 		function run( position, v, h, vo, ho ) {
 			var el = this,
-				style = el[0].style,
+				style = el[ 0 ].style,
 				effect = {
 					effect: "scale",
 					mode: "effect",
@@ -67,12 +69,15 @@
 					origin: [ vo, ho ],
 					duration: 500
 				};
-			el.stop(true, true);
+
+			el.stop( true, true );
+
 			if ( typeof style === "object" ) {
 				style.cssText = "";
 			} else {
-				el[0].style = "";
+				el[ 0 ].style = "";
 			}
+
 			el.css( "position", position )
 				.css( h, 5 )
 				.css( v, 5 )
@@ -95,6 +100,9 @@
 		border: 10px solid #fff;
 		margin: 10px;
 		padding: 10px;
+		position: absolute;
+		left: 5px;
+		top: 5px;
 	}
 	label {
 		display: block;
@@ -111,6 +119,7 @@
 	</style>
 </head>
 <body>
+
 	<div id="testArea">
 		<div id="testBox">
 		</div>
@@ -154,4 +163,6 @@
 		<button id="doAnim">Run Animation</button>
 		<button id="cycleNext">Forward</button>
 	</div>
+
 </body>
+</html>
