@@ -59,6 +59,9 @@ html .ui-button.ui-state-disabled:active {
 	font-weight: normal/*{fwDefault}*/;
 	color: #555555/*{fcDefault}*/;
 }
+.ui-state-active .ui-icon-background {
+	background-color: #e6e6e6/*{bgColorDefault}*/;
+}
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited,
@@ -99,11 +102,15 @@ a.ui-button:focus {
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active,
 a.ui-button:active,
-.ui-button:active {
+.ui-button:active,
+.ui-button.ui-state-active:hover {
 	border: 1px solid #aaaaaa/*{borderColorActive}*/;
 	background: #ffffff/*{bgColorActive}*/ url("images/ui-bg_glass_65_ffffff_1x400.png")/*{bgImgUrlActive}*/ 50%/*{bgActiveXPos}*/ 50%/*{bgActiveYPos}*/ repeat-x/*{bgActiveRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
 	color: #212121/*{fcActive}*/;
+}
+.ui-icon-background {
+	background-color: #ffffff/*{bgColorActive}*/;
 }
 .ui-state-active a,
 .ui-state-active a:link,
