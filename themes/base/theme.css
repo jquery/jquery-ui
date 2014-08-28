@@ -102,11 +102,17 @@ a.ui-button:focus {
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active,
 a.ui-button:active,
-.ui-button:active {
+.ui-button:active,
+.ui-button.ui-state-active:hover {
 	border: 1px solid #003eff/*{borderColorActive}*/;
 	background: #007fff/*{bgColorActive}*/ /*{bgImgUrlActive}*/ /*{bgActiveXPos}*/ /*{bgActiveYPos}*/ /*{bgActiveRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
 	color: #ffffff/*{fcActive}*/;
+}
+.ui-icon-background,
+.ui-state-active .ui-icon-background {
+	border: #003eff/*{borderColorActive}*/;
+	background-color: #ffffff/*{bgColorActive}*/;
 }
 .ui-state-active a,
 .ui-state-active a:link,
@@ -184,7 +190,6 @@ a.ui-button:active,
 .ui-widget-header .ui-icon {
 	background-image: url("images/ui-icons_444444_256x240.png")/*{iconsHeader}*/;
 }
-.ui-state-default .ui-icon,
 .ui-button .ui-icon {
 	background-image: url("images/ui-icons_777777_256x240.png")/*{iconsDefault}*/;
 }
@@ -198,7 +203,8 @@ a.ui-button:active,
 .ui-button:active .ui-icon {
 	background-image: url("images/ui-icons_ffffff_256x240.png")/*{iconsActive}*/;
 }
-.ui-state-highlight .ui-icon {
+.ui-state-highlight .ui-icon,
+.ui-button .ui-state-highlight.ui-icon {
 	background-image: url("images/ui-icons_777620_256x240.png")/*{iconsHighlight}*/;
 }
 .ui-state-error .ui-icon,
