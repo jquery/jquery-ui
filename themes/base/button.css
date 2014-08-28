@@ -30,7 +30,6 @@
 /* to make room for the icon, a width needs to be set here */
 .ui-button-icon-only {
 	padding: 0;
-	width: 2.1em;
 	height: 2.1em;
 	text-indent: -9999px;
 	white-space: nowrap;
@@ -43,40 +42,62 @@
 button.ui-button-icon-only {
 	width: 2.4em;
 }
-.ui-button-icons-only {
-	width: 3.4em;
-}
-button.ui-button-icons-only {
-	width: 3.7em;
-}
 
 /* no icon support for input elements, provide padding by default */
-input.ui-button {
+input.ui-button[class*='ui-icon-']{
 	padding: .4em 1em;
+}
+input.ui-button.ui-button-icon-only {
+	text-indent: initial;
 }
 
 /* button icon element(s) */
-.ui-button-icon-only .ui-icon,
-.ui-button-text-icon-primary .ui-icon,
-.ui-button-text-icon-secondary .ui-icon,
-.ui-button-text-icons .ui-icon,
-.ui-button-icons-only .ui-icon {
-	position: absolute;
-	top: 50%;
-	margin-top: -8px;
+.ui-button.ui-icon-end .ui-icon {
+	left: auto;
+	right: .5em;
 }
+
+.ui-button.ui-icon-top .ui-icon,
+.ui-button.ui-icon-bottom .ui-icon {
+	left: 50%;
+	margin-left: -11px;
+}
+
+.ui-button.ui-icon-top .ui-icon {
+	top: .6em;
+}
+
+.ui-button.ui-icon-bottom .ui-icon {
+	top: auto;
+	bottom: .05em;
+}
+
 .ui-button-icon-only .ui-icon {
 	left: 50%;
 	margin-left: -8px;
 }
 
-/* button sets */
-.ui-buttonset {
-	margin-right: 7px;
+.ui-button .ui-icon {
+	position: absolute;
+	display: block;
+	top: 50%;
+	margin-top: -8px;
 }
-.ui-buttonset .ui-button {
-	margin-left: 0;
-	margin-right: -.3em;
+
+.ui-button.ui-icon-beginning {
+	padding-left: 2.4em;
+}
+
+.ui-button.ui-icon-end {
+	padding: .4em 2.1em .4em 1em;
+}
+
+.ui-button.ui-icon-top {
+	padding: 1.1em 1em .4em 1em;
+}
+
+.ui-button.ui-icon-bottom {
+	padding: .4em 1em 1.1em 1em;
 }
 
 /* workarounds */
