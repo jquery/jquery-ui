@@ -40,76 +40,34 @@ test( "appendTo", function() {
 	input.datepicker( "destroy" );
 });
 
-test("buttons", function() {
-	expect( 3 );
+test( "Pass-through options", function() {
+	expect( 8 );
 
-	var button,
-		buttons = {
-			"Ok": function() {},
-			"Cancel": function() {}
+	var options = {
+			"buttons": { "Test": $.noop },
+			"dateFormat": { date: "full" },
+			"eachDay": function( day ) { day; },
+			"max": new Date( 2000, 0, 1 ),
+			"min": new Date( 2000, 0, 2 ),
+			"numberOfMonths": 3,
+			"showWeek": true
 		},
-		element = $( "#datepicker" ).datepicker({ buttons: buttons });
+		input = $( "#datepicker" ).val( "1/1/14" ).datepicker(),
+		datepickerInstance = input.datepicker( "instance" );
 
-	button = element.datepicker( "widget" ).find( ".ui-calendar-buttonpane button" );
-	equal( button.length, 2, "number of buttons" );
-	ok( button.parent().hasClass( "ui-calendar-buttonset" ), "buttons in container");
-	ok( element.datepicker( "widget" ).hasClass( "ui-calendar-buttons" ), "calendar wrapper adds class about having buttons" );
-});
+	$.each( options, function( key, value ) {
+		input.datepicker( "option", key, value );
 
-test( "dateFormat", function() {
-	expect( 2 );
-	var input = $( "#datepicker" ).val( "1/1/14" ).datepicker(),
-		picker = input.datepicker( "widget" ),
-		firstDayLink = picker.find( "td[id]:first a" );
+		deepEqual(
+			datepickerInstance.calendar.calendar( "option", key ),
+			value,
+			"option " + key + ": correct value"
+		);
 
-	input.datepicker( "open" );
-	firstDayLink.trigger( "mousedown" );
-	equal( input.val(), "1/1/14", "default formatting" );
-
-	input.datepicker( "option", "dateFormat", { date: "full" } );
-	equal( input.val(), "Wednesday, January 1, 2014", "updated formatting" );
-
-	input.datepicker( "destroy" );
-});
-
-test( "eachDay", function() {
-	expect( 5 );
-	var timestamp,
-		input = $( "#datepicker" ).datepicker(),
-		picker = input.datepicker( "widget" ),
-		firstCell = picker.find( "td[id]:first" );
-
-	equal( firstCell.find( "a" ).length, 1, "days are selectable by default" );
-	timestamp = parseInt( firstCell.find( "a" ).attr( "data-timestamp" ), 10 );
-	equal( new Date( timestamp ).getDate(), 1, "first available day is the 1st by default" );
-
-	// Do not render the 1st of the month
-	input.datepicker( "option", "eachDay", function( day ) {
-		if ( day.date === 1 ) {
-			day.render = false;
+		if ( key === "dateFormat" ) {
+			equal( input.val(), "Wednesday, January 1, 2014", "option " + key + ": updated format" );
 		}
 	});
-	firstCell = picker.find( "td[id]:first" );
-	timestamp = parseInt( firstCell.find( "a" ).attr( "data-timestamp" ), 10 );
-	equal( new Date( timestamp ).getDate(), 2, "first available day is the 2nd" );
-
-	// Display the 1st of the month but make it not selectable.
-	input.datepicker( "option", "eachDay", function( day ) {
-		if ( day.date === 1 ) {
-			day.selectable = false;
-		}
-	});
-	firstCell = picker.find( "td[id]:first" );
-	equal( firstCell.find( "a" ).length, 0, "the 1st is not selectable" );
-
-	input.datepicker( "option", "eachDay", function( day ) {
-		if ( day.date === 1 ) {
-			day.extraClasses = "ui-custom";
-		}
-	});
-	ok( picker.find( "td[id]:first a" ).hasClass( "ui-custom" ), "extraClasses applied" );
-
-	input.datepicker( "destroy" );
 });
 
 asyncTest( "position", function() {
@@ -138,68 +96,6 @@ asyncTest( "position", function() {
 		input.remove();
 		start();
 	});
-});
-
-test( "showWeek", function() {
-	expect( 7 );
-	var input = $( "#datepicker" ).datepicker(),
-		container = input.datepicker( "widget" );
-
-	equal( container.find( "thead th" ).length, 7, "just 7 days, no column cell" );
-	equal( container.find( ".ui-calendar-week-col" ).length, 0,
-		"no week column cells present" );
-	input.datepicker( "destroy" );
-
-	input = $( "#datepicker" ).datepicker({ showWeek: true });
-	container = input.datepicker( "widget" );
-	equal( container.find( "thead th" ).length, 8, "7 days + a column cell" );
-	ok( container.find( "thead th:first" ).is( ".ui-calendar-week-col" ),
-		"first cell should have ui-calendar-week-col class name" );
-	equal( container.find( ".ui-calendar-week-col" ).length,
-		container.find( "tr" ).length, "one week cell for each week" );
-	input.datepicker( "destroy" );
-
-	input = $( "#datepicker" ).datepicker();
-	container = input.datepicker( "widget" );
-	equal( container.find( "thead th" ).length, 7, "no week column" );
-	input.datepicker( "option", "showWeek", true );
-	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
-});
-
-test( "min / max", function() {
-	expect( 14 );
-
-	var inp = TestHelpers.datepicker.init( "#datepicker" ),
-		minDate = new Date( 2008, 2 - 1, 29 ),
-		maxDate = new Date( 2008, 12 - 1, 7 );
-
-	inp.val( "6/4/08" ).datepicker( "option", { min: minDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
-	ok( inp.datepicker( "isValid" ) );
-
-	inp.datepicker( "option", { min: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 4 ), "Min/max - value < min" );
-	ok( !inp.datepicker( "isValid" ) );
-
-	inp.datepicker( "option", { min: null } ).val( "6/4/08" ).datepicker( "option", { max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
-	ok( inp.datepicker( "isValid" ) );
-
-	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2009, 1 - 1, 4 ), "Min/max - setDate > max" );
-	ok( !inp.datepicker( "isValid" ) );
-
-	inp.datepicker( "option", { max: null } ).val( "1/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 1 - 1, 4 ), "Min/max - value < min" );
-	ok( !inp.datepicker( "isValid" ) );
-
-	inp.datepicker( "option", { max: null } ).val( "6/4/08" ).datepicker( "option", { min: minDate, max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
-	ok( inp.datepicker( "isValid" ) );
-
-	inp.datepicker( "option", { max: null } ).val( "1/4/09" ).datepicker( "option", { min: minDate, max: maxDate } );
-	TestHelpers.datepicker.equalsDate( inp.datepicker( "valueAsDate" ), new Date( 2009, 1 - 1, 4 ), "Min/max - value > max" );
-	ok( !inp.datepicker( "isValid" ) );
 });
 
 test( "Stop datepicker from appearing with beforeOpen event handler", function() {
