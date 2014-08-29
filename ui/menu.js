@@ -186,12 +186,8 @@ return $.widget( "ui.menu", {
 	},
 
 	_keydown: function( event ) {
-		var match, prev, character, skip, regex,
+		var match, prev, character, skip,
 			preventDefault = true;
-
-		function escape( value ) {
-			return value.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" );
-		}
 
 		switch ( event.keyCode ) {
 		case $.ui.keyCode.PAGE_UP:
@@ -241,10 +237,7 @@ return $.widget( "ui.menu", {
 				character = prev + character;
 			}
 
-			regex = new RegExp( "^" + escape( character ), "i" );
-			match = this.activeMenu.find( this.options.items ).filter(function() {
-				return regex.test( $( this ).text() );
-			});
+			match = this._filterMenuItems( character );
 			match = skip && match.index( this.active.next() ) !== -1 ?
 				this.active.nextAll( ".ui-menu-item" ) :
 				match;
@@ -253,10 +246,7 @@ return $.widget( "ui.menu", {
 			// to move down the menu to the first item that starts with that character
 			if ( !match.length ) {
 				character = String.fromCharCode( event.keyCode );
-				regex = new RegExp( "^" + escape( character ), "i" );
-				match = this.activeMenu.find( this.options.items ).filter(function() {
-					return regex.test( $( this ).text() );
-				});
+				match = this._filterMenuItems( character );
 			}
 
 			if ( match.length ) {
@@ -640,6 +630,20 @@ return $.widget( "ui.menu", {
 			this.collapseAll( event, true );
 		}
 		this._trigger( "select", event, ui );
+	},
+
+	_filterMenuItems: function(character) {
+		var escapedCharacter = character.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ),
+			regex = new RegExp( "^" + escapedCharacter, "i" );
+
+		return this.activeMenu
+			.find( this.options.items )
+
+			// Only match on items, not dividers or other content (#10571)
+			.filter( ".ui-menu-item" )
+			.filter(function() {
+				return regex.test( $( this ).text() );
+			});
 	}
 });
 
