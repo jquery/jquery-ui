@@ -44,11 +44,14 @@ button.ui-button-icon-only {
 }
 
 /* no icon support for input elements, provide padding by default */
-input.ui-button[class*='ui-icon-']{
+input.ui-button.ui-icon-end,
+input.ui-button.ui-icon-beginning,
+input.ui-button.ui-icon-top,
+input.ui-button.ui-icon-bottom{
 	padding: .4em 1em;
 }
 input.ui-button.ui-button-icon-only {
-	text-indent: initial;
+	text-indent: 0;
 }
 
 /* button icon element(s) */
@@ -120,7 +123,6 @@ input.ui-button.ui-icon-notext .ui-icon {
 /* button sets */
 .ui-buttonset {
 	margin-right: 7px;
->>>>>>> 781d4cb... Controlgroup: Inital commit of new widget
 }
 
 .ui-button.ui-icon-top {
