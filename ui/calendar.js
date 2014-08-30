@@ -70,14 +70,18 @@ return $.widget( "ui.calendar", {
 				this._select( event, $( event.currentTarget ).data( "timestamp" ) );
 				this.grid.focus( 1 );
 			},
+			"mouseenter .ui-calendar-header button": "_hover",
+			"mouseleave .ui-calendar-header button": "_hover",
+			"mouseenter .ui-calendar-calendar a": "_hover",
+			"mouseleave .ui-calendar-calendar a": "_hover",
 			"keydown .ui-calendar-calendar": "_handleKeydown"
 		});
 
-		this.element.on( "mouseenter.calendar mouseleave.calendar", ".ui-calendar-header button, .ui-calendar-calendar a", function() {
-			$( this ).toggleClass( "ui-state-hover" );
-		});
-
 		this._createCalendar();
+	},
+
+	_hover: function( event ) {
+		$( event.currentTarget ).toggleClass( "ui-state-hover" );
 	},
 
 	_handleKeydown: function( event ) {
