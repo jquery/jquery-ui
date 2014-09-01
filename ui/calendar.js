@@ -549,6 +549,12 @@ return $.widget( "ui.calendar", {
 			this._createButtons();
 		}
 
+		if ( key === "disabled" ) {
+			this.element
+				.toggleClass( "ui-state-disabled", value )
+				.attr( "aria-disabled", value );
+		}
+
 		if ( key === "eachDay" ) {
 			this.date.eachDay = value;
 			this.refresh();

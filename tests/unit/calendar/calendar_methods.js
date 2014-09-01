@@ -11,20 +11,21 @@ test( "destroy", function() {
 });
 
 test( "enable / disable", function() {
-	expect( 6 );
+	expect( 8 );
 
 	var element = $( "#calendar" ).calendar();
 
-	ok( !element.calendar( "option", "disabled" ), "initially enabled" );
-	ok( !element.hasClass( "ui-calendar-disabled" ), "does not have disabled class name" );
-
 	element.calendar( "disable" );
 	ok( element.calendar( "option", "disabled" ), "disabled option is set" );
-	ok( element.hasClass( "ui-calendar-disabled" ), "calendar has disabled class name" );
+	ok( element.hasClass( "ui-calendar-disabled" ), "has disabled widget class name" );
+	ok( element.hasClass( "ui-state-disabled" ), "has disabled state class name" );
+	equal( element.attr( "aria-disabled" ), "true", "has ARIA disabled" );
 
 	element.calendar( "enable" );
 	ok( !element.calendar( "option", "disabled" ), "enabled after enable() call" );
-	ok( !element.hasClass( "ui-calendar-disabled" ), "no longer has disabled class name" );
+	ok( !element.hasClass( "ui-calendar-disabled" ), "no longer has disabled widget class name" );
+	ok( !element.hasClass( "ui-state-disabled" ), "no longer has disabled state class name" );
+	equal( element.attr( "aria-disabled" ), "false", "no longer has ARIA disabled" );
 });
 
 test( "widget", function() {
