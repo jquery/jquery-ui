@@ -41,16 +41,17 @@ test( "appendTo", function() {
 });
 
 test( "Pass-through options", function() {
-	expect( 8 );
+	expect( 9 );
 
 	var options = {
-			"buttons": { "Test": $.noop },
-			"dateFormat": { date: "full" },
-			"eachDay": function( day ) { day; },
-			"max": new Date( 2000, 0, 1 ),
-			"min": new Date( 2000, 0, 2 ),
-			"numberOfMonths": 3,
-			"showWeek": true
+			buttons: { "Test": $.noop },
+			dateFormat: { date: "full" },
+			disabled: true,
+			eachDay: function( day ) { day; },
+			max: new Date( 2000, 0, 1 ),
+			min: new Date( 2000, 0, 2 ),
+			numberOfMonths: 3,
+			showWeek: true
 		},
 		input = $( "#datepicker" ).val( "1/1/14" ).datepicker(),
 		datepickerInstance = input.datepicker( "instance" );

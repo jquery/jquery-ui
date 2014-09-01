@@ -15,21 +15,24 @@ test( "destroy", function() {
 });
 
 test( "enable / disable", function() {
-	expect( 6 );
+	expect( 10 );
 
 	var input = TestHelpers.datepicker.init( "#datepicker" ),
-		widget = input.datepicker( "widget" );
-
-	ok( !input.datepicker( "option", "disabled" ), "initially enabled" );
-	ok( !widget.hasClass( "ui-datepicker-disabled" ), "does not have disabled class name" );
+		calendar = input.datepicker( "widget" );
 
 	input.datepicker( "disable" );
 	ok( input.datepicker( "option", "disabled" ), "disabled option is set" );
-	ok( widget.hasClass( "ui-datepicker-disabled" ), "datepicker has disabled class name" );
+	ok( calendar.hasClass( "ui-datepicker-disabled" ), "has disabled widget class name" );
+	ok( input.hasClass( "ui-state-disabled" ), "has disabled state class name" );
+	equal( input.attr( "aria-disabled" ), "true", "has ARIA disabled" );
+	equal( input.attr( "disabled" ), "disabled", "input disabled" );
 
 	input.datepicker( "enable" );
 	ok( !input.datepicker( "option", "disabled" ), "enabled after enable() call" );
-	ok( !widget.hasClass( "ui-datepicker-disabled" ), "no longer has disabled class name" );
+	ok( !calendar.hasClass( "ui-datepicker-disabled" ), "no longer has disabled widget class name" );
+	ok( !input.hasClass( "ui-state-disabled" ), "no longer has disabled state class name" );
+	equal( input.attr( "aria-disabled" ), "false", "no longer has ARIA disabled" );
+	equal( input.attr( "disabled" ), undefined, "input no longer disabled" );
 });
 
 test( "widget", function() {
