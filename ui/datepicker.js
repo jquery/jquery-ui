@@ -27,7 +27,7 @@
 }(function( $ ) {
 
 var widget,
-	calendarOptions = [ "buttons", "dateFormat", "eachDay", "max", "min", "numberOfMonths", "showWeek" ];
+	calendarOptions = [ "buttons", "dateFormat", "disabled", "eachDay", "max", "min", "numberOfMonths", "showWeek" ];
 
 widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
@@ -317,6 +317,17 @@ widget = $.widget( "ui.datepicker", {
 
 		if ( key === "dateFormat" ) {
 			this.element.val( this.calendarInstance.value() );
+		}
+
+		if ( key === "disabled" ) {
+			this.element
+				.prop( "disabled", value )
+				.toggleClass( "ui-state-disabled", value )
+				.attr( "aria-disabled", value );
+
+			if ( value ) {
+				this.close();
+			}
 		}
 
 		if ( key === "position" ) {

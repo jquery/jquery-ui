@@ -41,11 +41,12 @@ test( "appendTo", function() {
 });
 
 test( "Pass-through options", function() {
-	expect( 8 );
+	expect( 9 );
 
 	var options = {
 			"buttons": { "Test": $.noop },
 			"dateFormat": { date: "full" },
+			"disabled": true,
 			"eachDay": function( day ) { day; },
 			"max": new Date( 2000, 0, 1 ),
 			"min": new Date( 2000, 0, 2 ),
