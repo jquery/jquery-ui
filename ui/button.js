@@ -129,7 +129,6 @@ $.widget( "ui.button", {
 		}
 
 		this.icon.addClass( icon ).appendTo( this.element );
-		return this;
 	},
 
 	_destroy: function() {
@@ -137,7 +136,7 @@ $.widget( "ui.button", {
 			.removeClass( baseClasses + " ui-state-active " + typeClasses )
 			.removeAttr( "role" );
 
-		if ( this.icon !== undefined ) {
+		if ( this.icon ) {
 			this.icon.remove();
 		}
 		if ( !this.hasTitle ) {
