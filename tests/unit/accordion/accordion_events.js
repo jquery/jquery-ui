@@ -50,7 +50,7 @@ test( "beforeActivate", function() {
 			active: false,
 			collapsible: true
 		}),
-		headers = element.find( ".ui-accordion-header" ),
+		headers = element.find( ".ui-button" ),
 		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
@@ -115,7 +115,7 @@ test( "activate", function() {
 			active: false,
 			collapsible: true
 		}),
-		headers = element.find( ".ui-accordion-header" ),
+		headers = element.find( ".ui-button" ),
 		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionactivate", function( event, ui ) {

@@ -29,7 +29,7 @@ test( "{ active: false }", function() {
 		collapsible: true
 	});
 	state( element, 0, 0, 0 );
-	equal( element.find( ".ui-accordion-header.ui-state-active" ).length, 0, "no headers selected" );
+	equal( element.find( ".ui-button.ui-state-active" ).length, 0, "no headers selected" );
 	equal( element.accordion( "option", "active" ), false );
 
 	element.accordion( "option", "collapsible", false );
@@ -56,7 +56,7 @@ test( "{ active: Number }", function() {
 	equal( element.accordion( "option", "active" ), 0 );
 	state( element, 1, 0, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).click();
+	element.find( ".ui-button" ).eq( 1 ).click();
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
@@ -265,7 +265,7 @@ test( "{ collapsible: false }", function() {
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).click();
+	element.find( ".ui-button" ).eq( 1 ).click();
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 });
@@ -285,7 +285,7 @@ test( "{ collapsible: true }", function() {
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).click();
+	element.find( ".ui-button" ).eq( 1 ).click();
 	equal( element.accordion( "option", "active" ), false );
 	state( element, 0, 0, 0 );
 });
@@ -302,7 +302,7 @@ test( "{ event: null }", function() {
 	state( element, 0, 1, 0 );
 
 	// ensure default click handler isn't bound
-	element.find( ".ui-accordion-header" ).eq( 2 ).click();
+	element.find( ".ui-button" ).eq( 2 ).click();
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 });
@@ -314,28 +314,28 @@ test( "{ event: custom }", function() {
 	});
 	state( element, 1, 0, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom1" );
+	element.find( ".ui-button" ).eq( 1 ).trigger( "custom1" );
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
 	// ensure default click handler isn't bound
-	element.find( ".ui-accordion-header" ).eq( 2 ).trigger( "click" );
+	element.find( ".ui-button" ).eq( 2 ).trigger( "click" );
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 2 ).trigger( "custom2" );
+	element.find( ".ui-button" ).eq( 2 ).trigger( "custom2" );
 	equal( element.accordion( "option", "active" ), 2 );
 	state( element, 0, 0, 1 );
 
 	element.accordion( "option", "event", "custom3" );
 
 	// ensure old event handlers are unbound
-	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom1" );
-	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom2" );
+	element.find( ".ui-button" ).eq( 1 ).trigger( "custom1" );
+	element.find( ".ui-button" ).eq( 1 ).trigger( "custom2" );
 	equal( element.accordion( "option", "active" ), 2 );
 	state( element, 0, 0, 1 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom3" );
+	element.find( ".ui-button" ).eq( 1 ).trigger( "custom3" );
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 });
@@ -355,9 +355,9 @@ test( "{ header: custom }", function() {
 		header: "h2"
 	});
 	element.find( "h2" ).each(function() {
-		ok( $( this ).hasClass( "ui-accordion-header" ) );
+		ok( $( this ).hasClass( "ui-button" ) );
 	});
-	equal( element.find( ".ui-accordion-header" ).length, 3 );
+	equal( element.find( ".ui-button" ).length, 3 );
 	state( element, 1, 0, 0 );
 	element.accordion( "option", "active", 2 );
 	state( element, 0, 0, 1 );
@@ -435,7 +435,7 @@ test( "{ icons: false }", function() {
 	var element = $( "#list1" );
 	function icons( on ) {
 		deepEqual( element.find( "span.ui-icon").length, on ? 3 : 0 );
-		deepEqual( element.find( ".ui-accordion-header.ui-accordion-icons" ).length, on ? 3 : 0 );
+		deepEqual( element.find( ".ui-button.ui-icon-beginning" ).length, on ? 3 : 0 );
 	}
 	element.accordion();
 	icons( true );
@@ -454,10 +454,10 @@ test( "{ icons: hash }", function() {
 	var element = $( "#list1" ).accordion({
 		icons: { activeHeader: "a1", header: "h1" }
 	});
-	ok( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
+	ok( element.find( ".ui-button.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
 	element.accordion( "option", "icons", { activeHeader: "a2", header: "h2" } );
-	ok( !element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
-	ok( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a2" ) );
+	ok( !element.find( ".ui-button.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
+	ok( element.find( ".ui-button.ui-state-active span.ui-icon" ).hasClass( "a2" ) );
 });
 
 }( jQuery ) );

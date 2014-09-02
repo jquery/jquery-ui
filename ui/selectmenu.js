@@ -84,7 +84,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Create button
 		this.button = $( "<span>", {
-			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
+			"class": "ui-selectmenu-button ui-button ui-icon-end ui-widget ui-state-default ui-corner-all",
 			tabindex: tabindex || this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			role: "combobox",
@@ -117,8 +117,6 @@ return $.widget( "ui.selectmenu", {
 				that._refreshMenu();
 			}
 		});
-		this._hoverable( this.button );
-		this._focusable( this.button );
 	},
 
 	_drawMenu: function() {
