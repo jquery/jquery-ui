@@ -120,18 +120,6 @@ input.ui-button.ui-icon-notext .ui-icon {
 	white-space: normal;
 	padding: .4em 1em;
 }
-/* button sets */
-.ui-buttonset {
-	margin-right: 7px;
-}
-
-.ui-button.ui-icon-top {
-	padding: 1.1em 1em .4em 1em;
-}
-
-.ui-button.ui-icon-bottom {
-	padding: .4em 1em 1.1em 1em;
-}
 
 /* workarounds */
 /* reset extra padding in Firefox, see h5bp.com/l */
