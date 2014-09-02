@@ -129,6 +129,7 @@ $.widget( "ui.button", {
 		}
 
 		this.icon.addClass( icon ).appendTo( this.element );
+		return this;
 	},
 
 	_destroy: function() {
