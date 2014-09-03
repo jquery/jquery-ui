@@ -8,6 +8,11 @@ TestHelpers.commonWidgetTests( "controlgroup", {
 		},
 		direction: "horizontal",
 		excludeInvisible: true,
+		classes: {
+			"ui-controlgroup": null,
+			"ui-controlgroup-horizontal": null,
+			"ui-controlgroup-vertical": null
+		},
 
 		// Callbacks
 		create: null
