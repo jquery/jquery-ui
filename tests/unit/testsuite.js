@@ -30,7 +30,7 @@ QUnit.config.urlConfig.push({
 QUnit.config.urlConfig.push({
 	id: "nojshint",
 	label: "Skip JSHint",
-	tooltip: "Skip running JSHint, e.g. within TestSwarm, where Jenkins runs it already"
+	tooltip: "Skip running JSHint, e.g., within TestSwarm, where Jenkins runs it already"
 });
 
 QUnit.config.urlConfig.push({
