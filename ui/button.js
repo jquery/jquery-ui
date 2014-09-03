@@ -42,7 +42,12 @@ $.widget( "ui.button", {
 		showLabel: true,
 		label: null,
 		icon: null,
-		iconPosition: "beginning"
+		iconPosition: "beginning",
+		classes: {
+			"ui-button": "ui-corner-all",
+			"ui-button-icon-only": "",
+			"ui-button-icon": ""
+		}
 	},
 
 	_getCreateOptions: function() {
@@ -118,11 +123,11 @@ $.widget( "ui.button", {
 
 	_updateIcon: function( icon ) {
 		if ( !this.icon ) {
-			this.icon = $( "<span>" ).addClass( "ui-icon" );
+			this.icon = $( "<span>" ).addClass( this._classes( "ui-button-icon" ) + " ui-icon" );
 			this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 
 			if ( !this.options.showLabel ){
-				this.element.addClass( "ui-button-icon-only" );
+				this.element.addClass( this._classes( "ui-button-icon-only" ) );
 			}
 		} else {
 			this.icon.removeClass( this.options.icon );
@@ -134,7 +139,7 @@ $.widget( "ui.button", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( baseClasses + " ui-state-active " + typeClasses )
+			.removeClass( this._classes( "ui-button ui-button-icon-only" ) + " " + baseClasses + " ui-state-active " + typeClasses )
 			.removeAttr( "role" );
 
 		if ( this.icon ) {
@@ -151,14 +156,14 @@ $.widget( "ui.button", {
 				this._updateIcon( value );
 			} else {
 				this.icon.remove();
-				this.element.removeClass( "ui-icon-" + this.options.iconPosition );
+				this.element.removeClass( this._classes( "ui-button-icon" ) + " ui-icon-" + this.options.iconPosition );
 			}
 		}
 
 		// Make sure we cant end up with a button that has no text nor icon
 		if ( key === "showLabel" ) {
 			if ( ( !value && !this.options.icon ) || value ) {
-				this.element.toggleClass( "ui-button-icon-only", !value )
+				this.element.toggleClass( this._classes( "ui-button-icon-only" ), !value )
 					.toggleClass( this.options.iconPosition, !!value );
 				this._updateTooltip();
 			} else {
