@@ -104,23 +104,6 @@ input.ui-button.ui-button-icon-only {
 	padding: .4em 1em 1.1em 1em;
 }
 
-.ui-button.ui-icon-notext .ui-icon {
-	padding: 0;
-	width: 2.1em;
-	height: 2.1em;
-	text-indent: -9999px;
-	white-space: nowrap;
-
-}
-
-input.ui-button.ui-icon-notext .ui-icon {
-	width: auto;
-	height: auto;
-	text-indent: 0;
-	white-space: normal;
-	padding: .4em 1em;
-}
-
 /* workarounds */
 /* reset extra padding in Firefox, see h5bp.com/l */
 input.ui-button::-moz-focus-inner,
