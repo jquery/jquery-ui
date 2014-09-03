@@ -121,7 +121,7 @@ $.date.prototype = {
 		return 32 - new Date( year, month, 32 ).getDate();
 	},
 	monthName: function() {
-		return Globalize.format( this.dateObject, { pattern: "MMMM" } );
+		return Globalize.formatDate( this.dateObject, { pattern: "MMMM" } );
 	},
 	day: function() {
 		return this.dateObject.getDate();
@@ -157,7 +157,7 @@ $.date.prototype = {
 			printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
 		for ( var row = 0; row < rows; row++ ) {
 			var week = result[ result.length ] = {
-				number: Globalize.format( printDate, { pattern: "w" } ),
+				number: Globalize.formatDate( printDate, { pattern: "w" } ),
 				days: []
 			};
 			for ( var dayx = 0; dayx < 7; dayx++ ) {
@@ -202,7 +202,7 @@ $.date.prototype = {
 	// TODO compare year, month, day each for better performance
 	equal: function( other ) {
 		function format( date ) {
-			return Globalize.format( date, { pattern: "yyyyMMdd" } );
+			return Globalize.formatDate( date, { pattern: "yyyyMMdd" } );
 		}
 		return format( this.dateObject ) === format( other );
 	},
@@ -210,7 +210,7 @@ $.date.prototype = {
 		return this.dateObject;
 	},
 	format: function( format ) {
-		return Globalize.format( this.dateObject, format || this.globalFormat );
+		return Globalize.formatDate( this.dateObject, format || this.globalFormat );
 	}
 };
 

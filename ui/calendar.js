@@ -515,7 +515,7 @@ return $.widget( "ui.calendar", {
 		if ( arguments.length ) {
 			this.valueAsDate( Globalize.parseDate( value, this.options.dateFormat ) );
 		} else {
-			return Globalize.format( this.option( "value" ), this.options.dateFormat );
+			return Globalize.formatDate( this.option( "value" ), this.options.dateFormat );
 		}
 	},
 
