@@ -26,7 +26,7 @@ Some tests depend on PHP running locally, so make sure you have the following in
 
 * A web server with PHP support (any will do, such as [XAMPP](http://www.apachefriends.org/en/xampp.html) or [MAMP](http://www.mamp.info/en/index.html))
 * [Node.js](http://nodejs.org/) (includes NPM, necessary for the next step)
-* Grunt (install with: `npm install -g grunt`
+* Grunt (install with: `npm install -g grunt`)
 
 ### Build a Local Copy of jQuery UI
 
