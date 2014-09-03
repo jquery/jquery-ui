@@ -20,10 +20,11 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( ".controlgroup" ).eq( 0 ).controlgroup()
-			.end().eq( 1 ).controlgroup({
-				"direction": "vertical"
-			});
+		$( "#insurance, #insurance-v" ).checkboxradio({ icon: true });
+		$( ".controlgroup" ).controlgroup()
+		$( ".controlgroup-vertical" ).controlgroup({
+			"direction": "vertical"
+		});
 	});
 	</script>
 	<style>
@@ -72,7 +73,7 @@
 	<br/>
 	<fieldset>
 		<legend>Rental Car</legend>
-		<div class="controlgroup-horizontal">
+		<div class="controlgroup-vertical">
 			<select>
 				<option>Compact car</option>
 				<option>Midsize car</option>
@@ -91,7 +92,6 @@
 			<button>Book Now!</button>
 		</div>
 	</fieldset>
->>>>>>> 423b976... Checkboxradio: Fixed demos and tests
 </div>
 
 =======
