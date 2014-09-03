@@ -3,6 +3,8 @@ define([
 	"ui/accordion"
 ], function( testHelper ) {
 
+return function() {
+
 testHelper.commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
@@ -23,5 +25,7 @@ testHelper.commonWidgetTests( "accordion", {
 		create: null
 	}
 });
+
+};
 
 });
