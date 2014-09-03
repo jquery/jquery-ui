@@ -17,8 +17,8 @@
 .ui-controlgroup.ui-controlgroup-vertical > .ui-button {
 	display: block;
 	width: 100%;
-	margin-top: 0em;
-	margin-bottom: 0em;
+	margin-top: 0;
+	margin-bottom: 0;
 	text-align: left;
 }
 .ui-controlgroup-vertical label.ui-button {
