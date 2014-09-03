@@ -76,7 +76,7 @@ module( "Checkboxradio: checkbox: options" );
 		strictEqual( widget.find( "span" ).length, 1,
 			"Label contains a span when created with icon:true" );
 		strictEqual( widget.find( "span" ).attr( "class" ),
-			"ui-icon ui-icon-background ui-corner-all ui-icon-blank",
+			"ui-checkboxradio-icon ui-corner-all ui-icon ui-icon-background ui-icon-blank",
 			"Icon span has proper classes when created not checked" );
 
 		checkbox.checkboxradio( "destroy" ).prop( "checked", true );
@@ -86,7 +86,7 @@ module( "Checkboxradio: checkbox: options" );
 		});
 
 		strictEqual( widget.find( "span" ).attr( "class" ),
-			"ui-icon ui-icon-background ui-corner-all ui-icon-check",
+			"ui-checkboxradio-icon ui-corner-all ui-icon ui-icon-background ui-icon-check",
 			"Icon span has proper classes when created checked" );
 
 		checkbox.checkboxradio( "option", "icon", false );
@@ -97,7 +97,7 @@ module( "Checkboxradio: checkbox: options" );
 		checkbox.checkboxradio( "option", "icon", true );
 
 		strictEqual( widget.find( "span" ).attr( "class" ),
-			"ui-icon ui-icon-background ui-corner-all ui-icon-check",
+			"ui-checkboxradio-icon ui-corner-all ui-icon ui-icon-background ui-icon-check",
 			"Icon span has proper classes when option set to true and :is( checked )" );
 
 		checkbox.prop( "checked", false ).checkboxradio( "refresh" );
@@ -109,7 +109,7 @@ module( "Checkboxradio: checkbox: options" );
 		checkbox.checkboxradio( "option", "icon", true );
 
 		strictEqual( widget.find( "span" ).attr( "class" ),
-			"ui-icon ui-icon-background ui-corner-all ui-icon-blank",
+			"ui-checkboxradio-icon ui-corner-all ui-icon ui-icon-background ui-icon-blank",
 			"Icon span has proper classes when option set to true and not checked" );
 
 		checkbox.checkboxradio( "destroy" );
