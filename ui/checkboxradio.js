@@ -24,10 +24,9 @@
 	}
 }(function( $ ) {
 
-var baseClasses = "ui-button ui-widget ui-corner-all",
-	typeClasses = " ui-icon ui-icon-background ui-state-focus ui-icon-check ui-icon-blank" +
-		" ui-radio-label ui-checkbox-label ui-state-active ui-icon-beginning ui-icon-end" +
-		" ui-icon-top ui-icon-bottom ui-radio-checked ui-checkbox-checked",
+var baseClasses = "ui-button ui-widget",
+	typeClasses = "ui-state-focus ui-radio-label ui-checkbox-label ui-state-active " +
+	"ui-icon-beginning ui-icon-end ui-icon-top ui-icon-bottom ui-radio-checked ui-checkbox-checked",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -98,33 +97,16 @@ $.widget( "ui.checkboxradio", {
 		return options;
 	},
 
-	_readDisabled: function( options ) {
-		var isDisabled = this.element.prop( "disabled" );
-
-		if ( isDisabled !== undefined ) {
-			options.disabled = isDisabled;
-		} else {
-			options.disabled = false;
-		}
-	},
-
 	_create: function() {
 		var formElement = $( this.element[ 0 ].form );
 
 		// We don't use _on and _off here because we want all the checkboxes in the same form to use
-		// single handler which handles all the checkboxradio widgets in the form
+		// a single handler which handles all the checkboxradio widgets in the form
 		formElement.off( "reset" + this.eventNamespace, formResetHandler );
 		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
-		// If it is null the user set it explicitly to null so we need to check the dom
 		if ( this.options.disabled == null ) {
 			this.options.disabled = this.element.prop( "disabled" ) || false;
-		}
-
-		// If the option is true we call set options to add the disabled
-		// classes and ensure the element is not focused
-		if ( this.options.disabled === true ){
-			this._setOption( "disabled", true );
 		}
 
 		this._readType();
@@ -145,7 +127,7 @@ $.widget( "ui.checkboxradio", {
 	_readType: function() {
 		this.type = this.element[ 0 ].type;
 		if ( !/radio|checkbox/.test( this.type ) ) {
-			throw new Error( "Can't create checkboxradio widget for type " + this.type );
+			$.error( "Can't create checkboxradio widget for type " + this.type );
 		}
 	},
 
@@ -156,7 +138,7 @@ $.widget( "ui.checkboxradio", {
 		this.parentLabel = false;
 
 		// Check control.labels first
-		if ( this.element[ 0 ].labels !== undefined && this.element[ 0 ].labels.length > 0 ){
+		if ( this.element[ 0 ].labels !== undefined && this.element[ 0 ].labels.length > 0 ) {
 			this.label = $( this.element[ 0 ].labels[ 0 ] );
 		} else if ( parent.length > 0 ) {
 			this.label = parent;
@@ -172,8 +154,8 @@ $.widget( "ui.checkboxradio", {
 			this.label = ancestor.find( labelSelector );
 			if ( !this.label.length ) {
 
-				// The label was not found make sure ancestors exist if they do check their siblings
-				// if they dont check the elements siblings
+				// The label was not found, make sure ancestors exist. If they do check their
+				// siblings, if they dont check the elements siblings
 				ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
 
 				// Check if any of the new set of ancestors is the label
@@ -182,6 +164,9 @@ $.widget( "ui.checkboxradio", {
 
 					// Still not found look inside the ancestors for the label
 					this.label = ancestor.find( labelSelector );
+					if ( this.label.length === 0 ) {
+						$.error( "No label found for checkboxradio widget" );
+					}
 				}
 			}
 		}
@@ -190,6 +175,7 @@ $.widget( "ui.checkboxradio", {
 	_enhance: function() {
 		var checked = this.element.is( ":checked" );
 
+		this._setOption( "disabled", this.options.disabled );
 		this._updateIcon( checked );
 		this.element.addClass( "ui-helper-hidden-accessible " +
 			this._classes( "ui-checkboxradio" ) );
@@ -231,7 +217,8 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_destroy: function() {
-		this.label.removeClass( baseClasses + " " + typeClasses );
+		this.label.removeClass( this._classes( "ui-radio-label ui-checkbox-label" ) + " " +
+			baseClasses + " " + typeClasses );
 		if ( this.icon ) {
 			this.icon.remove();
 		}
@@ -262,7 +249,7 @@ $.widget( "ui.checkboxradio", {
 
 		if ( this.options.icon ) {
 			this.label.addClass( "ui-icon-beginning" );
-			if ( !this.icon ){
+			if ( !this.icon ) {
 				this.icon = $( "<span>" );
 			}
 

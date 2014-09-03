@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Controlgroup - Default Functionality</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/checkboxradio.js"></script>
+	<script src="../../ui/menu.js"></script>
+	<script src="../../ui/position.js"></script>
+	<script src="../../ui/selectmenu.js"></script>
+	<script src="../../ui/controlgroup.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( ".controlgroup" ).eq( 0 ).controlgroup()
+			.end().eq( 1 ).controlgroup({
+				"direction": "vertical"
+			});
+	});
+	</script>
+	<style>
+		.ui-controlgroup-vertical {
+			width: 300px;
+		}
+		.ui-controlgroup-vertical select {
+			width: 100%;
+		}
+		.ui-controlgroup.ui-controlgroup-vertical > button.ui-button {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div class="demo-description">
+<p>A Controlgroup featuring various form controls</p>
+</div>
+<div class="widget">
+	<h1>Controlgroup</h1>
+	<fieldset>
+		<legend>Rental Car</legend>
+		<div class="controlgroup">
+			<select>
+				<option>Compact car</option>
+				<option>Midsize car</option>
+				<option>Full size car</option>
+				<option>SUV</option>
+				<option>Luxury</option>
+				<option>Truck</option>
+				<option>Van</option>
+			</select>
+			<label for="transmission-standard">Standard</label>
+			<input type="radio" name="transmission" id="transmission-standard">
+			<label for="transmission-automatic">Automatic</label>
+			<input type="radio" name="transmission" id="transmission-automatic">
+			<label for="insurance">Insurance</label>
+			<input type="checkbox" name="insurance" id="insurance">
+			<button>Book Now!</button>
+		</div>
+	</fieldset>
+	<br/>
+	<fieldset>
+		<legend>Rental Car</legend>
+		<div class="controlgroup-horizontal">
+			<select>
+				<option>Compact car</option>
+				<option>Midsize car</option>
+				<option>Full size car</option>
+				<option>SUV</option>
+				<option>Luxury</option>
+				<option>Truck</option>
+				<option>Van</option>
+			</select>
+			<label for="transmission-standard-v">Standard</label>
+			<input type="radio" name="transmission-v" id="transmission-standard-v">
+			<label for="transmission-automatic-v">Automatic</label>
+			<input type="radio" name="transmission-v" id="transmission-automatic-v">
+			<label for="insurance-v">Insurance</label>
+			<input type="checkbox" name="insurance" id="insurance-v">
+			<button>Book Now!</button>
+		</div>
+	</fieldset>
+>>>>>>> 423b976... Checkboxradio: Fixed demos and tests
+</div>
+
+</body>
+</html>
