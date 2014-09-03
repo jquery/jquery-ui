@@ -8,7 +8,7 @@ var exports = {};
 function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
 
-	// ensure that all defaults have the correct value
+	// Ensure that all defaults have the correct value
 	test( "defined defaults", function() {
 		var count = 0;
 		$.each( defaults, function( key, val ) {
@@ -21,7 +21,7 @@ function testWidgetDefaults( widget, defaults ) {
 		});
 	});
 
-	// ensure that all defaults were tested
+	// Ensure that all defaults were tested
 	test( "tested defaults", function() {
 		var count = 0;
 		$.each( pluginDefaults, function( key ) {
@@ -59,6 +59,7 @@ function testBasicUsage( widget ) {
 		$( defaultElement )[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - never connected" );
 
+		// Ensure manipulating removed elements works (#3664)
 		$( defaultElement ).appendTo( "body" ).remove()[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - removed" );
 	});
@@ -66,7 +67,8 @@ function testBasicUsage( widget ) {
 
 // Asset revisioning through time and random hashing
 function revStamp( value ) {
-	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
+	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" +
+		parseInt(Math.random() * 100000, 10);
 }
 
 /**
@@ -89,8 +91,8 @@ exports.commonWidgetTests = function( widget, settings ) {
 /**
  * Experimental assertion for comparing DOM objects.
  *
- * Serializes an element and some properties and attributes and it's children if any, otherwise the text.
- * Then compares the result using deepEqual.
+ * Serializes an element and some properties and attributes and its children if any,
+ * otherwise the text. Then compares the result using deepEqual().
  */
 exports.domEqual = function( selector, modifier, message ) {
 	var expected, actual,

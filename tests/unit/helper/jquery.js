@@ -6,12 +6,10 @@ if( !window.helper ) {
 
 window.helper.jqueryUrl = function() {
 
-	var parts = document.location.search.slice( 1 ).split( "&" ),
-		length = parts.length,
+	var current, url, version,
 		i = 0,
-		current,
-		version,
-		url;
+		length = parts.length,
+		parts = document.location.search.slice( 1 ).split( "&" );
 
 	for ( ; i < length; i++ ) {
 		current = parts[ i ].split( "=" );

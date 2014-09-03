@@ -9,7 +9,7 @@ window.TestHelpers = {};
 reset = QUnit.reset;
 QUnit.reset = function() {
 	// Ensure jQuery events and data on the fixture are properly removed
-	jQuery("#qunit-fixture").empty();
+	jQuery( "#qunit-fixture" ).empty();
 	// Let QUnit reset the fixture
 	reset.apply( this, arguments );
 };
@@ -44,7 +44,7 @@ QUnit.config.urlConfig.push({
 	tooltip: "Which jQuery Core version to test against"
 });
 
-TestHelpers.onFocus= function( element, onFocus ) {
+TestHelpers.onFocus = function( element, onFocus ) {
 	var fn = function( event ){
 		if( !event.originalEvent ) {
 			return;
@@ -57,6 +57,7 @@ TestHelpers.onFocus= function( element, onFocus ) {
 };
 
 TestHelpers.forceScrollableWindow = function( appendTo ) {
+
 	// The main testable area is 10000x10000 so to enforce scrolling,
 	// this DIV must be greater than 10000 to work
 	return $( "<div>" ).css({
@@ -65,12 +66,10 @@ TestHelpers.forceScrollableWindow = function( appendTo ) {
 	}).appendTo( appendTo || "#qunit-fixture" );
 };
 
-/*
- * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
- */
+// Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
 window.closeEnough = function( actual, expected, maxDifference, message ) {
-	var passes = (actual === expected) || Math.abs(actual - expected) <= maxDifference;
-	QUnit.push(passes, actual, expected, message);
+	var passes = ( actual === expected ) || Math.abs( actual - expected ) <= maxDifference;
+	QUnit.push( passes, actual, expected, message );
 };
 
 });
