@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Button - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/checkboxradio.js"></script>
+	<script src="../../ui/controlgroup.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "input" ).checkboxradio();
+		$( "[name='shape']").on( "change", function(){
+			$( ".shape" ).removeClass( "circle pill square rectangle" )
+				.addClass( $( this ).val() );
+		});
+		$( "[name='brand']").on( "change", function(){
+			$( ".shape" ).removeClass( "jquery jquery-ui jquery-mobile sizzle qunit" )
+				.addClass( $( this ).val() );
+		});
+		$( ".toggle" ).on( "change", function(){
+			$( ".shape" ).toggleClass( $( this ).attr( "id" ), $( this ).is( ":checked" ) );
+		});
+		$( ".shape-bar" ).controlgroup();
+		$( ".toggles" ).controlgroup({
+			direction: "vertical"
+		});
+	});
+	</script>
+	<style>
+		.shape {
+			margin: 1em;
+			height: 15em;
+			width: 15em;
+		}
+		.circle, .pill {
+			border-radius: 8em;
+		}
+		.pill, .rectangle {
+			width: 30em;
+		}
+		.border {
+			border: 2px solid #333333;
+		}
+		.shadow.jquery {
+			box-shadow: 4px 4px 4px #7ACEF4;
+		}
+		.shadow.jquery-ui {
+			box-shadow: 4px 4px 4px #FAA523;
+		}
+		.shadow.jquery-mobile {
+			box-shadow: 4px 4px 4px #3EB249;
+		}
+		.shadow.sizzle {
+			box-shadow: 4px 4px 4px #FAA523;
+		}
+		.shadow.qunit {
+			box-shadow: 4px 4px 4px #9C3493;
+		}
+		.background.jquery {
+			background-color: #0769AD;
+		}
+		.background.jquery-ui {
+			background-color: #B24926;
+		}
+		.background.jquery-mobile {
+			background-color: #108040;
+		}
+		.background.sizzle {
+			background-color: #9A1B1E;
+		}
+		.background.qunit {
+			background-color: #390F39;
+		}
+		.background-image.jquery { 
+			background-image: url(http://jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery.png);
+		}
+		.background-image.jquery-ui { 
+			background-image: url(http://jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery-ui.png);
+		}
+		.background-image.jquery-mobile { 
+			background-image: url(http://jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery-mobile.png);
+		}
+		.background-image.sizzle { 
+			background-image: url(http://jquery.com/jquery-wp-content/themes/jquery/images/logo-sizzle.png);
+		}
+		.background-image.qunit { 
+			background-image: url(http://jquery.com/jquery-wp-content/themes/jquery/images/logo-qunit.png);
+		}
+		.background-image {
+			background-repeat: no-repeat; 
+			background-size: 90%;
+			background-position: 50%;
+		}
+		.toggles {
+			width: 200px;
+		}
+		.toggle-wrap, .shape {
+			display: inline-block;
+			vertical-align: top;
+		}
+		.shape-wrap {
+			margin-bottom: 2em;
+		}
+		.controls {
+			background: #ccc;
+			padding: 1em;
+			display: inline-block;
+		}
+		.spin {
+			-webkit-animation-name: spin;
+			-webkit-animation-duration: 4000ms;
+			-webkit-animation-iteration-count: infinite;
+			-webkit-animation-timing-function: linear;
+			-moz-animation-name: spin;
+			-moz-animation-duration: 4000ms;
+			-moz-animation-iteration-count: infinite;
+			-moz-animation-timing-function: linear;
+			-ms-animation-name: spin;
+			-ms-animation-duration: 4000ms;
+			-ms-animation-iteration-count: infinite;
+			-ms-animation-timing-function: linear;
+
+			animation-name: spin;
+			animation-duration: 4000ms;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+		@-moz-keyframes spin {
+			from { -moz-transform: rotateY(0deg); }
+			to { -moz-transform: rotateY(360deg); }
+		}
+		@-webkit-keyframes spin {
+			from { -webkit-transform: rotateY(0deg); }
+			to { -webkit-transform: rotateY(360deg); }
+		}
+		@keyframes spin {
+			from {transform:rotateY(0deg);}
+			to {transform:rotateY(360deg);}
+		}
+	</style>
+</head>
+<body>
+<div class="controls">
+	<div class="brand-wrap">
+		<h2>1.) Select a brand</h2>
+		<div class="brand">
+			<label for="brand-jquery">jQuery</label>
+			<input type="radio" name="brand" id="brand-jquery" value="jquery">
+			<label for="brand-jquery-ui">jQuery UI</label>
+			<input type="radio" name="brand" id="brand-jquery-ui" value="jquery-ui" checked>
+			<label for="brand-jquery-mobile">jQuery Mobile</label>
+			<input type="radio" name="brand" id="brand-jquery-mobile" value="jquery-mobile">
+			<label for="brand-sizzle">Sizzle</label>
+			<input type="radio" name="brand" id="brand-sizzle" value="sizzle">
+			<label for="brand-qunit">QUnit</label>
+			<input type="radio" name="brand" id="brand-qunit" value="qunit">
+		</div>
+	</div>
+	<div class="shape-wrap">
+		<h2>2.) Select a shape</h2>
+		<div class="shape-bar">
+			<label for="shape-circle">Circle</label>
+			<input type="radio" name="shape" id="shape-circle" value="circle" checked>
+			<label for="shape-square">Square</label>
+			<input type="radio" name="shape" id="shape-square" value="square">
+			<label for="shape-pill">pill</label>
+			<input type="radio" name="shape" id="shape-pill" value="pill">
+			<label for="shape-rectangle">Rectangle</label>
+			<input type="radio" name="shape" id="shape-rectangle" value="rectangle">
+		</div>
+	</div>
+	<div class="toggle-wrap">
+		<h2>3.) customize</h2>
+		<div class="toggles">
+			<label for="shadow">Shadow</label>
+			<input class="toggle" type="checkbox" name="shadow" id="shadow">
+			<label for="border">Border</label>
+			<input class="toggle" type="checkbox" name="border" id="border">
+			<label for="background">Background</label>
+			<input class="toggle" type="checkbox" name="background" id="background" checked>
+			<label for="background-image">Background Image</label>
+			<input class="toggle" type="checkbox" name="background-image" id="background-image">
+			<label for="spin">Animate</label>
+			<input class="toggle" type="checkbox" name="animate" id="spin">
+		</div>
+	</div>
+	<div class="shape circle background jquery-ui"></div>
+</div>
+
+
+<div class="demo-description">
+<p>Examples of the markup that can be used with checkboxs and radio buttons.</p>
+</div>
+</body>
+</html>
