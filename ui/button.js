@@ -139,7 +139,7 @@ $.widget( "ui.button", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( baseClasses + " ui-state-active " + typeClasses )
+			.removeClass( this._classes( "ui-button ui-button-icon-only" ) + " " + baseClasses + " ui-state-active " + typeClasses )
 			.removeAttr( "role" );
 
 		if ( this.icon ) {
@@ -156,7 +156,7 @@ $.widget( "ui.button", {
 				this._updateIcon( value );
 			} else {
 				this.icon.remove();
-				this.element.removeClass( "ui-icon-" + this.options.iconPosition );
+				this.element.removeClass( this._classes( "ui-button-icon" ) + " ui-icon-" + this.options.iconPosition );
 			}
 		}
 
