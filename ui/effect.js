@@ -1276,7 +1276,8 @@ $.fn.extend({
 					return;
 				}
 
-				if ( normalizedMode === "show" ) {
+				if ( normalizedMode === "show" ||
+						( normalizedMode === defaultMode && normalizedMode === "hide" ) ) {
 					el.show();
 				}
 
