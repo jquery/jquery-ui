@@ -35,50 +35,16 @@ $.widget( "ui.controlgroup", {
 			"selectmenu": "select"
 		},
 		direction: "horizontal",
-		excludeInvisible: true
+		excludeInvisible: true,
+		classes: {
+			"ui-controlgroup": null,
+			"ui-controlgroup-horizontal": null,
+			"ui-controlgroup-vertical": null
+		}
 	},
 
 	_create: function() {
-		this._enhance();
-		this._on( this.element, {
-			"selectmenuopen": "_handleSelectmenuOpen",
-			"selectmenuclose": "_handleSelectmenuClose"
-		});
-	},
-
-	_handleSelectmenuOpen: function( event ) {
-		var target = $( event.target ),
-			widget = target.selectmenu ( "widget" ),
-			vertical = this.options.direction === "vertical";
-		if ( widget[ 0 ] !== this.first[ 0 ] || !vertical ) {
-			widget.removeClass( "ui-corner-top" );
-		}
-		if ( vertical && widget[ 0 ] === this.last[ 0 ] ) {
-			widget.removeClass( "ui-corner-bottom" );
-		}
-		if ( widget[ 0 ] === this.first[ 0 ] ) {
-			widget.removeClass( "ui-corner-left" )
-				.addClass( "ui-corner-" + ( vertical ? "top" : "tl" ) );
-		}
-		if ( widget[ 0 ] === this.last[ 0 ] ) {
-			widget.removeClass( "ui-corner-right" )
-				.addClass( vertical ? "" : "ui-corner-tr" );
-		}
-	},
-
-	_handleSelectmenuClose: function( event ) {
-		var target = $( event.target ),
-			widget = target.selectmenu ( "widget" ),
-			vertical = this.options.direction === "vertical";
-		widget.removeClass( "ui-corner-all" );
-		if ( widget[ 0 ] === this.first[ 0 ] ) {
-			widget.removeClass( "ui-corner-left" )
-				.addClass( "ui-corner-" + ( vertical ? "top" : "left" ) );
-		}
-		if ( widget[ 0 ] === this.last[ 0 ] ) {
-			widget.removeClass( "ui-corner-right" )
-				.addClass( vertical ? "ui-corner-bottom" : "ui-corner-right" );
-		}
+		this._enhance();;
 	},
 
 	_enhance: function() {
@@ -89,7 +55,7 @@ $.widget( "ui.controlgroup", {
 	_destroy: function() {
 		this._callChildMethod( "destroy" );
 		this.element.removeAttr( "role" );
-		this.element.removeClass( "ui-controlgroup ui-selectmenu-vertical ui-controlgroup-horizontal" )
+		this.element.removeClass( "ui-controlgroup ui-controlgroup-vertical ui-controlgroup-horizontal" )
 			.children().removeClass( "ui-corner-all ui-corner-top" +
 			" ui-corner-bottom ui-corner-left ui-corner-tl ui-corner-tr" );
 	},
@@ -97,8 +63,29 @@ $.widget( "ui.controlgroup", {
 	_callChildMethod: function( method, filter ) {
 		var that = this;
 		$.each( this.options.items, function( widget, selector ) {
+			var options = {};
+			switch ( widget ) {
+				case "button":
+					options.classes = {
+						"ui-button": null
+					};
+				break;
+				case "checkboxradio":
+					options.classes = {
+						"ui-checkbox-label": null,
+						"ui-radio-label": null
+					};
+				break;
+				case "selectmenu":
+					options.classes = {
+						"ui-selectmenu-button-open": null,
+						"ui-selectmenu-button-closed": null
+					};
+				break;
+			}
 			if ( $.fn[ widget ] && selector ) {
-				that.element.children( selector ).not( filter )[ widget ]( method );
+				that.element.children( selector ).not( filter )[ widget ]( method ?
+					method: options );
 			}
 		});
 	},
@@ -120,7 +107,9 @@ $.widget( "ui.controlgroup", {
 	},
 
 	refresh: function() {
-		var vertical = ( this.options.direction === "vertical" );
+		var firstClasses = {},
+			lastClasses = {},
+			vertical = ( this.options.direction === "vertical" );
 		this.element.addClass( "ui-controlgroup ui-controlgroup-" + this.options.direction );
 		this._callChildMethod( undefined );
 		this.visible = this.element.children( ".ui-button" ).removeClass( function(index, css) {
@@ -131,7 +120,26 @@ $.widget( "ui.controlgroup", {
 			.addClass( "ui-corner-" + ( vertical ? "top" : "left" ) );
 		this.last =	this.visible.filter( ":last" )
 			.addClass( "ui-corner-" + ( vertical ? "bottom" : "right" ) );
-		this.element.find( this.options.items.selectmenu ).selectmenu( "refresh" );
+		if( $.ui.selectmenu ) {
+			if ( this.first.is( ".ui-selectmenu-button" ) && !vertical ) {
+				firstClasses[ "ui-selectmenu-button-open" ] = "ui-corner-tl";
+				firstClasses[ "ui-selectmenu-button-closed" ] = "ui-corner-left";
+				$( "#" + this.first.attr( "id" ).replace( /-button/, "" ) )
+					.selectmenu( "option", "classes", firstClasses );
+			}
+			if ( this.last.is( ".ui-selectmenu-button" ) ) {
+				if ( vertical ) {
+					lastClasses[ "ui-selectmenu-button-open" ] = null;
+					lastClasses[ "ui-selectmenu-button-closed" ] = "ui-corner-bottom"
+				} else {
+					lastClasses[ "ui-selectmenu-button-open" ] = "ui-corner-tr";
+					lastClasses[ "ui-selectmenu-button-closed" ] = "ui-corner-right";
+				}
+				$( "#" + this.last.attr( "id" ).replace( /-button/, "" ) )
+					.selectmenu( "option", "classes", lastClasses );
+			}
+			this.element.find( this.options.items.selectmenu ).selectmenu( "refresh" );
+		}
 		this._callChildMethod( "refresh" );
 
 	}

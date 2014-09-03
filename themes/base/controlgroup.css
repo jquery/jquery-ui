@@ -11,14 +11,14 @@
 
 
 .ui-controlgroup > .ui-button {
-	margin-left: -2px;
-	margin-right: -1px;
+	margin-left: -.14em;
+	margin-right: -.14em;
 }
 .ui-controlgroup.ui-controlgroup-vertical > .ui-button {
 	display: block;
 	width: 100%;
-	margin-top: -1px;
-	margin-bottom: -1px;
+	margin-top: 0em;
+	margin-bottom: 0em;
 	text-align: left;
 }
 .ui-controlgroup-vertical label.ui-button {
