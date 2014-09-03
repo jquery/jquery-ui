@@ -60,8 +60,6 @@ $.widget( "ui.checkboxradio", {
 		icon: false
 	},
 
-	defaultElement: "<input type='checkbox'>",
-
 	_getCreateOptions: function() {
 		var disabled,
 			options = {};
