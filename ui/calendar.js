@@ -13,39 +13,39 @@
 //>>docs: http://api.jqueryui.com/calendar/
 //>>demos: http://jqueryui.com/calendar/
 
-( function( factory ) {
+(function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		// TODO: Keep button even if its optional?
-		define( [
+		define([
 			"jquery",
 			"globalize",
-			"./core",
-			"./widget",
+			"globalize/date",
 			"./button",
-			"date"
+			"./calendar/date",
+			"./core",
+			"./widget"
 		], factory );
 	} else {
 
 		// Browser globals
 		factory( jQuery, Globalize );
 	}
-}( function( $, Globalize ) {
+}(function( $, Globalize ) {
 
 return $.widget( "ui.calendar", {
 	version: "@VERSION",
 	options: {
 		buttons: [],
-		dateFormat: { date: "short" },
 		eachDay: $.noop,
 		labels: {
-			"currentText": "Today",
 			"datePickerRole": "date picker",
 			"nextText": "Next",
 			"prevText": "Prev",
 			"weekHeader": "Wk"
 		},
+		locale: "en",
 		max: null,
 		min: null,
 		numberOfMonths: 1,
@@ -69,6 +69,9 @@ return $.widget( "ui.calendar", {
 		this.labels = this.options.labels;
 		this.buttonClickContext = this.element[ 0 ];
 
+		this._setLocale( this.options.locale );
+
+		this.date = new $.ui.calendarDate( this.options.value, this.options.locale );
 		this.date = $.date( this.options.value, this.options.dateFormat );
 		this.viewDate = this.date.clone();
 		this.viewDate.eachDay = this.options.eachDay;
@@ -97,7 +100,7 @@ return $.widget( "ui.calendar", {
 			"mouseenter .ui-calendar-calendar button": "_hover",
 			"mouseleave .ui-calendar-calendar button": "_hover",
 			"keydown .ui-calendar-calendar": "_handleKeydown"
-		} );
+		});
 
 		this._createCalendar();
 	},
@@ -174,6 +177,48 @@ return $.widget( "ui.calendar", {
 		).addClass( "ui-state-focus" );
 	},
 
+	_setLocale: function( locale ) {
+		var globalize;
+
+		if ( typeof locale === "string" ) {
+			globalize = new Globalize( locale );
+			locale = {
+				format: function( date ) {
+					return globalize.formatDate( date, { date: "short" } );
+				},
+				parse: function( stringDate ) {
+					return globalize.parseDate( stringDate, { date: "short" } );
+				}
+			};
+		}
+
+		if ( !locale.firstDay ) {
+			globalize = globalize || new Globalize( locale._locale );
+			$.extend( locale, {
+				firstDay: globalize.cldr.supplemental.weekData.firstDay(),
+				formatWeekdayShort: function( date ) {
+
+					// Return the short weekday if its length is < 3. Otherwise, its narrow form.
+					var shortWeekday = globalize.formatDate( date, { pattern: "EEEEEE" } );
+					return shortWeekday.length > 3 ?
+						globalize.formatDate( date, { pattern: "EEEEE" } ) :
+						shortWeekday;
+				},
+				formatWeekdayFull: function( date ) {
+					return globalize.formatDate( date, { pattern: "EEEE" } );
+				},
+				formatMonth: function( date ) {
+					return globalize.formatDate( date, { pattern: "MMMM" } );
+				},
+				formatWeekOfYear: function( date ) {
+					return globalize.formatDate( date, { pattern: "w" } );
+				}
+			});
+		}
+
+		this.options.locale = locale;
+	},
+
 	_createCalendar: function() {
 		var classes = "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all",
 			pickerHtml = "";
@@ -187,10 +232,10 @@ return $.widget( "ui.calendar", {
 
 		this.element
 			.addClass( classes )
-			.attr( {
+			.attr({
 				role: "region",
 				"aria-labelledby": this.id + "-title"
-			} )
+			})
 			.html( pickerHtml );
 
 		this._createButtonPane();
@@ -296,13 +341,14 @@ return $.widget( "ui.calendar", {
 	_buildGridHeading: function() {
 		var cells = "",
 			i = 0,
-			weekDayLength = this.viewDate.weekdays().length;
+			weekDayLength = this.viewDate.weekdays().length,
+			weekdays = this.date.weekdays();
 
 		if ( this.options.showWeek ) {
 			cells += "<th class='ui-calendar-week-col'>" + this._getTranslation( "weekHeader" ) + "</th>";
 		}
-		for ( ; i < weekDayLength; i++ ) {
-			cells += this._buildGridHeaderCell( this.date.weekdays()[ i ] );
+		for ( i; i < weekDayLength; i++ ) {
+			cells += this._buildGridHeaderCell( weekdays[ i ] );
 		}
 
 		return "<thead role='presentation'>" +
@@ -319,8 +365,6 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildGridBody: function() {
-
-		// this.date.days() needs caching as it has O(n^2) complexity.
 		var days = this.viewDate.days(),
 			i = 0,
 			rows = "";
@@ -454,7 +498,7 @@ return $.widget( "ui.calendar", {
 			$( "<button></button>", props )
 				.button( buttonOptions )
 				.appendTo( that.buttonSet );
-		} );
+		});
 		this.element.addClass( "ui-calendar-buttons" );
 		this.buttonPane.appendTo( this.element );
 	},
@@ -511,17 +555,18 @@ return $.widget( "ui.calendar", {
 	},
 
 	_setHiddenPicker: function() {
-		this.element.attr( {
+		this.element.attr({
 			"aria-hidden": "true",
 			"aria-expanded": "false"
-		} );
+		});
 	},
 
 	value: function( value ) {
+		var locale = this.options.locale;
 		if ( arguments.length ) {
-			this.valueAsDate( Globalize.parseDate( value, this.options.dateFormat ) );
+			this.valueAsDate( locale.parse( value ) );
 		} else {
-			return Globalize.formatDate( this.option( "value" ), this.options.dateFormat );
+			return locale.format( this.option( "value" ) );
 		}
 	},
 
@@ -572,7 +617,7 @@ return $.widget( "ui.calendar", {
 			if ( key in that.refreshRelatedOptions ) {
 				refresh = true;
 			}
-		} );
+		});
 
 		if ( refresh ) {
 			this._refresh();
@@ -611,10 +656,12 @@ return $.widget( "ui.calendar", {
 			this.viewDate.eachDay = value;
 		}
 
-		if ( key === "dateFormat" ) {
-			this.date.setFormat( value );
+		if ( key === "locale" ) {
+			this._setLocale( value );
+			this.date.setAttributes( this.options.locale );
+			this.refresh();
 		}
 	}
-} );
+});
 
-} ) );
+}));
