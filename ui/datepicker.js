@@ -56,17 +56,15 @@ var widget = $.widget( "ui.datepicker", {
 		"min", "numberOfMonths", "showWeek" ],
 
 	_create: function() {
-		var globalize;
 		this.suppressExpandOnFocus = false;
 
 		this._setLocale( this.options.locale );
 
-		// FIXME: can we use Date instead?
 		if ( $.type( this.options.max ) === "string" ) {
-			this.options.max = globalize.parseDate( this.options.max , { pattern: "yyyy-MM-dd" } );
+			this.options.max = this.options.locale.parseYMD( this.options.max );
 		}
 		if ( $.type( this.options.min ) === "string" ) {
-			this.options.min = globalize.parseDate( this.options.min , { pattern: "yyyy-MM-dd" } );
+			this.options.min = this.options.locale.parseYMD( this.options.min );
 		}
 
 		this._createCalendar();
@@ -293,6 +291,9 @@ var widget = $.widget( "ui.datepicker", {
 				},
 				parse: function( stringDate ) {
 					return globalize.parseDate( stringDate, { date: "short" } );
+				},
+				parseYMD: function( stringDate ) {
+					return globalize.parseDate( stringDate, { pattern: "yyyy-MM-dd" } );
 				}
 			};
 		}
