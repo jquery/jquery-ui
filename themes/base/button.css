@@ -29,6 +29,7 @@
 }
 /* to make room for the icon, a width needs to be set here */
 .ui-button-icon-only {
+	width: 2.2em;
 	padding-left: 0;
 	padding-right: 0;
 	text-indent: -9999px;
