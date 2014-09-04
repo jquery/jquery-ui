@@ -124,12 +124,16 @@ $.date.prototype = {
 		return new Date( year, 1, 29 ).getMonth() == 1;
 	},
 	weekdays: function() {
-		var result = [];
+		var cldr = Globalize.locale(),
+			result = [];
 		for ( var dow = 0; dow < 7; dow++ ) {
-			var day = ( dow + weekdaysRev[ Globalize.locale().supplemental.weekData.firstDay() ] ) % 7;
+			var day = ( dow + weekdaysRev[ cldr.supplemental.weekData.firstDay() ] ) % 7;
 			result.push({
-				shortname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/short", weekdays[ day ] ]),
-				fullname: Globalize.locale().main([ "dates/calendars/gregorian/days/format/wide", weekdays[ day ] ])
+				shortname:
+					cldr.main([ "dates/calendars/gregorian/days/format/short", weekdays[ day ] ]).length > 3 ?
+					cldr.main([ "dates/calendars/gregorian/days/format/narrow", weekdays[ day ] ]) :
+					cldr.main([ "dates/calendars/gregorian/days/format/short", weekdays[ day ] ]),
+				fullname: cldr.main([ "dates/calendars/gregorian/days/format/wide", weekdays[ day ] ])
 			});
 		}
 		return result;
