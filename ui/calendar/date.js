@@ -38,7 +38,7 @@ var _Date,
 
 _Date = function( date, attributes ) {
 	if ( !( this instanceof _Date ) ) {
-		return new _Date( date, options );
+		return new _Date( date, attributes );
 	}
 
 	this.setAttributes( attributes );

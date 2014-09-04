@@ -71,8 +71,7 @@ return $.widget( "ui.calendar", {
 
 		this._setLocale( this.options.locale );
 
-		this.date = new $.ui.calendarDate( this.options.value, this.options.locale );
-		this.date = $.date( this.options.value, this.options.dateFormat );
+		this.date = new $.ui.calendarDate( this.options.value, this._calendarDateOptions );
 		this.viewDate = this.date.clone();
 		this.viewDate.eachDay = this.options.eachDay;
 
@@ -178,23 +177,17 @@ return $.widget( "ui.calendar", {
 	},
 
 	_setLocale: function( locale ) {
-		var globalize;
+		var globalize = new Globalize( locale );
 
-		if ( typeof locale === "string" ) {
-			globalize = new Globalize( locale );
-			locale = {
-				format: function( date ) {
+		this._format = function( date ) {
 					return globalize.formatDate( date, { date: "short" } );
-				},
-				parse: function( stringDate ) {
-					return globalize.parseDate( stringDate, { date: "short" } );
-				}
-			};
-		}
+		};
 
-		if ( !locale.firstDay ) {
-			globalize = globalize || new Globalize( locale._locale );
-			$.extend( locale, {
+		this._parse = function( stringDate ) {
+					return globalize.parseDate( stringDate, { date: "short" } );
+			};
+
+		this._calendarDateOptions = {
 				firstDay: globalize.cldr.supplemental.weekData.firstDay(),
 				formatWeekdayShort: function( date ) {
 
@@ -212,11 +205,9 @@ return $.widget( "ui.calendar", {
 				},
 				formatWeekOfYear: function( date ) {
 					return globalize.formatDate( date, { pattern: "w" } );
-				}
-			});
-		}
-
-		this.options.locale = locale;
+	},
+			parse: this._parse
+		};
 	},
 
 	_createCalendar: function() {
@@ -562,11 +553,10 @@ return $.widget( "ui.calendar", {
 	},
 
 	value: function( value ) {
-		var locale = this.options.locale;
 		if ( arguments.length ) {
 			this.valueAsDate( locale.parse( value ) );
 		} else {
-			return locale.format( this.option( "value" ) );
+			return this._format( this.option( "value" ) );
 		}
 	},
 
@@ -658,7 +648,7 @@ return $.widget( "ui.calendar", {
 
 		if ( key === "locale" ) {
 			this._setLocale( value );
-			this.date.setAttributes( this.options.locale );
+			this.date.setAttributes( this._calendarDateOptions );
 			this.refresh();
 		}
 	}
