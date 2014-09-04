@@ -39,6 +39,13 @@ return $.widget( "ui.calendar", {
 		buttons: [],
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
+		labels: {
+			"currentText": "Today",
+			"datePickerRole": "date picker",
+			"nextText": "Next",
+			"prevText": "Prev",
+			"weekHeader": "Wk"
+		},
 		max: null,
 		min: null,
 		numberOfMonths: 1,
@@ -59,7 +66,7 @@ return $.widget( "ui.calendar", {
 
 	_create: function() {
 		this.id = this.element.uniqueId().attr( "id" );
-		this.labels = Globalize.translate( "datepicker" );
+		this.labels = this.options.labels;
 		this.buttonClickContext = this.element[ 0 ];
 
 		this.date = $.date( this.options.value, this.options.dateFormat );
@@ -463,7 +470,6 @@ return $.widget( "ui.calendar", {
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
-		this.labels = Globalize.translate( "datepicker" );
 
 		// Determine which day gridcell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
