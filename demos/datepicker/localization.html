@@ -10,9 +10,8 @@
 	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../external/globalize/globalize.js"></script>
 	<script src="../../external/globalize/globalize/date.js"></script>
-	<script src="../../external/globalize/globalize/message.js"></script>
 	<script src="../../external/localization.js"></script>
-	<script src="../../external/date.js"></script>
+	<script src="../../ui/calendar/date.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/button.js"></script>
@@ -25,11 +24,14 @@
 		var datepicker = $( "#datepicker" ),
 			select = $( "#locale" );
 
-		Globalize.locale( select.val() );
-		datepicker.datepicker();
+		datepicker.datepicker({
+			locale: select.val()
+		});
 
 		select.change( function() {
-			Globalize.locale( $( this ).val() );
+			datepicker.datepicker( "option", {
+				locale: select.val()
+			});
 			datepicker.datepicker( "valueAsDate", datepicker.datepicker( "valueAsDate" ) );
 		});
 	});
