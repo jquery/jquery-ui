@@ -83,7 +83,7 @@ test( "List days of Week", 2, function() {
 		];
 
 	deepEqual( date.weekdays(), offset0, "Get weekdays with start of day on 0 (English)" );
-	Globalize.locale( "de-DE" );
+	Globalize.locale( "de" );
 	deepEqual( date.weekdays(), offset1, "Get weekdays with start of day on 1 (Germany)" );
 
 	// Revert Globalize changes back to English
@@ -113,7 +113,7 @@ test( "Days in Month", 3, function() {
 test( "Month Name", 2, function() {
 	var date = $.date();
 	equal( date.setMonth( 3 ).monthName(), "April", "Month name return April (English)" );
-	Globalize.locale( "de-DE" );
+	Globalize.locale( "de" );
 	equal( date.setMonth( 2 ).monthName(), "März", "Month name return March (German)" );
 	Globalize.locale( "en" );
 });
