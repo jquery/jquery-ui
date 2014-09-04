@@ -283,18 +283,9 @@ var widget = $.widget( "ui.datepicker", {
 
 	_setLocale: function( locale ) {
 		var globalize = new Globalize( locale );
-
-		this._format = function( date ) {
-			return globalize.formatDate( date, { date: "short" } );
-		};
-
-		this._parse = function( stringDate ) {
-			return globalize.parseDate( stringDate, { date: "short" } );
-		};
-
-		this._parseYMD = function( stringDate ) {
-			return globalize.parseDate( stringDate, { pattern: "yyyy-MM-dd" } );
-		};
+		this._format = globalize.dateFormatter({ date: "short" });
+		this._parse = globalize.dateParser({ date: "short" });
+		this._parseYMD = globalize.dateParser({ pattern: "yyyy-MM-dd" });
 	},
 
 	_buildPosition: function() {

@@ -177,35 +177,22 @@ return $.widget( "ui.calendar", {
 	},
 
 	_setLocale: function( locale ) {
-		var globalize = new Globalize( locale );
-
-		this._format = function( date ) {
-					return globalize.formatDate( date, { date: "short" } );
-		};
-
-		this._parse = function( stringDate ) {
-					return globalize.parseDate( stringDate, { date: "short" } );
-			};
-
+		var globalize = new Globalize( locale ),
+			weekdayShortFormatter = globalize.dateFormatter({ pattern: "EEEEEE" }),
+			weekdayNarrowFormatter = globalize.dateFormatter({ pattern: "EEEEE" });
+		this._format = globalize.dateFormatter({ date: "short" });
+		this._parse = globalize.dateParser({ date: "short" });
 		this._calendarDateOptions = {
 				firstDay: globalize.cldr.supplemental.weekData.firstDay(),
 				formatWeekdayShort: function( date ) {
 
 					// Return the short weekday if its length is < 3. Otherwise, its narrow form.
-					var shortWeekday = globalize.formatDate( date, { pattern: "EEEEEE" } );
-					return shortWeekday.length > 3 ?
-						globalize.formatDate( date, { pattern: "EEEEE" } ) :
-						shortWeekday;
+				var shortWeekday = weekdayShortFormatter( date );
+				return shortWeekday.length > 3 ? weekdayNarrowFormatter( date ) : shortWeekday;
 				},
-				formatWeekdayFull: function( date ) {
-					return globalize.formatDate( date, { pattern: "EEEE" } );
-				},
-				formatMonth: function( date ) {
-					return globalize.formatDate( date, { pattern: "MMMM" } );
-				},
-				formatWeekOfYear: function( date ) {
-					return globalize.formatDate( date, { pattern: "w" } );
-	},
+			formatWeekdayFull: globalize.dateFormatter({ pattern: "EEEE" }),
+			formatMonth: globalize.dateFormatter({ pattern: "MMMM" }),
+			formatWeekOfYear: globalize.dateFormatter({ pattern: "w" }),
 			parse: this._parse
 		};
 	},
