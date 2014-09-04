@@ -61,10 +61,10 @@ var widget = $.widget( "ui.datepicker", {
 		this._setLocale( this.options.locale );
 
 		if ( $.type( this.options.max ) === "string" ) {
-			this.options.max = this.options.locale.parseYMD( this.options.max );
+			this.options.max = this._parseYMD( this.options.max );
 		}
 		if ( $.type( this.options.min ) === "string" ) {
-			this.options.min = this.options.locale.parseYMD( this.options.min );
+			this.options.min = this._parseYMD( this.options.min );
 		}
 
 		this._createCalendar();
@@ -282,22 +282,19 @@ var widget = $.widget( "ui.datepicker", {
 	},
 
 	_setLocale: function( locale ) {
-		if ( typeof locale === "string" ) {
-			globalize = new Globalize( locale );
-			locale = {
-				_locale: locale,
-				format: function( date ) {
-					return globalize.formatDate( date, { date: "short" } );
-				},
-				parse: function( stringDate ) {
-					return globalize.parseDate( stringDate, { date: "short" } );
-				},
-				parseYMD: function( stringDate ) {
-					return globalize.parseDate( stringDate, { pattern: "yyyy-MM-dd" } );
-				}
-			};
-		}
-		this.options.locale = locale;
+		var globalize = new Globalize( locale );
+
+		this._format = function( date ) {
+			return globalize.formatDate( date, { date: "short" } );
+		};
+
+		this._parse = function( stringDate ) {
+			return globalize.parseDate( stringDate, { date: "short" } );
+		};
+
+		this._parseYMD = function( stringDate ) {
+			return globalize.parseDate( stringDate, { pattern: "yyyy-MM-dd" } );
+		};
 	},
 
 	_buildPosition: function() {
@@ -306,7 +303,7 @@ var widget = $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this.valueAsDate( this.options.locale.parse( value ) );
+			this.valueAsDate( this._parse( value ) );
 		} else {
 			return this._getParsedValue() ? this.element.val() : null;
 		}
@@ -316,7 +313,7 @@ var widget = $.widget( "ui.datepicker", {
 		if ( arguments.length ) {
 			if ( this.calendarInstance._isValid( value ) ) {
 				this.calendarInstance.valueAsDate( value );
-				this.element.val( this.options.locale.format( value ) );
+				this.element.val( this._format( value ) );
 			}
 		} else {
 			return this._getParsedValue();
@@ -338,7 +335,7 @@ var widget = $.widget( "ui.datepicker", {
 	},
 
 	_getParsedValue: function() {
-		return this.options.locale.parse( this.element.val() );
+		return this._parse( this.element.val() );
 	},
 
 	_setOption: function( key, value ) {
