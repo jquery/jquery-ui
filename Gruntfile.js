@@ -233,7 +233,6 @@ grunt.initConfig({
 
 				"globalize/globalize.js": "globalize/dist/globalize.js",
 				"globalize/globalize/date.js": "globalize/dist/globalize/date.js",
-				"globalize/globalize/message.js": "globalize/dist/globalize/message.js",
 				"globalize/LICENSE.txt": "globalize/LICENSE.txt",
 
 				"qunit/qunit.js": "qunit/qunit/qunit.js",
