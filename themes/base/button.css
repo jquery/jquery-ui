@@ -69,7 +69,6 @@ input.ui-button.ui-button-icon-only {
 .ui-button.ui-icon-bottom .ui-icon {
 	top: auto;
 	bottom: .05em;
-
 }
 
 .ui-button-icon-only .ui-icon {
@@ -106,7 +105,6 @@ input.ui-button.ui-button-icon-only {
 	height: 2.1em;
 	text-indent: -9999px;
 	white-space: nowrap;
-
 }
 
 input.ui-button.ui-icon-notext .ui-icon {
