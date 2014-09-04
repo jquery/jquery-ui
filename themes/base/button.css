@@ -27,6 +27,7 @@
 .ui-button:active {
 	text-decoration: none;
 }
+
 /* to make room for the icon, a width needs to be set here */
 .ui-button-icon-only {
 	width: 2.2em;
@@ -34,6 +35,7 @@
 	text-indent: -9999px;
 	white-space: nowrap;
 }
+
 .ui-icon {
 	position: absolute;
 	display: block;
@@ -69,7 +71,6 @@ input.ui-button.ui-button-icon-only {
 .ui-button.ui-icon-bottom .ui-icon {
 	top: auto;
 	bottom: .05em;
-
 }
 
 .ui-button-icon-only .ui-icon {
