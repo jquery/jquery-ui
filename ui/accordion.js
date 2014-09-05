@@ -109,6 +109,29 @@ return $.widget( "ui.accordion", {
 		}
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch( classKey ) {
+			case "ui-accordion":
+				return this.element;
+			case "ui-accordion-icons":
+				return this.headers.filter( ".ui-accordion-icons" );
+			case "ui-accordion-header":
+				return this.headers;
+			case "ui-accordion-header-active":
+				return this.active;
+			case "ui-accordion-content":
+				return this.panels;
+			case "ui-accordion-header-collapsed":
+				return this.headers.filter( ".ui-accordion-header-collapsed" );
+			case "ui-accordion-content-active":
+				return this.active.next();
+			case "ui-accordion-header-icon":
+				return this.headers.children( ".ui-accordion-header-icon" );
+			default:
+				return this._superApply( arguments );
+		}
+	},
+
 	_destroyIcons: function() {
 		this.headers
 			.removeClass( this._classes( "ui-accordion-icons" ) )
