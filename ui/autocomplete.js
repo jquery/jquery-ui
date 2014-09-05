@@ -334,6 +334,20 @@ $.widget( "ui.autocomplete", {
 		this.liveRegion.remove();
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-autocomplete":
+				return this.menu.element;
+			case "ui-autocomplete-loading":
+				if ( !this.element.hasClass( "ui-autocomplete-loading" ) ) {
+					return $();
+				}
+				break;
+			default:
+				return this._superApply( arguments );
+		}
+	},
+
 	_setOption: function( key, value ) {
 		this._super( key, value );
 		if ( key === "source" ) {
