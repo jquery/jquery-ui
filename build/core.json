@@ -63,6 +63,7 @@
 			"state",
 			"factory"
 		],
-		"docs": "http://api.jqueryui.com/jQuery.widget/"
+		"docs": "http://api.jqueryui.com/jQuery.widget/",
+        "test": "我要修改你"
 	}
 }
