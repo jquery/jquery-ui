@@ -1396,6 +1396,37 @@ $.fn.extend({
 		return clipObj ?
 			this.css( "clip", "rect(" + clipObj.top + "px " + clipObj.right + "px " + clipObj.bottom + "px " + clipObj.left + "px)" ) :
 			parseClip( this.css("clip"), this );
+	},
+
+	transfer: function( options, done ) {
+		var element = $( this ),
+			target = $( options.to ),
+			targetFixed = target.css( "position" ) === "fixed",
+			body = $( "body" ),
+			fixTop = targetFixed ? body.scrollTop() : 0,
+			fixLeft = targetFixed ? body.scrollLeft() : 0,
+			endPosition = target.offset(),
+			animation = {
+				top: endPosition.top - fixTop,
+				left: endPosition.left - fixLeft,
+				height: target.innerHeight(),
+				width: target.innerWidth()
+			},
+			startPosition = element.offset(),
+			transfer = $( "<div class='ui-effects-transfer'></div>" )
+				.appendTo( "body" )
+				.addClass( options.className )
+				.css({
+					top: startPosition.top - fixTop,
+					left: startPosition.left - fixLeft,
+					height: element.innerHeight(),
+					width: element.innerWidth(),
+					position: targetFixed ? "fixed" : "absolute"
+				})
+				.animate( animation, options.duration, options.easing, function() {
+					transfer.remove();
+					done();
+				});
 	}
 });
 
