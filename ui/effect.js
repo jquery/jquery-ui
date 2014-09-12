@@ -1435,7 +1435,7 @@ $.fn.extend({
 function parseClip( str, element ) {
 		var outerWidth = element.outerWidth(),
 			outerHeight = element.outerHeight(),
-			clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto),?\s+(-?\d*\.?\d*px|-?\d+%|auto)\)$/,
+			clipRegex = /^rect\((-?\d*\.?\d*px|-?\d+%|auto),?\s*(-?\d*\.?\d*px|-?\d+%|auto),?\s*(-?\d*\.?\d*px|-?\d+%|auto),?\s*(-?\d*\.?\d*px|-?\d+%|auto)\)$/,
 			values = clipRegex.exec( str ) || [ "", 0, outerWidth, outerHeight, 0 ];
 
 		return {
