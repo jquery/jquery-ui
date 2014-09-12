@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "blind", "hide", function( o, done ) {
+return $.effects.define( "blind", "hide", function( o, done ) {
 	var start, placeholder,
 		animate = {},
 		map = {

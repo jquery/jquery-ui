@@ -1051,6 +1051,8 @@ $.extend( $.effects, {
 
 		$.effects.effect[ name ] = effect;
 		$.effects.effect[ name ].mode = mode;
+
+		return effect;
 	},
 
 	saveStyle: function( element ) {

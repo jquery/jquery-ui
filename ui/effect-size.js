@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "size", function( o, done ) {
+return $.effects.define( "size", function( o, done ) {
 
 	// Create element
 	var baseline, factor, temp,

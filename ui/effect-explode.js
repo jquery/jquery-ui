@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "explode", "hide", function( o, done ) {
+return $.effects.define( "explode", "hide", function( o, done ) {
 
 	var i, j, left, top, mx, my,
 		rows = o.pieces ? Math.round( Math.sqrt( o.pieces ) ) : 3,

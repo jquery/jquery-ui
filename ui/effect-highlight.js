@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "highlight", "show", function( o, done ) {
+return $.effects.define( "highlight", "show", function( o, done ) {
 	var elem = $( this ),
 		mode = o.mode,
 		animation = {

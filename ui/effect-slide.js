@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "slide", "show", function( o, done ) {
+return $.effects.define( "slide", "show", function( o, done ) {
 	var el = $( this ),
 		map = {
 			up: [ "bottom", "top" ],

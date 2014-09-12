@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "bounce", function( o, done ) {
+return $.effects.define( "bounce", function( o, done ) {
 	var upAnim, downAnim,
 		el = $( this ),
 

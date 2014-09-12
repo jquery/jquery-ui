@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "pulsate", "show", function( o, done ) {
+return $.effects.define( "pulsate", "show", function( o, done ) {
 	var elem = $( this ),
 		mode = o.mode,
 		show = mode === "show",

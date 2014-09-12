@@ -29,7 +29,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "scale", function( o, done ) {
+return $.effects.define( "scale", function( o, done ) {
 
 	// Create element
 	var el = $( this ),

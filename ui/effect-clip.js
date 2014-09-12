@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "clip", "hide", function( o, done ) {
+return $.effects.define( "clip", "hide", function( o, done ) {
 	var start, placeholder,
 		animate = {},
 		el = $( this ),

@@ -29,7 +29,7 @@
 }(function( $ ) {
 
 if ( $.uiBackCompat !== false ) {
-	$.effects.define( "transfer", function( options, done ) {
+	return $.effects.define( "transfer", function( options, done ) {
 		$( this ).transfer( options, done );
 	});
 }

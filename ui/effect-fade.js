@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "fade", "toggle", function( o, done ) {
+return $.effects.define( "fade", "toggle", function( o, done ) {
 	$( this ).animate({
 		opacity: o.mode
 	}, {

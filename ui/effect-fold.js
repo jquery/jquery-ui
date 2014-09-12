@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "fold", "hide", function( o, done ) {
+return $.effects.define( "fold", "hide", function( o, done ) {
 
 	// Create element
 	var el = $( this ),

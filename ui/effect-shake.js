@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "shake", function( o, done ) {
+return $.effects.define( "shake", function( o, done ) {
 
 	var i = 1,
 		el = $( this ),

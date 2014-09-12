@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-$.effects.define( "drop", "hide", function( o, done ) {
+return $.effects.define( "drop", "hide", function( o, done ) {
 
 	var el = $( this ),
 		mode = o.mode,
