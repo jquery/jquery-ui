@@ -26,6 +26,7 @@
 }(function( $ ) {
 
 var dataSpace = "ui-effects-",
+	dataSpaceStyle = "ui-effects-style",
 
 	// Create a local jQuery because jQuery Color relies on it and the
 	// global may not exist with AMD and a custom build (#10199)
@@ -1053,11 +1054,12 @@ $.extend( $.effects, {
 	},
 
 	saveStyle: function( element ) {
-		element.data( dataSpace + "style", element[ 0 ].style.cssText );
+		element.data( dataSpaceStyle, element[ 0 ].style.cssText );
 	},
 
 	restoreStyle: function( element ) {
-		element[ 0 ].style.cssText = element.data( dataSpace + "style" ) || "";
+		element[ 0 ].style.cssText = element.data( dataSpaceStyle ) || "";
+		element.removeData( dataSpaceStyle );
 	},
 
 	mode: function( el, mode ) {
