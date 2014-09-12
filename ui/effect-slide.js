@@ -65,7 +65,7 @@ $.effects.define( "slide", "show", function( o, done ) {
 		duration: o.duration,
 		easing: o.easing,
 		complete: function() {
-			$.effects.removePlaceholder( placeholder, el );
+			$.effects.cleanUpPlaceholder( placeholder, el );
 
 			if ( mode === "hide" ) {
 				el.hide();

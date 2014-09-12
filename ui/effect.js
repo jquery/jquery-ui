@@ -1156,14 +1156,17 @@ $.extend( $.effects, {
 		return placeholder;
 	},
 
-	// removes a placeholder if it exists and restores
-	// properties that were modified during placeholder creation
-	removePlaceholder: function( placeholder, el ) {
-		$.effects.restoreStyle( el );
-
+	removePlaceholder: function( placeholder ) {
 		if ( placeholder ) {
 			placeholder.remove();
 		}
+	},
+
+	// removes a placeholder if it exists and restores
+	// properties that were modified during placeholder creation
+	cleanUpPlaceholder: function( placeholder, el ) {
+		$.effects.restoreStyle( el );
+		$.effects.removePlaceholder( placeholder );
 	},
 
 	setTransition: function( element, list, factor, value ) {

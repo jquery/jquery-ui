@@ -185,7 +185,7 @@ $.effects.define( "size", function( o, done ) {
 			var offset = el.offset();
 
 			if ( restore ) {
-				$.effects.removePlaceholder( placeholder, el );
+				$.effects.cleanUpPlaceholder( placeholder, el );
 			}
 
 			if ( to.opacity === 0 ) {
@@ -196,10 +196,7 @@ $.effects.define( "size", function( o, done ) {
 			}
 
 			if ( !restore ) {
-
-				if ( placeholder ) {
-					placeholder.remove();
-				}
+				$.effects.removePlaceholder( placeholder );
 
 				el.css("position", position === "static" ? "relative" : position );
 

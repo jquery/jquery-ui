@@ -75,7 +75,7 @@ $.effects.define( "fold", "hide", function( o, done ) {
 		.animate( animation1, duration, o.easing )
 		.animate( animation2, duration, o.easing )
 		.queue(function() {
-			$.effects.removePlaceholder( placeholder, el );
+			$.effects.cleanUpPlaceholder( placeholder, el );
 
 			if ( hide ) {
 				el.hide();

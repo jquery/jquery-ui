@@ -100,7 +100,7 @@ $.effects.define( "bounce", function( o, done ) {
 	}
 
 	el.queue(function() {
-		$.effects.removePlaceholder( placeholder, el );
+		$.effects.cleanUpPlaceholder( placeholder, el );
 
 		if ( hide ) {
 			el.hide();

@@ -59,12 +59,13 @@ $.effects.define( "shake", function( o, done ) {
 	for ( ; i < times; i++ ) {
 		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
 	}
+
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
 		.queue(function() {
 
-			$.effects.removePlaceholder( placeholder, el );
+			$.effects.cleanUpPlaceholder( placeholder, el );
 
 			if ( o.mode === "hide" ) {
 				el.hide();

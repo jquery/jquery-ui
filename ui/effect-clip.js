@@ -59,7 +59,7 @@ $.effects.define( "clip", "hide", function( o, done ) {
 		easing: o.easing,
 		complete: function() {
 
-			$.effects.removePlaceholder( placeholder, el );
+			$.effects.cleanUpPlaceholder( placeholder, el );
 
 			if ( !show ) {
 				el.hide();
