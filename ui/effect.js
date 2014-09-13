@@ -1352,6 +1352,9 @@ $.fn.extend({
 			}
 		}
 
+		// run prefilter on all elements first to ensure that
+		// any showing or hiding happens before placeholder creation,
+		// which ensures that any layout changes are correctly captured
 		return queue === false ?
 			this.each( prefilter ).each( run ) :
 			this.queue( queue || "fx", prefilter ).queue( queue || "fx", run );
