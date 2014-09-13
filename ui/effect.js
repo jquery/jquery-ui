@@ -1279,13 +1279,16 @@ $.fn.extend({
 				// as the .show() below destroys the initial state
 				modes.push( normalizedMode );
 
-				if ( normalizedMode === "none" ) {
-					return;
-				}
+				// see $.uiBackCompat inside of run() for removal in 1.13
+				if ( defaultMode ) {
+					if ( normalizedMode === "none" ) {
+						return;
+					}
 
-				if ( normalizedMode === "show" ||
-						( normalizedMode === defaultMode && normalizedMode === "hide" ) ) {
-					el.show();
+					if ( normalizedMode === "show" ||
+							( normalizedMode === defaultMode && normalizedMode === "hide" ) ) {
+						el.show();
+					}
 				}
 
 				$.effects.saveStyle( el );
@@ -1323,12 +1326,22 @@ $.fn.extend({
 			// as toggle can be show, or hide depending on element state
 			args.mode = modes.shift();
 
-			if ( args.mode === "none" ) {
-				// call the core method to track "olddisplay" properly
-				elem[ mode ]();
-				done();
+			if ( $.uiBackCompat !== false && !defaultMode ) {
+				if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+					// call the core method to track "olddisplay" properly
+					elem[ mode ]();
+					done();
+				} else {
+					effectMethod.call( elem[ 0 ], args, done );
+				}
 			} else {
-				effectMethod.call( elem[0], args, done );
+				if ( args.mode === "none" ) {
+					// call the core method to track "olddisplay" properly
+					elem[ mode ]();
+					done();
+				} else {
+					effectMethod.call( elem[ 0 ], args, done );
+				}
 			}
 		}
 
