@@ -168,4 +168,22 @@ test( "widget and menuWidget", function() {
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
 });
 
+test( "#10665: when refreshing a selectmenu, set it's tabindex to that of the element", function() {
+	expect( 2 );
+
+	var element1 = $( "#speed1" ).selectmenu(),
+		element2 = $( "#speed2" ).selectmenu(),
+		button1 = element1.selectmenu( "widget" ),
+		button2 = element2.selectmenu( "widget" );
+
+	//equal( button1.attr( "tabindex" ), element1.attr( "tabindex" ), "button1 tabindex" );
+	//equal( button2.attr( "tabindex" ), element2.attr( "tabindex" ), "button2 tabindex" );
+
+	element1.selectmenu( "refresh" );
+	element2.selectmenu( "refresh" );
+
+	equal( button1.attr( "tabindex" ), element1.attr( "tabindex" ), "button1 tabindex" );
+	equal( button2.attr( "tabindex" ), element2.attr( "tabindex" ), "button2 tabindex" );
+});
+
 })( jQuery );
