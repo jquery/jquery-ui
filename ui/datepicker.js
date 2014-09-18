@@ -255,8 +255,14 @@ $.extend(Datepicker.prototype, {
 					$.datepicker._hideDatepicker();
 				} else if ($.datepicker._datepickerShowing && $.datepicker._lastInput !== input[0]) {
 					$.datepicker._hideDatepicker();
+					if($(input[0]).is(":disabled")){
+						return false;
+					}
 					$.datepicker._showDatepicker(input[0]);
 				} else {
+					if($(input[0]).is(":disabled")){
+						return false;
+					}
 					$.datepicker._showDatepicker(input[0]);
 				}
 				return false;
