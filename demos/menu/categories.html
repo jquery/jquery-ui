@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Menu - Categories</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/position.js"></script>
+	<script src="../../ui/menu.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "#menu" ).menu({
+			items: "> :not(.ui-widget-header)"
+		});
+	});
+	</script>
+	<style>
+	.ui-menu { width: 200px; }
+	.ui-widget-header { padding: 0.2em; }
+	</style>
+</head>
+<body>
+
+<ul id="menu">
+	<li class="ui-widget-header">Category 1</li>
+	<li>Option 1</li>
+	<li>Option 2</li>
+	<li>Option 3</li>
+	<li class="ui-widget-header">Category 2</li>    
+	<li>Option 4</li>
+	<li>Option 5</li>
+	<li>Option 6</li>
+</ul>
+
+<div class="demo-description">
+<p>By using the <code>items</code> option, you can configure which elements are converted into selectable menu items. Here this technique is used to create category headers.</p>
+</div>
+</body>
+</html>
