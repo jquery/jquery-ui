@@ -60,7 +60,7 @@ function Datepicker() {
 	this._disabledInputs = []; // List of date picker inputs that have been disabled
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
-	this._mainDivId = "ui-datepicker-div"; // The ID of the main datepicker division
+	this._mainDivId = "ui-datepicker-div"; // The ID of the main datepicui-ker division
 	this._inlineClass = "ui-datepicker-inline"; // The name of the inline marker class
 	this._appendClass = "ui-datepicker-append"; // The name of the append marker class
 	this._triggerClass = "ui-datepicker-trigger"; // The name of the trigger marker class
@@ -389,6 +389,11 @@ $.extend(Datepicker.prototype, {
 		} else if (nodeName === "div" || nodeName === "span") {
 			$target.removeClass(this.markerClassName).empty();
 		}
+		
+		
+	        if(instActive === inst) {
+	        	instActive = null;
+	        }
 	},
 
 	/* Enable the date picker to a jQuery selection.
