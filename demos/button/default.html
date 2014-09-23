@@ -11,11 +11,10 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( ".widget input[type=submit], .widget a, .widget button" )
-			.button()
-			.click(function( event ) {
-				event.preventDefault();
-			});
+		$( ".widget input[type=submit], .widget a, .widget button" ).button();
+		$( "button, input, a" ).click( function( event ) {
+			event.preventDefault();
+		});
 	});
 	</script>
 </head>
@@ -37,6 +36,8 @@
 
 <div class="demo-description">
 <p>Examples of the markup that can be used for buttons: A button element, an input of type submit and an anchor.</p>
+<p>Buttons can be styled via the button widget for by adding the classes yourself to avoid the javascript overhead if you dont need any of the methods provided by the button widget</p>p>
+<p>Here you can see examples of both buttons styled with css only and done using the button widget</p>
 </div>
 </body>
 </html>
