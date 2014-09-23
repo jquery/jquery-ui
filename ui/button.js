@@ -124,10 +124,11 @@ $.widget( "ui.button", {
 	_updateIcon: function( icon ) {
 		if ( !this.icon ) {
 			this.icon = $( "<span>" ).addClass( this._classes( "ui-button-icon" ) + " ui-icon" );
-			this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 
 			if ( !this.options.showLabel ){
 				this.element.addClass( this._classes( "ui-button-icon-only" ) );
+			} else {
+				this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 			}
 		} else {
 			this.icon.removeClass( this.options.icon );
