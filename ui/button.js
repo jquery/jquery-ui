@@ -29,8 +29,7 @@
 	}
 }(function( $ ) {
 
-var baseClasses = "ui-button ui-widget ui-corner-all",
-	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons" +
+var typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons" +
 		" ui-button-text-only ui-icon-beginning ui-icon-end ui-icon-top ui-icon-bottom",
 	formResetHandler = function() {
 		var form = $( this );
@@ -87,6 +86,7 @@ $.widget( "ui.button", {
 			this.options.disabled = this.element.prop( "disabled" ) || false;
 		}
 
+		this.hasTitle = this.element.attr( "title" );
 		this._enhance();
 
 		if ( this.element.is( "a" ) ) {
@@ -103,7 +103,9 @@ $.widget( "ui.button", {
 	_enhance: function() {
 		this._setOption( "disabled", this.options.disabled );
 
-		this.element.addClass( baseClasses ).attr( "role", "button" );
+		this.element
+			.addClass( this._classes( "ui-button" ) + " ui-widget" )
+			.attr( "role", "button" );
 
 		// Check to see if the label needs to be set or if its already correct
 		if ( this.options.label && this.options.label !== this.originalLabel ) {
@@ -120,9 +122,8 @@ $.widget( "ui.button", {
 
 	_updateTooltip: function() {
 		this.title = this.element.attr( "title" );
-		this.noTitle = !this.title;
 
-		if ( !this.options.showLabel && !this.noTitle ){
+		if ( !this.options.showLabel && !this.title ) {
 			this.element.attr( "title", this.options.label );
 		}
 	},
@@ -130,10 +131,11 @@ $.widget( "ui.button", {
 	_updateIcon: function( icon ) {
 		if ( !this.icon ) {
 			this.icon = $( "<span>" ).addClass( this._classes( "ui-button-icon" ) + " ui-icon" );
-			this.element.addClass(  "ui-icon-" + this.options.iconPosition );
 
-			if ( !this.options.showLabel ){
+			if ( !this.options.showLabel ) {
 				this.element.addClass( this._classes( "ui-button-icon-only" ) );
+			} else {
+				this.element.addClass( "ui-icon-" + this.options.iconPosition );
 			}
 		} else {
 			this.icon.removeClass( this.options.icon );
@@ -145,7 +147,8 @@ $.widget( "ui.button", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( this._classes( "ui-button ui-button-icon-only" ) + " " + baseClasses + " ui-state-active " + typeClasses )
+			.removeClass( this._classes( "ui-button ui-button-icon-only" ) + " ui-widget" +
+				" ui-state-active " + typeClasses )
 			.removeAttr( "role" );
 
 		if ( this.icon ) {
@@ -156,17 +159,35 @@ $.widget( "ui.button", {
 		}
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-button-icon-only":
+				if ( this.options.showLabel ) {
+					return $();
+				}
+				break;
+			case "ui-button-icon":
+				if ( this.icon ) {
+					return this.icon;
+				}
+				return $();
+			default:
+				return this._superApply( arguments );
+		}
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "icon" ) {
 			if ( value !== null ) {
 				this._updateIcon( value );
 			} else {
 				this.icon.remove();
-				this.element.removeClass( this._classes( "ui-button-icon" ) + " ui-icon-" + this.options.iconPosition );
+				this.element.removeClass( this._classes( "ui-button-icon" ) + " ui-icon-" +
+					this.options.iconPosition );
 			}
 		}
 
-		// Make sure we cant end up with a button that has no text nor icon
+		// Make sure we can't end up with a button that has no text nor icon
 		if ( key === "showLabel" ) {
 			if ( ( !value && !this.options.icon ) || value ) {
 				this.element.toggleClass( this._classes( "ui-button-icon-only" ), !value )
@@ -183,6 +204,7 @@ $.widget( "ui.button", {
 			if ( this.isInput ) {
 				this.element.val( value );
 			} else {
+
 				// If there us an icon append it else nothing then append the value
 				// this avoids removal of the icon when setting label text
 				this.element.html( !!this.icon ? "" : this.icon ).append( value );
