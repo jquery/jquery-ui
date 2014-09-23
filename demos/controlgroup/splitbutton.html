@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Controlgroup - Split Button</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/button.js"></script>
+	<script src="../../ui/checkboxradio.js"></script>
+	<script src="../../ui/menu.js"></script>
+	<script src="../../ui/position.js"></script>
+	<script src="../../ui/selectmenu.js"></script>
+	<script src="../../ui/controlgroup.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "select" ).selectmenu({
+			classes: {
+				"ui-selectmenu-button": "ui-button-icon-only"
+			}
+		}).selectmenu( "widget" ).removeClass( "ui-icon-end" );
+		$( ".controlgroup" ).controlgroup();
+		$( "button" ).click(function() {
+			alert( "Running the last action" );
+		});
+	});
+	</script>
+	<style>
+		select {
+			width: 2em;
+		}
+	</style>
+</head>
+<body>
+<div class="demo-description">
+<p>A Controlgroup creating a split button</p>
+</div>
+<div class="widget">
+	<h1>Split button</h1>
+	<div class="controlgroup">
+		<button>Run last option</button>
+		<select>
+			<option>Open...</option>
+			<option>Save</option>
+			<option>Delete</option>
+		</select>
+	</div>
+</div>
+
+</body>
+</html>
