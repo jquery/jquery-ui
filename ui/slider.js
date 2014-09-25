@@ -110,42 +110,43 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var options = this.options,
 			classes = "";
 
-		if ( options.range ) {
-			if ( options.range === true ) {
-				if ( !options.values ) {
-					options.values = [ this._valueMin(), this._valueMin() ];
-				} else if ( options.values.length && options.values.length !== 2 ) {
-					options.values = [ options.values[0], options.values[0] ];
-				} else if ( $.isArray( options.values ) ) {
-					options.values = options.values.slice(0);
-				}
-			}
-
-			if ( !this.range || !this.range.length ) {
-				this.range = $( "<div></div>" )
-					.appendTo( this.element );
-
-				classes = "ui-slider-range" +
-				// note: this isn't the most fittingly semantic framework class for this element,
-				// but worked best visually with a variety of themes
-				" ui-widget-header ui-corner-all";
-			} else {
-				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
-					// Handle range switching from true to min/max
-					.css({
-						"left": "",
-						"bottom": ""
-					});
-			}
-
-			this.range.addClass( classes +
-				( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
-		} else {
+		if ( !options.range ) {
 			if ( this.range ) {
 				this.range.remove();
 			}
 			this.range = null;
+			return;
 		}
+
+		if ( options.range === true ) {
+			if ( !options.values ) {
+				options.values = [ this._valueMin(), this._valueMin() ];
+			} else if ( options.values.length && options.values.length !== 2 ) {
+				options.values = [ options.values[0], options.values[0] ];
+			} else if ( $.isArray( options.values ) ) {
+				options.values = options.values.slice(0);
+			}
+		}
+
+		if ( !this.range || !this.range.length ) {
+			this.range = $( "<div></div>" )
+				.appendTo( this.element );
+
+			classes = "ui-slider-range" +
+			// note: this isn't the most fittingly semantic framework class for this element,
+			// but worked best visually with a variety of themes
+			" ui-widget-header ui-corner-all";
+		} else {
+			this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
+				// Handle range switching from true to min/max
+				.css({
+					"left": "",
+					"bottom": ""
+				});
+		}
+
+		this.range.addClass( classes +
+			( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
 	},
 
 	_setupEvents: function() {
