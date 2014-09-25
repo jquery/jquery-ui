@@ -300,7 +300,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			handle: this.handles[ index ],
 			value: this.value()
 		};
-		if ( this._isRange() ) {
+		if ( this._hasMultipleValues() ) {
 			uiHash.value = this.values( index );
 			uiHash.values = this.values();
 		}
@@ -312,7 +312,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			newValues,
 			allowed;
 
-		if ( this._isRange() ) {
+		if ( this._hasMultipleValues() ) {
 			otherVal = this.values( index ? 0 : 1 );
 
 			if ( ( this.options.values.length === 2 && this.options.range === true ) &&
@@ -354,7 +354,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			handle: this.handles[ index ],
 			value: this.value()
 		};
-		if ( this._isRange() ) {
+		if ( this._hasMultipleValues() ) {
 			uiHash.value = this.values( index );
 			uiHash.values = this.values();
 		}
@@ -368,7 +368,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				handle: this.handles[ index ],
 				value: this.value()
 			};
-			if ( this._isRange() ) {
+			if ( this._hasMultipleValues() ) {
 				uiHash.value = this.values( index );
 				uiHash.values = this.values();
 			}
@@ -413,7 +413,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				this._refreshValue();
 			} else {
-				if ( this._isRange() ) {
+				if ( this._hasMultipleValues() ) {
 					return this._values( index );
 				} else {
 					return this.value();
@@ -509,7 +509,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			val = this._trimAlignValue( val );
 
 			return val;
-		} else if ( this._isRange() ) {
+		} else if ( this._hasMultipleValues() ) {
 			// .slice() creates a copy of the array
 			// this copy gets trimmed by min and max and then returned
 			vals = this.options.values.slice();
@@ -560,7 +560,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			animate = ( !this._animateOff ) ? o.animate : false,
 			_set = {};
 
-		if ( this._isRange() ) {
+		if ( this._hasMultipleValues() ) {
 			this.handles.each(function( i ) {
 				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
@@ -609,7 +609,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
-	_isRange: function() {
+	_hasMultipleValues: function() {
 		return this.options.values && this.options.values.length;
 	},
 
@@ -640,7 +640,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			step = this.options.step;
-			if ( this._isRange() ) {
+			if ( this._hasMultipleValues() ) {
 				curVal = newVal = this.values( index );
 			} else {
 				curVal = newVal = this.value();
