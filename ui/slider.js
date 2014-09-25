@@ -174,8 +174,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_mouseCapture: function( event ) {
-		var position, normValue, distance, closestHandle, index, allowed, offset, mouseOverHandle,
-			that = this,
+		var position, normValue, closestHandle, index, allowed, offset, mouseOverHandle,
 			o = this.options;
 
 		if ( o.disabled ) {
@@ -190,17 +189,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
-		distance = this._valueMax() - this._valueMin() + 1;
-		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - that.values(i) );
-			if (( distance > thisDistance ) ||
-				( distance === thisDistance &&
-					(i === that._lastChangedValue || that.values(i) === o.min ))) {
-				distance = thisDistance;
-				closestHandle = $( this );
-				index = i;
-			}
-		});
+		index = this._getClosestHandleIndex(normValue);
+		closestHandle = this.handles.eq(index);
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
@@ -230,6 +220,43 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 		this._animateOff = true;
 		return true;
+	},
+
+	_getClosestHandleIndex: function( value ) {
+		var closest, handlevalue,
+			that = this,
+			distance = this._valueMax() - this._valueMin() + 1;
+		this.handles.each(function( i ) {
+			var thisDistance = Math.abs( value - that.values(i) );
+			if ( thisDistance < distance ) {
+				distance = thisDistance;
+				closest = [ i ];
+			} else if ( thisDistance === distance ) {
+				closest.push(i);
+			}
+		});
+
+		if (closest.length === 1) {
+			return closest[0];
+		}
+
+		// more than one handle with same value
+		handlevalue = this.values(closest[0]);
+
+		if (value === handlevalue) {
+			if (value === this.options.min) {
+				return closest.pop();
+			} else if (value === this.options.max) {
+				return closest.shift();
+			}
+			return this._lastChangedValue;
+		}
+
+		if (value > handlevalue) {
+			return closest.pop();
+		}
+		return closest.shift();
+
 	},
 
 	_mouseStart: function() {
