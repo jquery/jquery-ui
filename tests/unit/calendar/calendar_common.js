@@ -1,6 +1,5 @@
-TestHelpers.commonWidgetTests( "datepicker", {
+TestHelpers.commonWidgetTests( "calendar", {
 	defaults: {
-		appendTo: null,
 		buttons: [],
 		dateFormat: { date: "short" },
 		disabled: false,
@@ -8,19 +7,11 @@ TestHelpers.commonWidgetTests( "datepicker", {
 		max: null,
 		min: null,
 		numberOfMonths: 1,
-		position: {
-			my: "left top",
-			at: "left bottom"
-		},
-		show: true,
 		showWeek: false,
-		hide: true,
+		value: null,
 
 		// callbacks
-		beforeOpen: null,
-		close: null,
 		create: null,
-		open: null,
 		select: null
 	}
 });
