@@ -251,7 +251,7 @@ return $.widget( "ui.menu", {
 
 			if ( match.length ) {
 				this.focus( event, match );
-				if ( match.length > 1 ) {
+				if ( match.length > 0 ) {
 					this.previousFilter = character;
 					this.filterTimer = this._delay(function() {
 						delete this.previousFilter;

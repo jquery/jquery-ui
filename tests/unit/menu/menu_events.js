@@ -629,6 +629,28 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 	element[ 0 ].focus();
 });
 
+asyncTest( "Keep focus on selected item (see #10644)", function() {
+	expect( 1 );
+	var element = $( "#menu2" ).menu({
+		focus: function( event ) {
+			log( $( event.target ).find( ".ui-state-focus" ).index() );
+		}
+	});
+
+	log( "keydown", true );
+	element.one( "menufocus", function() {
+		element.simulate( "keydown", { keyCode: 65 } );
+		element.simulate( "keydown", { keyCode: 68 } );
+		element.simulate( "keydown", { keyCode: 68 } );
+		element.simulate( "keydown", { keyCode: 89 } );
+		element.simulate( "keydown", { keyCode: 83 } );
+		equal( logOutput(), "keydown,0,1,3,3,3",
+			"Focus stays on 'Addyston', even after other options are eliminated" );
+		start();
+	});
+	element[ 0 ].focus();
+});
+
 test( "#9469: Stopping propagation in a select event should not suppress subsequent select events.", function() {
 	expect( 1 );
 	var element = $( "#menu1" ).menu({
