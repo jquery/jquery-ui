@@ -251,14 +251,10 @@ return $.widget( "ui.menu", {
 
 			if ( match.length ) {
 				this.focus( event, match );
-				if ( match.length > 0 ) {
-					this.previousFilter = character;
-					this.filterTimer = this._delay(function() {
-						delete this.previousFilter;
-					}, 1000 );
-				} else {
+				this.previousFilter = character;
+				this.filterTimer = this._delay(function() {
 					delete this.previousFilter;
-				}
+				}, 1000 );
 			} else {
 				delete this.previousFilter;
 			}
