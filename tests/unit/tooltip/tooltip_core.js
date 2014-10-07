@@ -174,4 +174,51 @@ asyncTest( "destroy during hide animation; only one close event", function() {
 	});
 });
 
+// http://bugs.jqueryui.com/ticket/10602
+asyncTest( "multiple active delegated tooltips", function() {
+	expect( 1 );
+
+	var anchor = $( "#tooltipped1" ),
+		input = anchor.next(),
+		actions = [];
+		element = $( document ).tooltip({
+			show: false,
+			hide: false,
+			open: function( event, ui ) {
+				actions.push( "open:" + ui.tooltip.text() );
+			},
+			close: function( event, ui ) {
+				actions.push( "close:" + ui.tooltip.text() );
+			}
+		});
+
+	function step1() {
+		anchor.simulate( "mouseover" );
+		setTimeout( step2 );
+	}
+
+	function step2() {
+		input.simulate( "focus" );
+		setTimeout( step3 );
+	}
+
+	function step3() {
+		input.simulate( "blur" );
+		setTimeout( step4 );
+	}
+
+	function step4() {
+		anchor.simulate( "mouseout" );
+		deepEqual( actions, [
+			"open:anchortitle",
+			"open:inputtitle",
+			"close:inputtitle",
+			"close:anchortitle"
+		], "Both tooltips open and close" );
+		start();
+	}
+
+	step1();
+});
+
 }( jQuery ) );
