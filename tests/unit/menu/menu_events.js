@@ -609,7 +609,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with dividers and
 });
 
 asyncTest( "handle keyboard navigation with spelling of menu items", function() {
-	expect( 2 );
+	expect( 3 );
 	var element = $( "#menu2" ).menu({
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-state-focus" ).index() );
@@ -624,6 +624,8 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 		equal( logOutput(), "keydown,0,1,3", "Keydown focus Addyston by spelling the first 3 letters" );
 		element.simulate( "keydown", { keyCode: 68 } );
 		equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
+		element.simulate( "keydown", { keyCode: 83 } );
+		equal( logOutput(), "keydown,0,1,3,4,5", "Keydown focus Saarland ignoring leading space" );
 		start();
 	});
 	element[ 0 ].focus();

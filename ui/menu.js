@@ -638,7 +638,7 @@ return $.widget( "ui.menu", {
 			// Only match on items, not dividers or other content (#10571)
 			.filter( ".ui-menu-item" )
 			.filter(function() {
-				return regex.test( $( this ).text() );
+				return regex.test( $.trim( $( this ).text() ) );
 			});
 	}
 });
