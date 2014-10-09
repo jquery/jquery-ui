@@ -181,7 +181,8 @@ asyncTest( "multiple active delegated tooltips", function() {
 	var anchor = $( "#tooltipped1" ),
 		input = anchor.next(),
 		actions = [];
-		element = $( document ).tooltip({
+
+	$( document ).tooltip({
 			show: false,
 			hide: false,
 			open: function( event, ui ) {
