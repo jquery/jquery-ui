@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 2 );
+	expect( 4 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -52,8 +52,24 @@ test( "max", function() {
 	};
 
 	element.slider( options );
-	ok(element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
-	ok(element.slider( "value" ) === options.max, "value method is contained by max" );
+	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
+	ok( element.slider( "value" ) === options.max, "value method is contained by max" );
+	
+	options = {
+		max: 9,
+		min: 1,
+		orientation: "horizontal",
+		step: 3,
+		value: 8.75
+	};
+
+	element.slider( options );
+	ok( element.slider( "value" ) === 7, "value method is within max, edge Case" );
+	
+	options.step = 2;
+
+	element.slider( options );
+	ok( element.slider( "value" ) === options.max, "value method will max, step is changed" );
 	element.slider( "destroy" );
 
 });

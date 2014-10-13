@@ -1,11 +1,9 @@
 (function() {
 
-var parts = document.location.search.slice( 1 ).split( "&" ),
+var current, version, url,
+	parts = document.location.search.slice( 1 ).split( "&" ),
 	length = parts.length,
-	i = 0,
-	current,
-	version,
-	url;
+	i = 0;
 
 for ( ; i < length; i++ ) {
 	current = parts[ i ].split( "=" );

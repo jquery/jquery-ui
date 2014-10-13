@@ -46,19 +46,11 @@
 		#draggable3, #draggable4 {
 			z-index: 100;
 		}
-		#sortable {
+		.sortable {
 			position: relative;
 			top: 8000px;
 			left: 10px;
-		}
-		#sortable2 {
-			position: relative;
-			top: 9000px;
-			left: 10px;
-		}
-		.sortable {
 			width: 300px;
-			height: 100px;
 			padding: 0;
 			margin: 0;
 			border: 0;
@@ -117,13 +109,13 @@
 	<div style="width: 1px; height: 1000px;"></div>
 	<div style="position: absolute; width: 1px; height: 2000px;"></div>
 	<ul id="sortable" class="sortable">
-		    <li>Item 0</li>
-		    <li id="draggableSortable">Item 1</li>
+		    <li id="draggableSortable">Item 0</li>
+		    <li id="draggableSortable2">Item 1</li>
 		    <li>Item 2</li>
 		    <li>Item 3</li>
 		  </ul>
 		  <ul id="sortable2" class="sortable">
-		    <li id="draggableSortableClone">Item 0</li>
+		    <li id="draggableSortableClone" class="sortable2Item">Item 0</li>
 		    <li>Item 1</li>
 		    <li>Item 2</li>
 		    <li>Item 3</li>

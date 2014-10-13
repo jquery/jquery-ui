@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Effects Test Suite</title>
+	<link rel="stylesheet" href="effects.css">
+	<script src="../../../external/jquery/jquery.js"></script>
+	<script src="../../../ui/effect.js"></script>
+	<script src="../../../ui/effect-clip.js"></script>
+	<script>
+	$(function() {
+		var target = $( ".target" ),
+			duration = 2000;
+
+		$( ".toggle" ).click(function( event ) {
+			event.preventDefault();
+			target.toggle( "clip", {
+				direction: "horizontal"
+			}, duration );
+		});
+
+		$( ".effect-toggle" ).click(function( event ) {
+			event.preventDefault();
+			target.effect( "clip", {
+				direction: "vertical",
+				mode: "toggle"
+			}, duration );
+		});
+
+		$( ".effect-default" ).click(function( event ) {
+			event.preventDefault();
+			target.effect( "clip", {
+				direction: "vertical"
+			}, duration );
+		});
+	});
+	</script>
+	<style>
+	.clipped {
+		clip: rect(10px, 300px, 100px, 20px);
+		position: absolute;
+	}
+	.container {
+		overflow: hidden;
+		clear: both;
+		background: lightblue;
+	}
+	.column {
+		position: relative;
+		top: 40px;
+		float: left;
+		width: 600px;
+	}
+	.margin {
+		margin: 10px 20px 30px 40px;
+	}
+	.target {
+		border: 5px solid red;
+	}
+	p.target {
+		overflow: hidden;
+		background: lightgreen;
+	}
+	</style>
+</head>
+<body>
+
+<p>WHAT: A set of elements with various positions and clips, using the clip effect.</p>
+<p>EXPECTED: When clicking "Toggle" or "Effect Toggle", to observe the same behavior; All elements should not change position, aside from the expected clip animation. At the end of the animation, the animated elements should hide. Layout (i.e. the position of other elements) should not change until the animated elements are hidden.</p>
+<p>EXPECTED: Clicking "Toggle" or "Effect Toggle" a second time reverses the animation, first showing all elements at their original dimensions, and restoring them to their original state.</p>
+<p>EXPECTED: Clicking "Effect Default" should always perform a "hide" animation.</p>
+<p>EXPECTED: Clicking any of the buttons in quick succession should queue the relevant animations.</p>
+
+<div class="container">
+	<button class="toggle">Toggle</button>
+	<button class="effect-toggle">Effect Toggle</button>
+	<button class="effect-default">Effect Default</button>
+	<p>Bacon ipsum dolor sit amet chuck cow ground round, ham hock short loin tail jowl sausage flank. Venison andouille turducken sausage. Boudin filet mignon shoulder, prosciutto sirloin tail cow pastrami. Salami jerky flank rump, sirloin spare ribs pork belly. Biltong brisket boudin ground round, venison chicken shankle short ribs meatball corned beef. Swine short ribs shoulder, short loin turducken biltong prosciutto ball tip. Biltong beef bresaola sausage prosciutto spare ribs, short loin swine pork chop cow flank pork turkey shankle.</p>
+	<img class="target clipped" src="../../images/jquery_521x191.png" alt="jQuery Logo">
+	<p>Jerky corned beef short loin fatback jowl tail. Rump spare ribs shoulder pork belly. Sausage cow ground round bacon. Bresaola kielbasa pastrami brisket ham hock. Andouille kielbasa ham, pork beef tenderloin ground round beef ribs flank turkey pancetta tri-tip.</p>
+	<div class="column">
+		<p>Shankle filet mignon ribeye chicken, bacon jowl drumstick frankfurter swine short loin capicola leberkas tenderloin pig. Shankle bacon shank pork loin, shoulder ham drumstick biltong. Shankle ham pastrami ball tip turkey leberkas pork loin ground round. Chicken strip steak venison shoulder biltong ham. Bacon pork loin tenderloin kielbasa, prosciutto sausage leberkas jowl ribeye turducken. Flank short loin venison tenderloin spare ribs boudin, tongue pork chop shank sirloin. Ground round ham pork belly, corned beef jowl strip steak short ribs prosciutto pig bresaola spare ribs.</p>
+		<img class="target" style="margin: 10px 20px 30px 40px;" src="../../images/jquery_521x191.png" alt="jQuery Logo">
+		<p>Pork loin biltong ball tip tail jerky beef ribs prosciutto short loin turducken. Turkey chicken jowl pork loin shank tri-tip swine brisket. Doner prosciutto leberkas venison ground round, short loin capicola hamburger pork bacon. Spare ribs beef pork tenderloin rump shoulder pork belly turducken cow beef ribs pastrami tail flank. Spare ribs tri-tip shank, pork beef ribs ribeye chicken bacon boudin shoulder venison. Sirloin beef ribs boudin, andouille doner tail ball tip biltong prosciutto chicken beef turkey tongue hamburger tri-tip.</p>
+	</div>
+	<p>Doner salami jowl beef ribs. Pork chop beef short loin pork, kielbasa tail andouille salami sausage meatball short ribs t-bone tri-tip ham. Meatball short ribs prosciutto flank chicken fatback frankfurter brisket turducken. Corned beef hamburger swine short ribs pancetta. Jerky bresaola pork chuck spare ribs pastrami shoulder flank chicken leberkas beef.</p>
+	<p class="target">Doner salami jowl beef ribs. Pork chop beef short loin pork, kielbasa tail andouille salami sausage meatball short ribs t-bone tri-tip ham. Meatball short ribs prosciutto flank chicken fatback frankfurter brisket turducken. Corned beef hamburger swine short ribs pancetta. Jerky bresaola pork chuck spare ribs pastrami shoulder flank chicken leberkas beef.</p>
+	<p>Doner salami jowl beef ribs. Pork chop beef short loin pork, kielbasa tail andouille salami sausage meatball short ribs t-bone tri-tip ham. Meatball short ribs prosciutto flank chicken fatback frankfurter brisket turducken. Corned beef hamburger swine short ribs pancetta. Jerky bresaola pork chuck spare ribs pastrami shoulder flank chicken leberkas beef.</p>
+</div>
+
+</body>
+</html>

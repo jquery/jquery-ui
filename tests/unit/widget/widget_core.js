@@ -260,7 +260,7 @@ test( "merge multiple option arguments", function() {
 });
 
 test( "._getCreateOptions()", function() {
-	expect( 1 );
+	expect( 3 );
 	$.widget( "ui.testWidget", {
 		options: {
 			option1: "valuex",
@@ -268,6 +268,12 @@ test( "._getCreateOptions()", function() {
 			option3: "value3"
 		},
 		_getCreateOptions: function() {
+
+			// Support: IE8
+			// Strict equality fails when comparing this.window in ie8
+			equal( this.window[ 0 ], window, "this.window is properly defined" );
+			strictEqual( this.document[ 0 ], document, "this.document is properly defined" );
+
 			return {
 				option1: "override1",
 				option2: "overideX"

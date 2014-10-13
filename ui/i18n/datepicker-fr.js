@@ -21,7 +21,7 @@ datepicker.regional['fr'] = {
 	currentText: 'Aujourd\'hui',
 	monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
 		'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-	monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
+	monthNamesShort: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin',
 		'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
 	dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
 	dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],

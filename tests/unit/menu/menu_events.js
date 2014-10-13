@@ -609,7 +609,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with dividers and
 });
 
 asyncTest( "handle keyboard navigation with spelling of menu items", function() {
-	expect( 2 );
+	expect( 3 );
 	var element = $( "#menu2" ).menu({
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-state-focus" ).index() );
@@ -624,6 +624,30 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 		equal( logOutput(), "keydown,0,1,3", "Keydown focus Addyston by spelling the first 3 letters" );
 		element.simulate( "keydown", { keyCode: 68 } );
 		equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
+		element.simulate( "keydown", { keyCode: 83 } );
+		equal( logOutput(), "keydown,0,1,3,4,5", "Keydown focus Saarland ignoring leading space" );
+		start();
+	});
+	element[ 0 ].focus();
+});
+
+asyncTest( "Keep focus on selected item (see #10644)", function() {
+	expect( 1 );
+	var element = $( "#menu2" ).menu({
+		focus: function( event ) {
+			log( $( event.target ).find( ".ui-state-focus" ).index() );
+		}
+	});
+
+	log( "keydown", true );
+	element.one( "menufocus", function() {
+		element.simulate( "keydown", { keyCode: 65 } );
+		element.simulate( "keydown", { keyCode: 68 } );
+		element.simulate( "keydown", { keyCode: 68 } );
+		element.simulate( "keydown", { keyCode: 89 } );
+		element.simulate( "keydown", { keyCode: 83 } );
+		equal( logOutput(), "keydown,0,1,3,3,3",
+			"Focus stays on 'Addyston', even after other options are eliminated" );
 		start();
 	});
 	element[ 0 ].focus();
@@ -642,6 +666,23 @@ test( "#9469: Stopping propagation in a select event should not suppress subsequ
 	click( element, "2" );
 
 	equal( logOutput(), "1,2", "Both select events were not triggered." );
+});
+
+asyncTest( "#10571: When typing in a menu, only menu-items should be focused", function() {
+	expect( 3 );
+
+	var element = $( "#menu8" ).menu({
+		focus: function( event, ui ) {
+			equal( ui.item.length, 1, "There should only be one match when filtering" );
+			ok( ui.item.hasClass( "ui-menu-item" ), "element is .ui-menu-item" );
+			equal( ui.item.text(), "-Saarland", "element has correct text" );
+		}
+	});
+
+	setTimeout(function() {
+		element.menu( "widget" ).simulate( "keydown", { keyCode: "-".charCodeAt( 0 ) } );
+		start();
+	});
 });
 
 })( jQuery );

@@ -947,7 +947,7 @@ test("parseDate", function() {
 	fr = $.datepicker.regional.fr;
 	settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("D d M y", "Lun. 9 Avril 01", settings),
+	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("D d M y", "Lun. 9 avr. 01", settings),
 		new Date(2001, 4 - 1, 9), "Parse date D M y with settings");
 	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("d MM DD yy", "9 Avril Lundi 2001", settings),
 		new Date(2001, 4 - 1, 9), "Parse date d MM DD yy with settings");
@@ -1069,7 +1069,7 @@ test("formatDate", function() {
 	settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
 	equal($.datepicker.formatDate("D M y", new Date(2001, 4 - 1, 9), settings),
-		"lun. avril 01", "Format date D M y with settings");
+		"lun. avr. 01", "Format date D M y with settings");
 	equal($.datepicker.formatDate("DD MM yy", new Date(2001, 4 - 1, 9), settings),
 		"lundi avril 2001", "Format date DD MM yy with settings");
 	equal($.datepicker.formatDate("DD, MM d, yy", new Date(2001, 4 - 1, 9), settings),
