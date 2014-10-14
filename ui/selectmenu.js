@@ -237,7 +237,14 @@ return $.widget( "ui.selectmenu", {
 		this._resizeMenu();
 		this._position();
 
+		// Close the menu if the user clicks anywhere outside of the select
 		this._on( this.document, this._documentClick );
+
+		// Close the menu if the user scrolls any ancestor
+		this.scrollElements = this.widget().parents().add( document );
+		this._on( this.scrollElements, {
+			scroll: "close"
+		});
 
 		this._trigger( "open", event );
 	},
@@ -254,7 +261,7 @@ return $.widget( "ui.selectmenu", {
 		this.isOpen = false;
 		this._toggleAttr();
 
-		this._off( this.document );
+		this._off( this.scrollElements );
 
 		this._trigger( "close", event );
 	},

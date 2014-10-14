@@ -271,4 +271,17 @@ $.each([
 	});
 });
 
+test( "close on scroll", function() {
+	expect( 2 );
+
+	var element = $( "#speed" ).selectmenu(),
+		menu = element.selectmenu( "menuWidget" );
+
+	element.selectmenu( "open" );
+	ok( menu.is( ":visible" ), "Menu is visible on open" );
+
+	element.parent().trigger( "scroll" );
+	ok( menu.is( ":hidden" ), "Menu is hidden after scroll" );
+});
+
 })( jQuery );
