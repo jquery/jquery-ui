@@ -279,3 +279,6 @@ Rodrigo Menezes <rod333@gmail.com>
 Jacques Perrault <jacques_perrault@us.ibm.com>
 Frederik Elvhage <frederik.elvhage@googlemail.com>
 Will Holley <willholley@gmail.com>
+Uri Gilad <antishok@gmail.com>
+Richard Gibson <richard.gibson@gmail.com>
+Simen Bekkhus <sbekkhus91@gmail.com>
