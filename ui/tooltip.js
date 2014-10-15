@@ -30,7 +30,7 @@ $.widget( "ui.tooltip", {
 	options: {
 		classes: {
 			"ui-tooltip": "ui-corner-all",
-			"ui-tooltip-content": null
+			"ui-tooltip-content": ""
 		},
 		content: function() {
 			// support: IE<9, Opera in jQuery <1.7
