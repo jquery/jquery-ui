@@ -5,10 +5,10 @@ TestHelpers.commonWidgetTests( "selectmenu", {
 			"ui-selectmenu-button": "",
 			"ui-selectmenu-button-open": "ui-corner-top",
 			"ui-selectmenu-button-closed": "ui-corner-all",
-			"ui-selectmenu-text": null,
-			"ui-selectmenu-menu": null,
-			"ui-selectmenu-optgroup": null,
-			"ui-selectmenu-open": null
+			"ui-selectmenu-text": "",
+			"ui-selectmenu-menu": "",
+			"ui-selectmenu-optgroup": "",
+			"ui-selectmenu-open": ""
 		},
 		disabled: null,
 		icons: {

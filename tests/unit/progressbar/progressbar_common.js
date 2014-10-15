@@ -3,8 +3,8 @@ TestHelpers.commonWidgetTests( "progressbar", {
 		classes: {
 			"ui-progressbar": "ui-corner-all",
 			"ui-progressbar-value": "ui-corner-left",
-			"ui-progressbar-overlay": null,
-			"ui-progressbar-indeterminate": null,
+			"ui-progressbar-overlay": "",
+			"ui-progressbar-indeterminate": "",
 			"ui-progressbar-complete": "ui-corner-right"
 		},
 		disabled: false,
