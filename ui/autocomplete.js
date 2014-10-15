@@ -33,9 +33,9 @@ $.widget( "ui.autocomplete", {
 		appendTo: null,
 		autoFocus: false,
 		classes: {
-			"ui-autocomplete": null,
-			"ui-autocomplete-input": null,
-			"ui-autocomplete-loading": null
+			"ui-autocomplete": "",
+			"ui-autocomplete-input": "",
+			"ui-autocomplete-loading": ""
 		},
 		delay: 300,
 		minLength: 1,
