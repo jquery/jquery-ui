@@ -136,6 +136,14 @@ $.extend( $.expr[ ":" ], {
 	}
 });
 
+// support: document in RTL mode
+$(function () {
+    $.ui.isRtl = ( $( "body" ).attr( "dir" ) || $( "html" ).attr( "dir" ) || "" ).toLowerCase() === "rtl";
+    if ( $.ui.isRtl ) {
+        $( "body" ).addClass( "ui-rtl" );
+    }
+});
+
 // support: jQuery <1.8
 if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
 	$.each( [ "Width", "Height" ], function( i, name ) {
