@@ -30,7 +30,7 @@ $.widget( "ui.tooltip", {
 	options: {
 		classes: {
 			"ui-tooltip": "ui-corner-all",
-			"ui-tooltip-content": null
+			"ui-tooltip-content": ""
 		},
 		content: function() {
 			// support: IE<9, Opera in jQuery <1.7
@@ -110,9 +110,8 @@ $.widget( "ui.tooltip", {
 	_elementsFromClassKey: function( classKey ) {
 		switch( classKey ) {
 			case "ui-tooltip":
-				return this.element.find( "ui-tooltip" );
 			case "ui-tooltip-title":
-				return this.element.find( "ui-tooltip-title" );
+				return this.tooltips;
 			default:
 				return this._superApply( arguments );
 		}
