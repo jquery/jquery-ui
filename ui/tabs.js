@@ -275,6 +275,32 @@ return $.widget( "ui.tabs", {
 		return index;
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-tabs-collapsible":
+				if ( !this.options.collapsible ) {
+					return $();
+				}
+				break;
+			case "ui-tabs-active":
+				return this.active;
+			case "ui-tabs-nav":
+				return this.tablist;
+			case "ui-tab":
+				return this.tabs;
+			case "ui-tabs-anchor":
+				return this.anchors;
+			case "ui-tabs-panel":
+				return this.panels;
+			case "ui-tabs-loading":
+				if ( this.tab.hasClass( classKey ) ) {
+					return this.tab;
+				}
+				return $();
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "active" ) {
 			// _activate() will handle invalid values and update this.options
