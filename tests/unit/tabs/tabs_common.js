@@ -3,13 +3,13 @@ TestHelpers.commonWidgetTests( "tabs", {
 		active: null,
 		classes: {
 			"ui-tabs": "ui-corner-all",
-			"ui-tabs-collapsible": null,
-			"ui-tabs-active": null,
+			"ui-tabs-collapsible": "",
+			"ui-tabs-active": "",
 			"ui-tabs-nav": "ui-corner-all",
 			"ui-tab": "ui-corner-top",
-			"ui-tabs-anchor": null,
+			"ui-tabs-anchor": "",
 			"ui-tabs-panel": "ui-corner-bottom",
-			"ui-tabs-loading": null
+			"ui-tabs-loading": ""
 		},
 		collapsible: false,
 		disabled: false,
