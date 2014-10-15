@@ -349,6 +349,21 @@ return $.widget( "ui.menu", {
 		}[ this.options.role ];
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-menu-icons":
+				if ( !this.element.hasClass( "ui-menu-icons" ) ) {
+					return $();
+				}
+				break;
+			case "ui-menu-icon":
+			case "ui-menu-item":
+			case "ui-menu-divider":
+				return this.element.find( classKey );
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "icons" ) {
 			this.element.find( ".ui-menu-icon" )
