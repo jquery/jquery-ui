@@ -32,10 +32,10 @@ return $.widget( "ui.menu", {
 	options: {
 		classes: {
 			"ui-menu": "ui-corner-all",
-			"ui-menu-icons": null,
-			"ui-menu-icon": null,
-			"ui-menu-item": null,
-			"ui-menu-divider": null
+			"ui-menu-icons": "",
+			"ui-menu-icon": "",
+			"ui-menu-item": "",
+			"ui-menu-divider": ""
 		},
 		icons: {
 			submenu: "ui-icon-carat-1-e"
