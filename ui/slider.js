@@ -28,7 +28,6 @@
 return $.widget( "ui.slider", $.ui.mouse, {
 	version: "@VERSION",
 	widgetEventPrefix: "slide",
-
 	options: {
 		animate: false,
 		classes: {
@@ -426,6 +425,28 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		} else {
 			return this._values();
 		}
+	},
+
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-slider-handle":
+				return this.handles;
+			case "ui-slider-range-min":
+			case "ui-slider-range-max":
+			case "ui-slider-range":
+				if ( this.range === true && ( classKey === "ui-slider-range" ) ||
+					classKey.match( this.options.range ) ) {
+					return this.range;
+				}
+				return $();
+			case "ui-slider-vertical":
+			case "ui-slider-horizontal":
+				if ( !classKey.match( this.options.range ) ) {
+					return $();
+				}
+				break;
+		}
+		return this._superApply( arguments );
 	},
 
 	_setOption: function( key, value ) {
