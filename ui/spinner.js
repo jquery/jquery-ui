@@ -377,6 +377,18 @@ return $.widget( "ui.spinner", {
 		this._trigger( "stop", event );
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-spinner":
+				return this.uiSpinner;
+			case "ui-spinner-up":
+			case "ui-spinner-down":
+				return this.element.find( classKey );
+			default:
+				return this._superApply( arguments );
+		}
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "culture" || key === "numberFormat" ) {
 			var prevValue = this._parse( this.element.val() );
