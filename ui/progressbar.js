@@ -99,6 +99,29 @@ return $.widget( "ui.progressbar", {
 			Math.min( this.options.max, Math.max( this.min, newValue ) );
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-progressbar-value":
+				return this.valueDiv;
+			case "ui-progressbar-complete":
+				if ( this.valueDiv.hasClass( classKey ) ) {
+					return this.valueDiv;
+				}
+				break;
+			case "ui-progressbar-overlay":
+				if ( this.overlay ) {
+					return this.overlay;
+				}
+				break;
+			case "ui-progressbar-indeterminate":
+				if ( this.value ) {
+					return $();
+				}
+				break;
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOptions: function( options ) {
 		// Ensure "value" option is set after other values (like max)
 		var value = options.value;
