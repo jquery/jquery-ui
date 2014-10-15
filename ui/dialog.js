@@ -395,8 +395,6 @@ $.widget( "ui.dialog", {
 	},
 
 	_createTitlebar: function() {
-		var uiDialogTitle;
-
 		this.uiDialogTitlebar = $( "<div>" )
 			.addClass( this._classes( "ui-dialog-titlebar") + " ui-widget-header ui-helper-clearfix" )
 			.prependTo( this.uiDialog );
@@ -432,14 +430,14 @@ $.widget( "ui.dialog", {
 			}
 		});
 
-		uiDialogTitle = $( "<span>" )
+		this.uiDialogTitle = $( "<span>" )
 			.uniqueId()
 			.addClass( this._classes( "ui-dialog-title" ) )
 			.prependTo( this.uiDialogTitlebar );
-		this._title( uiDialogTitle );
+		this._title( this.uiDialogTitle );
 
 		this.uiDialog.attr({
-			"aria-labelledby": uiDialogTitle.attr( "id" )
+			"aria-labelledby": this.uiDialogTitle.attr( "id" )
 		});
 	},
 
@@ -646,6 +644,39 @@ $.widget( "ui.dialog", {
 		if ( !isVisible ) {
 			this.uiDialog.hide();
 		}
+	},
+
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-dialog":
+				return this.uiDialog;
+			case "ui-dialog-resizing":
+				if ( this.uiDialog.hasClass( classKey ) ) {
+					return this.uiDialog;
+				}
+				return $();
+			case "ui-dialog-titlebar":
+				return this.uiDialogTitlebar;
+			case "ui-dialog-titlebar-close":
+				if ( this.uiDialogTitlebar.hasClass( classKey ) ) {
+					return this.uiDialogTitlebar;
+				}
+				return $();
+			case "ui-dialog-title":
+				return this.uiDialogTitle;
+			case "ui-dialog-buttons":
+			case "ui-dialog-dragging":
+			case "ui-dialog-buttonset":
+				return this.uiButtonSet;
+			case "ui-dialog-buttonpane":
+				return this.uiDialogButtonPane;
+			case "ui-dialog-overlay":
+				if ( this.overlay ) {
+					return this.overlay;
+				}
+				return $();
+		}
+		return this._superApply( arguments );
 	},
 
 	_setOptions: function( options ) {
