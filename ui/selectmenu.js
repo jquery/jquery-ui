@@ -463,6 +463,33 @@ return $.widget( "ui.selectmenu", {
 		this.menu.attr( "aria-activedescendant", id );
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch( classKey ) {
+			case "ui-selectmenu-button":
+				return this.button;
+			case "ui-selectmenu-button-open":
+				if ( this.isOpen ) {
+					return this.button;
+				}
+			case "ui-selectmenu-button-closed":
+				if ( !this.isOpen ) {
+					return this.button;
+				}
+			case "ui-selectmenu-text":
+				return this.buttonText;
+			case "ui-selectmenu-menu":
+				return this.menu;
+			case "ui-selectmenu-optgroup":
+				return this.menu.find( classKey );
+			case "ui-selectmenu-open":
+				if ( this.isOpen ) {
+					return this.menuWrap;
+				}
+			default:
+				return this._superApply( arguments );
+		}
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "icons" ) {
 			this.button.find( "span.ui-icon" )
