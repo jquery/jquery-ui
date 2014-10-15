@@ -5,10 +5,10 @@ TestHelpers.commonWidgetTests( "slider", {
 			"ui-slider": "ui-corner-all",
 			"ui-slider-handle": "ui-corner-all",
 			"ui-slider-range": "ui-corner-all",
-			"ui-slider-range-min": null,
-			"ui-slider-range-max": null,
-			"ui-slider-horizontal": null,
-			"ui-slider-vertical": null
+			"ui-slider-range-min": "",
+			"ui-slider-range-max": "",
+			"ui-slider-horizontal": "",
+			"ui-slider-vertical": ""
 		},
 		cancel: "input,textarea,button,select,option",
 		delay: 0,
