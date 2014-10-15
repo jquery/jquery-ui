@@ -30,14 +30,14 @@ return $.widget( "ui.accordion", {
 		active: 0,
 		animate: {},
 		classes: {
-			"ui-accordion": null,
+			"ui-accordion": "",
 			"ui-accordion-header": "ui-corner-top",
-			"ui-accordion-header-active": null,
+			"ui-accordion-header-active": "",
 			"ui-accordion-header-collapsed": "ui-corner-all",
 			"ui-accordion-content": "ui-corner-bottom",
-			"ui-accordion-content-active": null,
-			"ui-accordion-header-icon": null,
-			"ui-accordion-icons": null
+			"ui-accordion-content-active": "",
+			"ui-accordion-header-icon": "",
+			"ui-accordion-icons": ""
 		},
 		collapsible: false,
 		event: "click",
