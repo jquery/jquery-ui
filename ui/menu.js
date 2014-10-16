@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Menu @VERSION
+ * jQuery UI Menu 1.11.2
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -26,7 +26,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.menu", {
-	version: "@VERSION",
+	version: "1.11.2",
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {

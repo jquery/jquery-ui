@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Accordion @VERSION
+ * jQuery UI Accordion 1.11.2
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -25,7 +25,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.accordion", {
-	version: "@VERSION",
+	version: "1.11.2",
 	options: {
 		active: 0,
 		animate: {},
