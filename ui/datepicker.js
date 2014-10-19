@@ -389,6 +389,10 @@ $.extend(Datepicker.prototype, {
 		} else if (nodeName === "div" || nodeName === "span") {
 			$target.removeClass(this.markerClassName).empty();
 		}
+
+        if(datepicker_instActive === inst) {
+            datepicker_instActive = null;
+        }
 	},
 
 	/* Enable the date picker to a jQuery selection.
