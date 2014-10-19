@@ -91,6 +91,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.element.removeClass( "ui-draggable ui-draggable-dragging ui-draggable-disabled" );
 		this._removeHandleClassName();
 		this._mouseDestroy();
+
+        if($.ui.ddmanager.current && ($.ui.ddmanager.current.element === this.element)) {
+            $.ui.ddmanager.current = null;
+        }
 	},
 
 	_mouseCapture: function(event) {
