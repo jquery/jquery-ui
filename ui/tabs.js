@@ -48,10 +48,6 @@ return $.widget( "ui.tabs", {
 		return function( anchor ) {
 			var anchorUrl, locationUrl;
 
-			// support: IE7
-			// IE7 doesn't normalize the href property when set via script (#9317)
-			anchor = anchor.cloneNode( false );
-
 			anchorUrl = anchor.href.replace( rhash, "" );
 			locationUrl = location.href.replace( rhash, "" );
 
