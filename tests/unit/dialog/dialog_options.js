@@ -371,9 +371,9 @@ test("minWidth", function() {
 test( "position, default center on window", function() {
 	expect( 2 );
 
-	// dialogs alter the window width and height in FF and IE7
+	// dialogs alter the window width and height in Firefox
 	// so we collect that information before creating the dialog
-	// Support: FF, IE7
+	// Support: Firefox
 	var winWidth = $( window ).width(),
 		winHeight = $( window ).height(),
 		element = $("<div></div>").dialog(),
@@ -387,9 +387,9 @@ test( "position, default center on window", function() {
 test( "position, right bottom at right bottom via ui.position args", function() {
 	expect( 2 );
 
-	// dialogs alter the window width and height in FF and IE7
+	// dialogs alter the window width and height in Firefox
 	// so we collect that information before creating the dialog
-	// Support: FF, IE7
+	// Support: Firefox
 	var winWidth = $( window ).width(),
 		winHeight = $( window ).height(),
 		element = $("<div></div>").dialog({
