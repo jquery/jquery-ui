@@ -368,7 +368,6 @@ $items = array(
 "Glossy Ibis"=>"Plegadis falcinellus",
 "Spanish Imperial Eagle"=>"Aquila adalberti",
 "Lesser Kestrel"=>"Falco naumanni",
-"Houbara Bustard"=>"Chlamydotis undulata",
 "Crab-Plover"=>"Dromas ardeola",
 "Cream-coloured Courser"=>"Cursorius cursor",
 "Collared Pratincole"=>"Glareola pratincola",
