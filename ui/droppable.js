@@ -101,7 +101,8 @@ $.widget( "ui.droppable", {
 
 		this.element.removeClass( "ui-droppable ui-droppable-disabled" );
 
-        if($.ui.ddmanager.current && ($.ui.ddmanager.current.element === this.element)) {
+        if($.ui.ddmanager.current && $.ui.ddmanager.current.element &&
+           ($.ui.ddmanager.current.element.get(0) === this.element.get(0))) {
             $.ui.ddmanager.current = null;
         }
 	},
