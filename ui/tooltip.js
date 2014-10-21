@@ -108,6 +108,18 @@ $.widget( "ui.tooltip", {
 			.appendTo( this.document[ 0 ].body );
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-tooltip":
+				return this.tooltips;
+			case "ui-tooltip-content":
+				return this.tooltips.map(function(){
+					return $( this ).find( classKey );
+				});
+		}
+		return $();
+	},
+
 	_setOption: function( key, value ) {
 		var that = this;
 

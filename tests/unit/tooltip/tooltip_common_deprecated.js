@@ -2,7 +2,7 @@ TestHelpers.commonWidgetTests( "tooltip", {
 	defaults: {
 		classes: {
 			"ui-tooltip": "ui-corner-all",
-			"ui-tooltip-content": null
+			"ui-tooltip-content": ""
 		},
 		content: function() {},
 		disabled: false,
