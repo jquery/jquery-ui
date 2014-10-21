@@ -54,7 +54,7 @@ test("showLabel false with icon", function() {
 		showLabel: false,
 		icon: "iconclass"
 	});
-	strictEqual( $( "#button" ).attr( "class" ), "ui-button ui-widget ui-corner-all ui-icon-beginning ui-button-icon-only" );
+	strictEqual( $( "#button" ).attr( "class" ), "ui-button ui-widget ui-corner-all ui-button-icon-only" );
 
 	$( "#button" ).button( "destroy" );
 });
