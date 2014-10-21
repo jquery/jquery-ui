@@ -94,7 +94,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this._removeHandleClassName();
 		this._mouseDestroy();
 
-        	if ( ddmanager && ddmanager.current && ddmanager.current === this ) {
+        	if ( ddmanager && ddmanager.current === this ) {
             		ddmanager.current = null;
         	}
 	},
