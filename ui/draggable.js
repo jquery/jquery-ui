@@ -84,6 +84,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_destroy: function() {
+		var ddmanager = $.ui.ddmanager;
+		
 		if ( ( this.helper || this.element ).is( ".ui-draggable-dragging" ) ) {
 			this.destroyOnClear = true;
 			return;
@@ -92,10 +94,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this._removeHandleClassName();
 		this._mouseDestroy();
 
-        if ($.ui.ddmanager && $.ui.ddmanager.current && $.ui.ddmanager.current.element &&
-            ($.ui.ddmanager.current.element.get(0) === this.element.get(0))) {
-            $.ui.ddmanager.current = null;
-        }
+        	if ( ddmanager && ddmanager.current && ddmanager.current === this ) {
+            		ddmanager.current = null;
+        	}
 	},
 
 	_mouseCapture: function(event) {
