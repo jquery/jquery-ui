@@ -193,7 +193,8 @@ test("open", function() {
 	ok(element.dialog("widget").is(":visible") && !element.dialog("widget").is(":hidden"), "dialog visible after open method called");
 });
 
-test("#6137: dialog('open') causes form elements to reset on IE7", function() {
+// http://bugs.jqueryui.com/ticket/6137
+test("Ensure form elements don't reset when opening a dialog", function() {
 	expect(2);
 
 	var d1 = $("<form><input type='radio' name='radio' id='a' value='a' checked='checked'></input>" +
