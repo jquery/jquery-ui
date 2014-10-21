@@ -100,6 +100,10 @@ $.widget( "ui.droppable", {
 		this._splice( drop );
 
 		this.element.removeClass( "ui-droppable ui-droppable-disabled" );
+
+        if($.ui.ddmanager.current && ($.ui.ddmanager.current.element === this.element)) {
+            $.ui.ddmanager.current = null;
+        }
 	},
 
 	_setOption: function( key, value ) {
