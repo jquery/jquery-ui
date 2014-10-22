@@ -94,7 +94,7 @@ return $.widget( "ui.selectmenu", {
 		// Create button
 		this.button = $( "<span>", {
 			"class": this._classes( "ui-selectmenu-button ui-selectmenu-button-closed" ) +
-			" ui-button ui-icon-end ui-widget ui-state-default",
+			"ui-button ui-icon-end ui-widget ui-state-default",
 			tabindex: tabindex || this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			role: "combobox",
