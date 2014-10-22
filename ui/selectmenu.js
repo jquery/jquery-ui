@@ -230,7 +230,7 @@ return $.widget( "ui.selectmenu", {
 		}
 
 		// If this is the first time the menu is being opened, render the items
-		if ( !this.menuItems || this.menuItems.length==0) {
+		if ( !this.menuItems || this.menuItems.length===0) {
 			this._refreshMenu();
 		} else {
 
