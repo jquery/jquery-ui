@@ -62,31 +62,15 @@ $.widget( "ui.controlgroup", {
 			" ui-corner-bottom ui-corner-left ui-corner-tl ui-corner-tr" );
 	},
 
-	_callChildMethod: function( method, filter ) {
+	_callChildMethod: function( method ) {
 		var that = this;
 		$.each( this.options.items, function( widget, selector ) {
 			var options = {};
-			switch ( widget ) {
-				case "button":
-					options.classes = {
-						"ui-button": null
-					};
-				break;
-				case "checkboxradio":
-					options.classes = {
-						"ui-checkbox-label": null,
-						"ui-radio-label": null
-					};
-				break;
-				case "selectmenu":
-					options.classes = {
-						"ui-selectmenu-button-open": null,
-						"ui-selectmenu-button-closed": null
-					};
-				break;
+			if ( that[ "_" + widget + "_options" ] ) {
+				options = that[ "_" + widget + "_options" ]();
 			}
 			if ( $.fn[ widget ] && selector ) {
-				that.element.children( selector ).not( filter )[ widget ]( method ?
+				that.element.children( selector )[ widget ]( method ?
 					method : options );
 			}
 		});
@@ -130,8 +114,7 @@ $.widget( "ui.controlgroup", {
 
 		this._super( key, value );
 		if ( key === "direction" ) {
-			this.element.removeClass( "ui-controlgroup-" + original )
-				.addClass( "ui-controlgroup-" + value );
+			this.element.removeClass( "ui-controlgroup-" + original );
 		}
 		if ( key === "disabled" ) {
 			this._callChildMethod( value ? "disable" : "enable" );
@@ -141,21 +124,11 @@ $.widget( "ui.controlgroup", {
 
 	},
 
-	refresh: function() {
+	_refresh_selectmenu: function() {
 		var firstClasses = {},
 			lastClasses = {},
 			vertical = ( this.options.direction === "vertical" );
-		this.element.addClass( this._classes( "ui-controlgroup ui-controlgroup-" +
-			this.options.direction ) );
-		this._callChildMethod( undefined );
-		this.visible = this.element.children( ".ui-button" ).removeClass( function(index, css) {
-			return ( css.match( /ui-corner-[a-z]*/g ) || [] ).join( " " );
-		}).filter( this.options.excludeInvisible ? ":visible" : "*" );
 
-		this.first = this.visible.filter( ":first" )
-			.addClass( "ui-corner-" + ( vertical ? "top" : "left" ) );
-		this.last =	this.visible.filter( ":last" )
-			.addClass( "ui-corner-" + ( vertical ? "bottom" : "right" ) );
 		if ( $.ui.selectmenu ) {
 			if ( this.first.is( ".ui-selectmenu-button" ) && !vertical ) {
 				firstClasses[ "ui-selectmenu-button-open" ] = "ui-corner-tl";
@@ -176,6 +149,28 @@ $.widget( "ui.controlgroup", {
 			}
 			this.element.find( this.options.items.selectmenu ).selectmenu( "refresh" );
 		}
+	},
+
+	refresh: function() {
+		var that = this,
+			vertical = ( this.options.direction === "vertical" );
+		this.element.addClass( this._classes( "ui-controlgroup ui-controlgroup-" +
+			this.options.direction ) );
+		this._callChildMethod( undefined );
+		this.visible = this.element.children( ".ui-button" ).removeClass( function(index, css) {
+			return ( css.match( /ui-corner-[a-z]*/g ) || [] ).join( " " );
+		}).filter( this.options.excludeInvisible ? ":visible" : "*" );
+
+		this.first = this.visible.eq( 0 )
+			.addClass( "ui-corner-" + ( vertical ? "top" : "left" ) );
+		this.last =	this.visible.last()
+			.addClass( "ui-corner-" + ( vertical ? "bottom" : "right" ) );
+
+		$.each( this.options.items, function( widget ) {
+			if ( that[ "_refresh_" + widget ] ) {
+				that[ "_refresh_" + widget ]();
+			}
+		});
 		this._callChildMethod( "refresh" );
 
 	}
