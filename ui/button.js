@@ -114,9 +114,8 @@ $.widget( "ui.button", {
 
 	_updateTooltip: function() {
 		this.title = this.element.attr( "title" );
-		this.noTitle = !this.title;
 
-		if ( !this.options.showLabel && !this.noTitle ){
+		if ( !this.options.showLabel && !this.title ){
 			this.element.attr( "title", this.options.label );
 		}
 	},
