@@ -22,6 +22,9 @@
 			}
 		}).selectmenu( "widget" ).removeClass( "ui-icon-end" );
 		$( ".controlgroup" ).controlgroup();
+		$( "select" ).on( "selectmenuchange", function(){
+			alert( this.value );
+		});
 		$( "button" ).click(function() {
 			alert( "Running the last action" );
 		});
@@ -34,9 +37,6 @@
 	</style>
 </head>
 <body>
-<div class="demo-description">
-<p>A Controlgroup creating a split button</p>
-</div>
 <div class="widget">
 	<h1>Split button</h1>
 	<div class="controlgroup">
@@ -48,6 +48,8 @@
 		</select>
 	</div>
 </div>
-
+<div class="demo-description">
+	<p>A Controlgroup creating a split button</p>
+</div>
 </body>
 </html>

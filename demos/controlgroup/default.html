@@ -17,10 +17,10 @@
 	<script>
 	$(function() {
 		$( "#insurance, #insurance-v" ).checkboxradio({ icon: true });
-		$( ".controlgroup" ).eq( 0 ).controlgroup()
-			.end().eq( 1 ).controlgroup({
-				"direction": "vertical"
-			});
+		$( ".controlgroup" ).controlgroup()
+		$( ".controlgroup-vertical" ).controlgroup({
+			"direction": "vertical"
+		});
 	});
 	</script>
 	<style>
@@ -65,7 +65,7 @@
 	<br/>
 	<fieldset>
 		<legend>Rental Car</legend>
-		<div class="controlgroup">
+		<div class="controlgroup-horizontal">
 			<select>
 				<option>Compact car</option>
 				<option>Midsize car</option>
