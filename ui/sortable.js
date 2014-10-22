@@ -238,13 +238,13 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		//Cache the former DOM position
 		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };
 
+		//Create the placeholder
+		this._createPlaceholder();
+
 		//If the helper is not the original, hide the original so it's not playing any role during the drag, won't cause anything bad this way
 		if(this.helper[0] !== this.currentItem[0]) {
 			this.currentItem.hide();
 		}
-
-		//Create the placeholder
-		this._createPlaceholder();
 
 		//Set a containment if given in the options
 		if(o.containment) {
