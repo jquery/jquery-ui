@@ -203,15 +203,16 @@ return $.widget( "ui.selectmenu", {
 		var item,
 			options = this.element.find( "option" );
 
+		this._parseOptions( options );
+		this._renderMenu( this.menu, this.items );
+
+		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
+
 		if ( !options.length ) {
 			return;
 		}
 
-		this._parseOptions( options );
-		this._renderMenu( this.menu, this.items );
-
 		this.menuInstance.refresh();
-		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
 
 		item = this._getSelectedItem();
 
@@ -229,7 +230,7 @@ return $.widget( "ui.selectmenu", {
 		}
 
 		// If this is the first time the menu is being opened, render the items
-		if ( !this.menuItems ) {
+		if ( !this.menuItems || this.menuItems.length==0) {
 			this._refreshMenu();
 		} else {
 
