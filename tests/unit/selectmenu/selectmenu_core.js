@@ -2,6 +2,24 @@
 
 module( "selectmenu: core" );
 
+test( "markup structure", function() {
+	var element = $( "#files" ).selectmenu(),
+		button = element.selectmenu( "widget" ),
+		menu = element.selectmenu( "menuWidget" ),
+		menuWrap = menu.parent();
+
+	expect( 7 );
+
+	ok( button.hasClass( "ui-selectmenu-button" ), "button is .ui-selectmenu-button" );
+	ok( button.hasClass( "ui-selectmenu-button-closed" ), "button is .ui-selectmenu-button-closed" );
+	ok( !button.hasClass( "ui-selectmenu-button-open" ), "button is not .ui-selectmenu-button-open" );
+	ok( button.hasClass( "ui-widget" ), "button is .ui-widget" );
+	ok( button.hasClass( "ui-state-default" ), "button is .ui-state-default" );
+
+	ok( menuWrap.hasClass( "ui-selectmenu-menu" ), "menu is .ui-selectmenu-menu" );
+	ok( !menuWrap.hasClass( "ui-selectmenu-menu-open" ), "menu is not .ui-selectmenu-menu-open" );
+});
+
 asyncTest( "accessibility", function() {
 	var links,
 		element = $( "#speed" ).selectmenu(),

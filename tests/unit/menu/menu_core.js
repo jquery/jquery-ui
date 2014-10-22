@@ -3,9 +3,10 @@
 module( "menu: core" );
 
 test( "markup structure", function() {
-	expect( 6 );
+	expect( 7 );
 	var element = $( "#menu1" ).menu();
 	ok( element.hasClass( "ui-menu" ), "main element is .ui-menu" );
+	ok( element.hasClass( "ui-corner-all" ), "main element is .ui-corner-all" );
 	element.children().each(function( index ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "child " + index + " is .ui-menu-item" );
 	});

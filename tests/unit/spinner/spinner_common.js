@@ -1,5 +1,12 @@
 TestHelpers.commonWidgetTests( "spinner", {
 	defaults: {
+		classes: {
+			"ui-spinner-input": null,
+			"ui-spinner": "ui-corner-all",
+			"ui-spinner-button": null,
+			"ui-spinner-up": "ui-corner-tr",
+			"ui-spinner-down": "ui-corner-br"
+		},
 		culture: null,
 		disabled: false,
 		icons: {
