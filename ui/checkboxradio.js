@@ -24,10 +24,9 @@
 	}
 }(function( $ ) {
 
-var baseClasses = "ui-button ui-widget ui-corner-all",
-	typeClasses = " ui-icon ui-icon-background ui-state-focus ui-icon-check ui-icon-blank" +
-		" ui-radio-label ui-checkbox-label ui-state-active ui-icon-beginning ui-icon-end" +
-		" ui-icon-top ui-icon-bottom ui-radio-checked ui-checkbox-checked",
+var baseClasses = "ui-button ui-widget",
+	typeClasses = "ui-state-focus ui-radio-label ui-checkbox-label ui-state-active " +
+	"ui-icon-beginning ui-icon-end ui-icon-top ui-icon-bottom ui-radio-checked ui-checkbox-checked",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -104,11 +103,11 @@ $.widget( "ui.checkboxradio", {
 		var formElement = $( this.element[ 0 ].form );
 
 		// We don't use _on and _off here because we want all the checkboxes in the same form to use
-		// single handler which handles all the checkboxradio widgets in the form
+		// a single handler which handles all the checkboxradio widgets in the form
 		formElement.off( "reset" + this.eventNamespace, formResetHandler );
 		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
-		// If it is null the user set it explicitly to null so we need to check the dom
+		// If it is null the user set it explicitly to null so we need to check the DOM
 		if ( this.options.disabled == null ) {
 			this.options.disabled = this.element.prop( "disabled" ) || false;
 		}
@@ -137,7 +136,7 @@ $.widget( "ui.checkboxradio", {
 	_readType: function() {
 		this.type = this.element[ 0 ].type;
 		if ( !/radio|checkbox/.test( this.type ) ) {
-			throw new Error( "Can't create checkboxradio widget for type " + this.type );
+			$.error( "Can't create checkboxradio widget for type " + this.type );
 		}
 	},
 
@@ -218,7 +217,8 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_destroy: function() {
-		this.label.removeClass( baseClasses + " " + typeClasses );
+		this.label.removeClass( this._classes( "ui-radio-label ui-checkbox-label" ) + " " +
+			baseClasses + " " + typeClasses );
 		if ( this.icon ) {
 			this.icon.remove();
 		}

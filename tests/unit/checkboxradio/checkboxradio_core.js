@@ -14,7 +14,7 @@ test("Checkbox", function() {
 	ok( !label.hasClass(".ui-button)") );
 	input.checkboxradio();
 	strictEqual( input.attr( "class" ), "ui-helper-hidden-accessible ui-checkboxradio" );
-	strictEqual( label.attr( "class" ), "ui-button ui-widget ui-corner-all ui-checkbox-label" );
+	strictEqual( label.attr( "class" ), "ui-button ui-widget ui-checkbox-label ui-corner-all" );
 });
 
 test("Radios", function() {
@@ -87,7 +87,7 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 		setTimeout(function() {
 			$( "#check2" ).checkboxradio( "widget" ).simulate( "click" );
 			start();
-		}, 1 );
+		});
 	});
 }
 test( "Checkbox creation that requires a matching finds label in all cases", function() {
@@ -141,4 +141,8 @@ test( "Checkbox label selector works for ids with \":\"", function() {
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
 
+test( "Calling checkboxradio on an unsupported element throws and error", function() {
+	expect( 1 );
+	throws( $( "<div>" ).checkboxradio, "Error thrown" );
+});
 })(jQuery);
