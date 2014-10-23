@@ -410,7 +410,11 @@ $.Widget.prototype = {
 
 		while ( i-- ) {
 			out.push( parts[ i ] );
-			out.push( classes[ parts[ i ] ] );
+
+			// Avoid extra spaces in the return value resulting from pushing an empty classes value
+			if ( classes[ parts[ i ] ] ) {
+				out.push( classes[ parts[ i ] ] );
+			}
 		}
 
 		return out.join( " " );
