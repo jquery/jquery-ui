@@ -140,7 +140,8 @@ Wesley Walser <waw325@gmail.com>
 Kouhei Sutou <kou@clear-code.com>
 Karl Kirch <karlkrch@gmail.com>
 Chris Kelly <ckdake@ckdake.com>
-Jay Oster <jay@loyalize.com>
+Jayson Oster <jay@loyalize.com>
+Felix Nagel <info@felixnagel.com>
 Alexander Polomoshnov <alex.polomoshnov@gmail.com>
 David Leal <dgleal@gmail.com>
 Igor Milla <igor.fsp.milla@gmail.com>
@@ -150,12 +151,14 @@ Marwan Al Jubeh <marwan.aljubeh@gmail.com>
 Milan Broum <midlis@googlemail.com>
 Sebastian Sauer <info@dynpages.de>
 Gaëtan Muller <m.gaetan89@gmail.com>
+Michel Weimerskirch <michel@weimerskirch.net>
 William Griffiths <william@ycymro.com>
 Stojce Slavkovski <stojce@gmail.com>
 David Soms <david.soms@gmail.com>
 David De Sloovere <david.desloovere@outlook.com>
 Michael P. Jung <michael.jung@terreon.de>
 Shannon Pekary <spekary@gmail.com>
+Dan Wellman <danwellman@hotmail.com>
 Matthew Edward Hutton <meh@corefiling.co.uk>
 James Khoury <james@jameskhoury.com>
 Rob Loach <robloach@gmail.com>
@@ -208,6 +211,7 @@ Bernhard Sirlinger <bernhard.sirlinger@tele2.de>
 Jared A. Scheel <jared@jaredscheel.com>
 Rafael Xavier de Souza <rxaviers@gmail.com>
 John Chen <zhang.z.chen@intel.com>
+Robert Beuligmann <robertbeuligmann@gmail.com>
 Dale Kocian <dale.kocian@gmail.com>
 Mike Sherov <mike.sherov@gmail.com>
 Andrew Couch <andy@couchand.com>
