@@ -608,17 +608,20 @@ test( ".option() - deep option setter", function() {
 });
 
 test( "_classes", function(){
-	expect( 3 );
+	expect( 4 );
 	$.widget( "ui.testWidget", {
 		options: {
 			classes: {
 				"test": "class1 class2",
+				"testEmpty": "",
 				"test2": "class3"
 			}
 		},
 		_create: function() {
 			equal( this._classes( "test" ), "test class1 class2" );
 			equal( this._classes( "test2" ), "test2 class3" );
+			equal( this._classes( "testEmpty" ), "testEmpty",
+				"Computed value of empty-string-valued class key has no extra spaces" );
 			equal( this._classes( "test test2" ), "test2 class3 test class1 class2" );
 		}
 	});
