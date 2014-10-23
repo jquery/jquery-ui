@@ -21,7 +21,7 @@ module( "Checkboxradio: methods" );
 		strictEqual( widget.find( ".ui-icon" ).length, 1, "Icon is recreated on refresh" );
 		checkbox.prop( "checked", true );
 		checkbox.checkboxradio( "refresh" );
-		strictEqual( widget.hasClass( "ui-checkbox-checked" ), true,
+		strictEqual( widget.hasClass( "ui-checkboxradio-checked" ), true,
 			"State updated based on checked property" );
 	});
 
@@ -82,7 +82,7 @@ module( "Checkboxradio: methods" );
 		strictEqual( widget.find( ".ui-icon" ).length, 1, "Icon is recreated on refresh" );
 		radio.prop( "checked", true );
 		radio.checkboxradio( "refresh" );
-		strictEqual( widget.hasClass( "ui-radio-checked" ), true,
+		strictEqual( widget.hasClass( "ui-checkboxradio-checked" ), true,
 			"State updated based on checked property" );
 	});
 
