@@ -51,7 +51,7 @@ $.widget( "ui.button", {
 
 	_getCreateOptions: function() {
 		var disabled,
-			options = {};
+			options =  this._super() || {};
 
 		this.isInput = this.element.is( "input" );
 		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
@@ -226,7 +226,7 @@ $.widget( "ui.button", {
 });
 
 // DEPRECATED
-if ( $.uiBackCompat ) {
+if ( $.uiBackCompat === false ) {
 
 	// Text and Icons options
 	$.widget( "ui.button", $.ui.button, {
