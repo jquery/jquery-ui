@@ -26,7 +26,8 @@
 
 var baseClasses = "ui-button ui-widget",
 	typeClasses = "ui-state-focus ui-radio-label ui-checkbox-label ui-state-active " +
-	"ui-icon-beginning ui-icon-end ui-icon-top ui-icon-bottom ui-radio-checked ui-checkbox-checked",
+	"ui-icon-beginning ui-icon-end ui-icon-top ui-icon-bottom ui-checkboxradio-radio-checked " +
+	"ui-checkboxradio-checkbox-checked",
 	formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
@@ -62,21 +63,18 @@ $.widget( "ui.checkboxradio", {
 		icon: false,
 >>>>>>> db16c96... Checkboxradio: add classes option
 		classes: {
-			"ui-checkboxradio": null,
-			"ui-checkbox": null,
-			"ui-radio": null,
-			"ui-checkbox-label": "ui-corner-all",
-			"ui-radio-label": "ui-corner-all",
+			"ui-checkboxradio": "",
+			"ui-checkboxradio-label": "ui-corner-all",
+			"ui-checkboxradio-radio-label": "",
 			"ui-checkboxradio-icon": "ui-corner-all",
-			"ui-radio-checked": null,
-			"ui-checkbox-checked": null
+			"ui-checkboxradio-checked": ""
 		}
 	},
 
 	_getCreateOptions: function() {
 		var disabled,
 			that = this,
-			options = {};
+			options = this._super() || {};
 
 		this._readLabel();
 
@@ -180,10 +178,14 @@ $.widget( "ui.checkboxradio", {
 		this.element.addClass( "ui-helper-hidden-accessible " +
 			this._classes( "ui-checkboxradio" ) );
 
-		this.label.addClass( baseClasses + " " + this._classes( "ui-" + this.type + "-label" ) );
+		this.label.addClass( baseClasses + " " + this._classes( "ui-checkboxradio-label" ) );
+
+		if ( this.type === "radio" ) {
+			this.label.addClass( "ui-checkboxradio-radio-label" );
+		}
 
 		if ( checked ) {
-			this.label.addClass( this._classes( "ui-" + this.type + "-checked" ) +
+			this.label.addClass( this._classes( "ui-checkboxradio-checked" ) +
 				" ui-state-active" );
 		}
 		if ( this.options.label && this.options.label !== this.originalLabel ) {
@@ -199,7 +201,7 @@ $.widget( "ui.checkboxradio", {
 
 	_toggleClasses: function() {
 		var checked = this.element.is( ":checked" );
-		this.label.toggleClass( this._classes( "ui-" + this.type + "-checked" ) +
+		this.label.toggleClass( this._classes( "ui-checkboxradio-checked" ) +
 			" ui-state-active", checked );
 		if ( this.options.icon && this.type === "checkbox" ) {
 			this.icon
@@ -212,18 +214,40 @@ $.widget( "ui.checkboxradio", {
 				.map(function() {
 					return $( this ).checkboxradio( "widget" )[ 0 ];
 				})
-				.removeClass( "ui-state-active " + this._classes( "ui-radio-checked" ) );
+				.removeClass( "ui-state-active " + this._classes( "ui-checkboxradio-checked" ) );
 		}
 	},
 
 	_destroy: function() {
-		this.label.removeClass( this._classes( "ui-radio-label ui-checkbox-label" ) + " " +
+		this.label.removeClass( this._classes( "ui-checkboxradio-radio-label ui-checkboxradio-label" ) + " " +
 			baseClasses + " " + typeClasses );
 		if ( this.icon ) {
 			this.icon.remove();
 		}
 		this.element.removeClass( this._classes( "ui-checkboxradio" ) +
 			" ui-helper-hidden-accessible" );
+	},
+
+	_elementsFromClassKey: function( classKey ) {
+		var parts = classKey.split( "-" ),
+			checkedType = parts[ 2 ] === this.type || parts[ 2 ] === undefined,
+			checkedClass = parts[ 3 ] === "checked" || this.element.is( ":checked" );
+		switch ( classKey ) {
+			case "ui-checkboxradio":
+			case "ui-checkboxradio-radio-label":
+			case "ui-checkboxradio-label":
+			case "ui-checkboxradio-checked":
+				if ( checkedType && checkedClass ) {
+					return this.label;
+				}
+				return $();
+			case "ui-checkboxradio-icon":
+				if ( this.icon ) {
+					return this.icon;
+				}
+				return $();
+		}
+		return this._superApply( arguments );
 	},
 
 	_setOption: function( key, value ) {
@@ -270,7 +294,7 @@ $.widget( "ui.checkboxradio", {
 		var checked = this.element.is( ":checked" ),
 			isDisabled = this.element.is( ":disabled" );
 		this._updateIcon( checked );
-		this.label.toggleClass( "ui-state-active " + this._classes( "ui-" + this.type + "-checked" ), checked );
+		this.label.toggleClass( "ui-state-active " + this._classes( "ui-checkboxradio-checked" ), checked );
 		if ( this.options.label !== null ) {
 			this.label.contents().not( this.element.add( this.icon ) ).remove();
 			this.label.append( this.options.label );
