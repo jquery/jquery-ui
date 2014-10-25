@@ -73,11 +73,12 @@ test( "refresh icons (see #9377)", function() {
 	expect( 3 );
 	var element = $( "#menu1" ).menu();
 	ok( !element.hasClass( "ui-menu-icons") );
-	element.find( "li:first" ).html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
+	element.find( "li:first .ui-menu-item-wrapper" )
+		.html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
 	element.menu( "refresh" );
 
 	ok( element.hasClass( "ui-menu-icons" ) );
-	element.find( "li:first" ).html( "Save" );
+	element.find( "li:first .ui-menu-item-wrapper" ).html( "Save" );
 	element.menu( "refresh" );
 	ok( !element.hasClass( "ui-menu-icons" ) );
 });

@@ -71,8 +71,10 @@ test( "{ role: 'menu' } ", function() {
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
-		equal( $( this ).attr( "role" ), "menuitem", "menu item ("+ item + ") role" );
-		equal( $( this ).attr( "tabindex" ), "-1", "tabindex for menu item ("+ item + ")" );
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ),
+			"menuitem", "menu item ("+ item + ") role" );
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
+			"tabindex for menu item ("+ item + ")" );
 	});
 });
 
@@ -86,8 +88,10 @@ test( "{ role: 'listbox' } ", function() {
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
-		equal( $( this ).attr( "role" ), "option", "menu item ("+ item + ") role" );
-		equal( $( this ).attr( "tabindex" ), "-1", "tabindex for menu item ("+ item + ")" );
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), "option",
+			"menu item ("+ item + ") role" );
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
+			"tabindex for menu item ("+ item + ")" );
 	});
 });
 
@@ -101,8 +105,10 @@ test( "{ role: null }", function() {
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
-		equal( $( this ).attr( "role" ), undefined, "menu item ("+ item + ") role" );
-		equal( $( this ).attr( "tabindex" ), "-1", "tabindex for menu item ("+ item + ")" );
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), undefined,
+			"menu item ("+ item + ") role" );
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
+			"tabindex for menu item ("+ item + ")" );
 	});
 });
 

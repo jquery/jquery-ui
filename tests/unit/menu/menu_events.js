@@ -32,7 +32,7 @@ test( "handle click on custom item menu", function() {
 		select: function() {
 			log();
 		},
-		menus: "div"
+		menus: ".menu"
 	});
 	log( "click", true );
 	click( element, "1" );
@@ -91,7 +91,7 @@ asyncTest( "handle focus of menu with active item", function() {
 	expect( 1 );
 	var element = $( "#menu1" ).menu({
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index() );
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
@@ -142,12 +142,12 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
-	var element = $( "#menu5" ).menu({ menus: "div" }),
+	var element = $( "#menu5" ).menu({ menus: ".menu" }),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
 		equal( element.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		element.menu( "focus", event, element.find( ":nth-child(7)" ).find( "div" ).eq( 0 ).children().eq( 0 ) );
+		element.menu( "focus", event, element.find( ":nth-child(7)" ).find( ".menu" ).eq( 0 ).children().eq( 0 ) );
 		setTimeout( menumouseleave2, 350 );
 	}
 	function menumouseleave2() {
@@ -177,7 +177,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and without submen
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index() );
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
@@ -243,7 +243,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 			log( $( ui.item[0] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index() );
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
@@ -363,7 +363,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index());
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
@@ -438,7 +438,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index());
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
 		}
 	});
 
@@ -533,7 +533,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 			log( $( ui.item[0] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index());
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index());
 		}
 	});
 
@@ -585,7 +585,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with dividers and
 			log( $( ui.item[0] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index());
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
@@ -612,7 +612,7 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 	expect( 3 );
 	var element = $( "#menu2" ).menu({
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index() );
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
@@ -635,7 +635,7 @@ asyncTest( "Keep focus on selected item (see #10644)", function() {
 	expect( 1 );
 	var element = $( "#menu2" ).menu({
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-state-focus" ).index() );
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
