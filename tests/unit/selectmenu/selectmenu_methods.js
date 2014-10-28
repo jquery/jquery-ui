@@ -154,6 +154,39 @@ test( "refresh - disabled optgroup", function() {
 	}
 });
 
+test( "refresh - empty select", function() {
+	expect( 1 );
+
+	var element = $( "#emptySelect" ).selectmenu();
+	try{
+		element.selectmenu( "refresh" );
+		ok( true, "refresh empty select without error" );
+	}catch(err) {
+		ok( false, err.message );
+	}
+});
+
+test( "refresh - structure remove all options", function() {
+	expect( 4 );
+
+	var element = $( "#speed" ).selectmenu(),
+		menu = element.selectmenu( "menuWidget" ),
+		options = element.find( "option" ),
+		menuItems = menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
+	// refresh select with some options
+	element.selectmenu( "refresh" );
+	ok( true, "first refresh ok" );
+	// remove all options and refresh
+	element.children().remove();
+	element.selectmenu( "refresh" );
+	ok( true, "refresh empty select ok" );
+	//check length for option and menuItems is 0
+	options = element.find( "option" );
+	menuItems = menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
+	equal( options.length,   0, "options length" );
+	equal( menuItems.length, 0, "menu item length" );
+});
+
 test( "widget and menuWidget", function() {
 	expect( 4 );
 
