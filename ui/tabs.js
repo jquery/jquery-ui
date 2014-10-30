@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/tabs/
  */
+
+//>>label: Tabs
+//>>group: Widgets
+//>>description: Transforms a set of container elements into a tab structure.
+//>>docs: http://api.jqueryui.com/tabs/
+//>>demos: http://jqueryui.com/tabs/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

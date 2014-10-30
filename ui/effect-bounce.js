@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/bounce-effect/
  */
+
+//>>label: Bounce Effect
+//>>group: Effects
+//>>description: Bounces an element horizontally or vertically n times.
+//>>docs: http://api.jqueryui.com/bounce-effect/
+//>>demos: http://jqueryui.com/effect/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

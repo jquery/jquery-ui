@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/blind-effect/
  */
+
+//>>label: Blind Effect
+//>>group: Effects
+//>>description: Blinds the element.
+//>>docs: http://api.jqueryui.com/blind-effect/
+//>>demos: http://jqueryui.com/effect/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

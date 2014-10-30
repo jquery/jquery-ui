@@ -6,8 +6,14 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://api.jqueryui.com/category/ui-core/
  */
+
+//>>label: Core
+//>>group: UI Core
+//>>description: The core of jQuery UI, required for all interactions and widgets.
+//>>docs: http://api.jqueryui.com/category/ui-core/
+//>>demos: http://jqueryui.com/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
