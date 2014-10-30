@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/category/effects-core/
  */
+
+//>>label: Effects Core
+//>>group: Effects
+//>>description: Extends the internal jQuery effects. Includes morphing and easing. Required by all other effects.
+//>>docs: http://api.jqueryui.com/category/effects-core/
+//>>demos: http://jqueryui.com/effect/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

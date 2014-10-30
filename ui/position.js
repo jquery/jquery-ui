@@ -8,6 +8,13 @@
  *
  * http://api.jqueryui.com/position/
  */
+
+//>>label: Position
+//>>group: UI Core
+//>>description: Positions elements relative to other elements.
+//>>docs: http://api.jqueryui.com/position/
+//>>demos: http://jqueryui.com/position/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

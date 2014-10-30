@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/drop-effect/
  */
+
+//>>label: Drop Effect
+//>>group: Effects
+//>>description: Moves an element in one direction and hides it at the same time.
+//>>docs: http://api.jqueryui.com/drop-effect/
+//>>demos: http://jqueryui.com/effect/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

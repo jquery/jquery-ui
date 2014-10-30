@@ -65,8 +65,9 @@ Release.define({
 			"}</script>\n\nReleased on " + monthNames[ now.getMonth() ] + " " + now.getDate() + ", " + now.getFullYear() + "\n\n";
 	},
 	generateArtifacts: function( fn ) {
-		var files;
-		function copyCdnFiles() {
+		var files = replaceAtVersion();
+
+		buildCDNPackage(function copyCdnFiles() {
 			var zipFile = shell.ls( "../jquery*-cdn.zip" )[ 0 ],
 				tmpFolder = "../tmp-zip-output",
 				unzipCommand = "unzip -o " + zipFile + " -d " + tmpFolder;
@@ -82,11 +83,7 @@ Release.define({
 			shell.cp( tmpFolder + "/jquery-ui*.js", "dist/cdn" );
 			shell.cp( "-r", tmpFolder + "/themes", "dist/cdn" );
 			fn( files );
-		}
-
-		Release.exec( "grunt manifest" );
-		files = shell.ls( "*.jquery.json" ).concat( replaceAtVersion() );
-		buildCDNPackage( copyCdnFiles );
+		});
 	}
 });
 
