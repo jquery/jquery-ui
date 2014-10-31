@@ -788,12 +788,13 @@ return $.widget("ui.sortable", $.ui.mouse, {
 							.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
 							.removeClass("ui-sortable-helper");
 
-					if ( nodeName === "tr" ) {
-						that.currentItem.children().each(function() {
-							$( "<td>&#160;</td>", that.document[0] )
-								.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
-								.appendTo( element );
-						});
+					if ( nodeName === "tbody" ) {
+						that._createTrPlaceholder(
+							that.currentItem.find( "tr" ).eq( 0 ),
+							$( "<tr>", that.document[ 0 ] ).appendTo( element )
+						);
+					} else if ( nodeName === "tr" ) {
+						that._createTrPlaceholder( that.currentItem, element );
 					} else if ( nodeName === "img" ) {
 						element.attr( "src", that.currentItem.attr( "src" ) );
 					}
@@ -828,6 +829,16 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
 		o.placeholder.update(that, that.placeholder);
 
+	},
+
+	_createTrPlaceholder: function( sourceTr, targetTr ) {
+		var that = this;
+
+		sourceTr.children().each(function() {
+			$( "<td>&#160;</td>", that.document[ 0 ] )
+				.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
+				.appendTo( targetTr );
+		});
 	},
 
 	_contactContainers: function(event) {
