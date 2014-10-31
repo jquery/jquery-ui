@@ -90,4 +90,32 @@ test( "disable", function() {
 	equal( chainable, element, "disable is chainable" );
 });
 
+test( "refresh() should update the positions of initially empty lists (see #7498)", function() {
+	expect( 1 );
+
+	var changeCount = 0,
+		element = $( "#qunit-fixture" ).html( "<ul></ul>" ).find( "ul" );
+
+	element
+		.css({ "float": "left", width: "100px" })
+		.sortable({
+			change: function() {
+				changeCount++;
+			}
+		})
+		.append( "<li>a</li><li>a</li>" )
+		.find( "li" )
+			.css({ "float": "left", width: "50px", height: "50px" });
+
+	element.sortable( "refresh" );
+
+	// Switch the order of the two li elements
+	element.find( "li:first" ).simulate( "drag", {
+		dx: 55,
+		moves: 15
+	});
+
+	equal( changeCount, 1 );
+});
+
 })(jQuery);
