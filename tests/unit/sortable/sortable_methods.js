@@ -97,7 +97,10 @@ test( "refresh() should update the positions of initially empty lists (see #7498
 		element = $( "#qunit-fixture" ).html( "<ul></ul>" ).find( "ul" );
 
 	element
-		.css({ "float": "left", width: "100px" })
+		.css({
+			"float": "left",
+			width: "100px"
+		})
 		.sortable({
 			change: function() {
 				changeCount++;
@@ -105,7 +108,11 @@ test( "refresh() should update the positions of initially empty lists (see #7498
 		})
 		.append( "<li>a</li><li>a</li>" )
 		.find( "li" )
-			.css({ "float": "left", width: "50px", height: "50px" });
+			.css({
+				"float": "left",
+				width: "50px",
+				height: "50px"
+			});
 
 	element.sortable( "refresh" );
 
