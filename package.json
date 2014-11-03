@@ -6,7 +6,7 @@
 	"homepage": "http://jqueryui.com",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
-		"url": "https://github.com/jquery/jquery-ui/blob/master/AUTHORS.txt"
+		"url": "https://github.com/jquery/jquery-ui/blob/1-10-stable/AUTHORS.txt"
 	},
 	"maintainers": [
 		{
@@ -48,7 +48,7 @@
 	"licenses": [
 		{
 			"type": "MIT",
-			"url": "https://github.com/jquery/jquery-ui/blob/master/MIT-LICENSE.txt"
+			"url": "https://github.com/jquery/jquery-ui/blob/1-10-stable/MIT-LICENSE.txt"
 		}
 	],
 	"scripts": {
