@@ -388,6 +388,42 @@ test( "{ placholder: String } tr", function() {
 	});
 });
 
+test( "{ placholder: String } tbody", function() {
+	expect( 6 );
+
+	var originalWidths,
+		element = $( "#sortable-table" ).sortable({
+			placeholder: "test",
+			start: function( event, ui ) {
+				var currentWidths = otherBody.children().map(function() {
+					return $( this ).width();
+				}).get();
+				ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+				deepEqual( currentWidths, originalWidths, "table cells maintain size" );
+				equal( ui.placeholder.children().length, 1,
+					"placeholder has one child" );
+				equal( ui.placeholder.children( "tr" ).length, 1,
+					"placeholder's child is tr" );
+				equal( ui.placeholder.find( "> tr" ).children().length,
+					dragBody.find( "> tr:first" ).children().length,
+					"placeholder's tr has correct number of cells" );
+				equal( ui.placeholder.find( "> tr" ).children().html(),
+					$( "<span>&#160;</span>" ).html(),
+					"placeholder td has content for forced dimensions" );
+			}
+		}),
+		bodies = element.children( "tbody" ),
+		dragBody = bodies.eq( 0 ),
+		otherBody = bodies.eq( 1 );
+
+	originalWidths = otherBody.children().map(function() {
+		return $( this ).width();
+	}).get();
+	dragBody.simulate( "drag", {
+		dy: 1
+	});
+});
+
 /*
 test("{ revert: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
