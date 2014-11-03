@@ -297,13 +297,13 @@ return $.widget( "ui.menu", {
 			.each(function() {
 				var menu = $( this ),
 					item = menu.prev(),
-					submenucaret = $( "<span>" )
+					submenuCaret = $( "<span>" )
 						.addClass( "ui-menu-icon ui-icon " + icon )
 						.data( "ui-menu-submenu-caret", true );
 
 				item
 					.attr( "aria-haspopup", "true" )
-					.prepend( submenucaret );
+					.prepend( submenuCaret );
 				menu.attr( "aria-labelledby", item.attr( "id" ) );
 			});
 
