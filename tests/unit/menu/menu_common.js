@@ -2,7 +2,7 @@ TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
 		disabled: false,
 		icons: {
-			submenu: "ui-icon-carat-1-e"
+			submenu: "ui-icon-caret-1-e"
 		},
 		items: "> *",
 		menus: "ul",

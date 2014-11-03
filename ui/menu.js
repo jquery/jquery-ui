@@ -31,7 +31,7 @@ return $.widget( "ui.menu", {
 	delay: 300,
 	options: {
 		icons: {
-			submenu: "ui-icon-carat-1-e"
+			submenu: "ui-icon-caret-1-e"
 		},
 		items: "> *",
 		menus: "ul",
@@ -178,7 +178,7 @@ return $.widget( "ui.menu", {
 				.removeAttr( "aria-haspopup" )
 				.children().each(function() {
 					var elem = $( this );
-					if ( elem.data( "ui-menu-submenu-carat" ) ) {
+					if ( elem.data( "ui-menu-submenu-caret" ) ) {
 						elem.remove();
 					}
 				});
@@ -297,13 +297,13 @@ return $.widget( "ui.menu", {
 			.each(function() {
 				var menu = $( this ),
 					item = menu.prev(),
-					submenuCarat = $( "<span>" )
+					submenucaret = $( "<span>" )
 						.addClass( "ui-menu-icon ui-icon " + icon )
-						.data( "ui-menu-submenu-carat", true );
+						.data( "ui-menu-submenu-caret", true );
 
 				item
 					.attr( "aria-haspopup", "true" )
-					.prepend( submenuCarat );
+					.prepend( submenucaret );
 				menu.attr( "aria-labelledby", item.attr( "id" ) );
 			});
 
@@ -438,7 +438,7 @@ return $.widget( "ui.menu", {
 		clearTimeout( this.timer );
 
 		// Don't open if already open fixes a Firefox bug that caused a .5 pixel
-		// shift in the submenu position when mousing over the carat icon
+		// shift in the submenu position when mousing over the caret icon
 		if ( submenu.attr( "aria-hidden" ) !== "true" ) {
 			return;
 		}
