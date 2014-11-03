@@ -110,7 +110,7 @@ test( "refresh() should update the positions of initially empty lists (see #7498
 	element.sortable( "refresh" );
 
 	// Switch the order of the two li elements
-	element.find( "li:first" ).simulate( "drag", {
+	element.find( "li" ).eq( 0 ).simulate( "drag", {
 		dx: 55,
 		moves: 15
 	});
