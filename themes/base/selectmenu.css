@@ -18,6 +18,7 @@
 }
 .ui-selectmenu-menu .ui-menu {
 	overflow: auto;
+	overflow-x: hidden;
 	padding-bottom: 1px;
 }
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
