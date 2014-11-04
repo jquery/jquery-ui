@@ -618,7 +618,7 @@ return $.widget( "ui.selectmenu", {
 		return {
 			element: option,
 			index: index,
-			value: option.attr( "value" ),
+			value: option.val(),
 			label: option.text(),
 			optgroup: optgroup.attr( "label" ) || "",
 			disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" )
