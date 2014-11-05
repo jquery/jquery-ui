@@ -13,22 +13,18 @@ function handle() {
 module( "slider: core" );
 
 test( "markup structure", function() {
-	expect( 9 );
+	expect( 3 );
 	var element = $( "<div></div>" ).slider({ range: true }),
 		handle = element.find( "span" ),
 		range = element.find( "div" );
 
-	ok( element.hasClass( "ui-slider" ), "main element is .ui-slider" );
-	ok( element.hasClass( "ui-widget" ), "main element is .ui-widget" );
-	ok( element.hasClass( "ui-widget-content" ), "main element is .ui-widget-content" );
-	ok( element.hasClass( "ui-corner-all" ), "main element is .ui-corner-all" );
+	ok( element.is( ".ui-slider.ui-widget.ui-widget-content.ui-corner-all" ),
+		"main element has proper classes" );
 
-	ok( handle.hasClass( "ui-slider-handle" ), "handle is .ui-slider-handle" );
-	ok( handle.hasClass( "ui-corner-all" ), "handle is .ui-corner-all" );
+	ok( handle.is( ".ui-slider-handle.ui-corner-all" ), "handle has proper classes" );
 
-	ok( range.hasClass( "ui-slider-range" ), "range is .ui-slider-range" );
-	ok( range.hasClass( "ui-widget-header" ), "range is .ui-widget-header" );
-	ok( range.hasClass( "ui-corner-all" ), "range is .ui-corner-all" );
+	ok( range.is( ".ui-slider-range.ui-widget-header.ui-corner-all" ),
+		"range has proper classes" );
 });
 
 test( "keydown HOME on handle sets value to min", function() {
