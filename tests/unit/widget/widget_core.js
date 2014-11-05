@@ -607,6 +607,72 @@ test( ".option() - deep option setter", function() {
 	div.testWidget( "option", "foo.qux.newOpt", "newVal" );
 });
 
+test( ".option() - classes setter", function(){
+	expect( 6 );
+	$.widget( "ui.testWidget", {
+		options: {
+			classes: {
+				"test-span": "",
+				"test-wrapper": "self-wrapper",
+				"test-self": "self-class self-class-2"
+			}
+		},
+		defaultElement: "<div>",
+		_elementsFromClassKey: function( classKey ) {
+			switch ( classKey ) {
+				case "test-span":
+					return this.span;
+				case "test-wrapper":
+					return this.widget();
+				default:
+					return this._superApply( arguments );
+			}
+		},
+		_create: function() {
+			this.span = $( "<span>" )
+				.addClass( this._classes( "test-span" ) )
+				.appendTo( this.element );
+
+			this.element.wrap( "<div>" );
+
+			this.element.addClass( this._classes( "test-self" ) );
+
+			this.wrapper = this.element.parent();
+
+			this.wrapper.addClass( this._classes( "test-wrapper" ) );
+
+		},
+		widget: function() {
+			return this.wrapper;
+		}
+	});
+
+	var testWidget = $.ui.testWidget(),
+		currentWrapperClass = testWidget.option( "classes.test-wrapper" );
+
+	testWidget.option({
+		classes: {
+			"test-span": "self-span-new",
+			"test-wrapper": currentWrapperClass + " self-wrapper-new",
+			"test-self": "self-class-2"
+		}
+	});
+
+	equal( testWidget.element.is( ".test-self.self-class-2" ), true,
+		"Removing a class leaves the structure and other classes in value" );
+	equal( !testWidget.element.is( ".self-class" ), true,
+		"Removing a class from the value removes the class" );
+	testWidget.option( "classes.test-self", "" );
+	equal( testWidget.element.is( ".test-self" ), true,
+		"Setting to empty value leaves structure class" );
+	equal( !testWidget.element.is( ".self-class-2" ), true,
+		"Setting empty value removes previous value classes" );
+	equal( testWidget.span.is( ".test-span.self-span-new" ), true,
+		"Adding a class to an empty value works as expected" );
+	equal( testWidget.wrapper.is( ".test-wrapper.self-wrapper-new" ), true,
+		"Appending a class to the current value works as expected" );
+});
+
 test( "_classes", function(){
 	expect( 4 );
 	$.widget( "ui.testWidget", {
@@ -617,6 +683,7 @@ test( "_classes", function(){
 				"test2": "class3"
 			}
 		},
+		defaultElement: "<div>",
 		_create: function() {
 			equal( this._classes( "test" ), "test class1 class2" );
 			equal( this._classes( "test2" ), "test2 class3" );
@@ -625,7 +692,7 @@ test( "_classes", function(){
 			equal( this._classes( "test test2" ), "test2 class3 test class1 class2" );
 		}
 	});
-	$( "<div>" ).testWidget();
+	$.ui.testWidget();
 });
 
 test( ".enable()", function() {
