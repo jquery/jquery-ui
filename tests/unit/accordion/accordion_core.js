@@ -7,19 +7,17 @@ module( "accordion: core", setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
 	test( "markup structure: " + type, function() {
-		expect( 11 );
+		expect( 8 );
 		var element = $( selector ).accordion(),
 			headers = element.find( ".ui-accordion-header" ),
 			panels = element.find( ".ui-accordion-content" );
 
-		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
-		ok( element.hasClass( "ui-widget" ), "main element is .ui-widget" );
+		ok( element.is( ".ui-accordion.ui-widget" ), "main has proper classes" );
 		ok( headers.hasClass( "ui-corner-top" ), "header is .ui-corner-top" );
 		ok( !headers.eq( 0 ).hasClass( "ui-corner-all" ), "open header is not .ui-corner-all" );
 		ok( headers.eq( 1 ).hasClass( "ui-corner-all" ), "closed header is .ui-corner-all" );
-		ok( headers.next().hasClass( "ui-accordion-content" ), "panel is .ui-accordion-content" );
-		ok( headers.next().hasClass( "ui-widget-content" ), "panel is .ui-widget-content" );
-		ok( headers.next().hasClass( "ui-corner-bottom" ), "panel is .ui-corner-bottom" );
+		ok( headers.next().is( ".ui-accordion-content.ui-widget-content.ui-corner-bottom" ),
+			"panel has proper classes" );
 
 		equal( headers.length, 3,
 			".ui-accordion-header elements exist, correct number" );
