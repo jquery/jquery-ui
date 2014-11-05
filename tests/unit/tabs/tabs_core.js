@@ -5,30 +5,23 @@ var state = TestHelpers.tabs.state;
 module( "tabs: core" );
 
 test( "markup structure", function() {
-	expect( 15 );
+	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),
 		ul = element.find( "ul.ui-tabs-nav" ),
 		tabs = ul.find( "li" ),
 		active = tabs.eq( 0 );
 
-	ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
-	ok( element.hasClass( "ui-widget" ), "main element is .ui-widget" );
-	ok( element.hasClass( "ui-widget-content" ), "main element is .ui-widget-content" );
-	ok( element.hasClass( "ui-corner-all" ), "main element is .ui-corner-all" );
+	ok( element.is( ".ui-tabs.ui-widget.ui-widget-content.ui-corner-all" ),
+		"main element has proper classes" );
 	ok( !element.hasClass( "ui-tabs-collapsible" ), "main element is not .ui-tabs-collapsible" );
 
-	ok( ul.hasClass( "ui-tabs-nav" ), "list is .ui-tabs-nav" );
-	ok( ul.hasClass( "ui-widget-header" ), "list is .ui-widget-header" );
-	ok( ul.hasClass( "ui-corner-all" ), "list is .ui-corner-all" );
+	ok( ul.is( ".ui-tabs-nav.ui-widget-header.ui-corner-all" ), "list has proper classes" );
 
-	ok( tabs.hasClass( "ui-tab" ), "list item is .ui-tab" );
-	ok( tabs.hasClass( "ui-corner-top" ), "list item is .ui-corner-top" );
-	ok( tabs.hasClass( "ui-state-default" ), "list item is .ui-state-default" );
+	ok( tabs.is( ".ui-tab.ui-corner-top.ui-state-default" ), "list has proper classes" );
 
 	ok( element.find( "a" ).hasClass( "ui-tabs-anchor" ), "link item is .ui-tabs-anchor" );
 
-	ok( active.hasClass( "ui-tabs-active" ), "active item is .ui-tabs-active" );
-	ok( active.hasClass( "ui-state-active" ), "active item is .ui-state-active" );
+	ok( active.is( ".ui-tabs-active.ui-state-active" ), "active item has proper classes" );
 
 	equal( element.find( ".ui-tabs-panel.ui-widget-content.ui-corner-bottom" ).length, 3,
 		".ui-tabs-panel elements exist, correct number" );
