@@ -908,7 +908,7 @@ $.widget( "ui.dialog", {
 });
 
 // DEPRECATED
-if ( $.uiBackCompat ) {
+if ( $.uiBackCompat !== false ) {
 
 	// DialogClass option
 	$.widget( "ui.dialog", $.ui.dialog, {
