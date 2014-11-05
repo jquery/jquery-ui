@@ -113,7 +113,7 @@ $.widget( "ui.tooltip", {
 			case "ui-tooltip":
 				return this.tooltips;
 			case "ui-tooltip-content":
-				return this.tooltips.map(function(){
+				return this.tooltips.map(function() {
 					return $( this ).find( classKey );
 				});
 		}
@@ -473,7 +473,7 @@ $.widget( "ui.tooltip", {
 });
 
 // DEPRECATED
-if ( $.uiBackCompat ) {
+if ( $.uiBackCompat !== false ) {
 
 	// TooltipClass option
 	$.widget( "ui.tooltip", $.ui.tooltip, {
