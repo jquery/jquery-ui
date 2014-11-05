@@ -470,7 +470,7 @@ $.widget( "ui.tooltip", {
 });
 
 // DEPRECATED
-if ( $.uiBackCompat ) {
+if ( $.uiBackCompat !== false ) {
 
 	// TooltipClass option
 	$.widget( "ui.tooltip", $.ui.tooltip, {
