@@ -8,7 +8,7 @@
 module("dialog: core");
 
 test( "markup structure", function() {
-	expect( 15 );
+	expect( 7 );
 	var element = $("<div></div>").dialog({
 			buttons: [{
 				text: "Ok",
@@ -23,7 +23,7 @@ test( "markup structure", function() {
 	ok( widget.is( ".ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-dialog-buttons" ),
 		"Widget has proper classes" );
 
-	ok( widget.is( ".ui-dialog-titlebar.ui-corner-all.ui-widget-header"),
+	ok( titlebar.is( ".ui-dialog-titlebar.ui-corner-all.ui-widget-header"),
 		"Titlebar has proper classes");
 
 	ok( titlebar.find( ".ui-dialog-title" ).length, "Title is .ui-dialog-title" );
