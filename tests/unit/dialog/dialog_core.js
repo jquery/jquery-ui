@@ -8,7 +8,7 @@
 module("dialog: core");
 
 test( "markup structure", function() {
-	expect( 15 );
+	expect( 7 );
 	var element = $("<div></div>").dialog({
 			buttons: [{
 				text: "Ok",
@@ -20,24 +20,20 @@ test( "markup structure", function() {
 		close = titlebar.find( "button" ),
 		buttonpane = widget.find( ".ui-dialog-buttonpane" );
 
-	ok( widget.hasClass( "ui-dialog" ), "widget is .ui-dialog" );
-	ok( widget.hasClass( "ui-widget" ), "widget is .ui-widget" );
-	ok( widget.hasClass( "ui-widget-content" ), "widget is .ui-widget-content" );
-	ok( widget.hasClass( "ui-corner-all" ), "widget is .ui-corner-all" );
-	ok( widget.hasClass( "ui-dialog-buttons" ), "widget is .ui-dialog-buttons" );
+	ok( widget.is( ".ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-dialog-buttons" ),
+		"Widget has proper classes" );
 
-	ok( titlebar.hasClass( "ui-dialog-titlebar" ), "titlebar is .ui-dialog-titlebar" );
-	ok( titlebar.hasClass( "ui-corner-all" ), "titlebar is .ui-corner-all" );
-	ok( titlebar.hasClass( "ui-widget-header" ), "titlebar is .ui-widget-header" );
-	ok( titlebar.find( ".ui-dialog-title" ).length, "title is .ui-dialog-title" );
+	ok( titlebar.is( ".ui-dialog-titlebar.ui-corner-all.ui-widget-header"),
+		"Titlebar has proper classes");
 
-	ok( close.hasClass( "ui-dialog-titlebar-close" ), "close button is .ui-dialog-titlebar-close" );
+	ok( titlebar.find( ".ui-dialog-title" ).length, "Title is .ui-dialog-title" );
 
-	ok( element.hasClass( "ui-dialog-content" ), "element is .ui-dialog-content" );
-	ok( element.hasClass( "ui-widget-content" ), "element is .ui-widget-content" );
+	ok( close.hasClass( "ui-dialog-titlebar-close" ), "Close button is .ui-dialog-titlebar-close" );
 
-	ok( buttonpane.hasClass( "ui-dialog-buttonpane" ), "buttonpane is .ui-dialog-buttonpane" );
-	ok( buttonpane.hasClass( "ui-widget-content" ), "buttonpane is .ui-widget-content" );
+	ok( element.is( ".ui-dialog-content.ui-widget-content" ), "Element is .ui-widget-content" );
+
+	ok( buttonpane.is( ".ui-dialog-buttonpane.ui-widget-content" ),
+		"Buttonpane is .ui-widget-content" );
 	ok( buttonpane.find( ".ui-dialog-buttonset" ).length, "buttonset is .ui-dialog-buttonset" );
 
 });
