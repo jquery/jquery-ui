@@ -8,13 +8,11 @@ test( "markup structure", function() {
 		menu = element.selectmenu( "menuWidget" ),
 		menuWrap = menu.parent();
 
-	expect( 7 );
+	expect( 4 );
 
-	ok( button.hasClass( "ui-selectmenu-button" ), "button is .ui-selectmenu-button" );
-	ok( button.hasClass( "ui-selectmenu-button-closed" ), "button is .ui-selectmenu-button-closed" );
+	ok( button.is( ".ui-selectmenu-button.ui-selectmenu-button-closed.ui-widget.ui-state-default" ),
+		"button has proper classes" );
 	ok( !button.hasClass( "ui-selectmenu-button-open" ), "button is not .ui-selectmenu-button-open" );
-	ok( button.hasClass( "ui-widget" ), "button is .ui-widget" );
-	ok( button.hasClass( "ui-state-default" ), "button is .ui-state-default" );
 
 	ok( menuWrap.hasClass( "ui-selectmenu-menu" ), "menu is .ui-selectmenu-menu" );
 	ok( !menuWrap.hasClass( "ui-selectmenu-menu-open" ), "menu is not .ui-selectmenu-menu-open" );
