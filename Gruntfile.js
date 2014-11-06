@@ -305,7 +305,64 @@ grunt.initConfig({
 				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt"
 			}
 		}
+	},
+
+	authors: {
+		prior: [
+			"Paul Bakaus <paul.bakaus@gmail.com>",
+			"Richard Worth <rdworth@gmail.com>",
+			"Yehuda Katz <wycats@gmail.com>",
+			"Sean Catchpole <sean@sunsean.com>",
+			"John Resig <jeresig@gmail.com>",
+			"Tane Piper <piper.tane@gmail.com>",
+			"Dmitri Gaskin <dmitrig01@gmail.com>",
+			"Klaus Hartl <klaus.hartl@gmail.com>",
+			"Stefan Petre <stefan.petre@gmail.com>",
+			"Gilles van den Hoven <gilles@webunity.nl>",
+			"Micheil Bryan Smith <micheil@brandedcode.com>",
+			"Jörn Zaefferer <joern.zaefferer@gmail.com>",
+			"Marc Grabanski <m@marcgrabanski.com>",
+			"Keith Wood <kbwood@iinet.com.au>",
+			"Brandon Aaron <brandon.aaron@gmail.com>",
+			"Scott González <scott.gonzalez@gmail.com>",
+			"Eduardo Lundgren <eduardolundgren@gmail.com>",
+			"Aaron Eisenberger <aaronchi@gmail.com>",
+			"Joan Piedra <theneojp@gmail.com>",
+			"Bruno Basto <b.basto@gmail.com>",
+			"Remy Sharp <remy@leftlogic.com>",
+			"Bohdan Ganicky <bohdan.ganicky@gmail.com>"
+		]
 	}
+});
+
+grunt.registerTask( "update-authors", function() {
+	var getAuthors = require( "grunt-git-authors" ),
+		done = this.async();
+
+	getAuthors({
+		priorAuthors: grunt.config( "authors.prior" )
+	}, function( error, authors ) {
+		if ( error ) {
+			grunt.log.error( error );
+			return done( false );
+		}
+
+		authors = authors.map(function( author ) {
+			if ( author.match( /^Jacek Jędrzejewski </ ) ) {
+				return "Jacek Jędrzejewski (http://jacek.jedrzejewski.name)";
+			} else if ( author.match( /^Pawel Maruszczyk </ ) ) {
+				return "Pawel Maruszczyk (http://hrabstwo.net)";
+			} else {
+				return author;
+			}
+		});
+
+		grunt.file.write( "AUTHORS.txt",
+			"Authors ordered by first contribution\n" +
+			"A list of current team members is available at http://jqueryui.com/about\n\n" +
+			authors.join( "\n" ) + "\n" );
+		done();
+	});
 });
 
 grunt.registerTask( "default", [ "lint", "test" ]);
