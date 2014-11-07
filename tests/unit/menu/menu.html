@@ -33,7 +33,7 @@
 		font-size: 15px;
 		line-height: 15px;
 	}
-	.ui-menu .ui-menu-item {
+	.ui-menu .ui-menu-item-wrapper {
 		padding: 0;
 	}
 	#menu3 {
@@ -52,263 +52,284 @@
 <div id="qunit-fixture">
 
 <ul class="foo" id="menu1">
-	<li class="foo">Aberdeen</li>
-	<li class="foo">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li id="testID1" class="foo">Addyston</li>
-	<li class="foo">Adelphi</li>
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div id="testID1">Addyston</div></li>
+	<li class="foo"><div>Adelphi</div></li>
 </ul>
 
 <ul id="menu2">
-	<li class="foo">Aberdeen</li>
-	<li class="foo">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo"><span class="ui-icon ui-icon-print"></span>Addyston</li>
-	<li>Delphi
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo">
+		<div><span class="ui-icon ui-icon-print"></span>Addyston</div>
+	</li>
+	<li>
+		<div>Delphi</div>
 		<ul>
-			<li class="foo">Ada</li>
-			<li class="foo">Saarland</li>
-			<li class="foo">Salzburg</li>
+			<li class="foo"><div>Ada</div></li>
+			<li class="foo"><div>Saarland</div></li>
+			<li class="foo"><div>Salzburg</div></li>
 		</ul>
 	</li>
-	<li class="foo"> Saarland</li>
-	<li>Salzburg
+	<li class="foo"><div> Saarland</div></li>
+	<li>
+		<div>Salzburg</div>
 		<ul>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li class="foo">Ada</li>
-					<li class="foo">Saarland</li>
-					<li class="foo">Salzburg</li>
+					<li class="foo"><div>Ada</div></li>
+					<li class="foo"><div>Saarland</div></li>
+					<li class="foo"><div>Salzburg</div></li>
 				</ul>
 			</li>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li class="foo">Ada</li>
+					<li class="foo"><div>Ada</div></li>
 					<li> - </li>
-					<li class="foo">Saarland</li>
+					<li class="foo"><div>Saarland</div></li>
 					<li></li>
-					<li class="foo">Salzburg</li>
+					<li class="foo"><div>Salzburg</div></li>
 					<li>&ndash;</li>
 				</ul>
 			</li>
-			<li class="foo">Perch</li>
+			<li class="foo"><div>Perch</div></li>
 		</ul>
 	</li>
 </ul>
 
 <ul class="foo" id="menu3">
-	<li class="foo">Aberdeen</li>
-	<li class="foo">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo">Addyston</li>
-	<li class="foo">Adelphi</li>
-	<li class="foo">Adena</li>
-	<li class="foo">Adrian</li>
-	<li class="foo">Akron</li>
-	<li class="foo">Albany</li>
-	<li class="foo">Alexandria</li>
-	<li class="foo">Alger</li>
-	<li class="foo">Alledonia</li>
-	<li class="foo">Alliance</li>
-	<li class="foo">Alpha</li>
-	<li class="foo">Alvada</li>
-	<li class="foo">Alvordton</li>
-	<li class="foo">Amanda</li>
-	<li class="foo">Amelia</li>
-	<li class="foo">Amesville</li>
-	<li class="foo">Aberdeen</li>
-	<li class="foo">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo">Addyston</li>
-	<li class="foo">Adelphi</li>
-	<li class="foo">Adena</li>
-	<li class="foo">Adrian</li>
-	<li class="foo">Akron</li>
-	<li class="foo">Albany</li>
-	<li class="foo">Alexandria</li>
-	<li class="foo">Alger</li>
-	<li class="foo">Alledonia</li>
-	<li class="foo">Alliance</li>
-	<li class="foo">Alpha</li>
-	<li class="foo">Alvada</li>
-	<li class="foo">Alvordton</li>
-	<li class="foo">Amanda</li>
-	<li class="foo">Amelia</li>
-	<li class="foo">Amesville</li>
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
+	<li class="foo"><div>Adelphi</div></li>
+	<li class="foo"><div>Adena</div></li>
+	<li class="foo"><div>Adrian</div></li>
+	<li class="foo"><div>Akron</div></li>
+	<li class="foo"><div>Albany</div></li>
+	<li class="foo"><div>Alexandria</div></li>
+	<li class="foo"><div>Alger</div></li>
+	<li class="foo"><div>Alledonia</div></li>
+	<li class="foo"><div>Alliance</div></li>
+	<li class="foo"><div>Alpha</div></li>
+	<li class="foo"><div>Alvada</div></li>
+	<li class="foo"><div>Alvordton</div></li>
+	<li class="foo"><div>Amanda</div></li>
+	<li class="foo"><div>Amelia</div></li>
+	<li class="foo"><div>Amesville</div></li>
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
+	<li class="foo"><div>Adelphi</div></li>
+	<li class="foo"><div>Adena</div></li>
+	<li class="foo"><div>Adrian</div></li>
+	<li class="foo"><div>Akron</div></li>
+	<li class="foo"><div>Albany</div></li>
+	<li class="foo"><div>Alexandria</div></li>
+	<li class="foo"><div>Alger</div></li>
+	<li class="foo"><div>Alledonia</div></li>
+	<li class="foo"><div>Alliance</div></li>
+	<li class="foo"><div>Alpha</div></li>
+	<li class="foo"><div>Alvada</div></li>
+	<li class="foo"><div>Alvordton</div></li>
+	<li class="foo"><div>Amanda</div></li>
+	<li class="foo"><div>Amelia</div></li>
+	<li class="foo"><div>Amesville</div></li>
 </ul>
 
 <ul class="foo" id="menu4">
-	<li class="foo">Aberdeen</li>
+	<li class="foo"><div>Aberdeen</div></li>
 	<li class="foo">
-		Ada
+		<div>Ada</div>
 		<ul class="foo">
-			<li class="foo">Aberdeen</li>
-			<li class="foo">Ada</li>
-			<li class="foo">Adamsville</li>
-			<li class="foo">Addyston</li>
-			<li class="foo">Adelphi</li>
-			<li class="foo">Adena</li>
-			<li class="foo">Adrian</li>
-			<li class="foo">Akron</li>
-			<li class="foo">Albany</li>
-			<li class="foo">Alexandria</li>
-			<li class="foo">Alger</li>
-			<li class="foo">Alledonia</li>
-			<li class="foo">Alliance</li>
-			<li class="foo">Alpha</li>
-			<li class="foo">Alvada</li>
-			<li class="foo">Alvordton</li>
-			<li class="foo">Amanda</li>
-			<li class="foo">Amelia</li>
-			<li class="foo">Amesville</li>
-			<li class="foo">Aberdeen</li>
-			<li class="foo">Ada</li>
-			<li class="foo">Adamsville</li>
-			<li class="foo">Addyston</li>
-			<li class="foo">Adelphi</li>
-			<li class="foo">Adena</li>
-			<li class="foo">Adrian</li>
-			<li class="foo">Akron</li>
-			<li class="foo">Albany</li>
+			<li class="foo"><div>Aberdeen</div></li>
+			<li class="foo"><div>Ada</div></li>
+			<li class="foo"><div>Adamsville</div></li>
+			<li class="foo"><div>Addyston</div></li>
+			<li class="foo"><div>Adelphi</div></li>
+			<li class="foo"><div>Adena</div></li>
+			<li class="foo"><div>Adrian</div></li>
+			<li class="foo"><div>Akron</div></li>
+			<li class="foo"><div>Albany</div></li>
+			<li class="foo"><div>Alexandria</div></li>
+			<li class="foo"><div>Alger</div></li>
+			<li class="foo"><div>Alledonia</div></li>
+			<li class="foo"><div>Alliance</div></li>
+			<li class="foo"><div>Alpha</div></li>
+			<li class="foo"><div>Alvada</div></li>
+			<li class="foo"><div>Alvordton</div></li>
+			<li class="foo"><div>Amanda</div></li>
+			<li class="foo"><div>Amelia</div></li>
+			<li class="foo"><div>Amesville</div></li>
+			<li class="foo"><div>Aberdeen</div></li>
+			<li class="foo"><div>Ada</div></li>
+			<li class="foo"><div>Adamsville</div></li>
+			<li class="foo"><div>Addyston</div></li>
+			<li class="foo"><div>Adelphi</div></li>
+			<li class="foo"><div>Adena</div></li>
+			<li class="foo"><div>Adrian</div></li>
+			<li class="foo"><div>Akron</div></li>
+			<li class="foo"><div>Albany</div></li>
 		</ul>
 	</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo">Addyston</li>
-	<li class="foo">Adelphi</li>
-	<li class="foo">Adena</li>
-	<li class="foo">Adrian</li>
-	<li class="foo">Akron</li>
-	<li class="foo">Albany</li>
-	<li class="foo">Alexandria</li>
-	<li class="foo">Alger</li>
-	<li class="foo">Alledonia</li>
-	<li class="foo">Alliance</li>
-	<li class="foo">Alpha</li>
-	<li class="foo">Alvada</li>
-	<li class="foo">Alvordton</li>
-	<li class="foo">Amanda</li>
-	<li class="foo">Amelia</li>
-	<li class="foo">Amesville</li>
-	<li class="foo">Aberdeen</li>
-	<li class="foo">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo">Addyston</li>
-	<li class="foo">Adelphi</li>
-	<li class="foo">Adena</li>
-	<li class="foo">Adrian</li>
-	<li class="foo">Akron</li>
-	<li class="foo">Albany</li>
-	<li class="foo">Alexandria</li>
-	<li class="foo">Alger</li>
-	<li class="foo">Alledonia</li>
-	<li class="foo">Alliance</li>
-	<li class="foo">Alpha</li>
-	<li class="foo">Alvada</li>
-	<li class="foo">Alvordton</li>
-	<li class="foo">Amanda</li>
-	<li class="foo">Amelia</li>
-	<li class="foo">Amesville</li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
+	<li class="foo"><div>Adelphi</div></li>
+	<li class="foo"><div>Adena</div></li>
+	<li class="foo"><div>Adrian</div></li>
+	<li class="foo"><div>Akron</div></li>
+	<li class="foo"><div>Albany</div></li>
+	<li class="foo"><div>Alexandria</div></li>
+	<li class="foo"><div>Alger</div></li>
+	<li class="foo"><div>Alledonia</div></li>
+	<li class="foo"><div>Alliance</div></li>
+	<li class="foo"><div>Alpha</div></li>
+	<li class="foo"><div>Alvada</div></li>
+	<li class="foo"><div>Alvordton</div></li>
+	<li class="foo"><div>Amanda</div></li>
+	<li class="foo"><div>Amelia</div></li>
+	<li class="foo"><div>Amesville</div></li>
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
+	<li class="foo"><div>Adelphi</div></li>
+	<li class="foo"><div>Adena</div></li>
+	<li class="foo"><div>Adrian</div></li>
+	<li class="foo"><div>Akron</div></li>
+	<li class="foo"><div>Albany</div></li>
+	<li class="foo"><div>Alexandria</div></li>
+	<li class="foo"><div>Alger</div></li>
+	<li class="foo"><div>Alledonia</div></li>
+	<li class="foo"><div>Alliance</div></li>
+	<li class="foo"><div>Alpha</div></li>
+	<li class="foo"><div>Alvada</div></li>
+	<li class="foo"><div>Alvordton</div></li>
+	<li class="foo"><div>Amanda</div></li>
+	<li class="foo"><div>Amelia</div></li>
+	<li class="foo"><div>Amesville</div></li>
 </ul>
 
 <div id="menu5">
-	<blockquote>Aberdeen</blockquote>
-	<blockquote>Ada</blockquote>
-	<blockquote>Adamsville</blockquote>
-	<blockquote>Addyston</blockquote>
-	<blockquote>Delphi
-		<div>
-			<blockquote>Ada</blockquote>
-			<blockquote>Saarland</blockquote>
-			<blockquote>Salzburg</blockquote>
+	<blockquote><div>Aberdeen</div></blockquote>
+	<blockquote><div>Ada</div></blockquote>
+	<blockquote><div>Adamsville</div></blockquote>
+	<blockquote><div>Addyston</div></blockquote>
+	<blockquote>
+		<div>Delphi</div>
+		<div class="menu">
+			<blockquote><div>Ada</div></blockquote>
+			<blockquote><div>Saarland</div></blockquote>
+			<blockquote><div>Salzburg</div></blockquote>
 		</div>
 	</blockquote>
-	<blockquote>Saarland</blockquote>
-	<blockquote>Salzburg
-		<div>
-			<blockquote>Delphi
-				<div>
-					<blockquote>Ada</blockquote>
+	<blockquote><div>Saarland</div></blockquote>
+	<blockquote>
+		<div>Salzburg</div>
+		<div class="menu">
+			<blockquote>
+				<div>Delphi</div>
+				<div class="menu">
+					<blockquote><div>Ada</div></blockquote>
 					<blockquote id="testID2">Saarland</blockquote>
-					<blockquote>Salzburg</blockquote>
+					<blockquote><div>Salzburg</div></blockquote>
 				</div>
 			</blockquote>
-			<blockquote>Delphi
-				<div>
-					<blockquote>Ada</blockquote>
-					<blockquote>Saarland</blockquote>
-					<blockquote>Salzburg</blockquote>
+			<blockquote>
+				<div>Delphi</div>
+				<div class="menu">
+					<blockquote><div>Ada</div></blockquote>
+					<blockquote><div>Saarland</div></blockquote>
+					<blockquote><div>Salzburg</div></blockquote>
 				</div>
 			</blockquote>
-			<blockquote>Perch</blockquote>
+			<blockquote><div>Perch</div></blockquote>
 		</div>
 	</blockquote>
 </div>
 
 <ul id="menu6">
-	<li class="foo">Aberdeen</li>
-	<li class="foo ui-state-disabled">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo">Addyston</li>
-	<li id="testID3" class="ui-state-disabled">Delphi
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo ui-state-disabled"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
+	<li id="testID3" class="ui-state-disabled">
+		<div>Delphi</div>
 		<ul>
-			<li class="foo">Ada</li>
-			<li class="foo">Saarland</li>
-			<li class="foo">Salzburg</li>
+			<li class="foo"><div>Ada</div></li>
+			<li class="foo"><div>Saarland</div></li>
+			<li class="foo"><div>Salzburg</div></li>
 		</ul>
 	</li>
-	<li class="foo">Saarland</li>
+	<li class="foo"><div>Saarland</div></li>
 </ul>
 
 <ul id="menu7">
-	<li class="ui-menu-group"><strong>Group 1</strong></li>
-	<li>Aberdeen</li>
-	<li>Ada</li>
-	<li>Adamsville</li>
-	<li>Addyston</li>
+	<li class="ui-menu-group">
+		<div><strong>Group 1</strong></div>
+	</li>
+	<li><div>Aberdeen</div></li>
+	<li><div>Ada</div></li>
+	<li><div>Adamsville</div></li>
+	<li><div>Addyston</div></li>
 	<li></li>
-	<li class="ui-menu-group"><strong>Group 2</strong></li>
-	<li>Delphi
+	<li class="ui-menu-group">
+		<div><strong>Group 2</strong></div>
+	</li>
+	<li>
+		<div>Delphi</div>
 		<ul>
-			<li>Ada</li>
-			<li>Saarland</li>
-			<li>Salzburg</li>
+			<li><div>Ada</div></li>
+			<li><div>Saarland</div></li>
+			<li><div>Salzburg</div></li>
 		</ul>
 	</li>
-	<li>Saarland</li>
+	<li><div>Saarland</div></li>
 	<li>---</li>
-	<li class="ui-menu-group"><strong>Group 3</strong></li>
-	<li>Salzburg
+	<li class="ui-menu-group">
+		<div><strong>Group 3</strong></div>
+	</li>
+	<li>
+		<div>Salzburg</div>
 		<ul>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li>Ada</li>
+					<li><div>Ada</div></li>
 					<li> - </li>
-					<li>Saarland</li>
+					<li><div>Saarland</div></li>
 					<li>&mdash;</li>
-					<li>Salzburg</li>
+					<li><div>Salzburg</div></li>
 					<li>&ndash;</li>
 				</ul>
 			</li>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li>Ada</li>
-					<li>Saarland</li>
-					<li>Salzburg</li>
+					<li><div>Ada</div></li>
+					<li><div>Saarland</div></li>
+					<li><div>Salzburg</div></li>
 				</ul>
 			</li>
-			<li>Perch</li>
+			<li><div>Perch</div></li>
 		</ul>
 	</li>
-	<li>Amesville</li>
+	<li><div>Amesville</div></li>
 </ul>
 
 <ul id="menu8">
-	<li class="foo">Aberdeen</li>
-	<li class="foo ui-state-disabled">Ada</li>
-	<li class="foo">Adamsville</li>
-	<li class="foo">Addyston</li>
+	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo ui-state-disabled"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
 	<li class="foo">-</li>
-	<li class="foo">-Saarland</li>
+	<li class="foo"><div>-Saarland</div></li>
 </ul>
 
 </div>

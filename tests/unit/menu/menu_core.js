@@ -48,12 +48,13 @@ asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", functio
 asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected item for Selectmenu", function() {
 	expect( 1 );
 	var element = $( "#menu1" ).menu(),
-		firstChild = element.children().eq( 0 );
+		firstChild = element.children().eq( 0 ),
+		wrapper = firstChild.children( ".ui-menu-item-wrapper" );
 
 	element.menu( "focus", null, firstChild );
-	firstChild.addClass( "ui-state-active" );
+	wrapper.addClass( "ui-state-active" );
 	setTimeout( function() {
-		ok( firstChild.is( ".ui-state-active" ), "ui-state-active improperly removed" );
+		ok( wrapper.is( ".ui-state-active" ), "ui-state-active improperly removed" );
 		start();
 	}, 500 );
 });

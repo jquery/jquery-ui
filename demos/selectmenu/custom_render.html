@@ -16,7 +16,8 @@
 	$(function() {
 		$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
 			_renderItem: function( ul, item ) {
-				var li = $( "<li>", { text: item.label } );
+				var li = $( "<li>" ),
+					wrapper = $( "<div>", { text: item.label } );
 
 				if ( item.disabled ) {
 					li.addClass( "ui-state-disabled" );
@@ -26,9 +27,9 @@
 					style: item.element.attr( "data-style" ),
 					"class": "ui-icon " + item.element.attr( "data-class" )
 				})
-					.appendTo( li );
+					.appendTo( wrapper );
 
-				return li.appendTo( ul );
+				return li.append( wrapper ).appendTo( ul );
 			}
 		});
 
@@ -63,7 +64,7 @@
 		}
 
 		/* select with custom icons */
-		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item {
+		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item-wrapper {
 			padding: 0.5em 0 0.5em 3em;
 		}
 		.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon {

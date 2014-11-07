@@ -77,7 +77,7 @@ function autoFocusTest( afValue, focusedLength ) {
 		open: function() {
 			equal(
 				element.autocomplete( "widget" )
-					.children( ".ui-menu-item.ui-state-focus" )
+					.find( ".ui-menu-item-wrapper.ui-state-focus" )
 					.length,
 				focusedLength,
 				"first item is " + (afValue ? "" : "not") + " auto focused" );

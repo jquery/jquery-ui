@@ -68,7 +68,7 @@
 		})
 		.autocomplete( "instance" )._renderItem = function( ul, item ) {
 			return $( "<li>" )
-				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
+				.append( "<div>" + item.label + "<br>" + item.desc + "</div>" )
 				.appendTo( ul );
 		};
 	});

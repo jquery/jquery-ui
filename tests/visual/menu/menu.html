@@ -28,14 +28,14 @@
 		});
 
 		$( "#menu5" ).menu({
-			menus: "div",
+			menus: ".menuElement",
 			select: logger
 		});
 
 		$( "#menu6" ).menu({
 			menus: ".menuElement",
 			select: logger,
-			icon: "ui-icon-carat-1-s"
+			icon: "ui-icon-caret-1-s"
 		});
 
 		$( "#menu7" ).menu({
@@ -45,9 +45,7 @@
 	});
 	</script>
 	<style>
-		body { font-size:62.5%; }
-		.ui-menu { width: 200px; margin-bottom: 2em; }
-		.menu2-container { width: 220px; }
+		.ui-menu { width: 250px; margin-bottom: 2em; }
 		.menu4 { height: 225px; overflow-y: auto; overflow-x: hidden; }
 		.address-item { border-bottom: 1px solid #999; }
 		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
@@ -58,241 +56,288 @@
 
 <h2>Default inline menu</h2>
 <ul id="menu1">
-	<li>Aberdeen</li>
-	<li>Ada</li>
-	<li>Adamsville</li>
-	<li>Addyston</li>
-	<li>Delphi</li>
-	<li>Saarland</li>
-	<li>Salzburg</li>
+	<li><div>Aberdeen</div></li>
+	<li><div>Ada</div></li>
+	<li><div>Adamsville</div></li>
+	<li><div>Addyston</div></li>
+	<li><div>Delphi</div></li>
+	<li><div>Saarland</div></li>
+	<li><div>Salzburg</div></li>
 </ul>
 
 <h2>Inline with disabled items and submenus</h2>
 <ul id="menu2">
-	<li class="ui-state-disabled">Aberdeen</li>
-	<li>Ada</li>
-	<li>Adamsville</li>
-	<li>Addyston</li>
-	<li>Delphi
+	<li class="ui-state-disabled"><div>Aberdeen</div></li>
+	<li><div>Ada</div></li>
+	<li><div>Adamsville</div></li>
+	<li><div>Addyston</div></li>
+	<li>
+		<div>Delphi</div>
 		<ul>
-			<li class="ui-state-disabled">Ada</li>
-			<li>Saarland</li>
-			<li>Salzburg</li>
+			<li class="ui-state-disabled"><div>Ada</div></li>
+			<li><div>Saarland</div></li>
+			<li><div>Salzburg</div></li>
 		</ul>
 	</li>
-	<li>Saarland</li>
-	<li>Salzburg
+	<li><div>Saarland</div></li>
+	<li>
+		<div>Salzburg</div>
 		<ul>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li>Ada</li>
-					<li>Saarland</li>
-					<li>Salzburg</li>
+					<li><div>Ada</div></li>
+					<li><div>Saarland</div></li>
+					<li><div>Salzburg</div></li>
 				</ul>
 			</li>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li>Ada</li>
-					<li>Saarland</li>
-					<li>Salzburg</li>
+					<li><div>Ada</div></li>
+					<li><div>Saarland</div></li>
+					<li><div>Salzburg</div></li>
 				</ul>
 			</li>
-			<li class="ui-state-disabled">Perch</li>
+			<li class="ui-state-disabled"><div>Perch</div></li>
 		</ul>
 	</li>
-	<li class="ui-state-disabled">Amesville</li>
+	<li class="ui-state-disabled"><div>Amesville</div></li>
 </ul>
 
 <h2>Menu with icons</h2>
 <ul id="menu3">
-	<li><span class="ui-icon ui-icon-print"></span>Aberdeen</li>
-	<li class="ui-state-disabled"><span class="ui-icon ui-icon-scissors"></span>Ada</li>
-	<li>Adamsville</li>
-	<li><span class="ui-icon ui-icon-wrench"></span>Addyston</li>
-	<li class="ui-state-disabled">Delphi
+	<li>
+		<div><span class="ui-icon ui-icon-print"></span>Aberdeen</div>
+	</li>
+	<li class="ui-state-disabled">
+		<div><span class="ui-icon ui-icon-scissors"></span>Ada</div>
+	</li>
+	<li><div>Adamsville</div></li>
+	<li>
+		<div><span class="ui-icon ui-icon-wrench"></span>Addyston</div>
+	</li>
+	<li class="ui-state-disabled">
+		<div>Delphi</div>
 		<ul>
-			<li>Ada</li>
-			<li><span class="ui-icon ui-icon-wrench"></span>Saarland</li>
-			<li>Salzburg</li>
+			<li><div>Ada</div></li>
+			<li>
+				<div><span class="ui-icon ui-icon-wrench"></span>Saarland</div>
+			</li>
+			<li><div>Salzburg</div></li>
 		</ul>
 	</li>
-	<li>Saarland</li>
 	<li>
-		<span class="ui-icon ui-icon-print"></span>Salzburg
+		<div>Saarland</div></li>
+	<li>
+		<div>
+			<span class="ui-icon ui-icon-print"></span>Salzburg
+		</div>
 		<ul>
 			<li>
-				<span class="ui-icon ui-icon-wrench"></span>Delphi
+				<div><span class="ui-icon ui-icon-wrench"></span>Delphi</div>
 				<ul>
-					<li>Ada</li>
-					<li>Saarland</li>
-					<li>Salzburg</li>
+					<li><div>Ada</div></li>
+					<li><div>Saarland</div></li>
+					<li><div>Salzburg</div></li>
 				</ul>
 			</li>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li><span class="ui-icon ui-icon-wrench"></span>Ada</li>
-					<li><span class="ui-icon ui-icon-wrench"></span>Saarland</li>
-					<li><span class="ui-icon ui-icon-wrench"></span>Salzburg</li>
+					<li><div><span class="ui-icon ui-icon-wrench"></span>Ada</div></li>
+					<li><div><span class="ui-icon ui-icon-wrench"></span>Saarland</div></li>
+					<li><div><span class="ui-icon ui-icon-wrench"></span>Salzburg</div></li>
 				</ul>
 			</li>
-			<li>Perch</li>
+			<li><div>Perch</div></li>
 		</ul>
 	</li>
 </ul>
 
 <h2>Long menu with scroll overflow, to test menu's scroll-on-keypress behaviour</h2>
 <ul class="menu4">
-	<li>Aberdeen</li>
-	<li>Ada</li>
-	<li>Adamsville</li>
-	<li>Addyston</li>
-	<li>Adelphi</li>
-	<li>Adena</li>
-	<li>Adrian</li>
-	<li>Akron</li>
-	<li>Albany</li>
-	<li>Alexandria</li>
-	<li>Alger</li>
-	<li>Alledonia</li>
-	<li>Alliance</li>
-	<li>Alpha</li>
-	<li>Alvada</li>
-	<li>Alvordton</li>
-	<li>Amanda</li>
-	<li>Amelia</li>
-	<li>Amesville</li>
-	<li>Aberdeen</li>
-	<li>Ada</li>
-	<li>Adamsville</li>
-	<li>Addyston</li>
-	<li>Adelphi</li>
-	<li>Adena</li>
-	<li>Adrian</li>
-	<li>Akron</li>
-	<li>Albany</li>
-	<li>Alexandria</li>
-	<li>Alger</li>
-	<li>Alledonia</li>
-	<li>Alliance</li>
-	<li>Alpha</li>
-	<li>Alvada</li>
-	<li>Alvordton</li>
-	<li>Amanda</li>
-	<li>Amelia</li>
-	<li>Amesville</li>
+	<li><div>Aberdeen</div></li>
+	<li><div>Ada</div></li>
+	<li><div>Adamsville</div></li>
+	<li><div>Addyston</div></li>
+	<li><div>Adelphi</div></li>
+	<li><div>Adena</div></li>
+	<li><div>Adrian</div></li>
+	<li><div>Akron</div></li>
+	<li><div>Albany</div></li>
+	<li><div>Alexandria</div></li>
+	<li><div>Alger</div></li>
+	<li><div>Alledonia</div></li>
+	<li><div>Alliance</div></li>
+	<li><div>Alpha</div></li>
+	<li><div>Alvada</div></li>
+	<li><div>Alvordton</div></li>
+	<li><div>Amanda</div></li>
+	<li><div>Amelia</div></li>
+	<li><div>Amesville</div></li>
+	<li><div>Aberdeen</div></li>
+	<li><div>Ada</div></li>
+	<li><div>Adamsville</div></li>
+	<li><div>Addyston</div></li>
+	<li><div>Adelphi</div></li>
+	<li><div>Adena</div></li>
+	<li><div>Adrian</div></li>
+	<li><div>Akron</div></li>
+	<li><div>Albany</div></li>
+	<li><div>Alexandria</div></li>
+	<li><div>Alger</div></li>
+	<li><div>Alledonia</div></li>
+	<li><div>Alliance</div></li>
+	<li><div>Alpha</div></li>
+	<li><div>Alvada</div></li>
+	<li><div>Alvordton</div></li>
+	<li><div>Amanda</div></li>
+	<li><div>Amelia</div></li>
+	<li><div>Amesville</div></li>
 </ul>
 
 <h2>Menu with custom markup</h2>
-<div id="menu5">
-	<blockquote>Aberdeen</blockquote>
-	<blockquote>Ada</blockquote>
-	<blockquote class="ui-state-disabled">Adamsville</blockquote>
-	<blockquote>Addyston</blockquote>
-	<blockquote>Delphi
-		<div>
-			<blockquote>Ada</blockquote>
-			<blockquote>Saarland</blockquote>
-			<blockquote>Salzburg</blockquote>
-		</div>
+<div id="menu5" class="menuElement">
+	<blockquote><div>Aberdeen</div></blockquote>
+	<blockquote><div>Ada</div></blockquote>
+	<blockquote class="ui-state-disabled"><div>Adamsville</div></blockquote>
+	<blockquote><div>Addyston</div></blockquote>
+	<blockquote>
+		<div>Delphi</div>
+		<blockquote class="menuElement">
+			<blockquote><div>Ada</div></blockquote>
+			<blockquote><div>Saarland</div></blockquote>
+			<blockquote><div>Salzburg</div></blockquote>
+		</blockquote>
 	</blockquote>
-	<blockquote>Saarland</blockquote>
-	<blockquote>Salzburg
-		<div>
-			<blockquote>Delphi
-				<div>
-					<blockquote>Ada</blockquote>
-					<blockquote>Saarland</blockquote>
-					<blockquote>Salzburg</blockquote>
-				</div>
+	<blockquote><div>Saarland</div></blockquote>
+	<blockquote>
+		<div>Salzburg</div>
+		<blockquote class="menuElement">
+			<blockquote>
+				<div>Delphi</div>
+				<blockquote class="menuElement">
+					<blockquote><div>Ada</div></blockquote>
+					<blockquote><div>Saarland</div></blockquote>
+					<blockquote><div>Salzburg</div></blockquote>
+				</blockquote>
 			</blockquote>
-			<blockquote>Delphi
-				<div>
-					<blockquote>Ada</blockquote>
-					<blockquote>Saarland</blockquote>
-					<blockquote>Salzburg</blockquote>
-				</div>
+			<blockquote>
+				<div>Delphi</div>
+				<blockquote class="menuElement">
+					<blockquote><div>Ada</div></blockquote>
+					<blockquote><div>Saarland</div></blockquote>
+					<blockquote><div>Salzburg</div></blockquote>
+				</blockquote>
 			</blockquote>
-			<blockquote>Perch</blockquote>
-		</div>
+			<blockquote><div>Perch</div></blockquote>
+		</blockquote>
 	</blockquote>
 </div>
 
 <h2>Menu with custom markup, multi-line items and a custom submenu icon</h2>
 <div class="menuElement" id="menu6">
 	<div class="address-item">
-		<span class="address-header">John Doe</span>
-		<span class="address-content">78 West Main St Apt 3A</span>
-		<span class="address-content">Bloomsburg, PA 12345</span>
+		<div>
+			<span class="address-header">John Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</div>
 	</div>
 	<div class="address-item">
-		<span class="address-header">Jane Doe</span>
-		<span class="address-content">78 West Main St Apt 3A</span>
-		<span class="address-content">Bloomsburg, PA 12345</span>
+		<div>
+			<span class="address-header">Jane Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</div>
 	</div>
 	<div class="address-item ui-state-disabled">
-		<span class="address-header">James Doe</span>
-		<span class="address-content">78 West Main St Apt 3A</span>
-		<span class="address-content">Bloomsburg, PA 12345</span>
+		<div>
+			<span class="address-header">James Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</div>
 	</div>
 	<div class="address-item">
-		<span class="address-header">Jenny Doe</span>
-		<span class="address-content">78 West Main St Apt 3A</span>
-		<span class="address-content">Bloomsburg, PA 12345</span>
+		<div>
+			<span class="address-header">Jenny Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</div>
 	</div>
 	<div class="address-item">
-		<span class="address-header">John Doe</span>
-		<span class="address-content">78 West Main St Apt 3A</span>
-		<span class="address-content">Bloomsburg, PA 12345</span>
+		<div>
+			<span class="address-header">John Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</div>
 		<div class="menuElement">
-			<div>Ada</div>
-			<div>Saarland</div>
-			<div>Salzburg</div>
+			<div>
+				<div>Ada</div>
+			</div>
+			<div>
+				<div>Saarland</div>
+			</div>
+			<div>
+				<div>Salzburg</div>
+			</div>
 		</div>
 	</div>
 </div>
 
 <h2>Inline with dividers and group labels</h2>
 <ul id="menu7">
-	<li class="ui-menu-group"><strong>Group 1</strong></li>
-	<li>Aberdeen</li>
-	<li>Ada</li>
-	<li>Adamsville</li>
-	<li>Addyston</li>
+	<li class="ui-menu-group">
+		<div><strong>Group 1</strong></div>
+	</li>
+	<li><div>Aberdeen</div></li>
+	<li><div>Ada</div></li>
+	<li><div>Adamsville</div></li>
+	<li><div>Addyston</div></li>
 	<li></li>
-	<li class="ui-menu-group"><strong>Group 2</strong></li>
-	<li>Delphi
+	<li class="ui-menu-group">
+		<div><strong>Group 2</strong></div>
+	</li>
+	<li>
+		<div>Delphi</div>
 		<ul>
-			<li>Ada</li>
-			<li>Saarland</li>
-			<li>Salzburg</li>
+			<li><div>Ada</div></li>
+			<li><div>Saarland</div></li>
+			<li><div>Salzburg</div></li>
 		</ul>
 	</li>
-	<li>Saarland</li>
+	<li><div>Saarland</div></li>
 	<li>---</li>
-	<li class="ui-menu-group"><strong>Group 3</strong></li>
-	<li>Salzburg
+	<li class="ui-menu-group">
+		<div><strong>Group 3</strong></div>
+	</li>
+	<li>
+		<div>Salzburg</div>
 		<ul>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li>Ada</li>
-					<li> - </li>
-					<li>Saarland</li>
+					<li><div>Ada</div></li>
+					<li>-</li>
+					<li><div>Saarland</div></li>
 					<li>&mdash;</li>
-					<li>Salzburg</li>
+					<li><div>Salzburg</div></li>
 					<li>&ndash;</li>
 				</ul>
 			</li>
-			<li>Delphi
+			<li>
+				<div>Delphi</div>
 				<ul>
-					<li>Ada</li>
-					<li>Saarland</li>
-					<li>Salzburg</li>
+					<li><div>Ada</div></li>
+					<li><div>Saarland</div></li>
+					<li><div>Salzburg</div></li>
 				</ul>
 			</li>
-			<li>Perch</li>
+			<li><div>Perch</div></li>
 		</ul>
 	</li>
-	<li>Amesville</li>
+	<li><div>Amesville</div></li>
 </ul>
 
 <div style="position: absolute; top: 1em; right: 1em;">

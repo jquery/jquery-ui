@@ -77,16 +77,11 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_create: function() {
-
-		var o = this.options;
 		this.containerCache = {};
 		this.element.addClass("ui-sortable");
 
 		//Get the items
 		this.refresh();
-
-		//Let's determine if the items are being displayed horizontally
-		this.floating = this.items.length ? o.axis === "x" || this._isFloating(this.items[0].item) : false;
 
 		//Let's determine the parent's offset
 		this.offset = this.element.offset();
@@ -730,6 +725,11 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	refreshPositions: function(fast) {
+
+		// Determine whether items are being displayed horizontally
+		this.floating = this.items.length ?
+			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
+			false;
 
 		//This has to be redone because due to the item being moved out/into the offsetParent, the offsetParent's position will change
 		if(this.offsetParent && this.helper) {
