@@ -35,7 +35,8 @@ return $.widget( "ui.menu", {
 			"ui-menu-icons": "",
 			"ui-menu-icon": "",
 			"ui-menu-item": "",
-			"ui-menu-divider": ""
+			"ui-menu-divider": "",
+			"ui-menu-item-wrapper": ""
 		},
 		icons: {
 			submenu: "ui-icon-caret-1-e"
@@ -177,9 +178,9 @@ return $.widget( "ui.menu", {
 			.removeClass( this._classes( "ui-menu-item" ) )
 			.removeAttr( "role" )
 			.removeAttr( "aria-disabled" )
-			.children( ".ui-menu-item-wrapper" )
+			.find( ".ui-menu-item-wrapper" )
 				.removeUniqueId()
-				.removeClass( this._classes( "ui-menu-item-wrapper" ) + "ui-state-hover" )
+				.removeClass( this._classes( "ui-menu-item-wrapper" ) + " ui-state-hover" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "role" )
 				.removeAttr( "aria-haspopup" )
@@ -305,9 +306,9 @@ return $.widget( "ui.menu", {
 			.each(function() {
 				var menu = $( this ),
 					item = menu.prev(),
-					submenuCarat = $( "<span>" )
+					submenuCaret = $( "<span>" )
 						.addClass( that._classes( "ui-menu-icon" ) + " ui-icon " + icon )
-						.data( "ui-menu-submenu-carat", true );
+						.data( "ui-menu-submenu-caret", true );
 
 				item
 					.attr( "aria-haspopup", "true" )
@@ -363,6 +364,7 @@ return $.widget( "ui.menu", {
 				break;
 			case "ui-menu-icon":
 			case "ui-menu-item":
+			case "ui-menu-item-wrapper":
 			case "ui-menu-divider":
 				return this.element.find( classKey );
 		}
