@@ -389,6 +389,19 @@ test("custom handles { handles: { 's': $('#resizer1'), containment: 'parent' }",
 });
 
 
+test("custom handles { handles: { 's': $('#resizer1')[0], containment: 'parent' }", function () {
+	expect(2);
+
+	var handle = "#resizer1", target = $("#resizable1").resizable({ handles: { "s": $("#resizer1")[0] }, containment: "parent" });
+
+	TestHelpers.resizable.drag(handle, 0, 70);
+	equal(target.height(), 170, "compare height");
+
+	TestHelpers.resizable.drag(handle, 0, -70);
+	equal(target.height(), 100, "compare height");
+});
+
+
 test("zIndex, applied to all handles", function() {
 	expect(8);
 

@@ -204,9 +204,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 				if (this.handles[i].constructor === String) {
 					this.handles[i] = this.element.children( this.handles[ i ] ).first().show();
 				}
-				else if (this.handles[i] instanceof $) {
-					this._on(this.handles[i], mouseDownHandlers);
-				}
+				else if (this.handles[i] && (this.handles[i].jquery || this.handles[i].nodeType)) {
+                    this.handles[i] = $(this.handles[i]);
+                    this._on(this.handles[i], mouseDownHandlers);	
+                }
 
 				if (this.elementIsWrapper && this.originalElement[0].nodeName.match(/textarea|input|select|button/i)) {
 
