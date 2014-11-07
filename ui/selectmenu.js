@@ -151,7 +151,6 @@ return $.widget( "ui.selectmenu", {
 		// Initialize menu widget
 		this.menuInstance = this.menu
 			.menu({
-				// Adjust menu styles to dropdown
 				classes: {
 					"ui-menu": "ui-corner-bottom"
 				},
