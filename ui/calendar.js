@@ -486,7 +486,7 @@ return $.widget( "ui.calendar", {
 		if ( arguments.length ) {
 			this._setOption( "value", value );
 		} else {
-			return this.option( "value" );
+			return this.options.value;
 		}
 	},
 
@@ -519,20 +519,14 @@ return $.widget( "ui.calendar", {
 			.empty();
 	},
 
-	option: function( key ) {
-		if ( arguments.length === 0 || ( arguments.length === 1 && key === "value" ) ) {
-			this.options.value = this.date.selectedDate();
-		}
-
-		return this._superApply( arguments );
-	},
-
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			if ( this._isValid( value ) ) {
 				this.date.setTime( value.getTime() ).select();
+				this._super( key, value );
 				this.refresh();
 			}
+			return;
 		}
 
 		if ( key === "max" || key === "min" ) {

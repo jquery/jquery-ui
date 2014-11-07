@@ -55,7 +55,7 @@ test( "valueAsDate", function() {
 	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		element = $( "#calendar" ).calendar(),
 		date1 = new Date( 2008, 6 - 1, 4 ),
-		date2 = new Date();
+		date2;
 
 	element.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
 	ok( element.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ), "First day marked as selected" );
@@ -64,7 +64,7 @@ test( "valueAsDate", function() {
 	element.calendar( "destroy" );
 
 	element.calendar();
-	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), date2, "Set date - default" );
+	equal( element.calendar( "valueAsDate" ), null, "Set date - default" );
 
 	element.calendar( "valueAsDate", date1 );
 	TestHelpers.calendar.equalsDate(element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
