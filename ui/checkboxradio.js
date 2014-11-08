@@ -70,8 +70,6 @@ $.widget( "ui.checkboxradio", {
 		}
 	},
 
-	defaultElement: "<input type='checkbox'>",
-
 	_getCreateOptions: function() {
 		var disabled,
 			that = this,
