@@ -1,4 +1,5 @@
 TestHelpers.commonWidgetTests( "checkboxradio", {
+	noDefaultElement: true,
 	defaults: {
 		disabled: null,
 		label: null,
