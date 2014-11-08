@@ -54,12 +54,12 @@
 	border: 1px solid #c5c5c5/*{borderColorDefault}*/;
 	background: #f6f6f6/*{bgColorDefault}*/ /*{bgImgUrlDefault}*/ /*{bgDefaultXPos}*/ /*{bgDefaultYPos}*/ /*{bgDefaultRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
-	color: #333333/*{fcDefault}*/;
+	color: #454545/*{fcDefault}*/;
 }
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-	color: #333333/*{fcDefault}*/;
+	color: #454545/*{fcDefault}*/;
 	text-decoration: none;
 }
 .ui-state-hover,
@@ -71,7 +71,7 @@
 	border: 1px solid #cccccc/*{borderColorHover}*/;
 	background: #ededed/*{bgColorHover}*/ /*{bgImgUrlHover}*/ /*{bgHoverXPos}*/ /*{bgHoverYPos}*/ /*{bgHoverRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
-	color: #333333/*{fcHover}*/;
+	color: #2b2b2b/*{fcHover}*/;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
@@ -81,7 +81,7 @@
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
 .ui-state-focus a:visited {
-	color: #333333/*{fcHover}*/;
+	color: #2b2b2b/*{fcHover}*/;
 	text-decoration: none;
 }
 .ui-state-active,
