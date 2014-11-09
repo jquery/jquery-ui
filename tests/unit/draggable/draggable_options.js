@@ -405,6 +405,29 @@ test( "connectToSortable, dragging through one sortable to a second", function()
 	element.simulate( "drag", dragParams );
 });
 
+test( "connectToSortable, dragging through a sortable", function() {
+	expect( 1 );
+
+	var draggable = $( "#draggableSortable" ).draggable({
+			scroll: false,
+			connectToSortable: "#sortable2"
+		}),
+		sortable = $( "#sortable2" ).sortable(),
+		sortableOffset = sortable.offset();
+
+	// http://bugs.jqueryui.com/ticket/10669
+	// Draggable: Position issue with connectToSortable
+	draggable.one( "dragstop", function() {
+		equal( draggable.parent().attr( "id" ), "sortable", "restored draggable to original parent" );
+	});
+
+	draggable.simulate( "drag", {
+		x: sortableOffset.left + 25,
+		y: sortableOffset.top + sortable.outerHeight() + 400,
+		moves: 20
+	});
+});
+
 test( "{ containment: Element }", function() {
 	expect( 1 );
 
