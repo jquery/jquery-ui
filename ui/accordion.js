@@ -565,11 +565,16 @@ return $.widget( "ui.accordion", {
 					if ( !fx.adjustInit ) {
 						if ( fx.prop !== "height" ) {
 							adjust += fx.now;
+						// padding-box: exclude padding
 						} else if ( that.options.heightStyle !== "content" &&
-								( toHide.css( "box-sizing" ) === "border-box" ||
-								toHide.css( "box-sizing" ) === "padding-box" ) ) {
+								toHide.css( "box-sizing" ) === "padding-box" ) {
+							// per conversation with @scottgonzalez and  @mikesherov
+							// let's just handle border-box and content-box.
+						// border-box: exclude all props
+						} else if ( that.options.heightStyle !== "content" &&
+								toHide.css( "box-sizing" ) === "border-box" ) {
 							fx.now = Math.round( total - toHide.outerHeight() );
-							adjust = 0;
+						// content-box: include all props
 						} else if ( that.options.heightStyle !== "content" ) {
 							fx.now = Math.round( total - toHide.outerHeight() - adjust);
 							adjust = 0;
