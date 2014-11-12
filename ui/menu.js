@@ -31,7 +31,7 @@ return $.widget( "ui.menu", {
 	delay: 300,
 	options: {
 		classes: {
-			"ui-menu": "ui-corner-all",
+			"ui-menu": "",
 			"ui-menu-icons": "",
 			"ui-menu-icon": "",
 			"ui-menu-item": "",

@@ -5,7 +5,7 @@ module( "menu: core" );
 test( "markup structure", function() {
 	expect( 6 );
 	var element = $( "#menu1" ).menu();
-	ok( element.is( ".ui-menu.ui-corner-all" ), "main element has proper classes" );
+	ok( element.hasClass( "ui-menu" ), "main element has proper classes" );
 	element.children().each(function( index ) {
 		ok( $( this ).hasClass( "ui-menu-item" ), "child " + index + " is .ui-menu-item" );
 	});
