@@ -515,7 +515,7 @@ return $.widget( "ui.accordion", {
 	},
 
 	_animate: function( toShow, toHide, data ) {
-		var total, easing, duration,
+		var total, easing, duration, progress,
 			that = this,
 			adjust = 0,
 			down = toShow.length &&
@@ -535,12 +535,25 @@ return $.widget( "ui.accordion", {
 		// fall back from options to animation in case of partial down settings
 		easing = easing || options.easing || animate.easing;
 		duration = duration || options.duration || animate.duration;
+		if ( animate && animate.progress && typeof animate.progress === "function" ) {
+			progress = animate.progress;
+		}
 
 		if ( !toHide.length ) {
-			return toShow.animate( this.showProps, duration, easing, complete );
+			return toShow.animate( this.showProps, {
+				duration: duration,
+				easing: easing,
+				complete: complete,
+				progress: progress
+			});
 		}
 		if ( !toShow.length ) {
-			return toHide.animate( this.hideProps, duration, easing, complete );
+			return toHide.animate( this.hideProps, {
+				duration: duration,
+				easing: easing,
+				complete: complete,
+				progress: progress
+			});
 		}
 
 		total = toShow.show().outerHeight();
@@ -557,6 +570,7 @@ return $.widget( "ui.accordion", {
 				duration: duration,
 				easing: easing,
 				complete: complete,
+				progress: progress,
 				step: function( now, fx ) {
 					fx.now = Math.round( now );
 					if ( fx.prop !== "height" ) {
