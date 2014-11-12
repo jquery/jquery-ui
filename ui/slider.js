@@ -542,7 +542,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valModStep = (val - this._valueMin()) % step,
 			alignValue = val - valModStep;
 
-		if ( Math.abs(valModStep) * 2 >= step ) {
+		if ( this.options.initValue === val && Math.abs(valModStep) < step ) {
+			alignValue += valModStep;
+		}else if ( Math.abs(valModStep) * 2 >= step ) {
 			alignValue += ( valModStep > 0 ) ? step : ( -step );
 		}
 
