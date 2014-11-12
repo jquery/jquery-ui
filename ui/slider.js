@@ -542,9 +542,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valModStep = (val - this._valueMin()) % step,
 			alignValue = val - valModStep;
 
-		if ( Math.abs(valModStep) * 2 >= step ) {
-			alignValue += ( valModStep > 0 ) ? step : ( -step );
-		}
+		if(this.options.initValue == val && Math.abs(valModStep) < step){
+                	alignValue += valModStep;
+            	}else if (Math.abs(valModStep) * 2 >= step) {
+                	alignValue += ( valModStep > 0 ) ? step : ( -step );
+            	}
 
 		// Since JavaScript has problems with large floats, round
 		// the final value to 5 digits after the decimal point (see #4124)
