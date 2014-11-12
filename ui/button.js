@@ -62,7 +62,7 @@ $.widget( "ui.button", {
 		this.isInput = this.element.is( "input" );
 		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
 
-		disabled = this.element.prop( "disabled" );
+		disabled = this.element[ 0 ].disabled;
 		if ( disabled != null ) {
 			options.disabled = disabled;
 		}
@@ -83,7 +83,7 @@ $.widget( "ui.button", {
 		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
 		if ( this.options.disabled == null ) {
-			this.options.disabled = this.element.prop( "disabled" ) || false;
+			this.options.disabled = this.element[ 0 ].disabled || false;
 		}
 
 		this.hasTitle = this.element.attr( "title" );
@@ -212,7 +212,8 @@ $.widget( "ui.button", {
 		}
 		this._super( key, value );
 		if ( key === "disabled" ) {
-			this.element.toggleClass( "ui-state-disabled", value ).prop( "disabled", value ).blur();
+			this.element.toggleClass( "ui-state-disabled", value )[ 0 ].disabled = value;
+			this.element.blur();
 		}
 	},
 
@@ -221,7 +222,7 @@ $.widget( "ui.button", {
 		// Make sure to only check disabled if its an element that supports this otherwise
 		// check for the disabled class to determine state
 		var isDisabled = this.element.is( "input, button" ) ?
-			this.element.is( ":disabled" ) : this.element.hasClass( "ui-button-disabled" );
+			this.element[ 0 ].disabled : this.element.hasClass( "ui-button-disabled" );
 
 		if ( isDisabled !== this.options.disabled ) {
 			this._setOptions({ "disabled": isDisabled });
@@ -232,7 +233,7 @@ $.widget( "ui.button", {
 });
 
 // DEPRECATED
-if ( $.uiBackCompat === false ) {
+if ( $.uiBackCompat !== false ) {
 
 	// Text and Icons options
 	$.widget( "ui.button", $.ui.button, {
@@ -279,7 +280,7 @@ if ( $.uiBackCompat === false ) {
 	});
 	$.fn.button = (function( orig ) {
 		return function() {
-			if ( this[ 0 ].tagName === "input" && ( this.attr( "type") === "checkbox" ||
+			if ( this.tagName === "input" && ( this.attr( "type") === "checkbox" ||
 					this.attr( "type" ) === "radio" ) ) {
 				if ( $.ui.checkboxradio ) {
 					if ( arguments.length === 0 ) {

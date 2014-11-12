@@ -57,11 +57,7 @@ $.widget( "ui.checkboxradio", {
 	options: {
 		disabled: null,
 		label: null,
-<<<<<<< HEAD
 		icon: true,
-=======
-		icon: false,
->>>>>>> db16c96... Checkboxradio: add classes option
 		classes: {
 			"ui-checkboxradio": "",
 			"ui-checkboxradio-label": "ui-corner-all",
@@ -83,7 +79,7 @@ $.widget( "ui.checkboxradio", {
 			that.originalLabel += ( this.nodeType === 3 ) ? $( this ).text() : this.outerHTML;
 		});
 
-		disabled = this.element.prop( "disabled" );
+		disabled = this.element[ 0 ].disabled;
 		if ( disabled != null ) {
 			options.disabled = disabled;
 		}
@@ -104,7 +100,7 @@ $.widget( "ui.checkboxradio", {
 		formElement.on( "reset" + this.eventNamespace, formResetHandler );
 
 		if ( this.options.disabled == null ) {
-			this.options.disabled = this.element.prop( "disabled" ) || false;
+			this.options.disabled = this.element[ 0 ].disabled || false;
 		}
 
 		this._readType();
@@ -171,7 +167,7 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_enhance: function() {
-		var checked = this.element.is( ":checked" );
+		var checked = this.element[ 0 ].checked;
 
 		this._setOption( "disabled", this.options.disabled );
 		this._updateIcon( checked );
@@ -200,7 +196,7 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_toggleClasses: function() {
-		var checked = this.element.is( ":checked" );
+		var checked = this.element[ 0 ].checked;
 		this.label.toggleClass( this._classes( "ui-checkboxradio-checked" ) +
 			" ui-state-active", checked );
 		if ( this.options.icon && this.type === "checkbox" ) {
@@ -231,7 +227,7 @@ $.widget( "ui.checkboxradio", {
 	_elementsFromClassKey: function( classKey ) {
 		var parts = classKey.split( "-" ),
 			checkedType = parts[ 2 ] === this.type || parts[ 2 ] === undefined,
-			checkedClass = parts[ 3 ] === "checked" || this.element.is( ":checked" );
+			checkedClass = parts[ 3 ] === "checked" || this.element[ 0 ].checked;
 		switch ( classKey ) {
 			case "ui-checkboxradio":
 			case "ui-checkboxradio-radio-label":
@@ -258,7 +254,7 @@ $.widget( "ui.checkboxradio", {
 		this._super( key, value );
 		if ( key === "disabled" ) {
 			this.label.toggleClass( "ui-state-disabled", !!value );
-			this.element.prop( "disabled", !!value );
+			this.element[ 0 ].disabled =  !!value;
 			return;
 		}
 		if ( key === "label" && value === null ) {
@@ -291,8 +287,8 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	refresh: function() {
-		var checked = this.element.is( ":checked" ),
-			isDisabled = this.element.is( ":disabled" );
+		var checked = this.element[ 0 ].checked,
+			isDisabled = this.element[ 0 ].disabled;
 		this._updateIcon( checked );
 		this.label.toggleClass( "ui-state-active " + this._classes( "ui-checkboxradio-checked" ), checked );
 		if ( this.options.label !== null ) {
