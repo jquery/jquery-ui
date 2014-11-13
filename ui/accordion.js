@@ -371,6 +371,7 @@ return $.widget( "ui.accordion", {
 				})
 					.height( maxHeight )
 					.not( this.active.next() )
+					.css( "display", "" )
 					.hide();
 		}
 	},
