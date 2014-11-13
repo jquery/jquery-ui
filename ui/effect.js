@@ -1145,7 +1145,8 @@ $.extend( $.effects, {
 				marginTop: element.css( "marginTop" ),
 				marginBottom: element.css( "marginBottom" ),
 				marginLeft: element.css( "marginLeft" ),
-				marginRight: element.css( "marginRight" )
+				marginRight: element.css( "marginRight" ),
+				"float": element.css( "float" )
 			})
 			.outerWidth( element.outerWidth() )
 			.outerHeight( element.outerHeight() );
