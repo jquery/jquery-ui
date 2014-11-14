@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/selectmenu"
+], function( $ ) {
 
 module( "selectmenu: methods" );
 
@@ -168,4 +171,4 @@ test( "widget and menuWidget", function() {
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
 });
 
-})( jQuery );
+});

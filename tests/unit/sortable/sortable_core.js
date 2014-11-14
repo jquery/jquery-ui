@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/sortable"
+], function( $ ) {
+
 /*
  * sortable_core.js
  */
-
 (function( $ ) {
 
 module( "sortable: core" );
@@ -37,4 +41,4 @@ test( "ui-sortable-handle applied to appropriate element", function() {
 	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
 });
 
-})( jQuery );
+});

@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/selectable"
+], function( $ ) {
+
 /*
  * selectable_events.js
  */
-(function( $ ) {
 
 module("selectable: events");
 
@@ -62,4 +66,4 @@ test( "mousedown: initial position of helper", function() {
 	$( window ).scrollTop( 0 ).scrollLeft( 0 );
 });
 
-})( jQuery );
+});

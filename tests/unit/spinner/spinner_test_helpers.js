@@ -1,4 +1,9 @@
-TestHelpers.spinner = {
+define([
+	"jquery",
+	"jquery.simulate"
+], function( $ ) {
+
+return {
 	simulateKeyDownUp: function( element, keyCode, shift ) {
 		element
 			.simulate( "keydown", { keyCode: keyCode, shiftKey: shift || false } )
@@ -6,3 +11,4 @@ TestHelpers.spinner = {
 	}
 };
 
+});

@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/spinner"
+], function( $ ) {
 
 var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
 
@@ -205,4 +208,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element.parent()[ 0 ], "parent element" );
 });
 
-})( jQuery );
+});

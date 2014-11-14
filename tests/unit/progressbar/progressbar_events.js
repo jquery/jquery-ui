@@ -1,3 +1,8 @@
+define([
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
+
 module( "progressbar: events" );
 
 test( "create", function() {
@@ -48,4 +53,6 @@ test( "complete", function() {
 	element.progressbar( "value", value );
 	value = 100;
 	element.progressbar( "value", value );
+});
+
 });

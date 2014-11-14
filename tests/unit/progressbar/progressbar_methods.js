@@ -1,3 +1,8 @@
+define([
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
+
 module( "progressbar: methods" );
 
 test( "destroy", function() {
@@ -32,4 +37,6 @@ test( "widget", function() {
 		widgetElement = element.progressbar( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+});
+
 });

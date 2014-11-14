@@ -1,3 +1,8 @@
+define([
+	"jquery",
+	"helper/testsuite"
+], function( $, testHelper ) {
+
 TestHelpers.draggable = {
 	// TODO: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
@@ -129,3 +134,5 @@ TestHelpers.draggable = {
 		});
 	}
 };
+
+});

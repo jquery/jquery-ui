@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/sortable"
+], function( $ ) {
+
 /*
  * sortable_events.js
  */
-(function($) {
 
 module("sortable: events");
 
@@ -375,4 +379,4 @@ test("deactivate", function() {
 });
 */
 
-})(jQuery);
+});

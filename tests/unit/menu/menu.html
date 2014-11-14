@@ -4,30 +4,12 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Menu Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../helper/css.js"></script>
 	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "menu" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/menu.js"
-		]
-	});
+	window.helper.loadCss([ "core", "menu" ]);
 	</script>
 
-	<script src="menu_test_helpers.js"></script>
-	<script src="menu_common.js"></script>
-	<script src="menu_core.js"></script>
-	<script src="menu_events.js"></script>
-	<script src="menu_methods.js"></script>
-	<script src="menu_options.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
 	<style>
 	.ui-menu {
 		font-size: 15px;
@@ -316,5 +298,25 @@
 </ul>
 
 </div>
+
+<script src="../../../external/requirejs/require.js"></script>
+<script src="../../../external/qunit/qunit.js"></script>
+<script src="../swarminject.js"></script>
+<script src="../helper/jquery.js"></script>
+<script src="../helper/require.js"></script>
+<script>
+QUnit.config.autostart = false;
+require_series([
+	"./menu_test_helpers",
+	"./menu_common",
+	"./menu_core",
+	"./menu_events",
+	"./menu_methods",
+	"./menu_options"
+], function() {
+	QUnit.start();
+});
+</script>
+
 </body>
 </html>

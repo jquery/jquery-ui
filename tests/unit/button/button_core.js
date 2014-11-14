@@ -1,9 +1,12 @@
+define([
+	"jquery",
+	"jquery.simulate",
+	"ui/button"
+], function( $ ) {
+
 /*
  * button_core.js
  */
-
-
-(function($) {
 
 module("button: core");
 
@@ -223,4 +226,4 @@ asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
 	});
 });
 
-})(jQuery);
+});

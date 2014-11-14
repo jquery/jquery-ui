@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "button", {
+define([
+	"helper/testsuite",
+	"ui/button"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "button", {
 	defaults: {
 		disabled: null,
 		icons: {
@@ -11,4 +16,6 @@ TestHelpers.commonWidgetTests( "button", {
 		// callbacks
 		create: null
 	}
+});
+
 });

@@ -200,6 +200,18 @@ exports.domEqual = function( selector, modifier, message ) {
 	}
 };
 
+exports.onFocus = function( element, onFocus ) {
+	var fn = function( event ){
+		if( !event.originalEvent ) {
+			return;
+		}
+		element.unbind( "focus", fn );
+		onFocus();
+	};
+
+	element.bind( "focus", fn )[ 0 ].focus();
+};
+
 exports.testJshint = function( module ) {
 	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
 	// https://github.com/jshint/jshint/issues/1384

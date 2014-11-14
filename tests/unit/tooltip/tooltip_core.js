@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tooltip"
+], function( $ ) {
 
 module( "tooltip: core" );
 
@@ -174,4 +177,4 @@ asyncTest( "destroy during hide animation; only one close event", function() {
 	});
 });
 
-}( jQuery ) );
+}(;

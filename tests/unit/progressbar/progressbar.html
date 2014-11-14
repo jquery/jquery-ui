@@ -4,29 +4,12 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Progressbar Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../helper/css.js"></script>
 	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "progressbar" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/progressbar.js"
-		]
-	});
+	window.helper.loadCss([ "core", "progressbar" ]);
 	</script>
 
-	<script src="progressbar_common.js"></script>
-	<script src="progressbar_core.js"></script>
-	<script src="progressbar_events.js"></script>
-	<script src="progressbar_methods.js"></script>
-	<script src="progressbar_options.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
 </head>
 <body>
 
@@ -36,5 +19,24 @@
 <div id="progressbar"></div>
 
 </div>
+
+<script src="../../../external/requirejs/require.js"></script>
+<script src="../../../external/qunit/qunit.js"></script>
+<script src="../swarminject.js"></script>
+<script src="../helper/jquery.js"></script>
+<script src="../helper/require.js"></script>
+<script>
+QUnit.config.autostart = false;
+require_series([
+	"./progressbar_common",
+	"./progressbar_core",
+	"./progressbar_events",
+	"./progressbar_methods",
+	"./progressbar_options"
+], function() {
+	QUnit.start();
+});
+</script>
+
 </body>
 </html>

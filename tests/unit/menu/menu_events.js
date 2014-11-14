@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/menu"
+], function( $ ) {
 
 var log = TestHelpers.menu.log,
 	logOutput = TestHelpers.menu.logOutput,
@@ -661,4 +664,4 @@ asyncTest( "#10571: When typing in a menu, only menu-items should be focused", f
 	});
 });
 
-})( jQuery );
+});

@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tooltip"
+], function( $ ) {
 
 module( "tooltip: options" );
 
@@ -171,4 +174,4 @@ test( "track and programmatic focus", function() {
 	equal( "inputtitle", $( ".ui-tooltip" ).text() );
 });
 
-}( jQuery ) );
+}(;

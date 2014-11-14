@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tooltip"
+], function( $ ) {
 
 module( "tooltip: methods" );
 
@@ -137,4 +140,4 @@ test( "preserve changes to title attributes on close and destroy", function() {
 	} );
 });
 
-}( jQuery ) );
+}(;

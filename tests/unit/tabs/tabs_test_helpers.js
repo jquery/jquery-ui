@@ -1,4 +1,6 @@
-TestHelpers.tabs = {
+define(function() {
+
+return {
 	disabled: function( tabs, state ) {
 		var expected, actual,
 			internalState = tabs.tabs( "option", "disabled" );
@@ -65,3 +67,4 @@ TestHelpers.tabs = {
 	}
 };
 
+});

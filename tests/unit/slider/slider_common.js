@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "slider", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
 		cancel: "input,textarea,button,select,option",
@@ -20,4 +24,6 @@ TestHelpers.commonWidgetTests( "slider", {
 		start: null,
 		stop: null
 	}
+});
+
 });

@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tabs"
+], function( $ ) {
 
 var state = TestHelpers.tabs.state;
 
@@ -612,4 +615,4 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 	state( element, 1 );
 });
 
-}( jQuery ) );
+}(;

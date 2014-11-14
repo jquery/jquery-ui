@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "spinner", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "spinner", {
 	defaults: {
 		culture: null,
 		disabled: false,
@@ -20,4 +24,6 @@ TestHelpers.commonWidgetTests( "spinner", {
 		start: null,
 		stop: null
 	}
+});
+
 });

@@ -1,8 +1,11 @@
+define([
+	"jquery",
+	"ui/resizable"
+], function( $ ) {
+
 /*
  * resizable_core.js
  */
-
-(function($) {
 
 module("resizable: core");
 
@@ -241,4 +244,4 @@ test( "nested resizable", function() {
 	outer.remove();
 });
 
-})(jQuery);
+});

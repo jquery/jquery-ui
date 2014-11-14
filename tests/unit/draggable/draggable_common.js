@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "draggable", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "draggable", {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
@@ -37,4 +41,6 @@ TestHelpers.commonWidgetTests( "draggable", {
 		start: null,
 		stop: null
 	}
+});
+
 });

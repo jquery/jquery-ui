@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/core"
+], function( $ ) {
 
 module( "core - deprecated" );
 
@@ -49,4 +52,4 @@ test( "zIndex", function() {
 	equal( $( "#zIndexAutoNoParent" ).zIndex(), 0, "zIndex never explicitly set in hierarchy" );
 });
 
-})( jQuery );
+});

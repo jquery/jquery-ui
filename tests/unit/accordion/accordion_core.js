@@ -1,8 +1,8 @@
 define([
 	"jquery",
 	"./accordion_test_helpers",
-	"ui/accordion",
-	"jquery.simulate"
+	"jquery.simulate",
+	"ui/accordion"
 ], function( $, accordionTestHelper ) {
 
 var setupTeardown = accordionTestHelper.setupTeardown,

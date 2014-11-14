@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/sortable"
+], function( $ ) {
+
 /*
  * sortable_methods.js
  */
-(function($) {
 
 module("sortable: methods");
 
@@ -90,4 +94,4 @@ test( "disable", function() {
 	equal( chainable, element, "disable is chainable" );
 });
 
-})(jQuery);
+});

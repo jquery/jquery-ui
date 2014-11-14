@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "progressbar", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "progressbar", {
 	defaults: {
 		disabled: false,
 		max: 100,
@@ -9,4 +13,6 @@ TestHelpers.commonWidgetTests( "progressbar", {
 		complete: null,
 		create: null
 	}
+});
+
 });

@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/droppable"
+], function( $ ) {
+
 /*
  * droppable_options.js
  */
-(function($) {
 
 module( "droppable: options" );
 
@@ -201,4 +205,4 @@ test( "tolerance, touch", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
-})(jQuery);
+});

@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "sortable", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "sortable", {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
@@ -42,4 +46,6 @@ TestHelpers.commonWidgetTests( "sortable", {
 		stop: null,
 		update: null
 	}
+});
+
 });

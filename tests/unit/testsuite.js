@@ -44,18 +44,6 @@ QUnit.config.urlConfig.push({
 	tooltip: "Which jQuery Core version to test against"
 });
 
-TestHelpers.onFocus = function( element, onFocus ) {
-	var fn = function( event ){
-		if( !event.originalEvent ) {
-			return;
-		}
-		element.unbind( "focus", fn );
-		onFocus();
-	};
-
-	element.bind( "focus", fn )[ 0 ].focus();
-};
-
 TestHelpers.forceScrollableWindow = function( appendTo ) {
 
 	// The main testable area is 10000x10000 so to enforce scrolling,

@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/menu"
+], function( $ ) {
 
 var log = TestHelpers.menu.log,
 	logOutput = TestHelpers.menu.logOutput,
@@ -106,4 +109,4 @@ test( "{ role: null }", function() {
 	});
 });
 
-})( jQuery );
+});

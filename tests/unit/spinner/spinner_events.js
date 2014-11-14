@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/spinner"
+], function( $ ) {
 
 var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
 
@@ -256,4 +259,4 @@ asyncTest( "change", function() {
 	setTimeout( step1 );
 });
 
-})( jQuery );
+});

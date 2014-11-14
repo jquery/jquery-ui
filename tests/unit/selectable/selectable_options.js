@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/selectable"
+], function( $ ) {
+
 /*
  * selectable_options.js
  */
-(function($) {
 
 module("selectable: options");
 
@@ -62,4 +66,4 @@ test("filter", function() {
 	el.selectable("destroy");
 });
 
-})(jQuery);
+});

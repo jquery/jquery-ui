@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "selectmenu", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "selectmenu", {
 	defaults: {
 		appendTo: null,
 		disabled: null,
@@ -20,4 +24,6 @@ TestHelpers.commonWidgetTests( "selectmenu", {
 		open: null,
 		select: null
 	}
+});
+
 });

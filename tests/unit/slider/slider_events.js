@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/slider"
+], function( $ ) {
 
 module( "slider: events" );
 
@@ -149,4 +152,4 @@ test( "mouse based interaction part two: when handles overlap", function() {
 
 });
 
-})( jQuery );
+});

@@ -1,3 +1,8 @@
+define([
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
+
 module( "progressbar: options" );
 
 test( "{ value: 0 }, default", function() {
@@ -69,4 +74,6 @@ test( "change max below value", function() {
 	}).progressbar( "option", "max", 5 );
 	equal( $( "#progressbar" ).progressbar( "value" ), 5,
 		"value constrained at max" );
+});
+
 });

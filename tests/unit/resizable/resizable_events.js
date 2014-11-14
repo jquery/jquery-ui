@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/resizable"
+], function( $ ) {
+
 /*
  * resizable_events.js
  */
-(function($) {
 
 module("resizable: events");
 
@@ -238,4 +242,4 @@ test( "resize (containment) works with parent with negative offset", function() 
 
 });
 
-})(jQuery);
+});

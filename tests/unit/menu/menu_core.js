@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/menu"
+], function( $ ) {
 
 module( "menu: core" );
 
@@ -58,4 +61,4 @@ asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected 
 	}, 500 );
 });
 
-})( jQuery );
+});

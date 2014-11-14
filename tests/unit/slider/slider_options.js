@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/slider"
+], function( $ ) {
 
 var element, options;
 
@@ -316,4 +319,4 @@ test( "range", function() {
 	element.slider( "destroy" );
 });
 
-})( jQuery );
+});

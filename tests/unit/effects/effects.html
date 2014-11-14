@@ -4,38 +4,12 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Effects Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../helper/css.js"></script>
 	<script>
-	TestHelpers.loadResources({
-		js: [
-			"ui/effect.js",
-			"ui/effect-blind.js",
-			"ui/effect-bounce.js",
-			"ui/effect-clip.js",
-			"ui/effect-drop.js",
-			"ui/effect-explode.js",
-			"ui/effect-fade.js",
-			"ui/effect-fold.js",
-			"ui/effect-highlight.js",
-			"ui/effect-puff.js",
-			"ui/effect-pulsate.js",
-			"ui/effect-scale.js",
-			"ui/effect-shake.js",
-			"ui/effect-size.js",
-			"ui/effect-slide.js",
-			"ui/effect-transfer.js"
-		]
-	});
+	window.helper.loadCss([
 	</script>
 
-	<script src="effects_core.js"></script>
-	<script src="effects_scale.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
 	<style>
 	#qunit-fixture {
 		width: 1000px;
@@ -111,5 +85,21 @@
 </div>
 
 </div>
+
+<script src="../../../external/requirejs/require.js"></script>
+<script src="../../../external/qunit/qunit.js"></script>
+<script src="../swarminject.js"></script>
+<script src="../helper/jquery.js"></script>
+<script src="../helper/require.js"></script>
+<script>
+QUnit.config.autostart = false;
+require_series([
+	"./effects_core",
+	"./effects_scale"
+], function() {
+	QUnit.start();
+});
+</script>
+
 </body>
 </html>

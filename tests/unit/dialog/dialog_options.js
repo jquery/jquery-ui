@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/dialog"
+], function( $ ) {
+
 /*
  * dialog_options.js
  */
-(function($) {
 
 module("dialog: options");
 
@@ -581,4 +585,4 @@ asyncTest( "Open followed by close during show effect", function() {
 	}, 100 );
 });
 
-})(jQuery);
+});

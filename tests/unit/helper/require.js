@@ -1,5 +1,5 @@
 
-// Common require.configs.
+// Common require.config.
 require.config({
 	paths: {
 		"helper": "../helper",

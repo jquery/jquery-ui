@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/widget"
+], function( $ ) {
 
 module( "widget factory", {
 	teardown: function() {
@@ -1504,4 +1507,4 @@ test( "$.widget.bridge() - widgetFullName", function() {
 	equal( typeof instance, "object", "instance stored in .data(widgetFullName)" );
 });
 
-}( jQuery ) );
+}(;

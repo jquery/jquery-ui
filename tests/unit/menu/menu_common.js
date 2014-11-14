@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "menu", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "menu", {
 	defaults: {
 		disabled: false,
 		icons: {
@@ -18,4 +22,6 @@ TestHelpers.commonWidgetTests( "menu", {
 		focus: null,
 		select: null
 	}
+});
+
 });

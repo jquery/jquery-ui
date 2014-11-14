@@ -1,4 +1,7 @@
-(function ( $ ) {
+define([
+	"jquery",
+	"ui/selectmenu"
+], function( $ ) {
 
 module( "selectmenu: options" );
 
@@ -122,4 +125,4 @@ test( "width", function() {
 	equal( button.outerWidth(), 300, "button width fills container" );
 });
 
-})( jQuery );
+});

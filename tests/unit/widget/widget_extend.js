@@ -1,3 +1,8 @@
+define([
+	"jquery",
+	"ui/widget"
+], function( $ ) {
+
 test( "$.widget.extend()", function() {
 	expect( 27 );
 
@@ -102,4 +107,6 @@ test( "$.widget.extend()", function() {
 	deepEqual( input, output, "don't clone arrays" );
 	input.key[0] = 10;
 	deepEqual( input, output, "don't clone arrays" );
+});
+
 });

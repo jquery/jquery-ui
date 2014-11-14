@@ -1,8 +1,11 @@
+define([
+	"jquery",
+	"ui/draggable"
+], function( $ ) {
+
 /*
  * draggable_core.js
  */
-
-(function( $ ) {
 
 module( "draggable: core" );
 
@@ -374,4 +377,4 @@ test( "setting right/bottom css shouldn't cause resize", function() {
 	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
-})( jQuery );
+});

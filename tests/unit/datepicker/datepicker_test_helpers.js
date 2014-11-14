@@ -1,4 +1,13 @@
-TestHelpers.datepicker = {
+define([
+	"jquery"
+], function( $ ) {
+
+function init( id, options ) {
+	$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
+	return $( id ).datepicker( $.extend( { showAnim: "" }, options || {} ) );
+}
+
+return {
 	addMonths: function(date, offset) {
 		var maxDay = 32 - new Date(date.getFullYear(), date.getMonth() + offset, 32).getDate();
 		date.setDate(Math.min(date.getDate(), maxDay));
@@ -14,14 +23,12 @@ TestHelpers.datepicker = {
 		d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
 		equal(d1.toString(), d2.toString(), message);
 	},
-	init: function( id, options ) {
-		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
-		return $( id ).datepicker( $.extend( { showAnim: "" }, options || {} ) );
-	},
+	init: init,
 	initNewInput: function( options ) {
 		var id = $( "<input>" ).appendTo( "#qunit-fixture" );
-		return TestHelpers.datepicker.init( id, options );
+		return init( id, options );
 	},
-	onFocus: TestHelpers.onFocus,
 	PROP_NAME: "datepicker"
 };
+
+});

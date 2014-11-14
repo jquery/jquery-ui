@@ -1,4 +1,7 @@
-(function ( $ ) {
+define([
+	"jquery",
+	"ui/selectmenu"
+], function( $ ) {
 
 module( "selectmenu: events", {
 	setup: function() {
@@ -130,4 +133,4 @@ asyncTest( "select", function() {
 	});
 });
 
-})( jQuery );
+});

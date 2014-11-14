@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/resizable"
+], function( $ ) {
+
 /*
  * resizable_options.js
  */
-(function($) {
 
 module("resizable: options");
 
@@ -404,4 +408,4 @@ test( "alsoResize + containment", function() {
 	equal( other.height(), 150, "alsoResize constrained height at containment edge" );
 });
 
-})(jQuery);
+});

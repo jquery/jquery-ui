@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tabs"
+], function( $ ) {
 
 var disabled = TestHelpers.tabs.disabled,
 	state = TestHelpers.tabs.state;
@@ -267,4 +270,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
-}( jQuery ) );
+}(;

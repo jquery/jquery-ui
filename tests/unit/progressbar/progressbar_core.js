@@ -1,3 +1,8 @@
+define([
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
+
 module( "progressbar: core" );
 
 test( "markup structure", function() {
@@ -50,4 +55,6 @@ test( "accessibility", function() {
 	equal( element.attr( "aria-valuemin" ), 0, "aria-valuemin" );
 	equal( element.attr( "aria-valuemax" ), 150, "aria-valuemax" );
 	strictEqual( element.attr( "aria-valuenow" ), undefined, "aria-valuenow" );
+});
+
 });

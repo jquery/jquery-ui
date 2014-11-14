@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "dialog", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "dialog", {
 	defaults: {
 		appendTo: "body",
 		autoOpen: true,
@@ -40,4 +44,6 @@ TestHelpers.commonWidgetTests( "dialog", {
 		resizeStart: null,
 		resizeStop: null
 	}
+});
+
 });

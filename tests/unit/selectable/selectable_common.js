@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests("selectable", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests("selectable", {
 	defaults: {
 		appendTo: "body",
 		autoRefresh: true,
@@ -18,4 +22,6 @@ TestHelpers.commonWidgetTests("selectable", {
 		unselected: null,
 		unselecting: null
 	}
+});
+
 });

@@ -4,32 +4,12 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Datepicker Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../helper/css.js"></script>
 	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "datepicker" ],
-		js: [
-			"ui/core.js",
-			"ui/datepicker.js",
-			"ui/i18n/datepicker-fr.js",
-			"ui/i18n/datepicker-he.js",
-			"ui/i18n/datepicker-zh-CN.js"
-		]
-	});
+	window.helper.loadCss([ "core", "datepicker" ]);
 	</script>
 
-	<script src="datepicker_common.js"></script>
-	<script src="datepicker_core.js"></script>
-	<script src="datepicker_events.js"></script>
-	<script src="datepicker_methods.js"></script>
-	<script src="datepicker_options.js"></script>
-	<script src="datepicker_test_helpers.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
 </head>
 <body>
 
@@ -40,5 +20,25 @@
 <p><input type="text" id="inp2"></p>
 
 </div>
+
+<script src="../../../external/requirejs/require.js"></script>
+<script src="../../../external/qunit/qunit.js"></script>
+<script src="../swarminject.js"></script>
+<script src="../helper/jquery.js"></script>
+<script src="../helper/require.js"></script>
+<script>
+QUnit.config.autostart = false;
+require_series([
+	"./datepicker_common",
+	"./datepicker_core",
+	"./datepicker_events",
+	"./datepicker_methods",
+	"./datepicker_options",
+	"./datepicker_test_helpers"
+], function() {
+	QUnit.start();
+});
+</script>
+
 </body>
 </html>

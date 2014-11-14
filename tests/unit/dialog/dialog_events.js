@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/dialog"
+], function( $ ) {
+
 /*
  * dialog_events.js
  */
-(function($) {
 
 module("dialog: events");
 
@@ -367,4 +371,4 @@ test("ensure dialog keeps focus when clicking modal overlay", function() {
 	element.remove();
 });
 
-})(jQuery);
+});

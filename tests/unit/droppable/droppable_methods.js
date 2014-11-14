@@ -1,7 +1,7 @@
-/*
- * droppable_methods.js
- */
-(function($) {
+define([
+	"jquery",
+	"ui/droppable"
+], function( $ ) {
 
 module("droppable: methods");
 
@@ -88,4 +88,4 @@ test( "disable", function() {
 	equal( actual, expected, "disable is chainable" );
 });
 
-})( jQuery );
+});

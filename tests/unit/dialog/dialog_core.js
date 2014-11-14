@@ -1,8 +1,11 @@
+define([
+	"jquery",
+	"ui/dialog"
+], function( $ ) {
+
 /*
  * dialog_core.js
  */
-
-(function($) {
 
 // TODO add teardown callback to remove dialogs
 module("dialog: core");
@@ -253,4 +256,4 @@ asyncTest( "interaction between overlay and other dialogs", function() {
 	});
 });
 
-})(jQuery);
+});

@@ -1,4 +1,8 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/slider"
+], function( $ ) {
+
 //
 // Slider Test Helper Functions
 //
@@ -294,4 +298,4 @@ test( "keydown LEFT on handle decreases value by step, not less than min", funct
 	element.slider( "destroy" );
 });
 
-})( jQuery );
+});

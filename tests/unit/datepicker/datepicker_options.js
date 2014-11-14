@@ -1,14 +1,20 @@
+define([
+	"jquery",
+	"./datepicker_test_helpers",
+	"helper/testsuite",
+	"jquery.simulate",
+	"ui/datepicker"
+], function( $, datepickerTestHelper, testHelper ) {
+
 /*
  * datepicker_options.js
  */
-
-(function($) {
 
 module("datepicker: options");
 
 test("setDefaults", function() {
 	expect( 3 );
-	TestHelpers.datepicker.init("#inp");
+	datepickerTestHelper.init("#inp");
 	equal($.datepicker._defaults.showOn, "focus", "Initial showOn");
 	$.datepicker.setDefaults({showOn: "button"});
 	equal($.datepicker._defaults.showOn, "button", "Change default showOn");
@@ -18,8 +24,8 @@ test("setDefaults", function() {
 
 test("option", function() {
 	expect( 17 );
-	var inp = TestHelpers.datepicker.init("#inp"),
-	inst = $.data(inp[0], TestHelpers.datepicker.PROP_NAME);
+	var inp = datepickerTestHelper.init("#inp"),
+	inst = $.data(inp[0], datepickerTestHelper.PROP_NAME);
 	// Set option
 	equal(inst.settings.showOn, null, "Initial setting showOn");
 	equal($.datepicker._get(inst, "showOn"), "focus", "Initial instance showOn");
@@ -37,7 +43,7 @@ test("option", function() {
 	equal($.datepicker._get(inst, "showOn"), "focus", "Restore instance showOn");
 	equal($.datepicker._defaults.showOn, "focus", "Retain default showOn");
 	// Get option
-	inp = TestHelpers.datepicker.init("#inp");
+	inp = datepickerTestHelper.init("#inp");
 	equal(inp.datepicker("option", "showOn"), "focus", "Initial setting showOn");
 	inp.datepicker("option", "showOn", "button");
 	equal(inp.datepicker("option", "showOn"), "button", "Change instance showOn");
@@ -50,7 +56,7 @@ test("option", function() {
 
 test( "disabled", function() {
 	expect(8);
-	var inp = TestHelpers.datepicker.init("#inp");
+	var inp = datepickerTestHelper.init("#inp");
 	ok(!inp.datepicker("isDisabled"), "Initially marked as enabled");
 	ok(!inp[0].disabled, "Field initially enabled");
 	inp.datepicker("option", "disabled", true);
@@ -61,15 +67,15 @@ test( "disabled", function() {
 	ok(!inp[0].disabled, "Field now enabled");
 	inp.datepicker("destroy");
 
-	inp = TestHelpers.datepicker.init("#inp", { disabled: true });
+	inp = datepickerTestHelper.init("#inp", { disabled: true });
 	ok(inp.datepicker("isDisabled"), "Initially marked as disabled");
 	ok(inp[0].disabled, "Field initially disabled");
 });
 
 test("change", function() {
 	expect( 12 );
-	var inp = TestHelpers.datepicker.init("#inp"),
-	inst = $.data(inp[0], TestHelpers.datepicker.PROP_NAME);
+	var inp = datepickerTestHelper.init("#inp"),
+	inst = $.data(inp[0], datepickerTestHelper.PROP_NAME);
 	equal(inst.settings.showOn, null, "Initial setting showOn");
 	equal($.datepicker._get(inst, "showOn"), "focus", "Initial instance showOn");
 	equal($.datepicker._defaults.showOn, "focus", "Initial default showOn");
@@ -104,7 +110,7 @@ test("change", function() {
 		expect( isOldIE ? 25 : 29 );
 
 		function step0() {
-			var inp = TestHelpers.datepicker.initNewInput(),
+			var inp = datepickerTestHelper.initNewInput(),
 				dp = $( "#ui-datepicker-div" );
 
 			button = inp.siblings( "button" );
@@ -112,7 +118,7 @@ test("change", function() {
 			image = inp.siblings( "img" );
 			ok( image.length === 0, "Focus - image absent" );
 
-			TestHelpers.datepicker.onFocus( inp, function() {
+			testHelper.onFocus( inp, function() {
 				ok( dp.is( ":visible" ), "Focus - rendered on focus" );
 				inp.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 				ok( !dp.is( ":visible" ), "Focus - hidden on exit" );
@@ -122,10 +128,10 @@ test("change", function() {
 
 		function step1() {
 
-			var inp = TestHelpers.datepicker.initNewInput(),
+			var inp = datepickerTestHelper.initNewInput(),
 				dp = $( "#ui-datepicker-div" );
 
-			TestHelpers.datepicker.onFocus( inp, function() {
+			testHelper.onFocus( inp, function() {
 				ok( dp.is( ":visible" ), "Focus - rendered on focus" );
 				body.simulate( "mousedown", {} );
 				ok( !dp.is( ":visible" ), "Focus - hidden on external click" );
@@ -136,7 +142,7 @@ test("change", function() {
 		}
 
 		function step2() {
-			var inp = TestHelpers.datepicker.initNewInput({
+			var inp = datepickerTestHelper.initNewInput({
 					showOn: "button",
 					buttonText: "Popup"
 				}),
@@ -149,7 +155,7 @@ test("change", function() {
 			ok( image.length === 0, "Button - image absent" );
 			equal( button.text(), "Popup", "Button - button text" );
 
-			TestHelpers.datepicker.onFocus( inp, function() {
+			testHelper.onFocus( inp, function() {
 				ok( !dp.is( ":visible" ), "Button - not rendered on focus" );
 				button.click();
 				ok( dp.is( ":visible" ), "Button - rendered on button click" );
@@ -162,7 +168,7 @@ test("change", function() {
 		}
 
 		function step3() {
-			var inp = TestHelpers.datepicker.initNewInput({
+			var inp = datepickerTestHelper.initNewInput({
 					showOn: "button",
 					buttonImageOnly: true,
 					buttonImage: "images/calendar.gif",
@@ -178,7 +184,7 @@ test("change", function() {
 			ok( /images\/calendar\.gif$/.test( image.attr( "src" ) ), "Image button - image source" );
 			equal( image.attr( "title" ), "Cal", "Image button - image text" );
 
-			TestHelpers.datepicker.onFocus( inp, function() {
+			testHelper.onFocus( inp, function() {
 				ok( !dp.is( ":visible" ), "Image button - not rendered on focus" );
 				image.click();
 				ok( dp.is( ":visible" ), "Image button - rendered on image click" );
@@ -191,7 +197,7 @@ test("change", function() {
 		}
 
 		function step4() {
-			var inp = TestHelpers.datepicker.initNewInput({
+			var inp = datepickerTestHelper.initNewInput({
 					showOn: "both",
 					buttonImage: "images/calendar.gif"
 				}),
@@ -207,7 +213,7 @@ test("change", function() {
 
 			// TODO: This test occasionally fails to focus in IE8 in BrowserStack
 			if ( !isOldIE ) {
-				TestHelpers.datepicker.onFocus( inp, function() {
+				testHelper.onFocus( inp, function() {
 					ok( dp.is( ":visible" ), "Both - rendered on focus" );
 					body.simulate( "mousedown", {} );
 					ok( !dp.is( ":visible" ), "Both - hidden on external click" );
@@ -230,7 +236,7 @@ test("change", function() {
 
 test("otherMonths", function() {
 	expect( 8 );
-	var inp = TestHelpers.datepicker.init("#inp"),
+	var inp = datepickerTestHelper.init("#inp"),
 		pop = $("#ui-datepicker-div");
 	inp.val("06/01/2009").datepicker("show");
 	equal(pop.find("tbody").text(),
@@ -258,105 +264,105 @@ test("otherMonths", function() {
 
 test("defaultDate", function() {
 	expect( 16 );
-	var inp = TestHelpers.datepicker.init("#inp"),
+	var inp = datepickerTestHelper.init("#inp"),
 		date = new Date();
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date null");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date null");
 
 	// Numeric values
 	inp.datepicker("option", {defaultDate: -2}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date -2");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date -2");
 
 	date = new Date();
 	inp.datepicker("option", {defaultDate: 3}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 3);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date 3");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date 3");
 
 	date = new Date();
 	inp.datepicker("option", {defaultDate: 1 / "a"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date NaN");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date NaN");
 
 	// String offset values
 	inp.datepicker("option", {defaultDate: "-1d"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date -1d");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date -1d");
 	inp.datepicker("option", {defaultDate: "+3D"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 4);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date +3D");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date +3D");
 	inp.datepicker("option", {defaultDate: " -2 w "}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date = new Date();
 	date.setDate(date.getDate() - 14);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date -2 w");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date -2 w");
 	inp.datepicker("option", {defaultDate: "+1 W"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 21);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date +1 W");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date +1 W");
 	inp.datepicker("option", {defaultDate: " -1 m "}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	date = TestHelpers.datepicker.addMonths(new Date(), -1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date -1 m");
+	date = datepickerTestHelper.addMonths(new Date(), -1);
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date -1 m");
 	inp.datepicker("option", {defaultDate: "+2M"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	date = TestHelpers.datepicker.addMonths(new Date(), 2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date +2M");
+	date = datepickerTestHelper.addMonths(new Date(), 2);
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date +2M");
 	inp.datepicker("option", {defaultDate: "-2y"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date = new Date();
 	date.setFullYear(date.getFullYear() - 2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date -2y");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date -2y");
 	inp.datepicker("option", {defaultDate: "+1 Y "}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date.setFullYear(date.getFullYear() + 3);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date +1 Y");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date +1 Y");
 	inp.datepicker("option", {defaultDate: "+1M +10d"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	date = TestHelpers.datepicker.addMonths(new Date(), 1);
+	date = datepickerTestHelper.addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date +1M +10d");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date +1M +10d");
 	// String date values
 	inp.datepicker("option", {defaultDate: "07/04/2007"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date = new Date(2007, 7 - 1, 4);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date 07/04/2007");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date 07/04/2007");
 	inp.datepicker("option", {dateFormat: "yy-mm-dd", defaultDate: "2007-04-02"}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	date = new Date(2007, 4 - 1, 2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date 2007-04-02");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date 2007-04-02");
 	// Date value
 	date = new Date(2007, 1 - 1, 26);
 	inp.datepicker("option", {dateFormat: "mm/dd/yy", defaultDate: date}).
 		datepicker("hide").val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date, "Default date 01/26/2007");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date, "Default date 01/26/2007");
 });
 
 test("miscellaneous", function() {
 	expect( 19 );
 	var curYear, longNames, shortNames, date,
 		dp = $("#ui-datepicker-div"),
-		inp = TestHelpers.datepicker.init("#inp");
+		inp = datepickerTestHelper.init("#inp");
 	// Year range
 	function genRange(start, offset) {
 		var i = start,
@@ -417,7 +423,7 @@ test("miscellaneous", function() {
 test("minMax", function() {
 	expect( 23 );
 	var date,
-		inp = TestHelpers.datepicker.init("#inp"),
+		inp = datepickerTestHelper.init("#inp"),
 		dp = $("#ui-datepicker-div"),
 		lastYear = new Date(2007, 6 - 1, 4),
 		nextYear = new Date(2009, 6 - 1, 4),
@@ -426,45 +432,45 @@ test("minMax", function() {
 	inp.val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), lastYear,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), lastYear,
 		"Min/max - null, null - ctrl+pgup");
 	inp.val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), nextYear,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), nextYear,
 		"Min/max - null, null - ctrl+pgdn");
 	inp.datepicker("option", {minDate: minDate}).
 		datepicker("hide").val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), minDate,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), minDate,
 		"Min/max - 02/29/2008, null - ctrl+pgup");
 	inp.val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), nextYear,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), nextYear,
 		"Min/max - 02/29/2008, null - ctrl+pgdn");
 	inp.datepicker("option", {maxDate: maxDate}).
 		datepicker("hide").val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), minDate,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), minDate,
 		"Min/max - 02/29/2008, 12/07/2008 - ctrl+pgup");
 	inp.val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), maxDate,
 		"Min/max - 02/29/2008, 12/07/2008 - ctrl+pgdn");
 	inp.datepicker("option", {minDate: null}).
 		datepicker("hide").val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), lastYear,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), lastYear,
 		"Min/max - null, 12/07/2008 - ctrl+pgup");
 	inp.val("06/04/2008").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), maxDate,
 		"Min/max - null, 12/07/2008 - ctrl+pgdn");
 	// Relative dates
 	date = new Date();
@@ -473,31 +479,31 @@ test("minMax", function() {
 		datepicker("hide").val("").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date,
 		"Min/max - -1w, +1 M +10 D - ctrl+pgup");
-	date = TestHelpers.datepicker.addMonths(new Date(), 1);
+	date = datepickerTestHelper.addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	inp.val("").datepicker("show");
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date,
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date,
 		"Min/max - -1w, +1 M +10 D - ctrl+pgdn");
 	// With existing date
-	inp = TestHelpers.datepicker.init("#inp");
+	inp = datepickerTestHelper.init("#inp");
 	inp.val("06/04/2008").datepicker("option", {minDate: minDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate > min");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate > min");
 	inp.datepicker("option", {minDate: null}).val("01/04/2008").datepicker("option", {minDate: minDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), minDate, "Min/max - setDate < min");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), minDate, "Min/max - setDate < min");
 	inp.datepicker("option", {minDate: null}).val("06/04/2008").datepicker("option", {maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate < max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate < max");
 	inp.datepicker("option", {maxDate: null}).val("01/04/2009").datepicker("option", {maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate, "Min/max - setDate > max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), maxDate, "Min/max - setDate > max");
 	inp.datepicker("option", {maxDate: null}).val("01/04/2008").datepicker("option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), minDate, "Min/max - setDate < min");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), minDate, "Min/max - setDate < min");
 	inp.datepicker("option", {maxDate: null}).val("06/04/2008").datepicker("option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate > min, < max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate > min, < max");
 	inp.datepicker("option", {maxDate: null}).val("01/04/2009").datepicker("option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate, "Min/max - setDate > max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), maxDate, "Min/max - setDate > max");
 
 	inp.datepicker("option", {yearRange: "-0:+1"}).val("01/01/" + new Date().getFullYear());
 	ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/1/minYear");
@@ -524,50 +530,50 @@ test("minMax", function() {
 test("setDate", function() {
 	expect( 24 );
 	var inl, alt, minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
-		inp = TestHelpers.datepicker.init("#inp"),
+		inp = datepickerTestHelper.init("#inp"),
 		date1 = new Date(2008, 6 - 1, 4),
 		date2 = new Date();
 	ok(inp.datepicker("getDate") == null, "Set date - default");
 	inp.datepicker("setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date - 2008-06-04");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date - 2008-06-04");
 	date1 = new Date();
 	date1.setDate(date1.getDate() + 7);
 	inp.datepicker("setDate", +7);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date - +7");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date - +7");
 	date2.setFullYear(date2.getFullYear() + 2);
 	inp.datepicker("setDate", "+2y");
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date2, "Set date - +2y");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date2, "Set date - +2y");
 	inp.datepicker("setDate", date1, date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date - two dates");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date - two dates");
 	inp.datepicker("setDate");
 	ok(inp.datepicker("getDate") == null, "Set date - null");
 	// Relative to current date
 	date1 = new Date();
 	date1.setDate(date1.getDate() + 7);
 	inp.datepicker("setDate", "c +7");
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date - c +7");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date - c +7");
 	date1.setDate(date1.getDate() + 7);
 	inp.datepicker("setDate", "c+7");
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date - c+7");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date - c+7");
 	date1.setDate(date1.getDate() - 21);
 	inp.datepicker("setDate", "c -3 w");
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date - c -3 w");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date - c -3 w");
 	// Inline
-	inl = TestHelpers.datepicker.init("#inl");
+	inl = datepickerTestHelper.init("#inl");
 	date1 = new Date(2008, 6 - 1, 4);
 	date2 = new Date();
-	TestHelpers.datepicker.equalsDate(inl.datepicker("getDate"), date2, "Set date inline - default");
+	datepickerTestHelper.equalsDate(inl.datepicker("getDate"), date2, "Set date inline - default");
 	inl.datepicker("setDate", date1);
-	TestHelpers.datepicker.equalsDate(inl.datepicker("getDate"), date1, "Set date inline - 2008-06-04");
+	datepickerTestHelper.equalsDate(inl.datepicker("getDate"), date1, "Set date inline - 2008-06-04");
 	date1 = new Date();
 	date1.setDate(date1.getDate() + 7);
 	inl.datepicker("setDate", +7);
-	TestHelpers.datepicker.equalsDate(inl.datepicker("getDate"), date1, "Set date inline - +7");
+	datepickerTestHelper.equalsDate(inl.datepicker("getDate"), date1, "Set date inline - +7");
 	date2.setFullYear(date2.getFullYear() + 2);
 	inl.datepicker("setDate", "+2y");
-	TestHelpers.datepicker.equalsDate(inl.datepicker("getDate"), date2, "Set date inline - +2y");
+	datepickerTestHelper.equalsDate(inl.datepicker("getDate"), date2, "Set date inline - +2y");
 	inl.datepicker("setDate", date1, date2);
-	TestHelpers.datepicker.equalsDate(inl.datepicker("getDate"), date1, "Set date inline - two dates");
+	datepickerTestHelper.equalsDate(inl.datepicker("getDate"), date1, "Set date inline - two dates");
 	inl.datepicker("setDate");
 	ok(inl.datepicker("getDate") == null, "Set date inline - null");
 	// Alternate field
@@ -578,23 +584,23 @@ test("setDate", function() {
 	equal(inp.val(), "06/04/2008", "Set date alternate - 06/04/2008");
 	equal(alt.val(), "2008-06-04", "Set date alternate - 2008-06-04");
 	// With minimum/maximum
-	inp = TestHelpers.datepicker.init("#inp");
+	inp = datepickerTestHelper.init("#inp");
 	date1 = new Date(2008, 1 - 1, 4);
 	date2 = new Date(2008, 6 - 1, 4);
 	minDate = new Date(2008, 2 - 1, 29);
 	maxDate = new Date(2008, 3 - 1, 28);
 	inp.val("").datepicker("option", {minDate: minDate}).datepicker("setDate", date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date2, "Set date min/max - setDate > min");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date2, "Set date min/max - setDate > min");
 	inp.datepicker("setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), minDate, "Set date min/max - setDate < min");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), minDate, "Set date min/max - setDate < min");
 	inp.val("").datepicker("option", {maxDate: maxDate, minDate: null}).datepicker("setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), date1, "Set date min/max - setDate < max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), date1, "Set date min/max - setDate < max");
 	inp.datepicker("setDate", date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate, "Set date min/max - setDate > max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), maxDate, "Set date min/max - setDate > max");
 	inp.val("").datepicker("option", {minDate: minDate}).datepicker("setDate", date1);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), minDate, "Set date min/max - setDate < min");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), minDate, "Set date min/max - setDate < min");
 	inp.datepicker("setDate", date2);
-	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate, "Set date min/max - setDate > max");
+	datepickerTestHelper.equalsDate(inp.datepicker("getDate"), maxDate, "Set date min/max - setDate > max");
 	dateAndTimeToSet = new Date(2008, 3 - 1, 28, 1, 11, 0);
 	dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
 	inp.datepicker("setDate", dateAndTimeToSet);
@@ -603,7 +609,7 @@ test("setDate", function() {
 
 test("altField", function() {
 	expect( 10 );
-	var inp = TestHelpers.datepicker.init("#inp"),
+	var inp = datepickerTestHelper.init("#inp"),
 		alt = $("#alt");
 	// No alternate field set
 	alt.val("");
@@ -642,7 +648,7 @@ test("altField", function() {
 
 test("autoSize", function() {
 	expect( 15 );
-	var inp = TestHelpers.datepicker.init("#inp");
+	var inp = datepickerTestHelper.init("#inp");
 	equal(inp.prop("size"), 20, "Auto size - default");
 	inp.datepicker("option", "autoSize", true);
 	equal(inp.prop("size"), 10, "Auto size - mm/dd/yy");
@@ -680,7 +686,7 @@ test("autoSize", function() {
 
 test("daylightSaving", function() {
 	expect( 25 );
-	var inp = TestHelpers.datepicker.init("#inp"),
+	var inp = datepickerTestHelper.init("#inp"),
 		dp = $("#ui-datepicker-div");
 	ok(true, "Daylight saving - " + new Date());
 	// Australia, Sydney - AM change, southern hemisphere
@@ -787,7 +793,7 @@ test("callbacks", function() {
 	expect( 13 );
 	// Before show
 	var dp, day20, day21,
-		inp = TestHelpers.datepicker.init("#inp", {beforeShow: beforeAll}),
+		inp = datepickerTestHelper.init("#inp", {beforeShow: beforeAll}),
 		inst = $.data(inp[0], "datepicker");
 	equal($.datepicker._get(inst, "currentText"), "Today", "Before show - initial");
 	inp.val("02/04/2008").datepicker("show");
@@ -797,7 +803,7 @@ test("callbacks", function() {
 	deepEqual(beforeShowInst, inst, "Before show - inst OK");
 	inp.datepicker("hide").datepicker("destroy");
 	// Before show day
-	inp = TestHelpers.datepicker.init("#inp", {beforeShowDay: beforeDay});
+	inp = datepickerTestHelper.init("#inp", {beforeShowDay: beforeDay});
 	dp = $("#ui-datepicker-div");
 	inp.val("02/04/2008").datepicker("show");
 	ok(beforeShowDayThis.id === inp[0].id, "Before show day - this OK");
@@ -816,7 +822,7 @@ test("callbacks", function() {
 test("beforeShowDay - tooltips with quotes", function() {
 	expect( 1 );
 	var inp, dp;
-	inp = TestHelpers.datepicker.init("#inp", {
+	inp = datepickerTestHelper.init("#inp", {
 		beforeShowDay: function() {
 			return [ true, "", "'" ];
 		}
@@ -831,7 +837,7 @@ test("beforeShowDay - tooltips with quotes", function() {
 test("localisation", function() {
 	expect( 24 );
 	var dp, month, day, date,
-		inp = TestHelpers.datepicker.init("#inp", $.datepicker.regional.fr);
+		inp = datepickerTestHelper.init("#inp", $.datepicker.regional.fr);
 	inp.datepicker("option", {dateFormat: "DD, d MM yy", showButtonPanel:true, changeMonth:true, changeYear:true}).val("").datepicker("show");
 	dp = $("#ui-datepicker-div");
 	equal($(".ui-datepicker-close", dp).text(), "Fermer", "Localisation - close");
@@ -898,72 +904,72 @@ test("iso8601Week", function() {
 
 test("parseDate", function() {
 	expect( 26 );
-	TestHelpers.datepicker.init("#inp");
+	datepickerTestHelper.init("#inp");
 	var currentYear, gmtDate, fr, settings, zh;
 	ok($.datepicker.parseDate("d m y", "") == null, "Parse date empty");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("d m y", "3 2 01"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("d m y", "3 2 01"),
 		new Date(2001, 2 - 1, 3), "Parse date d m y");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("dd mm yy", "03 02 2001"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("dd mm yy", "03 02 2001"),
 		new Date(2001, 2 - 1, 3), "Parse date dd mm yy");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("d m y", "13 12 01"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("d m y", "13 12 01"),
 		new Date(2001, 12 - 1, 13), "Parse date d m y");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("dd mm yy", "13 12 2001"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("dd mm yy", "13 12 2001"),
 		new Date(2001, 12 - 1, 13), "Parse date dd mm yy");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-o", "01-34"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-o", "01-34"),
 		new Date(2001, 2 - 1, 3), "Parse date y-o");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("yy-oo", "2001-347"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("yy-oo", "2001-347"),
 		new Date(2001, 12 - 1, 13), "Parse date yy-oo");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("oo yy", "348 2004"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("oo yy", "348 2004"),
 		new Date(2004, 12 - 1, 13), "Parse date oo yy");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("D d M y", "Sat 3 Feb 01"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("D d M y", "Sat 3 Feb 01"),
 		new Date(2001, 2 - 1, 3), "Parse date D d M y");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("d MM DD yy", "3 February Saturday 2001"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("d MM DD yy", "3 February Saturday 2001"),
 		new Date(2001, 2 - 1, 3), "Parse date dd MM DD yy");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("DD, MM d, yy", "Saturday, February 3, 2001"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("DD, MM d, yy", "Saturday, February 3, 2001"),
 		new Date(2001, 2 - 1, 3), "Parse date DD, MM d, yy");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("'day' d 'of' MM (''DD''), yy",
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("'day' d 'of' MM (''DD''), yy",
 		"day 3 of February ('Saturday'), 2001"), new Date(2001, 2 - 1, 3),
 		"Parse date 'day' d 'of' MM (''DD''), yy");
 	currentYear = new Date().getFullYear();
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000) + "-02-03"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000) + "-02-03"),
 			new Date(currentYear, 2 - 1, 3), "Parse date y-m-d - default cutuff");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 10) + "-02-03"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 10) + "-02-03"),
 			new Date(currentYear+10, 2 - 1, 3), "Parse date y-m-d - default cutuff");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 11) + "-02-03"),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 11) + "-02-03"),
 			new Date(currentYear-89, 2 - 1, 3), "Parse date y-m-d - default cutuff");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", "80-02-03", {shortYearCutoff: 80}),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", "80-02-03", {shortYearCutoff: 80}),
 		new Date(2080, 2 - 1, 3), "Parse date y-m-d - cutoff 80");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", "81-02-03", {shortYearCutoff: 80}),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", "81-02-03", {shortYearCutoff: 80}),
 		new Date(1981, 2 - 1, 3), "Parse date y-m-d - cutoff 80");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 60) + "-02-03", {shortYearCutoff: "+60"}),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 60) + "-02-03", {shortYearCutoff: "+60"}),
 			new Date(currentYear + 60, 2 - 1, 3), "Parse date y-m-d - cutoff +60");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 61) + "-02-03", {shortYearCutoff: "+60"}),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("y-m-d", (currentYear - 2000 + 61) + "-02-03", {shortYearCutoff: "+60"}),
 			new Date(currentYear - 39, 2 - 1, 3), "Parse date y-m-d - cutoff +60");
 	gmtDate = new Date(2001, 2 - 1, 3);
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("@", "981158400000"), gmtDate, "Parse date @");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("!", "631167552000000000"), gmtDate, "Parse date !");
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("@", "981158400000"), gmtDate, "Parse date @");
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("!", "631167552000000000"), gmtDate, "Parse date !");
 
 	fr = $.datepicker.regional.fr;
 	settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("D d M y", "Lun. 9 Avril 01", settings),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("D d M y", "Lun. 9 Avril 01", settings),
 		new Date(2001, 4 - 1, 9), "Parse date D M y with settings");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("d MM DD yy", "9 Avril Lundi 2001", settings),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("d MM DD yy", "9 Avril Lundi 2001", settings),
 		new Date(2001, 4 - 1, 9), "Parse date d MM DD yy with settings");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("DD, MM d, yy", "Lundi, Avril 9, 2001", settings),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("DD, MM d, yy", "Lundi, Avril 9, 2001", settings),
 		new Date(2001, 4 - 1, 9), "Parse date DD, MM d, yy with settings");
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("'jour' d 'de' MM (''DD''), yy", "jour 9 de Avril ('Lundi'), 2001", settings),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("'jour' d 'de' MM (''DD''), yy", "jour 9 de Avril ('Lundi'), 2001", settings),
 		new Date(2001, 4 - 1, 9), "Parse date 'jour' d 'de' MM (''DD''), yy with settings");
 
 	zh = $.datepicker.regional["zh-CN"];
-	TestHelpers.datepicker.equalsDate($.datepicker.parseDate("yy M d", "2011 十一月 22", zh),
+	datepickerTestHelper.equalsDate($.datepicker.parseDate("yy M d", "2011 十一月 22", zh),
 		new Date(2011, 11 - 1, 22), "Parse date yy M d with zh-CN");
 });
 
 test("parseDateErrors", function() {
 	expect( 18 );
-	TestHelpers.datepicker.init("#inp");
+	datepickerTestHelper.init("#inp");
 	var fr, settings;
 	function expectError(expr, value, error) {
 		try {
@@ -1038,7 +1044,7 @@ test("Ticket #7244: date parser does not fail when too many numbers are passed i
 
 test("formatDate", function() {
 	expect( 16 );
-	TestHelpers.datepicker.init("#inp");
+	datepickerTestHelper.init("#inp");
 	var gmtDate, fr, settings;
 	equal($.datepicker.formatDate("d m y", new Date(2001, 2 - 1, 3)),
 		"3 2 01", "Format date d m y");
@@ -1091,7 +1097,7 @@ test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler
 
 	var inp, dp;
 
-	inp = TestHelpers.datepicker.init( "#inp", {
+	inp = datepickerTestHelper.init( "#inp", {
 		beforeShow: function() {
 		}
 	});
@@ -1100,7 +1106,7 @@ test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler
 	equal( dp.css( "display" ), "block", "beforeShow returns nothing" );
 	inp.datepicker( "hide" ).datepicker( "destroy" );
 
-	inp = TestHelpers.datepicker.init( "#inp", {
+	inp = datepickerTestHelper.init( "#inp", {
 		beforeShow: function() {
 			return true;
 		}
@@ -1111,7 +1117,7 @@ test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler
 	inp.datepicker( "hide" );
 	inp.datepicker( "destroy" );
 
-	inp = TestHelpers.datepicker.init( "#inp", {
+	inp = datepickerTestHelper.init( "#inp", {
 		beforeShow: function() {
 			return false;
 		}
@@ -1122,4 +1128,4 @@ test( "Ticket 7602: Stop datepicker from appearing with beforeShow event handler
 	inp.datepicker( "destroy" );
 });
 
-})(jQuery);
+});

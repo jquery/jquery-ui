@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "tooltip", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "tooltip", {
 	defaults: {
 		content: function() {},
 		disabled: false,
@@ -18,4 +22,6 @@ TestHelpers.commonWidgetTests( "tooltip", {
 		create: null,
 		open: null
 	}
+});
+
 });

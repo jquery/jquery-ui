@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/droppable"
+], function( $ ) {
 
 module( "droppable: events" );
 
@@ -60,4 +63,4 @@ test("drop", function() {
 });
 */
 
-})( jQuery );
+});

@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/position"
+], function( $ ) {
 
 var win = $( window ),
 	scrollTopSupport = function() {
@@ -726,4 +729,4 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 	deepEqual( offset1, offset2 );
 });
 
-}( jQuery ) );
+}(;

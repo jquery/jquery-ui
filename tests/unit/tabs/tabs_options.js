@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tabs"
+], function( $ ) {
 
 var disabled = TestHelpers.tabs.disabled,
 	equalHeight = TestHelpers.tabs.equalHeight,
@@ -363,4 +366,4 @@ asyncTest( "hide and show - animation", function() {
 });
 
 
-}( jQuery ) );
+}(;

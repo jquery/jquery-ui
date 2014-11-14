@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/menu"
+], function( $ ) {
 
 var log = TestHelpers.menu.log,
 	logOutput = TestHelpers.menu.logOutput,
@@ -114,4 +117,4 @@ test( "widget", function() {
 
 // TODO: test select method
 
-})( jQuery );
+});

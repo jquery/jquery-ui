@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/selectmenu"
+], function( $ ) {
 
 module( "selectmenu: core" );
 
@@ -271,4 +274,4 @@ $.each([
 	});
 });
 
-})( jQuery );
+});

@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/slider"
+], function( $ ) {
 
 module( "slider: methods" );
 
@@ -94,4 +97,4 @@ test( "value", function() {
 //	ok(false, "missing test - untested code is broken code." );
 //});
 
-})( jQuery );
+});

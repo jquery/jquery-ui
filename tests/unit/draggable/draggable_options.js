@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/draggable"
+], function( $ ) {
 
 module( "draggable: options" );
 
@@ -1463,4 +1466,4 @@ test( "iframeFix", function() {
 	});
 });
 
-})( jQuery );
+});

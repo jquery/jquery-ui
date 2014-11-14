@@ -1,4 +1,8 @@
-TestHelpers.commonWidgetTests( "tabs", {
+define([
+	"helper/testsuite"
+], function( testHelper ) {
+
+testHelper.commonWidgetTests( "tabs", {
 	defaults: {
 		active: null,
 		collapsible: false,
@@ -15,4 +19,6 @@ TestHelpers.commonWidgetTests( "tabs", {
 		create: null,
 		load: null
 	}
+});
+
 });

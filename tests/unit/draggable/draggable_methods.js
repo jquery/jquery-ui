@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/draggable"
+], function( $ ) {
+
 /*
  * draggable_methods.js
  */
-(function( $ ) {
 
 var element;
 
@@ -100,4 +104,4 @@ test( "disable", function() {
 	equal( actual, expected, "disable is chainable" );
 });
 
-})( jQuery );
+});

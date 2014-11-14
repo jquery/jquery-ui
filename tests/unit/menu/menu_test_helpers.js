@@ -1,9 +1,9 @@
-(function() {
+define(function() {
 
 var lastItem,
 	log = [];
 
-TestHelpers.menu = {
+return {
 	log: function( message, clear ) {
 		if ( clear ) {
 			log.length = 0;
@@ -28,4 +28,4 @@ TestHelpers.menu = {
 	}
 };
 
-})();
+});

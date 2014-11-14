@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/spinner"
+], function( $ ) {
 
 var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
 
@@ -235,4 +238,4 @@ test( "precision", function() {
 	equal( element.val(), "0.05", "precision from min" );
 });
 
-})( jQuery );
+});

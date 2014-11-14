@@ -1,7 +1,11 @@
+define([
+	"jquery",
+	"ui/dialog"
+], function( $ ) {
+
 /*
  * dialog_methods.js
  */
-(function($) {
 
 module("dialog: methods", {
 	teardown: function() {
@@ -264,4 +268,4 @@ test("#5531: dialog width should be at least minWidth on creation", function () 
 
 });
 
-})(jQuery);
+});

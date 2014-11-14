@@ -1,14 +1,18 @@
+define([
+	"jquery",
+	"helper/testsuite",
+	"ui/button"
+], function( $, testHelper ) {
+
 /*
  * button_methods.js
  */
-(function($) {
-
 
 module("button: methods");
 
 test("destroy", function() {
 	expect( 1 );
-	domEqual( "#button", function() {
+	testHelper.domEqual( "#button", function() {
 		$( "#button" ).button().button( "destroy" );
 	});
 });
@@ -71,4 +75,4 @@ test( "refresh: buttonset should turn added elements into button widgets", funct
 	equal( checkboxButtonset.find( ":ui-button" ).length, 4, "checkbox" );
 });
 
-})(jQuery);
+});

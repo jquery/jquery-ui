@@ -1,4 +1,7 @@
-(function( $ ) {
+define([
+	"jquery",
+	"ui/tabs"
+], function( $ ) {
 
 var state = TestHelpers.tabs.state;
 
@@ -315,4 +318,4 @@ asyncTest( "load", function() {
 	}
 });
 
-}( jQuery ) );
+}(;

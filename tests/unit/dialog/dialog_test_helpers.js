@@ -1,4 +1,9 @@
-TestHelpers.dialog = {
+define([
+	"jquery",
+	"helper/testsuite"
+], function( $, testHelper ) {
+
+testHelper.dialog = {
 	drag: function(element, handle, dx, dy) {
 		var d = element.dialog("widget");
 		//this mouseover is to work around a limitation in resizable
@@ -45,3 +50,5 @@ TestHelpers.dialog = {
 		deepEqual(actual, expected, "resized[" + 50 + ", " + 50 + "] " + msg);
 	}
 };
+
+});

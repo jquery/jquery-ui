@@ -1,4 +1,7 @@
-(function($) {
+define([
+	"jquery",
+	"ui/effect"
+], function( $ ) {
 
 function present( value, array, message ) {
 	QUnit.push( jQuery.inArray( value, array ) !== -1 , value, array, message );
@@ -268,4 +271,4 @@ $.each( $.effects.effect, function( effect ) {
 	});
 });
 
-})(jQuery);
+});
