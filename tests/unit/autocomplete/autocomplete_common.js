@@ -1,4 +1,10 @@
-TestHelpers.commonWidgetTests( "autocomplete", {
+define([
+	"jquery",
+	"helper/testsuite",
+	"ui/autocomplete"
+], function( $, testHelper ) {
+
+testHelper.commonWidgetTests( "autocomplete", {
 	defaults: {
 		appendTo: null,
 		autoFocus: false,
@@ -26,4 +32,6 @@ TestHelpers.commonWidgetTests( "autocomplete", {
 		search: null,
 		select: null
 	}
+});
+
 });
