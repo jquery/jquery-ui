@@ -6,12 +6,11 @@ if( !window.helper ) {
 
 window.helper.jqueryUrl = function() {
 
-	var current, url, version,
+	var current, length, url, version,
 		i = 0,
-		length = parts.length,
 		parts = document.location.search.slice( 1 ).split( "&" );
 
-	for ( ; i < length; i++ ) {
+	for ( length = parts.length ; i < length; i++ ) {
 		current = parts[ i ].split( "=" );
 		if ( current[ 0 ] === "jquery" ) {
 			version = current[ 1 ];
