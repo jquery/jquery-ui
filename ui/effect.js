@@ -1064,6 +1064,18 @@ $.extend( $.effects, {
 		};
 	},
 
+	// Injects recently queued functions to be first in line (after "inprogress")
+	unshift: function( el, count ) {
+		var queue = el.queue(),
+				queuelen = queue.length;
+
+		if ( queuelen > count + 1 ) {
+			queue.splice.apply( queue,
+				[ 1, 0 ].concat( queue.splice( queuelen, count ) ) );
+		}
+		el.dequeue();
+	},
+
 	saveStyle: function( element ) {
 		element.data( dataSpaceStyle, element[ 0 ].style.cssText );
 	},

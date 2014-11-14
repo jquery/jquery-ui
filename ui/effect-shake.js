@@ -42,9 +42,6 @@ return $.effects.define( "shake", function( o, done ) {
 		animation = {},
 		animation1 = {},
 		animation2 = {},
-		// we will need to re-assemble the queue to stack our animations in place
-		queue = el.queue(),
-		queuelen = queue.length,
 		placeholder = $.effects.createPlaceholder( el );
 
 	// Animation
@@ -74,13 +71,7 @@ return $.effects.define( "shake", function( o, done ) {
 			done();
 		});
 
-	// inject all the animations we just queued to be first in line (after "inprogress")
-	if ( queuelen > 1) {
-		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
-	}
-	el.dequeue();
-
+	$.effects.unshift( el, anims + 1 );
 });
 
 }));

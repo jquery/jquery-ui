@@ -39,26 +39,20 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
 		duration = o.duration / anims,
 		animateTo = 0,
-		queue = elem.queue(),
-		queuelen = queue.length,
 		i = 1;
 
-	if ( show || !elem.is(":visible")) {
+	if ( show || !elem.is( ":visible" ) ) {
 		elem.css( "opacity", 0 ).show();
 		animateTo = 1;
 	}
 
 	// anims - 1 opacity "toggles"
 	for ( ; i < anims; i++ ) {
-		elem.animate({
-			opacity: animateTo
-		}, duration, o.easing );
+		elem.animate( { opacity: animateTo }, duration, o.easing );
 		animateTo = 1 - animateTo;
 	}
 
-	elem.animate({
-		opacity: animateTo
-	}, duration, o.easing);
+	elem.animate( { opacity: animateTo }, duration, o.easing);
 
 	elem.queue(function() {
 		if ( hide ) {
@@ -68,12 +62,7 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		done();
 	});
 
-	// We just queued up "anims" animations, we need to put them next in the queue
-	if ( queuelen > 1 ) {
-		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
-	}
-	elem.dequeue();
+	$.effects.unshift( elem, anims + 1 );
 });
 
 }));

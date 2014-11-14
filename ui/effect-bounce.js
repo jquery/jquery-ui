@@ -50,10 +50,6 @@ return $.effects.define( "bounce", function( o, done ) {
 		motion = ( direction === "up" || direction === "left" ),
 		i = 0,
 
-		// we will need to re-assemble the queue to stack our animations in place
-		queue = el.queue(),
-		queuelen = queue.length,
-
 		placeholder = $.effects.createPlaceholder( el ),
 		refValue = el.css( ref );
 
@@ -109,13 +105,7 @@ return $.effects.define( "bounce", function( o, done ) {
 		done();
 	});
 
-	// inject all the animations we just queued to be first in line (after "inprogress")
-	if ( queuelen > 1) {
-		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
-	}
-	el.dequeue();
-
+	$.effects.unshift( el, anims + 1 );
 });
 
 }));

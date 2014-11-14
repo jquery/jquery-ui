@@ -51,11 +51,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 			clip: el.cssClip()
 		},
 
-		distance = [ start[ref[0]], start[ref[1]] ],
-
-		// we will need to re-assemble the queue to stack our animations in place
-		queue = el.queue(),
-		queuelen = queue.length;
+		distance = [ start[ref[0]], start[ref[1]] ];
 
 	// define animations
 	if ( percent ) {
@@ -97,12 +93,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 			done();
 		});
 
-	// inject all the animations we just queued to be first in line (after "inprogress")
-	if ( queuelen > 1) {
-		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, 4 ) ) );
-	}
-	el.dequeue();
+	$.effects.unshift( el, 4 );
 });
 
 }));
