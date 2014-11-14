@@ -1055,6 +1055,15 @@ $.extend( $.effects, {
 		return effect;
 	},
 
+	clipToBox: function( animation ) {
+		return {
+			width: animation.clip.right - animation.clip.left,
+			height: animation.clip.bottom - animation.clip.top,
+			left: animation.clip.left,
+			top: animation.clip.top
+		};
+	},
+
 	saveStyle: function( element ) {
 		element.data( dataSpaceStyle, element[ 0 ].style.cssText );
 	},

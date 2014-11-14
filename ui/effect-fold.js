@@ -67,11 +67,24 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 
 	if ( show ) {
 		el.cssClip( animation2.clip );
+		if ( placeholder ) {
+			placeholder.css( $.effects.clipToBox( animation2 ) );
+		}
+
 		animation2.clip = start;
 	}
 
 	// Animate
 	el
+		.queue(function(next) {
+			if ( placeholder ) {
+				placeholder
+					.animate( $.effects.clipToBox( animation1 ), duration, o.easing )
+					.animate( $.effects.clipToBox( animation2 ), duration, o.easing );
+			}
+
+			next();
+		})
 		.animate( animation1, duration, o.easing )
 		.animate( animation2, duration, o.easing )
 		.queue(function() {
@@ -87,7 +100,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 	// inject all the animations we just queued to be first in line (after "inprogress")
 	if ( queuelen > 1) {
 		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, 3 ) ) );
+			[ 1, 0 ].concat( queue.splice( queuelen, 4 ) ) );
 	}
 	el.dequeue();
 });

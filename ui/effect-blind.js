@@ -51,7 +51,15 @@ return $.effects.define( "blind", "hide", function( o, done ) {
 
 	if ( show ) {
 		el.cssClip( animate.clip );
+		if ( placeholder ) {
+			placeholder.css( $.effects.clipToBox( animate ) );
+		}
+
 		animate.clip = start;
+	}
+
+	if ( placeholder ) {
+		placeholder.animate( $.effects.clipToBox( animate ), o.duration, o.easing );
 	}
 
 	el.animate( animate, {
