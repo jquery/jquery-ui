@@ -1065,13 +1065,12 @@ $.extend( $.effects, {
 	},
 
 	// Injects recently queued functions to be first in line (after "inprogress")
-	unshift: function( el, count ) {
-		var queue = el.queue(),
-				queuelen = queue.length;
+	unshift: function( el, queueLength, count ) {
+		var queue = el.queue();
 
-		if ( queuelen > count + 1 ) {
+		if ( queueLength > 1 ) {
 			queue.splice.apply( queue,
-				[ 1, 0 ].concat( queue.splice( queuelen, count ) ) );
+				[ 1, 0 ].concat( queue.splice( queueLength, count ) ) );
 		}
 		el.dequeue();
 	},

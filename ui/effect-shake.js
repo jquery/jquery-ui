@@ -42,6 +42,9 @@ return $.effects.define( "shake", function( o, done ) {
 		animation = {},
 		animation1 = {},
 		animation2 = {},
+
+		queuelen = el.queue().length,
+
 		placeholder = $.effects.createPlaceholder( el );
 
 	// Animation
@@ -71,7 +74,7 @@ return $.effects.define( "shake", function( o, done ) {
 			done();
 		});
 
-	$.effects.unshift( el, anims + 1 );
+	$.effects.unshift( el, queuelen, anims + 1 );
 });
 
 }));

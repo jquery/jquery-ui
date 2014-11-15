@@ -50,6 +50,8 @@ return $.effects.define( "bounce", function( o, done ) {
 		motion = ( direction === "up" || direction === "left" ),
 		i = 0,
 
+		queuelen = el.queue().length,
+
 		placeholder = $.effects.createPlaceholder( el ),
 		refValue = el.css( ref );
 
@@ -105,7 +107,7 @@ return $.effects.define( "bounce", function( o, done ) {
 		done();
 	});
 
-	$.effects.unshift( el, anims + 1 );
+	$.effects.unshift( el, queuelen, anims + 1 );
 });
 
 }));

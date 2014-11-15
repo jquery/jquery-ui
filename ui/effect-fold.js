@@ -51,7 +51,9 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 			clip: el.cssClip()
 		},
 
-		distance = [ start[ref[0]], start[ref[1]] ];
+		distance = [ start[ref[0]], start[ref[1]] ],
+
+		queuelen = el.queue().length;
 
 	// define animations
 	if ( percent ) {
@@ -93,7 +95,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 			done();
 		});
 
-	$.effects.unshift( el, 4 );
+	$.effects.unshift( el, queuelen, 4 );
 });
 
 }));

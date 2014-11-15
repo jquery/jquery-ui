@@ -39,7 +39,8 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
 		duration = o.duration / anims,
 		animateTo = 0,
-		i = 1;
+		i = 1,
+		queuelen = elem.queue().length;
 
 	if ( show || !elem.is( ":visible" ) ) {
 		elem.css( "opacity", 0 ).show();
@@ -62,7 +63,7 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		done();
 	});
 
-	$.effects.unshift( elem, anims + 1 );
+	$.effects.unshift( elem, queuelen, anims + 1 );
 });
 
 }));
