@@ -100,9 +100,6 @@ return $.effects.define( "explode", "hide", function( o, done ) {
 			visibility: "visible"
 		});
 		$( pieces ).remove();
-		if ( !show ) {
-			el.hide();
-		}
 		done();
 	}
 });

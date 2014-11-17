@@ -43,9 +43,9 @@ return $.effects.define( "shake", function( o, done ) {
 		animation1 = {},
 		animation2 = {},
 
-		queuelen = el.queue().length,
+		queuelen = el.queue().length;
 
-		placeholder = $.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( el );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -63,16 +63,7 @@ return $.effects.define( "shake", function( o, done ) {
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
-		.queue(function() {
-
-			$.effects.cleanUpPlaceholder( placeholder, el );
-
-			if ( o.mode === "hide" ) {
-				el.hide();
-			}
-
-			done();
-		});
+		.queue(done);
 
 	$.effects.unshift( el, queuelen, anims + 1 );
 });

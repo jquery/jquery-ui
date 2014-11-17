@@ -30,7 +30,8 @@
 
 return $.effects.define( "drop", "hide", function( o, done ) {
 
-	var el = $( this ),
+	var distance,
+		el = $( this ),
 		mode = o.mode,
 		show = mode === "show",
 		direction = o.direction || "left",
@@ -38,9 +39,11 @@ return $.effects.define( "drop", "hide", function( o, done ) {
 		motion = ( direction === "up" || direction === "left" ) ? "pos" : "neg",
 		animation = {
 			opacity: show ? 1 : 0
-		},
-		placeholder = $.effects.createPlaceholder( el ),
-		distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
+		};
+
+	$.effects.createPlaceholder( el );
+
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
 
 	if ( show ) {
 		el
@@ -59,15 +62,7 @@ return $.effects.define( "drop", "hide", function( o, done ) {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
-		complete: function() {
-			$.effects.cleanUpPlaceholder( placeholder, el );
-
-			if ( mode === "hide" ) {
-				el.hide();
-			}
-
-			done();
-		}
+		complete: done
 	});
 });
 

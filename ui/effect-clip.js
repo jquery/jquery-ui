@@ -29,7 +29,7 @@
 }(function( $ ) {
 
 return $.effects.define( "clip", "hide", function( o, done ) {
-	var start, placeholder,
+	var start,
 		animate = {},
 		el = $( this ),
 		show = o.mode === "show",
@@ -46,7 +46,7 @@ return $.effects.define( "clip", "hide", function( o, done ) {
 		left: horizontal ? ( start.right - start.left ) / 2 : start.left
 	};
 
-	placeholder = $.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( el );
 
 	if ( show ) {
 		el.cssClip( animate.clip );
@@ -57,16 +57,7 @@ return $.effects.define( "clip", "hide", function( o, done ) {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
-		complete: function() {
-
-			$.effects.cleanUpPlaceholder( placeholder, el );
-
-			if ( !show ) {
-				el.hide();
-			}
-
-			done();
-		}
+		complete: done
 	});
 
 });

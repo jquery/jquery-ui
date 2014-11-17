@@ -29,7 +29,7 @@
 }(function( $ ) {
 
 return $.effects.define( "bounce", function( o, done ) {
-	var upAnim, downAnim,
+	var upAnim, downAnim, refValue,
 		el = $( this ),
 
 		// defaults:
@@ -50,10 +50,11 @@ return $.effects.define( "bounce", function( o, done ) {
 		motion = ( direction === "up" || direction === "left" ),
 		i = 0,
 
-		queuelen = el.queue().length,
+		queuelen = el.queue().length;
 
-		placeholder = $.effects.createPlaceholder( el ),
-		refValue = el.css( ref );
+	$.effects.createPlaceholder( el );
+
+	refValue = el.css( ref );
 
 	// default distance for the BIGGEST bounce is the outer Distance / 3
 	if ( !distance ) {
@@ -97,15 +98,7 @@ return $.effects.define( "bounce", function( o, done ) {
 		el.animate( upAnim, speed, easing );
 	}
 
-	el.queue(function() {
-		$.effects.cleanUpPlaceholder( placeholder, el );
-
-		if ( hide ) {
-			el.hide();
-		}
-
-		done();
-	});
+	el.queue(done);
 
 	$.effects.unshift( el, queuelen, anims + 1 );
 });

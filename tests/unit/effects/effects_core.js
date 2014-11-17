@@ -247,7 +247,7 @@ $.each( $.effects.effect, function( effect ) {
 		return;
 	}
 	asyncTest( "show/hide", function() {
-		expect( 8 );
+		expect( 10 );
 		var hidden = $( "div.hidden" ),
 			count = 0,
 			test = 0;
@@ -268,8 +268,10 @@ $.each( $.effects.effect, function( effect ) {
 
 		hidden.queue( queueTest() ).show( effect, minDuration, queueTest(function() {
 			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" + effect + "\", time)" );
+			ok( !$( ".ui-effects-placeholder" ).length, "No placeholder remains after .show(\"" + effect + "\", time)" );
 		})).queue( queueTest() ).hide( effect, minDuration, queueTest(function() {
 			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" + effect + "\", time)" );
+			ok( !$( ".ui-effects-placeholder" ).length, "No placeholder remains after .hide(\"" + effect + "\", time)" );
 		})).queue( queueTest(function() {
 			deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains");
 			start();

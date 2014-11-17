@@ -31,7 +31,7 @@
 return $.effects.define( "size", function( o, done ) {
 
 	// Create element
-	var baseline, factor, temp,
+	var baseline, factor, temp, original, from,
 		el = $( this ),
 
 		// Copy for children
@@ -52,17 +52,17 @@ return $.effects.define( "size", function( o, done ) {
 			outerHeight: 0,
 			outerWidth: 0
 		},
-
-		placeholder = $.effects.createPlaceholder( el ),
-
-		original = {
-			height: el.height(),
-			width: el.width(),
-			outerHeight: el.outerHeight(),
-			outerWidth: el.outerWidth()
-		},
-		from = o.from || original,
 		to = o.to || zero;
+
+	$.effects.createPlaceholder( el );
+
+	original = {
+		height: el.height(),
+		width: el.width(),
+		outerHeight: el.outerHeight(),
+		outerWidth: el.outerWidth()
+	};
+	from = o.from || original;
 
 	if ( mode === "show" ) {
 		temp = from;
@@ -134,6 +134,7 @@ return $.effects.define( "size", function( o, done ) {
 					outerHeight: child.outerHeight(),
 					outerWidth: child.outerWidth()
 				};
+
 			if (restore) {
 				$.effects.saveStyle( child );
 			}
@@ -184,23 +185,18 @@ return $.effects.define( "size", function( o, done ) {
 
 			var offset = el.offset();
 
-			if ( restore ) {
-				$.effects.cleanUpPlaceholder( placeholder, el );
-			}
-
 			if ( to.opacity === 0 ) {
 				el.css( "opacity", from.opacity );
 			}
-			if ( mode === "hide" ) {
-				el.hide();
-			}
 
 			if ( !restore ) {
-				$.effects.removePlaceholder( placeholder );
+				el.css( "position", position === "static" ? "relative" : position );
 
-				el.css("position", position === "static" ? "relative" : position );
+				el.offset( offset );
 
-				el.offset(offset);
+				// Need to save style here so that automatic style restoration
+				// doesn't restore to the original styles from before the animation.
+				$.effects.saveStyle( el );
 			}
 
 			done();

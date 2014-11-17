@@ -66,16 +66,7 @@ return $.effects.define( "blind", "hide", function( o, done ) {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
-		complete: function() {
-
-			$.effects.cleanUpPlaceholder( placeholder, el );
-
-			if ( !show ) {
-				el.hide();
-			}
-
-			done();
-		}
+		complete: done
 	});
 });
 

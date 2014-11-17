@@ -50,15 +50,7 @@ return $.effects.define( "highlight", "show", function( o, done ) {
 			queue: false,
 			duration: o.duration,
 			easing: o.easing,
-			complete: function() {
-				$.effects.restoreStyle( elem );
-
-				if ( mode === "hide" ) {
-					elem.hide();
-				}
-
-				done();
-			}
+			complete: done
 		});
 });
 

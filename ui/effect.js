@@ -1169,7 +1169,8 @@ $.extend( $.effects, {
 				"float": element.css( "float" )
 			})
 			.outerWidth( element.outerWidth() )
-			.outerHeight( element.outerHeight() );
+			.outerHeight( element.outerHeight() )
+			.addClass( "ui-effects-placeholder" );
 		}
 
 		element.css({
@@ -1178,20 +1179,26 @@ $.extend( $.effects, {
 			top: position.top
 		});
 
+		element.data( dataSpace + "placeholder", placeholder );
+
 		return placeholder;
 	},
 
-	removePlaceholder: function( placeholder ) {
+	removePlaceholder: function( element ) {
+		var dataKey = dataSpace + "placeholder",
+				placeholder = element.data( dataKey );
+
 		if ( placeholder ) {
 			placeholder.remove();
+			element.removeData( dataKey );
 		}
 	},
 
 	// removes a placeholder if it exists and restores
 	// properties that were modified during placeholder creation
-	cleanUpPlaceholder: function( placeholder, el ) {
-		$.effects.restoreStyle( el );
-		$.effects.removePlaceholder( placeholder );
+	cleanUpPlaceholder: function( element ) {
+		$.effects.restoreStyle( element );
+		$.effects.removePlaceholder( element );
 	},
 
 	setTransition: function( element, list, factor, value ) {
@@ -1289,6 +1296,10 @@ $.fn.extend({
 		var args = _normalizeArguments.apply( this, arguments ),
 			effectMethod = $.effects.effect[ args.effect ],
 			defaultMode = effectMethod.mode,
+			queue = args.queue,
+			queueName = queue || "fx",
+			complete = args.complete,
+			mode = args.mode,
 			modes = [],
 			prefilter = function( next ) {
 				var el = $( this ),
@@ -1312,11 +1323,7 @@ $.fn.extend({
 				if ( $.isFunction( next ) ) {
 					next();
 				}
-			},
-			queue = args.queue,
-			queueName = queue || "fx",
-			complete = args.complete,
-			mode = args.mode;
+			};
 
 		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
@@ -1334,10 +1341,21 @@ $.fn.extend({
 		function run( next ) {
 			var elem = $( this );
 
+			function cleanup() {
+				$.effects.cleanUpPlaceholder( elem );
+
+				if ( args.mode === "hide" ) {
+					elem.hide();
+				}
+
+				done();
+			}
+
 			function done() {
 				if ( $.isFunction( complete ) ) {
-					complete.call( elem[0] );
+					complete.call( elem[ 0 ] );
 				}
+
 				if ( $.isFunction( next ) ) {
 					next();
 				}
@@ -1361,7 +1379,7 @@ $.fn.extend({
 					elem[ mode ]();
 					done();
 				} else {
-					effectMethod.call( elem[ 0 ], args, done );
+					effectMethod.call( elem[ 0 ], args, cleanup );
 				}
 			}
 		}

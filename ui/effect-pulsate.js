@@ -55,13 +55,7 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 
 	elem.animate( { opacity: animateTo }, duration, o.easing);
 
-	elem.queue(function() {
-		if ( hide ) {
-			elem.hide();
-		}
-
-		done();
-	});
+	elem.queue(done);
 
 	$.effects.unshift( elem, queuelen, anims + 1 );
 });

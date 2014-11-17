@@ -29,7 +29,8 @@
 }(function( $ ) {
 
 return $.effects.define( "slide", "show", function( o, done ) {
-	var el = $( this ),
+	var startClip, startRef,
+		el = $( this ),
 		map = {
 			up: [ "bottom", "top" ],
 			down: [ "top", "bottom" ],
@@ -41,10 +42,12 @@ return $.effects.define( "slide", "show", function( o, done ) {
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
 		positiveMotion = ( direction === "up" || direction === "left" ),
 		distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ),
-		animation = {},
-		placeholder = $.effects.createPlaceholder( el ),
-		startClip = el.cssClip(),
-		startRef = el.position()[ ref ];
+		animation = {};
+
+	$.effects.createPlaceholder( el );
+
+	startClip = el.cssClip();
+	startRef = el.position()[ ref ];
 
 	// define hide animation
 	animation[ ref ] = ( positiveMotion ? -1 : 1 ) * distance + startRef;
@@ -64,15 +67,7 @@ return $.effects.define( "slide", "show", function( o, done ) {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
-		complete: function() {
-			$.effects.cleanUpPlaceholder( placeholder, el );
-
-			if ( mode === "hide" ) {
-				el.hide();
-			}
-
-			done();
-		}
+		complete: done
 	});
 });
 
