@@ -199,6 +199,44 @@ asyncTest( "animateClass: css and class changes during animation are not lost (#
 		.height( 100 );
 });
 
+test( "createPlaceholder: only created for static or relative elements", function() {
+	expect( 4 );
+
+	ok( $.effects.createPlaceholder( $( ".relative" ) ).length );
+	ok( $.effects.createPlaceholder( $( ".static" ) ).length );
+	ok( !$.effects.createPlaceholder( $( ".absolute" ) ) );
+	ok( !$.effects.createPlaceholder( $( ".fixed" ) ) );
+});
+
+test( "createPlaceholder: preserves layout effecting properties", function() {
+	expect( 7 );
+
+	var position = 5,
+			element = $( ".relative" ).css({
+				top: position,
+				left: position
+			}),
+			before = {
+				offset: element.offset(),
+				outerWidth: element.outerWidth( true ),
+				outerHeight: element.outerHeight( true ),
+				"float": element.css( "float" ),
+				position: element.position()
+			},
+			placeholder = $.effects.createPlaceholder( element );
+
+	// Placeholders are only placed to preserve the effect on layout. Considering
+	// top and left do not change layout, they are not preserved, which makes some
+	// of the math simpler in the implementation.
+	deepEqual( before.offset.top - position, placeholder.offset().top, "offset top preserved" );
+	deepEqual( before.offset.left - position, placeholder.offset().left, "offset left preserved" );
+	deepEqual( before.position.top - position, placeholder.position().top, "position top preserved" );
+	deepEqual( before.position.left - position, placeholder.position().left, "position left preserved" );
+
+	deepEqual( before[ "float" ], placeholder.css( "float" ), "float preserved" );
+	deepEqual( before.outerWidth, placeholder.outerWidth( true ), "width preserved" );
+	deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
+});
 
 $.each( $.effects.effect, function( effect ) {
 	module( "effects." + effect );

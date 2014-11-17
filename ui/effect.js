@@ -1137,18 +1137,18 @@ $.extend( $.effects, {
 	createPlaceholder: function( element ) {
 
 		var placeholder,
-			cssPosition = element.css("position"),
+			cssPosition = element.css( "position" ),
 			position = element.position();
 
-		// lock in margins first to account for form elements, which
+		// Lock in margins first to account for form elements, which
 		// will change margin if you explicitly set height
 		// see: http://jsfiddle.net/JZSMt/3/ https://bugs.webkit.org/show_bug.cgi?id=107380
-		// Support: Chrome, Safari
+		// Support: Safari
 		element.css({
-			marginTop: element.css("marginTop"),
-			marginBottom: element.css("marginBottom"),
-			marginLeft: element.css("marginLeft"),
-			marginRight: element.css("marginRight")
+			marginTop: element.css( "marginTop" ),
+			marginBottom: element.css( "marginBottom" ),
+			marginLeft: element.css( "marginLeft" ),
+			marginRight: element.css( "marginRight" )
 		})
 		.outerWidth( element.outerWidth() )
 		.outerHeight( element.outerHeight() );
@@ -1159,7 +1159,7 @@ $.extend( $.effects, {
 			placeholder = $( "<" + element[ 0 ].nodeName + ">" ).insertAfter( element ).css({
 				// convert inline to inline block to account for inline elements
 				// that turn to inline block based on content (like img)
-				display: /^(inline|ruby)/.test( element.css("display") ) ? "inline-block" : "block",
+				display: /^(inline|ruby)/.test( element.css( "display" ) ) ? "inline-block" : "block",
 				visibility: "hidden",
 				// margins need to be set to account for margin collapse
 				marginTop: element.css( "marginTop" ),
