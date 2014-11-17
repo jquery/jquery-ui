@@ -1,11 +1,11 @@
 (function($) {
 
 function present( value, array, message ) {
-	QUnit.push( jQuery.inArray( value, array ) !== -1 , value, array, message );
+	QUnit.push( jQuery.inArray( value, array ) !== -1, value, array, message );
 }
 
 function notPresent( value, array, message ) {
-	QUnit.push( jQuery.inArray( value, array ) === -1 , value, array, message );
+	QUnit.push( jQuery.inArray( value, array ) === -1, value, array, message );
 }
 
 // minDuration is used for "short" animate tests where we are only concerned about the final
@@ -229,11 +229,11 @@ $.each( $.effects.effect, function( effect ) {
 		}
 
 		hidden.queue( queueTest() ).show( effect, minDuration, queueTest(function() {
-			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" +effect+ "\", time)" );
+			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" + effect + "\", time)" );
 		})).queue( queueTest() ).hide( effect, minDuration, queueTest(function() {
-			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" +effect+ "\", time)" );
+			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" + effect + "\", time)" );
 		})).queue( queueTest(function() {
-			deepEqual( hidden.queue(), ["inprogress"], "Only the inprogress sentinel remains");
+			deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains");
 			start();
 		}));
 	});
