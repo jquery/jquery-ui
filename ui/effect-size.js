@@ -135,7 +135,7 @@ return $.effects.define( "size", function( o, done ) {
 					outerWidth: child.outerWidth()
 				};
 
-			if (restore) {
+			if ( restore ) {
 				$.effects.saveStyle( child );
 			}
 

@@ -44,14 +44,10 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 		placeholder = $.effects.createPlaceholder( el ),
 
 		start = el.cssClip(),
-		animation1 = {
-			clip: el.cssClip()
-		},
-		animation2 = {
-			clip: el.cssClip()
-		},
+		animation1 = { clip: $.extend( {}, start ) },
+		animation2 = { clip: $.extend( {}, start ) },
 
-		distance = [ start[ref[0]], start[ref[1]] ],
+		distance = [ start[ ref[ 0 ] ], start[ ref[ 1 ] ] ],
 
 		queuelen = el.queue().length;
 
@@ -85,7 +81,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 		})
 		.animate( animation1, duration, o.easing )
 		.animate( animation2, duration, o.easing )
-		.queue(done);
+		.queue( done );
 
 	$.effects.unshift( el, queuelen, 4 );
 });

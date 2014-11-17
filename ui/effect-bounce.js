@@ -98,7 +98,7 @@ return $.effects.define( "bounce", function( o, done ) {
 		el.animate( upAnim, speed, easing );
 	}
 
-	el.queue(done);
+	el.queue( done );
 
 	$.effects.unshift( el, queuelen, anims + 1 );
 });

@@ -29,9 +29,7 @@
 }(function( $ ) {
 
 return $.effects.define( "blind", "hide", function( o, done ) {
-	var start, placeholder,
-		animate = {},
-		map = {
+	var map = {
 			up: [ "bottom", "top" ],
 			vertical: [ "bottom", "top" ],
 			down: [ "top", "bottom" ],
@@ -40,16 +38,16 @@ return $.effects.define( "blind", "hide", function( o, done ) {
 			right: [ "left", "right" ]
 		},
 		el = $( this ),
-		show = o.mode === "show",
-		direction = o.direction || "up";
+		direction = o.direction || "up",
+		start = el.cssClip(),
+		animate = { clip: $.extend( {}, start ) },
+		placeholder = $.effects.createPlaceholder( el );
 
-	start = el.cssClip();
-	animate.clip = el.cssClip();
 	animate.clip[ map[ direction ][ 0 ] ] = animate.clip[ map[ direction ][ 1 ] ];
 
 	placeholder = $.effects.createPlaceholder( el );
 
-	if ( show ) {
+	if ( o.mode === "show" ) {
 		el.cssClip( animate.clip );
 		if ( placeholder ) {
 			placeholder.css( $.effects.clipToBox( animate ) );

@@ -32,7 +32,6 @@ return $.effects.define( "clip", "hide", function( o, done ) {
 	var start,
 		animate = {},
 		el = $( this ),
-		show = o.mode === "show",
 		direction = o.direction || "vertical",
 		both = direction === "both",
 		horizontal = both || direction === "horizontal",
@@ -48,7 +47,7 @@ return $.effects.define( "clip", "hide", function( o, done ) {
 
 	$.effects.createPlaceholder( el );
 
-	if ( show ) {
+	if ( o.mode === "show" ) {
 		el.cssClip( animate.clip );
 		animate.clip = start;
 	}

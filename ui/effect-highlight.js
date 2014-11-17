@@ -30,12 +30,11 @@
 
 return $.effects.define( "highlight", "show", function( o, done ) {
 	var elem = $( this ),
-		mode = o.mode,
 		animation = {
-			backgroundColor: elem.css("backgroundColor")
+			backgroundColor: elem.css( "backgroundColor" )
 		};
 
-	if ( mode === "hide" ) {
+	if ( o.mode === "hide" ) {
 		animation.opacity = 0;
 	}
 

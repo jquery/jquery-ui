@@ -35,7 +35,7 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		hide = mode === "hide",
 		showhide = ( show || hide ),
 
-		// showing or hiding leaves of the "last" animation
+		// showing or hiding leaves off the "last" animation
 		anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
 		duration = o.duration / anims,
 		animateTo = 0,
@@ -55,7 +55,7 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 
 	elem.animate( { opacity: animateTo }, duration, o.easing);
 
-	elem.queue(done);
+	elem.queue( done );
 
 	$.effects.unshift( elem, queuelen, anims + 1 );
 });

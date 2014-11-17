@@ -37,8 +37,8 @@ return $.effects.define( "shake", function( o, done ) {
 		times = o.times || 3,
 		anims = times * 2 + 1,
 		speed = Math.round( o.duration / anims ),
-		ref = (direction === "up" || direction === "down") ? "top" : "left",
-		positiveMotion = (direction === "up" || direction === "left"),
+		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
+		positiveMotion = ( direction === "up" || direction === "left" ),
 		animation = {},
 		animation1 = {},
 		animation2 = {},
@@ -63,7 +63,7 @@ return $.effects.define( "shake", function( o, done ) {
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
-		.queue(done);
+		.queue( done );
 
 	$.effects.unshift( el, queuelen, anims + 1 );
 });
