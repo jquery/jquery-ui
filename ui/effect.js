@@ -1290,8 +1290,7 @@ $.fn.extend({
 			effectMethod = $.effects.effect[ args.effect ],
 			defaultMode = effectMethod.mode,
 			modes = [],
-			effectPrefilter = function() {
-
+			prefilter = function( next ) {
 				var el = $( this ),
 					normalizedMode = $.effects.mode( el, mode ) || defaultMode;
 
@@ -1300,21 +1299,22 @@ $.fn.extend({
 				// as the .show() below destroys the initial state
 				modes.push( normalizedMode );
 
-				// see $.uiBackCompat inside of run() for removal in 1.13
-				if ( defaultMode ) {
-					if ( normalizedMode === "none" ) {
-						return;
-					}
-
-					if ( normalizedMode === "show" ||
-							( normalizedMode === defaultMode && normalizedMode === "hide" ) ) {
-						el.show();
-					}
+				// see $.uiBackCompat inside of run() for removal of defaultMode in 1.13
+				if ( defaultMode && ( normalizedMode === "show" ||
+						( normalizedMode === defaultMode && normalizedMode === "hide" ) ) ) {
+					el.show();
 				}
 
-				$.effects.saveStyle( el );
+				if ( !defaultMode || normalizedMode !== "none" ) {
+					$.effects.saveStyle( el );
+				}
+
+				if ( $.isFunction( next ) ) {
+					next();
+				}
 			},
 			queue = args.queue,
+			queueName = queue || "fx",
 			complete = args.complete,
 			mode = args.mode;
 
@@ -1366,19 +1366,12 @@ $.fn.extend({
 			}
 		}
 
-		function prefilter( next ) {
-			effectPrefilter.call( this );
-			if ( $.isFunction( next ) ) {
-				next();
-			}
-		}
-
-		// run prefilter on all elements first to ensure that
+		// Run prefilter on all elements first to ensure that
 		// any showing or hiding happens before placeholder creation,
-		// which ensures that any layout changes are correctly captured
+		// which ensures that any layout changes are correctly captured.
 		return queue === false ?
 			this.each( prefilter ).each( run ) :
-			this.queue( queue || "fx", prefilter ).queue( queue || "fx", run );
+			this.queue( queueName, prefilter ).queue( queueName, run );
 	},
 
 	show: (function( orig ) {
