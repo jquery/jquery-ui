@@ -1194,9 +1194,9 @@ $.extend( $.effects, {
 		}
 	},
 
-	// removes a placeholder if it exists and restores
+	// Removes a placeholder if it exists and restores
 	// properties that were modified during placeholder creation
-	cleanUpPlaceholder: function( element ) {
+	cleanUp: function( element ) {
 		$.effects.restoreStyle( element );
 		$.effects.removePlaceholder( element );
 	},
@@ -1342,7 +1342,7 @@ $.fn.extend({
 			var elem = $( this );
 
 			function cleanup() {
-				$.effects.cleanUpPlaceholder( elem );
+				$.effects.cleanUp( elem );
 
 				if ( args.mode === "hide" ) {
 					elem.hide();

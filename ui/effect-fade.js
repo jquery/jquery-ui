@@ -29,14 +29,18 @@
 }(function( $ ) {
 
 return $.effects.define( "fade", "toggle", function( o, done ) {
-	$( this ).animate({
-		opacity: o.mode
-	}, {
-		queue: false,
-		duration: o.duration,
-		easing: o.easing,
-		complete: done
-	});
+	var show = o.mode === "show";
+
+	$( this )
+		.css( "opacity", show ? 0 : 1 )
+		.animate({
+			opacity: show ? 1 : 0
+		}, {
+			queue: false,
+			duration: o.duration,
+			easing: o.easing,
+			complete: done
+		});
 });
 
 }));

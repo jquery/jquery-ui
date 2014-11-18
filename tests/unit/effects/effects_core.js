@@ -247,7 +247,7 @@ $.each( $.effects.effect, function( effect ) {
 		return;
 	}
 	asyncTest( "show/hide", function() {
-		expect( 10 );
+		expect( 12 );
 		var hidden = $( "div.hidden" ),
 			count = 0,
 			test = 0;
@@ -266,16 +266,40 @@ $.each( $.effects.effect, function( effect ) {
 			};
 		}
 
-		hidden.queue( queueTest() ).show( effect, minDuration, queueTest(function() {
-			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" + effect + "\", time)" );
-			ok( !$( ".ui-effects-placeholder" ).length, "No placeholder remains after .show(\"" + effect + "\", time)" );
-		})).queue( queueTest() ).hide( effect, minDuration, queueTest(function() {
-			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" + effect + "\", time)" );
-			ok( !$( ".ui-effects-placeholder" ).length, "No placeholder remains after .hide(\"" + effect + "\", time)" );
-		})).queue( queueTest(function() {
-			deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains");
-			start();
-		}));
+		function duringTest( fn ) {
+			return function( next ) {
+				setTimeout( fn );
+				next();
+			};
+		}
+
+		hidden
+			.queue( queueTest() )
+			.queue( duringTest( function() {
+				ok( effect === "explode" || hidden.is( ":animated" ),
+					"Hidden is seen as animated during .show(\"" + effect + "\", time)" );
+			}) )
+			.show( effect, minDuration, queueTest(function() {
+				equal( hidden.css( "display" ), "block",
+					"Hidden is shown after .show(\"" + effect + "\", time)" );
+				ok( !$( ".ui-effects-placeholder" ).length,
+					"No placeholder remains after .show(\"" + effect + "\", time)" );
+			}) )
+			.queue( queueTest() )
+			.queue( duringTest( function() {
+				ok( effect === "explode" || hidden.is( ":animated" ),
+					"Hidden is seen as animated during .hide(\"" + effect + "\", time)" );
+			}) )
+			.hide( effect, minDuration, queueTest(function() {
+				equal( hidden.css( "display" ), "none",
+					"Back to hidden after .hide(\"" + effect + "\", time)" );
+				ok( !$( ".ui-effects-placeholder" ).length,
+					"No placeholder remains after .hide(\"" + effect + "\", time)" );
+			}) )
+			.queue( queueTest(function() {
+				deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains" );
+				start();
+			}) );
 	});
 
 	asyncTest( "relative width & height - properties are preserved", function() {
