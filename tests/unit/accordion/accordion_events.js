@@ -1,7 +1,11 @@
-(function( $ ) {
+define([
+	"jquery",
+	"./accordion_test_helpers",
+	"ui/accordion"
+], function( $, accordionTestHelper ) {
 
-var setupTeardown = TestHelpers.accordion.setupTeardown,
-	state = TestHelpers.accordion.state;
+var setupTeardown = accordionTestHelper.setupTeardown,
+	state = accordionTestHelper.state;
 
 module( "accordion: events", setupTeardown() );
 
@@ -161,4 +165,4 @@ test( "activate", function() {
 	element.accordion( "option", "active", 1 );
 });
 
-}( jQuery ) );
+});

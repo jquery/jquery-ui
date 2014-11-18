@@ -1,10 +1,14 @@
-(function( $ ) {
+define([
+	"jquery",
+	"helper/testsuite",
+	"ui/autocomplete"
+], function( $, testHelper ) {
 
 module( "autocomplete: methods" );
 
 test( "destroy", function() {
 	expect( 1 );
-	domEqual( "#autocomplete", function() {
+	testHelper.domEqual( "#autocomplete", function() {
 		$( "#autocomplete" ).autocomplete().autocomplete( "destroy" );
 	});
 });
@@ -42,4 +46,4 @@ test( "widget", function() {
 	ok( widgetElement.is( ".ui-menu" ), "menu element" );
 });
 
-}( jQuery ) );
+});
