@@ -27,6 +27,7 @@
 
 var dataSpace = "ui-effects-",
 	dataSpaceStyle = "ui-effects-style",
+	dataSpaceAnimated = "ui-effects-animated",
 
 	// Create a local jQuery because jQuery Color relies on it and the
 	// global may not exist with AMD and a custom build (#10199)
@@ -909,6 +910,14 @@ $.fn.extend({
 
 (function() {
 
+if ( $.expr && $.expr.filters && $.expr.filters.animated ) {
+	$.expr.filters.animated = (function( orig ) {
+		return function( elem ) {
+			return !!$( elem ).data( dataSpaceAnimated ) || orig( elem );
+		};
+	})( $.expr.filters.animated );
+}
+
 if ( $.uiBackCompat !== false ) {
 	$.extend( $.effects, {
 		// Saves a set of properties in a data storage
@@ -1305,6 +1314,9 @@ $.fn.extend({
 				var el = $( this ),
 					normalizedMode = $.effects.mode( el, mode ) || defaultMode;
 
+				// Sentinel for duck-punching the :animated psuedo-selector
+				el.data( dataSpaceAnimated, true );
+
 				// save effect mode for later use,
 				// we can't just call $.effects.mode again later,
 				// as the .show() below destroys the initial state
@@ -1342,6 +1354,8 @@ $.fn.extend({
 			var elem = $( this );
 
 			function cleanup() {
+				elem.removeData( dataSpaceAnimated );
+
 				$.effects.cleanUp( elem );
 
 				if ( args.mode === "hide" ) {

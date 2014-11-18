@@ -276,7 +276,7 @@ $.each( $.effects.effect, function( effect ) {
 		hidden
 			.queue( queueTest() )
 			.queue( duringTest( function() {
-				ok( effect === "explode" || hidden.is( ":animated" ),
+				ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .show(\"" + effect + "\", time)" );
 			}) )
 			.show( effect, minDuration, queueTest(function() {
@@ -287,7 +287,7 @@ $.each( $.effects.effect, function( effect ) {
 			}) )
 			.queue( queueTest() )
 			.queue( duringTest( function() {
-				ok( effect === "explode" || hidden.is( ":animated" ),
+				ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .hide(\"" + effect + "\", time)" );
 			}) )
 			.hide( effect, minDuration, queueTest(function() {
