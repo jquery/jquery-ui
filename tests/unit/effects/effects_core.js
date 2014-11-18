@@ -212,18 +212,18 @@ test( "createPlaceholder: preserves layout effecting properties", function() {
 	expect( 7 );
 
 	var position = 5,
-			element = $( ".relative" ).css({
-				top: position,
-				left: position
-			}),
-			before = {
-				offset: element.offset(),
-				outerWidth: element.outerWidth( true ),
-				outerHeight: element.outerHeight( true ),
-				"float": element.css( "float" ),
-				position: element.position()
-			},
-			placeholder = $.effects.createPlaceholder( element );
+		element = $( ".relative" ).css({
+			top: position,
+			left: position
+		}),
+		before = {
+			offset: element.offset(),
+			outerWidth: element.outerWidth( true ),
+			outerHeight: element.outerHeight( true ),
+			"float": element.css( "float" ),
+			position: element.position()
+		},
+		placeholder = $.effects.createPlaceholder( element );
 
 	// Placeholders are only placed to preserve the effect on layout. Considering
 	// top and left do not change layout, they are not preserved, which makes some
