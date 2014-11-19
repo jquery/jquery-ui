@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"ui/dialog"
-], function( $ ) {
+], function( $, testHelper ) {
 
 /*
  * dialog_methods.js
@@ -43,12 +44,12 @@ test("destroy", function() {
 	var element, element2;
 
 	$( "#dialog1, #form-dialog" ).hide();
-	domEqual( "#dialog1", function() {
+	testHelper.domEqual( "#dialog1", function() {
 		var dialog = $( "#dialog1" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
 		equal( dialog.index(), 0 );
 	});
-	domEqual( "#form-dialog", function() {
+	testHelper.domEqual( "#form-dialog", function() {
 		var dialog = $( "#form-dialog" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
 		equal( dialog.index(), 2 );
@@ -60,7 +61,7 @@ test("destroy", function() {
 		minHeight: "100px",
 		height: "200px"
 	});
-	domEqual( "#dialog1", function() {
+	testHelper.domEqual( "#dialog1", function() {
 		$( "#dialog1" ).dialog().dialog( "destroy" );
 	});
 

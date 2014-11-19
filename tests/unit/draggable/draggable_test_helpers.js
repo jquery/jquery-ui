@@ -3,7 +3,53 @@ define([
 	"helper/testsuite"
 ], function( $, testHelper ) {
 
-TestHelpers.draggable = {
+function testDragPosition( el, dx, dy, expectedDX, expectedDY, msg ) {
+	msg = msg ? msg + "." : "";
+
+	$( el ).one( "dragstop", function( event, ui ) {
+		var positionExpected = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
+		deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
+	});
+}
+
+function testDragOffset( el, dx, dy, expectedDX, expectedDY, msg ) {
+	msg = msg ? msg + "." : "";
+
+	var offsetBefore = el.offset(),
+		offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+	$( el ).one( "dragstop", function( event, ui ) {
+		deepEqual( ui.offset, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+	});
+}
+
+function testDragHelperOffset( el, dx, dy, expectedDX, expectedDY, msg ) {
+	msg = msg ? msg + "." : "";
+
+	var offsetBefore = el.offset(),
+		offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+	$( el ).one( "dragstop", function( event, ui ) {
+		deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+	});
+}
+
+function testDrag( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
+	testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
+	testDragOffset( el, dx, dy, expectedDX, expectedDY, msg );
+
+	$( handle ).simulate( "drag", {
+		dx: dx,
+		dy: dy
+	});
+}
+
+function shouldMove( el, msg, handle ) {
+	handle = handle || el;
+	testDrag( el, handle, 100, 100, 100, 100, msg );
+}
+
+return {
 	// TODO: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
 	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
@@ -11,60 +57,24 @@ TestHelpers.draggable = {
 		var element = $( "<div>" );
 		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
 	})(),
-	testDragPosition: function( el, dx, dy, expectedDX, expectedDY, msg ) {
-		msg = msg ? msg + "." : "";
-
-		$( el ).one( "dragstop", function( event, ui ) {
-			var positionExpected = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
-			deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
-		});
-	},
-	testDragOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
-		msg = msg ? msg + "." : "";
-
-		var offsetBefore = el.offset(),
-			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
-
-		$( el ).one( "dragstop", function( event, ui ) {
-			deepEqual( ui.offset, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
-		});
-	},
-	testDragHelperOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
-		msg = msg ? msg + "." : "";
-
-		var offsetBefore = el.offset(),
-			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
-
-		$( el ).one( "dragstop", function( event, ui ) {
-			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
-		});
-	},
-	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
-		TestHelpers.draggable.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
-		TestHelpers.draggable.testDragOffset( el, dx, dy, expectedDX, expectedDY, msg );
-
-		$( handle ).simulate( "drag", {
-			dx: dx,
-			dy: dy
-		});
-	},
+	testDragPosition: testDragPosition,
+	testDragOffset: testDragOffset,
+	testDragHelperOffset: testDragHelperOffset,
+	testDrag: testDrag,
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
 		handle = handle || el;
-		TestHelpers.draggable.testDragPosition( el, 100, 100, 100, 100, msg );
-		TestHelpers.draggable.testDragHelperOffset( el, 100, 100, 0, 0, msg );
+		testDragPosition( el, 100, 100, 100, 100, msg );
+		testDragHelperOffset( el, 100, 100, 0, 0, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
 			dy: 100
 		});
 	},
-	shouldMove: function( el, msg, handle ) {
-		handle = handle || el;
-		TestHelpers.draggable.testDrag( el, handle, 100, 100, 100, 100, msg );
-	},
+	shouldMove: shouldMove,
 	shouldNotMove: function( el, msg, handle ) {
 		handle = handle || el;
-		TestHelpers.draggable.testDrag( el, handle, 100, 100, 0, 0, msg );
+		testDrag( el, handle, 100, 100, 0, 0, msg );
 	},
 	shouldNotDrag: function( el, msg, handle ) {
 		handle = handle || el;
@@ -98,7 +108,7 @@ TestHelpers.draggable = {
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
 		$( "#main" ).css({ position: position, top: "0px", left: "0px" });
-		TestHelpers.draggable.shouldMove( el, position + " parent" );
+		shouldMove( el, position + " parent" );
 		$( "#main" ).css( "position", oldPosition );
 	},
 	restoreScroll: function( what ) {

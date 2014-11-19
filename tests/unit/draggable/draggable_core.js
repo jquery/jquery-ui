@@ -1,7 +1,11 @@
 define([
 	"jquery",
-	"ui/draggable"
-], function( $ ) {
+	"./draggable_test_helpers",
+	"helper/testsuite",
+	"jquery.simulate",
+	"ui/draggable",
+	"ui/resizable"
+], function( $, draggableTestHelper, testHelper ) {
 
 /*
  * draggable_core.js
@@ -45,8 +49,8 @@ test( "element types", function() {
 
 		// Support: FF, Chrome, and IE9,
 		// there are some rounding errors in so we can't say equal, we have to settle for close enough
-		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
-		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
+		testHelper.closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
+		testHelper.closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
 		el.draggable("destroy");
 		el.remove();
 	});
@@ -54,12 +58,12 @@ test( "element types", function() {
 
 test( "No options, relative", function() {
 	expect( 2 );
-	TestHelpers.draggable.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
+	draggableTestHelper.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
 });
 
 test( "No options, absolute", function() {
 	expect( 2 );
-	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
+	draggableTestHelper.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 
 test( "resizable handle with complex markup (#8756 / #8757)", function() {
@@ -102,7 +106,7 @@ test( "#8269: Removing draggable element on drop", function() {
 	});
 
 	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
-	if ( TestHelpers.draggable.unreliableContains ) {
+	if ( draggableTestHelper.unreliableContains ) {
 		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 	} else {
@@ -128,7 +132,7 @@ test( "Stray mousemove after mousedown still drags", function() {
 		$( document ).simulate( "mousemove", { button: -1 });
 	});
 
-	TestHelpers.draggable.shouldMove( element, "element is draggable" );
+	draggableTestHelper.shouldMove( element, "element is draggable" );
 });
 
 test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
@@ -148,7 +152,7 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 		oldOverflowY = $( "html" ).css( "overflow-y" ),
 		oldOverflowX = $( "html" ).css( "overflow-x" );
 
-		TestHelpers.forceScrollableWindow();
+		testHelper.forceScrollableWindow();
 
 		$( "html" )
 			.css( "overflow-y", "scroll" )
@@ -174,7 +178,7 @@ test( "#9315: jumps down with offset of scrollbar", function() {
 			}
 		});
 
-		TestHelpers.forceScrollableWindow();
+		testHelper.forceScrollableWindow();
 
 		$( "html" ).scrollTop( 300 ).scrollLeft( 300 );
 
@@ -208,7 +212,7 @@ test( "scroll offset with fixed ancestors", function() {
 				}
 			});
 
-	TestHelpers.forceScrollableWindow();
+	testHelper.forceScrollableWindow();
 
 	$( "#wrapper" ).css( "position", "fixed" );
 	$( "#wrapper2" ).css( "position", "absolute" );
@@ -279,8 +283,8 @@ test( "#5727: draggable from iframe", function() {
 	equal( draggable1.closest( iframeBody ).length, 1 );
 
 	// TODO: fix draggable within an IFRAME to fire events on the element properly
-	// and these TestHelpers.draggable.shouldMove relies on events for testing
-	//TestHelpers.draggable.shouldMove( draggable1, "draggable from an iframe" );
+	// and these draggableTestHelper.shouldMove relies on events for testing
+	//draggableTestHelper.shouldMove( draggable1, "draggable from an iframe" );
 });
 
 test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function() {
@@ -292,7 +296,7 @@ test( "#8399: A draggable should become the active element after you are finishe
 		notStrictEqual( document.activeElement, element.get( 0 ), "moving a draggable anchor did not make it the active element" );
 	});
 
-	TestHelpers.draggable.move( element, 50, 50 );
+	draggableTestHelper.move( element, 50, 50 );
 
 	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
 });
@@ -303,16 +307,16 @@ asyncTest( "blur behavior", function() {
 	var element = $( "#draggable1" ).draggable(),
 		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
 
-	TestHelpers.onFocus( focusElement, function() {
+	testHelper.onFocus( focusElement, function() {
 		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
 
-		TestHelpers.draggable.move( focusElement, 1, 1 );
+		draggableTestHelper.move( focusElement, 1, 1 );
 
 		// http://bugs.jqueryui.com/ticket/10527
 		// Draggable: Can't select option in modal dialog (IE8)
 		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
 
-		TestHelpers.draggable.move( element, 50, 50 );
+		draggableTestHelper.move( element, 50, 50 );
 
 		// http://bugs.jqueryui.com/ticket/4261
 		// active element should blur when mousing down on a draggable
@@ -365,16 +369,16 @@ test( "setting right/bottom css shouldn't cause resize", function() {
 
 	element.draggable();
 
-	TestHelpers.draggable.move( element, -50, -50 );
+	draggableTestHelper.move( element, -50, -50 );
 
 	finalOffset = element.offset();
 	finalOffset.left += 50;
 	finalOffset.top += 50;
 
-	closeEnough( element.width(), origWidth, 1, "element retains width" );
-	closeEnough( element.height(), origHeight, 1, "element retains height" );
-	closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
-	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
+	testHelper.closeEnough( element.width(), origWidth, 1, "element retains width" );
+	testHelper.closeEnough( element.height(), origHeight, 1, "element retains height" );
+	testHelper.closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
+	testHelper.closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
 });

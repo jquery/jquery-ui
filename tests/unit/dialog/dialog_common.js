@@ -1,6 +1,10 @@
 define([
-	"helper/testsuite"
-], function( testHelper ) {
+	"jquery",
+	"helper/testsuite",
+	"ui/dialog"
+], function( $, testHelper ) {
+
+$.uiBackCompat = false;
 
 testHelper.commonWidgetTests( "dialog", {
 	defaults: {

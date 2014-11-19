@@ -1,6 +1,7 @@
 define([
 	"jquery",
-	"ui/dialog"
+	"ui/dialog",
+	"jquery.simulate"
 ], function( $ ) {
 
 /*

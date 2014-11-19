@@ -33,7 +33,7 @@ test("initialization - Reinitialization after body had been emptied.", function(
 test( "widget method - empty collection", function() {
 	expect( 1 );
 	$( "#nonExist" ).datepicker(); // should create nothing
-	ok( !$( "#ui-datepicker-div" ).length, "Non init on empty collection" );
+	ok( !$( "#ui-datepicker-div" ).length, "Non init on empty collection " + $( "#ui-datepicker-div" ).length );
 });
 
 test("widget method", function() {

@@ -1,25 +1,26 @@
 define([
-	"jquery",
-	"helper/testsuite"
-], function( $, testHelper ) {
+	"jquery"
+], function( $ ) {
 
-testHelper.dialog = {
-	drag: function(element, handle, dx, dy) {
-		var d = element.dialog("widget");
-		//this mouseover is to work around a limitation in resizable
-		//TODO: fix resizable so handle doesn't require mouseover in order to be used
-		$( handle, d ).simulate("mouseover").simulate( "drag", {
-			dx: dx,
-			dy: dy
-		});
-	},
+function drag(element, handle, dx, dy) {
+	var d = element.dialog("widget");
+	//this mouseover is to work around a limitation in resizable
+	//TODO: fix resizable so handle doesn't require mouseover in order to be used
+	$( handle, d ).simulate("mouseover").simulate( "drag", {
+		dx: dx,
+		dy: dy
+	});
+}
+
+return {
+	drag: drag,
 	testDrag: function(element, dx, dy, expectedDX, expectedDY, msg) {
 		var actualDX, actualDY, offsetAfter,
 			d = element.dialog("widget"),
 			handle = $(".ui-dialog-titlebar", d),
 			offsetBefore = d.offset();
 
-		TestHelpers.dialog.drag(element, handle, dx, dy);
+		drag(element, handle, dx, dy);
 
 		offsetAfter = d.offset();
 
@@ -39,7 +40,7 @@ testHelper.dialog = {
 			heightBefore = element.height(),
 			widthBefore = element.width();
 
-		TestHelpers.dialog.drag(element, handle, 50, 50);
+		drag(element, handle, 50, 50);
 
 		heightAfter = element.height();
 		widthAfter = element.width();
