@@ -2,6 +2,7 @@ define([
 	"jquery",
 	"./datepicker_test_helpers",
 	"helper/testsuite",
+	"jquery.simulate",
 	"ui/datepicker",
 	"ui/i18n/datepicker-fr",
 	"ui/i18n/datepicker-he",

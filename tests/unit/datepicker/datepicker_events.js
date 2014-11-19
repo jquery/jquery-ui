@@ -1,6 +1,7 @@
 define([
 	"jquery",
 	"./datepicker_test_helpers",
+	"jquery.simulate",
 	"ui/datepicker"
 ], function( $, datepickerTestHelper ) {
 
