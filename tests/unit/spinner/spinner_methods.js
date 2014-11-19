@@ -1,15 +1,17 @@
 define([
 	"jquery",
+	"helper/testsuite",
+	"./spinner_test_helpers",
 	"ui/spinner"
-], function( $ ) {
+], function( $, testHelper, spinnerTestHelper ) {
 
-var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+var simulateKeyDownUp = spinnerTestHelper.simulateKeyDownUp;
 
 module( "spinner: methods" );
 
 test( "destroy", function() {
 	expect( 1 );
-	domEqual( "#spin", function() {
+	testHelper.domEqual( "#spin", function() {
 		$( "#spin" ).spinner().spinner( "destroy" );
 	});
 });

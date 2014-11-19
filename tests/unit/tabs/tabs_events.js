@@ -1,9 +1,10 @@
 define([
 	"jquery",
+	"./tabs_test_helpers",
 	"ui/tabs"
-], function( $ ) {
+], function( $, tabsTestHelper ) {
 
-var state = TestHelpers.tabs.state;
+var state = tabsTestHelper.state;
 
 module( "tabs: events" );
 
@@ -318,4 +319,4 @@ asyncTest( "load", function() {
 	}
 });
 
-}(;
+});

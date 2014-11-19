@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/tooltip"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "tooltip", {

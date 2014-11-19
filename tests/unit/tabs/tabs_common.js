@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/tabs"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "tabs", {

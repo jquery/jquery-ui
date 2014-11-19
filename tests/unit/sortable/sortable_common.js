@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/sortable"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "sortable", {

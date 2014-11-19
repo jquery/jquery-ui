@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"ui/slider"
-], function( $ ) {
+], function( $, testHelper ) {
 
 module( "slider: methods" );
 
@@ -28,7 +29,7 @@ test( "init", function() {
 
 test( "destroy", function() {
 	expect( 1 );
-	domEqual( "#slider1", function() {
+	testHelper.domEqual( "#slider1", function() {
 		$( "#slider1" ).slider().slider( "destroy" );
 	});
 });

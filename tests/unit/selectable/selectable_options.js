@@ -1,6 +1,7 @@
 define([
 	"jquery",
-	"ui/selectable"
+	"ui/selectable",
+	"jquery.simulate"
 ], function( $ ) {
 
 /*

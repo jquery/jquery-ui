@@ -1,5 +1,6 @@
 define([
 	"jquery",
+	"jquery.simulate",
 	"ui/slider"
 ], function( $ ) {
 

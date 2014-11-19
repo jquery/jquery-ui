@@ -1,8 +1,9 @@
 define([
-	"helper/testsuite"
-], function( testHelper ) {
+	"jquery",
+	"jquery.simulate"
+], function( $ ) {
 
-testHelper.resizable = {
+return {
 	drag: function( el, dx, dy ) {
 		// this mouseover is to work around a limitation in resizable
 		// TODO: fix resizable so handle doesn't require mouseover in order to be used

@@ -1,6 +1,7 @@
 define([
 	"jquery",
-	"ui/selectmenu"
+	"ui/selectmenu",
+	"jquery.simulate"
 ], function( $ ) {
 
 module( "selectmenu: events", {

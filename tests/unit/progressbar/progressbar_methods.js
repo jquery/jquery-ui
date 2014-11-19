@@ -1,13 +1,14 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"ui/progressbar"
-], function( $ ) {
+], function( $, testHelper ) {
 
 module( "progressbar: methods" );
 
 test( "destroy", function() {
 	expect( 1 );
-	domEqual( "#progressbar", function() {
+	testHelper.domEqual( "#progressbar", function() {
 		$( "#progressbar" ).progressbar().progressbar( "destroy" );
 	});
 });

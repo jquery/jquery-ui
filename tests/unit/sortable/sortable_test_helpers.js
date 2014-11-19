@@ -1,8 +1,9 @@
 define([
-	"helper/testsuite"
-], function( testHelper ) {
+	"jquery",
+	"jquery.simulate"
+], function( $ ) {
 
-testHelper.sortable = {
+return {
 	sort: function( handle, dx, dy, index, msg ) {
 		$( handle ).simulate( "drag", {
 			dx: dx,

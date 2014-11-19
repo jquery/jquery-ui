@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"./resizable_test_helpers",
 	"ui/resizable"
-], function( $ ) {
+], function( $, resizableTestHelper ) {
 
 /*
  * resizable_options.js
@@ -23,7 +24,7 @@ test( "alsoResize", function() {
 		}),
 		handle = ".ui-resizable-e";
 
-	TestHelpers.resizable.drag( handle, 80 );
+	resizableTestHelper.drag( handle, 80 );
 	equal( element.width(), 180, "resizable width" );
 	equal( other.width(), 130, "alsoResize width" );
 });
@@ -34,11 +35,11 @@ test("aspectRatio: 'preserve' (e)", function() {
 
 	var handle = ".ui-resizable-e", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, 80);
+	resizableTestHelper.drag(handle, 80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, -130);
+	resizableTestHelper.drag(handle, -130);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -48,11 +49,11 @@ test("aspectRatio: 'preserve' (w)", function() {
 
 	var handle = ".ui-resizable-w", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, -80);
+	resizableTestHelper.drag(handle, -80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, 130);
+	resizableTestHelper.drag(handle, 130);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -62,11 +63,11 @@ test("aspectRatio: 'preserve' (n)", function() {
 
 	var handle = ".ui-resizable-n", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, 0, -80);
+	resizableTestHelper.drag(handle, 0, -80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, 0, 80);
+	resizableTestHelper.drag(handle, 0, 80);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -76,11 +77,11 @@ test("aspectRatio: 'preserve' (s)", function() {
 
 	var handle = ".ui-resizable-s", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, 0, 80);
+	resizableTestHelper.drag(handle, 0, 80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, 0, -80);
+	resizableTestHelper.drag(handle, 0, -80);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -90,11 +91,11 @@ test("aspectRatio: 'preserve' (se)", function() {
 
 	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, 80, 80);
+	resizableTestHelper.drag(handle, 80, 80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, -80, -80);
+	resizableTestHelper.drag(handle, -80, -80);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -104,11 +105,11 @@ test("aspectRatio: 'preserve' (sw)", function() {
 
 	var handle = ".ui-resizable-sw", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, -80, 80);
+	resizableTestHelper.drag(handle, -80, 80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, 80, -80);
+	resizableTestHelper.drag(handle, 80, -80);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -118,11 +119,11 @@ test("aspectRatio: 'preserve' (ne)", function() {
 
 	var handle = ".ui-resizable-ne", target = $("#resizable1").resizable({ aspectRatio: "preserve", handles: "all", minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 
-	TestHelpers.resizable.drag(handle, 80, -80);
+	resizableTestHelper.drag(handle, 80, -80);
 	equal( target.width(), 130, "compare maxWidth");
 	equal( target.height(), 130, "compare maxHeight");
 
-	TestHelpers.resizable.drag(handle, -80, 80);
+	resizableTestHelper.drag(handle, -80, 80);
 	equal( target.width(), 70, "compare minWidth");
 	equal( target.height(), 70, "compare minHeight");
 });
@@ -142,7 +143,7 @@ test( "aspectRatio: Resizing can move objects", function() {
 	$( "#container" ).css({ width: 200, height: 300 });
 	$( "#resizable1" ).css({ width: 100, height: 100, left: 75, top: 200 });
 
-	TestHelpers.resizable.drag( handleW, -20 );
+	resizableTestHelper.drag( handleW, -20 );
 	equal( target.width(), 100, "compare width - no size change" );
 	equal( target.height(), 100, "compare height - no size change" );
 	equal( target.position().left, 75, "compare left - no movement" );
@@ -151,7 +152,7 @@ test( "aspectRatio: Resizing can move objects", function() {
 	$( "#container" ).css({ width: 200, height: 300, position: "absolute", left: 100, top: 100 });
 	$( "#resizable1" ).css({ width: 100, height: 100, left: 0, top: 0 });
 
-	TestHelpers.resizable.drag( handleNW, -20, -20 );
+	resizableTestHelper.drag( handleNW, -20, -20 );
 	equal( target.width(), 100, "compare width - no size change" );
 	equal( target.height(), 100, "compare height - no size change" );
 	equal( target.position().left, 0, "compare left - no movement" );
@@ -165,11 +166,11 @@ test( "containment", function() {
 		containment: "#container"
 	});
 
-	TestHelpers.resizable.drag( ".ui-resizable-se", 20, 30 );
+	resizableTestHelper.drag( ".ui-resizable-se", 20, 30 );
 	equal( element.width(), 120, "unconstrained width within container" );
 	equal( element.height(), 130, "unconstrained height within container" );
 
-	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	resizableTestHelper.drag( ".ui-resizable-se", 400, 400 );
 	equal( element.width(), 300, "constrained width at containment edge" );
 	equal( element.height(), 200, "constrained height at containment edge" );
 });
@@ -184,10 +185,10 @@ test( "containment - not immediate parent", function() {
 		handles: "all"
 	});
 
-	TestHelpers.resizable.drag( ".ui-resizable-e", 300, 0 );
+	resizableTestHelper.drag( ".ui-resizable-e", 300, 0 );
 	equal( element.width(), 400, "Relative, contained within container width" );
 
-	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 300 );
+	resizableTestHelper.drag( ".ui-resizable-s", 0, 300 );
 	equal( element.height(), 400, "Relative, contained within container height" );
 
 	$( "#child" ).css( { left: 50, top: 50 } );
@@ -199,10 +200,10 @@ test( "containment - not immediate parent", function() {
 		handles: "all"
 	});
 
-	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	resizableTestHelper.drag( ".ui-resizable-e", 400, 0 );
 	equal( element.width(), 300, "Relative with Left, contained within container width" );
 
-	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	resizableTestHelper.drag( ".ui-resizable-s", 0, 400 );
 	equal( element.height(), 300, "Relative with Top, contained within container height" );
 });
 
@@ -216,10 +217,10 @@ test( "containment - immediate parent", function() {
 		handles: "all"
 	});
 
-	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	resizableTestHelper.drag( ".ui-resizable-e", 400, 0 );
 	equal( element.width(), 300, "Relative, contained within container width" );
 
-	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	resizableTestHelper.drag( ".ui-resizable-s", 0, 400 );
 	equal( element.height(), 300, "Relative, contained within container height" );
 
 	$( "#child" ).css( { left: 50, top: 50 } );
@@ -231,10 +232,10 @@ test( "containment - immediate parent", function() {
 		handles: "all"
 	});
 
-	TestHelpers.resizable.drag( ".ui-resizable-e", 400, 0 );
+	resizableTestHelper.drag( ".ui-resizable-e", 400, 0 );
 	equal( element.width(), 250, "Relative with Left, contained within container width" );
 
-	TestHelpers.resizable.drag( ".ui-resizable-s", 0, 400 );
+	resizableTestHelper.drag( ".ui-resizable-s", 0, 400 );
 	equal( element.height(), 250, "Relative with Top, contained within container height" );
 });
 
@@ -243,11 +244,11 @@ test("grid", function() {
 
 	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all", grid: [0, 20] });
 
-	TestHelpers.resizable.drag(handle, 3, 9);
+	resizableTestHelper.drag(handle, 3, 9);
 	equal( target.width(), 103, "compare width");
 	equal( target.height(), 100, "compare height");
 
-	TestHelpers.resizable.drag(handle, 15, 11);
+	resizableTestHelper.drag(handle, 15, 11);
 	equal( target.width(), 118, "compare width");
 	equal( target.height(), 120, "compare height");
 });
@@ -257,11 +258,11 @@ test("grid (min/max dimensions)", function() {
 
 	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all", grid: 20, minWidth: 65, minHeight: 65, maxWidth: 135, maxHeight: 135 });
 
-	TestHelpers.resizable.drag(handle, 50, 50);
+	resizableTestHelper.drag(handle, 50, 50);
 	equal( target.width(), 120, "grid should respect maxWidth");
 	equal( target.height(), 120, "grid should respect maxHeight");
 
-	TestHelpers.resizable.drag(handle, -100, -100);
+	resizableTestHelper.drag(handle, -100, -100);
 	equal( target.width(), 80, "grid should respect minWidth");
 	equal( target.height(), 80, "grid should respect minHeight");
 });
@@ -271,11 +272,11 @@ test("grid (wrapped)", function() {
 
 	var handle = ".ui-resizable-se", target = $("#resizable2").resizable({ handles: "all", grid: [0, 20] });
 
-	TestHelpers.resizable.drag(handle, 3, 9);
+	resizableTestHelper.drag(handle, 3, 9);
 	equal( target.width(), 103, "compare width");
 	equal( target.height(), 100, "compare height");
 
-	TestHelpers.resizable.drag(handle, 15, 11);
+	resizableTestHelper.drag(handle, 15, 11);
 	equal( target.width(), 118, "compare width");
 	equal( target.height(), 120, "compare height");
 });
@@ -290,13 +291,13 @@ test( "grid - Resizable: can be moved when grid option is set (#9611)", function
 			grid: 50
 		});
 
-	TestHelpers.resizable.drag( handle, 50, 50 );
+	resizableTestHelper.drag( handle, 50, 50 );
 	equal( target.width(), 50, "compare width" );
 	equal( target.height(), 50, "compare height" );
 
 	oldPosition = target.position();
 
-	TestHelpers.resizable.drag( handle, 50, 50 );
+	resizableTestHelper.drag( handle, 50, 50 );
 	equal( target.width(), 50, "compare width" );
 	equal( target.height(), 50, "compare height" );
 	equal( target.position().top, oldPosition.top, "compare top" );
@@ -318,7 +319,7 @@ test( "grid - maintains grid with padding and border when approaching no dimensi
 			grid: 50
 		});
 
-	TestHelpers.resizable.drag( handle, 50, 50 );
+	resizableTestHelper.drag( handle, 50, 50 );
 	equal( target.outerWidth(), 50, "compare width" );
 	equal( target.outerHeight(), 50, "compare height" );
 });
@@ -328,11 +329,11 @@ test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
 
 	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all", minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 
-	TestHelpers.resizable.drag(handle, -50, -50);
+	resizableTestHelper.drag(handle, -50, -50);
 	equal( target.width(), 60, "compare minWidth" );
 	equal( target.height(), 60, "compare minHeight" );
 
-	TestHelpers.resizable.drag(handle, 70, 70);
+	resizableTestHelper.drag(handle, 70, 70);
 	equal( target.width(), 100, "compare maxWidth" );
 	equal( target.height(), 100, "compare maxHeight" );
 });
@@ -342,11 +343,11 @@ test("ui-resizable-sw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
 
 	var handle = ".ui-resizable-sw", target = $("#resizable1").resizable({ handles: "all", minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 
-	TestHelpers.resizable.drag(handle, 50, -50);
+	resizableTestHelper.drag(handle, 50, -50);
 	equal( target.width(), 60, "compare minWidth" );
 	equal( target.height(), 60, "compare minHeight" );
 
-	TestHelpers.resizable.drag(handle, -70, 70);
+	resizableTestHelper.drag(handle, -70, 70);
 	equal( target.width(), 100, "compare maxWidth" );
 	equal( target.height(), 100, "compare maxHeight" );
 });
@@ -356,11 +357,11 @@ test("ui-resizable-ne { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
 
 	var handle = ".ui-resizable-ne", target = $("#resizable1").resizable({ handles: "all", minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 
-	TestHelpers.resizable.drag(handle, -50, 50);
+	resizableTestHelper.drag(handle, -50, 50);
 	equal( target.width(), 60, "compare minWidth" );
 	equal( target.height(), 60, "compare minHeight" );
 
-	TestHelpers.resizable.drag(handle, 70, -70);
+	resizableTestHelper.drag(handle, 70, -70);
 	equal( target.width(), 100, "compare maxWidth" );
 	equal( target.height(), 100, "compare maxHeight" );
 });
@@ -370,11 +371,11 @@ test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
 
 	var handle = ".ui-resizable-nw", target = $("#resizable1").resizable({ handles: "all", minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 
-	TestHelpers.resizable.drag(handle, 70, 70);
+	resizableTestHelper.drag(handle, 70, 70);
 	equal( target.width(), 60, "compare minWidth" );
 	equal( target.height(), 60, "compare minHeight" );
 
-	TestHelpers.resizable.drag(handle, -70, -70);
+	resizableTestHelper.drag(handle, -70, -70);
 	equal( target.width(), 100, "compare maxWidth" );
 	equal( target.height(), 100, "compare maxHeight" );
 });
@@ -401,7 +402,7 @@ test( "alsoResize + containment", function() {
 			containment: "#container"
 		});
 
-	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	resizableTestHelper.drag( ".ui-resizable-se", 400, 400 );
 	equal( element.width(), 300, "resizable constrained width at containment edge" );
 	equal( element.height(), 200, "resizable constrained height at containment edge" );
 	equal( other.width(), 250, "alsoResize constrained width at containment edge" );

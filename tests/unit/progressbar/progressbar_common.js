@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/progressbar"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "progressbar", {

@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"ui/position"
-], function( $ ) {
+], function( $, testHelper ) {
 
 var win = $( window ),
 	scrollTopSupport = function() {
@@ -19,7 +20,7 @@ module( "position", {
 	}
 });
 
-TestHelpers.testJshint( "position" );
+testHelper.testJshint( "position" );
 
 test( "my, at, of", function() {
 	expect( 4 );
@@ -729,4 +730,4 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 	deepEqual( offset1, offset2 );
 });
 
-}(;
+});

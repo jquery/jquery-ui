@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/selectmenu"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "selectmenu", {

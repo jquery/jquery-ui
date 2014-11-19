@@ -174,4 +174,4 @@ test( "track and programmatic focus", function() {
 	equal( "inputtitle", $( ".ui-tooltip" ).text() );
 });
 
-}(;
+});

@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"ui/widget"
-], function( $ ) {
+], function( $, testHelper ) {
 
 module( "widget factory", {
 	teardown: function() {
@@ -12,7 +13,7 @@ module( "widget factory", {
 	}
 });
 
-TestHelpers.testJshint( "widget" );
+testHelper.testJshint( "widget" );
 
 test( "widget creation", function() {
 	expect( 5 );
@@ -1507,4 +1508,4 @@ test( "$.widget.bridge() - widgetFullName", function() {
 	equal( typeof instance, "object", "instance stored in .data(widgetFullName)" );
 });
 
-}(;
+});

@@ -1,13 +1,15 @@
 define([
 	"jquery",
-	"ui/selectmenu"
-], function( $ ) {
+	"helper/testsuite",
+	"ui/selectmenu",
+	"jquery.simulate"
+], function( $, testHelper ) {
 
 module( "selectmenu: methods" );
 
 test( "destroy", function() {
 	expect( 1 );
-	domEqual( "#speed", function() {
+	testHelper.domEqual( "#speed", function() {
 		$( "#speed" ).selectmenu().selectmenu( "destroy" );
 	});
 });

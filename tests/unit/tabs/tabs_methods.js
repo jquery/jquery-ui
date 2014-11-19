@@ -1,10 +1,11 @@
 define([
 	"jquery",
+	"./tabs_test_helpers",
 	"ui/tabs"
-], function( $ ) {
+], function( $, tabsTestHelper ) {
 
-var disabled = TestHelpers.tabs.disabled,
-	state = TestHelpers.tabs.state;
+var disabled = tabsTestHelper.disabled,
+	state = tabsTestHelper.state;
 
 module( "tabs: methods" );
 
@@ -270,4 +271,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
-}(;
+});

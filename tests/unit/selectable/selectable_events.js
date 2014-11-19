@@ -1,7 +1,9 @@
 define([
 	"jquery",
-	"ui/selectable"
-], function( $ ) {
+	"helper/testsuite",
+	"ui/selectable",
+	"jquery.simulate"
+], function( $, testHelper ) {
 
 /*
  * selectable_events.js
@@ -44,7 +46,7 @@ test( "mousedown: initial position of helper", function() {
 
 	var helperOffset,
 		element = $( "#selectable1" ).selectable(),
-		contentToForceScroll = TestHelpers.forceScrollableWindow( "body" );
+		contentToForceScroll = testHelper.forceScrollableWindow( "body" );
 
 	$( window ).scrollTop( 100 ).scrollLeft( 100 );
 

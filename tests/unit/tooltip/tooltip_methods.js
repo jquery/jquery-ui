@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"ui/tooltip"
-], function( $ ) {
+], function( $, testHelper ) {
 
 module( "tooltip: methods" );
 
@@ -9,12 +10,12 @@ test( "destroy", function() {
 	expect( 3 );
 	var element = $( "#tooltipped1" );
 
-	domEqual( "#tooltipped1", function() {
+	testHelper.domEqual( "#tooltipped1", function() {
 		element.tooltip().tooltip( "destroy" );
 	});
 
 	// make sure that open tooltips are removed on destroy
-	domEqual( "#tooltipped1", function() {
+	testHelper.domEqual( "#tooltipped1", function() {
 		element
 			.tooltip()
 			.tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
@@ -140,4 +141,4 @@ test( "preserve changes to title attributes on close and destroy", function() {
 	} );
 });
 
-}(;
+});

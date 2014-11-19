@@ -57,4 +57,4 @@ test( "focus events", function() {
 	element.trigger( "focusout" );
 });
 
-}(;
+});

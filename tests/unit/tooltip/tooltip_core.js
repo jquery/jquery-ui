@@ -177,4 +177,4 @@ asyncTest( "destroy during hide animation; only one close event", function() {
 	});
 });
 
-}(;
+});
