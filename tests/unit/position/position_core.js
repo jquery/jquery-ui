@@ -753,7 +753,7 @@ test( "bug #8710: flip if flipped position fits more", function() {
 	}, {
 		top: 92,
 		left: 60
-	}, "flip - top fits less" );
+	}, "no flip - top fits less" );
 });
 
 }( jQuery ) );
