@@ -1,7 +1,23 @@
 define([
 	"jquery",
-	"ui/effect"
-], function( $ ) {
+	"helper/testsuite",
+	"ui/effect-blind",
+	"ui/effect-bounce",
+	"ui/effect-clip",
+	"ui/effect-drop",
+	"ui/effect-explode",
+	"ui/effect-fade",
+	"ui/effect-fold",
+	"ui/effect-highlight",
+	"ui/effect",
+	"ui/effect-puff",
+	"ui/effect-pulsate",
+	"ui/effect-scale",
+	"ui/effect-shake",
+	"ui/effect-size",
+	"ui/effect-slide",
+	"ui/effect-transfer"
+], function( $, testHelper ) {
 
 function present( value, array, message ) {
 	QUnit.push( jQuery.inArray( value, array ) !== -1 , value, array, message );
@@ -220,7 +236,7 @@ asyncTest( "animateClass: css and class changes during animation are not lost (#
 $.each( $.effects.effect, function( effect ) {
 	module( "effects." + effect );
 
-	TestHelpers.testJshint( "effect-" + effect );
+	testHelper.testJshint( "effect-" + effect );
 
 	if ( effect === "transfer" ) {
 		return;

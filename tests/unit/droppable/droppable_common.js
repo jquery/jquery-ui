@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/droppable"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "droppable", {

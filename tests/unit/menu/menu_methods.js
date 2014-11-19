@@ -1,30 +1,32 @@
 define([
 	"jquery",
+	"helper/testsuite",
+	"./menu_test_helpers",
 	"ui/menu"
-], function( $ ) {
+], function( $, testHelper, menuTestHelper ) {
 
-var log = TestHelpers.menu.log,
-	logOutput = TestHelpers.menu.logOutput,
-	click = TestHelpers.menu.click;
+var log = menuTestHelper.log,
+	logOutput = menuTestHelper.logOutput,
+	click = menuTestHelper.click;
 
 module( "menu: methods", {
 	setup: function() {
-		TestHelpers.menu.clearLog();
+		menuTestHelper.clearLog();
 	}
 });
 
 test( "destroy", function() {
 	expect( 4 );
-	domEqual( "#menu1", function() {
+	testHelper.domEqual( "#menu1", function() {
 		$( "#menu1" ).menu().menu( "destroy" );
 	});
-	domEqual( "#menu2", function() {
+	testHelper.domEqual( "#menu2", function() {
 		$( "#menu2" ).menu().menu( "destroy" );
 	});
-	domEqual( "#menu5", function() {
+	testHelper.domEqual( "#menu5", function() {
 		$( "#menu5").menu().menu( "destroy" );
 	});
-	domEqual( "#menu6", function() {
+	testHelper.domEqual( "#menu6", function() {
 		$( "#menu6" ).menu().menu( "destroy" );
 	});
 });

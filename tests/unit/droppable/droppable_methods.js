@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"./droppable_test_helpers",
 	"ui/droppable"
-], function( $ ) {
+], function( $, droppableTestHelper ) {
 
 module("droppable: methods");
 
@@ -47,16 +48,16 @@ test("enable", function() {
 	var el, expected, actual;
 
 	el = $("#droppable1").droppable({ disabled: true });
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelper.shouldNotDrop();
 	el.droppable("enable");
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelper.shouldDrop();
 	equal(el.droppable("option", "disabled"), false, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: true });
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelper.shouldNotDrop();
 	el.droppable("option", "disabled", false);
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelper.shouldDrop();
 
 	expected = $("<div></div>").droppable(),
 	actual = expected.droppable("enable");
@@ -69,19 +70,19 @@ test( "disable", function() {
 	var actual, expected,
 		element = $( "#droppable1" ).droppable({ disabled: false });
 
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelper.shouldDrop();
 	element.droppable( "disable" );
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelper.shouldNotDrop();
 	equal( element.droppable( "option", "disabled" ), true, "disabled option getter" );
 	element.droppable( "destroy" );
 	element.droppable({ disabled: false });
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelper.shouldDrop();
 	element.droppable( "option", "disabled", true );
 	ok( !element.droppable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
 	ok( !element.droppable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
 	ok( element.droppable( "widget" ).hasClass( "ui-droppable-disabled" ), "element gets ui-droppable-disabled" );
 	equal( element.droppable( "option", "disabled" ), true, "disabled option setter" );
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelper.shouldNotDrop();
 
 	expected = $( "<div></div>" ).droppable();
 	actual = expected.droppable( "disable" );

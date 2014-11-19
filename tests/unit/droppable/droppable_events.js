@@ -1,6 +1,7 @@
 define([
 	"jquery",
-	"ui/droppable"
+	"ui/droppable",
+	"jquery.simulate"
 ], function( $ ) {
 
 module( "droppable: events" );

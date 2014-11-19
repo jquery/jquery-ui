@@ -1,5 +1,6 @@
 define([
-	"helper/testsuite"
+	"helper/testsuite",
+	"ui/menu"
 ], function( testHelper ) {
 
 testHelper.commonWidgetTests( "menu", {

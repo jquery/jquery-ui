@@ -1,7 +1,8 @@
 define([
 	"jquery",
+	"./menu_test_helpers",
 	"ui/menu"
-], function( $ ) {
+], function( $, menuTestHelper ) {
 
 module( "menu: core" );
 
@@ -40,7 +41,7 @@ asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", functio
 		$( "#test9044" ).focus();
 	});
 
-	TestHelpers.menu.click( element, "3" );
+	menuTestHelper.click( element, "3" );
 	setTimeout( function() {
 		equal( document.activeElement.id, "test9044", "Focus was swallowed by menu" );
 		$( "#test9044" ).remove();
