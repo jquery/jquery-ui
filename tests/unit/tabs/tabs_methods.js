@@ -1,8 +1,9 @@
 define([
 	"jquery",
+	"helper/testsuite",
 	"./tabs_test_helpers",
 	"ui/tabs"
-], function( $, tabsTestHelper ) {
+], function( $, testHelper, tabsTestHelper ) {
 
 var disabled = tabsTestHelper.disabled,
 	state = tabsTestHelper.state;
@@ -11,10 +12,10 @@ module( "tabs: methods" );
 
 test( "destroy", function() {
 	expect( 2 );
-	domEqual( "#tabs1", function() {
+	testHelper.domEqual( "#tabs1", function() {
 		$( "#tabs1" ).tabs().tabs( "destroy" );
 	});
-	domEqual( "#tabs2", function() {
+	testHelper.domEqual( "#tabs2", function() {
 		$( "#tabs2" ).tabs().tabs( "destroy" );
 	});
 });

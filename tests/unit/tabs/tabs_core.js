@@ -1,6 +1,7 @@
 define([
 	"jquery",
 	"./tabs_test_helpers",
+	"jquery.simulate",
 	"ui/tabs"
 ], function( $, tabsTestHelper ) {
 
