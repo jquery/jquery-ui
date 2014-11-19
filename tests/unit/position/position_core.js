@@ -722,7 +722,7 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 test( "bug #8710: flip if flipped position fits more", function() {
 	expect( 3 );
 
-	// positions a 10px tall element within 99px height at top 90px
+	// Positions a 10px tall element within 99px height at top 90px.
 	collisionTest({
 		within: "#bug-8710-within-smaller",
 		of: "#parentx",
@@ -733,7 +733,7 @@ test( "bug #8710: flip if flipped position fits more", function() {
 		left: 60
 	}, "flip - top fits all" );
 
-	// positions a 10px tall element within 99px height at top 92px
+	// Positions a 10px tall element within 99px height at top 92px.
 	collisionTest({
 		within: "#bug-8710-within-smaller",
 		of: "#parentx",
@@ -744,7 +744,7 @@ test( "bug #8710: flip if flipped position fits more", function() {
 		left: 60
 	}, "flip - top fits more" );
 
-	// positions a 10px tall element within 101px height at top 92px
+	// Positions a 10px tall element within 101px height at top 92px.
 	collisionTest({
 		within: "#bug-8710-within-bigger",
 		of: "#parentx",
