@@ -49,12 +49,12 @@ return $.effects.define( "slide", "show", function( o, done ) {
 	startClip = el.cssClip();
 	startRef = el.position()[ ref ];
 
-	// define hide animation
+	// Define hide animation
 	animation[ ref ] = ( positiveMotion ? -1 : 1 ) * distance + startRef;
 	animation.clip = el.cssClip();
 	animation.clip[ map[ direction ][ 1 ] ] = animation.clip[ map[ direction ][ 0 ] ];
 
-	// reverse the animation if we're showing
+	// Reverse the animation if we're showing
 	if ( mode === "show" ) {
 		el.cssClip( animation.clip );
 		el.css( ref, animation[ ref ] );
@@ -62,7 +62,7 @@ return $.effects.define( "slide", "show", function( o, done ) {
 		animation[ ref ] = startRef;
 	}
 
-	// actually animate
+	// Actually animate
 	el.animate( animation, {
 		queue: false,
 		duration: o.duration,

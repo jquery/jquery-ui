@@ -124,7 +124,7 @@ return $.effects.define( "size", function( o, done ) {
 		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat( cProps );
 		hProps = hProps.concat([ "marginLeft", "marginRight" ]);
 
-		// only animate children with width attributes specified
+		// Only animate children with width attributes specified
 		// TODO: is this right? should we include anything with css width specified as well
 		el.find( "*[width]" ).each( function() {
 			var child = $( this ),

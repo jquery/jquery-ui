@@ -45,8 +45,6 @@ return $.effects.define( "blind", "hide", function( o, done ) {
 
 	animate.clip[ map[ direction ][ 0 ] ] = animate.clip[ map[ direction ][ 1 ] ];
 
-	placeholder = $.effects.createPlaceholder( el );
-
 	if ( o.mode === "show" ) {
 		el.cssClip( animate.clip );
 		if ( placeholder ) {

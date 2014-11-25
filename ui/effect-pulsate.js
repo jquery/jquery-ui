@@ -33,9 +33,9 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		mode = o.mode,
 		show = mode === "show",
 		hide = mode === "hide",
-		showhide = ( show || hide ),
+		showhide = show || hide,
 
-		// showing or hiding leaves off the "last" animation
+		// Showing or hiding leaves off the "last" animation
 		anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
 		duration = o.duration / anims,
 		animateTo = 0,
@@ -47,13 +47,13 @@ return $.effects.define( "pulsate", "show", function( o, done ) {
 		animateTo = 1;
 	}
 
-	// anims - 1 opacity "toggles"
+	// Anims - 1 opacity "toggles"
 	for ( ; i < anims; i++ ) {
 		elem.animate( { opacity: animateTo }, duration, o.easing );
 		animateTo = 1 - animateTo;
 	}
 
-	elem.animate( { opacity: animateTo }, duration, o.easing);
+	elem.animate( { opacity: animateTo }, duration, o.easing );
 
 	elem.queue( done );
 

@@ -202,13 +202,13 @@ asyncTest( "animateClass: css and class changes during animation are not lost (#
 test( "createPlaceholder: only created for static or relative elements", function() {
 	expect( 4 );
 
-	ok( $.effects.createPlaceholder( $( ".relative" ) ).length );
-	ok( $.effects.createPlaceholder( $( ".static" ) ).length );
-	ok( !$.effects.createPlaceholder( $( ".absolute" ) ) );
-	ok( !$.effects.createPlaceholder( $( ".fixed" ) ) );
+	ok( $.effects.createPlaceholder( $( ".relative" ) ).length, "placeholder created for relative element" );
+	ok( $.effects.createPlaceholder( $( ".static" ) ).length, "placeholder created for static element" );
+	ok( !$.effects.createPlaceholder( $( ".absolute" ) ), "placeholder not created for absolute element" );
+	ok( !$.effects.createPlaceholder( $( ".fixed" ) ), "placeholder not created for fixed element" );
 });
 
-test( "createPlaceholder: preserves layout effecting properties", function() {
+test( "createPlaceholder: preserves layout affecting properties", function() {
 	expect( 7 );
 
 	var position = 5,
@@ -275,7 +275,7 @@ $.each( $.effects.effect, function( effect ) {
 
 		hidden
 			.queue( queueTest() )
-			.queue( duringTest( function() {
+			.queue( duringTest(function() {
 				ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .show(\"" + effect + "\", time)" );
 			}) )
@@ -286,7 +286,7 @@ $.each( $.effects.effect, function( effect ) {
 					"No placeholder remains after .show(\"" + effect + "\", time)" );
 			}) )
 			.queue( queueTest() )
-			.queue( duringTest( function() {
+			.queue( duringTest(function() {
 				ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .hide(\"" + effect + "\", time)" );
 			}) )

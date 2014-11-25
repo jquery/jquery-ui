@@ -51,7 +51,6 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 
 		queuelen = el.queue().length;
 
-	// define animations
 	if ( percent ) {
 		size = parseInt( percent[ 1 ], 10 ) / 100 * distance[ hide ? 0 : 1 ];
 	}
@@ -70,7 +69,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 
 	// Animate
 	el
-		.queue(function(next) {
+		.queue(function( next ) {
 			if ( placeholder ) {
 				placeholder
 					.animate( $.effects.clipToBox( animation1 ), duration, o.easing )

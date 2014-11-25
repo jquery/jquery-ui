@@ -35,7 +35,7 @@ return $.effects.define( "scale", function( o, done ) {
 	var el = $( this ),
 		mode = o.mode,
 
-		// this copies the "scale" option, which is normalized in $.effects.effect.size
+		// This copies the "scale" option, which is normalized in $.effects.effect.size
 		// and the "fade" option, which isn't documented, but supports $.effects.effect.puff
 		options = $.extend( true, {}, o ),
 

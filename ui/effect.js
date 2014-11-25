@@ -1074,14 +1074,14 @@ $.extend( $.effects, {
 	},
 
 	// Injects recently queued functions to be first in line (after "inprogress")
-	unshift: function( el, queueLength, count ) {
-		var queue = el.queue();
+	unshift: function( element, queueLength, count ) {
+		var queue = element.queue();
 
 		if ( queueLength > 1 ) {
 			queue.splice.apply( queue,
 				[ 1, 0 ].concat( queue.splice( queueLength, count ) ) );
 		}
-		el.dequeue();
+		element.dequeue();
 	},
 
 	saveStyle: function( element ) {
@@ -1093,8 +1093,8 @@ $.extend( $.effects, {
 		element.removeData( dataSpaceStyle );
 	},
 
-	mode: function( el, mode ) {
-		var hidden = el.is( ":hidden" );
+	mode: function( element, mode ) {
+		var hidden = element.is( ":hidden" );
 
 		if ( mode === "toggle" ) {
 			mode = hidden ? "show" : "hide";
@@ -1144,7 +1144,6 @@ $.extend( $.effects, {
 	// Creates a placeholder element so that the original element can be made absolute
 	// also stores all modified properties on the element so they can be restored later
 	createPlaceholder: function( element ) {
-
 		var placeholder,
 			cssPosition = element.css( "position" ),
 			position = element.position();
@@ -1166,11 +1165,13 @@ $.extend( $.effects, {
 			cssPosition = "absolute";
 
 			placeholder = $( "<" + element[ 0 ].nodeName + ">" ).insertAfter( element ).css({
-				// convert inline to inline block to account for inline elements
+
+				// Convert inline to inline block to account for inline elements
 				// that turn to inline block based on content (like img)
 				display: /^(inline|ruby)/.test( element.css( "display" ) ) ? "inline-block" : "block",
 				visibility: "hidden",
-				// margins need to be set to account for margin collapse
+
+				// Margins need to be set to account for margin collapse
 				marginTop: element.css( "marginTop" ),
 				marginBottom: element.css( "marginBottom" ),
 				marginLeft: element.css( "marginLeft" ),
@@ -1180,6 +1181,8 @@ $.extend( $.effects, {
 			.outerWidth( element.outerWidth() )
 			.outerHeight( element.outerHeight() )
 			.addClass( "ui-effects-placeholder" );
+
+			element.data( dataSpace + "placeholder", placeholder );
 		}
 
 		element.css({
@@ -1187,8 +1190,6 @@ $.extend( $.effects, {
 			left: position.left,
 			top: position.top
 		});
-
-		element.data( dataSpace + "placeholder", placeholder );
 
 		return placeholder;
 	},
@@ -1317,12 +1318,12 @@ $.fn.extend({
 				// Sentinel for duck-punching the :animated psuedo-selector
 				el.data( dataSpaceAnimated, true );
 
-				// save effect mode for later use,
+				// Save effect mode for later use,
 				// we can't just call $.effects.mode again later,
 				// as the .show() below destroys the initial state
 				modes.push( normalizedMode );
 
-				// see $.uiBackCompat inside of run() for removal of defaultMode in 1.13
+				// See $.uiBackCompat inside of run() for removal of defaultMode in 1.13
 				if ( defaultMode && ( normalizedMode === "show" ||
 						( normalizedMode === defaultMode && normalizedMode === "hide" ) ) ) {
 					el.show();
@@ -1375,13 +1376,14 @@ $.fn.extend({
 				}
 			}
 
-			// override mode option on a per element basis,
-			// as toggle can be show, or hide depending on element state
+			// Override mode option on a per element basis,
+			// as toggle can be either show or hide depending on element state
 			args.mode = modes.shift();
 
 			if ( $.uiBackCompat !== false && !defaultMode ) {
 				if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
-					// call the core method to track "olddisplay" properly
+
+					// Call the core method to track "olddisplay" properly
 					elem[ mode ]();
 					done();
 				} else {
@@ -1389,7 +1391,8 @@ $.fn.extend({
 				}
 			} else {
 				if ( args.mode === "none" ) {
-					// call the core method to track "olddisplay" properly
+
+					// Call the core method to track "olddisplay" properly
 					elem[ mode ]();
 					done();
 				} else {
@@ -1442,7 +1445,6 @@ $.fn.extend({
 		};
 	})( $.fn.toggle ),
 
-	// helper functions
 	cssUnit: function(key) {
 		var style = this.css( key ),
 			val = [];
@@ -1455,7 +1457,6 @@ $.fn.extend({
 		return val;
 	},
 
-	// getter/setter for an object representing clip values
 	cssClip: function( clipObj ) {
 		return clipObj ?
 			this.css( "clip", "rect(" + clipObj.top + "px " + clipObj.right + "px " + clipObj.bottom + "px " + clipObj.left + "px)" ) :
