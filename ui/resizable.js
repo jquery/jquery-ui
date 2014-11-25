@@ -7,7 +7,7 @@
  * http://jquery.org/license
  */
 
-//>>label: Resizble
+//>>label: Resizable
 //>>group: Interactions
 //>>description: Enables resize functionality for any element.
 //>>docs: http://api.jqueryui.com/resizable/
