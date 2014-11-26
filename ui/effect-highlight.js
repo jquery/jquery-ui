@@ -28,27 +28,27 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "highlight", "show", function( o, done ) {
-	var elem = $( this ),
+return $.effects.define( "highlight", "show", function( options, done ) {
+	var element = $( this ),
 		animation = {
-			backgroundColor: elem.css( "backgroundColor" )
+			backgroundColor: element.css( "backgroundColor" )
 		};
 
-	if ( o.mode === "hide" ) {
+	if ( options.mode === "hide" ) {
 		animation.opacity = 0;
 	}
 
-	$.effects.saveStyle( elem );
+	$.effects.saveStyle( element );
 
-	elem
+	element
 		.css({
 			backgroundImage: "none",
-			backgroundColor: o.color || "#ffff99"
+			backgroundColor: options.color || "#ffff99"
 		})
 		.animate( animation, {
 			queue: false,
-			duration: o.duration,
-			easing: o.easing,
+			duration: options.duration,
+			easing: options.easing,
 			complete: done
 		});
 });

@@ -28,11 +28,11 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "size", function( o, done ) {
+return $.effects.define( "size", function( options, done ) {
 
 	// Create element
 	var baseline, factor, temp,
-		el = $( this ),
+		element = $( this ),
 
 		// Copy for children
 		cProps = [ "fontSize" ],
@@ -40,17 +40,17 @@ return $.effects.define( "size", function( o, done ) {
 		hProps = [ "borderLeftWidth", "borderRightWidth", "paddingLeft", "paddingRight" ],
 
 		// Set options
-		mode = o.mode,
+		mode = options.mode,
 		restore = mode !== "effect",
-		scale = o.scale || "both",
-		origin = o.origin || [ "middle", "center" ],
-		position = el.css( "position" ),
-		pos = el.position(),
-		original = $.effects.scaledDimensions( el ),
-		from = o.from || original,
-		to = o.to || original;
+		scale = options.scale || "both",
+		origin = options.origin || [ "middle", "center" ],
+		position = element.css( "position" ),
+		pos = element.position(),
+		original = $.effects.scaledDimensions( element ),
+		from = options.from || original,
+		to = options.to || $.effects.scaledDimensions( element, 0 );
 
-	$.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( element );
 
 	if ( mode === "show" ) {
 		temp = from;
@@ -75,14 +75,14 @@ return $.effects.define( "size", function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			from = $.effects.setTransition( el, vProps, factor.from.y, from );
-			to = $.effects.setTransition( el, vProps, factor.to.y, to );
+			from = $.effects.setTransition( element, vProps, factor.from.y, from );
+			to = $.effects.setTransition( element, vProps, factor.to.y, to );
 		}
 
 		// Horizontal props scaling
 		if ( factor.from.x !== factor.to.x ) {
-			from = $.effects.setTransition( el, hProps, factor.from.x, from );
-			to = $.effects.setTransition( el, hProps, factor.to.x, to );
+			from = $.effects.setTransition( element, hProps, factor.from.x, from );
+			to = $.effects.setTransition( element, hProps, factor.to.x, to );
 		}
 	}
 
@@ -91,8 +91,8 @@ return $.effects.define( "size", function( o, done ) {
 
 		// Vertical props scaling
 		if ( factor.from.y !== factor.to.y ) {
-			from = $.effects.setTransition( el, cProps, factor.from.y, from );
-			to = $.effects.setTransition( el, cProps, factor.to.y, to );
+			from = $.effects.setTransition( element, cProps, factor.from.y, from );
+			to = $.effects.setTransition( element, cProps, factor.to.y, to );
 		}
 	}
 
@@ -104,7 +104,7 @@ return $.effects.define( "size", function( o, done ) {
 		to.top = ( original.outerHeight - to.outerHeight ) * baseline.y + pos.top;
 		to.left = ( original.outerWidth - to.outerWidth ) * baseline.x + pos.left;
 	}
-	el.css( from );
+	element.css( from );
 
 	// Animate the children if desired
 	if ( scale === "content" || scale === "both" ) {
@@ -114,7 +114,7 @@ return $.effects.define( "size", function( o, done ) {
 
 		// Only animate children with width attributes specified
 		// TODO: is this right? should we include anything with css width specified as well
-		el.find( "*[width]" ).each( function() {
+		element.find( "*[width]" ).each( function() {
 			var child = $( this ),
 				c_original = $.effects.scaledDimensions( child );
 
@@ -149,7 +149,7 @@ return $.effects.define( "size", function( o, done ) {
 
 			// Animate children
 			child.css( child.from );
-			child.animate( child.to, o.duration, o.easing, function() {
+			child.animate( child.to, options.duration, options.easing, function() {
 
 				// Restore children
 				if ( restore ) {
@@ -160,26 +160,26 @@ return $.effects.define( "size", function( o, done ) {
 	}
 
 	// Animate
-	el.animate( to, {
+	element.animate( to, {
 		queue: false,
-		duration: o.duration,
-		easing: o.easing,
+		duration: options.duration,
+		easing: options.easing,
 		complete: function() {
 
-			var offset = el.offset();
+			var offset = element.offset();
 
 			if ( to.opacity === 0 ) {
-				el.css( "opacity", from.opacity );
+				element.css( "opacity", from.opacity );
 			}
 
 			if ( !restore ) {
-				el.css( "position", position === "static" ? "relative" : position );
-
-				el.offset( offset );
+				element
+					.css( "position", position === "static" ? "relative" : position )
+					.offset( offset );
 
 				// Need to save style here so that automatic style restoration
 				// doesn't restore to the original styles from before the animation.
-				$.effects.saveStyle( el );
+				$.effects.saveStyle( element );
 			}
 
 			done();

@@ -28,36 +28,36 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "pulsate", "show", function( o, done ) {
-	var elem = $( this ),
-		mode = o.mode,
+return $.effects.define( "pulsate", "show", function( options, done ) {
+	var element = $( this ),
+		mode = options.mode,
 		show = mode === "show",
 		hide = mode === "hide",
 		showhide = show || hide,
 
 		// Showing or hiding leaves off the "last" animation
-		anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
-		duration = o.duration / anims,
+		anims = ( ( options.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
+		duration = options.duration / anims,
 		animateTo = 0,
 		i = 1,
-		queuelen = elem.queue().length;
+		queuelen = element.queue().length;
 
-	if ( show || !elem.is( ":visible" ) ) {
-		elem.css( "opacity", 0 ).show();
+	if ( show || !element.is( ":visible" ) ) {
+		element.css( "opacity", 0 ).show();
 		animateTo = 1;
 	}
 
 	// Anims - 1 opacity "toggles"
 	for ( ; i < anims; i++ ) {
-		elem.animate( { opacity: animateTo }, duration, o.easing );
+		element.animate( { opacity: animateTo }, duration, options.easing );
 		animateTo = 1 - animateTo;
 	}
 
-	elem.animate( { opacity: animateTo }, duration, o.easing );
+	element.animate( { opacity: animateTo }, duration, options.easing );
 
-	elem.queue( done );
+	element.queue( done );
 
-	$.effects.unshift( elem, queuelen, anims + 1 );
+	$.effects.unshift( element, queuelen, anims + 1 );
 });
 
 }));

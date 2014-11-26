@@ -28,28 +28,28 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "fold", "hide", function( o, done ) {
+return $.effects.define( "fold", "hide", function( options, done ) {
 
 	// Create element
-	var el = $( this ),
-		mode = o.mode,
+	var element = $( this ),
+		mode = options.mode,
 		show = mode === "show",
 		hide = mode === "hide",
-		size = o.size || 15,
+		size = options.size || 15,
 		percent = /([0-9]+)%/.exec( size ),
-		horizFirst = !!o.horizFirst,
+		horizFirst = !!options.horizFirst,
 		ref = horizFirst ? [ "right", "bottom" ] : [ "bottom", "right" ],
-		duration = o.duration / 2,
+		duration = options.duration / 2,
 
-		placeholder = $.effects.createPlaceholder( el ),
+		placeholder = $.effects.createPlaceholder( element ),
 
-		start = el.cssClip(),
+		start = element.cssClip(),
 		animation1 = { clip: $.extend( {}, start ) },
 		animation2 = { clip: $.extend( {}, start ) },
 
 		distance = [ start[ ref[ 0 ] ], start[ ref[ 1 ] ] ],
 
-		queuelen = el.queue().length;
+		queuelen = element.queue().length;
 
 	if ( percent ) {
 		size = parseInt( percent[ 1 ], 10 ) / 100 * distance[ hide ? 0 : 1 ];
@@ -59,7 +59,7 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 	animation2.clip[ ref[ 1 ] ] = 0;
 
 	if ( show ) {
-		el.cssClip( animation2.clip );
+		element.cssClip( animation2.clip );
 		if ( placeholder ) {
 			placeholder.css( $.effects.clipToBox( animation2 ) );
 		}
@@ -68,21 +68,21 @@ return $.effects.define( "fold", "hide", function( o, done ) {
 	}
 
 	// Animate
-	el
+	element
 		.queue(function( next ) {
 			if ( placeholder ) {
 				placeholder
-					.animate( $.effects.clipToBox( animation1 ), duration, o.easing )
-					.animate( $.effects.clipToBox( animation2 ), duration, o.easing );
+					.animate( $.effects.clipToBox( animation1 ), duration, options.easing )
+					.animate( $.effects.clipToBox( animation2 ), duration, options.easing );
 			}
 
 			next();
 		})
-		.animate( animation1, duration, o.easing )
-		.animate( animation2, duration, o.easing )
+		.animate( animation1, duration, options.easing )
+		.animate( animation2, duration, options.easing )
 		.queue( done );
 
-	$.effects.unshift( el, queuelen, 4 );
+	$.effects.unshift( element, queuelen, 4 );
 });
 
 }));

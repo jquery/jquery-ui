@@ -29,13 +29,13 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "puff", "hide", function( o, done ) {
-	var options = $.extend( true, {}, o, {
+return $.effects.define( "puff", "hide", function( options, done ) {
+	var newOptions = $.extend( true, {}, options, {
 		fade: true,
-		percent: parseInt( o.percent, 10 ) || 150
+		percent: parseInt( options.percent, 10 ) || 150
 	});
 
-	$.effects.effect.scale.call( this, options, done );
+	$.effects.effect.scale.call( this, newOptions, done );
 });
 
 }));

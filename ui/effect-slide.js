@@ -28,45 +28,45 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "slide", "show", function( o, done ) {
+return $.effects.define( "slide", "show", function( options, done ) {
 	var startClip, startRef,
-		el = $( this ),
+		element = $( this ),
 		map = {
 			up: [ "bottom", "top" ],
 			down: [ "top", "bottom" ],
 			left: [ "right", "left" ],
 			right: [ "left", "right" ]
 		},
-		mode = o.mode,
-		direction = o.direction || "left",
+		mode = options.mode,
+		direction = options.direction || "left",
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
 		positiveMotion = ( direction === "up" || direction === "left" ),
-		distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ),
+		distance = options.distance || element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ),
 		animation = {};
 
-	$.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( element );
 
-	startClip = el.cssClip();
-	startRef = el.position()[ ref ];
+	startClip = element.cssClip();
+	startRef = element.position()[ ref ];
 
 	// Define hide animation
 	animation[ ref ] = ( positiveMotion ? -1 : 1 ) * distance + startRef;
-	animation.clip = el.cssClip();
+	animation.clip = element.cssClip();
 	animation.clip[ map[ direction ][ 1 ] ] = animation.clip[ map[ direction ][ 0 ] ];
 
 	// Reverse the animation if we're showing
 	if ( mode === "show" ) {
-		el.cssClip( animation.clip );
-		el.css( ref, animation[ ref ] );
+		element.cssClip( animation.clip );
+		element.css( ref, animation[ ref ] );
 		animation.clip = startClip;
 		animation[ ref ] = startRef;
 	}
 
 	// Actually animate
-	el.animate( animation, {
+	element.animate( animation, {
 		queue: false,
-		duration: o.duration,
-		easing: o.easing,
+		duration: options.duration,
+		easing: options.easing,
 		complete: done
 	});
 });

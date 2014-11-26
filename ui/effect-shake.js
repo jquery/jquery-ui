@@ -28,24 +28,24 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "shake", function( o, done ) {
+return $.effects.define( "shake", function( options, done ) {
 
 	var i = 1,
-		el = $( this ),
-		direction = o.direction || "left",
-		distance = o.distance || 20,
-		times = o.times || 3,
+		element = $( this ),
+		direction = options.direction || "left",
+		distance = options.distance || 20,
+		times = options.times || 3,
 		anims = times * 2 + 1,
-		speed = Math.round( o.duration / anims ),
+		speed = Math.round( options.duration / anims ),
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
 		positiveMotion = ( direction === "up" || direction === "left" ),
 		animation = {},
 		animation1 = {},
 		animation2 = {},
 
-		queuelen = el.queue().length;
+		queuelen = element.queue().length;
 
-	$.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( element );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -53,19 +53,19 @@ return $.effects.define( "shake", function( o, done ) {
 	animation2[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance * 2;
 
 	// Animate
-	el.animate( animation, speed, o.easing );
+	element.animate( animation, speed, options.easing );
 
 	// Shakes
 	for ( ; i < times; i++ ) {
-		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
+		element.animate( animation1, speed, options.easing ).animate( animation2, speed, options.easing );
 	}
 
-	el
-		.animate( animation1, speed, o.easing )
-		.animate( animation, speed / 2, o.easing )
+	element
+		.animate( animation1, speed, options.easing )
+		.animate( animation, speed / 2, options.easing )
 		.queue( done );
 
-	$.effects.unshift( el, queuelen, anims + 1 );
+	$.effects.unshift( element, queuelen, anims + 1 );
 });
 
 }));

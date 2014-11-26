@@ -28,16 +28,16 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "clip", "hide", function( o, done ) {
+return $.effects.define( "clip", "hide", function( options, done ) {
 	var start,
 		animate = {},
-		el = $( this ),
-		direction = o.direction || "vertical",
+		element = $( this ),
+		direction = options.direction || "vertical",
 		both = direction === "both",
 		horizontal = both || direction === "horizontal",
 		vertical = both || direction === "vertical";
 
-	start = el.cssClip();
+	start = element.cssClip();
 	animate.clip = {
 		top: vertical ? ( start.bottom - start.top ) / 2 : start.top,
 		right: horizontal ? ( start.right - start.left ) / 2 : start.right,
@@ -45,17 +45,17 @@ return $.effects.define( "clip", "hide", function( o, done ) {
 		left: horizontal ? ( start.right - start.left ) / 2 : start.left
 	};
 
-	$.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( element );
 
-	if ( o.mode === "show" ) {
-		el.cssClip( animate.clip );
+	if ( options.mode === "show" ) {
+		element.cssClip( animate.clip );
 		animate.clip = start;
 	}
 
-	el.animate( animate, {
+	element.animate( animate, {
 		queue: false,
-		duration: o.duration,
-		easing: o.easing,
+		duration: options.duration,
+		easing: options.easing,
 		complete: done
 	});
 

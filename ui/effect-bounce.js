@@ -28,37 +28,37 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "bounce", function( o, done ) {
+return $.effects.define( "bounce", function( options, done ) {
 	var upAnim, downAnim, refValue,
-		el = $( this ),
+		element = $( this ),
 
 		// defaults:
-		mode = o.mode,
+		mode = options.mode,
 		hide = mode === "hide",
 		show = mode === "show",
-		direction = o.direction || "up",
-		distance = o.distance,
-		times = o.times || 5,
+		direction = options.direction || "up",
+		distance = options.distance,
+		times = options.times || 5,
 
 		// number of internal animations
 		anims = times * 2 + ( show || hide ? 1 : 0 ),
-		speed = o.duration / anims,
-		easing = o.easing,
+		speed = options.duration / anims,
+		easing = options.easing,
 
 		// utility:
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
 		motion = ( direction === "up" || direction === "left" ),
 		i = 0,
 
-		queuelen = el.queue().length;
+		queuelen = element.queue().length;
 
-	$.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( element );
 
-	refValue = el.css( ref );
+	refValue = element.css( ref );
 
 	// default distance for the BIGGEST bounce is the outer Distance / 3
 	if ( !distance ) {
-		distance = el[ ref === "top" ? "outerHeight" : "outerWidth" ]() / 3;
+		distance = element[ ref === "top" ? "outerHeight" : "outerWidth" ]() / 3;
 	}
 
 	if ( show ) {
@@ -67,7 +67,8 @@ return $.effects.define( "bounce", function( o, done ) {
 
 		// if we are showing, force opacity 0 and set the initial position
 		// then do the "first" animation
-		el.css( "opacity", 0 )
+		element
+			.css( "opacity", 0 )
 			.css( ref, motion ? -distance * 2 : distance * 2 )
 			.animate( downAnim, speed, easing );
 	}
@@ -84,7 +85,8 @@ return $.effects.define( "bounce", function( o, done ) {
 		upAnim = {};
 		upAnim[ ref ] = ( motion ? "-=" : "+=" ) + distance;
 
-		el.animate( upAnim, speed, easing )
+		element
+			.animate( upAnim, speed, easing )
 			.animate( downAnim, speed, easing );
 
 		distance = hide ? distance * 2 : distance / 2;
@@ -95,12 +97,12 @@ return $.effects.define( "bounce", function( o, done ) {
 		upAnim = { opacity: 0 };
 		upAnim[ ref ] = ( motion ? "-=" : "+=" ) + distance;
 
-		el.animate( upAnim, speed, easing );
+		element.animate( upAnim, speed, easing );
 	}
 
-	el.queue( done );
+	element.queue( done );
 
-	$.effects.unshift( el, queuelen, anims + 1 );
+	$.effects.unshift( element, queuelen, anims + 1 );
 });
 
 }));

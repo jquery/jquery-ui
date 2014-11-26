@@ -28,7 +28,7 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "blind", "hide", function( o, done ) {
+return $.effects.define( "blind", "hide", function( options, done ) {
 	var map = {
 			up: [ "bottom", "top" ],
 			vertical: [ "bottom", "top" ],
@@ -37,16 +37,16 @@ return $.effects.define( "blind", "hide", function( o, done ) {
 			horizontal: [ "right", "left" ],
 			right: [ "left", "right" ]
 		},
-		el = $( this ),
-		direction = o.direction || "up",
-		start = el.cssClip(),
+		element = $( this ),
+		direction = options.direction || "up",
+		start = element.cssClip(),
 		animate = { clip: $.extend( {}, start ) },
-		placeholder = $.effects.createPlaceholder( el );
+		placeholder = $.effects.createPlaceholder( element );
 
 	animate.clip[ map[ direction ][ 0 ] ] = animate.clip[ map[ direction ][ 1 ] ];
 
-	if ( o.mode === "show" ) {
-		el.cssClip( animate.clip );
+	if ( options.mode === "show" ) {
+		element.cssClip( animate.clip );
 		if ( placeholder ) {
 			placeholder.css( $.effects.clipToBox( animate ) );
 		}
@@ -55,13 +55,13 @@ return $.effects.define( "blind", "hide", function( o, done ) {
 	}
 
 	if ( placeholder ) {
-		placeholder.animate( $.effects.clipToBox( animate ), o.duration, o.easing );
+		placeholder.animate( $.effects.clipToBox( animate ), options.duration, options.easing );
 	}
 
-	el.animate( animate, {
+	element.animate( animate, {
 		queue: false,
-		duration: o.duration,
-		easing: o.easing,
+		duration: options.duration,
+		easing: options.easing,
 		complete: done
 	});
 });

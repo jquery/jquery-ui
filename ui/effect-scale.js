@@ -29,27 +29,27 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "scale", function( o, done ) {
+return $.effects.define( "scale", function( options, done ) {
 
 	// Create element
 	var el = $( this ),
-		mode = o.mode,
-		percent = parseInt( o.percent, 10 ) ||
-			( parseInt( o.percent, 10 ) === 0 ? 0 : ( mode !== "effect" ? 0 : 100 ) ),
+		mode = options.mode,
+		percent = parseInt( options.percent, 10 ) ||
+			( parseInt( options.percent, 10 ) === 0 ? 0 : ( mode !== "effect" ? 0 : 100 ) ),
 
-		options = $.extend( true, {
+		newOptions = $.extend( true, {
 			from: $.effects.scaledDimensions( el ),
-			to: $.effects.scaledDimensions( el, percent, o.direction || "both" ),
-			origin: o.origin || [ "middle", "center" ]
-		}, o );
+			to: $.effects.scaledDimensions( el, percent, options.direction || "both" ),
+			origin: options.origin || [ "middle", "center" ]
+		}, options );
 
 	// Fade option to support puff
-	if ( o.fade ) {
-		options.from.opacity = 1;
-		options.to.opacity = 0;
+	if ( options.fade ) {
+		newOptions.from.opacity = 1;
+		newOptions.to.opacity = 0;
 	}
 
-	$.effects.effect.size.call( this, options, done );
+	$.effects.effect.size.call( this, newOptions, done );
 });
 
 }));

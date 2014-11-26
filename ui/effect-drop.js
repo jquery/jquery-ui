@@ -28,40 +28,38 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "drop", "hide", function( o, done ) {
+return $.effects.define( "drop", "hide", function( options, done ) {
 
 	var distance,
-		el = $( this ),
-		mode = o.mode,
+		element = $( this ),
+		mode = options.mode,
 		show = mode === "show",
-		direction = o.direction || "left",
+		direction = options.direction || "left",
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
-		motion = ( direction === "up" || direction === "left" ) ? "pos" : "neg",
+		motion = ( direction === "up" || direction === "left" ) ? "-=" : "+=",
+		oppositeMotion = ( motion === "+=" ) ? "-=" : "+=",
 		animation = {
-			opacity: show ? 1 : 0
+			opacity: 0
 		};
 
-	$.effects.createPlaceholder( el );
+	$.effects.createPlaceholder( element );
 
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
+	distance = options.distance || element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
+
+	animation[ ref ] = motion + distance;
 
 	if ( show ) {
-		el
-			.css( "opacity", 0 )
-			.css( ref, ( motion === "pos" ? "-=" : "+=" ) + distance );
+		element.css( animation );
+
+		animation[ ref ] = oppositeMotion + distance;
+		animation.opacity = 1;
 	}
 
-	// Animation
-	animation[ ref ] = ( show ?
-		( motion === "pos" ? "+=" : "-=" ) :
-		( motion === "pos" ? "-=" : "+=" ) ) +
-		distance;
-
 	// Animate
-	el.animate( animation, {
+	element.animate( animation, {
 		queue: false,
-		duration: o.duration,
-		easing: o.easing,
+		duration: options.duration,
+		easing: options.easing,
 		complete: done
 	});
 });

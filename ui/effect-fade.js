@@ -28,8 +28,8 @@
 	}
 }(function( $ ) {
 
-return $.effects.define( "fade", "toggle", function( o, done ) {
-	var show = o.mode === "show";
+return $.effects.define( "fade", "toggle", function( options, done ) {
+	var show = options.mode === "show";
 
 	$( this )
 		.css( "opacity", show ? 0 : 1 )
@@ -37,8 +37,8 @@ return $.effects.define( "fade", "toggle", function( o, done ) {
 			opacity: show ? 1 : 0
 		}, {
 			queue: false,
-			duration: o.duration,
-			easing: o.easing,
+			duration: options.duration,
+			easing: options.easing,
 			complete: done
 		});
 });
