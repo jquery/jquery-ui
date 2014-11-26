@@ -31,7 +31,7 @@
 return $.effects.define( "size", function( o, done ) {
 
 	// Create element
-	var baseline, factor, temp, original, from,
+	var baseline, factor, temp,
 		el = $( this ),
 
 		// Copy for children
@@ -41,28 +41,16 @@ return $.effects.define( "size", function( o, done ) {
 
 		// Set options
 		mode = o.mode,
-		restore = o.restore || mode !== "effect",
+		restore = mode !== "effect",
 		scale = o.scale || "both",
 		origin = o.origin || [ "middle", "center" ],
 		position = el.css( "position" ),
 		pos = el.position(),
-		zero = {
-			height: 0,
-			width: 0,
-			outerHeight: 0,
-			outerWidth: 0
-		},
-		to = o.to || zero;
+		original = $.effects.scaledDimensions( el ),
+		from = o.from || original,
+		to = o.to || original;
 
 	$.effects.createPlaceholder( el );
-
-	original = {
-		height: el.height(),
-		width: el.width(),
-		outerHeight: el.outerHeight(),
-		outerWidth: el.outerWidth()
-	};
-	from = o.from || original;
 
 	if ( mode === "show" ) {
 		temp = from;
@@ -128,12 +116,7 @@ return $.effects.define( "size", function( o, done ) {
 		// TODO: is this right? should we include anything with css width specified as well
 		el.find( "*[width]" ).each( function() {
 			var child = $( this ),
-				c_original = {
-					height: child.height(),
-					width: child.width(),
-					outerHeight: child.outerHeight(),
-					outerWidth: child.outerWidth()
-				};
+				c_original = $.effects.scaledDimensions( child );
 
 			if ( restore ) {
 				$.effects.saveStyle( child );

@@ -1064,6 +1064,28 @@ $.extend( $.effects, {
 		return effect;
 	},
 
+	scaledDimensions: function( element, percent, direction ) {
+		if ( percent === 0 ) {
+			return {
+				height: 0,
+				width: 0,
+				outerHeight: 0,
+				outerWidth: 0
+			};
+		}
+
+		var x = direction !== "horizontal" ? ( ( percent || 100 ) / 100 ) : 1,
+			y = direction !== "vertical" ? ( ( percent || 100 ) / 100 ) : 1;
+
+		return {
+			height: element.height() * y,
+			width: element.width() * x,
+			outerHeight: element.outerHeight() * y,
+			outerWidth: element.outerWidth() * x
+		};
+
+	},
+
 	clipToBox: function( animation ) {
 		return {
 			width: animation.clip.right - animation.clip.left,
