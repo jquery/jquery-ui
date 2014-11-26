@@ -1131,32 +1131,35 @@ $.extend( $.effects, {
 	// this should be a little more flexible in the future to handle a string & hash
 	getBaseline: function( origin, original ) {
 		var y, x;
+
 		switch ( origin[ 0 ] ) {
-			case "top":
-				y = 0;
-				break;
-			case "middle":
-				y = 0.5;
-				break;
-			case "bottom":
-				y = 1;
-				break;
-			default:
-				y = origin[ 0 ] / original.height;
+		case "top":
+			y = 0;
+			break;
+		case "middle":
+			y = 0.5;
+			break;
+		case "bottom":
+			y = 1;
+			break;
+		default:
+			y = origin[ 0 ] / original.height;
 		}
+
 		switch ( origin[ 1 ] ) {
-			case "left":
-				x = 0;
-				break;
-			case "center":
-				x = 0.5;
-				break;
-			case "right":
-				x = 1;
-				break;
-			default:
-				x = origin[ 1 ] / original.width;
+		case "left":
+			x = 0;
+			break;
+		case "center":
+			x = 0.5;
+			break;
+		case "right":
+			x = 1;
+			break;
+		default:
+			x = origin[ 1 ] / original.width;
 		}
+
 		return {
 			x: x,
 			y: y
