@@ -28,18 +28,19 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.fade = function( o, done ) {
-	var el = $( this ),
-		mode = $.effects.setMode( el, o.mode || "toggle" );
+return $.effects.define( "fade", "toggle", function( options, done ) {
+	var show = options.mode === "show";
 
-	el.animate({
-		opacity: mode
-	}, {
-		queue: false,
-		duration: o.duration,
-		easing: o.easing,
-		complete: done
-	});
-};
+	$( this )
+		.css( "opacity", show ? 0 : 1 )
+		.animate({
+			opacity: show ? 1 : 0
+		}, {
+			queue: false,
+			duration: options.duration,
+			easing: options.easing,
+			complete: done
+		});
+});
 
 }));

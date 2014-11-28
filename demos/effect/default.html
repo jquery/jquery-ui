@@ -25,7 +25,7 @@
 	<style>
 		.toggler { width: 500px; height: 200px; position: relative; }
 		#button { padding: .5em 1em; text-decoration: none; }
-		#effect { width: 240px; height: 135px; padding: 0.4em; position: relative; }
+		#effect { width: 240px; height: 170px; padding: 0.4em; position: relative; }
 		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
 		.ui-effects-transfer { border: 2px dotted gray; }
 	</style>
@@ -40,7 +40,7 @@
 			var options = {};
 			// some effects have required parameters
 			if ( selectedEffect === "scale" ) {
-				options = { percent: 0 };
+				options = { percent: 50 };
 			} else if ( selectedEffect === "transfer" ) {
 				options = { to: "#button", className: "ui-effects-transfer" };
 			} else if ( selectedEffect === "size" ) {

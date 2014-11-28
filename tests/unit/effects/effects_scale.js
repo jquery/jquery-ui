@@ -6,8 +6,8 @@ function run( position, v, h, vo, ho ) {
 	asyncTest( desc, function() {
 		expect( 2 );
 		function complete() {
-			equal( parseInt( test.css( h ), 10 ), target[ h ], "Horizontal Position Correct " + desc );
-			equal( parseInt( test.css( v ), 10 ), target[ v ], "Vertical Position Correct " + desc );
+			closeEnough( parseInt( test.css( h ), 10 ), target[ h ], 1, "Horizontal Position Correct " + desc );
+			closeEnough( parseInt( test.css( v ), 10 ), target[ v ], 1, "Vertical Position Correct " + desc );
 			start();
 		}
 		var test = $( ".testScale" ),
