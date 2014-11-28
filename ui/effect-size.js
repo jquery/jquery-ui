@@ -116,40 +116,39 @@ return $.effects.define( "size", function( options, done ) {
 		// TODO: is this right? should we include anything with css width specified as well
 		element.find( "*[width]" ).each( function() {
 			var child = $( this ),
-				c_original = $.effects.scaledDimensions( child );
+				childOriginal = $.effects.scaledDimensions( child ),
+				childFrom = {
+					height: childOriginal.height * factor.from.y,
+					width: childOriginal.width * factor.from.x,
+					outerHeight: childOriginal.outerHeight * factor.from.y,
+					outerWidth: childOriginal.outerWidth * factor.from.x
+				},
+				childTo = {
+					height: childOriginal.height * factor.to.y,
+					width: childOriginal.width * factor.to.x,
+					outerHeight: childOriginal.height * factor.to.y,
+					outerWidth: childOriginal.width * factor.to.x
+				};
+
+			// Vertical props scaling
+			if ( factor.from.y !== factor.to.y ) {
+				childFrom = $.effects.setTransition( child, vProps, factor.from.y, childFrom );
+				childTo = $.effects.setTransition( child, vProps, factor.to.y, childTo );
+			}
+
+			// Horizontal props scaling
+			if ( factor.from.x !== factor.to.x ) {
+				childFrom = $.effects.setTransition( child, hProps, factor.from.x, childFrom );
+				childTo = $.effects.setTransition( child, hProps, factor.to.x, childTo );
+			}
 
 			if ( restore ) {
 				$.effects.saveStyle( child );
 			}
 
-			child.from = {
-				height: c_original.height * factor.from.y,
-				width: c_original.width * factor.from.x,
-				outerHeight: c_original.outerHeight * factor.from.y,
-				outerWidth: c_original.outerWidth * factor.from.x
-			};
-			child.to = {
-				height: c_original.height * factor.to.y,
-				width: c_original.width * factor.to.x,
-				outerHeight: c_original.height * factor.to.y,
-				outerWidth: c_original.width * factor.to.x
-			};
-
-			// Vertical props scaling
-			if ( factor.from.y !== factor.to.y ) {
-				child.from = $.effects.setTransition( child, vProps, factor.from.y, child.from );
-				child.to = $.effects.setTransition( child, vProps, factor.to.y, child.to );
-			}
-
-			// Horizontal props scaling
-			if ( factor.from.x !== factor.to.x ) {
-				child.from = $.effects.setTransition( child, hProps, factor.from.x, child.from );
-				child.to = $.effects.setTransition( child, hProps, factor.to.x, child.to );
-			}
-
 			// Animate children
-			child.css( child.from );
-			child.animate( child.to, options.duration, options.easing, function() {
+			child.css( childFrom );
+			child.animate( childTo, options.duration, options.easing, function() {
 
 				// Restore children
 				if ( restore ) {
