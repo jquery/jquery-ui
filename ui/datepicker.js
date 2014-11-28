@@ -83,6 +83,7 @@ function Datepicker() {
 		dayNamesMin: ["Su","Mo","Tu","We","Th","Fr","Sa"], // Column headings for days starting at Sunday
 		weekHeader: "Wk", // Column header for week of the year
 		dateFormat: "mm/dd/yy", // See format options on parseDate
+		numbersCharachters: ["0","1","2","3","4","5","6","7","8","9"],
 		firstDay: 0, // The first day of the week, Sun = 0, Mon = 1, ...
 		isRTL: false, // True if right-to-left language, false if left-to-right
 		showMonthAfterYear: false, // True if the year select precedes month, false for month then year
@@ -679,7 +680,7 @@ $.extend(Datepicker.prototype, {
 			inst = $.datepicker._getInst(event.target);
 
 		if ($.datepicker._get(inst, "constrainInput")) {
-			chars = $.datepicker._possibleChars($.datepicker._get(inst, "dateFormat"));
+			chars = $.datepicker._possibleChars($.datepicker._get(inst, "dateFormat"), $.datepicker._get(inst, "numbersCharachters"));
 			chr = String.fromCharCode(event.charCode == null ? event.keyCode : event.charCode);
 			return event.ctrlKey || event.metaKey || (chr < " " || !chars || chars.indexOf(chr) > -1);
 		}
@@ -1008,7 +1009,7 @@ $.extend(Datepicker.prototype, {
 		}
 
 		inst = this._getInst(target[0]);
-		inst.selectedDay = inst.currentDay = $("a", td).html();
+		inst.selectedDay = inst.currentDay = $.datepicker.parseNumber($("a", td).html(), this._get(inst, 'numbersCharachters'));
 		inst.selectedMonth = inst.currentMonth = month;
 		inst.selectedYear = inst.currentYear = year;
 		this._selectDate(id, this._formatDate(inst,
@@ -1091,6 +1092,30 @@ $.extend(Datepicker.prototype, {
 		return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
 	},
 
+	/* Use numbersCharachters to create an integer from a string. */
+	parseNumber: function (str, numbersCharachters) {
+        var number = 0;
+        var len = str.length;
+        for (i = 0; i < len; i++) {
+            number += numbersCharachters.indexOf(str.charAt(i)) * Math.pow(10, len - 1 - i);
+        }
+        return number;
+    },
+
+	/* Use numbersCharachters to create a string from an integer to display. */
+	formatNumber: function (num, numbersCharachters) {
+        var len = Math.floor(Math.log(num)/Math.log(10)) + 1;
+        var next = num;
+        var str = '';
+        for (i = 0; i < len; i++) {
+            var order = Math.pow(10, len - 1 - i);
+            var digit = Math.floor(next / order);
+            next = next - digit * order;
+            str += numbersCharachters[digit];
+        }
+        return str;
+    },
+
 	/* Parse a string value into a date object.
 	 * See formatDate below for the possible formats.
 	 *
@@ -1139,17 +1164,19 @@ $.extend(Datepicker.prototype, {
 			},
 			// Extract a number from the string value
 			getNumber = function(match) {
-				var isDoubled = lookAhead(match),
-					size = (match === "@" ? 14 : (match === "!" ? 20 :
+                var numbersCharachters = settings['numbersCharachters'],
+                    isDoubled = lookAhead(match),
+                    size = (match === "@" ? 14 : (match === "!" ? 20 :
 					(match === "y" && isDoubled ? 4 : (match === "o" ? 3 : 2)))),
 					minSize = (match === "y" ? size : 1),
-					digits = new RegExp("^\\d{" + minSize + "," + size + "}"),
+					digits = new RegExp("^[" + numbersCharachters.concat() + "]{" + minSize + "," + size + "}"),
 					num = value.substring(iValue).match(digits);
 				if (!num) {
 					throw "Missing number at position " + iValue;
 				}
+
 				iValue += num[0].length;
-				return parseInt(num[0], 10);
+                return $.datepicker.parseNumber(num[0], numbersCharachters);
 			},
 			// Extract a name from the string value and convert to an index
 			getName = function(match, shortNames, longNames) {
@@ -1331,12 +1358,14 @@ $.extend(Datepicker.prototype, {
 				}
 				return matches;
 			},
+			numbersCharachters = settings['numbersCharachters'],
 			// Format a number, with leading zero if necessary
 			formatNumber = function(match, value, len) {
-				var num = "" + value;
+                var num = $.datepicker.formatNumber(value, numbersCharachters);
+
 				if (lookAhead(match)) {
 					while (num.length < len) {
-						num = "0" + num;
+						num = numbersCharachters[0] + num;
 					}
 				}
 				return num;
@@ -1375,8 +1404,8 @@ $.extend(Datepicker.prototype, {
 							output += formatName("M", date.getMonth(), monthNamesShort, monthNames);
 							break;
 						case "y":
-							output += (lookAhead("y") ? date.getFullYear() :
-								(date.getYear() % 100 < 10 ? "0" : "") + date.getYear() % 100);
+							output += $.datepicker.formatNumber((lookAhead("y") ? date.getFullYear() :
+								(date.getYear() % 100 < 10 ? "0" : "") + date.getYear() % 100), numbersCharachters);
 							break;
 						case "@":
 							output += date.getTime();
@@ -1401,7 +1430,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Extract all possible characters from the date format. */
-	_possibleChars: function (format) {
+	_possibleChars: function (format, numbersCharachters) {
 		var iFormat,
 			chars = "",
 			literal = false,
@@ -1424,7 +1453,7 @@ $.extend(Datepicker.prototype, {
 			} else {
 				switch (format.charAt(iFormat)) {
 					case "d": case "m": case "y": case "@":
-						chars += "0123456789";
+						chars += numbersCharachters.concat(); //'0123456789';
 						break;
 					case "D": case "M":
 						return null; // Accept anything
@@ -1704,6 +1733,7 @@ $.extend(Datepicker.prototype, {
 		beforeShowDay = this._get(inst, "beforeShowDay");
 		showOtherMonths = this._get(inst, "showOtherMonths");
 		selectOtherMonths = this._get(inst, "selectOtherMonths");
+		numbersCharachters = this._get(inst, 'numbersCharachters');
 		defaultDate = this._getDefaultDate(inst);
 		html = "";
 		dow;
@@ -1778,7 +1808,7 @@ $.extend(Datepicker.prototype, {
 							(printDate.getTime() === today.getTime() ? " ui-state-highlight" : "") +
 							(printDate.getTime() === currentDate.getTime() ? " ui-state-active" : "") + // highlight selected day
 							(otherMonth ? " ui-priority-secondary" : "") + // distinguish dates from other months
-							"' href='#'>" + printDate.getDate() + "</a>")) + "</td>"; // display selectable date
+							"' href='#'>" + $.datepicker.formatNumber(printDate.getDate() , numbersCharachters) + "</a>")) + "</td>"; // display selectable date
 						printDate.setDate(printDate.getDate() + 1);
 						printDate = this._daylightSavingAdjust(printDate);
 					}
@@ -1808,6 +1838,7 @@ $.extend(Datepicker.prototype, {
 			changeMonth = this._get(inst, "changeMonth"),
 			changeYear = this._get(inst, "changeYear"),
 			showMonthAfterYear = this._get(inst, "showMonthAfterYear"),
+			numbersCharachters = this._get(inst, 'numbersCharachters'),
 			html = "<div class='ui-datepicker-title'>",
 			monthHtml = "";
 
@@ -1836,7 +1867,7 @@ $.extend(Datepicker.prototype, {
 		if ( !inst.yearshtml ) {
 			inst.yearshtml = "";
 			if (secondary || !changeYear) {
-				html += "<span class='ui-datepicker-year'>" + drawYear + "</span>";
+				html += "<span class='ui-datepicker-year'>" + $.datepicker.formatNumber(drawYear, numbersCharachters) + "</span>";
 			} else {
 				// determine range of years to display
 				years = this._get(inst, "yearRange").split(":");
@@ -1971,7 +2002,8 @@ $.extend(Datepicker.prototype, {
 			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
 		return {shortYearCutoff: shortYearCutoff,
 			dayNamesShort: this._get(inst, "dayNamesShort"), dayNames: this._get(inst, "dayNames"),
-			monthNamesShort: this._get(inst, "monthNamesShort"), monthNames: this._get(inst, "monthNames")};
+			monthNamesShort: this._get(inst, "monthNamesShort"), monthNames: this._get(inst, "monthNames"),
+			numbersCharachters: this._get(inst, "numbersCharachters")};
 	},
 
 	/* Format the given date for display. */
