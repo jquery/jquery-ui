@@ -144,14 +144,6 @@ test( "items", function() {
 	element.tooltip( "destroy" );
 });
 
-test( "tooltipClass", function() {
-	expect( 1 );
-	var element = $( "#tooltipped1" ).tooltip({
-		tooltipClass: "custom"
-	}).tooltip( "open" );
-	ok( $( "#" + element.data( "ui-tooltip-id" ) ).hasClass( "custom" ) );
-});
-
 test( "track + show delay", function() {
 	expect( 2 );
 	var event,
