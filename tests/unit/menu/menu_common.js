@@ -6,7 +6,8 @@ TestHelpers.commonWidgetTests( "menu", {
 			"ui-menu-icon": "",
 			"ui-menu-item": "",
 			"ui-menu-item-wrapper": "",
-			"ui-menu-divider": ""
+			"ui-menu-divider": "",
+			"ui-menu-submenu-caret": ""
 		},
 		disabled: false,
 		icons: {

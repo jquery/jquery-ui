@@ -128,7 +128,7 @@ $.widget( "ui.dialog", {
 			.removeAttr( "title" )
 			.appendTo( this.uiDialog );
 
-		this._addClass( "ui-dialog-content", "ui-widget-content" );
+		this._addClass( "ui-dialog-content ui-widget-content" );
 
 		this._createTitlebar();
 		this._createButtonPane();
@@ -170,8 +170,6 @@ $.widget( "ui.dialog", {
 			.css( this.originalCss )
 			// Without detaching first, the following becomes really slow
 			.detach();
-
-		this._removeClass( "ui-dialog-content", "ui-widget-content" );
 
 		this.uiDialog.stop( true, true ).remove();
 
@@ -349,7 +347,7 @@ $.widget( "ui.dialog", {
 			})
 			.appendTo( this._appendTo() );
 
-		this._addClass( this.uiDialog, "ui-dialog", "ui-widget ui-widget-content ui-front" );
+		this._addClass( this.uiDialog, "ui-dialog ui-widget ui-widget-content ui-front" );
 
 		this._on( this.uiDialog, {
 			keydown: function( event ) {
@@ -398,9 +396,11 @@ $.widget( "ui.dialog", {
 	},
 
 	_createTitlebar: function() {
-		this.uiDialogTitlebar = $( "<div>" )
-			.addClass( "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" )
-			.prependTo( this.uiDialog );
+		this.uiDialogTitlebar = $( "<div>" ).prependTo( this.uiDialog );
+
+		this._addClass( this.uiDialogTitlebar,
+			"ui-dialog-titlebar ui-widget-header ui-helper-clearfix" );
+
 		this._on( this.uiDialogTitlebar, {
 			mousedown: function( event ) {
 				// Don't prevent click on close button (#8838)
@@ -455,8 +455,7 @@ $.widget( "ui.dialog", {
 
 	_createButtonPane: function() {
 		this.uiDialogButtonPane = $( "<div>" );
-		this._addClass( this.uiDialogButtonPane, "ui-dialog-buttonpane",
-			"ui-widget-content ui-helper-clearfix" );
+		this._addClass( this.uiDialogButtonPane, "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
 
 		this.uiButtonSet = $( "<div>" )
 			.appendTo( this.uiDialogButtonPane );
@@ -853,7 +852,7 @@ $.widget( "ui.dialog", {
 		this.overlay = $( "<div>" )
 			.appendTo( this._appendTo() );
 
-		this._addClass( this.overlay, "ui-widget-overlay", "ui-front" );
+		this._addClass( this.overlay, "ui-widget-overlay ui-front" );
 		this._on( this.overlay, {
 			mousedown: "_keepFocus"
 		});

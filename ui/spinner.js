@@ -216,7 +216,7 @@ return $.widget( "ui.spinner", {
 				// add buttons
 				.append( this._buttonHtml() );
 
-		this._addClass( this.uiSpinner, "ui-spinner", "ui-widget ui-widget-content" );
+		this._addClass( this.uiSpinner, "ui-spinner ui-widget ui-widget-content" );
 		this._addClass( "ui-spinner-input" );
 
 		this.element.attr( "role", "spinbutton" );
@@ -224,13 +224,15 @@ return $.widget( "ui.spinner", {
 		// button bindings
 		this.buttons = uiSpinner.find( "a" )
 			.attr( "tabIndex", -1 )
-			.button()
+			.button();
 
 			// Right now button does not support classes once it does adjust this with classes
-			.removeClass( "ui-corner-all" );
+		this._removeClass( this.buttons, "ui-corner-all" );
 
 		this._addClass( this.buttons.eq( 0 ), "ui-spinner-button ui-spinner-up" );
 		this._addClass( this.buttons.eq( 1 ), "ui-spinner-button ui-spinner-down" );
+		this._addClass( this.buttons.first().find( "span span" ), "ui-icon " + this.options.icons.up );
+		this._addClass( this.buttons.last().find( "span span" ), "ui-icon " + this.options.icons.down );
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height
@@ -268,16 +270,16 @@ return $.widget( "ui.spinner", {
 	},
 
 	_uiSpinnerHtml: function() {
-		return "<span class='ui-spinner ui-widget ui-widget-content ui-corner-all'></span>";
+		return "<span></span>";
 	},
 
 	_buttonHtml: function() {
 		return "" +
 			"<a>" +
-				"<span class='ui-icon " + this.options.icons.up + "'>&#9650;</span>" +
+				"<span>&#9650;</span>" +
 			"</a>" +
 			"<a>" +
-				"<span class='ui-icon " + this.options.icons.down + "'>&#9660;</span>" +
+				"<span>&#9660;</span>" +
 			"</a>";
 	},
 
@@ -385,8 +387,9 @@ return $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
+		var prevValue, first, last;
 		if ( key === "culture" || key === "numberFormat" ) {
-			var prevValue = this._parse( this.element.val() );
+			prevValue = this._parse( this.element.val() );
 			this.options[ key ] = value;
 			this.element.val( this._format( prevValue ) );
 			return;
@@ -398,18 +401,19 @@ return $.widget( "ui.spinner", {
 			}
 		}
 		if ( key === "icons" ) {
-			this.buttons.first().find( ".ui-icon" )
-				.removeClass( this.options.icons.up )
-				.addClass( value.up );
-			this.buttons.last().find( ".ui-icon" )
-				.removeClass( this.options.icons.down )
-				.addClass( value.down );
+			first = this.buttons.first().find( ".ui-icon" );
+			this._removeClass( first, this.options.icons.up );
+			this._addClass( first, value.up );
+			last = this.buttons.last().find( ".ui-icon" );
+			this._removeClass( last, this.options.icons.down );
+			this._addClass( last, value.down );
 		}
 
 		this._super( key, value );
 
 		if ( key === "disabled" ) {
-			this.widget().toggleClass( "ui-state-disabled", !!value );
+			this[ ( !!value ? "_add" : "_remove" ) + "Class" ]( this.widget(),
+				"ui-state-disabled" );
 			this.element.prop( "disabled", !!value );
 			this.buttons.button( value ? "disable" : "enable" );
 		}
@@ -482,7 +486,6 @@ return $.widget( "ui.spinner", {
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
 
-		this._removeClass( "ui-spinner-input" );
 		this.uiSpinner.replaceWith( this.element );
 	},
 

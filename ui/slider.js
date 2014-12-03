@@ -69,8 +69,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseInit();
 		this._calculateNewMax();
 
-		this._addClass( "ui-slider" + " ui-slider-" + this.orientation,
-				"ui-widget ui-widget-content ui-corner-all");
+		this._addClass( "ui-slider" + " ui-slider-" + this.orientation +
+			" ui-widget ui-widget-content ui-corner-all");
 
 		this._refresh();
 		this._setOption( "disabled", this.options.disabled );
@@ -105,7 +105,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this.handles = existingHandles.add( $( handles.join( "" ) ).appendTo( this.element ) );
 
-		this._addClass( this.handles, "ui-slider-handle", "ui-state-default" );
+		this._addClass( this.handles, "ui-slider-handle ui-state-default" );
 
 		this.handle = this.handles.eq( 0 );
 
@@ -132,7 +132,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this.range = $( "<div></div>" )
 					.appendTo( this.element );
 
-				this._addClass( this.range, "ui-slider-range", "ui-widget-header" );
+				this._addClass( this.range, "ui-slider-range ui-widget-header" );
 			} else {
 				this._removeClass( this.range, "ui-slider-range-min ui-slider-range-max" );
 					// Handle range switching from true to min/max
@@ -164,9 +164,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		if ( this.range ) {
 			this.range.remove();
 		}
-
-		this._removeClass( "ui-slider ui-slider-horizontal ui-slider-vertical",
-				" ui-widget ui-widget-content" );
 
 		this._mouseDestroy();
 	},
@@ -208,9 +205,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this._handleIndex = index;
 
-		closestHandle
-			.addClass( "ui-state-active" )
-			.focus();
+		closestHandle.focus();
+		this._addClass( closestHandle, "ui-state-active" );
 
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
@@ -244,7 +240,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_mouseStop: function( event ) {
-		this.handles.removeClass( "ui-state-active" );
+		this._removeClass( this.handles, "ui-state-active" );
 		this._mouseSliding = false;
 
 		this._stop( event, this._handleIndex );
@@ -441,7 +437,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 
 		if ( key === "disabled" ) {
-			this.element.toggleClass( "ui-state-disabled", !!value );
+			this[ ( !!value? "_add" : "_remove" ) + "Class" ]( "ui-state-disabled" );
 		}
 
 		this._super( key, value );
@@ -630,7 +626,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 					event.preventDefault();
 					if ( !this._keySliding ) {
 						this._keySliding = true;
-						$( event.target ).addClass( "ui-state-active" );
+						this._addClass( $( event.target ), "ui-state-active" );
 						allowed = this._start( event, index );
 						if ( allowed === false ) {
 							return;
@@ -687,7 +683,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this._keySliding = false;
 				this._stop( event, index );
 				this._change( event, index );
-				$( event.target ).removeClass( "ui-state-active" );
+				this._removeClass( $( event.target ), "ui-state-active" );
 			}
 		}
 	}
