@@ -450,8 +450,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "orientation":
 				this._detectOrientation();
 				this._removeClass( "ui-slider-horizontal ui-slider-vertical" )
-					._addClass( "ui-slider-" + this.orientation )
-					._refreshValue();
+					._addClass( "ui-slider-" + this.orientation );
+				this._refreshValue();
 
 				// Reset positioning from previous orientation
 				this.handles.css( value === "horizontal" ? "bottom" : "left", "" );
