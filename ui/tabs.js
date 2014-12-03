@@ -79,7 +79,7 @@ return $.widget( "ui.tabs", {
 
 		this.running = false;
 
-		this._addClass( "ui-tabs", "ui-widget ui-widget-content" );
+		this._addClass( "ui-tabs ui-widget ui-widget-content" );
 		this[ ( options.collapsible ? "_add" : "_remove" ) + "Class" ]( "ui-tabs-collapsible" );
 
 		this._processTabs();
@@ -369,7 +369,7 @@ return $.widget( "ui.tabs", {
 					tabIndex: 0
 				});
 
-			this._addClass( this.active, "ui-tabs-active", "ui-state-active" );
+			this._addClass( this.active, "ui-tabs-active ui-state-active" );
 			this._getPanelForTab( this.active )
 				.show()
 				.attr({
@@ -386,8 +386,8 @@ return $.widget( "ui.tabs", {
 
 		this.tablist = this._getList().attr( "role", "tablist" );
 
-		this._addClass( this.tablist, "ui-tabs-nav",
-			"ui-helper-reset ui-helper-clearfix ui-widget-header" );
+		this._addClass( this.tablist,
+			"ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header" );
 
 			// Prevent users from focusing disabled tabs via click
 		this.tablist.delegate( "> li", "mousedown" + this.eventNamespace, function( event ) {
@@ -413,7 +413,7 @@ return $.widget( "ui.tabs", {
 				role: "tab",
 				tabIndex: -1
 			});
-		this._addClass( this.tabs, "ui-tab", "ui-state-default" );
+		this._addClass( this.tabs, "ui-tab ui-state-default" );
 
 		this.anchors = this.tabs.map(function() {
 				return $( "a", this )[ 0 ];
@@ -464,7 +464,7 @@ return $.widget( "ui.tabs", {
 		});
 
 		this.panels.attr( "role", "tabpanel" );
-		this._addClass( this.panels, "ui-tabs-panel", "ui-widget-content" );
+		this._addClass( this.panels, "ui-tabs-panel ui-widget-content" );
 
 		// Avoid memory leaks (#10056)
 		if ( prevTabs ) {
@@ -495,13 +495,9 @@ return $.widget( "ui.tabs", {
 		// disable tabs
 		for ( var i = 0, li; ( li = this.tabs[ i ] ); i++ ) {
 			if ( disabled === true || $.inArray( i, disabled ) !== -1 ) {
-				$( li )
-					.addClass( "ui-state-disabled" )
-					.attr( "aria-disabled", "true" );
+				this._addClass( $( li ).attr( "aria-disabled", "true" ), "ui-state-disabled" );
 			} else {
-				$( li )
-					.removeClass( "ui-state-disabled" )
-					.removeAttr( "aria-disabled" );
+				this._removeClass( $( li ).removeAttr( "aria-disabled" ), "ui-state-disabled" );
 			}
 		}
 
@@ -627,7 +623,7 @@ return $.widget( "ui.tabs", {
 		}
 
 		function show() {
-			that._addClass( eventData.newTab.closest( "li" ), "ui-tabs-active", "ui-state-active" );
+			that._addClass( eventData.newTab.closest( "li" ), "ui-tabs-active ui-state-active" );
 
 			if ( toShow.length && that.options.show ) {
 				that._show( toShow, that.options.show, complete );
@@ -641,12 +637,12 @@ return $.widget( "ui.tabs", {
 		if ( toHide.length && this.options.hide ) {
 			this._hide( toHide, this.options.hide, function() {
 				that._removeClass( eventData.oldTab.closest( "li" ),
-					"ui-tabs-active", "ui-state-active" );
+					"ui-tabs-active ui-state-active" );
 				show();
 			});
 		} else {
 			this._removeClass( eventData.oldTab.closest( "li" ),
-				"ui-tabs-active", "ui-state-active" );
+				"ui-tabs-active ui-state-active" );
 			toHide.hide();
 			show();
 		}
@@ -712,15 +708,10 @@ return $.widget( "ui.tabs", {
 	},
 
 	_destroy: function() {
-		var that = this;
 		if ( this.xhr ) {
 			this.xhr.abort();
 		}
 
-		this._removeClass( "ui-tabs ui-tabs-collapsible", "ui-widget ui-widget-content" );
-		this._removeClass( this.tablist, "ui-tabs-nav",
-			"ui-helper-reset ui-helper-clearfix ui-widget-header" );
-		this._removeClass( this.anchors, "ui-tabs-anchor" );
 
 		this.tablist.removeAttr( "role" ).unbind( this.eventNamespace );
 
@@ -739,8 +730,6 @@ return $.widget( "ui.tabs", {
 					.removeAttr( "aria-hidden" )
 					.removeAttr( "aria-expanded" )
 					.removeAttr( "role" );
-				that._removeClass( $( this ), "ui-tabs-active ui-tab ui-tabs-panel",
-					"ui-state-default ui-state-active ui-state-disabled ui-widget-content" );
 			}
 		});
 
