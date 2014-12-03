@@ -9,6 +9,7 @@
 	<script src="../../../external/qunit/qunit.js"></script>
 	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
+	<script src="../../../external/qunit-assert-classes/qunit-assert-classes.js"></script>
 	<script>
 	TestHelpers.loadResources({
 		css: [ "core", "menu" ],
@@ -52,7 +53,7 @@
 <div id="qunit-fixture">
 
 <ul class="foo" id="menu1">
-	<li class="foo"><div>Aberdeen</div></li>
+	<li class="foo"><div>Aberdeen</div>
 	<li class="foo"><div>Ada</div></li>
 	<li class="foo"><div>Adamsville</div></li>
 	<li class="foo"><div id="testID1">Addyston</div></li>
@@ -332,6 +333,18 @@
 	<li class="foo"><div>-Saarland</div></li>
 </ul>
 
+<ul class="foo" id="menu9">
+	<li class="foo">
+		<div>Aberdeen</div>
+		<ul>
+			<li class="foo"><div>Ada</div></li>
+		</ul>
+	</li>
+	<li class="foo"><div>Ada</div></li>
+	<li class="foo"><div>Adamsville</div></li>
+	<li class="foo"><div>Addyston</div></li>
+	<li class="foo"><div>Adelphi</div></li>
+</ul>
 </div>
 </body>
 </html>
