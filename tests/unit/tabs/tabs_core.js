@@ -4,13 +4,32 @@ var state = TestHelpers.tabs.state;
 
 module( "tabs: core" );
 
-test( "markup structure", function() {
-	expect( 3 );
-	var element = $( "#tabs1" ).tabs();
-	ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
-	ok( element.find( "ul" ).hasClass( "ui-tabs-nav" ), "list item is .ui-tabs-nav" );
-	equal( element.find( ".ui-tabs-panel" ).length, 3,
-		".ui-tabs-panel elements exist, correct number" );
+test( "markup structure", function( assert ) {
+	expect( 17 );
+	var element = $( "#tabs1" ).tabs(),
+		tabList = element.find( "ul, ol" ),
+		tabs = tabList.find( "li" ),
+		active = tabs.eq( 0 ),
+		anchors = tabs.find( "a" ),
+		panels = element.find( ".ui-tabs-panel" );
+
+	assert.hasClasses( element, "ui-tabs ui-widget ui-widget-content" );
+	assert.lacksClasses( element, "ui-tabs-collapsible" );
+	assert.hasClasses( tabList, "ui-tabs-nav ui-widget-header" );
+	equal( tabList.length, 1, "The widget contains exactly one tab list" );
+	assert.hasClasses( tabs[ 0 ], "ui-tab" );
+	assert.hasClasses( tabs[ 1 ], "ui-tab" );
+	assert.hasClasses( tabs[ 2 ], "ui-tab" );
+	equal( tabs.length, 3, "There are exactly three tabs" );
+	assert.hasClasses( anchors[ 0 ], "ui-tabs-anchor" );
+	assert.hasClasses( anchors[ 1 ], "ui-tabs-anchor" );
+	assert.hasClasses( anchors[ 2 ], "ui-tabs-anchor" );
+	equal( anchors.length, 3, "There are exactly 3 anchors" );
+	assert.hasClasses( active, "ui-tabs-active" );
+	assert.hasClasses( panels[ 0 ], "ui-tabs-panel ui-widget-content" );
+	assert.hasClasses( panels[ 1 ], "ui-tabs-panel ui-widget-content" );
+	assert.hasClasses( panels[ 2 ], "ui-tabs-panel ui-widget-content" );
+	equal( panels.length, 3, "There are exactly 3 tab panels" );
 });
 
 $.each({
@@ -129,18 +148,21 @@ test( "accessibility", function() {
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
 });
 
-asyncTest( "accessibility - ajax", function() {
-	expect( 4 );
+asyncTest( "accessibility - ajax", function( assert ) {
+	expect( 6 );
 	var element = $( "#tabs2" ).tabs(),
+		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 		panel = $( "#custom-id" );
 
 	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
 	equal( panel.attr( "aria-busy" ), null, "does not have aria-busy on init" );
 	element.tabs( "option", "active", 3 );
+	assert.hasClasses( tab, "ui-tabs-loading" );
 	equal( panel.attr( "aria-busy" ), "true", "panel has aria-busy during load" );
 	element.one( "tabsload", function() {
 		setTimeout(function() {
 			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
+			assert.lacksClasses( tab, "ui-tabs-loading" );
 			start();
 		}, 1 );
 	});
