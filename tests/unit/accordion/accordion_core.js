@@ -6,14 +6,26 @@ var setupTeardown = TestHelpers.accordion.setupTeardown,
 module( "accordion: core", setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
-	test( "markup structure: " + type, function() {
-		expect( 4 );
-		var element = $( selector ).accordion();
-		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
-		equal( element.find( ".ui-accordion-header" ).length, 3,
-			".ui-accordion-header elements exist, correct number" );
-		equal( element.find( ".ui-accordion-content" ).length, 3,
-			".ui-accordion-content elements exist, correct number" );
+
+	test( "markup structure: " + type, function( assert ) {
+		expect( 10 );
+		var element = $( selector ).accordion(),
+			headers = element.find( ".ui-accordion-header" ),
+			content = headers.next();
+
+		assert.hasClasses( element, "ui-accordion ui-widget" );
+		equal( headers.length, 3, ".ui-accordion-header elements exist, correct number" );
+		assert.hasClasses( headers[ 0 ],
+			"ui-accordion-header ui-accordion-header-active ui-accordion-icons" );
+		assert.hasClasses( headers[ 1 ],
+			"ui-accordion-header ui-accordion-header-collapsed ui-accordion-icons" );
+		assert.hasClasses( headers[ 2 ],
+			"ui-accordion-header ui-accordion-header-collapsed ui-accordion-icons" );
+		equal( content.length, 3, ".ui-accordion-content elements exist, correct number" );
+		assert.hasClasses( content[ 0 ],
+			"ui-accordion-content ui-widget-content ui-accordion-content-active" );
+		assert.hasClasses( content[ 1 ], "ui-accordion-content ui-widget-content" );
+		assert.hasClasses( content[ 2 ], "ui-accordion-content ui-widget-content" );
 		deepEqual( element.find( ".ui-accordion-header" ).next().get(),
 			element.find( ".ui-accordion-content" ).get(),
 			"content panels come immediately after headers" );
