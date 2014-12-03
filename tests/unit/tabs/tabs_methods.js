@@ -15,6 +15,22 @@ test( "destroy", function() {
 	});
 });
 
+asyncTest( "destroy - ajax", function() {
+	expect( 1 );
+	domEqual( "#tabs2", function( done ) {
+		var element = $( "#tabs2" ).tabs({
+			load: function() {
+				setTimeout(function() {
+					element.tabs( "destroy" );
+					done();
+					start();
+				});
+			}
+		});
+		element.tabs( "option", "active", 2 );
+	});
+});
+
 test( "enable", function() {
 	expect( 8 );
 

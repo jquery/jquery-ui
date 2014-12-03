@@ -107,28 +107,14 @@ test( "active - mismatched tab/panel order", function() {
 	location.hash = "#";
 });
 
-test( "{ collapsible: false }", function() {
-	expect( 4 );
-
-	var element = $( "#tabs1" ).tabs({
-		active: 1
-	});
-	element.tabs( "option", "active", false );
-	equal( element.tabs( "option", "active" ), 1 );
-	state( element, 0, 1, 0 );
-
-	element.find( ".ui-state-active .ui-tabs-anchor" ).eq( 1 ).click();
-	equal( element.tabs( "option", "active" ), 1 );
-	state( element, 0, 1, 0 );
-});
-
-test( "{ collapsible: true }", function() {
-	expect( 6 );
+test( "collapsible", function() {
+	expect( 13 );
 
 	var element = $( "#tabs1" ).tabs({
 		active: 1,
 		collapsible: true
 	});
+	ok( element.hasClass( "ui-tabs-collapsible" ), "main element is .ui-tabs-collapsible" );
 
 	element.tabs( "option", "active", false );
 	equal( element.tabs( "option", "active" ), false );
@@ -141,6 +127,24 @@ test( "{ collapsible: true }", function() {
 	element.find( ".ui-state-active .ui-tabs-anchor" ).click();
 	equal( element.tabs( "option", "active" ), false );
 	state( element, 0, 0, 0 );
+
+	element.tabs( "option", "collapsible", false );
+	ok( !element.hasClass( "ui-tabs-collapsible" ), "main element is not .ui-tabs-collapsible" );
+
+	element.tabs( "option", "collapsible", true );
+	ok( element.hasClass( "ui-tabs-collapsible" ), "main element is .ui-tabs-collapsible" );
+
+	element.tabs({
+		active: 1,
+		collapsible: false
+	});
+	element.tabs( "option", "active", false );
+	equal( element.tabs( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
+
+	element.find( ".ui-state-active .ui-tabs-anchor" ).eq( 1 ).click();
+	equal( element.tabs( "option", "active" ), 1 );
+	state( element, 0, 1, 0 );
 });
 
 test( "disabled", function() {
