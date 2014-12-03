@@ -213,7 +213,7 @@ $.widget( "ui.autocomplete", {
 			.hide()
 			.menu( "instance" );
 
-		this._addClass( this.menu.element, "ui-autocomplete", "ui-front" );
+		this._addClass( this.menu.element, "ui-autocomplete ui-front" );
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
 				// prevent moving focus out of the text field
@@ -309,9 +309,8 @@ $.widget( "ui.autocomplete", {
 				role: "status",
 				"aria-live": "assertive",
 				"aria-relevant": "additions"
-			})
-			.addClass( "ui-helper-hidden-accessible" )
-			.appendTo( this.document[ 0 ].body );
+			}).appendTo( this.document[ 0 ].body );
+		this._addClass( this.liveRegion, "ui-helper-hidden-accessible" );
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
@@ -325,9 +324,7 @@ $.widget( "ui.autocomplete", {
 
 	_destroy: function() {
 		clearTimeout( this.searching );
-		this.element
-			.removeClass( "ui-autocomplete-input" )
-			.removeAttr( "autocomplete" );
+		this.element.removeAttr( "autocomplete" );
 		this.menu.element.remove();
 		this.liveRegion.remove();
 	},
