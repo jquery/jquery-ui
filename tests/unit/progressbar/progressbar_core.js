@@ -2,29 +2,33 @@
 
 module( "progressbar: core" );
 
-test( "markup structure", function() {
-	expect( 5 );
-	var element = $( "#progressbar" ).progressbar();
-	ok( element.hasClass( "ui-progressbar" ), "main element is .ui-progressbar" );
-	ok( !element.hasClass( "ui-progressbar-indeterminate" ),
-		"main element is not .ui-progressbar-indeterminate" );
-	equal( element.children().length, 1, "main element contains one child" );
-	ok( element.children().eq( 0 ).hasClass( "ui-progressbar-value" ),
-		"child is .ui-progressbar-value" );
+test( "markup structure", function( assert ) {
+	expect( 7 );
+	var element = $( "#progressbar" ).progressbar(),
+		value = element.children().eq( 0 );
+
+	assert.hasClasses( element, "ui-progressbar ui-widget ui-widget-content" );
+	assert.hasClasses( value, "ui-progressbar-value ui-widget-header" );
+	assert.lacksClasses( value, "ui-progressbar-complete" );
+	assert.lacksClasses( element, "ui-progressbar-indeterminate" );
+	equal( element.children().length, 1, "Main element contains one child" );
+
+	element.progressbar( "option", "value", 100 );
+	assert.hasClasses( value, "ui-progressbar-complete ui-widget-header ui-progressbar-value" );
 	equal( element.children().children().length, 0, "no overlay div" );
 });
 
-test( "markup structure - indeterminate", function() {
+test( "markup structure - indeterminate", function( assert ) {
 	expect( 5 );
-	var element = $( "#progressbar" ).progressbar({ value: false });
-	ok( element.hasClass( "ui-progressbar" ), "main element is .ui-progressbar" );
-	ok( element.hasClass( "ui-progressbar-indeterminate" ),
-		"main element is .ui-progressbar-indeterminate" );
-	equal( element.children().length, 1, "main element contains one child" );
-	ok( element.children().eq( 0 ).hasClass( "ui-progressbar-value" ),
-		"child is .ui-progressbar-value" );
-	equal( element.children().children( ".ui-progressbar-overlay" ).length, 1,
-		".ui-progressbar-value has .ui-progressbar-overlay" );
+	var element = $( "#progressbar" ).progressbar({ value: false }),
+		children = element.children();
+
+	assert.hasClasses( element, "ui-progressbar ui-progressbar-indeterminate ui-widget ui-widget-content" );
+	assert.hasClasses( children[ 0 ], "ui-progressbar-value ui-widget-header" );
+	equal( children.length, 1, "Main element contains one child" );
+	assert.hasClasses( children[ 0 ], "ui-progressbar-value" );
+	equal( children.children( ".ui-progressbar-overlay" ).length, 1,
+		"Value has class ui-progressbar-overlay" );
 });
 
 test( "accessibility", function() {
