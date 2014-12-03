@@ -228,6 +228,7 @@ test( "merge multiple option arguments", function() {
 		_create: function() {
 			deepEqual( this.options, {
 				create: null,
+				classes: {},
 				disabled: false,
 				option1: "value1",
 				option2: "value2",
@@ -282,6 +283,7 @@ test( "._getCreateOptions()", function() {
 		_create: function() {
 			deepEqual( this.options, {
 				create: null,
+				classes: {},
 				disabled: false,
 				option1: "override1",
 				option2: "value2",
@@ -486,6 +488,7 @@ test( ".option() - getter", function() {
 	options = div.testWidget( "option" );
 	deepEqual( options, {
 		create: null,
+		classes: {},
 		disabled: false,
 		foo: "bar",
 		baz: 5,
