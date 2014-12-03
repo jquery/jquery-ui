@@ -53,10 +53,10 @@ return $.widget( "ui.progressbar", {
 				role: "progressbar",
 				"aria-valuemin": this.min
 			});
-		this._addClass( "ui-progressbar", "ui-widget ui-widget-content" );
+		this._addClass( "ui-progressbar ui-widget ui-widget-content" );
 
 		this.valueDiv = $( "<div>" ).appendTo( this.element );
-		this._addClass( this.valueDiv, "ui-progressbar-value", "ui-widget-header" );
+		this._addClass( this.valueDiv, "ui-progressbar-value ui-widget-header" );
 		this._refreshValue();
 	},
 
@@ -66,8 +66,6 @@ return $.widget( "ui.progressbar", {
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
-
-		this._removeClass( "ui-progressbar", "ui-widget ui-widget-content" );
 
 		this.valueDiv.remove();
 	},
@@ -114,9 +112,8 @@ return $.widget( "ui.progressbar", {
 			value = Math.max( this.min, value );
 		}
 		if ( key === "disabled" ) {
-			this.element
-				.toggleClass( "ui-state-disabled", !!value )
-				.attr( "aria-disabled", value );
+			this.element.attr( "aria-disabled", value );
+			this[ ( !!value ? "_add" : "_remove" ) + "Class" ]( "ui-state-disabled" );
 		}
 		this._super( key, value );
 	},
