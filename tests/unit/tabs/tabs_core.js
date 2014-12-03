@@ -4,12 +4,21 @@ var state = TestHelpers.tabs.state;
 
 module( "tabs: core" );
 
-test( "markup structure", function() {
-	expect( 3 );
-	var element = $( "#tabs1" ).tabs();
-	ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
-	ok( element.find( "ul" ).hasClass( "ui-tabs-nav" ), "list item is .ui-tabs-nav" );
-	equal( element.find( ".ui-tabs-panel" ).length, 3,
+test( "markup structure", function( assert ) {
+	expect( 7 );
+	var element = $( "#tabs1" ).tabs(),
+		ul = element.find( "ul.ui-tabs-nav" ),
+		tabs = ul.find( "li" ),
+		active = tabs.eq( 0 );
+
+	assert.hasClasses( element, "ui-tabs ui-widget ui-widget-content" )
+	assert.hasClasses( ul, "ui-tabs-nav ui-widget-header" );
+	assert.hasClasses( tabs, "ui-tab ui-state-default" );
+	assert.hasClasses( element.find( "a" ), "ui-tabs-anchor" );
+	assert.hasClasses( active, "ui-tabs-active ui-state-default" );
+	ok( !element.hasClass( "ui-tabs-collapsible" ),
+		"Main element does not have class ui-tabs-collapsible" );
+	equal( element.find( ".ui-tabs-panel.ui-widget-content.ui-corner-bottom" ).length, 3,
 		".ui-tabs-panel elements exist, correct number" );
 });
 
@@ -130,8 +139,9 @@ test( "accessibility", function() {
 });
 
 asyncTest( "accessibility - ajax", function() {
-	expect( 4 );
+	expect( 5 );
 	var element = $( "#tabs2" ).tabs(),
+		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 		panel = $( "#custom-id" );
 
 	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
@@ -141,6 +151,7 @@ asyncTest( "accessibility - ajax", function() {
 	element.one( "tabsload", function() {
 		setTimeout(function() {
 			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
+			ok( !tab.hasClass( "ui-tabs-loading" ), "tab is not .ui-tabs-loading after load" );
 			start();
 		}, 1 );
 	});
