@@ -2,6 +2,21 @@
 
 module( "selectmenu: core" );
 
+test( "markup structure", function( assert ) {
+	expect( 4 );
+
+	var element = $( "#files" ).selectmenu(),
+		button = element.selectmenu( "widget" ),
+		menu = element.selectmenu( "menuWidget" ),
+		menuWrap = menu.parent();
+
+	assert.hasClasses( button,
+		"ui-selectmenu-button ui-selectmenu-button-closed ui-widget" );
+	assert.lacksClasses( button, "ui-selectmenu-button-open" );
+	assert.hasClasses( menuWrap, "ui-selectmenu-menu" );
+	assert.lacksClasses( menuWrap, "ui-selectmenu-menu-open" );
+});
+
 asyncTest( "accessibility", function() {
 	var wrappers, button, menu,
 		element = $( "#speed" ).attr( "title", "A demo title" );
