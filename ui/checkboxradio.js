@@ -290,7 +290,8 @@ $.widget( "ui.checkboxradio", {
 		var checked = this.element[ 0 ].checked,
 			isDisabled = this.element[ 0 ].disabled;
 		this._updateIcon( checked );
-		this.label.toggleClass( "ui-state-active " + this._classes( "ui-checkboxradio-checked" ), checked );
+		this.label.toggleClass( "ui-state-active " +
+			this._classes( "ui-checkboxradio-checked" ), checked );
 		if ( this.options.label !== null ) {
 			this.label.contents().not( this.element.add( this.icon ) ).remove();
 			this.label.append( this.options.label );

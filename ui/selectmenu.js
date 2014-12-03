@@ -151,7 +151,7 @@ return $.widget( "ui.selectmenu", {
 		this.menuInstance = this.menu
 			.menu({
 				classes: {
-					"ui-menu": "ui-corner-bottom"
+					"ui-menu": $.ui.menu.prototype.options.classes[ "ui-menu" ] + " ui-corner-bottom"
 				},
 				role: "listbox",
 				select: function( event, ui ) {
