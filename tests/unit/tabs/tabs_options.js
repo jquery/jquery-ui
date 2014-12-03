@@ -123,12 +123,13 @@ test( "{ collapsible: false }", function() {
 });
 
 test( "{ collapsible: true }", function() {
-	expect( 6 );
+	expect( 9 );
 
 	var element = $( "#tabs1" ).tabs({
 		active: 1,
 		collapsible: true
 	});
+	ok( element.hasClass( "ui-tabs-collapsible" ), "main element is .ui-tabs-collapsible" );
 
 	element.tabs( "option", "active", false );
 	equal( element.tabs( "option", "active" ), false );
@@ -141,6 +142,12 @@ test( "{ collapsible: true }", function() {
 	element.find( ".ui-state-active .ui-tabs-anchor" ).click();
 	equal( element.tabs( "option", "active" ), false );
 	state( element, 0, 0, 0 );
+
+	element.tabs( "option", "collapsible", false );
+	ok( !element.hasClass( "ui-tabs-collapsible" ), "main element is not .ui-tabs-collapsible" );
+
+	element.tabs( "option", "collapsible", true );
+	ok( element.hasClass( "ui-tabs-collapsible" ), "main element is .ui-tabs-collapsible" );
 });
 
 test( "disabled", function() {

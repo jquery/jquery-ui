@@ -34,6 +34,12 @@ return $.widget( "ui.tabs", {
 	delay: 300,
 	options: {
 		active: null,
+		classes: {
+			"ui-tabs": "ui-corner-all",
+			"ui-tabs-nav": "ui-corner-all",
+			"ui-tab": "ui-corner-top",
+			"ui-tabs-panel": "ui-corner-bottom"
+		},
 		collapsible: false,
 		event: "click",
 		heightStyle: "content",
@@ -74,9 +80,8 @@ return $.widget( "ui.tabs", {
 
 		this.running = false;
 
-		this.element
-			.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" )
-			.toggleClass( "ui-tabs-collapsible", options.collapsible );
+		this._addClass( "ui-tabs", "ui-widget ui-widget-content" );
+		this._toggleClass( "ui-tabs-collapsible", null, options.collapsible );
 
 		this._processTabs();
 		options.active = this._initialActive();
@@ -283,7 +288,8 @@ return $.widget( "ui.tabs", {
 		this._super( key, value);
 
 		if ( key === "collapsible" ) {
-			this.element.toggleClass( "ui-tabs-collapsible", value );
+			this._toggleClass( "ui-tabs-collapsible", null, value );
+
 			// Setting collapsible: false while collapsed; open first panel
 			if ( !value && this.options.active === false ) {
 				this._activate( 0 );
@@ -359,12 +365,12 @@ return $.widget( "ui.tabs", {
 			this.tabs.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
 			this.active
-				.addClass( "ui-tabs-active ui-state-active" )
 				.attr({
 					"aria-selected": "true",
 					"aria-expanded": "true",
 					tabIndex: 0
 				});
+			this._addClass( this.active, "ui-tabs-active", "ui-state-active" );
 			this._getPanelForTab( this.active )
 				.show()
 				.attr({
@@ -379,45 +385,45 @@ return $.widget( "ui.tabs", {
 			prevAnchors = this.anchors,
 			prevPanels = this.panels;
 
-		this.tablist = this._getList()
-			.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
-			.attr( "role", "tablist" )
+		this.tablist = this._getList().attr( "role", "tablist" );
+		this._addClass( this.tablist, "ui-tabs-nav",
+			"ui-helper-reset ui-helper-clearfix ui-widget-header" );
 
-			// Prevent users from focusing disabled tabs via click
-			.delegate( "> li", "mousedown" + this.eventNamespace, function( event ) {
-				if ( $( this ).is( ".ui-state-disabled" ) ) {
-					event.preventDefault();
-				}
-			})
+		// Prevent users from focusing disabled tabs via click
+		this.tablist.delegate( "> li", "mousedown" + this.eventNamespace, function( event ) {
+			if ( $( this ).is( ".ui-state-disabled" ) ) {
+				event.preventDefault();
+			}
+		})
 
-			// support: IE <9
-			// Preventing the default action in mousedown doesn't prevent IE
-			// from focusing the element, so if the anchor gets focused, blur.
-			// We don't have to worry about focusing the previously focused
-			// element since clicking on a non-focusable element should focus
-			// the body anyway.
-			.delegate( ".ui-tabs-anchor", "focus" + this.eventNamespace, function() {
-				if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
-					this.blur();
-				}
-			});
+		// support: IE <9
+		// Preventing the default action in mousedown doesn't prevent IE
+		// from focusing the element, so if the anchor gets focused, blur.
+		// We don't have to worry about focusing the previously focused
+		// element since clicking on a non-focusable element should focus
+		// the body anyway.
+		.delegate( ".ui-tabs-anchor", "focus" + this.eventNamespace, function() {
+			if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
+				this.blur();
+			}
+		});
 
 		this.tabs = this.tablist.find( "> li:has(a[href])" )
-			.addClass( "ui-state-default ui-corner-top" )
 			.attr({
 				role: "tab",
 				tabIndex: -1
 			});
+		this._addClass( this.tabs, "ui-tab", "ui-state-default" );
 
 		this.anchors = this.tabs.map(function() {
 				return $( "a", this )[ 0 ];
 			})
-			.addClass( "ui-tabs-anchor" )
 			.attr({
 				role: "presentation",
 				tabIndex: -1
 			});
 
+		this._addClass( this.anchors, "ui-tabs-anchor" );
 		this.panels = $();
 
 		this.anchors.each(function( i, anchor ) {
@@ -458,9 +464,8 @@ return $.widget( "ui.tabs", {
 			panel.attr( "aria-labelledby", anchorId );
 		});
 
-		this.panels
-			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-			.attr( "role", "tabpanel" );
+		this.panels.attr( "role", "tabpanel" );
+		this._addClass( this.panels, "ui-tabs-panel ui-widget-content" );
 
 		// Avoid memory leaks (#10056)
 		if ( prevTabs ) {
@@ -476,13 +481,11 @@ return $.widget( "ui.tabs", {
 	},
 
 	_createPanel: function( id ) {
-		return $( "<div>" )
-			.attr( "id", id )
-			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-			.data( "ui-tabs-destroy", true );
+		return $( "<div>" ).attr( "id", id ).data( "ui-tabs-destroy", true );
 	},
 
 	_setupDisabled: function( disabled ) {
+		var currentItem, li, i;
 		if ( $.isArray( disabled ) ) {
 			if ( !disabled.length ) {
 				disabled = false;
@@ -492,15 +495,14 @@ return $.widget( "ui.tabs", {
 		}
 
 		// disable tabs
-		for ( var i = 0, li; ( li = this.tabs[ i ] ); i++ ) {
+		for ( i = 0; ( li = this.tabs[ i ] ); i++ ) {
+			currentItem = $( li );
 			if ( disabled === true || $.inArray( i, disabled ) !== -1 ) {
-				$( li )
-					.addClass( "ui-state-disabled" )
-					.attr( "aria-disabled", "true" );
+				currentItem.attr( "aria-disabled", "true" );
+				this._addClass( currentItem, null, "ui-state-disabled" );
 			} else {
-				$( li )
-					.removeClass( "ui-state-disabled" )
-					.removeAttr( "aria-disabled" );
+				currentItem.removeAttr( "aria-disabled" );
+				this._removeClass( currentItem, null, "ui-state-disabled" );
 			}
 		}
 
@@ -626,7 +628,7 @@ return $.widget( "ui.tabs", {
 		}
 
 		function show() {
-			eventData.newTab.closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
+			that._addClass( eventData.newTab.closest( "li" ), "ui-tabs-active", "ui-state-active" );
 
 			if ( toShow.length && that.options.show ) {
 				that._show( toShow, that.options.show, complete );
@@ -639,11 +641,13 @@ return $.widget( "ui.tabs", {
 		// start out by hiding, then showing, then completing
 		if ( toHide.length && this.options.hide ) {
 			this._hide( toHide, this.options.hide, function() {
-				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+				that._removeClass( eventData.oldTab.closest( "li" ),
+					"ui-tabs-active", "ui-state-active" );
 				show();
 			});
 		} else {
-			eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+			this._removeClass( eventData.oldTab.closest( "li" ),
+				"ui-tabs-active", "ui-state-active" );
 			toHide.hide();
 			show();
 		}
@@ -713,27 +717,18 @@ return $.widget( "ui.tabs", {
 			this.xhr.abort();
 		}
 
-		this.element.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" );
-
-		this.tablist
-			.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
-			.removeAttr( "role" );
+		this.tablist.removeAttr( "role" ).unbind( this.eventNamespace );
 
 		this.anchors
-			.removeClass( "ui-tabs-anchor" )
 			.removeAttr( "role" )
 			.removeAttr( "tabIndex" )
 			.removeUniqueId();
-
-		this.tablist.unbind( this.eventNamespace );
 
 		this.tabs.add( this.panels ).each(function() {
 			if ( $.data( this, "ui-tabs-destroy" ) ) {
 				$( this ).remove();
 			} else {
 				$( this )
-					.removeClass( "ui-state-default ui-state-active ui-state-disabled " +
-						"ui-corner-top ui-corner-bottom ui-widget-content ui-tabs-active ui-tabs-panel" )
 					.removeAttr( "tabIndex" )
 					.removeAttr( "aria-live" )
 					.removeAttr( "aria-busy" )
@@ -831,7 +826,7 @@ return $.widget( "ui.tabs", {
 		// jQuery <1.8 returns false if the request is canceled in beforeSend,
 		// but as of 1.8, $.ajax() always returns a jqXHR object.
 		if ( this.xhr && this.xhr.statusText !== "canceled" ) {
-			tab.addClass( "ui-tabs-loading" );
+			this._addClass( tab, "ui-tabs-loading" );
 			panel.attr( "aria-busy", "true" );
 
 			this.xhr
@@ -851,7 +846,7 @@ return $.widget( "ui.tabs", {
 							that.panels.stop( false, true );
 						}
 
-						tab.removeClass( "ui-tabs-loading" );
+						that._removeClass( tab, "ui-tabs-loading" );
 						panel.removeAttr( "aria-busy" );
 
 						if ( jqXHR === that.xhr ) {
