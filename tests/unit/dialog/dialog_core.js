@@ -7,11 +7,60 @@
 // TODO add teardown callback to remove dialogs
 module("dialog: core");
 
+test( "markup structure", function( assert ) {
+	expect( 11 );
+
+	var element = $( "<div>" ).dialog({
+			buttons: [ {
+				text: "Ok",
+				click: $.noop
+			} ]
+		}),
+		widget = element.dialog( "widget" ),
+		titlebar = widget.find( ".ui-dialog-titlebar" ),
+		title = titlebar.find( ".ui-dialog-title" ),
+		close = titlebar.find( ".ui-dialog-titlebar-close" ),
+		buttonpane = widget.find( ".ui-dialog-buttonpane" ),
+		buttonset = widget.find( ".ui-dialog-buttonset" ),
+		buttons = buttonset.find( ".ui-button" );
+
+	assert.hasClasses( widget, "ui-dialog ui-dialog-buttons ui-widget ui-widget-content" );
+	assert.hasClasses( titlebar, "ui-dialog-titlebar ui-widget-header" );
+	equal( titlebar.length, 1, "Dialog has exactly one titlebar" );
+	assert.hasClasses( close, "ui-dialog-titlebar-close ui-widget" );
+	equal( close.length, 1, "Titlebar has exactly one close button" );
+	equal( title.length, 1, "Titlebar has exactly one title" );
+	assert.hasClasses( element, "ui-dialog-content ui-widget-content" );
+	assert.hasClasses( buttonpane, "ui-dialog-buttonpane ui-widget-content" );
+	equal( buttonpane.length, 1, "Dialog has exactly one buttonpane" );
+	equal( buttonset.length, 1, "Buttonpane has exactly one buttonset" );
+	equal( buttons.length, 1, "Buttonset contains exactly 1 button when created with 1" );
+
+});
+
+test( "markup structure - no buttons", function( assert ) {
+	expect( 7 );
+
+	var element = $( "<div>" ).dialog(),
+		widget = element.dialog( "widget" ),
+		titlebar = widget.find( ".ui-dialog-titlebar" ),
+		title = titlebar.find( ".ui-dialog-title" ),
+		close = titlebar.find( ".ui-dialog-titlebar-close" );
+
+	assert.hasClasses( widget, "ui-dialog ui-widget ui-widget-content" );
+	assert.hasClasses( titlebar, "ui-dialog-titlebar ui-widget-header" );
+	equal( titlebar.length, 1, "Dialog has exactly one titlebar" );
+	assert.hasClasses( close, "ui-dialog-titlebar-close ui-widget" );
+	equal( close.length, 1, "Titlebar has exactly one close button" );
+	equal( title.length, 1, "Titlebar has exactly one title" );
+	assert.hasClasses( element, "ui-dialog-content ui-widget-content" );
+});
+
 test("title id", function() {
 	expect(1);
 
 	var titleId,
-		element = $("<div></div>").dialog();
+		element = $("<div>").dialog();
 
 	titleId = element.dialog("widget").find(".ui-dialog-title").attr("id");
 	ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id");
@@ -21,7 +70,7 @@ test("title id", function() {
 test( "ARIA", function() {
 	expect( 4 );
 
-	var element = $( "<div></div>" ).dialog(),
+	var element = $( "<div>" ).dialog(),
 		wrapper = element.dialog( "widget" );
 	equal( wrapper.attr( "role" ), "dialog", "dialog role" );
 	equal( wrapper.attr( "aria-labelledby" ), wrapper.find( ".ui-dialog-title" ).attr( "id" ) );
