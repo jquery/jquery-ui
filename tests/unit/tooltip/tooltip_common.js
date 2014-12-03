@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "tooltip", {
 	defaults: {
+		classes: {},
 		content: function() {},
 		disabled: false,
 		hide: true,

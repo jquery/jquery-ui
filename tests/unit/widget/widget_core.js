@@ -227,6 +227,7 @@ test( "merge multiple option arguments", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			deepEqual( this.options, {
+				classes: {},
 				create: null,
 				disabled: false,
 				option1: "value1",
@@ -281,6 +282,7 @@ test( "._getCreateOptions()", function() {
 		},
 		_create: function() {
 			deepEqual( this.options, {
+				classes: {},
 				create: null,
 				disabled: false,
 				option1: "override1",
@@ -485,10 +487,11 @@ test( ".option() - getter", function() {
 
 	options = div.testWidget( "option" );
 	deepEqual( options, {
+		baz: 5,
+		classes: {},
 		create: null,
 		disabled: false,
 		foo: "bar",
-		baz: 5,
 		qux: [ "quux", "quuux" ]
 	}, "full options hash returned" );
 	options.foo = "notbar";

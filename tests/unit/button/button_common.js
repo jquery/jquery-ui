@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "button", {
 	defaults: {
+		classes: {},
 		disabled: null,
 		icons: {
 			primary: null,

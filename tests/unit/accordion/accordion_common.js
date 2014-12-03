@@ -2,6 +2,7 @@ TestHelpers.commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
 		animate: {},
+		classes: {},
 		collapsible: false,
 		disabled: false,
 		event: "click",

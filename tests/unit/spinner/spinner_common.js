@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "spinner", {
 	defaults: {
+		classes: {},
 		culture: null,
 		disabled: false,
 		icons: {

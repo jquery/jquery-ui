@@ -3,6 +3,7 @@ TestHelpers.commonWidgetTests( "sortable", {
 		appendTo: "parent",
 		axis: false,
 		cancel: "input,textarea,button,select,option",
+		classes: {},
 		connectWith: false,
 		containment: false,
 		cursor: "auto",
