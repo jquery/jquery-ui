@@ -58,7 +58,9 @@
 						source: $.proxy( this, "_source" )
 					})
 					.tooltip({
-						tooltipClass: "ui-state-highlight"
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
 					});
 
 				this._on( this.input, {
