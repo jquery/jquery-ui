@@ -1,10 +1,10 @@
 TestHelpers.commonWidgetTests( "tooltip", {
 	defaults: {
-		content: function() {},
 		classes: {
 			"ui-tooltip": "ui-corner-all",
 			"ui-tooltip-content": ""
 		},
+		content: function() {},
 		disabled: false,
 		hide: true,
 		items: "[title]:not([disabled])",
@@ -14,6 +14,7 @@ TestHelpers.commonWidgetTests( "tooltip", {
 			collision: "flipfit flip"
 		},
 		show: true,
+		tooltipClass: null,
 		track: false,
 
 		// callbacks
