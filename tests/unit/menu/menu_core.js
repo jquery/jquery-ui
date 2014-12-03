@@ -2,12 +2,12 @@
 
 module( "menu: core" );
 
-test( "markup structure", function() {
+test( "markup structure", function( assert ) {
 	expect( 6 );
 	var element = $( "#menu1" ).menu();
-	ok( element.hasClass( "ui-menu" ), "main element is .ui-menu" );
+	assert.hasClasses( element, "ui-menu" );
 	element.children().each(function( index ) {
-		ok( $( this ).hasClass( "ui-menu-item" ), "child " + index + " is .ui-menu-item" );
+		assert.hasClasses( $( this ), "ui-menu-item" );
 	});
 });
 
