@@ -29,6 +29,16 @@ return $.widget( "ui.accordion", {
 	options: {
 		active: 0,
 		animate: {},
+		classes: {
+			"ui-accordion": "",
+			"ui-accordion-header": "ui-corner-top",
+			"ui-accordion-header-active": "",
+			"ui-accordion-header-collapsed": "ui-corner-all",
+			"ui-accordion-content": "ui-corner-bottom",
+			"ui-accordion-content-active": "",
+			"ui-accordion-header-icon": "",
+			"ui-accordion-icons": ""
+		},
 		collapsible: false,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
@@ -62,9 +72,10 @@ return $.widget( "ui.accordion", {
 	_create: function() {
 		var options = this.options;
 		this.prevShow = this.prevHide = $();
-		this.element.addClass( "ui-accordion ui-widget ui-helper-reset" )
-			// ARIA
-			.attr( "role", "tablist" );
+		this._addClass( "ui-accordion", "ui-widget ui-helper-reset" );
+
+		// ARIA
+		this.element.attr( "role", "tablist" );
 
 		// don't allow collapsible: false and active: false / null
 		if ( !options.collapsible && (options.active === false || options.active == null) ) {
@@ -87,21 +98,21 @@ return $.widget( "ui.accordion", {
 	},
 
 	_createIcons: function() {
-		var icons = this.options.icons;
+		var icon,
+			icons = this.options.icons;
 		if ( icons ) {
-			$( "<span>" )
-				.addClass( "ui-accordion-header-icon ui-icon " + icons.header )
-				.prependTo( this.headers );
+			icon = $( "<span>" );
+			this._addClass( icon, "ui-accordion-header-icon", "ui-icon " + icons.header );
+			icon.prependTo( this.headers );
 			this.active.children( ".ui-accordion-header-icon" )
 				.removeClass( icons.header )
 				.addClass( icons.activeHeader );
-			this.headers.addClass( "ui-accordion-icons" );
+			this._addClass( this.headers, "ui-accordion-icons" );
 		}
 	},
 
 	_destroyIcons: function() {
-		this.headers
-			.removeClass( "ui-accordion-icons" )
+		this._removeClass( this.headers, "ui-accordion-icons" )
 			.children( ".ui-accordion-header-icon" )
 				.remove();
 	},
@@ -110,14 +121,13 @@ return $.widget( "ui.accordion", {
 		var contents;
 
 		// clean up main element
-		this.element
-			.removeClass( "ui-accordion ui-widget ui-helper-reset" )
-			.removeAttr( "role" );
+		this._removeClass( "ui-accordion", "ui-widget ui-helper-reset" );
+		this.element.removeAttr( "role" );
 
 		// clean up headers
+		this._removeClass( this.headers, "ui-accordion-header ui-accordion-header-collapsed ui-accordion-header-active",
+			"ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" );
 		this.headers
-			.removeClass( "ui-accordion-header ui-accordion-header-active ui-state-default " +
-				"ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
@@ -129,13 +139,13 @@ return $.widget( "ui.accordion", {
 
 		// clean up content panels
 		contents = this.headers.next()
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom " +
-				"ui-accordion-content ui-accordion-content-active ui-state-disabled" )
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-hidden" )
 			.removeAttr( "aria-labelledby" )
 			.removeUniqueId();
+		this._removeClass( contents, "ui-accordion-content ui-accordion-content-active",
+			"ui-helper-reset ui-widget-content ui-state-disabled" );
 
 		if ( this.options.heightStyle !== "content" ) {
 			contents.css( "height", "" );
@@ -262,13 +272,13 @@ return $.widget( "ui.accordion", {
 		var prevHeaders = this.headers,
 			prevPanels = this.panels;
 
-		this.headers = this.element.find( this.options.header )
-			.addClass( "ui-accordion-header ui-state-default ui-corner-all" );
+		this.headers = this.element.find( this.options.header );
+		this._addClass( this.headers, "ui-accordion-header ui-accordion-header-collapsed",
+			"ui-state-default" );
 
-		this.panels = this.headers.next()
-			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" )
-			.filter( ":not(.ui-accordion-content-active)" )
-			.hide();
+		this.panels = this.headers.next().filter( ":not(.ui-accordion-content-active)" ).hide();
+		this._addClass( this.panels, "ui-accordion-content",
+			"ui-helper-reset ui-widget-content" );
 
 		// Avoid memory leaks (#10056)
 		if ( prevPanels ) {
@@ -283,12 +293,11 @@ return $.widget( "ui.accordion", {
 			heightStyle = options.heightStyle,
 			parent = this.element.parent();
 
-		this.active = this._findActive( options.active )
-			.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-			.removeClass( "ui-corner-all" );
-		this.active.next()
-			.addClass( "ui-accordion-content-active" )
-			.show();
+		this.active = this._findActive( options.active );
+		this._addClass( this.active, "ui-accordion-header-active", "ui-state-active" );
+		this._removeClass( this.active, "ui-accordion-header-collapsed" );
+		this._addClass( this.active.next(), "ui-accordion-content-active" );
+		this.active.next().show();
 
 		this.headers
 			.attr( "role", "tab" )
@@ -440,7 +449,7 @@ return $.widget( "ui.accordion", {
 
 		// switch classes
 		// corner classes on the previously active header stay after the animation
-		active.removeClass( "ui-accordion-header-active ui-state-active" );
+		this._removeClass( active, "ui-accordion-header-active", "ui-state-active" );
 		if ( options.icons ) {
 			active.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
@@ -448,18 +457,15 @@ return $.widget( "ui.accordion", {
 		}
 
 		if ( !clickedIsActive ) {
-			clicked
-				.removeClass( "ui-corner-all" )
-				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" );
+			this._removeClass( clicked, "ui-accordion-header-collapsed" );
+			this._addClass( clicked, "ui-accordion-header-active", "ui-state-active" );
 			if ( options.icons ) {
 				clicked.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
 			}
 
-			clicked
-				.next()
-				.addClass( "ui-accordion-content-active" );
+			this._addClass( clicked.next(), "ui-accordion-content-active" );
 		}
 	},
 
@@ -565,13 +571,12 @@ return $.widget( "ui.accordion", {
 	},
 
 	_toggleComplete: function( data ) {
-		var toHide = data.oldPanel;
+		var toHide = data.oldPanel,
+			prev = toHide.prev();
 
-		toHide
-			.removeClass( "ui-accordion-content-active" )
-			.prev()
-				.removeClass( "ui-corner-top" )
-				.addClass( "ui-corner-all" );
+		this._removeClass( toHide, "ui-accordion-content-active" );
+		this._removeClass( prev, "ui-accordion-header-active" );
+		this._addClass( prev, "ui-accordion-header-collapsed" );
 
 		// Work around for rendering bug in IE (#5421)
 		if ( toHide.length ) {
