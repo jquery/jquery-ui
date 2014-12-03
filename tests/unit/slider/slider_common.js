@@ -2,6 +2,7 @@ TestHelpers.commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
 		cancel: "input,textarea,button,select,option",
+		classes: {},
 		delay: 0,
 		disabled: false,
 		distance: 0,

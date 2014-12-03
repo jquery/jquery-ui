@@ -1,6 +1,7 @@
 TestHelpers.commonWidgetTests( "selectmenu", {
 	defaults: {
 		appendTo: null,
+		classes: {},
 		disabled: null,
 		icons: {
 			button: "ui-icon-triangle-1-s"

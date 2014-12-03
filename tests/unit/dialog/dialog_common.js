@@ -3,6 +3,7 @@ TestHelpers.commonWidgetTests( "dialog", {
 		appendTo: "body",
 		autoOpen: true,
 		buttons: [],
+		classes: {},
 		closeOnEscape: true,
 		closeText: "Close",
 		disabled: false,

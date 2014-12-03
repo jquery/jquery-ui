@@ -2,6 +2,7 @@ TestHelpers.commonWidgetTests( "autocomplete", {
 	defaults: {
 		appendTo: null,
 		autoFocus: false,
+		classes: {},
 		delay: 300,
 		disabled: false,
 		messages: {
