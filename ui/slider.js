@@ -31,6 +31,15 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 	options: {
 		animate: false,
+		classes: {
+			"ui-slider": "ui-corner-all",
+			"ui-slider-handle": "ui-corner-all",
+			"ui-slider-range": "ui-corner-all",
+			"ui-slider-range-min": "",
+			"ui-slider-range-max": "",
+			"ui-slider-horizontal": "",
+			"ui-slider-vertical": ""
+		},
 		distance: 0,
 		max: 100,
 		min: 0,
@@ -60,12 +69,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseInit();
 		this._calculateNewMax();
 
-		this.element
-			.addClass( "ui-slider" +
-				" ui-slider-" + this.orientation +
-				" ui-widget" +
-				" ui-widget-content" +
-				" ui-corner-all");
+		this._addClass( "ui-slider" + " ui-slider-" + this.orientation,
+				"ui-widget ui-widget-content ui-corner-all");
 
 		this._refresh();
 		this._setOption( "disabled", this.options.disabled );
@@ -83,8 +88,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	_createHandles: function() {
 		var i, handleCount,
 			options = this.options,
-			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
-			handle = "<span class='ui-slider-handle ui-state-default ui-corner-all' tabindex='0'></span>",
+			existingHandles = this.element.find( ".ui-slider-handle" ),
+			handle = "<span tabindex='0'></span>",
 			handles = [];
 
 		handleCount = ( options.values && options.values.length ) || 1;
@@ -100,6 +105,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this.handles = existingHandles.add( $( handles.join( "" ) ).appendTo( this.element ) );
 
+		this._addClass( this.handles, "ui-slider-handle", "ui-state-default" );
+
 		this.handle = this.handles.eq( 0 );
 
 		this.handles.each(function( i ) {
@@ -108,8 +115,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_createRange: function() {
-		var options = this.options,
-			classes = "";
+		var options = this.options;
 
 		if ( options.range ) {
 			if ( options.range === true ) {
@@ -126,21 +132,18 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this.range = $( "<div></div>" )
 					.appendTo( this.element );
 
-				classes = "ui-slider-range" +
-				// note: this isn't the most fittingly semantic framework class for this element,
-				// but worked best visually with a variety of themes
-				" ui-widget-header ui-corner-all";
+				this._addClass( this.range, "ui-slider-range", "ui-widget-header" );
 			} else {
-				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
+				this._removeClass( this.range, "ui-slider-range-min ui-slider-range-max" );
 					// Handle range switching from true to min/max
-					.css({
+				this.range.css({
 						"left": "",
 						"bottom": ""
 					});
 			}
-
-			this.range.addClass( classes +
-				( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
+			if ( options.range === "min" || options.range === "max" ) {
+				this._addClass( this.range, "ui-slider-range-" + options.range );
+			}
 		} else {
 			if ( this.range ) {
 				this.range.remove();
@@ -162,13 +165,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			this.range.remove();
 		}
 
-		this.element
-			.removeClass( "ui-slider" +
-				" ui-slider-horizontal" +
-				" ui-slider-vertical" +
-				" ui-widget" +
-				" ui-widget-content" +
-				" ui-corner-all" );
+		this._removeClass( "ui-slider ui-slider-horizontal ui-slider-vertical",
+				" ui-widget ui-widget-content" );
 
 		this._mouseDestroy();
 	},
@@ -451,9 +449,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		switch ( key ) {
 			case "orientation":
 				this._detectOrientation();
-				this.element
-					.removeClass( "ui-slider-horizontal ui-slider-vertical" )
-					.addClass( "ui-slider-" + this.orientation );
+				this._removeClass( "ui-slider-horizontal ui-slider-vertical" );
+				this._addClass( "ui-slider-" + this.orientation );
 				this._refreshValue();
 
 				// Reset positioning from previous orientation
