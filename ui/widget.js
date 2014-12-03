@@ -292,7 +292,13 @@ $.Widget.prototype = {
 	_init: $.noop,
 
 	destroy: function() {
+		var that = this;
 		this._destroy();
+
+		$.each( this.classObject, function( key, value ) {
+			that._removeClass( value, key );
+		});
+
 		// we can probably remove the unbind calls in 2.0
 		// all event bindings should go through this._on()
 		this.element
@@ -304,9 +310,7 @@ $.Widget.prototype = {
 		this.widget()
 			.unbind( this.eventNamespace )
 			.removeAttr( "aria-disabled" )
-			.removeClass(
-				this.widgetFullName + "-disabled " +
-				"ui-state-disabled" );
+			.removeClass( this.widgetFullName + "-disabled " + "ui-state-disabled" );
 
 		// clean up events and states
 		this.bindings.unbind( this.eventNamespace );
@@ -401,20 +405,19 @@ $.Widget.prototype = {
 	},
 
 	_constructClasses: function( element, keys, add, object ) {
-		var i,
+		var i, current,
 			full = [],
 			keyArray = keys.split( " " );
 
 		object = object || this.options.classes;
 
 		for ( i = 0; i < keyArray.length; i++ ) {
-			this.classObject[ keyArray[ i ] ] = this.classObject[ keyArray[ i ] ] || $();
-			this.classObject[ keyArray[ i ] ][ add ? "add" : "filter" ]( element );
-
+			current = this.classObject[ keyArray[ i ] ];
+			this.classObject[ keyArray[ i ] ] = this.classObject[ keyArray[ i ] ] ? this.classObject[ keyArray[ i ] ].add( element ) : $().add( element );
 			full.push( keyArray[ i ] );
 
 			if ( this.options.classes[ keyArray[ i ] ] ) {
-				full.push( this.options.classes[ keyArray[ i ] ] );
+				full.push( object[ keyArray[ i ] ] );
 			}
 		}
 		return full.join( " " );
