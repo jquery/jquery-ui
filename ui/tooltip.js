@@ -104,8 +104,8 @@ $.widget( "ui.tooltip", {
 				"aria-live": "assertive",
 				"aria-relevant": "additions"
 			})
-			.addClass( "ui-helper-hidden-accessible" )
 			.appendTo( this.document[ 0 ].body );
+		this._addClass( this.liveRegion, "ui-helper-hidden-accessible" );
 	},
 
 	_setOption: function( key, value ) {
@@ -410,7 +410,7 @@ $.widget( "ui.tooltip", {
 			id = tooltip.uniqueId().attr( "id" );
 
 		this._addClass( content, "ui-tooltip-content" );
-		this._addClass( tooltip, "ui-tooltip", "ui-widget ui-widget-content" );
+		this._addClass( tooltip, "ui-tooltip ui-widget ui-widget-content" );
 
 		tooltip.appendTo( this.document[0].body );
 
