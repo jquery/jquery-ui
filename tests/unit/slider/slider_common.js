@@ -2,7 +2,11 @@ TestHelpers.commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
 		cancel: "input,textarea,button,select,option",
-		classes: {},
+		classes: {
+			"ui-slider": "ui-corner-all",
+			"ui-slider-handle": "ui-corner-all",
+			"ui-slider-range": "ui-corner-all ui-widget-header"
+		},
 		delay: 0,
 		disabled: false,
 		distance: 0,
