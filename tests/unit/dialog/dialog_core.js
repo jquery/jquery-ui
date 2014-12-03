@@ -7,6 +7,29 @@
 // TODO add teardown callback to remove dialogs
 module("dialog: core");
 
+test( "markup structure", function( assert ) {
+	expect( 7 );
+	var element = $( "<div></div>" ).dialog({
+			buttons: [ {
+				text: "Ok",
+				click: $.noop
+			} ]
+		}),
+		widget = element.dialog( "widget" ),
+		titlebar = widget.find( ".ui-dialog-titlebar" ),
+		close = titlebar.find( ".ui-button" ),
+		buttonpane = widget.find( ".ui-dialog-buttonpane" );
+
+	assert.hasClasses( widget, "ui-dialog ui-widget ui-widget-content ui-dialog-buttons" );
+	assert.hasClasses( titlebar, "ui-dialog-titlebar" );
+	assert.hasClasses( element, "ui-dialog-content ui-widget-content" );
+	assert.hasClasses( buttonpane, "ui-dialog-buttonpane ui-widget-content");
+	assert.hasClasses( close, "ui-dialog-titlebar-close" );
+	ok( titlebar.find( ".ui-dialog-title" ).length, "Title hasClass ui-dialog-title" );
+	ok( buttonpane.find( ".ui-dialog-buttonset" ).length,
+		"Buttonset has class ui-dialog-buttonset" );
+});
+
 test("title id", function() {
 	expect(1);
 
