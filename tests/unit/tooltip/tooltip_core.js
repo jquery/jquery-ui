@@ -2,7 +2,7 @@
 
 module( "tooltip: core" );
 
-test( "markup structure", function() {
+test( "markup structure", function( assert ) {
 	expect( 7 );
 	var element = $( "#tooltipped1" ).tooltip(),
 		tooltip = $( ".ui-tooltip" );
@@ -14,7 +14,7 @@ test( "markup structure", function() {
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
 	equal( tooltip.length, 1, "tooltip exists" );
 	equal( element.attr( "aria-describedby"), tooltip.attr( "id" ), "aria-describedby" );
-	ok( tooltip.hasClass( "ui-tooltip" ), "tooltip is .ui-tooltip" );
+	assert.hasClasses( tooltip, "ui-tooltip" );
 	equal( tooltip.length, 1, ".ui-tooltip exists" );
 	equal( tooltip.find( ".ui-tooltip-content" ).length, 1,
 		".ui-tooltip-content exists" );
