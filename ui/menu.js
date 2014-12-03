@@ -36,7 +36,8 @@ return $.widget( "ui.menu", {
 			"ui-menu-icon": "",
 			"ui-menu-item": "",
 			"ui-menu-divider": "",
-			"ui-menu-item-wrapper": ""
+			"ui-menu-item-wrapper": "",
+			"ui-menu-submenu-caret": ""
 		},
 		icons: {
 			submenu: "ui-icon-caret-1-e"
@@ -67,13 +68,12 @@ return $.widget( "ui.menu", {
 				role: this.options.role,
 				tabIndex: 0
 			});
-		this._addClass( "ui-menu", "ui-widget ui-widget-content" );
-		this[ "_" + ( !!this.element.find( ".ui-icon" ).length ? "add" : "remove" ) +
+		this._addClass( "ui-menu ui-widget ui-widget-content" );
+		this[ ( !!this.element.find( ".ui-icon" ).length ? "_add" : "_remove" ) +
 			"Class" ]( "ui-menu-icons" );
 		if ( this.options.disabled ) {
-			this.element
-				.addClass( "ui-state-disabled" )
-				.attr( "aria-disabled", "true" );
+			this._addClass( "ui-state-disabled" );
+			this.element.attr( "aria-disabled", "true" );
 		}
 
 		this._on({
@@ -118,7 +118,7 @@ return $.widget( "ui.menu", {
 				var target = $( event.currentTarget );
 				// Remove ui-state-active class from siblings of the newly focused menu item
 				// to avoid a jump caused by adjacent elements both having a class with a border
-				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
+				this._removeClass( target.siblings().children( ".ui-state-active" ), "ui-state-active" );
 
 				this.focus( event, target );
 			},
@@ -159,8 +159,17 @@ return $.widget( "ui.menu", {
 	},
 
 	_destroy: function() {
+		var items = this.element.find( ".ui-menu-item" )
+				.removeAttr( "role" )
+				.removeAttr( "aria-disabled" ),
+			submenus = items.children( ".ui-menu-item-wrapper" )
+				.removeUniqueId()
+				.removeAttr( "tabIndex" )
+				.removeAttr( "role" )
+				.removeAttr( "aria-haspopup" );
+
 		// Destroy (sub)menus
-		var menu = this.element
+		this.element
 				.removeAttr( "aria-activedescendant" )
 				.find( ".ui-menu" ).addBack()
 				.removeAttr( "role" )
@@ -171,15 +180,6 @@ return $.widget( "ui.menu", {
 				.removeAttr( "aria-disabled" )
 				.removeUniqueId()
 				.show(),
-			items = this.element.find( ".ui-menu-item" )
-				.removeClass( "ui-menu-item" )
-				.removeAttr( "role" )
-				.removeAttr( "aria-disabled" ),
-			submenus = items.children( ".ui-menu-item-wrapper" )
-				.removeUniqueId()
-				.removeAttr( "tabIndex" )
-				.removeAttr( "role" )
-				.removeAttr( "aria-haspopup" );
 
 			submenus.children().each(function() {
 					var elem = $( this );
@@ -187,14 +187,6 @@ return $.widget( "ui.menu", {
 						elem.remove();
 					}
 				});
-
-		this._removeClass( menu, "ui-menu ui-menu-icons", "ui-widget ui-widget-content ui-front" );
-		this._removeClass( items, "ui-menu-item" );
-		this._removeClass( submenus, "ui-menu-item-wrapper", "ui-state-hover ui-state" );
-
-		// Destroy menu dividers
-		this._removeClass( this.element.find( ".ui-menu-divider" ), "ui-menu-divider",
-			"ui-widget-content" );
 	},
 
 	_keydown: function( event ) {
@@ -293,7 +285,8 @@ return $.widget( "ui.menu", {
 			icon = this.options.icons.submenu,
 			submenus = this.element.find( this.options.menus );
 
-		this.element.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length );
+		this[ ( !!this.element.find( ".ui-icon" ).length ? "_add" : "_remove" ) +
+			"Class" ]( "ui-menu-icons" );
 
 		// Initialize nested menus
 		submenus.filter( ":not(.ui-menu)" )
@@ -306,9 +299,9 @@ return $.widget( "ui.menu", {
 			.each(function() {
 				var menu = $( this ),
 					item = menu.prev(),
-					submenuCaret = $( "<span>" )
-						.addClass( "ui-menu-icon ui-icon " + icon )
-						.data( "ui-menu-submenu-caret", true );
+					submenuCaret = $( "<span>" ).data( "ui-menu-submenu-caret", true );
+
+				that._addClass( submenuCaret, "ui-menu-icon ui-icon " + icon );
 
 				item
 					.attr( "aria-haspopup", "true" )
@@ -316,8 +309,8 @@ return $.widget( "ui.menu", {
 				menu.attr( "aria-labelledby", item.attr( "id" ) );
 			});
 
-		this._addClass( submenus.filter( ":not(.ui-menu)" ), "ui-menu",
-			"ui-widget ui-widget-content ui-front" );
+		this._addClass( submenus.filter( ":not(.ui-menu)" ),
+			"ui-menu ui-widget ui-widget-content ui-front" );
 
 		menus = submenus.add( this.element );
 		items = menus.find( this.options.items );
@@ -326,7 +319,7 @@ return $.widget( "ui.menu", {
 		items.not( ".ui-menu-item" ).each(function() {
 			var item = $( this );
 			if ( that._isDivider( item ) ) {
-				that._addClass( item, "ui-menu-divider", "ui-widget-content" );
+				that._addClass( item, "ui-menu-divider ui-widget-content" );
 			}
 		});
 
@@ -360,28 +353,27 @@ return $.widget( "ui.menu", {
 
 	_setOption: function( key, value ) {
 		if ( key === "icons" ) {
-			this.element.find( ".ui-menu-icon" )
-				.removeClass( this.options.icons.submenu )
-				.addClass( value.submenu );
+			var icons = this.element.find( ".ui-menu-icon" );
+			this._removeClass( icons, this.options.icons.submenu );
+			this._addClass( icons, value.submenu );
 		}
 		if ( key === "disabled" ) {
-			this.element
-				.toggleClass( "ui-state-disabled", !!value )
-				.attr( "aria-disabled", value );
+			this.element.attr( "aria-disabled", value );
+			this[ ( !!value ? "_add" : "_remove" ) + "Class" ]( "ui-state-disabled", !!value );
 		}
 		this._super( key, value );
 	},
 
 	focus: function( event, item ) {
-		var nested, focused;
+		var nested, focused, highlight;
 		this.blur( event, event && event.type === "focus" );
 
 		this._scrollIntoView( item );
 
 		this.active = item.first();
-		focused = this.active.children( ".ui-menu-item-wrapper" )
-			.addClass( "ui-state-focus" )
-			.removeClass( "ui-state-active" );
+		focused = this.active.children( ".ui-menu-item-wrapper" );
+		this._addClass( focused, "ui-state-focus" );
+		this._removeClass( focused, "ui-state-active" );
 
 		// Only update aria-activedescendant if there's a role
 		// otherwise we assume focus is managed elsewhere
@@ -390,11 +382,12 @@ return $.widget( "ui.menu", {
 		}
 
 		// Highlight active parent menu item, if any
-		this.active
+		highlight = this.active
 			.parent()
 				.closest( ".ui-menu-item" )
-					.children( ".ui-menu-item-wrapper" )
-						.addClass( "ui-state-active" );
+					.children( ".ui-menu-item-wrapper" );
+
+		this._addClass( highlight, "ui-state-active" );
 
 		if ( event && event.type === "keydown" ) {
 			this._close();
@@ -440,7 +433,7 @@ return $.widget( "ui.menu", {
 			return;
 		}
 
-		this.active.children( ".ui-menu-item-wrapper" ).removeClass( "ui-state-focus" );
+		this._removeClass( this.active.children( ".ui-menu-item-wrapper" ), "ui-state-focus" );
 		this.active = null;
 
 		this._trigger( "blur", event, { item: this.active } );
@@ -504,14 +497,15 @@ return $.widget( "ui.menu", {
 			startMenu = this.active ? this.active.parent() : this.element;
 		}
 
-		startMenu
+		var active = startMenu
 			.find( ".ui-menu" )
 				.hide()
 				.attr( "aria-hidden", "true" )
 				.attr( "aria-expanded", "false" )
 			.end()
-			.find( ".ui-state-active" ).not( ".ui-state-focus" )
-				.removeClass( "ui-state-active" );
+			.find( ".ui-state-active" ).not( ".ui-state-focus" );
+
+		this._removeClass( active, "ui-state-active" );
 	},
 
 	_closeOnDocumentClick: function( event ) {
