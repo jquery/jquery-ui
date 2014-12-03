@@ -8,14 +8,14 @@ module( "button: options" );
 test( "disabled, explicit value", function() {
 	expect( 9 );
 
-	var element = $( "#radio01" ).button({ disabled: false });
+	var element = $( "#button" ).button({ disabled: false });
 	deepEqual( element.button( "option", "disabled" ), false, "disabled option set to false" );
 	deepEqual( element.prop( "disabled" ), false, "element is disabled" );
 
 	ok( !element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
 	ok( !element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
 
-	element = $( "#radio02" ).button({ disabled: true });
+	element = $( "#button" ).button({ disabled: true });
 
 	ok( element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
 	ok( !element.button( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
@@ -26,16 +26,11 @@ test( "disabled, explicit value", function() {
 });
 
 test( "disabled, null", function() {
-	expect( 4 );
-	$( "#radio01" ).button({ disabled: null });
-	strictEqual( $("#radio01").button("option", "disabled"), false,
+	expect( 2 );
+	$( "#button" ).button({ disabled: null });
+	strictEqual( $("#button").button("option", "disabled"), false,
 		"disabled option set to false");
-	strictEqual( $("#radio01").prop("disabled"), false, "element is disabled");
-
-	$( "#radio02" ).prop( "disabled", true ).button({ disabled: null });
-	deepEqual( true, $( "#radio02" ).button( "option", "disabled" ),
-		"disabled option set to true" );
-	deepEqual( true, $( "#radio02" ).prop( "disabled" ), "element is not disabled" );
+	strictEqual( $("#button").prop("disabled"), false, "element is disabled");
 });
 
 test( "showLabel false without icon", function() {

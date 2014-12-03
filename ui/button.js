@@ -183,7 +183,7 @@ $.widget( "ui.button", {
 
 		// Make sure we can't end up with a button that has no text nor icon
 		if ( key === "showLabel" ) {
-			if ( ( !value && !this.options.icon ) || value ) {
+			if ( ( !value && this.options.icon ) || value ) {
 				this.element.toggleClass( this._classes( "ui-button-icon-only" ), !value )
 					.toggleClass( this.options.iconPosition, !!value );
 				this._updateTooltip();
@@ -243,6 +243,9 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.showLabel && !this.options.text ) {
 				this.options.showLabel = this.options.text;
 			}
+			if ( !this.options.showLabel && this.options.text ) {
+				this.options.text = this.options.showLabel;
+			}
 			if ( !this.options.icon && ( this.options.icons.primary ||
 					this.options.icons.secondary ) ) {
 				if ( this.options.icons.primary ) {
@@ -252,6 +255,9 @@ if ( $.uiBackCompat !== false ) {
 					this.options.iconPosition = "end";
 				}
 			}
+			if ( this.options.icon ) {
+				this.options.icons.primary = this.options.icon;
+			}
 			this._super();
 		},
 
@@ -259,13 +265,19 @@ if ( $.uiBackCompat !== false ) {
 			if ( key === "text" ) {
 				this._setOption( "showLabel", value );
 			}
+			if ( key === "showLabel" ) {
+				this.options.text = value;
+			}
+			if ( key === "icon" ) {
+				this.options.icons.primary = value;
+			}
 			if ( key === "icons" ) {
 				this._setOption( "icon", value );
 				if ( value.primary ) {
-					this._setOption( "icon", value );
+					this._setOption( "icon", value.primary );
 					this._setOption( "iconPosition", "beginning" );
 				} else if ( value.secondary ) {
-					this._setOption( "icon", value );
+					this._setOption( "icon", value.secondary );
 					this._setOption( "iconPosition", "end" );
 				}
 			}
@@ -274,15 +286,15 @@ if ( $.uiBackCompat !== false ) {
 	});
 	$.fn.button = (function( orig ) {
 		return function() {
-			if ( this.tagName === "input" && ( this.attr( "type") === "checkbox" ||
-					this.attr( "type" ) === "radio" ) ) {
+			if ( this.length > 0 && this[ 0 ].tagName === "INPUT" &&
+					( this.attr( "type") === "checkbox" || this.attr( "type" ) === "radio" ) ) {
 				if ( $.ui.checkboxradio ) {
 					if ( arguments.length === 0 ) {
 						return this.checkboxradio({
 							"icon": false
 						});
 					} else {
-						return this.checkboxradio.apply( arguments );
+						return this.checkboxradio.apply( this, arguments );
 					}
 				} else {
 					$.error( "Checkboxradio widget missing" );
@@ -292,13 +304,22 @@ if ( $.uiBackCompat !== false ) {
 			}
 		};
 	})( $.fn.button );
-	$.fn.buttonset = function( method, key, value ) {
-		if ( method === "option" && key === "items" ) {
-			value = {
-				"button": value
-			};
+	$.fn.buttonset = function() {
+		if ( $.ui.controlgroup ) {
+			if ( arguments[ 0 ] === "option" && arguments[ 1 ] === "items" && arguments[ 2 ] ) {
+				return this.controlgroup.apply( this,
+					[ arguments[ 0 ], "items.button", arguments[ 2 ] ] );
+			} else if ( typeof arguments[ 0 ] === "object" && arguments[ 0 ].items ) {
+				arguments[ 0 ].items = {
+					button: arguments[ 0 ].items
+				};
+			} else if ( arguments[ 0 ] === "option" && arguments[ 1 ] === "items" ) {
+				return this.controlgroup.apply( this, [ arguments[ 0 ], "items.button" ] );
+			}
+			return this.controlgroup.apply( this, arguments );
+		} else {
+			$.error( "Controlgroup widget missing" );
 		}
-		this.controlgroup.call( method, key, value );
 	};
 }
 
