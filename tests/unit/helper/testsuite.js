@@ -263,8 +263,8 @@ exports.testJshint = function( module ) {
 		return;
 	}
 
-	require([ "jshint" ], function() {
-		asyncTest( "JSHint", function() {
+	asyncTest( "JSHint", function() {
+		require([ "jshint" ], function() {
 			expect( 1 );
 
 			$.when(
