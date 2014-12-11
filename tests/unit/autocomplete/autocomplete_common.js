@@ -2,6 +2,11 @@ TestHelpers.commonWidgetTests( "autocomplete", {
 	defaults: {
 		appendTo: null,
 		autoFocus: false,
+		classes: {
+			"ui-autocomplete": "",
+			"ui-autocomplete-input": "",
+			"ui-autocomplete-loading": ""
+		},
 		delay: 300,
 		disabled: false,
 		messages: {

@@ -32,6 +32,13 @@
 return $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
+		classes: {
+			"ui-progressbar": "ui-corner-all",
+			"ui-progressbar-value": "ui-corner-left",
+			"ui-progressbar-overlay": "",
+			"ui-progressbar-indeterminate": "",
+			"ui-progressbar-complete": "ui-corner-right"
+		},
 		max: 100,
 		value: 0,
 
@@ -46,7 +53,7 @@ return $.widget( "ui.progressbar", {
 		this.oldValue = this.options.value = this._constrainedValue();
 
 		this.element
-			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
+			.addClass( this._classes( "ui-progressbar" ) + " ui-widget ui-widget-content" )
 			.attr({
 				// Only set static values, aria-valuenow and aria-valuemax are
 				// set inside _refreshValue()
@@ -54,7 +61,8 @@ return $.widget( "ui.progressbar", {
 				"aria-valuemin": this.min
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
+		this.valueDiv = $( "<div>" )
+			.addClass( this._classes( "ui-progressbar-value" ) + " ui-widget-header" )
 			.appendTo( this.element );
 
 		this._refreshValue();
@@ -62,7 +70,7 @@ return $.widget( "ui.progressbar", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
+			.removeClass( this._classes( "ui-progressbar" ) + " ui-widget ui-widget-content" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
@@ -94,6 +102,29 @@ return $.widget( "ui.progressbar", {
 
 		return this.indeterminate ? false :
 			Math.min( this.options.max, Math.max( this.min, newValue ) );
+	},
+
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-progressbar-value":
+				return this.valueDiv;
+			case "ui-progressbar-complete":
+				if ( this.valueDiv.hasClass( classKey ) ) {
+					return this.valueDiv;
+				}
+				break;
+			case "ui-progressbar-overlay":
+				if ( this.overlay ) {
+					return this.overlay;
+				}
+				break;
+			case "ui-progressbar-indeterminate":
+				if ( this.value ) {
+					return $();
+				}
+				break;
+		}
+		return this._superApply( arguments );
 	},
 
 	_setOptions: function( options ) {
@@ -130,15 +161,17 @@ return $.widget( "ui.progressbar", {
 
 		this.valueDiv
 			.toggle( this.indeterminate || value > this.min )
-			.toggleClass( "ui-corner-right", value === this.options.max )
+			.toggleClass( this._classes( "ui-progressbar-complete" ), value === this.options.max )
 			.width( percentage.toFixed(0) + "%" );
 
-		this.element.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
+		this.element.toggleClass( this._classes( "ui-progressbar-indeterminate" ), this.indeterminate );
 
 		if ( this.indeterminate ) {
 			this.element.removeAttr( "aria-valuenow" );
 			if ( !this.overlayDiv ) {
-				this.overlayDiv = $( "<div class='ui-progressbar-overlay'></div>" ).appendTo( this.valueDiv );
+				this.overlayDiv = $( "<div>" )
+					.addClass( this._classes( "ui-progressbar-overlay" ) )
+					.appendTo( this.valueDiv );
 			}
 		} else {
 			this.element.attr({
