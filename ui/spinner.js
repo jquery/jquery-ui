@@ -46,6 +46,13 @@ return $.widget( "ui.spinner", {
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
+		classes: {
+			"ui-spinner-input": "",
+			"ui-spinner": "ui-corner-all",
+			"ui-spinner-button": "",
+			"ui-spinner-up": "ui-corner-tr",
+			"ui-spinner-down": "ui-corner-br"
+		},
 		culture: null,
 		icons: {
 			down: "ui-icon-triangle-1-s",
@@ -208,20 +215,27 @@ return $.widget( "ui.spinner", {
 
 	_draw: function() {
 		var uiSpinner = this.uiSpinner = this.element
-			.addClass( "ui-spinner-input" )
 			.attr( "autocomplete", "off" )
 			.wrap( this._uiSpinnerHtml() )
 			.parent()
 				// add buttons
 				.append( this._buttonHtml() );
 
+		this._addClass( this.uiSpinner, "ui-spinner", "ui-widget ui-widget-content" );
+		this._addClass( "ui-spinner-input" );
+
 		this.element.attr( "role", "spinbutton" );
 
 		// button bindings
-		this.buttons = uiSpinner.find( ".ui-spinner-button" )
+		this.buttons = uiSpinner.find( "a" )
 			.attr( "tabIndex", -1 )
 			.button()
+
+			// Right now button does not support classes once it does adjust this with classes
 			.removeClass( "ui-corner-all" );
+
+		this._addClass( this.buttons.eq( 0 ), "ui-spinner-button ui-spinner-up" );
+		this._addClass( this.buttons.eq( 1 ), "ui-spinner-button ui-spinner-down" );
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height
@@ -264,10 +278,10 @@ return $.widget( "ui.spinner", {
 
 	_buttonHtml: function() {
 		return "" +
-			"<a class='ui-spinner-button ui-spinner-up ui-corner-tr'>" +
+			"<a>" +
 				"<span class='ui-icon " + this.options.icons.up + "'>&#9650;</span>" +
 			"</a>" +
-			"<a class='ui-spinner-button ui-spinner-down ui-corner-br'>" +
+			"<a>" +
 				"<span class='ui-icon " + this.options.icons.down + "'>&#9660;</span>" +
 			"</a>";
 	},
@@ -466,13 +480,14 @@ return $.widget( "ui.spinner", {
 
 	_destroy: function() {
 		this.element
-			.removeClass( "ui-spinner-input" )
 			.prop( "disabled", false )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
+
+		this._removeClass( "ui-spinner-input" );
 		this.uiSpinner.replaceWith( this.element );
 	},
 

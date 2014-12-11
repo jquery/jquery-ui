@@ -5,11 +5,25 @@ var state = TestHelpers.tabs.state;
 module( "tabs: core" );
 
 test( "markup structure", function() {
-	expect( 3 );
-	var element = $( "#tabs1" ).tabs();
-	ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
-	ok( element.find( "ul" ).hasClass( "ui-tabs-nav" ), "list item is .ui-tabs-nav" );
-	equal( element.find( ".ui-tabs-panel" ).length, 3,
+	expect( 7 );
+	var element = $( "#tabs1" ).tabs(),
+		ul = element.find( "ul.ui-tabs-nav" ),
+		tabs = ul.find( "li" ),
+		active = tabs.eq( 0 );
+
+	ok( element.is( ".ui-tabs.ui-widget.ui-widget-content.ui-corner-all" ),
+		"main element has proper classes" );
+	ok( !element.hasClass( "ui-tabs-collapsible" ), "main element is not .ui-tabs-collapsible" );
+
+	ok( ul.is( ".ui-tabs-nav.ui-widget-header.ui-corner-all" ), "list has proper classes" );
+
+	ok( tabs.is( ".ui-tab.ui-corner-top.ui-state-default" ), "tabs have proper classes" );
+
+	ok( element.find( "a" ).hasClass( "ui-tabs-anchor" ), "link item is .ui-tabs-anchor" );
+
+	ok( active.is( ".ui-tabs-active.ui-state-active" ), "active item has proper classes" );
+
+	equal( element.find( ".ui-tabs-panel.ui-widget-content.ui-corner-bottom" ).length, 3,
 		".ui-tabs-panel elements exist, correct number" );
 });
 
@@ -130,17 +144,20 @@ test( "accessibility", function() {
 });
 
 asyncTest( "accessibility - ajax", function() {
-	expect( 4 );
+	expect( 6 );
 	var element = $( "#tabs2" ).tabs(),
+		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 		panel = $( "#custom-id" );
 
 	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
 	equal( panel.attr( "aria-busy" ), null, "does not have aria-busy on init" );
 	element.tabs( "option", "active", 3 );
 	equal( panel.attr( "aria-busy" ), "true", "panel has aria-busy during load" );
+	ok( tab.hasClass( "ui-tabs-loading" ), "tab is .ui-tabs-loading during load" );
 	element.one( "tabsload", function() {
 		setTimeout(function() {
 			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
+			ok( !tab.hasClass( "ui-tabs-loading" ), "tab is not .ui-tabs-loading after load" );
 			start();
 		}, 1 );
 	});

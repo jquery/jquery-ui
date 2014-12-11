@@ -263,6 +263,7 @@ $.Widget.prototype = {
 		this.bindings = $();
 		this.hoverable = $();
 		this.focusable = $();
+		this.classObject = {};
 
 		if ( element !== this ) {
 			$.data( element, this.widgetFullName, this );
@@ -372,6 +373,15 @@ $.Widget.prototype = {
 		return this;
 	},
 	_setOption: function( key, value ) {
+		if ( key === "classes" ) {
+			for ( var classKey in value ) {
+				if ( value[ classKey ] !== this.options.classes[ classKey ] ) {
+					this._removeClass( this.classObject[ classKey ], classKey )
+						._addClass( this.classObject[ classKey ], classKey, "", value );
+				}
+			}
+		}
+
 		this.options[ key ] = value;
 
 		if ( key === "disabled" ) {
@@ -393,6 +403,47 @@ $.Widget.prototype = {
 	},
 	disable: function() {
 		return this._setOptions({ disabled: true });
+	},
+
+	_constructClasses: function( element, keys, add, object ) {
+		var i,
+			full = [],
+			keyArray = keys.split( " " );
+
+		object = object || this.options.classes;
+
+		for ( i = 0; i < keyArray.length; i++ ) {
+			this.classObject[ keyArray[ i ] ] = this.classObject[ keyArray[ i ] ] || $();
+			this.classObject[ keyArray[ i ] ][ add ? "add" : "filter" ]( element );
+
+			full.push( keyArray[ i ] );
+
+			if ( this.options.classes[ keyArray[ i ] ] ) {
+				full.push( this.options.classes[ keyArray[ i ] ] );
+			}
+		}
+		return full.join( " " );
+	},
+
+	_removeClass: function( element, keys, extra ) {
+		if ( typeof element === "string" ) {
+			extra = keys;
+			keys = element;
+			element = this.element;
+		}
+		extra = ( " " + extra ) || "";
+		return element.removeClass( this._constructClasses( element, keys ) + extra );
+	},
+
+	_addClass: function( element, keys, extra, update ) {
+		if ( typeof element === "string" ) {
+			update = extra;
+			extra = keys;
+			keys = element;
+			element = this.element;
+		}
+		extra = extra ? ( " " + extra ) : "";
+		return element.addClass( this._constructClasses( element, keys, true, update ) + extra );
 	},
 
 	_on: function( suppressDisabledCheck, element, handlers ) {

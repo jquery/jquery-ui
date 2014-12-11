@@ -37,6 +37,11 @@ $.widget( "ui.autocomplete", {
 	options: {
 		appendTo: null,
 		autoFocus: false,
+		classes: {
+			"ui-autocomplete": "",
+			"ui-autocomplete-input": "",
+			"ui-autocomplete-loading": ""
+		},
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -84,9 +89,8 @@ $.widget( "ui.autocomplete", {
 		this.valueMethod = this.element[ isTextarea || isInput ? "val" : "text" ];
 		this.isNewMenu = true;
 
-		this.element
-			.addClass( "ui-autocomplete-input" )
-			.attr( "autocomplete", "off" );
+		this._addClass( "ui-autocomplete-input" );
+		this.element.attr( "autocomplete", "off" );
 
 		this._on( this.element, {
 			keydown: function( event ) {
@@ -206,9 +210,7 @@ $.widget( "ui.autocomplete", {
 		});
 
 		this._initSource();
-		this.menu = $( "<ul>" )
-			.addClass( "ui-autocomplete ui-front" )
-			.appendTo( this._appendTo() )
+		this.menu = $( "<ul>" ).appendTo( this._appendTo() )
 			.menu({
 				// disable ARIA support, the live region takes care of that
 				role: null
@@ -216,6 +218,7 @@ $.widget( "ui.autocomplete", {
 			.hide()
 			.menu( "instance" );
 
+		this._addClass( this.menu.element, "ui-autocomplete", "ui-front" );
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
 				// prevent moving focus out of the text field
@@ -433,7 +436,7 @@ $.widget( "ui.autocomplete", {
 
 	_search: function( value ) {
 		this.pending++;
-		this.element.addClass( "ui-autocomplete-loading" );
+		this._addClass( "ui-autocomplete-loading" );
 		this.cancelSearch = false;
 
 		this.source( { term: value }, this._response() );
@@ -449,7 +452,7 @@ $.widget( "ui.autocomplete", {
 
 			this.pending--;
 			if ( !this.pending ) {
-				this.element.removeClass( "ui-autocomplete-loading" );
+				this._removeClass( "ui-autocomplete-loading" );
 			}
 		}, this );
 	},

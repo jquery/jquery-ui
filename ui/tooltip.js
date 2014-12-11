@@ -30,9 +30,13 @@
 	}
 }(function( $ ) {
 
-return $.widget( "ui.tooltip", {
+$.widget( "ui.tooltip", {
 	version: "@VERSION",
 	options: {
+		classes: {
+			"ui-tooltip": "ui-corner-all",
+			"ui-tooltip-content": ""
+		},
 		content: function() {
 			// support: IE<9, Opera in jQuery <1.7
 			// .text() can't accept undefined, so coerce to a string
@@ -49,7 +53,6 @@ return $.widget( "ui.tooltip", {
 			collision: "flipfit flip"
 		},
 		show: true,
-		tooltipClass: null,
 		track: false,
 
 		// callbacks
@@ -407,15 +410,12 @@ return $.widget( "ui.tooltip", {
 	},
 
 	_tooltip: function( element ) {
-		var tooltip = $( "<div>" )
-				.attr( "role", "tooltip" )
-				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
-					( this.options.tooltipClass || "" ) ),
+		var tooltip = $( "<div>" ).attr( "role", "tooltip" ),
+			content = $( "<div>" ).appendTo( tooltip ),
 			id = tooltip.uniqueId().attr( "id" );
 
-		$( "<div>" )
-			.addClass( "ui-tooltip-content" )
-			.appendTo( tooltip );
+		this._addClass( content, "ui-tooltip-content" );
+		this._addClass( tooltip, "ui-tooltip", "ui-widget ui-widget-content" );
 
 		tooltip.appendTo( this.document[0].body );
 
@@ -462,5 +462,23 @@ return $.widget( "ui.tooltip", {
 		this.liveRegion.remove();
 	}
 });
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+
+	// TooltipClass option
+	$.widget( "ui.tooltip", $.ui.tooltip, {
+		options: {
+			tooltipClass: null
+		},
+		_tooltip: function() {
+			var tooltip = this._superApply( arguments );
+			tooltip.tooltip.addClass( this.options.tooltipClass || "" );
+			return tooltip;
+		}
+	});
+}
+
+return $.ui.tooltip;
 
 }));

@@ -35,6 +35,14 @@ return $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {
+		classes: {
+			"ui-menu": "",
+			"ui-menu-icons": "",
+			"ui-menu-icon": "",
+			"ui-menu-item": "",
+			"ui-menu-divider": "",
+			"ui-menu-item-wrapper": ""
+		},
 		icons: {
 			submenu: "ui-icon-caret-1-e"
 		},
@@ -60,13 +68,13 @@ return $.widget( "ui.menu", {
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
-			.addClass( "ui-menu ui-widget ui-widget-content" )
-			.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length )
 			.attr({
 				role: this.options.role,
 				tabIndex: 0
 			});
-
+		this._addClass( "ui-menu", "ui-widget ui-widget-content" );
+		this[ "_" + ( !!this.element.find( ".ui-icon" ).length ? "add" : "remove" ) +
+			"Class" ]( "ui-menu-icons" );
 		if ( this.options.disabled ) {
 			this.element
 				.addClass( "ui-state-disabled" )
@@ -157,10 +165,9 @@ return $.widget( "ui.menu", {
 
 	_destroy: function() {
 		// Destroy (sub)menus
-		this.element
-			.removeAttr( "aria-activedescendant" )
-			.find( ".ui-menu" ).addBack()
-				.removeClass( "ui-menu ui-widget ui-widget-content ui-menu-icons ui-front" )
+		var menu = this.element
+				.removeAttr( "aria-activedescendant" )
+				.find( ".ui-menu" ).addBack()
 				.removeAttr( "role" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "aria-labelledby" )
@@ -168,28 +175,31 @@ return $.widget( "ui.menu", {
 				.removeAttr( "aria-hidden" )
 				.removeAttr( "aria-disabled" )
 				.removeUniqueId()
-				.show();
-
-		// Destroy menu items
-		this.element.find( ".ui-menu-item" )
-			.removeClass( "ui-menu-item" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-disabled" )
-			.children( ".ui-menu-item-wrapper" )
+				.show(),
+			items = this.element.find( ".ui-menu-item" )
+				.removeClass( "ui-menu-item" )
+				.removeAttr( "role" )
+				.removeAttr( "aria-disabled" ),
+			submenus = items.children( ".ui-menu-item-wrapper" )
 				.removeUniqueId()
-				.removeClass( "ui-menu-item-wrapper ui-state-hover" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "role" )
-				.removeAttr( "aria-haspopup" )
-				.children().each(function() {
+				.removeAttr( "aria-haspopup" );
+
+			submenus.children().each(function() {
 					var elem = $( this );
 					if ( elem.data( "ui-menu-submenu-caret" ) ) {
 						elem.remove();
 					}
 				});
 
+		this._removeClass( menu, "ui-menu ui-menu-icons", "ui-widget ui-widget-content ui-front" );
+		this._removeClass( items, "ui-menu-item" );
+		this._removeClass( submenus, "ui-menu-item-wrapper", "ui-state-hover ui-state" );
+
 		// Destroy menu dividers
-		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
+		this._removeClass( this.element.find( ".ui-menu-divider" ), "ui-menu-divider",
+			"ui-widget-content" );
 	},
 
 	_keydown: function( event ) {
@@ -283,7 +293,7 @@ return $.widget( "ui.menu", {
 	},
 
 	refresh: function() {
-		var menus, items,
+		var menus, items, newSubmenus, newItems,
 			that = this,
 			icon = this.options.icons.submenu,
 			submenus = this.element.find( this.options.menus );
@@ -292,7 +302,6 @@ return $.widget( "ui.menu", {
 
 		// Initialize nested menus
 		submenus.filter( ":not(.ui-menu)" )
-			.addClass( "ui-menu ui-widget ui-widget-content ui-front" )
 			.hide()
 			.attr({
 				role: this.options.role,
@@ -312,6 +321,9 @@ return $.widget( "ui.menu", {
 				menu.attr( "aria-labelledby", item.attr( "id" ) );
 			});
 
+		this._addClass( submenus.filter( ":not(.ui-menu)" ), "ui-menu",
+			"ui-widget ui-widget-content ui-front" );
+
 		menus = submenus.add( this.element );
 		items = menus.find( this.options.items );
 
@@ -319,21 +331,21 @@ return $.widget( "ui.menu", {
 		items.not( ".ui-menu-item" ).each(function() {
 			var item = $( this );
 			if ( that._isDivider( item ) ) {
-				item.addClass( "ui-widget-content ui-menu-divider" );
+				that._addClass( item, "ui-menu-divider", "ui-widget-content" );
 			}
 		});
 
 		// Don't refresh list items that are already adapted
-		items.not( ".ui-menu-item, .ui-menu-divider" )
-			.addClass( "ui-menu-item" )
-			.children()
+		newItems = items.not( ".ui-menu-item, .ui-menu-divider" );
+		newSubmenus = newItems.children()
 				.not( ".ui-menu" )
-					.addClass( "ui-menu-item-wrapper" )
 					.uniqueId()
 					.attr({
 						tabIndex: -1,
 						role: this._itemRole()
 					});
+		this._addClass( newItems, "ui-menu-item" );
+		this._addClass( newSubmenus, "ui-menu-item-wrapper" );
 
 		// Add aria-disabled attribute to any disabled menu item
 		items.filter( ".ui-state-disabled" ).attr( "aria-disabled", "true" );

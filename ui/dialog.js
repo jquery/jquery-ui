@@ -34,15 +34,27 @@
 	}
 }(function( $ ) {
 
-return $.widget( "ui.dialog", {
+$.widget( "ui.dialog", {
 	version: "@VERSION",
 	options: {
 		appendTo: "body",
 		autoOpen: true,
 		buttons: [],
+		classes: {
+			"ui-dialog": "ui-corner-all",
+			"ui-dialog-content": "",
+			"ui-dialog-titlebar": "ui-corner-all",
+			"ui-dialog-titlebar-close": "",
+			"ui-dialog-title": "",
+			"ui-dialog-buttons": "",
+			"ui-dialog-buttonpane": "",
+			"ui-dialog-buttonset": "",
+			"ui-dialog-dragging": "",
+			"ui-dialog-resizing": "",
+			"ui-widget-overlay": ""
+		},
 		closeOnEscape: true,
 		closeText: "Close",
-		dialogClass: "",
 		draggable: true,
 		hide: null,
 		height: "auto",
@@ -119,8 +131,9 @@ return $.widget( "ui.dialog", {
 		this.element
 			.show()
 			.removeAttr( "title" )
-			.addClass( "ui-dialog-content ui-widget-content" )
 			.appendTo( this.uiDialog );
+
+		this._addClass( "ui-dialog-content", "ui-widget-content" );
 
 		this._createTitlebar();
 		this._createButtonPane();
@@ -159,10 +172,11 @@ return $.widget( "ui.dialog", {
 
 		this.element
 			.removeUniqueId()
-			.removeClass( "ui-dialog-content ui-widget-content" )
 			.css( this.originalCss )
 			// Without detaching first, the following becomes really slow
 			.detach();
+
+		this._removeClass( "ui-dialog-content", "ui-widget-content" );
 
 		this.uiDialog.stop( true, true ).remove();
 
@@ -332,8 +346,6 @@ return $.widget( "ui.dialog", {
 
 	_createWrapper: function() {
 		this.uiDialog = $("<div>")
-			.addClass( "ui-dialog ui-widget ui-widget-content ui-corner-all ui-front " +
-				this.options.dialogClass )
 			.hide()
 			.attr({
 				// Setting tabIndex makes the div focusable
@@ -341,6 +353,8 @@ return $.widget( "ui.dialog", {
 				role: "dialog"
 			})
 			.appendTo( this._appendTo() );
+
+		this._addClass( this.uiDialog, "ui-dialog", "ui-widget ui-widget-content ui-front" );
 
 		this._on( this.uiDialog, {
 			keydown: function( event ) {
@@ -389,8 +403,6 @@ return $.widget( "ui.dialog", {
 	},
 
 	_createTitlebar: function() {
-		var uiDialogTitle;
-
 		this.uiDialogTitlebar = $( "<div>" )
 			.addClass( "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" )
 			.prependTo( this.uiDialog );
@@ -417,8 +429,9 @@ return $.widget( "ui.dialog", {
 				},
 				text: false
 			})
-			.addClass( "ui-dialog-titlebar-close" )
 			.appendTo( this.uiDialogTitlebar );
+
+		this._addClass( this.uiDialogTitlebarClose, "ui-dialog-titlebar-close" );
 		this._on( this.uiDialogTitlebarClose, {
 			click: function( event ) {
 				event.preventDefault();
@@ -426,14 +439,15 @@ return $.widget( "ui.dialog", {
 			}
 		});
 
-		uiDialogTitle = $( "<span>" )
+		this.uiDialogTitle = $( "<span>" )
 			.uniqueId()
-			.addClass( "ui-dialog-title" )
 			.prependTo( this.uiDialogTitlebar );
-		this._title( uiDialogTitle );
+
+		this._addClass( this.uiDialogTitle, "ui-dialog-title" );
+		this._title( this.uiDialogTitle );
 
 		this.uiDialog.attr({
-			"aria-labelledby": uiDialogTitle.attr( "id" )
+			"aria-labelledby": this.uiDialogTitle.attr( "id" )
 		});
 	},
 
@@ -445,12 +459,14 @@ return $.widget( "ui.dialog", {
 	},
 
 	_createButtonPane: function() {
-		this.uiDialogButtonPane = $( "<div>" )
-			.addClass( "ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" );
+		this.uiDialogButtonPane = $( "<div>" );
+		this._addClass( this.uiDialogButtonPane, "ui-dialog-buttonpane",
+			"ui-widget-content ui-helper-clearfix" );
 
 		this.uiButtonSet = $( "<div>" )
-			.addClass( "ui-dialog-buttonset" )
 			.appendTo( this.uiDialogButtonPane );
+
+		this._addClass( this.uiButtonSet, "ui-dialog-buttonset" );
 
 		this._createButtons();
 	},
@@ -464,7 +480,7 @@ return $.widget( "ui.dialog", {
 		this.uiButtonSet.empty();
 
 		if ( $.isEmptyObject( buttons ) || ($.isArray( buttons ) && !buttons.length) ) {
-			this.uiDialog.removeClass( "ui-dialog-buttons" );
+			this._removeClass( this.uiDialog, "ui-dialog-buttons" );
 			return;
 		}
 
@@ -490,7 +506,7 @@ return $.widget( "ui.dialog", {
 				.button( buttonOptions )
 				.appendTo( that.uiButtonSet );
 		});
-		this.uiDialog.addClass( "ui-dialog-buttons" );
+		this._addClass( this.uiDialog, "ui-dialog-buttons" );
 		this.uiDialogButtonPane.appendTo( this.uiDialog );
 	},
 
@@ -510,7 +526,7 @@ return $.widget( "ui.dialog", {
 			handle: ".ui-dialog-titlebar",
 			containment: "document",
 			start: function( event, ui ) {
-				$( this ).addClass( "ui-dialog-dragging" );
+				that._addClass( $( this ), "ui-dialog-dragging" );
 				that._blockFrames();
 				that._trigger( "dragStart", event, filteredUi( ui ) );
 			},
@@ -527,7 +543,7 @@ return $.widget( "ui.dialog", {
 						"top" + (top >= 0 ? "+" : "") + top,
 					of: that.window
 				};
-				$( this ).removeClass( "ui-dialog-dragging" );
+				that._removeClass( $( this ), "ui-dialog-dragging" );
 				that._unblockFrames();
 				that._trigger( "dragStop", event, filteredUi( ui ) );
 			}
@@ -564,7 +580,7 @@ return $.widget( "ui.dialog", {
 			minHeight: this._minHeight(),
 			handles: resizeHandles,
 			start: function( event, ui ) {
-				$( this ).addClass( "ui-dialog-resizing" );
+				that._addClass( $( this ), "ui-dialog-resizing" );
 				that._blockFrames();
 				that._trigger( "resizeStart", event, filteredUi( ui ) );
 			},
@@ -584,7 +600,7 @@ return $.widget( "ui.dialog", {
 						"top" + (top >= 0 ? "+" : "") + top,
 					of: that.window
 				};
-				$( this ).removeClass( "ui-dialog-resizing" );
+				that._removeClass( $( this ), "ui-dialog-resizing" );
 				that._unblockFrames();
 				that._trigger( "resizeStop", event, filteredUi( ui ) );
 			}
@@ -671,12 +687,6 @@ return $.widget( "ui.dialog", {
 	_setOption: function( key, value ) {
 		var isDraggable, isResizable,
 			uiDialog = this.uiDialog;
-
-		if ( key === "dialogClass" ) {
-			uiDialog
-				.removeClass( this.options.dialogClass )
-				.addClass( value );
-		}
 
 		if ( key === "disabled" ) {
 			return;
@@ -846,8 +856,9 @@ return $.widget( "ui.dialog", {
 		}
 
 		this.overlay = $( "<div>" )
-			.addClass( "ui-widget-overlay ui-front" )
 			.appendTo( this._appendTo() );
+
+		this._addClass( this.overlay, "ui-widget-overlay", "ui-front" );
 		this._on( this.overlay, {
 			mousedown: "_keepFocus"
 		});
@@ -876,5 +887,30 @@ return $.widget( "ui.dialog", {
 		}
 	}
 });
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+
+	// DialogClass option
+	$.widget( "ui.dialog", $.ui.dialog, {
+		options: {
+			dialogClass: ""
+		},
+		_createWrapper: function() {
+			this._super();
+			this.uiDialog.addClass( this.options.dialogClass );
+		},
+		_setOption: function( key, value ) {
+			if ( key === "dialogClass" ) {
+				this.uiDialog
+					.removeClass( this.options.dialogClass )
+					.addClass( value );
+			}
+			this._superApply( arguments );
+		}
+	});
+}
+
+return $.ui.dialog;
 
 }));

@@ -7,9 +7,16 @@ var equalHeight = TestHelpers.accordion.equalHeight,
 module( "accordion: methods", setupTeardown() );
 
 test( "destroy", function() {
-	expect( 1 );
+	expect( 2 );
 	domEqual( "#list1", function() {
 		$( "#list1" ).accordion().accordion( "destroy" );
+	});
+
+	// Animate
+	domEqual( "#list1", function() {
+		$( "#list1" ).accordion()
+			.accordion( "option", "active", 1 )
+			.accordion( "destroy" );
 	});
 });
 
