@@ -64,9 +64,10 @@
 				this._on( this.input, {
 					autocompleteselect: function( event, ui ) {
 						ui.item.option.selected = true;
-						this._trigger( "select", event, {
-							item: ui.item.option
-						});
+						var par={item: ui.item.option};
+						$(this.bindings)
+						   .trigger("select", event, par)
+						   .trigger("click" , event, par);
 					},
 
 					autocompletechange: "_removeIfInvalid"
@@ -162,7 +163,9 @@
 	})( jQuery );
 
 	$(function() {
-		$( "#combobox" ).combobox();
+		$( "#combobox" ).combobox().click(function(event,ui){
+			alert($(this).val());
+		});
 		$( "#toggle" ).click(function() {
 			$( "#combobox" ).toggle();
 		});
