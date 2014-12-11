@@ -828,7 +828,7 @@ $.extend(Datepicker.prototype, {
 		inst.dpDiv[(this._get(inst, "isRTL") ? "add" : "remove") +
 			"Class"]("ui-datepicker-rtl");
 
-		if (inst === $.datepicker._curInst && $.datepicker._datepickerShowing && $.datepicker._shouldFocusInput( inst ) ) {
+		if (inst.input === $.datepicker._curInst && $.datepicker._datepickerShowing && $.datepicker._shouldFocusInput( inst ) ) {
 			inst.input.focus();
 		}
 
