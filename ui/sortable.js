@@ -848,7 +848,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 				continue;
 			}
 
-			if(this._intersectsWith(this.containers[i].containerCache)) {
+			if(this.containers[i].element.is(":visible") && this._intersectsWith(this.containers[i].containerCache)) {
 
 				// if we've already found a container and it's more "inner" than this, then continue
 				if(innermostContainer && $.contains(this.containers[i].element[0], innermostContainer.element[0])) {
