@@ -806,7 +806,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					sortable.isOver = 1;
 
 					// Store draggable's parent in case we need to reappend to it later.
-					draggable._parent = ui.helper.parent();
+					draggable._parent = draggable.options.appendTo || ui.helper.parent();
 
 					sortable.currentItem = ui.helper
 						.appendTo( sortable.element )
