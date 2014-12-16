@@ -780,7 +780,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 			sortable.helperProportions = draggable.helperProportions;
 			sortable.offset.click = draggable.offset.click;
 
-			if ( !sortable.options.disabled && sortable.element.is(':visible') && sortable._intersectsWith( sortable.containerCache ) ) {
+			if ( !sortable.options.disabled && sortable.element.is(":visible") && sortable._intersectsWith( sortable.containerCache ) ) {
 				innermostIntersecting = true;
 
 				$.each( draggable.sortables, function() {
