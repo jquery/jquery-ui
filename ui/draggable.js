@@ -894,13 +894,13 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 
 					// Inform draggable that the helper is no longer in a valid drop zone
 					draggable.dropped = false;
-
-					// Need to refreshPositions of all sortables just in case removing
-					// from one sortable changes the location of other sortables (#9675)
-					$.each( draggable.sortables, function() {
-						this.refreshPositions();
-					});
 				}
+
+				// Need to refreshPositions of all sortables just in case removing
+				// from one sortable changes the location of other sortables (#9675)
+				$.each( draggable.sortables, function() {
+					this.refreshPositions();
+				});
 			}
 		});
 	}
