@@ -43,6 +43,14 @@ return $.widget( "ui.calendar", {
 		select: null
 	},
 
+	refreshRelatedOptions: {
+		eachDay: true,
+		max: true,
+		min: true,
+		showWeek: true,
+		value: true
+	},
+
 	_create: function() {
 		this.id = this.element.uniqueId().attr( "id" );
 		this.labels = Globalize.translate( "datepicker" );
@@ -470,13 +478,13 @@ return $.widget( "ui.calendar", {
 	},
 
 	_select: function( event, time ) {
-		this._setOption( "value", new Date( time ) );
+		this.valueAsDate( new Date( time ) );
 		this._trigger( "select", event );
 	},
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this._setOption( "value", Globalize.parseDate( value, this.options.dateFormat ) );
+			this.valueAsDate( Globalize.parseDate( value, this.options.dateFormat ) );
 		} else {
 			return Globalize.format( this.option( "value" ), this.options.dateFormat );
 		}
@@ -484,7 +492,7 @@ return $.widget( "ui.calendar", {
 
 	valueAsDate: function( value ) {
 		if ( arguments.length ) {
-			this._setOption( "value", value );
+			this.option( "value", value );
 		} else {
 			return this.options.value;
 		}
@@ -519,12 +527,28 @@ return $.widget( "ui.calendar", {
 			.empty();
 	},
 
+	_setOptions: function( options ) {
+		var that = this,
+			refresh = false;
+
+		$.each( options, function( key, value ) {
+			that._setOption( key, value );
+
+			if ( key in that.refreshRelatedOptions ) {
+				refresh = true;
+			}
+		});
+
+		if ( refresh ) {
+			this.refresh();
+		}
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			if ( this._isValid( value ) ) {
 				this.date.setTime( value.getTime() ).select();
 				this._super( key, value );
-				this.refresh();
 			}
 			return;
 		}
@@ -532,7 +556,6 @@ return $.widget( "ui.calendar", {
 		if ( key === "max" || key === "min" ) {
 			if ( $.type( value ) === "date" || value === null ) {
 				this._super( key, value );
-				this.refresh();
 			}
 			return;
 		}
@@ -551,15 +574,10 @@ return $.widget( "ui.calendar", {
 
 		if ( key === "eachDay" ) {
 			this.date.eachDay = value;
-			this.refresh();
 		}
 
 		if ( key === "dateFormat" ) {
 			this.date.setFormat( value );
-		}
-
-		if ( key === "showWeek" ) {
-			this.refresh();
 		}
 	}
 });
