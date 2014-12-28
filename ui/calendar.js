@@ -99,9 +99,7 @@ return $.widget( "ui.calendar", {
 		// TODO: Handle for pickers with multiple months
 		switch ( event.keyCode ) {
 		case $.ui.keyCode.ENTER:
-			this.element.find(
-				"#" + this.grid.attr( "aria-activedescendant" ) + " > a:first"
-			).mousedown();
+			this.activeDescendant.mousedown();
 			return;
 		case $.ui.keyCode.PAGE_UP:
 			this.date.adjust( event.altKey ? "Y" : "M", -1 );
@@ -147,7 +145,10 @@ return $.widget( "ui.calendar", {
 			.attr( "aria-activedescendant", id )
 			.find( ".ui-state-focus" )
 			.removeClass( "ui-state-focus" );
-		this.grid.find( "#" + id ).find ( "a" ).addClass( "ui-state-focus" );
+
+		this.activeDescendant = this.grid.find(
+			this._sanitizeSelector( "#" + id ) + " > a"
+		).addClass( "ui-state-focus" );
 	},
 
 	_createCalendar: function() {
@@ -468,6 +469,10 @@ return $.widget( "ui.calendar", {
 
 	_getTranslation: function( key ) {
 		return $( "<a>" ).text( this.labels[ key ] ).html();
+	},
+
+	_sanitizeSelector: function( hash ) {
+		return hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g, "\\$&" ) : "";
 	},
 
 	_setHiddenPicker: function() {
