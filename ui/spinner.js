@@ -277,7 +277,7 @@ return $.widget( "ui.spinner", {
 	},
 
 	_uiSpinnerHtml: function() {
-		return "<span class='ui-spinner ui-widget ui-widget-content ui-corner-all'></span>";
+		return "<span class='ui-spinner ui-widget ui-state-default ui-corner-all'></span>";
 	},
 
 	_buttonHtml: function() {
