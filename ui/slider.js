@@ -50,7 +50,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		slide: null,
 		start: null,
 		stop: null,
-		
+
 		calculateDistance: null,
 		calculateValue: null
 	},
@@ -67,11 +67,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
-		
+
 		if ( !$.isFunction(this.options.calculateDistance) ) {
 			this.options.calculateDistance = this._calculateDistance;
 		}
-		
+
 		if ( !$.isFunction(this.options.callculateValue) ) {
 			this.options.calculateValue = this._calculateValue;
 		}
@@ -703,27 +703,27 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 		}
 	},
-	
+
 	/**
 	 * Calculates the distance (as percentage) of the handle based on provided value and boundaries
-	 * 
+	 *
 	 * @param {Number} min   Minimum value boundary
 	 * @param {Number} max   Maximum value boundary
 	 * @param {Number} value Slider's value
-	 * 
+	 *
 	 * @returns {Number}
 	 */
 	_calculateDistance: function( min, max, value ) {
 		return max !== min ? ( value - min ) / ( max - min ) * 100 : 0;
 	},
-	
+
 	/**
 	 * Calculates the value based on provided boundaries and distance
-	 * 
+	 *
 	 * @param {Number} min      Minimum value boundary
 	 * @param {Number} max      Maximum value boundary
 	 * @param {Number} distance Distance as percentage
-	 * 
+	 *
 	 * @returns {Number}
 	 */
 	_calculateValue: function( min, max, distance ) {
