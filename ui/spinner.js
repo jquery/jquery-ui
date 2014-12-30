@@ -64,11 +64,31 @@ return $.widget( "ui.spinner", {
 		stop: null
 	},
 
+	_getCreateOptions: function() {
+		var options = {},
+			element = this.element;
+
+		$.each( [ "min", "max", "step" ], function( i, option ) {
+			var attr_value = element.attr( option );
+			if ( attr_value !== undefined && attr_value.length ) {
+				options[ option ] = attr_value;
+			}
+		});
+
+		options.disabled = this.element.prop( "disabled" );
+
+		return options;
+	},
+
 	_create: function() {
 		// handle string values that need to be parsed
 		this._setOption( "max", this.options.max );
 		this._setOption( "min", this.options.min );
 		this._setOption( "step", this.options.step );
+
+		// first thing first, draw the markup and embedded buttons
+		this._draw();
+		this._on( this._events );
 
 		// Only format if there is a value, prevents the field from being marked
 		// as invalid in Firefox, see #9573.
@@ -77,8 +97,6 @@ return $.widget( "ui.spinner", {
 			this._value( this.element.val(), true );
 		}
 
-		this._draw();
-		this._on( this._events );
 		this._refresh();
 
 		// turning off autocomplete prevents the browser from remembering the
@@ -91,31 +109,17 @@ return $.widget( "ui.spinner", {
 		});
 	},
 
-	_getCreateOptions: function() {
-		var options = {},
-			element = this.element;
-
-		$.each( [ "min", "max", "step" ], function( i, option ) {
-			var value = element.attr( option );
-			if ( value !== undefined && value.length ) {
-				options[ option ] = value;
-			}
-		});
-
-		return options;
-	},
-
 	_events: {
-		keydown: function( event ) {
+		"keydown": function( event ) {
 			if ( this._start( event ) && this._keydown( event ) ) {
 				event.preventDefault();
 			}
 		},
-		keyup: "_stop",
-		focus: function() {
+		"keyup": "_stop",
+		"focus": function() {
 			this.previous = this.element.val();
 		},
-		blur: function( event ) {
+		"blur": function( event ) {
 			if ( this.cancelBlur ) {
 				delete this.cancelBlur;
 				return;
@@ -127,7 +131,15 @@ return $.widget( "ui.spinner", {
 				this._trigger( "change", event );
 			}
 		},
-		mousewheel: function( event, delta ) {
+		"mouseenter": function( event ) {
+			if ( !this.options.disabled ) {
+				this.uiSpinner.addClass( "ui-state-hover" );
+			}
+		},
+		"mouseleave": function( event ) {
+			this.uiSpinner.removeClass( "ui-state-hover" );
+		},
+		"mousewheel": function( event, delta ) {
 			if ( !delta ) {
 				return;
 			}
@@ -143,6 +155,12 @@ return $.widget( "ui.spinner", {
 				}
 			}, 100 );
 			event.preventDefault();
+		},
+		"focus .ui-spinner-input": function() {
+			this.uiSpinner.addClass( "ui-state-focus" );
+		},
+		"blur .ui-spinner-input": function() {
+			this.uiSpinner.removeClass( "ui-state-focus" );
 		},
 		"mousedown .ui-spinner-button": function( event ) {
 			var previous;
@@ -400,10 +418,13 @@ return $.widget( "ui.spinner", {
 		this._super( key, value );
 
 		if ( key === "disabled" ) {
-			this.widget().toggleClass( "ui-state-disabled", !!value );
 			this.element.prop( "disabled", !!value );
-			this.buttons.button( value ? "disable" : "enable" );
+			this._refreshDisabledStatus();
 		}
+	},
+
+	widget: function() {
+		return this.uiSpinner;
 	},
 
 	_setOptions: spinner_modifier(function( options ) {
@@ -427,6 +448,9 @@ return $.widget( "ui.spinner", {
 			value;
 	},
 
+	refresh: function() {
+		this._refresh();
+	},
 	_refresh: function() {
 		this.element.attr({
 			"aria-valuemin": this.options.min,
@@ -434,6 +458,24 @@ return $.widget( "ui.spinner", {
 			// TODO: what should we do with values that can't be parsed?
 			"aria-valuenow": this._parse( this.element.val() )
 		});
+
+		this._refreshDisabledStatus();
+	},
+
+	// updates the visual aspect based on the disabled dom property
+	_refreshDisabledStatus: function() {
+		this.options.disabled = this.element.prop( "disabled" );
+
+		if ( this.options.disabled ) {
+			this.uiSpinner
+				.removeClass( "ui-state-focus ui-state-hover ui-state-active" )
+				.addClass( "ui-state-disabled" );
+			this.buttons.button( "disable" );
+		}
+		else {
+			this.uiSpinner.removeClass( "ui-state-disabled" );
+			this.buttons.button( "enable" );
+		}
 	},
 
 	isValid: function() {
