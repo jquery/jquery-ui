@@ -52,6 +52,8 @@ $.extend( $.ui, {
 	}
 });
 
+var ui_core_uuid = 0;
+
 // plugins
 $.fn.extend({
 	scrollParent: function( includeHidden ) {
@@ -69,17 +71,13 @@ $.fn.extend({
 		return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
 	},
 
-	uniqueId: (function() {
-		var uuid = 0;
-
-		return function() {
-			return this.each(function() {
-				if ( !this.id ) {
-					this.id = "ui-id-" + ( ++uuid );
-				}
-			});
-		};
-	})(),
+	uniqueId: function() {
+		return this.each(function() {
+			if ( !this.id ) {
+				this.id = "ui-id-" + ( ++ui_core_uuid );
+			}
+		});
+	},
 
 	removeUniqueId: function() {
 		return this.each(function() {
