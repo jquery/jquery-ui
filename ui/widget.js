@@ -219,7 +219,8 @@ $.widget.bridge = function( name, object ) {
 				}
 			});
 		} else {
-			// allow multiple hashes to be passed on init
+
+			// Allow multiple hashes to be passed on init
 			if ( args.length ) {
 				options = $.widget.extend.apply( null, [ options ].concat(args) );
 			}
