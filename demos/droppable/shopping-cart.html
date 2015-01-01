@@ -28,8 +28,10 @@
 			helper: "clone"
 		});
 		$( "#cart ol" ).droppable({
-			activeClass: "ui-state-default",
-			hoverClass: "ui-state-hover",
+			classes: {
+				"ui-droppable-active": "ui-state-active",
+				"ui-droppable-hover": "ui-state-hover"
+			},
 			accept: ":not(.ui-sortable-helper)",
 			drop: function( event, ui ) {
 				$( this ).find( ".placeholder" ).remove();

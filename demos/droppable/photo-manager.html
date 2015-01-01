@@ -47,7 +47,9 @@
 		// let the trash be droppable, accepting the gallery items
 		$trash.droppable({
 			accept: "#gallery > li",
-			activeClass: "ui-state-highlight",
+			classes: {
+				"ui-droppable-active": "ui-state-highlight"
+			},
 			drop: function( event, ui ) {
 				deleteImage( ui.draggable );
 			}
@@ -56,7 +58,9 @@
 		// let the gallery be droppable as well, accepting items from the trash
 		$gallery.droppable({
 			accept: "#trash li",
-			activeClass: "custom-state-active",
+			classes: {
+				"ui-droppable-active": "custom-state-active"
+			},
 			drop: function( event, ui ) {
 				recycleImage( ui.draggable );
 			}
