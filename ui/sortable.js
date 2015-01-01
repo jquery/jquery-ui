@@ -37,6 +37,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	options: {
 		appendTo: "parent",
 		axis: false,
+		classes: {},
 		connectWith: false,
 		containment: false,
 		cursor: "auto",
@@ -83,7 +84,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 	_create: function() {
 		this.containerCache = {};
-		this.element.addClass("ui-sortable");
+		this._addClass( "ui-sortable" );
 
 		//Get the items
 		this.refresh();
@@ -110,19 +111,19 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_setHandleClassName: function() {
-		this.element.find( ".ui-sortable-handle" ).removeClass( "ui-sortable-handle" );
+		var that = this;
+		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
 		$.each( this.items, function() {
-			( this.instance.options.handle ?
-				this.item.find( this.instance.options.handle ) : this.item )
-				.addClass( "ui-sortable-handle" );
+			that._addClass(
+				this.instance.options.handle ?
+					this.item.find( this.instance.options.handle ) :
+					this.item,
+				"ui-sortable-handle"
+			);
 		});
 	},
 
 	_destroy: function() {
-		this.element
-			.removeClass( "ui-sortable ui-sortable-disabled" )
-			.find( ".ui-sortable-handle" )
-				.removeClass( "ui-sortable-handle" );
 		this._mouseDestroy();
 
 		for ( var i = this.items.length - 1; i >= 0; i-- ) {
@@ -307,7 +308,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 		this.dragging = true;
 
-		this.helper.addClass("ui-sortable-helper");
+		this._addClass( this.helper, "ui-sortable-helper" );
 		this._mouseDrag(event); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		return true;
 
@@ -476,7 +477,8 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			this._mouseUp({ target: null });
 
 			if(this.options.helper === "original") {
-				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
+				this.currentItem.css(this._storedCSS);
+				this._removeClass( this.currentItem, "ui-sortable-helper" );
 			} else {
 				this.currentItem.show();
 			}
@@ -789,9 +791,11 @@ return $.widget("ui.sortable", $.ui.mouse, {
 				element: function() {
 
 					var nodeName = that.currentItem[0].nodeName.toLowerCase(),
-						element = $( "<" + nodeName + ">", that.document[0] )
-							.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
-							.removeClass("ui-sortable-helper");
+						element = $( "<" + nodeName + ">", that.document[0] );
+
+						that._addClass( element, className || that.currentItem[0].className +
+								" ui-sortable-placeholder" )
+							._removeClass( element, "ui-sortable-helper" );
 
 					if ( nodeName === "tr" ) {
 						that.currentItem.children().each(function() {
@@ -1206,7 +1210,8 @@ return $.widget("ui.sortable", $.ui.mouse, {
 					this._storedCSS[i] = "";
 				}
 			}
-			this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
+			this.currentItem.css( this._storedCSS );
+			this._removeClass( this.currentItem, "ui-sortable-helper" );
 		} else {
 			this.currentItem.show();
 		}
