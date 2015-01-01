@@ -36,10 +36,8 @@ $.widget( "ui.droppable", {
 	widgetEventPrefix: "drop",
 	options: {
 		accept: "*",
-		activeClass: false,
 		addClasses: true,
 		greedy: false,
-		hoverClass: false,
 		scope: "default",
 		tolerance: "intersect",
 
@@ -80,7 +78,7 @@ $.widget( "ui.droppable", {
 
 		this._addToManager( o.scope );
 
-		o.addClasses && this.element.addClass( "ui-droppable" );
+		o.addClasses && this._addClass( "ui-droppable" );
 
 	},
 
@@ -103,8 +101,6 @@ $.widget( "ui.droppable", {
 		var drop = $.ui.ddmanager.droppables[ this.options.scope ];
 
 		this._splice( drop );
-
-		this.element.removeClass( "ui-droppable ui-droppable-disabled" );
 	},
 
 	_setOption: function( key, value ) {
@@ -125,9 +121,8 @@ $.widget( "ui.droppable", {
 
 	_activate: function( event ) {
 		var draggable = $.ui.ddmanager.current;
-		if ( this.options.activeClass ) {
-			this.element.addClass( this.options.activeClass );
-		}
+
+		this._addActiveClass();
 		if ( draggable ){
 			this._trigger( "activate", event, this.ui( draggable ) );
 		}
@@ -135,9 +130,8 @@ $.widget( "ui.droppable", {
 
 	_deactivate: function( event ) {
 		var draggable = $.ui.ddmanager.current;
-		if ( this.options.activeClass ) {
-			this.element.removeClass( this.options.activeClass );
-		}
+
+		this._removeActiveClass();
 		if ( draggable ){
 			this._trigger( "deactivate", event, this.ui( draggable ) );
 		}
@@ -153,9 +147,7 @@ $.widget( "ui.droppable", {
 		}
 
 		if ( this.accept.call( this.element[ 0 ], ( draggable.currentItem || draggable.element ) ) ) {
-			if ( this.options.hoverClass ) {
-				this.element.addClass( this.options.hoverClass );
-			}
+			this._addHoverClass();
 			this._trigger( "over", event, this.ui( draggable ) );
 		}
 
@@ -171,9 +163,7 @@ $.widget( "ui.droppable", {
 		}
 
 		if ( this.accept.call( this.element[ 0 ], ( draggable.currentItem || draggable.element ) ) ) {
-			if ( this.options.hoverClass ) {
-				this.element.removeClass( this.options.hoverClass );
-			}
+			this._removeHoverClass();
 			this._trigger( "out", event, this.ui( draggable ) );
 		}
 
@@ -204,12 +194,9 @@ $.widget( "ui.droppable", {
 		}
 
 		if ( this.accept.call( this.element[ 0 ], ( draggable.currentItem || draggable.element ) ) ) {
-			if ( this.options.activeClass ) {
-				this.element.removeClass( this.options.activeClass );
-			}
-			if ( this.options.hoverClass ) {
-				this.element.removeClass( this.options.hoverClass );
-			}
+			this._removeActiveClass();
+			this._removeHoverClass();
+
 			this._trigger( "drop", event, this.ui( draggable ) );
 			return this.element;
 		}
@@ -225,8 +212,25 @@ $.widget( "ui.droppable", {
 			position: c.position,
 			offset: c.positionAbs
 		};
-	}
+	},
 
+	// Extension points just to make backcompat sane and avoid duplicating logic
+	// TODO: Remove in 1.13 along with call to it below
+	_addHoverClass: function() {
+		this._addClass( "ui-droppable-hover" );
+	},
+
+	_removeHoverClass: function() {
+		this._removeClass( "ui-droppable-hover" );
+	},
+
+	_addActiveClass: function() {
+		this._addClass( "ui-droppable-active" );
+	},
+
+	_removeActiveClass: function() {
+		this._removeClass( "ui-droppable-active" );
+	}
 });
 
 var intersect = (function() {
@@ -412,6 +416,43 @@ $.ui.ddmanager = {
 		}
 	}
 };
+
+// DEPRECATED
+// TODO: switch return back to widget declaration at top of file when this is removed
+if ( $.uiBackCompat !== false ) {
+
+	// Backcompat for activeClass and hoverClass options
+	$.widget( "ui.droppable", $.ui.droppable, {
+		options: {
+			hoverClass: false,
+			activeClass: false
+		},
+		_addActiveClass: function() {
+			this._super();
+			if ( this.options.activeClass ) {
+				this.element.addClass( this.options.activeClass );
+			}
+		},
+		_removeActiveClass: function() {
+			this._super();
+			if ( this.options.activeClass ) {
+				this.element.removeClass( this.options.activeClass );
+			}
+		},
+		_addHoverClass: function() {
+			this._super();
+			if ( this.options.hoverClass ) {
+				this.element.addClass( this.options.hoverClass );
+			}
+		},
+		_removeHoverClass: function() {
+			this._super();
+			if ( this.options.hoverClass ) {
+				this.element.removeClass( this.options.hoverClass );
+			}
+		}
+	});
+}
 
 return $.ui.droppable;
 
