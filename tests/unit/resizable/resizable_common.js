@@ -7,6 +7,7 @@ TestHelpers.commonWidgetTests( "resizable", {
 		aspectRatio: false,
 		autoHide: false,
 		cancel: "input,textarea,button,select,option",
+		classes: {},
 		containment: false,
 		delay: 0,
 		disabled: false,

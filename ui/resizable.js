@@ -40,6 +40,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		animateEasing: "swing",
 		aspectRatio: false,
 		autoHide: false,
+		classes: {},
 		containment: false,
 		ghost: false,
 		grid: false,
@@ -93,7 +94,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		var n, i, handle, axis, hname,
 			that = this,
 			o = this.options;
-		this.element.addClass("ui-resizable");
+		this._addClass( "ui-resizable" );
 
 		$.extend(this, {
 			_aspectRatio: !!(o.aspectRatio),
@@ -178,13 +179,14 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 				handle = $.trim(n[i]);
 				hname = "ui-resizable-" + handle;
-				axis = $("<div class='ui-resizable-handle " + hname + "'></div>");
+				axis = $("<div>");
+				this._addClass( axis, "ui-resizable-handle " + hname );
 
 				axis.css({ zIndex: o.zIndex });
 
 				// TODO : What's going on here?
 				if ("se" === handle) {
-					axis.addClass("ui-icon ui-icon-gripsmall-diagonal-se");
+					this._addClass( axis, null, "ui-icon ui-icon-gripsmall-diagonal-se" );
 				}
 
 				this.handles[handle] = ".ui-resizable-" + handle;
@@ -246,13 +248,13 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		if (o.autoHide) {
 			this._handles.hide();
+			this._addClass( "ui-resizable-autohide" );
 			$(this.element)
-				.addClass("ui-resizable-autohide")
 				.mouseenter(function() {
 					if (o.disabled) {
 						return;
 					}
-					$(this).removeClass("ui-resizable-autohide");
+					that._removeClass( "ui-resizable-autohide" );
 					that._handles.show();
 				})
 				.mouseleave(function() {
@@ -260,7 +262,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 						return;
 					}
 					if (!that.resizing) {
-						$(this).addClass("ui-resizable-autohide");
+						that._addClass( "ui-resizable-autohide" );
 						that._handles.hide();
 					}
 				});
@@ -277,7 +279,6 @@ $.widget("ui.resizable", $.ui.mouse, {
 		var wrapper,
 			_destroy = function(exp) {
 				$(exp)
-					.removeClass("ui-resizable ui-resizable-disabled ui-resizable-resizing")
 					.removeData("resizable")
 					.removeData("ui-resizable")
 					.unbind(".resizable")
@@ -371,7 +372,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		cursor = $(".ui-resizable-" + this.axis).css("cursor");
 		$("body").css("cursor", cursor === "auto" ? this.axis + "-resize" : cursor);
 
-		el.addClass("ui-resizable-resizing");
+		this._addClass( "ui-resizable-resizing" );
 		this._propagate("start", event);
 		return true;
 	},
@@ -455,7 +456,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		$("body").css("cursor", "auto");
 
-		this.element.removeClass("ui-resizable-resizing");
+		this._removeClass( "ui-resizable-resizing" );
 
 		this._propagate("stop", event);
 
@@ -684,7 +685,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			this.helper = this.helper || $("<div style='overflow:hidden;'></div>");
 
-			this.helper.addClass(this._helper).css({
+			this._addClass( this.helper, this._helper );
+			this.helper.css({
 				width: this.element.outerWidth() - 1,
 				height: this.element.outerHeight() - 1,
 				position: "absolute",
@@ -1064,22 +1066,20 @@ $.ui.plugin.add("resizable", "ghost", {
 
 	start: function() {
 
-		var that = $(this).resizable( "instance" ), o = that.options, cs = that.size;
+		var that = $(this).resizable( "instance" ), cs = that.size;
 
 		that.ghost = that.originalElement.clone();
-		that.ghost
-			.css({
-				opacity: 0.25,
-				display: "block",
-				position: "relative",
-				height: cs.height,
-				width: cs.width,
-				margin: 0,
-				left: 0,
-				top: 0
-			})
-			.addClass("ui-resizable-ghost")
-			.addClass(typeof o.ghost === "string" ? o.ghost : "");
+		that.ghost.css({
+			opacity: 0.25,
+			display: "block",
+			position: "relative",
+			height: cs.height,
+			width: cs.width,
+			margin: 0,
+			left: 0,
+			top: 0
+		});
+		this._addClass( that.ghost, "ui-resizable-ghost" );
 
 		that.ghost.appendTo(that.helper);
 
@@ -1178,6 +1178,13 @@ $.ui.plugin.add("resizable", "grid", {
 	}
 
 });
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+
+	// Ghost option
+	// TODO add backcompat once i know how $.ui.plugin works...
+}
 
 return $.ui.resizable;
 
