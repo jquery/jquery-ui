@@ -3,6 +3,7 @@ TestHelpers.commonWidgetTests("selectable", {
 		appendTo: "body",
 		autoRefresh: true,
 		cancel: "input,textarea,button,select,option",
+		classes: {},
 		delay: 0,
 		disabled: false,
 		distance: 0,
