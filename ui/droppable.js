@@ -38,6 +38,7 @@ $.widget( "ui.droppable", {
 		accept: "*",
 		activeClass: false,
 		addClasses: true,
+		classes: {},
 		greedy: false,
 		hoverClass: false,
 		scope: "default",
@@ -80,7 +81,7 @@ $.widget( "ui.droppable", {
 
 		this._addToManager( o.scope );
 
-		o.addClasses && this.element.addClass( "ui-droppable" );
+		o.addClasses && this._addClass( "ui-droppable" );
 
 	},
 
@@ -103,8 +104,6 @@ $.widget( "ui.droppable", {
 		var drop = $.ui.ddmanager.droppables[ this.options.scope ];
 
 		this._splice( drop );
-
-		this.element.removeClass( "ui-droppable ui-droppable-disabled" );
 	},
 
 	_setOption: function( key, value ) {
