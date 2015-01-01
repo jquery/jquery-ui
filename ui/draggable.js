@@ -37,6 +37,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		addClasses: true,
 		appendTo: "parent",
 		axis: false,
+		classes: {},
 		connectToSortable: false,
 		containment: false,
 		cursor: "auto",
@@ -70,10 +71,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this._setPositionRelative();
 		}
 		if (this.options.addClasses){
-			this.element.addClass("ui-draggable");
+			this._addClass( "ui-draggable" );
 		}
 		if (this.options.disabled){
-			this.element.addClass("ui-draggable-disabled");
+			this._addClass( "ui-draggable-disabled" );
 		}
 		this._setHandleClassName();
 
@@ -93,7 +94,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this.destroyOnClear = true;
 			return;
 		}
-		this.element.removeClass( "ui-draggable ui-draggable-dragging ui-draggable-disabled" );
 		this._removeHandleClassName();
 		this._mouseDestroy();
 	},
@@ -169,7 +169,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
 
-		this.helper.addClass("ui-draggable-dragging");
+		this._addClass( this.helper, "ui-draggable-dragging" );
 
 		//Cache the helper size
 		this._cacheHelperProportions();
@@ -351,11 +351,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_setHandleClassName: function() {
 		this.handleElement = this.options.handle ?
 			this.element.find( this.options.handle ) : this.element;
-		this.handleElement.addClass( "ui-draggable-handle" );
+		this._addClass( this.handleElement, "ui-draggable-handle" );
 	},
 
 	_removeHandleClassName: function() {
-		this.handleElement.removeClass( "ui-draggable-handle" );
+		this._removeClass( this.handleElement, "ui-draggable-handle" );
 	},
 
 	_createHelper: function(event) {
@@ -659,7 +659,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_clear: function() {
-		this.helper.removeClass("ui-draggable-dragging");
+		this._removeClass( this.helper, "ui-draggable-dragging" );
 		if (this.helper[0] !== this.element[0] && !this.cancelHelperRemoval) {
 			this.helper.remove();
 		}
