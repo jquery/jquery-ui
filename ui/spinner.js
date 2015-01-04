@@ -65,7 +65,6 @@ return $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
-		var rtl = this.element.attr( "dir" ) === "rtl";
 		// handle string values that need to be parsed
 		this._setOption( "max", this.options.max );
 		this._setOption( "min", this.options.min );
