@@ -2,12 +2,17 @@
  * jQuery UI Selectmenu @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/selectmenu
  */
+
+//>>label: Selectmenu
+//>>group: Widgets
+//>>description: Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.
+//>>docs: http://api.jqueryui.com/selectmenu/
+//>>demos: http://jqueryui.com/selectmenu/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -68,7 +73,10 @@ return $.widget( "ui.selectmenu", {
 
 	_drawButton: function() {
 		var that = this,
-			tabindex = this.element.attr( "tabindex" );
+			item = this._parseOption(
+				this.element.find( "option:selected" ),
+				this.element[ 0 ].selectedIndex
+			);
 
 		// Associate existing label with the new button
 		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
@@ -85,13 +93,14 @@ return $.widget( "ui.selectmenu", {
 		// Create button
 		this.button = $( "<span>", {
 			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
-			tabindex: tabindex || this.options.disabled ? -1 : 0,
+			tabindex: this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			role: "combobox",
 			"aria-expanded": "false",
 			"aria-autocomplete": "list",
 			"aria-owns": this.ids.menu,
-			"aria-haspopup": "true"
+			"aria-haspopup": "true",
+			title: this.element.attr( "title" )
 		})
 			.insertAfter( this.element );
 
@@ -100,12 +109,9 @@ return $.widget( "ui.selectmenu", {
 		})
 			.prependTo( this.button );
 
-		this.buttonText = $( "<span>", {
-			"class": "ui-selectmenu-text"
-		})
+		this.buttonItem = this._renderButtonItem( item )
 			.appendTo( this.button );
 
-		this._setText( this.buttonText, this.element.find( "option:selected" ).text() );
 		this._resizeButton();
 
 		this._on( this.button, this._buttonEvents );
@@ -144,6 +150,12 @@ return $.widget( "ui.selectmenu", {
 				role: "listbox",
 				select: function( event, ui ) {
 					event.preventDefault();
+
+					// support: IE8
+					// If the item was selected via a click, the text selection
+					// will be destroyed in IE
+					that._setSelection();
+
 					that._select( ui.item.data( "ui-selectmenu-item" ), event );
 				},
 				focus: function( event, ui ) {
@@ -185,7 +197,11 @@ return $.widget( "ui.selectmenu", {
 
 	refresh: function() {
 		this._refreshMenu();
-		this._setText( this.buttonText, this._getSelectedItem().text() );
+		this.buttonItem.replaceWith(
+			this.buttonItem = this._renderButtonItem(
+				this._getSelectedItem().data( "ui-selectmenu-item" )
+			)
+		);
 		if ( !this.options.width ) {
 			this._resizeButton();
 		}
@@ -205,7 +221,9 @@ return $.widget( "ui.selectmenu", {
 		this._renderMenu( this.menu, this.items );
 
 		this.menuInstance.refresh();
-		this.menuItems = this.menu.find( "li" ).not( ".ui-selectmenu-optgroup" );
+		this.menuItems = this.menu.find( "li" )
+			.not( ".ui-selectmenu-optgroup" )
+				.find( ".ui-menu-item-wrapper" );
 
 		item = this._getSelectedItem();
 
@@ -254,6 +272,7 @@ return $.widget( "ui.selectmenu", {
 		this.isOpen = false;
 		this._toggleAttr();
 
+		this.range = null;
 		this._off( this.document );
 
 		this._trigger( "close", event );
@@ -265,6 +284,15 @@ return $.widget( "ui.selectmenu", {
 
 	menuWidget: function() {
 		return this.menu;
+	},
+
+	_renderButtonItem: function( item ) {
+		var buttonItem = $( "<span>", {
+			"class": "ui-selectmenu-text"
+		});
+		this._setText( buttonItem, item.label );
+
+		return buttonItem;
 	},
 
 	_renderMenu: function( ul, items ) {
@@ -294,14 +322,17 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_renderItem: function( ul, item ) {
-		var li = $( "<li>" );
+		var li = $( "<li>" ),
+			wrapper = $( "<div>", {
+				title: item.element.attr( "title" )
+			});
 
 		if ( item.disabled ) {
 			li.addClass( "ui-state-disabled" );
 		}
-		this._setText( li, item.label );
+		this._setText( wrapper, item.label );
 
-		return li.appendTo( ul );
+		return li.append( wrapper ).appendTo( ul );
 	},
 
 	_setText: function( element, value ) {
@@ -317,9 +348,9 @@ return $.widget( "ui.selectmenu", {
 			filter = ".ui-menu-item";
 
 		if ( this.isOpen ) {
-			item = this.menuItems.eq( this.focusIndex );
+			item = this.menuItems.eq( this.focusIndex ).parent( "li" );
 		} else {
-			item = this.menuItems.eq( this.element[ 0 ].selectedIndex );
+			item = this.menuItems.eq( this.element[ 0 ].selectedIndex ).parent( "li" );
 			filter += ":not(.ui-state-disabled)";
 		}
 
@@ -335,11 +366,34 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_getSelectedItem: function() {
-		return this.menuItems.eq( this.element[ 0 ].selectedIndex );
+		return this.menuItems.eq( this.element[ 0 ].selectedIndex ).parent( "li" );
 	},
 
 	_toggle: function( event ) {
 		this[ this.isOpen ? "close" : "open" ]( event );
+	},
+
+	_setSelection: function() {
+		var selection;
+
+		if ( !this.range ) {
+			return;
+		}
+
+		if ( window.getSelection ) {
+			selection = window.getSelection();
+			selection.removeAllRanges();
+			selection.addRange( this.range );
+
+		// support: IE8
+		} else {
+			this.range.select();
+		}
+
+		// support: IE
+		// Setting the text selection kills the button focus in IE, but
+		// restoring the focus doesn't kill the selection.
+		this.button.focus();
 	},
 
 	_documentClick: {
@@ -357,11 +411,25 @@ return $.widget( "ui.selectmenu", {
 	_buttonEvents: {
 
 		// Prevent text selection from being reset when interacting with the selectmenu (#10144)
-		mousedown: function( event ) {
-			event.preventDefault();
+		mousedown: function() {
+			var selection;
+
+			if ( window.getSelection ) {
+				selection = window.getSelection();
+				if ( selection.rangeCount ) {
+					this.range = selection.getRangeAt( 0 );
+				}
+
+			// support: IE8
+			} else {
+				this.range = document.selection.createRange();
+			}
 		},
 
-		click: "_toggle",
+		click: function( event ) {
+			this._setSelection();
+			this._toggle( event );
+		},
 
 		keydown: function( event ) {
 			var preventDefault = true;
@@ -423,7 +491,7 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_selectFocusedItem: function( event ) {
-		var item = this.menuItems.eq( this.focusIndex );
+		var item = this.menuItems.eq( this.focusIndex ).parent( "li" );
 		if ( !item.hasClass( "ui-state-disabled" ) ) {
 			this._select( item.data( "ui-selectmenu-item" ), event );
 		}
@@ -434,7 +502,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
-		this._setText( this.buttonText, item.label );
+		this.buttonItem.replaceWith( this.buttonItem = this._renderButtonItem( item ) );
 		this._setAria( item );
 		this._trigger( "select", event, { item: item } );
 
@@ -544,20 +612,25 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_parseOptions: function( options ) {
-		var data = [];
+		var that = this,
+			data = [];
 		options.each(function( index, item ) {
-			var option = $( item ),
-				optgroup = option.parent( "optgroup" );
-			data.push({
-				element: option,
-				index: index,
-				value: option.attr( "value" ),
-				label: option.text(),
-				optgroup: optgroup.attr( "label" ) || "",
-				disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" )
-			});
+			data.push( that._parseOption( $( item ), index ) );
 		});
 		this.items = data;
+	},
+
+	_parseOption: function( option, index ) {
+		var optgroup = option.parent( "optgroup" );
+
+		return {
+			element: option,
+			index: index,
+			value: option.val(),
+			label: option.text(),
+			optgroup: optgroup.attr( "label" ) || "",
+			disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" )
+		};
 	},
 
 	_destroy: function() {

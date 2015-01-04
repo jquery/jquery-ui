@@ -11,6 +11,7 @@
 	<script src="../../ui/effect-clip.js"></script>
 	<script src="../../ui/effect-drop.js"></script>
 	<script src="../../ui/effect-explode.js"></script>
+	<script src="../../ui/effect-fade.js"></script>
 	<script src="../../ui/effect-fold.js"></script>
 	<script src="../../ui/effect-highlight.js"></script>
 	<script src="../../ui/effect-puff.js"></script>
@@ -32,7 +33,7 @@
 	#effect {
 		position: relative;
 		width: 240px;
-		height: 135px;
+		height: 170px;
 		padding: 0.4em;
 	}
 	#effect h3 {
@@ -52,7 +53,7 @@
 			var options = {};
 			// some effects have required parameters
 			if ( selectedEffect === "scale" ) {
-				options = { percent: 0 };
+				options = { percent: 50 };
 			} else if ( selectedEffect === "size" ) {
 				options = { to: { width: 200, height: 60 } };
 			}
@@ -85,6 +86,7 @@
 	<option value="clip">Clip</option>
 	<option value="drop">Drop</option>
 	<option value="explode">Explode</option>
+	<option value="fade">Fade</option>
 	<option value="fold">Fold</option>
 	<option value="highlight">Highlight</option>
 	<option value="puff">Puff</option>

@@ -2,12 +2,17 @@
  * jQuery UI Droppable @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/droppable/
  */
+
+//>>label: Droppable
+//>>group: Interactions
+//>>description: Enables drop targets for draggable elements.
+//>>docs: http://api.jqueryui.com/droppable/
+//>>demos: http://jqueryui.com/droppable/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -191,7 +196,7 @@ $.widget( "ui.droppable", {
 				!inst.options.disabled &&
 				inst.options.scope === draggable.options.scope &&
 				inst.accept.call( inst.element[ 0 ], ( draggable.currentItem || draggable.element ) ) &&
-				$.ui.intersect( draggable, $.extend( inst, { offset: inst.element.offset() } ), inst.options.tolerance, event )
+				intersect( draggable, $.extend( inst, { offset: inst.element.offset() } ), inst.options.tolerance, event )
 			) { childrenIntersection = true; return false; }
 		});
 		if ( childrenIntersection ) {
@@ -224,7 +229,7 @@ $.widget( "ui.droppable", {
 
 });
 
-$.ui.intersect = (function() {
+var intersect = (function() {
 	function isOverAxis( x, reference, size ) {
 		return ( x >= reference ) && ( x < ( reference + size ) );
 	}
@@ -323,7 +328,7 @@ $.ui.ddmanager = {
 			if ( !this.options ) {
 				return;
 			}
-			if ( !this.options.disabled && this.visible && $.ui.intersect( draggable, this, this.options.tolerance, event ) ) {
+			if ( !this.options.disabled && this.visible && intersect( draggable, this, this.options.tolerance, event ) ) {
 				dropped = this._drop.call( this, event ) || dropped;
 			}
 
@@ -360,7 +365,7 @@ $.ui.ddmanager = {
 			}
 
 			var parentInstance, scope, parent,
-				intersects = $.ui.intersect( draggable, this, this.options.tolerance, event ),
+				intersects = intersect( draggable, this, this.options.tolerance, event ),
 				c = !intersects && this.isover ? "isout" : ( intersects && !this.isover ? "isover" : null );
 			if ( !c ) {
 				return;

@@ -2,12 +2,17 @@
  * jQuery UI Progressbar @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/progressbar/
  */
+
+//>>label: Progressbar
+//>>group: Widgets
+//>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
+//>>docs: http://api.jqueryui.com/progressbar/
+//>>demos: http://jqueryui.com/progressbar/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

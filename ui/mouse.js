@@ -2,12 +2,16 @@
  * jQuery UI Mouse @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/mouse/
  */
+
+//>>label: Mouse
+//>>group: UI Core
+//>>description: Abstracts mouse-based interactions to assist in creating certain widgets.
+//>>docs: http://api.jqueryui.com/mouse/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

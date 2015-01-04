@@ -2,7 +2,7 @@
  * jQuery UI Accordion @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -14,7 +14,6 @@
 	position: relative;
 	margin: 2px 0 0 0;
 	padding: .5em .5em .5em .7em;
-	min-height: 0; /* support: IE7 */
 	font-size: 100%;
 }
 .ui-accordion .ui-accordion-icons {

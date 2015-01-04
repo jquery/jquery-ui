@@ -2,7 +2,7 @@
  * jQuery UI CSS Framework @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -42,9 +42,6 @@
 }
 .ui-helper-clearfix:after {
 	clear: both;
-}
-.ui-helper-clearfix {
-	min-height: 0; /* support: IE7 */
 }
 .ui-helper-zfix {
 	width: 100%;

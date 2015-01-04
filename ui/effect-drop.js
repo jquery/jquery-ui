@@ -2,12 +2,17 @@
  * jQuery UI Effects Drop @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/drop-effect/
  */
+
+//>>label: Drop Effect
+//>>group: Effects
+//>>description: Moves an element in one direction and hides it at the same time.
+//>>docs: http://api.jqueryui.com/drop-effect/
+//>>demos: http://jqueryui.com/effect/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -23,53 +28,40 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.drop = function( o, done ) {
+return $.effects.define( "drop", "hide", function( options, done ) {
 
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "opacity", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "hide" ),
+	var distance,
+		element = $( this ),
+		mode = options.mode,
 		show = mode === "show",
-		direction = o.direction || "left",
+		direction = options.direction || "left",
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
-		motion = ( direction === "up" || direction === "left" ) ? "pos" : "neg",
+		motion = ( direction === "up" || direction === "left" ) ? "-=" : "+=",
+		oppositeMotion = ( motion === "+=" ) ? "-=" : "+=",
 		animation = {
-			opacity: show ? 1 : 0
-		},
-		distance;
+			opacity: 0
+		};
 
-	// Adjust
-	$.effects.save( el, props );
-	el.show();
-	$.effects.createWrapper( el );
+	$.effects.createPlaceholder( element );
 
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
+	distance = options.distance || element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
+
+	animation[ ref ] = motion + distance;
 
 	if ( show ) {
-		el
-			.css( "opacity", 0 )
-			.css( ref, motion === "pos" ? -distance : distance );
+		element.css( animation );
+
+		animation[ ref ] = oppositeMotion + distance;
+		animation.opacity = 1;
 	}
 
-	// Animation
-	animation[ ref ] = ( show ?
-		( motion === "pos" ? "+=" : "-=" ) :
-		( motion === "pos" ? "-=" : "+=" ) ) +
-		distance;
-
 	// Animate
-	el.animate( animation, {
+	element.animate( animation, {
 		queue: false,
-		duration: o.duration,
-		easing: o.easing,
-		complete: function() {
-			if ( mode === "hide" ) {
-				el.hide();
-			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
-			done();
-		}
+		duration: options.duration,
+		easing: options.easing,
+		complete: done
 	});
-};
+});
 
 }));

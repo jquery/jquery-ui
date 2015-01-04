@@ -2,7 +2,7 @@
  * jQuery UI Selectmenu @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -18,7 +18,6 @@
 }
 .ui-selectmenu-menu .ui-menu {
 	overflow: auto;
-	/* Support: IE7 */
 	overflow-x: hidden;
 	padding-bottom: 1px;
 }

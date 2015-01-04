@@ -2,12 +2,17 @@
  * jQuery UI Accordion @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/accordion/
  */
+
+//>>label: Accordion
+//>>group: Widgets
+//>>description: Displays collapsible content panels for presenting information in a limited amount of space.
+//>>docs: http://api.jqueryui.com/accordion/
+//>>demos: http://jqueryui.com/accordion/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 

@@ -88,28 +88,47 @@
 		width: 100px;
 	}
 
+	.relative {
+		position: relative;
+		top: 0px;
+		left: 0px;
+	}
+	.absolute {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
+	.fixed {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+	}
+	.static {
+		position: static;
+	}
+
 	</style>
 </head>
 <body>
 
 <div id="qunit"></div>
 <div id="qunit-fixture">
-<div id="elem" class="test">
-</div>
-<div class="hidden test">
-	<div>.</div>
-</div>
-<div class="animateClass test">
-	<h2>Child Element Test</h2>
-</div>
-<div class="relWidth relHeight testAddBorder">
-	<h2>Slide with relative width</h2>
-</div>
-<div class="testScale">
-</div>
-<div class="ticket7106">
-</div>
-
+	<div id="elem" class="test"></div>
+	<div class="hidden test">
+		<div>.</div>
+	</div>
+	<div class="animateClass test">
+		<h2>Child Element Test</h2>
+	</div>
+	<div class="relWidth relHeight testAddBorder">
+		<h2>Slide with relative width</h2>
+	</div>
+	<div class="testScale"></div>
+	<div class="ticket7106"></div>
+	<div class="relative"></div>
+	<div class="absolute"></div>
+	<div class="fixed"></div>
+	<div class="static"></div>
 </div>
 </body>
 </html>
