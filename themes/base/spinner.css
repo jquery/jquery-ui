@@ -73,7 +73,7 @@
 	right: auto;
 	left: 0;
 }
-.ui-rtl .ui-spinner a.ui-spinner-button {
+.ui-rtl.ui-spinner a.ui-spinner-button {
 	border-left-width: 0;
 	border-right-width: 1px;
 }

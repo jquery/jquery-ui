@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/spinner/
  */
+
+//>>label: Spinner
+//>>group: Widgets
+//>>description: Displays buttons to easily input numbers via the keyboard or mouse.
+//>>docs: http://api.jqueryui.com/spinner/
+//>>demos: http://jqueryui.com/spinner/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -60,6 +65,7 @@ return $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
+		var rtl = this.element.attr( "dir" ) === "rtl";
 		// handle string values that need to be parsed
 		this._setOption( "max", this.options.max );
 		this._setOption( "min", this.options.min );
@@ -202,13 +208,16 @@ return $.widget( "ui.spinner", {
 	},
 
 	_draw: function() {
-		var uiSpinner = this.uiSpinner = this.element
+		var rtl = this.element.attr( "dir" ) === "rtl",
+			uiSpinner = this.uiSpinner = this.element
 			.addClass( "ui-spinner-input" )
 			.attr( "autocomplete", "off" )
 			.wrap( this._uiSpinnerHtml() )
 			.parent()
 				// add buttons
-				.append( this._buttonHtml() );
+				.append( this._buttonHtml() )
+				// add ui-rtl class
+				.toggleClass( "ui-rtl", rtl );
 
 		this.element.attr( "role", "spinbutton" );
 
@@ -258,11 +267,12 @@ return $.widget( "ui.spinner", {
 	},
 
 	_buttonHtml: function() {
+		var rtl = this.element.attr( "dir" ) === "rtl";
 		return "" +
-			"<a class='ui-spinner-button ui-spinner-up " + ($.ui.isRtl ? "ui-corner-tl" : "ui-corner-tr") + "'>" +
+			"<a class='ui-spinner-button ui-spinner-up " + ( rtl ? "ui-corner-tl'>" : "ui-corner-tr'>" ) +
 				"<span class='ui-icon " + this.options.icons.up + "'>&#9650;</span>" +
 			"</a>" +
-			"<a class='ui-spinner-button ui-spinner-down " + ($.ui.isRtl ? "ui-corner-bl" : "ui-corner-br") + "'>" +
+			"<a class='ui-spinner-button ui-spinner-down " + ( rtl ? "ui-corner-bl'>" : "ui-corner-br'>" ) +
 				"<span class='ui-icon " + this.options.icons.down + "'>&#9660;</span>" +
 			"</a>";
 	},
