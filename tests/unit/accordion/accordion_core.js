@@ -28,9 +28,10 @@ test( "handle click on header-descendant", function() {
 });
 
 test( "accessibility", function () {
-	expect( 37 );
+	expect( 61 );
 	var element = $( "#list1" ).accordion({
-			active: 1
+			active: 1,
+			collapsible: true
 		}),
 		headers = element.find( ".ui-accordion-header" );
 
@@ -45,31 +46,60 @@ test( "accessibility", function () {
 	});
 
 	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
-	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded=true" );
-	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
-	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
-	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab (1) has aria-selected=true" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab (1) has aria-expanded=true" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel (1) has aria-hidden=false" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header (0) has tabindex=-1" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab (0) has aria-selected=false" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab (0) has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (0) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
 
 	element.accordion( "option", "active", 0 );
-	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
-	equal( headers.eq( 0 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded=true" );
-	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
-	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
-	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "active header (0) has tabindex=0" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab (0) has aria-selected=true" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "true", "active tab (0) has aria-expanded=true" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "false", "active tabpanel (0) has aria-hidden=false" );
+	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header (1) has tabindex=-1" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab (1) has aria-selected=false" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab (1) has aria-expanded=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (1) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
+
+	element.accordion( "option", "active", false );
+	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "previously active header (0) has tabindex=0" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab (0) has aria-selected=false" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab (0) has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (0) has aria-hidden=true" );
+	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header (1) has tabindex=-1" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab (1) has aria-selected=false" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab (1) has aria-expanded=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (1) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
+
+	element.accordion( "option", "active", 1 );
+	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab (1) has aria-selected=true" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab (1) has aria-expanded=true" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel (1) has aria-hidden=false" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header (0) has tabindex=-1" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab (0) has aria-selected=false" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab (0) has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (0) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
+
 });
 
 asyncTest( "keyboard support", function() {
