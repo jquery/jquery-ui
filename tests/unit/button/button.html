@@ -5,6 +5,9 @@
 	<title>jQuery UI Button Test Suite</title>
 
 	<script src="../../jquery.js"></script>
+	<script>
+	$.uiBackCompat = false;
+	</script>
 	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
 	<script src="../../../external/qunit/qunit.js"></script>
 	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
@@ -33,7 +36,7 @@
 <div id="qunit"></div>
 <div id="qunit-fixture">
 
-<div><button id="button" class="foo">Label</button></div>
+<div><button id="button">Label</button></div>
 
 <div id="radio0" style="margin-top: 2em;">
 	<input type="radio" id="radio01" name="radio" checked="checked"><label for="radio01">Choice 1</label>

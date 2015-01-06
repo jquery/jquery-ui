@@ -154,10 +154,8 @@ test("buttons - advanced", function() {
 					click: function() {
 						equal(this, element[0], "correct context");
 					},
-					icons: {
-						primary: "ui-icon-cancel"
-					},
-					showText: false
+					icon: "ui-icon-cancel",
+					showLabel: false
 				}
 			]
 		});
@@ -167,8 +165,8 @@ test("buttons - advanced", function() {
 	equal(buttons.attr("id"), "my-button-id", "correct id");
 	equal(buttons.text(), "a button", "correct label");
 	ok(buttons.hasClass("additional-class"), "additional classes added");
-	deepEqual( buttons.button("option", "icons"), { primary: "ui-icon-cancel", secondary: null } );
-	equal( buttons.button( "option", "text" ), false );
+	deepEqual( buttons.button("option", "icon"), "ui-icon-cancel" );
+	equal( buttons.button( "option", "showLabel" ), false );
 	buttons.click();
 
 	element.remove();
@@ -209,38 +207,18 @@ test("closeText", function() {
 	expect(3);
 
 	var element = $("<div></div>").dialog();
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close span").text(), "Close",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), "Close",
 			"default close text");
 	element.remove();
 
 	element = $("<div></div>").dialog({ closeText: "foo" });
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close span").text(), "foo",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), "foo",
 			"closeText on init");
 	element.remove();
 
 	element = $("<div></div>").dialog().dialog("option", "closeText", "bar");
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close span").text(), "bar",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), "bar",
 			"closeText via option method");
-	element.remove();
-});
-
-test("dialogClass", function() {
-	expect( 6 );
-
-	var element = $("<div></div>").dialog();
-		equal(element.dialog("widget").is(".foo"), false, "dialogClass not specified. foo class added");
-	element.remove();
-
-	element = $("<div></div>").dialog({ dialogClass: "foo" });
-		equal(element.dialog("widget").is(".foo"), true, "dialogClass in init. foo class added");
-	element.dialog( "option", "dialogClass", "foobar" );
-		equal( element.dialog("widget").is(".foo"), false, "dialogClass changed, previous one was removed" );
-		equal( element.dialog("widget").is(".foobar"), true, "dialogClass changed, new one was added" );
-	element.remove();
-
-	element = $("<div></div>").dialog({ dialogClass: "foo bar" });
-		equal(element.dialog("widget").is(".foo"), true, "dialogClass in init, two classes. foo class added");
-		equal(element.dialog("widget").is(".bar"), true, "dialogClass in init, two classes. bar class added");
 	element.remove();
 });
 

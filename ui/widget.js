@@ -363,6 +363,7 @@ $.Widget.prototype = {
 
 		return this;
 	},
+
 	_setOptions: function( options ) {
 		var key;
 
@@ -372,7 +373,26 @@ $.Widget.prototype = {
 
 		return this;
 	},
+
+	_elementsFromClassKey: function( classKey ) {
+		if ( this.options.classes[ classKey ] ) {
+			return this.element;
+		} else {
+			return $();
+		}
+	},
+
 	_setOption: function( key, value ) {
+		if ( key === "classes" ) {
+			for ( var classKey in value ) {
+				if ( value[ classKey ] !== this.options.classes[ classKey ] ) {
+					this._elementsFromClassKey( classKey )
+						.removeClass( this._classesFromObject( classKey, this.options.classes ) )
+						.addClass( this._classesFromObject( classKey, value ) );
+				}
+			}
+		}
+
 		this.options[ key ] = value;
 
 		if ( key === "disabled" ) {
@@ -387,6 +407,27 @@ $.Widget.prototype = {
 		}
 
 		return this;
+	},
+
+	_classesFromObject: function( key, classes ) {
+		var out = [],
+			parts = key.split( " " ),
+			i = parts.length;
+
+		while ( i-- ) {
+			out.push( parts[ i ] );
+
+			// Avoid extra spaces in the return value resulting from pushing an empty classes value
+			if ( classes[ parts[ i ] ] ) {
+				out.push( classes[ parts[ i ] ] );
+			}
+		}
+
+		return out.join( " " );
+	},
+
+	_classes: function( key ) {
+		return this._classesFromObject( key, this.options.classes );
 	},
 
 	enable: function() {

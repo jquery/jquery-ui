@@ -1,14 +1,17 @@
 TestHelpers.commonWidgetTests( "button", {
 	defaults: {
 		disabled: null,
-		icons: {
-			primary: null,
-			secondary: null
-		},
+		showLabel: true,
 		label: null,
-		text: true,
+		icon: null,
+		iconPosition: "beginning",
+		classes: {
+			"ui-button": "ui-corner-all",
+			"ui-button-icon-only": "",
+			"ui-button-icon": ""
+		},
 
-		// callbacks
+		// Callbacks
 		create: null
 	}
 });

@@ -7,15 +7,23 @@ module( "accordion: core", setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
 	test( "markup structure: " + type, function() {
-		expect( 4 );
-		var element = $( selector ).accordion();
-		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
-		equal( element.find( ".ui-accordion-header" ).length, 3,
+		expect( 8 );
+		var element = $( selector ).accordion(),
+			headers = element.find( ".ui-accordion-header" ),
+			panels = element.find( ".ui-accordion-content" );
+
+		ok( element.is( ".ui-accordion.ui-widget" ), "main has proper classes" );
+		ok( headers.hasClass( "ui-corner-top" ), "header is .ui-corner-top" );
+		ok( !headers.eq( 0 ).hasClass( "ui-corner-all" ), "open header is not .ui-corner-all" );
+		ok( headers.eq( 1 ).hasClass( "ui-corner-all" ), "closed header is .ui-corner-all" );
+		ok( headers.next().is( ".ui-accordion-content.ui-widget-content.ui-corner-bottom" ),
+			"panel has proper classes" );
+
+		equal( headers.length, 3,
 			".ui-accordion-header elements exist, correct number" );
-		equal( element.find( ".ui-accordion-content" ).length, 3,
+		equal( panels.length, 3,
 			".ui-accordion-content elements exist, correct number" );
-		deepEqual( element.find( ".ui-accordion-header" ).next().get(),
-			element.find( ".ui-accordion-content" ).get(),
+		deepEqual( headers.next().get(), panels.get(),
 			"content panels come immediately after headers" );
 	});
 });

@@ -1,5 +1,13 @@
 TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
+		classes: {
+			"ui-menu": "ui-corner-all",
+			"ui-menu-icons": "",
+			"ui-menu-icon": "",
+			"ui-menu-item": "",
+			"ui-menu-item-wrapper": "",
+			"ui-menu-divider": ""
+		},
 		disabled: false,
 		icons: {
 			submenu: "ui-icon-caret-1-e"

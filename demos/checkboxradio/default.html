@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Checkboxradio - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../ui/core.js"></script>
+	<script src="../../ui/widget.js"></script>
+	<script src="../../ui/checkboxradio.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$( "input" ).checkboxradio();
+	});
+	</script>
+</head>
+<body>
+<div class="widget">
+	<h1>Checkbox and radio button widgets</h1>
+	<h2>Checkbox</h2>
+	<fieldset>
+		<legend>Filter by rating</legend>
+		<label for="rating-1">2 Star</label>
+		<input type="checkbox" name="rating" id="rating-1" value="1">
+		<label for="rating-2">3 Star</label>
+		<input type="checkbox" name="rating" id="rating-2" value="2">
+		<label for="rating-3">4 Star</label>
+		<input type="checkbox" name="rating" id="rating-3" value="3">
+		<label for="rating-4">5 Star</label>
+		<input type="checkbox" name="rating" id="rating-4" value="4">
+	</fieldset>
+	<h2>Radio Group</h2>
+	<fieldset>
+		<legend>Filter by location: </legend>
+		<label for="location-new-york">New York</label>
+		<input type="radio" name="location" id="location-new-york">
+		<label>Paris
+			<input type="radio" name="location" id="location-paris">
+		</label>
+		<input type="radio" name="location" id="location-london">
+		<label for="location-london">London</label>
+	</fieldset>
+</div>
+
+<div class="demo-description">
+<p>Examples of the markup that can be used with checkboxs and radio buttons.</p>
+</div>
+</body>
+</html>

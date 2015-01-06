@@ -10,6 +10,7 @@
 	<script src="../../ui/position.js"></script>
 	<script src="../../ui/tooltip.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/controlgroup.js"></script>
 	<script src="../../ui/menu.js"></script>
 	<script src="../../ui/effect.js"></script>
 	<script src="../../ui/effect-blind.js"></script>
@@ -78,8 +79,10 @@
 				notify( button );
 			});
 		});
-		$( ".set" ).buttonset({
-			items: "button"
+		$( ".set" ).controlgroup({
+			items: {
+				"button" : "button"
+			}
 		});
 
 		$( "button.menu" )

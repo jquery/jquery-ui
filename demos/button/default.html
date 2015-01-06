@@ -11,24 +11,33 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "input[type=submit], a, button" )
-			.button()
-			.click(function( event ) {
-				event.preventDefault();
-			});
+		$( ".widget input[type=submit], .widget a, .widget button" ).button();
+		$( "button, input, a" ).click( function( event ) {
+			event.preventDefault();
+		});
 	});
 	</script>
 </head>
 <body>
+<div class="widget">
+	<h1>Widget Buttons</h1>
+	<button>A button element</button>
 
-<button>A button element</button>
+	<input type="submit" value="A submit button">
 
-<input type="submit" value="A submit button">
+	<a href="#">An anchor</a>
+</div>
+<h1>CSS Buttons</h1>
+<button class="ui-button ui-widget ui-corner-all">A button element</button>
 
-<a href="#">An anchor</a>
+<input class="ui-button ui-widget ui-corner-all" type="submit" value="A submit button">
+
+<a class="ui-button ui-widget ui-corner-all" href="#">An anchor</a>
 
 <div class="demo-description">
 <p>Examples of the markup that can be used for buttons: A button element, an input of type submit and an anchor.</p>
+<p>Buttons can be styled via the button widget for by adding the classes yourself to avoid the javascript overhead if you dont need any of the methods provided by the button widget</p>p>
+<p>Here you can see examples of both buttons styled with css only and done using the button widget</p>
 </div>
 </body>
 </html>

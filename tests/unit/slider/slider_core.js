@@ -12,6 +12,21 @@ function handle() {
 // Slider Tests
 module( "slider: core" );
 
+test( "markup structure", function() {
+	expect( 3 );
+	var element = $( "<div></div>" ).slider({ range: true }),
+		handle = element.find( "span" ),
+		range = element.find( "div" );
+
+	ok( element.is( ".ui-slider.ui-widget.ui-widget-content.ui-corner-all" ),
+		"main element has proper classes" );
+
+	ok( handle.is( ".ui-slider-handle.ui-corner-all" ), "handle has proper classes" );
+
+	ok( range.is( ".ui-slider-range.ui-widget-header.ui-corner-all" ),
+		"range has proper classes" );
+});
+
 test( "keydown HOME on handle sets value to min", function() {
 	expect( 2 );
 	element = $( "<div></div>" );

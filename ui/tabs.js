@@ -34,6 +34,16 @@ return $.widget( "ui.tabs", {
 	delay: 300,
 	options: {
 		active: null,
+		classes: {
+			"ui-tabs": "ui-corner-all",
+			"ui-tabs-collapsible": "",
+			"ui-tabs-active": "",
+			"ui-tabs-nav": "ui-corner-all",
+			"ui-tab": "ui-corner-top",
+			"ui-tabs-anchor": "",
+			"ui-tabs-panel": "ui-corner-bottom",
+			"ui-tabs-loading": ""
+		},
 		collapsible: false,
 		event: "click",
 		heightStyle: "content",
@@ -75,8 +85,8 @@ return $.widget( "ui.tabs", {
 		this.running = false;
 
 		this.element
-			.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" )
-			.toggleClass( "ui-tabs-collapsible", options.collapsible );
+			.addClass( this._classes( "ui-tabs" ) + " ui-widget ui-widget-content" )
+			.toggleClass( this._classes( "ui-tabs-collapsible" ), options.collapsible );
 
 		this._processTabs();
 		options.active = this._initialActive();
@@ -267,6 +277,32 @@ return $.widget( "ui.tabs", {
 		return index;
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-tabs-collapsible":
+				if ( !this.options.collapsible ) {
+					return $();
+				}
+				break;
+			case "ui-tabs-active":
+				return this.active;
+			case "ui-tabs-nav":
+				return this.tablist;
+			case "ui-tab":
+				return this.tabs;
+			case "ui-tabs-anchor":
+				return this.anchors;
+			case "ui-tabs-panel":
+				return this.panels;
+			case "ui-tabs-loading":
+				if ( this.tab.hasClass( classKey ) ) {
+					return this.tab;
+				}
+				return $();
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "active" ) {
 			// _activate() will handle invalid values and update this.options
@@ -283,7 +319,7 @@ return $.widget( "ui.tabs", {
 		this._super( key, value);
 
 		if ( key === "collapsible" ) {
-			this.element.toggleClass( "ui-tabs-collapsible", value );
+			this.element.toggleClass( this._classes( "ui-tabs-collapsible" ), value );
 			// Setting collapsible: false while collapsed; open first panel
 			if ( !value && this.options.active === false ) {
 				this._activate( 0 );
@@ -359,7 +395,7 @@ return $.widget( "ui.tabs", {
 			this.tabs.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
 			this.active
-				.addClass( "ui-tabs-active ui-state-active" )
+				.addClass( this._classes( "ui-tabs-active" ) + " ui-state-active" )
 				.attr({
 					"aria-selected": "true",
 					"aria-expanded": "true",
@@ -380,7 +416,7 @@ return $.widget( "ui.tabs", {
 			prevPanels = this.panels;
 
 		this.tablist = this._getList()
-			.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
+			.addClass( this._classes( "ui-tabs-nav" ) + " ui-helper-reset ui-helper-clearfix ui-widget-header" )
 			.attr( "role", "tablist" )
 
 			// Prevent users from focusing disabled tabs via click
@@ -403,7 +439,7 @@ return $.widget( "ui.tabs", {
 			});
 
 		this.tabs = this.tablist.find( "> li:has(a[href])" )
-			.addClass( "ui-state-default ui-corner-top" )
+			.addClass( this._classes( "ui-tab" ) + " ui-state-default" )
 			.attr({
 				role: "tab",
 				tabIndex: -1
@@ -412,7 +448,7 @@ return $.widget( "ui.tabs", {
 		this.anchors = this.tabs.map(function() {
 				return $( "a", this )[ 0 ];
 			})
-			.addClass( "ui-tabs-anchor" )
+			.addClass( that._classes( "ui-tabs-anchor" ) )
 			.attr({
 				role: "presentation",
 				tabIndex: -1
@@ -459,7 +495,7 @@ return $.widget( "ui.tabs", {
 		});
 
 		this.panels
-			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+			.addClass( this._classes( "ui-tabs-panel" ) + " ui-widget-content" )
 			.attr( "role", "tabpanel" );
 
 		// Avoid memory leaks (#10056)
@@ -478,7 +514,7 @@ return $.widget( "ui.tabs", {
 	_createPanel: function( id ) {
 		return $( "<div>" )
 			.attr( "id", id )
-			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+			.addClass( this._classes( "ui-tabs-panel" ) + " ui-widget-content" )
 			.data( "ui-tabs-destroy", true );
 	},
 
@@ -626,7 +662,7 @@ return $.widget( "ui.tabs", {
 		}
 
 		function show() {
-			eventData.newTab.closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
+			eventData.newTab.closest( "li" ).addClass( that._classes( "ui-tabs-active" ) + " ui-state-active" );
 
 			if ( toShow.length && that.options.show ) {
 				that._show( toShow, that.options.show, complete );
@@ -639,11 +675,11 @@ return $.widget( "ui.tabs", {
 		// start out by hiding, then showing, then completing
 		if ( toHide.length && this.options.hide ) {
 			this._hide( toHide, this.options.hide, function() {
-				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+				eventData.oldTab.closest( "li" ).removeClass( that._classes( "ui-tabs-active" ) + " ui-state-active" );
 				show();
 			});
 		} else {
-			eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+			eventData.oldTab.closest( "li" ).removeClass( this._classes( "ui-tabs-active" ) + " ui-state-active" );
 			toHide.hide();
 			show();
 		}
@@ -709,18 +745,19 @@ return $.widget( "ui.tabs", {
 	},
 
 	_destroy: function() {
+		var that = this;
 		if ( this.xhr ) {
 			this.xhr.abort();
 		}
 
-		this.element.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" );
+		this.element.removeClass( this._classes( "ui-tabs ui-tabs-collapsible" ) + " ui-widget ui-widget-content" );
 
 		this.tablist
-			.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
+			.removeClass( this._classes( "ui-tabs-nav" ) + " ui-helper-reset ui-helper-clearfix ui-widget-header" )
 			.removeAttr( "role" );
 
 		this.anchors
-			.removeClass( "ui-tabs-anchor" )
+			.removeClass( this._classes( "ui-tabs-anchor" ) )
 			.removeAttr( "role" )
 			.removeAttr( "tabIndex" )
 			.removeUniqueId();
@@ -732,8 +769,8 @@ return $.widget( "ui.tabs", {
 				$( this ).remove();
 			} else {
 				$( this )
-					.removeClass( "ui-state-default ui-state-active ui-state-disabled " +
-						"ui-corner-top ui-corner-bottom ui-widget-content ui-tabs-active ui-tabs-panel" )
+					.removeClass( that._classes( "ui-tabs-active ui-tab ui-tabs-panel" ) +
+						" ui-helper-reset ui-helper-clearfix ui-widget-content ui-state-default ui-state-active ui-state-disabled" )
 					.removeAttr( "tabIndex" )
 					.removeAttr( "aria-live" )
 					.removeAttr( "aria-busy" )
@@ -831,7 +868,7 @@ return $.widget( "ui.tabs", {
 		// jQuery <1.8 returns false if the request is canceled in beforeSend,
 		// but as of 1.8, $.ajax() always returns a jqXHR object.
 		if ( this.xhr && this.xhr.statusText !== "canceled" ) {
-			tab.addClass( "ui-tabs-loading" );
+			tab.addClass( this._classes( "ui-tabs-loading" ) );
 			panel.attr( "aria-busy", "true" );
 
 			this.xhr
@@ -851,7 +888,7 @@ return $.widget( "ui.tabs", {
 							that.panels.stop( false, true );
 						}
 
-						tab.removeClass( "ui-tabs-loading" );
+						tab.removeClass( that._classes( "ui-tabs-loading" ) );
 						panel.removeAttr( "aria-busy" );
 
 						if ( jqXHR === that.xhr ) {

@@ -36,6 +36,15 @@ return $.widget( "ui.selectmenu", {
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,
+		classes: {
+			"ui-selectmenu-button": "",
+			"ui-selectmenu-button-open": "ui-corner-top",
+			"ui-selectmenu-button-closed": "ui-corner-all",
+			"ui-selectmenu-text": "",
+			"ui-selectmenu-menu": "",
+			"ui-selectmenu-optgroup": "",
+			"ui-selectmenu-open": ""
+		},
 		disabled: null,
 		icons: {
 			button: "ui-icon-triangle-1-s"
@@ -92,7 +101,8 @@ return $.widget( "ui.selectmenu", {
 
 		// Create button
 		this.button = $( "<span>", {
-			"class": "ui-selectmenu-button ui-widget ui-state-default ui-corner-all",
+			"class": this._classes( "ui-selectmenu-button ui-selectmenu-button-closed" ) +
+			" ui-button ui-icon-end ui-widget ui-state-default",
 			tabindex: this.options.disabled ? -1 : 0,
 			id: this.ids.button,
 			role: "combobox",
@@ -123,8 +133,6 @@ return $.widget( "ui.selectmenu", {
 				that._refreshMenu();
 			}
 		});
-		this._hoverable( this.button );
-		this._focusable( this.button );
 	},
 
 	_drawMenu: function() {
@@ -139,7 +147,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Wrap menu
 		this.menuWrap = $( "<div>", {
-			"class": "ui-selectmenu-menu ui-front"
+			"class": this._classes( "ui-selectmenu-menu" ) + " ui-front"
 		})
 			.append( this.menu )
 			.appendTo( this._appendTo() );
@@ -147,6 +155,9 @@ return $.widget( "ui.selectmenu", {
 		// Initialize menu widget
 		this.menuInstance = this.menu
 			.menu({
+				classes: {
+					"ui-menu": $.ui.menu.prototype.options.classes[ "ui-menu" ] + " ui-corner-bottom"
+				},
 				role: "listbox",
 				select: function( event, ui ) {
 					event.preventDefault();
@@ -175,11 +186,6 @@ return $.widget( "ui.selectmenu", {
 				}
 			})
 			.menu( "instance" );
-
-		// Adjust menu styles to dropdown
-		this.menu
-			.addClass( "ui-corner-bottom" )
-			.removeClass( "ui-corner-all" );
 
 		// Don't close the menu on mouseleave
 		this.menuInstance._off( this.menu, "mouseleave" );
@@ -288,7 +294,7 @@ return $.widget( "ui.selectmenu", {
 
 	_renderButtonItem: function( item ) {
 		var buttonItem = $( "<span>", {
-			"class": "ui-selectmenu-text"
+			"class": this._classes( "ui-selectmenu-text" )
 		});
 		this._setText( buttonItem, item.label );
 
@@ -302,7 +308,7 @@ return $.widget( "ui.selectmenu", {
 		$.each( items, function( index, item ) {
 			if ( item.optgroup !== currentOptgroup ) {
 				$( "<li>", {
-					"class": "ui-selectmenu-optgroup ui-menu-divider" +
+					"class": that._classes( "ui-selectmenu-optgroup" ) + " ui-menu-divider" +
 						( item.element.parent( "optgroup" ).prop( "disabled" ) ?
 							" ui-state-disabled" :
 							"" ),
@@ -523,6 +529,35 @@ return $.widget( "ui.selectmenu", {
 		this.menu.attr( "aria-activedescendant", id );
 	},
 
+	_elementsFromClassKey: function( classKey ) {
+		switch ( classKey ) {
+			case "ui-selectmenu-button":
+				return this.button;
+			case "ui-selectmenu-button-open":
+				if ( this.isOpen ) {
+					return this.button;
+				}
+				return $();
+			case "ui-selectmenu-button-closed":
+				if ( !this.isOpen ) {
+					return this.button;
+				}
+				return $();
+			case "ui-selectmenu-text":
+				return this.buttonText;
+			case "ui-selectmenu-menu":
+				return this.menu;
+			case "ui-selectmenu-optgroup":
+				return this.menu.find( classKey );
+			case "ui-selectmenu-open":
+				if ( this.isOpen ) {
+					return this.menuWrap;
+				}
+				return $();
+		}
+		return this._superApply( arguments );
+	},
+
 	_setOption: function( key, value ) {
 		if ( key === "icons" ) {
 			this.button.find( "span.ui-icon" )
@@ -578,10 +613,10 @@ return $.widget( "ui.selectmenu", {
 
 	_toggleAttr: function() {
 		this.button
-			.toggleClass( "ui-corner-top", this.isOpen )
-			.toggleClass( "ui-corner-all", !this.isOpen )
+			.toggleClass( this._classes( "ui-selectmenu-button-open" ), this.isOpen )
+			.toggleClass( this._classes( "ui-selectmenu-button-closed" ), !this.isOpen )
 			.attr( "aria-expanded", this.isOpen );
-		this.menuWrap.toggleClass( "ui-selectmenu-open", this.isOpen );
+		this.menuWrap.toggleClass( this._classes( "ui-selectmenu-open" ), this.isOpen );
 		this.menu.attr( "aria-hidden", !this.isOpen );
 	},
 
