@@ -141,7 +141,8 @@ function Datepicker() {
 		constrainInput: true, // The input is constrained by the current date format
 		showButtonPanel: false, // True to show button panel, false to not show it
 		autoSize: false, // True to size the input for the date format, false to leave as is
-		disabled: false // The initial disabled state
+		disabled: false, // The initial disabled state
+		alignRight: false // Align the widget to the right side of the input
 	};
 	$.extend(this._defaults, this.regional[""]);
 	this.regional.en = $.extend( true, {}, this.regional[ "" ]);
@@ -861,7 +862,7 @@ $.extend(Datepicker.prototype, {
 			viewWidth = document.documentElement.clientWidth + (isFixed ? 0 : $(document).scrollLeft()),
 			viewHeight = document.documentElement.clientHeight + (isFixed ? 0 : $(document).scrollTop());
 
-		offset.left -= (this._get(inst, "isRTL") ? (dpWidth - inputWidth) : 0);
+		offset.left -= (this._get(inst, "isRTL") || this._get(inst, "alignRight") ? (dpWidth - inputWidth) : 0);
 		offset.left -= (isFixed && offset.left === inst.input.offset().left) ? $(document).scrollLeft() : 0;
 		offset.top -= (isFixed && offset.top === (inst.input.offset().top + inputHeight)) ? $(document).scrollTop() : 0;
 
