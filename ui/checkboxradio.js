@@ -178,7 +178,7 @@ $.widget( "ui.checkboxradio", {
 			if ( form ) {
 				radios = $( form ).find( "[name='" + name + "']" );
 			} else {
-				radios = $( "[name='" + name + "']", radio.ownerDocument )
+				radios = $( "[name='" + name + "']", this.document )
 				.filter(function() {
 					return !this.form;
 				});
