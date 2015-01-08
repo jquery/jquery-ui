@@ -32,6 +32,9 @@
 var formResetHandler = function() {
 		var form = $( this );
 		setTimeout(function() {
+			// We find .ui-button first then filer by :ui-button because doing a
+			// widget pseudo selectors are very very slow but we need to filter out
+			// css only buttons
 			form.find( ".ui-button" ).filter( ":ui-button" ).button( "refresh" );
 		});
 	};
