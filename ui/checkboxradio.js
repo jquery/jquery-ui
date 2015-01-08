@@ -30,6 +30,7 @@ var formResetHandler = function() {
 			form.find( ".ui-checkboxradio" ).checkboxradio( "refresh" );
 		});
 	},
+	escapeId = new RegExp( /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g ),
 	radioGroup = function( radio ) {
 		var name = radio.name,
 			form = radio.form,
@@ -137,7 +138,8 @@ $.widget( "ui.checkboxradio", {
 			ancestor = this.element.parents().last();
 
 			// Look for the label based on the id
-			labelSelector = "label[for='" + this.element.attr( "id" ) + "']";
+			labelSelector = "label[for='" +
+				this.element.attr( "id" ).replace( escapeId, "\\$1" ) + "']";
 			this.label = ancestor.find( labelSelector );
 			if ( !this.label.length ) {
 
@@ -165,7 +167,6 @@ $.widget( "ui.checkboxradio", {
 		this._setOption( "disabled", this.options.disabled );
 		this._updateIcon( checked );
 		this._addClass( "ui-checkboxradio", "ui-helper-hidden-accessible " );
-
 		this._addClass( this.label, "ui-checkboxradio-label", "ui-button ui-widget" );
 
 		if ( this.type === "radio" ) {
