@@ -30,24 +30,7 @@ var formResetHandler = function() {
 			form.find( ".ui-checkboxradio" ).checkboxradio( "refresh" );
 		});
 	},
-	escapeId = new RegExp( /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g ),
-	radioGroup = function( radio ) {
-		var name = radio.name,
-			form = radio.form,
-			radios = $( [] );
-		if ( name ) {
-			name = name.replace( /'/g, "\\'" );
-			if ( form ) {
-				radios = $( form ).find( "[name='" + name + "']" );
-			} else {
-				radios = $( "[name='" + name + "']", radio.ownerDocument )
-				.filter(function() {
-					return !this.form;
-				});
-			}
-		}
-		return radios;
-	};
+	escapeId = new RegExp( /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g );
 
 $.widget( "ui.checkboxradio", {
 	version: "@VERSION",
@@ -186,6 +169,24 @@ $.widget( "ui.checkboxradio", {
 		return this.label;
 	},
 
+	_getRadioGroup: function( radio ) {
+		var name = this.element[0].name,
+			form = this.element[0].form,
+			radios = $( [] );
+		if ( name ) {
+			name = name.replace( /'/g, "\\'" );
+			if ( form ) {
+				radios = $( form ).find( "[name='" + name + "']" );
+			} else {
+				radios = $( "[name='" + name + "']", radio.ownerDocument )
+				.filter(function() {
+					return !this.form;
+				});
+			}
+		}
+		return radios.not( this.element );
+	},
+
 	_toggleClasses: function() {
 		var checked = this.element[ 0 ].checked;
 		this._toggleClass( this.label, "ui-checkboxradio-checked", "ui-state-active", checked );
@@ -194,8 +195,7 @@ $.widget( "ui.checkboxradio", {
 				._toggleClass( this.icon, null, "ui-icon-blank", !checked );
 		}
 		if ( this.type === "radio" ) {
-			radioGroup( this.element[0] )
-				.not( this.element )
+			this._getRadioGroup()
 				.each( function(){
 					var instance = $( this ).checkboxradio( "instance" );
 
