@@ -36,11 +36,7 @@ $.widget( "ui.controlgroup", {
 		},
 		direction: "horizontal",
 		excludeInvisible: true,
-		classes: {
-			"ui-controlgroup": "",
-			"ui-controlgroup-horizontal": "",
-			"ui-controlgroup-vertical": ""
-		}
+		classes: {}
 	},
 
 	_create: function() {
@@ -54,12 +50,14 @@ $.widget( "ui.controlgroup", {
 	},
 
 	_destroy: function() {
+		var that = this;
+		$.each( this.options.items, function( widget, selector ) {
+			that.element.children( selector ).map(function(){
+				return $( this )[ widget ]( "widget" )[ 0 ];
+			}).removeData( "ui-controlgroup-data" );
+		});
 		this._callChildMethod( "destroy" );
 		this.element.removeAttr( "role" );
-		this.element.removeClass(
-			this._classes( "ui-controlgroup ui-controlgroup-vertical ui-controlgroup-horizontal" )
-		).children().removeClass( "ui-corner-all ui-corner-top" +
-			" ui-corner-bottom ui-corner-left ui-corner-tl ui-corner-tr" );
 	},
 
 	_callChildMethod: function( method ) {
@@ -67,46 +65,72 @@ $.widget( "ui.controlgroup", {
 		$.each( this.options.items, function( widget, selector ) {
 			var options = {};
 			if ( that[ "_" + widget + "_options" ] ) {
-				options = that[ "_" + widget + "_options" ]();
+				options = that[ "_" + widget + "_options" ]( "middle" );
 			}
 			if ( $.fn[ widget ] && selector ) {
-				that.element.children( selector )[ widget ]( method ?
-					method : options );
+				that.element
+					.children( selector )[ widget ]( method ? method: options )
+					.each(function(){
+						if ( method !== "destroy" ) {
+							$( this )[ widget ]( "widget" ).data( "ui-controlgroup-data", {
+								"type": widget,
+								"element": $( this )
+							});
+						}
+					});
 			}
 		});
 	},
 
-	_button_options: function() {
+	_button_options: function( position ) {
+		var cornerClasses = {
+			"middle": null,
+			"first": "ui-corner-" + ( ( this.options.direction === "vertical" )? "top" : "left" ),
+			"last": "ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom" : "right" )
+		};
+
 		return {
 					classes: {
-						"ui-button": ""
+						"ui-button": cornerClasses[ position ]
 					}
 				};
 	},
 
-	_checkboxradio_options: function() {
+	_checkboxradio_options: function( position ) {
+		var cornerClasses = {
+			"middle": null,
+			"first": "ui-corner-" + ( ( this.options.direction === "vertical" )? "top" : "left" ),
+			"last": "ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom" : "right" )
+		};
+
 		return {
 					classes: {
-						"ui-checkbox-label": "",
-						"ui-radio-label": ""
+						"ui-checkboxradio-label": cornerClasses[ position ]
 					}
 				};
 	},
 
-	_selectmenu_options: function() {
-		return {
-					classes: {
-						"ui-selectmenu-button-open": "",
-						"ui-selectmenu-button-closed": ""
-					}
-				};
-	},
+	_selectmenu_options: function( position ) {
+		var classes = {
+			middle: {
+				"ui-selectmenu-button-open": null,
+				"ui-selectmenu-button-closed": null
+			},
+			first: {
+				"ui-selectmenu-button-open":
+					"ui-corner-" + ( ( this.options.direction === "vertical" )? "top": "tl" ),
+				"ui-selectmenu-button-closed":
+					"ui-corner-" + ( ( this.options.direction === "vertical" )? "top": "left" )
+			},
+			last: {
+				"ui-selectmenu-button-open":
+					( this.options.direction === "vertical" )? null: "ui-corner-tr",
+				"ui-selectmenu-button-closed":
+					"ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom": "right" )
+			}
 
-	_elementsFromClassKey: function( classKey ) {
-		if ( this.options.direction !== classKey.split( "-" )[ 2 ] ) {
-			return $();
-		}
-		return this._superApply( arguments );
+		};
+		return { classes: classes[ position ] };
 	},
 
 	_setOption: function( key, value ) {
@@ -124,55 +148,24 @@ $.widget( "ui.controlgroup", {
 
 	},
 
-	_refresh_selectmenu: function() {
-		var firstClasses = {},
-			lastClasses = {},
-			vertical = ( this.options.direction === "vertical" );
-
-		if ( $.ui.selectmenu ) {
-			if ( this.first.is( ".ui-selectmenu-button" ) && !vertical ) {
-				firstClasses[ "ui-selectmenu-button-open" ] = "ui-corner-tl";
-				firstClasses[ "ui-selectmenu-button-closed" ] = "ui-corner-left";
-				$( "#" + this.first.attr( "id" ).replace( /-button/, "" ) )
-					.selectmenu( "option", "classes", firstClasses );
-			}
-			if ( this.last.is( ".ui-selectmenu-button" ) ) {
-				if ( vertical ) {
-					lastClasses[ "ui-selectmenu-button-open" ] = null;
-					lastClasses[ "ui-selectmenu-button-closed" ] = "ui-corner-bottom";
-				} else {
-					lastClasses[ "ui-selectmenu-button-open" ] = "ui-corner-tr";
-					lastClasses[ "ui-selectmenu-button-closed" ] = "ui-corner-right";
-				}
-				$( "#" + this.last.attr( "id" ).replace( /-button/, "" ) )
-					.selectmenu( "option", "classes", lastClasses );
-			}
-			this.element.find( this.options.items.selectmenu ).selectmenu( "refresh" );
-		}
-	},
-
 	refresh: function() {
-		var that = this,
-			vertical = ( this.options.direction === "vertical" );
-		this.element.addClass( this._classes( "ui-controlgroup ui-controlgroup-" +
-			this.options.direction ) );
-		this._callChildMethod( undefined );
-		this.visible = this.element.children( ".ui-button" ).removeClass( function(index, css) {
-			return ( css.match( /ui-corner-[a-z]*/g ) || [] ).join( " " );
-		}).filter( this.options.excludeInvisible ? ":visible" : "*" );
+		var children,
+			that = this;
 
-		this.first = this.visible.eq( 0 )
-			.addClass( "ui-corner-" + ( vertical ? "top" : "left" ) );
-		this.last =	this.visible.last()
-			.addClass( "ui-corner-" + ( vertical ? "bottom" : "right" ) );
+		this._addClass( "ui-controlgroup ui-controlgroup-" + this.options.direction );
+		this._callChildMethod();
+		children = this.element.children( ".ui-button" );
 
-		$.each( this.options.items, function( widget ) {
-			if ( that[ "_refresh_" + widget ] ) {
-				that[ "_refresh_" + widget ]();
-			}
-		});
-		this._callChildMethod( "refresh" );
-
+		if ( this.options.excludeInvisible ) {
+			children = children.filter( ":visible" );
+		}
+		if ( children.length ) {
+			[ "first", "last" ].forEach( function( value ){
+				var data = children[ value ]().data( "ui-controlgroup-data" );
+				data.element[ data.type ]( that[ "_" + data.type + "_options" ]( value ) );
+			});
+			this._callChildMethod( "refresh" );
+		}
 	}
 
 });
