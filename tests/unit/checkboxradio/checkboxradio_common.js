@@ -5,11 +5,8 @@ TestHelpers.commonWidgetTests( "checkboxradio", {
 		label: null,
 		icon: true,
 		classes: {
-			"ui-checkboxradio": "",
 			"ui-checkboxradio-label": "ui-corner-all",
-			"ui-checkboxradio-radio-label": "",
-			"ui-checkboxradio-icon": "ui-corner-all",
-			"ui-checkboxradio-checked": ""
+			"ui-checkboxradio-icon": "ui-corner-all"
 		},
 
 		// Callbacks

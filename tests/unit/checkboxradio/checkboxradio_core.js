@@ -13,9 +13,10 @@ test("Checkbox", function() {
 	ok( input.is( ":visible" ) );
 	ok( !label.hasClass(".ui-button)") );
 	input.checkboxradio();
-	strictEqual( input.attr( "class" ), "ui-helper-hidden-accessible ui-checkboxradio" );
-	strictEqual( label.attr( "class" ), "ui-icon-beginning ui-button ui-widget" +
-		" ui-checkboxradio-label ui-corner-all" );
+	equal( input.is( ".ui-helper-hidden-accessible.ui-checkboxradio" ), true,
+		"Input has proper classes" );
+	equal( label.is( ".ui-icon-beginning.ui-button.ui-widget.ui-checkboxradio-label.ui-corner-all" ),
+		true, "Label has proper classes" );
 });
 
 test("Radios", function() {
