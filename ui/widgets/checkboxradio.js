@@ -14,8 +14,10 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
-			"./core",
-			"./widget"
+			"../escape-selector",
+			"../form-reset-mixin",
+			"../labels",
+			"../widget"
 		], factory );
 	} else {
 
@@ -24,19 +26,7 @@
 	}
 }( function( $ ) {
 
-// Remove and replace with reset handler extension
-var formResetHandler = function() {
-		var form = $( this );
-
-		// Wait for the form reset to actually happen before refreshing
-		setTimeout( function() {
-
-			// We dont filter for css only versions since css only is not supported
-			form.find( ".ui-checkboxradio" ).checkboxradio( "refresh" );
-		} );
-	};
-
-$.widget( "ui.checkboxradio", {
+$.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	version: "@VERSION",
 	options: {
 		disabled: null,
@@ -91,20 +81,12 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_create: function() {
-		var formCount,
-			checked = this.element[ 0 ].checked,
-			form = this.element.form();
-		this.formParent = !!form.length ? form : $( "body" );
+		var checked = this.element[ 0 ].checked;
 
-		formCount = this.formParent.data( "uiCheckboxradioCount" ) || 0;
+		this._bindFormResetHandler();
 
-		// We don't use _on and _off here because we want all the checkboxes in the same form to use
-		// single handler which handles all the checkboxradio widgets in the form
-		if ( formCount === 0 ) {
-			this.formParent.on( "reset." + this.widgetFullName, formResetHandler );
-		}
-
-		this.formParent.data( "uiCheckboxradioCount", formCount + 1 );
+		// this.form is set by the form-reset-mixin
+		this.formParent = this.form.length ? this.form : $( "body" );
 
 		if ( this.options.disabled == null ) {
 			this.options.disabled = this.element[ 0 ].disabled || false;
@@ -199,13 +181,7 @@ $.widget( "ui.checkboxradio", {
 	},
 
 	_destroy: function() {
-		var formCount = this.formParent.data( "uiCheckboxradioCount" ) - 1;
-
-		this.formParent.data( "uiCheckboxradioCount", formCount );
-
-		if ( formCount === 0 ) {
-			this.formParent.off( "reset." + this.widgetFullName, formResetHandler );
-		}
+		this._unbindFormResetHandler();
 
 		if ( this.icon ) {
 			this.icon.remove();
@@ -282,7 +258,7 @@ $.widget( "ui.checkboxradio", {
 		}
 	}
 
-} );
+} ] );
 
 return $.ui.checkboxradio;
 

@@ -1,5 +1,6 @@
 define( [
 	"jquery",
+	"ui/safe-active-element",
 	"ui/widgets/button"
 ], function( $ ) {
 

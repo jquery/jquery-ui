@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/checkboxradio"
+	"ui/widgets/checkboxradio"
 ], function( $ ) {
 
 module( "Checkboxradio: options" );

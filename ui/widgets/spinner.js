@@ -250,17 +250,19 @@ $.widget( "ui.spinner", {
 		// Button bindings
 		this.buttons = this.uiSpinner.children( "a" )
 			.attr( "tabIndex", -1 )
-			.button();
+			.button( {
+				classes: {
+					"ui-button": ""
+				}
+			} );
 
 		// TODO: Right now button does not support classes this is already updated in button PR
 		this._removeClass( this.buttons, "ui-corner-all" );
 
 		this._addClass( this.buttons.first(), "ui-spinner-button ui-spinner-up" );
 		this._addClass( this.buttons.last(), "ui-spinner-button ui-spinner-down" );
-		this._addClass( this.buttons.first().find( ".ui-button-text span" ), null,
-			"ui-icon " + this.options.icons.up );
-		this._addClass( this.buttons.last().find( ".ui-button-text span" ), null,
-			"ui-icon " + this.options.icons.down );
+		this.buttons.first().button( "option", "icon", this.options.icons.up );
+		this.buttons.last().button( "option", "icon", this.options.icons.down );
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height

@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/checkboxradio"
+	"ui/widgets/checkboxradio"
 ], function( common ) {
 
 common.testWidget( "checkboxradio", {
