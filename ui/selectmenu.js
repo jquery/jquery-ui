@@ -112,7 +112,7 @@ return $.widget( "ui.selectmenu", {
 			.insertAfter( this.element );
 
 		this._addClass( this.button, "ui-selectmenu-button ui-selectmenu-button-closed",
-			"ui-widget ui-state-default" );
+			"ui-button ui-icon-end ui-widget ui-state-default" );
 
 		icon = $( "<span>" ).prependTo( this.button );
 		this._addClass( icon, null, "ui-icon " + this.options.icons.button );
