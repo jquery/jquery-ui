@@ -7,9 +7,7 @@ TestHelpers.commonWidgetTests( "button", {
 		icon: null,
 		iconPosition: "beginning",
 		classes: {
-			"ui-button": "ui-corner-all",
-			"ui-button-icon-only": "",
-			"ui-button-icon": ""
+			"ui-button": "ui-corner-all"
 		},
 
 		// Callbacks
