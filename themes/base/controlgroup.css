@@ -11,11 +11,13 @@
 
 
 .ui-controlgroup > .ui-button {
-	margin-left: -.14em;
-	margin-right: -.14em;
+	float: left;
+	margin-left: 0;
+	margin-right: 0;
 }
 .ui-controlgroup.ui-controlgroup-vertical > .ui-button {
 	display: block;
+	float: none;
 	width: 100%;
 	margin-top: 0;
 	margin-bottom: 0;
