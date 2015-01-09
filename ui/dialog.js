@@ -748,7 +748,8 @@ return $.widget( "ui.dialog", {
 			width: "auto",
 			minHeight: 0,
 			maxHeight: "none",
-			height: 0
+			height: 0,
+			minWidth: options.minWidth
 		});
 
 		if ( options.minWidth > options.width ) {
