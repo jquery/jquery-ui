@@ -506,8 +506,8 @@ test("minMax", function() {
 
 	inp.datepicker("option", {
 		minDate: new Date(1900, 0, 1),
-		maxDate: "-6Y",
-		yearRange: "1900:-6"
+		maxDate: "-7Y",
+		yearRange: "1900:-7"
 	}).val( "" );
 	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - relative - next button disabled");
 	ok(!dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - relative - prev button enabled");
