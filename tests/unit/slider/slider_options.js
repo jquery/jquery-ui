@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 4 );
+	expect( 5 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -70,6 +70,18 @@ test( "max", function() {
 
 	element.slider( options );
 	ok( element.slider( "value" ) === options.max, "value method will max, step is changed" );
+	element.slider( "destroy" );
+
+	options = {
+		max: 60,
+		min: 50,
+		orientation: "horizontal",
+		step: 0.1,
+		value: 60
+	};
+
+	element.slider( options );
+	ok( element.slider( "value" ) === options.max, "value method will max, step is changed and step is float" );
 	element.slider( "destroy" );
 
 });
