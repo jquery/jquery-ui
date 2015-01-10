@@ -16,68 +16,83 @@ This is the best way to contribute to jQuery UI. Please read through the full gu
 
 Every week (unless otherwise noted) the jQuery UI team has a meeting to discuss the progress of current work and to bring forward possible new blockers for discussion. The meeting is held on [IRC](http://irc.jquery.org) in the #jquery-meeting channel at [Noon EST](http://www.timeanddate.com/worldclock/fixedtime.html?month=1&day=17&year=2011&hour=12&min=0&sec=0&p1=43) on Wednesdays. Meeting notes are posted on http://meetings.jquery.org/category/ui/ after each meeting.
 
-## Tips For Bug Patching
+## Tips for Getting Started
 
-### Environment: localhost w/ PHP, Node.js & Grunt
+### Environment: Minimum Required
 
-jQuery UI uses Node.js & Grunt to automate the building and validation of source code.
-
-Some tests depend on PHP running locally, so make sure you have the following installed:
-
-* A web server with PHP support (any will do, such as [XAMPP](http://www.apachefriends.org/en/xampp.html) or [MAMP](http://www.mamp.info/en/index.html))
-* [Node.js](http://nodejs.org/) (includes NPM, necessary for the next step)
-* Grunt (install with: `npm install -g grunt`)
-
-### Build a Local Copy of jQuery UI
-
-Create a fork of the jQuery UI repo on GitHub at http://github.com/jquery/jquery-ui.
-
-Change directory to your web root directory, whatever that might be:
+If you are contributing changes you will need a fork of jquery-ui (see [Getting the Source](#environment-getting-the-source)). If you just want the source code you could clone jquery-ui directly:
 
 ```bash
-$ cd /path/to/your/www/root/
+git clone git://github.com/jquery/jquery-ui.git
+cd jquery-ui
 ```
 
-Clone your jQuery UI fork to work locally.
+The tests can run in any local web server. Ideally you should test your patch in appropriate web browsers and if possible run `grunt` to lint the code and run automated tests (this will happen automatically when you create a pull request). See the [Recommended Setup](#environment-recommended-setup) for setting up Node.js so that the grunt command works.
+
+### Environment: Getting the Source
+
+* Create a fork of the jQuery UI repo on GitHub at http://github.com/jquery/jquery-ui. This will create a fork of jquery-ui in your Github account.
+* You may want to clone jquery-ui under the path to your web server. If so, change to the required directory
+
+```bash
+cd /path/to/your/www/root/
+```
+
+* Clone your jQuery UI git repo.
+
+```bash
+git clone git://github.com/[USERNAME]/jquery-ui.git
+cd jquery-ui
+```
 
 *Note: be sure to replace `[USERNAME]` with your GitHub username.*
 
-```bash
-$ git clone git@github.com:[USERNAME]/jquery-ui.git
-```
-
-Change to the newly created directory.
+* Add the official jQuery repository as a remote. We recommend naming it "upstream".
 
 ```bash
-$ cd jquery-ui
+git remote add upstream git://github.com/jquery/jquery-ui.git
 ```
 
-Add the official jQuery repository as a remote. We recommend naming it "upstream".
+* Get in the habit of pulling in the "upstream" master to stay up to date as jQuery UI receives new commits.
 
 ```bash
-$ git remote add upstream git://github.com/jquery/jquery-ui.git
+git pull upstream master
 ```
 
-Get in the habit of pulling in the "upstream" master to stay up to date as jQuery UI receives new commits.
+### Environment: Recommended Setup
+
+jQuery UI uses Node.js & Grunt to automate the building and validation of source code. Here is how to set that up:
+
+* Get [Node.js](http://nodejs.org/) (includes NPM, necessary for the next step)
+* Install Grunt cli:
 
 ```bash
-$ git pull upstream master
+npm install -g grunt-cli
 ```
 
-Install the dependencies.
+* Install local Node.js modules
 
 ```bash
 npm install
 ```
 
+The tests require a local web server and the samples contain some PHP, so a PHP web server may be useful.
+
+* Install a web server. Here are some you could use:
+  * Windows: [WAMP download](http://www.wampserver.com/en/)
+  * Mac: [MAMP download](http://www.mamp.info/en/index.html)
+  * Linux: [Setting up LAMP](https://www.linux.com/learn/tutorials/288158-easy-lamp-server-installation)
+  * [Mongoose (most platforms)](http://code.google.com/p/mongoose/)
+  * [http-server](https://www.npmjs.com/package/http-server)
+
+### Running the Tests
+
 To lint the JavaScript, HTML, and CSS, as well as run a smoke test in PhantomJS, run grunt:
 
 ```bash
-$ grunt
+grunt
 ```
 
 To run the tests for a specific plugin in your browser, open the appropriate file from the `/tests/unit/` directory, for example: `http://localhost/tests/unit/accordion/accordion.html`. The domain will be dependent on your local server configuration; if there is a port, be sure to include it.
 
 Ideally you would test in all of our [supported browsers](http://jqueryui.com/browser-support/), but if you don't have all of these browsers available, that's ok.
-
-Make sure to read our [commits and pull requests documentation](http://dev.contribute.jquery.org/commits-and-pull-requests/) for full details on working with branches and forks, as well as our commit guidelines.
