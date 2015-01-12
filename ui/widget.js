@@ -302,10 +302,7 @@ $.Widget.prototype = {
 		// all event bindings should go through this._on()
 		this.element
 			.unbind( this.eventNamespace )
-			.removeData( this.widgetFullName )
-			// support: jquery <1.6.3
-			// http://bugs.jquery.com/ticket/9413
-			.removeData( $.camelCase( this.widgetFullName ) );
+			.removeData( this.widgetFullName );
 		this.widget()
 			.unbind( this.eventNamespace )
 			.removeAttr( "aria-disabled" )
