@@ -154,6 +154,20 @@ test( "refresh - disabled optgroup", function() {
 	}
 });
 
+test( "refresh - remove all options", function() {
+	expect( 2 );
+
+	var element = $( "#speed" ).selectmenu(),
+		button = element.selectmenu( "widget" ),
+		menu = element.selectmenu( "menuWidget" );
+
+	element.children().remove();
+	element.selectmenu( "refresh" );
+	equal( button.find( ".ui-selectmenu-text" ).html(), $( "<span>&#160;</span>" ).html(),
+		"Empty button text" );
+	equal( menu.children().length, 0, "Empty menu" );
+});
+
 test( "widget and menuWidget", function() {
 	expect( 4 );
 

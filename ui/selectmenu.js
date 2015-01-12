@@ -66,6 +66,9 @@ return $.widget( "ui.selectmenu", {
 		this._drawButton();
 		this._drawMenu();
 
+		this._rendered = false;
+		this.menuItems = $();
+
 		if ( this.options.disabled ) {
 			this.disable();
 		}
@@ -119,7 +122,7 @@ return $.widget( "ui.selectmenu", {
 
 			// Delay rendering the menu items until the button receives focus.
 			// The menu may have already been rendered via a programmatic open.
-			if ( !that.menuItems ) {
+			if ( !that._rendered ) {
 				that._refreshMenu();
 			}
 		});
@@ -199,7 +202,8 @@ return $.widget( "ui.selectmenu", {
 		this._refreshMenu();
 		this.buttonItem.replaceWith(
 			this.buttonItem = this._renderButtonItem(
-				this._getSelectedItem().data( "ui-selectmenu-item" )
+				// Fall back to an empty object in case there are no options
+				this._getSelectedItem().data( "ui-selectmenu-item" ) || {}
 			)
 		);
 		if ( !this.options.width ) {
@@ -208,14 +212,10 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_refreshMenu: function() {
-		this.menu.empty();
-
 		var item,
 			options = this.element.find( "option" );
 
-		if ( !options.length ) {
-			return;
-		}
+		this.menu.empty();
 
 		this._parseOptions( options );
 		this._renderMenu( this.menu, this.items );
@@ -224,6 +224,12 @@ return $.widget( "ui.selectmenu", {
 		this.menuItems = this.menu.find( "li" )
 			.not( ".ui-selectmenu-optgroup" )
 				.find( ".ui-menu-item-wrapper" );
+
+		this._rendered = true;
+
+		if ( !options.length ) {
+			return;
+		}
 
 		item = this._getSelectedItem();
 
@@ -241,13 +247,18 @@ return $.widget( "ui.selectmenu", {
 		}
 
 		// If this is the first time the menu is being opened, render the items
-		if ( !this.menuItems ) {
+		if ( !this._rendered ) {
 			this._refreshMenu();
 		} else {
 
 			// Menu clears focus on close, reset focus to selected item
 			this.menu.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
 			this.menuInstance.focus( null, this._getSelectedItem() );
+		}
+
+		// If there are no options, don't open the menu
+		if ( !this.menuItems.length ) {
+			return;
 		}
 
 		this.isOpen = true;
