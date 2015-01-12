@@ -102,24 +102,24 @@ test( "content: string", function() {
 
 test( "content: element", function() {
 	expect( 1 );
-	var content = "<p>This is a <i>test</i> of the emergency broadcast system.</p>",
+	var content = "<p>this is a <i>test</i> of the emergency broadcast system.</p>",
 		element = $( content )[ 0 ];
 	$( "#tooltipped1" ).tooltip({
 		content: element,
 		open: function( event, ui ) {
-			equal( ui.tooltip.children().html(), content );
+			equal( ui.tooltip.children().html().toLowerCase(), content );
 		}
 	}).tooltip( "open" );
 });
 
 test( "content: jQuery", function() {
 	expect( 1 );
-	var content = "<p>This is a <i>test</i> of the emergency broadcast system.</p>",
+	var content = "<p>this is a <i>test</i> of the emergency broadcast system.</p>",
 		element = $( content );
 	$( "#tooltipped1" ).tooltip({
 		content: element,
 		open: function( event, ui ) {
-			equal( ui.tooltip.children().html(), content );
+			equal( ui.tooltip.children().html().toLowerCase(), content );
 		}
 	}).tooltip( "open" );
 });
