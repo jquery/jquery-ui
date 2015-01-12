@@ -16,11 +16,6 @@
 		"jshint": "2.4.4",
 		"qunit": "1.14.0",
 
-		"jquery-1.6.0": "jquery#1.6.0",
-		"jquery-1.6.1": "jquery#1.6.1",
-		"jquery-1.6.2": "jquery#1.6.2",
-		"jquery-1.6.3": "jquery#1.6.3",
-		"jquery-1.6.4": "jquery#1.6.4",
 		"jquery-1.7.0": "jquery#1.7.0",
 		"jquery-1.7.1": "jquery#1.7.1",
 		"jquery-1.7.2": "jquery#1.7.2",
