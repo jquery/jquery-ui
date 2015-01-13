@@ -36,7 +36,6 @@
 		height: 200px;
 	}
 	#resizable1 {
-		background: green;
 		height: 100px;
 		width: 100px;
 	}
@@ -59,6 +58,37 @@
 		position: relative;
 		width: 100px;
 		height: 100px;
+	#containment1 {
+		position: absolute;
+	    left: 0;
+	    top: 0;
+	    width: 300px;
+	    height: 200px;
+	}
+	#scroll-container {
+		position: relative;
+		width: 300px;
+		height: 300px;		
+	    overflow-y: auto;
+	    overflow-x: auto;
+	}
+	#lots_o_content {
+    	width: 600px;
+    	height: 600px;		
+	}
+	#containment2 {
+	    position: absolute;
+	    left: 50px;
+	    top: 50px;
+	    width: 300px;
+	    height: 300px;
+	}
+	#resizable3 {
+		position: absolute;
+		top: 100px;
+		left: 100px;
+		height: 100px;
+		width: 100px;
 	}
 	</style>
 </head>
@@ -69,12 +99,21 @@
 
 <div id="container">
 	<div id="resizable1">I'm a resizable.</div>
+	<div id="containment1"></div>
+</div>
+<div id="scroll-container">
+	<div id="lots_o_content"></div>
+	<div id="containment2"></div>
+	<div id="resizable3"></div>
+<<<<<<< HEAD
 </div>
 
 <div id="container2">
 	<div id="parent">
 		<div id="child">I'm a resizable.</div>
 	</div>
+=======
+>>>>>>> - Fixed a typo that was causing containment in the x direction to use the wrong offset.
 </div>
 <img src="images/test.jpg" id="resizable2" alt="solid gray">
 
