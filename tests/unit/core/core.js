@@ -127,18 +127,11 @@ test( "outerHeight(true) - setter", function() {
 test( "uniqueId / removeUniqueId", function() {
 	expect( 3 );
 	var el = $( "img" ).eq( 0 );
-
-	// support: jQuery <1.6.2
-	// support: IE <8
-	// We should use strictEqual( id, undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
-	ok( !el.attr( "id" ), "element has no initial id" );
+	strictEqual( el.attr( "id" ), undefined, "element has no initial id" );
 	el.uniqueId();
 	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
 	el.removeUniqueId();
-	// support: jQuery <1.6.2
-	// support: IE <8
-	// see above
-	ok( !el.attr( "id" ), "unique id has been removed from element" );
+	strictEqual( el.attr( "id" ), undefined, "unique id has been removed from element" );
 });
 
 })( jQuery );

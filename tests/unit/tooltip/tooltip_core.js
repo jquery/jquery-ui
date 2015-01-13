@@ -39,10 +39,7 @@ test( "accessibility", function() {
 		"multiple describedby when open" );
 
 	// strictEqual to distinguish between .removeAttr( "title" ) and .attr( "title", "" )
-	// support: jQuery <1.6.2
-	// support: IE <8
-	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
-	ok( !element.attr( "title" ), "no title when open" );
+	strictEqual( element.attr( "title" ), undefined, "no title when open" );
 	equal( liveRegion.children().length, 1 );
 	equal( liveRegion.children().last().html(), "..." );
 	element.tooltip( "close" );
