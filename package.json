@@ -20,16 +20,6 @@
 			"url": "http://bassistance.de"
 		},
 		{
-			"name": "Kris Borchers",
-			"email": "kris.borchers@gmail.com",
-			"url": "http://krisborchers.com"
-		},
-		{
-			"name": "Corey Frang",
-			"email": "gnarf37@gmail.com",
-			"url": "http://gnarf.net"
-		},
-		{
 			"name": "Mike Sherov",
 			"email": "mike.sherov@gmail.com",
 			"url": "http://mike.sherov.com"
@@ -43,6 +33,11 @@
 			"name": "Felix Nagel",
 			"email": "info@felixnagel.com",
 			"url": "http://www.felixnagel.com"
+		},
+		{
+			"name": "Alex Schmitz",
+			"email": "arschmitz@gmail.com",
+			"url": "https://github.com/arschmitz"
 		}
 	],
 	"repository": {
