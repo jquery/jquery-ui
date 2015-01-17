@@ -43,7 +43,7 @@ return $.widget( "ui.selectmenu", {
 		position: {
 			my: "left top",
 			at: "left bottom",
-			collision: "none"
+			collision: "flip"
 		},
 		width: null,
 
@@ -617,6 +617,15 @@ return $.widget( "ui.selectmenu", {
 			// so we add 1px to avoid the wrapping
 			this.menu.width( "" ).outerWidth() + 1
 		) );
+
+		// Reset the height of the menu and calculate the max height
+		this.menu.css( "height", "auto" );
+		var menuHeight = this.menu.height();
+		var maxMenuHeight = Math.round( $( window ).height() / 3 );
+
+		if ( maxMenuHeight < menuHeight ) {
+			this.menu.height( maxMenuHeight );
+		}
 	},
 
 	_getCreateOptions: function() {
