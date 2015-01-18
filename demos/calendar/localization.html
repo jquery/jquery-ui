@@ -21,7 +21,6 @@
 
 		Globalize.locale( select.val() );
 		calendar.calendar();
-
 		select.change( function() {
 			Globalize.locale( $( this ).val() );
 			calendar.calendar( "valueAsDate", calendar.calendar( "valueAsDate" ) );
@@ -38,7 +37,7 @@
 </select>
 
 <div class="demo-description">
-<p>Localize the calendar calendar language and format (English / Western formatting is the default). The calendar includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
+<p>Localize the calendar language and format (English / Western formatting is the default). The calendar includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
 </div>
 </body>
 </html>
