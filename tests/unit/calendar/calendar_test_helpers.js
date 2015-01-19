@@ -16,9 +16,9 @@ TestHelpers.calendar = {
 	},
 	focusGrid: function( element ) {
 		element.find( ":tabbable" ).last().simulate( "focus" );
-		$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
-		$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
 
-		return $( ":focus" );
+		return $( document.activeElement );
 	}
 };

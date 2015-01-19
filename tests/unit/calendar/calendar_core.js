@@ -139,7 +139,7 @@ asyncTest( "keyboard handling", function() {
 			.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 12 - 1, 31 ),
@@ -170,7 +170,7 @@ asyncTest( "keyboard handling", function() {
 
 		TestHelpers.calendar.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 12 - 1, 25 ),
@@ -186,7 +186,7 @@ asyncTest( "keyboard handling", function() {
 
 		TestHelpers.calendar.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2014, 1 - 1, 8 ),
@@ -202,7 +202,7 @@ asyncTest( "keyboard handling", function() {
 
 		TestHelpers.calendar.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 12 - 1, 1 ),
@@ -219,7 +219,7 @@ asyncTest( "keyboard handling", function() {
 		TestHelpers.calendar.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP, altKey: true } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 1 - 1, 1 ),
@@ -235,7 +235,7 @@ asyncTest( "keyboard handling", function() {
 
 		TestHelpers.calendar.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2014, 2 - 1, 1 ),
@@ -252,7 +252,7 @@ asyncTest( "keyboard handling", function() {
 		TestHelpers.calendar.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN, altKey: true } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2015, 1 - 1, 1 ),
@@ -269,7 +269,7 @@ asyncTest( "keyboard handling", function() {
 
 		TestHelpers.calendar.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2014, 2 - 1, 28 ),
@@ -285,7 +285,7 @@ asyncTest( "keyboard handling", function() {
 
 		TestHelpers.calendar.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			TestHelpers.calendar.equalsDate(
 				element.calendar( "valueAsDate" ),
 				new Date( 2016, 2 - 1, 29 ),
