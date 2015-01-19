@@ -108,7 +108,7 @@ asyncTest( "select", function() {
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout(function() {
-			$( ":focus" )
+			$( document.activeElement )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			input.datepicker( "close" );
@@ -122,7 +122,7 @@ asyncTest( "select", function() {
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout(function() {
-			$( ":focus" ).simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 			input.datepicker( "close" );
 			start();
 		}, 100 );
