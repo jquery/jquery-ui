@@ -372,9 +372,7 @@ return $.widget( "ui.menu", {
 		this._scrollIntoView( item );
 
 		this.active = item.first();
-		focused = this.active.children( ".ui-menu-item-wrapper" )
-			.addClass( "ui-state-focus" )
-			.removeClass( "ui-state-active" );
+		focused = this.active.children( ".ui-menu-item-wrapper" ).addClass( "ui-state-active" );
 
 		// Only update aria-activedescendant if there's a role
 		// otherwise we assume focus is managed elsewhere
@@ -433,7 +431,7 @@ return $.widget( "ui.menu", {
 			return;
 		}
 
-		this.active.children( ".ui-menu-item-wrapper" ).removeClass( "ui-state-focus" );
+		this.active.children( ".ui-menu-item-wrapper" ).removeClass( "ui-state-active" );
 		this.active = null;
 
 		this._trigger( "blur", event, { item: this.active } );
@@ -503,7 +501,7 @@ return $.widget( "ui.menu", {
 				.attr( "aria-hidden", "true" )
 				.attr( "aria-expanded", "false" )
 			.end()
-			.find( ".ui-state-active" ).not( ".ui-state-focus" )
+			.find( ".ui-state-active" ).not( ".ui-menu-item-wrapper" )
 				.removeClass( "ui-state-active" );
 	},
 

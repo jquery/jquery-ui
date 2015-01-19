@@ -253,7 +253,7 @@ return $.widget( "ui.selectmenu", {
 		} else {
 
 			// Menu clears focus on close, reset focus to selected item
-			this.menu.find( ".ui-state-focus" ).removeClass( "ui-state-focus" );
+			this.menu.find( ".ui-state-active" ).removeClass( "ui-state-active" );
 			this.menuInstance.focus( null, this._getSelectedItem() );
 		}
 

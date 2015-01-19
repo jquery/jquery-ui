@@ -273,7 +273,7 @@ $.each([
 		});
 
 		function checkItemClasses() {
-			focusedItem = menu.find( "li .ui-state-focus" );
+			focusedItem = menu.find( ".ui-menu-item-wrapper.ui-state-active" );
 			equal( focusedItem.length, 1, "only one item has ui-state-focus class" );
 			equal( focusedItem.attr( "id" ), wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"selected item has ui-state-focus class" );
