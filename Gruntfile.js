@@ -175,7 +175,7 @@ grunt.initConfig({
 	},
 	qunit: {
 		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
-			return !( /(all|index|test|datepicker)\.html$/ ).test( file );
+			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
 		options: {
 			page: {
