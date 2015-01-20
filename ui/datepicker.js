@@ -31,10 +31,7 @@
 	}
 }(function( $ ) {
 
-var widget,
-	calendarOptions = [ "buttons", "dateFormat", "disabled", "eachDay", "max", "min", "numberOfMonths", "showWeek" ];
-
-widget = $.widget( "ui.datepicker", {
+var widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
 	options: {
 		appendTo: null,
@@ -51,6 +48,9 @@ widget = $.widget( "ui.datepicker", {
 		open: null,
 		select: null
 	},
+
+	calendarOptions: [ "buttons", "dateFormat", "disabled", "eachDay", "max",
+		"min", "numberOfMonths", "showWeek" ],
 
 	_create: function() {
 		this.suppressExpandOnFocus = false;
@@ -312,7 +312,7 @@ widget = $.widget( "ui.datepicker", {
 	_setOption: function( key, value ) {
 		this._super( key, value );
 
-		if ( $.inArray( key, calendarOptions ) !== -1 ) {
+		if ( $.inArray( key, this.calendarOptions ) !== -1 ) {
 			this.calendarInstance.option( key, value );
 		}
 
@@ -341,7 +341,7 @@ widget = $.widget( "ui.datepicker", {
 	}
 });
 
-$.each( calendarOptions, function( index, option ) {
+$.each( $.ui.datepicker.prototype.calendarOptions, function( index, option ) {
 	$.ui.datepicker.prototype.options[ option ] = $.ui.calendar.prototype.options[ option ];
 });
 
