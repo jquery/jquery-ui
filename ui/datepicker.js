@@ -255,7 +255,7 @@ var widget = $.widget( "ui.datepicker", {
 		this._setHiddenPicker();
 		this._hide( this.calendar, this.options.hide );
 
-		this.element.attr( "tabindex" , 0 );
+		this.element.attr( "tabindex", 0 );
 
 		this.isOpen = false;
 		this._trigger( "close", event );
@@ -274,7 +274,7 @@ var widget = $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this.valueAsDate( Globalize.parseDate( value , this.options.dateFormat ) );
+			this.valueAsDate( Globalize.parseDate( value, this.options.dateFormat ) );
 		} else {
 			return this._getParsedValue() ? this.element.val() : null;
 		}
