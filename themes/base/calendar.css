@@ -82,12 +82,19 @@
 	border: 0;
 	padding: 1px;
 }
-.ui-calendar td span,
-.ui-calendar td a {
+.ui-calendar td button {
 	display: block;
 	padding: .2em;
 	text-align: right;
-	text-decoration: none;
+	cursor: pointer;
+	width: 100%;
+}
+.ui-calendar td button::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+}
+.ui-calendar .ui-state-disabled button {
+	cursor: default;
 }
 .ui-calendar .ui-calendar-buttonpane {
 	background-image: none;

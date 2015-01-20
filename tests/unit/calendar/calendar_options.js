@@ -112,7 +112,7 @@ test( "dateFormat", function() {
 	var element = $( "#calendar" ).calendar({
 			value: "1/1/14"
 		}),
-		firstDayLink = element.calendar( "widget" ).find( "td[id]:first a" );
+		firstDayLink = element.calendar( "widget" ).find( "td[id]:first button" );
 
 	firstDayLink.trigger( "mousedown" );
 	equal( element.calendar( "value" ), "1/1/14", "default formatting" );
@@ -128,8 +128,8 @@ test( "eachDay", function() {
 		picker = input.calendar( "widget" ),
 		firstCell = picker.find( "td[id]:first" );
 
-	equal( firstCell.find( "a" ).length, 1, "days are selectable by default" );
-	timestamp = parseInt( firstCell.find( "a" ).attr( "data-timestamp" ), 10 );
+	equal( firstCell.find( "button" ).length, 1, "days are selectable by default" );
+	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 1, "first available day is the 1st by default" );
 
 	// Do not render the 1st of the month
@@ -139,7 +139,7 @@ test( "eachDay", function() {
 		}
 	});
 	firstCell = picker.find( "td[id]:first" );
-	timestamp = parseInt( firstCell.find( "a" ).attr( "data-timestamp" ), 10 );
+	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 2, "first available day is the 2nd" );
 
 	// Display the 1st of the month but make it not selectable.
@@ -149,14 +149,14 @@ test( "eachDay", function() {
 		}
 	});
 	firstCell = picker.find( "td[id]:first" );
-	equal( firstCell.find( "a" ).length, 0, "the 1st is not selectable" );
+	ok( firstCell.find( "button" ).prop( "disabled" ), "the 1st is not selectable" );
 
 	input.calendar( "option", "eachDay", function( day ) {
 		if ( day.date === 1 ) {
 			day.extraClasses = "ui-custom";
 		}
 	});
-	ok( picker.find( "td[id]:first a" ).hasClass( "ui-custom" ), "extraClasses applied" );
+	ok( picker.find( "td[id]:first button" ).hasClass( "ui-custom" ), "extraClasses applied" );
 
 	input.calendar( "destroy" );
 });

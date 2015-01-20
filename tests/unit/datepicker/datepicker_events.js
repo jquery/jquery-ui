@@ -57,7 +57,7 @@ test( "close", function() {
 	shouldFire = false;
 	input.datepicker( "open" );
 	shouldFire = true;
-	input.datepicker( "widget" ).find( "tbody tr:first a:first" ).simulate( "mousedown" );
+	input.datepicker( "widget" ).find( "tbody tr:first button:first" ).simulate( "mousedown" );
 });
 
 test( "open", function() {
@@ -96,7 +96,7 @@ asyncTest( "select", function() {
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout(function() {
-			widget.find( "tbody tr:first a:first" ).simulate( "mousedown" );
+			widget.find( "tbody tr:first button:first" ).simulate( "mousedown" );
 			input.datepicker( "close" );
 			step2();
 		}, 100 );
