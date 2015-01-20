@@ -191,15 +191,15 @@ return $.widget( "ui.calendar", {
 
 			// TODO: Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
 			this.date = months[ i ];
+			headerClass = "ui-calendar-header ui-widget-header ui-helper-clearfix";
 			if ( months[ i ].first ) {
-				headerClass = "ui-corner-left";
+				headerClass += " ui-corner-left";
 			} else if ( months[ i ].last ) {
-				headerClass = "ui-corner-right";
+				headerClass += " ui-corner-right";
 			}
 
 			html += "<div class='ui-calendar-group'>" +
-				"<div class='ui-calendar-header ui-widget-header ui-helper-clearfix " +
-				headerClass + "'>";
+				"<div class='" + headerClass + "'>";
 			if ( months[ i ].first ) {
 				html += this._buildPreviousLink();
 			} else if ( months[ i ].last ) {
