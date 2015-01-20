@@ -5,6 +5,9 @@
 	<title>jQuery UI Example Page</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<script src="../../external/jquery/jquery.js"></script>
+	<script src="../../external/globalize/globalize.js"></script>
+	<script src="../../external/date.js"></script>
+	<script src="../../external/localization.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/mouse.js"></script>
@@ -12,6 +15,7 @@
 	<script src="../../ui/accordion.js"></script>
 	<script src="../../ui/autocomplete.js"></script>
 	<script src="../../ui/button.js"></script>
+	<script src="../../ui/calendar.js"></script>
 	<script src="../../ui/datepicker.js"></script>
 	<script src="../../ui/dialog.js"></script>
 	<script src="../../ui/draggable.js"></script>
@@ -52,16 +56,13 @@
 			return false;
 		});
 
-		// Datepicker
-		$('#datepicker').datepicker({
-			inline: true,
+		// Calendar
+		$('#calendar').calendar({
 			showWeek: true
 		});
 
-		$('#multidatepicker').datepicker({
-			numberOfMonths: 3,
-			showButtonPanel: true,
-			inline: true
+		$('#multicalendar').calendar({
+			numberOfMonths: 3
 		});
 
 		// Slider
@@ -460,13 +461,13 @@
 </div>
 
 
-<!-- Datepicker -->
-<h2 class="demoHeaders">Datepicker</h2>
+<!-- Calendar -->
+<h2 class="demoHeaders">Calendar</h2>
 <div class="columnbox" style="width: 32%">
-	<div id="datepicker"></div>
+	<div id="calendar"></div>
 </div>
 <div class="columnbox" style="width: 66%; height: 220px;">
-	<div id="multidatepicker"></div>
+	<div id="multicalendar"></div>
 </div>
 
 
