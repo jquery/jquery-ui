@@ -42,7 +42,10 @@ test( "value", function() {
 	var element = $( "#calendar" ).calendar();
 
 	element.calendar( "value", "1/1/14" );
-	ok( element.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ), "first day marked as selected" );
+	ok( element.find( "button[data-timestamp]:first" )
+			.hasClass( "ui-state-active" ),
+		"first day marked as selected"
+	);
 	equal( element.calendar( "value" ), "1/1/14", "getter" );
 
 	element.calendar( "value", "abc" );
@@ -58,7 +61,10 @@ test( "valueAsDate", function() {
 		date2;
 
 	element.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
-	ok( element.find( "a[data-timestamp]:first" ).hasClass( "ui-state-active" ), "First day marked as selected" );
+	ok( element.find( "button[data-timestamp]:first" )
+			.hasClass( "ui-state-active" ),
+		"First day marked as selected"
+	);
 	TestHelpers.calendar.equalsDate( element.calendar( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
 
 	element.calendar( "destroy" );

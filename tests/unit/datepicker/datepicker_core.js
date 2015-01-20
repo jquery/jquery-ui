@@ -136,7 +136,7 @@ asyncTest( "mouse", function() {
 
 	setTimeout(function() {
 		input.val( "4/4/08" ).datepicker( "refresh" ).datepicker( "open" );
-		$( ".ui-calendar-calendar tbody a:contains(12)", picker ).simulate( "mousedown", {} );
+		$( ".ui-calendar-calendar tbody button:contains(12)", picker ).simulate( "mousedown", {} );
 		TestHelpers.datepicker.equalsDate(
 			input.datepicker( "valueAsDate" ),
 			new Date( 2008, 4 - 1, 12 ),

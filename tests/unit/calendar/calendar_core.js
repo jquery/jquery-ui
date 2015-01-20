@@ -306,7 +306,7 @@ asyncTest( "mouse", function() {
 		date = new Date();
 
 	function step1() {
-		$( "tbody a:contains(10)", element ).simulate( "mousedown" );
+		$( "tbody button:contains(10)", element ).simulate( "mousedown" );
 		date.setDate( 10 );
 		TestHelpers.calendar.equalsDate(
 			element.calendar( "valueAsDate" ),
@@ -315,7 +315,7 @@ asyncTest( "mouse", function() {
 		);
 
 		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4) );
-		$( ".ui-calendar-calendar tbody a:contains(12)", element ).simulate( "mousedown" );
+		$( ".ui-calendar-calendar tbody button:contains(12)", element ).simulate( "mousedown" );
 		TestHelpers.calendar.equalsDate(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 2 - 1, 12 ),
@@ -325,7 +325,7 @@ asyncTest( "mouse", function() {
 		// Previous/next
 		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4) );
 		$( ".ui-calendar-prev", element ).simulate( "click" );
-		$( ".ui-calendar-calendar tbody a:contains(16)", element ).simulate( "mousedown" );
+		$( ".ui-calendar-calendar tbody button:contains(16)", element ).simulate( "mousedown" );
 		TestHelpers.calendar.equalsDate(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 1 - 1, 16 ),
@@ -334,7 +334,7 @@ asyncTest( "mouse", function() {
 
 		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4) );
 		$( ".ui-calendar-next", element ).simulate( "click" );
-		$( ".ui-calendar-calendar tbody a:contains(18)", element ).simulate( "mousedown" );
+		$( ".ui-calendar-calendar tbody button:contains(18)", element ).simulate( "mousedown" );
 		TestHelpers.calendar.equalsDate(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 3 - 1, 18 ),
@@ -354,7 +354,7 @@ asyncTest( "mouse", function() {
 		});
 
 		$( ".ui-calendar-prev", element ).simulate( "click" );
-		$( "tbody a:contains(16)", element ).simulate( "mousedown" );
+		$( "tbody button:contains(16)", element ).simulate( "mousedown" );
 		TestHelpers.calendar.equalsDate(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 2 - 1, 16 ),
@@ -372,7 +372,7 @@ asyncTest( "mouse", function() {
 		});
 
 		$( ".ui-calendar-next", element ).simulate( "click" );
-		$( "tbody a:contains(18)", element ).simulate( "mousedown" );
+		$( "tbody button:contains(18)", element ).simulate( "mousedown" );
 		TestHelpers.calendar.equalsDate(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 2 - 1, 18 ),

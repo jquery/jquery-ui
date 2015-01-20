@@ -75,7 +75,7 @@ return $.widget( "ui.calendar", {
 				this.date.adjust( "M", this.options.numberOfMonths );
 				this.refresh();
 			},
-			"mousedown .ui-calendar-calendar a": function( event ) {
+			"mousedown .ui-calendar-calendar button": function( event ) {
 				event.preventDefault();
 
 				// TODO Exclude clicks on lead days or handle them correctly
@@ -85,8 +85,8 @@ return $.widget( "ui.calendar", {
 			},
 			"mouseenter .ui-calendar-header button": "_hover",
 			"mouseleave .ui-calendar-header button": "_hover",
-			"mouseenter .ui-calendar-calendar a": "_hover",
-			"mouseleave .ui-calendar-calendar a": "_hover",
+			"mouseenter .ui-calendar-calendar button": "_hover",
+			"mouseleave .ui-calendar-calendar button": "_hover",
 			"keydown .ui-calendar-calendar": "_handleKeydown"
 		});
 
@@ -152,7 +152,7 @@ return $.widget( "ui.calendar", {
 			.removeClass( "ui-state-focus" );
 
 		this.activeDescendant = this.grid.find(
-			this._sanitizeSelector( "#" + id ) + " > a"
+			this._sanitizeSelector( "#" + id ) + " > button"
 		).addClass( "ui-state-focus" );
 	},
 
@@ -351,8 +351,8 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildDayElement: function( day, selectable ) {
-		var classes = [ "ui-state-default" ],
-			content = "";
+		var attributes, content,
+			classes = [ "ui-state-default" ];
 
 		if ( day === this.date && selectable ) {
 			classes.push( "ui-state-focus" );
@@ -368,12 +368,13 @@ return $.widget( "ui.calendar", {
 			classes.push( day.extraClasses.split( " " ) );
 		}
 
-		classes = " class='" + classes.join( " " ) + "'";
+		attributes = " class='" + classes.join( " " ) + "'";
 		if ( selectable ) {
-			content = "<a href='#' tabindex='-1' data-timestamp='" + day.timestamp + "'" + classes + ">" + day.date + "</a>";
+			attributes += " tabindex='-1' data-timestamp='" + day.timestamp + "'";
 		} else {
-			content = "<span" + classes + ">" + day.date + "</span>";
+			attributes += " disabled='disabled'";
 		}
+		content = "<button" + attributes + ">" + day.date + "</button>";
 
 		if ( day.today ) {
 			content += "<span class='ui-helper-hidden-accessible'>, " + this._getTranslation( "currentText" ) + "</span>";

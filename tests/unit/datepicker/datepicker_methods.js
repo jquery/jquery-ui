@@ -72,7 +72,10 @@ test( "value", function() {
 	equal( input.val(), "1/1/14", "input's value set" );
 
 	input.datepicker( "open" );
-	ok( picker.find( "a[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ), "first day marked as selected" );
+	ok(
+		picker.find( "button[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
+		"first day marked as selected"
+	);
 	equal( input.datepicker( "value" ), "1/1/14", "getter" );
 
 	input.val( "abc" );
@@ -88,7 +91,10 @@ test( "valueAsDate", function() {
 
 	input.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
 	equal( input.val(), "1/1/14", "Input's value set" );
-	ok( picker.find( "a[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ), "First day marked as selected" );
+	ok(
+		picker.find( "button[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
+		"First day marked as selected"
+	);
 	TestHelpers.datepicker.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
 
 	input.val( "a/b/c" );
