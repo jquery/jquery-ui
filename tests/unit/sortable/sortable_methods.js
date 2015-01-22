@@ -129,7 +129,7 @@ test("cancel", function() {
 	expect(5);
 
 	var element = $("#sortable-with-text"),
-		item = element.find("li").eq(3),
+		item = element.find("div").eq(3),
 		index = item.index(),
 		nextElement = item.next()[0],
 		prevElement = item.prev()[0],
