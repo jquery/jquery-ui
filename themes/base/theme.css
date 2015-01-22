@@ -396,11 +396,11 @@
 
 /* Overlays */
 .ui-widget-overlay {
-	background: #aaaaaa/*{bgColorOverlay}*/ url("images/ui-bg_flat_0_aaaaaa_40x100.png")/*{bgImgUrlOverlay}*/ 50%/*{bgOverlayXPos}*/ 50%/*{bgOverlayYPos}*/ repeat-x/*{bgOverlayRepeat}*/;
+	background: #aaaaaa/*{bgColorOverlay}*/;
 	opacity: .3/*{opacityOverlay}*/;
 	filter: Alpha(Opacity=30)/*{opacityFilterOverlay}*/; /* support: IE8 */
 }
 .ui-widget-shadow {
-	-webkit-box-shadow: 0/*{offsetLeftShadow}*/ 0/*{offsetTopShadow}*/ 5px/*{thicknessShadow}*/ #ddd/*{bgColorShadow}*/;
-	box-shadow: 0/*{offsetLeftShadow}*/ 0/*{offsetTopShadow}*/ 5px/*{thicknessShadow}*/ #ddd/*{bgColorShadow}*/;
+	-webkit-box-shadow: 0/*{offsetLeftShadow}*/ 0/*{offsetTopShadow}*/ 5px/*{thicknessShadow}*/ #666666/*{bgColorShadow}*/;
+	box-shadow: 0/*{offsetLeftShadow}*/ 0/*{offsetTopShadow}*/ 5px/*{thicknessShadow}*/ #666666/*{bgColorShadow}*/;
 }
