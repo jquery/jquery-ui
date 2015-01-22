@@ -125,4 +125,32 @@ test( "refresh() should update the positions of initially empty lists (see #7498
 	equal( changeCount, 1 );
 });
 
+test("cancel", function() {
+	expect(5);
+
+	var element = $("#sortable-with-text"),
+		item = element.find("li").eq(3),
+		index = item.index(),
+		nextElement = item.next()[0],
+		prevElement = item.prev()[0],
+		nextNode = item[0].nextSibling,
+		prevNode = item[0].previousSibling;
+
+	element.sortable({
+		update: function() {
+			element.sortable("cancel");
+		}
+	});
+
+	item.simulate( "drag", {
+		dy: -50
+	});
+
+	equal(index, item.index());
+	equal(nextElement, item.next()[0]);
+	equal(prevElement, item.prev()[0]);
+	equal(nextNode, item[0].nextSibling);
+	equal(prevNode, item[0].previousSibling);
+});
+
 })(jQuery);
