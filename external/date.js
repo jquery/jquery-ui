@@ -151,6 +151,8 @@ $.date.prototype = {
 				var day = week.days[ week.days.length ] = {
 					lead: printDate.getMonth() != date.getMonth(),
 					date: printDate.getDate(),
+					month: printDate.getMonth(),
+					year: printDate.getFullYear(),
 					timestamp: printDate.getTime(),
 					today: today.equal( printDate )
 				};

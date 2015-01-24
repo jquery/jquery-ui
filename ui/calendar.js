@@ -62,26 +62,26 @@ return $.widget( "ui.calendar", {
 		this.buttonClickContext = this.element[ 0 ];
 
 		this.date = $.date( this.options.value, this.options.dateFormat );
-		this.date.eachDay = this.options.eachDay;
-		this.options.value = this.date.date();
+		this.viewDate = this.date.clone();
+		this.viewDate.eachDay = this.options.eachDay;
 
 		this._on( this.element, {
 			"click .ui-calendar-prev": function( event ) {
 				event.preventDefault();
 				this.date.adjust( "M", -this.options.numberOfMonths );
-				this.refresh();
+				this._refresh();
 			},
 			"click .ui-calendar-next": function( event ) {
 				event.preventDefault();
 				this.date.adjust( "M", this.options.numberOfMonths );
-				this.refresh();
+				this._refresh();
 			},
 			"mousedown .ui-calendar-calendar button": function( event ) {
 				event.preventDefault();
 
-				// TODO Exclude clicks on lead days or handle them correctly
-				// TODO Store/read more then just date, also required for multi month picker
-				this._select( event, $( event.currentTarget ).data( "timestamp" ) );
+				this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
+				this.refresh();
+				this._trigger( "select", event );
 				this.grid.focus();
 			},
 			"mouseenter .ui-calendar-header button": "_hover",
@@ -99,10 +99,6 @@ return $.widget( "ui.calendar", {
 	},
 
 	_handleKeydown: function( event ) {
-		var oldMonth = this.date.month(),
-			oldYear = this.date.year();
-
-		// TODO: Handle for pickers with multiple months
 		switch ( event.keyCode ) {
 		case $.ui.keyCode.ENTER:
 			this.activeDescendant.mousedown();
@@ -136,16 +132,26 @@ return $.widget( "ui.calendar", {
 			return;
 		}
 
-		if ( this.date.month() !== oldMonth || this.date.year() !== oldYear ) {
-			this.refresh();
+		if ( this._needsRefresh() ) {
+			this._refresh();
 			this.grid.focus();
 		}
 
 		this._setActiveDescendant();
 	},
 
+	_needsRefresh: function() {
+		if ( this.date.month() !== this.viewDate.month() || this.date.year() !== this.viewDate.year() ) {
+			return !this.grid.find(
+					this._sanitizeSelector( "#" + this._getDayId( this.date ) )
+				).length;
+		}
+
+		return false;
+	},
+
 	_setActiveDescendant: function() {
-		var id = this.id + "-" + this.date.day();
+		var id = this._getDayId( this.date );
 
 		this.grid
 			.attr( "aria-activedescendant", id )
@@ -184,14 +190,14 @@ return $.widget( "ui.calendar", {
 	_buildMultiplePicker: function() {
 		var headerClass,
 			html = "",
-			currentDate = this.date,
-			months = this.date.months( this.options.numberOfMonths - 1 ),
+			currentDate = this.viewDate,
+			months = this.viewDate.months( this.options.numberOfMonths - 1 ),
 			i = 0;
 
 		for ( ; i < months.length; i++ ) {
 
 			// TODO: Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
-			this.date = months[ i ];
+			this.viewDate = months[ i ];
 			headerClass = "ui-calendar-header ui-widget-header ui-helper-clearfix";
 			if ( months[ i ].first ) {
 				headerClass += " ui-corner-left";
@@ -212,7 +218,7 @@ return $.widget( "ui.calendar", {
 
 		html += "<div class='ui-calendar-row-break'></div>";
 
-		this.date = currentDate;
+		this.viewDate = currentDate;
 
 		return html;
 	},
@@ -260,17 +266,17 @@ return $.widget( "ui.calendar", {
 
 	_buildTitle: function() {
 		return "<span class='ui-calendar-month'>" +
-			this.date.monthName() +
+			this.viewDate.monthName() +
 		"</span> " +
 		"<span class='ui-calendar-year'>" +
-			this.date.year() +
+			this.viewDate.year() +
 		"</span>";
 	},
 
 	_buildGrid: function() {
 		return "<table class='ui-calendar-calendar' role='grid' aria-readonly='true' " +
 				"aria-labelledby='" + this.id + "-month-label' tabindex='0' " +
-				"aria-activedescendant='" + this.id + "-" + this.date.day() + "'>" +
+				"aria-activedescendant='" + this._getDayId( this.date ) + "'>" +
 				this._buildGridHeading() +
 				this._buildGridBody() +
 			"</table>";
@@ -279,7 +285,7 @@ return $.widget( "ui.calendar", {
 	_buildGridHeading: function() {
 		var cells = "",
 			i = 0,
-			weekDayLength = this.date.weekdays().length;
+			weekDayLength = this.viewDate.weekdays().length;
 
 		if ( this.options.showWeek ) {
 			cells += "<th class='ui-calendar-week-col'>" + this._getTranslation( "weekHeader" ) + "</th>";
@@ -304,7 +310,7 @@ return $.widget( "ui.calendar", {
 	_buildGridBody: function() {
 
 		// this.date.days() needs caching as it has O(n^2) complexity.
-		var days = this.date.days(),
+		var days = this.viewDate.days(),
 			i = 0,
 			rows = "";
 
@@ -338,7 +344,7 @@ return $.widget( "ui.calendar", {
 			selectable = ( day.selectable && this._isValid( new Date( day.timestamp ) ) );
 
 		if ( day.render ) {
-			attributes.push( "id='" + this.id + "-" + day.date + "'" );
+			attributes.push( "id='" + this.id + "-" + day.year + "-" + day.month + "-" + day.date + "'" );
 
 			if ( !selectable ) {
 				attributes.push( "aria-disabled='true'" );
@@ -349,6 +355,10 @@ return $.widget( "ui.calendar", {
 		}
 
 		return "<td " + attributes.join( " " ) + ">" + content + "</td>";
+	},
+
+	_getDayId: function( date ) {
+		return this.id + "-" + date.year() + "-" + date.month() + "-" + date.day();
 	},
 
 	_buildDayElement: function( day, selectable ) {
@@ -364,7 +374,6 @@ return $.widget( "ui.calendar", {
 		if ( day.today ) {
 			classes.push( "ui-state-highlight" );
 		}
-		// TODO Explain and document this
 		if ( day.extraClasses ) {
 			classes.push( day.extraClasses.split( " " ) );
 		}
@@ -385,7 +394,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_isCurrent: function( day ) {
-		return day.timestamp === this.options.value.getTime();
+		return this.options.value && day.timestamp === this.options.value.getTime();
 	},
 
 	_createButtonPane: function() {
@@ -439,6 +448,11 @@ return $.widget( "ui.calendar", {
 		this.buttonPane.appendTo( this.element );
 	},
 
+	_refresh: function() {
+		this.viewDate.setTime( this.date.date().getTime() );
+		this.refresh();
+	},
+
 	// Refreshing the entire calendar during interaction confuses screen readers, specifically
 	// because the grid heading is marked up as a live region and will often not update if it's
 	// destroyed and recreated instead of just having its text change. Additionally, interacting
@@ -469,9 +483,9 @@ return $.widget( "ui.calendar", {
 		for ( ; i < this.options.numberOfMonths; i++ ) {
 			this.element.find( ".ui-calendar-title" ).eq( i ).html( this._buildTitle() );
 			this.element.find( ".ui-calendar-calendar" ).eq( i ).html( this._buildGrid() );
-			this.date.adjust( "M", 1 );
+			this.viewDate.adjust( "M", 1 );
 		}
-		this.date.adjust( "M", -this.options.numberOfMonths );
+		this.viewDate.adjust( "M", -this.options.numberOfMonths );
 
 		// TODO: This assumes focus is on the first grid. For multi pickers, the widget needs
 		// to maintain the currently focused grid and base queries like this off of it.
@@ -491,11 +505,6 @@ return $.widget( "ui.calendar", {
 			"aria-hidden": "true",
 			"aria-expanded": "false"
 		});
-	},
-
-	_select: function( event, time ) {
-		this.valueAsDate( new Date( time ) );
-		this._trigger( "select", event );
 	},
 
 	value: function( value ) {
@@ -556,7 +565,7 @@ return $.widget( "ui.calendar", {
 		});
 
 		if ( refresh ) {
-			this.refresh();
+			this._refresh();
 		}
 	},
 
@@ -589,7 +598,7 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( key === "eachDay" ) {
-			this.date.eachDay = value;
+			this.viewDate.eachDay = value;
 		}
 
 		if ( key === "dateFormat" ) {
