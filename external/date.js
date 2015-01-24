@@ -32,7 +32,6 @@ $.date = function( date, globalFormat ) {
 
 	this.dateObject = this.dateObject || new Date();
 	this.globalFormat = globalFormat;
-	this.selected = null;
 };
 
 $.date.prototype = {
@@ -153,7 +152,6 @@ $.date.prototype = {
 					lead: printDate.getMonth() != date.getMonth(),
 					date: printDate.getDate(),
 					timestamp: printDate.getTime(),
-					current: this.selected && this.selected.equal( printDate ),
 					today: today.equal( printDate )
 				};
 				day.render = day.selectable = !day.lead;
@@ -179,13 +177,6 @@ $.date.prototype = {
 		result[ 0 ].first = true;
 		result[ result.length - 1 ].last = true;
 		return result;
-	},
-	select: function() {
-		this.selected = this.clone();
-		return this;
-	},
-	selectedDate: function() {
-		return this.selected.date();
 	},
 	clone: function() {
 		var date = this.dateObject;

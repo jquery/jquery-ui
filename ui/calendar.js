@@ -61,8 +61,9 @@ return $.widget( "ui.calendar", {
 		this.labels = Globalize.translate( "datepicker" );
 		this.buttonClickContext = this.element[ 0 ];
 
-		this.date = $.date( this.options.value, this.options.dateFormat ).select();
+		this.date = $.date( this.options.value, this.options.dateFormat );
 		this.date.eachDay = this.options.eachDay;
+		this.options.value = this.date.date();
 
 		this._on( this.element, {
 			"click .ui-calendar-prev": function( event ) {
@@ -332,7 +333,7 @@ return $.widget( "ui.calendar", {
 		var content = "",
 			attributes = [
 				"role='gridcell'",
-				"aria-selected='" + ( day.current ? true : false ) + "'"
+				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'"
 			],
 			selectable = ( day.selectable && this._isValid( new Date( day.timestamp ) ) );
 
@@ -357,7 +358,7 @@ return $.widget( "ui.calendar", {
 		if ( day === this.date && selectable ) {
 			classes.push( "ui-state-focus" );
 		}
-		if ( day.current ) {
+		if ( this._isCurrent( day ) ) {
 			classes.push( "ui-state-active" );
 		}
 		if ( day.today ) {
@@ -381,6 +382,10 @@ return $.widget( "ui.calendar", {
 		}
 
 		return content;
+	},
+
+	_isCurrent: function( day ) {
+		return day.timestamp === this.options.value.getTime();
 	},
 
 	_createButtonPane: function() {
@@ -558,7 +563,7 @@ return $.widget( "ui.calendar", {
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			if ( this._isValid( value ) ) {
-				this.date.setTime( value.getTime() ).select();
+				this.date.setTime( value.getTime() );
 				this._super( key, value );
 			}
 			return;
