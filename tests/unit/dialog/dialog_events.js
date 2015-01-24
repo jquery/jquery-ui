@@ -39,7 +39,6 @@ test("open", function() {
 	element.remove();
 });
 
-
 test( "focus", function() {
 	expect( 5 );
 	var element, other;

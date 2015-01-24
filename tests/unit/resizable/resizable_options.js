@@ -24,7 +24,6 @@ test( "alsoResize", function() {
 	equal( other.width(), 130, "alsoResize width" );
 });
 
-
 test("aspectRatio: 'preserve' (e)", function() {
 	expect(4);
 

@@ -5,4 +5,3 @@ TestHelpers.spinner = {
 			.simulate( "keyup", { keyCode: keyCode, shiftKey: shift || false } );
 	}
 };
-

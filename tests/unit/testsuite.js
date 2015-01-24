@@ -27,7 +27,6 @@ QUnit.reset = function() {
 	reset.apply( this, arguments );
 };
 
-
 QUnit.config.requireExpects = true;
 
 /*

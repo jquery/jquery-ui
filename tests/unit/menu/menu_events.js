@@ -169,7 +169,6 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	setTimeout( menumouseleave1, 350 );
 });
 
-
 asyncTest( "handle keyboard navigation on menu without scroll and without submenus", function() {
 	expect( 12 );
 	var element = $( "#menu1" ).menu({

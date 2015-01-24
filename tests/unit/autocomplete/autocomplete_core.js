@@ -216,8 +216,6 @@ asyncTest( "ESCAPE in multiline autocomplete", function() {
 	}, 50 );
 });
 
-
-
 asyncTest( "handle race condition", function() {
 	expect( 3 );
 	var count = 0,

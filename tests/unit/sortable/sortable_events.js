@@ -26,8 +26,6 @@ test("start", function() {
 	// todo: see if these events should actually have sane values in them
 	ok("position" in hash, "UI hash includes: position");
 	ok("offset" in hash, "UI hash includes: offset");
-
-
 });
 
 test("sort", function() {

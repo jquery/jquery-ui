@@ -52,7 +52,6 @@ asyncTest( "accessibility", function() {
 	});
 });
 
-
 test( "_renderButtonItem()", function() {
 	expect( 2 );
 

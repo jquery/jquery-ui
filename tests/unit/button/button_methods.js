@@ -3,7 +3,6 @@
  */
 (function($) {
 
-
 module("button: methods");
 
 test("destroy", function() {

@@ -767,7 +767,6 @@ var beforeShowThis = null,
 	beforeShowDayThis = null,
 	beforeShowDayOK = true;
 
-
 function beforeAll(input, inst) {
 	beforeShowThis = this;
 	beforeShowInput = input;

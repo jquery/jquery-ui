@@ -67,7 +67,6 @@ test( "appendTo: ui-front", function() {
 		$( "#selectmenu-wrap2" )[ 0 ], "empty jQuery object, inside .ui-front" );
 });
 
-
 test( "CSS styles", function() {
 	expect( 2 );
 
@@ -84,7 +83,6 @@ test( "CSS styles", function() {
 	ok( menu.hasClass( "ui-corner-bottom" ) && !menu.hasClass( "ui-corner-all" ),
 		"menu styles dropdown" );
 });
-
 
 test( "width", function() {
 	expect( 5 );
