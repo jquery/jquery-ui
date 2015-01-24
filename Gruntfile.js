@@ -225,9 +225,10 @@ grunt.initConfig({
 				destPrefix: "external"
 			},
 			files: {
-				"qunit/qunit.js": "qunit/qunit/qunit.js",
-				"qunit/qunit.css": "qunit/qunit/qunit.css",
 				"qunit/MIT-LICENSE.txt": "qunit/MIT-LICENSE.txt",
+				"qunit/qunit.css": "qunit/qunit/qunit.css",
+				"qunit/qunit.js": "qunit/qunit/qunit.js",
+				"requirejs/require.js": "requirejs/require.js",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
