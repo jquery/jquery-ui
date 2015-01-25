@@ -1,3 +1,5 @@
+(function( $ ) {
+
 module( "progressbar: core" );
 
 test( "markup structure", function() {
@@ -51,3 +53,5 @@ test( "accessibility", function() {
 	equal( element.attr( "aria-valuemax" ), 150, "aria-valuemax" );
 	strictEqual( element.attr( "aria-valuenow" ), undefined, "aria-valuenow" );
 });
+
+}( jQuery ) );

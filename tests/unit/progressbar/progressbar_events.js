@@ -1,3 +1,5 @@
+(function( $ ) {
+
 module( "progressbar: events" );
 
 test( "create", function() {
@@ -49,3 +51,5 @@ test( "complete", function() {
 	value = 100;
 	element.progressbar( "value", value );
 });
+
+}( jQuery ) );
