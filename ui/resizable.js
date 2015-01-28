@@ -1165,7 +1165,7 @@ $.ui.plugin.add("resizable", "grid", {
 				that.size.width = newWidth;
 				that.position.left = op.left - ox;
 			} else {
-				newWidth = gridY - outerDimensions.height;
+				newWidth = gridX - outerDimensions.width;
 				that.size.width = newWidth;
 				that.position.left = op.left + os.width - newWidth;
 			}
