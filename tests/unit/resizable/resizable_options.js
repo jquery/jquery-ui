@@ -310,12 +310,12 @@ test( "grid - maintains grid with padding and border when approaching no dimensi
 			height: 80
 		}).resizable({
 			handles: "all",
-			grid: 50
+			grid: [ 50, 12 ]
 		});
 
 	TestHelpers.resizable.drag( handle, 50, 50 );
 	equal( target.outerWidth(), 50, "compare width" );
-	equal( target.outerHeight(), 50, "compare height" );
+	equal( target.outerHeight(), 52, "compare height" );
 });
 
 test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
