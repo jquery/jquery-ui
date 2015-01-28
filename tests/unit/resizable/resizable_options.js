@@ -237,7 +237,7 @@ test( "containment - immediate parent", function() {
 test("grid", function() {
 	expect(4);
 
-	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all", grid: [0, 20] });
+	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all", grid: [ 0, 20 ] });
 
 	TestHelpers.resizable.drag(handle, 3, 9);
 	equal( target.width(), 103, "compare width");
@@ -265,7 +265,7 @@ test("grid (min/max dimensions)", function() {
 test("grid (wrapped)", function() {
 	expect(4);
 
-	var handle = ".ui-resizable-se", target = $("#resizable2").resizable({ handles: "all", grid: [0, 20] });
+	var handle = ".ui-resizable-se", target = $("#resizable2").resizable({ handles: "all", grid: [ 0, 20 ] });
 
 	TestHelpers.resizable.drag(handle, 3, 9);
 	equal( target.width(), 103, "compare width");
