@@ -91,7 +91,7 @@ $.widget( "ui.datepicker", {
 				// TODO store/read more then just date, also required for multi month picker
 				this.select( event, $( event.currentTarget ).data( "timestamp" ) );
 				if ( this.inline ) {
-					this.grid.focus( 1 );
+					this.grid.focus();
 				}
 			},
 			"keydown .ui-datepicker-calendar": "_handleKeydown"
@@ -152,7 +152,7 @@ $.widget( "ui.datepicker", {
 
 		if ( this.date.month() !== oldMonth || this.date.year() !== oldYear ) {
 			this.refresh();
-			this.grid.focus( 1 );
+			this.grid.focus();
 		} else {
 			newId = this.id + "-" + this.date.day();
 			newCell = $( "#" + newId );
@@ -200,7 +200,7 @@ $.widget( "ui.datepicker", {
 						clearTimeout( this.closeTimer );
 						this._delay(function() {
 							this.open( event );
-							this.grid.focus( 1 );
+							this.grid.focus();
 						}, 1);
 						break;
 				}
