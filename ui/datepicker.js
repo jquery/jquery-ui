@@ -9,7 +9,7 @@
 
 //>>label: Datepicker
 //>>group: Widgets
-//>>description: Displays a calendar from an input or inline for selecting dates.
+//>>description: Displays a calendar for input-based date selection.
 //>>docs: http://api.jqueryui.com/datepicker/
 //>>demos: http://jqueryui.com/datepicker/
 
