@@ -5,9 +5,14 @@
  * Copyright 2014 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/calendar/
  */
+
+//>>label: Datepicker
+//>>group: Widgets
+//>>description: Displays a calendar for inline date selection.
+//>>docs: http://api.jqueryui.com/calendar/
+//>>demos: http://jqueryui.com/calendar/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
