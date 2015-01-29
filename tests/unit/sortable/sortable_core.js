@@ -16,6 +16,32 @@ test( "#9314: Sortable: Items cannot be dragged directly into bottom position", 
 	TestHelpers.sortable.sort( $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
 });
 
+asyncTest( "#3173: Sortable: connected sortables do not scroll on transfer", function() {
+	expect( 1 );
+
+	var element1 = $( "#sortable" ).sortable({
+			connectWith: "#sortable2"
+		}),
+		element2 = $( "#sortable2" ).sortable({
+			connectWith: "#sortable"
+		}),
+		item = element1.find( "li" ).eq( 0 );
+
+	element1.css({"height": "90px", "overflow": "hidden"});
+	element2.css({"height": "90px", "overflow-y": "scroll", "overflow-x": "hidden"});
+
+	item.simulate( "drag", {
+		dy: 175,
+		dx: 0
+	});
+
+	setTimeout(function() {
+		var top = element2.scrollTop();
+		ok( top > 0, "sortable list scrolls down" );
+		start();
+	}, 200 );
+});
+
 test( "ui-sortable-handle applied to appropriate element", function() {
 	expect( 6 );
 	var item = "<li><p></p></li>",
