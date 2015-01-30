@@ -2,7 +2,7 @@
 
 module( "droppable: events" );
 
-test( "droppable destruction/recreation on drop event", function() {
+test( "droppable destruction/recreation on drop event", function( assert ) {
 	expect( 1 );
 
 	var config = {
@@ -32,7 +32,7 @@ test( "droppable destruction/recreation on drop event", function() {
 		dy: dy
 	});
 
-	ok( !droppable2.hasClass( "active" ), "subsequent droppable no longer active" );
+	assert.lacksClasses( droppable2, "active", "subsequent droppable no longer active" );
 });
 
 // todo: comment the following in when ready to actually test
