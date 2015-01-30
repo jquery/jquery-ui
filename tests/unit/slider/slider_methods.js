@@ -30,34 +30,30 @@ test( "destroy", function() {
 	});
 });
 
-test( "enable", function() {
-	expect( 5 );
+test( "enable", function( assert ) {
+	expect( 3 );
 	var element,
 		expected = $( "<div></div>" ).slider(),
 		actual = expected.slider( "enable" );
 	equal(actual, expected, "enable is chainable" );
 
 	element = $( "<div></div>" ).slider({ disabled: true });
-	ok( element.hasClass( "ui-state-disabled" ), "slider has ui-state-disabled class before enable method call" );
-	ok( element.hasClass( "ui-slider-disabled" ), "slider has ui-slider-disabled class before enable method call" );
+	assert.hasClasses( element, "ui-state-disabled ui-slider-disabled" );
 	element.slider( "enable" );
-	ok( !element.hasClass( "ui-state-disabled" ), "slider does not have ui-state-disabled class after enable method call" );
-	ok( !element.hasClass( "ui-slider-disabled" ), "slider does not have ui-slider-disabled class after enable method call" );
+	assert.lacksClasses( element, "ui-state-disabled ui-slider-disabled" );
 });
 
-test( "disable", function() {
-	expect( 6 );
+test( "disable", function( assert ) {
+	expect( 4 );
 	var element,
 		expected = $( "<div></div>" ).slider(),
 		actual = expected.slider( "disable" );
 	equal(actual, expected, "disable is chainable" );
 
 	element = $( "<div></div>" ).slider({ disabled: false });
-	ok( !element.hasClass( "ui-state-disabled" ), "slider does not have ui-state-disabled class before disabled method call" );
-	ok( !element.hasClass( "ui-slider-disabled" ), "slider does not have ui-slider-disabled class before disable method call" );
+	assert.lacksClasses( element, "ui-state-disabled ui-slider-disabled" );
 	element.slider( "disable" );
-	ok( element.hasClass( "ui-state-disabled" ), "slider has ui-state-disabled class after disable method call" );
-	ok( element.hasClass( "ui-slider-disabled" ), "slider has ui-slider-disabled class after disable method call" );
+	assert.hasClasses( element, "ui-state-disabled ui-slider-disabled" );
 	ok( !element.attr( "aria-disabled" ), "slider does not have aria-disabled attr after disable method call" );
 });
 
