@@ -23,8 +23,8 @@
 	cursor: pointer;
 	position: absolute;
 	top: 2px;
-	width: 19px;
-	height: 18px;
+	width: 36px;
+	height: 31px;
 }
 .ui-calendar .ui-calendar-prev:not(.ui-state-hover):not(.ui-state-focus),
 .ui-calendar .ui-calendar-next:not(.ui-state-hover):not(.ui-state-focus) {
@@ -110,6 +110,7 @@
 	display: inline-block;
 }
 .ui-calendar-multi .ui-calendar-group {
+	width: 17em;
 	float: left;
 }
 .ui-calendar-multi .ui-calendar-group table {
