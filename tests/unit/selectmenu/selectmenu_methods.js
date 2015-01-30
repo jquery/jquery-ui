@@ -114,7 +114,7 @@ test( "refresh - disabled select", function() {
 	equal( menu.attr( "aria-disabled" ), "true", "menu ARIA" );
 });
 
-test( "refresh - disabled option", function() {
+test( "refresh - disabled option", function( assert ) {
 	expect( 1 );
 
 	var disabledItem,
@@ -125,10 +125,10 @@ test( "refresh - disabled option", function() {
 	element.selectmenu( "refresh" );
 
 	disabledItem = menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).eq( 2 );
-	ok( disabledItem.hasClass( "ui-state-disabled" ), "class" );
+	assert.hasClasses( disabledItem, "ui-state-disabled" );
 });
 
-test( "refresh - disabled optgroup", function() {
+test( "refresh - disabled optgroup", function( assert ) {
 	var i, item,
 		element = $( "#files" ).selectmenu(),
 		menu = element.selectmenu( "menuWidget" ).parent(),
@@ -141,7 +141,8 @@ test( "refresh - disabled optgroup", function() {
 	element.selectmenu( "refresh" );
 
 	item = menu.find( "li.ui-selectmenu-optgroup" ).first();
-	ok( item.hasClass( "ui-state-disabled" ), "class" );
+
+	assert.hasClasses( item, "ui-state-disabled" );
 
 	equal(
 		menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).filter( ".ui-state-disabled" ).length,
@@ -150,7 +151,7 @@ test( "refresh - disabled optgroup", function() {
 	);
 	for ( i = 0; i < originalDisabledOptions.length; i++ ) {
 		item = item.next( "li" );
-		ok( item.hasClass( "ui-state-disabled" ), "item #" + i + ": class" );
+		assert.hasClasses( item, "ui-state-disabled" );
 	}
 });
 
@@ -168,7 +169,7 @@ test( "refresh - remove all options", function() {
 	equal( menu.children().length, 0, "Empty menu" );
 });
 
-test( "widget and menuWidget", function() {
+test( "widget and menuWidget", function( assert ) {
 	expect( 4 );
 
 	var element = $( "#speed" ).selectmenu(),
@@ -176,7 +177,7 @@ test( "widget and menuWidget", function() {
 		menu = element.selectmenu( "menuWidget" );
 
 	equal( button.length, 1, "button: one element" );
-	ok( button.is( ".ui-selectmenu-button" ), "button: class" );
+	assert.hasClasses( button, "ui-selectmenu-button" );
 
 	equal( menu.length, 1, "Menu Widget: one element" );
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );

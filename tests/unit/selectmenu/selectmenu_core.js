@@ -294,7 +294,7 @@ $.each([
 		}
 	});
 
-	asyncTest( "empty option - " + settings.type, function() {
+	asyncTest( "empty option - " + settings.type, function( assert ) {
 		expect( 7 );
 
 		var button, menu, wrappers, wrapper,
@@ -316,10 +316,8 @@ $.each([
 				"correct amount of list elements" );
 			ok( wrapper.outerHeight() > 10, "empty item seems to have reasonable height" );
 			ok( wrapper.attr( "id" ), "empty item has id attribute" );
-			ok( wrapper.parent().hasClass( "ui-menu-item" ),
-				"empty item has ui-menu-item class" );
-			ok( !wrapper.hasClass( "ui-menu-divider" ),
-				"empty item does not have ui-menu-divider class" );
+			assert.hasClasses( wrapper.parent(), "ui-menu-item" );
+			assert.lacksClasses( wrapper, "ui-menu-divider" );
 			equal( wrapper.attr( "tabindex" ), -1, "empty item has tabindex" );
 			equal( wrapper.attr( "role" ), "option", "empty item has role option" );
 
