@@ -78,7 +78,7 @@ test("autoOpen", function() {
 	element.remove();
 });
 
-test("buttons", function() {
+test("buttons", function( assert ) {
 	expect(21);
 
 	var btn, i, newButtons,
@@ -105,8 +105,8 @@ test("buttons", function() {
 		i++;
 	});
 
-	ok(btn.parent().hasClass("ui-dialog-buttonset"), "buttons in container");
-	ok(element.parent().hasClass("ui-dialog-buttons"), "dialog wrapper adds class about having buttons");
+	assert.hasClasses( btn.parent(), "ui-dialog-buttonset" );
+	assert.hasClasses( element.parent(), "ui-dialog-buttons" );
 
 	btn.trigger("click");
 
@@ -136,12 +136,11 @@ test("buttons", function() {
 	btn = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(btn.length, 0, "all buttons have been removed");
 	equal(element.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
-	equal(element.parent().hasClass("ui-dialog-buttons"), false, "dialog wrapper removes class about having buttons");
-
+	assert.lacksClasses( element.parent(), "ui-dialog-buttons" );
 	element.remove();
 });
 
-test("buttons - advanced", function() {
+test("buttons - advanced", function( assert ) {
 	expect( 7 );
 
 	var buttons,
@@ -166,7 +165,7 @@ test("buttons - advanced", function() {
 	equal(buttons.length, 1, "correct number of buttons");
 	equal(buttons.attr("id"), "my-button-id", "correct id");
 	equal(buttons.text(), "a button", "correct label");
-	ok(buttons.hasClass("additional-class"), "additional classes added");
+	assert.hasClasses( buttons, "additional-class" );
 	deepEqual( buttons.button("option", "icons"), { primary: "ui-icon-cancel", secondary: null } );
 	equal( buttons.button( "option", "text" ), false );
 	buttons.click();

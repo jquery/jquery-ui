@@ -100,13 +100,12 @@ test("#4980: Destroy should place element back in original DOM position", functi
 	ok($.contains(container[0], modal[0]), "dialog(destroy) should place element back in original DOM position");
 });
 
-test( "enable/disable disabled", function() {
-	expect( 4 );
+test( "enable/disable disabled", function( assert ) {
+	expect( 3 );
 	var element = $( "<div></div>" ).dialog();
 	element.dialog( "disable" );
 	equal(element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
-	ok( !element.dialog( "widget" ).hasClass( "ui-dialog-disabled" ), "disable method doesn't add ui-dialog-disabled class" );
-	ok( !element.dialog( "widget" ).hasClass( "ui-state-disabled" ), "disable method doesn't add ui-state-disabled class" );
+	assert.lacksClasses( element, "ui-dialog-disabled ui-state-disabled" );
 	ok( !element.dialog( "widget" ).attr( "aria-disabled" ), "disable method doesn't add aria-disabled" );
 });
 
