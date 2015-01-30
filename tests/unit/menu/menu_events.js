@@ -667,13 +667,13 @@ test( "#9469: Stopping propagation in a select event should not suppress subsequ
 	equal( logOutput(), "1,2", "Both select events were not triggered." );
 });
 
-asyncTest( "#10571: When typing in a menu, only menu-items should be focused", function() {
+asyncTest( "#10571: When typing in a menu, only menu-items should be focused", function( assert ) {
 	expect( 3 );
 
 	var element = $( "#menu8" ).menu({
 		focus: function( event, ui ) {
 			equal( ui.item.length, 1, "There should only be one match when filtering" );
-			ok( ui.item.hasClass( "ui-menu-item" ), "element is .ui-menu-item" );
+			assert.hasClasses( ui.item, "ui-menu-item" );
 			equal( ui.item.text(), "-Saarland", "element has correct text" );
 		}
 	});

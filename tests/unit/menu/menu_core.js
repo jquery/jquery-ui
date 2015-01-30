@@ -6,7 +6,7 @@ test( "markup structure", function( assert ) {
 	expect( 6 );
 	var element = $( "#menu1" ).menu();
 	assert.hasClasses( element, "ui-menu" );
-	element.children().each(function( index ) {
+	element.children().each(function() {
 		assert.hasClasses( $( this ), "ui-menu-item" );
 	});
 });
@@ -45,7 +45,7 @@ asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", functio
 	});
 });
 
-asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected item for Selectmenu", function() {
+asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected item for Selectmenu", function( assert ) {
 	expect( 1 );
 	var element = $( "#menu1" ).menu(),
 		firstChild = element.children().eq( 0 ),
@@ -54,7 +54,7 @@ asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected 
 	element.menu( "focus", null, firstChild );
 	wrapper.addClass( "ui-state-active" );
 	setTimeout( function() {
-		ok( wrapper.is( ".ui-state-active" ), "ui-state-active improperly removed" );
+		assert.hasClasses( wrapper, "ui-state-active" );
 		start();
 	}, 500 );
 });

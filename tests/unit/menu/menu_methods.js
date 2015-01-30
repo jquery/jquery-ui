@@ -26,7 +26,7 @@ test( "destroy", function() {
 	});
 });
 
-test( "enable/disable", function() {
+test( "enable/disable", function( assert ) {
 	expect( 3 );
 	var element = $( "#menu1" ).menu({
 		select: function() {
@@ -34,12 +34,12 @@ test( "enable/disable", function() {
 		}
 	});
 	element.menu( "disable" );
-	ok( element.is( ".ui-state-disabled" ), "Missing ui-state-disabled class" );
+	assert.hasClasses( element, "ui-state-disabled" );
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
 	element.menu( "enable" );
-	ok( element.not( ".ui-state-disabled" ), "Has ui-state-disabled class" );
+	assert.lacksClasses( element, "ui-state-disabled" );
 	log( "click" );
 	click( element, "1" );
 	log( "afterclick" );
@@ -69,18 +69,18 @@ test( "refresh submenu", function() {
 	equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
 });
 
-test( "refresh icons (see #9377)", function() {
+test( "refresh icons (see #9377)", function( assert ) {
 	expect( 3 );
 	var element = $( "#menu1" ).menu();
-	ok( !element.hasClass( "ui-menu-icons") );
+	assert.lacksClasses( element, "ui-menu-icons" );
 	element.find( "li:first .ui-menu-item-wrapper" )
 		.html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
 	element.menu( "refresh" );
 
-	ok( element.hasClass( "ui-menu-icons" ) );
+	assert.hasClasses( element, "ui-menu-icons" );
 	element.find( "li:first .ui-menu-item-wrapper" ).html( "Save" );
 	element.menu( "refresh" );
-	ok( !element.hasClass( "ui-menu-icons" ) );
+	assert.lacksClasses( element, "ui-menu-icons" );
 });
 
 test( "widget", function() {
