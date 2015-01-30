@@ -318,35 +318,32 @@ asyncTest( "blur behavior", function() {
 	});
 });
 
-test( "ui-draggable-handle assigned to appropriate element", function() {
+test( "ui-draggable-handle assigned to appropriate element", function( assert ) {
 	expect( 5 );
 
 	var p = $( "<p>" ).appendTo( "#qunit-fixture" ),
 		element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
-	ok( element.hasClass( "ui-draggable-handle" ), "handle is element by default" );
-
+	assert.hasClasses( element, "ui-draggable-handle" );
 	element.draggable( "option", "handle", "p" );
-	ok( !element.hasClass( "ui-draggable-handle" ), "removed from element" );
-	ok( element.find( "p" ).hasClass( "ui-draggable-handle" ), "added to handle" );
-
-	ok( !p.hasClass( "ui-draggable-handle" ),
-		"ensure handle class name is constrained within the draggble (#10212)" );
+	assert.lacksClasses( element, "ui-draggable-handle" );
+	assert.hasClasses( element.find( "p" ), "ui-draggable-handle" );
+	assert.lacksClasses( p, "ui-draggable-handle" );
 
 	element.draggable( "destroy" );
-	ok( !element.find( "p" ).hasClass( "ui-draggable-handle" ), "removed in destroy()" );
+	assert.lacksClasses( element.find( "p" ), "ui-draggable-handle" );
 });
 
-test( "ui-draggable-handle managed correctly in nested draggables", function() {
+test( "ui-draggable-handle managed correctly in nested draggables", function( assert ) {
 	expect( 4 );
 	var parent = $( "<div><div></div></div>" ).draggable().appendTo( "#qunit-fixture" ),
 		child = parent.find( "div" ).draggable();
 
-	ok( parent.hasClass( "ui-draggable-handle" ), "parent has class name on init" );
-	ok( child.hasClass( "ui-draggable-handle" ), "child has class name on init" );
+	assert.hasClasses( parent, "ui-draggable-handle" );
+	assert.hasClasses( child, "ui-draggable-handle" );
 
 	parent.draggable( "destroy" );
-	ok( !parent.hasClass( "ui-draggable-handle" ), "parent loses class name on destroy" );
-	ok( child.hasClass( "ui-draggable-handle" ), "child retains class name on destroy" );
+	assert.lacksClasses( parent, "ui-draggable-handle" );
+	assert.hasClasses( child, "ui-draggable-handle" );
 });
 
 // http://bugs.jqueryui.com/ticket/7772
