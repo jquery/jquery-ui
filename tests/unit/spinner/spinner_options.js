@@ -4,21 +4,25 @@ module( "spinner: options" );
 
 // culture is tested after numberFormat, since it depends on numberFormat
 
-test( "icons: default ", function() {
+test( "icons: default ", function( assert ) {
 	expect( 4 );
 	var element = $( "#spin" ).val( 0 ).spinner();
-	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-triangle-1-n" );
-	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
+	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:first" ),
+		"ui-icon ui-icon-triangle-1-n" );
+	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:last" ),
+		"ui-icon ui-icon-triangle-1-s" );
 
 	element.spinner( "option", "icons", {
 		up: "ui-icon-caret-1-n",
 		down: "ui-icon-caret-1-s"
 	});
-	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-caret-1-n" );
-	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-caret-1-s" );
+	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:first" ),
+		"ui-icon ui-icon-caret-1-n" );
+	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:last" ),
+		"ui-icon ui-icon-caret-1-s" );
 });
 
-test( "icons: custom ", function() {
+test( "icons: custom ", function( assert ) {
 	expect( 2 );
 	var element = $( "#spin" ).val( 0 ).spinner({
 		icons: {
@@ -26,8 +30,8 @@ test( "icons: custom ", function() {
 			up: "custom-up"
 		}
 	}).spinner( "widget" );
-	equal( element.find( ".ui-icon:first" ).attr( "class" ), "ui-icon custom-up" );
-	equal( element.find( ".ui-icon:last" ).attr( "class" ), "ui-icon custom-down" );
+	assert.hasClasses( element.find( ".ui-icon:first" ), "ui-icon custom-up" );
+	assert.hasClasses( element.find( ".ui-icon:last" ), "ui-icon custom-down" );
 });
 
 test( "incremental, false", function() {

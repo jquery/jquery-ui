@@ -11,17 +11,16 @@ test( "destroy", function() {
 	});
 });
 
-test( "disable", function() {
-	expect( 16 );
+test( "disable", function( assert ) {
+	expect( 15 );
 	var element = $( "#spin" ).val( 2 ).spinner(),
 		wrapper = $( "#spin" ).spinner( "widget" );
 
-	ok( !wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper does not have ui-spinner-disabled class" );
+	assert.lacksClasses( wrapper, "ui-spinner-disabled" );
 	ok( !element.is( ":disabled" ), "before: input does not have disabled attribute" );
 
 	element.spinner( "disable" );
-	ok( wrapper.hasClass( "ui-spinner-disabled" ), "after: wrapper has ui-spinner-disabled class" );
-	ok( wrapper.hasClass( "ui-state-disabled" ), "after: wrapper has ui-state-disabled class" );
+	assert.hasClasses( wrapper, "ui-state-disabled ui-spinner-disabled" );
 	ok( !wrapper.attr( "aria-disabled" ), "after: wrapper does not have aria-disabled attr" );
 	ok( element.is( ":disabled"), "after: input has disabled attribute" );
 
@@ -56,17 +55,17 @@ test( "disable", function() {
 	equal( 7, element.val(), "script - pageDown 1 page changes value" );
 });
 
-test( "enable", function() {
+test( "enable", function( assert ) {
 	expect( 5 );
 	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true }),
 		wrapper = element.spinner( "widget" );
 
-	ok( wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper has ui-spinner-disabled class" );
+	assert.hasClasses( wrapper, "ui-spinner-disabled" );
 	ok( element.is( ":disabled" ), "before: input has disabled attribute" );
 
 	element.spinner( "enable" );
 
-	ok( !wrapper.hasClass( ".ui-spinner-disabled" ), "after: wrapper does not have ui-spinner-disabled class" );
+	assert.lacksClasses( wrapper, "ui-spinner-disabled" );
 	ok( !element.is( ":disabled" ), "after: input does not have disabled attribute" );
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
