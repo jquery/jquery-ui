@@ -67,21 +67,20 @@ test( "appendTo: ui-front", function() {
 		$( "#selectmenu-wrap2" )[ 0 ], "empty jQuery object, inside .ui-front" );
 });
 
-test( "CSS styles", function() {
-	expect( 2 );
+test( "CSS styles", function( assert ) {
+	expect( 5 );
 
 	var element = $( "#speed" ).selectmenu(),
 		button = element.selectmenu( "widget" ),
 		menu = element.selectmenu( "menuWidget" );
 
 	element.selectmenu( "open" );
-	ok(
-		button.hasClass( "ui-corner-top" ) && !button.hasClass( "ui-corner-all" ) &&
-			button.find( "span.ui-icon" ).hasClass( "ui-icon-triangle-1-s" ),
-		"button styles dropdown"
-	);
-	ok( menu.hasClass( "ui-corner-bottom" ) && !menu.hasClass( "ui-corner-all" ),
-		"menu styles dropdown" );
+
+	assert.hasClasses( button, "ui-corner-top" );
+	assert.lacksClasses( button, "ui-corner-all" );
+	assert.hasClasses( button.find( "span.ui-icon"), "ui-icon-triangle-1-s" );
+	assert.hasClasses( menu, "ui-corner-bottom" );
+	assert.lacksClasses( button, "ui-corner-all" );
 });
 
 test( "width", function() {
