@@ -105,7 +105,7 @@ test( "enable/disable disabled", function( assert ) {
 	var element = $( "<div></div>" ).dialog();
 	element.dialog( "disable" );
 	equal(element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
-	assert.lacksClasses( element, "ui-dialog-disabled ui-state-disabled" );
+	assert.lacksClasses( element, "ui-dialog-disabled ui-state-disabled", "disable method doesn't add classes" );
 	ok( !element.dialog( "widget" ).attr( "aria-disabled" ), "disable method doesn't add aria-disabled" );
 });
 
