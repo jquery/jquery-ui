@@ -71,7 +71,7 @@ test("enable", function() {
 	equal(actual, expected, "enable is chainable");
 });
 
-test( "disable", function() {
+test( "disable", function( assert ) {
 	expect( 6 );
 	var chainable,
 		fired = false,
@@ -98,9 +98,10 @@ test( "disable", function() {
 	});
 	equal( fired, false, "start fired" );
 
-	ok( !element.selectable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	assert.lacksClasses( element.selectable( "widget" ), "ui-state-disabled" );
+
 	ok( !element.selectable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
-	ok( element.selectable( "widget" ).hasClass( "ui-selectable-disabled" ), "element gets ui-selectable-disabled" );
+	assert.hasClasses( element.selectable( "widget" ), "ui-selectable-disabled" );
 
 	element.selectable( "destroy" );
 
