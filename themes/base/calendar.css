@@ -12,6 +12,8 @@
 	width: 17em;
 	padding: .2em .2em 0;
 }
+
+/* calendar header */
 .ui-calendar .ui-calendar-header {
 	position: relative;
 	padding: .2em 0;
@@ -29,21 +31,11 @@
 	background: none;
 	border: none;
 }
-.ui-calendar .ui-calendar-prev-hover,
-.ui-calendar .ui-calendar-next-hover {
-	top: 1px;
-}
 .ui-calendar .ui-calendar-prev {
 	left: 2px;
 }
 .ui-calendar .ui-calendar-next {
 	right: 2px;
-}
-.ui-calendar .ui-calendar-prev-hover {
-	left: 1px;
-}
-.ui-calendar .ui-calendar-next-hover {
-	right: 1px;
 }
 .ui-calendar .ui-calendar-prev .ui-icon,
 .ui-calendar .ui-calendar-next .ui-icon {
@@ -58,14 +50,8 @@
 	line-height: 1.8em;
 	text-align: center;
 }
-.ui-calendar .ui-calendar-title select {
-	font-size: 1em;
-	margin: 1px 0;
-}
-.ui-calendar select.ui-calendar-month,
-.ui-calendar select.ui-calendar-year {
-	width: 49%;
-}
+
+/* calendar grid */
 .ui-calendar table {
 	width: 100%;
 	font-size: .9em;
@@ -96,6 +82,8 @@
 .ui-calendar .ui-state-disabled button {
 	cursor: default;
 }
+
+/* button pane */
 .ui-calendar .ui-calendar-buttonpane {
 	background-image: none;
 	margin: .7em 0 0 0;
@@ -127,19 +115,6 @@
 .ui-calendar-multi .ui-calendar-group table {
 	width: 95%;
 	margin: 0 2.5% .4em;
-}
-.ui-calendar-multi-2 .ui-calendar-group {
-	width: 50%;
-}
-.ui-calendar-multi-3 .ui-calendar-group {
-	width: 33.3%;
-}
-.ui-calendar-multi-4 .ui-calendar-group {
-	width: 25%;
-}
-.ui-calendar-multi .ui-calendar-group-last .ui-calendar-header,
-.ui-calendar-multi .ui-calendar-group-middle .ui-calendar-header {
-	border-left-width: 0;
 }
 .ui-calendar-multi .ui-calendar-buttonpane {
 	clear: left;
@@ -180,9 +155,3 @@
 .ui-calendar-rtl .ui-calendar-group {
 	float: right;
 }
-.ui-calendar-rtl .ui-calendar-group-last .ui-calendar-header,
-.ui-calendar-rtl .ui-calendar-group-middle .ui-calendar-header {
-	border-right-width: 0;
-	border-left-width: 1px;
-}
-
