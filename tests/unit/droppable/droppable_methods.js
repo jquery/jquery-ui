@@ -63,7 +63,7 @@ test("enable", function() {
 	equal(actual, expected, "enable is chainable");
 });
 
-test( "disable", function() {
+test( "disable", function( assert ) {
 	expect( 10 );
 
 	var actual, expected,
@@ -77,9 +77,9 @@ test( "disable", function() {
 	element.droppable({ disabled: false });
 	TestHelpers.droppable.shouldDrop();
 	element.droppable( "option", "disabled", true );
-	ok( !element.droppable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	assert.lacksClasses( element.droppable( "widget" ), "ui-state-disabled" );
 	ok( !element.droppable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
-	ok( element.droppable( "widget" ).hasClass( "ui-droppable-disabled" ), "element gets ui-droppable-disabled" );
+	assert.hasClasses( element.droppable( "widget" ), "ui-droppable-disabled" );
 	equal( element.droppable( "option", "disabled" ), true, "disabled option setter" );
 	TestHelpers.droppable.shouldNotDrop();
 
