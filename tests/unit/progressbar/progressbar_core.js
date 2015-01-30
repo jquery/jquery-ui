@@ -6,11 +6,10 @@ test( "markup structure", function( assert ) {
 		value = element.children().eq( 0 );
 
 	assert.hasClasses( element, "ui-progressbar ui-widget ui-widget-content" );
-	ok( !value.hasClass( "ui-progressbar-complete" ), "value does not have ui-corner-right" );
+	assert.lacksClasses( value, "ui-progressbar-complete" );
 	element.progressbar( "option", "value", 100 );
 	assert.hasClasses( value, "ui-progressbar-complete ui-widget-header" );
-	ok( !element.hasClass( "ui-progressbar-indeterminate" ),
-		"Main element is not .ui-progressbar-indeterminate" );
+	assert.lacksClasses( element, "ui-progressbar-indeterminate" );
 	equal( element.children().length, 1, "Main element contains one child" );
 	assert.hasClasses( element.children().eq( 0 ), "ui-progressbar-value" );
 	equal( element.children().children().length, 0, "no overlay div" );
@@ -21,8 +20,7 @@ test( "markup structure - indeterminate", function( assert ) {
 	var element = $( "#progressbar" ).progressbar({ value: false });
 	assert.hasClasses( element, "ui-progressbar ui-progressbar-indeterminate" );
 	equal( element.children().length, 1, "Main element contains one child" );
-	ok( element.children().eq( 0 ).hasClass( "ui-progressbar-value" ),
-		"child hasClass ui-progressbar-value" );
+	assert.hasClasses( element.children().eq( 0 ), "ui-progressbar-value" );
 	equal( element.children().children( ".ui-progressbar-overlay" ).length, 1,
 		"Value has class ui-progressbar-overlay" );
 });
