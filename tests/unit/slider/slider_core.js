@@ -13,14 +13,15 @@ function handle() {
 module( "slider: core" );
 
 test( "markup structure", function( assert ) {
-	expect( 3 );
+	expect( 4 );
 	var element = $( "<div></div>" ).slider({ range: true }),
 		handle = element.find( "span" ),
 		range = element.find( "div" );
 
 	assert.hasClasses( element, "ui-slider ui-widget ui-widget-content" );
 	assert.hasClasses( range, "ui-slider-range ui-widget-header" );
-	assert.hasClasses( handle, "ui-slider-handle" );
+	assert.hasClasses( handle[ 0 ], "ui-slider-handle" );
+	assert.hasClasses( handle[ 1 ], "ui-slider-handle" );
 });
 
 test( "keydown HOME on handle sets value to min", function() {
