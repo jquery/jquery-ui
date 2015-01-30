@@ -10,7 +10,7 @@ module( "menu: options", {
 	}
 });
 
-test( "{ disabled: true }", function() {
+test( "{ disabled: true }", function( assert ) {
 	expect( 2 );
 	var element = $( "#menu1" ).menu({
 		disabled: true,
@@ -18,14 +18,14 @@ test( "{ disabled: true }", function() {
 			log();
 		}
 	});
-	ok( element.hasClass( "ui-state-disabled" ), "Missing ui-state-disabled class" );
+	assert.hasClasses( element, "ui-state-disabled" );
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
 	equal( logOutput(), "click,afterclick", "Click order not valid." );
 });
 
-test( "{ disabled: false }", function() {
+test( "{ disabled: false }", function( assert ) {
 	expect( 2 );
 	var element = $( "#menu1" ).menu({
 		disabled: false,
@@ -33,44 +33,50 @@ test( "{ disabled: false }", function() {
 			log();
 		}
 	});
-	ok( !element.hasClass( "ui-state-disabled" ), "Has ui-state-disabled class" );
+	assert.lacksClasses( element, "ui-state-disabled" );
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
 	equal( logOutput(), "click,1,afterclick", "Click order not valid." );
 });
 
-test( "{ icons: default }", function() {
-	expect( 2 );
+test( "{ icons: default }", function( assert ) {
+	expect( 8 );
 	var element = $( "#menu2" ).menu();
-	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon ui-icon-caret-1-e" );
+	element.find( ".ui-menu-icon" ).each(function(){
+		assert.hasClasses( this, "ui-menu-icon ui-icon ui-icon-caret-1-e" );
+	});
 
 	element.menu( "option", "icons.submenu", "ui-icon-triangle-1-e" );
-	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon ui-icon-triangle-1-e" );
+	element.find( ".ui-menu-icon" ).each(function(){
+		assert.hasClasses( this, "ui-menu-icon ui-icon ui-icon-triangle-1-e" );
+	});
 });
 
-test( "{ icons: { submenu: 'custom' } }", function() {
-	expect( 1 );
+test( "{ icons: { submenu: 'custom' } }", function( assert ) {
+	expect( 4 );
 	var element = $( "#menu2" ).menu({
 		icons: {
 			submenu: "custom-class"
 		}
 	});
-	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon custom-class" );
+	element.find( ".ui-menu-icon" ).each(function(){
+		assert.hasClasses( this, "ui-menu-icon ui-icon custom-class" );
+	});
 });
 
 // TODO: test menus option
 
 // TODO: test position option
 
-test( "{ role: 'menu' } ", function() {
+test( "{ role: 'menu' } ", function( assert ) {
 	var element = $( "#menu1" ).menu(),
 		items = element.find( "li" );
 	expect( 2 + 3 * items.length );
 	equal( element.attr( "role" ), "menu" );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
-		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
+		assert.hasClasses( $( this ), "ui-menu-item" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ),
 			"menuitem", "menu item ("+ item + ") role" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
@@ -78,7 +84,7 @@ test( "{ role: 'menu' } ", function() {
 	});
 });
 
-test( "{ role: 'listbox' } ", function() {
+test( "{ role: 'listbox' } ", function( assert ) {
 	var element = $( "#menu1" ).menu({
 			role: "listbox"
 		}),
@@ -87,7 +93,7 @@ test( "{ role: 'listbox' } ", function() {
 	equal( element.attr( "role" ), "listbox" );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
-		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
+		assert.hasClasses( $( this ), "ui-menu-item" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), "option",
 			"menu item ("+ item + ") role" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
@@ -95,7 +101,7 @@ test( "{ role: 'listbox' } ", function() {
 	});
 });
 
-test( "{ role: null }", function() {
+test( "{ role: null }", function( assert ) {
 	var element = $( "#menu1" ).menu({
 			role: null
 		}),
@@ -104,7 +110,7 @@ test( "{ role: null }", function() {
 	strictEqual( element.attr( "role" ), undefined );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
-		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
+		assert.hasClasses( $( this ), "ui-menu-item" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), undefined,
 			"menu item ("+ item + ") role" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
