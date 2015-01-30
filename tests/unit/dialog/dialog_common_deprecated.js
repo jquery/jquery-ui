@@ -8,7 +8,7 @@ TestHelpers.commonWidgetTests( "dialog", {
 			"ui-dialog-titlebar": "ui-corner-all"
 		},
 		closeOnEscape: true,
-		closeText: "close",
+		closeText: "Close",
 		dialogClass: "",
 		disabled: false,
 		draggable: true,
