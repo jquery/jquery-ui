@@ -6,7 +6,6 @@ var setupTeardown = TestHelpers.accordion.setupTeardown,
 module( "accordion: core", setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
-
 	test( "markup structure: " + type, function( assert ) {
 		expect( 10 );
 		var element = $( selector ).accordion(),
@@ -114,7 +113,7 @@ test( "accessibility", function () {
 
 });
 
-asyncTest( "keyboard support", function() {
+asyncTest( "keyboard support", function( assert ) {
 	expect( 13 );
 	var element = $( "#list1" ).accordion(),
 		headers = element.find( ".ui-accordion-header" ),
@@ -125,7 +124,7 @@ asyncTest( "keyboard support", function() {
 	setTimeout( step1 );
 
 	function step1() {
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "first header has focus" );
+		assert.hasClasses( headers.eq( 0 ), "ui-state-focus", "first header has focus" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
 		setTimeout( step2 );
 	}
@@ -134,43 +133,44 @@ asyncTest( "keyboard support", function() {
 	// All of the setTimeouts() from keydowns aren't necessary with newer jQuery.
 	// Only the explicit focus simulations require them.
 	function step2() {
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "DOWN moves focus to next header" );
+		assert.hasClasses( headers.eq( 1 ), "ui-state-focus", "DOWN moves focus to next header" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT } );
 		setTimeout( step3 );
 	}
 
 	function step3() {
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next header" );
+		assert.hasClasses( headers.eq( 2 ), "ui-state-focus", "RIGHT moves focus to next header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
 		setTimeout( step4 );
 	}
 
 	function step4() {
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first header" );
+		assert.hasClasses( headers.eq( 0 ), "ui-state-focus", "DOWN wraps focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
 		setTimeout( step5 );
 	}
 
 	function step5() {
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last header" );
+		assert.hasClasses( headers.eq( 2 ), "ui-state-focus", "UP wraps focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
 		setTimeout( step6 );
 	}
 
 	function step6() {
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous header" );
+		assert.hasClasses( headers.eq( 1 ),
+			"ui-state-focus", "LEFT moves focus to previous header" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
 		setTimeout( step7 );
 	}
 
 	function step7() {
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first header" );
+		assert.hasClasses( headers.eq( 0 ), "ui-state-focus", "HOME moves focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
 		setTimeout( step8 );
 	}
 
 	function step8() {
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last header" );
+		assert.hasClasses( headers.eq( 2 ), "ui-state-focus", "END moves focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
 		setTimeout( step9 );
 	}
@@ -188,13 +188,14 @@ asyncTest( "keyboard support", function() {
 	}
 
 	function step11() {
-		ok( !headers.eq( 1 ).is( ".ui-state-focus" ), "header loses focus when focusing inside the panel" );
+		assert.lacksClasses( headers.eq( 1 ), "ui-state-focus",
+			"header loses focus when focusing inside the panel" );
 		anchor.simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
 		setTimeout( step12 );
 	}
 
 	function step12() {
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "CTRL+UP moves focus to header" );
+		assert.hasClasses( headers.eq( 1 ), "ui-state-focus", "CTRL+UP moves focus to header" );
 		start();
 	}
 });
