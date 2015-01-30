@@ -2,12 +2,12 @@
 
 module( "tooltip: (deprecated) options" );
 
-test( "tooltipClass", function() {
+test( "tooltipClass", function( assert ) {
 	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip({
 		tooltipClass: "custom"
 	}).tooltip( "open" );
-	ok( $( "#" + element.data( "ui-tooltip-id" ) ).hasClass( "custom" ) );
+	assert.hasClasses( $( "#" + element.data( "ui-tooltip-id" ) ), "custom" );
 });
 
 }( jQuery ) );
