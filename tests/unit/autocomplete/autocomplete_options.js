@@ -115,7 +115,7 @@ asyncTest( "delay", function() {
 	}, 100 );
 });
 
-asyncTest( "disabled", function() {
+asyncTest( "disabled", function( assert ) {
 	expect( 5 );
 	var element = $( "#autocomplete" ).autocomplete({
 			source: data,
@@ -126,9 +126,9 @@ asyncTest( "disabled", function() {
 
 	ok( menu.is( ":hidden" ) );
 
-	ok( !element.is( ".ui-state-disabled" ), "element doesn't get ui-state-disabled" );
+	assert.lacksClasses( element, "ui-state-disabled" );
+	assert.hasClasses( menu, "ui-autocomplete-disabled" );
 	ok( !element.attr( "aria-disabled" ), "element doesn't get aria-disabled" );
-	ok( menu.is( ".ui-autocomplete-disabled" ), "element gets ui-autocomplete-disabled" );
 
 	setTimeout(function() {
 		ok( menu.is( ":hidden" ) );
