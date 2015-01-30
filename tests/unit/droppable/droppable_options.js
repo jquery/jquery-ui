@@ -22,17 +22,18 @@ test( "activeClass", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
-test( "{ addClasses: true }, default", function() {
+test( "{ addClasses: true }, default", function( assert ) {
 	expect( 1 );
 	var el = $( "<div />" ).droppable({ addClasses: true });
-	ok( el.is( ".ui-droppable" ), "'ui-droppable' class added" );
+	assert.hasClasses( el, "ui-droppable" );
 	el.droppable( "destroy" );
 });
 
-test( "{ addClasses: false }", function() {
+test( "{ addClasses: false }", function( assert ) {
 	expect( 1 );
 	var el = $( "<div />" ).droppable({ addClasses: false });
-	ok( !el.is( ".ui-droppable" ), "'ui-droppable' class not added" );
+
+	assert.lacksClasses( el, "ui-droppable" );
 	el.droppable( "destroy" );
 });
 
