@@ -344,16 +344,16 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 			} else {
 
-				if(event.pageY - $(this.document[0]).scrollTop() < o.scrollSensitivity) {
-					scrolled = $(this.document[0]).scrollTop($(this.document[0]).scrollTop() - o.scrollSpeed);
-				} else if($(this.window[0]).height() - (event.pageY - $(this.document[0]).scrollTop()) < o.scrollSensitivity) {
-					scrolled = $(this.document[0]).scrollTop($(this.document[0]).scrollTop() + o.scrollSpeed);
+				if(event.pageY - this.document.scrollTop() < o.scrollSensitivity) {
+					scrolled = this.document.scrollTop(this.document.scrollTop() - o.scrollSpeed);
+				} else if(this.window.height() - (event.pageY - this.document.scrollTop()) < o.scrollSensitivity) {
+					scrolled = this.document.scrollTop(this.document.scrollTop() + o.scrollSpeed);
 				}
 
-				if(event.pageX - $(this.document[0]).scrollLeft() < o.scrollSensitivity) {
-					scrolled = $(this.document[0]).scrollLeft($(this.document[0]).scrollLeft() - o.scrollSpeed);
-				} else if($(this.window[0]).width() - (event.pageX - $(this.document[0]).scrollLeft()) < o.scrollSensitivity) {
-					scrolled = $(this.document[0]).scrollLeft($(this.document[0]).scrollLeft() + o.scrollSpeed);
+				if(event.pageX - this.document.scrollLeft() < o.scrollSensitivity) {
+					scrolled = this.document.scrollLeft(this.document.scrollLeft() - o.scrollSpeed);
+				} else if(this.window.width() - (event.pageX - this.document.scrollLeft()) < o.scrollSensitivity) {
+					scrolled = this.document.scrollLeft(this.document.scrollLeft() + o.scrollSpeed);
 				}
 
 			}
@@ -1052,8 +1052,8 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			this.containment = [
 				0 - this.offset.relative.left - this.offset.parent.left,
 				0 - this.offset.relative.top - this.offset.parent.top,
-				$(o.containment === "document" ? this.document[0] : this.window[0]).width() - this.helperProportions.width - this.margins.left,
-				($(o.containment === "document" ? this.document[0] : this.window[0]).height() || this.document[0].body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
+				o.containment === "document" ? this.document.width() : this.window.width() - this.helperProportions.width - this.margins.left,
+				(o.containment === "document" ? this.document.width() : this.window.height() || this.document[0].body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
 			];
 		}
 
