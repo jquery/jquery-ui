@@ -64,7 +64,7 @@ test("enable", function() {
 	equal(actual, expected, "enable is chainable");
 });
 
-test( "disable", function() {
+test( "disable", function( assert ) {
 	expect( 9 );
 
 	var chainable,
@@ -82,9 +82,9 @@ test( "disable", function() {
 	element.sortable( "option", "disabled", true);
 	equal( element.sortable( "option", "disabled" ), true, "disabled option setter" );
 
-	ok( !element.sortable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	assert.lacksClasses( element.sortable( "widget" ), "ui-state-disabled" );
 	ok( !element.sortable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
-	ok( element.sortable( "widget" ).hasClass( "ui-sortable-disabled" ), "element gets ui-sortable-disabled" );
+	assert.hasClasses( element.sortable( "widget" ), "ui-sortable-disabled" );
 
 	TestHelpers.sortable.sort($( "li", element )[ 0 ], 0, 44, 0, ".sortable('option', 'disabled', true)" );
 	equal( chainable, element, "disable is chainable" );

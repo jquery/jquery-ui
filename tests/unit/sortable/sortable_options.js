@@ -343,13 +343,13 @@ test( "{ placeholder: false } img", function() {
 	});
 });
 
-test( "{ placeholder: String }", function() {
+test( "{ placeholder: String }", function( assert ) {
 	expect( 1 );
 
 	var element = $( "#sortable" ).sortable({
 		placeholder: "test",
 		start: function( event, ui ) {
-			ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+			assert.hasClasses( ui.placeholder, "test" );
 		}
 	});
 
@@ -358,7 +358,7 @@ test( "{ placeholder: String }", function() {
 	});
 });
 
-test( "{ placholder: String } tr", function() {
+test( "{ placholder: String } tr", function( assert ) {
 	expect( 4 );
 
 	var originalWidths,
@@ -368,7 +368,7 @@ test( "{ placholder: String } tr", function() {
 				var currentWidths = otherRow.children().map(function() {
 					return $( this ).width();
 				}).get();
-				ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+				assert.hasClasses( ui.placeholder, "test" );
 				deepEqual( currentWidths, originalWidths, "table cells maintian size" );
 				equal( ui.placeholder.children().length, dragRow.children().length,
 					"placeholder has correct number of cells" );
