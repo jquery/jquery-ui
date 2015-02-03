@@ -13,14 +13,14 @@ test("buttonset works with single-quote named elements (#7505)", function() {
 	}).click();
 });
 
-asyncTest( "when button loses focus, ensure active state is removed (#8559)", function() {
+asyncTest( "when button loses focus, ensure active state is removed (#8559)", function( assert ) {
 	expect( 1 );
 
 	var element = $( "#button" ).button();
 
 	element.one( "keypress", function() {
 		element.one( "blur", function() {
-			ok( !element.is(".ui-state-active"), "button loses active state appropriately" );
+			assert.lacksClasses( element, "ui-state-active", "button loses active state appropriately" );
 			start();
 		}).blur();
 	});
