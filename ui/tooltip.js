@@ -241,7 +241,7 @@ return $.widget( "ui.tooltip", {
 		var tooltipData, tooltip, events, delayedShow, a11yContent,
 			positionOption = $.extend( {}, this.options.position );
 
-		if ( !content ) {
+		if ( !content || target.is(':hidden')) {
 			return;
 		}
 
