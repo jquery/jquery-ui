@@ -414,7 +414,7 @@ test("miscellaneous", function() {
 		shortNames[2] + " >", "Navigation next - as date format + goto current");
 });
 
-test("minMax", function() {
+test("minMax", function( assert ) {
 	expect( 23 );
 	var date,
 		inp = TestHelpers.datepicker.init("#inp"),
@@ -500,25 +500,31 @@ test("minMax", function() {
 	TestHelpers.datepicker.equalsDate(inp.datepicker("getDate"), maxDate, "Min/max - setDate > max");
 
 	inp.datepicker("option", {yearRange: "-0:+1"}).val("01/01/" + new Date().getFullYear());
-	ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/1/minYear");
+	assert.hasClasses( dp.find(".ui-datepicker-prev"), "ui-state-disabled",
+		"Year Range Test - previous button disabled at 1/1/minYear");
 	inp.datepicker("setDate", "12/30/" + new Date().getFullYear());
-	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled at 12/30/maxYear");
+	assert.hasClasses( dp.find(".ui-datepicker-next"), "ui-state-disabled",
+		"Year Range Test - next button disabled at 12/30/maxYear");
 
 	inp.datepicker("option", {
 		minDate: new Date(1900, 0, 1),
 		maxDate: "-7Y",
 		yearRange: "1900:-7"
 	}).val( "" );
-	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - relative - next button disabled");
-	ok(!dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - relative - prev button enabled");
+	assert.hasClasses( dp.find( ".ui-datepicker-next" ), "ui-state-disabled",
+		"Year Range Test - relative - next button disabled" );
+	assert.lacksClasses( dp.find( ".ui-datepicker-prev" ), "ui-state-disabled",
+		"Year Range Test - relative - prev button enabled" );
 
 	inp.datepicker("option", {
 		minDate: new Date(1900, 0, 1),
 		maxDate: "1/25/2007",
 		yearRange: "1900:2007"
 	}).val( "" );
-	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - absolute - next button disabled");
-	ok(!dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - absolute - prev button enabled");
+	assert.hasClasses( dp.find( ".ui-datepicker-next" ), "ui-state-disabled",
+		"Year Range Test - absolute - next button disabled" );
+	assert.lacksClasses( dp.find( ".ui-datepicker-prev" ), "ui-state-disabled",
+		"Year Range Test - absolute - prev button enabled" );
 });
 
 test("setDate", function() {
@@ -782,7 +788,7 @@ function beforeDay(date) {
 		(date.getDate() % 3 === 0 ? "Divisble by 3" : "")];
 }
 
-test("callbacks", function() {
+test("callbacks", function( assert ) {
 	expect( 13 );
 	// Before show
 	var dp, day20, day21,
@@ -803,10 +809,10 @@ test("callbacks", function() {
 	ok(beforeShowDayOK, "Before show day - dates OK");
 	day20 = dp.find(".ui-datepicker-calendar td:contains('20')");
 	day21 = dp.find(".ui-datepicker-calendar td:contains('21')");
-	ok(!day20.is(".ui-datepicker-unselectable"), "Before show day - unselectable 20");
-	ok(day21.is(".ui-datepicker-unselectable"), "Before show day - unselectable 21");
-	ok(day20.is(".day10"), "Before show day - CSS 20");
-	ok(!day21.is(".day10"), "Before show day - CSS 21");
+	assert.lacksClasses( day20, "ui-datepicker-unselectable", "Before show day - unselectable 20");
+	assert.hasClasses( day21, "ui-datepicker-unselectable", "Before show day - unselectable 21");
+	assert.hasClasses( day20, "day10", "Before show day - CSS 20");
+	assert.lacksClasses( day21, "day10", "Before show day - CSS 21");
 	ok(!day20.attr("title"), "Before show day - title 20");
 	ok(day21.attr("title") === "Divisble by 3", "Before show day - title 21");
 	inp.datepicker("hide").datepicker("destroy");
