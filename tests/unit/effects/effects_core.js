@@ -182,13 +182,14 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 	start();
 });
 
-asyncTest( "animateClass: css and class changes during animation are not lost (#7106)", function() {
+asyncTest( "animateClass: css and class changes during animation are not lost (#7106)",
+function( assert ) {
 	expect( 2 );
 	var test = $( "div.ticket7106" );
 
 	// ensure the class stays and that the css property stays
 	function animationComplete() {
-		ok( test.hasClass( "testClass" ), "class change during animateClass was not lost" );
+		assert.hasClasses( test, "testClass", "class change during animateClass was not lost" );
 		equal( test.height(), 100, "css change during animateClass was not lost" );
 		start();
 	}
