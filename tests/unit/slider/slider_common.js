@@ -18,6 +18,9 @@ TestHelpers.commonWidgetTests( "slider", {
 		change: null,
 		slide: null,
 		start: null,
-		stop: null
+		stop: null,
+		
+		calculateDistance: null,
+		calculateValue: null
 	}
 });

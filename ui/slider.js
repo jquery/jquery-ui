@@ -49,7 +49,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		change: null,
 		slide: null,
 		start: null,
-		stop: null
+		stop: null,
+
+		calculateDistance: null,
+		calculateValue: null
 	},
 
 	// number of pages in a slider
@@ -64,6 +67,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
+
+		if ( !$.isFunction(this.options.calculateDistance) ) {
+			this.options.calculateDistance = this._calculateDistance;
+		}
+
+		if ( !$.isFunction(this.options.callculateValue) ) {
+			this.options.calculateValue = this._calculateValue;
+		}
 
 		this.element
 			.addClass( "ui-slider" +
@@ -272,8 +283,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var pixelTotal,
 			pixelMouse,
 			percentMouse,
-			valueTotal,
-			valueMouse;
+			value;
 
 		if ( this.orientation === "horizontal" ) {
 			pixelTotal = this.elementSize.width;
@@ -294,10 +304,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			percentMouse = 1 - percentMouse;
 		}
 
-		valueTotal = this._valueMax() - this._valueMin();
-		valueMouse = this._valueMin() + percentMouse * valueTotal;
+		value = this.options.calculateValue(this._valueMin(), this._valueMax(), percentMouse * 100);
 
-		return this._trimAlignValue( valueMouse );
+		return this._trimAlignValue( value );
 	},
 
 	_start: function( event, index ) {
@@ -583,7 +592,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_refreshValue: function() {
-		var lastValPercent, valPercent, value, valueMin, valueMax,
+		var lastValPercent, valPercent,
 			oRange = this.options.range,
 			o = this.options,
 			that = this,
@@ -592,7 +601,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		if ( this.options.values && this.options.values.length ) {
 			this.handles.each(function( i ) {
-				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
+				valPercent = that.options.calculateDistance(that._valueMin(), that._valueMax(), that.values(i));
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 				if ( that.options.range === true ) {
@@ -615,12 +624,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				lastValPercent = valPercent;
 			});
 		} else {
-			value = this.value();
-			valueMin = this._valueMin();
-			valueMax = this._valueMax();
-			valPercent = ( valueMax !== valueMin ) ?
-					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
-					0;
+			valPercent = that.options.calculateDistance(this._valueMin(), this._valueMax(), this.value());
 			_set[ this.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 
@@ -716,6 +720,32 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				$( event.target ).removeClass( "ui-state-active" );
 			}
 		}
+	},
+
+	/**
+	 * Calculates the distance (as percentage) of the handle based on provided value and boundaries
+	 *
+	 * @param {Number} min   Minimum value boundary
+	 * @param {Number} max   Maximum value boundary
+	 * @param {Number} value Slider's value
+	 *
+	 * @returns {Number}
+	 */
+	_calculateDistance: function( min, max, value ) {
+		return max !== min ? ( value - min ) / ( max - min ) * 100 : 0;
+	},
+
+	/**
+	 * Calculates the value based on provided boundaries and distance
+	 *
+	 * @param {Number} min      Minimum value boundary
+	 * @param {Number} max      Maximum value boundary
+	 * @param {Number} distance Distance as percentage
+	 *
+	 * @returns {Number}
+	 */
+	_calculateValue: function( min, max, distance ) {
+		return min + ( distance / 100 ) * ( max - min );
 	}
 });
 
