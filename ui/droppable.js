@@ -36,11 +36,9 @@ $.widget( "ui.droppable", {
 	widgetEventPrefix: "drop",
 	options: {
 		accept: "*",
-		activeClass: false,
 		addClasses: true,
 		classes: {},
 		greedy: false,
-		hoverClass: false,
 		scope: "default",
 		tolerance: "intersect",
 
@@ -124,9 +122,7 @@ $.widget( "ui.droppable", {
 
 	_activate: function( event ) {
 		var draggable = $.ui.ddmanager.current;
-		if ( this.options.activeClass ) {
-			this.element.addClass( this.options.activeClass );
-		}
+		this._addClass( "ui-droppable-active" );
 		if ( draggable ){
 			this._trigger( "activate", event, this.ui( draggable ) );
 		}
@@ -134,9 +130,7 @@ $.widget( "ui.droppable", {
 
 	_deactivate: function( event ) {
 		var draggable = $.ui.ddmanager.current;
-		if ( this.options.activeClass ) {
-			this.element.removeClass( this.options.activeClass );
-		}
+		this._removeClass( "ui-droppable-active" );
 		if ( draggable ){
 			this._trigger( "deactivate", event, this.ui( draggable ) );
 		}
@@ -152,9 +146,7 @@ $.widget( "ui.droppable", {
 		}
 
 		if ( this.accept.call( this.element[ 0 ], ( draggable.currentItem || draggable.element ) ) ) {
-			if ( this.options.hoverClass ) {
-				this.element.addClass( this.options.hoverClass );
-			}
+			this._addClass( "ui-droppable-hover" );
 			this._trigger( "over", event, this.ui( draggable ) );
 		}
 
@@ -170,13 +162,15 @@ $.widget( "ui.droppable", {
 		}
 
 		if ( this.accept.call( this.element[ 0 ], ( draggable.currentItem || draggable.element ) ) ) {
-			if ( this.options.hoverClass ) {
-				this.element.removeClass( this.options.hoverClass );
-			}
+			this._removeClass( "ui-droppable-hover" );
 			this._trigger( "out", event, this.ui( draggable ) );
 		}
 
 	},
+
+	// Extension point just to make backcompat sane and avoid duplicating all the logic in _drop
+	// TODO: Remove in 1.13 along with call to it below
+	_classesCompat: $.noop,
 
 	_drop: function( event, custom ) {
 
@@ -203,12 +197,11 @@ $.widget( "ui.droppable", {
 		}
 
 		if ( this.accept.call( this.element[ 0 ], ( draggable.currentItem || draggable.element ) ) ) {
-			if ( this.options.activeClass ) {
-				this.element.removeClass( this.options.activeClass );
-			}
-			if ( this.options.hoverClass ) {
-				this.element.removeClass( this.options.hoverClass );
-			}
+			this._removeClass( "ui-droppable-active" );
+			this._removeClass( "ui-droppable-hover" );
+
+			// See above TODO and remove this too
+			this._classesCompat();
 			this._trigger( "drop", event, this.ui( draggable ) );
 			return this.element;
 		}
@@ -411,6 +404,62 @@ $.ui.ddmanager = {
 		}
 	}
 };
+
+// DEPRECATED TODO: switch return back to widget declaration at top of file when this is removed
+if ( $.uiBackCompat !== false ) {
+
+	// DialogClass option
+	$.widget( "ui.droppable", $.ui.droppable, {
+		options: {
+			hoverClass: false,
+			activeClass: false
+		},
+		_classesCompat: function() {
+			if ( this.options.activeClass ) {
+				this.element.removeClass( this.options.activeClass );
+			}
+			if ( this.options.hoverClass ) {
+				this.element.removeClass( this.options.hoverClass );
+			}
+		},
+		_activate: function( event ) {
+			if ( this.options.activeClass ) {
+				this.element.addClass( this.options.activeClass );
+			}
+			this._super( event );
+		},
+		_deactivate: function( event ) {
+			if ( this.options.activeClass ) {
+				this.element.removeClass( this.options.activeClass );
+			}
+			this._super( event );
+		},
+		_toggleDroppableClasses: function( stateVal ) {
+
+			var draggable = $.ui.ddmanager.current;
+
+			// Bail if draggable and droppable are same element
+			if ( !draggable || ( draggable.currentItem ||
+					draggable.element )[ 0 ] === this.element[ 0 ] ) {
+				return;
+			}
+
+			if (  this.options.hoverClass && this.accept.call( this.element[ 0 ], ( draggable.currentItem ||
+					draggable.element ) ) ) {
+				this.element[ ( stateVal ? "add" : "remove" ) + "Class" ]( this.options.hoverClass );
+			}
+
+		},
+		_out: function( event ) {
+			this._super( event );
+			this._toggleDroppableClasses( false );
+		},
+		_over: function( event ) {
+			this._super( event );
+			this._toggleDroppableClasses( true );
+		}
+	});
+}
 
 return $.ui.droppable;
 
