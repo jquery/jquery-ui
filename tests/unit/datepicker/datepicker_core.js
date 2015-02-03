@@ -34,8 +34,8 @@ test("widget method", function() {
 	deepEqual($("body > #ui-datepicker-div:last-child")[0], actual);
 });
 
-asyncTest( "baseStructure", function() {
-	expect( 58 );
+asyncTest( "baseStructure", function( assert ) {
+	expect( 59 );
 	var header, title, table, thead, week, panel, inl, child,
 		inp = TestHelpers.datepicker.initNewInput(),
 		dp = $( "#ui-datepicker-div" );
@@ -43,8 +43,8 @@ asyncTest( "baseStructure", function() {
 	function step1() {
 		TestHelpers.datepicker.onFocus( inp, function() {
 			ok( dp.is( ":visible" ), "Structure - datepicker visible" );
-			ok( !dp.is( ".ui-datepicker-rtl" ), "Structure - not right-to-left" );
-			ok( !dp.is( ".ui-datepicker-multi" ), "Structure - not multi-month" );
+			assert.lacksClasses( dp, "ui-datepicker-rtl" );
+			assert.lacksClasses( dp, "ui-datepicker-multi" );
 			equal( dp.children().length, 2, "Structure - child count" );
 
 			header = dp.children( ":first" );
@@ -107,7 +107,7 @@ asyncTest( "baseStructure", function() {
 		// Multi-month 2
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: 2 });
 		TestHelpers.datepicker.onFocus( inp, function() {
-			ok( dp.is( ".ui-datepicker-multi" ), "Structure multi [2] - multi-month" );
+			assert.hasClasses( dp, "ui-datepicker-multi", "Structure multi [2] - multi-month" );
 			equal( dp.children().length, 3, "Structure multi [2] - child count" );
 
 			child = dp.children( ":first" );
@@ -118,8 +118,7 @@ asyncTest( "baseStructure", function() {
 
 			child = dp.children( ":eq(2)" );
 			ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2] - row break" );
-			ok( dp.is( ".ui-datepicker-multi-2" ), "Structure multi [2] - multi-2" );
-
+			assert.hasClasses( dp, "ui-datepicker-multi-2", "Structure multi [2] - multi-2" );
 			inp.datepicker( "hide" ).datepicker( "destroy" );
 			step4();
 		});
@@ -129,8 +128,8 @@ asyncTest( "baseStructure", function() {
 		// Multi-month 3
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: 3 });
 		TestHelpers.datepicker.onFocus( inp, function() {
-			ok( dp.is( ".ui-datepicker-multi-3" ), "Structure multi [3] - multi-3" );
-			ok( !dp.is( ".ui-datepicker-multi-2" ), "Structure multi [3] - Trac #6704" );
+			assert.hasClasses( dp, "ui-datepicker-multi-3", "Structure multi [3] - multi-3" );
+			assert.lacksClasses( dp, "ui-datepicker-multi-2", "Structure multi [3] - Trac #6704" );
 
 			inp.datepicker( "hide" ).datepicker( "destroy" );
 			step5();
@@ -141,7 +140,7 @@ asyncTest( "baseStructure", function() {
 		// Multi-month [2, 2]
 		inp = TestHelpers.datepicker.initNewInput({ numberOfMonths: [ 2, 2 ] });
 		TestHelpers.datepicker.onFocus( inp, function() {
-			ok( dp.is( ".ui-datepicker-multi" ), "Structure multi - multi-month" );
+			assert.hasClasses( dp, "ui-datepicker-multi", "Structure multi - multi-month" );
 			equal( dp.children().length, 6, "Structure multi [2,2] - child count" );
 
 			child = dp.children( ":first" );
@@ -168,9 +167,9 @@ asyncTest( "baseStructure", function() {
 			inl = TestHelpers.datepicker.init( "#inl" );
 			dp = inl.children();
 
-			ok( dp.is( ".ui-datepicker-inline" ), "Structure inline - main div" );
-			ok( !dp.is( ".ui-datepicker-rtl" ), "Structure inline - not right-to-left" );
-			ok( !dp.is( ".ui-datepicker-multi" ), "Structure inline - not multi-month" );
+			assert.hasClasses( dp, "ui-datepicker-inline", "Structure inline - main div" );
+			assert.lacksClasses( dp, "ui-datepicker-rtl", "Structure inline - not right-to-left" );
+			assert.lacksClasses( dp, "ui-datepicker-multi", "Structure inline - not multi-month" );
 			equal( dp.children().length, 2, "Structure inline - child count" );
 
 			header = dp.children( ":first" );
@@ -188,7 +187,8 @@ asyncTest( "baseStructure", function() {
 			inl = TestHelpers.datepicker.init( "#inl", { numberOfMonths: 2 } );
 			dp = inl.children();
 
-			ok( dp.is( ".ui-datepicker-inline" ) && dp.is( ".ui-datepicker-multi" ), "Structure inline multi - main div" );
+			assert.hasClasses( dp, "ui-datepicker-inline" );
+			assert.hasClasses( dp,  "ui-datepicker-multi" );
 			equal( dp.children().length, 3, "Structure inline multi - child count" );
 
 			child = dp.children( ":first" );
@@ -208,7 +208,7 @@ asyncTest( "baseStructure", function() {
 	step1();
 });
 
-asyncTest( "customStructure", function() {
+asyncTest( "customStructure", function( assert ) {
 	expect( 20 );
 	var header, panel, title, thead,
 		inp = TestHelpers.datepicker.initNewInput( $.datepicker.regional.he ),
@@ -218,7 +218,7 @@ asyncTest( "customStructure", function() {
 		inp.datepicker( "option", "showButtonPanel", true );
 
 		TestHelpers.datepicker.onFocus( inp, function() {
-			ok( dp.is( ".ui-datepicker-rtl" ), "Structure RTL - right-to-left" );
+		assert.hasClasses( dp, "ui-datepicker-rtl", "Structure RTL - right-to-left" );
 
 			header = dp.children( ":first" );
 			ok( header.is( "div.ui-datepicker-header" ), "Structure RTL - header division" );
