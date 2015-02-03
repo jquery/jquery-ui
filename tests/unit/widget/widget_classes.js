@@ -57,7 +57,7 @@ $.widget( "ui.classesWidget", {
 	}
 });
 
-test( ".option() - classes setter", function(){
+test( ".option() - classes setter", function( assert ){
 	expect( 12 );
 
 	var testWidget = $.ui.classesWidget(),
@@ -73,18 +73,18 @@ test( ".option() - classes setter", function(){
 		}
 	});
 
-	equal( testWidget.element.is( ".test-self.self-class-2" ), true,
+	assert.hasClasses( testWidget.element, "test-self self-class-2",
 		"Removing a class leaves the structure and other classes in value" );
-	equal( !testWidget.element.is( ".self-class" ), true,
+	assert.lacksClasses( testWidget.element, "self-class",
 		"Removing a class from the value removes the class" );
 	testWidget.option( "classes.test-self", "" );
-	equal( testWidget.element.is( ".test-self" ), true,
+	assert.hasClasses( testWidget.element, "test-self",
 		"Setting to empty value leaves structure class" );
-	equal( !testWidget.element.is( ".self-class-2" ), true,
+	assert.lacksClasses( testWidget.element, "self-class-2",
 		"Setting empty value removes previous value classes" );
-	equal( testWidget.span.is( ".test-span.self-span-new" ), true,
+	assert.hasClasses( testWidget.span, "test-span self-span-new",
 		"Adding a class to an empty value works as expected" );
-	equal( testWidget.wrapper.is( ".test-wrapper.self-wrapper-new" ), true,
+	assert.hasClasses( testWidget.wrapper, "test-wrapper self-wrapper-new",
 		"Appending a class to the current value works as expected" );
 });
 
@@ -96,19 +96,21 @@ test( ".destroy() - class removal", function(){
 	});
 });
 
-function testElementClasses( widget, bool, method, toggle ) {
-	toggle = toggle || "";
-	equal( widget.is( ".test-self.self-class.self-class-2" ), bool,
+function testElementClasses( widget, bool, method ) {
+	var toggle = method === "toggle" ? ( ", " + bool ) : "",
+		assertion = QUnit.assert[ ( bool? "has" : "lacks" ) + "Classes" ];
+
+	assertion( widget, "test-self self-class self-class-2",
 		"_" + method + "Class works with ( keys, extra " + toggle + ")" );
-	equal( widget.is( ".test-self-2" ), bool,
+	assertion( widget, "test-self-2",
 		"_" + method + "Class works with ( keys, null " + toggle + ")" );
-	equal( widget.is( ".test-self-extra-null" ), bool,
+	assertion( widget, "test-self-extra-null",
 		"_" + method + "Class works with ( null, extra " + toggle + ")" );
-	equal( widget.parent().is( ".test-wrapper.self-wrapper" ), bool,
+	assertion( widget.parent(), "test-wrapper self-wrapper",
 		"_" + method + "Class works with ( element, null, extra " + toggle + ")" );
-	equal( widget.find( "span" ).is( ".test-span.test-span-extra" ), bool,
+	assertion( widget.find( "span" ), "test-span test-span-extra",
 		"_" + method + "Class works with ( element, keys, extra " + toggle + ")" );
-	equal( widget.find( "span" ).is( ".test-span-extra-null" ), bool,
+	assertion( widget.find( "span" ), "test-span-extra-null",
 		"_" + method + "Class works with ( element, keys, null " + toggle + ")" );
 }
 
@@ -119,9 +121,9 @@ test( "._add/_remove/_toggleClass()", function(){
 
 	testElementClasses( widget, true, "add" );
 	widget.classesWidget( "toggleClasses", false );
-	testElementClasses( widget, false, "toggle", ", false ");
+	testElementClasses( widget, false, "toggle" );
 	widget.classesWidget( "toggleClasses", true );
-	testElementClasses( widget, true, "toggle", ", true ");
+	testElementClasses( widget, true, "toggle" );
 	widget.classesWidget( "removeClasses" );
 	testElementClasses( widget, false, "remove" );
 });
