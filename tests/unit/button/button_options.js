@@ -5,21 +5,19 @@
 
 module( "button: options" );
 
-test( "disabled, explicit value", function() {
-	expect( 9 );
+test( "disabled, explicit value", function( assert ) {
+	expect( 7 );
 
 	var element = $( "#radio01" ).button({ disabled: false });
 	deepEqual( element.button( "option", "disabled" ), false, "disabled option set to false" );
 	deepEqual( element.prop( "disabled" ), false, "element is disabled" );
 
-	ok( !element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
-	ok( !element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
+	assert.lacksClasses( element.button( "widget" ), "ui-state-disabled ui-button-disabled" );
 
 	element = $( "#radio02" ).button({ disabled: true });
 
-	ok( element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
 	ok( !element.button( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
-	ok( element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
+	assert.hasClasses( element.button( "widget" ), "ui-button-disabled ui-state-disabled" );
 
 	deepEqual( element.button( "option", "disabled" ), true, "disabled option set to true" );
 	deepEqual( element.prop( "disabled" ), true, "element is not disabled" );
@@ -38,7 +36,7 @@ test("disabled, null", function() {
 	deepEqual(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
-test( "disabled, ui-state-active is removed unless checkbox or radio", function() {
+test( "disabled, ui-state-active is removed unless checkbox or radio", function( assert ) {
 	expect( 12 );
 	var elements = [
 		$( "<input type='button'>" ),
@@ -59,15 +57,15 @@ test( "disabled, ui-state-active is removed unless checkbox or radio", function(
 		}
 
 		element.trigger( "mousedown" );
-		ok( buttonElement.hasClass( "ui-state-active" ),
+		assert.hasClasses( buttonElement, "ui-state-active",
 			"[" + elementType + "] has ui-state-active class after mousedown." );
 
 		element.button( "disable" );
 		if ( element.is( "[type=checkbox], [type=radio]" ) ) {
-			ok( buttonElement.hasClass( "ui-state-active" ),
+		assert.hasClasses( buttonElement, "ui-state-active",
 				"Disabled [" + elementType + "] has ui-state-active class." );
 		} else {
-			ok( !buttonElement.hasClass( "ui-state-active" ),
+			assert.lacksClasses( buttonElement, "ui-state-active",
 				"Disabled [" + elementType + "] does not have ui-state-active class." );
 		}
 	});
@@ -145,7 +143,7 @@ test("icons", function() {
 	$("#button").button("destroy");
 });
 
-test( "#5295 - button does not remove hoverstate if disabled" , function() {
+test( "#5295 - button does not remove hoverstate if disabled" , function( assert ) {
 	expect( 1 );
 	var btn = $("#button").button();
 	btn.hover( function() {
@@ -153,7 +151,7 @@ test( "#5295 - button does not remove hoverstate if disabled" , function() {
 	});
 	btn.trigger( "mouseenter" );
 	btn.trigger( "mouseleave" );
-	ok( !btn.is( ".ui-state-hover") );
+	assert.lacksClasses( btn, "ui-state-hover" );
 });
 
 })(jQuery);
