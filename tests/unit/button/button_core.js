@@ -6,50 +6,54 @@
 
 module("button: core");
 
-test("checkbox", function() {
+test("checkbox", function( assert ) {
 	expect( 4 );
 	var input = $("#check"),
 		label = $("label[for=check]");
 	ok( input.is(":visible") );
 	ok( label.is(":not(.ui-button)") );
 	input.button();
-	ok( input.is(".ui-helper-hidden-accessible") );
-	ok( label.is(".ui-button") );
+	assert.hasClasses( input, "ui-helper-hidden-accessible" );
+	assert.hasClasses( label, "ui-button" );
 });
 
-test("radios", function() {
-	expect( 4 );
+test("radios", function( assert ) {
+	expect( 8 );
 	var inputs = $("#radio0 input"),
 		labels = $("#radio0 label");
 	ok( inputs.is(":visible") );
 	ok( labels.is(":not(.ui-button)") );
 	inputs.button();
-	ok( inputs.is(".ui-helper-hidden-accessible") );
-	ok( labels.is(".ui-button") );
+	inputs.each(function() {
+		assert.hasClasses( this, "ui-helper-hidden-accessible" );
+	});
+	labels.each(function() {
+		assert.hasClasses( this, "ui-button" );
+	});
 });
 
-function assert(noForm, form1, form2) {
-	ok( $("#radio0 .ui-button" + noForm).is(".ui-state-active") );
-	ok( $("#radio1 .ui-button" + form1).is(".ui-state-active") );
-	ok( $("#radio2 .ui-button" + form2).is(".ui-state-active") );
+function assertClasses(noForm, form1, form2) {
+	QUnit.assert.hasClasses( $("#radio0 .ui-button" + noForm ), "ui-state-active" );
+	QUnit.assert.hasClasses( $("#radio1 .ui-button" + form1 ), "ui-state-active" );
+	QUnit.assert.hasClasses( $("#radio2 .ui-button" + form2 ), "ui-state-active" );
 }
 
 test("radio groups", function() {
 	expect( 12 );
 	$("input[type=radio]").button();
-	assert(":eq(0)", ":eq(1)", ":eq(2)");
+	assertClasses(":eq(0)", ":eq(1)", ":eq(2)");
 
 	// click outside of forms
 	$("#radio0 .ui-button:eq(1)").click();
-	assert(":eq(1)", ":eq(1)", ":eq(2)");
+	assertClasses(":eq(1)", ":eq(1)", ":eq(2)");
 
 	// click in first form
 	$("#radio1 .ui-button:eq(0)").click();
-	assert(":eq(1)", ":eq(0)", ":eq(2)");
+	assertClasses(":eq(1)", ":eq(0)", ":eq(2)");
 
 	// click in second form
 	$("#radio2 .ui-button:eq(0)").click();
-	assert(":eq(1)", ":eq(0)", ":eq(0)");
+	assertClasses(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
 test( "radio groups - ignore elements with same name", function() {
@@ -74,10 +78,10 @@ test("input type submit, don't create child elements", function() {
 	deepEqual( input.children().length, 0 );
 });
 
-test("buttonset", function() {
+test("buttonset", function( assert ) {
 	expect( 6 );
 	var set = $("#radio1").buttonset();
-	ok( set.is(".ui-buttonset") );
+	assert.hasClasses( set, "ui-buttonset" );
 	deepEqual( set.children(".ui-button").length, 3 );
 	deepEqual( set.children("input[type=radio].ui-helper-hidden-accessible").length, 3 );
 	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
@@ -85,7 +89,7 @@ test("buttonset", function() {
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
 });
 
-test("buttonset (rtl)", function() {
+test("buttonset (rtl)", function( assert ) {
 	expect( 6 );
 	var set,
 		parent = $("#radio1").parent();
@@ -93,7 +97,7 @@ test("buttonset (rtl)", function() {
 	parent.attr("dir", "rtl");
 
 	set = $("#radio1").buttonset();
-	ok( set.is(".ui-buttonset") );
+	assert.hasClasses( set, "ui-buttonset" );
 	deepEqual( set.children(".ui-button").length, 3 );
 	deepEqual( set.children("input[type=radio].ui-helper-hidden-accessible").length, 3 );
 	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
@@ -105,14 +109,14 @@ test("buttonset (rtl)", function() {
 // remove this when simulate properly simulates this
 // see http://yuilibrary.com/projects/yui2/ticket/2528826 fore more info
 if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
-	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function() {
+	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function( assert ) {
 		expect( 3 );
 
 		$("#check2").button().change( function() {
 			var lbl = $( this ).button("widget");
 			ok( this.checked, "checked ok" );
 			ok( lbl.attr("aria-pressed") === "true", "aria ok" );
-			ok( lbl.hasClass("ui-state-active"), "ui-state-active ok" );
+			assert.hasClasses( lbl, "ui-state-active" );
 		});
 
 		// support: Opera
@@ -126,47 +130,48 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 	});
 }
 
-test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
+test( "#7092 - button creation that requires a matching label does not find label in all cases", function( assert ) {
 	expect( 5 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
 	group.find( "input[type=checkbox]" ).button();
-	ok( group.find( "label" ).is( ".ui-button" ) );
+	assert.hasClasses( group.find( "label" ), "ui-button" );
 
 	group = $( "<input type='checkbox' id='t7092b'><label for='t7092b'></label>" );
 	group.filter( "input[type=checkbox]" ).button();
-	ok( group.filter( "label" ).is( ".ui-button" ) );
+	assert.hasClasses( group.filter( "label" ), "ui-button" );
 
 	group = $( "<span><input type='checkbox' id='t7092c'></span><label for='t7092c'></label>" );
 	group.find( "input[type=checkbox]" ).button();
-	ok( group.filter( "label" ).is( ".ui-button" ) );
+	assert.hasClasses( group.filter( "label" ), "ui-button" );
 
 	group = $( "<span><input type='checkbox' id='t7092d'></span><span><label for='t7092d'></label></span>" );
 	group.find( "input[type=checkbox]" ).button();
-	ok( group.find( "label" ).is( ".ui-button" ) );
+	assert.hasClasses( group.find( "label" ), "ui-button" );
 
 	group = $( "<input type='checkbox' id='t7092e'><span><label for='t7092e'></label></span>" );
 	group.filter( "input[type=checkbox]" ).button();
-	ok( group.find( "label" ).is( ".ui-button" ) );
+	assert.hasClasses( group.find( "label" ), "ui-button" );
 });
 
-test( "#5946 - buttonset should ignore buttons that are not :visible", function() {
+test( "#5946 - buttonset should ignore buttons that are not :visible", function( assert ) {
 	expect( 2 );
 	$( "#radio01" ).next().addBack().hide();
 	var set = $( "#radio0" ).buttonset({ items: "input[type=radio]:visible" });
 	ok( set.find( "label:eq(0)" ).is( ":not(.ui-button):not(.ui-corner-left)" ) );
-	ok( set.find( "label:eq(1)" ).is( ".ui-button.ui-corner-left" ) );
+	assert.hasClasses( set.find( "label:eq(1)" ), "ui-button ui-corner-left" );
 });
 
-test( "#6262 - buttonset not applying ui-corner to invisible elements", function() {
+test( "#6262 - buttonset not applying ui-corner to invisible elements", function( assert ) {
 	expect( 3 );
 	$( "#radio0" ).hide();
 	var set = $( "#radio0" ).buttonset();
-	ok( set.find( "label:eq(0)" ).is( ".ui-button.ui-corner-left" ) );
-	ok( set.find( "label:eq(1)" ).is( ".ui-button" ) );
-	ok( set.find( "label:eq(2)" ).is( ".ui-button.ui-corner-right" ) );
+	assert.hasClasses( set.find( "label:eq(0)" ), "ui-button ui-corner-left" );
+	assert.hasClasses( set.find( "label:eq(1)" ), "ui-button" );
+	assert.hasClasses( set.find( "label:eq(2)" ), "ui-button ui-corner-right" );
+
 });
 
-asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function() {
+asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function( assert ) {
 	expect( 2 );
 	var form = $( "<form>" +
 		"<button></button>" +
@@ -176,7 +181,7 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 		checkbox = form.find( "input[type=checkbox]" ).button();
 
 	checkbox.prop( "checked", false ).button( "refresh" );
-	ok( !checkbox.button( "widget" ).hasClass( "ui-state-active" ) );
+	assert.lacksClasses( checkbox.button( "widget" ), "ui-state-active" );
 
 	form.get( 0 ).reset();
 
@@ -185,38 +190,38 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 	button.remove();
 
 	setTimeout(function() {
-		ok( checkbox.button( "widget" ).hasClass( "ui-state-active" ));
+		assert.hasClasses( checkbox.button( "widget" ), "ui-state-active" );
 		start();
 	}, 1 );
 });
 
-asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function( assert ) {
 	expect( 2 );
 	var check = $( "#check" ).button(),
 		label = $( "label[for='check']" );
-	ok( !label.is( ".ui-state-focus" ) );
+	assert.lacksClasses( label, "ui-state-focus" );
 	check.focus();
 	setTimeout(function() {
-		ok( label.is( ".ui-state-focus" ) );
+		assert.hasClasses( label, "ui-state-focus" );
 		start();
 	});
 });
 
-test( "#7534 - Button label selector works for ids with \":\"", function() {
+test( "#7534 - Button label selector works for ids with \":\"", function( assert ) {
 	expect( 1 );
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).button();
-	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
+	assert.hasClasses( group.find( "label" ), "ui-button" , "Found an id with a :" );
 });
 
-asyncTest( "#9169 - Disabled button maintains ui-state-focus", function() {
+asyncTest( "#9169 - Disabled button maintains ui-state-focus", function( assert ) {
 	expect( 2 );
 	var element = $( "#button1" ).button();
 	element[ 0 ].focus();
 	setTimeout(function() {
-		ok( element.hasClass( "ui-state-focus" ), "button has ui-state-focus" );
+		assert.hasClasses( element, "ui-state-focus" );
 		element.button( "disable" );
-		ok( !element.hasClass( "ui-state-focus" ),
+		assert.lacksClasses( element, "ui-state-focus",
 			"button does not have ui-state-focus when disabled" );
 		start();
 	});
