@@ -58,6 +58,7 @@ var lastActive,
 
 $.widget( "ui.button", {
 	version: "@VERSION",
+	classes: {},
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
