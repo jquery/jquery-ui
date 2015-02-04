@@ -130,7 +130,10 @@ $.widget( "ui.controlgroup", {
 			}
 
 		};
-		return { classes: classes[ position ] };
+		return {
+			width: "auto",
+			classes: classes[ position ]
+		};
 	},
 
 	_setOption: function( key, value ) {
