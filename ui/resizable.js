@@ -483,18 +483,22 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		if ( this.position.top !== this.prevPosition.top ) {
 			props.top = this.position.top + "px";
+			this.helper.css('top',this.position.top);
 		}
 		if ( this.position.left !== this.prevPosition.left ) {
 			props.left = this.position.left + "px";
+			this.helper.css('left',this.position.left);
 		}
 		if ( this.size.width !== this.prevSize.width ) {
+			this.helper.width(this.size.width);
 			props.width = this.size.width + "px";
 		}
 		if ( this.size.height !== this.prevSize.height ) {
+			this.helper.height(this.size.height);
 			props.height = this.size.height + "px";
 		}
 
-		this.helper.css( props );
+		//this.helper.css( props );
 
 		return props;
 	},
@@ -1037,12 +1041,16 @@ $.ui.plugin.add("resizable", "alsoResize", {
 
 					$.each(css, function(i, prop) {
 						var sum = (start[prop] || 0) + (delta[prop] || 0);
-						if (sum && sum >= 0) {
-							style[prop] = sum || null;
-						}
+						if(sum && sum >= 0){
+						       if($.inArray(prop,['width','height'])>=0){
+							   el[prop](sum);
+						       }else{
+							   el.css(prop,sum);
+						       }
+						   }
 					});
 
-					el.css(style);
+					//el.css(style);
 				});
 			};
 
