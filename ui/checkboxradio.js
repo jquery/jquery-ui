@@ -169,7 +169,7 @@ $.widget( "ui.checkboxradio", {
 		return this.label;
 	},
 
-	_getRadioGroup: function( radio ) {
+	_getRadioGroup: function() {
 		var name = this.element[0].name,
 			form = this.element[0].form,
 			radios = $( [] );
