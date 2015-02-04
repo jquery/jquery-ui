@@ -127,20 +127,28 @@ $.widget( "ui.button", {
 	},
 
 	_updateIcon: function( icon ) {
+		var placementMethod =
+				( this.options.iconPosition === "top" ||
+				this.options.iconPosition === "beginning" ) ?
+				"prependTo" :
+				"appendTo",
+			displayBlock =
+				( this.options.iconPosition === "top" ||
+				this.options.iconPosition === "bottom" );
 		if ( !this.icon ) {
 			this.icon = $( "<span>" );
 			this._addClass( this.icon, "ui-button-icon", " ui-icon" );
 
 			if ( !this.options.showLabel ) {
 				this._addClass( "ui-button-icon-only" );
-			} else {
-				this._addClass( null, "ui-icon-" + this.options.iconPosition );
+			} else if ( displayBlock ) {
+				this._addClass( this.icon, null, "ui-icon-display-block" );
 			}
 		} else {
 			this._removeClass( this.icon, null, this.options.icon );
 		}
 		this._addClass( this.icon, null, icon );
-		this.icon.appendTo( this.element );
+		this.icon[ placementMethod ]( this.element );
 		return this;
 	},
 
