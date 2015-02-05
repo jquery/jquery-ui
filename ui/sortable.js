@@ -776,8 +776,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 	_createPlaceholder: function(that) {
 		that = that || this;
 		var className,
-			o = that.options,
-			tr;
+			o = that.options;
 
 		if(!o.placeholder || o.placeholder.constructor === String) {
 			className = o.placeholder;
@@ -790,11 +789,9 @@ return $.widget("ui.sortable", $.ui.mouse, {
 							.removeClass("ui-sortable-helper");
 
 					if ( nodeName === "tbody" ) {
-						tr = $( "<tr></tr>", that.document[0] )
-							.appendTo( element ) ;
-						that._createTrPlaceholder( that, that.currentItem.find( "tr:first" ), tr );
+						that._createTrPlaceholder( that.currentItem.find( "tr:first" ), $( "<tr></tr>", that.document[0] ).appendTo( element ) );
 					} else if ( nodeName === "tr" ) {
-						that._createTrPlaceholder( that, that.currentItem, element );
+						that._createTrPlaceholder( that.currentItem, element );
 					} else if ( nodeName === "img" ) {
 						element.attr( "src", that.currentItem.attr( "src" ) );
 					}
@@ -831,8 +828,8 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 	},
 
-	_createTrPlaceholder: function(that, sourceTr, targetTr) {
-		that = that || this;
+	_createTrPlaceholder: function( sourceTr, targetTr ) {
+		var that = this;
 
 		sourceTr.children().each(function() {
 			$( "<td>&#160;</td>", that.document[0] )
