@@ -288,7 +288,6 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			this._cacheHelperProportions();
 		}
 
-
 		//Post "activate" events to possible containers
 		if( !noActivation ) {
 			for ( i = this.containers.length - 1; i >= 0; i-- ) {
@@ -394,6 +393,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			this._rearrange(event, this.items[touchingContainmentEdge]);
 			this._trigger("change", event, this._uiHash());
 		} else {
+
 			//Rearrange
 			for (i = this.items.length - 1; i >= 0; i--) {
 
@@ -420,9 +420,9 @@ return $.widget("ui.sortable", $.ui.mouse, {
 				// no useless actions that have been done before
 				// no action if the item moved is the parent of the item checked
 				if (itemElement !== this.currentItem[0] &&
-					this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
-					!$.contains(this.placeholder[0], itemElement) &&
-					(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
+						this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
+						!$.contains(this.placeholder[0], itemElement) &&
+						(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
 				) {
 
 					this.direction = intersection === 1 ? "down" : "up";
@@ -514,6 +514,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		if (this.placeholder) {
+
 			//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
 			if(this.placeholder[0].parentNode) {
 				this.placeholder[0].parentNode.removeChild(this.placeholder[0]);

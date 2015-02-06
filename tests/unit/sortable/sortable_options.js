@@ -218,11 +218,11 @@ test("#5772: wide element intersect sorting to first and last position on x-axis
 	expect(2);
 
 	var element = $("#sortable-horizontal").sortable({
-				axis: "x",
-				containment: "parent",
-				scroll: false,
-				tolerance: "intersect"
-			}),
+			axis: "x",
+			containment: "parent",
+			scroll: false,
+			tolerance: "intersect"
+		}),
 		item = element.find(".wide").eq(0);
 
 	item.simulate("drag", { dx: -150 });
@@ -238,11 +238,11 @@ test("#5772: wide element pointer sorting to first and last position on x-axis",
 	expect(2);
 
 	var element = $("#sortable-horizontal").sortable({
-				axis: "x",
-				containment: "parent",
-				scroll: false,
-				tolerance: "pointer"
-			}),
+			axis: "x",
+			containment: "parent",
+			scroll: false,
+			tolerance: "pointer"
+		}),
 		item = element.find(".wide").eq(0);
 
 	item.simulate("drag", { dx: -150 });
@@ -258,11 +258,11 @@ test("#5772: tall element intersect sorting to first and last position on y-axis
 	expect(2);
 
 	var element = $("#sortable-vertical").sortable({
-				axis: "y",
-				containment: "parent",
-				scroll: false,
-				tolerance: "intersect"
-			}),
+			axis: "y",
+			containment: "parent",
+			scroll: false,
+			tolerance: "intersect"
+		}),
 		item = element.find(".tall").eq(0);
 
 	item.simulate("drag", { dy: -150 });
@@ -278,11 +278,11 @@ test("#5772: tall element pointer sorting to first and last position on y-axis",
 	expect(2);
 
 	var element = $("#sortable-vertical").sortable({
-				axis: "y",
-				containment: "parent",
-				scroll: false,
-				tolerance: "pointer"
-			}),
+			axis: "y",
+			containment: "parent",
+			scroll: false,
+			tolerance: "pointer"
+		}),
 		item = element.find(".tall").eq(0);
 
 	item.simulate("drag", { dy: -150 });
@@ -298,10 +298,10 @@ test("#5772: element intersect sorting to first and last position on grid", func
 	expect(2);
 
 	var element = $("#sortable-grid").sortable({
-				containment: "parent",
-				scroll: false,
-				tolerance: "intersect"
-			}),
+			containment: "parent",
+			scroll: false,
+			tolerance: "intersect"
+		}),
 		item = element.find("span").eq(5);
 
 	item.simulate("drag", { dy: -150, dx: -150 });
@@ -317,10 +317,10 @@ test("#5772: element pointer sorting to first and last position on grid", functi
 	expect(2);
 
 	var element = $("#sortable-grid").sortable({
-				containment: "parent",
-				scroll: false,
-				tolerance: "pointer"
-			}),
+			containment: "parent",
+			scroll: false,
+			tolerance: "pointer"
+		}),
 		item = element.find("span").eq(5);
 
 	item.simulate("drag", { dy: -150, dx: -150 });
