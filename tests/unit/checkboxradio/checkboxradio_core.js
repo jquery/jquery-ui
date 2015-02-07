@@ -15,7 +15,7 @@ test("Checkbox", function() {
 	input.checkboxradio();
 	equal( input.is( ".ui-helper-hidden-accessible.ui-checkboxradio" ), true,
 		"Input has proper classes" );
-	equal( label.is( ".ui-icon-beginning.ui-button.ui-widget.ui-checkboxradio-label.ui-corner-all" ),
+	equal( label.is( ".ui-button.ui-widget.ui-checkboxradio-label.ui-corner-all" ),
 		true, "Label has proper classes" );
 });
 

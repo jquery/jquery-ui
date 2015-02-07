@@ -136,7 +136,7 @@ $.widget( "ui.checkboxradio", {
 
 					// Still not found look inside the ancestors for the label
 					this.label = ancestor.find( labelSelector );
-					if ( this.label.length === 0 ) {
+					if ( !this.label.length ) {
 						$.error( "No label found for checkboxradio widget" );
 					}
 				}
@@ -157,6 +157,7 @@ $.widget( "ui.checkboxradio", {
 		}
 		if ( checked ) {
 			this._addClass( this.label, "ui-checkboxradio-checked", "ui-state-active" );
+			this._addClass( this.icon, null, "ui-state-hover" );
 		}
 		if ( this.options.label && this.options.label !== this.originalLabel ) {
 			this.label.html( this.icon ? this.icon : "" ).append( this.options.label );
@@ -190,13 +191,14 @@ $.widget( "ui.checkboxradio", {
 	_toggleClasses: function() {
 		var checked = this.element[ 0 ].checked;
 		this._toggleClass( this.label, "ui-checkboxradio-checked", "ui-state-active", checked );
+		this._toggleClass( this.icon, null, "ui-state-hover", checked );
 		if ( this.options.icon && this.type === "checkbox" ) {
 			this._toggleClass( this.icon, null, "ui-icon-check", checked )
 				._toggleClass( this.icon, null, "ui-icon-blank", !checked );
 		}
 		if ( this.type === "radio" ) {
 			this._getRadioGroup()
-				.each( function(){
+				.each( function() {
 					var instance = $( this ).checkboxradio( "instance" );
 
 					if ( instance ) {
@@ -210,6 +212,7 @@ $.widget( "ui.checkboxradio", {
 	_destroy: function() {
 		if ( this.icon ) {
 			this.icon.remove();
+			this.iconSpace.remove();
 		}
 	},
 
@@ -234,9 +237,9 @@ $.widget( "ui.checkboxradio", {
 		var toAdd = "ui-icon ui-icon-background ";
 
 		if ( this.options.icon ) {
-			this._addClass( this.label, null, "ui-icon-beginning" );
 			if ( !this.icon ) {
 				this.icon = $( "<span>" );
+				this.iconSpace = $( "<span> </span>" );
 			}
 
 			if ( this.type === "checkbox" ) {
@@ -245,10 +248,10 @@ $.widget( "ui.checkboxradio", {
 				toAdd += "ui-icon-blank";
 			}
 			this._addClass( this.icon, "ui-checkboxradio-icon", toAdd );
-			this.icon.appendTo( this.label );
+			this.icon.prependTo( this.label ).after( this.iconSpace );
 		} else if ( this.icon !== undefined ) {
-			this._removeClass( this.label, null, "ui-icon-beginning" );
 			this.icon.remove();
+			this.iconSpace.remove();
 			delete this.icon;
 		}
 	},
@@ -259,7 +262,7 @@ $.widget( "ui.checkboxradio", {
 		this._updateIcon( checked );
 		this._toggleClass( this.label, "ui-checkboxradio-checked", "ui-state-active", checked );
 		if ( this.options.label !== null ) {
-			this.label.contents().not( this.element.add( this.icon ) ).remove();
+			this.label.contents().not( this.element.add( this.icon ).add( this.iconSpace ) ).remove();
 			this.label.append( this.options.label );
 
 		}

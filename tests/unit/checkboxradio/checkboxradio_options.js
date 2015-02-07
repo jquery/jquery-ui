@@ -1,4 +1,4 @@
--/*
+/*
  * checkboxradio_methods.js
  */
 
@@ -73,7 +73,7 @@ module( "Checkboxradio: checkbox: options" );
 			icon: true
 		});
 
-		strictEqual( widget.find( "span" ).length, 1,
+		strictEqual( widget.find( "span.ui-icon" ).length, 1,
 			"Label contains a span when created with icon:true" );
 		strictEqual( widget.find( "span" ).is( ".ui-checkboxradio-icon.ui-corner-all.ui-icon." +
 			"ui-icon-background.ui-icon-blank" ), true,

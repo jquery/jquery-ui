@@ -26,7 +26,6 @@
 .ui-checkboxradio-radio-label.ui-checkboxradio-checked .ui-icon,
 .ui-checkboxradio-radio-label.ui-checkboxradio-checked:hover .ui-icon {
 	background-image: none;
-	background-color: #fff;
 	width: 8px;
 	height: 8px;
 	border-width: 4px;
