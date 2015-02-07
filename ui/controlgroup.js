@@ -24,7 +24,7 @@
 	}
 }(function( $ ) {
 
-$.widget( "ui.controlgroup", {
+return $.widget( "ui.controlgroup", {
 	version: "@VERSION",
 	defaultElement: "<div>",
 	options: {
@@ -52,8 +52,8 @@ $.widget( "ui.controlgroup", {
 	_destroy: function() {
 		var that = this;
 		$.each( this.options.items, function( widget, selector ) {
-			that.element.children( selector ).map(function(){
-				return $( this )[ widget ]( "widget" )[ 0 ];
+			that.element.children( selector ).map( function() {
+				return $( this )[ widget ]( "widget" ).removeData( "ui-controlgroup-data" )[ 0 ];
 			}).removeData( "ui-controlgroup-data" );
 		});
 		this._callChildMethod( "destroy" );
@@ -62,6 +62,8 @@ $.widget( "ui.controlgroup", {
 
 	_callChildMethod: function( method ) {
 		var that = this;
+
+		this.buttons = $();
 		$.each( this.options.items, function( widget, selector ) {
 			var options = {};
 			if ( that[ "_" + widget + "_options" ] ) {
@@ -69,15 +71,17 @@ $.widget( "ui.controlgroup", {
 			}
 			if ( $.fn[ widget ] && selector ) {
 				that.element
-					.children( selector )[ widget ]( method ? method: options )
-					.each(function(){
-						if ( method !== "destroy" ) {
-							$( this )[ widget ]( "widget" ).data( "ui-controlgroup-data", {
-								"type": widget,
-								"element": $( this )
-							});
-						}
-					});
+					.find( selector )[ widget ]( method ? method : options )
+						.each( function() {
+							if ( method !== "destroy" ) {
+								var button =
+									$( this )[ widget ]( "widget" ).data( "ui-controlgroup-data", {
+										"widgetType": widget,
+										"element": $( this )
+									});
+								that.buttons = that.buttons.add( button );
+							}
+						});
 			}
 		});
 	},
@@ -85,29 +89,29 @@ $.widget( "ui.controlgroup", {
 	_button_options: function( position ) {
 		var cornerClasses = {
 			"middle": null,
-			"first": "ui-corner-" + ( ( this.options.direction === "vertical" )? "top" : "left" ),
-			"last": "ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom" : "right" )
+			"first": "ui-corner-" + ( this.options.direction === "vertical" ? "top" : "left" ),
+			"last": "ui-corner-" + ( this.options.direction === "vertical" ? "bottom" : "right" )
 		};
 
 		return {
-					classes: {
-						"ui-button": cornerClasses[ position ]
-					}
-				};
+			classes: {
+				"ui-button": cornerClasses[ position ]
+			}
+		};
 	},
 
 	_checkboxradio_options: function( position ) {
 		var cornerClasses = {
 			"middle": null,
-			"first": "ui-corner-" + ( ( this.options.direction === "vertical" )? "top" : "left" ),
-			"last": "ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom" : "right" )
+			"first": "ui-corner-" + ( this.options.direction === "vertical" ? "top" : "left" ),
+			"last": "ui-corner-" + ( this.options.direction === "vertical" ? "bottom" : "right" )
 		};
 
 		return {
-					classes: {
-						"ui-checkboxradio-label": cornerClasses[ position ]
-					}
-				};
+			classes: {
+				"ui-checkboxradio-label": cornerClasses[ position ]
+			}
+		};
 	},
 
 	_selectmenu_options: function( position ) {
@@ -118,15 +122,15 @@ $.widget( "ui.controlgroup", {
 			},
 			first: {
 				"ui-selectmenu-button-open":
-					"ui-corner-" + ( ( this.options.direction === "vertical" )? "top": "tl" ),
+					"ui-corner-" + ( this.options.direction === "vertical" ? "top" : "tl" ),
 				"ui-selectmenu-button-closed":
-					"ui-corner-" + ( ( this.options.direction === "vertical" )? "top": "left" )
+					"ui-corner-" + ( this.options.direction === "vertical" ? "top" : "left" )
 			},
 			last: {
 				"ui-selectmenu-button-open":
-					( this.options.direction === "vertical" )? null: "ui-corner-tr",
+					( this.options.direction === "vertical" )? null : "ui-corner-tr",
 				"ui-selectmenu-button-closed":
-					"ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom": "right" )
+					"ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom" : "right" )
 			}
 
 		};
@@ -157,22 +161,23 @@ $.widget( "ui.controlgroup", {
 
 		this._addClass( "ui-controlgroup ui-controlgroup-" + this.options.direction );
 		this._callChildMethod();
-		children = this.element.children( ".ui-button" );
+
+		children = this.buttons;
 
 		if ( this.options.excludeInvisible ) {
 			children = children.filter( ":visible" );
 		}
 		if ( children.length ) {
-			[ "first", "last" ].forEach( function( value ){
+			[ "first", "last" ].forEach( function( value ) {
 				var data = children[ value ]().data( "ui-controlgroup-data" );
-				data.element[ data.type ]( that[ "_" + data.type + "_options" ]( value ) );
+				if ( that[ "_" + data.widgetType + "_options" ] ) {
+					data.element[ data.widgetType ]( that[ "_" + data.widgetType + "_options" ]( value ) );
+				}
 			});
 			this._callChildMethod( "refresh" );
 		}
 	}
 
 });
-
-return $.ui.controlgroup;
 
 }));
