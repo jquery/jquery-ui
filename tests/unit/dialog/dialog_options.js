@@ -162,7 +162,7 @@ test("buttons - advanced", function( assert ) {
 	buttons = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal(buttons.length, 1, "correct number of buttons");
 	equal(buttons.attr("id"), "my-button-id", "correct id");
-	equal(buttons.text(), "a button", "correct label");
+	equal(buttons.text(), " a button", "correct label");
 	assert.hasClasses( buttons, "additional-class" );
 	deepEqual( buttons.button("option", "icon"), "ui-icon-cancel" );
 	equal( buttons.button( "option", "showLabel" ), false );
@@ -206,12 +206,12 @@ test("closeText", function() {
 	expect(3);
 
 	var element = $("<div></div>").dialog();
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), "Close",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), " Close",
 			"default close text");
 	element.remove();
 
 	element = $("<div></div>").dialog({ closeText: "foo" });
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), "foo",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), " foo",
 			"closeText on init");
 	element.remove();
 
