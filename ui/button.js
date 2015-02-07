@@ -31,8 +31,11 @@
 
 var formResetHandler = function() {
 		var form = $( this );
+
+		// Wait for the form reset to actually happen before refreshing
 		setTimeout(function() {
-			// We find .ui-button first then filer by :ui-button because doing a
+
+			// We find .ui-button first then filter by :ui-button because doing a
 			// widget pseudo selectors are very very slow but we need to filter out
 			// css only buttons
 			form.find( ".ui-button" ).filter( ":ui-button" ).button( "refresh" );
@@ -127,16 +130,17 @@ $.widget( "ui.button", {
 	},
 
 	_updateIcon: function( icon ) {
-		var placementMethod =
-				( this.options.iconPosition === "top" ||
-				this.options.iconPosition === "beginning" ) ?
-				"prependTo" :
-				"appendTo",
+		var prepend =
+				( this.options.iconPosition === "top" || this.options.iconPosition === "beginning" )?
+				true :
+				false,
 			displayBlock =
 				( this.options.iconPosition === "top" ||
 				this.options.iconPosition === "bottom" );
 		if ( !this.icon ) {
 			this.icon = $( "<span>" );
+			this.iconSpace = $( "<span> </span>" );
+
 			this._addClass( this.icon, "ui-button-icon", " ui-icon" );
 
 			if ( !this.options.showLabel ) {
@@ -148,7 +152,10 @@ $.widget( "ui.button", {
 			this._removeClass( this.icon, null, this.options.icon );
 		}
 		this._addClass( this.icon, null, icon );
-		this.icon[ placementMethod ]( this.element );
+		this.icon[ prepend ? "prependTo" : "appendTo" ]( this.element );
+		if ( !displayBlock ) {
+			this.icon[ prepend ? "after" : "before" ]( this.iconSpace );
+		}
 		return this;
 	},
 
@@ -157,6 +164,7 @@ $.widget( "ui.button", {
 
 		if ( this.icon ) {
 			this.icon.remove();
+			this.iconSpace.remove();
 		}
 		if ( !this.hasTitle ) {
 			this.element.removeAttr( "title" );
@@ -169,6 +177,7 @@ $.widget( "ui.button", {
 				this._updateIcon( value );
 			} else {
 				this.icon.remove();
+				this.iconSpace.remove();
 				this._removeClass( "ui-button-icon", " ui-icon-" + this.options.iconPosition );
 			}
 		}
@@ -194,7 +203,7 @@ $.widget( "ui.button", {
 
 				// If there us an icon append it else nothing then append the value
 				// this avoids removal of the icon when setting label text
-				this.element.html( !!this.icon ? "" : this.icon ).append( value );
+				this.element.html( !!this.icon ? this.icon : "" ).append( value );
 			}
 		}
 		this._super( key, value );
@@ -278,7 +287,7 @@ if ( $.uiBackCompat !== false ) {
 	});
 	$.fn.button = (function( orig ) {
 		return function() {
-			if ( this.length > 0 && this[ 0 ].tagName === "INPUT" &&
+			if ( this.length && this[ 0 ].tagName === "INPUT" &&
 					( this.attr( "type") === "checkbox" || this.attr( "type" ) === "radio" ) ) {
 				if ( $.ui.checkboxradio ) {
 					if ( arguments.length === 0 ) {

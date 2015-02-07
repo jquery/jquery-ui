@@ -9,7 +9,7 @@
  * http://api.jqueryui.com/button/#theming
  */
 .ui-button {
-	padding: .4em;
+	padding: .4em 1em;
 	display: inline-block;
 	position: relative;
 	line-height: normal;
