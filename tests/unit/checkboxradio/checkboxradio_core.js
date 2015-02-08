@@ -11,7 +11,7 @@ test("Checkbox", function() {
 	var input = $("#check"),
 		label = $("label[for=check]");
 	ok( input.is( ":visible" ) );
-	ok( !label.hasClass(".ui-button)") );
+	ok( !label.hasClass("ui-button") );
 	input.checkboxradio();
 	equal( input.is( ".ui-helper-hidden-accessible.ui-checkboxradio" ), true,
 		"Input has proper classes" );
@@ -31,9 +31,9 @@ test("Radios", function() {
 });
 
 function assert(noForm, form1, form2) {
-	ok( $("#radio0 .ui-button" + noForm).is(".ui-state-active") );
-	ok( $("#radio1 .ui-button" + form1).is(".ui-state-active") );
-	ok( $("#radio2 .ui-button" + form2).is(".ui-state-active") );
+	ok( $( "#radio0 .ui-button" + noForm ).is( ".ui-state-active" ) );
+	ok( $( "#radio1 .ui-button" + form1 ).is( ".ui-state-active" ) );
+	ok( $( "#radio2 .ui-button" + form2 ).is( ".ui-state-active" ) );
 }
 
 test("radio groups", function() {
@@ -93,7 +93,7 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 	});
 }
 test( "Checkbox creation that requires a matching finds label in all cases", function() {
-	expect( 6 );
+	expect( 7 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
 	group.find( "input[type=checkbox]" ).checkboxradio();
 	ok( group.find( "label" ).is( ".ui-button" ) );
@@ -117,6 +117,10 @@ test( "Checkbox creation that requires a matching finds label in all cases", fun
 	group = $( "<span><label><input type='checkbox' id='t7092f'></label></span>" );
 	group.find( "input[type=checkbox]" ).checkboxradio();
 	ok( group.find( "label" ).is( ".ui-button" ) );
+
+	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
+	group.find( "input" ).checkboxradio();
+	ok( group.find( "label" ).is( ".ui-button" ), "Found an label with id containing a :" );
 });
 
 asyncTest( "Resetting a button's form should refresh the visual state of the button widget to match.", function() {
@@ -135,12 +139,6 @@ asyncTest( "Resetting a button's form should refresh the visual state of the but
 		ok( checkbox.checkboxradio( "widget" ).hasClass( "ui-state-active" ));
 		start();
 	}, 1 );
-});
-test( "Checkbox label selector works for ids with \":\"", function() {
-	expect( 1 );
-	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
-	group.find( "input" ).checkboxradio();
-	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
 
 test( "Calling checkboxradio on an unsupported element throws an error", function() {
