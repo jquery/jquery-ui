@@ -9,7 +9,9 @@
  * http://api.jqueryui.com/controlgroup/#theming
  */
 
-
+.ui-controlgroup {
+	vertical-align: middle;
+}
 .ui-controlgroup > .ui-button {
 	float: left;
 	margin-left: 0;

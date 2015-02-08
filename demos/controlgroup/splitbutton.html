@@ -19,22 +19,17 @@
 		$( "select" ).selectmenu({
 			classes: {
 				"ui-selectmenu-button": "ui-button-icon-only"
+			},
+			change: function(){
+				$( ".output" ).append( "<li>" + this.value + "</li>" );
 			}
-		}).selectmenu( "widget" ).removeClass( "ui-icon-end" );
-		$( ".controlgroup" ).controlgroup();
-		$( "select" ).on( "selectmenuchange", function(){
-			alert( this.value );
 		});
+		$( ".controlgroup" ).controlgroup();
 		$( "button" ).click(function() {
-			alert( "Running the last action" );
+			$( ".output" ).append( "<li>Running Last Action...</li>" );
 		});
 	});
 	</script>
-	<style>
-		select {
-			width: 2em;
-		}
-	</style>
 </head>
 <body>
 <div class="widget">
@@ -47,6 +42,9 @@
 			<option>Delete</option>
 		</select>
 	</div>
+	<br/>
+	<h3>Output:</h3>
+	<ul class="output"></ul>
 </div>
 <div class="demo-description">
 	<p>A Controlgroup creating a split button</p>

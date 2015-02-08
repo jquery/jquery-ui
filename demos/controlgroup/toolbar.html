@@ -43,7 +43,7 @@
 				contents[ 0 ].execCommand( this.id );
 			});
 			$( "#fontsize, #forecolor, #hilitecolor, #backcolor, #fontname" ).on( "change selectmenuchange", function() {
-				contents[ 0 ].execCommand( this.id ,false, $( this ).val() );
+				contents[ 0 ].execCommand( this.id, false, $( this ).val() );
 			});
 			$( ".toolbar" ).controlgroup();
 			$( "#zoom" ).on( "selectmenuchange", function() {
@@ -57,7 +57,7 @@
 	</script>
 	<style>
 		#zoom, #fontsize {
-			min-width:75px;
+			min-width: 75px;
 		}
 		#input {
 			display: none;
