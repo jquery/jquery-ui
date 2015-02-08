@@ -241,4 +241,18 @@ test( "nested resizable", function() {
 	outer.remove();
 });
 
+test( "resizable correctly accounts for elements with left set to 'auto'", function() {
+	expect( 2 );
+
+	var target = $("#resizable3").resizable({
+		handles: "all"
+	});
+
+	TestHelpers.resizable.drag( ".ui-resizable-w", -10 );
+	equal( target.width(), 410, "compare width" );
+
+	TestHelpers.resizable.drag( ".ui-resizable-n", 0, -10 );
+	equal( target.height(), 410, "compare height" );
+});
+
 })(jQuery);
