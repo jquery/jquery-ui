@@ -15,7 +15,7 @@ test( "Calling button on a checkbox input calls checkboxradio widget", function(
 
 	equal( checkbox.is( ":ui-checkboxradio" ), true,
 		"Calling button on a checkbox creats checkboxradio instance" );
-	equal( checkbox.checkboxradio( "option", "icon" ), false,
+	strictEqual( checkbox.checkboxradio( "option", "icon" ), false,
 		"Calling button on a checkbox sets the checkboxradio icon option to false" );
 });
 test( "Calling buttonset calls controlgroup", function(){
@@ -25,6 +25,6 @@ test( "Calling buttonset calls controlgroup", function(){
 	controlgroup.buttonset();
 
 	equal( controlgroup.is( ":ui-controlgroup" ), true,
-		"Calling buttonset creats controlgroup instance" );
+		"Calling buttonset creates controlgroup instance" );
 });
 })(jQuery);

@@ -10,7 +10,7 @@ test( "disabled, explicit value", function() {
 
 	var element = $( "#button" ).button({ disabled: false });
 	deepEqual( element.button( "option", "disabled" ), false, "disabled option set to false" );
-	deepEqual( element.prop( "disabled" ), false, "element is disabled" );
+	deepEqual( element.prop( "disabled" ), false, "Disabled property is false" );
 
 	ok( !element.button( "widget" ).hasClass( "ui-state-disabled" ), "element gets ui-state-disabled" );
 	ok( !element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
@@ -22,9 +22,11 @@ test( "disabled, explicit value", function() {
 	ok( element.button( "widget" ).hasClass( "ui-button-disabled" ), "element gets ui-button-disabled" );
 
 	deepEqual( element.button( "option", "disabled" ), true, "disabled option set to true" );
-	deepEqual( element.prop( "disabled" ), true, "element is not disabled" );
+	deepEqual( element.prop( "disabled" ), true, "Disabled property is set" );
 });
 
+// We are testing the default here because the default null is a special value which means to check
+// the DOM, so we need to make sure this happens correctly
 test( "disabled, null", function() {
 	expect( 2 );
 	$( "#button" ).button({ disabled: null });
@@ -33,18 +35,20 @@ test( "disabled, null", function() {
 	strictEqual( $("#button").prop("disabled"), false, "element is disabled");
 });
 
-test( "showLabel false without icon", function() {
+test( "showLabel, false, without icon", function() {
 	expect( 1 );
-	$( "#button" ).button({
+
+	var button = $( "#button" )
+	button.button({
 		showLabel: false
 	});
-	strictEqual( $( "#button" ).is( ":ui-button.ui-corner-all.ui-widget" ), true,
+	strictEqual( button.is( ":ui-button.ui-corner-all.ui-widget" ), true,
 		"Button has correct classes" );
 
-	$( "#button" ).button( "destroy" );
+	button.button( "destroy" );
 });
 
-test("showLabel false with icon", function() {
+test( "showLabel, false, with icon", function() {
 	expect( 1 );
 	$("#button").button({
 		showLabel: false,
@@ -64,7 +68,7 @@ test( "label, default", function() {
 	$( "#button" ).button( "destroy" );
 });
 
-test( "label", function() {
+test( "label, explicit value", function() {
 	expect( 2 );
 	$( "#button" ).button({
 		label: "xxx"
@@ -75,13 +79,13 @@ test( "label", function() {
 	$( "#button" ).button( "destroy" );
 });
 
-test( "label default with input type submit", function() {
+test( "label, default, with input type submit", function() {
 	expect( 2 );
 	deepEqual( $( "#submit" ).button().val(), "Label" );
 	deepEqual( $( "#submit" ).button( "option", "label" ), "Label" );
 });
 
-test( "label with input type submit", function() {
+test( "label, explicit value, with input type submit", function() {
 	expect( 2 );
 	var label = $( "#submit" ).button({
 		label: "xxx"
@@ -90,7 +94,7 @@ test( "label with input type submit", function() {
 	deepEqual( $( "#submit" ).button( "option", "label" ), "xxx" );
 });
 
-test( "icons", function() {
+test( "icon", function() {
 	expect( 1 );
 	$("#button").button({
 		showLabel: false,

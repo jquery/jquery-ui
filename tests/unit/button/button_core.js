@@ -3,7 +3,6 @@
  */
 
 (function($) {
-
 module( "Button: core" );
 
 test( "Input type submit, don't create child elements", function() {
