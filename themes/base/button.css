@@ -17,11 +17,13 @@
 	cursor: pointer;
 	vertical-align: middle;
 	text-align: center;
-	overflow: visible; /* removes extra width in IE */
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+
+	/* Support: IE <= 11 */
+	overflow: visible;
 }
 
 .ui-button,
@@ -55,7 +57,7 @@ input.ui-button.ui-button-icon-only {
 }
 
 /* workarounds */
-/* reset extra padding in Firefox, see h5bp.com/l */
+/* Support: FireFox >= 4 */
 input.ui-button::-moz-focus-inner,
 button.ui-button::-moz-focus-inner {
 	border: 0;
