@@ -43,7 +43,7 @@ return $.widget( "ui.controlgroup", {
 		this._enhance();
 	},
 
-	// To support enhanced option in jQuery mobile we isolate dom manipulation here
+	// The support the enhanced option in jQuery Mobile, we isolate DOM manipulation
 	_enhance: function() {
 		this.element.attr( "role", "toolbar" );
 		this.refresh();
@@ -86,57 +86,52 @@ return $.widget( "ui.controlgroup", {
 		});
 	},
 
-	_button_options: function( position ) {
-		var cornerClasses = {
-			"middle": null,
-			"first": "ui-corner-" + ( this.options.direction === "vertical" ? "top" : "left" ),
-			"last": "ui-corner-" + ( this.options.direction === "vertical" ? "bottom" : "right" )
-		};
-
+	_button_options: function( position, direction ) {
 		return {
 			classes: {
-				"ui-button": cornerClasses[ position ]
+				"ui-button": {
+					"middle": null,
+					"first": "ui-corner-" + ( direction ? "top" : "left" ),
+					"last": "ui-corner-" + ( direction ? "bottom" : "right" )
+				}[ position ]
 			}
 		};
 	},
 
-	_checkboxradio_options: function( position ) {
-		var cornerClasses = {
-			"middle": null,
-			"first": "ui-corner-" + ( this.options.direction === "vertical" ? "top" : "left" ),
-			"last": "ui-corner-" + ( this.options.direction === "vertical" ? "bottom" : "right" )
-		};
-
+	_checkboxradio_options: function( position, direction ) {
 		return {
 			classes: {
-				"ui-checkboxradio-label": cornerClasses[ position ]
+				"ui-checkboxradio-label": {
+					"middle": null,
+					"first": "ui-corner-" + ( direction ? "top" : "left" ),
+					"last": "ui-corner-" + ( direction ? "bottom" : "right" )
+				}[ position ]
 			}
 		};
 	},
 
-	_selectmenu_options: function( position ) {
-		var classes = {
-			middle: {
-				"ui-selectmenu-button-open": null,
-				"ui-selectmenu-button-closed": null
-			},
-			first: {
-				"ui-selectmenu-button-open":
-					"ui-corner-" + ( this.options.direction === "vertical" ? "top" : "tl" ),
-				"ui-selectmenu-button-closed":
-					"ui-corner-" + ( this.options.direction === "vertical" ? "top" : "left" )
-			},
-			last: {
-				"ui-selectmenu-button-open":
-					( this.options.direction === "vertical" )? null : "ui-corner-tr",
-				"ui-selectmenu-button-closed":
-					"ui-corner-" + ( ( this.options.direction === "vertical" )? "bottom" : "right" )
-			}
-
-		};
+	_selectmenu_options: function( position, direction ) {
 		return {
 			width: "auto",
-			classes: classes[ position ]
+			classes: {
+				middle: {
+					"ui-selectmenu-button-open": null,
+					"ui-selectmenu-button-closed": null
+				},
+				first: {
+					"ui-selectmenu-button-open":
+						"ui-corner-" + ( direction ? "top" : "tl" ),
+					"ui-selectmenu-button-closed":
+						"ui-corner-" + ( direction ? "top" : "left" )
+				},
+				last: {
+					"ui-selectmenu-button-open":
+						direction ? null : "ui-corner-tr",
+					"ui-selectmenu-button-closed":
+						"ui-corner-" + ( direction ? "bottom" : "right" )
+				}
+
+			}[ position ]
 		};
 	},
 
@@ -145,14 +140,14 @@ return $.widget( "ui.controlgroup", {
 
 		this._super( key, value );
 		if ( key === "direction" ) {
-			this.element.removeClass( "ui-controlgroup-" + original );
+			this._removeClass( "ui-controlgroup-" + original );
 		}
 		if ( key === "disabled" ) {
 			this._callChildMethod( value ? "disable" : "enable" );
-		} else {
-			this.refresh();
+			return;
 		}
 
+		this.refresh();
 	},
 
 	refresh: function() {
@@ -171,7 +166,12 @@ return $.widget( "ui.controlgroup", {
 			[ "first", "last" ].forEach( function( value ) {
 				var data = children[ value ]().data( "ui-controlgroup-data" );
 				if ( that[ "_" + data.widgetType + "_options" ] ) {
-					data.element[ data.widgetType ]( that[ "_" + data.widgetType + "_options" ]( value ) );
+					data.element[ data.widgetType ](
+						that[ "_" + data.widgetType + "_options" ](
+							value,
+							this.options.direction === "vertical"
+						)
+					);
 				}
 			});
 			this._callChildMethod( "refresh" );
