@@ -169,7 +169,7 @@ return $.widget( "ui.controlgroup", {
 					data.element[ data.widgetType ](
 						that[ "_" + data.widgetType + "_options" ](
 							value,
-							this.options.direction === "vertical"
+							that.options.direction === "vertical"
 						)
 					);
 				}
