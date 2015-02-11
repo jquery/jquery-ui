@@ -6,40 +6,30 @@ test( "destroy", function() {
 		$( ".controlgroup" ).controlgroup().controlgroup( "destroy" );
 	});
 });
-test( "disable", function() {
-	var tests = 1,
-		element = $( ".controlgroup" ).controlgroup().controlgroup( "disable" );
-	strictEqual( element.hasClass( "ui-state-disabled" ), false,
+test( "disable", function( assert ) {
+	expect( 2 );
+	var element = $( ".controlgroup" ).controlgroup().controlgroup( "disable" );
+	assert.lacksClasses( element, "ui-state-disabled",
 		"ui-state-disabled is not present on widget after disabling" );
-	$.each( $.ui.controlgroup.prototype.options.items, function( widget, selector ){
-		element.children( selector ).each(function(){
-			expect( ++tests );
-			strictEqual( $( this )[ widget ]( "widget" ).hasClass( "ui-state-disabled"), true,
-				"Child " + widget + " widgets are disabled" );
-		});
-	});
+	strictEqual( element.find( ".ui-state-disabled" ).length, 6,
+		"Child widgets are disabled" );
 });
 
-test( "enable", function() {
-	var tests = 1,
-		element = $( ".controlgroup" ).controlgroup().controlgroup( "enable" );
-	strictEqual( element.hasClass( "ui-state-disabled" ), false,
+test( "enable", function( assert ) {
+	expect( 2 );
+	var element = $( ".controlgroup" ).controlgroup().controlgroup( "enable" );
+	assert.lacksClasses( element, "ui-state-disabled",
 		"ui-state-disabled is not present on widget after enabling" );
-	$.each( $.ui.controlgroup.prototype.options.items, function( widget, selector ){
-		element.children( selector ).each(function(){
-			expect( ++tests );
-			strictEqual( $( this )[ widget ]( "widget" ).hasClass( "ui-state-disabled"), false,
-				"Child " + widget + " widgets are not disabled" );
-		});
-	});
+	strictEqual( element.find( "ui-state-disabled" ).length, 0,
+		"Child widgets are disabled" );
 });
 
-function hasCornerClass( className, element ) {
+function hasCornerClass( element, className ) {
 	if ( className ) {
 		return element.hasClass( className );
 	}
 
-	return element.attr( "class" ).match( /ui-corner/g );
+	return !!element.attr( "class" ).match( /ui-corner/g );
 }
 test( "refresh", function() {
 	var count = 0,
@@ -82,7 +72,7 @@ test( "refresh", function() {
 			element.controlgroup( "refresh" );
 			for ( i = 0; i < 4; i++ ) {
 				strictEqual( controls[ i ].is( ":ui-" + widget ), true,
-					name + ": " + widget + " " + i+ ": is a " + widget + " widget after refresh" );
+					name + ": " + widget + " " + i + ": is a " + widget + " widget after refresh" );
 			}
 			checkCornerClasses( classes );
 			interateHidden( true );
@@ -121,7 +111,7 @@ test( "refresh", function() {
 			}
 			function checkCornerClasses( classList ) {
 				for ( var j = 0; j < 4; j++ ) {
-					strictEqual( !!hasCornerClass( classList[ j ], controls[ j ][ widget ]( "widget" ) ), !!classList[ j ],
+					strictEqual( hasCornerClass( controls[ j ][ widget ]( "widget" ), classList[ j ] ), !!classList[ j ],
 						name + ": " + widget + " " + j + ": has class " + classList[ j ] + " after refresh" );
 				}
 			}
