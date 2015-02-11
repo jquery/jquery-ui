@@ -222,7 +222,7 @@ $.widget( "ui.button", {
 		this._super( key, value );
 		if ( key === "disabled" ) {
 			this._toggleClass( null, "ui-state-disabled", value );
-			this.element.element[ 0 ].disabled = value;
+			this.element[ 0 ].disabled = value;
 			if ( value ) {
 				this.element.blur();
 			}
