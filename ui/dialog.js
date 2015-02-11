@@ -483,12 +483,12 @@ $.widget( "ui.dialog", {
 			};
 			buttonOptions = {
 				icon: props.icon,
-				showLabel: props.showLabel,
-				iconPosition: props.iconPosition
+				iconPosition: props.iconPosition,
+				showLabel: props.showLabel
 			};
 			delete props.icon;
-			delete props.showLabel;
 			delete props.iconPosition;
+			delete props.showLabel;
 			$( "<button></button>", props )
 				.button( buttonOptions )
 				.appendTo( that.uiButtonSet );
