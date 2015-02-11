@@ -17,7 +17,7 @@
 	margin-left: 0;
 	margin-right: 0;
 }
-.ui-controlgroup.ui-controlgroup-vertical > .ui-button {
+.ui-controlgroup-vertical > .ui-button {
 	display: block;
 	float: none;
 	width: 100%;
