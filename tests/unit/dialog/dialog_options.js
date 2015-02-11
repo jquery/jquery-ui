@@ -216,7 +216,7 @@ test("closeText", function() {
 	element.remove();
 
 	element = $("<div></div>").dialog().dialog("option", "closeText", "bar");
-		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), "bar",
+		equal(element.dialog("widget").find(".ui-dialog-titlebar-close").text(), " bar",
 			"closeText via option method");
 	element.remove();
 });
