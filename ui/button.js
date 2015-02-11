@@ -40,7 +40,8 @@ var formResetHandler = function() {
 			// css only buttons
 			form.find( ".ui-button" ).filter( ":ui-button" ).button( "refresh" );
 		});
-	};
+	},
+	buttonCount = 0;
 
 $.widget( "ui.button", {
 	version: "@VERSION",
@@ -62,13 +63,13 @@ $.widget( "ui.button", {
 			options =  this._super() || {};
 
 		this.isInput = this.element.is( "input" );
-		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
 
 		disabled = this.element[ 0 ].disabled;
 		if ( disabled != null ) {
 			options.disabled = disabled;
 		}
 
+		this.originalLabel = this.isInput ? this.element.val() : this.element.html();
 		if ( this.originalLabel ) {
 			options.label = this.originalLabel;
 		}
@@ -77,13 +78,17 @@ $.widget( "ui.button", {
 	},
 
 	_create: function() {
-		var formElement = $( this.element[ 0 ].form );
+		this.formElement = $( this.element[ 0 ].form );
 
-		// We don't use _on and _off here because we want all the checkboxes in the same form to use
-		// single handler which handles all the checkboxradio widgets in the form
-		formElement.off( "reset" + this.eventNamespace, formResetHandler );
-		formElement.on( "reset" + this.eventNamespace, formResetHandler );
+		// We don't use _on and _off here because we want all the buttons in the same form to use
+		// single handler which handles all the button widgets in the form
+		this.formElement.off( "reset." + this.widgetFullName, formResetHandler );
+		this.formElement.on( "reset." + this.widgetFullName, formResetHandler );
+		buttonCount++;
 
+		// We have to check the option again here even though we did in _getCreateOptions
+		// because null may have been passed on init which would override what was set in
+		// _getCreateOptions
 		if ( this.options.disabled == null ) {
 			this.options.disabled = this.element[ 0 ].disabled || false;
 		}
@@ -95,7 +100,8 @@ $.widget( "ui.button", {
 			this._on({
 				"keyup": function( event ) {
 					if ( event.keyCode === $.ui.keyCode.SPACE ) {
-						this.element[0].click();
+						event.preventDefault();
+						this.element[ 0 ].click();
 					}
 				}
 			});
@@ -131,9 +137,7 @@ $.widget( "ui.button", {
 
 	_updateIcon: function( icon ) {
 		var prepend =
-				( this.options.iconPosition === "top" || this.options.iconPosition === "beginning" )?
-				true :
-				false,
+				( this.options.iconPosition === "top" || this.options.iconPosition === "beginning" ),
 			displayBlock =
 				( this.options.iconPosition === "top" ||
 				this.options.iconPosition === "bottom" );
@@ -169,9 +173,16 @@ $.widget( "ui.button", {
 		if ( !this.hasTitle ) {
 			this.element.removeAttr( "title" );
 		}
+		buttonCount--;
+		if ( buttonCount === 0 ) {
+			this.formElement.off( "reset." + this.widgetFullName, formResetHandler );
+		}
 	},
 
 	_setOption: function( key, value ) {
+		var iconGroup,
+			prepend = ( this.options.iconPosition === "top" || this.options.iconPosition === "beginning" );
+
 		if ( key === "icon" ) {
 			if ( value !== null ) {
 				this._updateIcon( value );
@@ -185,31 +196,36 @@ $.widget( "ui.button", {
 		// Make sure we can't end up with a button that has no text nor icon
 		if ( key === "showLabel" ) {
 			if ( ( !value && this.options.icon ) || value ) {
-				this._toggleClass( this._classes( "ui-button-icon-only" ), null, !value )
-					._toggleClass( null, this.options.iconPosition, value );
+				this._toggleClass( this._classes( "ui-button-icon-only" ), null, !value );
 				this._updateTooltip();
 			} else {
 				value = true;
 			}
 		}
 		if ( key === "iconPosition" && this.options.icon ) {
-			this._addClass( null, value )
-				._removeClass( null, this.options.iconPosition );
+			this._addClass( null, value );
 		}
 		if ( key === "label" ) {
 			if ( this.isInput ) {
 				this.element.val( value );
 			} else {
 
-				// If there us an icon append it else nothing then append the value
+				// If there is an icon, append it, else nothing then append the value
 				// this avoids removal of the icon when setting label text
-				this.element.html( !!this.icon ? this.icon : "" ).append( value );
+				this.element.html( value );
+				if ( !!this.icon ) {
+					iconGroup = this.icon.add( this.iconSpace );
+					this.element[ prepend ? "prepend" : "append" ]( iconGroup );
+				}
 			}
 		}
 		this._super( key, value );
 		if ( key === "disabled" ) {
-			this._toggleClass( null, "ui-state-disabled", value ).element[ 0 ].disabled = value;
-			this.element.blur();
+			this._toggleClass( null, "ui-state-disabled", value );
+			this.element.element[ 0 ].disabled = value;
+			if ( value ) {
+				this.element.blur();
+			}
 		}
 	},
 
@@ -265,7 +281,8 @@ if ( $.uiBackCompat !== false ) {
 
 		_setOption: function( key, value ) {
 			if ( key === "text" ) {
-				this._setOption( "showLabel", value );
+				this._super( "showLabel", value );
+				return;
 			}
 			if ( key === "showLabel" ) {
 				this.options.text = value;
@@ -275,11 +292,11 @@ if ( $.uiBackCompat !== false ) {
 			}
 			if ( key === "icons" ) {
 				if ( value.primary ) {
-					this._setOption( "icon", value.primary );
-					this._setOption( "iconPosition", "beginning" );
+					this._super( "icon", value.primary );
+					this._super( "iconPosition", "beginning" );
 				} else if ( value.secondary ) {
-					this._setOption( "icon", value.secondary );
-					this._setOption( "iconPosition", "end" );
+					this._super( "icon", value.secondary );
+					this._super( "iconPosition", "end" );
 				}
 			}
 			this._superApply( arguments );
