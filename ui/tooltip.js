@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Tooltip @VERSION
+ * jQuery UI Tooltip 1.11.3
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -26,7 +26,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.tooltip", {
-	version: "@VERSION",
+	version: "1.11.3",
 	options: {
 		content: function() {
 			// support: IE<9, Opera in jQuery <1.7

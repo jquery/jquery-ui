@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Scale @VERSION
+ * jQuery UI Effects Scale 1.11.3
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

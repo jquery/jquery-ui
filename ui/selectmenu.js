@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Selectmenu @VERSION
+ * jQuery UI Selectmenu 1.11.3
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -27,7 +27,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.selectmenu", {
-	version: "@VERSION",
+	version: "1.11.3",
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,

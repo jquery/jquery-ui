@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Widget @VERSION
+ * jQuery UI Widget 1.11.3
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
