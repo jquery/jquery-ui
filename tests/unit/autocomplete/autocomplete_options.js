@@ -102,7 +102,7 @@ asyncTest( "delay", function() {
 	expect( 2 );
 	var element = $( "#autocomplete" ).autocomplete({
 			source: data,
-			delay: 50
+			delay: 25
 		}),
 		menu = element.autocomplete( "widget" );
 	element.val( "ja" ).keydown();
@@ -112,7 +112,7 @@ asyncTest( "delay", function() {
 	setTimeout(function() {
 		ok( menu.is( ":visible" ), "menu is open after delay" );
 		start();
-	}, 100 );
+	}, 50 );
 });
 
 asyncTest( "disabled", function() {
@@ -133,7 +133,7 @@ asyncTest( "disabled", function() {
 	setTimeout(function() {
 		ok( menu.is( ":hidden" ) );
 		start();
-	}, 50 );
+	});
 });
 
 test( "minLength", function() {
@@ -158,7 +158,7 @@ asyncTest( "minLength, exceed then drop below", function() {
 				equal( req.term, "12", "correct search term" );
 				setTimeout(function() {
 					res([ "item" ]);
-				}, 1 );
+				});
 			}
 		}),
 		menu = element.autocomplete( "widget" );
@@ -172,7 +172,7 @@ asyncTest( "minLength, exceed then drop below", function() {
 	setTimeout(function() {
 		ok( menu.is( ":hidden" ), "menu is hidden after searches" );
 		start();
-	}, 50 );
+	});
 });
 
 test( "minLength, exceed then drop below then exceed", function() {

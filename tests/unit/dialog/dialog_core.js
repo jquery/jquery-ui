@@ -141,7 +141,7 @@ asyncTest( "focus tabbable", function() {
 					"Honor preventDefault, allowing custom focus management" );
 				element.remove();
 				start();
-			}, 50 );
+			});
 		});
 	}
 

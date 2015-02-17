@@ -11,18 +11,12 @@ module( "menu: methods", {
 });
 
 test( "destroy", function() {
-	expect( 4 );
-	domEqual( "#menu1", function() {
-		$( "#menu1" ).menu().menu( "destroy" );
-	});
+	expect( 2 );
 	domEqual( "#menu2", function() {
 		$( "#menu2" ).menu().menu( "destroy" );
 	});
 	domEqual( "#menu5", function() {
 		$( "#menu5").menu().menu( "destroy" );
-	});
-	domEqual( "#menu6", function() {
-		$( "#menu6" ).menu().menu( "destroy" );
 	});
 });
 

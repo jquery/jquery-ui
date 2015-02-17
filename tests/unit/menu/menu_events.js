@@ -111,62 +111,66 @@ asyncTest( "handle focus of menu with active item", function() {
 	});
 });
 
-asyncTest( "handle submenu auto collapse: mouseleave", function() {
+asyncTest( "handle submenu auto collapse: mouseleave, default markup", function() {
 	expect( 4 );
+	$.ui.menu.prototype.delay = 1;
 	var element = $( "#menu2" ).menu(),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
 		equal( element.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
 		element.menu( "focus", event, element.find( "li:nth-child(7) li:first" ) );
-		setTimeout( menumouseleave2, 350 );
+		setTimeout( menumouseleave2, 25 );
 	}
 	function menumouseleave2() {
 		equal( element.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 		element.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
-		setTimeout( menumouseleave3, 350 );
+		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
 		equal( element.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
 		element.trigger( "mouseleave" );
-		setTimeout( menumouseleave4, 350 );
+		setTimeout( menumouseleave4, 25 );
 	}
 	function menumouseleave4() {
 		equal( element.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		$.ui.menu.prototype.delay = 300;
 		start();
 	}
 
 	element.find( "li:nth-child(7)" ).trigger( "mouseenter" );
-	setTimeout( menumouseleave1, 350 );
+	setTimeout( menumouseleave1, 25 );
 });
 
-asyncTest( "handle submenu auto collapse: mouseleave", function() {
+asyncTest( "handle submenu auto collapse: mouseleave, custom markup", function() {
 	expect( 4 );
+	$.ui.menu.prototype.delay = 1;
 	var element = $( "#menu5" ).menu({ menus: ".menu" }),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
 		equal( element.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
 		element.menu( "focus", event, element.find( ":nth-child(7)" ).find( ".menu" ).eq( 0 ).children().eq( 0 ) );
-		setTimeout( menumouseleave2, 350 );
+		setTimeout( menumouseleave2, 25 );
 	}
 	function menumouseleave2() {
 		equal( element.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 		element.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
-		setTimeout( menumouseleave3, 350 );
+		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
 		equal( element.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
 		element.trigger( "mouseleave" );
-		setTimeout( menumouseleave4, 350 );
+		setTimeout( menumouseleave4, 25 );
 	}
 	function menumouseleave4() {
 		equal( element.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		$.ui.menu.prototype.delay = 300;
 		start();
 	}
 
 	element.find( ":nth-child(7)" ).trigger( "mouseenter" );
-	setTimeout( menumouseleave1, 350 );
+	setTimeout( menumouseleave1, 25 );
 });
 
 asyncTest( "handle keyboard navigation on menu without scroll and without submenus", function() {
@@ -251,7 +255,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
-		setTimeout( menukeyboard1, 50 );
+		setTimeout( menukeyboard1 );
 	});
 	element.focus();
 
@@ -274,8 +278,8 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 
 		setTimeout(function() {
 			equal( logOutput(), "keydown,1,2,3,4,0", "Keydown RIGHT (open submenu)" );
-			setTimeout( menukeyboard2, 50 );
-		}, 50 );
+			setTimeout( menukeyboard2 );
+		} );
 	}
 
 	function menukeyboard2() {
@@ -285,7 +289,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 
 		// re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-		setTimeout( menukeyboard3, 50 );
+		setTimeout( menukeyboard3 );
 	}
 
 	function menukeyboard3() {
@@ -319,7 +323,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.SPACE } );
-		setTimeout( menukeyboard4, 50 );
+		setTimeout( menukeyboard4 );
 	}
 
 	function menukeyboard4() {
@@ -344,9 +348,9 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 
 				log( "keydown", true );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-				setTimeout( menukeyboard6, 50 );
-			}, 50 );
-		}, 50 );
+				setTimeout( menukeyboard6 );
+			} );
+		} );
 	}
 
 	function menukeyboard6() {
@@ -446,7 +450,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
-		setTimeout( menukeyboard1, 50 );
+		setTimeout( menukeyboard1 );
 	});
 	element.focus();
 

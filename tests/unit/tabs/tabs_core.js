@@ -155,7 +155,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		panels = element.find( ".ui-tabs-panel" ),
 		keyCode = $.ui.keyCode;
 
-	element.tabs( "instance" ).delay = 50;
+	element.tabs( "instance" ).delay = 1;
 
 	equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 	tabs.eq( 0 ).simulate( "focus" );
@@ -208,7 +208,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-		setTimeout( step2, 100 );
+		setTimeout( step2, 25 );
 	}
 
 	// left, home, space
@@ -246,7 +246,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 
 		// SPACE activates, cancels delay
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.SPACE } );
-		setTimeout( step3, 1 );
+		setTimeout( step3 );
 	}
 
 	// end, enter
@@ -273,7 +273,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 
 		// ENTER activates, cancels delay
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
-		setTimeout( step4, 1 );
+		setTimeout( step4 );
 	}
 
 	// enter (collapse)
@@ -293,10 +293,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
-		setTimeout( start, 1 );
+		setTimeout( start );
 	}
 
-	setTimeout( step1, 1 );
+	setTimeout( step1 );
 });
 
 // Navigation with CTRL and COMMAND (both behave the same)
@@ -311,7 +311,7 @@ $.each({
 			panels = element.find( ".ui-tabs-panel" ),
 			keyCode = $.ui.keyCode;
 
-		element.tabs( "instance" ).delay = 50;
+		element.tabs( "instance" ).delay = 1;
 
 		equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 		tabs.eq( 0 ).simulate( "focus" );
@@ -337,7 +337,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step2, 100 );
+			setTimeout( step2, 25 );
 		}
 
 		// right
@@ -364,7 +364,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step3, 100 );
+			setTimeout( step3, 25 );
 		}
 
 		// down (wrap)
@@ -387,7 +387,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step4, 100 );
+			setTimeout( step4, 25 );
 		}
 
 		// up (wrap)
@@ -411,7 +411,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step5, 100 );
+			setTimeout( step5, 25 );
 		}
 
 		// left
@@ -438,7 +438,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step6, 100 );
+			setTimeout( step6, 25 );
 		}
 
 		// home
@@ -465,7 +465,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step7, 100 );
+			setTimeout( step7, 25 );
 		}
 
 		// end
@@ -489,7 +489,7 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
-			setTimeout( step8, 100 );
+			setTimeout( step8, 25 );
 		}
 
 		// space
@@ -512,10 +512,10 @@ $.each({
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tab has aria-expanded=false" );
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
-			setTimeout( start, 1 );
+			setTimeout( start );
 		}
 
-		setTimeout( step1, 1 );
+		setTimeout( step1 );
 	});
 });
 
@@ -567,7 +567,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		panels.eq( 0 ).simulate( "focus" );
-		setTimeout( step2, 1 );
+		setTimeout( step2 );
 	}
 
 	function step2() {
@@ -596,7 +596,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		panels.eq( 1 ).simulate( "focus" );
-		setTimeout( step3, 1 );
+		setTimeout( step3 );
 	}
 
 	function step3() {
@@ -605,10 +605,10 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		panels.eq( 1 ).simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
 		strictEqual( document.activeElement, tabs[ 1 ], "second tab is activeElement" );
 
-		setTimeout( start, 1 );
+		setTimeout( start );
 	}
 
-	setTimeout( step1, 1 );
+	setTimeout( step1 );
 });
 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {

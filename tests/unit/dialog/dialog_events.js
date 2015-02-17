@@ -337,7 +337,7 @@ asyncTest("ensure dialog's container doesn't scroll on resize and focus", functi
 		equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after focus moved to dialog");
 		element.dialog("destroy");
 		start();
-	}, 500);
+	});
 });
 
 test("#5184: isOpen in dialogclose event is true", function() {

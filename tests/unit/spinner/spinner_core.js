@@ -88,7 +88,7 @@ asyncTest( "blur input while spinning with UP", function() {
 	function step1() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		equal( element.val(), 11 );
-		setTimeout( step2, 750 );
+		setTimeout( step2, 501 );
 	}
 
 	function step2() {
@@ -97,7 +97,7 @@ asyncTest( "blur input while spinning with UP", function() {
 
 		element.bind( "blur", function() {
 			value = element.val();
-			setTimeout( step3, 750 );
+			setTimeout( step3 );
 		})[ 0 ].blur();
 	}
 
