@@ -187,7 +187,7 @@ asyncTest( "past end of menu in multiline autocomplete", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( element.text(), customVal );
 		start();
-	}, 50 );
+	});
 });
 
 asyncTest( "ESCAPE in multiline autocomplete", function() {
@@ -213,7 +213,7 @@ asyncTest( "ESCAPE in multiline autocomplete", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 		equal( element.text(), customVal );
 		start();
-	}, 50 );
+	});
 });
 
 asyncTest( "handle race condition", function() {
@@ -226,8 +226,8 @@ asyncTest( "handle race condition", function() {
 				equal( count, 1, "request with 1 character is first" );
 				setTimeout(function() {
 					response([ "one" ]);
-					setTimeout( checkResults, 1 );
-				}, 1 );
+					setTimeout( checkResults );
+				});
 				return;
 			}
 			equal( count, 2, "request with 2 characters is second" );

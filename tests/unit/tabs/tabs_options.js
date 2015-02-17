@@ -347,7 +347,7 @@ asyncTest( "hide and show - animation", function() {
 		equal( options, "drop", "correct options in _show()" );
 		setTimeout(function() {
 			callback();
-		}, 1 );
+		});
 	};
 	widget._hide = function( element, options, callback ) {
 		strictEqual( element[ 0 ], panels[ 0 ], "correct element in _hide()" );
@@ -355,7 +355,7 @@ asyncTest( "hide and show - animation", function() {
 		setTimeout(function() {
 			callback();
 			start();
-		}, 1 );
+		});
 	};
 
 	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );

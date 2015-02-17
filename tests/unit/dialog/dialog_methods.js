@@ -87,7 +87,7 @@ asyncTest("#9000: Dialog leaves broken event handler after close/destroy in cert
 		$( "#favorite-animal" ).focus();
 		ok( true, "close and destroy modal dialog before its really opened" );
 		start();
-	}, 2 );
+	});
 });
 
 test("#4980: Destroy should place element back in original DOM position", function(){

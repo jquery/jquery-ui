@@ -206,7 +206,7 @@ asyncTest( "load", function() {
 		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 		equal( uiPanel.find( "p" ).length, 1, "panel html" );
 		state( element, 1, 0, 0, 0, 0 );
-		setTimeout( tabsload1, 100 );
+		setTimeout( tabsload1 );
 	});
 	element.tabs( "load", 3 );
 	state( element, 1, 0, 0, 0, 0 );
@@ -218,7 +218,7 @@ asyncTest( "load", function() {
 		});
 		element.one( "tabsload", function() {
 			ok( true, "tabsload invoked" );
-			setTimeout( tabsload2, 100 );
+			setTimeout( tabsload2 );
 		});
 		element.tabs( "option", "active", 3 );
 		state( element, 0, 0, 0, 1, 0 );

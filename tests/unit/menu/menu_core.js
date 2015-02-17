@@ -54,9 +54,9 @@ asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected 
 	element.menu( "focus", null, firstChild );
 	wrapper.addClass( "ui-state-active" );
 	setTimeout( function() {
-		ok( wrapper.is( ".ui-state-active" ), "ui-state-active improperly removed" );
+		ok( wrapper.is( ".ui-state-active" ) );
 		start();
-	}, 500 );
+	});
 });
 
 })( jQuery );
