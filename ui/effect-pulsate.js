@@ -53,11 +53,12 @@ return $.effects.effect.pulsate = function( o, done ) {
 
 	elem.animate({
 		opacity: animateTo
-	}, duration, o.easing);
+	}, duration, o.easing, function() {
+		elem.css( "opacity", "" );
+	});
 
 	elem.queue(function() {
 		if ( hide ) {
-			elem.css( "opacity", "" );
 			elem.hide();
 		}
 		done();
