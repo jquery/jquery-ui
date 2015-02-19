@@ -997,8 +997,8 @@ $.ui.plugin.add("resizable", "alsoResize", {
 				$(exp).each(function() {
 					var el = $(this);
 					el.data("ui-resizable-alsoresize", {
-						width: parseInt(el.width(), 10), height: parseInt(el.height(), 10),
-						left: parseInt(el.css("left"), 10), top: parseInt(el.css("top"), 10)
+					    width: parseInt(el.css("width"), 10), height: parseInt(el.css("height"), 10),
+					    left: parseInt(el.css("left"), 10), top: parseInt(el.css("top"), 10)
 					});
 				});
 			};
