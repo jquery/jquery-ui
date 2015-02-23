@@ -227,7 +227,7 @@ grunt.initConfig({
 			files: {
 				"qunit/qunit.js": "qunit/qunit/qunit.js",
 				"qunit/qunit.css": "qunit/qunit/qunit.css",
-				"qunit/MIT-LICENSE.txt": "qunit/MIT-LICENSE.txt",
+				"qunit/LICENSE.txt": "qunit/LICENSE.txt",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
@@ -238,7 +238,7 @@ grunt.initConfig({
 				"jshint/jshint.js": "jshint/dist/jshint.js",
 				"jshint/LICENSE": "jshint/LICENSE",
 
-				"jquery/jquery.js": "jquery-1.x/jquery.js",
+				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",
 
 				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
@@ -277,6 +277,15 @@ grunt.initConfig({
 				"jquery-1.10.2/jquery.js": "jquery-1.10.2/jquery.js",
 				"jquery-1.10.2/MIT-LICENSE.txt": "jquery-1.10.2/MIT-LICENSE.txt",
 
+				"jquery-1.11.0/jquery.js": "jquery-1.11.0/dist/jquery.js",
+				"jquery-1.11.0/MIT-LICENSE.txt": "jquery-1.11.0/MIT-LICENSE.txt",
+
+				"jquery-1.11.1/jquery.js": "jquery-1.11.1/dist/jquery.js",
+				"jquery-1.11.1/MIT-LICENSE.txt": "jquery-1.11.1/MIT-LICENSE.txt",
+
+				"jquery-1.11.2/jquery.js": "jquery-1.11.2/dist/jquery.js",
+				"jquery-1.11.2/MIT-LICENSE.txt": "jquery-1.11.2/MIT-LICENSE.txt",
+
 				"jquery-2.0.0/jquery.js": "jquery-2.0.0/jquery.js",
 				"jquery-2.0.0/MIT-LICENSE.txt": "jquery-2.0.0/MIT-LICENSE.txt",
 
@@ -287,7 +296,19 @@ grunt.initConfig({
 				"jquery-2.0.2/MIT-LICENSE.txt": "jquery-2.0.2/MIT-LICENSE.txt",
 
 				"jquery-2.0.3/jquery.js": "jquery-2.0.3/jquery.js",
-				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt"
+				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt",
+
+				"jquery-2.1.0/jquery.js": "jquery-2.1.0/dist/jquery.js",
+				"jquery-2.1.0/MIT-LICENSE.txt": "jquery-2.1.0/MIT-LICENSE.txt",
+
+				"jquery-2.1.1/jquery.js": "jquery-2.1.1/dist/jquery.js",
+				"jquery-2.1.1/MIT-LICENSE.txt": "jquery-2.1.1/MIT-LICENSE.txt",
+
+				"jquery-2.1.2/jquery.js": "jquery-2.1.2/dist/jquery.js",
+				"jquery-2.1.2/MIT-LICENSE.txt": "jquery-2.1.2/MIT-LICENSE.txt",
+
+				"jquery-2.1.3/jquery.js": "jquery-2.1.3/dist/jquery.js",
+				"jquery-2.1.3/MIT-LICENSE.txt": "jquery-2.1.3/MIT-LICENSE.txt"
 			}
 		}
 	},
