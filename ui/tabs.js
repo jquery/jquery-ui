@@ -835,7 +835,7 @@ return $.widget( "ui.tabs", {
 			panel.attr( "aria-busy", "true" );
 
 			this.xhr
-				.success(function( response ) {
+				.done(function( response ) {
 					// support: jQuery <1.8
 					// http://bugs.jquery.com/ticket/11778
 					setTimeout(function() {
@@ -843,7 +843,7 @@ return $.widget( "ui.tabs", {
 						that._trigger( "load", event, eventData );
 					}, 1 );
 				})
-				.complete(function( jqXHR, status ) {
+				.always(function( jqXHR, status ) {
 					// support: jQuery <1.8
 					// http://bugs.jquery.com/ticket/11778
 					setTimeout(function() {
