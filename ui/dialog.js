@@ -570,6 +570,7 @@ return $.widget( "ui.dialog", {
 				that._trigger( "resizeStart", event, filteredUi( ui ) );
 			},
 			resize: function( event, ui ) {
+				that._resizeBlocks();
 				that._trigger( "resize", event, filteredUi( ui ) );
 			},
 			stop: function( event, ui ) {
@@ -794,7 +795,20 @@ return $.widget( "ui.dialog", {
 					height: iframe.outerHeight()
 				})
 				.appendTo( iframe.parent() )
+				.data( "iframe", iframe )
 				.offset( iframe.offset() )[0];
+		});
+	},
+
+	_resizeBlocks: function() {
+		this.iframeBlocks.each(function() {
+			var block = $( this ),
+				iframe = block.data( "iframe" );
+
+			block.css({
+				width: iframe.outerWidth(),
+				height: iframe.innerHeight()
+			});
 		});
 	},
 
