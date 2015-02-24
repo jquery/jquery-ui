@@ -71,6 +71,28 @@ asyncTest( "content: sync + async callback", function() {
 	}).tooltip( "open" );
 });
 
+// http://bugs.jqueryui.com/ticket/8740
+asyncTest( "content: async callback loses focus before load", function() {
+	expect( 1 );
+
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function( response ) {
+			setTimeout(function() {
+				element.trigger( "mouseleave" );
+				setTimeout(function() {
+					response( "sometext" );
+					setTimeout(function() {
+						ok( !$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ),
+							"Tooltip should not display" );
+						start();
+					});
+				});
+			});
+		}
+	});
+	element.trigger( "mouseover" );
+});
+
 test( "content: change while open", function() {
 	expect( 2 ) ;
 	var element = $( "#tooltipped1" ).tooltip({
