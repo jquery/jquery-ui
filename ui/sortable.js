@@ -789,7 +789,10 @@ return $.widget("ui.sortable", $.ui.mouse, {
 							.removeClass("ui-sortable-helper");
 
 					if ( nodeName === "tbody" ) {
-						that._createTrPlaceholder( that.currentItem.find( "tr:first" ), $( "<tr></tr>", that.document[0] ).appendTo( element ) );
+						that._createTrPlaceholder(
+							that.currentItem.find( "tr" ).eq( 0 ),
+							$( "<tr />", that.document[ 0 ] ).appendTo( element )
+						);
 					} else if ( nodeName === "tr" ) {
 						that._createTrPlaceholder( that.currentItem, element );
 					} else if ( nodeName === "img" ) {
@@ -832,7 +835,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		var that = this;
 
 		sourceTr.children().each(function() {
-			$( "<td>&#160;</td>", that.document[0] )
+			$( "<td>&#160;</td>", that.document[ 0 ] )
 				.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
 				.appendTo( targetTr );
 		});
