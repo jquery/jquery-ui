@@ -77,14 +77,15 @@ asyncTest( "content: async callback loses focus before load", function() {
 
 	var element = $( "#tooltipped1" ).tooltip({
 		content: function( response ) {
-			element.trigger( "mouseleave" );
 			setTimeout(function() {
-				response( "sometext" );
+				element.trigger( "mouseleave" );
 				setTimeout(function() {
-					ok( !$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ),
-						"Tooltip should not display" );
-					element.tooltip( "destroy" );
-					start();
+					response( "sometext" );
+					setTimeout(function() {
+						ok( !$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ),
+							"Tooltip should not display" );
+						start();
+					});
 				});
 			});
 		}
