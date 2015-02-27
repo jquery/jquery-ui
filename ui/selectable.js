@@ -49,18 +49,17 @@ return $.widget("ui.selectable", $.ui.mouse, {
 		unselecting: null
 	},
 	_create: function() {
-		var selectees,
-			that = this;
+		var that = this;
 
-		this.element.addClass("ui-selectable");
+		this._addClass( "ui-selectable" );
 
 		this.dragged = false;
 
 		// cache selectee children based on filter
 		this.refresh = function() {
-			selectees = $(that.options.filter, that.element[0]);
-			selectees.addClass("ui-selectee");
-			selectees.each(function() {
+			that.selectees = $(that.options.filter, that.element[0]);
+			that._addClass( that.selectees, "ui-selectee" );
+			that.selectees.each(function() {
 				var $this = $(this),
 					pos = $this.offset();
 				$.data(this, "selectable-item", {
@@ -79,19 +78,14 @@ return $.widget("ui.selectable", $.ui.mouse, {
 		};
 		this.refresh();
 
-		this.selectees = selectees.addClass("ui-selectee");
-
 		this._mouseInit();
 
-		this.helper = $("<div class='ui-selectable-helper'></div>");
+		this.helper = $("<div>");
+		this._addClass( this.helper, "ui-selectable-helper" );
 	},
 
 	_destroy: function() {
-		this.selectees
-			.removeClass("ui-selectee")
-			.removeData("selectable-item");
-		this.element
-			.removeClass("ui-selectable ui-selectable-disabled");
+		this.selectees.removeData("selectable-item");
 		this._mouseDestroy();
 	},
 
@@ -126,9 +120,9 @@ return $.widget("ui.selectable", $.ui.mouse, {
 			var selectee = $.data(this, "selectable-item");
 			selectee.startselected = true;
 			if (!event.metaKey && !event.ctrlKey) {
-				selectee.$element.removeClass("ui-selected");
+				that._removeClass( selectee.$element, "ui-selected" );
 				selectee.selected = false;
-				selectee.$element.addClass("ui-unselecting");
+				that._addClass( selectee.$element, "ui-unselecting" );
 				selectee.unselecting = true;
 				// selectable UNSELECTING callback
 				that._trigger("unselecting", event, {
@@ -142,9 +136,8 @@ return $.widget("ui.selectable", $.ui.mouse, {
 				selectee = $.data(this, "selectable-item");
 			if (selectee) {
 				doSelect = (!event.metaKey && !event.ctrlKey) || !selectee.$element.hasClass("ui-selected");
-				selectee.$element
-					.removeClass(doSelect ? "ui-unselecting" : "ui-selected")
-					.addClass(doSelect ? "ui-selecting" : "ui-unselecting");
+				that._removeClass( selectee.$element, doSelect ? "ui-unselecting" : "ui-selected" )
+					._addClass( selectee.$element, doSelect ? "ui-selecting" : "ui-unselecting" );
 				selectee.unselecting = !doSelect;
 				selectee.selecting = doSelect;
 				selectee.selected = doSelect;
@@ -202,15 +195,15 @@ return $.widget("ui.selectable", $.ui.mouse, {
 			if (hit) {
 				// SELECT
 				if (selectee.selected) {
-					selectee.$element.removeClass("ui-selected");
+					that._removeClass( selectee.$element, "ui-selected" );
 					selectee.selected = false;
 				}
 				if (selectee.unselecting) {
-					selectee.$element.removeClass("ui-unselecting");
+					that._removeClass( selectee.$element, "ui-unselecting" );
 					selectee.unselecting = false;
 				}
 				if (!selectee.selecting) {
-					selectee.$element.addClass("ui-selecting");
+					that._addClass( selectee.$element, "ui-selecting" );
 					selectee.selecting = true;
 					// selectable SELECTING callback
 					that._trigger("selecting", event, {
@@ -221,15 +214,15 @@ return $.widget("ui.selectable", $.ui.mouse, {
 				// UNSELECT
 				if (selectee.selecting) {
 					if ((event.metaKey || event.ctrlKey) && selectee.startselected) {
-						selectee.$element.removeClass("ui-selecting");
+						that._removeClass( selectee.$element, "ui-selecting" );
 						selectee.selecting = false;
-						selectee.$element.addClass("ui-selected");
+						that._addClass( selectee.$element, "ui-selected" );
 						selectee.selected = true;
 					} else {
-						selectee.$element.removeClass("ui-selecting");
+						that._removeClass( selectee.$element, "ui-selecting" );
 						selectee.selecting = false;
 						if (selectee.startselected) {
-							selectee.$element.addClass("ui-unselecting");
+							that._addClass( selectee.$element, "ui-unselecting" );
 							selectee.unselecting = true;
 						}
 						// selectable UNSELECTING callback
@@ -240,10 +233,10 @@ return $.widget("ui.selectable", $.ui.mouse, {
 				}
 				if (selectee.selected) {
 					if (!event.metaKey && !event.ctrlKey && !selectee.startselected) {
-						selectee.$element.removeClass("ui-selected");
+						that._removeClass( selectee.$element, "ui-selected" );
 						selectee.selected = false;
 
-						selectee.$element.addClass("ui-unselecting");
+						that._addClass( selectee.$element, "ui-unselecting" );
 						selectee.unselecting = true;
 						// selectable UNSELECTING callback
 						that._trigger("unselecting", event, {
@@ -264,7 +257,7 @@ return $.widget("ui.selectable", $.ui.mouse, {
 
 		$(".ui-unselecting", this.element[0]).each(function() {
 			var selectee = $.data(this, "selectable-item");
-			selectee.$element.removeClass("ui-unselecting");
+			that._removeClass( selectee.$element, "ui-unselecting" );
 			selectee.unselecting = false;
 			selectee.startselected = false;
 			that._trigger("unselected", event, {
@@ -273,7 +266,8 @@ return $.widget("ui.selectable", $.ui.mouse, {
 		});
 		$(".ui-selecting", this.element[0]).each(function() {
 			var selectee = $.data(this, "selectable-item");
-			selectee.$element.removeClass("ui-selecting").addClass("ui-selected");
+			that._removeClass( selectee.$element, "ui-selecting" )
+				._addClass( selectee.$element, "ui-selected" );
 			selectee.selecting = false;
 			selectee.selected = true;
 			selectee.startselected = true;
