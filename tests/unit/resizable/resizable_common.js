@@ -7,7 +7,9 @@ TestHelpers.commonWidgetTests( "resizable", {
 		aspectRatio: false,
 		autoHide: false,
 		cancel: "input,textarea,button,select,option",
-		classes: {},
+		classes: {
+			"ui-resizable-se": "ui-icon ui-icon-gripsmall-diagonal-se"
+		},
 		containment: false,
 		delay: 0,
 		disabled: false,
