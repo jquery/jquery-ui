@@ -142,8 +142,17 @@ $.extend( $.expr[ ":" ], {
 	}
 });
 
-// support: jQuery <1.8
-if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
+// support: jQuery 1.7 only
+// Not a great way to check versions, but since we only support 1.7+ and only
+// need to detect <1.8, this is a simple check that should suffice. Checking
+// for "1.7." would be a bit safer, but the version string is 1.7, not 1.7.0
+// and we'll never reach 1.70.0 (if we do, we certainly won't be supporting
+// 1.7 anymore). See #11197 for why we're not using feature detection.
+if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
+
+	// Setters for .innerWidth(), .innerHeight(), .outerWidth(), .outerHeight()
+	// Unlike jQuery Core 1.8+, these only support numeric values to set the
+	// dimensions in pixels
 	$.each( [ "Width", "Height" ], function( i, name ) {
 		var side = name === "Width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ],
 			type = name.toLowerCase(),
@@ -187,10 +196,7 @@ if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
 			});
 		};
 	});
-}
 
-// support: jQuery <1.8
-if ( !$.fn.addBack ) {
 	$.fn.addBack = function( selector ) {
 		return this.add( selector == null ?
 			this.prevObject : this.prevObject.filter( selector )
