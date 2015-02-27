@@ -142,7 +142,7 @@ $.extend( $.expr[ ":" ], {
 	}
 });
 
-// support: jQuery <1.8
+// support: jQuery 1.7 only
 // Not a great way to check versions, but since we only support 1.7+ and only
 // need to detect <1.8, this is a simple check that should suffice. Checking
 // for "1.7." would be a bit safer, but the version string is 1.7, not 1.7.0
