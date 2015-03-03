@@ -435,21 +435,21 @@ test( "alsoResize + containment", function() {
 test( "alsoResize + multiple selection", function() {
 	expect( 6 );
 	var other1 = $( "<div>" )
-			.addClass("other")
+			.addClass( "other" )
 			.css({
 				width: 50,
 				height: 50
 			})
 			.appendTo( "body" ),
 		other2 = $( "<div>" )
-			.addClass("other")
+			.addClass( "other" )
 			.css({
 				width: 50,
 				height: 50
 			})
 			.appendTo( "body"),
 		element = $( "#resizable1" ).resizable({
-			alsoResize: $.merge(other1, other2),
+			alsoResize: other1.add( other2 ),
 			containment: "#container"
 		});
 
