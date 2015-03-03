@@ -432,4 +432,34 @@ test( "alsoResize + containment", function() {
 	equal( other.height(), 150, "alsoResize constrained height at containment edge" );
 });
 
+test( "alsoResize + multiple selection", function() {
+	expect( 6 );
+	var other1 = $( "<div>" )
+			.addClass("other")
+			.css({
+				width: 50,
+				height: 50
+			})
+			.appendTo( "body" ),
+		other2 = $( "<div>" )
+			.addClass("other")
+			.css({
+				width: 50,
+				height: 50
+			})
+			.appendTo( "body"),
+		element = $( "#resizable1" ).resizable({
+			alsoResize: $.merge(other1, other2),
+			containment: "#container"
+		});
+
+	TestHelpers.resizable.drag( ".ui-resizable-se", 400, 400 );
+	equal( element.width(), 300, "resizable constrained width at containment edge" );
+	equal( element.height(), 200, "resizable constrained height at containment edge" );
+	equal( other1.width(), 250, "alsoResize o1 constrained width at containment edge" );
+	equal( other1.height(), 150, "alsoResize o1 constrained height at containment edge" );
+	equal( other2.width(), 250, "alsoResize o2 constrained width at containment edge" );
+	equal( other2.height(), 150, "alsoResize o2 constrained height at containment edge" );
+});
+
 })(jQuery);
