@@ -111,7 +111,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this.handle = this.handles.eq( 0 );
 
 		this.handles.each(function( i ) {
-			$( this ).data( "ui-slider-handle-index", i );
+			$( this ).data( "ui-slider-handle-index", i ).addClass( "ui-slider-handle-" + i );
 		});
 	},
 
@@ -119,42 +119,43 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var options = this.options,
 			classes = "";
 
-		if ( options.range ) {
-			if ( options.range === true ) {
-				if ( !options.values ) {
-					options.values = [ this._valueMin(), this._valueMin() ];
-				} else if ( options.values.length && options.values.length !== 2 ) {
-					options.values = [ options.values[0], options.values[0] ];
-				} else if ( $.isArray( options.values ) ) {
-					options.values = options.values.slice(0);
-				}
-			}
-
-			if ( !this.range || !this.range.length ) {
-				this.range = $( "<div></div>" )
-					.appendTo( this.element );
-
-				classes = "ui-slider-range" +
-				// note: this isn't the most fittingly semantic framework class for this element,
-				// but worked best visually with a variety of themes
-				" ui-widget-header ui-corner-all";
-			} else {
-				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
-					// Handle range switching from true to min/max
-					.css({
-						"left": "",
-						"bottom": ""
-					});
-			}
-
-			this.range.addClass( classes +
-				( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
-		} else {
+		if ( !options.range ) {
 			if ( this.range ) {
 				this.range.remove();
 			}
 			this.range = null;
+			return;
 		}
+
+		if ( options.range === true ) {
+			if ( !options.values ) {
+				options.values = [ this._valueMin(), this._valueMin() ];
+			} else if ( options.values.length && options.values.length !== 2 ) {
+				options.values = [ options.values[0], options.values[0] ];
+			} else if ( $.isArray( options.values ) ) {
+				options.values = options.values.slice(0);
+			}
+		}
+
+		if ( !this.range || !this.range.length ) {
+			this.range = $( "<div></div>" )
+				.appendTo( this.element );
+
+			classes = "ui-slider-range" +
+			// note: this isn't the most fittingly semantic framework class for this element,
+			// but worked best visually with a variety of themes
+			" ui-widget-header ui-corner-all";
+		} else {
+			this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
+				// Handle range switching from true to min/max
+				.css({
+					"left": "",
+					"bottom": ""
+				});
+		}
+
+		this.range.addClass( classes +
+			( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
 	},
 
 	_setupEvents: function() {
@@ -182,8 +183,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_mouseCapture: function( event ) {
-		var position, normValue, distance, closestHandle, index, allowed, offset, mouseOverHandle,
-			that = this,
+		var position, normValue, closestHandle, index, allowed, offset, mouseOverHandle,
 			o = this.options;
 
 		if ( o.disabled ) {
@@ -198,17 +198,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
-		distance = this._valueMax() - this._valueMin() + 1;
-		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - that.values(i) );
-			if (( distance > thisDistance ) ||
-				( distance === thisDistance &&
-					(i === that._lastChangedValue || that.values(i) === o.min ))) {
-				distance = thisDistance;
-				closestHandle = $( this );
-				index = i;
-			}
-		});
+		index = this._getClosestHandleIndex(normValue);
+		closestHandle = this.handles.eq(index);
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
@@ -238,6 +229,43 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 		this._animateOff = true;
 		return true;
+	},
+
+	_getClosestHandleIndex: function( value ) {
+		var closest, handlevalue,
+			that = this,
+			distance = this._valueMax() - this._valueMin() + 1;
+		this.handles.each(function( i ) {
+			var thisDistance = Math.abs( value - that.values(i) );
+			if ( thisDistance < distance ) {
+				distance = thisDistance;
+				closest = [ i ];
+			} else if ( thisDistance === distance ) {
+				closest.push(i);
+			}
+		});
+
+		if (closest.length === 1) {
+			return closest[0];
+		}
+
+		// more than one handle with same value
+		handlevalue = this.values(closest[0]);
+
+		if (value === handlevalue) {
+			if (value === this.options.min) {
+				return closest.pop();
+			} else if (value === this.options.max) {
+				return closest.shift();
+			}
+			return this._lastChangedValue;
+		}
+
+		if (value > handlevalue) {
+			return closest.pop();
+		}
+		return closest.shift();
+
 	},
 
 	_mouseStart: function() {
@@ -308,7 +336,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			handle: this.handles[ index ],
 			value: this.value()
 		};
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			uiHash.value = this.values( index );
 			uiHash.values = this.values();
 		}
@@ -320,7 +348,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			newValues,
 			allowed;
 
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			otherVal = this.values( index ? 0 : 1 );
 
 			if ( ( this.options.values.length === 2 && this.options.range === true ) &&
@@ -362,7 +390,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			handle: this.handles[ index ],
 			value: this.value()
 		};
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			uiHash.value = this.values( index );
 			uiHash.values = this.values();
 		}
@@ -376,7 +404,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				handle: this.handles[ index ],
 				value: this.value()
 			};
-			if ( this.options.values && this.options.values.length ) {
+			if ( this._hasMultipleValues() ) {
 				uiHash.value = this.values( index );
 				uiHash.values = this.values();
 			}
@@ -421,7 +449,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				this._refreshValue();
 			} else {
-				if ( this.options.values && this.options.values.length ) {
+				if ( this._hasMultipleValues() ) {
 					return this._values( index );
 				} else {
 					return this.value();
@@ -519,7 +547,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			val = this._trimAlignValue( val );
 
 			return val;
-		} else if ( this.options.values && this.options.values.length ) {
+		} else if ( this._hasMultipleValues() ) {
 			// .slice() creates a copy of the array
 			// this copy gets trimmed by min and max and then returned
 			vals = this.options.values.slice();
@@ -593,7 +621,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			animate = ( !this._animateOff ) ? o.animate : false,
 			_set = {};
 
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			this.handles.each(function( i ) {
 				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
@@ -642,6 +670,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
+	_hasMultipleValues: function() {
+		return this.options.values && this.options.values.length;
+	},
+
 	_handleEvents: {
 		keydown: function( event ) {
 			var allowed, curVal, newVal, step,
@@ -669,7 +701,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			step = this.options.step;
-			if ( this.options.values && this.options.values.length ) {
+			if ( this._hasMultipleValues() ) {
 				curVal = newVal = this.values( index );
 			} else {
 				curVal = newVal = this.value();
