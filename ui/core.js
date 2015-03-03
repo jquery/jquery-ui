@@ -92,6 +92,9 @@ $.fn.extend({
 
 // selectors
 function focusable( element, isTabIndexNotNaN ) {
+	if(typeof element.nodeName != "string") {
+		return false;
+	}
 	var map, mapName, img,
 		nodeName = element.nodeName.toLowerCase();
 	if ( "area" === nodeName ) {
