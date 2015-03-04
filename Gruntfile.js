@@ -79,7 +79,7 @@ var
 	component = grunt.option( "component" ) || "**";
 
 function mapMinFile( file ) {
-	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
+	return "dist/" + file.replace( /ui\//, "minified/" );
 }
 
 function expandFiles( files ) {
