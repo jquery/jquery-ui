@@ -170,7 +170,7 @@ asyncTest( "blur during remote search", function() {
 			setTimeout(function() {
 				response([ "result" ]);
 				start();
-			});
+			}, 25);
 		},
 		open: function() {
 			ok( false, "opened after a blur" );
