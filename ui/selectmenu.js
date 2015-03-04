@@ -48,7 +48,7 @@ return $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
-		width: null,
+		width: false,
 
 		// callbacks
 		change: null,
@@ -118,7 +118,9 @@ return $.widget( "ui.selectmenu", {
 		this.buttonItem = this._renderButtonItem( item )
 			.appendTo( this.button );
 
-		this._resizeButton();
+		if ( this.options.width !== false ) {
+			this._resizeButton();
+		}
 
 		this._on( this.button, this._buttonEvents );
 		this.button.one( "focusin", function() {
@@ -210,7 +212,7 @@ return $.widget( "ui.selectmenu", {
 				this._getSelectedItem().data( "ui-selectmenu-item" ) || {}
 			)
 		);
-		if ( !this.options.width ) {
+		if ( this.options.width === null ) {
 			this._resizeButton();
 		}
 	},
@@ -603,7 +605,14 @@ return $.widget( "ui.selectmenu", {
 	_resizeButton: function() {
 		var width = this.options.width;
 
-		if ( !width ) {
+		// For `width: false`, just remove inline style and stop
+		if ( width === false ) {
+			this.button.css( "width", "" );
+			return;
+		}
+
+		// For `width: null`, match the width of the original element
+		if ( width === null ) {
 			width = this.element.show().outerWidth();
 			this.element.hide();
 		}
