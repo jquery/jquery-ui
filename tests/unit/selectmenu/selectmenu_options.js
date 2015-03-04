@@ -85,7 +85,7 @@ test( "CSS styles", function() {
 });
 
 test( "width", function() {
-	expect( 5 );
+	expect( 6 );
 
 	var button,
 		element = $( "#speed" );
@@ -93,6 +93,9 @@ test( "width", function() {
 	element.selectmenu();
 	button = element.selectmenu( "widget" );
 
+	equal( button[ 0 ].style.width, "", "no inline style" );
+
+	element.selectmenu( "option", "width", null );
 	equal( button.outerWidth(), element.outerWidth(), "button width auto" );
 
 	element.outerWidth( 100 );
@@ -107,7 +110,7 @@ test( "width", function() {
 
 	element
 		.append( $( "<option>", { text: "Option with a little longer text" } ) )
-		.selectmenu( "option", "width", "" )
+		.selectmenu( "option", "width", null )
 		.selectmenu( "refresh" );
 	equal( button.outerWidth(), element.outerWidth(), "button width with long option" );
 
@@ -115,7 +118,7 @@ test( "width", function() {
 	element
 		.selectmenu( "destroy" )
 		.css( "width", "100%" )
-		.selectmenu();
+		.selectmenu({ width: null });
 	button = element.selectmenu( "widget" );
 	equal( button.outerWidth(), 300, "button width fills container" );
 });
