@@ -229,6 +229,16 @@ $.widget( "ui.autocomplete", {
 				this.cancelBlur = true;
 				this._delay(function() {
 					delete this.cancelBlur;
+
+					// Support: IE 8 only
+					// Right clicking a menu item or selecting text from the menu items will
+					// result in focus moving out of the input. However, we've already received
+					// and ignored the blur event because of the cancelBlur flag set above. So
+					// we restore focus to ensure that the menu closes properly based on the user's
+					// next actions.
+					if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
+						this.element.focus();
+					}
 				});
 
 				// clicking on the scrollbar causes focus to shift to the body
