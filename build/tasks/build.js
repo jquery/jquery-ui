@@ -4,12 +4,12 @@ module.exports = function( grunt ) {
 
 grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
-});
+} );
 
 grunt.registerTask( "asciilint", function() {
 	var valid = true,
-		files = grunt.file.expand({ filter: "isFile" }, "ui/*.js" );
-	files.forEach(function( filename ) {
+		files = grunt.file.expand( { filter: "isFile" }, "ui/*.js" );
+	files.forEach( function( filename ) {
 		var i, c,
 			text = grunt.file.read( filename );
 
@@ -32,11 +32,11 @@ grunt.registerTask( "asciilint", function() {
 			}
 			valid = false;
 		}
-	});
+	} );
 	if ( valid ) {
 		grunt.log.ok( files.length + " files lint free." );
 	}
 	return valid;
-});
+} );
 
 };
