@@ -303,83 +303,74 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this._trimAlignValue( valueMouse );
 	},
 
-	_start: function( event, index ) {
+	_createUiHash: function ( index, value, values ) {
 		var uiHash = {
 			handle: this.handles[ index ],
-			value: this.value()
+			handleIndex: index,
+			value: value || this.value()
 		};
-		if ( this.options.values && this.options.values.length ) {
-			uiHash.value = this.values( index );
-			uiHash.values = this.values();
+
+		if ( this._hasMultipleValues() ) {
+			uiHash.value = value || this.values( index );
+			uiHash.values = values || this.values();
 		}
+
+		return uiHash;
+	},
+
+	_hasMultipleValues: function () {
+		return this.options.values && this.options.values.length;
+	},
+
+	_start: function( event, index ) {
+		var uiHash = this._createUiHash(index);
 		return this._trigger( "start", event, uiHash );
 	},
 
 	_slide: function( event, index, newVal ) {
 		var otherVal,
-			newValues,
+			currentValue = this.value(),
+			newValues = this.values(),
 			allowed;
 
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			otherVal = this.values( index ? 0 : 1 );
+			currentValue = this.values( index );
 
-			if ( ( this.options.values.length === 2 && this.options.range === true ) &&
-					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
-				) {
-				newVal = otherVal;
+			if ( this.options.values.length === 2 && this.options.range === true ) {
+				newVal =  index === 0 ? Math.min(otherVal, newVal) : Math.max(otherVal, newVal);
 			}
 
-			if ( newVal !== this.values( index ) ) {
-				newValues = this.values();
-				newValues[ index ] = newVal;
-				// A slide can be canceled by returning false from the slide callback
-				allowed = this._trigger( "slide", event, {
-					handle: this.handles[ index ],
-					value: newVal,
-					values: newValues
-				} );
-				otherVal = this.values( index ? 0 : 1 );
-				if ( allowed !== false ) {
-					this.values( index, newVal );
-				}
-			}
+			newValues[ index ] = newVal;
+		}
+
+		if ( newVal === currentValue ) {
+			return;
+		}
+
+		allowed = this._trigger( "slide", event, this._createUiHash(index, newVal, newValues) );
+
+		// A slide can be canceled by returning false from the slide callback
+		if (allowed === false) {
+			return;
+		}
+
+		if ( this._hasMultipleValues() ) {
+			this.values( index, newVal );
 		} else {
-			if ( newVal !== this.value() ) {
-				// A slide can be canceled by returning false from the slide callback
-				allowed = this._trigger( "slide", event, {
-					handle: this.handles[ index ],
-					value: newVal
-				} );
-				if ( allowed !== false ) {
-					this.value( newVal );
-				}
-			}
+			this.value( newVal );
 		}
 	},
 
 	_stop: function( event, index ) {
-		var uiHash = {
-			handle: this.handles[ index ],
-			value: this.value()
-		};
-		if ( this.options.values && this.options.values.length ) {
-			uiHash.value = this.values( index );
-			uiHash.values = this.values();
-		}
+		var uiHash = this._createUiHash(index);
 
 		this._trigger( "stop", event, uiHash );
 	},
 
 	_change: function( event, index ) {
 		if ( !this._keySliding && !this._mouseSliding ) {
-			var uiHash = {
-				handle: this.handles[ index ],
-				value: this.value()
-			};
-			if ( this.options.values && this.options.values.length ) {
-				uiHash.value = this.values( index );
-				uiHash.values = this.values();
-			}
+			var uiHash = this._createUiHash(index);
 
 			//store the last changed value index for reference when handles overlap
 			this._lastChangedValue = index;
@@ -421,7 +412,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				this._refreshValue();
 			} else {
-				if ( this.options.values && this.options.values.length ) {
+				if ( this._hasMultipleValues() ) {
 					return this._values( index );
 				} else {
 					return this.value();
@@ -519,7 +510,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			val = this._trimAlignValue( val );
 
 			return val;
-		} else if ( this.options.values && this.options.values.length ) {
+		} else if ( this._hasMultipleValues() ) {
 			// .slice() creates a copy of the array
 			// this copy gets trimmed by min and max and then returned
 			vals = this.options.values.slice();
@@ -593,7 +584,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			animate = ( !this._animateOff ) ? o.animate : false,
 			_set = {};
 
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			this.handles.each(function( i ) {
 				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
@@ -669,7 +660,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			step = this.options.step;
-			if ( this.options.values && this.options.values.length ) {
+			if ( this._hasMultipleValues() ) {
 				curVal = newVal = this.values( index );
 			} else {
 				curVal = newVal = this.value();
