@@ -303,7 +303,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this._trimAlignValue( valueMouse );
 	},
 
-	_createUiHash: function ( index, value, values ) {
+	_createUiHash: function( index, value, values ) {
 		var uiHash = {
 			handle: this.handles[ index ],
 			handleIndex: index,
@@ -318,7 +318,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return uiHash;
 	},
 
-	_hasMultipleValues: function () {
+	_hasMultipleValues: function() {
 		return this.options.values && this.options.values.length;
 	},
 

@@ -153,22 +153,22 @@ test( "passing arguments to events", function() {
 	expect(4);
 
 	var element = $( "#slider1" )
-					.slider({
-						values: [ 8, 9, 7, 4 ],
-						start: function( event, ui ) {
-							equal( ui.handleIndex, 3, "passing handle index to start event (#7630)" );
-						},
-						slide: function( event, ui ) {
-							equal( ui.handleIndex, 3, "passing handle index to slide event (#7630)" );
-						},
-						stop: function( event, ui ) {
-							equal( ui.handleIndex, 3, "passing handle index to stop event (#7630)" );
-						},
-						change: function( event, ui ) {
-							equal( ui.handleIndex, 3, "passing handle index to change event (#7630)" );
-						}
-					}),
-			handles = element.find( ".ui-slider-handle" );
+			.slider({
+				values: [ 8, 9, 7, 4 ],
+				start: function( event, ui ) {
+					equal( ui.handleIndex, 3, "passing handle index to start event (#7630)" );
+				},
+				slide: function( event, ui ) {
+					equal( ui.handleIndex, 3, "passing handle index to slide event (#7630)" );
+				},
+				stop: function( event, ui ) {
+					equal( ui.handleIndex, 3, "passing handle index to stop event (#7630)" );
+				},
+				change: function( event, ui ) {
+					equal( ui.handleIndex, 3, "passing handle index to change event (#7630)" );
+				}
+			}),
+		handles = element.find( ".ui-slider-handle" );
 
 	handles.eq( 3 ).simulate( "drag", { dx: 10 } );
 });
