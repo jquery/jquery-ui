@@ -95,7 +95,7 @@ return $.widget( "ui.menu", {
 					// Open submenu on click
 					if ( target.has( ".ui-menu" ).length ) {
 						this.expand( event );
-					} else if ( !this.element.is( ":focus" ) && $( this.document[ 0 ].activeElement ).closest( ".ui-menu" ).length ) {
+					} else if ( !this.element.is( ":focus" ) && $( $.ui.safeActiveElement( this.document[ 0 ] ) ).closest( ".ui-menu" ).length ) {
 
 						// Redirect focus to the menu
 						this.element.trigger( "focus", [ true ] );
@@ -135,7 +135,7 @@ return $.widget( "ui.menu", {
 			},
 			blur: function( event ) {
 				this._delay(function() {
-					if ( !$.contains( this.element[0], this.document[0].activeElement ) ) {
+					if ( !$.contains( this.element[0], $.ui.safeActiveElement( this.document[0] ) ) ) {
 						this.collapseAll( event );
 					}
 				});
