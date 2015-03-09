@@ -49,6 +49,31 @@ $.extend( $.ui, {
 		SPACE: 32,
 		TAB: 9,
 		UP: 38
+	},
+
+	// Internal use only
+	safeActiveElement: function( document ) {
+		var activeElement;
+
+		// Support: IE 9 only
+		// IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
+		try {
+			activeElement = document.activeElement;
+		} catch ( error ) {
+			activeElement = document.body;
+		}
+
+		return activeElement;
+	},
+
+	// Internal use only
+	safeBlur: function( element ) {
+
+		// Support: IE9 - 10 only
+		// If the <body> is blurred, IE will switch windows, see #9420
+		if ( element && element.nodeName.toLowerCase() !== "body" ) {
+			$( element ).blur();
+		}
 	}
 });
 

@@ -160,10 +160,10 @@ return $.widget( "ui.spinner", {
 			// If the input is focused then this.previous is properly set from
 			// when the input first received focus. If the input is not focused
 			// then we need to set this.previous based on the value before spinning.
-			previous = this.element[0] === this.document[0].activeElement ?
+			previous = this.element[0] === $.ui.safeActiveElement( this.document[0] ) ?
 				this.previous : this.element.val();
 			function checkFocus() {
-				var isActive = this.element[0] === this.document[0].activeElement;
+				var isActive = this.element[0] === $.ui.safeActiveElement( this.document[0] );
 				if ( !isActive ) {
 					this.element.focus();
 					this.previous = previous;
