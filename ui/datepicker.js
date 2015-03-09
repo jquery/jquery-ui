@@ -1271,6 +1271,8 @@ $.extend(Datepicker.prototype, {
 				month++;
 				day -= dim;
 			} while (true);
+		} else if (-1 === day) { // to support MonthPicker which dateFormat is 'yy-mm';
+			day = 1;
 		}
 
 		date = this._daylightSavingAdjust(new Date(year, month - 1, day));
