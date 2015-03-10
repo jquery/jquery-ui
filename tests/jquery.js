@@ -13,8 +13,8 @@ for ( ; i < length; i++ ) {
 	}
 }
 
-if ( version === "git" ) {
-	url = "http://code.jquery.com/jquery-git.js";
+if ( version === "git" || version === "git1" ) {
+	url = "http://code.jquery.com/jquery-" + version + ".js";
 } else {
 	url = "../../../external/jquery-" + ( version || "1.11.2" ) + "/jquery.js";
 }
