@@ -99,16 +99,15 @@ test( "value", function() {
 	element.slider( "option", "value", 2.4 );
 	equal( element.slider( "value" ), 2.4, "value is set to max with 0.01 step" );
 
-	element = $("<div></div>").slider({
-		value:100,
+	element = $( "<div></div>" ).slider({
+		value: 100,
 		min: 10,
 		max: 500,
 		step: 50
 	});
 
-	//set value with min that less than step and more than zero
-	element.slider("option", "value", 510);
-	equal(element.slider("value"), 460, "value doesn't reach max when min less than step and more than zero");
+	element.slider( "option", "value", 510 );
+	equal( element.slider( "value" ), 460, "value is restricted to maximum valid step" );
 });
 
 //test( "values", function() {
