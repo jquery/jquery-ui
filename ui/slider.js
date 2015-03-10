@@ -303,7 +303,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this._trimAlignValue( valueMouse );
 	},
 
-	_createUiHash: function( index, value, values ) {
+	_uiHash: function( index, value, values ) {
 		var uiHash = {
 			handle: this.handles[ index ],
 			handleIndex: index,
@@ -323,22 +323,20 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_start: function( event, index ) {
-		var uiHash = this._createUiHash(index);
-		return this._trigger( "start", event, uiHash );
+		return this._trigger( "start", event, this._uiHash( index ) );
 	},
 
 	_slide: function( event, index, newVal ) {
-		var otherVal,
+		var allowed, otherVal,
 			currentValue = this.value(),
-			newValues = this.values(),
-			allowed;
+			newValues = this.values();
 
 		if ( this._hasMultipleValues() ) {
 			otherVal = this.values( index ? 0 : 1 );
 			currentValue = this.values( index );
 
 			if ( this.options.values.length === 2 && this.options.range === true ) {
-				newVal =  index === 0 ? Math.min(otherVal, newVal) : Math.max(otherVal, newVal);
+				newVal =  index === 0 ? Math.min( otherVal, newVal ) : Math.max( otherVal, newVal );
 			}
 
 			newValues[ index ] = newVal;
@@ -348,10 +346,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			return;
 		}
 
-		allowed = this._trigger( "slide", event, this._createUiHash(index, newVal, newValues) );
+		allowed = this._trigger( "slide", event, this._uiHash( index, newVal, newValues ) );
 
 		// A slide can be canceled by returning false from the slide callback
-		if (allowed === false) {
+		if ( allowed === false ) {
 			return;
 		}
 
@@ -363,19 +361,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_stop: function( event, index ) {
-		var uiHash = this._createUiHash(index);
-
-		this._trigger( "stop", event, uiHash );
+		this._trigger( "stop", event, this._uiHash( index ) );
 	},
 
 	_change: function( event, index ) {
 		if ( !this._keySliding && !this._mouseSliding ) {
-			var uiHash = this._createUiHash(index);
-
 			//store the last changed value index for reference when handles overlap
 			this._lastChangedValue = index;
-
-			this._trigger( "change", event, uiHash );
+			this._trigger( "change", event, this._uiHash( index ) );
 		}
 	},
 

@@ -149,28 +149,41 @@ test( "mouse based interaction part two: when handles overlap", function() {
 
 });
 
-test( "passing arguments to events", function() {
-	expect(4);
+test( "event data", function() {
+	expect( 4 );
 
-	var element = $( "#slider1" )
+	var slideHandleIndex = 3,
+		values = [ 8, 9, 7, 4 ],
+		newValues = [ 8, 9, 7, 5 ],
+		element = $( "#slider1" )
 			.slider({
-				values: [ 8, 9, 7, 4 ],
+				values: values,
 				start: function( event, ui ) {
-					equal( ui.handleIndex, 3, "passing handle index to start event (#7630)" );
+					deepEqual( ui, expectedUiHash, "passing ui to start event" );
 				},
 				slide: function( event, ui ) {
-					equal( ui.handleIndex, 3, "passing handle index to slide event (#7630)" );
+					deepEqual( ui, expectedChangedUiHash, "passing ui to slide event" );
 				},
 				stop: function( event, ui ) {
-					equal( ui.handleIndex, 3, "passing handle index to stop event (#7630)" );
+					deepEqual( ui, expectedChangedUiHash, "passing ui to stop event" );
 				},
 				change: function( event, ui ) {
-					equal( ui.handleIndex, 3, "passing handle index to change event (#7630)" );
+					deepEqual( ui, expectedChangedUiHash, "passing ui to change event" );
 				}
 			}),
-		handles = element.find( ".ui-slider-handle" );
+		handles = element.find( ".ui-slider-handle" ),
+		expectedUiHash = {
+			handle: handles.eq( slideHandleIndex )[0],
+			handleIndex: slideHandleIndex,
+			values: values,
+			value: values[ slideHandleIndex ]
+		},
+		expectedChangedUiHash = $.extend( {}, expectedUiHash, {
+			values: newValues,
+			value: newValues[ slideHandleIndex ]
+		});
 
-	handles.eq( 3 ).simulate( "drag", { dx: 10 } );
+	handles.eq( slideHandleIndex ).simulate( "drag", { dx: 10 } );
 });
 
 })( jQuery );
