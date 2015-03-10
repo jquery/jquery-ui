@@ -59,90 +59,94 @@ asyncTest( "focus tabbable", function() {
 
 		element = $( markup ).dialog( options );
 		setTimeout(function() {
-			testFn();
-			element.remove();
-			setTimeout( next );
+			testFn(function done() {
+				element.remove();
+				setTimeout( next );
+			});
 		});
 	}
 
 	function step1() {
-		element = $( "<div><input><input></div>" ).dialog( options );
-		setTimeout(function() {
+		checkFocus( "<div><input><input></div>", options, function( done ) {
 			var input = element.find( "input:last" ).focus().blur();
 			element.dialog( "instance" )._focusTabbable();
 			setTimeout(function() {
 				equal( document.activeElement, input[ 0 ],
 					"1. an element that was focused previously." );
-				element.remove();
-				setTimeout( step2 );
+				done();
 			});
-		});
+		}, step2 );
 	}
 
 	function step2() {
-		checkFocus( "<div><input><input autofocus></div>", options, function() {
+		checkFocus( "<div><input><input autofocus></div>", options, function( done ) {
 			equal( document.activeElement, element.find( "input" )[ 1 ],
 				"2. first element inside the dialog matching [autofocus]" );
+			done();
 		}, step3 );
 	}
 
 	function step3() {
-		checkFocus( "<div><input><input></div>", options, function() {
+		checkFocus( "<div><input><input></div>", options, function( done ) {
 			equal( document.activeElement, element.find( "input" )[ 0 ],
 				"3. tabbable element inside the content element" );
+			done();
 		}, step4 );
 	}
 
 	function step4() {
-		checkFocus( "<div>text</div>", options, function() {
+		checkFocus( "<div>text</div>", options, function( done ) {
 			equal( document.activeElement,
 				element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ],
 				"4. tabbable element inside the buttonpane" );
+			done();
 		}, step5 );
 	}
 
 	function step5() {
-		checkFocus( "<div>text</div>", {}, function() {
+		checkFocus( "<div>text</div>", {}, function( done ) {
 			equal( document.activeElement,
 				element.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ],
 				"5. the close button" );
+			done();
 		}, step6 );
 	}
 
 	function step6() {
-		element = $( "<div>text</div>" ).dialog({
-			autoOpen: false
-		});
-		element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
-		element.dialog( "open" );
-		setTimeout(function() {
-			equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
-			element.remove();
-			setTimeout( step7 );
-		});
+		checkFocus( "<div>text</div>", { autoOpen: false }, function( done ) {
+			element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
+			element.dialog( "open" );
+			setTimeout(function() {
+				equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
+				done();
+			});
+		}, step7 );
 	}
 
 	function step7() {
-		element = $( "<div><input name='0'><input name='1' autofocus></div>" ).dialog({
-			open: function() {
-				var inputs = $( this ).find( "input" );
-				inputs.last().keydown(function( event ) {
-					event.preventDefault();
-					inputs.first().focus();
-				});
-			}
-		});
-		setTimeout(function() {
-			var inputs = element.find( "input" );
-			equal( document.activeElement, inputs[ 1 ], "Focus starts on second input" );
-			inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
-			setTimeout(function() {
-				equal( document.activeElement, inputs[ 0 ],
-					"Honor preventDefault, allowing custom focus management" );
-				element.remove();
-				start();
-			}, 50 );
-		});
+		checkFocus(
+			"<div><input><input autofocus></div>",
+			{
+				open: function() {
+					var inputs = $( this ).find( "input" );
+					inputs.last().keydown(function( event ) {
+						event.preventDefault();
+						inputs.first().focus();
+					});
+				}
+			},
+			function( done ) {
+				var inputs = element.find( "input" );
+				equal( document.activeElement, inputs[ 1 ], "Focus starts on second input" );
+				inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
+				setTimeout(function() {
+					equal( document.activeElement, inputs[ 0 ],
+						"Honor preventDefault, allowing custom focus management" );
+					done();
+				}, 50 );
+			},
+			start
+		);
 	}
 
 	step1();
