@@ -283,15 +283,6 @@ test("height", function() {
 	element.remove();
 });
 
-asyncTest( "hide, #5860 - don't leave effects wrapper behind", function() {
-	expect( 1 );
-	$( "#dialog1" ).dialog({ hide: "clip" }).dialog( "close" ).dialog( "destroy" );
-	setTimeout(function() {
-		equal( $( ".ui-effects-wrapper" ).length, 0 );
-		start();
-	}, 500);
-});
-
 test("maxHeight", function() {
 	expect(3);
 
