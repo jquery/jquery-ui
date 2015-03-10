@@ -51,6 +51,7 @@ $.extend( $.ui, {
 		UP: 38
 	},
 
+	// Internal use only
 	safeActiveElement: function( document ) {
 		var activeElement;
 
@@ -65,6 +66,7 @@ $.extend( $.ui, {
 		return activeElement;
 	},
 
+	// Internal use only
 	safeBlur: function( element ) {
 
 		// Support: IE9 - 10 only
