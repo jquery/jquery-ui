@@ -168,7 +168,7 @@ return $.widget( "ui.dialog", {
 			// Without detaching first, the following becomes really slow
 			.detach();
 
-		this.uiDialog.stop( true, true ).remove();
+		this.uiDialog.remove();
 
 		if ( this.originalTitle ) {
 			this.element.attr( "title", this.originalTitle );
