@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Dialog @VERSION
+ * jQuery UI Dialog 1.11.4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -30,7 +30,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.dialog", {
-	version: "@VERSION",
+	version: "1.11.4",
 	options: {
 		appendTo: "body",
 		autoOpen: true,
