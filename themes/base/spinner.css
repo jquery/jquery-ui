@@ -42,7 +42,7 @@
 .ui-spinner a.ui-spinner-button {
 	border-top: none;
 	border-bottom: none;
-	border-right: none;
+	border-right-width: 0;
 }
 /* vertically center icon */
 .ui-spinner .ui-icon {
@@ -62,4 +62,18 @@
 .ui-spinner .ui-icon-triangle-1-s {
 	/* need to fix icons sprite */
 	background-position: -65px -16px;
+}
+
+/* rtl mode overrides */
+.ui-rtl .ui-spinner-input{
+	margin-right: .4em;
+	margin-left: 22px;
+}
+.ui-rtl .ui-spinner-button {
+	right: auto;
+	left: 0;
+}
+.ui-rtl.ui-spinner a.ui-spinner-button {
+	border-left-width: 0;
+	border-right-width: 1px;
 }
