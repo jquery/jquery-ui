@@ -352,17 +352,20 @@ return $.widget( "ui.spinner", {
 		// - rounding is based on 0, so adjust back to our base
 		value = base + aboveMin;
 
-		// fix precision from bad JS floating point math
-		value = parseFloat( value.toFixed( this._precision() ) );
+		// ensure it is a float
+		value = this._parse( value );
 
 		// clamp the value
 		if ( options.max !== null && value > options.max) {
-			return options.max;
+			value = options.max;
 		}
 		if ( options.min !== null && value < options.min ) {
-			return options.min;
+			value = options.min;
 		}
-
+		
+		//parse the float with floating points to string, 50 will return '50.00' if precision is 2;
+		value = value.toFixed(this._precision());
+		
 		return value;
 	},
 
