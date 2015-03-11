@@ -250,6 +250,7 @@ $.Widget.prototype = {
 	widgetEventPrefix: "",
 	defaultElement: "<div>",
 	options: {
+		classes: {},
 		disabled: false,
 
 		// callbacks
@@ -264,6 +265,7 @@ $.Widget.prototype = {
 		this.bindings = $();
 		this.hoverable = $();
 		this.focusable = $();
+		this.classesElementLookup = {};
 
 		if ( element !== this ) {
 			$.data( element, this.widgetFullName, this );
@@ -297,7 +299,13 @@ $.Widget.prototype = {
 	_init: $.noop,
 
 	destroy: function() {
+		var that = this;
+
 		this._destroy();
+		$.each( this.classesElementLookup, function( key, value ) {
+			that._removeClass( value, key );
+		});
+
 		// we can probably remove the unbind calls in 2.0
 		// all event bindings should go through this._on()
 		this.element
@@ -305,15 +313,10 @@ $.Widget.prototype = {
 			.removeData( this.widgetFullName );
 		this.widget()
 			.unbind( this.eventNamespace )
-			.removeAttr( "aria-disabled" )
-			.removeClass(
-				this.widgetFullName + "-disabled " +
-				"ui-state-disabled" );
+			.removeAttr( "aria-disabled" );
 
 		// clean up events and states
 		this.bindings.unbind( this.eventNamespace );
-		this.hoverable.removeClass( "ui-state-hover" );
-		this.focusable.removeClass( "ui-state-focus" );
 	},
 	_destroy: $.noop,
 
@@ -370,20 +373,53 @@ $.Widget.prototype = {
 		return this;
 	},
 	_setOption: function( key, value ) {
+		if ( key === "classes" ) {
+			this._setOptionClasses( value );
+		}
+
 		this.options[ key ] = value;
 
 		if ( key === "disabled" ) {
-			this.widget()
-				.toggleClass( this.widgetFullName + "-disabled", !!value );
+			this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
 
 			// If the widget is becoming disabled, then nothing is interactive
 			if ( value ) {
-				this.hoverable.removeClass( "ui-state-hover" );
-				this.focusable.removeClass( "ui-state-focus" );
+				this._removeClass( this.hoverable, null, "ui-state-hover" );
+				this._removeClass( this.focusable, null, "ui-state-focus" );
 			}
 		}
 
 		return this;
+	},
+	_setOptionClasses: function( value ) {
+		var classKey, elements, currentElements;
+
+		for ( classKey in value ) {
+			currentElements = this.classesElementLookup[ classKey ];
+			if ( value[ classKey ] === this.options.classes[ classKey ] ||
+					!currentElements ||
+					!currentElements.length ) {
+				continue;
+			}
+
+			// We are doing this to create a new jQuery object because the _removeClass() call
+			// on the next line is going to destroy the reference to the current elements being
+			// tracked. We need to save a copy of this collection so that we can add the new classes
+			// below.
+			elements = $( currentElements.get() );
+			this._removeClass( currentElements, classKey );
+
+			// We don't use _addClass() here, because that uses this.options.classes
+			// for generating the string of classes. We want to use the value passed in from
+			// _setOption(), this is the new value of the classes option which was passed to
+			// _setOption(). We pass this value directly to _classes().
+			elements.addClass( this._classes({
+				element: elements,
+				keys: classKey,
+				classes: value,
+				add: true
+			}));
+		}
 	},
 
 	enable: function() {
@@ -391,6 +427,63 @@ $.Widget.prototype = {
 	},
 	disable: function() {
 		return this._setOptions({ disabled: true });
+	},
+
+	_classes: function( options ) {
+		var full = [],
+			that = this;
+
+		options = $.extend({
+			element: this.element,
+			classes: this.options.classes || {}
+		}, options );
+
+		function processClassString( classes, checkOption ) {
+			var current, i;
+			for ( i = 0; i < classes.length; i++ ) {
+				current = that.classesElementLookup[ classes[ i ] ] || $();
+				if ( options.add ) {
+					current = $( $.unique( current.get().concat( options.element.get() ) ) );
+				} else {
+					current = $( current.not( options.element ).get() );
+				}
+				that.classesElementLookup[ classes[ i ] ] = current;
+				full.push( classes[ i ] );
+				if ( checkOption && options.classes[ classes[ i ] ] ) {
+					full.push( options.classes[ classes[ i ] ] );
+				}
+			}
+		}
+
+		if ( options.keys ) {
+			processClassString( options.keys.match( /\S+/g ) || [], true );
+		}
+		if ( options.extra ) {
+			processClassString( options.extra.match( /\S+/g ) || [] );
+		}
+
+		return full.join( " " );
+	},
+
+	_removeClass: function( element, keys, extra ) {
+		return this._toggleClass( element, keys, extra, false );
+	},
+
+	_addClass: function( element, keys, extra ) {
+		return this._toggleClass( element, keys, extra, true );
+	},
+
+	_toggleClass: function( element, keys, extra, add ) {
+		add = ( typeof add === "boolean" ) ? add : extra;
+		var shift = ( typeof element === "string" || element === null ),
+			options = {
+				extra: shift ? keys : extra,
+				keys: shift ? element : keys,
+				element: shift ? this.element : element,
+				add: add
+			};
+		options.element.toggleClass( this._classes( options ), add );
+		return this;
 	},
 
 	_on: function( suppressDisabledCheck, element, handlers ) {
@@ -469,10 +562,10 @@ $.Widget.prototype = {
 		this.hoverable = this.hoverable.add( element );
 		this._on( element, {
 			mouseenter: function( event ) {
-				$( event.currentTarget ).addClass( "ui-state-hover" );
+				this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
 			},
 			mouseleave: function( event ) {
-				$( event.currentTarget ).removeClass( "ui-state-hover" );
+				this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
 			}
 		});
 	},
@@ -481,10 +574,10 @@ $.Widget.prototype = {
 		this.focusable = this.focusable.add( element );
 		this._on( element, {
 			focusin: function( event ) {
-				$( event.currentTarget ).addClass( "ui-state-focus" );
+				this._addClass( $( event.currentTarget ), null, "ui-state-focus" );
 			},
 			focusout: function( event ) {
-				$( event.currentTarget ).removeClass( "ui-state-focus" );
+				this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
 			}
 		});
 	},

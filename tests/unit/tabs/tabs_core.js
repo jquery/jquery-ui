@@ -4,13 +4,32 @@ var state = TestHelpers.tabs.state;
 
 module( "tabs: core" );
 
-test( "markup structure", function() {
-	expect( 3 );
-	var element = $( "#tabs1" ).tabs();
-	ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
-	ok( element.find( "ul" ).hasClass( "ui-tabs-nav" ), "list item is .ui-tabs-nav" );
-	equal( element.find( ".ui-tabs-panel" ).length, 3,
-		".ui-tabs-panel elements exist, correct number" );
+test( "markup structure", function( assert ) {
+	expect( 17 );
+	var element = $( "#tabs1" ).tabs(),
+		tabList = element.find( "ul, ol" ),
+		tabs = tabList.find( "li" ),
+		active = tabs.eq( 0 ),
+		anchors = tabs.find( "a" ),
+		panels = element.find( ".ui-tabs-panel" );
+
+	assert.hasClasses( element, "ui-tabs ui-widget ui-widget-content" );
+	assert.lacksClasses( element, "ui-tabs-collapsible" );
+	assert.hasClasses( tabList, "ui-tabs-nav ui-widget-header" );
+	equal( tabList.length, 1, "The widget contains exactly one tab list" );
+	assert.hasClasses( tabs[ 0 ], "ui-tab" );
+	assert.hasClasses( tabs[ 1 ], "ui-tab" );
+	assert.hasClasses( tabs[ 2 ], "ui-tab" );
+	equal( tabs.length, 3, "There are exactly three tabs" );
+	assert.hasClasses( anchors[ 0 ], "ui-tabs-anchor" );
+	assert.hasClasses( anchors[ 1 ], "ui-tabs-anchor" );
+	assert.hasClasses( anchors[ 2 ], "ui-tabs-anchor" );
+	equal( anchors.length, 3, "There are exactly 3 anchors" );
+	assert.hasClasses( active, "ui-tabs-active" );
+	assert.hasClasses( panels[ 0 ], "ui-tabs-panel ui-widget-content" );
+	assert.hasClasses( panels[ 1 ], "ui-tabs-panel ui-widget-content" );
+	assert.hasClasses( panels[ 2 ], "ui-tabs-panel ui-widget-content" );
+	equal( panels.length, 3, "There are exactly 3 tab panels" );
 });
 
 $.each({
@@ -19,12 +38,11 @@ $.each({
 	"multiple lists, ol first": "#tabs5",
 	"empty list": "#tabs6"
 }, function( type, selector ) {
-	test( "markup structure: " + type, function() {
+	test( "markup structure: " + type, function( assert ) {
 		expect( 2 );
 		var element = $( selector ).tabs();
-		ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
-		ok( $( selector + "-list" ).hasClass( "ui-tabs-nav" ),
-			"list item is .ui-tabs-nav" );
+		assert.hasClasses( element, "ui-tabs" );
+		assert.hasClasses( $( selector + "-list" ), "ui-tabs-nav" );
 	});
 });
 
@@ -129,24 +147,27 @@ test( "accessibility", function() {
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
 });
 
-asyncTest( "accessibility - ajax", function() {
-	expect( 4 );
+asyncTest( "accessibility - ajax", function( assert ) {
+	expect( 6 );
 	var element = $( "#tabs2" ).tabs(),
+		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 		panel = $( "#custom-id" );
 
 	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
 	equal( panel.attr( "aria-busy" ), null, "does not have aria-busy on init" );
 	element.tabs( "option", "active", 3 );
+	assert.hasClasses( tab, "ui-tabs-loading" );
 	equal( panel.attr( "aria-busy" ), "true", "panel has aria-busy during load" );
 	element.one( "tabsload", function() {
 		setTimeout(function() {
 			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
+			assert.lacksClasses( tab, "ui-tabs-loading" );
 			start();
 		}, 1 );
 	});
 });
 
-asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function() {
+asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function( assert ) {
 	expect( 92 );
 	var element = $( "#tabs1" ).tabs({
 			collapsible: true
@@ -162,13 +183,13 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 
 	// down, right, down (wrap), up (wrap)
 	function step1() {
-		ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "first tab has focus" );
+		assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "first tab has focus" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "DOWN moves focus to next tab" );
-		ok( !tabs.eq( 0 ).is( ".ui-state-focus" ), "first tab is no longer focused" );
+		assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "DOWN moves focus to next tab" );
+		assert.lacksClasses( tabs.eq( 0 ), "ui-state-focus", "first tab is no longer focused" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
@@ -179,7 +200,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT } );
-		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next tab" );
+		assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "RIGHT moves focus to next tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
@@ -190,7 +211,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first tab" );
+		assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "DOWN wraps focus to first tab" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
@@ -198,7 +219,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
-		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last tab" );
+		assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "UP wraps focus to last tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
@@ -223,7 +244,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
-		ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous tab" );
+		assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "LEFT moves focus to previous tab" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 		ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
@@ -234,7 +255,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
-		ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first tab" );
+		assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "HOME moves focus to first tab" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 		ok( panels.eq( 0 ).is( ":hidden" ), "first panel is still hidden" );
@@ -261,7 +282,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
-		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last tab" );
+		assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "END moves focus to last tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
@@ -304,7 +325,7 @@ $.each({
 	ctrl: "CTRL",
 	meta: "COMMAND"
 }, function( modifier, label ) {
-	asyncTest( "keyboard support - " + label + " navigation", function() {
+	asyncTest( "keyboard support - " + label + " navigation", function( assert ) {
 		expect( 115 );
 		var element = $( "#tabs1" ).tabs(),
 			tabs = element.find( ".ui-tabs-nav li" ),
@@ -321,13 +342,13 @@ $.each({
 			var eventProperties = { keyCode: keyCode.DOWN };
 			eventProperties[ modifier + "Key" ] = true;
 
-			ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "first tab has focus" );
+			assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "first tab has focus" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
 
 			tabs.eq( 0 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "DOWN moves focus to next tab" );
-			ok( !tabs.eq( 0 ).is( ".ui-state-focus" ), "first tab is no longer focused" );
+			assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "DOWN moves focus to next tab" );
+			assert.lacksClasses( tabs.eq( 0 ), ".ui-state-focus", "first tab is no longer focused" );
 			equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
@@ -354,7 +375,7 @@ $.each({
 			equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 
 			tabs.eq( 1 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next tab" );
+			assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "RIGHT moves focus to next tab" );
 			equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
@@ -381,7 +402,7 @@ $.each({
 			equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 			tabs.eq( 2 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first tab" );
+			assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "DOWN wraps focus to first tab" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 0 ).is( ":visible" ), "first panel is still visible" );
 			equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
@@ -401,7 +422,7 @@ $.each({
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 			tabs.eq( 0 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last tab" );
+			assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "UP wraps focus to last tab" );
 			equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
@@ -428,7 +449,7 @@ $.each({
 			equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
 			tabs.eq( 2 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous tab" );
+			assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "LEFT moves focus to previous tab" );
 			equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
@@ -455,7 +476,7 @@ $.each({
 			equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "second panel has aria-hidden=true" );
 
 			tabs.eq( 1 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first tab" );
+			assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "HOME moves focus to first tab" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "second tab has aria-selected=false" );
 			ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
@@ -479,7 +500,7 @@ $.each({
 			equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "first panel has aria-hidden=false" );
 
 			tabs.eq( 0 ).simulate( "keydown", eventProperties );
-			ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last tab" );
+			assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "END moves focus to last tab" );
 			equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 2 ).is( ":hidden" ), "third panel is still hidden" );
@@ -519,7 +540,7 @@ $.each({
 	});
 });
 
-asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() {
+asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function( assert ) {
 	expect( 50 );
 	var element = $( "#tabs1" ).tabs(),
 		tabs = element.find( ".ui-tabs-nav li" ),
@@ -535,7 +556,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 
 		panels.eq( 0 ).simulate( "keydown", { keyCode: keyCode.PAGE_DOWN, altKey: true } );
 		strictEqual( document.activeElement, tabs[ 1 ], "second tab is activeElement" );
-		ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "ALT+PAGE_DOWN moves focus to next tab" );
+		assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "ALT+PAGE_DOWN moves focus to next tab" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		ok( panels.eq( 1 ).is( ":visible" ), "second panel is visible" );
 		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "true", "second tab has aria-expanded=true" );
@@ -546,7 +567,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 
 		tabs.eq( 1 ).simulate( "keydown", { keyCode: keyCode.PAGE_DOWN, altKey: true } );
 		strictEqual( document.activeElement, tabs[ 2 ], "third tab is activeElement" );
-		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "ALT+PAGE_DOWN moves focus to next tab" );
+		assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "ALT+PAGE_DOWN moves focus to next tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
 		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
@@ -557,7 +578,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.PAGE_DOWN, altKey: true } );
 		strictEqual( document.activeElement, tabs[ 0 ], "first tab is activeElement" );
-		ok( tabs.eq( 0 ).is( ".ui-state-focus" ), "ALT+PAGE_DOWN wraps focus to first tab" );
+		assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "ALT+PAGE_DOWN wraps focus to first tab" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
 		equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
@@ -575,7 +596,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 
 		panels.eq( 0 ).simulate( "keydown", { keyCode: keyCode.PAGE_UP, altKey: true } );
 		strictEqual( document.activeElement, tabs[ 2 ], "third tab is activeElement" );
-		ok( tabs.eq( 2 ).is( ".ui-state-focus" ), "ALT+PAGE_UP wraps focus to last tab" );
+		assert.hasClasses( tabs.eq( 2 ), "ui-state-focus", "ALT+PAGE_UP wraps focus to last tab" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
 		equal( tabs.eq( 2 ).attr( "aria-expanded" ), "true", "third tab has aria-expanded=true" );
@@ -586,7 +607,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 
 		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.PAGE_UP, altKey: true } );
 		strictEqual( document.activeElement, tabs[ 1 ], "second tab is activeElement" );
-		ok( tabs.eq( 1 ).is( ".ui-state-focus" ), "ALT+PAGE_UP moves focus to previous tab" );
+		assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "ALT+PAGE_UP moves focus to previous tab" );
 		equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		ok( panels.eq( 1 ).is( ":visible" ), "second panel is visible" );
 		equal( tabs.eq( 1 ).attr( "aria-expanded" ), "true", "second tab has aria-expanded=true" );

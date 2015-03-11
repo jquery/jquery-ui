@@ -2,6 +2,11 @@ TestHelpers.commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
 		animate: {},
+		classes: {
+			"ui-accordion-header": "ui-corner-top",
+			"ui-accordion-header-collapsed": "ui-corner-all",
+			"ui-accordion-content": "ui-corner-bottom"
+		},
 		collapsible: false,
 		disabled: false,
 		event: "click",

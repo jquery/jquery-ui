@@ -15,6 +15,7 @@
 		"jquery-simulate": "1.0.0",
 		"jshint": "2.4.4",
 		"qunit": "1.17.1",
+		"qunit-assert-classes": "0.1.5",
 
 		"jquery-1.7.0": "jquery#1.7.0",
 		"jquery-1.7.1": "jquery#1.7.1",

@@ -1,5 +1,8 @@
 TestHelpers.commonWidgetTests( "tooltip", {
 	defaults: {
+		classes: {
+			"ui-tooltip": "ui-corner-all ui-widget-shadow"
+		},
 		content: function() {},
 		disabled: false,
 		hide: true,
@@ -10,7 +13,6 @@ TestHelpers.commonWidgetTests( "tooltip", {
 			collision: "flipfit flip"
 		},
 		show: true,
-		tooltipClass: null,
 		track: false,
 
 		// callbacks

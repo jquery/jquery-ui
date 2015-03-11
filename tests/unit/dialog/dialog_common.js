@@ -3,10 +3,13 @@ TestHelpers.commonWidgetTests( "dialog", {
 		appendTo: "body",
 		autoOpen: true,
 		buttons: [],
+		classes: {
+			"ui-dialog": "ui-corner-all",
+			"ui-dialog-titlebar": "ui-corner-all"
+		},
 		closeOnEscape: true,
 		closeText: "Close",
 		disabled: false,
-		dialogClass: "",
 		draggable: true,
 		height: "auto",
 		hide: null,

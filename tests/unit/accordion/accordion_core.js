@@ -6,14 +6,25 @@ var setupTeardown = TestHelpers.accordion.setupTeardown,
 module( "accordion: core", setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
-	test( "markup structure: " + type, function() {
-		expect( 4 );
-		var element = $( selector ).accordion();
-		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
-		equal( element.find( ".ui-accordion-header" ).length, 3,
-			".ui-accordion-header elements exist, correct number" );
-		equal( element.find( ".ui-accordion-content" ).length, 3,
-			".ui-accordion-content elements exist, correct number" );
+	test( "markup structure: " + type, function( assert ) {
+		expect( 10 );
+		var element = $( selector ).accordion(),
+			headers = element.find( ".ui-accordion-header" ),
+			content = headers.next();
+
+		assert.hasClasses( element, "ui-accordion ui-widget" );
+		equal( headers.length, 3, ".ui-accordion-header elements exist, correct number" );
+		assert.hasClasses( headers[ 0 ],
+			"ui-accordion-header ui-accordion-header-active ui-accordion-icons" );
+		assert.hasClasses( headers[ 1 ],
+			"ui-accordion-header ui-accordion-header-collapsed ui-accordion-icons" );
+		assert.hasClasses( headers[ 2 ],
+			"ui-accordion-header ui-accordion-header-collapsed ui-accordion-icons" );
+		equal( content.length, 3, ".ui-accordion-content elements exist, correct number" );
+		assert.hasClasses( content[ 0 ],
+			"ui-accordion-content ui-widget-content ui-accordion-content-active" );
+		assert.hasClasses( content[ 1 ], "ui-accordion-content ui-widget-content" );
+		assert.hasClasses( content[ 2 ], "ui-accordion-content ui-widget-content" );
 		deepEqual( element.find( ".ui-accordion-header" ).next().get(),
 			element.find( ".ui-accordion-content" ).get(),
 			"content panels come immediately after headers" );
@@ -102,7 +113,7 @@ test( "accessibility", function () {
 
 });
 
-asyncTest( "keyboard support", function() {
+asyncTest( "keyboard support", function( assert ) {
 	expect( 13 );
 	var element = $( "#list1" ).accordion(),
 		headers = element.find( ".ui-accordion-header" ),
@@ -111,23 +122,23 @@ asyncTest( "keyboard support", function() {
 	equal( headers.filter( ".ui-state-focus" ).length, 0, "no headers focused on init" );
 	headers.eq( 0 ).simulate( "focus" );
 	setTimeout(function() {
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "first header has focus" );
+		assert.hasClasses( headers.eq( 0 ), "ui-state-focus", "first header has focus" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "DOWN moves focus to next header" );
+		assert.hasClasses( headers.eq( 1 ), "ui-state-focus", "DOWN moves focus to next header" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next header" );
+		assert.hasClasses( headers.eq( 2 ), "ui-state-focus", "RIGHT moves focus to next header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first header" );
+		assert.hasClasses( headers.eq( 0 ), "ui-state-focus", "DOWN wraps focus to first header" );
 
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last header" );
+		assert.hasClasses( headers.eq( 2 ), "ui-state-focus", "UP wraps focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous header" );
+		assert.hasClasses( headers.eq( 1 ), "ui-state-focus", "LEFT moves focus to previous header" );
 
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first header" );
+		assert.hasClasses( headers.eq( 0 ), "ui-state-focus", "HOME moves focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last header" );
+		assert.hasClasses( headers.eq( 2 ), "ui-state-focus", "END moves focus to last header" );
 
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
 		equal( element.accordion( "option", "active" ) , 2, "ENTER activates panel" );
@@ -136,9 +147,9 @@ asyncTest( "keyboard support", function() {
 
 		anchor.simulate( "focus" );
 		setTimeout(function() {
-			ok( !headers.eq( 1 ).is( ".ui-state-focus" ), "header loses focus when focusing inside the panel" );
+			assert.lacksClasses( headers.eq( 1 ), "ui-state-focus", "header loses focus when focusing inside the panel" );
 			anchor.simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
-			ok( headers.eq( 1 ).is( ".ui-state-focus" ), "CTRL+UP moves focus to header" );
+			assert.hasClasses( headers.eq( 1 ), "ui-state-focus", "CTRL+UP moves focus to header" );
 			start();
 		}, 1 );
 	}, 1 );

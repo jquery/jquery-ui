@@ -22,10 +22,14 @@
 
 		// custom class, replaces ui-widget-content
 		$( "#context2" ).tooltip({
-			tooltipClass: "ui-widget-header"
+			classes: {
+				"ui-tooltip": "ui-corner-all ui-widget-header"
+			}
 		});
 		$( "#right1" ).tooltip({
-			tooltipClass: "ui-state-error"
+			classes: {
+				"ui-tooltip": "ui-corner-all ui-state-error"
+			}
 		});
 
 		// synchronous content
@@ -63,7 +67,9 @@
 
 		// custom position
 		$( "#right2" ).tooltip({
-			tooltipClass: "ui-state-highlight",
+			classes: {
+				"ui-tooltip": "ui-corner-all ui-state-highlight"
+			},
 			position: {
 				my: "center top",
 				at: "center bottom+10"

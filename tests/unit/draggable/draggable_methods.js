@@ -73,7 +73,7 @@ test( "enable", function() {
 	equal( actual, expected, "enable is chainable" );
 });
 
-test( "disable", function() {
+test( "disable", function( assert ) {
 	expect( 14 );
 
 	element = $( "#draggable2" ).draggable({ disabled: false });
@@ -91,9 +91,9 @@ test( "disable", function() {
 	equal( element.draggable( "option", "disabled" ), true, "disabled option setter" );
 	TestHelpers.draggable.shouldNotDrag( element, ".draggable('option', 'disabled', true)" );
 
-	ok( !element.draggable( "widget" ).hasClass( "ui-state-disabled" ), "element does not get ui-state-disabled" );
+	assert.lacksClasses( element.draggable( "widget" ), "ui-state-disabled" );
 	ok( !element.draggable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
-	ok( element.draggable( "widget" ).hasClass( "ui-draggable-disabled" ), "element gets ui-draggable-disabled" );
+	assert.hasClasses( element.draggable( "widget" ), "ui-draggable-disabled" );
 
 	var expected = element.draggable(),
 		actual = expected.draggable( "disable" );

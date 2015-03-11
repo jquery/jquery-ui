@@ -53,7 +53,7 @@ test( "open/close with tracking", function() {
 	$.fx.off = false;
 });
 
-test( "enable/disable", function() {
+test( "enable/disable", function( assert ) {
 	expect( 11 );
 	$.fx.off = true;
 	var tooltip,
@@ -67,9 +67,9 @@ test( "enable/disable", function() {
 	element.tooltip( "disable" );
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
 
-	ok( !element.tooltip( "widget" ).hasClass( "ui-state-disabled" ), "element doesn't get ui-state-disabled" );
+	assert.lacksClasses( element.tooltip( "widget" ), "ui-state-disabled" );
 	ok( !element.tooltip( "widget" ).attr( "aria-disabled" ), "element doesn't get aria-disabled" );
-	ok( !element.tooltip( "widget" ).hasClass( "ui-tooltip-disabled" ), "element doesn't get ui-tooltip-disabled" );
+	assert.lacksClasses( element.tooltip( "widget" ), "ui-tooltip-disabled" );
 	strictEqual( tooltip.attr( "title" ), undefined, "title removed on disable" );
 
 	element.tooltip( "open" );

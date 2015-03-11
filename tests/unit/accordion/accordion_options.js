@@ -349,13 +349,13 @@ test( "{ header: default }", function() {
 	state( $( "#navigation" ).accordion(), 1, 0, 0);
 });
 
-test( "{ header: custom }", function() {
+test( "{ header: custom }", function( assert ) {
 	expect( 6 );
 	var element = $( "#navigationWrapper" ).accordion({
 		header: "h2"
 	});
 	element.find( "h2" ).each(function() {
-		ok( $( this ).hasClass( "ui-accordion-header" ) );
+		assert.hasClasses( this, "ui-accordion-header" );
 	});
 	equal( element.find( ".ui-accordion-header" ).length, 3 );
 	state( element, 1, 0, 0 );
@@ -449,15 +449,15 @@ test( "{ icons: false }", function() {
 	icons( false );
 });
 
-test( "{ icons: hash }", function() {
+test( "{ icons: hash }", function( assert ) {
 	expect( 3 );
 	var element = $( "#list1" ).accordion({
 		icons: { activeHeader: "a1", header: "h1" }
 	});
-	ok( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
+	assert.hasClasses( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ), "a1" );
 	element.accordion( "option", "icons", { activeHeader: "a2", header: "h2" } );
-	ok( !element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
-	ok( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a2" ) );
+	assert.lacksClasses( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ), "a1");
+	assert.hasClasses( element.find( ".ui-accordion-header.ui-state-active span.ui-icon" ), "a2" );
 });
 
 }( jQuery ) );

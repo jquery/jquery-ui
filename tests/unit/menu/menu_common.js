@@ -1,5 +1,6 @@
 TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
+		classes: {},
 		disabled: false,
 		icons: {
 			submenu: "ui-icon-caret-1-e"

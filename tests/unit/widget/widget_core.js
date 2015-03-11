@@ -227,6 +227,7 @@ test( "merge multiple option arguments", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			deepEqual( this.options, {
+				classes: {},
 				create: null,
 				disabled: false,
 				option1: "value1",
@@ -281,6 +282,7 @@ test( "._getCreateOptions()", function() {
 		},
 		_create: function() {
 			deepEqual( this.options, {
+				classes: {},
 				create: null,
 				disabled: false,
 				option1: "override1",
@@ -485,10 +487,11 @@ test( ".option() - getter", function() {
 
 	options = div.testWidget( "option" );
 	deepEqual( options, {
+		baz: 5,
+		classes: {},
 		create: null,
 		disabled: false,
 		foo: "bar",
-		baz: 5,
 		qux: [ "quux", "quuux" ]
 	}, "full options hash returned" );
 	options.foo = "notbar";
@@ -980,7 +983,7 @@ test( "_off() - all events", function() {
 	element.trigger( "bar" );
 });
 
-test( "._hoverable()", function() {
+test( "._hoverable()", function( assert ) {
 	expect( 10 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -989,30 +992,30 @@ test( "._hoverable()", function() {
 	});
 
 	var div = $( "#widget" ).testWidget().children();
-	ok( !div.hasClass( "ui-state-hover" ), "not hovered on init" );
+	assert.lacksClasses( div, "ui-state-hover", "not hovered on init" );
 	div.trigger( "mouseenter" );
-	ok( div.hasClass( "ui-state-hover" ), "hovered after mouseenter" );
+	assert.hasClasses( div, "ui-state-hover", "hovered after mouseenter" );
 	div.trigger( "mouseleave" );
-	ok( !div.hasClass( "ui-state-hover" ), "not hovered after mouseleave" );
+	assert.lacksClasses( div, "ui-state-hover", "not hovered after mouseleave" );
 
 	div.trigger( "mouseenter" );
-	ok( div.hasClass( "ui-state-hover" ), "hovered after mouseenter" );
+	assert.hasClasses( div, "ui-state-hover", "hovered after mouseenter" );
 	$( "#widget" ).testWidget( "disable" );
-	ok( !div.hasClass( "ui-state-hover" ), "not hovered while disabled" );
+	assert.lacksClasses( div, "ui-state-hover", "not hovered while disabled" );
 	div.trigger( "mouseenter" );
-	ok( !div.hasClass( "ui-state-hover" ), "can't hover while disabled" );
+	assert.lacksClasses( div, "ui-state-hover", "can't hover while disabled" );
 	$( "#widget" ).testWidget( "enable" );
-	ok( !div.hasClass( "ui-state-hover" ), "enabling doesn't reset hover" );
+	assert.lacksClasses( div, "ui-state-hover", "enabling doesn't reset hover" );
 
 	div.trigger( "mouseenter" );
-	ok( div.hasClass( "ui-state-hover" ), "hovered after mouseenter" );
+	assert.hasClasses( div, "ui-state-hover", "hovered after mouseenter" );
 	$( "#widget" ).testWidget( "destroy" );
-	ok( !div.hasClass( "ui-state-hover" ), "not hovered after destroy" );
+	assert.lacksClasses( div, "ui-state-hover", "not hovered after destroy" );
 	div.trigger( "mouseenter" );
-	ok( !div.hasClass( "ui-state-hover" ), "event handler removed on destroy" );
+	assert.lacksClasses( div, "ui-state-hover", "event handler removed on destroy" );
 });
 
-test( "._focusable()", function() {
+test( "._focusable()", function( assert ) {
 	expect( 10 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -1021,27 +1024,27 @@ test( "._focusable()", function() {
 	});
 
 	var div = $( "#widget" ).testWidget().children();
-	ok( !div.hasClass( "ui-state-focus" ), "not focused on init" );
+	assert.lacksClasses( div, "ui-state-focus", "not focused on init" );
 	div.trigger( "focusin" );
-	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
+	assert.hasClasses( div, "ui-state-focus", "focused after explicit focus" );
 	div.trigger( "focusout" );
-	ok( !div.hasClass( "ui-state-focus" ), "not focused after blur" );
+	assert.lacksClasses( div, "ui-state-focus", "not focused after blur" );
 
 	div.trigger( "focusin" );
-	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
+	assert.hasClasses( div, "ui-state-focus", "focused after explicit focus" );
 	$( "#widget" ).testWidget( "disable" );
-	ok( !div.hasClass( "ui-state-focus" ), "not focused while disabled" );
+	assert.lacksClasses( div, "ui-state-focus", "not focused while disabled" );
 	div.trigger( "focusin" );
-	ok( !div.hasClass( "ui-state-focus" ), "can't focus while disabled" );
+	assert.lacksClasses( div, "ui-state-focus", "can't focus while disabled" );
 	$( "#widget" ).testWidget( "enable" );
-	ok( !div.hasClass( "ui-state-focus" ), "enabling doesn't reset focus" );
+	assert.lacksClasses( div, "ui-state-focus", "enabling doesn't reset focus" );
 
 	div.trigger( "focusin" );
-	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
+	assert.hasClasses( div, "ui-state-focus", "focused after explicit focus" );
 	$( "#widget" ).testWidget( "destroy" );
-	ok( !div.hasClass( "ui-state-focus" ), "not focused after destroy" );
+	assert.lacksClasses( div, "ui-state-focus", "not focused after destroy" );
 	div.trigger( "focusin" );
-	ok( !div.hasClass( "ui-state-focus" ), "event handler removed on destroy" );
+	assert.lacksClasses( div, "ui-state-focus", "event handler removed on destroy" );
 });
 
 test( "._trigger() - no event, no ui", function() {

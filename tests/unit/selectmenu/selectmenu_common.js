@@ -1,6 +1,10 @@
 TestHelpers.commonWidgetTests( "selectmenu", {
 	defaults: {
 		appendTo: null,
+		classes: {
+			"ui-selectmenu-button-open": "ui-corner-top",
+			"ui-selectmenu-button-closed": "ui-corner-all"
+		},
 		disabled: null,
 		icons: {
 			button: "ui-icon-triangle-1-s"

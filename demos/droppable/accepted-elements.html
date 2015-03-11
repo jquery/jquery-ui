@@ -20,8 +20,10 @@
 		$( "#draggable, #draggable-nonvalid" ).draggable();
 		$( "#droppable" ).droppable({
 			accept: "#draggable",
-			activeClass: "ui-state-hover",
-			hoverClass: "ui-state-active",
+			classes: {
+				"ui-droppable-active": "ui-state-active",
+				"ui-droppable-hover": "ui-state-hover"
+			},
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )

@@ -16,22 +16,24 @@ test( "#9314: Sortable: Items cannot be dragged directly into bottom position", 
 	TestHelpers.sortable.sort( $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
 });
 
-test( "ui-sortable-handle applied to appropriate element", function() {
-	expect( 6 );
+test( "ui-sortable-handle applied to appropriate element", function( assert ) {
+	expect( 8 );
 	var item = "<li><p></p></li>",
 		el = $( "<ul>" + item + item + "</ul>" )
 			.sortable()
 			.appendTo( "#qunit-fixture" );
 
-	ok( el.find( "li:first" ).hasClass( "ui-sortable-handle" ), "defaults to item" );
-	ok( el.find( "li:last" ).hasClass( "ui-sortable-handle" ), "both items received class name" );
+	assert.hasClasses( el.find( "li:first" ), "ui-sortable-handle" );
+	assert.hasClasses( el.find( "li:last" ), "ui-sortable-handle" );
 
 	el.sortable( "option", "handle", "p" );
-	ok( !el.find( "li" ).hasClass( "ui-sortable-handle" ), "removed on change" );
-	ok( el.find( "p" ).hasClass( "ui-sortable-handle" ), "applied to handle" );
+	assert.lacksClasses( el.find( "li" )[ 0 ], "ui-sortable-handle" );
+	assert.lacksClasses( el.find( "li" )[ 1 ], "ui-sortable-handle" );
+	assert.hasClasses( el.find( "p" )[ 0 ], "ui-sortable-handle" );
+	assert.hasClasses( el.find( "p" )[ 1 ], "ui-sortable-handle" );
 
 	el.append( item ).sortable( "refresh" );
-	ok( el.find( "p:last" ).hasClass( "ui-sortable-handle" ), "class name applied on refresh" );
+	assert.hasClasses( el.find( "p:last" ), "ui-sortable-handle" );
 
 	el.sortable( "destroy" );
 	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );

@@ -8,7 +8,7 @@ function handle() {
 
 module( "slider: options" );
 
-test( "disabled", function(){
+test( "disabled", function( assert ){
 	expect( 8 );
 	var count = 0;
 
@@ -18,7 +18,7 @@ test( "disabled", function(){
 	});
 
 	// enabled
-	ok( !element.hasClass( "ui-slider-disabled" ), "no disabled class" );
+	assert.lacksClasses( element, "ui-slider-disabled" );
 	equal( element.slider( "option", "disabled" ), false , "is not disabled" );
 
 	handle().simulate( "drag", { dx: 10 } );
@@ -29,7 +29,7 @@ test( "disabled", function(){
 
 	// disabled
 	element.slider( "option", "disabled", true );
-	ok( element.hasClass( "ui-slider-disabled" ), "has disabled class" );
+	assert.hasClasses( element, "ui-slider-disabled" );
 	equal( element.slider( "option", "disabled" ), true, "is disabled" );
 
 	handle().simulate( "drag", { dx: 10 } );
@@ -105,7 +105,7 @@ test( "min", function() {
 
 });
 
-test( "orientation", function() {
+test( "orientation", function( assert ) {
 	expect( 8 );
 	element = $( "#slider1" );
 
@@ -119,8 +119,8 @@ test( "orientation", function() {
 	var percentVal = ( options.value - options.min ) / ( options.max - options.min ) * 100;
 
 	element.slider( options ).slider( "option", "orientation", "horizontal" );
-	ok( element.is( ".ui-slider-horizontal" ), "horizontal slider has class .ui-slider-horizontal" );
-	ok( !element.is( ".ui-slider-vertical" ), "horizontal slider does not have class .ui-slider-vertical" );
+	assert.hasClasses( element, "ui-slider-horizontal" );
+	assert.lacksClasses( element, "ui-slider-vertical" );
 	equal( element.find( ".ui-slider-handle" )[ 0 ].style.bottom, "", "CSS bottom reset" );
 	equal( handle()[0].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
 
@@ -136,8 +136,8 @@ test( "orientation", function() {
 	percentVal = ( options.value - options.min ) / ( options.max - options.min ) * 100;
 
 	element.slider( options ).slider( "option", "orientation", "vertical" );
-	ok( element.is( ".ui-slider-vertical" ), "vertical slider has class .ui-slider-vertical" );
-	ok( !element.is( ".ui-slider-horizontal" ), "vertical slider does not have class .ui-slider-horizontal" );
+	assert.hasClasses( element, "ui-slider-vertical" );
+	assert.lacksClasses( element, "ui-slider-horizontal" );
 	equal( element.find( ".ui-slider-handle" )[ 0 ].style.left, "", "CSS left reset" );
 	equal( handle()[0].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %" );
 
@@ -226,8 +226,8 @@ test( "values", function() {
 	);
 });
 
-test( "range", function() {
-	expect( 33 );
+test( "range", function( assert ) {
+	expect( 32 );
 	var range;
 
 	// min
@@ -264,8 +264,7 @@ test( "range", function() {
 
 	range = element.find( ".ui-slider-range" );
 	equal( element.find( ".ui-slider-handle" ).length, 2, "range true, two handles" );
-	ok( !range.is( ".ui-slider-range-min" ), "range true" );
-	ok( !range.is( ".ui-slider-range-max" ), "range true" );
+	assert.lacksClasses( range, "ui-slider-range-max ui-slider-range-min" );
 	element.slider( "destroy" );
 
 	// Change range from min to max
