@@ -149,4 +149,41 @@ test( "mouse based interaction part two: when handles overlap", function() {
 
 });
 
+test( "event data", function() {
+	expect( 4 );
+
+	var slideHandleIndex = 3,
+		values = [ 8, 9, 7, 4 ],
+		newValues = [ 8, 9, 7, 5 ],
+		element = $( "#slider1" )
+			.slider({
+				values: values,
+				start: function( event, ui ) {
+					deepEqual( ui, expectedUiHash, "passing ui to start event" );
+				},
+				slide: function( event, ui ) {
+					deepEqual( ui, expectedChangedUiHash, "passing ui to slide event" );
+				},
+				stop: function( event, ui ) {
+					deepEqual( ui, expectedChangedUiHash, "passing ui to stop event" );
+				},
+				change: function( event, ui ) {
+					deepEqual( ui, expectedChangedUiHash, "passing ui to change event" );
+				}
+			}),
+		handles = element.find( ".ui-slider-handle" ),
+		expectedUiHash = {
+			handle: handles.eq( slideHandleIndex )[ 0 ],
+			handleIndex: slideHandleIndex,
+			values: values,
+			value: values[ slideHandleIndex ]
+		},
+		expectedChangedUiHash = $.extend( {}, expectedUiHash, {
+			values: newValues,
+			value: newValues[ slideHandleIndex ]
+		});
+
+	handles.eq( slideHandleIndex ).simulate( "drag", { dx: 10 } );
+});
+
 })( jQuery );
