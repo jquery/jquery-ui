@@ -28,9 +28,10 @@ test( "handle click on header-descendant", function() {
 });
 
 test( "accessibility", function () {
-	expect( 37 );
+	expect( 61 );
 	var element = $( "#list1" ).accordion({
-			active: 1
+			active: 1,
+			collapsible: true
 		}),
 		headers = element.find( ".ui-accordion-header" );
 
@@ -45,31 +46,60 @@ test( "accessibility", function () {
 	});
 
 	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
-	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded=true" );
-	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
-	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
-	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab (1) has aria-selected=true" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab (1) has aria-expanded=true" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel (1) has aria-hidden=false" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header (0) has tabindex=-1" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab (0) has aria-selected=false" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab (0) has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (0) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
 
 	element.accordion( "option", "active", 0 );
-	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
-	equal( headers.eq( 0 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded=true" );
-	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
-	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
-	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header has tabindex=-1" );
-	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
-	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
-	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel has aria-hidden=true" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "active header (0) has tabindex=0" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab (0) has aria-selected=true" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "true", "active tab (0) has aria-expanded=true" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "false", "active tabpanel (0) has aria-hidden=false" );
+	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header (1) has tabindex=-1" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab (1) has aria-selected=false" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab (1) has aria-expanded=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (1) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
+
+	element.accordion( "option", "active", false );
+	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "previously active header (0) has tabindex=0" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab (0) has aria-selected=false" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab (0) has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (0) has aria-hidden=true" );
+	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "inactive header (1) has tabindex=-1" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab (1) has aria-selected=false" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "inactive tab (1) has aria-expanded=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (1) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
+
+	element.accordion( "option", "active", 1 );
+	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab (1) has aria-selected=true" );
+	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab (1) has aria-expanded=true" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel (1) has aria-hidden=false" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header (0) has tabindex=-1" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab (0) has aria-selected=false" );
+	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab (0) has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (0) has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "inactive header (2) has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab (2) has aria-selected=false" );
+	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
+
 });
 
 asyncTest( "keyboard support", function() {
@@ -80,38 +110,81 @@ asyncTest( "keyboard support", function() {
 		keyCode = $.ui.keyCode;
 	equal( headers.filter( ".ui-state-focus" ).length, 0, "no headers focused on init" );
 	headers.eq( 0 ).simulate( "focus" );
-	setTimeout(function() {
+	setTimeout( step1 );
+
+	function step1() {
 		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "first header has focus" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
+		setTimeout( step2 );
+	}
+
+	// Support: IE 11 with jQuery 1.7 - 1.8 only
+	// All of the setTimeouts() from keydowns aren't necessary with newer jQuery.
+	// Only the explicit focus simulations require them.
+	function step2() {
 		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "DOWN moves focus to next header" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.RIGHT } );
+		setTimeout( step3 );
+	}
+
+	function step3() {
 		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
-		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first header" );
+		setTimeout( step4 );
+	}
 
+	function step4() {
+		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
+		setTimeout( step5 );
+	}
+
+	function step5() {
 		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
-		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous header" );
+		setTimeout( step6 );
+	}
 
+	function step6() {
+		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous header" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
+		setTimeout( step7 );
+	}
+
+	function step7() {
 		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
-		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last header" );
+		setTimeout( step8 );
+	}
 
+	function step8() {
+		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
+		setTimeout( step9 );
+	}
+
+	function step9() {
 		equal( element.accordion( "option", "active" ) , 2, "ENTER activates panel" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.SPACE } );
-		equal( element.accordion( "option", "active" ), 1, "SPACE activates panel" );
+		setTimeout( step10 );
+	}
 
+	function step10() {
+		equal( element.accordion( "option", "active" ), 1, "SPACE activates panel" );
 		anchor.simulate( "focus" );
-		setTimeout(function() {
-			ok( !headers.eq( 1 ).is( ".ui-state-focus" ), "header loses focus when focusing inside the panel" );
-			anchor.simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
-			ok( headers.eq( 1 ).is( ".ui-state-focus" ), "CTRL+UP moves focus to header" );
-			start();
-		}, 1 );
-	}, 1 );
+		setTimeout( step11 );
+	}
+
+	function step11() {
+		ok( !headers.eq( 1 ).is( ".ui-state-focus" ), "header loses focus when focusing inside the panel" );
+		anchor.simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
+		setTimeout( step12 );
+	}
+
+	function step12() {
+		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "CTRL+UP moves focus to header" );
+		start();
+	}
 });
 
 }( jQuery ) );

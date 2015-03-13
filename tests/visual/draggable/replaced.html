@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Draggable Visual Test</title>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<script src="../../../external/jquery/jquery.js"></script>
+	<script src="../../../ui/core.js"></script>
+	<script src="../../../ui/widget.js"></script>
+	<script src="../../../ui/mouse.js"></script>
+	<script src="../../../ui/draggable.js"></script>
+	<script>
+	$(function() {
+		$( "#draggable" )
+			.draggable()
+			.bind( "mousedown", function() {
+				$( this ).html( "<div>replaced</div>" );
+			});
+	});
+	</script>
+
+	<style>
+	#draggable {
+		background: green;
+		height: 75px;
+		width: 75px;
+	}
+	</style>
+</head>
+<body>
+
+<p>WHAT: A draggable, whose content is replaced onmousedown.</p>
+<p>EXPECTED: In IE8, the draggable can actually be dragged.</p>
+
+<div id="draggable"><div>content</div></div>
+
+</body>
+</html>

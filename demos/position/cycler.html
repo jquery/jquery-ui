@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Position - Image Cycler</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/position.js"></script>
@@ -25,52 +25,51 @@
 	</style>
 	<script>
 	$(function() {
-		// TODO refactor into a widget and get rid of these plugin methods
-		$.fn.left = function( using ) {
-			return this.position({
+		function left( element, using ) {
+			element.position({
 				my: "right middle",
 				at: "left+25 middle",
 				of: "#container",
 				collision: "none",
 				using: using
 			});
-		};
-		$.fn.right = function( using ) {
-			return this.position({
+		}
+		function right( element, using ) {
+			element.position({
 				my: "left middle",
 				at: "right-25 middle",
 				of: "#container",
 				collision: "none",
 				using: using
 			});
-		};
-		$.fn.center = function( using ) {
-			return this.position({
+		}
+		function center( element, using ) {
+			element.position({
 				my: "center middle",
 				at: "center middle",
 				of: "#container",
 				using: using
 			});
-		};
+		}
 
-		$( "img:eq(0)" ).left();
-		$( "img:eq(1)" ).center();
-		$( "img:eq(2)" ).right();
+		left( $( "img:eq(0)" ) );
+		center( $( "img:eq(1)" ) );
+		right( $( "img:eq(2)" ) );
 
 		function animate( to ) {
 			$( this ).stop( true, false ).animate( to );
 		}
 		function next( event ) {
 			event.preventDefault();
-			$( "img:eq(2)" ).center( animate );
-			$( "img:eq(1)" ).left( animate );
-			$( "img:eq(0)" ).right().appendTo( "#container" );
+			center( $( "img:eq(2)" ), animate );
+			left( $( "img:eq(1)" ), animate );
+			right( $( "img:eq(0)" ).appendTo( "#container" ) );
 		}
 		function previous( event ) {
 			event.preventDefault();
-			$( "img:eq(0)" ).center( animate );
-			$( "img:eq(1)" ).right( animate );
-			$( "img:eq(2)" ).left().prependTo( "#container" );
+			center( $( "img:eq(0)" ), animate );
+			right( $( "img:eq(1)" ), animate );
+			left( $( "img:eq(2)" ).prependTo( "#container" ) );
 		}
 		$( "#previous" ).click( previous );
 		$( "#next" ).click( next );
@@ -80,9 +79,9 @@
 		});
 
 		$( window ).resize(function() {
-			$( "img:eq(0)" ).left( animate );
-			$( "img:eq(1)" ).center( animate );
-			$( "img:eq(2)" ).right( animate );
+			left( $( "img:eq(0)" ), animate );
+			center( $( "img:eq(1)" ), animate );
+			right( $( "img:eq(2)" ), animate );
 		});
 	});
 	</script>

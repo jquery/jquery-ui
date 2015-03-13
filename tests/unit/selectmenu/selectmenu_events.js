@@ -1,29 +1,29 @@
 (function ( $ ) {
 
 module( "selectmenu: events", {
-	setup: function () {
+	setup: function() {
 		this.element = $( "#speed" );
 	}
 });
 
-asyncTest( "change", function () {
-	expect( 5 );
+asyncTest( "change", function() {
+	expect( 3 );
 
-	var optionIndex = 1,
-		button, menu, options;
+	var button, menu, options,
+		optionIndex = 1;
 
 	this.element.selectmenu({
 		change: function ( event, ui ) {
-			ok( event, "change event fired on change" );
-			equal( event.type, "selectmenuchange", "event type set to selectmenuchange" );
 			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
-			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ], "ui.item.element contains original option element" );
-			equal( ui.item.value, options.eq( optionIndex ).text(), "ui.item.value property updated correctly" );
+			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
+				"ui.item.element contains original option element" );
+			equal( ui.item.value, options.eq( optionIndex ).text(),
+				"ui.item.value property updated correctly" );
 		}
 	});
 
 	button = this.element.selectmenu( "widget" );
-	menu = this.element.selectmenu( "menuWidget" ).parent();
+	menu = this.element.selectmenu( "menuWidget" );
 	options = this.element.find( "option" );
 
 	button.simulate( "focus" );
@@ -32,41 +32,44 @@ asyncTest( "change", function () {
 		button.trigger( "click" );
 		menu.find( "li" ).eq( optionIndex ).simulate( "mouseover" ).trigger( "click" );
 		start();
-	}, 1 );
+	});
 });
 
+test( "close", function() {
+	expect( 2 );
 
-test( "close", function () {
-	expect( 4 );
+	var shouldFire;
 
 	this.element.selectmenu({
-		close: function ( event ) {
-			ok( event, "close event fired on close" );
-			equal( event.type, "selectmenuclose", "event type set to selectmenuclose" );
+		close: function() {
+			ok( shouldFire, "close event fired on close" );
 		}
 	});
 
-	this.element.selectmenu( "open" ).selectmenu( "close" );
-
+	shouldFire = false;
 	this.element.selectmenu( "open" );
+	shouldFire = true;
+	this.element.selectmenu( "close" );
+	shouldFire = false;
+	this.element.selectmenu( "open" );
+	shouldFire = true;
 	$( "body" ).trigger( "mousedown" );
 });
 
+asyncTest( "focus", function() {
+	expect( 9 );
 
-asyncTest( "focus", function () {
-	expect( 12 );
-
-	var that = this,
+	var button, menu, links,
+		that = this,
 		optionIndex = this.element[ 0 ].selectedIndex + 1,
-		options = this.element.find( "option" ),
-		button, menu, links;
+		options = this.element.find( "option" );
 
 	this.element.selectmenu({
-		focus: function ( event, ui ) {
-			ok( event, "focus event fired on element #" + optionIndex + " mouseover" );
-			equal( event.type, "selectmenufocus", "event type set to selectmenufocus" );
+		focus: function( event, ui ) {
+			ok( true, "focus event fired on element #" + optionIndex + " mouseover" );
 			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
-			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ], "ui.item.element contains original option element" );
+			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
+				"ui.item.element contains original option element" );
 		}
 	});
 
@@ -74,7 +77,6 @@ asyncTest( "focus", function () {
 	menu = this.element.selectmenu( "menuWidget" );
 
 	button.simulate( "focus" );
-
 	setTimeout(function() {
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 
@@ -85,51 +87,47 @@ asyncTest( "focus", function () {
 		optionIndex += 1;
 		links.eq( optionIndex ).simulate( "mouseover" );
 
-		// this tests for unwanted, additional focus event on close
+		// This tests for unwanted, additional focus event on close
 		that.element.selectmenu( "close" );
 		start();
-	}, 1 );
+	});
 });
 
-
-test( "open", function () {
-	expect( 2 );
+test( "open", function() {
+	expect( 1 );
 
 	this.element.selectmenu({
-		open: function ( event ) {
-			ok( event, "open event fired on open" );
-			equal( event.type, "selectmenuopen", "event type set to selectmenuopen" );
+		open: function() {
+			ok( true, "open event fired on open" );
 		}
 	});
 
 	this.element.selectmenu( "open" );
 });
 
-
-asyncTest( "select", function () {
-	expect( 4 );
+asyncTest( "select", function() {
+	expect( 3 );
 
 	this.element.selectmenu({
-		select: function ( event, ui ) {
-			ok( event, "select event fired on item select" );
-			equal( event.type, "selectmenuselect", "event type set to selectmenuselect" );
+		select: function( event, ui ) {
+			ok( true, "select event fired on item select" );
 			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
-			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ], "ui.item.element contains original option element" );
+			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
+				"ui.item.element contains original option element" );
 		}
 	});
 
 	var button = this.element.selectmenu( "widget" ),
-		menu = this.element.selectmenu( "menuWidget" ).parent(),
+		menu = this.element.selectmenu( "menuWidget" ),
 		options = this.element.find( "option" ),
 		optionIndex = 1;
 
 	button.simulate( "focus" );
-
 	setTimeout(function() {
 		button.trigger( "click" );
 		menu.find( "li" ).eq( optionIndex ).simulate( "mouseover" ).trigger( "click" );
 		start();
-	}, 1 );
+	});
 });
 
-})(jQuery);
+})( jQuery );

@@ -2,12 +2,19 @@
  * jQuery UI Position @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://api.jqueryui.com/position/
  */
+
+//>>label: Position
+//>>group: UI Core
+//>>description: Positions elements relative to other elements.
+//>>docs: http://api.jqueryui.com/position/
+//>>demos: http://jqueryui.com/position/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -23,7 +30,7 @@
 
 $.ui = $.ui || {};
 
-var cachedScrollbarWidth,
+var cachedScrollbarWidth, supportsOffsetFractions,
 	max = Math.max,
 	abs = Math.abs,
 	round = Math.round,
@@ -123,8 +130,8 @@ $.position = {
 			offset: withinElement.offset() || { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
-			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
-			height: isWindow ? withinElement.height() : withinElement.outerHeight()
+			width: withinElement.outerWidth(),
+			height: withinElement.outerHeight()
 		};
 	}
 };
@@ -236,7 +243,7 @@ $.fn.position = function( options ) {
 		position.top += myOffset[ 1 ];
 
 		// if the browser doesn't support fractions, then round for consistent results
-		if ( !$.support.offsetFractions ) {
+		if ( !supportsOffsetFractions ) {
 			position.left = round( position.left );
 			position.top = round( position.top );
 		}
@@ -445,12 +452,12 @@ $.ui.position = {
 				newOverBottom;
 			if ( overTop < 0 ) {
 				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight - outerHeight - withinOffset;
-				if ( ( position.top + myOffset + atOffset + offset) > overTop && ( newOverBottom < 0 || newOverBottom < abs( overTop ) ) ) {
+				if ( newOverBottom < 0 || newOverBottom < abs( overTop ) ) {
 					position.top += myOffset + atOffset + offset;
 				}
 			} else if ( overBottom > 0 ) {
 				newOverTop = position.top - data.collisionPosition.marginTop + myOffset + atOffset + offset - offsetTop;
-				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || abs( newOverTop ) < overBottom ) ) {
+				if ( newOverTop > 0 || abs( newOverTop ) < overBottom ) {
 					position.top += myOffset + atOffset + offset;
 				}
 			}
@@ -501,7 +508,7 @@ $.ui.position = {
 	div.style.cssText = "position: absolute; left: 10.7432222px;";
 
 	offsetLeft = $( div ).offset().left;
-	$.support.offsetFractions = offsetLeft > 10 && offsetLeft < 11;
+	supportsOffsetFractions = offsetLeft > 10 && offsetLeft < 11;
 
 	testElement.innerHTML = "";
 	testElementParent.removeChild( testElement );

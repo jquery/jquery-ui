@@ -64,4 +64,3 @@ TestHelpers.tabs = {
 		deepEqual( actual, expected );
 	}
 };
-

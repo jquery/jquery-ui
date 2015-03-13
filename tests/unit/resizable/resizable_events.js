@@ -146,6 +146,27 @@ test("resize (grid)", function() {
 
 });
 
+test( "resize, custom adjustment", function() {
+	expect( 4 );
+
+	var handle = ".ui-resizable-se",
+		element = $( "#resizable1" ).resizable({
+			resize: function( event, ui ) {
+				ui.size.width = 100;
+				ui.size.height = 200;
+				ui.position.left = 300;
+				ui.position.top = 400;
+			}
+		});
+
+	TestHelpers.resizable.drag( handle, 50, 50 );
+
+	equal( element.width(), 100, "resize event can control width" );
+	equal( element.height(), 200, "resize event can control height" );
+	equal( element.position().left, 300, "resize event can control left" );
+	equal( element.position().top, 400, "resize event can control top" );
+});
+
 test("stop", function() {
 
 	expect(5);

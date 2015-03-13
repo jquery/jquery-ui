@@ -12,7 +12,7 @@ TestHelpers.draggable = {
 		$( el ).one( "dragstop", function( event, ui ) {
 			var positionExpected = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
 			deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
-		} );
+		});
 	},
 	testDragOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
@@ -21,8 +21,18 @@ TestHelpers.draggable = {
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
 		$( el ).one( "dragstop", function( event, ui ) {
+			deepEqual( ui.offset, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+		});
+	},
+	testDragHelperOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+		msg = msg ? msg + "." : "";
+
+		var offsetBefore = el.offset(),
+			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
+
+		$( el ).one( "dragstop", function( event, ui ) {
 			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
-		} );
+		});
 	},
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
 		TestHelpers.draggable.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
@@ -36,7 +46,7 @@ TestHelpers.draggable = {
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
 		handle = handle || el;
 		TestHelpers.draggable.testDragPosition( el, 100, 100, 100, 100, msg );
-		TestHelpers.draggable.testDragOffset( el, 100, 100, 0, 0, msg );
+		TestHelpers.draggable.testDragHelperOffset( el, 100, 100, 0, 0, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
@@ -53,14 +63,28 @@ TestHelpers.draggable = {
 	},
 	shouldNotDrag: function( el, msg, handle ) {
 		handle = handle || el;
-		$( el ).bind( "dragstop", function() {
+
+		var newOffset,
+			element = $( el ),
+			beginOffset = element.offset();
+
+		element.bind( "dragstop", function() {
 			ok( false, "should not drag " + msg );
-		} );
+		});
+
 		$( handle ).simulate( "drag", {
 			dx: 100,
 			dy: 100
 		});
-		$( el ).unbind( "dragstop" );
+
+		newOffset = element.offset();
+
+		// Also assert that draggable did not move, to ensure it isn't just
+		// that drag did not fire and draggable still somehow moved
+		equal( newOffset.left, beginOffset.left, "Offset left should not be different" );
+		equal( newOffset.top, beginOffset.top, "Offset top should not be different" );
+
+		element.unbind( "dragstop" );
 	},
 	setScrollable: function( what, isScrollable ) {
 		var overflow = isScrollable ? "scroll" : "hidden";
@@ -76,12 +100,6 @@ TestHelpers.draggable = {
 		$( what ).scrollTop( 0 ).scrollLeft( 0 );
 	},
 	setScroll: function( what ) {
-		if (what) {
-			$(document).scrollTop(100); $(document).scrollLeft(100);
-		} else {
-			$("#main").scrollTop(100); $("#main").scrollLeft(100);
-		}
-
 		$( what ).scrollTop( 100 ).scrollLeft( 100 );
 	},
 	border: function( el, side ) {
@@ -106,7 +124,7 @@ TestHelpers.draggable = {
 		el.draggable( "option", "helper", "clone" );
 
 		// Get what parent is at time of drag
-		el.bind( "drag", function(e,ui) {
+		el.bind( "drag", function(e, ui) {
 			el.data( "last_dragged_parent", ui.helper.parent()[ 0 ] );
 		});
 	}

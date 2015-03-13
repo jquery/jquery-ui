@@ -70,11 +70,7 @@ test( "enable/disable", function() {
 	ok( !element.tooltip( "widget" ).hasClass( "ui-state-disabled" ), "element doesn't get ui-state-disabled" );
 	ok( !element.tooltip( "widget" ).attr( "aria-disabled" ), "element doesn't get aria-disabled" );
 	ok( !element.tooltip( "widget" ).hasClass( "ui-tooltip-disabled" ), "element doesn't get ui-tooltip-disabled" );
-
-	// support: jQuery <1.6.2
-	// support: IE <8
-	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
-	ok( !tooltip.attr( "title" ), "title removed on disable" );
+	strictEqual( tooltip.attr( "title" ), undefined, "title removed on disable" );
 
 	element.tooltip( "open" );
 	equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );
@@ -123,7 +119,7 @@ test( "preserve changes to title attributes on close and destroy", function() {
 	tests[ 5 ] = { expected: original, method: "destroy" };
 
 	$.each( tests, function( index, test ) {
-		
+
 		element.attr( "title", original ).tooltip()
 			.tooltip( "open", $.Event( "mouseover", { target: element[ 0 ] } ) );
 		if ( test.title ) {
@@ -133,7 +129,7 @@ test( "preserve changes to title attributes on close and destroy", function() {
 		}
 		element.tooltip( test.method );
 		equal( $( "#tooltipped1" ).attr( "title" ), test.expected );
-		
+
 	} );
 });
 

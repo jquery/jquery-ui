@@ -25,6 +25,7 @@ TestHelpers.commonWidgetTests( "sortable", {
 		scrollSpeed: 20,
 		scope: "default",
 		tolerance: "intersect",
+		zIndex: 1000,
 
 		// callbacks
 		activate: null,

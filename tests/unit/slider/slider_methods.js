@@ -62,7 +62,7 @@ test( "disable", function() {
 });
 
 test( "value", function() {
-	expect( 17 );
+	expect( 18 );
 	$( [ false, "min", "max" ] ).each(function() {
 		var element = $( "<div></div>" ).slider({
 			range: this,
@@ -88,6 +88,16 @@ test( "value", function() {
 	equal( element.slider( "value" ), 1, "value method get respects max" );
 	equal( element.slider( "value", 2 ), element, "value method is chainable" );
 	equal( element.slider( "option", "value" ), 1, "value method set respects max" );
+
+	// set max value with step 0.01
+	element.slider( "option", {
+		min: 2,
+		value: 2,
+		max: 2.4,
+		step: 0.01
+	});
+	element.slider( "option", "value", 2.4 );
+	equal( element.slider( "value" ), 2.4, "value is set to max with 0.01 step" );
 });
 
 //test( "values", function() {

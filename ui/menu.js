@@ -2,12 +2,20 @@
  * jQuery UI Menu @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/menu/
  */
+
+//>>label: Menu
+//>>group: Widgets
+//>>description: Creates nestable menus.
+//>>docs: http://api.jqueryui.com/menu/
+//>>demos: http://jqueryui.com/menu/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/menu.css
+//>>css.theme: ../themes/base/theme.css
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -31,12 +39,12 @@ return $.widget( "ui.menu", {
 	delay: 300,
 	options: {
 		icons: {
-			submenu: "ui-icon-carat-1-e"
+			submenu: "ui-icon-caret-1-e"
 		},
 		items: "> *",
 		menus: "ul",
 		position: {
-			my: "left-1 top",
+			my: "left top",
 			at: "right top"
 		},
 		role: "menu",
@@ -101,10 +109,17 @@ return $.widget( "ui.menu", {
 				}
 			},
 			"mouseenter .ui-menu-item": function( event ) {
+				// Ignore mouse events while typeahead is active, see #10458.
+				// Prevents focusing the wrong item when typeahead causes a scroll while the mouse
+				// is over an item in the menu
+				if ( this.previousFilter ) {
+					return;
+				}
 				var target = $( event.currentTarget );
 				// Remove ui-state-active class from siblings of the newly focused menu item
 				// to avoid a jump caused by adjacent elements both having a class with a border
-				target.siblings( ".ui-state-active" ).removeClass( "ui-state-active" );
+				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
+
 				this.focus( event, target );
 			},
 			mouseleave: "collapseAll",
@@ -163,29 +178,26 @@ return $.widget( "ui.menu", {
 			.removeClass( "ui-menu-item" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-disabled" )
-			.removeUniqueId()
-			.removeClass( "ui-state-hover" )
-			.removeAttr( "tabIndex" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-haspopup" )
-			.children().each( function() {
-				var elem = $( this );
-				if ( elem.data( "ui-menu-submenu-carat" ) ) {
-					elem.remove();
-				}
-			});
+			.children( ".ui-menu-item-wrapper" )
+				.removeUniqueId()
+				.removeClass( "ui-menu-item-wrapper ui-state-hover" )
+				.removeAttr( "tabIndex" )
+				.removeAttr( "role" )
+				.removeAttr( "aria-haspopup" )
+				.children().each(function() {
+					var elem = $( this );
+					if ( elem.data( "ui-menu-submenu-caret" ) ) {
+						elem.remove();
+					}
+				});
 
 		// Destroy menu dividers
 		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
 	},
 
 	_keydown: function( event ) {
-		var match, prev, character, skip, regex,
+		var match, prev, character, skip,
 			preventDefault = true;
-
-		function escape( value ) {
-			return value.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" );
-		}
 
 		switch ( event.keyCode ) {
 		case $.ui.keyCode.PAGE_UP:
@@ -235,10 +247,7 @@ return $.widget( "ui.menu", {
 				character = prev + character;
 			}
 
-			regex = new RegExp( "^" + escape( character ), "i" );
-			match = this.activeMenu.find( this.options.items ).filter(function() {
-				return regex.test( $( this ).text() );
-			});
+			match = this._filterMenuItems( character );
 			match = skip && match.index( this.active.next() ) !== -1 ?
 				this.active.nextAll( ".ui-menu-item" ) :
 				match;
@@ -247,22 +256,15 @@ return $.widget( "ui.menu", {
 			// to move down the menu to the first item that starts with that character
 			if ( !match.length ) {
 				character = String.fromCharCode( event.keyCode );
-				regex = new RegExp( "^" + escape( character ), "i" );
-				match = this.activeMenu.find( this.options.items ).filter(function() {
-					return regex.test( $( this ).text() );
-				});
+				match = this._filterMenuItems( character );
 			}
 
 			if ( match.length ) {
 				this.focus( event, match );
-				if ( match.length > 1 ) {
-					this.previousFilter = character;
-					this.filterTimer = this._delay(function() {
-						delete this.previousFilter;
-					}, 1000 );
-				} else {
+				this.previousFilter = character;
+				this.filterTimer = this._delay(function() {
 					delete this.previousFilter;
-				}
+				}, 1000 );
 			} else {
 				delete this.previousFilter;
 			}
@@ -275,7 +277,7 @@ return $.widget( "ui.menu", {
 
 	_activate: function( event ) {
 		if ( !this.active.is( ".ui-state-disabled" ) ) {
-			if ( this.active.is( "[aria-haspopup='true']" ) ) {
+			if ( this.active.children( "[aria-haspopup='true']" ).length ) {
 				this.expand( event );
 			} else {
 				this.select( event );
@@ -302,14 +304,14 @@ return $.widget( "ui.menu", {
 			})
 			.each(function() {
 				var menu = $( this ),
-					item = menu.parent(),
-					submenuCarat = $( "<span>" )
+					item = menu.prev(),
+					submenuCaret = $( "<span>" )
 						.addClass( "ui-menu-icon ui-icon " + icon )
-						.data( "ui-menu-submenu-carat", true );
+						.data( "ui-menu-submenu-caret", true );
 
 				item
 					.attr( "aria-haspopup", "true" )
-					.prepend( submenuCarat );
+					.prepend( submenuCaret );
 				menu.attr( "aria-labelledby", item.attr( "id" ) );
 			});
 
@@ -327,11 +329,14 @@ return $.widget( "ui.menu", {
 		// Don't refresh list items that are already adapted
 		items.not( ".ui-menu-item, .ui-menu-divider" )
 			.addClass( "ui-menu-item" )
-			.uniqueId()
-			.attr({
-				tabIndex: -1,
-				role: this._itemRole()
-			});
+			.children()
+				.not( ".ui-menu" )
+					.addClass( "ui-menu-item-wrapper" )
+					.uniqueId()
+					.attr({
+						tabIndex: -1,
+						role: this._itemRole()
+					});
 
 		// Add aria-disabled attribute to any disabled menu item
 		items.filter( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
@@ -370,7 +375,8 @@ return $.widget( "ui.menu", {
 		this._scrollIntoView( item );
 
 		this.active = item.first();
-		focused = this.active.addClass( "ui-state-focus" ).removeClass( "ui-state-active" );
+		focused = this.active.children( ".ui-menu-item-wrapper" ).addClass( "ui-state-active" );
+
 		// Only update aria-activedescendant if there's a role
 		// otherwise we assume focus is managed elsewhere
 		if ( this.options.role ) {
@@ -380,8 +386,9 @@ return $.widget( "ui.menu", {
 		// Highlight active parent menu item, if any
 		this.active
 			.parent()
-			.closest( ".ui-menu-item" )
-			.addClass( "ui-state-active" );
+				.closest( ".ui-menu-item" )
+					.children( ".ui-menu-item-wrapper" )
+						.addClass( "ui-state-active" );
 
 		if ( event && event.type === "keydown" ) {
 			this._close();
@@ -408,7 +415,7 @@ return $.widget( "ui.menu", {
 			offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop;
 			scroll = this.activeMenu.scrollTop();
 			elementHeight = this.activeMenu.height();
-			itemHeight = item.height();
+			itemHeight = item.outerHeight();
 
 			if ( offset < 0 ) {
 				this.activeMenu.scrollTop( scroll + offset );
@@ -427,7 +434,7 @@ return $.widget( "ui.menu", {
 			return;
 		}
 
-		this.active.removeClass( "ui-state-focus" );
+		this.active.children( ".ui-menu-item-wrapper" ).removeClass( "ui-state-active" );
 		this.active = null;
 
 		this._trigger( "blur", event, { item: this.active } );
@@ -437,7 +444,7 @@ return $.widget( "ui.menu", {
 		clearTimeout( this.timer );
 
 		// Don't open if already open fixes a Firefox bug that caused a .5 pixel
-		// shift in the submenu position when mousing over the carat icon
+		// shift in the submenu position when mousing over the caret icon
 		if ( submenu.attr( "aria-hidden" ) !== "true" ) {
 			return;
 		}
@@ -497,7 +504,7 @@ return $.widget( "ui.menu", {
 				.attr( "aria-hidden", "true" )
 				.attr( "aria-expanded", "false" )
 			.end()
-			.find( ".ui-state-active" ).not( ".ui-state-focus" )
+			.find( ".ui-state-active" ).not( ".ui-menu-item-wrapper" )
 				.removeClass( "ui-state-active" );
 	},
 
@@ -634,6 +641,21 @@ return $.widget( "ui.menu", {
 			this.collapseAll( event, true );
 		}
 		this._trigger( "select", event, ui );
+	},
+
+	_filterMenuItems: function( character ) {
+		var escapedCharacter = character.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ),
+			regex = new RegExp( "^" + escapedCharacter, "i" );
+
+		return this.activeMenu
+			.find( this.options.items )
+
+			// Only match on items, not dividers or other content (#10571)
+			.filter( ".ui-menu-item" )
+			.filter(function() {
+				return regex.test(
+					$.trim( $( this ).children( ".ui-menu-item-wrapper" ).text() ) );
+			});
 	}
 });
 

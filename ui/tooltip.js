@@ -2,12 +2,20 @@
  * jQuery UI Tooltip @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/tooltip/
  */
+
+//>>label: Tooltip
+//>>group: Widgets
+//>>description: Shows additional information for any element on hover or focus.
+//>>docs: http://api.jqueryui.com/tooltip/
+//>>demos: http://jqueryui.com/tooltip/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/tooltip.css
+//>>css.theme: ../themes/base/theme.css
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -86,6 +94,7 @@ return $.widget( "ui.tooltip", {
 
 		// IDs of generated tooltips, needed for destroy
 		this.tooltips = {};
+
 		// IDs of parent tooltips where we removed the title attribute
 		this.parents = {};
 
@@ -117,8 +126,8 @@ return $.widget( "ui.tooltip", {
 		this._super( key, value );
 
 		if ( key === "content" ) {
-			$.each( this.tooltips, function( id, element ) {
-				that._updateContent( element );
+			$.each( this.tooltips, function( id, tooltipData ) {
+				that._updateContent( tooltipData.element );
 			});
 		}
 	},
@@ -127,9 +136,9 @@ return $.widget( "ui.tooltip", {
 		var that = this;
 
 		// close open tooltips
-		$.each( this.tooltips, function( id, element ) {
+		$.each( this.tooltips, function( id, tooltipData ) {
 			var event = $.Event( "blur" );
-			event.target = event.currentTarget = element[0];
+			event.target = event.currentTarget = tooltipData.element[ 0 ];
 			that.close( event, true );
 		});
 
@@ -193,6 +202,7 @@ return $.widget( "ui.tooltip", {
 			});
 		}
 
+		this._registerCloseHandlers( event, target );
 		this._updateContent( target, event );
 	},
 
@@ -202,18 +212,22 @@ return $.widget( "ui.tooltip", {
 			that = this,
 			eventType = event ? event.type : null;
 
-		if ( typeof contentOption === "string" ) {
+		if ( typeof contentOption === "string" || contentOption.nodeType ||
+				contentOption.jquery ) {
 			return this._open( event, target, contentOption );
 		}
 
 		content = contentOption.call( target[0], function( response ) {
-			// ignore async response if tooltip was closed already
-			if ( !target.data( "ui-tooltip-open" ) ) {
-				return;
-			}
+
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			that._delay(function() {
+
+				// Ignore async response if tooltip was closed already
+				if ( !target.data( "ui-tooltip-open" ) ) {
+					return;
+				}
+
 				// jQuery creates a special event for focusin when it doesn't
 				// exist natively. To improve performance, the native event
 				// object is reused and the type is changed. Therefore, we can't
@@ -231,7 +245,7 @@ return $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
-		var tooltip, events, delayedShow, a11yContent,
+		var tooltipData, tooltip, delayedShow, a11yContent,
 			positionOption = $.extend( {}, this.options.position );
 
 		if ( !content ) {
@@ -240,9 +254,9 @@ return $.widget( "ui.tooltip", {
 
 		// Content can be updated multiple times. If the tooltip already
 		// exists, then just update the content and bail.
-		tooltip = this._find( target );
-		if ( tooltip.length ) {
-			tooltip.find( ".ui-tooltip-content" ).html( content );
+		tooltipData = this._find( target );
+		if ( tooltipData ) {
+			tooltipData.tooltip.find( ".ui-tooltip-content" ).html( content );
 			return;
 		}
 
@@ -261,7 +275,8 @@ return $.widget( "ui.tooltip", {
 			}
 		}
 
-		tooltip = this._tooltip( target );
+		tooltipData = this._tooltip( target );
+		tooltip = tooltipData.tooltip;
 		this._addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 
@@ -269,13 +284,9 @@ return $.widget( "ui.tooltip", {
 		// JAWS announces deletions even when aria-relevant="additions"
 		// Voiceover will sometimes re-read the entire log region's contents from the beginning
 		this.liveRegion.children().hide();
-		if ( content.clone ) {
-			a11yContent = content.clone();
-			a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
-		} else {
-			a11yContent = content;
-		}
-		$( "<div>" ).html( a11yContent ).appendTo( this.liveRegion );
+		a11yContent = $( "<div>" ).html( tooltip.find( ".ui-tooltip-content" ).html() );
+		a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
+		a11yContent.appendTo( this.liveRegion );
 
 		function position( event ) {
 			positionOption.of = event;
@@ -312,8 +323,10 @@ return $.widget( "ui.tooltip", {
 		}
 
 		this._trigger( "open", event, { tooltip: tooltip } );
+	},
 
-		events = {
+	_registerCloseHandlers: function( event, target ) {
+		var events = {
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
 					var fakeEvent = $.Event(event);
@@ -327,7 +340,7 @@ return $.widget( "ui.tooltip", {
 		// tooltips will handle this in destroy.
 		if ( target[ 0 ] !== this.element[ 0 ] ) {
 			events.remove = function() {
-				this._removeTooltip( tooltip );
+				this._removeTooltip( this._find( target ).tooltip );
 			};
 		}
 
@@ -341,13 +354,27 @@ return $.widget( "ui.tooltip", {
 	},
 
 	close: function( event ) {
-		var that = this,
+		var tooltip,
+			that = this,
 			target = $( event ? event.currentTarget : this.element ),
-			tooltip = this._find( target );
+			tooltipData = this._find( target );
+
+		// The tooltip may already be closed
+		if ( !tooltipData ) {
+
+			// We set ui-tooltip-open immediately upon open (in open()), but only set the
+			// additional data once there's actually content to show (in _open()). So even if the
+			// tooltip doesn't have full data, we always remove ui-tooltip-open in case we're in
+			// the period between open() and _open().
+			target.removeData( "ui-tooltip-open" );
+			return;
+		}
+
+		tooltip = tooltipData.tooltip;
 
 		// disabling closes the tooltip, so we need to track when we're closing
 		// to avoid an infinite loop in case the tooltip becomes disabled on close
-		if ( this.closing ) {
+		if ( tooltipData.closing ) {
 			return;
 		}
 
@@ -362,6 +389,7 @@ return $.widget( "ui.tooltip", {
 
 		this._removeDescribedBy( target );
 
+		tooltipData.hiding = true;
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
 			that._removeTooltip( $( this ) );
@@ -383,15 +411,18 @@ return $.widget( "ui.tooltip", {
 			});
 		}
 
-		this.closing = true;
+		tooltipData.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
-		this.closing = false;
+		if ( !tooltipData.hiding ) {
+			tooltipData.closing = false;
+		}
 	},
 
 	_tooltip: function( element ) {
 		var tooltip = $( "<div>" )
 				.attr( "role", "tooltip" )
-				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
+				// TODO move to classes option
+				.addClass( "ui-tooltip ui-widget ui-widget-shadow ui-corner-all ui-widget-content " +
 					( this.options.tooltipClass || "" ) ),
 			id = tooltip.uniqueId().attr( "id" );
 
@@ -400,13 +431,16 @@ return $.widget( "ui.tooltip", {
 			.appendTo( tooltip );
 
 		tooltip.appendTo( this.document[0].body );
-		this.tooltips[ id ] = element;
-		return tooltip;
+
+		return this.tooltips[ id ] = {
+			element: element,
+			tooltip: tooltip
+		};
 	},
 
 	_find: function( target ) {
 		var id = target.data( "ui-tooltip-id" );
-		return id ? $( "#" + id ) : $();
+		return id ? this.tooltips[ id ] : null;
 	},
 
 	_removeTooltip: function( tooltip ) {
@@ -418,10 +452,11 @@ return $.widget( "ui.tooltip", {
 		var that = this;
 
 		// close open tooltips
-		$.each( this.tooltips, function( id, element ) {
+		$.each( this.tooltips, function( id, tooltipData ) {
 			// Delegate to close method to handle common cleanup
-			var event = $.Event( "blur" );
-			event.target = event.currentTarget = element[0];
+			var event = $.Event( "blur" ),
+				element = tooltipData.element;
+			event.target = event.currentTarget = element[ 0 ];
 			that.close( event, true );
 
 			// Remove immediately; destroying an open tooltip doesn't use the

@@ -1,3 +1,5 @@
+(function( $ ) {
+
 module( "progressbar: methods" );
 
 test( "destroy", function() {
@@ -33,3 +35,5 @@ test( "widget", function() {
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
+
+}( jQuery ) );

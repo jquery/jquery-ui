@@ -11,11 +11,11 @@ test( "icons: default ", function() {
 	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-triangle-1-s" );
 
 	element.spinner( "option", "icons", {
-		up: "ui-icon-carat-1-n",
-		down: "ui-icon-carat-1-s"
+		up: "ui-icon-caret-1-n",
+		down: "ui-icon-caret-1-s"
 	});
-	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-carat-1-n" );
-	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-carat-1-s" );
+	equal( element.spinner( "widget" ).find( ".ui-icon:first" ).attr( "class" ), "ui-icon ui-icon-caret-1-n" );
+	equal( element.spinner( "widget" ).find( ".ui-icon:last" ).attr( "class" ), "ui-icon ui-icon-caret-1-s" );
 });
 
 test( "icons: custom ", function() {

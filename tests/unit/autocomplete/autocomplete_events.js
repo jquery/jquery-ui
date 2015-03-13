@@ -71,8 +71,8 @@ $.each([
 			// blur must be async for IE to handle it properly
 			setTimeout(function() {
 				element.simulate( "blur" );
-			}, 1 );
-		}, 50 );
+			});
+		});
 	});
 });
 
@@ -117,8 +117,8 @@ asyncTest( "cancel search", function() {
 			ok( menu.is( ":visible" ), "menu is visible after second search" );
 			equal( menu.find( ".ui-menu-item" ).length, 2, "# of menu items" );
 			start();
-		}, 50 );
-	}, 50 );
+		});
+	});
 });
 
 asyncTest( "cancel focus", function() {
@@ -137,7 +137,7 @@ asyncTest( "cancel focus", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( element.val(), customVal );
 		start();
-	}, 50 );
+	});
 });
 
 asyncTest( "cancel select", function() {
@@ -157,7 +157,7 @@ asyncTest( "cancel select", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 		equal( element.val(), customVal );
 		start();
-	}, 50 );
+	});
 });
 
 asyncTest( "blur during remote search", function() {
@@ -170,7 +170,7 @@ asyncTest( "blur during remote search", function() {
 			setTimeout(function() {
 				response([ "result" ]);
 				start();
-			}, 100 );
+			}, 25);
 		},
 		open: function() {
 			ok( false, "opened after a blur" );

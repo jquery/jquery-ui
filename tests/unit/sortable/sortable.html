@@ -4,10 +4,11 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Sortable Test Suite</title>
 
+	<script src="../../../external/PEP/PEP.js"></script>
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
+	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
@@ -16,7 +17,8 @@
 			"ui/core.js",
 			"ui/widget.js",
 			"ui/interaction.js",
-			"ui/sortable.js"
+			"ui/sortable.js",
+			"ui/draggable.js"
 		]
 	});
 	</script>
@@ -51,11 +53,7 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Sortable Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
 
 <ul id="sortable" class="connectWith">
@@ -77,29 +75,65 @@
 <table id="sortable-table">
 	<tbody>
 		<tr>
-			<td>1</td>
-			<td>2</td>
+			<td>1.1</td>
+			<td>1.2</td>
 		</tr>
 		<tr>
-			<td>3</td>
-			<td>4</td>
+			<td>1.3</td>
+			<td>1.4</td>
 		</tr>
 		<tr>
-			<td>5</td>
-			<td>6</td>
+			<td>1.5</td>
+			<td>1.6</td>
 		</tr>
 		<tr>
-			<td>7</td>
-			<td>8</td>
+			<td>1.7</td>
+			<td>1.8</td>
+		</tr>
+	</tbody>
+	<tbody>
+		<tr>
+			<td>2.1</td>
+			<td>2.2</td>
+		</tr>
+		<tr>
+			<td>2.3</td>
+			<td>2.4</td>
+		</tr>
+		<tr>
+			<td>2.5</td>
+			<td>2.6</td>
+		</tr>
+		<tr>
+			<td>2.7</td>
+			<td>2.8</td>
+		</tr>
+	</tbody>
+	<tbody>
+		<tr>
+			<td>3.1</td>
+			<td>3.2</td>
+		</tr>
+		<tr>
+			<td>3.3</td>
+			<td>3.4</td>
+		</tr>
+		<tr>
+			<td>3.5</td>
+			<td>3.6</td>
+		</tr>
+		<tr>
+			<td>3.7</td>
+			<td>3.8</td>
 		</tr>
 	</tbody>
 </table>
 
 <div id="sortable-images">
-	<img src="../images/jqueryui_32x32.png" alt="">
-	<img src="../images/jqueryui_32x32.png" alt="">
-	<img src="../images/jqueryui_32x32.png" alt="">
-	<img src="../images/jqueryui_32x32.png" alt="">
+	<img src="../../images/jqueryui_32x32.png" alt="">
+	<img src="../../images/jqueryui_32x32.png" alt="">
+	<img src="../../images/jqueryui_32x32.png" alt="">
+	<img src="../../images/jqueryui_32x32.png" alt="">
 </div>
 
 </div>

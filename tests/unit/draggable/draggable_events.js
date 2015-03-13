@@ -118,8 +118,47 @@ test( "stopping the stop callback", function() {
 	});
 
 	ok( element.draggable( "instance" ).helper, "the clone should not be deleted if the stop callback is stopped" );
+});
 
+// http://bugs.jqueryui.com/ticket/6884
+// Draggable: ui.offset.left differs between the "start" and "drag" hooks
+test( "position and offset in hash is consistent between start, drag, and stop", function() {
+	expect( 4 );
 
+	var startPos, startOffset, dragPos, dragOffset, stopPos, stopOffset;
+
+	element = $( "<div style='margin: 2px;'></div>" ).appendTo( "#qunit-fixture" );
+
+	element.draggable({
+		start: function( event, ui ) {
+			startPos = ui.position;
+			startOffset = ui.offset;
+		},
+		drag: function( event, ui ) {
+			dragPos = ui.position;
+			dragOffset = ui.offset;
+		},
+		stop: function( event, ui ) {
+			stopPos = ui.position;
+			stopOffset = ui.offset;
+		}
+	});
+
+	element.simulate( "drag", {
+		dx: 10,
+		dy: 10,
+		moves: 1
+	});
+
+	startPos.left += 10;
+	startPos.top += 10;
+	startOffset.left += 10;
+	startOffset.top += 10;
+
+	deepEqual( startPos, dragPos, "start position equals drag position plus distance" );
+	deepEqual( dragPos, stopPos, "drag position equals stop position" );
+	deepEqual( startOffset, dragOffset, "start offset equals drag offset plus distance" );
+	deepEqual( dragOffset, stopOffset, "drag offset equals stop offset" );
 });
 
 })( jQuery );

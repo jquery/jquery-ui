@@ -32,11 +32,13 @@ var
 		"button",
 		"datepicker",
 		"dialog",
+		"draggable",
 		"menu",
 		"progressbar",
 		"resizable",
 		"selectable",
 		"selectmenu",
+		"sortable",
 		"slider",
 		"spinner",
 		"tabs",
@@ -74,10 +76,11 @@ var
 			"dist/jquery-ui.js",
 			"dist/jquery-ui.min.js"
 		]
-	};
+	},
+	component = grunt.option( "component" ) || "**";
 
 function mapMinFile( file ) {
-	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
+	return "dist/" + file.replace( /ui\//, "minified/" );
 }
 
 function expandFiles( files ) {
@@ -102,16 +105,7 @@ uiFiles.forEach(function( file ) {
 });
 
 // grunt plugins
-grunt.loadNpmTasks( "grunt-contrib-jshint" );
-grunt.loadNpmTasks( "grunt-contrib-uglify" );
-grunt.loadNpmTasks( "grunt-contrib-concat" );
-grunt.loadNpmTasks( "grunt-contrib-qunit" );
-grunt.loadNpmTasks( "grunt-contrib-csslint" );
-grunt.loadNpmTasks( "grunt-jscs-checker" );
-grunt.loadNpmTasks( "grunt-html" );
-grunt.loadNpmTasks( "grunt-compare-size" );
-grunt.loadNpmTasks( "grunt-git-authors" );
-grunt.loadNpmTasks( "grunt-esformatter" );
+require( "load-grunt-tasks" )( grunt );
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -126,7 +120,7 @@ function createBanner( files ) {
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\\n' : '' %>" +
 		(files ? "* Includes: " + fileNames.join(", ") + "\n" : "") +
-		"* Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
+		"* Copyright <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n";
 }
 
@@ -166,11 +160,11 @@ grunt.initConfig({
 		}
 	},
 	jscs: {
-		// datepicker, sortable, resizable and draggable are getting rewritten, ignore until that's done
-		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js", "!ui/resizable.js", "!ui/draggable.js" ],
-		// TODO enable this once we have a tool that can help with fixing formatting of existing files
+		// datepicker and sortable are getting rewritten, ignore until that's done
+		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js" ],
+		// TODO enable this once we have a tool that can auto format files
 		// tests: "tests/unit/**/*.js",
-		grunt: "Gruntfile.js"
+		grunt: [ "Gruntfile.js", "build/tasks/*.js" ]
 	},
 	uglify: minify,
 	htmllint: {
@@ -180,11 +174,14 @@ grunt.initConfig({
 		})
 	},
 	qunit: {
-		files: expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
-			// disabling everything that doesn't (quite) work with PhantomJS for now
-			// TODO except for all|index|test, try to include more as we go
-			return !( /(all|index|test|dialog|tooltip)\.html$/ ).test( file );
-		})
+		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
+			return !( /(all|index|test)\.html$/ ).test( file );
+		}),
+		options: {
+			page: {
+				viewportSize: { width: 700, height: 500 }
+			}
+		}
 	},
 	jshint: {
 		options: {
@@ -219,7 +216,160 @@ grunt.initConfig({
 			src: "build/**/*.js"
 		},
 		grunt: "Gruntfile.js"
+	},
+
+	bowercopy: {
+		all: {
+			options: {
+				clean: true,
+				ignore: [ "jquery" ],
+				destPrefix: "external"
+			},
+			files: {
+				"qunit/qunit.js": "qunit/qunit/qunit.js",
+				"qunit/qunit.css": "qunit/qunit/qunit.css",
+				"qunit/LICENSE.txt": "qunit/LICENSE.txt",
+
+				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
+				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
+
+				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
+				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
+
+				"jshint/jshint.js": "jshint/dist/jshint.js",
+				"jshint/LICENSE": "jshint/LICENSE",
+
+				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
+				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",
+
+				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
+				"jquery-1.7.0/MIT-LICENSE.txt": "jquery-1.7.0/MIT-LICENSE.txt",
+
+				"jquery-1.7.1/jquery.js": "jquery-1.7.1/jquery.js",
+				"jquery-1.7.1/MIT-LICENSE.txt": "jquery-1.7.1/MIT-LICENSE.txt",
+
+				"jquery-1.7.2/jquery.js": "jquery-1.7.2/jquery.js",
+				"jquery-1.7.2/MIT-LICENSE.txt": "jquery-1.7.2/MIT-LICENSE.txt",
+
+				"jquery-1.8.0/jquery.js": "jquery-1.8.0/jquery.js",
+				"jquery-1.8.0/MIT-LICENSE.txt": "jquery-1.8.0/MIT-LICENSE.txt",
+
+				"jquery-1.8.1/jquery.js": "jquery-1.8.1/jquery.js",
+				"jquery-1.8.1/MIT-LICENSE.txt": "jquery-1.8.1/MIT-LICENSE.txt",
+
+				"jquery-1.8.2/jquery.js": "jquery-1.8.2/jquery.js",
+				"jquery-1.8.2/MIT-LICENSE.txt": "jquery-1.8.2/MIT-LICENSE.txt",
+
+				"jquery-1.8.3/jquery.js": "jquery-1.8.3/jquery.js",
+				"jquery-1.8.3/MIT-LICENSE.txt": "jquery-1.8.3/MIT-LICENSE.txt",
+
+				"jquery-1.9.0/jquery.js": "jquery-1.9.0/jquery.js",
+				"jquery-1.9.0/MIT-LICENSE.txt": "jquery-1.9.0/MIT-LICENSE.txt",
+
+				"jquery-1.9.1/jquery.js": "jquery-1.9.1/jquery.js",
+				"jquery-1.9.1/MIT-LICENSE.txt": "jquery-1.9.1/MIT-LICENSE.txt",
+
+				"jquery-1.10.0/jquery.js": "jquery-1.10.0/jquery.js",
+				"jquery-1.10.0/MIT-LICENSE.txt": "jquery-1.10.0/MIT-LICENSE.txt",
+
+				"jquery-1.10.1/jquery.js": "jquery-1.10.1/jquery.js",
+				"jquery-1.10.1/MIT-LICENSE.txt": "jquery-1.10.1/MIT-LICENSE.txt",
+
+				"jquery-1.10.2/jquery.js": "jquery-1.10.2/jquery.js",
+				"jquery-1.10.2/MIT-LICENSE.txt": "jquery-1.10.2/MIT-LICENSE.txt",
+
+				"jquery-1.11.0/jquery.js": "jquery-1.11.0/dist/jquery.js",
+				"jquery-1.11.0/MIT-LICENSE.txt": "jquery-1.11.0/MIT-LICENSE.txt",
+
+				"jquery-1.11.1/jquery.js": "jquery-1.11.1/dist/jquery.js",
+				"jquery-1.11.1/MIT-LICENSE.txt": "jquery-1.11.1/MIT-LICENSE.txt",
+
+				"jquery-1.11.2/jquery.js": "jquery-1.11.2/dist/jquery.js",
+				"jquery-1.11.2/MIT-LICENSE.txt": "jquery-1.11.2/MIT-LICENSE.txt",
+
+				"jquery-2.0.0/jquery.js": "jquery-2.0.0/jquery.js",
+				"jquery-2.0.0/MIT-LICENSE.txt": "jquery-2.0.0/MIT-LICENSE.txt",
+
+				"jquery-2.0.1/jquery.js": "jquery-2.0.1/jquery.js",
+				"jquery-2.0.1/MIT-LICENSE.txt": "jquery-2.0.1/MIT-LICENSE.txt",
+
+				"jquery-2.0.2/jquery.js": "jquery-2.0.2/jquery.js",
+				"jquery-2.0.2/MIT-LICENSE.txt": "jquery-2.0.2/MIT-LICENSE.txt",
+
+				"jquery-2.0.3/jquery.js": "jquery-2.0.3/jquery.js",
+				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt",
+
+				"jquery-2.1.0/jquery.js": "jquery-2.1.0/dist/jquery.js",
+				"jquery-2.1.0/MIT-LICENSE.txt": "jquery-2.1.0/MIT-LICENSE.txt",
+
+				"jquery-2.1.1/jquery.js": "jquery-2.1.1/dist/jquery.js",
+				"jquery-2.1.1/MIT-LICENSE.txt": "jquery-2.1.1/MIT-LICENSE.txt",
+
+				"jquery-2.1.2/jquery.js": "jquery-2.1.2/dist/jquery.js",
+				"jquery-2.1.2/MIT-LICENSE.txt": "jquery-2.1.2/MIT-LICENSE.txt",
+
+				"jquery-2.1.3/jquery.js": "jquery-2.1.3/dist/jquery.js",
+				"jquery-2.1.3/MIT-LICENSE.txt": "jquery-2.1.3/MIT-LICENSE.txt"
+			}
+		}
+	},
+
+	authors: {
+		prior: [
+			"Paul Bakaus <paul.bakaus@gmail.com>",
+			"Richard Worth <rdworth@gmail.com>",
+			"Yehuda Katz <wycats@gmail.com>",
+			"Sean Catchpole <sean@sunsean.com>",
+			"John Resig <jeresig@gmail.com>",
+			"Tane Piper <piper.tane@gmail.com>",
+			"Dmitri Gaskin <dmitrig01@gmail.com>",
+			"Klaus Hartl <klaus.hartl@gmail.com>",
+			"Stefan Petre <stefan.petre@gmail.com>",
+			"Gilles van den Hoven <gilles@webunity.nl>",
+			"Micheil Bryan Smith <micheil@brandedcode.com>",
+			"Jörn Zaefferer <joern.zaefferer@gmail.com>",
+			"Marc Grabanski <m@marcgrabanski.com>",
+			"Keith Wood <kbwood@iinet.com.au>",
+			"Brandon Aaron <brandon.aaron@gmail.com>",
+			"Scott González <scott.gonzalez@gmail.com>",
+			"Eduardo Lundgren <eduardolundgren@gmail.com>",
+			"Aaron Eisenberger <aaronchi@gmail.com>",
+			"Joan Piedra <theneojp@gmail.com>",
+			"Bruno Basto <b.basto@gmail.com>",
+			"Remy Sharp <remy@leftlogic.com>",
+			"Bohdan Ganicky <bohdan.ganicky@gmail.com>"
+		]
 	}
+});
+
+grunt.registerTask( "update-authors", function() {
+	var getAuthors = require( "grunt-git-authors" ),
+		done = this.async();
+
+	getAuthors({
+		priorAuthors: grunt.config( "authors.prior" )
+	}, function( error, authors ) {
+		if ( error ) {
+			grunt.log.error( error );
+			return done( false );
+		}
+
+		authors = authors.map(function( author ) {
+			if ( author.match( /^Jacek Jędrzejewski </ ) ) {
+				return "Jacek Jędrzejewski (http://jacek.jedrzejewski.name)";
+			} else if ( author.match( /^Pawel Maruszczyk </ ) ) {
+				return "Pawel Maruszczyk (http://hrabstwo.net)";
+			} else {
+				return author;
+			}
+		});
+
+		grunt.file.write( "AUTHORS.txt",
+			"Authors ordered by first contribution\n" +
+			"A list of current team members is available at http://jqueryui.com/about\n\n" +
+			authors.join( "\n" ) + "\n" );
+		done();
+	});
 });
 
 grunt.registerTask( "default", [ "lint", "test" ]);

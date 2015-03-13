@@ -2,12 +2,20 @@
  * jQuery UI Slider @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/slider/
  */
+
+//>>label: Slider
+//>>group: Widgets
+//>>description: Displays a flexible slider with ranges and accessibility via keyboard.
+//>>docs: http://api.jqueryui.com/slider/
+//>>demos: http://jqueryui.com/slider/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/slider.css
+//>>css.theme: ../themes/base/theme.css
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -58,6 +66,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
+		this._calculateNewMax();
 
 		this.element
 			.addClass( "ui-slider" +
@@ -83,7 +92,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var i, handleCount,
 			options = this.options,
 			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
-			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
+			handle = "<span class='ui-slider-handle ui-state-default ui-corner-all' tabindex='0'></span>",
 			handles = [];
 
 		handleCount = ( options.values && options.values.length ) || 1;
@@ -149,11 +158,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_setupEvents: function() {
-		var elements = this.handles.add( this.range ).filter( "a" );
-		this._off( elements );
-		this._on( elements, this._handleEvents );
-		this._hoverable( elements );
-		this._focusable( elements );
+		this._off( this.handles );
+		this._on( this.handles, this._handleEvents );
+		this._hoverable( this.handles );
+		this._focusable( this.handles );
 	},
 
 	_destroy: function() {
@@ -455,6 +463,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 					.removeClass( "ui-slider-horizontal ui-slider-vertical" )
 					.addClass( "ui-slider-" + this.orientation );
 				this._refreshValue();
+
+				// Reset positioning from previous orientation
+				this.handles.css( value === "horizontal" ? "bottom" : "left", "" );
 				break;
 			case "value":
 				this._animateOff = true;
@@ -470,9 +481,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				this._animateOff = false;
 				break;
+			case "step":
 			case "min":
 			case "max":
 				this._animateOff = true;
+				this._calculateNewMax();
 				this._refreshValue();
 				this._animateOff = false;
 				break;
@@ -510,7 +523,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			// .slice() creates a copy of the array
 			// this copy gets trimmed by min and max and then returned
 			vals = this.options.values.slice();
-			for ( i = 0; i < vals.length; i+= 1) {
+			for ( i = 0; i < vals.length; i += 1) {
 				vals[ i ] = this._trimAlignValue( vals[ i ] );
 			}
 
@@ -541,12 +554,35 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return parseFloat( alignValue.toFixed(5) );
 	},
 
+	_calculateNewMax: function() {
+		var max = this.options.max,
+			min = this._valueMin(),
+			step = this.options.step,
+			aboveMin = Math.floor( ( +( max - min ).toFixed( this._precision() ) ) / step ) * step;
+		max = aboveMin + min;
+		this.max = parseFloat( max.toFixed( this._precision() ) );
+	},
+
+	_precision: function() {
+		var precision = this._precisionOf( this.options.step );
+		if ( this.options.min !== null ) {
+			precision = Math.max( precision, this._precisionOf( this.options.min ) );
+		}
+		return precision;
+	},
+
+	_precisionOf: function( num ) {
+		var str = num.toString(),
+			decimal = str.indexOf( "." );
+		return decimal === -1 ? 0 : str.length - decimal - 1;
+	},
+
 	_valueMin: function() {
 		return this.options.min;
 	},
 
 	_valueMax: function() {
-		return this.options.max;
+		return this.max;
 	},
 
 	_refreshValue: function() {
@@ -672,9 +708,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			this._slide( event, index, newVal );
-		},
-		click: function( event ) {
-			event.preventDefault();
 		},
 		keyup: function( event ) {
 			var index = $( event.target ).data( "ui-slider-handle-index" );

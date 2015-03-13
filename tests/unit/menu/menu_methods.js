@@ -11,18 +11,12 @@ module( "menu: methods", {
 });
 
 test( "destroy", function() {
-	expect( 4 );
-	domEqual( "#menu1", function() {
-		$( "#menu1" ).menu().menu( "destroy" );
-	});
+	expect( 2 );
 	domEqual( "#menu2", function() {
 		$( "#menu2" ).menu().menu( "destroy" );
 	});
 	domEqual( "#menu5", function() {
 		$( "#menu5").menu().menu( "destroy" );
-	});
-	domEqual( "#menu6", function() {
-		$( "#menu6" ).menu().menu( "destroy" );
 	});
 });
 
@@ -73,11 +67,12 @@ test( "refresh icons (see #9377)", function() {
 	expect( 3 );
 	var element = $( "#menu1" ).menu();
 	ok( !element.hasClass( "ui-menu-icons") );
-	element.find( "li:first" ).html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
+	element.find( "li:first .ui-menu-item-wrapper" )
+		.html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
 	element.menu( "refresh" );
 
 	ok( element.hasClass( "ui-menu-icons" ) );
-	element.find( "li:first" ).html( "Save" );
+	element.find( "li:first .ui-menu-item-wrapper" ).html( "Save" );
 	element.menu( "refresh" );
 	ok( !element.hasClass( "ui-menu-icons" ) );
 });

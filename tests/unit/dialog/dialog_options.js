@@ -283,15 +283,6 @@ test("height", function() {
 	element.remove();
 });
 
-asyncTest( "hide, #5860 - don't leave effects wrapper behind", function() {
-	expect( 1 );
-	$( "#dialog1" ).dialog({ hide: "clip" }).dialog( "close" ).dialog( "destroy" );
-	setTimeout(function() {
-		equal( $( ".ui-effects-wrapper" ).length, 0 );
-		start();
-	}, 500);
-});
-
 test("maxHeight", function() {
 	expect(3);
 
@@ -371,9 +362,9 @@ test("minWidth", function() {
 test( "position, default center on window", function() {
 	expect( 2 );
 
-	// dialogs alter the window width and height in FF and IE7
+	// dialogs alter the window width and height in Firefox
 	// so we collect that information before creating the dialog
-	// Support: FF, IE7
+	// Support: Firefox
 	var winWidth = $( window ).width(),
 		winHeight = $( window ).height(),
 		element = $("<div></div>").dialog(),
@@ -387,9 +378,9 @@ test( "position, default center on window", function() {
 test( "position, right bottom at right bottom via ui.position args", function() {
 	expect( 2 );
 
-	// dialogs alter the window width and height in FF and IE7
+	// dialogs alter the window width and height in Firefox
 	// so we collect that information before creating the dialog
-	// Support: FF, IE7
+	// Support: Firefox
 	var winWidth = $( window ).width(),
 		winHeight = $( window ).height(),
 		element = $("<div></div>").dialog({
@@ -558,7 +549,7 @@ asyncTest( "#4421 - Focus lost from dialog which uses show-effect", function() {
 	var element = $( "<div></div>" ).dialog({
 		show: "blind",
 		focus: function() {
-			equal( element.dialog( "widget" ).find( ":focus" ).length, 1, "dialog maintains focus" );
+			equal( element.dialog( "widget" ).find( document.activeElement ).length, 1, "dialog maintains focus" );
 			element.remove();
 			start();
 		}

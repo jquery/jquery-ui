@@ -2,12 +2,20 @@
  * jQuery UI Spinner @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/spinner/
  */
+
+//>>label: Spinner
+//>>group: Widgets
+//>>description: Displays buttons to easily input numbers via the keyboard or mouse.
+//>>docs: http://api.jqueryui.com/spinner/
+//>>demos: http://jqueryui.com/spinner/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/spinner.css
+//>>css.theme: ../themes/base/theme.css
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -403,7 +411,6 @@ return $.widget( "ui.spinner", {
 
 	_setOptions: spinner_modifier(function( options ) {
 		this._super( options );
-		this._value( this.element.val() );
 	}),
 
 	_parse: function( val ) {

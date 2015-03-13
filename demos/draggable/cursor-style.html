@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Draggable - Cursor style</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/widget.js"></script>
 	<script src="../../ui/interaction.js"></script>
@@ -14,58 +14,29 @@
 	#draggable, #draggable2, #draggable3 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
 	</style>
 	<script>
-	$.ui.draggable.prototype.options.cursorAt = null;
-	$( document ).bind( "dragbeforestart", function( event, ui ) {
-		var cursorAt, elem,
-			draggable = $( event.target ).data( "draggable" );
-
-		if ( !draggable || !draggable.options.cursorAt ) {
-			return;
-		}
-
-		elem = ui.helper || draggable.element;
-		cursorAt = draggable.options.cursorAt;
-		if ( "top" in cursorAt ) {
-			ui.position.top += ui.pointer.y - ui.offset.top - cursorAt.top;
-		}
-		if ( "left" in cursorAt ) {
-			ui.position.left += ui.pointer.x - ui.offset.left - cursorAt.left;
-		}
-		if ( "bottom" in cursorAt ) {
-			ui.position.top += ui.pointer.y - ui.offset.top - elem.outerHeight() + cursorAt.bottom;
-		}
-		if ( "right" in cursorAt ) {
-			ui.position.left += ui.pointer.x - ui.offset.left - elem.outerWidth() + cursorAt.right;
-		}
-	});
-
 	$(function() {
-		$( "#draggable" ).draggable({
-			beforeStart: function( event, ui ) {
-				ui.position.top += ui.pointer.y - ui.offset.top - $( event.target ).outerHeight() / 2;
-				ui.position.left += ui.pointer.x - ui.offset.left - $( event.target ).outerWidth() / 2;
-			}
-		});
-		$( "#draggable2" ).draggable({
-			beforeStart: function( event, ui ) {
-				ui.position.top += ui.pointer.y - ui.offset.top;
-			}
-		});
+		$( "#draggable" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
+		$( "#draggable2" ).draggable({ cursor: "crosshair", cursorAt: { top: -5, left: -5 } });
+		$( "#draggable3" ).draggable({ cursorAt: { bottom: 0 } });
 	});
 	</script>
 </head>
 <body>
 
 <div id="draggable" class="ui-widget-content">
-	<p>I will always stick to the center (relative to the pointer)</p>
+	<p>I will always stick to the center (relative to the mouse)</p>
 </div>
 
 <div id="draggable2" class="ui-widget-content">
-	<p>My cursor position is always at the top</p>
+	<p>My cursor is at left -5 and top -5</p>
+</div>
+
+<div id="draggable3" class="ui-widget-content">
+	<p>My cursor position is only controlled for the 'bottom' value</p>
 </div>
 
 <div class="demo-description">
-<p>The <code>beforeStart</code> callback allows you to position the draggable element in order to adjust where the draggable movements will be calculated from. In this example, we adjust the position to control where the element is relative to the pointer during the drag.</p>
+<p>Position the cursor while dragging the object. By default the cursor appears in the center of the dragged object; use the <code>cursorAt</code> option to specify another location relative to the draggable (specify a pixel value from the top, right, bottom, and/or left).  Customize the cursor's appearance by supplying the <code>cursor</code> option with a valid CSS cursor value: default, move, pointer, crosshair, etc.</p>
 </div>
 </body>
 </html>

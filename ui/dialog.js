@@ -2,12 +2,20 @@
  * jQuery UI Dialog @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/dialog/
  */
+
+//>>label: Dialog
+//>>group: Widgets
+//>>description: Displays customizable dialog windows.
+//>>docs: http://api.jqueryui.com/dialog/
+//>>demos: http://jqueryui.com/dialog/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/dialog.css
+//>>css.theme: ../themes/base/theme.css
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -150,6 +158,7 @@ return $.widget( "ui.dialog", {
 		var next,
 			originalPosition = this.originalPosition;
 
+		this._untrackInstance();
 		this._destroyOverlay();
 
 		this.element
@@ -159,7 +168,7 @@ return $.widget( "ui.dialog", {
 			// Without detaching first, the following becomes really slow
 			.detach();
 
-		this.uiDialog.stop( true, true ).remove();
+		this.uiDialog.remove();
 
 		if ( this.originalTitle ) {
 			this.element.attr( "title", this.originalTitle );
@@ -228,10 +237,10 @@ return $.widget( "ui.dialog", {
 
 	_moveToTop: function( event, silent ) {
 		var moved = false,
-			zIndicies = this.uiDialog.siblings( ".ui-front:visible" ).map(function() {
+			zIndices = this.uiDialog.siblings( ".ui-front:visible" ).map(function() {
 				return +$( this ).css( "z-index" );
 			}).get(),
-			zIndexMax = Math.max.apply( null, zIndicies );
+			zIndexMax = Math.max.apply( null, zIndices );
 
 		if ( zIndexMax >= +this.uiDialog.css( "z-index" ) ) {
 			this.uiDialog.css( "z-index", zIndexMax + 1 );
@@ -260,10 +269,23 @@ return $.widget( "ui.dialog", {
 		this._position();
 		this._createOverlay();
 		this._moveToTop( null, true );
+
+		// Ensure the overlay is moved to the top with the dialog, but only when
+		// opening. The overlay shouldn't move after the dialog is open so that
+		// modeless dialogs opened after the modal dialog stack properly.
+		if ( this.overlay ) {
+			this.overlay.css( "z-index", this.uiDialog.css( "z-index" ) - 1 );
+		}
+
 		this._show( this.uiDialog, this.options.show, function() {
 			that._focusTabbable();
 			that._trigger( "focus" );
 		});
+
+		// Track the dialog immediately upon openening in case a focus event
+		// somehow occurs outside of the dialog before an element inside the
+		// dialog is focused (#10152)
+		this._makeFocusTarget();
 
 		this._trigger( "open" );
 	},
@@ -334,7 +356,7 @@ return $.widget( "ui.dialog", {
 				}
 
 				// prevent tabbing out of dialogs
-				if ( event.keyCode !== $.ui.keyCode.TAB ) {
+				if ( event.keyCode !== $.ui.keyCode.TAB || event.isDefaultPrevented() ) {
 					return;
 				}
 				var tabbables = this.uiDialog.find( ":tabbable" ),
@@ -342,10 +364,14 @@ return $.widget( "ui.dialog", {
 					last = tabbables.filter( ":last" );
 
 				if ( ( event.target === last[0] || event.target === this.uiDialog[0] ) && !event.shiftKey ) {
-					first.focus( 1 );
+					this._delay(function() {
+						first.focus();
+					});
 					event.preventDefault();
 				} else if ( ( event.target === first[0] || event.target === this.uiDialog[0] ) && event.shiftKey ) {
-					last.focus( 1 );
+					this._delay(function() {
+						last.focus();
+					});
 					event.preventDefault();
 				}
 			},
@@ -572,12 +598,16 @@ return $.widget( "ui.dialog", {
 
 	_trackFocus: function() {
 		this._on( this.widget(), {
-			"focusin": function( event ) {
-				this._untrackInstance();
-				this._trackingInstances().unshift( this );
+			focusin: function( event ) {
+				this._makeFocusTarget();
 				this._focusedElement = $( event.target );
 			}
 		});
+	},
+
+	_makeFocusTarget: function() {
+		this._untrackInstance();
+		this._trackingInstances().unshift( this );
 	},
 
 	_untrackInstance: function() {
@@ -839,7 +869,7 @@ return $.widget( "ui.dialog", {
 
 			if ( !overlays ) {
 				this.document
-					.off( "focusin" )
+					.unbind( "focusin" )
 					.removeData( "ui-dialog-overlays" );
 			} else {
 				this.document.data( "ui-dialog-overlays", overlays );

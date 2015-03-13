@@ -2,12 +2,20 @@
  * jQuery UI Datepicker @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/datepicker/
  */
+
+//>>label: Datepicker
+//>>group: Widgets
+//>>description: Displays a calendar from an input or inline for selecting dates.
+//>>docs: http://api.jqueryui.com/datepicker/
+//>>demos: http://jqueryui.com/datepicker/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/datepicker.css
+//>>css.theme: ../themes/base/theme.css
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -139,6 +147,8 @@ function Datepicker() {
 		disabled: false // The initial disabled state
 	};
 	$.extend(this._defaults, this.regional[""]);
+	this.regional.en = $.extend( true, {}, this.regional[ "" ]);
+	this.regional[ "en-US" ] = $.extend( true, {}, this.regional.en );
 	this.dpDiv = datepicker_bindHover($("<div id='" + this._mainDivId + "' class='ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>"));
 }
 
@@ -386,6 +396,10 @@ $.extend(Datepicker.prototype, {
 				unbind("keyup", this._doKeyUp);
 		} else if (nodeName === "div" || nodeName === "span") {
 			$target.removeClass(this.markerClassName).empty();
+		}
+
+		if ( datepicker_instActive === inst ) {
+			datepicker_instActive = null;
 		}
 	},
 
@@ -797,12 +811,16 @@ $.extend(Datepicker.prototype, {
 		datepicker_instActive = inst; // for delegate hover events
 		inst.dpDiv.empty().append(this._generateHTML(inst));
 		this._attachHandlers(inst);
-		inst.dpDiv.find("." + this._dayOverClass + " a").mouseover();
 
 		var origyearshtml,
 			numMonths = this._getNumberOfMonths(inst),
 			cols = numMonths[1],
-			width = 17;
+			width = 17,
+			activeCell = inst.dpDiv.find( "." + this._dayOverClass + " a" );
+
+		if ( activeCell.length > 0 ) {
+			datepicker_handleMouseover.apply( activeCell.get( 0 ) );
+		}
 
 		inst.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").width("");
 		if (cols > 1) {
@@ -1136,7 +1154,8 @@ $.extend(Datepicker.prototype, {
 				var isDoubled = lookAhead(match),
 					size = (match === "@" ? 14 : (match === "!" ? 20 :
 					(match === "y" && isDoubled ? 4 : (match === "o" ? 3 : 2)))),
-					digits = new RegExp("^\\d{1," + size + "}"),
+					minSize = (match === "y" ? size : 1),
+					digits = new RegExp("^\\d{" + minSize + "," + size + "}"),
 					num = value.substring(iValue).match(digits);
 				if (!num) {
 					throw "Missing number at position " + iValue;
@@ -1997,18 +2016,20 @@ function datepicker_bindHover(dpDiv) {
 				$(this).removeClass("ui-datepicker-next-hover");
 			}
 		})
-		.delegate(selector, "mouseover", function(){
-			if (!$.datepicker._isDisabledDatepicker( datepicker_instActive.inline ? dpDiv.parent()[0] : datepicker_instActive.input[0])) {
-				$(this).parents(".ui-datepicker-calendar").find("a").removeClass("ui-state-hover");
-				$(this).addClass("ui-state-hover");
-				if (this.className.indexOf("ui-datepicker-prev") !== -1) {
-					$(this).addClass("ui-datepicker-prev-hover");
-				}
-				if (this.className.indexOf("ui-datepicker-next") !== -1) {
-					$(this).addClass("ui-datepicker-next-hover");
-				}
-			}
-		});
+		.delegate( selector, "mouseover", datepicker_handleMouseover );
+}
+
+function datepicker_handleMouseover() {
+	if (!$.datepicker._isDisabledDatepicker( datepicker_instActive.inline? datepicker_instActive.dpDiv.parent()[0] : datepicker_instActive.input[0])) {
+		$(this).parents(".ui-datepicker-calendar").find("a").removeClass("ui-state-hover");
+		$(this).addClass("ui-state-hover");
+		if (this.className.indexOf("ui-datepicker-prev") !== -1) {
+			$(this).addClass("ui-datepicker-prev-hover");
+		}
+		if (this.className.indexOf("ui-datepicker-next") !== -1) {
+			$(this).addClass("ui-datepicker-next-hover");
+		}
+	}
 }
 
 /* jQuery extend now ignores nulls! */

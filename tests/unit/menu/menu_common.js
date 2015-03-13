@@ -2,12 +2,12 @@ TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
 		disabled: false,
 		icons: {
-			submenu: "ui-icon-carat-1-e"
+			submenu: "ui-icon-caret-1-e"
 		},
 		items: "> *",
 		menus: "ul",
 		position: {
-			my: "left-1 top",
+			my: "left top",
 			at: "right top"
 		},
 		role: "menu",

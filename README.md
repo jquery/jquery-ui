@@ -10,46 +10,32 @@ If you are interested in helping develop jQuery UI, you are in the right place.
 To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui) or [#jqueryui-dev on irc.freenode.net](http://irc.jquery.org/).
 
 
-## For contributors
+## For Contributors
 
 If you want to help and provide a patch for a bugfix or new feature, please take
 a few minutes and look at [our Getting Involved guide](http://wiki.jqueryui.com/w/page/35263114/Getting-Involved).
 In particular check out the [Coding standards](http://wiki.jqueryui.com/w/page/12137737/Coding-standards)
-and [Commit Message Style Guide](http://wiki.jqueryui.com/w/page/25941597/Commit-Message-Style-Guide).
+and [Commit Message Style Guide](http://contribute.jquery.org/commits-and-pull-requests/#commit-guidelines).
 
 In general, fork the project, create a branch for a specific change and send a
 pull request for that branch. Don't mix unrelated changes. You can use the commit
 message as the description for the pull request.
 
+For more information, see the [contributing page](CONTRIBUTING.md).
 
 ## Running the Unit Tests
 
-Run the unit tests with a local server that supports PHP. No database is required. Pre-configured php local servers are available for Windows and Mac. Here are some options:
+Run the unit tests manually with appropriate browsers and any local web server. See our [environment setup](CONTRIBUTING.md#environment-minimum-required) and [information on running tests](CONTRIBUTING.md#running-the-tests).
 
-- Windows: [WAMP download](http://www.wampserver.com/en/)
-- Mac: [MAMP download](http://www.mamp.info/en/index.html)
-- Linux: [Setting up LAMP](https://www.linux.com/learn/tutorials/288158-easy-lamp-server-installation)
-- [Mongoose (most platforms)](http://code.google.com/p/mongoose/)
-
+You can also run the unit tests inside phantomjs by [setting up your environment](CONTRIBUTING.md#user-content-environment-recommended-setup).
 
 ## Building jQuery UI
 
-jQuery UI uses the [Grunt](http://github.com/gruntjs/grunt) build system.
+jQuery UI uses the [Grunt](http://gruntjs.com/) build system.
 
-To build jQuery UI, you must have [node.js](http://nodejs.org/) installed and then run the following commands:
+To build jQuery UI, [setup your environment]([setting up your environment](CONTRIBUTING.md#environment-minimum-required)) and then run the following commands:
 
 ```sh
-
-# Install the Grunt CLI
-npm install -g grunt-cli
-
-# Clone the jQuery UI git repo
-git clone git://github.com/jquery/jquery-ui.git
-cd jquery-ui
-
-# Install the node module dependencies
-npm install
-
 # Run the concat task to concatenate files
 grunt concat
 
@@ -57,40 +43,3 @@ grunt concat
 # For a list of all tasks:
 grunt --help
 ```
-
-
-## For committers
-
-When looking at pull requests, first check for [proper commit messages](http://wiki.jqueryui.com/w/page/12137724/Bug-Fixing-Guide).
-
-Do not merge pull requests directly through GitHub's interface.
-Most pull requests are a single commit; cherry-picking will avoid creating a merge commit.
-It's also common for contributors to make minor fixes in an additional one or two commits.
-These should be squashed before landing in master.
-
-**Make sure the author has a valid name and email address associated with the commit.**
-
-Fetch the remote first:
-
-	git fetch [their-fork.git] [their-branch]
-
-Then cherry-pick the commit(s):
-
-	git cherry-pick [sha-of-commit]
-
-If you need to edit the commit message:
-
-	git cherry-pick -e [sha-of-commit]
-
-If you need to edit the changes:
-
-	git cherry-pick -n [sha-of-commit]
-	# make changes
-	git commit --author="[author-name-and-email]"
-
-If it should go to the stable branch, cherry-pick it to stable:
-
-	git checkout 1-10-stable
-	git cherry-pick -x [sha-of-commit-from-master]
-
-*NOTE: Do not cherry-pick into 1-10-stable until you have pushed the commit from master upstream.*
