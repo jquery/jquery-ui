@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/menu.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget",
@@ -31,7 +31,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -64,10 +64,10 @@ return $.widget( "ui.menu", {
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
-			.attr({
+			.attr( {
 				role: this.options.role,
 				tabIndex: 0
-			});
+			} );
 
 		if ( this.options.disabled ) {
 			this._addClass( null, "ui-state-disabled" );
@@ -75,7 +75,7 @@ return $.widget( "ui.menu", {
 		}
 
 		this._addClass( "ui-menu", "ui-widget ui-widget-content" );
-		this._on({
+		this._on( {
 
 			// Prevent focus from sticking to links inside menu after clicking
 			// them (focus should always stay on UL during navigation).
@@ -134,14 +134,14 @@ return $.widget( "ui.menu", {
 				}
 			},
 			blur: function( event ) {
-				this._delay(function() {
-					if ( !$.contains( this.element[0], $.ui.safeActiveElement( this.document[0] ) ) ) {
+				this._delay( function() {
+					if ( !$.contains( this.element[ 0 ], $.ui.safeActiveElement( this.document[ 0 ] ) ) ) {
 						this.collapseAll( event );
 					}
-				});
+				} );
 			},
 			keydown: "_keydown"
-		});
+		} );
 
 		this.refresh();
 
@@ -155,7 +155,7 @@ return $.widget( "ui.menu", {
 				// Reset the mouseHandled flag
 				this.mouseHandled = false;
 			}
-		});
+		} );
 	},
 
 	_destroy: function() {
@@ -181,12 +181,12 @@ return $.widget( "ui.menu", {
 				.removeUniqueId()
 				.show();
 
-		submenus.children().each(function() {
+		submenus.children().each( function() {
 			var elem = $( this );
 			if ( elem.data( "ui-menu-submenu-caret" ) ) {
 				elem.remove();
 			}
-		});
+		} );
 	},
 
 	_keydown: function( event ) {
@@ -256,7 +256,7 @@ return $.widget( "ui.menu", {
 			if ( match.length ) {
 				this.focus( event, match );
 				this.previousFilter = character;
-				this.filterTimer = this._delay(function() {
+				this.filterTimer = this._delay( function() {
 					delete this.previousFilter;
 				}, 1000 );
 			} else {
@@ -290,12 +290,12 @@ return $.widget( "ui.menu", {
 		// Initialize nested menus
 		newSubmenus = submenus.filter( ":not(.ui-menu)" )
 			.hide()
-			.attr({
+			.attr( {
 				role: this.options.role,
 				"aria-hidden": "true",
 				"aria-expanded": "false"
-			})
-			.each(function() {
+			} )
+			.each( function() {
 				var menu = $( this ),
 					item = menu.prev(),
 					submenuCaret = $( "<span>" ).data( "ui-menu-submenu-caret", true );
@@ -305,7 +305,7 @@ return $.widget( "ui.menu", {
 					.attr( "aria-haspopup", "true" )
 					.prepend( submenuCaret );
 				menu.attr( "aria-labelledby", item.attr( "id" ) );
-			});
+			} );
 
 		this._addClass( newSubmenus, "ui-menu", "ui-widget ui-widget-content ui-front" );
 
@@ -313,22 +313,22 @@ return $.widget( "ui.menu", {
 		items = menus.find( this.options.items );
 
 		// Initialize menu-items containing spaces and/or dashes only as dividers
-		items.not( ".ui-menu-item" ).each(function() {
+		items.not( ".ui-menu-item" ).each( function() {
 			var item = $( this );
 			if ( that._isDivider( item ) ) {
 				that._addClass( item, "ui-menu-divider", "ui-widget-content" );
 			}
-		});
+		} );
 
 		// Don't refresh list items that are already adapted
 		newItems = items.not( ".ui-menu-item, .ui-menu-divider" );
 		newWrappers = newItems.children()
 			.not( ".ui-menu" )
 				.uniqueId()
-				.attr({
+				.attr( {
 					tabIndex: -1,
 					role: this._itemRole()
-				});
+				} );
 		this._addClass( newItems, "ui-menu-item" )
 			._addClass( newWrappers, "ui-menu-item-wrapper" );
 
@@ -388,14 +388,14 @@ return $.widget( "ui.menu", {
 		if ( event && event.type === "keydown" ) {
 			this._close();
 		} else {
-			this.timer = this._delay(function() {
+			this.timer = this._delay( function() {
 				this._close();
 			}, this.delay );
 		}
 
 		nested = item.children( ".ui-menu" );
 		if ( nested.length && event && ( /^mouse/.test( event.type ) ) ) {
-			this._startOpening(nested);
+			this._startOpening( nested );
 		}
 		this.activeMenu = item.parent();
 
@@ -405,8 +405,8 @@ return $.widget( "ui.menu", {
 	_scrollIntoView: function( item ) {
 		var borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
 		if ( this._hasScroll() ) {
-			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
-			paddingTop = parseFloat( $.css( this.activeMenu[0], "paddingTop" ) ) || 0;
+			borderTop = parseFloat( $.css( this.activeMenu[ 0 ], "borderTopWidth" ) ) || 0;
+			paddingTop = parseFloat( $.css( this.activeMenu[ 0 ], "paddingTop" ) ) || 0;
 			offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop;
 			scroll = this.activeMenu.scrollTop();
 			elementHeight = this.activeMenu.height();
@@ -445,14 +445,14 @@ return $.widget( "ui.menu", {
 			return;
 		}
 
-		this.timer = this._delay(function() {
+		this.timer = this._delay( function() {
 			this._close();
 			this._open( submenu );
 		}, this.delay );
 	},
 
 	_open: function( submenu ) {
-		var position = $.extend({
+		var position = $.extend( {
 			of: this.active
 		}, this.options.position );
 
@@ -470,7 +470,7 @@ return $.widget( "ui.menu", {
 
 	collapseAll: function( event, all ) {
 		clearTimeout( this.timer );
-		this.timer = this._delay(function() {
+		this.timer = this._delay( function() {
 			// If we were passed an event, look for the submenu that contains the event
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
@@ -527,16 +527,16 @@ return $.widget( "ui.menu", {
 		var newItem = this.active &&
 			this.active
 				.children( ".ui-menu " )
-				.find( this.options.items )
-				.first();
+					.find( this.options.items )
+						.first();
 
 		if ( newItem && newItem.length ) {
 			this._open( newItem.parent() );
 
 			// Delay so Firefox will not hide activedescendant change in expanding submenu from AT
-			this._delay(function() {
+			this._delay( function() {
 				this.focus( event, newItem );
-			});
+			} );
 		}
 	},
 
@@ -589,10 +589,10 @@ return $.widget( "ui.menu", {
 		if ( this._hasScroll() ) {
 			base = this.active.offset().top;
 			height = this.element.height();
-			this.active.nextAll( ".ui-menu-item" ).each(function() {
+			this.active.nextAll( ".ui-menu-item" ).each( function() {
 				item = $( this );
 				return item.offset().top - base - height < 0;
-			});
+			} );
 
 			this.focus( event, item );
 		} else {
@@ -613,10 +613,10 @@ return $.widget( "ui.menu", {
 		if ( this._hasScroll() ) {
 			base = this.active.offset().top;
 			height = this.element.height();
-			this.active.prevAll( ".ui-menu-item" ).each(function() {
+			this.active.prevAll( ".ui-menu-item" ).each( function() {
 				item = $( this );
 				return item.offset().top - base + height > 0;
-			});
+			} );
 
 			this.focus( event, item );
 		} else {
@@ -646,13 +646,13 @@ return $.widget( "ui.menu", {
 		return this.activeMenu
 			.find( this.options.items )
 
-			// Only match on items, not dividers or other content (#10571)
-			.filter( ".ui-menu-item" )
-			.filter(function() {
-				return regex.test(
-					$.trim( $( this ).children( ".ui-menu-item-wrapper" ).text() ) );
-			});
+				// Only match on items, not dividers or other content (#10571)
+				.filter( ".ui-menu-item" )
+					.filter( function() {
+						return regex.test(
+							$.trim( $( this ).children( ".ui-menu-item-wrapper" ).text() ) );
+					} );
 	}
-});
+} );
 
-}));
+} ) );
