@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/progressbar.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget"
@@ -30,7 +30,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.widget( "ui.progressbar", {
 	version: "@VERSION",
@@ -54,13 +54,13 @@ return $.widget( "ui.progressbar", {
 		// Constrain initial value
 		this.oldValue = this.options.value = this._constrainedValue();
 
-		this.element.attr({
+		this.element.attr( {
 
 			// Only set static values; aria-valuenow and aria-valuemax are
 			// set inside _refreshValue()
 			role: "progressbar",
 			"aria-valuemin": this.min
-		});
+		} );
 		this._addClass( "ui-progressbar", "ui-widget ui-widget-content" );
 
 		this.valueDiv = $( "<div>" ).appendTo( this.element );
@@ -136,7 +136,7 @@ return $.widget( "ui.progressbar", {
 
 		this.valueDiv
 			.toggle( this.indeterminate || value > this.min )
-			.width( percentage.toFixed(0) + "%" );
+			.width( percentage.toFixed( 0 ) + "%" );
 
 		this
 			._toggleClass( this.valueDiv, "ui-progressbar-complete", null,
@@ -150,10 +150,10 @@ return $.widget( "ui.progressbar", {
 				this._addClass( this.overlayDiv, "ui-progressbar-overlay" );
 			}
 		} else {
-			this.element.attr({
+			this.element.attr( {
 				"aria-valuemax": this.options.max,
 				"aria-valuenow": value
-			});
+			} );
 			if ( this.overlayDiv ) {
 				this.overlayDiv.remove();
 				this.overlayDiv = null;
@@ -168,6 +168,6 @@ return $.widget( "ui.progressbar", {
 			this._trigger( "complete" );
 		}
 	}
-});
+} );
 
-}));
+} ) );
