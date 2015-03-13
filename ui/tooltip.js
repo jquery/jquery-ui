@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/tooltip.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget",
@@ -31,7 +31,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 $.widget( "ui.tooltip", {
 	version: "@VERSION",
@@ -63,7 +63,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_addDescribedBy: function( elem, id ) {
-		var describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ );
+		var describedby = ( elem.attr( "aria-describedby" ) || "" ).split( /\s+/ );
 		describedby.push( id );
 		elem
 			.data( "ui-tooltip-id", id )
@@ -72,7 +72,7 @@ $.widget( "ui.tooltip", {
 
 	_removeDescribedBy: function( elem ) {
 		var id = elem.data( "ui-tooltip-id" ),
-			describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ ),
+			describedby = ( elem.attr( "aria-describedby" ) || "" ).split( /\s+/ ),
 			index = $.inArray( id, describedby );
 
 		if ( index !== -1 ) {
@@ -89,10 +89,10 @@ $.widget( "ui.tooltip", {
 	},
 
 	_create: function() {
-		this._on({
+		this._on( {
 			mouseover: "open",
 			focusin: "open"
-		});
+		} );
 
 		// IDs of generated tooltips, needed for destroy
 		this.tooltips = {};
@@ -106,11 +106,11 @@ $.widget( "ui.tooltip", {
 
 		// Append the aria-live region so tooltips announce correctly
 		this.liveRegion = $( "<div>" )
-			.attr({
+			.attr( {
 				role: "log",
 				"aria-live": "assertive",
 				"aria-relevant": "additions"
-			})
+			} )
 			.appendTo( this.document[ 0 ].body );
 		this._addClass( this.liveRegion, null, "ui-helper-hidden-accessible" );
 	},
@@ -130,7 +130,7 @@ $.widget( "ui.tooltip", {
 		if ( key === "content" ) {
 			$.each( this.tooltips, function( id, tooltipData ) {
 				that._updateContent( tooltipData.element );
-			});
+			} );
 		}
 	},
 
@@ -142,27 +142,27 @@ $.widget( "ui.tooltip", {
 			var event = $.Event( "blur" );
 			event.target = event.currentTarget = tooltipData.element[ 0 ];
 			that.close( event, true );
-		});
+		} );
 
 		// remove title attributes to prevent native tooltips
-		this.element.find( this.options.items ).addBack().each(function() {
+		this.element.find( this.options.items ).addBack().each( function() {
 			var element = $( this );
 			if ( element.is( "[title]" ) ) {
 				element
 					.data( "ui-tooltip-title", element.attr( "title" ) )
 					.removeAttr( "title" );
 			}
-		});
+		} );
 	},
 
 	_enable: function() {
 		// restore title attributes
-		this.element.find( this.options.items ).addBack().each(function() {
+		this.element.find( this.options.items ).addBack().each( function() {
 			var element = $( this );
 			if ( element.data( "ui-tooltip-title" ) ) {
 				element.attr( "title", element.data( "ui-tooltip-title" ) );
 			}
-		});
+		} );
 	},
 
 	open: function( event ) {
@@ -185,7 +185,7 @@ $.widget( "ui.tooltip", {
 
 		// kill parent tooltips, custom or native, for hover
 		if ( event && event.type === "mouseover" ) {
-			target.parents().each(function() {
+			target.parents().each( function() {
 				var parent = $( this ),
 					blurEvent;
 				if ( parent.data( "ui-tooltip-open" ) ) {
@@ -201,7 +201,7 @@ $.widget( "ui.tooltip", {
 					};
 					parent.attr( "title", "" );
 				}
-			});
+			} );
 		}
 
 		this._registerCloseHandlers( event, target );
@@ -219,11 +219,11 @@ $.widget( "ui.tooltip", {
 			return this._open( event, target, contentOption );
 		}
 
-		content = contentOption.call( target[0], function( response ) {
+		content = contentOption.call( target[ 0 ], function( response ) {
 
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
-			that._delay(function() {
+			that._delay( function() {
 
 				// Ignore async response if tooltip was closed already
 				if ( !target.data( "ui-tooltip-open" ) ) {
@@ -239,8 +239,8 @@ $.widget( "ui.tooltip", {
 					event.type = eventType;
 				}
 				this._open( event, target, response );
-			});
-		});
+			} );
+		} );
 		if ( content ) {
 			this._open( event, target, content );
 		}
@@ -300,11 +300,11 @@ $.widget( "ui.tooltip", {
 		if ( this.options.track && event && /^mouse/.test( event.type ) ) {
 			this._on( this.document, {
 				mousemove: position
-			});
+			} );
 			// trigger once to override element-relative positioning
 			position( event );
 		} else {
-			tooltip.position( $.extend({
+			tooltip.position( $.extend( {
 				of: target
 			}, this.options.position ) );
 		}
@@ -316,7 +316,7 @@ $.widget( "ui.tooltip", {
 		// as the tooltip is visible, position the tooltip using the most recent
 		// event.
 		if ( this.options.show && this.options.show.delay ) {
-			delayedShow = this.delayedShow = setInterval(function() {
+			delayedShow = this.delayedShow = setInterval( function() {
 				if ( tooltip.is( ":visible" ) ) {
 					position( positionOption.of );
 					clearInterval( delayedShow );
@@ -331,8 +331,8 @@ $.widget( "ui.tooltip", {
 		var events = {
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
-					var fakeEvent = $.Event(event);
-					fakeEvent.currentTarget = target[0];
+					var fakeEvent = $.Event( event );
+					fakeEvent.currentTarget = target[ 0 ];
 					this.close( fakeEvent, true );
 				}
 			}
@@ -395,7 +395,7 @@ $.widget( "ui.tooltip", {
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
 			that._removeTooltip( $( this ) );
-		});
+		} );
 
 		target.removeData( "ui-tooltip-open" );
 		this._off( target, "mouseleave focusout keyup" );
@@ -410,7 +410,7 @@ $.widget( "ui.tooltip", {
 			$.each( this.parents, function( id, parent ) {
 				$( parent.element ).attr( "title", parent.title );
 				delete that.parents[ id ];
-			});
+			} );
 		}
 
 		tooltipData.closing = true;
@@ -428,7 +428,7 @@ $.widget( "ui.tooltip", {
 		this._addClass( content, "ui-tooltip-content" );
 		this._addClass( tooltip, "ui-tooltip", "ui-widget ui-widget-content" );
 
-		tooltip.appendTo( this.document[0].body );
+		tooltip.appendTo( this.document[ 0 ].body );
 
 		return this.tooltips[ id ] = {
 			element: element,
@@ -469,10 +469,10 @@ $.widget( "ui.tooltip", {
 				}
 				element.removeData( "ui-tooltip-title" );
 			}
-		});
+		} );
 		this.liveRegion.remove();
 	}
-});
+} );
 
 // DEPRECATED
 // TODO: Switch return back to widget declaration at top of file when this is removed
@@ -490,9 +490,9 @@ if ( $.uiBackCompat !== false ) {
 			}
 			return tooltipData;
 		}
-	});
+	} );
 }
 
 return $.ui.tooltip;
 
-}));
+} ) );
