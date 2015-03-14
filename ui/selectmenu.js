@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/selectmenu.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget",
@@ -32,7 +32,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.widget( "ui.selectmenu", {
 	version: "@VERSION",
@@ -96,7 +96,7 @@ return $.widget( "ui.selectmenu", {
 				this.button.focus();
 				event.preventDefault();
 			}
-		});
+		} );
 
 		// Hide original select element
 		this.element.hide();
@@ -111,7 +111,7 @@ return $.widget( "ui.selectmenu", {
 			"aria-owns": this.ids.menu,
 			"aria-haspopup": "true",
 			title: this.element.attr( "title" )
-		})
+		} )
 			.insertAfter( this.element );
 
 		this._addClass( this.button, "ui-selectmenu-button ui-selectmenu-button-closed",
@@ -135,7 +135,7 @@ return $.widget( "ui.selectmenu", {
 			if ( !that._rendered ) {
 				that._refreshMenu();
 			}
-		});
+		} );
 		this._hoverable( this.button );
 		this._focusable( this.button );
 	},
@@ -148,7 +148,7 @@ return $.widget( "ui.selectmenu", {
 			"aria-hidden": "true",
 			"aria-labelledby": this.ids.button,
 			id: this.ids.menu
-		});
+		} );
 
 		// Wrap menu
 		this.menuWrap = $( "<div>" ).append( this.menu );
@@ -157,7 +157,7 @@ return $.widget( "ui.selectmenu", {
 
 		// Initialize menu widget
 		this.menuInstance = this.menu
-			.menu({
+			.menu( {
 				classes: {
 					"ui-menu": "ui-corner-bottom"
 				},
@@ -187,7 +187,7 @@ return $.widget( "ui.selectmenu", {
 					that.button.attr( "aria-activedescendant",
 						that.menuItems.eq( item.index ).attr( "id" ) );
 				}
-			})
+			} )
 			.menu( "instance" );
 
 		// Don't close the menu on mouseleave
@@ -323,7 +323,7 @@ return $.widget( "ui.selectmenu", {
 			if ( item.optgroup !== currentOptgroup ) {
 				li = $( "<li>", {
 					text: item.optgroup
-				});
+				} );
 				that._addClass( li, "ui-selectmenu-optgroup", "ui-menu-divider" +
 					( item.element.parent( "optgroup" ).prop( "disabled" ) ?
 						" ui-state-disabled" :
@@ -335,7 +335,7 @@ return $.widget( "ui.selectmenu", {
 			}
 
 			that._renderItemData( ul, item );
-		});
+		} );
 	},
 
 	_renderItemData: function( ul, item ) {
@@ -346,7 +346,7 @@ return $.widget( "ui.selectmenu", {
 		var li = $( "<li>" ),
 			wrapper = $( "<div>", {
 				title: item.element.attr( "title" )
-			});
+			} );
 
 		if ( item.disabled ) {
 			this._addClass( li, null, "ui-state-disabled" );
@@ -455,54 +455,54 @@ return $.widget( "ui.selectmenu", {
 		keydown: function( event ) {
 			var preventDefault = true;
 			switch ( event.keyCode ) {
-				case $.ui.keyCode.TAB:
-				case $.ui.keyCode.ESCAPE:
-					this.close( event );
-					preventDefault = false;
-					break;
-				case $.ui.keyCode.ENTER:
-					if ( this.isOpen ) {
-						this._selectFocusedItem( event );
-					}
-					break;
-				case $.ui.keyCode.UP:
-					if ( event.altKey ) {
-						this._toggle( event );
-					} else {
-						this._move( "prev", event );
-					}
-					break;
-				case $.ui.keyCode.DOWN:
-					if ( event.altKey ) {
-						this._toggle( event );
-					} else {
-						this._move( "next", event );
-					}
-					break;
-				case $.ui.keyCode.SPACE:
-					if ( this.isOpen ) {
-						this._selectFocusedItem( event );
-					} else {
-						this._toggle( event );
-					}
-					break;
-				case $.ui.keyCode.LEFT:
+			case $.ui.keyCode.TAB:
+			case $.ui.keyCode.ESCAPE:
+				this.close( event );
+				preventDefault = false;
+				break;
+			case $.ui.keyCode.ENTER:
+				if ( this.isOpen ) {
+					this._selectFocusedItem( event );
+				}
+				break;
+			case $.ui.keyCode.UP:
+				if ( event.altKey ) {
+					this._toggle( event );
+				} else {
 					this._move( "prev", event );
-					break;
-				case $.ui.keyCode.RIGHT:
+				}
+				break;
+			case $.ui.keyCode.DOWN:
+				if ( event.altKey ) {
+					this._toggle( event );
+				} else {
 					this._move( "next", event );
-					break;
-				case $.ui.keyCode.HOME:
-				case $.ui.keyCode.PAGE_UP:
-					this._move( "first", event );
-					break;
-				case $.ui.keyCode.END:
-				case $.ui.keyCode.PAGE_DOWN:
-					this._move( "last", event );
-					break;
-				default:
-					this.menu.trigger( event );
-					preventDefault = false;
+				}
+				break;
+			case $.ui.keyCode.SPACE:
+				if ( this.isOpen ) {
+					this._selectFocusedItem( event );
+				} else {
+					this._toggle( event );
+				}
+				break;
+			case $.ui.keyCode.LEFT:
+				this._move( "prev", event );
+				break;
+			case $.ui.keyCode.RIGHT:
+				this._move( "next", event );
+				break;
+			case $.ui.keyCode.HOME:
+			case $.ui.keyCode.PAGE_UP:
+				this._move( "first", event );
+				break;
+			case $.ui.keyCode.END:
+			case $.ui.keyCode.PAGE_DOWN:
+				this._move( "last", event );
+				break;
+			default:
+				this.menu.trigger( event );
+				preventDefault = false;
 			}
 
 			if ( preventDefault ) {
@@ -537,10 +537,10 @@ return $.widget( "ui.selectmenu", {
 	_setAria: function( item ) {
 		var id = this.menuItems.eq( item.index ).attr( "id" );
 
-		this.button.attr({
+		this.button.attr( {
 			"aria-labelledby": id,
 			"aria-activedescendant": id
-		});
+		} );
 		this.menu.attr( "aria-activedescendant", id );
 	},
 
@@ -647,9 +647,9 @@ return $.widget( "ui.selectmenu", {
 	_parseOptions: function( options ) {
 		var that = this,
 			data = [];
-		options.each(function( index, item ) {
+		options.each( function( index, item ) {
 			data.push( that._parseOption( $( item ), index ) );
-		});
+		} );
 		this.items = data;
 	},
 
@@ -673,6 +673,6 @@ return $.widget( "ui.selectmenu", {
 		this.element.removeUniqueId();
 		this.label.attr( "for", this.ids.element );
 	}
-});
+} );
 
-}));
+} ) );
