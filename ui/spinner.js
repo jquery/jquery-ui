@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/spinner.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget",
@@ -31,7 +31,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 function spinner_modifier( fn ) {
 	return function() {
@@ -96,7 +96,7 @@ return $.widget( "ui.spinner", {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
 			}
-		});
+		} );
 	},
 
 	_getCreateOptions: function() {
@@ -108,7 +108,7 @@ return $.widget( "ui.spinner", {
 			if ( value !== undefined && value.length ) {
 				options[ option ] = value;
 			}
-		});
+		} );
 
 		return options;
 	},
@@ -143,9 +143,9 @@ return $.widget( "ui.spinner", {
 				return false;
 			}
 
-			this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
+			this._spin( ( delta > 0 ? 1 : -1 ) * this.options.step, event );
 			clearTimeout( this.mousewheelTimer );
-			this.mousewheelTimer = this._delay(function() {
+			this.mousewheelTimer = this._delay( function() {
 				if ( this.spinning ) {
 					this._stop( event );
 				}
@@ -160,19 +160,19 @@ return $.widget( "ui.spinner", {
 			// If the input is focused then this.previous is properly set from
 			// when the input first received focus. If the input is not focused
 			// then we need to set this.previous based on the value before spinning.
-			previous = this.element[0] === $.ui.safeActiveElement( this.document[0] ) ?
+			previous = this.element[ 0 ] === $.ui.safeActiveElement( this.document[ 0 ] ) ?
 				this.previous : this.element.val();
 			function checkFocus() {
-				var isActive = this.element[0] === $.ui.safeActiveElement( this.document[0] );
+				var isActive = this.element[ 0 ] === $.ui.safeActiveElement( this.document[ 0 ] );
 				if ( !isActive ) {
 					this.element.focus();
 					this.previous = previous;
 					// support: IE
 					// IE sets focus asynchronously, so we need to check if focus
 					// moved off of the input because the user clicked on the button.
-					this._delay(function() {
+					this._delay( function() {
 						this.previous = previous;
-					});
+					} );
 				}
 			}
 
@@ -185,10 +185,10 @@ return $.widget( "ui.spinner", {
 			// so we set a flag to know when we should ignore the blur event
 			// and check (again) if focus moved off of the input.
 			this.cancelBlur = true;
-			this._delay(function() {
+			this._delay( function() {
 				delete this.cancelBlur;
 				checkFocus.call( this );
-			});
+			} );
 
 			if ( this._start( event ) === false ) {
 				return;
@@ -307,7 +307,7 @@ return $.widget( "ui.spinner", {
 		i = i || 500;
 
 		clearTimeout( this.timer );
-		this.timer = this._delay(function() {
+		this.timer = this._delay( function() {
 			this._repeat( 40, steps, event );
 		}, i );
 
@@ -323,7 +323,7 @@ return $.widget( "ui.spinner", {
 
 		value = this._adjustValue( value + step * this._increment( this.counter ) );
 
-		if ( !this.spinning || this._trigger( "spin", event, { value: value } ) !== false) {
+		if ( !this.spinning || this._trigger( "spin", event, { value: value } ) !== false ) {
 			this._value( value );
 			this.counter++;
 		}
@@ -364,7 +364,7 @@ return $.widget( "ui.spinner", {
 		base = options.min !== null ? options.min : 0;
 		aboveMin = value - base;
 		// - round to the nearest step
-		aboveMin = Math.round(aboveMin / options.step) * options.step;
+		aboveMin = Math.round( aboveMin / options.step ) * options.step;
 		// - rounding is based on 0, so adjust back to our base
 		value = base + aboveMin;
 
@@ -372,7 +372,7 @@ return $.widget( "ui.spinner", {
 		value = parseFloat( value.toFixed( this._precision() ) );
 
 		// clamp the value
-		if ( options.max !== null && value > options.max) {
+		if ( options.max !== null && value > options.max ) {
 			return options.max;
 		}
 		if ( options.min !== null && value < options.min ) {
@@ -427,9 +427,9 @@ return $.widget( "ui.spinner", {
 		}
 	},
 
-	_setOptions: spinner_modifier(function( options ) {
+	_setOptions: spinner_modifier( function( options ) {
 		this._super( options );
-	}),
+	} ),
 
 	_parse: function( val ) {
 		if ( typeof val === "string" && val !== "" ) {
@@ -449,12 +449,12 @@ return $.widget( "ui.spinner", {
 	},
 
 	_refresh: function() {
-		this.element.attr({
+		this.element.attr( {
 			"aria-valuemin": this.options.min,
 			"aria-valuemax": this.options.max,
 			// TODO: what should we do with values that can't be parsed?
 			"aria-valuenow": this._parse( this.element.val() )
-		});
+		} );
 	},
 
 	isValid: function() {
@@ -497,33 +497,33 @@ return $.widget( "ui.spinner", {
 		this.uiSpinner.replaceWith( this.element );
 	},
 
-	stepUp: spinner_modifier(function( steps ) {
+	stepUp: spinner_modifier( function( steps ) {
 		this._stepUp( steps );
-	}),
+	} ),
 	_stepUp: function( steps ) {
 		if ( this._start() ) {
-			this._spin( (steps || 1) * this.options.step );
+			this._spin( ( steps || 1 ) * this.options.step );
 			this._stop();
 		}
 	},
 
-	stepDown: spinner_modifier(function( steps ) {
+	stepDown: spinner_modifier( function( steps ) {
 		this._stepDown( steps );
-	}),
+	} ),
 	_stepDown: function( steps ) {
 		if ( this._start() ) {
-			this._spin( (steps || 1) * -this.options.step );
+			this._spin( ( steps || 1 ) * -this.options.step );
 			this._stop();
 		}
 	},
 
-	pageUp: spinner_modifier(function( pages ) {
-		this._stepUp( (pages || 1) * this.options.page );
-	}),
+	pageUp: spinner_modifier( function( pages ) {
+		this._stepUp( ( pages || 1 ) * this.options.page );
+	} ),
 
-	pageDown: spinner_modifier(function( pages ) {
-		this._stepDown( (pages || 1) * this.options.page );
-	}),
+	pageDown: spinner_modifier( function( pages ) {
+		this._stepDown( ( pages || 1 ) * this.options.page );
+	} ),
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
@@ -535,6 +535,6 @@ return $.widget( "ui.spinner", {
 	widget: function() {
 		return this.uiSpinner;
 	}
-});
+} );
 
-}));
+} ) );
