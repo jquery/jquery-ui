@@ -13,7 +13,7 @@
 //>>docs: http://api.jqueryui.com/jQuery.widget/
 //>>demos: http://jqueryui.com/widget/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -23,15 +23,15 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 var widget_uuid = 0,
 	widget_slice = Array.prototype.slice;
 
-$.cleanData = (function( orig ) {
+$.cleanData = ( function( orig ) {
 	return function( elems ) {
 		var events, elem, i;
-		for ( i = 0; (elem = elems[i]) != null; i++ ) {
+		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
 			try {
 
 				// Only trigger remove when necessary to save time
@@ -45,7 +45,7 @@ $.cleanData = (function( orig ) {
 		}
 		orig( elems );
 	};
-})( $.cleanData );
+} )( $.cleanData );
 
 $.widget = function( name, base, prototype ) {
 	var fullName, existingConstructor, constructor, basePrototype,
@@ -90,7 +90,7 @@ $.widget = function( name, base, prototype ) {
 		// track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
 		_childConstructors: []
-	});
+	} );
 
 	basePrototype = new base();
 	// we need to make the options hash a property directly on the new instance
@@ -102,7 +102,7 @@ $.widget = function( name, base, prototype ) {
 			proxiedPrototype[ prop ] = value;
 			return;
 		}
-		proxiedPrototype[ prop ] = (function() {
+		proxiedPrototype[ prop ] = ( function() {
 			var _super = function() {
 					return base.prototype[ prop ].apply( this, arguments );
 				},
@@ -124,19 +124,19 @@ $.widget = function( name, base, prototype ) {
 
 				return returnValue;
 			};
-		})();
-	});
+		} )();
+	} );
 	constructor.prototype = $.widget.extend( basePrototype, {
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
-		widgetEventPrefix: existingConstructor ? (basePrototype.widgetEventPrefix || name) : name
+		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
 	}, proxiedPrototype, {
 		constructor: constructor,
 		namespace: namespace,
 		widgetName: name,
 		widgetFullName: fullName
-	});
+	} );
 
 	// If this widget is being redefined then we need to find all widgets that
 	// are inheriting from it and redefine all of them so that they inherit from
@@ -149,7 +149,7 @@ $.widget = function( name, base, prototype ) {
 			// redefine the child widget using the same prototype that was
 			// originally used, but inherit from the new version of the base
 			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
-		});
+		} );
 		// remove the list of existing child constructors from the old constructor
 		// so the old child constructors can be garbage collected
 		delete existingConstructor._childConstructors;
@@ -196,7 +196,7 @@ $.widget.bridge = function( name, object ) {
 			returnValue = this;
 
 		if ( isMethodCall ) {
-			this.each(function() {
+			this.each( function() {
 				var methodValue,
 					instance = $.data( this, fullName );
 				if ( options === "instance" ) {
@@ -207,7 +207,7 @@ $.widget.bridge = function( name, object ) {
 					return $.error( "cannot call methods on " + name + " prior to initialization; " +
 						"attempted to call method '" + options + "'" );
 				}
-				if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) === "_" ) {
+				if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
 					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
 				}
 				methodValue = instance[ options ].apply( instance, args );
@@ -217,15 +217,15 @@ $.widget.bridge = function( name, object ) {
 						methodValue;
 					return false;
 				}
-			});
+			} );
 		} else {
 
 			// Allow multiple hashes to be passed on init
 			if ( args.length ) {
-				options = $.widget.extend.apply( null, [ options ].concat(args) );
+				options = $.widget.extend.apply( null, [ options ].concat( args ) );
 			}
 
-			this.each(function() {
+			this.each( function() {
 				var instance = $.data( this, fullName );
 				if ( instance ) {
 					instance.option( options || {} );
@@ -235,7 +235,7 @@ $.widget.bridge = function( name, object ) {
 				} else {
 					$.data( this, fullName, new object( options, this ) );
 				}
-			});
+			} );
 		}
 
 		return returnValue;
@@ -275,13 +275,13 @@ $.Widget.prototype = {
 						this.destroy();
 					}
 				}
-			});
+			} );
 			this.document = $( element.style ?
 				// element within the document
 				element.ownerDocument :
 				// element is window or document
 				element.document || element );
-			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
+			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
 		}
 
 		this.options = $.widget.extend( {},
@@ -304,7 +304,7 @@ $.Widget.prototype = {
 		this._destroy();
 		$.each( this.classesElementLookup, function( key, value ) {
 			that._removeClass( value, key );
-		});
+		} );
 
 		// we can probably remove the unbind calls in 2.0
 		// all event bindings should go through this._on()
@@ -413,27 +413,27 @@ $.Widget.prototype = {
 			// for generating the string of classes. We want to use the value passed in from
 			// _setOption(), this is the new value of the classes option which was passed to
 			// _setOption(). We pass this value directly to _classes().
-			elements.addClass( this._classes({
+			elements.addClass( this._classes( {
 				element: elements,
 				keys: classKey,
 				classes: value,
 				add: true
-			}));
+			} ) );
 		}
 	},
 
 	enable: function() {
-		return this._setOptions({ disabled: false });
+		return this._setOptions( { disabled: false } );
 	},
 	disable: function() {
-		return this._setOptions({ disabled: true });
+		return this._setOptions( { disabled: true } );
 	},
 
 	_classes: function( options ) {
 		var full = [],
 			that = this;
 
-		options = $.extend({
+		options = $.extend( {
 			element: this.element,
 			classes: this.options.classes || {}
 		}, options );
@@ -514,7 +514,7 @@ $.Widget.prototype = {
 				// - disabled class as method for disabling individual parts
 				if ( !suppressDisabledCheck &&
 						( instance.options.disabled === true ||
-							$( this ).hasClass( "ui-state-disabled" ) ) ) {
+						$( this ).hasClass( "ui-state-disabled" ) ) ) {
 					return;
 				}
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
@@ -528,18 +528,18 @@ $.Widget.prototype = {
 			}
 
 			var match = event.match( /^([\w:-]*)\s*(.*)$/ ),
-				eventName = match[1] + instance.eventNamespace,
-				selector = match[2];
+				eventName = match[ 1 ] + instance.eventNamespace,
+				selector = match[ 2 ];
 			if ( selector ) {
 				delegateElement.delegate( selector, eventName, handlerProxy );
 			} else {
 				element.bind( eventName, handlerProxy );
 			}
-		});
+		} );
 	},
 
 	_off: function( element, eventName ) {
-		eventName = (eventName || "").split( " " ).join( this.eventNamespace + " " ) +
+		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
 			this.eventNamespace;
 		element.unbind( eventName ).undelegate( eventName );
 
@@ -567,7 +567,7 @@ $.Widget.prototype = {
 			mouseleave: function( event ) {
 				this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
 			}
-		});
+		} );
 	},
 
 	_focusable: function( element ) {
@@ -579,7 +579,7 @@ $.Widget.prototype = {
 			focusout: function( event ) {
 				this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
 			}
-		});
+		} );
 	},
 
 	_trigger: function( type, event, data ) {
@@ -607,7 +607,7 @@ $.Widget.prototype = {
 
 		this.element.trigger( event, data );
 		return !( $.isFunction( callback ) &&
-			callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
+			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
 			event.isDefaultPrevented() );
 	}
 };
@@ -637,17 +637,17 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		} else if ( effectName !== method && element[ effectName ] ) {
 			element[ effectName ]( options.duration, options.easing, callback );
 		} else {
-			element.queue(function( next ) {
+			element.queue( function( next ) {
 				$( this )[ method ]();
 				if ( callback ) {
 					callback.call( element[ 0 ] );
 				}
 				next();
-			});
+			} );
 		}
 	};
-});
+} );
 
 return $.widget;
 
-}));
+} ) );
