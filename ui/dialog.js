@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/dialog.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget",
@@ -35,7 +35,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 $.widget( "ui.dialog", {
 	version: "@VERSION",
@@ -152,7 +152,7 @@ $.widget( "ui.dialog", {
 
 	_appendTo: function() {
 		var element = this.options.appendTo;
-		if ( element && (element.jquery || element.nodeType) ) {
+		if ( element && ( element.jquery || element.nodeType ) ) {
 			return $( element );
 		}
 		return this.document.find( element || "body" ).eq( 0 );
@@ -215,7 +215,7 @@ $.widget( "ui.dialog", {
 
 		this._hide( this.uiDialog, this.options.hide, function() {
 			that._trigger( "close", event );
-		});
+		} );
 	},
 
 	isOpen: function() {
@@ -228,9 +228,9 @@ $.widget( "ui.dialog", {
 
 	_moveToTop: function( event, silent ) {
 		var moved = false,
-			zIndices = this.uiDialog.siblings( ".ui-front:visible" ).map(function() {
+			zIndices = this.uiDialog.siblings( ".ui-front:visible" ).map( function() {
 				return +$( this ).css( "z-index" );
-			}).get(),
+			} ).get(),
 			zIndexMax = Math.max.apply( null, zIndices );
 
 		if ( zIndexMax >= +this.uiDialog.css( "z-index" ) ) {
@@ -271,7 +271,7 @@ $.widget( "ui.dialog", {
 		this._show( this.uiDialog, this.options.show, function() {
 			that._focusTabbable();
 			that._trigger( "focus" );
-		});
+		} );
 
 		// Track the dialog immediately upon openening in case a focus event
 		// somehow occurs outside of the dialog before an element inside the
@@ -310,9 +310,9 @@ $.widget( "ui.dialog", {
 
 	_keepFocus: function( event ) {
 		function checkFocus() {
-			var activeElement = $.ui.safeActiveElement( this.document[0] ),
-				isActive = this.uiDialog[0] === activeElement ||
-					$.contains( this.uiDialog[0], activeElement );
+			var activeElement = $.ui.safeActiveElement( this.document[ 0 ] ),
+				isActive = this.uiDialog[ 0 ] === activeElement ||
+					$.contains( this.uiDialog[ 0 ], activeElement );
 			if ( !isActive ) {
 				this._focusTabbable();
 			}
@@ -326,13 +326,13 @@ $.widget( "ui.dialog", {
 	},
 
 	_createWrapper: function() {
-		this.uiDialog = $("<div>")
+		this.uiDialog = $( "<div>" )
 			.hide()
-			.attr({
+			.attr( {
 				// Setting tabIndex makes the div focusable
 				tabIndex: -1,
 				role: "dialog"
-			})
+			} )
 			.appendTo( this._appendTo() );
 
 		this._addClass( this.uiDialog, "ui-dialog", "ui-widget ui-widget-content ui-front" );
@@ -353,15 +353,15 @@ $.widget( "ui.dialog", {
 					first = tabbables.filter( ":first" ),
 					last = tabbables.filter( ":last" );
 
-				if ( ( event.target === last[0] || event.target === this.uiDialog[0] ) && !event.shiftKey ) {
-					this._delay(function() {
+				if ( ( event.target === last[ 0 ] || event.target === this.uiDialog[ 0 ] ) && !event.shiftKey ) {
+					this._delay( function() {
 						first.focus();
-					});
+					} );
 					event.preventDefault();
-				} else if ( ( event.target === first[0] || event.target === this.uiDialog[0] ) && event.shiftKey ) {
-					this._delay(function() {
+				} else if ( ( event.target === first[ 0 ] || event.target === this.uiDialog[ 0 ] ) && event.shiftKey ) {
+					this._delay( function() {
 						last.focus();
-					});
+					} );
 					event.preventDefault();
 				}
 			},
@@ -370,15 +370,15 @@ $.widget( "ui.dialog", {
 					this._focusTabbable();
 				}
 			}
-		});
+		} );
 
 		// We assume that any existing aria-describedby attribute means
 		// that the dialog content is marked up properly
 		// otherwise we brute force the content as the description
 		if ( !this.element.find( "[aria-describedby]" ).length ) {
-			this.uiDialog.attr({
+			this.uiDialog.attr( {
 				"aria-describedby": this.element.uniqueId().attr( "id" )
-			});
+			} );
 		}
 	},
 
@@ -398,19 +398,19 @@ $.widget( "ui.dialog", {
 					this.uiDialog.focus();
 				}
 			}
-		});
+		} );
 
 		// support: IE
 		// Use type="button" to prevent enter keypresses in textboxes from closing the
 		// dialog in IE (#9312)
 		this.uiDialogTitlebarClose = $( "<button type='button'></button>" )
-			.button({
+			.button( {
 				label: this.options.closeText,
 				icons: {
 					primary: "ui-icon-closethick"
 				},
 				text: false
-			})
+			} )
 			.appendTo( this.uiDialogTitlebar );
 
 		this._addClass( this.uiDialogTitlebarClose, "ui-dialog-titlebar-close" );
@@ -419,7 +419,7 @@ $.widget( "ui.dialog", {
 				event.preventDefault();
 				this.close( event );
 			}
-		});
+		} );
 
 		uiDialogTitle = $( "<span>" ).uniqueId().prependTo( this.uiDialogTitlebar );
 		this._addClass( uiDialogTitle, "ui-dialog-title" );
@@ -427,9 +427,9 @@ $.widget( "ui.dialog", {
 
 		this.uiDialogTitlebar.prependTo( this.uiDialog );
 
-		this.uiDialog.attr({
+		this.uiDialog.attr( {
 			"aria-labelledby": uiDialogTitle.attr( "id" )
-		});
+		} );
 	},
 
 	_title: function( title ) {
@@ -459,7 +459,7 @@ $.widget( "ui.dialog", {
 		this.uiDialogButtonPane.remove();
 		this.uiButtonSet.empty();
 
-		if ( $.isEmptyObject( buttons ) || ($.isArray( buttons ) && !buttons.length) ) {
+		if ( $.isEmptyObject( buttons ) || ( $.isArray( buttons ) && !buttons.length ) ) {
 			this._removeClass( this.uiDialog, "ui-dialog-buttons" );
 			return;
 		}
@@ -485,7 +485,7 @@ $.widget( "ui.dialog", {
 			$( "<button></button>", props )
 				.button( buttonOptions )
 				.appendTo( that.uiButtonSet );
-		});
+		} );
 		this._addClass( this.uiDialog, "ui-dialog-buttons" );
 		this.uiDialogButtonPane.appendTo( this.uiDialog );
 	},
@@ -501,7 +501,7 @@ $.widget( "ui.dialog", {
 			};
 		}
 
-		this.uiDialog.draggable({
+		this.uiDialog.draggable( {
 			cancel: ".ui-dialog-content, .ui-dialog-titlebar-close",
 			handle: ".ui-dialog-titlebar",
 			containment: "document",
@@ -519,15 +519,15 @@ $.widget( "ui.dialog", {
 
 				options.position = {
 					my: "left top",
-					at: "left" + (left >= 0 ? "+" : "") + left + " " +
-						"top" + (top >= 0 ? "+" : "") + top,
+					at: "left" + ( left >= 0 ? "+" : "" ) + left + " " +
+						"top" + ( top >= 0 ? "+" : "" ) + top,
 					of: that.window
 				};
 				that._removeClass( $( this ), "ui-dialog-dragging" );
 				that._unblockFrames();
 				that._trigger( "dragStop", event, filteredUi( ui ) );
 			}
-		});
+		} );
 	},
 
 	_makeResizable: function() {
@@ -536,9 +536,9 @@ $.widget( "ui.dialog", {
 			handles = options.resizable,
 			// .ui-resizable has position: relative defined in the stylesheet
 			// but dialogs have to use absolute or fixed positioning
-			position = this.uiDialog.css("position"),
+			position = this.uiDialog.css( "position" ),
 			resizeHandles = typeof handles === "string" ?
-				handles	:
+				handles :
 				"n,e,s,w,se,sw,ne,nw";
 
 		function filteredUi( ui ) {
@@ -550,7 +550,7 @@ $.widget( "ui.dialog", {
 			};
 		}
 
-		this.uiDialog.resizable({
+		this.uiDialog.resizable( {
 			cancel: ".ui-dialog-content",
 			containment: "document",
 			alsoResize: this.element,
@@ -576,16 +576,16 @@ $.widget( "ui.dialog", {
 				options.width = that.uiDialog.width();
 				options.position = {
 					my: "left top",
-					at: "left" + (left >= 0 ? "+" : "") + left + " " +
-						"top" + (top >= 0 ? "+" : "") + top,
+					at: "left" + ( left >= 0 ? "+" : "" ) + left + " " +
+						"top" + ( top >= 0 ? "+" : "" ) + top,
 					of: that.window
 				};
 				that._removeClass( $( this ), "ui-dialog-resizing" );
 				that._unblockFrames();
 				that._trigger( "resizeStop", event, filteredUi( ui ) );
 			}
-		})
-		.css( "position", position );
+		} )
+			.css( "position", position );
 	},
 
 	_trackFocus: function() {
@@ -594,7 +594,7 @@ $.widget( "ui.dialog", {
 				this._makeFocusTarget();
 				this._focusedElement = $( event.target );
 			}
-		});
+		} );
 	},
 
 	_makeFocusTarget: function() {
@@ -653,7 +653,7 @@ $.widget( "ui.dialog", {
 			if ( key in that.resizableRelatedOptions ) {
 				resizableOptions[ key ] = value;
 			}
-		});
+		} );
 
 		if ( resize ) {
 			this._size();
@@ -683,10 +683,10 @@ $.widget( "ui.dialog", {
 		}
 
 		if ( key === "closeText" ) {
-			this.uiDialogTitlebarClose.button({
+			this.uiDialogTitlebarClose.button( {
 				// Ensure that we always pass a string
 				label: "" + value
-			});
+			} );
 		}
 
 		if ( key === "draggable" ) {
@@ -734,12 +734,12 @@ $.widget( "ui.dialog", {
 			options = this.options;
 
 		// Reset content sizing
-		this.element.show().css({
+		this.element.show().css( {
 			width: "auto",
 			minHeight: 0,
 			maxHeight: "none",
 			height: 0
-		});
+		} );
 
 		if ( options.minWidth > options.width ) {
 			options.width = options.minWidth;
@@ -747,10 +747,10 @@ $.widget( "ui.dialog", {
 
 		// reset wrapper sizing
 		// determine the height of all the non-content elements
-		nonContentHeight = this.uiDialog.css({
-				height: "auto",
-				width: options.width
-			})
+		nonContentHeight = this.uiDialog.css( {
+			height: "auto",
+			width: options.width
+		} )
 			.outerHeight();
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
 		maxContentHeight = typeof options.maxHeight === "number" ?
@@ -758,11 +758,11 @@ $.widget( "ui.dialog", {
 			"none";
 
 		if ( options.height === "auto" ) {
-			this.element.css({
+			this.element.css( {
 				minHeight: minContentHeight,
 				maxHeight: maxContentHeight,
 				height: "auto"
-			});
+			} );
 		} else {
 			this.element.height( Math.max( 0, options.height - nonContentHeight ) );
 		}
@@ -773,18 +773,18 @@ $.widget( "ui.dialog", {
 	},
 
 	_blockFrames: function() {
-		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
+		this.iframeBlocks = this.document.find( "iframe" ).map( function() {
 			var iframe = $( this );
 
 			return $( "<div>" )
-				.css({
+				.css( {
 					position: "absolute",
 					width: iframe.outerWidth(),
 					height: iframe.outerHeight()
-				})
+				} )
 				.appendTo( iframe.parent() )
-				.offset( iframe.offset() )[0];
-		});
+				.offset( iframe.offset() )[ 0 ];
+		} );
 	},
 
 	_unblockFrames: function() {
@@ -812,9 +812,9 @@ $.widget( "ui.dialog", {
 		// We use a delay in case the overlay is created from an
 		// event that we're going to be cancelling (#2804)
 		var isOpening = true;
-		this._delay(function() {
+		this._delay( function() {
 			isOpening = false;
-		});
+		} );
 
 		if ( !this.document.data( "ui-dialog-overlays" ) ) {
 
@@ -832,7 +832,7 @@ $.widget( "ui.dialog", {
 						this._trackingInstances()[ 0 ]._focusTabbable();
 					}
 				}
-			});
+			} );
 		}
 
 		this.overlay = $( "<div>" )
@@ -841,9 +841,9 @@ $.widget( "ui.dialog", {
 		this._addClass( this.overlay, null, "ui-widget-overlay ui-front" );
 		this._on( this.overlay, {
 			mousedown: "_keepFocus"
-		});
+		} );
 		this.document.data( "ui-dialog-overlays",
-			(this.document.data( "ui-dialog-overlays" ) || 0) + 1 );
+			( this.document.data( "ui-dialog-overlays" ) || 0 ) + 1 );
 	},
 
 	_destroyOverlay: function() {
@@ -866,7 +866,7 @@ $.widget( "ui.dialog", {
 			this.overlay = null;
 		}
 	}
-});
+} );
 
 // DEPRECATED
 // TODO: switch return back to widget declaration at top of file when this is removed
@@ -889,9 +889,9 @@ if ( $.uiBackCompat !== false ) {
 			}
 			this._superApply( arguments );
 		}
-	});
+	} );
 }
 
 return $.ui.dialog;
 
-}));
+} ) );
