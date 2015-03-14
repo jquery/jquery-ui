@@ -14,7 +14,7 @@
 //>>docs: http://api.jqueryui.com/category/ui-core/
 //>>demos: http://jqueryui.com/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,7 +24,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 // $.ui might exist from components with no dependencies, e.g., $.ui.position
 $.ui = $.ui || {};
@@ -75,10 +75,10 @@ $.extend( $.ui, {
 			$( element ).blur();
 		}
 	}
-});
+} );
 
 // plugins
-$.fn.extend({
+$.fn.extend( {
 	scrollParent: function( includeHidden ) {
 		var position = this.css( "position" ),
 			excludeStaticParent = position === "absolute",
@@ -89,31 +89,31 @@ $.fn.extend({
 					return false;
 				}
 				return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) );
-			}).eq( 0 );
+			} ).eq( 0 );
 
 		return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
 	},
 
-	uniqueId: (function() {
+	uniqueId: ( function() {
 		var uuid = 0;
 
 		return function() {
-			return this.each(function() {
+			return this.each( function() {
 				if ( !this.id ) {
 					this.id = "ui-id-" + ( ++uuid );
 				}
-			});
+			} );
 		};
-	})(),
+	} )(),
 
 	removeUniqueId: function() {
-		return this.each(function() {
+		return this.each( function() {
 			if ( /^ui-id-\d+$/.test( this.id ) ) {
 				$( this ).removeAttr( "id" );
 			}
-		});
+		} );
 	}
-});
+} );
 
 // selectors
 function focusable( element, isTabIndexNotNaN ) {
@@ -132,25 +132,25 @@ function focusable( element, isTabIndexNotNaN ) {
 		!element.disabled :
 		"a" === nodeName ?
 			element.href || isTabIndexNotNaN :
-			isTabIndexNotNaN) &&
+			isTabIndexNotNaN ) &&
 		// the element and all of its ancestors must be visible
 		visible( element );
 }
 
 function visible( element ) {
 	return $.expr.filters.visible( element ) &&
-		!$( element ).parents().addBack().filter(function() {
+		!$( element ).parents().addBack().filter( function() {
 			return $.css( this, "visibility" ) === "hidden";
-		}).length;
+		} ).length;
 }
 
 $.extend( $.expr[ ":" ], {
 	data: $.expr.createPseudo ?
-		$.expr.createPseudo(function( dataName ) {
+		$.expr.createPseudo( function( dataName ) {
 			return function( elem ) {
 				return !!$.data( elem, dataName );
 			};
-		}) :
+		} ) :
 		// support: jQuery <1.8
 		function( elem, i, match ) {
 			return !!$.data( elem, match[ 3 ] );
@@ -165,7 +165,7 @@ $.extend( $.expr[ ":" ], {
 			isTabIndexNaN = isNaN( tabIndex );
 		return ( isTabIndexNaN || tabIndex >= 0 ) && focusable( element, !isTabIndexNaN );
 	}
-});
+} );
 
 // support: jQuery 1.7 only
 // Not a great way to check versions, but since we only support 1.7+ and only
@@ -197,7 +197,7 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 				if ( margin ) {
 					size -= parseFloat( $.css( elem, "margin" + this ) ) || 0;
 				}
-			});
+			} );
 			return size;
 		}
 
@@ -206,21 +206,21 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 				return orig[ "inner" + name ].call( this );
 			}
 
-			return this.each(function() {
+			return this.each( function() {
 				$( this ).css( type, reduce( this, size ) + "px" );
-			});
+			} );
 		};
 
-		$.fn[ "outer" + name] = function( size, margin ) {
+		$.fn[ "outer" + name ] = function( size, margin ) {
 			if ( typeof size !== "number" ) {
 				return orig[ "outer" + name ].call( this, size );
 			}
 
-			return this.each(function() {
-				$( this).css( type, reduce( this, size, true, margin ) + "px" );
-			});
+			return this.each( function() {
+				$( this ).css( type, reduce( this, size, true, margin ) + "px" );
+			} );
 		};
-	});
+	} );
 
 	$.fn.addBack = function( selector ) {
 		return this.add( selector == null ?
@@ -232,8 +232,8 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 // deprecated
 $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
-$.fn.extend({
-	disableSelection: (function() {
+$.fn.extend( {
+	disableSelection: ( function() {
 		var eventType = "onselectstart" in document.createElement( "div" ) ?
 			"selectstart" :
 			"mousedown";
@@ -241,14 +241,14 @@ $.fn.extend({
 		return function() {
 			return this.bind( eventType + ".ui-disableSelection", function( event ) {
 				event.preventDefault();
-			});
+			} );
 		};
-	})(),
+	} )(),
 
 	enableSelection: function() {
 		return this.unbind( ".ui-disableSelection" );
 	}
-});
+} );
 
 // $.ui.plugin is deprecated. Use $.widget() extensions instead.
 $.ui.plugin = {
@@ -280,4 +280,4 @@ $.ui.plugin = {
 	}
 };
 
-}));
+} ) );
