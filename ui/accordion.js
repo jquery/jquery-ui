@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/accordion.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget"
@@ -30,7 +30,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -80,7 +80,7 @@ return $.widget( "ui.accordion", {
 		this.element.attr( "role", "tablist" );
 
 		// don't allow collapsible: false and active: false / null
-		if ( !options.collapsible && (options.active === false || options.active == null) ) {
+		if ( !options.collapsible && ( options.active === false || options.active == null ) ) {
 			options.active = 0;
 		}
 
@@ -200,24 +200,24 @@ return $.widget( "ui.accordion", {
 			toFocus = false;
 
 		switch ( event.keyCode ) {
-			case keyCode.RIGHT:
-			case keyCode.DOWN:
-				toFocus = this.headers[ ( currentIndex + 1 ) % length ];
-				break;
-			case keyCode.LEFT:
-			case keyCode.UP:
-				toFocus = this.headers[ ( currentIndex - 1 + length ) % length ];
-				break;
-			case keyCode.SPACE:
-			case keyCode.ENTER:
-				this._eventHandler( event );
-				break;
-			case keyCode.HOME:
-				toFocus = this.headers[ 0 ];
-				break;
-			case keyCode.END:
-				toFocus = this.headers[ length - 1 ];
-				break;
+		case keyCode.RIGHT:
+		case keyCode.DOWN:
+			toFocus = this.headers[ ( currentIndex + 1 ) % length ];
+			break;
+		case keyCode.LEFT:
+		case keyCode.UP:
+			toFocus = this.headers[ ( currentIndex - 1 + length ) % length ];
+			break;
+		case keyCode.SPACE:
+		case keyCode.ENTER:
+			this._eventHandler( event );
+			break;
+		case keyCode.HOME:
+			toFocus = this.headers[ 0 ];
+			break;
+		case keyCode.END:
+			toFocus = this.headers[ length - 1 ];
+			break;
 		}
 
 		if ( toFocus ) {
@@ -248,7 +248,7 @@ return $.widget( "ui.accordion", {
 		// was active, but active panel is gone
 		} else if ( this.active.length && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
 			// all remaining panel are disabled
-			if ( this.headers.length === this.headers.find(".ui-state-disabled").length ) {
+			if ( this.headers.length === this.headers.find( ".ui-state-disabled" ).length ) {
 				options.active = false;
 				this.active = $();
 			// activate previous panel
@@ -298,43 +298,43 @@ return $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
-			.each(function() {
+			.each( function() {
 				var header = $( this ),
 					headerId = header.uniqueId().attr( "id" ),
 					panel = header.next(),
 					panelId = panel.uniqueId().attr( "id" );
 				header.attr( "aria-controls", panelId );
 				panel.attr( "aria-labelledby", headerId );
-			})
+			} )
 			.next()
 				.attr( "role", "tabpanel" );
 
 		this.headers
 			.not( this.active )
-			.attr({
-				"aria-selected": "false",
-				"aria-expanded": "false",
-				tabIndex: -1
-			})
-			.next()
-				.attr({
-					"aria-hidden": "true"
-				})
-				.hide();
+				.attr( {
+					"aria-selected": "false",
+					"aria-expanded": "false",
+					tabIndex: -1
+				} )
+				.next()
+					.attr( {
+						"aria-hidden": "true"
+					} )
+					.hide();
 
 		// make sure at least one header is in the tab order
 		if ( !this.active.length ) {
 			this.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			this.active.attr({
+			this.active.attr( {
 				"aria-selected": "true",
 				"aria-expanded": "true",
 				tabIndex: 0
-			})
-			.next()
-				.attr({
-					"aria-hidden": "false"
-				});
+			} )
+				.next()
+					.attr( {
+						"aria-hidden": "false"
+					} );
 		}
 
 		this._createIcons();
@@ -343,7 +343,7 @@ return $.widget( "ui.accordion", {
 
 		if ( heightStyle === "fill" ) {
 			maxHeight = parent.height();
-			this.element.siblings( ":visible" ).each(function() {
+			this.element.siblings( ":visible" ).each( function() {
 				var elem = $( this ),
 					position = elem.css( "position" );
 
@@ -351,24 +351,24 @@ return $.widget( "ui.accordion", {
 					return;
 				}
 				maxHeight -= elem.outerHeight( true );
-			});
+			} );
 
-			this.headers.each(function() {
+			this.headers.each( function() {
 				maxHeight -= $( this ).outerHeight( true );
-			});
+			} );
 
 			this.headers.next()
-				.each(function() {
+				.each( function() {
 					$( this ).height( Math.max( 0, maxHeight -
 						$( this ).innerHeight() + $( this ).height() ) );
-				})
+				} )
 				.css( "overflow", "auto" );
 		} else if ( heightStyle === "auto" ) {
 			maxHeight = 0;
 			this.headers.next()
-				.each(function() {
+				.each( function() {
 					maxHeight = Math.max( maxHeight, $( this ).css( "height", "" ).height() );
-				})
+				} )
 				.height( maxHeight );
 		}
 	},
@@ -384,11 +384,11 @@ return $.widget( "ui.accordion", {
 		// trying to collapse, simulate a click on the currently active header
 		active = active || this.active[ 0 ];
 
-		this._eventHandler({
+		this._eventHandler( {
 			target: active,
 			currentTarget: active,
 			preventDefault: $.noop
-		});
+		} );
 	},
 
 	_findActive: function( selector ) {
@@ -402,12 +402,12 @@ return $.widget( "ui.accordion", {
 		if ( event ) {
 			$.each( event.split( " " ), function( index, eventName ) {
 				events[ eventName ] = "_eventHandler";
-			});
+			} );
 		}
 
 		this._off( this.headers.add( this.headers.next() ) );
 		this._on( this.headers, events );
-		this._on( this.headers.next(), { keydown: "_panelKeyDown" });
+		this._on( this.headers.next(), { keydown: "_panelKeyDown" } );
 		this._hoverable( this.headers );
 		this._focusable( this.headers );
 	},
@@ -484,36 +484,36 @@ return $.widget( "ui.accordion", {
 			this._toggleComplete( data );
 		}
 
-		toHide.attr({
+		toHide.attr( {
 			"aria-hidden": "true"
-		});
-		toHide.prev().attr({
+		} );
+		toHide.prev().attr( {
 			"aria-selected": "false",
 			"aria-expanded": "false"
-		});
+		} );
 		// if we're switching panels, remove the old header from the tab order
 		// if we're opening from collapsed state, remove the previous header from the tab order
 		// if we're collapsing, then keep the collapsing header in the tab order
 		if ( toShow.length && toHide.length ) {
-			toHide.prev().attr({
+			toHide.prev().attr( {
 				"tabIndex": -1,
 				"aria-expanded": "false"
-			});
+			} );
 		} else if ( toShow.length ) {
-			this.headers.filter(function() {
+			this.headers.filter( function() {
 				return parseInt( $( this ).attr( "tabIndex" ), 10 ) === 0;
-			})
-			.attr( "tabIndex", -1 );
+			} )
+				.attr( "tabIndex", -1 );
 		}
 
 		toShow
 			.attr( "aria-hidden", "false" )
 			.prev()
-				.attr({
+				.attr( {
 					"aria-selected": "true",
 					"aria-expanded": "true",
 					tabIndex: 0
-				});
+				} );
 	},
 
 	_animate: function( toShow, toHide, data ) {
@@ -553,7 +553,7 @@ return $.widget( "ui.accordion", {
 			step: function( now, fx ) {
 				fx.now = Math.round( now );
 			}
-		});
+		} );
 		toShow
 			.hide()
 			.animate( this.showProps, {
@@ -571,7 +571,7 @@ return $.widget( "ui.accordion", {
 						adjust = 0;
 					}
 				}
-			});
+			} );
 	},
 
 	_toggleComplete: function( data ) {
@@ -588,6 +588,6 @@ return $.widget( "ui.accordion", {
 		}
 		this._trigger( "activate", null, data );
 	}
-});
+} );
 
-}));
+} ) );
