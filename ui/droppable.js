@@ -309,7 +309,7 @@ $.ui.ddmanager = {
 			}
 
 			// Activate the droppable if used directly from draggables
-			// todo
+			// Todo (interaction): Needs to be converted to pointerdown
 			if ( type === "mousedown" ) {
 				m[ i ]._activate.call( m[ i ], event );
 			}

@@ -21,8 +21,8 @@
 		define([
 			"jquery",
 			"./core",
-			"./widget",
-			"./interaction"
+			"./interaction",
+			"./widget"
 		], factory );
 	} else {
 
@@ -31,7 +31,7 @@
 	}
 }(function( $ ) {
 
-$.widget("ui.draggable", $.ui.mouse, {
+$.widget("ui.draggable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "drag",
 	options: {
@@ -66,6 +66,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		stop: null
 	},
 	_create: function() {
+		this._super();
 
 		if ( this.options.helper === "original" ) {
 			this._setPositionRelative();
@@ -77,12 +78,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this.element.addClass("ui-draggable-disabled");
 		}
 		this._setHandleClassName();
-
-        // TODO
-		this._mouseInit();
 	},
 
-	// TODO Where is this function used?
 	_setOption: function( key, value ) {
 		this._super( key, value );
 		if ( key === "handle" ) {
@@ -98,8 +95,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 		this.element.removeClass( "ui-draggable ui-draggable-dragging ui-draggable-disabled" );
 		this._removeHandleClassName();
-		// Todo
-		this._mouseDestroy();
 	},
 
 	/** interaction interface **/
@@ -107,16 +102,20 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_isValidTarget: function( element ) {
 		var o = this.options;
 
+		this._blurActiveElement( element );
+
 		// among others, prevent a drag on a resizable-handle
-		if (this.helper || o.disabled || $(event.target).closest(".ui-resizable-handle").length > 0) {
+		if (this.helper || o.disabled || element.closest(".ui-resizable-handle").length > 0) {
 			return false;
 		}
 
 		//Quit if we're not on a valid handle
-		this.handle = this._getHandle(event);
+		this.handle = this._getHandle( element );
 		if (!this.handle) {
 			return false;
 		}
+
+		this._blockFrames( o.iframeFix === true ? "iframe" : o.iframeFix );
 
 		return true;
 
@@ -142,11 +141,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 	},
 
-	_blurActiveElement: function( event ) {
+	_blurActiveElement: function( element ) {
 		var document = this.document[ 0 ];
 
 		// Only need to blur if the event occurred on the draggable itself, see #10527
-		if ( !this.handleElement.is( event.target ) ) {
+		if ( !this.handleElement.is( element ) ) {
 			return;
 		}
 
@@ -163,17 +162,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 			}
 		} catch ( error ) {}
 	},
-	// Todo this is not considering any conditions for the trigger of _MouseStart
-	// and treats it as equivalent to _MouseCapture
-	_start: function( event, pointerPosition ) {
+
+	_start: function( event ) {
 
 		var o = this.options;
-
-		// todo from mouse_capture
-		this._blurActiveElement( event );
-
-		// todo from mouse_capture
-		this._blockFrames( o.iframeFix === true ? "iframe" : o.iframeFix );
 
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
@@ -184,7 +176,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this._cacheHelperProportions();
 
 		//If ddmanager is used for droppables, set the global draggable
-		// TODO Where is this from?
 		if ($.ui.ddmanager) {
 			$.ui.ddmanager.current = this;
 		}
@@ -221,7 +212,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this._setContainment();
 
 		//Trigger event + callbacks
-		// TODO what does this trigger?
 		if (this._trigger("start", event) === false) {
 			this._clear();
 			return false;
@@ -239,15 +229,16 @@ $.widget("ui.draggable", $.ui.mouse, {
 		// as this prevents resizing of elements with right/bottom set (see #7772)
 		this._normalizeRightBottom();
 
-		// Todo
-		this._mouseDrag(event, true); //Execute the drag once - this causes the helper not to be visible before getting its correct position
+		// Execute the drag once - this causes the helper not to be visible
+		// before getting its correct position.
+		this.noPropagationWorkaround = true;
+		this._move( event );
 
 		//If the ddmanager is used for droppables, inform the manager that dragging has started (see #5003)
 		if ( $.ui.ddmanager ) {
 			$.ui.ddmanager.dragStart(this, event);
 		}
 
-		// Todo: Which one? true or false?
 		return true;
 	},
 
@@ -266,9 +257,12 @@ $.widget("ui.draggable", $.ui.mouse, {
 		};
 	},
 
-	// todo noPropagation argument needed
-	// _mouseDrag
-	_move: function( event, pointerPosition ) {
+	// Todo (interaction): _mouseDrag: function(event, noPropagation)
+	_move: function( event ) {
+		var noPropagation = this.noPropagationWorkaround,
+		    ui;
+
+		this.noPropagationWorkaround = undefined;
 		// reset any necessary cached properties (see #5009)
 		if ( this.hasFixedAncestor ) {
 			this.offset.parent = this._getParentOffset();
@@ -280,10 +274,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		//Call plugins and callbacks and use the resulting position if something is returned
 		if (!noPropagation) {
-			var ui = this._uiHash();
+			ui = this._uiHash();
 			if (this._trigger("drag", event, ui) === false) {
-				this._mouseUp({});
-				return false;
+				// Todo (interaction): this._mouseUp({});
+				this._trigger( "pointerup", event, ui );
+				return;
 			}
 			this.position = ui.position;
 		}
@@ -294,12 +289,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if ($.ui.ddmanager) {
 			$.ui.ddmanager.drag(this, event);
 		}
-
-		return false;
 	},
 
-	_stop: function( event, pointerPosition ) {
-        // << Todo: The following is from _mouseUp
+	_stop: function( event ) {
+		var that = this,
+			dropped = false;
+
+        // Todo (interaction): The following is from _mouseUp
 		this._unblockFrames();
 
 		//If the ddmanager is used for droppables, inform the manager that dragging has stopped (see #5003)
@@ -312,13 +308,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 			// The interaction is over; whether or not the click resulted in a drag, focus the element
 			this.element.focus();
 		}
-        // todo
-		$.ui.mouse.prototype._mouseUp.call(this, event);
-		// /Todo >>
-		// Todo The following from _mouseStop
+
+		// Todo The following is from _mouseStop
 		//If we are using droppables, inform the manager about the drop
-		var that = this,
-			dropped = false;
 		if ($.ui.ddmanager && !this.options.dropBehaviour) {
 			dropped = $.ui.ddmanager.drop(this, event);
 		}
@@ -347,7 +339,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	cancel: function() {
 
 		if (this.helper.is(".ui-draggable-dragging")) {
-			this._mouseUp({});
+			this._trigger( "pointerup", {} );
 		} else {
 			this._clear();
 		}
@@ -358,9 +350,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	/** internal **/
 
-	_getHandle: function(event) {
+	_getHandle: function( element ) {
 		return this.options.handle ?
-			!!$( event.target ).closest( this.element.find( this.options.handle ) ).length :
+			!!element.closest( this.element.find( this.options.handle ) ).length :
 			true;
 	},
 
@@ -771,8 +763,8 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					left: sortable.placeholder.css( "left" )
 				};
 
-				// todo
-				sortable._mouseStop(event);
+				// Todo (interaction): sortable._mouseStop(event);
+				sortable._stop( event );
 
 				// Once drag has ended, the sortable should return to using
 				// its original helper, not the shared helper from draggable
@@ -839,10 +831,12 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					// Fire the start events of the sortable with our passed browser event,
 					// and our own helper (so it doesn't create a new one)
 					event.target = sortable.currentItem[ 0 ];
-					// todo
-					sortable._mouseCapture( event, true );
-					// todo
-					sortable._mouseStart( event, true, true );
+
+					// Todo (interaction): sortable._mouseCapture( event, true );
+					// Todo (interaction): sortable._mouseStart( event, true, true );
+					sortable._overwriteHandleWorkaround = true;
+					sortable._noActivationWorkaround = true;
+					sortable._start( event );
 
 					// Because the browser event is way off the new appended portlet,
 					// modify necessary variables to reflect the changes
@@ -871,8 +865,8 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 				}
 
 				if ( sortable.currentItem ) {
-					// todo
-					sortable._mouseDrag( event );
+					// Todo (interaction): sortable._mouseDrag( event );
+					sortable._move( event );
 					// Copy the sortable's position because the draggable's can potentially reflect
 					// a relative position, while sortable is always absolute, which the dragged
 					// element has now become. (#8809)
@@ -893,8 +887,10 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					sortable.options.revert = false;
 
 					sortable._trigger( "out", event, sortable._uiHash( sortable ) );
-					// todo
-					sortable._mouseStop( event, true );
+
+					// Todo (interaction): sortable._mouseStop( event, true );
+					sortable.noPropagationWorkaround = true;
+					sortable._stop( event );
 
 					// restore sortable behaviors that were modfied
 					// when the draggable entered the sortable area (#9481)

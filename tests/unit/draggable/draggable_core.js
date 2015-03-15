@@ -59,7 +59,7 @@ test( "No options, absolute", function() {
 	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 
-// todo: reintroduce, once sortable is converts to interactions
+// Todo (interactions): Resizable needs to adopt interactions first
 //test( "resizable handle with complex markup (#8756 / #8757)", function() {
 //	expect( 2 );
 //
@@ -223,7 +223,7 @@ $( [ "hidden", "auto", "scroll" ] ).each(function() {
 
 	// http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
 	// http://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
-	// todo: reintroduce once scrollable is converted to interactions
+	// Todo (interactions): Scrollable needs to fully adopt to interactions
 	//test( "position in scrollable parent with overflow: " + overflow, function() {
 	//	expect( 2 );
 	//

@@ -244,7 +244,7 @@ test( "cancelement, default, switching after initialization", function() {
 	TestHelpers.draggable.shouldNotDrag( element, "cancel: input, input dragged", input );
 });
 
-// Todo (interaction): sortable needs to fully converted to use interactions first
+// Todo (interaction): connectToSortable needs to adopt interactions first
 //test( "connectToSortable, dragging out of a sortable", function() {
 //	expect( 4 );
 //
@@ -1057,7 +1057,7 @@ test( "scope", function() {
 	TestHelpers.draggable.shouldMove( element, "revert: valid reverts when dropped on a droppable out of scope" );
 });
 
-// todo (interaction) reintroduce once scrollable has interactions
+// Todo (interaction): Scrollable needs to adopt interactions
 //test( "scroll, scrollSensitivity, and scrollSpeed", function() {
 //	expect( 2 );
 //

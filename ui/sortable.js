@@ -21,8 +21,8 @@
 		define([
 			"jquery",
 			"./core",
-			"./widget",
-			"./interaction"
+			"./interaction",
+			"./widget"
 		], factory );
 	} else {
 
@@ -83,6 +83,7 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 	},
 
 	_create: function() {
+		this._super();
 		this.containerCache = {};
 		this.element.addClass("ui-sortable");
 
@@ -91,10 +92,6 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 
 		//Let's determine the parent's offset
 		this.offset = this.element.offset();
-
-		//Initialize mouse events for interaction
-		// todo
-		this._mouseInit();
 
 		this._setHandleClassName();
 
@@ -125,8 +122,6 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 			.removeClass( "ui-sortable ui-sortable-disabled" )
 			.find( ".ui-sortable-handle" )
 				.removeClass( "ui-sortable-handle" );
-		//todo
-		this._mouseDestroy();
 
 		for ( var i = this.items.length - 1; i >= 0; i-- ) {
 			this.items[i].item.removeData(this.widgetName + "-item");
@@ -136,12 +131,8 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 	},
 
 	/** interaction interface **/
-
-	_isValidTarget: function( element ) {
-		var currentItem = null,
-			validHandle = false,
-			that = this;
-
+	// Todo (interaction): _mouseCapture: function(event, overrideHandle)
+	_isValidTarget: function() {
 		if (this.reverting) {
 			return false;
 		}
@@ -150,17 +141,34 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 			return false;
 		}
 
+		return true;
+	},
+
+	// Todo (interaction): _mouseStart: function(event, overrideHandle, noActivation)
+	_start: function( event ) {
+		var currentItem = null,
+		    validHandle = false,
+		    that = this,
+			i, body,
+			o = this.options,
+		    overrideHandle = this.noOverrideHandleWorkaround,
+		    noActivation = this.noActivationWorkaround;
+
+		// Todo (interaction)
+		this.noOverrideHandleWorkaround = undefined;
+		this.noActivationWorkaround = undefined;
+
+		// Todo (interaction): second part of _mouseCapture(event, overrideHandle)
 		//We have to refresh the items data once first
 		this._refreshItems(event);
 
 		//Find out if the clicked node (or one of its parents) is a actual item in this.items
-		element.parents().each(function() {
+		$(event.target).parents().each(function() {
 			if($.data(this, that.widgetName + "-item") === that) {
 				currentItem = $(this);
 				return false;
 			}
 		});
-
 		if($.data(event.target, that.widgetName + "-item") === that) {
 			currentItem = $(event.target);
 		}
@@ -181,15 +189,6 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 
 		this.currentItem = currentItem;
 		this._removeCurrentsFromItems();
-		return true;
-
-	},
-
-	// TODO: overrideHandle parameter, noActivation parameter
-	_start: function( event, pointerPosition ) {
-
-		var i, body,
-			o = this.options;
 
 		this.currentContainer = this;
 
@@ -240,7 +239,6 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 		this.originalPageY = event.pageY;
 
 		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
-		// todo cursorAt
 		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
 
 		//Cache the former DOM position
@@ -258,7 +256,7 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 		if(o.containment) {
 			this._setContainment();
 		}
-		// todo understand cursor stuff
+
 		if( o.cursor && o.cursor !== "auto" ) { // cursor option
 			body = this.document.find( "body" );
 
@@ -316,14 +314,13 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 		this.dragging = true;
 
 		this.helper.addClass("ui-sortable-helper");
-
-		// todo
-		this._mouseDrag(event); //Execute the drag once - this causes the helper not to be visible before getting its correct position
+		// Execute the drag once - this causes the helper not to be visible
+		// before getting its correct position
+		this._move( event );
 		return true;
 
 	},
-
-	_move: function( event, pointerPosition ) {
+	_move: function( event ) {
 		var i, item, itemElement, intersection,
 			o = this.options,
 			scrolled = false;
@@ -444,8 +441,12 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 
 	},
 
-	// todo noPropagation parameter
-	_stop: function( event, pointerPosition ) {
+	// Todo (interaction): _mouseStop: function(event, noPropagation) {
+	_stop: function( event ) {
+		var that, cur, axis, animation,
+		    noPropagation = this.noPropagationWorkaround;
+
+		this.noPropagationWorkaround = undefined;
 
 		if(!event) {
 			return;
@@ -457,10 +458,10 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 		}
 
 		if(this.options.revert) {
-			var that = this,
-				cur = this.placeholder.offset(),
-				axis = this.options.axis,
-				animation = {};
+			that = this;
+			cur = this.placeholder.offset();
+			axis = this.options.axis;
+			animation = {};
 
 			if ( !axis || axis === "x" ) {
 				animation.left = cur.left - this.offset.parent.left - this.margins.left + (this.offsetParent[0] === this.document[0].body ? 0 : this.offsetParent[0].scrollLeft);
@@ -475,9 +476,6 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 		} else {
 			this._clear(event, noPropagation);
 		}
-		// todo maybe rather return nothing?
-		return false;
-
 	},
 
 	// /** internal **/
@@ -485,8 +483,9 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 	cancel: function() {
 
 		if(this.dragging) {
-			// todo
-			this._mouseUp({ target: null });
+
+			// Todo (interaction): this._mouseUp({ target: null });
+			this._stop ( { target: null } );
 
 			if(this.options.helper === "original") {
 				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
@@ -1209,7 +1208,6 @@ return $.widget( "ui.sortable", $.ui.interaction, {
 
 	},
 
-	// todo where is this called from ?
 	_clear: function(event, noPropagation) {
 
 		this.reverting = false;
