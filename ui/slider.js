@@ -453,7 +453,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "values":
 				this._animateOff = true;
 				this._refreshValue();
-				for ( i = 0; i < valsLength; i += 1 ) {
+
+				// Start from the last handle to prevent unreachable handles (#9046)
+				for ( i = valsLength - 1; i >= 0; i-- ) {
 					this._change( null, i );
 				}
 				this._animateOff = false;
