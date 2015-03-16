@@ -410,9 +410,24 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
-	_setOption: function( key, value ) {
+	_changeAllValues: function( valuesLength ) {
 		var i,
-			valsLength = 0;
+			rangeValues = [ this.values( 0 ), this.values( 1 ), this._valueMax() ];
+
+		if ( this.options.range === true && $.unique( rangeValues ).length === 1 ) {
+			for ( i = valuesLength - 1; i >= 0; i -= 1 ) {
+				this._change( null, i );
+			}
+			return;
+		}
+
+		for ( i = 0; i < valuesLength; i += 1 ) {
+			this._change( null, i );
+		}
+	},
+
+	_setOption: function( key, value ) {
+		var valsLength = 0;
 
 		if ( key === "range" && this.options.range === true ) {
 			if ( value === "min" ) {
@@ -453,9 +468,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "values":
 				this._animateOff = true;
 				this._refreshValue();
-				for ( i = 0; i < valsLength; i += 1 ) {
-					this._change( null, i );
-				}
+				this._changeAllValues( valsLength );
 				this._animateOff = false;
 				break;
 			case "step":
