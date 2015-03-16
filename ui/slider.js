@@ -411,17 +411,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_changeAllValues: function( valuesLength ) {
-		var i,
-			rangeValues = [ this.values( 0 ), this.values( 1 ), this._valueMax() ];
+		var i;
 
-		if ( this.options.range === true && $.unique( rangeValues ).length === 1 ) {
-			for ( i = valuesLength - 1; i >= 0; i -= 1 ) {
-				this._change( null, i );
-			}
-			return;
-		}
-
-		for ( i = 0; i < valuesLength; i += 1 ) {
+		for ( i = valuesLength - 1; i >= 0; i -= 1 ) {
 			this._change( null, i );
 		}
 	},

@@ -99,7 +99,7 @@ test( "programmatic event triggers", function() {
 });
 
 test( "mouse based interaction part two: when handles overlap", function() {
-	expect( 4 );
+	expect( 5 );
 
 	var element = $( "#slider1" )
 		.slider({
@@ -147,6 +147,18 @@ test( "mouse based interaction part two: when handles overlap", function() {
 	});
 	handles.eq( 0 ).simulate( "drag", { dx: 10 } );
 
+	element = $( "#slider1" )
+		.slider({
+			range: true,
+			min: 0,
+			max: 100,
+			values: [ 0, 50 ]
+		}),
+		handles = element.find( ".ui-slider-handle" );
+
+	element.slider( "option", { values: [ 100, 100 ] } );
+	element.find( ".ui-slider-handle" ).simulate( "drag", { dx: -10 } );
+	equal( element.slider( "values" )[ 0 ], 99, "setting values of range slider doesn't lock slider" );
 });
 
 test( "event data", function() {
