@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Widget - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../jquery-1.10.2.js"></script>
+	<script src="../../external/jquery/jquery.js"></script>
 	<script src="../../ui/core.js"></script>
 	<script src="../../ui/position.js"></script>
 	<script src="../../ui/widget.js"></script>
@@ -150,11 +150,11 @@
 		});
 
 		// click to set options after initialization
-		$( "#black" ).click( function() {
+		$( "#green" ).click( function() {
 			$( ":custom-colorize" ).colorize( "option", {
-				red: 0,
-				green: 0,
-				blue: 0
+				red: 64,
+				green: 250,
+				blue: 8
 			});
 		});
 	});
@@ -167,7 +167,7 @@
 	<div id="my-widget2">color me</div>
 	<div id="my-widget3">color me</div>
 	<button id="disable">Toggle disabled option</button>
-	<button id="black">Go black</button>
+	<button id="green">Go green</button>
 </div>
 
 <div class="demo-description">

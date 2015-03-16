@@ -4,10 +4,11 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Droppable Test Suite</title>
 
+	<script src="../../../external/PEP/PEP.js"></script>
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
+	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
@@ -33,14 +34,11 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Droppable Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
+
+<div id="draggable1" style="width: 25px; height: 25px;">Draggable</div>
 <div id="droppable1" style="width: 100px; height: 100px;">Droppable</div>
-<div id="draggable1" style="width: 25px; height: 25px; position: absolute; top: 150px;">Draggable</div>
 <div id="droppable2" style="width: 100px; height: 100px;">Droppable</div>
 <div style='width:1000px;height:1000px;'>&nbsp;</div>
 

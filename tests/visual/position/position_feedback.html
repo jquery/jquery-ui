@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>Position Visual Test: Feedback</title>
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../jquery-1.10.2.js"></script>
+	<script src="../../../external/jquery/jquery.js"></script>
 	<script src="../../../ui/core.js"></script>
 	<script src="../../../ui/widget.js"></script>
 	<script src="../../../ui/position.js"></script>
@@ -64,7 +64,7 @@
 				using: using
 			};
 		};
-		$( document ).on( "mousemove", function( event ) {
+		$( document ).bind( "mousemove", function( event ) {
 			element.position( positionWithOffset(
 				event.pageX - targetOffset.left, event.pageY - targetOffset.top ) );
 			oppositeElement.position( positionWithOffset(

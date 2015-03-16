@@ -1,3 +1,5 @@
+(function( $ ) {
+
 test( "$.widget.extend()", function() {
 	expect( 27 );
 
@@ -103,3 +105,5 @@ test( "$.widget.extend()", function() {
 	input.key[0] = 10;
 	deepEqual( input, output, "don't clone arrays" );
 });
+
+}( jQuery ));

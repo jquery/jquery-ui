@@ -2,7 +2,7 @@
  * jQuery UI Menu @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -20,12 +20,13 @@
 }
 .ui-menu .ui-menu-item {
 	margin: 0;
-	display: block;
-	padding: 3px .4em;
 	cursor: pointer;
-	min-height: 0; /* support: IE7 */
 	/* support: IE10, see #8844 */
 	list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+}
+.ui-menu .ui-menu-item-wrapper {
+	position: relative;
+	padding: 3px 1em 3px .4em;
 }
 .ui-menu .ui-menu-divider {
 	margin: 5px 0;
@@ -43,21 +44,21 @@
 .ui-menu-icons {
 	position: relative;
 }
-.ui-menu-icons .ui-menu-item {
-	position: relative;
+.ui-menu-icons .ui-menu-item-wrapper {
 	padding-left: 2em;
 }
 
 /* left-aligned */
 .ui-menu .ui-icon {
 	position: absolute;
-	top: .2em;
+	top: 0;
+	bottom: 0;
 	left: .2em;
+	margin: auto 0;
 }
 
 /* right-aligned */
 .ui-menu .ui-menu-icon {
-	position: relative;
-	top: -.2em;
-	float: right;
+	left: auto;
+	right: 0;
 }

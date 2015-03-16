@@ -71,6 +71,28 @@ asyncTest( "content: sync + async callback", function() {
 	}).tooltip( "open" );
 });
 
+// http://bugs.jqueryui.com/ticket/8740
+asyncTest( "content: async callback loses focus before load", function() {
+	expect( 1 );
+
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function( response ) {
+			setTimeout(function() {
+				element.trigger( "mouseleave" );
+				setTimeout(function() {
+					response( "sometext" );
+					setTimeout(function() {
+						ok( !$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ),
+							"Tooltip should not display" );
+						start();
+					});
+				});
+			});
+		}
+	});
+	element.trigger( "mouseover" );
+});
+
 test( "content: change while open", function() {
 	expect( 2 ) ;
 	var element = $( "#tooltipped1" ).tooltip({
@@ -96,6 +118,30 @@ test( "content: string", function() {
 		content: "just a string",
 		open: function( event, ui ) {
 			equal( ui.tooltip.text(), "just a string" );
+		}
+	}).tooltip( "open" );
+});
+
+test( "content: element", function() {
+	expect( 1 );
+	var content = "<p>this is a <i>test</i> of the emergency broadcast system.</p>",
+		element = $( content )[ 0 ];
+	$( "#tooltipped1" ).tooltip({
+		content: element,
+		open: function( event, ui ) {
+			equal( ui.tooltip.children().html().toLowerCase(), content );
+		}
+	}).tooltip( "open" );
+});
+
+test( "content: jQuery", function() {
+	expect( 1 );
+	var content = "<p>this is a <i>test</i> of the emergency broadcast system.</p>",
+		element = $( content );
+	$( "#tooltipped1" ).tooltip({
+		content: element,
+		open: function( event, ui ) {
+			equal( ui.tooltip.children().html().toLowerCase(), content );
 		}
 	}).tooltip( "open" );
 });

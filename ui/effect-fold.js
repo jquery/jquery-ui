@@ -2,12 +2,17 @@
  * jQuery UI Effects Fold @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/fold-effect/
  */
+
+//>>label: Fold Effect
+//>>group: Effects
+//>>description: Folds an element first horizontally and then vertically.
+//>>docs: http://api.jqueryui.com/fold-effect/
+//>>demos: http://jqueryui.com/effect/
+
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -23,64 +28,61 @@
 	}
 }(function( $ ) {
 
-return $.effects.effect.fold = function( o, done ) {
+return $.effects.define( "fold", "hide", function( options, done ) {
 
 	// Create element
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "hide" ),
+	var element = $( this ),
+		mode = options.mode,
 		show = mode === "show",
 		hide = mode === "hide",
-		size = o.size || 15,
+		size = options.size || 15,
 		percent = /([0-9]+)%/.exec( size ),
-		horizFirst = !!o.horizFirst,
-		widthFirst = show !== horizFirst,
-		ref = widthFirst ? [ "width", "height" ] : [ "height", "width" ],
-		duration = o.duration / 2,
-		wrapper, distance,
-		animation1 = {},
-		animation2 = {};
+		horizFirst = !!options.horizFirst,
+		ref = horizFirst ? [ "right", "bottom" ] : [ "bottom", "right" ],
+		duration = options.duration / 2,
 
-	$.effects.save( el, props );
-	el.show();
+		placeholder = $.effects.createPlaceholder( element ),
 
-	// Create Wrapper
-	wrapper = $.effects.createWrapper( el ).css({
-		overflow: "hidden"
-	});
-	distance = widthFirst ?
-		[ wrapper.width(), wrapper.height() ] :
-		[ wrapper.height(), wrapper.width() ];
+		start = element.cssClip(),
+		animation1 = { clip: $.extend( {}, start ) },
+		animation2 = { clip: $.extend( {}, start ) },
+
+		distance = [ start[ ref[ 0 ] ], start[ ref[ 1 ] ] ],
+
+		queuelen = element.queue().length;
 
 	if ( percent ) {
 		size = parseInt( percent[ 1 ], 10 ) / 100 * distance[ hide ? 0 : 1 ];
 	}
+	animation1.clip[ ref[ 0 ] ] = size;
+	animation2.clip[ ref[ 0 ] ] = size;
+	animation2.clip[ ref[ 1 ] ] = 0;
+
 	if ( show ) {
-		wrapper.css( horizFirst ? {
-			height: 0,
-			width: size
-		} : {
-			height: size,
-			width: 0
-		});
+		element.cssClip( animation2.clip );
+		if ( placeholder ) {
+			placeholder.css( $.effects.clipToBox( animation2 ) );
+		}
+
+		animation2.clip = start;
 	}
 
-	// Animation
-	animation1[ ref[ 0 ] ] = show ? distance[ 0 ] : size;
-	animation2[ ref[ 1 ] ] = show ? distance[ 1 ] : 0;
-
 	// Animate
-	wrapper
-		.animate( animation1, duration, o.easing )
-		.animate( animation2, duration, o.easing, function() {
-			if ( hide ) {
-				el.hide();
+	element
+		.queue(function( next ) {
+			if ( placeholder ) {
+				placeholder
+					.animate( $.effects.clipToBox( animation1 ), duration, options.easing )
+					.animate( $.effects.clipToBox( animation2 ), duration, options.easing );
 			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
-			done();
-		});
 
-};
+			next();
+		})
+		.animate( animation1, duration, options.easing )
+		.animate( animation2, duration, options.easing )
+		.queue( done );
+
+	$.effects.unshift( element, queuelen, 4 );
+});
 
 }));

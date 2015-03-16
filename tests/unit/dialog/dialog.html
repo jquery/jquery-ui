@@ -5,12 +5,9 @@
 	<title>jQuery UI Dialog Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script>
-	$.uiBackCompat = false;
-	</script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
+	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
@@ -25,7 +22,6 @@
 			"ui/button.js",
 			"ui/effect.js",
 			"ui/effect-blind.js",
-			"ui/effect-clip.js",
 			"ui/effect-explode.js",
 			"ui/dialog.js"
 		]
@@ -43,11 +39,7 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Dialog Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
 	<div id="dialog1"></div>
 	<div id="dialog2"></div>

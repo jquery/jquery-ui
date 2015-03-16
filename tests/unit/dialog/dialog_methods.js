@@ -87,7 +87,7 @@ asyncTest("#9000: Dialog leaves broken event handler after close/destroy in cert
 		$( "#favorite-animal" ).focus();
 		ok( true, "close and destroy modal dialog before its really opened" );
 		start();
-	}, 2 );
+	});
 });
 
 test("#4980: Destroy should place element back in original DOM position", function(){
@@ -193,7 +193,8 @@ test("open", function() {
 	ok(element.dialog("widget").is(":visible") && !element.dialog("widget").is(":hidden"), "dialog visible after open method called");
 });
 
-test("#6137: dialog('open') causes form elements to reset on IE7", function() {
+// http://bugs.jqueryui.com/ticket/6137
+test("Ensure form elements don't reset when opening a dialog", function() {
 	expect(2);
 
 	var d1 = $("<form><input type='radio' name='radio' id='a' value='a' checked='checked'></input>" +

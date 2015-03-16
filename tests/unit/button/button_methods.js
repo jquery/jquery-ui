@@ -3,7 +3,6 @@
  */
 (function($) {
 
-
 module("button: methods");
 
 test("destroy", function() {
@@ -47,6 +46,28 @@ test( "refresh: Ensure disabled state is preserved correctly.", function() {
 	element = $( "<input type='radio'>" );
 	element.button( { disabled: true} ).prop( "disabled", false ).button( "refresh" );
 	ok( !element.button( "option", "disabled" ), "Changing a radio button's disabled property should update the state after refresh.");
+});
+
+// #8975
+test( "refresh: buttonset should turn added elements into button widgets", function() {
+	expect( 2 );
+	var radioButtonset = $( "#radio0" ).buttonset(),
+		checkboxButtonset = $( "#checkbox0" ).buttonset();
+
+	radioButtonset.append(
+		"<input type='radio' name='radio' id='radio04'>" +
+		"<label for='radio04'>Choice 4</label>"
+	);
+	checkboxButtonset.append(
+		"<input type='checkbox' name='checkbox' id='checkbox04'>" +
+		"<label for='checkbox04'>Choice 4</label>"
+	);
+
+	radioButtonset.buttonset( "refresh" );
+	checkboxButtonset.buttonset( "refresh" );
+
+	equal( radioButtonset.find( ":ui-button" ).length, 4, "radio" );
+	equal( checkboxButtonset.find( ":ui-button" ).length, 4, "checkbox" );
 });
 
 })(jQuery);

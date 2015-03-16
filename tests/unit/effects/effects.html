@@ -5,9 +5,9 @@
 	<title>jQuery UI Effects Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../../../external/qunit/qunit.js"></script>
+	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 	<script>
 	TestHelpers.loadResources({
@@ -88,32 +88,47 @@
 		width: 100px;
 	}
 
+	.relative {
+		position: relative;
+		top: 0px;
+		left: 0px;
+	}
+	.absolute {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
+	.fixed {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+	}
+	.static {
+		position: static;
+	}
+
 	</style>
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Effects Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
 <div id="qunit-fixture">
-<div id="elem" class="test">
-</div>
-<div class="hidden test">
-	<div>.</div>
-</div>
-<div class="animateClass test">
-	<h2>Child Element Test</h2>
-</div>
-<div class="relWidth relHeight testAddBorder">
-	<h2>Slide with relative width</h2>
-</div>
-<div class="testScale">
-</div>
-<div class="ticket7106">
-</div>
-
+	<div id="elem" class="test"></div>
+	<div class="hidden test">
+		<div>.</div>
+	</div>
+	<div class="animateClass test">
+		<h2>Child Element Test</h2>
+	</div>
+	<div class="relWidth relHeight testAddBorder">
+		<h2>Slide with relative width</h2>
+	</div>
+	<div class="testScale"></div>
+	<div class="ticket7106"></div>
+	<div class="relative"></div>
+	<div class="absolute"></div>
+	<div class="fixed"></div>
+	<div class="static"></div>
 </div>
 </body>
 </html>

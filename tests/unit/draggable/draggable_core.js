@@ -25,6 +25,13 @@ test( "element types", function() {
 			el.append("<tr><td>content</td></tr>");
 		}
 
+		// intrinsic height is incorrect in FF for buttons with no content
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=471763
+		// Support: FF
+		if ( typeName === "button" ) {
+			el.text( "button" );
+		}
+
 		el.draggable({ cancel: "" });
 		offsetBefore = el.offset();
 		el.simulate( "drag", {
@@ -35,8 +42,8 @@ test( "element types", function() {
 
 		// Support: FF, Chrome, and IE9,
 		// there are some rounding errors in so we can't say equal, we have to settle for close enough
-		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
-		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
+		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
+		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
 		el.draggable("destroy");
 		el.remove();
 	});
@@ -52,108 +59,28 @@ test( "No options, absolute", function() {
 	TestHelpers.draggable.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 
-//TODO: re-enable when resizable is ported to interactions
-// test( "resizable handle with complex markup (#8756 / #8757)", function() {
-// 	expect( 2 );
-
-// 	$( "#draggable1" )
-// 		.append(
-// 			$("<div>")
-// 				.addClass("ui-resizable-handle ui-resizable-w")
-// 				.append( $("<div>") )
-// 		);
-
-// 	var handle = $(".ui-resizable-w div"),
-// 		target = $( "#draggable1" ).draggable().resizable({ handles: "all" });
-
-// 	// todo: fix resizable so it doesn't require a mouseover
-// 	handle.simulate("mouseover").simulate( "drag", { dx: -50 } );
-// 	equal( target.width(), 250, "compare width" );
-
-// 	// todo: fix resizable so it doesn't require a mouseover
-// 	handle.simulate("mouseover").simulate( "drag", { dx: 50 } );
-// 	equal( target.width(), 200, "compare width" );
-// });
-
-test("_blockFrames, absolute parent", function() {
-	expect( 3 );
-	var el = $("#draggable1").draggable(),
-		parent = $("<div style='width: 600px; height: 600px; position: absolute; top: 300px; left; 400px;'>"),
-		iframe = $("<iframe src='about:blank' width='500' height='500' style='position: absolute; top: 25px; left: 30px;'>"),
-		left, top;
-
-	parent.append( iframe );
-
-	$("#qunit-fixture").prepend( parent );
-
-	el.on( "drag", function() {
-
-		var block = iframe.next();
-
-		left = block.css("left");
-		top = block.css("top");
-
-	});
-
-	TestHelpers.draggable.shouldMove(el);
-
-	equal( left, "30px" );
-	equal( top, "25px" );
-
-});
-
-test("_blockFrames, relative parent", function() {
-	expect( 3 );
-	var el = $("#draggable1").draggable(),
-		parent = $("<div style='width: 600px; height: 600px; position: relative; top: 300px; left; 400px;'>"),
-		iframe = $("<iframe src='about:blank' width='500' height='500' style='position: absolute; top: 25px; left: 30px;'>"),
-		left, top;
-
-	parent.append( iframe );
-
-	$("#qunit-fixture").prepend( parent );
-
-	el.on( "drag", function() {
-
-		var block = iframe.next();
-
-		left = block.css("left");
-		top = block.css("top");
-
-	});
-
-	TestHelpers.draggable.shouldMove(el);
-
-	equal( left, "30px" );
-	equal( top, "25px" );
-});
-
-test("_blockFrames, static parent", function() {
-	expect( 3 );
-	var el = $("#draggable1").draggable(),
-		parent = $("<div style='width: 600px; height: 600px; margin-top: 300px; margin-left: 400px;'>"),
-		iframe = $("<iframe src='about:blank' width='500' height='500' style='position: relative; top: 25px; left: 30px;'>"),
-		left, top;
-
-	parent.append( iframe );
-
-	$("#qunit-fixture").prepend( parent );
-
-	el.on( "drag", function() {
-
-		var block = iframe.next();
-
-		left = block.css("left");
-		top = block.css("top");
-
-	});
-
-	TestHelpers.draggable.shouldMove(el);
-
-	equal( left, "430px" );
-  equal( top, "325px" );
-
-});
+// Todo (interactions): Resizable needs to adopt interactions first
+//test( "resizable handle with complex markup (#8756 / #8757)", function() {
+//	expect( 2 );
+//
+//	$( "#draggable1" )
+//		.append(
+//			$("<div>")
+//				.addClass("ui-resizable-handle ui-resizable-w")
+//				.append( $("<div>") )
+//		);
+//
+//	var handle = $(".ui-resizable-w div"),
+//		target = $( "#draggable1" ).draggable().resizable({ handles: "all" });
+//
+//	// todo: fix resizable so it doesn't require a mouseover
+//	handle.simulate("mouseover").simulate( "drag", { dx: -50 } );
+//	equal( target.width(), 250, "compare width" );
+//
+//	// todo: fix resizable so it doesn't require a mouseover
+//	handle.simulate("mouseover").simulate( "drag", { dx: 50 } );
+//	equal( target.width(), 200, "compare width" );
+//});
 
 test( "#8269: Removing draggable element on drop", function() {
 	expect( 2 );
@@ -183,6 +110,23 @@ test( "#8269: Removing draggable element on drop", function() {
 			y: dropOffset.top
 		});
 	}
+});
+
+// http://bugs.jqueryui.com/ticket/7778
+// drag element breaks in IE8 when its content is replaced onmousedown
+test( "Stray mousemove after mousedown still drags", function() {
+	expect( 2 );
+
+	var element = $( "#draggable1" ).draggable({ scroll: false });
+
+	// In IE8, when content is placed under the mouse (e.g. when draggable content is replaced
+	// on mousedown), mousemove is triggered on those elements even though the mouse hasn't moved.
+	// Support: IE <9
+	element.bind( "mousedown", function() {
+		$( document ).simulate( "mousemove", { button: -1 });
+	});
+
+	TestHelpers.draggable.shouldMove( element, "element is draggable" );
 });
 
 test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
@@ -239,25 +183,33 @@ test( "#9315: jumps down with offset of scrollbar", function() {
 		});
 });
 
-test( "#5009: scroll not working with parent's position fixed", function() {
+test( "scroll offset with fixed ancestors", function() {
 	expect( 2 );
 
 	var startValue = 300,
-		element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable({
-			drag: function() {
-				startValue += 100;
-				$( document ).scrollTop( startValue ).scrollLeft( startValue );
-			},
-			stop: function( event, ui ) {
-				equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
-				equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
-				$( document ).scrollTop( 0 ).scrollLeft( 0 );
-			}
-		});
+		element = $( "#draggable1" )
+			// http://bugs.jqueryui.com/ticket/5009
+			// scroll not working with parent's position fixed
+			.wrap( "<div id='wrapper' />" )
+			// http://bugs.jqueryui.com/ticket/9612
+			// abspos elements inside of fixed elements moving away from the mouse when scrolling
+			.wrap( "<div id='wrapper2' />" )
+			.draggable({
+				drag: function() {
+					startValue += 100;
+					$( document ).scrollTop( startValue ).scrollLeft( startValue );
+				},
+				stop: function( event, ui ) {
+					equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
+					equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
+					$( document ).scrollTop( 0 ).scrollLeft( 0 );
+				}
+			});
 
 	TestHelpers.forceScrollableWindow();
 
 	$( "#wrapper" ).css( "position", "fixed" );
+	$( "#wrapper2" ).css( "position", "absolute" );
 
 	element.simulate( "drag", {
 		dx: 10,
@@ -266,39 +218,46 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
-test( "#9379: Draggable: position bug in scrollable div", function() {
-	expect( 2 );
+$( [ "hidden", "auto", "scroll" ] ).each(function() {
+	var overflow = this;
 
-	$( "#qunit-fixture" ).html( "<div id='o_9379'><div id='i_9379'></div><div id='d_9379'>a</div></div>" );
-	$( "#i_9379" ).css({ position: "absolute", width: "500px", height: "500px" });
-	$( "#o_9379" ).css({ position: "absolute", width: "300px", height: "300px" });
-	$( "#d_9379" ).css({ width: "10px", height: "10px" });
-
-	var moves = 3,
-		startValue = 0,
-		dragDelta = 20,
-		delta = 100,
-
-		// we scroll after each drag event, so subtract 1 from number of moves for expected
-		expected = delta + ( ( moves - 1 ) * dragDelta ),
-		element = $( "#d_9379" ).draggable({
-			drag: function() {
-				startValue += dragDelta;
-				$( "#o_9379" ).scrollTop( startValue ).scrollLeft( startValue );
-			},
-			stop: function( event, ui ) {
-				equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
-				equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
-			}
-		});
-
-	$( "#o_9379" ).css( "overflow", "auto" );
-
-	element.simulate( "drag", {
-		dy: delta,
-		dx: delta,
-		moves: moves
-	});
+	// http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
+	// http://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
+	// Todo (interactions): Scrollable needs to fully adopt to interactions
+	//test( "position in scrollable parent with overflow: " + overflow, function() {
+	//	expect( 2 );
+	//
+	//	$( "#qunit-fixture" ).html( "<div id='outer'><div id='inner'></div><div id='dragged'>a</div></div>" );
+	//	$( "#inner" ).css({ position: "absolute", width: "500px", height: "500px" });
+	//	$( "#outer" ).css({ position: "absolute", width: "300px", height: "300px" });
+	//	$( "#dragged" ).css({ width: "10px", height: "10px" });
+	//
+	//	var moves = 3,
+	//		startValue = 0,
+	//		dragDelta = 20,
+	//		delta = 100,
+	//
+	//		// we scroll after each drag event, so subtract 1 from number of moves for expected
+	//		expected = delta + ( ( moves - 1 ) * dragDelta ),
+	//		element = $( "#dragged" ).draggable({
+	//			drag: function() {
+	//				startValue += dragDelta;
+	//				$( "#outer" ).scrollTop( startValue ).scrollLeft( startValue );
+	//			},
+	//			stop: function( event, ui ) {
+	//				equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
+	//				equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
+	//			}
+	//		});
+	//
+	//	$( "#outer" ).css( "overflow", overflow );
+	//
+	//	element.simulate( "drag", {
+	//		dy: delta,
+	//		dx: delta,
+	//		moves: moves
+	//	});
+	//});
 });
 
 test( "#5727: draggable from iframe", function() {
@@ -337,34 +296,84 @@ test( "#8399: A draggable should become the active element after you are finishe
 	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
 });
 
-asyncTest( "#4261: active element should blur when mousing down on a draggable", function() {
-	expect( 2 );
+asyncTest( "blur behavior", function() {
+	expect( 3 );
 
-	var textInput = $( "<input>" ).appendTo( "#qunit-fixture" ),
-		element = $( "#draggable1" ).draggable();
+	var element = $( "#draggable1" ).draggable(),
+		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
 
-	TestHelpers.onFocus( textInput, function() {
-		strictEqual( document.activeElement, textInput.get( 0 ), "ensure that a focussed text input is the active element before mousing down on a draggable" );
+	TestHelpers.onFocus( focusElement, function() {
+		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
+
+		TestHelpers.draggable.move( focusElement, 1, 1 );
+
+		// http://bugs.jqueryui.com/ticket/10527
+		// Draggable: Can't select option in modal dialog (IE8)
+		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
 
 		TestHelpers.draggable.move( element, 50, 50 );
 
-		notStrictEqual( document.activeElement, textInput.get( 0 ), "ensure the text input is no longer the active element after mousing down on a draggable" );
+		// http://bugs.jqueryui.com/ticket/4261
+		// active element should blur when mousing down on a draggable
+		notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
 		start();
 	});
 });
 
 test( "ui-draggable-handle assigned to appropriate element", function() {
-	expect( 4 );
+	expect( 5 );
 
-	var element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
+	var p = $( "<p>" ).appendTo( "#qunit-fixture" ),
+		element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
 	ok( element.hasClass( "ui-draggable-handle" ), "handle is element by default" );
 
 	element.draggable( "option", "handle", "p" );
 	ok( !element.hasClass( "ui-draggable-handle" ), "removed from element" );
 	ok( element.find( "p" ).hasClass( "ui-draggable-handle" ), "added to handle" );
 
+	ok( !p.hasClass( "ui-draggable-handle" ),
+		"ensure handle class name is constrained within the draggble (#10212)" );
+
 	element.draggable( "destroy" );
 	ok( !element.find( "p" ).hasClass( "ui-draggable-handle" ), "removed in destroy()" );
+});
+
+test( "ui-draggable-handle managed correctly in nested draggables", function() {
+	expect( 4 );
+	var parent = $( "<div><div></div></div>" ).draggable().appendTo( "#qunit-fixture" ),
+		child = parent.find( "div" ).draggable();
+
+	ok( parent.hasClass( "ui-draggable-handle" ), "parent has class name on init" );
+	ok( child.hasClass( "ui-draggable-handle" ), "child has class name on init" );
+
+	parent.draggable( "destroy" );
+	ok( !parent.hasClass( "ui-draggable-handle" ), "parent loses class name on destroy" );
+	ok( child.hasClass( "ui-draggable-handle" ), "child retains class name on destroy" );
+});
+
+// http://bugs.jqueryui.com/ticket/7772
+// when css 'right' is set, element resizes on drag
+test( "setting right/bottom css shouldn't cause resize", function() {
+	expect( 4 );
+
+	var finalOffset,
+		element = $( "#draggable3" ),
+		origWidth = element.width(),
+		origHeight = element.height(),
+		origOffset = element.offset();
+
+	element.draggable();
+
+	TestHelpers.draggable.move( element, -50, -50 );
+
+	finalOffset = element.offset();
+	finalOffset.left += 50;
+	finalOffset.top += 50;
+
+	closeEnough( element.width(), origWidth, 1, "element retains width" );
+	closeEnough( element.height(), origHeight, 1, "element retains height" );
+	closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
+	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
 })( jQuery );

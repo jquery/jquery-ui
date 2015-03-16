@@ -51,7 +51,7 @@ test( "destroy", function() {
 });
 
 test( "enable", function() {
-	expect( 7 );
+	expect( 11 );
 
 	element.draggable({ disabled: true });
 	TestHelpers.draggable.shouldNotDrag( element, ".draggable({ disabled: true })" );
@@ -74,7 +74,7 @@ test( "enable", function() {
 });
 
 test( "disable", function() {
-	expect( 10 );
+	expect( 14 );
 
 	element = $( "#draggable2" ).draggable({ disabled: false });
 	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );

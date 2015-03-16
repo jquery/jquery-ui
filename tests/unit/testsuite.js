@@ -13,17 +13,19 @@ function includeScript( url ) {
 }
 
 function url( value ) {
-	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random() * 100000, 10);
+	return value + ( /\?/.test( value ) ? "&" : "?" ) + new Date().getTime() + "" +
+		parseInt( Math.random() * 100000, 10 );
 }
 
 reset = QUnit.reset;
 QUnit.reset = function() {
+
 	// Ensure jQuery events and data on the fixture are properly removed
-	jQuery("#qunit-fixture").empty();
+	jQuery( "#qunit-fixture" ).empty();
+
 	// Let QUnit reset the fixture
 	reset.apply( this, arguments );
 };
-
 
 QUnit.config.requireExpects = true;
 
@@ -54,11 +56,28 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 QUnit.config.urlConfig.push({
 	id: "nojshint",
 	label: "Skip JSHint",
-	tooltip: "Skip running JSHint, e.g. within TestSwarm, where Jenkins runs it already"
+	tooltip: "Skip running JSHint, e.g., within TestSwarm, where Jenkins runs it already"
+});
+
+QUnit.config.urlConfig.push({
+	id: "jquery",
+	label: "jQuery version",
+	value: [
+		"1.7.0", "1.7.1", "1.7.2",
+		"1.8.0", "1.8.1", "1.8.2", "1.8.3",
+		"1.9.0", "1.9.1",
+		"1.10.0", "1.10.1", "1.10.2",
+		"1.11.0", "1.11.1", "1.11.2",
+		"2.0.0", "2.0.1", "2.0.2", "2.0.3",
+		"2.1.0", "2.1.1", "2.1.2", "2.1.3",
+		"git1", "git"
+	],
+	tooltip: "Which jQuery Core version to test against"
 });
 
 jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
+
 	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
 	// https://github.com/jshint/jshint/issues/1384
 	if ( QUnit.urlParams.nojshint || !Function.prototype.bind ) {
@@ -66,7 +85,7 @@ TestHelpers.testJshint = function( module ) {
 	}
 
 	if ( !jshintLoaded ) {
-		includeScript( "external/jshint.js" );
+		includeScript( "external/jshint/jshint.js" );
 		jshintLoaded = true;
 	}
 
@@ -75,11 +94,11 @@ TestHelpers.testJshint = function( module ) {
 
 		$.when(
 			$.ajax({
-				url: url("../../../ui/.jshintrc"),
+				url: url( "../../../ui/.jshintrc" ),
 				dataType: "json"
 			}),
 			$.ajax({
-				url: url("../../../ui/" + module + ".js"),
+				url: url( "../../../ui/" + module + ".js" ),
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
@@ -91,6 +110,7 @@ TestHelpers.testJshint = function( module ) {
 			delete jshintrc.globals;
 			passed = JSHINT( source, jshintrc, globals );
 			errors = $.map( JSHINT.errors, function( error ) {
+
 				// JSHINT may report null if there are too many errors
 				if ( !error ) {
 					return;
@@ -112,7 +132,7 @@ TestHelpers.testJshint = function( module ) {
 function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
 
-	// ensure that all defaults have the correct value
+	// Ensure that all defaults have the correct value
 	test( "defined defaults", function() {
 		var count = 0;
 		$.each( defaults, function( key, val ) {
@@ -125,7 +145,7 @@ function testWidgetDefaults( widget, defaults ) {
 		});
 	});
 
-	// ensure that all defaults were tested
+	// Ensure that all defaults were tested
 	test( "tested defaults", function() {
 		var count = 0;
 		$.each( pluginDefaults, function( key ) {
@@ -163,6 +183,7 @@ function testBasicUsage( widget ) {
 		$( defaultElement )[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - never connected" );
 
+		// Ensure manipulating removed elements works (#3664)
 		$( defaultElement ).appendTo( "body" ).remove()[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - removed" );
 	});
@@ -181,9 +202,9 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 	});
 };
 
-TestHelpers.onFocus= function( element, onFocus ) {
-	var fn = function( event ){
-		if( !event.originalEvent ) {
+TestHelpers.onFocus = function( element, onFocus ) {
+	var fn = function( event ) {
+		if ( !event.originalEvent ) {
 			return;
 		}
 		element.unbind( "focus", fn );
@@ -194,25 +215,26 @@ TestHelpers.onFocus= function( element, onFocus ) {
 };
 
 TestHelpers.forceScrollableWindow = function( appendTo ) {
+
+	// The main testable area is 10000x10000 so to enforce scrolling,
+	// this DIV must be greater than 10000 to work
 	return $( "<div>" ).css({
-		height: "10000px",
-		width: "10000px"
+		height: "11000px",
+		width: "11000px"
 	}).appendTo( appendTo || "#qunit-fixture" );
 };
 
-/*
- * Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
- */
+// Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
 window.closeEnough = function( actual, expected, maxDifference, message ) {
-	var passes = (actual === expected) || Math.abs(actual - expected) <= maxDifference;
-	QUnit.push(passes, actual, expected, message);
+	var passes = ( actual === expected ) || Math.abs( actual - expected ) <= maxDifference;
+	QUnit.push( passes, actual, expected, message );
 };
 
 /*
  * Experimental assertion for comparing DOM objects.
  *
- * Serializes an element and some properties and attributes and its children if any, otherwise the text.
- * Then compares the result using deepEqual.
+ * Serializes an element and some properties and attributes and its children if any,
+ * otherwise the text. Then compares the result using deepEqual().
  */
 window.domEqual = function( selector, modifier, message ) {
 	var expected, actual,
@@ -259,6 +281,7 @@ window.domEqual = function( selector, modifier, message ) {
 					styles[ $.camelCase( key ) ] = style[ key ];
 				}
 			}
+
 		// support: Opera, IE <9
 		} else {
 			for ( key in style ) {

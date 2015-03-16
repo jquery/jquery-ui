@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 2 );
+	expect( 5 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -52,8 +52,36 @@ test( "max", function() {
 	};
 
 	element.slider( options );
-	ok(element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
-	ok(element.slider( "value" ) === options.max, "value method is contained by max" );
+	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
+	ok( element.slider( "value" ) === options.max, "value method is contained by max" );
+	
+	options = {
+		max: 9,
+		min: 1,
+		orientation: "horizontal",
+		step: 3,
+		value: 8.75
+	};
+
+	element.slider( options );
+	ok( element.slider( "value" ) === 7, "value method is within max, edge Case" );
+	
+	options.step = 2;
+
+	element.slider( options );
+	ok( element.slider( "value" ) === options.max, "value method will max, step is changed" );
+	element.slider( "destroy" );
+
+	options = {
+		max: 60,
+		min: 50,
+		orientation: "horizontal",
+		step: 0.1,
+		value: 60
+	};
+
+	element.slider( options );
+	ok( element.slider( "value" ) === options.max, "value method will max, step is changed and step is float" );
 	element.slider( "destroy" );
 
 });
@@ -78,7 +106,7 @@ test( "min", function() {
 });
 
 test( "orientation", function() {
-	expect( 6 );
+	expect( 8 );
 	element = $( "#slider1" );
 
 	options = {
@@ -93,6 +121,7 @@ test( "orientation", function() {
 	element.slider( options ).slider( "option", "orientation", "horizontal" );
 	ok( element.is( ".ui-slider-horizontal" ), "horizontal slider has class .ui-slider-horizontal" );
 	ok( !element.is( ".ui-slider-vertical" ), "horizontal slider does not have class .ui-slider-vertical" );
+	equal( element.find( ".ui-slider-handle" )[ 0 ].style.bottom, "", "CSS bottom reset" );
 	equal( handle()[0].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
 
 	element.slider( "destroy" ) ;
@@ -109,6 +138,7 @@ test( "orientation", function() {
 	element.slider( options ).slider( "option", "orientation", "vertical" );
 	ok( element.is( ".ui-slider-vertical" ), "vertical slider has class .ui-slider-vertical" );
 	ok( !element.is( ".ui-slider-horizontal" ), "vertical slider does not have class .ui-slider-horizontal" );
+	equal( element.find( ".ui-slider-handle" )[ 0 ].style.left, "", "CSS left reset" );
 	equal( handle()[0].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %" );
 
 	element.slider( "destroy" );

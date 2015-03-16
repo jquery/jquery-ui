@@ -1,19 +1,16 @@
 TestHelpers.commonWidgetTests( "draggable", {
 	defaults: {
-		// options
-		appendTo: null,
-		containment: null,
-		disabled: false,
-		exclude: "input,textarea,button,select",
-		handle: null,
-		helper: false,
-
-		// backCompat options
+		appendTo: "parent",
 		axis: false,
-		// connectToSortable: false,
+		cancel: "input,textarea,button,select,option",
+		connectToSortable: false,
+		containment: false,
 		cursor: "auto",
 		cursorAt: false,
+		disabled: false,
 		grid: false,
+		handle: false,
+		helper: "original",
 		opacity: false,
 		refreshPositions: false,
 		revert: false,
@@ -27,10 +24,14 @@ TestHelpers.commonWidgetTests( "draggable", {
 		snapTolerance: 20,
 		stack: false,
 		zIndex: false,
-		cancel: null,
+
+		//todo: remove the following option checks when interactions are rewritten:
+		addClasses: true,
+		delay: 0,
+		distance: 1,
+		iframeFix: false,
 
 		// callbacks
-		beforeStart: null,
 		create: null,
 		drag: null,
 		start: null,

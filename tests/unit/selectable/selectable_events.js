@@ -49,12 +49,9 @@ test( "mousedown: initial position of helper", function() {
 		clientY: 10
 	});
 
-	// we do a GTE comparison here because IE7 erroneously subtracts
-	// 2 pixels from a simulated mousedown for clientX/Y
-	// Support: IE7
 	helperOffset = $( ".ui-selectable-helper" ).offset();
-	ok( helperOffset.top >= 99, "Scroll top should be accounted for." );
-	ok( helperOffset.left >= 99, "Scroll left should be accounted for." );
+	ok( helperOffset.top, 110, "Scroll top should be accounted for." );
+	ok( helperOffset.left, 110, "Scroll left should be accounted for." );
 
 	// Cleanup
 	element.simulate( "mouseup" );

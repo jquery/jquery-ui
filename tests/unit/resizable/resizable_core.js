@@ -171,13 +171,14 @@ test("handle with complex markup (#8756)", function() {
 });
 
 test("resizable accounts for scroll position correctly (#3815)", function() {
-	expect( 3 );
+	expect( 4 );
 
 	var position, top, left,
 		container = $("<div style='overflow:scroll;height:300px;width:300px;position:relative;'></div>").appendTo("#qunit-fixture"),
 		overflowed = $("<div style='width: 1000px; height: 1000px;'></div>").appendTo( container ),
 		el = $("<div style='height:100px;width:100px;position:absolute;top:10px;left:10px;'></div>").appendTo( overflowed ).resizable({ handles: "all" }),
-		handle = ".ui-resizable-e";
+		handle = ".ui-resizable-e",
+		handlePosition = $(handle).position().left;
 
 	container.scrollLeft( 100 ).scrollTop( 100 );
 
@@ -189,6 +190,7 @@ test("resizable accounts for scroll position correctly (#3815)", function() {
 	deepEqual( el.position(), position, "position stays the same when resized" );
 	equal( el.css("left"), left, "css('left') stays the same when resized" );
 	equal( el.css("top"), top, "css('top') stays the same when resized" );
+	equal( $(handle).position().left, handlePosition + 50, "handle also moved" );
 });
 
 test( "resizable stores correct size when using helper and grid (#9547)", function() {
@@ -208,7 +210,7 @@ test( "resizable stores correct size when using helper and grid (#9547)", functi
 
 test( "nested resizable", function() {
 	expect( 4 );
-	
+
 	var outer = $( "<div id='outer' style='width:50px'></div>" ),
 		inner = $( "<div id='inner' style='width:30px'></div>" ),
 		target = $( "#resizable1" ),
@@ -224,7 +226,7 @@ test( "nested resizable", function() {
 
 	innerHandle = $( "#inner > .ui-resizable-e" );
 	outerHandle = $( "#outer > .ui-resizable-e" );
-	
+
 	TestHelpers.resizable.drag( innerHandle, 10 );
 	equal( inner.width(), 40, "compare width of inner element" );
 	TestHelpers.resizable.drag( innerHandle, -10 );

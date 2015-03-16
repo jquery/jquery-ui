@@ -39,7 +39,6 @@ test("open", function() {
 	element.remove();
 });
 
-
 test( "focus", function() {
 	expect( 5 );
 	var element, other;
@@ -338,7 +337,7 @@ asyncTest("ensure dialog's container doesn't scroll on resize and focus", functi
 		equal($(window).scrollTop(), initialScroll, "scroll hasn't moved after focus moved to dialog");
 		element.dialog("destroy");
 		start();
-	}, 500);
+	});
 });
 
 test("#5184: isOpen in dialogclose event is true", function() {
@@ -361,9 +360,9 @@ test("ensure dialog keeps focus when clicking modal overlay", function() {
 	var element = $( "<div></div>" ).dialog({
 			modal: true
 		});
-	ok( $(":focus").closest(".ui-dialog").length, "focus is in dialog" );
+	equal( $( document.activeElement ).closest( ".ui-dialog" ).length, 1, "focus is in dialog" );
 	$(".ui-widget-overlay").simulate("mousedown");
-	ok( $(":focus").closest(".ui-dialog").length, "focus is still in dialog" );
+	equal( $( document.activeElement ).closest( ".ui-dialog" ).length, 1, "focus is still in dialog" );
 	element.remove();
 });
 

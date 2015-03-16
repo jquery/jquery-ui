@@ -39,10 +39,7 @@ test( "accessibility", function() {
 		"multiple describedby when open" );
 
 	// strictEqual to distinguish between .removeAttr( "title" ) and .attr( "title", "" )
-	// support: jQuery <1.6.2
-	// support: IE <8
-	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
-	ok( !element.attr( "title" ), "no title when open" );
+	strictEqual( element.attr( "title" ), undefined, "no title when open" );
 	equal( liveRegion.children().length, 1 );
 	equal( liveRegion.children().last().html(), "..." );
 	element.tooltip( "close" );
@@ -152,6 +149,74 @@ asyncTest( "programmatic focus with async content", function() {
 	});
 
 	element.focus();
+});
+
+asyncTest( "destroy during hide animation; only one close event", function() {
+	expect( 1 );
+
+	var element = $( "#tooltipped1" ).tooltip({
+		show: false,
+		hide: true
+	});
+
+	element.bind( "tooltipclose", function() {
+		ok( true, "tooltip closed" );
+	});
+
+	element.tooltip( "open" );
+	element.tooltip( "close" );
+	setTimeout(function() {
+		element.tooltip( "destroy" );
+		start();
+	});
+});
+
+// http://bugs.jqueryui.com/ticket/10602
+asyncTest( "multiple active delegated tooltips", function() {
+	expect( 1 );
+
+	var anchor = $( "#tooltipped1" ),
+		input = anchor.next(),
+		actions = [];
+
+	$( document ).tooltip({
+			show: false,
+			hide: false,
+			open: function( event, ui ) {
+				actions.push( "open:" + ui.tooltip.text() );
+			},
+			close: function( event, ui ) {
+				actions.push( "close:" + ui.tooltip.text() );
+			}
+		});
+
+	function step1() {
+		anchor.simulate( "mouseover" );
+		setTimeout( step2 );
+	}
+
+	function step2() {
+		input.simulate( "focus" );
+		setTimeout( step3 );
+	}
+
+	function step3() {
+		input.simulate( "blur" );
+		setTimeout( step4 );
+	}
+
+	function step4() {
+		anchor.simulate( "mouseout" );
+		deepEqual( actions, [
+			"open:anchortitle",
+			"open:inputtitle",
+			"close:inputtitle",
+			"close:anchortitle"
+		], "Both tooltips open and close" );
+		start();
+	}
+
+	step1();
 });
 
 }( jQuery ) );
