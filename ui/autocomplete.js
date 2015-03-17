@@ -16,11 +16,11 @@
 //>>css.structure: ../themes/base/autocomplete.css
 //>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget",
@@ -32,7 +32,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 $.widget( "ui.autocomplete", {
 	version: "@VERSION",
@@ -203,15 +203,15 @@ $.widget( "ui.autocomplete", {
 				this.close( event );
 				this._change( event );
 			}
-		});
+		} );
 
 		this._initSource();
 		this.menu = $( "<ul>" )
 			.appendTo( this._appendTo() )
-			.menu({
+			.menu( {
 				// disable ARIA support, the live region takes care of that
 				role: null
-			})
+			} )
 			.hide()
 			.menu( "instance" );
 
@@ -224,7 +224,7 @@ $.widget( "ui.autocomplete", {
 				// IE doesn't prevent moving focus even with event.preventDefault()
 				// so we set a flag to know when we should ignore the blur event
 				this.cancelBlur = true;
-				this._delay(function() {
+				this._delay( function() {
 					delete this.cancelBlur;
 
 					// Support: IE 8 only
@@ -236,7 +236,7 @@ $.widget( "ui.autocomplete", {
 					if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
 						this.element.focus();
 					}
-				});
+				} );
 
 				// clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
@@ -244,7 +244,7 @@ $.widget( "ui.autocomplete", {
 				// the user clicks somewhere outside of the autocomplete
 				var menuElement = this.menu.element[ 0 ];
 				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
-					this._delay(function() {
+					this._delay( function() {
 						var that = this;
 						this.document.one( "mousedown", function( event ) {
 							if ( event.target !== that.element[ 0 ] &&
@@ -252,8 +252,8 @@ $.widget( "ui.autocomplete", {
 									!$.contains( menuElement, event.target ) ) {
 								that.close();
 							}
-						});
-					});
+						} );
+					} );
 				}
 			},
 			menufocus: function( event, ui ) {
@@ -267,7 +267,7 @@ $.widget( "ui.autocomplete", {
 
 						this.document.one( "mousemove", function() {
 							$( event.target ).trigger( event.originalEvent );
-						});
+						} );
 
 						return;
 					}
@@ -299,10 +299,10 @@ $.widget( "ui.autocomplete", {
 					// #6109 - IE triggers two focus events and the second
 					// is asynchronous, so we need to reset the previous
 					// term synchronously and asynchronously :-(
-					this._delay(function() {
+					this._delay( function() {
 						this.previous = previous;
 						this.selectedItem = item;
-					});
+					} );
 				}
 
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
@@ -315,13 +315,13 @@ $.widget( "ui.autocomplete", {
 				this.close( event );
 				this.selectedItem = item;
 			}
-		});
+		} );
 
 		this.liveRegion = $( "<span>", {
-				role: "status",
-				"aria-live": "assertive",
-				"aria-relevant": "additions"
-			})
+			role: "status",
+			"aria-live": "assertive",
+			"aria-relevant": "additions"
+		} )
 			.appendTo( this.document[ 0 ].body );
 
 		this._addClass( this.liveRegion, null, "ui-helper-hidden-accessible" );
@@ -333,7 +333,7 @@ $.widget( "ui.autocomplete", {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
 			}
-		});
+		} );
 	},
 
 	_destroy: function() {
@@ -390,7 +390,7 @@ $.widget( "ui.autocomplete", {
 				if ( that.xhr ) {
 					that.xhr.abort();
 				}
-				that.xhr = $.ajax({
+				that.xhr = $.ajax( {
 					url: url,
 					data: request,
 					dataType: "json",
@@ -398,9 +398,9 @@ $.widget( "ui.autocomplete", {
 						response( data );
 					},
 					error: function() {
-						response([]);
+						response( [] );
 					}
-				});
+				} );
 			};
 		} else {
 			this.source = this.options.source;
@@ -409,7 +409,7 @@ $.widget( "ui.autocomplete", {
 
 	_searchTimeout: function( event ) {
 		clearTimeout( this.searching );
-		this.searching = this._delay(function() {
+		this.searching = this._delay( function() {
 
 			// Search if the value has changed, or if the user retypes the same value (see #7434)
 			var equalValues = this.term === this._value(),
@@ -451,7 +451,7 @@ $.widget( "ui.autocomplete", {
 	_response: function() {
 		var index = ++this.requestIndex;
 
-		return $.proxy(function( content ) {
+		return $.proxy( function( content ) {
 			if ( index === this.requestIndex ) {
 				this.__response( content );
 			}
@@ -512,8 +512,8 @@ $.widget( "ui.autocomplete", {
 			return $.extend( {}, item, {
 				label: item.label || item.value,
 				value: item.value || item.label
-			});
-		});
+			} );
+		} );
 	},
 
 	_suggest: function( items ) {
@@ -525,7 +525,7 @@ $.widget( "ui.autocomplete", {
 		// size and position menu
 		ul.show();
 		this._resizeMenu();
-		ul.position( $.extend({
+		ul.position( $.extend( {
 			of: this.element
 		}, this.options.position ) );
 
@@ -548,7 +548,7 @@ $.widget( "ui.autocomplete", {
 		var that = this;
 		$.each( items, function( index, item ) {
 			that._renderItemData( ul, item );
-		});
+		} );
 	},
 
 	_renderItemData: function( ul, item ) {
@@ -595,7 +595,7 @@ $.widget( "ui.autocomplete", {
 			event.preventDefault();
 		}
 	}
-});
+} );
 
 $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
@@ -605,9 +605,9 @@ $.extend( $.ui.autocomplete, {
 		var matcher = new RegExp( $.ui.autocomplete.escapeRegex( term ), "i" );
 		return $.grep( array, function( value ) {
 			return matcher.test( value.label || value.value || value );
-		});
+		} );
 	}
-});
+} );
 
 // live region extension, adding a `messages` option
 // NOTE: This is an experimental API. We are still investigating
@@ -637,8 +637,8 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		this.liveRegion.children().hide();
 		$( "<div>" ).text( message ).appendTo( this.liveRegion );
 	}
-});
+} );
 
 return $.ui.autocomplete;
 
-}));
+} ) );
