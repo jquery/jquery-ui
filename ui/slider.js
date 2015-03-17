@@ -410,16 +410,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
-	_changeAllValues: function( valuesLength ) {
-		var i;
-
-		for ( i = valuesLength - 1; i >= 0; i -= 1 ) {
-			this._change( null, i );
-		}
-	},
-
 	_setOption: function( key, value ) {
-		var valsLength = 0;
+		var i,
+			valsLength = 0;
 
 		if ( key === "range" && this.options.range === true ) {
 			if ( value === "min" ) {
@@ -460,7 +453,12 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "values":
 				this._animateOff = true;
 				this._refreshValue();
-				this._changeAllValues( valsLength );
+
+				// use reverse loop to change values, then last changed handle will be the first handle
+				// it need when user set both values to max ( with normal loop slider locks )
+				for ( i = valsLength - 1; i >= 0; i -= 1 ) {
+					this._change( null, i );
+				}
 				this._animateOff = false;
 				break;
 			case "step":
