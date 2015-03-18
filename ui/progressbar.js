@@ -69,11 +69,7 @@ return $.widget( "ui.progressbar", {
 	},
 
 	_destroy: function() {
-		this.element
-			.removeAttr( "role" )
-			.removeAttr( "aria-valuemin" )
-			.removeAttr( "aria-valuemax" )
-			.removeAttr( "aria-valuenow" );
+		this.element.removeAttr( "role aria-valuemin aria-valuemax aria-valuenow" );
 
 		this.valueDiv.remove();
 	},

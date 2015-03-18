@@ -729,23 +729,15 @@ return $.widget( "ui.tabs", {
 			.unbind( this.eventNamespace );
 
 		this.anchors
-			.removeAttr( "role" )
-			.removeAttr( "tabIndex" )
+			.removeAttr( "role tabIndex" )
 			.removeUniqueId();
 
 		this.tabs.add( this.panels ).each( function() {
 			if ( $.data( this, "ui-tabs-destroy" ) ) {
 				$( this ).remove();
 			} else {
-				$( this )
-					.removeAttr( "tabIndex" )
-					.removeAttr( "aria-live" )
-					.removeAttr( "aria-busy" )
-					.removeAttr( "aria-selected" )
-					.removeAttr( "aria-labelledby" )
-					.removeAttr( "aria-hidden" )
-					.removeAttr( "aria-expanded" )
-					.removeAttr( "role" );
+				$( this ).removeAttr( "role tabIndex " +
+					"aria-live aria-busy aria-selected aria-labelledby aria-hidden aria-expanded" );
 			}
 		} );
 
