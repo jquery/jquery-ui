@@ -38,7 +38,6 @@ return $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {
-		classes: {},
 		icons: {
 			submenu: "ui-icon-caret-1-e"
 		},
