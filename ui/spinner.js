@@ -488,11 +488,7 @@ return $.widget( "ui.spinner", {
 	_destroy: function() {
 		this.element
 			.prop( "disabled", false )
-			.removeAttr( "autocomplete" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-valuemin" )
-			.removeAttr( "aria-valuemax" )
-			.removeAttr( "aria-valuenow" );
+			.removeAttr( "autocomplete role aria-valuemin aria-valuemax aria-valuenow" );
 
 		this.uiSpinner.replaceWith( this.element );
 	},

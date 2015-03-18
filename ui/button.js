@@ -253,8 +253,7 @@ $.widget( "ui.button", {
 			.removeClass( "ui-helper-hidden-accessible" );
 		this.buttonElement
 			.removeClass( baseClasses + " ui-state-active " + typeClasses )
-			.removeAttr( "role" )
-			.removeAttr( "aria-pressed" )
+			.removeAttr( "role aria-pressed" )
 			.html( this.buttonElement.find(".ui-button-text").html() );
 
 		if ( !this.hasTitle ) {

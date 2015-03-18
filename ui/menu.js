@@ -160,24 +160,17 @@ return $.widget( "ui.menu", {
 
 	_destroy: function() {
 		var items = this.element.find( ".ui-menu-item" )
-				.removeAttr( "role" )
-				.removeAttr( "aria-disabled" ),
+				.removeAttr( "role aria-disabled" ),
 			submenus = items.children( ".ui-menu-item-wrapper" )
 				.removeUniqueId()
-				.removeAttr( "tabIndex" )
-				.removeAttr( "role" )
-				.removeAttr( "aria-haspopup" );
+				.removeAttr( "tabIndex role aria-haspopup" );
 
 		// Destroy (sub)menus
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" ).addBack()
-				.removeAttr( "role" )
-				.removeAttr( "tabIndex" )
-				.removeAttr( "aria-labelledby" )
-				.removeAttr( "aria-expanded" )
-				.removeAttr( "aria-hidden" )
-				.removeAttr( "aria-disabled" )
+				.removeAttr( "role aria-labelledby aria-expanded aria-hidden aria-disabled " +
+					"tabIndex" )
 				.removeUniqueId()
 				.show();
 

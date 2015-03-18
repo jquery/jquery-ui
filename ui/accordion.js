@@ -127,11 +127,7 @@ return $.widget( "ui.accordion", {
 
 		// clean up headers
 		this.headers
-			.removeAttr( "role" )
-			.removeAttr( "aria-expanded" )
-			.removeAttr( "aria-selected" )
-			.removeAttr( "aria-controls" )
-			.removeAttr( "tabIndex" )
+			.removeAttr( "role aria-expanded aria-selected aria-controls tabIndex" )
 			.removeUniqueId();
 
 		this._destroyIcons();
@@ -139,9 +135,7 @@ return $.widget( "ui.accordion", {
 		// clean up content panels
 		contents = this.headers.next()
 			.css( "display", "" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-hidden" )
-			.removeAttr( "aria-labelledby" )
+			.removeAttr( "role aria-hidden aria-labelledby" )
 			.removeUniqueId();
 
 		if ( this.options.heightStyle !== "content" ) {
