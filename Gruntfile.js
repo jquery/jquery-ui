@@ -76,7 +76,9 @@ var
 			"dist/jquery-ui.min.js"
 		]
 	},
-	component = grunt.option( "component" ) || "**";
+	component = grunt.option( "component" ) || "**",
+
+	jscsBad = [ "ui/tabs.js", "ui/slider.js", "ui/selectable.js", "ui/resizable.js", "ui/mouse.js", "ui/menu.js", "ui/effect*.js", "ui/droppable.js", "ui/draggable.js", "ui/button.js", "ui/datepicker.js", "ui/sortable.js" ];
 
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /ui\//, "minified/" );
@@ -158,12 +160,30 @@ grunt.initConfig({
 			dest: "dist/jquery-ui.css"
 		}
 	},
+
+	// Remove the requireSpacesInsideParentheses override once everything is fixed
 	jscs: {
-		// datepicker and sortable are getting rewritten, ignore until that's done
-		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js" ],
-		// TODO enable this once we have a tool that can auto format files
-		// tests: "tests/unit/**/*.js",
-		grunt: [ "Gruntfile.js", "build/tasks/*.js" ]
+		"ui-good": [ "ui/*.js" ].concat( jscsBad.map( function( file ) {
+			return "!" + file;
+		} ) ),
+		"ui-bad": {
+			options: {
+				requireSpacesInsideParentheses: null
+			},
+			src: jscsBad
+		},
+		tests: {
+			options: {
+				requireSpacesInsideParentheses: null
+			},
+			src: "tests/unit/**/*.js"
+		},
+		grunt: {
+			options: {
+				requireSpacesInsideParentheses: null
+			},
+			src: [ "Gruntfile.js", "build/tasks/*.js" ]
+		}
 	},
 	uglify: minify,
 	htmllint: {
