@@ -44,6 +44,7 @@ var cachedScrollbarWidth, supportsOffsetFractions,
 // Support: IE <=9 only
 supportsOffsetFractions = function() {
 	var element = $( "<div>" )
+			.css( "position", "absolute" )
 			.appendTo( "body" )
 			.offset( {
 				top: 1.5,
