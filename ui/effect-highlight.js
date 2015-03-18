@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/highlight-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "highlight", "show", function( options, done ) {
 	var element = $( this ),
@@ -41,16 +41,16 @@ return $.effects.define( "highlight", "show", function( options, done ) {
 	$.effects.saveStyle( element );
 
 	element
-		.css({
+		.css( {
 			backgroundImage: "none",
 			backgroundColor: options.color || "#ffff99"
-		})
+		} )
 		.animate( animation, {
 			queue: false,
 			duration: options.duration,
 			easing: options.easing,
 			complete: done
-		});
-});
+		} );
+} );
 
-}));
+} ) );

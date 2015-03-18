@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/shake-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "shake", function( options, done ) {
 
@@ -66,6 +66,6 @@ return $.effects.define( "shake", function( options, done ) {
 		.queue( done );
 
 	$.effects.unshift( element, queuelen, anims + 1 );
-});
+} );
 
-}));
+} ) );

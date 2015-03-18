@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/slide-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "slide", "show", function( options, done ) {
 	var startClip, startRef,
@@ -68,7 +68,7 @@ return $.effects.define( "slide", "show", function( options, done ) {
 		duration: options.duration,
 		easing: options.easing,
 		complete: done
-	});
-});
+	} );
+} );
 
-}));
+} ) );
