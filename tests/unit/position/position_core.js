@@ -16,8 +16,6 @@ module( "position", {
 	}
 });
 
-TestHelpers.testJshint( "position" );
-
 test( "my, at, of", function() {
 	expect( 4 );
 
@@ -762,5 +760,7 @@ test( "bug #8710: flip if flipped position fits more", function() {
 		left: 60
 	}, "no flip - top fits less" );
 });
+
+TestHelpers.testJshint( "position" );
 
 }( jQuery ) );
