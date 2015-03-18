@@ -83,7 +83,7 @@ var
 		"ui/datepicker.js",
 		"ui/draggable.js",
 		"ui/droppable.js",
-		"ui/effect*.js",
+		"ui/effect.js",
 		"ui/mouse.js",
 		"ui/resizable.js",
 		"ui/selectable.js",
