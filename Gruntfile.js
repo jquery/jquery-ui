@@ -84,13 +84,11 @@ var
 		"ui/draggable.js",
 		"ui/droppable.js",
 		"ui/effect*.js",
-		"ui/menu.js",
 		"ui/mouse.js",
 		"ui/resizable.js",
 		"ui/selectable.js",
 		"ui/slider.js",
-		"ui/sortable.js",
-		"ui/tabs.js"
+		"ui/sortable.js"
 	],
 
 	htmllintBad = [
