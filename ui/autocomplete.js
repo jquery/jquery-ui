@@ -40,7 +40,6 @@ $.widget( "ui.autocomplete", {
 	options: {
 		appendTo: null,
 		autoFocus: false,
-		classes: {},
 		delay: 300,
 		minLength: 1,
 		position: {
