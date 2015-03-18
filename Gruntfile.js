@@ -78,7 +78,27 @@ var
 	},
 	component = grunt.option( "component" ) || "**",
 
-	jscsBad = [ "ui/tabs.js", "ui/slider.js", "ui/selectable.js", "ui/resizable.js", "ui/mouse.js", "ui/menu.js", "ui/effect*.js", "ui/droppable.js", "ui/draggable.js", "ui/button.js", "ui/datepicker.js", "ui/sortable.js" ];
+	jscsBad = [
+		"ui/button.js",
+		"ui/datepicker.js",
+		"ui/draggable.js",
+		"ui/droppable.js",
+		"ui/effect*.js",
+		"ui/menu.js",
+		"ui/mouse.js",
+		"ui/resizable.js",
+		"ui/selectable.js",
+		"ui/slider.js",
+		"ui/sortable.js",
+		"ui/tabs.js"
+	],
+
+	htmllintBad = [
+		"demos/tabs/ajax/content*.html",
+		"demos/tooltip/ajax/content*.html",
+		"tests/unit/core/core.html",
+		"tests/unit/tabs/data/test.html"
+	];
 
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /ui\//, "minified/" );
@@ -187,10 +207,20 @@ grunt.initConfig({
 	},
 	uglify: minify,
 	htmllint: {
-		// ignore files that contain invalid html, used only for ajax content testing
-		all: grunt.file.expand( [ "demos/**/*.html", "tests/**/*.html" ] ).filter(function( file ) {
-			return !/(?:ajax\/content\d\.html|tabs\/data\/test\.html|tests\/unit\/core\/core.*\.html)/.test( file );
-		})
+		good: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
+			return "!" + file;
+		} ) ),
+		bad: {
+			options: {
+				ignore: [
+					/Start tag seen without seeing a doctype first/,
+					/Element “head” is missing a required instance of child element “title”/,
+					/Element “object” is missing one or more of the following/,
+					/The “codebase” attribute on the “object” element is obsolete/
+				]
+			},
+			src: htmllintBad
+		}
 	},
 	qunit: {
 		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
