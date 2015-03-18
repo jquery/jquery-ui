@@ -1,18 +1,16 @@
 (function() {
 
-if( !window.helper ) {
-	window.helper = {};
-}
-
 function includeStyle( url ) {
 	document.write( "<link rel='stylesheet' href='../../../" + url + "'>" );
 }
 
-window.helper.loadCss = function( styles ) {
-	var i;
-	for( i = 0; i < styles.length; i++ ) {
-		includeStyle( "themes/base/" + styles[ i ] + ".css" );
-	}
-};
+var scripts = document.getElementsByTagName( "script" );
+var script = scripts[ scripts.length - 1 ];
+var modules = script.getAttribute( "data-modules" ).split( /\s+/ );
+var i = 0;
 
-}());
+for ( ; i < modules.length; i++ ) {
+	document.write( "<link rel='stylesheet' href='../../../themes/base/" + modules[ i ] + ".css'>" );
+}
+
+} )();
