@@ -453,7 +453,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "values":
 				this._animateOff = true;
 				this._refreshValue();
-				for ( i = 0; i < valsLength; i += 1 ) {
+
+				// use reverse loop to change values, then last changed handle will be the first handle
+				// it need when user set both values to max ( with normal loop slider locks )
+				for ( i = valsLength - 1; i >= 0; i -= 1 ) {
 					this._change( null, i );
 				}
 				this._animateOff = false;
