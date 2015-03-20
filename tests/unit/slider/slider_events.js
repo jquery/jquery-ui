@@ -7,28 +7,45 @@ module( "slider: events" );
 // value (even if same as previous value), via mouse(mouseup) or keyboard(keyup)
 // or value method/option"
 test( "mouse based interaction", function() {
-	expect( 4 );
+	expect( 5 );
 
-	var element = $( "#slider1" )
+	var handlePosition,
+		element = $( "#slider1" )
+			.slider({
+				start: function( event ) {
+					equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
+				},
+				slide: function( event) {
+					equal( event.originalEvent.type, "mousemove", "slider triggered by mousemove" );
+				},
+				stop: function( event ) {
+					equal( event.originalEvent.type, "mouseup", "stop triggered by mouseup" );
+				},
+				change: function( event ) {
+					equal( event.originalEvent.type, "mouseup", "change triggered by mouseup" );
+				}
+			}),
+		handles = element.find( ".ui-slider-handle" );
+
+	handles.eq( 0 ).simulate( "drag", { dx: 10, dy: 10 } );
+	element.slider( "destroy" );
+
+	element = $( "#slider1" )
 		.slider({
-			start: function( event ) {
-				equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
-			},
-			slide: function( event) {
-				equal( event.originalEvent.type, "mousemove", "slider triggered by mousemove" );
-			},
-			stop: function( event ) {
-				equal( event.originalEvent.type, "mouseup", "stop triggered by mouseup" );
-			},
-			change: function( event ) {
-				equal( event.originalEvent.type, "mouseup", "change triggered by mouseup" );
-			}
+			range: true,
+			min: 0,
+			max: 100,
+			values: [ 20, 80 ]
 		});
+	handles = element.find( ".ui-slider-handle" );
+	handles.eq( 1 ).simulate( "drag", { dx: 10 } );
+	handlePosition = handles.eq( 0 ).offset();
 
-	element.find( ".ui-slider-handle" ).eq( 0 )
-		.simulate( "drag", { dx: 10, dy: 10 } );
-
+	element.simulate( "mousedown", { clientX: handlePosition.left + 110, clientY: handlePosition.top } );
+	element.simulate( "mouseup" );
+	equal( element.slider( "values" )[ 1 ], 30, "should drag selected handle" );
 });
+
 test( "keyboard based interaction", function() {
 	expect( 3 );
 

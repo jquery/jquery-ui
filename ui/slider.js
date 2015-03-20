@@ -72,6 +72,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseSliding = false;
 		this._animateOff = true;
 		this._handleIndex = null;
+		this._lastChangedValue = null;
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
@@ -176,9 +177,28 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseDestroy();
 	},
 
-	_mouseCapture: function( event ) {
-		var position, normValue, distance, closestHandle, index, allowed, offset, mouseOverHandle,
+	_closestHandleIndex: function( normValue ) {
+		var distance, index,
 			that = this,
+			o = this.options;
+
+		distance = this._valueMax() - this._valueMin() + 1;
+		this.handles.each(function( i ) {
+			var thisDistance = Math.abs( normValue - that.values(i) );
+			if ( ( distance > thisDistance ) ||
+					( distance === thisDistance &&
+					( i === that._lastChangedValue || that.values(i) === o.min )) ) {
+				distance = thisDistance;
+				index = i;
+			}
+		});
+
+		return index;
+	},
+
+	_mouseCapture: function( event ) {
+		var position, normValue, handle, index, allowed, offset, mouseOverHandle,
+			capturedElement = $( event.target ),
 			o = this.options;
 
 		if ( o.disabled ) {
@@ -193,17 +213,13 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
-		distance = this._valueMax() - this._valueMin() + 1;
-		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - that.values(i) );
-			if (( distance > thisDistance ) ||
-				( distance === thisDistance &&
-					(i === that._lastChangedValue || that.values(i) === o.min ))) {
-				distance = thisDistance;
-				closestHandle = $( this );
-				index = i;
-			}
-		});
+		if ( this._lastChangedValue === null || capturedElement.is( ".ui-slider-handle" ) ) {
+			index = this._closestHandleIndex( normValue );
+		} else {
+			index = this._lastChangedValue;
+		}
+
+		handle = this.handles.eq( index );
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
@@ -213,18 +229,18 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this._handleIndex = index;
 
-		this._addClass( closestHandle, null, "ui-state-active" );
-		closestHandle.focus();
+		this._addClass( handle, null, "ui-state-active" );
+		handle.focus();
 
-		offset = closestHandle.offset();
+		offset = handle.offset();
 		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
+			left: event.pageX - offset.left - ( handle.width() / 2 ),
 			top: event.pageY - offset.top -
-				( closestHandle.height() / 2 ) -
-				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
-				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
-				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
+			( handle.height() / 2 ) -
+			( parseInt( handle.css("borderTopWidth"), 10 ) || 0 ) -
+			( parseInt( handle.css("borderBottomWidth"), 10 ) || 0) +
+			( parseInt( handle.css("marginTop"), 10 ) || 0)
 		};
 
 		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
