@@ -1,12 +1,12 @@
 /*!
- * QUnit 1.17.1
+ * QUnit 1.17.2-pre
  * http://qunitjs.com/
  *
  * Copyright jQuery Foundation and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2015-01-20T19:39Z
+ * Date: 2015-03-20T19:32Z
  */
 
 (function( window ) {
@@ -189,7 +189,7 @@ config.modules.push( config.currentModule );
 	if ( urlParams.testId ) {
 
 		// Ensure that urlParams.testId is an array
-		urlParams.testId = [].concat( urlParams.testId );
+		urlParams.testId = decodeURIComponent( urlParams.testId ).split( "," );
 		for ( i = 0; i < urlParams.testId.length; i++ ) {
 			config.testId.push( urlParams.testId[ i ] );
 		}
@@ -197,6 +197,9 @@ config.modules.push( config.currentModule );
 
 	// Figure out if we're running the tests from a server or not
 	QUnit.isLocal = location.protocol === "file:";
+
+	// Expose the current QUnit version
+	QUnit.version = "1.17.2-pre";
 }());
 
 // Root QUnit object.
@@ -1123,7 +1126,7 @@ Test.prototype = {
 
 	valid: function() {
 		var include,
-			filter = config.filter,
+			filter = config.filter && config.filter.toLowerCase(),
 			module = QUnit.urlParams.module && QUnit.urlParams.module.toLowerCase(),
 			fullName = ( this.module.name + ": " + this.testName ).toLowerCase();
 
@@ -1146,7 +1149,7 @@ Test.prototype = {
 
 		include = filter.charAt( 0 ) !== "!";
 		if ( !include ) {
-			filter = filter.toLowerCase().slice( 1 );
+			filter = filter.slice( 1 );
 		}
 
 		// If the filter matches, we need to honour include
@@ -1284,87 +1287,52 @@ QUnit.assert = Assert.prototype = {
 		return assert.test.push.apply( assert.test, arguments );
 	},
 
-	/**
-	 * Asserts rough true-ish result.
-	 * @name ok
-	 * @function
-	 * @example ok( "asdfasdf".length > 5, "There must be at least 5 chars" );
-	 */
 	ok: function( result, message ) {
 		message = message || ( result ? "okay" : "failed, expected argument to be truthy, was: " +
 			QUnit.dump.parse( result ) );
 		this.push( !!result, result, true, message );
 	},
 
-	/**
-	 * Assert that the first two arguments are equal, with an optional message.
-	 * Prints out both actual and expected values.
-	 * @name equal
-	 * @function
-	 * @example equal( format( "{0} bytes.", 2), "2 bytes.", "replaces {0} with next argument" );
-	 */
+	notOk: function( result, message ) {
+		message = message || ( !result ? "okay" : "failed, expected argument to be falsy, was: " +
+			QUnit.dump.parse( result ) );
+		this.push( !result, result, false, message );
+	},
+
 	equal: function( actual, expected, message ) {
 		/*jshint eqeqeq:false */
 		this.push( expected == actual, actual, expected, message );
 	},
 
-	/**
-	 * @name notEqual
-	 * @function
-	 */
 	notEqual: function( actual, expected, message ) {
 		/*jshint eqeqeq:false */
 		this.push( expected != actual, actual, expected, message );
 	},
 
-	/**
-	 * @name propEqual
-	 * @function
-	 */
 	propEqual: function( actual, expected, message ) {
 		actual = objectValues( actual );
 		expected = objectValues( expected );
 		this.push( QUnit.equiv( actual, expected ), actual, expected, message );
 	},
 
-	/**
-	 * @name notPropEqual
-	 * @function
-	 */
 	notPropEqual: function( actual, expected, message ) {
 		actual = objectValues( actual );
 		expected = objectValues( expected );
 		this.push( !QUnit.equiv( actual, expected ), actual, expected, message );
 	},
 
-	/**
-	 * @name deepEqual
-	 * @function
-	 */
 	deepEqual: function( actual, expected, message ) {
 		this.push( QUnit.equiv( actual, expected ), actual, expected, message );
 	},
 
-	/**
-	 * @name notDeepEqual
-	 * @function
-	 */
 	notDeepEqual: function( actual, expected, message ) {
 		this.push( !QUnit.equiv( actual, expected ), actual, expected, message );
 	},
 
-	/**
-	 * @name strictEqual
-	 * @function
-	 */
 	strictEqual: function( actual, expected, message ) {
 		this.push( expected === actual, actual, expected, message );
 	},
 
-	/**
-	 * @name notStrictEqual
-	 * @function
-	 */
 	notStrictEqual: function( actual, expected, message ) {
 		this.push( expected !== actual, actual, expected, message );
 	},
@@ -1372,7 +1340,8 @@ QUnit.assert = Assert.prototype = {
 	"throws": function( block, expected, message ) {
 		var actual, expectedType,
 			expectedOutput = expected,
-			ok = false;
+			ok = false,
+			currentTest = ( this instanceof Assert && this.test ) || QUnit.config.current;
 
 		// 'expected' is optional unless doing string comparison
 		if ( message == null && typeof expected === "string" ) {
@@ -1380,13 +1349,13 @@ QUnit.assert = Assert.prototype = {
 			expected = null;
 		}
 
-		this.test.ignoreGlobalErrors = true;
+		currentTest.ignoreGlobalErrors = true;
 		try {
-			block.call( this.test.testEnvironment );
+			block.call( currentTest.testEnvironment );
 		} catch (e) {
 			actual = e;
 		}
-		this.test.ignoreGlobalErrors = false;
+		currentTest.ignoreGlobalErrors = false;
 
 		if ( actual ) {
 			expectedType = QUnit.objectType( expected );
@@ -1419,11 +1388,9 @@ QUnit.assert = Assert.prototype = {
 				expectedOutput = null;
 				ok = true;
 			}
-
-			this.push( ok, actual, expectedOutput, message );
-		} else {
-			this.test.pushFailure( message, null, "No exception was thrown." );
 		}
+
+		currentTest.assert.push( ok, actual, expectedOutput, message );
 	}
 };
 
@@ -1830,7 +1797,7 @@ QUnit.dump = (function() {
 					nonEnumerableProperties = [ "message", "name" ];
 					for ( i in nonEnumerableProperties ) {
 						key = nonEnumerableProperties[ i ];
-						if ( key in map && !( key in keys ) ) {
+						if ( key in map && inArray( key, keys ) < 0 ) {
 							keys.push( key );
 						}
 					}
@@ -1949,6 +1916,7 @@ if ( typeof window !== "undefined" ) {
 				"start",
 				"stop",
 				"ok",
+				"notOk",
 				"equal",
 				"notEqual",
 				"propEqual",
@@ -1979,6 +1947,13 @@ if ( typeof module !== "undefined" && module && module.exports ) {
 // For CommonJS with exports, but without module.exports, like Rhino
 if ( typeof exports !== "undefined" && exports ) {
 	exports.QUnit = QUnit;
+}
+
+if ( typeof define === "function" && define.amd ) {
+	define( [], function() {
+		return QUnit;
+	} );
+	QUnit.config.autostart = false;
 }
 
 // Get a reference to the global object, like window in browsers
@@ -2256,7 +2231,14 @@ function addEvent( elem, type, fn ) {
 	} else if ( elem.attachEvent ) {
 
 		// support: IE <9
-		elem.attachEvent( "on" + type, fn );
+		elem.attachEvent( "on" + type, function() {
+			var event = window.event;
+			if ( !event.target ) {
+				event.target = event.srcElement || document;
+			}
+
+			fn.call( elem, event );
+		});
 	}
 }
 
@@ -2427,12 +2409,16 @@ function setUrl( params ) {
 }
 
 function applyUrlParams() {
-	var selectBox = id( "qunit-modulefilter" ),
-		selection = decodeURIComponent( selectBox.options[ selectBox.selectedIndex ].value ),
+	var selectedModule,
+		modulesList = id( "qunit-modulefilter" ),
 		filter = id( "qunit-filter-input" ).value;
 
+	selectedModule = modulesList ?
+		decodeURIComponent( modulesList.options[ modulesList.selectedIndex ].value ) :
+		undefined;
+
 	window.location = setUrl({
-		module: ( selection === "" ) ? undefined : selection,
+		module: ( selectedModule === "" ) ? undefined : selectedModule,
 		filter: ( filter === "" ) ? undefined : filter,
 
 		// Remove testId filter
@@ -2588,9 +2574,14 @@ function storeFixture() {
 
 function appendUserAgent() {
 	var userAgent = id( "qunit-userAgent" );
+
 	if ( userAgent ) {
 		userAgent.innerHTML = "";
-		userAgent.appendChild( document.createTextNode( navigator.userAgent ) );
+		userAgent.appendChild(
+			document.createTextNode(
+				"QUnit " + QUnit.version  + "; " + navigator.userAgent
+			)
+		);
 	}
 }
 
@@ -2733,7 +2724,7 @@ function getNameHtml( name, module ) {
 }
 
 QUnit.testStart(function( details ) {
-	var running, testBlock;
+	var running, testBlock, bad;
 
 	testBlock = id( "qunit-test-output-" + details.testId );
 	if ( testBlock ) {
@@ -2746,7 +2737,13 @@ QUnit.testStart(function( details ) {
 
 	running = id( "qunit-testresult" );
 	if ( running ) {
-		running.innerHTML = "Running: <br />" + getNameHtml( details.name, details.module );
+		bad = QUnit.config.reorder && defined.sessionStorage &&
+			+sessionStorage.getItem( "qunit-test-" + details.module + "-" + details.name );
+
+		running.innerHTML = ( bad ?
+			"Rerunning previously failed test: <br />" :
+			"Running: <br />" ) +
+			getNameHtml( details.name, details.module );
 	}
 
 });
@@ -2865,10 +2862,6 @@ QUnit.testDone(function( details ) {
 
 if ( defined.document ) {
 	if ( document.readyState === "complete" ) {
-		if ( window.define && window.define.amd ) {
-			QUnit.config.autostart = false;
-		}
-
 		QUnit.load();
 	} else {
 		addEvent( window, "load", QUnit.load );

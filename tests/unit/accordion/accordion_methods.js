@@ -1,9 +1,8 @@
 define([
 	"jquery",
 	"./accordion_test_helpers",
-	"helper/testsuite",
 	"ui/accordion"
-], function( $, accordionTestHelper, testHelper ) {
+], function( $, accordionTestHelper ) {
 
 var equalHeight = accordionTestHelper.equalHeight,
 	setupTeardown = accordionTestHelper.setupTeardown,
@@ -11,9 +10,9 @@ var equalHeight = accordionTestHelper.equalHeight,
 
 module( "accordion: methods", setupTeardown() );
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 1 );
-	testHelper.domEqual( "#list1", function() {
+	assert.domEqual( "#list1", function() {
 		$( "#list1" ).accordion().accordion( "destroy" );
 	});
 });

@@ -6,14 +6,13 @@ window.requirejs = {
 		"jquery": jqueryUrl(),
 		"jquery.simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
-		"qunit": "../qunit",
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
-		"qunit-core": "../../../external/qunit/qunit",
+		"qunit": "../../../external/qunit/qunit",
 		"ui": "../../../ui"
 	},
 	shim: {
 		"jquery.simulate": [ "jquery" ],
-		"qunit-assert-classes": [ "qunit-core" ]
+		"qunit-assert-classes": [ "qunit" ]
 	}
 };
 
@@ -38,11 +37,13 @@ function requireModules( dependencies, callback, modules ) {
 
 window.requireTests = function( dependencies, callback ) {
 	dependencies = [
-		"qunit",
-		"jquery"
+		"../../lib/qunit",
+		"jquery",
+		"qunit-assert-classes",
+		"../../lib/qunit-assert-domequal"
 	].concat( dependencies );
 
-	requireModules( dependencies, function() {
+	requireModules( dependencies, function( QUnit ) {
 		swarmInject();
 		QUnit.start();
 	} );
@@ -67,10 +68,10 @@ function jqueryUrl() {
 	var version = parseUrl().jquery;
 	var url;
 
-	if ( version === "git" ) {
-		url = "http://code.jquery.com/jquery-git.js";
+	if ( version === "git" || version === "git1" ) {
+		url = "http://code.jquery.com/jquery-" + version + ".js";
 	} else {
-		url = "../../../external/jquery-" + ( version || "1.10.2" ) + "/jquery";
+		url = "../../../external/jquery-" + ( version || "1.11.2" ) + "/jquery";
 	}
 
 	return url;

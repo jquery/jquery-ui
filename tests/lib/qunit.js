@@ -1,8 +1,7 @@
-require( [
-	"jquery",
-	"qunit-core",
-	"qunit-assert-classes"
-], function( $ ) {
+define( [
+	"qunit",
+	"jquery"
+], function( QUnit, $ ) {
 
 QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;
@@ -39,7 +38,6 @@ QUnit.reset = ( function( reset ) {
 		reset.apply( this, arguments );
 	};
 } )( QUnit.reset );
-
 
 return QUnit;
 
