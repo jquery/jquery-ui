@@ -5,8 +5,7 @@
 	<title>jQuery UI Accordion Test Suite</title>
 
 	<script src="../helper/css.js" data-modules="core accordion"></script>
-
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
+	<script src="../testsuite-require.js" data-widget="accordion"></script>
 	<style>
 	#list, #list1 *, #navigation, #navigation * {
 		margin: 0;
@@ -110,25 +109,5 @@
 </dl>
 
 </div>
-
-<script src="../../../external/requirejs/require.js"></script>
-<script src="../../../external/qunit/qunit.js"></script>
-<script src="../../../external/qunit-assert-classes/qunit-assert-classes.js"></script>
-<script src="../swarminject.js"></script>
-<script src="../helper/jquery.js"></script>
-<script src="../helper/require.js"></script>
-<script>
-QUnit.config.autostart = false;
-require_series([
-	"./accordion_common",
-	"./accordion_core",
-	"./accordion_events" ,
-	"./accordion_methods",
-	"./accordion_options"
-], function() {
-	QUnit.start();
-});
-</script>
-
 </body>
 </html>

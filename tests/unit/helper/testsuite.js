@@ -65,47 +65,6 @@ function testBasicUsage( widget ) {
 	});
 }
 
-// Asset revisioning through time and random hashing
-function revStamp( value ) {
-	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" +
-		parseInt(Math.random() * 100000, 10);
-}
-
-QUnit.reset = ( function( reset ) {
-	return function() {
-
-		// Ensure jQuery events and data on the fixture are properly removed
-		jQuery( "#qunit-fixture" ).empty();
-
-		// Let QUnit reset the fixture
-		reset.apply( this, arguments );
-	};
-} )( QUnit.reset );
-
-QUnit.config.requireExpects = true;
-
-QUnit.config.urlConfig.push({
-	id: "nojshint",
-	label: "Skip JSHint",
-	tooltip: "Skip running JSHint, e.g., within TestSwarm, where Jenkins runs it already"
-});
-
-QUnit.config.urlConfig.push({
-	id: "jquery",
-	label: "jQuery version",
-	value: [
-		"1.7.0", "1.7.1", "1.7.2",
-		"1.8.0", "1.8.1", "1.8.2", "1.8.3",
-		"1.9.0", "1.9.1",
-		"1.10.0", "1.10.1", "1.10.2",
-		"1.11.0", "1.11.1", "1.11.2",
-		"2.0.0", "2.0.1", "2.0.2", "2.0.3",
-		"2.1.0", "2.1.1", "2.1.2", "2.1.3",
-		"git1", "git"
-	],
-	tooltip: "Which jQuery Core version to test against"
-});
-
 /**
  * Exports
  */
@@ -277,11 +236,11 @@ exports.testJshint = function( module ) {
 
 			$.when(
 				$.ajax({
-					url: revStamp( "../../../ui/.jshintrc" ),
+					url: "../../../ui/.jshintrc",
 					dataType: "json"
 				}),
 				$.ajax({
-					url: revStamp( "../../../ui/" + module + ".js" ),
+					url: "../../../ui/" + module + ".js",
 					dataType: "text"
 				})
 			).done(function( hintArgs, srcArgs ) {

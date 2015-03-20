@@ -4,13 +4,17 @@ function includeStyle( url ) {
 	document.write( "<link rel='stylesheet' href='../../../" + url + "'>" );
 }
 
+// Find the script element
 var scripts = document.getElementsByTagName( "script" );
 var script = scripts[ scripts.length - 1 ];
-var modules = script.getAttribute( "data-modules" ).split( /\s+/ );
-var i = 0;
 
-for ( ; i < modules.length; i++ ) {
-	document.write( "<link rel='stylesheet' href='../../../themes/base/" + modules[ i ] + ".css'>" );
+// Load the modules
+var modules = script.getAttribute( "data-modules" ).split( /\s+/ );
+for ( var i = 0; i < modules.length; i++ ) {
+	includeStyle( "themes/base/" + modules[ i ] + ".css" );
 }
+
+// Load the QUnit stylesheet
+includeStyle( "external/qunit/qunit.css" );
 
 } )();
