@@ -105,7 +105,7 @@ return $.widget( "ui.spinner", {
 
 		$.each( [ "min", "max", "step" ], function( i, option ) {
 			var value = element.attr( option );
-			if ( value !== undefined && value.length ) {
+			if ( value != null && value.length ) {
 				options[ option ] = value;
 			}
 		} );
