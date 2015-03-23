@@ -118,7 +118,9 @@ $.widget( "ui.dialog", {
 			index: this.element.parent().children().index( this.element )
 		};
 		this.originalTitle = this.element.attr( "title" );
-		this.options.title = this.options.title || this.originalTitle;
+		if ( this.options.title == null && this.originalTitle != null ) {
+			this.options.title = this.originalTitle;
+		}
 
 		this._createWrapper();
 
@@ -433,10 +435,11 @@ $.widget( "ui.dialog", {
 	},
 
 	_title: function( title ) {
-		if ( !this.options.title ) {
+		if ( this.options.title ) {
+			title.text( this.options.title );
+		} else {
 			title.html( "&#160;" );
 		}
-		title.text( this.options.title );
 	},
 
 	_createButtonPane: function() {
