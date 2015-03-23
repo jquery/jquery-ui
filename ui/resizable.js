@@ -329,16 +329,11 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		this._renderProxy();
 
-		curleft = this._num(this.helper.css("left"));
-		curtop = this._num(this.helper.css("top"));
-
-		if (o.containment) {
-			curleft += $(o.containment).scrollLeft() || 0;
-			curtop += $(o.containment).scrollTop() || 0;
-		}
-
 		this.offset = this.helper.offset();
-		this.position = { left: curleft, top: curtop };
+		this.position = el.position();
+
+		curleft = this.position.left;
+		curtop = this.position.top;
 
 		this.size = this._helper ? {
 				width: this.helper.width(),
