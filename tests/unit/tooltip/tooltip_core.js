@@ -38,8 +38,7 @@ test( "accessibility", function() {
 	equal( element.attr( "aria-describedby" ), "fixture-span " + tooltipId,
 		"multiple describedby when open" );
 
-	// strictEqual to distinguish between .removeAttr( "title" ) and .attr( "title", "" )
-	strictEqual( element.attr( "title" ), undefined, "no title when open" );
+	equal( element.attr( "title" ), null, "no title when open" );
 	equal( liveRegion.children().length, 1 );
 	equal( liveRegion.children().last().html(), "..." );
 	element.tooltip( "close" );

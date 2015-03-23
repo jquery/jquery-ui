@@ -127,11 +127,11 @@ test( "outerHeight(true) - setter", function() {
 test( "uniqueId / removeUniqueId", function() {
 	expect( 3 );
 	var el = $( "img" ).eq( 0 );
-	strictEqual( el.attr( "id" ), undefined, "element has no initial id" );
+	equal( el.attr( "id" ), null, "element has no initial id" );
 	el.uniqueId();
 	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
 	el.removeUniqueId();
-	strictEqual( el.attr( "id" ), undefined, "unique id has been removed from element" );
+	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
 })( jQuery );
