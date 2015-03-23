@@ -428,7 +428,7 @@ $.widget( "ui.tooltip", {
 		this._addClass( content, "ui-tooltip-content" );
 		this._addClass( tooltip, "ui-tooltip", "ui-widget ui-widget-content" );
 
-		tooltip.appendTo( this.document[ 0 ].body );
+		tooltip.appendTo( this._appendTo( element ) );
 
 		return this.tooltips[ id ] = {
 			element: element,
@@ -444,6 +444,16 @@ $.widget( "ui.tooltip", {
 	_removeTooltip: function( tooltip ) {
 		tooltip.remove();
 		delete this.tooltips[ tooltip.attr( "id" ) ];
+	},
+
+	_appendTo: function( target ) {
+		var element = target.closest( ".ui-front, dialog" );
+
+		if ( !element.length ) {
+			element = this.document[ 0 ].body;
+		}
+
+		return element;
 	},
 
 	_destroy: function() {
