@@ -586,7 +586,7 @@ return $.widget( "ui.selectmenu", {
 		}
 
 		if ( !element || !element[ 0 ] ) {
-			element = this.element.closest( ".ui-front" );
+			element = this.element.closest( ".ui-front, dialog" );
 		}
 
 		if ( !element.length ) {
