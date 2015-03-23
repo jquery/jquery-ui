@@ -78,7 +78,7 @@ test( "ARIA", function() {
 	element.remove();
 
 	element = $("<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>").dialog();
-	strictEqual( element.dialog( "widget" ).attr( "aria-describedby" ), undefined, "no aria-describedby added, as already present in markup" );
+	equal( element.dialog( "widget" ).attr( "aria-describedby" ), null, "no aria-describedby added, as already present in markup" );
 	element.remove();
 });
 

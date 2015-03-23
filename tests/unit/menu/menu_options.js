@@ -107,11 +107,11 @@ test( "{ role: null }", function( assert ) {
 		}),
 		items = element.find( "li" );
 	expect( 2 + 3 * items.length );
-	strictEqual( element.attr( "role" ), undefined );
+	equal( element.attr( "role" ), null );
 	ok( items.length > 0, "number of menu items" );
 	items.each(function( item ) {
 		assert.hasClasses( $( this ), "ui-menu-item" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), undefined,
+		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), null,
 			"menu item ("+ item + ") role" );
 		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
 			"tabindex for menu item ("+ item + ")" );

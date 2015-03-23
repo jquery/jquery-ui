@@ -70,7 +70,7 @@ test( "enable/disable", function( assert ) {
 	assert.lacksClasses( element.tooltip( "widget" ), "ui-state-disabled" );
 	ok( !element.tooltip( "widget" ).attr( "aria-disabled" ), "element doesn't get aria-disabled" );
 	assert.lacksClasses( element.tooltip( "widget" ), "ui-tooltip-disabled" );
-	strictEqual( tooltip.attr( "title" ), undefined, "title removed on disable" );
+	equal( tooltip.attr( "title" ), null, "title removed on disable" );
 
 	element.tooltip( "open" );
 	equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );
