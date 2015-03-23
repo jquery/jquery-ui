@@ -16,6 +16,7 @@ window.requirejs = {
 	}
 };
 
+// Load all modules in series
 function requireModules( dependencies, callback, modules ) {
 	if ( !dependencies.length ) {
 		if ( callback ) {
@@ -35,7 +36,8 @@ function requireModules( dependencies, callback, modules ) {
 	} );
 }
 
-window.requireTests = function( dependencies, callback ) {
+// Load a set of test file along with the required test infrastructure
+function requireTests = function( dependencies, callback ) {
 	dependencies = [
 		"../../lib/qunit",
 		"jquery",
@@ -49,6 +51,7 @@ window.requireTests = function( dependencies, callback ) {
 	} );
 }
 
+// Parse the URL into key/value pairs
 function parseUrl() {
 	var data = {};
 	var parts = document.location.search.slice( 1 ).split( "&" );
@@ -88,6 +91,11 @@ function swarmInject() {
 		(new Date()).getTime() + "'></script>" );
 }
 
+// Load test modules based on data attributes
+// - data-modules: list of test modules to load
+// - data-widget: A widget to load test modules for
+//   - Automatically loads common, core, events, methods, and options
+// - data-deprecated: Loads the deprecated test modules for a widget
 (function() {
 
 	// Find the script element
