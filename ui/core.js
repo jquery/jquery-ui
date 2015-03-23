@@ -123,7 +123,7 @@ $.fn.extend( {
 } );
 
 // selectors
-function focusable( element, isTabIndexNotNaN ) {
+function focusable( element, hasTabindex ) {
 	var map, mapName, img,
 		nodeName = element.nodeName.toLowerCase();
 	if ( "area" === nodeName ) {
@@ -138,8 +138,8 @@ function focusable( element, isTabIndexNotNaN ) {
 	return ( /^(input|select|textarea|button|object)$/.test( nodeName ) ?
 		!element.disabled :
 		"a" === nodeName ?
-			element.href || isTabIndexNotNaN :
-			isTabIndexNotNaN ) &&
+			element.href || hasTabindex :
+			hasTabindex ) &&
 		// the element and all of its ancestors must be visible
 		visible( element );
 }
@@ -164,13 +164,13 @@ $.extend( $.expr[ ":" ], {
 		},
 
 	focusable: function( element ) {
-		return focusable( element, !isNaN( $.attr( element, "tabindex" ) ) );
+		return focusable( element, $.attr( element, "tabindex" ) != null );
 	},
 
 	tabbable: function( element ) {
 		var tabIndex = $.attr( element, "tabindex" ),
-			isTabIndexNaN = isNaN( tabIndex );
-		return ( isTabIndexNaN || tabIndex >= 0 ) && focusable( element, !isTabIndexNaN );
+			hasTabindex = tabIndex != null;
+		return ( !hasTabindex || tabIndex >= 0 ) && focusable( element, hasTabindex );
 	}
 } );
 
