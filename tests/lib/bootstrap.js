@@ -2,10 +2,10 @@
 
 window.requirejs = {
 	paths: {
-		"helper": "../helper",
 		"jquery": jqueryUrl(),
 		"jquery.simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
+		"lib": "../../lib",
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit": "../../../external/qunit/qunit",
 		"ui": "../../../ui"
@@ -37,7 +37,7 @@ function requireModules( dependencies, callback, modules ) {
 }
 
 // Load a set of test file along with the required test infrastructure
-function requireTests = function( dependencies, callback ) {
+function requireTests( dependencies, callback ) {
 	dependencies = [
 		"../../lib/qunit",
 		"jquery",

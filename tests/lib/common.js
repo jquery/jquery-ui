@@ -1,6 +1,5 @@
 define([
-	"jquery",
-	"ui/core"
+	"jquery"
 ], function( $ ) {
 
 var exports = {};
@@ -65,16 +64,6 @@ function testBasicUsage( widget ) {
 	});
 }
 
-/**
- * Exports
- */
-
-// Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
-exports.closeEnough = function( actual, expected, maxDifference, message ) {
-	var passes = ( actual === expected ) || Math.abs( actual - expected ) <= maxDifference;
-	QUnit.push( passes, actual, expected, message );
-};
-
 exports.commonWidgetTests = function( widget, settings ) {
 	module( widget + ": common widget" );
 
@@ -88,28 +77,6 @@ exports.commonWidgetTests = function( widget, settings ) {
 	});
 };
 
-exports.forceScrollableWindow = function( appendTo ) {
-
-	// The main testable area is 10000x10000 so to enforce scrolling,
-	// this DIV must be greater than 10000 to work
-	return $( "<div>" ).css({
-		height: "11000px",
-		width: "11000px"
-	}).appendTo( appendTo || "#qunit-fixture" );
-};
-
-exports.onFocus = function( element, onFocus ) {
-	var fn = function( event ){
-		if( !event.originalEvent ) {
-			return;
-		}
-		element.unbind( "focus", fn );
-		onFocus();
-	};
-
-	element.bind( "focus", fn )[ 0 ].focus();
-};
-
 exports.testJshint = function( module ) {
 
 	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
@@ -119,43 +86,44 @@ exports.testJshint = function( module ) {
 	}
 
 	asyncTest( "JSHint", function() {
-		require([ "jshint" ], function() {
+		require( [ "jshint" ], function() {
 			expect( 1 );
 
 			$.when(
-				$.ajax({
+				$.ajax( {
 					url: "../../../ui/.jshintrc",
 					dataType: "json"
-				}),
-				$.ajax({
+				} ),
+				$.ajax( {
 					url: "../../../ui/" + module + ".js",
 					dataType: "text"
-				})
-			).done(function( hintArgs, srcArgs ) {
-				var globals, passed, errors,
-					jshintrc = hintArgs[ 0 ],
-					source = srcArgs[ 0 ];
+				} )
+			)
+				.done( function( hintArgs, srcArgs ) {
+					var globals, passed, errors,
+						jshintrc = hintArgs[ 0 ],
+						source = srcArgs[ 0 ];
 
-				globals = jshintrc.globals || {};
-				delete jshintrc.globals;
-				passed = JSHINT( source, jshintrc, globals );
-				errors = $.map( JSHINT.errors, function( error ) {
+					globals = jshintrc.globals || {};
+					delete jshintrc.globals;
+					passed = JSHINT( source, jshintrc, globals );
+					errors = $.map( JSHINT.errors, function( error ) {
 
-					// JSHINT may report null if there are too many errors
-					if ( !error ) {
-						return;
-					}
+						// JSHINT may report null if there are too many errors
+						if ( !error ) {
+							return;
+						}
 
-					return "[L" + error.line + ":C" + error.character + "] " +
-						error.reason + "\n" + error.evidence + "\n";
-				}).join( "\n" );
-				ok( passed, errors );
-				start();
-			})
-			.fail(function( hintError, srcError ) {
-				ok( false, "error loading source: " + ( hintError || srcError ).statusText );
-				start();
-			});
+						return "[L" + error.line + ":C" + error.character + "] " +
+							error.reason + "\n" + error.evidence + "\n";
+					} ).join( "\n" );
+					ok( passed, errors );
+					start();
+				} )
+				.fail(function( hintError, srcError ) {
+					ok( false, "error loading source: " + ( hintError || srcError ).statusText );
+					start();
+				} );
 		});
 	});
 };

@@ -1,9 +1,9 @@
 define([
-	"helper/testsuite",
+	"lib/common",
 	"ui/accordion"
-], function( testHelper ) {
+], function( common ) {
 
-testHelper.commonWidgetTests( "accordion", {
+common.commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
 		animate: {},
