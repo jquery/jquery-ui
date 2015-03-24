@@ -109,12 +109,11 @@ test( "buttons - advanced", function() {
 
 test( "dateFormat", function() {
 	expect( 2 );
-	var element = $( "#calendar" ).calendar({
-			value: "1/1/14"
-		}),
-		firstDayLink = element.calendar( "widget" ).find( "td[id]:first button" );
+	var element = $( "#calendar" ).calendar();
 
-	firstDayLink.trigger( "mousedown" );
+	element.calendar( "value", "1/1/14" );
+
+	element.calendar( "widget" ).find( "td[id]:first button" ).trigger( "mousedown" );
 	equal( element.calendar( "value" ), "1/1/14", "default formatting" );
 
 	element.calendar( "option", "dateFormat", { date: "full" } );
