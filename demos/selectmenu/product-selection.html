@@ -44,10 +44,7 @@
 
 		#circle {
 			float: left;
-			background: yellow;
 			border-radius: 50%;
-			width: 150px;
-			height: 150px;
 		}
 	</style>
 </head>
@@ -62,18 +59,20 @@
 	<fieldset>
 		<label for="radius">Circle radius</label>
 		<select name="radius" id="radius">
+			<option selected="selected" disabled="disabled">Please choose a size</option>
 			<option value="50">50px</option>
 			<option value="100">100px</option>
-			<option value="150" selected="selected">150px</option>
+			<option value="150">150px</option>
 			<option value="200">200px</option>
 			<option value="250">250px</option>
 		</select>
 
 		<label for="color">Circle color</label>
 		<select name="color" id="color">
+			<option selected="selected" disabled="disabled">Please choose a color</option>
 			<option value="black">Black</option>
 			<option value="red">Red</option>
-			<option value="yellow" selected="selected">Yellow</option>
+			<option value="yellow">Yellow</option>
 			<option value="blue">Blue</option>
 			<option value="green">Green</option>
 		</select>
