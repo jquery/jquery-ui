@@ -280,14 +280,28 @@ $.widget( "ui.tooltip", {
 		tooltipData = this._tooltip( target );
 		tooltip = tooltipData.tooltip;
 		this._addDescribedBy( target, tooltip.attr( "id" ) );
+		// Parse content into DOM remove attributes id and name
+		if ( typeof content === "string" || content.nodeType ) {
+			if ( typeof content === "string" ) {
+				tooltip_content_div = document.createElement("div");
+				tooltip_content_div.innerHTML = content;
+				dom_content = $(tooltip_content_div);
+			} else {
+				dom_content = $("<div>").html( content );
+			}
+			dom_content.find( "[id]" ).removeAttr( "id" );
+			dom_content.find( "[name]" ).removeAttr( "name" );
+			content = dom_content.html();
+		} else if ( content.jquery ) {
+			content.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
+			content.removeAttr( "name" ).find( "[name]" ).removeAttr( "name" );
+		}
 		tooltip.find( ".ui-tooltip-content" ).html( content );
-
 		// Support: Voiceover on OS X, JAWS on IE <= 9
 		// JAWS announces deletions even when aria-relevant="additions"
 		// Voiceover will sometimes re-read the entire log region's contents from the beginning
 		this.liveRegion.children().hide();
 		a11yContent = $( "<div>" ).html( tooltip.find( ".ui-tooltip-content" ).html() );
-		a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
 		a11yContent.appendTo( this.liveRegion );
 
 		function position( event ) {
