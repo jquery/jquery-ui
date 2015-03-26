@@ -12,16 +12,16 @@ test( "mouse based interaction", function() {
 	var element = $( "#slider1" )
 		.slider({
 			start: function( event ) {
-				equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
+				equal( event.originalEvent.type, "pointerdown", "start triggered by pointerdown" );
 			},
 			slide: function( event) {
-				equal( event.originalEvent.type, "mousemove", "slider triggered by mousemove" );
+				equal( event.originalEvent.type, "pointermove", "slider triggered by pointermove" );
 			},
 			stop: function( event ) {
-				equal( event.originalEvent.type, "mouseup", "stop triggered by mouseup" );
+				equal( event.originalEvent.type, "pointerup", "stop triggered by pointerup" );
 			},
 			change: function( event ) {
-				equal( event.originalEvent.type, "mouseup", "change triggered by mouseup" );
+				equal( event.originalEvent.type, "pointerup", "change triggered by pointerup" );
 			}
 		});
 
