@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>jQuery UI Slider - Multi slider</title>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<style>
+		#wrapper {
+			font-family: Arial;
+			width: 500px;
+			margin: 20px auto;
+		}
+	</style>
+	<script src="../../../external/jquery/jquery.js"></script>
+	<script src="../../../ui/core.js"></script>
+	<script src="../../../ui/widget.js"></script>
+	<script src="../../../ui/mouse.js"></script>
+	<script src="../../../ui/slider.js"></script>
+</head>
+<body>
+<div id="wrapper">
+	<h1>Multi Slider</h1>
+	<h3>Handles shouldn't drag over each other</h3>
+	<div id="slider"></div>
+	<br>
+</div>
+
+<script>
+	var el = $( "#slider" ).slider({
+		min: 0,
+		max: 100,
+		values: [ 0, 20, 50, 80 ]
+	});
+
+</script>
+</body>
+</html>

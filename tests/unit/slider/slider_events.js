@@ -169,10 +169,12 @@ test( "event data", function() {
 	expect( 4 );
 
 	var slideHandleIndex = 3,
-		values = [ 8, 9, 7, 4 ],
-		newValues = [ 8, 9, 7, 5 ],
+		values = [ 10, 20, 60, 80 ],
+		newValues = [ 10, 20, 60, 81 ],
 		element = $( "#slider1" )
 			.slider({
+				min: 0,
+				max: 100,
 				values: values,
 				start: function( event, ui ) {
 					deepEqual( ui, expectedUiHash, "passing ui to start event" );

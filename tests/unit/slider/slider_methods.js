@@ -58,7 +58,7 @@ test( "disable", function( assert ) {
 });
 
 test( "value", function() {
-	expect( 19 );
+	expect( 21 );
 	$( [ false, "min", "max" ] ).each(function() {
 		var element = $( "<div></div>" ).slider({
 			range: this,
@@ -104,6 +104,17 @@ test( "value", function() {
 
 	element.slider( "option", "value", 510 );
 	equal( element.slider( "value" ), 460, "value is restricted to maximum valid step" );
+
+	element = $( "<div></div>" ).slider({
+		min: 0,
+		max: 100,
+		values: [ 10, 40, 60, 80 ]
+	});
+
+	element.slider( "values", 0, 50 );
+	equal( element.slider( "values", 0 ), 40, "handle doesn't exceed next handle" );
+	element.slider( "values", 3, 50 );
+	equal( element.slider( "values", 3 ), 60, "handle doesn't exceed previous handle" );
 });
 
 //test( "values", function() {
