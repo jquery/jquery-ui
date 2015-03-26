@@ -367,47 +367,60 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	value: function( newValue ) {
-		if ( arguments.length ) {
-			this.options.value = this._trimAlignValue( newValue );
+		if ( !arguments.length ) {
+			return this._value();
+		}
+
+		this.values( 0, newValue );
+	},
+
+	values: function( index, newValue ) {
+		var i,
+			newValues = arguments[ 0 ];
+
+		if ( !arguments.length ) {
+			return this._values();
+		}
+
+		if ( arguments.length > 1 ) {
+			this._changeValue( index, newValue );
 			this._refreshValue();
+			return;
+		}
+
+		if ( $.isArray( newValues ) ) {
+			for ( i = 0; i < this.options.values.length; i++ ) {
+				this._changeValue( i,  newValues[ i ] );
+			}
+			this._refreshValue();
+		}
+
+		if ( this._hasMultipleValues() ) {
+			return this._values( index );
+		} else {
+			return this.value();
+		}
+	},
+
+	_changeValue: function ( index, newValue ) {
+		if ( !this._hasMultipleValues() ) {
+			this.options.value = this._trimAlignValue( newValue );
 			this._change( null, 0 );
 			return;
 		}
 
-		return this._value();
-	},
+		var prevValue = this._values( index - 1 ),
+			nextValue = this._values( index + 1 );
 
-	values: function( index, newValue ) {
-		var vals,
-			newValues,
-			i;
-
-		if ( arguments.length > 1 ) {
-			this.options.values[ index ] = this._trimAlignValue( newValue );
-			this._refreshValue();
-			this._change( null, index );
-			return;
+		if ( newValue > nextValue ) {
+			newValue = nextValue;
+		}
+		if ( newValue < prevValue ) {
+			newValue = prevValue;
 		}
 
-		if ( arguments.length ) {
-			if ( $.isArray( arguments[ 0 ] ) ) {
-				vals = this.options.values;
-				newValues = arguments[ 0 ];
-				for ( i = 0; i < vals.length; i += 1 ) {
-					vals[ i ] = this._trimAlignValue( newValues[ i ] );
-					this._change( null, i );
-				}
-				this._refreshValue();
-			} else {
-				if ( this._hasMultipleValues() ) {
-					return this._values( index );
-				} else {
-					return this.value();
-				}
-			}
-		} else {
-			return this._values();
-		}
+		this.options.values[ index ] = this._trimAlignValue( newValue );
+		this._change( null, index );
 	},
 
 	_setOption: function( key, value ) {
