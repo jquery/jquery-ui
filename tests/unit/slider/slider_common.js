@@ -1,7 +1,7 @@
 TestHelpers.commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
-		cancel: "input,textarea,button,select,option",
+		cancel: "input, textarea, button, select, option",
 		classes: {
 			"ui-slider": "ui-corner-all",
 			"ui-slider-handle": "ui-corner-all",

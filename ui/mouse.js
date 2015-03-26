@@ -35,7 +35,7 @@ $( document ).mouseup( function() {
 return $.widget("ui.mouse", {
 	version: "@VERSION",
 	options: {
-		cancel: "input,textarea,button,select,option",
+		cancel: "input, textarea, button, select, option",
 		distance: 1,
 		delay: 0
 	},

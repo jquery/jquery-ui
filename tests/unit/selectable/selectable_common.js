@@ -2,7 +2,7 @@ TestHelpers.commonWidgetTests("selectable", {
 	defaults: {
 		appendTo: "body",
 		autoRefresh: true,
-		cancel: "input,textarea,button,select,option",
+		cancel: "input, textarea, button, select, option",
 		classes: {},
 		delay: 0,
 		disabled: false,
