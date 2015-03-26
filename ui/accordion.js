@@ -44,7 +44,7 @@ return $.widget( "ui.accordion", {
 		},
 		collapsible: false,
 		event: "click",
-		header: "> li > :first-child,> :not(li):even",
+		header: "> li > :first-child, > :not(li):even",
 		heightStyle: "auto",
 		icons: {
 			activeHeader: "ui-icon-triangle-1-s",

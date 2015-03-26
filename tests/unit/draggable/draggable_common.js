@@ -2,7 +2,7 @@ TestHelpers.commonWidgetTests( "draggable", {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
-		cancel: "input,textarea,button,select,option",
+		cancel: "input, textarea, button, select, option",
 		classes: {},
 		connectToSortable: false,
 		containment: false,
