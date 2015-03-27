@@ -63,6 +63,13 @@ $.extend( $.ui, {
 			activeElement = document.body;
 		}
 
+		// Support: IE 9 - 11 only
+		// IE may return null instead of an element
+		// Interestingly, this only seems to occur when NOT in an iframe
+		if ( !activeElement ) {
+			activeElement = document.body;
+		}
+
 		// Support: IE 11 only
 		// IE11 returns a seemingly empty object in some cases when accessing
 		// document.activeElement from an <iframe>
