@@ -187,12 +187,12 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this.handles.each( function( i ) {
 			var handleDistance = Math.abs( value - that.values( i ) );
-			if ( breakLoop || handleDistance > distance || !that._canBeDrag( i ) ) {
+			if ( ( breakLoop && handleDistance >= distance ) || handleDistance > distance || !that._canBeDrag( i ) ) {
 				return;
 			}
 			index = i;
 			distance = handleDistance;
-			breakLoop = i === that._lastChangedIndex ;
+			breakLoop = breakLoop ? breakLoop : i === that._lastChangedIndex;
 		});
 
 		return index;
