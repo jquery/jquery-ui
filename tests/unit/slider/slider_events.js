@@ -38,12 +38,14 @@ test( "mouse based interaction", function() {
 			values: [ 20, 80 ]
 		});
 	handles = element.find( ".ui-slider-handle" );
-	handles.eq( 1 ).simulate( "drag", { dx: 10 } );
-	handlePosition = handles.eq( 0 ).offset();
+	element.slider( "values", 0, 79 );
+	handlePosition = handles.eq( 1 ).offset();
+	element.on( "slidestart", function( event, ui ) {
+		equal( ui.handleIndex, 1, "drag selected instead of closest handle" );
+	});
 
-	element.simulate( "mousedown", { clientX: handlePosition.left + 110, clientY: handlePosition.top } );
-	element.simulate( "mouseup" );
-	equal( element.slider( "values" )[ 1 ], 30, "should drag selected handle" );
+	handles.eq( 1 ).simulate( "mousedown", { clientX: handlePosition.left } );
+	handles.eq( 1 ).simulate( "mouseup" );
 });
 
 test( "keyboard based interaction", function() {

@@ -72,7 +72,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseSliding = false;
 		this._animateOff = true;
 		this._handleIndex = null;
-		this._lastChangedValue = null;
+		this._lastChangedIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
@@ -177,28 +177,45 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseDestroy();
 	},
 
-	_closestHandleIndex: function( normValue ) {
-		var distance, index,
-			that = this,
-			o = this.options;
+	_closestHandleIndex: function( value, activeHandleIndex ) {
+		var that = this,
+			index = activeHandleIndex,
+			breakLoop = false,
+			activeSet = activeHandleIndex !== -1,
+			max = this._valueMax(), min = this._valueMin(),
+			distance = activeSet ? value - this.values( activeHandleIndex ) : max - min +  1;
 
-		distance = this._valueMax() - this._valueMin() + 1;
-		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - that.values(i) );
-			if ( ( distance > thisDistance ) ||
-					( distance === thisDistance &&
-					( i === that._lastChangedValue || that.values(i) === o.min )) ) {
-				distance = thisDistance;
-				index = i;
+		this.handles.each( function( i ) {
+			var handleDistance = Math.abs( value - that.values( i ) );
+			if ( breakLoop || handleDistance > distance || !that._canBeDrag( i ) ) {
+				return;
 			}
+			index = i;
+			distance = handleDistance;
+			breakLoop = i === that._lastChangedIndex ;
 		});
 
 		return index;
 	},
 
+	_canBeDrag: function( index ) {
+		var values,
+			val = this.values( index ),
+			prev = this.values( index - 1 ),
+			next = this.values( index + 1 );
+
+		prev = isNaN( prev ) ? this._valueMin() : prev;
+		next = isNaN( next ) ? this._valueMax() : next;
+		values = [ prev, val, next ];
+
+		return $.grep( values, function( v, k ) {
+			return $.inArray( v, values ) === k;
+		}).length > 1;
+	},
+
 	_mouseCapture: function( event ) {
 		var position, normValue, handle, index, allowed, offset, mouseOverHandle,
-			capturedElement = $( event.target ),
+			capturedElementIndex = this.handles.index( $( event.target ) ),
 			o = this.options;
 
 		if ( o.disabled ) {
@@ -210,15 +227,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			height: this.element.outerHeight()
 		};
 		this.elementOffset = this.element.offset();
-
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
-		if ( this._lastChangedValue === null || capturedElement.is( ".ui-slider-handle" ) ) {
-			index = this._closestHandleIndex( normValue );
-		} else {
-			index = this._lastChangedValue;
-		}
 
+		index = this._closestHandleIndex( normValue, capturedElementIndex );
 		handle = this.handles.eq( index );
 
 		allowed = this._start( event, index );
@@ -377,7 +389,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	_change: function( event, index ) {
 		if ( !this._keySliding && !this._mouseSliding ) {
 			//store the last changed value index for reference when handles overlap
-			this._lastChangedValue = index;
+			this._lastChangedIndex = index;
 			this._trigger( "change", event, this._uiHash( index ) );
 		}
 	},
@@ -471,7 +483,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this._refreshValue();
 
 				// Start from the last handle to prevent unreachable handles (#9046)
-				for ( i = valsLength - 1; i >= 0; i-- ) {
+				for ( i = 0; i < valsLength; i++ ) {
 					this._change( null, i );
 				}
 				this._animateOff = false;
