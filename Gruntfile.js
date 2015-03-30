@@ -221,6 +221,8 @@ grunt.initConfig({
 		}
 	},
 	qunit: {
+		// TODO: should disable injecting the bridge
+		// Tests run fine, but there is an unhandled error when the injection occurs
 		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
 			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
