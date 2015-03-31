@@ -3,7 +3,7 @@ define([
 	"ui/accordion"
 ], function( common ) {
 
-common.commonWidgetTests( "accordion", {
+common.testWidget( "accordion", {
 	defaults: {
 		active: 0,
 		animate: {},

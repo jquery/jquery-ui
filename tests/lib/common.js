@@ -64,7 +64,7 @@ function testBasicUsage( widget ) {
 	});
 }
 
-exports.commonWidgetTests = function( widget, settings ) {
+exports.testWidget = function( widget, settings ) {
 	module( widget + ": common widget" );
 
 	exports.testJshint( widget );
