@@ -98,11 +98,11 @@ function extract( elem ) {
 	var children;
 	$.each( domEqual.properties, function( index, attr ) {
 		var value = elem.prop( attr );
-		result[ attr ] = value !== undefined ? value : "";
+		result[ attr ] = value != null ? value : "";
 	});
 	$.each( domEqual.attributes, function( index, attr ) {
 		var value = elem.attr( attr );
-		result[ attr ] = value !== undefined ? value : "";
+		result[ attr ] = value != null ? value : "";
 	});
 	result.style = getElementStyles( elem[ 0 ] );
 	result.events = $._data( elem[ 0 ], "events" );
