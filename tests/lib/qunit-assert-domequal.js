@@ -11,12 +11,14 @@ define( [
 
 var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 
+	var assert = this;
+
 	// Get current state prior to modifier
 	var expected = extract( $( selector ) );
 
 	function done() {
 		var actual = extract( $( selector ) );
-		QUnit.push( QUnit.equiv( actual, expected ), actual, expected, message );
+		assert.push( QUnit.equiv( actual, expected ), actual, expected, message );
 	}
 
 	// Run modifier (async or sync), then compare state via done()
