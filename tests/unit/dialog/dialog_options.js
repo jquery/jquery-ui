@@ -262,83 +262,83 @@ test("height", function() {
 	element.remove();
 });
 
-test("maxHeight", function() {
+test("maxHeight", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ maxHeight: 200 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-s", 1000, 1000);
-		closeEnough(element.dialog("widget").height(), 200, 1, "maxHeight");
+		assert.close(element.dialog("widget").height(), 200, 1, "maxHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxHeight: 200 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-n", -1000, -1000);
-		closeEnough(element.dialog("widget").height(), 200, 1, "maxHeight");
+		assert.close(element.dialog("widget").height(), 200, 1, "maxHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxHeight: 200 }).dialog("option", "maxHeight", 300);
 		TestHelpers.dialog.drag(element, ".ui-resizable-s", 1000, 1000);
-		closeEnough(element.dialog("widget").height(), 300, 1, "maxHeight");
+		assert.close(element.dialog("widget").height(), 300, 1, "maxHeight");
 	element.remove();
 });
 
-test("maxWidth", function() {
+test("maxWidth", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ maxWidth: 200 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-e", 1000, 1000);
-		closeEnough(element.dialog("widget").width(), 200, 1, "maxWidth");
+		assert.close(element.dialog("widget").width(), 200, 1, "maxWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxWidth: 200 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-w", -1000, -1000);
-		closeEnough(element.dialog("widget").width(), 200, 1, "maxWidth");
+		assert.close(element.dialog("widget").width(), 200, 1, "maxWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxWidth: 200 }).dialog("option", "maxWidth", 300);
 		TestHelpers.dialog.drag(element, ".ui-resizable-w", -1000, -1000);
-		closeEnough(element.dialog("widget").width(), 300, 1, "maxWidth");
+		assert.close(element.dialog("widget").width(), 300, 1, "maxWidth");
 	element.remove();
 });
 
-test("minHeight", function() {
+test("minHeight", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ minHeight: 10 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-s", -1000, -1000);
-		closeEnough(element.dialog("widget").height(), 10, 1, "minHeight");
+		assert.close(element.dialog("widget").height(), 10, 1, "minHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minHeight: 10 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-n", 1000, 1000);
-		closeEnough(element.dialog("widget").height(), 10, 1, "minHeight");
+		assert.close(element.dialog("widget").height(), 10, 1, "minHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minHeight: 10 }).dialog("option", "minHeight", 30);
 		TestHelpers.dialog.drag(element, ".ui-resizable-n", 1000, 1000);
-		closeEnough(element.dialog("widget").height(), 30, 1, "minHeight");
+		assert.close(element.dialog("widget").height(), 30, 1, "minHeight");
 	element.remove();
 });
 
-test("minWidth", function() {
+test("minWidth", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ minWidth: 10 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-e", -1000, -1000);
-		closeEnough(element.dialog("widget").width(), 10, 1, "minWidth");
+		assert.close(element.dialog("widget").width(), 10, 1, "minWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minWidth: 10 });
 		TestHelpers.dialog.drag(element, ".ui-resizable-w", 1000, 1000);
-		closeEnough(element.dialog("widget").width(), 10, 1, "minWidth");
+		assert.close(element.dialog("widget").width(), 10, 1, "minWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minWidth: 30 }).dialog("option", "minWidth", 30);
 		TestHelpers.dialog.drag(element, ".ui-resizable-w", 1000, 1000);
-		closeEnough(element.dialog("widget").width(), 30, 1, "minWidth");
+		assert.close(element.dialog("widget").width(), 30, 1, "minWidth");
 	element.remove();
 });
 
-test( "position, default center on window", function() {
+test( "position, default center on window", function( assert ) {
 	expect( 2 );
 
 	// dialogs alter the window width and height in Firefox
@@ -349,12 +349,12 @@ test( "position, default center on window", function() {
 		element = $("<div></div>").dialog(),
 		dialog = element.dialog("widget"),
 		offset = dialog.offset();
-	closeEnough( offset.left, Math.round( winWidth / 2 - dialog.outerWidth() / 2 ) + $( window ).scrollLeft(), 1, "dialog left position of center on window on initilization" );
-	closeEnough( offset.top, Math.round( winHeight / 2 - dialog.outerHeight() / 2 ) + $( window ).scrollTop(), 1, "dialog top position of center on window on initilization" );
+	assert.close( offset.left, Math.round( winWidth / 2 - dialog.outerWidth() / 2 ) + $( window ).scrollLeft(), 1, "dialog left position of center on window on initilization" );
+	assert.close( offset.top, Math.round( winHeight / 2 - dialog.outerHeight() / 2 ) + $( window ).scrollTop(), 1, "dialog top position of center on window on initilization" );
 	element.remove();
 });
 
-test( "position, right bottom at right bottom via ui.position args", function() {
+test( "position, right bottom at right bottom via ui.position args", function( assert ) {
 	expect( 2 );
 
 	// dialogs alter the window width and height in Firefox
@@ -371,12 +371,12 @@ test( "position, right bottom at right bottom via ui.position args", function() 
 		dialog = element.dialog("widget"),
 		offset = dialog.offset();
 
-	closeEnough( offset.left, winWidth - dialog.outerWidth() + $( window ).scrollLeft(), 1, "dialog left position of right bottom at right bottom on initilization" );
-	closeEnough( offset.top, winHeight - dialog.outerHeight() + $( window ).scrollTop(), 1, "dialog top position of right bottom at right bottom on initilization" );
+	assert.close( offset.left, winWidth - dialog.outerWidth() + $( window ).scrollLeft(), 1, "dialog left position of right bottom at right bottom on initilization" );
+	assert.close( offset.top, winHeight - dialog.outerHeight() + $( window ).scrollTop(), 1, "dialog top position of right bottom at right bottom on initilization" );
 	element.remove();
 });
 
-test( "position, at another element", function() {
+test( "position, at another element", function( assert ) {
 	expect( 4 );
 	var parent = $("<div></div>").css({
 			position: "absolute",
@@ -398,8 +398,8 @@ test( "position, at another element", function() {
 		dialog = element.dialog("widget"),
 		offset = dialog.offset();
 
-	closeEnough( offset.left, 600, 1, "dialog left position at another element on initilization" );
-	closeEnough( offset.top, 400, 1, "dialog top position at another element on initilization" );
+	assert.close( offset.left, 600, 1, "dialog left position at another element on initilization" );
+	assert.close( offset.top, 400, 1, "dialog top position at another element on initilization" );
 
 	element.dialog("option", "position", {
 			my: "left top",
@@ -410,8 +410,8 @@ test( "position, at another element", function() {
 
 	offset = dialog.offset();
 
-	closeEnough( offset.left, 610, 1, "dialog left position at another element via setting option" );
-	closeEnough( offset.top, 410, 1, "dialog top position at another element via setting option" );
+	assert.close( offset.left, 610, 1, "dialog left position at another element via setting option" );
+	assert.close( offset.top, 410, 1, "dialog top position at another element via setting option" );
 
 	element.remove();
 	parent.remove();
@@ -475,17 +475,17 @@ test( "title", function() {
 	element.remove();
 });
 
-test("width", function() {
+test("width", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog();
-		closeEnough(element.dialog("widget").width(), 300, 1, "default width");
+		assert.close(element.dialog("widget").width(), 300, 1, "default width");
 	element.remove();
 
 	element = $("<div></div>").dialog({width: 437 });
-		closeEnough(element.dialog("widget").width(), 437, 1, "explicit width");
+		assert.close(element.dialog("widget").width(), 437, 1, "explicit width");
 		element.dialog("option", "width", 438);
-		closeEnough(element.dialog("widget").width(), 438, 1, "explicit width after init");
+		assert.close(element.dialog("widget").width(), 438, 1, "explicit width after init");
 	element.remove();
 });
 

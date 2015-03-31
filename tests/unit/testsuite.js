@@ -224,8 +224,8 @@ TestHelpers.forceScrollableWindow = function( appendTo ) {
 	}).appendTo( appendTo || "#qunit-fixture" );
 };
 
-// Taken from https://github.com/jquery/qunit/tree/master/addons/close-enough
-window.closeEnough = function( actual, expected, maxDifference, message ) {
+// TODO: switch to qunit-assert-close plugin
+QUnit.assert.close = function( actual, expected, maxDifference, message ) {
 	var passes = ( actual === expected ) || Math.abs( actual - expected ) <= maxDifference;
 	QUnit.push( passes, actual, expected, message );
 };
