@@ -1,8 +1,8 @@
 define( [
 	"qunit",
 	"jquery",
-	"./qunit-bridge",
-], function( QUnit, $, bridge ) {
+	"phantom-bridge"
+], function( QUnit, $ ) {
 
 QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;
@@ -39,10 +39,6 @@ QUnit.reset = ( function( reset ) {
 		reset.apply( this, arguments );
 	};
 } )( QUnit.reset );
-
-if ( /PhantomJS/.test( navigator.userAgent ) ) {
-	bridge();
-}
 
 return QUnit;
 

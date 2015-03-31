@@ -6,6 +6,7 @@ window.requirejs = {
 		"jquery.simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
 		"lib": "../../lib",
+		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit": "../../../external/qunit/qunit",
 		"ui": "../../../ui"
@@ -125,6 +126,12 @@ function swarmInject() {
 	script = document.createElement( "script" );
 	script.src = "../../../external/requirejs/require.js";
 	script.onload = function() {
+
+		// Create a dummy bridge if we're not actually testing in PhantomJS
+		if ( !/PhantomJS/.test( navigator.userAgent ) ) {
+			define( "phantom-bridge", function() {} );
+		}
+
 		requireTests( modules );
 	};
 	document.documentElement.appendChild( script );
