@@ -6,7 +6,7 @@
 
 module( "draggable: core" );
 
-test( "element types", function() {
+test( "element types", function( assert ) {
 	var typeNames = (
 			"p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form" +
 			",table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr" +
@@ -42,8 +42,8 @@ test( "element types", function() {
 
 		// Support: FF, Chrome, and IE9,
 		// there are some rounding errors in so we can't say equal, we have to settle for close enough
-		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
-		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
+		assert.close( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
+		assert.close( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
 		el.draggable("destroy");
 		el.remove();
 	});
@@ -350,7 +350,7 @@ test( "ui-draggable-handle managed correctly in nested draggables", function( as
 
 // http://bugs.jqueryui.com/ticket/7772
 // when css 'right' is set, element resizes on drag
-test( "setting right/bottom css shouldn't cause resize", function() {
+test( "setting right/bottom css shouldn't cause resize", function( assert ) {
 	expect( 4 );
 
 	var finalOffset,
@@ -367,10 +367,10 @@ test( "setting right/bottom css shouldn't cause resize", function() {
 	finalOffset.left += 50;
 	finalOffset.top += 50;
 
-	closeEnough( element.width(), origWidth, 1, "element retains width" );
-	closeEnough( element.height(), origHeight, 1, "element retains height" );
-	closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
-	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
+	assert.close( element.width(), origWidth, 1, "element retains width" );
+	assert.close( element.height(), origHeight, 1, "element retains height" );
+	assert.close( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
+	assert.close( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
 })( jQuery );
