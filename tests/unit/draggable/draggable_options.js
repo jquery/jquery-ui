@@ -519,7 +519,7 @@ test( "{ containment: 'parent' }, absolute", function() {
 	deepEqual( offsetAfter, expected, "compare offset to parent" );
 });
 
-test( "containment, account for border", function() {
+test( "containment, account for border", function( assert ) {
 	expect( 2 );
 
 	var el = $( "#draggable1" ).appendTo( "#scrollParent" ),
@@ -544,9 +544,9 @@ test( "containment, account for border", function() {
 		dy: 100
 	});
 
-	closeEnough( el.offset().top, parentBottom - parentBorderBottom - el.height(), 1,
+	assert.close( el.offset().top, parentBottom - parentBorderBottom - el.height(), 1,
 		"The draggable should be on top of its parent's bottom border" );
-	closeEnough( el.offset().left, parentRight - parentBorderRight - el.width(), 1,
+	assert.close( el.offset().left, parentRight - parentBorderRight - el.width(), 1,
 		"The draggable should be to the right of its parent's right border" );
 });
 
@@ -1137,7 +1137,7 @@ test( "scroll ignores containers that are overflow: hidden", function() {
 	equal( scrollParent.scrollLeft(), 0, "container doesn't scroll horizontally" );
 });
 
-test( "#6817: auto scroll goes double distance when dragging", function() {
+test( "#6817: auto scroll goes double distance when dragging", function( assert ) {
 	expect( 2 );
 
 	TestHelpers.draggable.restoreScroll( document );
@@ -1149,8 +1149,8 @@ test( "#6817: auto scroll goes double distance when dragging", function() {
 			scroll: true,
 			stop: function( e, ui ) {
 				equal( ui.offset.top, newY, "offset of item matches pointer position after scroll" );
-				// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
-				closeEnough( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
+				// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
+				assert.close( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
 			}
 		}),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
@@ -1174,7 +1174,7 @@ test( "#6817: auto scroll goes double distance when dragging", function() {
 	TestHelpers.draggable.restoreScroll( document );
 });
 
-test( "snap, snapMode, and snapTolerance", function() {
+test( "snap, snapMode, and snapTolerance", function( assert ) {
 	expect( 10 );
 
 	var newX, newY,
@@ -1206,9 +1206,9 @@ test( "snap, snapMode, and snapTolerance", function() {
 		moves: 1
 	});
 
-	// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
-	closeEnough( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
-	closeEnough( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
+	// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
+	assert.close( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
+	assert.close( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
 
 	newX += 3;
 
@@ -1301,7 +1301,7 @@ test( "snap, snapMode, and snapTolerance", function() {
 	deepEqual( element.offset(), { top: newY, left: newX }, "doesn't snap on the inner snapTolerance area when snapMode is outer" );
 });
 
-test( "#8459: element can snap to an element that was removed during drag", function() {
+test( "#8459: element can snap to an element that was removed during drag", function( assert ) {
 	expect( 2 );
 
 	var newX, newY,
@@ -1337,9 +1337,9 @@ test( "#8459: element can snap to an element that was removed during drag", func
 		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 	} else {
-		// TODO: fix IE8 testswarm IFRAME positioning bug so closeEnough can be turned back to equal
-		closeEnough( element.offset().left, newX, 1, "doesn't snap to a removed element" );
-		closeEnough( element.offset().top, newY, 1, "doesn't snap to a removed element" );
+		// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
+		assert.close( element.offset().left, newX, 1, "doesn't snap to a removed element" );
+		assert.close( element.offset().top, newY, 1, "doesn't snap to a removed element" );
 	}
 });
 

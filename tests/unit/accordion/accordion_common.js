@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "accordion", {
+define([
+	"lib/common",
+	"ui/accordion"
+], function( common ) {
+
+common.testWidget( "accordion", {
 	defaults: {
 		active: 0,
 		animate: {},
@@ -22,4 +27,6 @@ TestHelpers.commonWidgetTests( "accordion", {
 		beforeActivate: null,
 		create: null
 	}
+});
+
 });

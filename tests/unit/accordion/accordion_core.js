@@ -1,7 +1,12 @@
-(function( $ ) {
+define([
+	"jquery",
+	"./accordion_test_helpers",
+	"jquery.simulate",
+	"ui/accordion"
+], function( $, accordionTestHelper ) {
 
-var setupTeardown = TestHelpers.accordion.setupTeardown,
-	state = TestHelpers.accordion.state;
+var setupTeardown = accordionTestHelper.setupTeardown,
+	state = accordionTestHelper.state;
 
 module( "accordion: core", setupTeardown() );
 
@@ -200,4 +205,4 @@ asyncTest( "keyboard support", function( assert ) {
 	}
 });
 
-}( jQuery ) );
+});

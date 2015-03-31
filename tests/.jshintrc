@@ -20,8 +20,8 @@
 
 	"globals": {
 		"asyncTest": false,
-		"closeEnough": false,
 		"deepEqual": false,
+		"define": false,
 		"domEqual": false,
 		"equal": false,
 		"expect": false,

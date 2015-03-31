@@ -221,6 +221,8 @@ grunt.initConfig({
 		}
 	},
 	qunit: {
+		// TODO: should disable injecting the bridge
+		// Tests run fine, but there is an unhandled error when the injection occurs
 		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
 			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
@@ -279,6 +281,8 @@ grunt.initConfig({
 
 				"qunit-assert-classes/qunit-assert-classes.js": "qunit-assert-classes/qunit-assert-classes.js",
 				"qunit-assert-classes/LICENSE.txt": "qunit-assert-classes/LICENSE",
+
+				"requirejs/require.js": "requirejs/require.js",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
