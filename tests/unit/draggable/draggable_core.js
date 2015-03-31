@@ -6,7 +6,7 @@
 
 module( "draggable: core" );
 
-test( "element types", function() {
+test( "element types", function( assert ) {
 	var typeNames = (
 			"p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form" +
 			",table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr" +
@@ -35,8 +35,8 @@ test( "element types", function() {
 
 		// Support: FF, Chrome, and IE9,
 		// there are some rounding errors in so we can't say equal, we have to settle for close enough
-		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
-		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
+		assert.close( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
+		assert.close( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
 		el.draggable("destroy");
 		el.remove();
 	});

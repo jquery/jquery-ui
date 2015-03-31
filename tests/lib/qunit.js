@@ -40,6 +40,12 @@ QUnit.reset = ( function( reset ) {
 	};
 } )( QUnit.reset );
 
+// TODO: switch to qunit-assert-close plugin
+QUnit.assert.close = function( actual, expected, maxDifference, message ) {
+	var passes = ( actual === expected ) || Math.abs( actual - expected ) <= maxDifference;
+	QUnit.push( passes, actual, expected, message );
+};
+
 return QUnit;
 
 } );

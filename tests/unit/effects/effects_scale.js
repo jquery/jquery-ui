@@ -3,11 +3,11 @@ module( "effect.scale: Scale" );
 
 function run( position, v, h, vo, ho ) {
 	var desc = "End Position Correct: " + position + " (" + v + "," + h + ") - origin: (" + vo + "," + ho + ")";
-	asyncTest( desc, function() {
+	asyncTest( desc, function( assert ) {
 		expect( 2 );
 		function complete() {
-			closeEnough( parseInt( test.css( h ), 10 ), target[ h ], 1, "Horizontal Position Correct " + desc );
-			closeEnough( parseInt( test.css( v ), 10 ), target[ v ], 1, "Vertical Position Correct " + desc );
+			assert.close( parseInt( test.css( h ), 10 ), target[ h ], 1, "Horizontal Position Correct " + desc );
+			assert.close( parseInt( test.css( v ), 10 ), target[ v ], 1, "Vertical Position Correct " + desc );
 			start();
 		}
 		var test = $( ".testScale" ),
