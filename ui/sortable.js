@@ -636,6 +636,12 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		return this;
 	},
 
+	_container: function() {
+		var options = this.options;
+		var container = options.container ? this.element.find(options.container) : [];
+		return container.length ? container : this.element;
+	},
+
 	_connectWith: function() {
 		var options = this.options;
 		return options.connectWith.constructor === String ? [options.connectWith] : options.connectWith;
@@ -938,7 +944,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 				return;
 			}
 
-			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true);
+			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex]._container(), true);
 			this._trigger("change", event, this._uiHash());
 			this.containers[innermostIndex]._trigger("change", event, this._uiHash(this));
 			this.currentContainer = this.containers[innermostIndex];
