@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "autocomplete", {
+define( [
+	"lib/common",
+	"ui/autocomplete"
+], function( common ) {
+
+common.testWidget( "autocomplete", {
 	defaults: {
 		appendTo: null,
 		autoFocus: false,
@@ -28,3 +33,5 @@ TestHelpers.commonWidgetTests( "autocomplete", {
 		select: null
 	}
 });
+
+} );

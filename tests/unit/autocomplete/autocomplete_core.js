@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/autocomplete"
+], function( $ ) {
 
 module( "autocomplete: core" );
 
@@ -395,4 +398,4 @@ asyncTest( "Search if the user retypes the same value (#7434)", function() {
 	});
 });
 
-}( jQuery ) );
+} );

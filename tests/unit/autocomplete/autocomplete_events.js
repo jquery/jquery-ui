@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/autocomplete"
+], function( $ ) {
 
 module( "autocomplete: events" );
 
@@ -179,4 +182,4 @@ asyncTest( "blur during remote search", function() {
 	ac.val( "ro" ).keydown();
 });
 
-}( jQuery ) );
+} );
