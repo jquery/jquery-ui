@@ -4,32 +4,8 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-	<script src="../../../external/qunit-assert-classes/qunit-assert-classes.js"></script>
-	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "menu", "autocomplete" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/position.js",
-			"ui/menu.js",
-			"ui/autocomplete.js"
-		]
-	});
-	</script>
-
-	<script src="autocomplete_common.js"></script>
-	<script src="autocomplete_core.js"></script>
-	<script src="autocomplete_events.js"></script>
-	<script src="autocomplete_methods.js"></script>
-	<script src="autocomplete_options.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<script src="../../lib/css.js" data-modules="core menu autocomplete"></script>
+	<script src="../../lib/bootstrap.js" data-widget="autocomplete"></script>
 </head>
 <body>
 

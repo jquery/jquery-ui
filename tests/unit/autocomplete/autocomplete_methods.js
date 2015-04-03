@@ -1,10 +1,13 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/autocomplete"
+], function( $ ) {
 
 module( "autocomplete: methods" );
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 1 );
-	domEqual( "#autocomplete", function() {
+	assert.domEqual( "#autocomplete", function() {
 		$( "#autocomplete" ).autocomplete().autocomplete( "destroy" );
 	});
 });
@@ -42,4 +45,4 @@ test( "widget", function( assert ) {
 	assert.hasClasses( widgetElement, "ui-menu" );
 });
 
-}( jQuery ) );
+} );

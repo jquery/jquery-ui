@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/autocomplete"
+], function( $ ) {
 
 module( "autocomplete: options" );
 
@@ -311,4 +314,4 @@ test( "source, update after init", function() {
 	equal( menu.find( ".ui-menu-item" ).text(), "php" );
 });
 
-}( jQuery ) );
+} );
