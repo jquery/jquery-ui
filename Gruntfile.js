@@ -225,6 +225,7 @@ grunt.initConfig({
 			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
 		options: {
+			inject: false,
 			page: {
 				viewportSize: { width: 700, height: 500 }
 			}
@@ -283,6 +284,8 @@ grunt.initConfig({
 				"qunit-composite/qunit-composite.js": "qunit-composite/qunit-composite.js",
 				"qunit-composite/qunit-composite.css": "qunit-composite/qunit-composite.css",
 				"qunit-composite/LICENSE.txt": "qunit-composite/LICENSE.txt",
+
+				"requirejs/require.js": "requirejs/require.js",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
