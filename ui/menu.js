@@ -354,12 +354,14 @@ return $.widget( "ui.menu", {
 	},
 
 	focus: function( event, item ) {
-		var nested, focused, activeParent;
+		var nested, focused, activeParent, first, isUI;
 		this.blur( event, event && event.type === "focus" );
 
 		this._scrollIntoView( item );
 
-		this.active = item.first();
+                first = item.first();
+                isUI  = first.is('.ui-menu-item');
+		this.active =  isUI ? first : $('.ui-menu-item',first).first();
 
 		focused = this.active.children( ".ui-menu-item-wrapper" );
 		this._addClass( focused, null, "ui-state-active" );

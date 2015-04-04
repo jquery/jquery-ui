@@ -256,7 +256,7 @@ $.widget( "ui.autocomplete", {
 				}
 			},
 			menufocus: function( event, ui ) {
-				var label, item;
+				var label, item, uiItem, isUI;
 				// support: Firefox
 				// Prevent accidental activation of menu items in Firefox (#7024 #9118)
 				if ( this.isNewMenu ) {
@@ -272,7 +272,10 @@ $.widget( "ui.autocomplete", {
 					}
 				}
 
+                                isUI   = ui.item.is('.ui-menu-item');
+                                uiItem = isUI ? ui.item : $('.ui-menu-item',ui.item).first();
 				item = ui.item.data( "ui-autocomplete-item" );
+
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
 					// use value to match what will end up in the input, if it was a key event
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
