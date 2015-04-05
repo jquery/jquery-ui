@@ -25,13 +25,6 @@ test( "element types", function() {
 			el.append("<tr><td>content</td></tr>");
 		}
 
-		// intrinsic height is incorrect in FF for buttons with no content
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=471763
-		// Support: FF
-		if ( typeName === "button" ) {
-			el.text( "button" );
-		}
-
 		el.draggable({ cancel: "" });
 		offsetBefore = el.offset();
 		el.simulate( "drag", {
@@ -42,8 +35,8 @@ test( "element types", function() {
 
 		// Support: FF, Chrome, and IE9,
 		// there are some rounding errors in so we can't say equal, we have to settle for close enough
-		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + "> left" );
-		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + "> top" );
+		closeEnough( offsetBefore.left, offsetAfter.left - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
+		closeEnough( offsetBefore.top, offsetAfter.top - 50, 1, "dragged[50, 50] " + "<" + typeName + ">" );
 		el.draggable("destroy");
 		el.remove();
 	});
@@ -346,31 +339,6 @@ test( "ui-draggable-handle managed correctly in nested draggables", function( as
 	parent.draggable( "destroy" );
 	assert.lacksClasses( parent, "ui-draggable-handle", "parent loses class name on destroy" );
 	assert.hasClasses( child, "ui-draggable-handle", "child retains class name on destroy" );
-});
-
-// http://bugs.jqueryui.com/ticket/7772
-// when css 'right' is set, element resizes on drag
-test( "setting right/bottom css shouldn't cause resize", function() {
-	expect( 4 );
-
-	var finalOffset,
-		element = $( "#draggable3" ),
-		origWidth = element.width(),
-		origHeight = element.height(),
-		origOffset = element.offset();
-
-	element.draggable();
-
-	TestHelpers.draggable.move( element, -50, -50 );
-
-	finalOffset = element.offset();
-	finalOffset.left += 50;
-	finalOffset.top += 50;
-
-	closeEnough( element.width(), origWidth, 1, "element retains width" );
-	closeEnough( element.height(), origHeight, 1, "element retains height" );
-	closeEnough( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
-	closeEnough( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
 });
 
 })( jQuery );
