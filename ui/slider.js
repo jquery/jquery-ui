@@ -610,13 +610,13 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: valPercent + "%" }, o.animate );
 			}
 			if ( oRange === "max" && this.orientation === "horizontal" ) {
-				this.range[ animate ? "animate" : "css" ]( { width: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
+				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: ( 100 - valPercent ) + "%" }, o.animate );
 			}
 			if ( oRange === "min" && this.orientation === "vertical" ) {
 				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { height: valPercent + "%" }, o.animate );
 			}
 			if ( oRange === "max" && this.orientation === "vertical" ) {
-				this.range[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
+				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, o.animate );
 			}
 		}
 	},

@@ -25,16 +25,31 @@
 	<br>
 	<button id="set-max-values">set values to max</button>
 	<button id="set-min-values">set values to min</button>
+	<br><br>
+	
+	<hr>
+
+	<h1>Max Range Slider</h1>
+	<h3>Animation of range and handle in sync</h3>
+	<div id="max-slider"></div>
 </div>
 
 <script>
 	var el = $( "#slider" ).slider({
-		range: true,
-		min: 0,
-		max: 100,
-		values: [ 0, 50 ]
-	});
+			range: true,
+			min: 0,
+			max: 100,
+			values: [ 0, 50 ]
+		}),
+		el2 = $( "#max-slider" ).slider({
+			range: "max",
+			animate: "slow",
+			min: 0,
+			max: 100,
+			values: 50
+		});
 
+	//range slider
 	$( "#set-max-values" ).on( "click", function() {
 		el.slider( "option", { values: [ 100, 100 ] } );
 	});
