@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/slider"
+], function( $ ) {
 
 module( "slider: methods" );
 
@@ -23,9 +26,9 @@ test( "init", function() {
 	ok( true, "arbitrary option setter after init" );
 });
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 1 );
-	domEqual( "#slider1", function() {
+	assert.domEqual( "#slider1", function() {
 		$( "#slider1" ).slider().slider( "destroy" );
 	});
 });
@@ -110,4 +113,4 @@ test( "value", function() {
 //	ok(false, "missing test - untested code is broken code." );
 //});
 
-})( jQuery );
+} );
