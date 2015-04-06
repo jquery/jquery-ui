@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "sortable", {
+define( [
+	"lib/common",
+	"ui/sortable"
+], function( common ) {
+
+common.testWidget( "sortable", {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
@@ -44,3 +49,5 @@ TestHelpers.commonWidgetTests( "sortable", {
 		update: null
 	}
 });
+
+} );

@@ -1,7 +1,8 @@
-/*
- * sortable_methods.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./sortable_test_helpers",
+	"ui/sortable"
+], function( $, sortableTestHelpers ) {
 
 module("sortable: methods");
 
@@ -47,7 +48,7 @@ test("enable", function() {
 
 	el = $("#sortable").sortable({ disabled: true });
 
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 0, ".sortable({ disabled: true })");
+	sortableTestHelpers.sort($("li", el)[0], 0, 44, 0, ".sortable({ disabled: true })");
 
 	el.sortable("enable");
 	equal(el.sortable("option", "disabled"), false, "disabled option getter");
@@ -57,7 +58,7 @@ test("enable", function() {
 	el.sortable("option", "disabled", false);
 	equal(el.sortable("option", "disabled"), false, "disabled option setter");
 
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, ".sortable('option', 'disabled', false)");
+	sortableTestHelpers.sort($("li", el)[0], 0, 44, 2, ".sortable('option', 'disabled', false)");
 
 	expected = $("<div></div>").sortable(),
 	actual = expected.sortable("enable");
@@ -70,15 +71,15 @@ test( "disable", function( assert ) {
 	var chainable,
 		element = $( "#sortable" ).sortable({ disabled: false });
 
-	TestHelpers.sortable.sort( $( "li", element )[ 0 ], 0, 44, 2, ".sortable({ disabled: false })" );
+	sortableTestHelpers.sort( $( "li", element )[ 0 ], 0, 44, 2, ".sortable({ disabled: false })" );
 
 	chainable = element.sortable( "disable" );
-	TestHelpers.sortable.sort( $( "li", element )[ 0 ], 0, 44, 0, "disabled.sortable getter" );
+	sortableTestHelpers.sort( $( "li", element )[ 0 ], 0, 44, 0, "disabled.sortable getter" );
 
 	element.sortable( "destroy" );
 
 	element.sortable({ disabled: false });
-	TestHelpers.sortable.sort( $( "li", element )[ 0 ], 0, 44, 2, ".sortable({ disabled: false })" );
+	sortableTestHelpers.sort( $( "li", element )[ 0 ], 0, 44, 2, ".sortable({ disabled: false })" );
 	element.sortable( "option", "disabled", true);
 	equal( element.sortable( "option", "disabled" ), true, "disabled option setter" );
 
@@ -86,7 +87,7 @@ test( "disable", function( assert ) {
 	ok( !element.sortable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
 	assert.hasClasses( element.sortable( "widget" ), "ui-sortable-disabled" );
 
-	TestHelpers.sortable.sort($( "li", element )[ 0 ], 0, 44, 0, ".sortable('option', 'disabled', true)" );
+	sortableTestHelpers.sort($( "li", element )[ 0 ], 0, 44, 0, ".sortable('option', 'disabled', true)" );
 	equal( chainable, element, "disable is chainable" );
 });
 
@@ -125,4 +126,4 @@ test( "refresh() should update the positions of initially empty lists (see #7498
 	equal( changeCount, 1 );
 });
 
-})(jQuery);
+} );

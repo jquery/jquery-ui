@@ -1,7 +1,7 @@
-/*
- * sortable_options.js
- */
-(function($) {
+define( [
+	"jquery",
+	"ui/sortable"
+], function( $ ) {
 
 module("sortable: options");
 
@@ -493,4 +493,4 @@ test("{ zIndex: false }", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 */
-})(jQuery);
+} );
