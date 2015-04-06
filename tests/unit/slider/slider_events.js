@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/slider"
+], function( $ ) {
 
 module( "slider: events" );
 
@@ -202,4 +205,4 @@ test( "event data", function() {
 	handles.eq( slideHandleIndex ).simulate( "drag", { dx: 10 } );
 });
 
-})( jQuery );
+} );

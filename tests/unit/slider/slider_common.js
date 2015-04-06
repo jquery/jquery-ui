@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "slider", {
+define( [
+	"lib/common",
+	"ui/slider"
+], function( common ) {
+
+common.testWidget( "slider", {
 	defaults: {
 		animate: false,
 		cancel: "input, textarea, button, select, option",
@@ -26,3 +31,5 @@ TestHelpers.commonWidgetTests( "slider", {
 		stop: null
 	}
 });
+
+} );

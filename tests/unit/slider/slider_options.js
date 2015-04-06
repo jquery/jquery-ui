@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/slider"
+], function( $ ) {
 
 var element, options;
 
@@ -54,7 +57,7 @@ test( "max", function() {
 	element.slider( options );
 	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
 	ok( element.slider( "value" ) === options.max, "value method is contained by max" );
-	
+
 	options = {
 		max: 9,
 		min: 1,
@@ -65,7 +68,7 @@ test( "max", function() {
 
 	element.slider( options );
 	ok( element.slider( "value" ) === 7, "value method is within max, edge Case" );
-	
+
 	options.step = 2;
 
 	element.slider( options );
@@ -343,4 +346,4 @@ test( "range", function( assert ) {
 	element.slider( "destroy" );
 });
 
-})( jQuery );
+} );
