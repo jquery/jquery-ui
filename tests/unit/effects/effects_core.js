@@ -1,4 +1,23 @@
-(function($) {
+define( [
+	"jquery",
+	"lib/common",
+	"ui/effect",
+	"ui/effect-blind",
+	"ui/effect-bounce",
+	"ui/effect-clip",
+	"ui/effect-drop",
+	"ui/effect-explode",
+	"ui/effect-fade",
+	"ui/effect-fold",
+	"ui/effect-highlight",
+	"ui/effect-puff",
+	"ui/effect-pulsate",
+	"ui/effect-scale",
+	"ui/effect-shake",
+	"ui/effect-size",
+	"ui/effect-slide",
+	"ui/effect-transfer"
+], function( $, common ) {
 
 function present( value, array, message ) {
 	QUnit.push( jQuery.inArray( value, array ) !== -1, value, array, message );
@@ -242,7 +261,7 @@ test( "createPlaceholder: preserves layout affecting properties", function() {
 $.each( $.effects.effect, function( effect ) {
 	module( "effects." + effect );
 
-	TestHelpers.testJshint( "effect-" + effect );
+	common.testJshint( "effect-" + effect );
 
 	if ( effect === "transfer" ) {
 		return;
@@ -319,4 +338,4 @@ $.each( $.effects.effect, function( effect ) {
 	});
 });
 
-})(jQuery);
+} );
