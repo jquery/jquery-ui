@@ -29,6 +29,36 @@ test( "mouse based interaction", function() {
 		.simulate( "drag", { dx: 10, dy: 10 } );
 
 });
+
+asyncTest( "range slider animation", function() {
+	expect( 2 );
+
+	var animateDuration = 2000,
+		element = $( "#slider1" )
+		.slider({
+			range: "max",
+			animate: animateDuration,
+			min: 0,
+			max: 100,
+			value: 0
+		}),
+		handle = element.find( ".ui-slider-handle" ),
+		highlight = element.find( ".ui-slider-range" ),
+		left = element.offset().left,
+		width = element.width();
+
+	element.simulate( "mousedown", { clientX: left + width });
+	element.simulate( "mouseup" );
+
+	setTimeout(function () {
+		element.simulate( "mousedown", { clientX: left } );
+		element.simulate( "mouseup" );
+		equal( highlight.width(), 0, "animation of range in sync" );
+		ok( Math.abs( handle.offset().left ) > Math.abs( left + width ), "animation of handle in sync" );
+		start();
+	}, animateDuration / 2);
+});
+
 test( "keyboard based interaction", function() {
 	expect( 3 );
 
