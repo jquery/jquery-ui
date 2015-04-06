@@ -1,4 +1,8 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/effect-scale"
+], function( $ ) {
+
 module( "effect.scale: Scale" );
 
 function run( position, v, h, vo, ho ) {
@@ -65,4 +69,4 @@ $(function() {
 	}
 });
 
-})( jQuery );
+} );
