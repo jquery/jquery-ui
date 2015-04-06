@@ -1,8 +1,12 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"lib/common",
+	"ui/core"
+], function( $, common ) {
 
 module( "core - jQuery extensions" );
 
-TestHelpers.testJshint( "core" );
+common.testJshint( "core" );
 
 test( "innerWidth - getter", function() {
 	expect( 2 );
@@ -134,4 +138,4 @@ test( "uniqueId / removeUniqueId", function() {
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
-})( jQuery );
+} );
