@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "resizable", {
+define( [
+	"lib/common",
+	"ui/resizable"
+], function( common ) {
+
+common.testWidget( "resizable", {
 	defaults: {
 		alsoResize: false,
 		animate: false,
@@ -31,3 +36,5 @@ TestHelpers.commonWidgetTests( "resizable", {
 		stop: null
 	}
 });
+
+} );
