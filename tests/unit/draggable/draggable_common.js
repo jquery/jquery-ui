@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "draggable", {
+define( [
+	"lib/common",
+	"ui/draggable"
+], function( common ) {
+
+common.testWidget( "draggable", {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
@@ -39,3 +44,5 @@ TestHelpers.commonWidgetTests( "draggable", {
 		stop: null
 	}
 });
+
+} );

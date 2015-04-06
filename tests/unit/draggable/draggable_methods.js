@@ -1,7 +1,8 @@
-/*
- * draggable_methods.js
- */
-(function( $ ) {
+define( [
+	"jquery",
+	"./draggable_test_helpers",
+	"ui/draggable"
+], function( $, draggableTestHelpers ) {
 
 var element;
 
@@ -54,19 +55,19 @@ test( "enable", function() {
 	expect( 11 );
 
 	element.draggable({ disabled: true });
-	TestHelpers.draggable.shouldNotDrag( element, ".draggable({ disabled: true })" );
+	draggableTestHelpers.shouldNotDrag( element, ".draggable({ disabled: true })" );
 
 	element.draggable("enable");
-	TestHelpers.draggable.shouldMove( element, ".draggable('enable')" );
+	draggableTestHelpers.shouldMove( element, ".draggable('enable')" );
 	equal( element.draggable( "option", "disabled" ), false, "disabled option getter" );
 
 	element.draggable("destroy");
 	element.draggable({ disabled: true });
-	TestHelpers.draggable.shouldNotDrag( element, ".draggable({ disabled: true })" );
+	draggableTestHelpers.shouldNotDrag( element, ".draggable({ disabled: true })" );
 
 	element.draggable( "option", "disabled", false );
 	equal(element.draggable( "option", "disabled" ), false, "disabled option setter" );
-	TestHelpers.draggable.shouldMove( element, ".draggable('option', 'disabled', false)" );
+	draggableTestHelpers.shouldMove( element, ".draggable('option', 'disabled', false)" );
 
 	var expected = element.draggable(),
 		actual = expected.draggable("enable");
@@ -77,19 +78,19 @@ test( "disable", function( assert ) {
 	expect( 14 );
 
 	element = $( "#draggable2" ).draggable({ disabled: false });
-	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );
+	draggableTestHelpers.shouldMove( element, ".draggable({ disabled: false })" );
 
 	element.draggable( "disable" );
-	TestHelpers.draggable.shouldNotDrag( element, ".draggable('disable')" );
+	draggableTestHelpers.shouldNotDrag( element, ".draggable('disable')" );
 	equal( element.draggable( "option", "disabled" ), true, "disabled option getter" );
 
 	element.draggable( "destroy" );
 	element.draggable({ disabled: false });
-	TestHelpers.draggable.shouldMove( element, ".draggable({ disabled: false })" );
+	draggableTestHelpers.shouldMove( element, ".draggable({ disabled: false })" );
 
 	element.draggable( "option", "disabled", true );
 	equal( element.draggable( "option", "disabled" ), true, "disabled option setter" );
-	TestHelpers.draggable.shouldNotDrag( element, ".draggable('option', 'disabled', true)" );
+	draggableTestHelpers.shouldNotDrag( element, ".draggable('option', 'disabled', true)" );
 
 	assert.lacksClasses( element.draggable( "widget" ), "ui-state-disabled" );
 	ok( !element.draggable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
@@ -100,4 +101,4 @@ test( "disable", function( assert ) {
 	equal( actual, expected, "disable is chainable" );
 });
 
-})( jQuery );
+} );

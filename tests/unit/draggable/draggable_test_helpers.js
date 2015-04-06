@@ -1,4 +1,7 @@
-TestHelpers.draggable = {
+define( function() {
+
+var draggableTestHelpers = {
+
 	// TODO: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
 	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
@@ -35,8 +38,8 @@ TestHelpers.draggable = {
 		});
 	},
 	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
-		TestHelpers.draggable.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
-		TestHelpers.draggable.testDragOffset( el, dx, dy, expectedDX, expectedDY, msg );
+		draggableTestHelpers.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
+		draggableTestHelpers.testDragOffset( el, dx, dy, expectedDX, expectedDY, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
@@ -45,8 +48,8 @@ TestHelpers.draggable = {
 	},
 	shouldMovePositionButNotOffset: function( el, msg, handle ) {
 		handle = handle || el;
-		TestHelpers.draggable.testDragPosition( el, 100, 100, 100, 100, msg );
-		TestHelpers.draggable.testDragHelperOffset( el, 100, 100, 0, 0, msg );
+		draggableTestHelpers.testDragPosition( el, 100, 100, 100, 100, msg );
+		draggableTestHelpers.testDragHelperOffset( el, 100, 100, 0, 0, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
@@ -55,11 +58,11 @@ TestHelpers.draggable = {
 	},
 	shouldMove: function( el, msg, handle ) {
 		handle = handle || el;
-		TestHelpers.draggable.testDrag( el, handle, 100, 100, 100, 100, msg );
+		draggableTestHelpers.testDrag( el, handle, 100, 100, 100, 100, msg );
 	},
 	shouldNotMove: function( el, msg, handle ) {
 		handle = handle || el;
-		TestHelpers.draggable.testDrag( el, handle, 100, 100, 0, 0, msg );
+		draggableTestHelpers.testDrag( el, handle, 100, 100, 0, 0, msg );
 	},
 	shouldNotDrag: function( el, msg, handle ) {
 		handle = handle || el;
@@ -93,7 +96,7 @@ TestHelpers.draggable = {
 	testScroll: function( el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
 		$( "#main" ).css({ position: position, top: "0px", left: "0px" });
-		TestHelpers.draggable.shouldMove( el, position + " parent" );
+		draggableTestHelpers.shouldMove( el, position + " parent" );
 		$( "#main" ).css( "position", oldPosition );
 	},
 	restoreScroll: function( what ) {
@@ -129,3 +132,7 @@ TestHelpers.draggable = {
 		});
 	}
 };
+
+return draggableTestHelpers;
+
+} );
