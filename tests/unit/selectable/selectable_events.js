@@ -1,7 +1,8 @@
-/*
- * selectable_events.js
- */
-(function( $ ) {
+define( [
+	"jquery",
+	"lib/helper",
+	"ui/selectable"
+], function( $, testHelpers ) {
 
 module("selectable: events");
 
@@ -40,7 +41,7 @@ test( "mousedown: initial position of helper", function() {
 
 	var helperOffset,
 		element = $( "#selectable1" ).selectable(),
-		contentToForceScroll = TestHelpers.forceScrollableWindow( "body" );
+		contentToForceScroll = testHelpers.forceScrollableWindow( "body" );
 
 	$( window ).scrollTop( 100 ).scrollLeft( 100 );
 
@@ -59,4 +60,4 @@ test( "mousedown: initial position of helper", function() {
 	$( window ).scrollTop( 0 ).scrollLeft( 0 );
 });
 
-})( jQuery );
+} );

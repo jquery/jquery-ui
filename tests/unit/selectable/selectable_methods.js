@@ -1,7 +1,7 @@
-/*
- * selectable_methods.js
- */
-(function($) {
+define( [
+	"jquery",
+	"ui/selectable"
+], function( $ ) {
 
 module("selectable: methods");
 
@@ -108,4 +108,4 @@ test( "disable", function( assert ) {
 	equal( chainable, element, "disable is chainable" );
 });
 
-})(jQuery);
+} );

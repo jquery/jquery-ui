@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests("selectable", {
+define( [
+	"lib/common",
+	"ui/selectable"
+], function( common ) {
+
+common.testWidget( "selectable", {
 	defaults: {
 		appendTo: "body",
 		autoRefresh: true,
@@ -20,3 +25,5 @@ TestHelpers.commonWidgetTests("selectable", {
 		unselecting: null
 	}
 });
+
+} );
