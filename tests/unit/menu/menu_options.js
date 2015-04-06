@@ -1,12 +1,16 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./menu_test_helpers",
+	"ui/menu"
+], function( $, menuTestHelpers ) {
 
-var log = TestHelpers.menu.log,
-	logOutput = TestHelpers.menu.logOutput,
-	click = TestHelpers.menu.click;
+var log = menuTestHelpers.log,
+	logOutput = menuTestHelpers.logOutput,
+	click = menuTestHelpers.click;
 
 module( "menu: options", {
 	setup: function() {
-		TestHelpers.menu.clearLog();
+		menuTestHelpers.clearLog();
 	}
 });
 
@@ -118,4 +122,4 @@ test( "{ role: null }", function( assert ) {
 	});
 });
 
-})( jQuery );
+} );

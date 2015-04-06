@@ -1,4 +1,8 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./menu_test_helpers",
+	"ui/menu"
+], function( $, menuTestHelpers ) {
 
 module( "menu: core" );
 
@@ -47,7 +51,7 @@ asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", functio
 		$( "#test9044" ).focus();
 	});
 
-	TestHelpers.menu.click( element, "3" );
+	menuTestHelpers.click( element, "3" );
 	setTimeout( function() {
 		equal( document.activeElement.id, "test9044", "Focus was swallowed by menu" );
 		$( "#test9044" ).remove();
@@ -69,4 +73,4 @@ asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected 
 	});
 });
 
-})( jQuery );
+} );
