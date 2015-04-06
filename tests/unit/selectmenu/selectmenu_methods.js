@@ -1,10 +1,13 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/selectmenu"
+], function( $ ) {
 
 module( "selectmenu: methods" );
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 1 );
-	domEqual( "#speed", function() {
+	assert.domEqual( "#speed", function() {
 		$( "#speed" ).selectmenu().selectmenu( "destroy" );
 	});
 });
@@ -183,4 +186,4 @@ test( "widget and menuWidget", function( assert ) {
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
 });
 
-})( jQuery );
+} );
