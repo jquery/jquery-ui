@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "selectmenu", {
+define( [
+	"lib/common",
+	"ui/selectmenu"
+], function( common ) {
+
+common.testWidget( "selectmenu", {
 	defaults: {
 		appendTo: null,
 		classes: {
@@ -25,3 +30,5 @@ TestHelpers.commonWidgetTests( "selectmenu", {
 		select: null
 	}
 });
+
+} );
