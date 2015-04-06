@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
 
 module( "progressbar: core" );
 
@@ -58,4 +61,4 @@ test( "accessibility", function() {
 	equal( element.attr( "aria-valuenow" ), null, "aria-valuenow" );
 });
 
-}( jQuery ) );
+} );

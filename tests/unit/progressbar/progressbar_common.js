@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "progressbar", {
+define( [
+	"lib/common",
+	"ui/progressbar"
+], function( common ) {
+
+common.testWidget( "progressbar", {
 	defaults: {
 		classes: {
 			"ui-progressbar": "ui-corner-all",
@@ -15,3 +20,5 @@ TestHelpers.commonWidgetTests( "progressbar", {
 		create: null
 	}
 });
+
+} );
