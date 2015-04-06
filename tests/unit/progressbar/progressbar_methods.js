@@ -1,10 +1,13 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
 
 module( "progressbar: methods" );
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 1 );
-	domEqual( "#progressbar", function() {
+	assert.domEqual( "#progressbar", function() {
 		$( "#progressbar" ).progressbar().progressbar( "destroy" );
 	});
 });
@@ -36,4 +39,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
-}( jQuery ) );
+} );

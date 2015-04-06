@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
 
 module( "progressbar: options" );
 
@@ -73,4 +76,4 @@ test( "change max below value", function() {
 		"value constrained at max" );
 });
 
-}( jQuery ) );
+} );

@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/progressbar"
+], function( $ ) {
 
 module( "progressbar: events" );
 
@@ -52,4 +55,4 @@ test( "complete", function() {
 	element.progressbar( "value", value );
 });
 
-}( jQuery ) );
+} );
