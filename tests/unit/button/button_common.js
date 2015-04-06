@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "button", {
+define( [
+	"lib/common",
+	"ui/button"
+], function( common ) {
+
+common.testWidget( "button", {
 	defaults: {
 		classes: {},
 		disabled: null,
@@ -13,3 +18,5 @@ TestHelpers.commonWidgetTests( "button", {
 		create: null
 	}
 });
+
+} );
