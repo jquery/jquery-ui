@@ -1,8 +1,12 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./tabs_test_helpers",
+	"ui/tabs"
+], function( $, tabsTestHelpers ) {
 
-var disabled = TestHelpers.tabs.disabled,
-	equalHeight = TestHelpers.tabs.equalHeight,
-	state = TestHelpers.tabs.state;
+var disabled = tabsTestHelpers.disabled,
+	equalHeight = tabsTestHelpers.equalHeight,
+	state = tabsTestHelpers.state;
 
 module( "tabs: options" );
 
@@ -367,4 +371,4 @@ asyncTest( "hide and show - animation", function() {
 	element.tabs( "option", "active", 1 );
 });
 
-}( jQuery ) );
+} );

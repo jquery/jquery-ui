@@ -1,6 +1,10 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./tabs_test_helpers",
+	"ui/tabs"
+], function( $, tabsTestHelpers ) {
 
-var state = TestHelpers.tabs.state;
+var state = tabsTestHelpers.state;
 
 module( "tabs: events" );
 
@@ -315,4 +319,4 @@ asyncTest( "load", function() {
 	}
 });
 
-}( jQuery ) );
+} );
