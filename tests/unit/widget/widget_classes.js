@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/widget"
+], function( $ ) {
 
 module( "widget factory classes", {
 	setup: function() {
@@ -115,10 +118,10 @@ test( ".option() - classes setter", function( assert ) {
 		"Appending a class to the current value works as expected" );
 });
 
-test( ".destroy() - class removal", function() {
+test( ".destroy() - class removal", function( assert ) {
 	expect( 1 );
 
-	domEqual( "#widget", function() {
+	assert.domEqual( "#widget", function() {
 		$( "#widget" ).classesWidget().classesWidget( "destroy" );
 	});
 });
@@ -140,4 +143,4 @@ test( "._add/_remove/_toggleClass()", function( assert ) {
 	elementLacksClasses( widget, "remove", assert );
 });
 
-}( jQuery ) );
+} );
