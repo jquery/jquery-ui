@@ -1,4 +1,9 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/spinner",
+	"globalize",
+	"globalize/ja-JP"
+], function( $ ) {
 
 module( "spinner: options" );
 
@@ -263,4 +268,4 @@ test( "step, string", function() {
 	equal( element.val(), "$0.70", "stepUp" );
 });
 
-})( jQuery );
+} );

@@ -1,6 +1,10 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./spinner_test_helpers",
+	"ui/spinner"
+], function( $, spinnerTestHelpers ) {
 
-var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+var simulateKeyDownUp = spinnerTestHelpers.simulateKeyDownUp;
 
 module( "spinner: events" );
 
@@ -256,4 +260,4 @@ asyncTest( "change", function() {
 	setTimeout( step1 );
 });
 
-})( jQuery );
+} );

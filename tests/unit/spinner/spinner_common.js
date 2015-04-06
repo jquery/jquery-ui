@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "spinner", {
+define( [
+	"lib/common",
+	"ui/spinner"
+], function( common ) {
+
+common.testWidget( "spinner", {
 	defaults: {
 		classes: {
 			"ui-spinner": "ui-corner-all",
@@ -26,3 +31,5 @@ TestHelpers.commonWidgetTests( "spinner", {
 		stop: null
 	}
 });
+
+} );
