@@ -1,7 +1,7 @@
-/*
- * draggable_events.js
- */
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/draggable"
+], function( $ ) {
 
 var element;
 
@@ -161,4 +161,4 @@ test( "position and offset in hash is consistent between start, drag, and stop",
 	deepEqual( dragOffset, stopOffset, "drag offset equals stop offset" );
 });
 
-})( jQuery );
+} );
