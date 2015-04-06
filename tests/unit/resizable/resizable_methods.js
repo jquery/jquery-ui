@@ -1,7 +1,7 @@
-/*
- * resizable_methods.js
- */
-(function($) {
+define( [
+	"jquery",
+	"ui/resizable"
+], function( $ ) {
 
 module( "resizable: methods" );
 
@@ -18,4 +18,4 @@ test( "disable", function( assert ) {
 	equal( chainable, element, "disable is chainable" );
 });
 
-})(jQuery);
+} );
