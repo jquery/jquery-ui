@@ -1,8 +1,8 @@
-/*
- * sortable_core.js
- */
-
-(function( $ ) {
+define( [
+	"jquery",
+	"./sortable_test_helpers",
+	"ui/sortable"
+], function( $, sortableTestHelpers ) {
 
 module( "sortable: core" );
 
@@ -13,7 +13,7 @@ test( "#9314: Sortable: Items cannot be dragged directly into bottom position", 
 			connectWith: ".connectWith"
 		});
 
-	TestHelpers.sortable.sort( $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
+	sortableTestHelpers.sort( $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
 });
 
 test( "ui-sortable-handle applied to appropriate element", function( assert ) {
@@ -39,4 +39,4 @@ test( "ui-sortable-handle applied to appropriate element", function( assert ) {
 	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
 });
 
-})( jQuery );
+} );

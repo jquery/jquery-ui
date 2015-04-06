@@ -1,7 +1,9 @@
-/*
- * sortable_events.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./sortable_test_helpers",
+	"ui/sortable",
+	"ui/draggable"
+], function( $, sortableTestHelpers ) {
 
 module("sortable: events");
 
@@ -170,7 +172,7 @@ test("#3019: Stop fires too early", function() {
 			}
 		});
 
-	TestHelpers.sortable.sort($("li", el)[0], 0, 44, 2, "Dragging the sortable");
+	sortableTestHelpers.sort($("li", el)[0], 0, 44, 2, "Dragging the sortable");
 	equal(helper, null, "helper should be false");
 
 });
@@ -373,4 +375,4 @@ test("deactivate", function() {
 });
 */
 
-})(jQuery);
+} );

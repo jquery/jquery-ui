@@ -1,4 +1,6 @@
-TestHelpers.sortable = {
+define( function() {
+
+return {
 	sort: function( handle, dx, dy, index, msg ) {
 		$( handle ).simulate( "drag", {
 			dx: dx,
@@ -7,3 +9,5 @@ TestHelpers.sortable = {
 		equal( $( handle ).parent().children().index( handle ), index, msg );
 	}
 };
+
+} );
