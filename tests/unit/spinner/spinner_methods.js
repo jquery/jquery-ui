@@ -1,12 +1,16 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./spinner_test_helpers",
+	"ui/spinner"
+], function( $, spinnerTestHelpers ) {
 
-var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+var simulateKeyDownUp = spinnerTestHelpers.simulateKeyDownUp;
 
 module( "spinner: methods" );
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 1 );
-	domEqual( "#spin", function() {
+	assert.domEqual( "#spin", function() {
 		$( "#spin" ).spinner().spinner( "destroy" );
 	});
 });
@@ -204,4 +208,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element.parent()[ 0 ], "parent element" );
 });
 
-})( jQuery );
+} );

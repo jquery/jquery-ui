@@ -2,6 +2,8 @@
 
 window.requirejs = {
 	paths: {
+		"globalize": "../../../external/globalize/globalize",
+		"globalize/ja-JP": "../../../external/globalize/globalize.culture.ja-JP",
 		"jquery": jqueryUrl(),
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
@@ -12,6 +14,7 @@ window.requirejs = {
 		"ui": "../../../ui"
 	},
 	shim: {
+		"globalize/ja-JP": [ "globalize" ],
 		"jquery-simulate": [ "jquery" ],
 		"qunit-assert-classes": [ "qunit" ]
 	}

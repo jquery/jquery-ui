@@ -1,6 +1,10 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./spinner_test_helpers",
+	"ui/spinner"
+], function( $, spinnerTestHelpers ) {
 
-var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+var simulateKeyDownUp = spinnerTestHelpers.simulateKeyDownUp;
 
 module( "spinner: core" );
 
@@ -250,4 +254,4 @@ test( "precision", function() {
 	equal( element.val(), "0.05", "precision from min" );
 });
 
-})( jQuery );
+} );
