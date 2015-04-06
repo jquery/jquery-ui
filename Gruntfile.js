@@ -280,6 +280,10 @@ grunt.initConfig({
 				"qunit-assert-classes/qunit-assert-classes.js": "qunit-assert-classes/qunit-assert-classes.js",
 				"qunit-assert-classes/LICENSE.txt": "qunit-assert-classes/LICENSE",
 
+				"qunit-composite/qunit-composite.js": "qunit-composite/qunit-composite.js",
+				"qunit-composite/qunit-composite.css": "qunit-composite/qunit-composite.css",
+				"qunit-composite/LICENSE.txt": "qunit-composite/LICENSE.txt",
+
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
 
