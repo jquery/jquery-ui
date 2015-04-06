@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "menu", {
+define( [
+	"lib/common",
+	"ui/menu"
+], function( common ) {
+
+common.testWidget( "menu", {
 	defaults: {
 		classes: {},
 		disabled: false,
@@ -20,3 +25,5 @@ TestHelpers.commonWidgetTests( "menu", {
 		select: null
 	}
 });
+
+} );

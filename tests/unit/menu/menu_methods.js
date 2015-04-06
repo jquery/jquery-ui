@@ -1,21 +1,25 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./menu_test_helpers",
+	"ui/menu"
+], function( $, menuTestHelpers ) {
 
-var log = TestHelpers.menu.log,
-	logOutput = TestHelpers.menu.logOutput,
-	click = TestHelpers.menu.click;
+var log = menuTestHelpers.log,
+	logOutput = menuTestHelpers.logOutput,
+	click = menuTestHelpers.click;
 
 module( "menu: methods", {
 	setup: function() {
-		TestHelpers.menu.clearLog();
+		menuTestHelpers.clearLog();
 	}
 });
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 2 );
-	domEqual( "#menu2", function() {
+	assert.domEqual( "#menu2", function() {
 		$( "#menu2" ).menu().menu( "destroy" );
 	});
-	domEqual( "#menu5", function() {
+	assert.domEqual( "#menu5", function() {
 		$( "#menu5").menu().menu( "destroy" );
 	});
 });
@@ -109,4 +113,4 @@ test( "widget", function() {
 
 // TODO: test select method
 
-})( jQuery );
+} );
