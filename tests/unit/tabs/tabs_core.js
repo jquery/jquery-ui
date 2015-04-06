@@ -1,6 +1,10 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./tabs_test_helpers",
+	"ui/tabs"
+], function( $, tabsTestHelpers ) {
 
-var state = TestHelpers.tabs.state;
+var state = tabsTestHelpers.state;
 
 module( "tabs: core" );
 
@@ -660,4 +664,4 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 	state( element, 1 );
 });
 
-}( jQuery ) );
+} );

@@ -1,23 +1,27 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"./tabs_test_helpers",
+	"ui/tabs"
+], function( $, tabsTestHelpers ) {
 
-var disabled = TestHelpers.tabs.disabled,
-	state = TestHelpers.tabs.state;
+var disabled = tabsTestHelpers.disabled,
+	state = tabsTestHelpers.state;
 
 module( "tabs: methods" );
 
-test( "destroy", function() {
+test( "destroy", function( assert ) {
 	expect( 2 );
-	domEqual( "#tabs1", function() {
+	assert.domEqual( "#tabs1", function() {
 		$( "#tabs1" ).tabs().tabs( "destroy" );
 	});
-	domEqual( "#tabs2", function() {
+	assert.domEqual( "#tabs2", function() {
 		$( "#tabs2" ).tabs().tabs( "destroy" );
 	});
 });
 
-asyncTest( "destroy - ajax", function() {
+asyncTest( "destroy - ajax", function( assert ) {
 	expect( 1 );
-	domEqual( "#tabs2", function( done ) {
+	assert.domEqual( "#tabs2", function( done ) {
 		var element = $( "#tabs2" ).tabs({
 			load: function() {
 				setTimeout(function() {
@@ -283,4 +287,4 @@ test( "widget", function() {
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
 
-}( jQuery ) );
+} );

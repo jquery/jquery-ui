@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "tabs", {
+define( [
+	"lib/common",
+	"ui/tabs"
+], function( common ) {
+
+common.testWidget( "tabs", {
 	defaults: {
 		active: null,
 		classes: {
@@ -22,3 +27,5 @@ TestHelpers.commonWidgetTests( "tabs", {
 		load: null
 	}
 });
+
+} );
