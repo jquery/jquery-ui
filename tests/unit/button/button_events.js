@@ -1,7 +1,7 @@
-/*
- * button_events.js
- */
-(function($) {
+define( [
+	"jquery",
+	"ui/button"
+], function( $ ) {
 
 module("button: events");
 
@@ -33,4 +33,4 @@ asyncTest( "when button loses focus, ensure active state is removed (#8559)", fu
 	});
 });
 
-})(jQuery);
+} );

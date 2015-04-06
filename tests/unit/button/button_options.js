@@ -1,7 +1,7 @@
-/*
- * button_options.js
- */
-(function($) {
+define( [
+	"jquery",
+	"ui/button"
+], function( $ ) {
 
 module( "button: options" );
 
@@ -154,4 +154,4 @@ test( "#5295 - button does not remove hoverstate if disabled" , function( assert
 	assert.lacksClasses( btn, "ui-state-hover" );
 });
 
-})(jQuery);
+} );
