@@ -1,3 +1,7 @@
+define( [
+	"jquery",
+	"ui/widget"
+], function( $ ) {
 
 module( "widget animation", (function() {
 	var show = $.fn.show,
@@ -255,3 +259,5 @@ asyncTest( "show: object(effect)", function() {
 			next();
 		});
 });
+
+} );

@@ -1,4 +1,8 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"lib/common",
+	"ui/widget"
+], function( $, common ) {
 
 module( "widget factory", {
 	teardown: function() {
@@ -9,7 +13,7 @@ module( "widget factory", {
 	}
 });
 
-TestHelpers.testJshint( "widget" );
+common.testJshint( "widget" );
 
 test( "widget creation", function() {
 	expect( 5 );
@@ -1507,4 +1511,4 @@ test( "$.widget.bridge() - widgetFullName", function() {
 	equal( typeof instance, "object", "instance stored in .data(widgetFullName)" );
 });
 
-}( jQuery ) );
+} );
