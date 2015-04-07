@@ -1,7 +1,8 @@
-/*
- * datepicker_events.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./datepicker_test_helpers",
+	"ui/datepicker"
+], function( $, datepickerTestHelpers ) {
 
 module("datepicker: events");
 
@@ -24,13 +25,13 @@ function callback2(year, month, inst) {
 test("events", function() {
 	expect( 26 );
 	var dateStr, newMonthYear, inp2,
-		inp = TestHelpers.datepicker.init("#inp", {onSelect: callback}),
+		inp = datepickerTestHelpers.init("#inp", {onSelect: callback}),
 	date = new Date();
 	// onSelect
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	equal(selectedThis, inp[0], "Callback selected this");
-	equal(selectedInst, $.data(inp[0], TestHelpers.datepicker.PROP_NAME), "Callback selected inst");
+	equal(selectedInst, $.data(inp[0], datepickerTestHelpers.PROP_NAME), "Callback selected inst");
 	equal(selectedDate, $.datepicker.formatDate("mm/dd/yy", date),
 		"Callback selected date");
 	inp.val("").datepicker("show").
@@ -59,7 +60,7 @@ test("events", function() {
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP});
 	date.setMonth(date.getMonth() - 1);
 	equal(selectedThis, inp[0], "Callback change month/year this");
-	equal(selectedInst, $.data(inp[0], TestHelpers.datepicker.PROP_NAME), "Callback change month/year inst");
+	equal(selectedInst, $.data(inp[0], datepickerTestHelpers.PROP_NAME), "Callback change month/year inst");
 	equal(selectedDate, newMonthYear(date),
 		"Callback change month/year date - pgup");
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN});
@@ -107,7 +108,7 @@ test("events", function() {
 		val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
 	equal(selectedThis, inp[0], "Callback close this");
-	equal(selectedInst, $.data(inp[0], TestHelpers.datepicker.PROP_NAME), "Callback close inst");
+	equal(selectedInst, $.data(inp[0], datepickerTestHelpers.PROP_NAME), "Callback close inst");
 	equal(selectedDate, "", "Callback close date - esc");
 	inp.val("").datepicker("show").
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
@@ -120,7 +121,7 @@ test("events", function() {
 		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.END});
 	equal(selectedDate, "", "Callback close date - ctrl+end");
 
-	inp2 = TestHelpers.datepicker.init("#inp2");
+	inp2 = datepickerTestHelpers.init("#inp2");
 	inp2.datepicker().datepicker("option", {onClose: callback}).datepicker("show");
 	inp.datepicker("show");
 	equal(selectedThis, inp2[0], "Callback close this");
@@ -128,7 +129,7 @@ test("events", function() {
 
 test("beforeShowDay-getDate", function() {
 	expect( 3 );
-	var inp = TestHelpers.datepicker.init("#inp", {beforeShowDay: function() { inp.datepicker("getDate"); return [true, ""]; }}),
+	var inp = datepickerTestHelpers.init("#inp", {beforeShowDay: function() { inp.datepicker("getDate"); return [true, ""]; }}),
 		dp = $("#ui-datepicker-div");
 	inp.val("01/01/2010").datepicker("show");
 	// contains non-breaking space
@@ -150,4 +151,4 @@ test("beforeShowDay-getDate", function() {
 	inp.datepicker("hide");
 });
 
-})(jQuery);
+} );

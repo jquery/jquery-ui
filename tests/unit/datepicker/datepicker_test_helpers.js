@@ -1,4 +1,9 @@
-TestHelpers.datepicker = {
+define( [
+	"lib/helper",
+	"ui/datepicker"
+], function( testHelpers ) {
+
+var datepickerTestHelpers = {
 	addMonths: function(date, offset) {
 		var maxDay = 32 - new Date(date.getFullYear(), date.getMonth() + offset, 32).getDate();
 		date.setDate(Math.min(date.getDate(), maxDay));
@@ -20,8 +25,12 @@ TestHelpers.datepicker = {
 	},
 	initNewInput: function( options ) {
 		var id = $( "<input>" ).appendTo( "#qunit-fixture" );
-		return TestHelpers.datepicker.init( id, options );
+		return datepickerTestHelpers.init( id, options );
 	},
-	onFocus: TestHelpers.onFocus,
+	onFocus: testHelpers.onFocus,
 	PROP_NAME: "datepicker"
 };
+
+return datepickerTestHelpers;
+
+} );
