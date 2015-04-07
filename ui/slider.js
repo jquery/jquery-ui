@@ -199,18 +199,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_canBeDrag: function( index ) {
-		var values,
-			val = this.values( index ),
+		var val = this.values( index ),
 			prev = this.values( index - 1 ),
 			next = this.values( index + 1 );
 
 		prev = isNaN( prev ) ? this._valueMin() : prev;
 		next = isNaN( next ) ? this._valueMax() : next;
-		values = [ prev, val, next ];
 
-		return $.grep( values, function( v, k ) {
-			return $.inArray( v, values ) === k;
-		}).length > 1;
+		return !( prev === val && val === next );
 	},
 
 	_mouseCapture: function( event ) {
