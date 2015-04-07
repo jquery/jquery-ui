@@ -1,6 +1,10 @@
-define( function() {
+define( [
+	"jquery",
+	"lib/helper",
+	"ui/accordion"
+], function( $, helper ) {
 
-return {
+return $.extend( helper, {
 	equalHeight: function( accordion, height ) {
 		accordion.find( ".ui-accordion-content" ).each(function() {
 			equal( $( this ).outerHeight(), height );
@@ -26,7 +30,6 @@ return {
 			}).get();
 		QUnit.push( QUnit.equiv(actual, expected), actual, expected );
 	}
-
-};
+} );
 
 } );

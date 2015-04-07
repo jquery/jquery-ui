@@ -1,6 +1,9 @@
-define( function() {
+define( [
+	"jquery",
+	"lib/helper"
+], function( $, helper ) {
 
-return {
+return $.extend( helper, {
 	sort: function( handle, dx, dy, index, msg ) {
 		$( handle ).simulate( "drag", {
 			dx: dx,
@@ -8,6 +11,6 @@ return {
 		});
 		equal( $( handle ).parent().children().index( handle ), index, msg );
 	}
-};
+} );
 
 } );

@@ -2,11 +2,11 @@ define( [
 	"jquery",
 	"./accordion_test_helpers",
 	"ui/accordion"
-], function( $, accordionTestHelper ) {
+], function( $, testHelper ) {
 
-var equalHeight = accordionTestHelper.equalHeight,
-	setupTeardown = accordionTestHelper.setupTeardown,
-	state = accordionTestHelper.state;
+var equalHeight = testHelper.equalHeight,
+	setupTeardown = testHelper.setupTeardown,
+	state = testHelper.state;
 
 module( "accordion: options", setupTeardown() );
 

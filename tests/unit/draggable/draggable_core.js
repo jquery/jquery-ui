@@ -1,11 +1,10 @@
 define( [
 	"jquery",
-	"lib/helper",
 	"./draggable_test_helpers",
 	"ui/draggable",
 	"ui/droppable",
 	"ui/resizable"
-], function( $, testHelpers, draggableTestHelpers ) {
+], function( $, testHelper ) {
 
 module( "draggable: core" );
 
@@ -54,12 +53,12 @@ test( "element types", function( assert ) {
 
 test( "No options, relative", function() {
 	expect( 2 );
-	draggableTestHelpers.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
+	testHelper.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
 });
 
 test( "No options, absolute", function() {
 	expect( 2 );
-	draggableTestHelpers.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
+	testHelper.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
 });
 
 test( "resizable handle with complex markup (#8756 / #8757)", function() {
@@ -102,7 +101,7 @@ test( "#8269: Removing draggable element on drop", function() {
 	});
 
 	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
-	if ( draggableTestHelpers.unreliableContains ) {
+	if ( testHelper.unreliableContains ) {
 		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 	} else {
@@ -128,7 +127,7 @@ test( "Stray mousemove after mousedown still drags", function() {
 		$( document ).simulate( "mousemove", { button: -1 });
 	});
 
-	draggableTestHelpers.shouldMove( element, "element is draggable" );
+	testHelper.shouldMove( element, "element is draggable" );
 });
 
 test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
@@ -148,7 +147,7 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 		oldOverflowY = $( "html" ).css( "overflow-y" ),
 		oldOverflowX = $( "html" ).css( "overflow-x" );
 
-		testHelpers.forceScrollableWindow();
+		testHelper.forceScrollableWindow();
 
 		$( "html" )
 			.css( "overflow-y", "scroll" )
@@ -174,7 +173,7 @@ test( "#9315: jumps down with offset of scrollbar", function() {
 			}
 		});
 
-		testHelpers.forceScrollableWindow();
+		testHelper.forceScrollableWindow();
 
 		$( "html" ).scrollTop( 300 ).scrollLeft( 300 );
 
@@ -208,7 +207,7 @@ test( "scroll offset with fixed ancestors", function() {
 				}
 			});
 
-	testHelpers.forceScrollableWindow();
+	testHelper.forceScrollableWindow();
 
 	$( "#wrapper" ).css( "position", "fixed" );
 	$( "#wrapper2" ).css( "position", "absolute" );
@@ -279,8 +278,8 @@ test( "#5727: draggable from iframe", function() {
 	equal( draggable1.closest( iframeBody ).length, 1 );
 
 	// TODO: fix draggable within an IFRAME to fire events on the element properly
-	// and these draggableTestHelpers.shouldMove relies on events for testing
-	//draggableTestHelpers.shouldMove( draggable1, "draggable from an iframe" );
+	// and these testHelper.shouldMove relies on events for testing
+	//testHelper.shouldMove( draggable1, "draggable from an iframe" );
 });
 
 test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function() {
@@ -292,7 +291,7 @@ test( "#8399: A draggable should become the active element after you are finishe
 		notStrictEqual( document.activeElement, element.get( 0 ), "moving a draggable anchor did not make it the active element" );
 	});
 
-	draggableTestHelpers.move( element, 50, 50 );
+	testHelper.move( element, 50, 50 );
 
 	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
 });
@@ -303,16 +302,16 @@ asyncTest( "blur behavior", function() {
 	var element = $( "#draggable1" ).draggable(),
 		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
 
-	testHelpers.onFocus( focusElement, function() {
+	testHelper.onFocus( focusElement, function() {
 		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
 
-		draggableTestHelpers.move( focusElement, 1, 1 );
+		testHelper.move( focusElement, 1, 1 );
 
 		// http://bugs.jqueryui.com/ticket/10527
 		// Draggable: Can't select option in modal dialog (IE8)
 		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
 
-		draggableTestHelpers.move( element, 50, 50 );
+		testHelper.move( element, 50, 50 );
 
 		// http://bugs.jqueryui.com/ticket/4261
 		// active element should blur when mousing down on a draggable
@@ -364,7 +363,7 @@ test( "setting right/bottom css shouldn't cause resize", function( assert ) {
 
 	element.draggable();
 
-	draggableTestHelpers.move( element, -50, -50 );
+	testHelper.move( element, -50, -50 );
 
 	finalOffset = element.offset();
 	finalOffset.left += 50;

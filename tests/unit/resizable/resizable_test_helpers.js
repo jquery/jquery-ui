@@ -1,6 +1,9 @@
-define( function() {
+define( [
+	"jquery",
+	"lib/helper"
+], function( $, helper ) {
 
-return {
+return $.extend( helper, {
 	drag: function( el, dx, dy ) {
 		// this mouseover is to work around a limitation in resizable
 		// TODO: fix resizable so handle doesn't require mouseover in order to be used
@@ -10,6 +13,6 @@ return {
 			dy: dy
 		});
 	}
-};
+} );
 
 } );

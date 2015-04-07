@@ -2,10 +2,10 @@ define( [
 	"jquery",
 	"./accordion_test_helpers",
 	"ui/accordion"
-], function( $, accordionTestHelper ) {
+], function( $, testHelper ) {
 
-var setupTeardown = accordionTestHelper.setupTeardown,
-	state = accordionTestHelper.state;
+var setupTeardown = testHelper.setupTeardown,
+	state = testHelper.state;
 
 module( "accordion: events", setupTeardown() );
 

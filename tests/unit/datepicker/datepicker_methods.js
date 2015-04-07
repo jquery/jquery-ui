@@ -2,72 +2,72 @@ define( [
 	"jquery",
 	"./datepicker_test_helpers",
 	"ui/datepicker"
-], function( $, datepickerTestHelpers ) {
+], function( $, testHelper ) {
 
 module("datepicker: methods");
 
 test("destroy", function() {
 	expect( 33 );
 	var inl,
-		inp = datepickerTestHelpers.init("#inp");
+		inp = testHelper.init("#inp");
 	ok(inp.is(".hasDatepicker"), "Default - marker class set");
-	ok($.data(inp[0], datepickerTestHelpers.PROP_NAME), "Default - instance present");
+	ok($.data(inp[0], testHelper.PROP_NAME), "Default - instance present");
 	ok(inp.next().is("#alt"), "Default - button absent");
 	inp.datepicker("destroy");
 	inp = $("#inp");
 	ok(!inp.is(".hasDatepicker"), "Default - marker class cleared");
-	ok(!$.data(inp[0], datepickerTestHelpers.PROP_NAME), "Default - instance absent");
+	ok(!$.data(inp[0], testHelper.PROP_NAME), "Default - instance absent");
 	ok(inp.next().is("#alt"), "Default - button absent");
 	// With button
-	inp= datepickerTestHelpers.init("#inp", {showOn: "both"});
+	inp= testHelper.init("#inp", {showOn: "both"});
 	ok(inp.is(".hasDatepicker"), "Button - marker class set");
-	ok($.data(inp[0], datepickerTestHelpers.PROP_NAME), "Button - instance present");
+	ok($.data(inp[0], testHelper.PROP_NAME), "Button - instance present");
 	ok(inp.next().text() === "...", "Button - button added");
 	inp.datepicker("destroy");
 	inp = $("#inp");
 	ok(!inp.is(".hasDatepicker"), "Button - marker class cleared");
-	ok(!$.data(inp[0], datepickerTestHelpers.PROP_NAME), "Button - instance absent");
+	ok(!$.data(inp[0], testHelper.PROP_NAME), "Button - instance absent");
 	ok(inp.next().is("#alt"), "Button - button removed");
 	// With append text
-	inp = datepickerTestHelpers.init("#inp", {appendText: "Testing"});
+	inp = testHelper.init("#inp", {appendText: "Testing"});
 	ok(inp.is(".hasDatepicker"), "Append - marker class set");
-	ok($.data(inp[0], datepickerTestHelpers.PROP_NAME), "Append - instance present");
+	ok($.data(inp[0], testHelper.PROP_NAME), "Append - instance present");
 	ok(inp.next().text() === "Testing", "Append - append text added");
 	inp.datepicker("destroy");
 	inp = $("#inp");
 	ok(!inp.is(".hasDatepicker"), "Append - marker class cleared");
-	ok(!$.data(inp[0], datepickerTestHelpers.PROP_NAME), "Append - instance absent");
+	ok(!$.data(inp[0], testHelper.PROP_NAME), "Append - instance absent");
 	ok(inp.next().is("#alt"), "Append - append text removed");
 	// With both
-	inp= datepickerTestHelpers.init("#inp", {showOn: "both", buttonImageOnly: true,
+	inp= testHelper.init("#inp", {showOn: "both", buttonImageOnly: true,
 		buttonImage: "images/calendar.gif", appendText: "Testing"});
 	ok(inp.is(".hasDatepicker"), "Both - marker class set");
-	ok($.data(inp[0], datepickerTestHelpers.PROP_NAME), "Both - instance present");
+	ok($.data(inp[0], testHelper.PROP_NAME), "Both - instance present");
 	ok(inp.next()[0].nodeName.toLowerCase() === "img", "Both - button added");
 	ok(inp.next().next().text() === "Testing", "Both - append text added");
 	inp.datepicker("destroy");
 	inp = $("#inp");
 	ok(!inp.is(".hasDatepicker"), "Both - marker class cleared");
-	ok(!$.data(inp[0], datepickerTestHelpers.PROP_NAME), "Both - instance absent");
+	ok(!$.data(inp[0], testHelper.PROP_NAME), "Both - instance absent");
 	ok(inp.next().is("#alt"), "Both - button and append text absent");
 	// Inline
-	inl = datepickerTestHelpers.init("#inl");
+	inl = testHelper.init("#inl");
 	ok(inl.is(".hasDatepicker"), "Inline - marker class set");
 	ok(inl.html() !== "", "Inline - datepicker present");
-	ok($.data(inl[0], datepickerTestHelpers.PROP_NAME), "Inline - instance present");
+	ok($.data(inl[0], testHelper.PROP_NAME), "Inline - instance present");
 	ok(inl.next().length === 0 || inl.next().is("p"), "Inline - button absent");
 	inl.datepicker("destroy");
 	inl = $("#inl");
 	ok(!inl.is(".hasDatepicker"), "Inline - marker class cleared");
 	ok(inl.html() === "", "Inline - datepicker absent");
-	ok(!$.data(inl[0], datepickerTestHelpers.PROP_NAME), "Inline - instance absent");
+	ok(!$.data(inl[0], testHelper.PROP_NAME), "Inline - instance absent");
 	ok(inl.next().length === 0 || inl.next().is("p"), "Inline - button absent");
 });
 
 test("enableDisable", function() {
 	expect( 33 );
 	var inl, dp,
-		inp = datepickerTestHelpers.init("#inp");
+		inp = testHelper.init("#inp");
 	ok(!inp.datepicker("isDisabled"), "Enable/disable - initially marked as enabled");
 	ok(!inp[0].disabled, "Enable/disable - field initially enabled");
 	inp.datepicker("disable");
@@ -78,7 +78,7 @@ test("enableDisable", function() {
 	ok(!inp[0].disabled, "Enable/disable - field now enabled");
 	inp.datepicker("destroy");
 	// With a button
-	inp = datepickerTestHelpers.init("#inp", {showOn: "button"});
+	inp = testHelper.init("#inp", {showOn: "button"});
 	ok(!inp.datepicker("isDisabled"), "Enable/disable button - initially marked as enabled");
 	ok(!inp[0].disabled, "Enable/disable button - field initially enabled");
 	ok(!inp.next("button")[0].disabled, "Enable/disable button - button initially enabled");
@@ -92,7 +92,7 @@ test("enableDisable", function() {
 	ok(!inp.next("button")[0].disabled, "Enable/disable button - button now enabled");
 	inp.datepicker("destroy");
 	// With an image button
-	inp = datepickerTestHelpers.init("#inp", {showOn: "button", buttonImageOnly: true,
+	inp = testHelper.init("#inp", {showOn: "button", buttonImageOnly: true,
 		buttonImage: "images/calendar.gif"});
 	ok(!inp.datepicker("isDisabled"), "Enable/disable image - initially marked as enabled");
 	ok(!inp[0].disabled, "Enable/disable image - field initially enabled");
@@ -107,7 +107,7 @@ test("enableDisable", function() {
 	ok(parseFloat(inp.next("img").css("opacity")) === 1, "Enable/disable image - image now enabled");
 	inp.datepicker("destroy");
 	// Inline
-	inl = datepickerTestHelpers.init("#inl", {changeYear: true});
+	inl = testHelper.init("#inl", {changeYear: true});
 	dp = $(".ui-datepicker-inline", inl);
 	ok(!inl.datepicker("isDisabled"), "Enable/disable inline - initially marked as enabled");
 	ok(!dp.children().is(".ui-state-disabled"), "Enable/disable inline - not visually disabled initially");

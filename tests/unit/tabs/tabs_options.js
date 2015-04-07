@@ -2,11 +2,11 @@ define( [
 	"jquery",
 	"./tabs_test_helpers",
 	"ui/tabs"
-], function( $, tabsTestHelpers ) {
+], function( $, testHelper ) {
 
-var disabled = tabsTestHelpers.disabled,
-	equalHeight = tabsTestHelpers.equalHeight,
-	state = tabsTestHelpers.state;
+var disabled = testHelper.disabled,
+	equalHeight = testHelper.equalHeight,
+	state = testHelper.state;
 
 module( "tabs: options" );
 

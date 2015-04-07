@@ -2,9 +2,9 @@ define( [
 	"jquery",
 	"./spinner_test_helpers",
 	"ui/spinner"
-], function( $, spinnerTestHelpers ) {
+], function( $, testHelper ) {
 
-var simulateKeyDownUp = spinnerTestHelpers.simulateKeyDownUp;
+var simulateKeyDownUp = testHelper.simulateKeyDownUp;
 
 module( "spinner: methods" );
 

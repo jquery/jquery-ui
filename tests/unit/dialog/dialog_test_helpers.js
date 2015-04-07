@@ -1,6 +1,10 @@
-define( function() {
+define( [
+	"jquery",
+	"lib/helper",
+	"ui/dialog"
+], function( $, helper ) {
 
-var dialogTestHelpers = {
+return $.extend( helper, {
 	drag: function(element, handle, dx, dy) {
 		var d = element.dialog("widget");
 		//this mouseover is to work around a limitation in resizable
@@ -16,7 +20,7 @@ var dialogTestHelpers = {
 			handle = $(".ui-dialog-titlebar", d),
 			offsetBefore = d.offset();
 
-		dialogTestHelpers.drag(element, handle, dx, dy);
+		this.drag(element, handle, dx, dy);
 
 		offsetAfter = d.offset();
 
@@ -36,7 +40,7 @@ var dialogTestHelpers = {
 			heightBefore = element.height(),
 			widthBefore = element.width();
 
-		dialogTestHelpers.drag(element, handle, 50, 50);
+		this.drag(element, handle, 50, 50);
 
 		heightAfter = element.height();
 		widthAfter = element.width();
@@ -46,8 +50,6 @@ var dialogTestHelpers = {
 		expected = { width: widthBefore + dw, height: heightBefore + dh };
 		deepEqual(actual, expected, "resized[" + 50 + ", " + 50 + "] " + msg);
 	}
-};
-
-return dialogTestHelpers;
+} );
 
 } );

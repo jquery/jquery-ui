@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"./resizable_test_helpers",
 	"ui/resizable"
-], function( $, resizableTestHelpers ) {
+], function( $, testHelper ) {
 
 module("resizable: events");
 
@@ -24,7 +24,7 @@ test("start", function() {
 		}
 	});
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 
 	equal(count, 1, "start callback should happen exactly once");
 
@@ -55,7 +55,7 @@ test( "resize", function() {
 		}
 	});
 
-	resizableTestHelpers.drag( handle, 50, 50 );
+	testHelper.drag( handle, 50, 50 );
 
 	equal( count, 2, "resize callback should happen exactly once per size adjustment" );
 
@@ -83,7 +83,7 @@ test( "resize (min/max dimensions)", function() {
 		}
 	});
 
-	resizableTestHelpers.drag( handle, -200, -200 );
+	testHelper.drag( handle, -200, -200 );
 
 	equal( count, 1, "resize callback should happen exactly once per size adjustment" );
 
@@ -113,10 +113,10 @@ test( "resize (containment)", function() {
 	});
 
 	// Prove you can't resize outside containment by dragging southeast corner southeast
-	resizableTestHelpers.drag( handle, 100, 100 );
+	testHelper.drag( handle, 100, 100 );
 
 	// Prove you can't resize outside containment by dragging southeast corner northwest
-	resizableTestHelpers.drag( handle, -200, -200 );
+	testHelper.drag( handle, -200, -200 );
 
 	equal( count, 1, "resize callback should happen exactly once per size adjustment" );
 
@@ -141,7 +141,7 @@ test("resize (grid)", function() {
 		}
 	});
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 
 	equal(count, 1, "resize callback should happen exactly once per grid-unit size adjustment");
 
@@ -160,7 +160,7 @@ test( "resize, custom adjustment", function() {
 			}
 		});
 
-	resizableTestHelpers.drag( handle, 50, 50 );
+	testHelper.drag( handle, 50, 50 );
 
 	equal( element.width(), 100, "resize event can control width" );
 	equal( element.height(), 200, "resize event can control height" );
@@ -186,7 +186,7 @@ test("stop", function() {
 		}
 	});
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 
 	equal(count, 1, "stop callback should happen exactly once");
 
@@ -231,7 +231,7 @@ test( "resize (containment) works with parent with negative offset", function() 
 
 	widthBefore = target.width();
 
-	resizableTestHelpers.drag( handle, increaseWidthBy, 0 );
+	testHelper.drag( handle, increaseWidthBy, 0 );
 
 	widthAfter = target.width();
 

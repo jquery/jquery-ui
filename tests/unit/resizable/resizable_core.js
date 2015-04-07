@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"./resizable_test_helpers",
 	"ui/resizable"
-], function( $, resizableTestHelpers ) {
+], function( $, testHelper ) {
 
 module("resizable: core");
 
@@ -30,10 +30,10 @@ test("n", function() {
 
 	var handle = ".ui-resizable-n", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, 0, -50);
+	testHelper.drag(handle, 0, -50);
 	equal( target.height(), 150, "compare height" );
 
-	resizableTestHelpers.drag(handle, 0, 50);
+	testHelper.drag(handle, 0, 50);
 	equal( target.height(), 100, "compare height" );
 
 	equal( target[0].style.left, "", "left should not be modified" );
@@ -45,10 +45,10 @@ test("s", function() {
 
 	var handle = ".ui-resizable-s", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, 0, 50);
+	testHelper.drag(handle, 0, 50);
 	equal( target.height(), 150, "compare height" );
 
-	resizableTestHelpers.drag(handle, 0, -50);
+	testHelper.drag(handle, 0, -50);
 	equal( target.height(), 100, "compare height" );
 
 	equal( target[0].style.top, "", "top should not be modified" );
@@ -61,10 +61,10 @@ test("e", function() {
 
 	var handle = ".ui-resizable-e", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, 50);
+	testHelper.drag(handle, 50);
 	equal( target.width(), 150, "compare width");
 
-	resizableTestHelpers.drag(handle, -50);
+	testHelper.drag(handle, -50);
 	equal( target.width(), 100, "compare width" );
 
 	equal( target[0].style.height, "", "height should not be modified" );
@@ -77,10 +77,10 @@ test("w", function() {
 
 	var handle = ".ui-resizable-w", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, -50);
+	testHelper.drag(handle, -50);
 	equal( target.width(), 150, "compare width" );
 
-	resizableTestHelpers.drag(handle, 50);
+	testHelper.drag(handle, 50);
 	equal( target.width(), 100, "compare width" );
 
 	equal( target[0].style.height, "", "height should not be modified" );
@@ -92,11 +92,11 @@ test("ne", function() {
 
 	var handle = ".ui-resizable-ne", target = $("#resizable1").css({ overflow: "hidden" }).resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, -50, -50);
+	testHelper.drag(handle, -50, -50);
 	equal( target.width(), 50, "compare width" );
 	equal( target.height(), 150, "compare height" );
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 
@@ -108,11 +108,11 @@ test("se", function() {
 
 	var handle = ".ui-resizable-se", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 	equal( target.width(), 150, "compare width" );
 	equal( target.height(), 150, "compare height" );
 
-	resizableTestHelpers.drag(handle, -50, -50);
+	testHelper.drag(handle, -50, -50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 
@@ -125,11 +125,11 @@ test("sw", function() {
 
 	var handle = ".ui-resizable-sw", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, -50, -50);
+	testHelper.drag(handle, -50, -50);
 	equal( target.width(), 150, "compare width" );
 	equal( target.height(), 50, "compare height" );
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 
@@ -141,11 +141,11 @@ test("nw", function() {
 
 	var handle = ".ui-resizable-nw", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, -50, -50);
+	testHelper.drag(handle, -50, -50);
 	equal( target.width(), 150, "compare width" );
 	equal( target.height(), 150, "compare height" );
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 });
@@ -163,10 +163,10 @@ test("handle with complex markup (#8756)", function() {
 
 	var handle = ".ui-resizable-w div", target = $("#resizable1").resizable({ handles: "all" });
 
-	resizableTestHelpers.drag(handle, -50);
+	testHelper.drag(handle, -50);
 	equal( target.width(), 150, "compare width" );
 
-	resizableTestHelpers.drag(handle, 50);
+	testHelper.drag(handle, 50);
 	equal( target.width(), 100, "compare width" );
 });
 
@@ -186,7 +186,7 @@ test("resizable accounts for scroll position correctly (#3815)", function() {
 	left = el.css("left");
 	top = el.css("top");
 
-	resizableTestHelpers.drag(handle, 50, 50);
+	testHelper.drag(handle, 50, 50);
 	deepEqual( el.position(), position, "position stays the same when resized" );
 	equal( el.css("left"), left, "css('left') stays the same when resized" );
 	equal( el.css("top"), top, "css('top') stays the same when resized" );
@@ -203,7 +203,7 @@ test( "resizable stores correct size when using helper and grid (#9547)", functi
 			grid: [ 10, 10 ]
 		});
 
-	resizableTestHelpers.drag( handle, 1, 1 );
+	testHelper.drag( handle, 1, 1 );
 	equal( target.width(), 100, "compare width" );
 	equal( target.height(), 100, "compare height" );
 });
@@ -227,14 +227,14 @@ test( "nested resizable", function() {
 	innerHandle = $( "#inner > .ui-resizable-e" );
 	outerHandle = $( "#outer > .ui-resizable-e" );
 
-	resizableTestHelpers.drag( innerHandle, 10 );
+	testHelper.drag( innerHandle, 10 );
 	equal( inner.width(), 40, "compare width of inner element" );
-	resizableTestHelpers.drag( innerHandle, -10 );
+	testHelper.drag( innerHandle, -10 );
 	equal( inner.width(), 30, "compare width of inner element" );
 
-	resizableTestHelpers.drag( outerHandle, 10 );
+	testHelper.drag( outerHandle, 10 );
 	equal( outer.width(), 60, "compare width of outer element" );
-	resizableTestHelpers.drag( outerHandle, -10 );
+	testHelper.drag( outerHandle, -10 );
 	equal( outer.width(), 50, "compare width of outer element" );
 
 	inner.remove();

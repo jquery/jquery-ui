@@ -1,6 +1,5 @@
 define( [
 	"jquery",
-	"./droppable_test_helpers",
 	"ui/droppable"
 ], function( $ ) {
 

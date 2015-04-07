@@ -1,15 +1,17 @@
 define( [
+	"jquery",
 	"lib/helper",
 	"ui/datepicker"
-], function( testHelpers ) {
+], function( $, helper ) {
 
-var datepickerTestHelpers = {
+return $.extend( helper, {
 	addMonths: function(date, offset) {
 		var maxDay = 32 - new Date(date.getFullYear(), date.getMonth() + offset, 32).getDate();
 		date.setDate(Math.min(date.getDate(), maxDay));
 		date.setMonth(date.getMonth() + offset);
 		return date;
 	},
+
 	equalsDate: function(d1, d2, message) {
 		if (!d1 || !d2) {
 			ok(false, message + " - missing date");
@@ -19,18 +21,18 @@ var datepickerTestHelpers = {
 		d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
 		equal(d1.toString(), d2.toString(), message);
 	},
+
 	init: function( id, options ) {
 		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
 		return $( id ).datepicker( $.extend( { showAnim: "" }, options || {} ) );
 	},
+
 	initNewInput: function( options ) {
 		var id = $( "<input>" ).appendTo( "#qunit-fixture" );
-		return datepickerTestHelpers.init( id, options );
+		return this.init( id, options );
 	},
-	onFocus: testHelpers.onFocus,
-	PROP_NAME: "datepicker"
-};
 
-return datepickerTestHelpers;
+	PROP_NAME: "datepicker"
+} );
 
 } );

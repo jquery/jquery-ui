@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"./droppable_test_helpers",
 	"ui/droppable"
-], function( $, droppableTestHelpers ) {
+], function( $, testHelper ) {
 
 module("droppable: core");
 
@@ -20,7 +20,7 @@ test("element types", function() {
 
 		(typeName === "table" && el.append("<tr><td>content</td></tr>"));
 		el.droppable();
-		droppableTestHelpers.shouldDrop();
+		testHelper.shouldDrop();
 		el.droppable("destroy");
 		el.remove();
 	});
