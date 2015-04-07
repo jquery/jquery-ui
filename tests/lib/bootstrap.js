@@ -123,14 +123,14 @@ function swarmInject() {
 
 	if ( widget ) {
 		modules = modules.concat([
-			widget + ( deprecated ? "_common_deprecated" : "_common" ),
-			widget + "_core",
-			widget + "_events",
-			widget + "_methods",
-			widget + "_options"
+			( deprecated ? "common-deprecated" : "common" ),
+			"core",
+			"events",
+			"methods",
+			"options"
 		]);
 		if ( deprecated ) {
-			modules = modules.concat( widget + "_deprecated" );
+			modules = modules.concat( "deprecated" );
 		}
 	}
 
