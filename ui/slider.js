@@ -569,10 +569,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			return;
 		}
 		if ( orientation === "vertical" ) {
-			this.range.css( "width", "" );
+			this.range.css( { "width": "", "left": "" } );
 		}
 		if ( orientation === "horizontal" ) {
-			this.range.css( "height", "" );
+			this.range.css( { "height": "", "bottom": "" } );
 		}
 	},
 

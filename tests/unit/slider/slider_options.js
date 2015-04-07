@@ -106,7 +106,7 @@ test( "min", function() {
 });
 
 test( "orientation", function( assert ) {
-	expect( 9 );
+	expect( 11 );
 	element = $( "#slider1" );
 
 	options = {
@@ -153,6 +153,22 @@ test( "orientation", function( assert ) {
 	element.slider( "option", "orientation", "vertical" );
 	equal( element.width(), element.find( ".ui-slider-range " ).width(),
 		"range should fill all horizontal space after changing orientation to vertical" );
+
+	element.slider( "option", "orientation", "horizontal" );
+	equal( element.height(), element.find( ".ui-slider-range " ).height(),
+		"range should fill all vertical space after changing orientation to horizontal" );
+
+	element.slider( "destroy" );
+
+	element = $( "#slider1" ).slider({
+		range: true,
+		min: 0,
+		max: 100
+	});
+	element.slider( "option", { values: [ 60, 70 ] } );
+	element.slider( "option", "orientation", "vertical" );
+	equal( element.find( ".ui-slider-range " ).position().left, 0,
+		"range should pull over to the track's border" );
 
 	element.slider( "destroy" );
 });
