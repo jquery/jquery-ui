@@ -106,7 +106,7 @@ test( "min", function() {
 });
 
 test( "orientation", function( assert ) {
-	expect( 8 );
+	expect( 9 );
 	element = $( "#slider1" );
 
 	options = {
@@ -143,6 +143,18 @@ test( "orientation", function( assert ) {
 
 	element.slider( "destroy" );
 
+	element = $( "#slider1" ).slider({
+		range: "max",
+		min: 0,
+		max: 10
+	});
+
+	element.slider( "option", "value", 5 );
+	element.slider( "option", "orientation", "vertical" );
+	equal( element.width(), element.find( ".ui-slider-range " ).width(),
+		"range should fill all horizontal space after changing orientation to vertical" );
+
+	element.slider( "destroy" );
 });
 
 //spec: http://wiki.jqueryui.com/Slider#specs
