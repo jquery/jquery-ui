@@ -1,7 +1,7 @@
-/*
- * dialog_methods.js
- */
-(function($) {
+define( [
+	"jquery",
+	"ui/dialog"
+], function( $ ) {
 
 module("dialog: methods", {
 	teardown: function() {
@@ -33,18 +33,18 @@ test("init", function() {
 	ok(true, "arbitrary option setter after init");
 });
 
-test("destroy", function() {
+test("destroy", function( assert ) {
 	expect( 17 );
 
 	var element, element2;
 
 	$( "#dialog1, #form-dialog" ).hide();
-	domEqual( "#dialog1", function() {
+	assert.domEqual( "#dialog1", function() {
 		var dialog = $( "#dialog1" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
 		equal( dialog.index(), 0 );
 	});
-	domEqual( "#form-dialog", function() {
+	assert.domEqual( "#form-dialog", function() {
 		var dialog = $( "#form-dialog" ).dialog().dialog( "destroy" );
 		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
 		equal( dialog.index(), 2 );
@@ -56,7 +56,7 @@ test("destroy", function() {
 		minHeight: "100px",
 		height: "200px"
 	});
-	domEqual( "#dialog1", function() {
+	assert.domEqual( "#dialog1", function() {
 		$( "#dialog1" ).dialog().dialog( "destroy" );
 	});
 
@@ -264,4 +264,4 @@ test("#5531: dialog width should be at least minWidth on creation", function () 
 
 });
 
-})(jQuery);
+} );

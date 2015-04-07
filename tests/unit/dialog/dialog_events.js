@@ -1,7 +1,8 @@
-/*
- * dialog_events.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./dialog_test_helpers",
+	"ui/dialog"
+], function( $, dialogTestHelpers ) {
 
 module("dialog: events");
 
@@ -103,7 +104,7 @@ test("dragStart", function() {
 		});
 
 	handle = $(".ui-dialog-titlebar", element.dialog("widget"));
-	TestHelpers.dialog.drag(element, handle, 50, 50);
+	dialogTestHelpers.drag(element, handle, 50, 50);
 	element.remove();
 });
 
@@ -131,7 +132,7 @@ test("drag", function() {
 		});
 
 	handle = $(".ui-dialog-titlebar", element.dialog("widget"));
-	TestHelpers.dialog.drag(element, handle, 50, 50);
+	dialogTestHelpers.drag(element, handle, 50, 50);
 	element.remove();
 });
 
@@ -155,7 +156,7 @@ test("dragStop", function() {
 		});
 
 	handle = $(".ui-dialog-titlebar", element.dialog("widget"));
-	TestHelpers.dialog.drag(element, handle, 50, 50);
+	dialogTestHelpers.drag(element, handle, 50, 50);
 	element.remove();
 });
 
@@ -183,7 +184,7 @@ test("resizeStart", function() {
 		});
 
 	handle = $(".ui-resizable-se", element.dialog("widget"));
-	TestHelpers.dialog.drag(element, handle, 50, 50);
+	dialogTestHelpers.drag(element, handle, 50, 50);
 	element.remove();
 });
 
@@ -215,7 +216,7 @@ test("resize", function() {
 		});
 
 	handle = $(".ui-resizable-se", element.dialog("widget"));
-	TestHelpers.dialog.drag(element, handle, 50, 50);
+	dialogTestHelpers.drag(element, handle, 50, 50);
 	element.remove();
 });
 
@@ -243,7 +244,7 @@ test("resizeStop", function() {
 		});
 
 	handle = $(".ui-resizable-se", element.dialog("widget"));
-	TestHelpers.dialog.drag(element, handle, 50, 50);
+	dialogTestHelpers.drag(element, handle, 50, 50);
 	element.remove();
 });
 
@@ -366,4 +367,4 @@ test("ensure dialog keeps focus when clicking modal overlay", function() {
 	element.remove();
 });
 
-})(jQuery);
+} );
