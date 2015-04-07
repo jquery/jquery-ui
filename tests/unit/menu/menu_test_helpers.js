@@ -1,9 +1,12 @@
-define( function() {
+define( [
+	"jquery",
+	"lib/helper"
+], function( $, helper ) {
 
 var lastItem,
 	log = [];
 
-return {
+return $.extend( helper, {
 	log: function( message, clear ) {
 		if ( clear ) {
 			log.length = 0;
@@ -28,6 +31,6 @@ return {
 			.children( ".ui-menu-item-wrapper" )
 			.trigger( "click" );
 	}
-};
+} );
 
 } );

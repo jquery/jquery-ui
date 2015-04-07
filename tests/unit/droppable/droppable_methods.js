@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"./droppable_test_helpers",
 	"ui/droppable"
-], function( $, droppableTestHelpers ) {
+], function( $, testHelper ) {
 
 module("droppable: methods");
 
@@ -48,16 +48,16 @@ test("enable", function() {
 	var el, expected, actual;
 
 	el = $("#droppable1").droppable({ disabled: true });
-	droppableTestHelpers.shouldNotDrop();
+	testHelper.shouldNotDrop();
 	el.droppable("enable");
-	droppableTestHelpers.shouldDrop();
+	testHelper.shouldDrop();
 	equal(el.droppable("option", "disabled"), false, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: true });
-	droppableTestHelpers.shouldNotDrop();
+	testHelper.shouldNotDrop();
 	el.droppable("option", "disabled", false);
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
-	droppableTestHelpers.shouldDrop();
+	testHelper.shouldDrop();
 
 	expected = $("<div></div>").droppable(),
 	actual = expected.droppable("enable");
@@ -70,19 +70,19 @@ test( "disable", function( assert ) {
 	var actual, expected,
 		element = $( "#droppable1" ).droppable({ disabled: false });
 
-	droppableTestHelpers.shouldDrop();
+	testHelper.shouldDrop();
 	element.droppable( "disable" );
-	droppableTestHelpers.shouldNotDrop();
+	testHelper.shouldNotDrop();
 	equal( element.droppable( "option", "disabled" ), true, "disabled option getter" );
 	element.droppable( "destroy" );
 	element.droppable({ disabled: false });
-	droppableTestHelpers.shouldDrop();
+	testHelper.shouldDrop();
 	element.droppable( "option", "disabled", true );
 	assert.lacksClasses( element.droppable( "widget" ), "ui-state-disabled" );
 	ok( !element.droppable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
 	assert.hasClasses( element.droppable( "widget" ), "ui-droppable-disabled" );
 	equal( element.droppable( "option", "disabled" ), true, "disabled option setter" );
-	droppableTestHelpers.shouldNotDrop();
+	testHelper.shouldNotDrop();
 
 	expected = $( "<div></div>" ).droppable();
 	actual = expected.droppable( "disable" );

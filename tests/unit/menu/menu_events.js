@@ -2,15 +2,15 @@ define( [
 	"jquery",
 	"./menu_test_helpers",
 	"ui/menu"
-], function( $, menuTestHelpers ) {
+], function( $, testHelper ) {
 
-var log = menuTestHelpers.log,
-	logOutput = menuTestHelpers.logOutput,
-	click = menuTestHelpers.click;
+var log = testHelper.log,
+	logOutput = testHelper.logOutput,
+	click = testHelper.click;
 
 module( "menu: events", {
 	setup: function() {
-		menuTestHelpers.clearLog();
+		testHelper.clearLog();
 	}
 });
 

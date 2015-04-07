@@ -1,6 +1,10 @@
-define( function() {
+define( [
+	"jquery",
+	"lib/helper",
+	"ui/tabs"
+], function( $, helper ) {
 
-return {
+return $.extend( helper, {
 	disabled: function( tabs, state ) {
 		var expected, actual,
 			internalState = tabs.tabs( "option", "disabled" );
@@ -65,6 +69,6 @@ return {
 			}).get();
 		deepEqual( actual, expected );
 	}
-};
+} );
 
 } );

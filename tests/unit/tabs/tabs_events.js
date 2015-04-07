@@ -2,9 +2,9 @@ define( [
 	"jquery",
 	"./tabs_test_helpers",
 	"ui/tabs"
-], function( $, tabsTestHelpers ) {
+], function( $, testHelper ) {
 
-var state = tabsTestHelpers.state;
+var state = testHelper.state;
 
 module( "tabs: events" );
 

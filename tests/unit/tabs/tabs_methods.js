@@ -2,10 +2,10 @@ define( [
 	"jquery",
 	"./tabs_test_helpers",
 	"ui/tabs"
-], function( $, tabsTestHelpers ) {
+], function( $, testHelper ) {
 
-var disabled = tabsTestHelpers.disabled,
-	state = tabsTestHelpers.state;
+var disabled = testHelper.disabled,
+	state = testHelper.state;
 
 module( "tabs: methods" );
 

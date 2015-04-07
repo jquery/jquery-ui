@@ -3,7 +3,7 @@ define( [
 	"./sortable_test_helpers",
 	"ui/sortable",
 	"ui/draggable"
-], function( $, sortableTestHelpers ) {
+], function( $, testHelper ) {
 
 module("sortable: events");
 
@@ -172,7 +172,7 @@ test("#3019: Stop fires too early", function() {
 			}
 		});
 
-	sortableTestHelpers.sort($("li", el)[0], 0, 44, 2, "Dragging the sortable");
+	testHelper.sort($("li", el)[0], 0, 44, 2, "Dragging the sortable");
 	equal(helper, null, "helper should be false");
 
 });
