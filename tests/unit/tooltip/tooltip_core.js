@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/tooltip"
+], function( $ ) {
 
 module( "tooltip: core" );
 
@@ -218,4 +221,4 @@ asyncTest( "multiple active delegated tooltips", function() {
 	step1();
 });
 
-}( jQuery ) );
+} );
