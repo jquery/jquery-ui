@@ -1,8 +1,8 @@
-/*
- * droppable_core.js
- */
-
-(function($) {
+define( [
+	"jquery",
+	"./droppable_test_helpers",
+	"ui/droppable"
+], function( $, droppableTestHelpers ) {
 
 module("droppable: core");
 
@@ -20,10 +20,10 @@ test("element types", function() {
 
 		(typeName === "table" && el.append("<tr><td>content</td></tr>"));
 		el.droppable();
-		TestHelpers.droppable.shouldDrop();
+		droppableTestHelpers.shouldDrop();
 		el.droppable("destroy");
 		el.remove();
 	});
 });
 
-})(jQuery);
+} );

@@ -1,7 +1,8 @@
-/*
- * droppable_options.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./droppable_test_helpers",
+	"ui/droppable"
+], function( $ ) {
 
 module( "droppable: options" );
 
@@ -202,4 +203,4 @@ test( "tolerance, touch", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
-})(jQuery);
+} );

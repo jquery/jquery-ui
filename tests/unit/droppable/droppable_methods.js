@@ -1,7 +1,8 @@
-/*
- * droppable_methods.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./droppable_test_helpers",
+	"ui/droppable"
+], function( $, droppableTestHelpers ) {
 
 module("droppable: methods");
 
@@ -47,16 +48,16 @@ test("enable", function() {
 	var el, expected, actual;
 
 	el = $("#droppable1").droppable({ disabled: true });
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelpers.shouldNotDrop();
 	el.droppable("enable");
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelpers.shouldDrop();
 	equal(el.droppable("option", "disabled"), false, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: true });
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelpers.shouldNotDrop();
 	el.droppable("option", "disabled", false);
 	equal(el.droppable("option", "disabled"), false, "disabled option setter");
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelpers.shouldDrop();
 
 	expected = $("<div></div>").droppable(),
 	actual = expected.droppable("enable");
@@ -69,23 +70,23 @@ test( "disable", function( assert ) {
 	var actual, expected,
 		element = $( "#droppable1" ).droppable({ disabled: false });
 
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelpers.shouldDrop();
 	element.droppable( "disable" );
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelpers.shouldNotDrop();
 	equal( element.droppable( "option", "disabled" ), true, "disabled option getter" );
 	element.droppable( "destroy" );
 	element.droppable({ disabled: false });
-	TestHelpers.droppable.shouldDrop();
+	droppableTestHelpers.shouldDrop();
 	element.droppable( "option", "disabled", true );
 	assert.lacksClasses( element.droppable( "widget" ), "ui-state-disabled" );
 	ok( !element.droppable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
 	assert.hasClasses( element.droppable( "widget" ), "ui-droppable-disabled" );
 	equal( element.droppable( "option", "disabled" ), true, "disabled option setter" );
-	TestHelpers.droppable.shouldNotDrop();
+	droppableTestHelpers.shouldNotDrop();
 
 	expected = $( "<div></div>" ).droppable();
 	actual = expected.droppable( "disable" );
 	equal( actual, expected, "disable is chainable" );
 });
 
-})( jQuery );
+} );

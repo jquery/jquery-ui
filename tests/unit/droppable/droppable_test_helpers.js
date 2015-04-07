@@ -1,4 +1,6 @@
-TestHelpers.droppable = {
+define( function() {
+
+return {
 	shouldDrop: function() {
 		// todo: actually implement this
 		ok(true, "missing test - untested code is broken code");
@@ -8,3 +10,5 @@ TestHelpers.droppable = {
 		ok(true, "missing test - untested code is broken code");
 	}
 };
+
+} );
