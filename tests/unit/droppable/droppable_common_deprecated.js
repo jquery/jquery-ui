@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "droppable", {
+define( [
+	"lib/common",
+	"ui/droppable"
+], function( common ) {
+
+common.testWidget( "droppable", {
 	defaults: {
 		accept: "*",
 		activeClass: false,
@@ -19,3 +24,5 @@ TestHelpers.commonWidgetTests( "droppable", {
 		over: null
 	}
 });
+
+} );
