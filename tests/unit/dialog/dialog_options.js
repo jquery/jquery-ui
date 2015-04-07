@@ -1,7 +1,10 @@
-/*
- * dialog_options.js
- */
-(function($) {
+define( [
+	"jquery",
+	"./dialog_test_helpers",
+	"ui/dialog",
+	"ui/effect-blind",
+	"ui/effect-explode"
+], function( $, dialogTestHelpers ) {
 
 module("dialog: options");
 
@@ -228,15 +231,15 @@ test("draggable", function() {
 
 	var element = $("<div></div>").dialog({ draggable: false });
 
-		TestHelpers.dialog.testDrag(element, 50, -50, 0, 0);
+		dialogTestHelpers.testDrag(element, 50, -50, 0, 0);
 		element.dialog("option", "draggable", true);
-		TestHelpers.dialog.testDrag(element, 50, -50, 50, -50);
+		dialogTestHelpers.testDrag(element, 50, -50, 50, -50);
 	element.remove();
 
 	element = $("<div></div>").dialog({ draggable: true });
-		TestHelpers.dialog.testDrag(element, 50, -50, 50, -50);
+		dialogTestHelpers.testDrag(element, 50, -50, 50, -50);
 		element.dialog("option", "draggable", false);
-		TestHelpers.dialog.testDrag(element, 50, -50, 0, 0);
+		dialogTestHelpers.testDrag(element, 50, -50, 0, 0);
 	element.remove();
 });
 
@@ -266,17 +269,17 @@ test("maxHeight", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ maxHeight: 200 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-s", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-s", 1000, 1000);
 		assert.close(element.dialog("widget").height(), 200, 1, "maxHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxHeight: 200 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-n", -1000, -1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-n", -1000, -1000);
 		assert.close(element.dialog("widget").height(), 200, 1, "maxHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxHeight: 200 }).dialog("option", "maxHeight", 300);
-		TestHelpers.dialog.drag(element, ".ui-resizable-s", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-s", 1000, 1000);
 		assert.close(element.dialog("widget").height(), 300, 1, "maxHeight");
 	element.remove();
 });
@@ -285,17 +288,17 @@ test("maxWidth", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ maxWidth: 200 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-e", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-e", 1000, 1000);
 		assert.close(element.dialog("widget").width(), 200, 1, "maxWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxWidth: 200 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-w", -1000, -1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-w", -1000, -1000);
 		assert.close(element.dialog("widget").width(), 200, 1, "maxWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ maxWidth: 200 }).dialog("option", "maxWidth", 300);
-		TestHelpers.dialog.drag(element, ".ui-resizable-w", -1000, -1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-w", -1000, -1000);
 		assert.close(element.dialog("widget").width(), 300, 1, "maxWidth");
 	element.remove();
 });
@@ -304,17 +307,17 @@ test("minHeight", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ minHeight: 10 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-s", -1000, -1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-s", -1000, -1000);
 		assert.close(element.dialog("widget").height(), 10, 1, "minHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minHeight: 10 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-n", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-n", 1000, 1000);
 		assert.close(element.dialog("widget").height(), 10, 1, "minHeight");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minHeight: 10 }).dialog("option", "minHeight", 30);
-		TestHelpers.dialog.drag(element, ".ui-resizable-n", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-n", 1000, 1000);
 		assert.close(element.dialog("widget").height(), 30, 1, "minHeight");
 	element.remove();
 });
@@ -323,17 +326,17 @@ test("minWidth", function( assert ) {
 	expect(3);
 
 	var element = $("<div></div>").dialog({ minWidth: 10 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-e", -1000, -1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-e", -1000, -1000);
 		assert.close(element.dialog("widget").width(), 10, 1, "minWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minWidth: 10 });
-		TestHelpers.dialog.drag(element, ".ui-resizable-w", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-w", 1000, 1000);
 		assert.close(element.dialog("widget").width(), 10, 1, "minWidth");
 	element.remove();
 
 	element = $("<div></div>").dialog({ minWidth: 30 }).dialog("option", "minWidth", 30);
-		TestHelpers.dialog.drag(element, ".ui-resizable-w", 1000, 1000);
+		dialogTestHelpers.drag(element, ".ui-resizable-w", 1000, 1000);
 		assert.close(element.dialog("widget").width(), 30, 1, "minWidth");
 	element.remove();
 });
@@ -421,15 +424,15 @@ test("resizable", function() {
 	expect(4);
 
 	var element = $("<div></div>").dialog();
-		TestHelpers.dialog.shouldResize(element, 50, 50, "[default]");
+		dialogTestHelpers.shouldResize(element, 50, 50, "[default]");
 		element.dialog("option", "resizable", false);
-		TestHelpers.dialog.shouldResize(element, 0, 0, "disabled after init");
+		dialogTestHelpers.shouldResize(element, 0, 0, "disabled after init");
 	element.remove();
 
 	element = $("<div></div>").dialog({ resizable: false });
-		TestHelpers.dialog.shouldResize(element, 0, 0, "disabled in init options");
+		dialogTestHelpers.shouldResize(element, 0, 0, "disabled in init options");
 		element.dialog("option", "resizable", true);
-		TestHelpers.dialog.shouldResize(element, 50, 50, "enabled after init");
+		dialogTestHelpers.shouldResize(element, 50, 50, "enabled after init");
 	element.remove();
 });
 
@@ -494,18 +497,18 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 	var i,
 		element = $("<div></div>").dialog({ resizable: false });
 
-	TestHelpers.dialog.shouldResize(element, 0, 0, "[default]");
+	dialogTestHelpers.shouldResize(element, 0, 0, "[default]");
 	for (i=0; i<2; i++) {
 		element.dialog("close").dialog("open");
-		TestHelpers.dialog.shouldResize(element, 0, 0, "initialized with resizable false toggle ("+ (i+1) +")");
+		dialogTestHelpers.shouldResize(element, 0, 0, "initialized with resizable false toggle ("+ (i+1) +")");
 	}
 	element.remove();
 
 	element = $("<div></div>").dialog({ resizable: true });
-	TestHelpers.dialog.shouldResize(element, 50, 50, "[default]");
+	dialogTestHelpers.shouldResize(element, 50, 50, "[default]");
 	for (i=0; i<2; i++) {
 		element.dialog("close").dialog("option", "resizable", false).dialog("open");
-		TestHelpers.dialog.shouldResize(element, 0, 0, "set option resizable false toggle ("+ (i+1) +")");
+		dialogTestHelpers.shouldResize(element, 0, 0, "set option resizable false toggle ("+ (i+1) +")");
 	}
 	element.remove();
 
@@ -551,4 +554,4 @@ asyncTest( "Open followed by close during show effect", function() {
 	}, 100 );
 });
 
-})(jQuery);
+} );

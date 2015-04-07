@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/dialog"
+], function( $ ) {
 
 module( "dialog (deprecated): options" );
 
@@ -24,4 +27,4 @@ test( "dialogClass", function( assert ) {
 	element.remove();
 });
 
-})( jQuery );
+} );
