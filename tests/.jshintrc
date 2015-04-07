@@ -22,7 +22,6 @@
 		"asyncTest": false,
 		"deepEqual": false,
 		"define": false,
-		"domEqual": false,
 		"equal": false,
 		"expect": false,
 		"Globalize": false,
@@ -36,7 +35,6 @@
 		"strictEqual": false,
 		"stop": false,
 		"test": false,
-		"TestHelpers": true,
 		"JSHINT": false
 	}
 }
