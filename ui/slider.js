@@ -440,6 +440,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this._removeClass( "ui-slider-horizontal ui-slider-vertical" )
 					._addClass( "ui-slider-" + this.orientation );
 				this._refreshValue();
+				if ( this.options.range ) {
+					this._refreshRange( value );
+				}
 
 				// Reset positioning from previous orientation
 				this.handles.css( value === "horizontal" ? "bottom" : "left", "" );
@@ -562,6 +565,15 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 	_valueMax: function() {
 		return this.max;
+	},
+
+	_refreshRange: function ( orientation ) {
+		if ( orientation === "vertical" ) {
+			this.range.css( { "width": "", "left": "" } );
+		}
+		if ( orientation === "horizontal" ) {
+			this.range.css( { "height": "", "bottom": "" } );
+		}
 	},
 
 	_refreshValue: function() {
