@@ -41,10 +41,10 @@ function requireModules( dependencies, callback, modules ) {
 }
 
 // Load a set of test file along with the required test infrastructure
-function requireTests( dependencies, callback ) {
+function requireTests( dependencies, noBackCompat ) {
 	dependencies = [
 		"../../lib/qunit",
-		"jquery",
+		noBackCompat ? "jquery-no-back-compat" : "jquery",
 		"jquery-simulate",
 		"qunit-assert-classes",
 		"../../lib/qunit-assert-domequal"
@@ -101,6 +101,7 @@ function swarmInject() {
 // - data-widget: A widget to load test modules for
 //   - Automatically loads common, core, events, methods, and options
 // - data-deprecated: Loads the deprecated test modules for a widget
+// - data-no-back-compat: Set $.uiBackCompat to false
 (function() {
 
 	// Find the script element
@@ -117,7 +118,9 @@ function swarmInject() {
 		modules = [];
 	}
 	var widget = script.getAttribute( "data-widget" );
-	var deprecated = script.getAttribute( "data-deprecated" );
+	var deprecated = !!script.getAttribute( "data-deprecated" );
+	var noBackCompat = !!script.getAttribute( "data-no-back-compat" );
+
 	if ( widget ) {
 		modules = modules.concat([
 			widget + ( deprecated ? "_common_deprecated" : "_common" ),
@@ -136,12 +139,19 @@ function swarmInject() {
 	script.src = "../../../external/requirejs/require.js";
 	script.onload = function() {
 
+		// Create a module that disables back compat for UI modules
+		define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
+			$.uiBackCompat = false;
+
+			return $;
+		} );
+
 		// Create a dummy bridge if we're not actually testing in PhantomJS
 		if ( !/PhantomJS/.test( navigator.userAgent ) ) {
 			define( "phantom-bridge", function() {} );
 		}
 
-		requireTests( modules );
+		requireTests( modules, noBackCompat );
 	};
 	document.documentElement.appendChild( script );
 } )();
