@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/tooltip"
+], function( $ ) {
 
 module( "tooltip: events" );
 
@@ -54,4 +57,4 @@ test( "focus events", function() {
 	element.trigger( "focusout" );
 });
 
-}( jQuery ) );
+} );

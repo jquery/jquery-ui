@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/tooltip"
+], function( $ ) {
 
 module( "tooltip: (deprecated) options" );
 
@@ -10,4 +13,4 @@ test( "tooltipClass", function( assert ) {
 	assert.hasClasses( $( "#" + element.data( "ui-tooltip-id" ) ), "custom" );
 });
 
-}( jQuery ) );
+} );

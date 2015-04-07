@@ -1,4 +1,9 @@
-TestHelpers.commonWidgetTests( "tooltip", {
+define( [
+	"lib/common",
+	"ui/tooltip"
+], function( common ) {
+
+common.testWidget( "tooltip", {
 	defaults: {
 		classes: {
 			"ui-tooltip": "ui-corner-all ui-widget-shadow"
@@ -21,3 +26,5 @@ TestHelpers.commonWidgetTests( "tooltip", {
 		open: null
 	}
 });
+
+} );
