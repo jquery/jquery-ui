@@ -111,6 +111,47 @@ asyncTest( "handle focus of menu with active item", function() {
 	});
 });
 
+test( "handle mouseenter on nested menu item", function( assert ) {
+	assert.expect( 8 );
+	$.ui.menu.prototype.delay = 1;
+	var activeItem,
+		done = assert.async(),
+		element = $( "#menu2" ).menu();
+
+	element
+		.menu( "previous" )
+		.menu( "expand" );
+
+	function checkSubmenus() {
+		equal( element.find( "ul[aria-expanded='true']" ).length, 2, "both submenus expanded" );
+	}
+	function menumouseenter1() {
+		element.menu( "expand" );
+		setTimeout( menumouseenter2, 25 );
+	}
+	function menumouseenter2() {
+		checkSubmenus();
+		activeItem = $( "#" + element.attr( "aria-activedescendant" ) );
+		assert.hasClasses( activeItem, "ui-state-active" );
+		activeItem.trigger( "mouseleave" );
+		setTimeout( menumouseenter3, 25 );
+	}
+	function menumouseenter3() {
+		checkSubmenus();
+		assert.lacksClasses( activeItem, "ui-state-active" );
+		activeItem.trigger( "mouseenter" );
+		setTimeout( menumouseenter4, 25 );
+	}
+	function menumouseenter4() {
+		checkSubmenus();
+		activeItem.parents( ".ui-menu-item" ).each( function( index, item ) {
+			assert.hasClasses( $( item ).children( ".ui-menu-item-wrapper" ), "ui-state-active" );
+		} );
+		done();
+	}
+	setTimeout( menumouseenter1, 25 );
+} );
+
 asyncTest( "handle submenu auto collapse: mouseleave, default markup", function() {
 	expect( 4 );
 	$.ui.menu.prototype.delay = 1;
