@@ -147,6 +147,7 @@ test( "handle mouseenter on nested menu item", function( assert ) {
 		activeItem.parents( ".ui-menu-item" ).each( function( index, item ) {
 			assert.hasClasses( $( item ).children( ".ui-menu-item-wrapper" ), "ui-state-active" );
 		} );
+		$.ui.menu.prototype.delay = 300;
 		done();
 	}
 	setTimeout( menumouseenter1, 25 );
