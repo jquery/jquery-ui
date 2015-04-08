@@ -366,13 +366,11 @@ test( "setting right/bottom css shouldn't cause resize", function( assert ) {
 	testHelper.move( element, -50, -50 );
 
 	finalOffset = element.offset();
-	finalOffset.left += 50;
-	finalOffset.top += 50;
 
 	assert.close( element.width(), origWidth, 1, "element retains width" );
 	assert.close( element.height(), origHeight, 1, "element retains height" );
-	assert.close( finalOffset.top, origOffset.top, "element moves the correct vertical distance" );
-	assert.close( finalOffset.top, origOffset.top, "element moves the correct horizontal distance" );
+	assert.close( finalOffset.top, origOffset.top - 50, 1, "element moves the correct vertical distance" );
+	assert.close( finalOffset.top, origOffset.top - 50, 1, "element moves the correct horizontal distance" );
 });
 
 } );

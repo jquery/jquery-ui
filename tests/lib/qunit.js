@@ -1,6 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"qunit-assert-classes",
+	"qunit-assert-close",
+	"lib/qunit-assert-domequal",
 	"phantom-bridge"
 ], function( QUnit, $ ) {
 
@@ -39,12 +42,6 @@ QUnit.reset = ( function( reset ) {
 		reset.apply( this, arguments );
 	};
 } )( QUnit.reset );
-
-// TODO: switch to qunit-assert-close plugin
-QUnit.assert.close = function( actual, expected, maxDifference, message ) {
-	var passes = ( actual === expected ) || Math.abs( actual - expected ) <= maxDifference;
-	QUnit.push( passes, actual, expected, message );
-};
 
 return QUnit;
 
