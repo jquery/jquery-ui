@@ -4,31 +4,8 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-	<script src="../../../external/qunit-assert-classes/qunit-assert-classes.js"></script>
-	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "accordion" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/accordion.js"
-		]
-	});
-	</script>
-
-	<script src="accordion_test_helpers.js"></script>
-	<script src="accordion_common.js"></script>
-	<script src="accordion_core.js"></script>
-	<script src="accordion_events.js"></script>
-	<script src="accordion_methods.js"></script>
-	<script src="accordion_options.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<script src="../../lib/css.js" data-modules="core accordion"></script>
+	<script src="../../lib/bootstrap.js" data-widget="accordion"></script>
 	<style>
 	#list, #list1 *, #navigation, #navigation * {
 		margin: 0;

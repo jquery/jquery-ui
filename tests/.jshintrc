@@ -20,9 +20,8 @@
 
 	"globals": {
 		"asyncTest": false,
-		"closeEnough": false,
 		"deepEqual": false,
-		"domEqual": false,
+		"define": false,
 		"equal": false,
 		"expect": false,
 		"Globalize": false,
@@ -36,7 +35,6 @@
 		"strictEqual": false,
 		"stop": false,
 		"test": false,
-		"TestHelpers": true,
 		"JSHINT": false
 	}
 }

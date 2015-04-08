@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/core"
+], function( $ ) {
 
 module( "core - selectors" );
 
@@ -251,4 +254,4 @@ test( "tabbable - dimensionless parent with overflow", function() {
 	isTabbable( "#dimensionlessParent", "input" );
 });
 
-})( jQuery );
+} );
