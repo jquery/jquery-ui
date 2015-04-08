@@ -10,13 +10,15 @@ window.requirejs = {
 		"lib": "../../lib",
 		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
+		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
 		"ui": "../../../ui"
 	},
 	shim: {
 		"globalize/ja-JP": [ "globalize" ],
 		"jquery-simulate": [ "jquery" ],
-		"qunit-assert-classes": [ "qunit" ]
+		"qunit-assert-classes": [ "qunit" ],
+		"qunit-assert-close": [ "qunit" ]
 	}
 };
 
@@ -43,11 +45,9 @@ function requireModules( dependencies, callback, modules ) {
 // Load a set of test file along with the required test infrastructure
 function requireTests( dependencies, noBackCompat ) {
 	dependencies = [
-		"../../lib/qunit",
+		"lib/qunit",
 		noBackCompat ? "jquery-no-back-compat" : "jquery",
-		"jquery-simulate",
-		"qunit-assert-classes",
-		"../../lib/qunit-assert-domequal"
+		"jquery-simulate"
 	].concat( dependencies );
 
 	requireModules( dependencies, function( QUnit ) {
