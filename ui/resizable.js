@@ -321,7 +321,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	_mouseStart: function(event) {
 
-		var curleft, curtop, cursor,
+		var curleft, curtop, cursor, pos,
 			o = this.options,
 			el = this.element;
 
@@ -329,8 +329,21 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		this._renderProxy();
 
-		curleft = this._num(this.helper.css("left"));
-		curtop = this._num(this.helper.css("top"));
+		curleft = this.helper.css("left");
+		curtop = this.helper.css("top");
+
+		if ( curleft === "auto" ) {
+			pos = this.helper.position();
+			curleft = pos.left;
+		}
+
+		if ( curtop === "auto" ) {
+			pos = pos || this.helper.position();
+			curtop = pos.top;
+		}
+
+		curleft = this._num(curleft);
+		curtop = this._num(curtop);
 
 		if (o.containment) {
 			curleft += $(o.containment).scrollLeft() || 0;
