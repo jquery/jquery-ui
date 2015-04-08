@@ -108,13 +108,22 @@ return $.widget( "ui.menu", {
 				}
 			},
 			"mouseenter .ui-menu-item": function( event ) {
+
 				// Ignore mouse events while typeahead is active, see #10458.
 				// Prevents focusing the wrong item when typeahead causes a scroll while the mouse
 				// is over an item in the menu
 				if ( this.previousFilter ) {
 					return;
 				}
-				var target = $( event.currentTarget );
+
+				var actualTarget = $( event.target ).closest( ".ui-menu-item" ),
+					target = $( event.currentTarget );
+
+				// Ignore bubbled events on parent items, see #11641
+				if ( actualTarget[ 0 ] !== target[ 0 ] ) {
+					return;
+				}
+
 				// Remove ui-state-active class from siblings of the newly focused menu item
 				// to avoid a jump caused by adjacent elements both having a class with a border
 				this._removeClass( target.siblings().children( ".ui-state-active" ),
