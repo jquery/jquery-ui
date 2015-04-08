@@ -219,3 +219,35 @@ asyncTest( "multiple active delegated tooltips", function() {
 });
 
 }( jQuery ) );
+
+// http://bugs.jqueryui.com/ticket/11272
+test ( "remove radio button conflict with live Region and tooltip content", function () {
+	expect( 3 );
+	var content = "<div id='content'>" +
+			"<input type='radio' name='hobby' checked='checked'><label>option 1</label>" +
+			"<input type='radio' name='hobby'><label>option 2</label>" +
+		"</div>",
+		stripped_content = "<div>" +
+				"<input checked=\"checked\" type=\"radio\"><label>option 1</label>" +
+				"<input type=\"radio\"><label>option 2</label>" +
+			"</div>",
+		element = $( content );
+	$( "#tooltipped1" ).tooltip({
+		content: element,
+		open: function( event, ui ) {
+			equal( ui.tooltip.children().html().toLowerCase(), stripped_content );
+		}
+	}).tooltip( "open" ).tooltip( "destroy" );
+	$( "#tooltipped1" ).tooltip({
+		content: element[0],
+		open: function( event, ui ) {
+			equal( ui.tooltip.children().html().toLowerCase(), stripped_content );
+		}
+	}).tooltip( "open" ).tooltip( "destroy" );
+	$( "#tooltipped1" ).tooltip({
+		content: content,
+		open: function( event, ui ) {
+			equal( ui.tooltip.children().html().toLowerCase(), stripped_content );
+		}
+	}).tooltip( "open" );
+});
