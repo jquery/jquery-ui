@@ -1,5 +1,5 @@
 /**
- * QUnit Composite v1.0.4
+ * QUnit Composite v1.0.5-pre
  *
  * https://github.com/JamesMGreene/qunit-composite
  *
@@ -7,7 +7,13 @@
  * Released under the MIT license.
  * https://jquery.org/license/
  */
-(function( QUnit ) {
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( [ "qunit" ], factory );
+	} else {
+		factory( QUnit );
+	}
+}(function( QUnit ) {
 var iframe, hasBound,
 	modules = 1,
 	executingComposite = false;
@@ -58,6 +64,11 @@ function initIframe() {
 
 		if ( !iframe.src ) {
 			return;
+		}
+
+		// Deal with QUnit being loaded asynchronously via AMD
+		if ( !iframeWin.QUnit && iframeWin.define && iframeWin.define.amd ) {
+			return iframeWin.require( [ "qunit" ], onIframeLoad );
 		}
 
 		iframeWin.QUnit.moduleStart(function( data ) {
@@ -181,4 +192,4 @@ QUnit.testDone(function( data ) {
 	current.getElementsByTagName( "a" )[ 0 ].href = src;
 });
 
-})( QUnit );
+}));

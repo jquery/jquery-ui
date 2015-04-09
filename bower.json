@@ -17,7 +17,7 @@
 		"qunit": "1.18.0",
 		"qunit-assert-classes": "0.1.5",
 		"qunit-assert-close": "JamesMGreene/qunit-assert-close#v1.1.1",
-		"qunit-composite": "JamesMGreene/qunit-composite#v1.0.4",
+		"qunit-composite": "JamesMGreene/qunit-composite#v1.1.0",
 		"requirejs": "2.1.14",
 
 		"jquery-1.7.0": "jquery#1.7.0",
