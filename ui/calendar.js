@@ -142,6 +142,9 @@ return $.widget( "ui.calendar", {
 
 	_needsRefresh: function() {
 		if ( this.date.month() !== this.viewDate.month() || this.date.year() !== this.viewDate.year() ) {
+
+			// Check if the needed day is already present in our grid due
+			// to eachDay option changes (eg. other-months demo)
 			return !this.grid.find(
 					this._sanitizeSelector( "#" + this._getDayId( this.date ) )
 				).length;
