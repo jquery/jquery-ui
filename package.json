@@ -54,7 +54,9 @@
 	"scripts": {
 		"test": "grunt"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"jquery": "2.*"
+	},
 	"devDependencies": {
 		"commitplease": "2.0.0",
 		"grunt": "0.4.2",
