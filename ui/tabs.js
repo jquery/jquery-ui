@@ -32,7 +32,7 @@
 	}
 }( function( $ ) {
 
-return $.widget( "ui.tabs", {
+$.widget( "ui.tabs", {
 	version: "@VERSION",
 	delay: 300,
 	options: {
@@ -417,7 +417,7 @@ return $.widget( "ui.tabs", {
 				role: "tab",
 				tabIndex: -1
 			} );
-		this._addClass( this.tabs, "ui-tab", "ui-state-default" );
+		this._addClass( this.tabs, "ui-tabs-tab", "ui-state-default" );
 
 		this.anchors = this.tabs.map( function() {
 			return $( "a", this )[ 0 ];
@@ -879,5 +879,20 @@ return $.widget( "ui.tabs", {
 		return this.element.find( this._sanitizeSelector( "#" + id ) );
 	}
 } );
+
+// DEPRECATED
+// TODO: Switch return back to widget declaration at top of file when this is removed
+if ( $.uiBackCompat !== false ) {
+
+	// Backcompat for ui-tab class (now ui-tabs-tab)
+	$.widget( "ui.tabs", $.ui.tabs, {
+		_processTabs: function() {
+			this._superApply( arguments );
+			this._addClass( this.tabs, "ui-tab" );
+		}
+	} );
+}
+
+return $.ui.tabs;
 
 } ) );

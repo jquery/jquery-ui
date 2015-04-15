@@ -9,7 +9,7 @@ var state = testHelper.state;
 module( "tabs: core" );
 
 test( "markup structure", function( assert ) {
-	expect( 17 );
+	expect( 20 );
 	var element = $( "#tabs1" ).tabs(),
 		tabList = element.find( "ul, ol" ),
 		tabs = tabList.find( "li" ),
@@ -21,9 +21,15 @@ test( "markup structure", function( assert ) {
 	assert.lacksClasses( element, "ui-tabs-collapsible" );
 	assert.hasClasses( tabList, "ui-tabs-nav ui-widget-header" );
 	equal( tabList.length, 1, "The widget contains exactly one tab list" );
+	assert.hasClasses( tabs[ 0 ], "ui-tabs-tab" );
+	assert.hasClasses( tabs[ 1 ], "ui-tabs-tab" );
+	assert.hasClasses( tabs[ 2 ], "ui-tabs-tab" );
+
+	// DEPRECATED
 	assert.hasClasses( tabs[ 0 ], "ui-tab" );
 	assert.hasClasses( tabs[ 1 ], "ui-tab" );
 	assert.hasClasses( tabs[ 2 ], "ui-tab" );
+
 	equal( tabs.length, 3, "There are exactly three tabs" );
 	assert.hasClasses( anchors[ 0 ], "ui-tabs-anchor" );
 	assert.hasClasses( anchors[ 1 ], "ui-tabs-anchor" );
