@@ -239,7 +239,8 @@ grunt.initConfig({
 			"ui/*.js",
 			"Gruntfile.js",
 			"build/**/*.js",
-			"tests/unit/**/*.js"
+			"tests/unit/**/*.js",
+			"tests/lib/**/*.js"
 		]
 	},
 	csslint: {

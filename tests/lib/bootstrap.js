@@ -1,6 +1,6 @@
 ( function() {
 
-window.requirejs = {
+requirejs.config({
 	paths: {
 		"globalize": "../../../external/globalize/globalize",
 		"globalize/ja-JP": "../../../external/globalize/globalize.culture.ja-JP",
@@ -20,7 +20,19 @@ window.requirejs = {
 		"qunit-assert-classes": [ "qunit" ],
 		"qunit-assert-close": [ "qunit" ]
 	}
-};
+});
+
+// Create a module that disables back compat for UI modules
+define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
+	$.uiBackCompat = false;
+
+	return $;
+} );
+
+// Create a dummy bridge if we're not actually testing in PhantomJS
+if ( !/PhantomJS/.test( navigator.userAgent ) ) {
+	define( "phantom-bridge", function() {} );
+}
 
 // Load all modules in series
 function requireModules( dependencies, callback, modules ) {
@@ -83,7 +95,7 @@ function jqueryUrl() {
 	}
 
 	return url;
-};
+}
 
 function swarmInject() {
 	var url = parseUrl().swarmURL;
@@ -134,26 +146,7 @@ function swarmInject() {
 		}
 	}
 
-	// Load requirejs, then load the tests
-	script = document.createElement( "script" );
-	script.src = "../../../external/requirejs/require.js";
-	script.onload = function() {
-
-		// Create a module that disables back compat for UI modules
-		define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
-			$.uiBackCompat = false;
-
-			return $;
-		} );
-
-		// Create a dummy bridge if we're not actually testing in PhantomJS
-		if ( !/PhantomJS/.test( navigator.userAgent ) ) {
-			define( "phantom-bridge", function() {} );
-		}
-
-		requireTests( modules, noBackCompat );
-	};
-	document.documentElement.appendChild( script );
+	requireTests( modules, noBackCompat );
 } )();
 
 } )();
