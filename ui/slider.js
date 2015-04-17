@@ -301,11 +301,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var uiHash = {
 			handle: this.handles[ index ],
 			handleIndex: index,
-			value: value || this.value()
+			value: value !== undefined ? value : this.value()
 		};
 
 		if ( this._hasMultipleValues() ) {
-			uiHash.value = value || this.values( index );
+			uiHash.value = value !== undefined ? value : this.values( index );
 			uiHash.values = values || this.values();
 		}
 
