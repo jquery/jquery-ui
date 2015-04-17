@@ -14,10 +14,10 @@ var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 	var assert = this;
 
 	// Get current state prior to modifier
-	var expected = extract( $( selector ) );
+	var expected = extract( selector, message );
 
 	function done() {
-		var actual = extract( $( selector ) );
+		var actual = extract( selector, message );
 		assert.push( QUnit.equiv( actual, expected ), actual, expected, message );
 	}
 
@@ -87,9 +87,10 @@ function getElementStyles( elem ) {
 	return styles;
 }
 
-function extract( elem ) {
-	if ( !elem || !elem.length ) {
-		QUnit.push( false, actual, expected,
+function extract( selector, message ) {
+	var elem = $( selector );
+	if ( !elem.length ) {
+		QUnit.push( false, null, null,
 			"domEqual failed, can't extract " + selector + ", message was: " + message );
 		return;
 	}
