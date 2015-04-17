@@ -12,13 +12,15 @@ requirejs.config({
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
+		"testswarm": "http://swarm.jquery.org/js/inject.js?" + (new Date()).getTime(),
 		"ui": "../../../ui"
 	},
 	shim: {
 		"globalize/ja-JP": [ "globalize" ],
 		"jquery-simulate": [ "jquery" ],
 		"qunit-assert-classes": [ "qunit" ],
-		"qunit-assert-close": [ "qunit" ]
+		"qunit-assert-close": [ "qunit" ],
+		"testswarm": [ "qunit" ]
 	}
 });
 
@@ -62,8 +64,12 @@ function requireTests( dependencies, noBackCompat ) {
 		"jquery-simulate"
 	].concat( dependencies );
 
+	// Load the TestSwarm injector, if necessary
+	if ( parseUrl().swarmURL ) {
+		dependencies.push( "testswarm" );
+	}
+
 	requireModules( dependencies, function( QUnit ) {
-		swarmInject();
 		QUnit.start();
 	} );
 }
@@ -95,17 +101,6 @@ function jqueryUrl() {
 	}
 
 	return url;
-}
-
-function swarmInject() {
-	var url = parseUrl().swarmURL;
-
-	if ( !url || url.indexOf( "http" ) !== 0 ) {
-		return;
-	}
-
-	document.write( "<script src='http://swarm.jquery.org/js/inject.js?" +
-		(new Date()).getTime() + "'></script>" );
 }
 
 // Load test modules based on data attributes
