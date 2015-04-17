@@ -169,7 +169,7 @@ test( "mouse based interaction part two: when handles overlap", function() {
 });
 
 test( "event data", function() {
-	expect( 4 );
+	expect( 6 );
 
 	var slideHandleIndex = 3,
 		values = [ 8, 9, 7, 4 ],
@@ -203,6 +203,30 @@ test( "event data", function() {
 		});
 
 	handles.eq( slideHandleIndex ).simulate( "drag", { dx: 10 } );
+
+	element.slider( "destroy" );
+	element = $( "#slider1" ).slider({
+		min: 0,
+		max: 100,
+		value: 1,
+		slide: function ( event, ui ) {
+			equal( ui.value, 0, "should pass 0 value if slider reaches it" );
+		}
+	});
+	handles = element.find( ".ui-slider-handle" );
+	handles.eq( 0 ).simulate( "drag", { dx: -10 } );
+
+	element.slider( "destroy" );
+	element = $( "#slider1" ).slider({
+		min: 0,
+		max: 100,
+		values: [ 1, 2 ],
+		slide: function ( event, ui ) {
+			equal( ui.value, 0, "should pass 0 value if one of handles reaches it" );
+		}
+	});
+	handles = element.find( ".ui-slider-handle" );
+	handles.eq( 0 ).simulate( "drag", { dx: -10 } );
 });
 
 } );
