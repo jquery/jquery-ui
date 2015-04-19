@@ -299,10 +299,10 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 	_uiHash: function( index, value, values ) {
 		var uiHash = {
-				handle: this.handles[ index ],
-				handleIndex: index,
-				value: typeof value !== "undefined" ? value : this.value()
-			};
+			handle: this.handles[ index ],
+			handleIndex: index,
+			value: typeof value !== "undefined" ? value : this.value()
+		};
 
 		if ( this._hasMultipleValues() ) {
 			uiHash.value = typeof value !== "undefined" ? value : this.values( index );
