@@ -26,39 +26,33 @@
 
 		$( "#city" ).autocomplete({
 			source: function( request, response ) {
-				$.ajax({
+				$.ajax( {
 					url: "http://gd.geobytes.com/AutoCompleteCity",
 					dataType: "jsonp",
 					data: {
 						q: request.term
 					},
 					success: function( data ) {
-						response( data );
+
+						// Handle 'no match' indicated by [ "" ] response
+						response( data.length === 1 && data[ 0 ].length === 0 ? [] : data );
 					}
-				});
+				} );
 			},
 			minLength: 3,
 			select: function( event, ui ) {
-				log( ui.item ?
-					"Selected: " + ui.item.label :
-					"Nothing selected, input was " + this.value);
-			},
-			open: function() {
-				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-			},
-			close: function() {
-				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+				log( "Selected: " + ui.item.label );
 			}
-		});
-	});
+		} );
+	} );
 	</script>
 </head>
 <body>
 
 <div class="ui-widget">
 	<label for="city">Your city: </label>
-	<input id="city">
-	Powered by <a href="http://geonames.org">geonames.org</a>
+	<input id="city" type="text">
+	Powered by <a href="http://geobytes.com">geobytes.com</a>
 </div>
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">
@@ -67,8 +61,7 @@
 </div>
 
 <div class="demo-description">
-<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are cities, displayed when at least two characters are entered into the field.</p>
-<p>In this case, the datasource is the <a href="http://geonames.org">geonames.org webservice</a>. While only the city name itself ends up in the input after selecting an element, more info is displayed in the suggestions to help find the right entry. That data is also available in callbacks, as illustrated by the Result area below the input.</p>
+<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are cities, displayed when at least three characters are entered into the field. The datasource is the <a href="http://geobytes.com">geobytes.com webservice</a>. That data is also available in callbacks, as illustrated by the Result area below the input.</p>
 </div>
 </body>
 </html>
