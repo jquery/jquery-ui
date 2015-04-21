@@ -220,3 +220,21 @@ asyncTest( "multiple active delegated tooltips", function() {
 });
 
 }( jQuery ) );
+
+// http://bugs.jqueryui.com/ticket/11272
+test ( "remove radio button name conflict between live Region and tooltip content", function () {
+	expect( 1 );
+
+	var element = $( "<div id='content'>" +
+		"<input type='radio' name='hobby' checked='checked'><label>option 1</label>" +
+		"<input type='radio' name='hobby'><label>option 2</label>" +
+		"</div>" );
+	$( "#tooltipped1" )
+		.tooltip({
+			content: element,
+			open: function( event, ui ) {
+				equal( $( ".ui-helper-hidden-accessible [name]" ).length, 0, 'no name attr within liveRegion');
+			}
+		})
+		.tooltip( "open" );
+});
