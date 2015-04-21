@@ -106,7 +106,7 @@ test( "min", function() {
 });
 
 test( "orientation", function( assert ) {
-	expect( 14 );
+	expect( 12 );
 	element = $( "#slider1" );
 
 	options = {
@@ -151,16 +151,12 @@ test( "orientation", function( assert ) {
 
 	element.slider( "option", "value", 5 );
 	element.slider( "option", "orientation", "vertical" );
-	equal( element.find( ".ui-slider-range" ).width(), element.width(),
-		"range should fill all horizontal space after changing orientation to vertical" );
-	equal( element.find( ".ui-slider-range" ).height(), 250,
-		"range should fill vertical space proportionally to handle value" );
+	equal( element.find( ".ui-slider-range" ).width(), 12,
+		"range should occupy all horizontal space after changing orientation to vertical" );
 
 	element.slider( "option", "orientation", "horizontal" );
-	equal( element.find( ".ui-slider-range " ).height(), element.height(),
-		"range should fill all vertical space after changing orientation to horizontal" );
-	equal( element.find( ".ui-slider-range " ).width(), 250,
-		"range should fill horizontal space proportionally to handle value" );
+	equal( element.find( ".ui-slider-range " ).height(), 12,
+		"range should occupy all vertical space after changing orientation to horizontal" );
 
 	element.slider( "destroy" );
 
