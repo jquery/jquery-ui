@@ -106,7 +106,7 @@ test( "min", function() {
 });
 
 test( "orientation", function( assert ) {
-	expect( 11 );
+	expect( 14 );
 	element = $( "#slider1" );
 
 	options = {
@@ -143,7 +143,7 @@ test( "orientation", function( assert ) {
 
 	element.slider( "destroy" );
 
-	element = $( "#slider1" ).slider({
+	element = $( "#slider2" ).slider({
 		range: "max",
 		min: 0,
 		max: 10
@@ -151,21 +151,27 @@ test( "orientation", function( assert ) {
 
 	element.slider( "option", "value", 5 );
 	element.slider( "option", "orientation", "vertical" );
-	equal( element.width(), element.find( ".ui-slider-range " ).width(),
+	equal( element.find( ".ui-slider-range" ).width(), element.width(),
 		"range should fill all horizontal space after changing orientation to vertical" );
+	equal( element.find( ".ui-slider-range" ).height(), 250,
+		"range should fill vertical space proportionally to handle value" );
 
 	element.slider( "option", "orientation", "horizontal" );
-	equal( element.height(), element.find( ".ui-slider-range " ).height(),
+	equal( element.find( ".ui-slider-range " ).height(), element.height(),
 		"range should fill all vertical space after changing orientation to horizontal" );
+	equal( element.find( ".ui-slider-range " ).width(), 250,
+		"range should fill horizontal space proportionally to handle value" );
 
 	element.slider( "destroy" );
 
-	element = $( "#slider1" ).slider({
+	element = $( "#slider2" ).slider({
 		range: true,
 		min: 0,
 		max: 100
 	});
 	element.slider( "option", { values: [ 60, 70 ] } );
+	notEqual( element.find( ".ui-slider-range " ).position().left, 0,
+		"range should not pull over to the track's border" );
 	element.slider( "option", "orientation", "vertical" );
 	equal( element.find( ".ui-slider-range " ).position().left, 0,
 		"range should pull over to the track's border" );
