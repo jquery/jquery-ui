@@ -361,10 +361,14 @@ return $.widget( "ui.accordion", {
 			maxHeight = 0;
 			this.headers.next()
 				.each( function() {
-					var display = $( this ).css( "display" );
-					$( this ).css( "display", "block" );
+					var isVisible = $( this ).is ( ":visible" );
+					if ( !isVisible ) {
+						$( this ).show();
+					}
 					maxHeight = Math.max( maxHeight, $( this ).css( "height", "" ).height() );
-					$( this ).css( "display", display );
+					if ( !isVisible ) {
+						$( this ).hide();
+					}
 				} )
 				.height( maxHeight );
 		}
