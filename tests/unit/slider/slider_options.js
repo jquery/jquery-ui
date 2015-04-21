@@ -106,7 +106,7 @@ test( "min", function() {
 });
 
 test( "orientation", function( assert ) {
-	expect( 12 );
+	expect( 14 );
 	element = $( "#slider1" );
 
 	options = {
@@ -116,7 +116,8 @@ test( "orientation", function( assert ) {
 		value: 1
 	};
 
-	var percentVal = ( options.value - options.min ) / ( options.max - options.min ) * 100;
+	var newValue, rangeSize,
+		percentVal = ( options.value - options.min ) / ( options.max - options.min ) * 100;
 
 	element.slider( options ).slider( "option", "orientation", "horizontal" );
 	assert.hasClasses( element, "ui-slider-horizontal" );
@@ -143,20 +144,26 @@ test( "orientation", function( assert ) {
 
 	element.slider( "destroy" );
 
+	newValue = 7;
+	rangeSize = 500 - (500 * newValue / 10);
 	element = $( "#slider2" ).slider({
 		range: "max",
 		min: 0,
 		max: 10
 	});
 
-	element.slider( "option", "value", 5 );
+	element.slider( "option", "value", newValue );
 	element.slider( "option", "orientation", "vertical" );
 	equal( element.find( ".ui-slider-range" ).width(), 12,
 		"range should occupy all horizontal space after changing orientation to vertical" );
+	equal( element.find( ".ui-slider-range" ).height(), rangeSize,
+		"range height of vertical slider should be proportional to the value" );
 
 	element.slider( "option", "orientation", "horizontal" );
 	equal( element.find( ".ui-slider-range " ).height(), 12,
 		"range should occupy all vertical space after changing orientation to horizontal" );
+	equal( element.find( ".ui-slider-range" ).width(), rangeSize,
+		"range width of horizontal slider should be proportional to the value" );
 
 	element.slider( "destroy" );
 
