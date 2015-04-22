@@ -221,4 +221,29 @@ asyncTest( "multiple active delegated tooltips", function() {
 	step1();
 });
 
+// http://bugs.jqueryui.com/ticket/11272
+test( "remove conflicting attributes from live region", function() {
+	expect( 2 );
+
+	var element = $(
+		"<div id='content'>" +
+			"<input type='radio' name='hobby' id='hobby1' checked='checked'>" +
+			"<label for='hobby1'>option 1</label>" +
+			"<input type='radio' name='hobby' id='hobby2'>" +
+			"<label for='hobby2'>option 2</label>" +
+		"</div>" );
+
+	$( "#tooltipped1" )
+		.tooltip({
+			content: element,
+			open: function() {
+				equal( $( ".ui-helper-hidden-accessible [name]" ).length, 0,
+					"no name attributes within live region" );
+				equal( $( ".ui-helper-hidden-accessible [id]" ).length, 0,
+					"no id attributes within live region" );
+			}
+		})
+		.tooltip( "open" );
+});
+
 } );
