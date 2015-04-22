@@ -243,4 +243,3 @@ test ( "remove conflicting attributes from live region", function() {
 });
 
 } );
-
