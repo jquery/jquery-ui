@@ -232,7 +232,7 @@ test ( "remove conflicting attributes from live region", function() {
 	$( "#tooltipped1" )
 		.tooltip({
 			content: element,
-			open: function( event, ui ) {
+			open: function() {
 				equal( $( ".ui-helper-hidden-accessible [name]" ).length, 0,
 				  "no name attributes within live region" );
 				equal( $( ".ui-helper-hidden-accessible [id]" ).length, 0,
