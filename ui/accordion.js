@@ -361,7 +361,7 @@ return $.widget( "ui.accordion", {
 			maxHeight = 0;
 			this.headers.next()
 				.each( function() {
-					var isVisible = $( this ).is ( ":visible" );
+					var isVisible = $( this ).is( ":visible" );
 					if ( !isVisible ) {
 						$( this ).show();
 					}
