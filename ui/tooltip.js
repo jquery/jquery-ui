@@ -287,6 +287,7 @@ $.widget( "ui.tooltip", {
 		// Voiceover will sometimes re-read the entire log region's contents from the beginning
 		this.liveRegion.children().hide();
 		a11yContent = $( "<div>" ).html( tooltip.find( ".ui-tooltip-content" ).html() );
+		a11yContent.removeAttr( "name" ).find( "[name]" ).removeAttr( "name" );
 		a11yContent.removeAttr( "id" ).find( "[id]" ).removeAttr( "id" );
 		a11yContent.appendTo( this.liveRegion );
 
