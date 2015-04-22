@@ -1505,7 +1505,9 @@ $.fn.extend({
 				})
 				.animate( animation, options.duration, options.easing, function() {
 					transfer.remove();
-					done();
+					if ( $.isFunction( done ) ) {
+						done();
+					}
 				});
 	}
 });

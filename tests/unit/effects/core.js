@@ -258,6 +258,32 @@ test( "createPlaceholder: preserves layout affecting properties", function() {
 	deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
 });
 
+module( "transfer" );
+
+asyncTest( "transfer() without callback", function() {
+	expect( 0 );
+
+	// Verify that the effect works without a callback
+	$( "#elem" ).transfer( {
+		to: ".animateClass",
+		duration: 1
+	} );
+	setTimeout( function() {
+		start();
+	}, 25 );
+} );
+
+asyncTest( "transfer() with callback", function() {
+	expect( 1 );
+	$( "#elem" ).transfer( {
+		to: ".animateClass",
+		duration: 1
+	}, function() {
+		ok( true, "callback invoked" );
+		start();
+	} );
+} );
+
 $.each( $.effects.effect, function( effect ) {
 	module( "effects." + effect );
 
