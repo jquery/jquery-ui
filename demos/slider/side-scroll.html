@@ -36,6 +36,9 @@
 				} else {
 					scrollContent.css( "margin-left", 0 );
 				}
+			},
+			stop: function () {
+				scrollbar.width( "100%" );
 			}
 		});
 
@@ -43,9 +46,6 @@
 		var handleHelper = scrollbar.find( ".ui-slider-handle" )
 		.mousedown(function() {
 			scrollbar.width( handleHelper.width() );
-		})
-		.mouseup(function() {
-			scrollbar.width( "100%" );
 		})
 		.append( "<span class='ui-icon ui-icon-grip-dotted-vertical'></span>" )
 		.wrap( "<div class='ui-handle-helper-parent'></div>" ).parent();
