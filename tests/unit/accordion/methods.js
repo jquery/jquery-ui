@@ -10,6 +10,18 @@ var equalHeight = testHelper.equalHeight,
 
 module( "accordion: methods", setupTeardown() );
 
+test( "collapsedHeight", function() {
+	expect( 1 );
+	var element = $( "#collapsible" ).accordion(),
+		content = element.find( ".ui-accordion-content" ),
+		height = content.height();
+	element.accordion( "destroy" ).accordion({
+		active: false,
+		collapsible: true
+	});
+	equal( content.height(), height );
+});
+
 test( "destroy", function( assert ) {
 	expect( 1 );
 	assert.domEqual( "#list1", function() {
