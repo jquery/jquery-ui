@@ -48,6 +48,19 @@ test( "{ active: false }", function() {
 	strictEqual( element.accordion( "option", "active" ), 0 );
 });
 
+// http://bugs.jqueryui.com/ticket/11938
+test( "{ active: false, collapsible: true }", function() {
+	expect( 1 );
+	var element = $( "#collapsible" ).accordion(),
+		content = element.find( ".ui-accordion-content" ),
+		height = content.height();
+	element.accordion( "destroy" ).accordion({
+		active: false,
+		collapsible: true
+	});
+	equal( content.height(), height );
+});
+
 test( "{ active: Number }", function() {
 	expect( 8 );
 	var element = $( "#list1" ).accordion({
