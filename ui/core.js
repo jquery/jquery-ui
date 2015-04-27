@@ -184,7 +184,7 @@ $.fn.extend( {
 				ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
 
 				// Create a selector for the label based on the id
-				selector = "label[for='" + this.attr( "id" ).replace( /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g, "\\$1" ) + "']";
+				selector = "label[for='" + this.attr( "id" ).replace( $.ui.escapeId, "\\$1" ) + "']";
 
 				// Support: Core 1.7
 				// Once we drop support for 1.7 we can just use .addBack( selector ) here
