@@ -424,7 +424,7 @@ return $.widget( "ui.selectmenu", {
 			}
 
 			if ( !$( event.target ).closest( ".ui-selectmenu-menu, #" +
-					this.ids.button.replace( $.ui.escapeId) ).length ) {
+					this.ids.button.replace( $.ui.escapeId, "\\$1" ) ).length ) {
 				this.close( event );
 			}
 		}
