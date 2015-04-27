@@ -138,4 +138,69 @@ test( "uniqueId / removeUniqueId", function() {
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
+
+test( "labels", function() {
+	expect( 2 );
+
+	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ],
+		foundFragment = [],
+		foundDom = [],
+		dom = $( "#labels-fragment" ),
+		domLabels = dom.find( "input" ).labels(),
+		fragmentLabels = $( dom.html() ).find( "input" ).labels();
+
+	domLabels.each( function( index ){
+		foundDom.push( $( this ).text().trim() );
+	} );
+	deepEqual( foundDom, expected,
+		"Labels finds labels all labels in the DOM, and sorts them in DOM order" );
+
+	fragmentLabels.each( function( index ){
+		foundFragment.push( $( this ).text().trim() );
+	} );
+	deepEqual( foundFragment, expected,
+		"Labels finds all labels in fragments, and sorts them in dom order" );
+} );
+
+asyncTest( "form", function() {
+	expect( 12 );
+
+	var dom = $( "#form-dom" ),
+		domInputs = dom.find( "input" ),
+		formTests = [],
+		count = 0,
+		first = true,
+		fragmentDom = $( $( "#form-fragment" ).html().trim() ),
+		fragmentInputs = fragmentDom.find( "input" ).add( fragmentDom.filter( "input " ) );
+
+	function testInputReset( input ) {
+		var form = input.form(),
+			resolveValue = ( count === 0 || count === 6 || count === 7 ) ? "changed" : "",
+			deffered = new $.Deferred();
+
+		count++;
+		input.val( "changed" );
+		deffered.then( function( value ) {
+			equal( input.val(), value, "Proper form found for #" + input.attr( "id" ) );
+		} );
+
+		form.trigger( "reset" );
+		setTimeout( function() {
+			deffered.resolve( resolveValue );
+		} );
+		return deffered;
+	}
+	$( "#form-fragment" ).remove();
+	domInputs.each( function() {
+		formTests.push( testInputReset( $( this ) ) );
+	} );
+
+	fragmentInputs.each( function() {
+		formTests.push( testInputReset( $( this ) ) );
+	} );
+	$.when.apply( formTests ).then( function() {
+		start();
+	} );
+} );
+
 } );
