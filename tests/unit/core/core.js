@@ -138,25 +138,30 @@ test( "uniqueId / removeUniqueId", function() {
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
-
+// Support: Core 1.9 Only, IE8 Only
+// The use of $.trim() in the two tests below this is to account for IE8 missing string.trim()
+// We need to trim the values at all because of a bug in core 1.9.x
 test( "labels", function() {
 	expect( 2 );
 
-	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ],
+	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
 		foundFragment = [],
 		foundDom = [],
 		dom = $( "#labels-fragment" ),
-		domLabels = dom.find( "input" ).labels(),
-		fragmentLabels = $( dom.html() ).find( "input" ).labels();
+		domLabels = dom.find( "#test" ).labels(),
+		fragmentLabels = $( $.trim( dom.html() ) ).find( "#test" );
 
-	domLabels.each( function( index ){
-		foundDom.push( $( this ).text().trim() );
+	domLabels.each( function(){
+		foundDom.push( $.trim( $( this ).text() ) );
 	} );
 	deepEqual( foundDom, expected,
 		"Labels finds labels all labels in the DOM, and sorts them in DOM order" );
 
-	fragmentLabels.each( function( index ){
-		foundFragment.push( $( this ).text().trim() );
+	// Remove fragment DOM so id's are not duplicated and we know we are finding the detached labels
+	dom.remove();
+	fragmentLabels = fragmentLabels.labels();
+	fragmentLabels.each( function(){
+		foundFragment.push( $.trim( $( this ).text() ) );
 	} );
 	deepEqual( foundFragment, expected,
 		"Labels finds all labels in fragments, and sorts them in dom order" );
@@ -168,36 +173,51 @@ asyncTest( "form", function() {
 	var dom = $( "#form-dom" ),
 		domInputs = dom.find( "input" ),
 		formTests = [],
-		count = 0,
-		first = true,
-		fragmentDom = $( $( "#form-fragment" ).html().trim() ),
+		fragmentDom = $( $.trim( $( "#form-fragment" ).html() ) ),
 		fragmentInputs = fragmentDom.find( "input" ).add( fragmentDom.filter( "input " ) );
 
-	function testInputReset( input ) {
+	function testInputReset( input, dom ) {
 		var form = input.form(),
-			resolveValue = ( count === 0 || count === 6 || count === 7 ) ? "changed" : "",
+
+			// If the input has a form value should be reset, other wise it should still be changed
+			resolveValue = form.length ? "" : "changed",
+
+			// Create a deffered to resolve after the form has been reset
 			deffered = new $.Deferred();
 
-		count++;
-		input.val( "changed" );
+		// When the deffered is resolved check if the input has beem reset or not
 		deffered.then( function( value ) {
 			equal( input.val(), value, "Proper form found for #" + input.attr( "id" ) );
 		} );
 
-		form.trigger( "reset" );
+		input.val( "changed" );
+
+		// If there is a form we reset just that. If there is not a form, reset every form.
+		// The idea is if a form is found resetting that form should reset the input.
+		// If no form is found no amount of resetting should change the value.
+		( form.length ? form : dom.find( "form" ).add( dom.filter( form ) ) ).trigger( "reset" );
+
+		// We need to wait for the form to actually reset then resolve the deffered
 		setTimeout( function() {
 			deffered.resolve( resolveValue );
 		} );
 		return deffered;
 	}
+
+	// Remove fragment DOM so id's are not duplicated and we know we are finding the detached forms
 	$( "#form-fragment" ).remove();
+
+	// Iterate over each set of inputs attached and detached and push the deffereds the test helper
+	// returns to an array
 	domInputs.each( function() {
-		formTests.push( testInputReset( $( this ) ) );
+		formTests.push( testInputReset( $( this ), $( document ) ) );
 	} );
 
 	fragmentInputs.each( function() {
-		formTests.push( testInputReset( $( this ) ) );
+		formTests.push( testInputReset( $( this ), fragmentDom ) );
 	} );
+
+	// We are doing a whole pile of async tests here so we will start when they all resolve
 	$.when.apply( formTests ).then( function() {
 		start();
 	} );

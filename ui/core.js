@@ -131,7 +131,7 @@ $.fn.extend( {
 	},
 
 	form: function() {
-		var parent;
+		var form;
 
 		if ( this[ 0 ].form && typeof this[ 0 ].form !== "string" ) {
 			return this.pushStack( $( this[ 0 ].form ) );
@@ -145,18 +145,9 @@ $.fn.extend( {
 		// like all other IE's and Android 2.3 support the form attribute not at all or partially.
 		// We don't care in those cases because they still always return an element. We are not
 		// trying to fix the form attribute here, only deal with the prop supplying a string.
-		// we don't use document on the first line below because we support document fragments
-		parent = ( this[ 0 ].style ?
-				// element within the document
-				this[ 0 ].ownerDocument :
-				// element is window or document
-				this[ 0 ].document || this[ 0 ] ).getElementByID( this[ 0 ].form );
-		if ( parent ) {
-			return this.pushStack( parent );
-		}
-		parent = this.closest( "form" );
-		if ( parent.length ) {
-			return this.pushStack( parent );
+		form = this.closest( "form" );
+		if ( form.length ) {
+			return this.pushStack( form );
 		}
 		return this.pushStack( [] );
 	},
@@ -172,10 +163,17 @@ $.fn.extend( {
 			// Support: IE <= 11, FF <= 37, Android <=2.3 only
 			// Above browsers do not support control.labels everything below is to support them
 			// as well as document fragments control.labels does not work on document fragments anywhere
-			labels = this.parents( "label" );
+			id = this.attr( "id" );
+
+			labels = this.parents( "label" ).filter( function() {
+				var labelFor = $( this ).attr( "for" );
+
+				// Just because an input is wrapped in a label does not mean it belongs to that
+				// label it may have a for attribute pointing to a different input.
+				return ( !labelFor || labelFor === id );
+			} );
 
 			// Look for the label based on the id
-			id = this.attr( "id" );
 			if ( id ) {
 
 				// We don't search against the document in case the element
@@ -188,6 +186,8 @@ $.fn.extend( {
 				// Create a selector for the label based on the id
 				selector = "label[for='" + this.attr( "id" ).replace( /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g, "\\$1" ) + "']";
 
+				// Support: Core 1.7
+				// Once we drop support for 1.7 we can just use .addBack( selector ) here
 				// Check both the ancestors and the contents of the ancestors for matching labels
 				labels = labels.add( ancestors.filter( selector ) );
 				labels = labels.add( ancestors.find( selector ) );
