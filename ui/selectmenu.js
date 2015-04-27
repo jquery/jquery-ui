@@ -90,7 +90,7 @@ return $.widget( "ui.selectmenu", {
 			);
 
 		// Associate existing label with the new button
-		this.labels = this.element.labels();
+		this.labels = this.element.labels().attr( "for", this.ids.button );
 		this._on( this.labels, {
 			click: function( event ) {
 				this.button.focus();
@@ -423,7 +423,8 @@ return $.widget( "ui.selectmenu", {
 				return;
 			}
 
-			if ( !$( event.target ).closest( ".ui-selectmenu-menu, #" + this.ids.button ).length ) {
+			if ( !$( event.target ).closest( ".ui-selectmenu-menu, #" +
+					this.ids.button.replace( $.ui.escapeId) ).length ) {
 				this.close( event );
 			}
 		}
