@@ -163,17 +163,10 @@ $.fn.extend( {
 			// Support: IE <= 11, FF <= 37, Android <=2.3 only
 			// Above browsers do not support control.labels everything below is to support them
 			// as well as document fragments control.labels does not work on document fragments anywhere
-			id = this.attr( "id" );
-
-			labels = this.parents( "label" ).filter( function() {
-				var labelFor = $( this ).attr( "for" );
-
-				// Just because an input is wrapped in a label does not mean it belongs to that
-				// label it may have a for attribute pointing to a different input.
-				return ( !labelFor || labelFor === id );
-			} );
+			labels = this.parents( "label" );
 
 			// Look for the label based on the id
+			id = this.attr( "id" );
 			if ( id ) {
 
 				// We don't search against the document in case the element

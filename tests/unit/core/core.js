@@ -144,7 +144,7 @@ test( "uniqueId / removeUniqueId", function() {
 test( "labels", function() {
 	expect( 2 );
 
-	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
+	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ],
 		foundFragment = [],
 		foundDom = [],
 		dom = $( "#labels-fragment" ),

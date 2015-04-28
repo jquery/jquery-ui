@@ -214,10 +214,7 @@ grunt.initConfig({
 					/Start tag seen without seeing a doctype first/,
 					/Element “head” is missing a required instance of child element “title”/,
 					/Element “object” is missing one or more of the following/,
-					/The “codebase” attribute on the “object” element is obsolete/,
-					/The element “label” must not appear as a descendant of the “label” element./,
-					/Any “input” descendant of a “label” element with a “for” attribute must have an ID value that matches that “for” attribute./,
-					/Any “input” descendant of a “label” element with a “for” attribute must have an ID value that matches that “for” attribute./
+					/The “codebase” attribute on the “object” element is obsolete/
 				]
 			},
 			src: htmllintBad
