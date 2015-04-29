@@ -254,4 +254,11 @@ test( "tabbable - dimensionless parent with overflow", function() {
 	isTabbable( "#dimensionlessParent", "input" );
 });
 
+test( "escapeId", function() {
+	expect( 1 );
+
+	equal( $( "#" + $.ui.escapeId( "weird-['x']-id" ) ).length, 1,
+		"Escape id properly escapes selectors to use as an id" );
+} );
+
 } );
