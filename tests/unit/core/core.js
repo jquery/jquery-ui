@@ -139,32 +139,30 @@ test( "uniqueId / removeUniqueId", function() {
 });
 
 // Support: Core 1.9 Only, IE8 Only
-// The use of $.trim() in the two tests below this is to account for IE8 missing string.trim()
-// We need to trim the values at all because of a bug in core 1.9.x
+// The use of $.trim() in the two tests below this is to account for IE8 missing
+// string.trim() We need to trim the values at all because of a bug in core 1.9.x
 test( "labels", function() {
 	expect( 2 );
 
 	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ],
-		foundFragment = [],
-		foundDom = [],
-		dom = $( "#labels-fragment" ),
-		domLabels = dom.find( "#test" ).labels(),
-		fragmentLabels = $( $.trim( dom.html() ) ).find( "#test" );
+		dom = $( "#labels-fragment" );
 
-	domLabels.each( function(){
-		foundDom.push( $.trim( $( this ).text() ) );
-	} );
-	deepEqual( foundDom, expected,
-		"Labels finds labels all labels in the DOM, and sorts them in DOM order" );
+	function testLabels( testType ) {
+		var labels = dom.find( "#test" ).labels(),
+			found = labels.map( function() {
+				return $.trim( $( this ).text() );
+			} ).get();
 
-	// Remove fragment DOM so id's are not duplicated and we know we are finding the detached labels
-	dom.remove();
-	fragmentLabels = fragmentLabels.labels();
-	fragmentLabels.each( function(){
-		foundFragment.push( $.trim( $( this ).text() ) );
-	} );
-	deepEqual( foundFragment, expected,
-		"Labels finds all labels in fragments, and sorts them in dom order" );
+		deepEqual( found, expected,
+			"Labels finds all labels in " + testType + ", and sorts them in DOM order" );
+	}
+
+	testLabels( "the DOM" );
+
+	// Detach the dom to test on a fragment
+	dom.detach();
+	testLabels( "document fragments" );
+
 } );
 
 asyncTest( "form", function() {

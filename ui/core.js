@@ -29,6 +29,8 @@
 // $.ui might exist from components with no dependencies, e.g., $.ui.position
 $.ui = $.ui || {};
 
+var idEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
+
 $.extend( $.ui, {
 	version: "@VERSION",
 
@@ -90,7 +92,9 @@ $.extend( $.ui, {
 		}
 	},
 
-	escapeId: new RegExp( /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g )
+	escapeId: function( id ) {
+		return id.replace( idEscape, "\\$1" );
+	}
 } );
 
 // plugins
@@ -130,65 +134,47 @@ $.fn.extend( {
 		} );
 	},
 
+	// Support: IE8 Only
+	// IE8 does not support the form attribute and when it is supplied it over wirtes the form prop
+	// with a string so we need to try and work around this by looking for the closest form if the
+	// prop is a string.
 	form: function() {
-		var form;
-
-		if ( this[ 0 ].form && typeof this[ 0 ].form !== "string" ) {
-			return this.pushStack( $( this[ 0 ].form ) );
-		} else if ( !this[ 0 ].form ) {
-			return this.pushStack( [] );
-		}
-
-		// Support: IE8 only ( the rest of the method )
-		// IE8 supports the form property, but not the form attribute, worse yet if you supply the
-		// form attribute it overwrites the form property with the string. Other supported browsers
-		// like all other IE's and Android 2.3 support the form attribute not at all or partially.
-		// We don't care in those cases because they still always return an element. We are not
-		// trying to fix the form attribute here, only deal with the prop supplying a string.
-		form = this.closest( "form" );
-		if ( form.length ) {
-			return this.pushStack( form );
-		}
-		return this.pushStack( [] );
+		return typeof this[ 0 ].form === "string" ? this.closest( "form" ) : $( this[ 0 ].form );
 	},
 
 	labels: function() {
 		var ancestor, selector, id, labels, ancestors;
 
-			// Check control.labels first
-			if ( this[ 0 ].labels !== undefined && this[ 0 ].labels.length > 0 ) {
-				return this.pushStack( this[ 0 ].labels );
-			}
+		// Check control.labels first
+		if ( this[ 0 ].labels && this[ 0 ].labels.length ) {
+			return this.pushStack( this[ 0 ].labels );
+		}
 
-			// Support: IE <= 11, FF <= 37, Android <=2.3 only
-			// Above browsers do not support control.labels everything below is to support them
-			// as well as document fragments control.labels does not work on document fragments anywhere
-			labels = this.parents( "label" );
+		// Support: IE <= 11, FF <= 37, Android <=2.3 only
+		// Above browsers do not support control.labels everything below is to support them
+		// as well as document fragments control.labels does not work on document fragments anywhere
+		labels = this.parents( "label" );
 
-			// Look for the label based on the id
-			id = this.attr( "id" );
-			if ( id ) {
+		// Look for the label based on the id
+		id = this.attr( "id" );
+		if ( id ) {
 
-				// We don't search against the document in case the element
-				// is disconnected from the DOM
-				ancestor = this.parents().last();
+			// We don't search against the document in case the element
+			// is disconnected from the DOM
+			ancestor = this.parents().last();
 
-				// get a full set of top level ancestors
-				ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
+			// get a full set of top level ancestors
+			ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
 
-				// Create a selector for the label based on the id
-				selector = "label[for='" + this.attr( "id" ).replace( $.ui.escapeId, "\\$1" ) + "']";
+			// Create a selector for the label based on the id
+			selector = "label[for='" + $.ui.escapeId( id ) + "']";
 
-				// Support: Core 1.7
-				// Once we drop support for 1.7 we can just use .addBack( selector ) here
-				// Check both the ancestors and the contents of the ancestors for matching labels
-				labels = labels.add( ancestors.filter( selector ) );
-				labels = labels.add( ancestors.find( selector ) );
+			labels = labels.add( ancestors.find( selector ).addBack( selector ) );
 
-			}
+		}
 
-			// Return whatever we have found for labels
-			return this.pushStack( $.unique( labels ) );
+		// Return whatever we have found for labels
+		return this.pushStack( $.unique( labels ) );
 	}
 } );
 
