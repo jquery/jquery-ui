@@ -18,7 +18,6 @@ requirejs.config({
 	shim: {
 		"globalize/ja-JP": [ "globalize" ],
 		"jquery-simulate": [ "jquery" ],
-		"qunit-assert-classes": [ "qunit" ],
 		"qunit-assert-close": [ "qunit" ],
 		"testswarm": [ "qunit" ]
 	}
