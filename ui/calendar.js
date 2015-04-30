@@ -180,16 +180,18 @@ return $.widget( "ui.calendar", {
 		var globalize = new Globalize( locale ),
 			weekdayShortFormatter = globalize.dateFormatter({ pattern: "EEEEEE" }),
 			weekdayNarrowFormatter = globalize.dateFormatter({ pattern: "EEEEE" });
+
 		this._format = globalize.dateFormatter({ date: "short" });
 		this._parse = globalize.dateParser({ date: "short" });
 		this._calendarDateOptions = {
-				firstDay: globalize.cldr.supplemental.weekData.firstDay(),
-				formatWeekdayShort: function( date ) {
+			firstDay: globalize.cldr.supplemental.weekData.firstDay(),
+			formatWeekdayShort: function( date ) {
 
-					// Return the short weekday if its length is < 3. Otherwise, its narrow form.
+				// Return the short weekday if its length is < 3. Otherwise, its narrow form.
 				var shortWeekday = weekdayShortFormatter( date );
+
 				return shortWeekday.length > 3 ? weekdayNarrowFormatter( date ) : shortWeekday;
-				},
+			},
 			formatWeekdayFull: globalize.dateFormatter({ pattern: "EEEE" }),
 			formatMonth: globalize.dateFormatter({ pattern: "MMMM" }),
 			formatWeekOfYear: globalize.dateFormatter({ pattern: "w" }),
@@ -325,7 +327,7 @@ return $.widget( "ui.calendar", {
 		if ( this.options.showWeek ) {
 			cells += "<th class='ui-calendar-week-col'>" + this._getTranslation( "weekHeader" ) + "</th>";
 		}
-		for ( i; i < weekDayLength; i++ ) {
+		for ( ; i < weekDayLength; i++ ) {
 			cells += this._buildGridHeaderCell( weekdays[ i ] );
 		}
 
@@ -492,6 +494,7 @@ return $.widget( "ui.calendar", {
 	// with the prev and next links would cause loss of focus issues because the links being
 	// interacted with will disappear while focused.
 	refresh: function() {
+		this.labels = this.options.labels;
 
 		// Determine which day gridcell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
@@ -541,7 +544,7 @@ return $.widget( "ui.calendar", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this.valueAsDate( locale.parse( value ) );
+			this.valueAsDate( this._parse( value ) );
 		} else {
 			return this._format( this.option( "value" ) );
 		}
