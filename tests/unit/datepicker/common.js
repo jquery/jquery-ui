@@ -1,7 +1,14 @@
-TestHelpers.commonWidgetTests( "datepicker", {
+define( [
+	"lib/common",
+	"ui/datepicker",
+	"globalize-locales"
+], function( common ) {
+
+common.testWidget( "datepicker", {
 	defaults: {
 		appendTo: null,
 		buttons: [],
+		classes: {},
 		disabled: false,
 		eachDay: $.noop,
 		labels: {
@@ -30,3 +37,5 @@ TestHelpers.commonWidgetTests( "datepicker", {
 		select: null
 	}
 });
+
+} );

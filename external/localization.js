@@ -1,6 +1,19 @@
 /**
  * CLDR data
  */
+( function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [
+			"globalize"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( Globalize );
+	}
+}( function( Globalize ) {
 
 Globalize.load({
 	"main": {
@@ -4188,3 +4201,7 @@ Globalize.load({
 		}
 	}
 });
+
+return Globalize;
+
+} ) );

@@ -1,6 +1,13 @@
-TestHelpers.commonWidgetTests( "calendar", {
+define( [
+	"lib/common",
+	"ui/calendar",
+	"globalize-locales"
+], function( common ) {
+
+common.testWidget( "calendar", {
 	defaults: {
 		buttons: [],
+		classes: {},
 		disabled: false,
 		eachDay: $.noop,
 		labels: {
@@ -21,3 +28,5 @@ TestHelpers.commonWidgetTests( "calendar", {
 		select: null
 	}
 });
+
+} );

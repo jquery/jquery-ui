@@ -3,6 +3,7 @@
 requirejs.config({
 	paths: {
 		"date": "../../../external/date",
+		"cldr": "../../../external/cldrjs/cldr",
 		"globalize": "../../../external/globalize/globalize",
 		"globalize-locales": "../../../external/localization",
 		"globalize-old": "../../../external/globalize-old/globalize",

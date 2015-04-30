@@ -282,6 +282,7 @@ grunt.initConfig({
 				"cldrjs/LICENSE-MIT": "cldrjs/LICENSE-MIT",
 
 				"globalize/globalize.js": "globalize/dist/globalize.js",
+				"globalize/globalize/number.js": "globalize/dist/globalize/number.js",
 				"globalize/globalize/date.js": "globalize/dist/globalize/date.js",
 				"globalize/LICENSE.txt": "globalize/LICENSE.txt",
 
