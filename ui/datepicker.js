@@ -37,7 +37,6 @@ var widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
 	options: {
 		appendTo: null,
-		locale: "en",
 		position: {
 			my: "left top",
 			at: "left bottom"
@@ -52,8 +51,8 @@ var widget = $.widget( "ui.datepicker", {
 		select: null
 	},
 
-	calendarOptions: [ "buttons", "dateFormat", "disabled", "eachDay", "max",
-		"min", "numberOfMonths", "showWeek" ],
+	calendarOptions: [ "buttons", "disabled", "eachDay", "labels", "locale",
+		"max", "min", "numberOfMonths", "showWeek" ],
 
 	_create: function() {
 		this.suppressExpandOnFocus = false;
@@ -283,6 +282,7 @@ var widget = $.widget( "ui.datepicker", {
 
 	_setLocale: function( locale ) {
 		var globalize = new Globalize( locale );
+
 		this._format = globalize.dateFormatter({ date: "short" });
 		this._parse = globalize.dateParser({ date: "short" });
 		this._parseYMD = globalize.dateParser({ pattern: "yyyy-MM-dd" });

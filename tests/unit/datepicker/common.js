@@ -1,17 +1,16 @@
-define( [
-	"lib/common",
-	"ui/datepicker",
-	"globalize-locales"
-], function( common ) {
-
-common.testWidget( "datepicker", {
+TestHelpers.commonWidgetTests( "datepicker", {
 	defaults: {
 		appendTo: null,
 		buttons: [],
-		classes: {},
-		dateFormat: { date: "short" },
 		disabled: false,
 		eachDay: $.noop,
+		labels: {
+			"datePickerRole": "date picker",
+			"nextText": "Next",
+			"prevText": "Prev",
+			"weekHeader": "Wk"
+		},
+		locale: "en",
 		max: null,
 		min: null,
 		numberOfMonths: 1,
@@ -31,5 +30,3 @@ common.testWidget( "datepicker", {
 		select: null
 	}
 });
-
-} );

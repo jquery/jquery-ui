@@ -85,12 +85,18 @@ test( "base structure", function() {
 test( "Localization", function() {
 	expect( 10 );
 
-	var defaultLocale = Globalize.locale(),
-		element = $( "#calendar" ),
+	var element = $( "#calendar" ),
 		date = new Date( 2014, 0, 1 ),
-		initCalendar = function() {
+		optionsDe = {
+			locale: "de",
+			labels: {
+				"nextText": "Vor",
+				"prevText": "Zurück"
+			}
+		},
+		initCalendar = function( options ) {
 			element
-				.calendar()
+				.calendar( options )
 				.calendar( "valueAsDate", date );
 		},
 		testLocalization = function( message ) {
@@ -108,26 +114,23 @@ test( "Localization", function() {
 			);
 			equal(
 				element.find( ".ui-calendar-prev" ).text(),
-				"<Zurück", message + "header prev"
+				"Zurück", message + "header prev"
 			);
 			equal(
 				element.find( ".ui-calendar-next" ).text(),
-				"Vor>", message + "header next"
+				"Vor", message + "header next"
 			);
 		};
 
-	Globalize.locale( "de" );
-	initCalendar();
+	initCalendar( optionsDe );
 	testLocalization( "Init: " );
 	element.calendar( "destroy" );
 
-	Globalize.locale( defaultLocale.locale );
-	initCalendar();
-	Globalize.locale( "de" );
-	element.calendar( "refresh" );
+	initCalendar( {} );
+	element
+		.calendar( "option", optionsDe )
+		.calendar( "refresh" );
 	testLocalization( "After init: " );
-
-	Globalize.locale( defaultLocale.locale );
 });
 
 asyncTest( "keyboard handling", function() {
