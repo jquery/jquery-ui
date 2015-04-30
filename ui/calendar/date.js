@@ -162,14 +162,16 @@ $.extend( _Date.prototype, {
 
 		// date = firstDay
 		date = new Date( this.dateObject.getTime() );
-		date.setDate( date.getDate() + firstDay - date.getDay() );
+		date.setDate( date.getDate() + firstDay - 1 - date.getDay() );
 
-		for ( var dow = 0; dow < 7; dow++ && date.setDate( date.getDate() + 1 ) ) {
+		for ( var dow = 0; dow < 7; dow++ ) {
+			date.setTime( date.getTime() + 86400000 );
 			result.push({
 				shortname: this.attributes.formatWeekdayShort( date ),
 				fullname: this.attributes.formatWeekdayFull( date )
 			});
 		}
+
 		return result;
 	},
 
