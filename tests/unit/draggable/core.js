@@ -291,7 +291,7 @@ test( "#8399: A draggable should become the active element after you are finishe
 	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
 } );
 
-asyncTest( "blur behavior", function() {
+asyncTest( "blur behavior - handle is main element", function() {
 	expect( 3 );
 
 	var element = $( "#draggable1" ).draggable(),
@@ -310,6 +310,26 @@ asyncTest( "blur behavior", function() {
 
 		// Http://bugs.jqueryui.com/ticket/4261
 		// active element should blur when mousing down on a draggable
+		notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
+		start();
+	} );
+} );
+
+asyncTest( "blur behavior - descendant of handle", function() {
+	expect( 2 );
+
+	var element = $( "#draggable2" ).draggable( { handle: "span" } ),
+
+		// The handle is a descendant, but we also want to grab a descendant of the handle
+		handle = element.find( "span em" ),
+		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
+
+	testHelper.onFocus( focusElement, function() {
+		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
+
+		testHelper.move( handle, 50, 50 );
+
+		// Elements outside of the handle should blur (#12472, #14905)
 		notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
 		start();
 	} );
