@@ -78,19 +78,6 @@ var
 	},
 	component = grunt.option( "component" ) || "**",
 
-	jscsBad = [
-		"ui/button.js",
-		"ui/datepicker.js",
-		"ui/draggable.js",
-		"ui/droppable.js",
-		"ui/effect.js",
-		"ui/mouse.js",
-		"ui/resizable.js",
-		"ui/selectable.js",
-		"ui/slider.js",
-		"ui/sortable.js"
-	],
-
 	htmllintBad = [
 		"demos/tabs/ajax/content*.html",
 		"demos/tooltip/ajax/content*.html",
@@ -181,15 +168,7 @@ grunt.initConfig({
 
 	// Remove the requireSpacesInsideParentheses override once everything is fixed
 	jscs: {
-		"ui-good": [ "ui/*.js" ].concat( jscsBad.map( function( file ) {
-			return "!" + file;
-		} ) ),
-		"ui-bad": {
-			options: {
-				requireSpacesInsideParentheses: null
-			},
-			src: jscsBad
-		},
+		"ui-good": [ "ui/*.js" ],
 		tests: {
 			options: {
 				requireSpacesInsideParentheses: null
