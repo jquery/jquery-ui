@@ -40,13 +40,16 @@ $.widget( "ui.tooltip", {
 			"ui-tooltip": "ui-corner-all ui-widget-shadow"
 		},
 		content: function() {
+
 			// support: IE<9, Opera in jQuery <1.7
 			// .text() can't accept undefined, so coerce to a string
 			var title = $( this ).attr( "title" ) || "";
+
 			// Escape title, since we're going from an attribute to raw HTML
 			return $( "<a>" ).text( title ).html();
 		},
 		hide: true,
+
 		// Disabled elements have inconsistent behavior across browsers (#8661)
 		items: "[title]:not([disabled])",
 		position: {
@@ -121,6 +124,7 @@ $.widget( "ui.tooltip", {
 		if ( key === "disabled" ) {
 			this[ value ? "_disable" : "_enable" ]();
 			this.options[ key ] = value;
+
 			// disable element style changes
 			return;
 		}
@@ -156,6 +160,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_enable: function() {
+
 		// restore title attributes
 		this.element.find( this.options.items ).addBack().each( function() {
 			var element = $( this );
@@ -168,6 +173,7 @@ $.widget( "ui.tooltip", {
 	open: function( event ) {
 		var that = this,
 			target = $( event ? event.target : this.element )
+
 				// we need closest here due to mouseover bubbling,
 				// but always pointing at the same event target
 				.closest( this.options.items );
@@ -302,6 +308,7 @@ $.widget( "ui.tooltip", {
 			this._on( this.document, {
 				mousemove: position
 			} );
+
 			// trigger once to override element-relative positioning
 			position( event );
 		} else {
@@ -313,6 +320,7 @@ $.widget( "ui.tooltip", {
 		tooltip.hide();
 
 		this._show( tooltip, this.options.show );
+
 		// Handle tracking tooltips that are shown with a delay (#8644). As soon
 		// as the tooltip is visible, position the tooltip using the most recent
 		// event.
@@ -462,6 +470,7 @@ $.widget( "ui.tooltip", {
 
 		// close open tooltips
 		$.each( this.tooltips, function( id, tooltipData ) {
+
 			// Delegate to close method to handle common cleanup
 			var event = $.Event( "blur" ),
 				element = tooltipData.element;
@@ -474,6 +483,7 @@ $.widget( "ui.tooltip", {
 
 			// Restore the title
 			if ( element.data( "ui-tooltip-title" ) ) {
+
 				// If the title attribute has changed since open(), don't restore
 				if ( !element.attr( "title" ) ) {
 					element.attr( "title", element.data( "ui-tooltip-title" ) );

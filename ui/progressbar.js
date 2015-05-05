@@ -100,6 +100,7 @@ return $.widget( "ui.progressbar", {
 	},
 
 	_setOptions: function( options ) {
+
 		// Ensure "value" option is set after other values (like max)
 		var value = options.value;
 		delete options.value;
@@ -112,6 +113,7 @@ return $.widget( "ui.progressbar", {
 
 	_setOption: function( key, value ) {
 		if ( key === "max" ) {
+
 			// Don't allow a max less than min
 			value = Math.max( this.min, value );
 		}

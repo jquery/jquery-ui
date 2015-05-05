@@ -133,6 +133,7 @@ return $.widget( "ui.menu", {
 			mouseleave: "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
 			focus: function( event, keepActiveItem ) {
+
 				// If there's already an active item, keep it active
 				// If not, activate the first item
 				var item = this.active || this.element.find( this.options.items ).eq( 0 );
@@ -472,6 +473,7 @@ return $.widget( "ui.menu", {
 	collapseAll: function( event, all ) {
 		clearTimeout( this.timer );
 		this.timer = this._delay( function() {
+
 			// If we were passed an event, look for the submenu that contains the event
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
@@ -630,6 +632,7 @@ return $.widget( "ui.menu", {
 	},
 
 	select: function( event ) {
+
 		// TODO: It should never be possible to not have an active item at this
 		// point, but the tests don't trigger mouseenter before click.
 		this.active = this.active || $( event.target ).closest( ".ui-menu-item" );

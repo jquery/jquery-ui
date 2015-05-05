@@ -80,6 +80,7 @@ return $.effects.define( "bounce", function( options, done ) {
 
 	downAnim = {};
 	downAnim[ ref ] = refValue;
+
 	// Bounces up/down/left/right then back to 0 -- times * 2 animations happen here
 	for ( ; i < times; i++ ) {
 		upAnim = {};

@@ -49,6 +49,7 @@ $.cleanData = ( function( orig ) {
 
 $.widget = function( name, base, prototype ) {
 	var fullName, existingConstructor, constructor, basePrototype,
+
 		// proxiedPrototype allows the provided prototype to remain unmodified
 		// so that it can be used as a mixin for multiple widgets (#8876)
 		proxiedPrototype = {},
@@ -70,6 +71,7 @@ $.widget = function( name, base, prototype ) {
 	$[ namespace ] = $[ namespace ] || {};
 	existingConstructor = $[ namespace ][ name ];
 	constructor = $[ namespace ][ name ] = function( options, element ) {
+
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
 			return new constructor( options, element );
@@ -81,18 +83,22 @@ $.widget = function( name, base, prototype ) {
 			this._createWidget( options, element );
 		}
 	};
+
 	// extend with the existing constructor to carry over any static properties
 	$.extend( constructor, existingConstructor, {
 		version: prototype.version,
+
 		// copy the object used to create the prototype in case we need to
 		// redefine the widget later
 		_proto: $.extend( {}, prototype ),
+
 		// track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
 		_childConstructors: []
 	} );
 
 	basePrototype = new base();
+
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
@@ -127,6 +133,7 @@ $.widget = function( name, base, prototype ) {
 		} )();
 	} );
 	constructor.prototype = $.widget.extend( basePrototype, {
+
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
@@ -150,6 +157,7 @@ $.widget = function( name, base, prototype ) {
 			// originally used, but inherit from the new version of the base
 			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
 		} );
+
 		// remove the list of existing child constructors from the old constructor
 		// so the old child constructors can be garbage collected
 		delete existingConstructor._childConstructors;
@@ -172,12 +180,15 @@ $.widget.extend = function( target ) {
 		for ( key in input[ inputIndex ] ) {
 			value = input[ inputIndex ][ key ];
 			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+
 				// Clone objects
 				if ( $.isPlainObject( value ) ) {
 					target[ key ] = $.isPlainObject( target[ key ] ) ?
 						$.widget.extend( {}, target[ key ], value ) :
+
 						// Don't extend strings, arrays, etc. with objects
 						$.widget.extend( {}, value );
+
 				// Copy everything else by reference
 				} else {
 					target[ key ] = value;
@@ -277,8 +288,10 @@ $.Widget.prototype = {
 				}
 			} );
 			this.document = $( element.style ?
+
 				// element within the document
 				element.ownerDocument :
+
 				// element is window or document
 				element.document || element );
 			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
@@ -331,11 +344,13 @@ $.Widget.prototype = {
 			i;
 
 		if ( arguments.length === 0 ) {
+
 			// don't return a reference to the internal hash
 			return $.widget.extend( {}, this.options );
 		}
 
 		if ( typeof key === "string" ) {
+
 			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
 			options = {};
 			parts = key.split( "." );
@@ -509,6 +524,7 @@ $.Widget.prototype = {
 
 		$.each( handlers, function( event, handler ) {
 			function handlerProxy() {
+
 				// allow widgets to customize the disabled handling
 				// - disabled as an array instead of boolean
 				// - disabled class as method for disabling individual parts
@@ -591,6 +607,7 @@ $.Widget.prototype = {
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
+
 		// the original event may come from any element
 		// so we need to reset the target on the new event
 		event.target = this.element[ 0 ];
