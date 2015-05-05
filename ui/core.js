@@ -29,8 +29,6 @@
 // $.ui might exist from components with no dependencies, e.g., $.ui.position
 $.ui = $.ui || {};
 
-var idEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
-
 $.extend( $.ui, {
 	version: "@VERSION",
 
@@ -92,9 +90,12 @@ $.extend( $.ui, {
 		}
 	},
 
-	escapeId: function( id ) {
-		return id.replace( idEscape, "\\$1" );
-	}
+	escapeSelector: ( function() {
+		var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
+		return function( id ) {
+			return id.replace( selectorEscape, "\\$1" );
+		};
+	} )()
 } );
 
 // plugins
@@ -150,9 +151,9 @@ $.fn.extend( {
 			return this.pushStack( this[ 0 ].labels );
 		}
 
-		// Support: IE <= 11, FF <= 37, Android <=2.3 only
-		// Above browsers do not support control.labels everything below is to support them
-		// as well as document fragments control.labels does not work on document fragments anywhere
+		// Support: IE <= 11, FF <= 37, Android <= 2.3 only
+		// Above browsers do not support control.labels. Everything below is to support them
+		// as well as document fragments. control.labels does not work on document fragments
 		labels = this.parents( "label" );
 
 		// Look for the label based on the id
@@ -163,18 +164,18 @@ $.fn.extend( {
 			// is disconnected from the DOM
 			ancestor = this.parents().last();
 
-			// get a full set of top level ancestors
+			// Get a full set of top level ancestors
 			ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
 
 			// Create a selector for the label based on the id
-			selector = "label[for='" + $.ui.escapeId( id ) + "']";
+			selector = "label[for='" + $.ui.escapeSelector( id ) + "']";
 
 			labels = labels.add( ancestors.find( selector ).addBack( selector ) );
 
 		}
 
 		// Return whatever we have found for labels
-		return this.pushStack( $.unique( labels ) );
+		return this.pushStack( labels );
 	}
 } );
 
