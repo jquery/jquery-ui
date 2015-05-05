@@ -138,7 +138,7 @@ test( "uniqueId / removeUniqueId", function() {
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
-test( ".labels()", function() {
+test( "Labels", function() {
 	expect( 2 );
 
 	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ];
@@ -154,7 +154,7 @@ test( ".labels()", function() {
 			} ).get();
 
 		deepEqual( found, expected,
-			"Labels finds all labels in " + testType + ", and sorts them in DOM order" );
+			".labels() finds all labels in " + testType + ", and sorts them in DOM order" );
 	}
 
 	testLabels( "the DOM" );
