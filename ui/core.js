@@ -93,8 +93,8 @@ $.extend( $.ui, {
 	// Internal use only
 	escapeSelector: ( function() {
 		var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
-		return function( id ) {
-			return id.replace( selectorEscape, "\\$1" );
+		return function( selector ) {
+			return selector.replace( selectorEscape, "\\$1" );
 		};
 	} )()
 } );
@@ -154,7 +154,7 @@ $.fn.extend( {
 		// Support: IE <= 11, FF <= 37, Android <= 2.3 only
 		// Above browsers do not support control.labels. Everything below is to support them
 		// as well as document fragments. control.labels does not work on document fragments
-		labels = this.parents( "label" );
+		labels = this.eq( 0 ).parents( "label" );
 
 		// Look for the label based on the id
 		id = this.attr( "id" );
@@ -162,7 +162,7 @@ $.fn.extend( {
 
 			// We don't search against the document in case the element
 			// is disconnected from the DOM
-			ancestor = this.parents().last();
+			ancestor = this.eq( 0 ).parents().last();
 
 			// Get a full set of top level ancestors
 			ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );

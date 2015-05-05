@@ -152,6 +152,10 @@
 
 <div id="weird-['x']-id"></div>
 </div>
+
+<!-- This is intentionally outside the test fixture. We don't want this
+markup to be removed and reinserted between tests, as it will remove saved
+refrences in the tests. -->
 <div id="form-test">
 	<input id="body:_implicit_form">
 	<input id="body:_explicit_form" form="form-1">
@@ -168,9 +172,9 @@
 	<input id="fragment:_implicit_form">
 
 	<!-- Support: Chrome > 33
-	Chrome when in a fragment with an input which has a form attribute and is not in any form
-	the form property returns the proper form however resetting the form does not reset the 
-	input the following input is commented out to stop the test from failing
+	when an input with a form attribute is inside a fragment, and not contained by any form,
+	the form property returns the proper form. However resetting the form does not reset the
+	input. The following input is commented out to stop the test from failing in this case.
 	<input id="fragment:_explicit_form" form="form-3">
 	-->
 	<form id="form-3">
