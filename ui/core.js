@@ -90,6 +90,7 @@ $.extend( $.ui, {
 		}
 	},
 
+	// Internal use only
 	escapeSelector: ( function() {
 		var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
 		return function( id ) {
