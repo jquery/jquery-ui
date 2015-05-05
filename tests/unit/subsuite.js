@@ -1,4 +1,4 @@
-(function() {
+( function() {
 
 var versions = [
 		"1.7.0", "1.7.1", "1.7.2",
@@ -9,6 +9,7 @@ var versions = [
 		"git1"
 	],
 	additionalTests = {
+
 		// component: [ "other_test.html" ]
 	};
 
@@ -18,8 +19,8 @@ window.testAllVersions = function( widget ) {
 		function( test ) {
 			return $.map( versions, function( version ) {
 				return test + "?jquery=" + version;
-			});
-		}));
+			} );
+		} ) );
 };
 
-}());
+}() );

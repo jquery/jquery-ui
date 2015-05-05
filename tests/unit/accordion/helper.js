@@ -6,9 +6,9 @@ define( [
 
 return $.extend( helper, {
 	equalHeight: function( accordion, height ) {
-		accordion.find( ".ui-accordion-content" ).each(function() {
+		accordion.find( ".ui-accordion-content" ).each( function() {
 			equal( $( this ).outerHeight(), height );
-		});
+		} );
 	},
 
 	setupTeardown: function() {
@@ -25,10 +25,10 @@ return $.extend( helper, {
 
 	state: function( accordion ) {
 		var expected = $.makeArray( arguments ).slice( 1 ),
-			actual = accordion.find( ".ui-accordion-content" ).map(function() {
+			actual = accordion.find( ".ui-accordion-content" ).map( function() {
 				return $( this ).css( "display" ) === "none" ? 0 : 1;
-			}).get();
-		QUnit.push( QUnit.equiv(actual, expected), actual, expected );
+			} ).get();
+		QUnit.push( QUnit.equiv( actual, expected ), actual, expected );
 	}
 } );
 

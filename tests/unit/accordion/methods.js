@@ -14,8 +14,8 @@ test( "destroy", function( assert ) {
 	expect( 1 );
 	assert.domEqual( "#list1", function() {
 		$( "#list1" ).accordion().accordion( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "enable/disable", function( assert ) {
 	expect( 7 );
@@ -31,13 +31,14 @@ test( "enable/disable", function( assert ) {
 	// event does nothing
 	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
 	state( element, 1, 0, 0 );
+
 	// option still works
 	element.accordion( "option", "active", 1 );
 	state( element, 0, 1, 0 );
 	element.accordion( "enable" );
 	element.accordion( "option", "active", 2 );
 	state( element, 0, 0, 1 );
-});
+} );
 
 test( "refresh", function() {
 	expect( 19 );
@@ -45,9 +46,9 @@ test( "refresh", function() {
 		.parent()
 			.height( 300 )
 		.end()
-		.accordion({
+		.accordion( {
 			heightStyle: "fill"
-		});
+		} );
 	equalHeight( element, 255 );
 
 	element.parent().height( 500 );
@@ -69,8 +70,8 @@ test( "refresh", function() {
 
 	// add a panel
 	element
-		.append("<h3 class='bar' id='new_1'>new 1</h3>")
-		.append("<div class='foo' id='new_1_panel'>new 1</div>");
+		.append( "<h3 class='bar' id='new_1'>new 1</h3>" )
+		.append( "<div class='foo' id='new_1_panel'>new 1</div>" );
 	element.accordion( "refresh" );
 	state( element, 1, 0, 0, 0 );
 
@@ -82,14 +83,14 @@ test( "refresh", function() {
 
 	// add panels
 	element
-		.append("<h3 class='bar' id='new_2'>new 2</h3>")
-		.append("<div class='foo' id='new_2_panel'>new 2</div>")
-		.append("<h3 class='bar' id='new_3'>new 3</h3>")
-		.append("<div class='foo' id='new_3_panel'>new 3</div>")
-		.append("<h3 class='bar' id='new_4'>new 4</h3>")
-		.append("<div class='foo' id='new_4_panel'>new 4</div>")
-		.append("<h3 class='bar' id='new_5'>new 5</h3>")
-		.append("<div class='foo' id='new_5_panel'>new 5</div>");
+		.append( "<h3 class='bar' id='new_2'>new 2</h3>" )
+		.append( "<div class='foo' id='new_2_panel'>new 2</div>" )
+		.append( "<h3 class='bar' id='new_3'>new 3</h3>" )
+		.append( "<div class='foo' id='new_3_panel'>new 3</div>" )
+		.append( "<h3 class='bar' id='new_4'>new 4</h3>" )
+		.append( "<div class='foo' id='new_4_panel'>new 4</div>" )
+		.append( "<h3 class='bar' id='new_5'>new 5</h3>" )
+		.append( "<div class='foo' id='new_5_panel'>new 5</div>" );
 	element.accordion( "refresh" );
 	state( element, 1, 0, 0, 0 );
 
@@ -119,11 +120,11 @@ test( "refresh", function() {
 	element.accordion( "option", {
 		collapsible: true,
 		active: false
-	});
+	} );
 	state( element, 0 );
 	element.accordion( "refresh" );
 	state( element, 0 );
-});
+} );
 
 test( "widget", function() {
 	expect( 2 );
@@ -131,6 +132,6 @@ test( "widget", function() {
 		widgetElement = element.accordion( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
-});
+} );
 
 } );

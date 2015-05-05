@@ -21,7 +21,7 @@ test( "markup structure", function( assert ) {
 	equal( tooltip.length, 1, ".ui-tooltip exists" );
 	equal( tooltip.find( ".ui-tooltip-content" ).length, 1,
 		".ui-tooltip-content exists" );
-});
+} );
 
 test( "accessibility", function() {
 	expect( 15 );
@@ -61,7 +61,7 @@ test( "accessibility", function() {
 	element.tooltip( "destroy" );
 	equal( liveRegion.parent().length, 0,
 		"Tooltip liveregion element should be removed" );
-});
+} );
 
 test( "delegated removal", function() {
 	expect( 2 );
@@ -74,32 +74,32 @@ test( "delegated removal", function() {
 
 	container.empty();
 	equal( $( ".ui-tooltip" ).length, 0 );
-});
+} );
 
 test( "nested tooltips", function() {
 	expect( 2 );
 
 	var child = $( "#contained-tooltipped" ),
-		parent = $( "#contains-tooltipped" ).tooltip({
+		parent = $( "#contains-tooltipped" ).tooltip( {
 			show: null,
 			hide: null
-		});
+		} );
 
 	parent.trigger( "mouseover" );
 	equal( $( ".ui-tooltip:visible" ).text(), "parent" );
 
 	child.trigger( "mouseover" );
 	equal( $( ".ui-tooltip" ).text(), "child" );
-});
+} );
 
 // #8742
 test( "form containing an input with name title", function() {
 	expect( 4 );
 
-	var form = $( "#tooltip-form" ).tooltip({
+	var form = $( "#tooltip-form" ).tooltip( {
 			show: null,
 			hide: null
-		}),
+		} ),
 		input = form.find( "[name=title]" );
 
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltips on init" );
@@ -111,7 +111,7 @@ test( "form containing an input with name title", function() {
 
 	form.trigger( "mouseover" );
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip for form" );
-});
+} );
 
 test( "tooltip on .ui-state-disabled element", function() {
 	expect( 2 );
@@ -124,18 +124,18 @@ test( "tooltip on .ui-state-disabled element", function() {
 
 	container.empty();
 	equal( $( ".ui-tooltip" ).length, 0 );
-});
+} );
 
 // http://bugs.jqueryui.com/ticket/8740
 asyncTest( "programmatic focus with async content", function() {
 	expect( 2 );
-	var element = $( "#tooltipped1" ).tooltip({
+	var element = $( "#tooltipped1" ).tooltip( {
 		content: function( response ) {
-			setTimeout(function() {
+			setTimeout( function() {
 				response( "test" );
-			});
+			} );
 		}
-	});
+	} );
 
 	element.bind( "tooltipopen", function( event ) {
 		deepEqual( event.originalEvent.type, "focusin" );
@@ -143,35 +143,35 @@ asyncTest( "programmatic focus with async content", function() {
 		element.bind( "tooltipclose", function( event ) {
 			deepEqual( event.originalEvent.type, "focusout" );
 			start();
-		});
+		} );
 
-		setTimeout(function() {
+		setTimeout( function() {
 			element.blur();
-		});
-	});
+		} );
+	} );
 
 	element.focus();
-});
+} );
 
 asyncTest( "destroy during hide animation; only one close event", function() {
 	expect( 1 );
 
-	var element = $( "#tooltipped1" ).tooltip({
+	var element = $( "#tooltipped1" ).tooltip( {
 		show: false,
 		hide: true
-	});
+	} );
 
 	element.bind( "tooltipclose", function() {
 		ok( true, "tooltip closed" );
-	});
+	} );
 
 	element.tooltip( "open" );
 	element.tooltip( "close" );
-	setTimeout(function() {
+	setTimeout( function() {
 		element.tooltip( "destroy" );
 		start();
-	});
-});
+	} );
+} );
 
 // http://bugs.jqueryui.com/ticket/10602
 asyncTest( "multiple active delegated tooltips", function() {
@@ -181,7 +181,7 @@ asyncTest( "multiple active delegated tooltips", function() {
 		input = anchor.next(),
 		actions = [];
 
-	$( document ).tooltip({
+	$( document ).tooltip( {
 			show: false,
 			hide: false,
 			open: function( event, ui ) {
@@ -190,7 +190,7 @@ asyncTest( "multiple active delegated tooltips", function() {
 			close: function( event, ui ) {
 				actions.push( "close:" + ui.tooltip.text() );
 			}
-		});
+		} );
 
 	function step1() {
 		anchor.simulate( "mouseover" );
@@ -219,7 +219,7 @@ asyncTest( "multiple active delegated tooltips", function() {
 	}
 
 	step1();
-});
+} );
 
 // http://bugs.jqueryui.com/ticket/11272
 test( "remove conflicting attributes from live region", function() {
@@ -234,7 +234,7 @@ test( "remove conflicting attributes from live region", function() {
 		"</div>" );
 
 	$( "#tooltipped1" )
-		.tooltip({
+		.tooltip( {
 			content: element,
 			open: function() {
 				equal( $( ".ui-helper-hidden-accessible [name]" ).length, 0,
@@ -242,8 +242,8 @@ test( "remove conflicting attributes from live region", function() {
 				equal( $( ".ui-helper-hidden-accessible [id]" ).length, 0,
 					"no id attributes within live region" );
 			}
-		})
+		} )
 		.tooltip( "open" );
-});
+} );
 
 } );

@@ -13,95 +13,103 @@ test( "destroy", function( assert ) {
 	expect( 2 );
 	assert.domEqual( "#tabs1", function() {
 		$( "#tabs1" ).tabs().tabs( "destroy" );
-	});
+	} );
 	assert.domEqual( "#tabs2", function() {
 		$( "#tabs2" ).tabs().tabs( "destroy" );
-	});
-});
+	} );
+} );
 
 asyncTest( "destroy - ajax", function( assert ) {
 	expect( 1 );
 	assert.domEqual( "#tabs2", function( done ) {
-		var element = $( "#tabs2" ).tabs({
+		var element = $( "#tabs2" ).tabs( {
 			load: function() {
-				setTimeout(function() {
+				setTimeout( function() {
 					element.tabs( "destroy" );
 					done();
 					start();
-				});
+				} );
 			}
-		});
+		} );
 		element.tabs( "option", "active", 2 );
-	});
-});
+	} );
+} );
 
 test( "enable", function() {
 	expect( 8 );
 
-	var element = $( "#tabs1" ).tabs({ disabled: true });
+	var element = $( "#tabs1" ).tabs( { disabled: true } );
 	disabled( element, true );
 	element.tabs( "enable" );
 	disabled( element, false );
 	element.tabs( "destroy" );
 
-	element.tabs({ disabled: [ 0, 1 ] });
+	element.tabs( { disabled: [ 0, 1 ] } );
 	disabled( element, [ 0, 1 ] );
 	element.tabs( "enable" );
 	disabled( element, false );
-});
+} );
 
 test( "enable( index )", function() {
 	expect( 10 );
 
-	var element = $( "#tabs1" ).tabs({ disabled: true });
+	var element = $( "#tabs1" ).tabs( { disabled: true } );
 	disabled( element, true );
+
 	// fully disabled -> partially disabled
 	element.tabs( "enable", 1 );
 	disabled( element, [ 0, 2 ] );
+
 	// partially disabled -> partially disabled
 	element.tabs( "enable", 2 );
 	disabled( element, [ 0 ] );
+
 	// already enabled tab, no change
 	element.tabs( "enable", 2 );
 	disabled( element, [ 0 ] );
+
 	// partially disabled -> fully enabled
 	element.tabs( "enable", 0 );
 	disabled( element, false );
-});
+} );
 
 test( "disable", function() {
 	expect( 8 );
 
-	var element = $( "#tabs1" ).tabs({ disabled: false });
+	var element = $( "#tabs1" ).tabs( { disabled: false } );
 	disabled( element, false );
 	element.tabs( "disable" );
 	disabled( element, true );
 	element.tabs( "destroy" );
 
-	element.tabs({ disabled: [ 0, 1 ] });
+	element.tabs( { disabled: [ 0, 1 ] } );
 	disabled( element, [ 0, 1 ] );
 	element.tabs( "disable" );
 	disabled( element, true );
-});
+} );
 
 test( "disable( index )", function() {
 	expect( 10 );
 
-	var element = $( "#tabs1" ).tabs({ disabled: false });
+	var element = $( "#tabs1" ).tabs( { disabled: false } );
 	disabled( element, false );
+
 	// fully enabled -> partially disabled
 	element.tabs( "disable", 1 );
 	disabled( element, [ 1 ] );
+
 	// partially disabled -> partially disabled
 	element.tabs( "disable", 2 );
 	disabled( element, [ 1, 2 ] );
+
 	// already disabled tab, no change
 	element.tabs( "disable", 2 );
 	disabled( element, [ 1, 2 ] );
+
 	// partially disabled -> fully disabled
 	element.tabs( "disable", 0 );
 	disabled( element, true );
-});
+} );
 
 test( "refresh", function() {
 	expect( 27 );
@@ -170,15 +178,15 @@ test( "refresh", function() {
 	element.tabs( "refresh" );
 	state( element, 1 );
 	disabled( element, false );
-});
+} );
 
 test( "refresh - looping", function() {
 	expect( 6 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		disabled: [ 0 ],
 		active: 1
-	});
+	} );
 	state( element, 0, 1, 0 );
 	disabled( element, [ 0 ] );
 
@@ -190,7 +198,7 @@ test( "refresh - looping", function() {
 	element.tabs( "refresh" );
 	state( element, 0, 1 );
 	disabled( element, [ 0 ] );
-});
+} );
 
 asyncTest( "load", function() {
 	expect( 30 );
@@ -210,8 +218,9 @@ asyncTest( "load", function() {
 		equal( ui.panel.length, 1, "panel length" );
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		state( element, 1, 0, 0, 0, 0 );
-	});
+	} );
 	element.one( "tabsload", function( event, ui ) {
+
 		// TODO: remove wrapping in 2.0
 		var uiTab = $( ui.tab ),
 			uiPanel = $( ui.panel ),
@@ -227,24 +236,26 @@ asyncTest( "load", function() {
 		equal( uiPanel.find( "p" ).length, 1, "panel html" );
 		state( element, 1, 0, 0, 0, 0 );
 		setTimeout( tabsload1 );
-	});
+	} );
 	element.tabs( "load", 3 );
 	state( element, 1, 0, 0, 0, 0 );
 
 	function tabsload1() {
+
 		// no need to test details of event (tested in events tests)
 		element.one( "tabsbeforeload", function() {
 			ok( true, "tabsbeforeload invoked" );
-		});
+		} );
 		element.one( "tabsload", function() {
 			ok( true, "tabsload invoked" );
 			setTimeout( tabsload2 );
-		});
+		} );
 		element.tabs( "option", "active", 3 );
 		state( element, 0, 0, 0, 1, 0 );
 	}
 
 	function tabsload2() {
+
 		// reload content of active tab
 		element.one( "tabsbeforeload", function( event, ui ) {
 			var tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
@@ -257,8 +268,9 @@ asyncTest( "load", function() {
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 			state( element, 0, 0, 0, 1, 0 );
-		});
+		} );
 		element.one( "tabsload", function( event, ui ) {
+
 			// TODO: remove wrapping in 2.0
 			var uiTab = $( ui.tab ),
 				uiPanel = $( ui.panel ),
@@ -273,11 +285,11 @@ asyncTest( "load", function() {
 			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 			state( element, 0, 0, 0, 1, 0 );
 			start();
-		});
+		} );
 		element.tabs( "load", 3 );
 		state( element, 0, 0, 0, 1, 0 );
 	}
-});
+} );
 
 test( "widget", function() {
 	expect( 2 );
@@ -285,6 +297,6 @@ test( "widget", function() {
 		widgetElement = element.tabs( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
-});
+} );
 
 } );

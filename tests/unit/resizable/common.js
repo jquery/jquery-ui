@@ -35,6 +35,6 @@ common.testWidget( "resizable", {
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

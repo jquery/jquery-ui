@@ -19,11 +19,11 @@ test( "markup structure", function( assert ) {
 	element.progressbar( "option", "value", 100 );
 	assert.hasClasses( value, "ui-progressbar-complete ui-widget-header ui-progressbar-value" );
 	equal( element.children().children().length, 0, "no overlay div" );
-});
+} );
 
 test( "markup structure - indeterminate", function( assert ) {
 	expect( 5 );
-	var element = $( "#progressbar" ).progressbar({ value: false }),
+	var element = $( "#progressbar" ).progressbar( { value: false } ),
 		children = element.children();
 
 	assert.hasClasses( element, "ui-progressbar ui-progressbar-indeterminate ui-widget ui-widget-content" );
@@ -32,7 +32,7 @@ test( "markup structure - indeterminate", function( assert ) {
 	assert.hasClasses( children[ 0 ], "ui-progressbar-value" );
 	equal( children.children( ".ui-progressbar-overlay" ).length, 1,
 		"Value has class ui-progressbar-overlay" );
-});
+} );
 
 test( "accessibility", function() {
 	expect( 11 );
@@ -59,6 +59,6 @@ test( "accessibility", function() {
 	equal( element.attr( "aria-valuemin" ), 0, "aria-valuemin" );
 	equal( element.attr( "aria-valuemax" ), 150, "aria-valuemax" );
 	equal( element.attr( "aria-valuenow" ), null, "aria-valuenow" );
-});
+} );
 
 } );

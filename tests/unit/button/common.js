@@ -17,6 +17,6 @@ common.testWidget( "button", {
 		// callbacks
 		create: null
 	}
-});
+} );
 
 } );

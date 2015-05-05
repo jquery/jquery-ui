@@ -4,17 +4,17 @@ define( [
 ], function( $ ) {
 
 // TODO add teardown callback to remove dialogs
-module("dialog: core");
+module( "dialog: core" );
 
 test( "markup structure", function( assert ) {
 	expect( 11 );
 
-	var element = $( "<div>" ).dialog({
+	var element = $( "<div>" ).dialog( {
 			buttons: [ {
 				text: "Ok",
 				click: $.noop
 			} ]
-		}),
+		} ),
 		widget = element.dialog( "widget" ),
 		titlebar = widget.find( ".ui-dialog-titlebar" ),
 		title = titlebar.find( ".ui-dialog-title" ),
@@ -35,7 +35,7 @@ test( "markup structure", function( assert ) {
 	equal( buttonset.length, 1, "Buttonpane has exactly one buttonset" );
 	equal( buttons.length, 1, "Buttonset contains exactly 1 button when created with 1" );
 
-});
+} );
 
 test( "markup structure - no buttons", function( assert ) {
 	expect( 7 );
@@ -53,18 +53,18 @@ test( "markup structure - no buttons", function( assert ) {
 	equal( close.length, 1, "Titlebar has exactly one close button" );
 	equal( title.length, 1, "Titlebar has exactly one title" );
 	assert.hasClasses( element, "ui-dialog-content ui-widget-content" );
-});
+} );
 
-test("title id", function() {
-	expect(1);
+test( "title id", function() {
+	expect( 1 );
 
 	var titleId,
-		element = $("<div>").dialog();
+		element = $( "<div>" ).dialog();
 
-	titleId = element.dialog("widget").find(".ui-dialog-title").attr("id");
-	ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id");
+	titleId = element.dialog( "widget" ).find( ".ui-dialog-title" ).attr( "id" );
+	ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id" );
 	element.remove();
-});
+} );
 
 test( "ARIA", function() {
 	expect( 4 );
@@ -76,26 +76,26 @@ test( "ARIA", function() {
 	equal( wrapper.attr( "aria-describedby" ), element.attr( "id" ), "aria-describedby added" );
 	element.remove();
 
-	element = $("<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>").dialog();
+	element = $( "<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>" ).dialog();
 	equal( element.dialog( "widget" ).attr( "aria-describedby" ), null, "no aria-describedby added, as already present in markup" );
 	element.remove();
-});
+} );
 
-test("widget method", function() {
+test( "widget method", function() {
 	expect( 1 );
-	var dialog = $("<div>").appendTo("#qunit-fixture").dialog();
-	deepEqual(dialog.parent()[0], dialog.dialog("widget")[0]);
+	var dialog = $( "<div>" ).appendTo( "#qunit-fixture" ).dialog();
+	deepEqual( dialog.parent()[0], dialog.dialog( "widget" )[0] );
 	dialog.remove();
-});
+} );
 
 asyncTest( "focus tabbable", function() {
 	expect( 8 );
 	var element,
 		options = {
-			buttons: [{
+			buttons: [ {
 				text: "Ok",
 				click: $.noop
-			}]
+			} ]
 		};
 
 	function checkFocus( markup, options, testFn, next ) {
@@ -106,23 +106,23 @@ asyncTest( "focus tabbable", function() {
 		$( "body" ).focus();
 
 		element = $( markup ).dialog( options );
-		setTimeout(function() {
-			testFn(function done() {
+		setTimeout( function() {
+			testFn( function done() {
 				element.remove();
 				setTimeout( next );
-			});
-		});
+			} );
+		} );
 	}
 
 	function step1() {
 		checkFocus( "<div><input><input></div>", options, function( done ) {
 			var input = element.find( "input:last" ).focus().blur();
 			element.dialog( "instance" )._focusTabbable();
-			setTimeout(function() {
+			setTimeout( function() {
 				equal( document.activeElement, input[ 0 ],
 					"1. an element that was focused previously." );
 				done();
-			});
+			} );
 		}, step2 );
 	}
 
@@ -164,10 +164,10 @@ asyncTest( "focus tabbable", function() {
 		checkFocus( "<div>text</div>", { autoOpen: false }, function( done ) {
 			element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
 			element.dialog( "open" );
-			setTimeout(function() {
+			setTimeout( function() {
 				equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
 				done();
-			});
+			} );
 		}, step7 );
 	}
 
@@ -177,17 +177,17 @@ asyncTest( "focus tabbable", function() {
 			{
 				open: function() {
 					var inputs = $( this ).find( "input" );
-					inputs.last().keydown(function( event ) {
+					inputs.last().keydown( function( event ) {
 						event.preventDefault();
 						inputs.first().focus();
-					});
+					} );
 				}
 			},
 			function( done ) {
 				var inputs = element.find( "input" );
 				equal( document.activeElement, inputs[ 1 ], "Focus starts on second input" );
-				inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
-				setTimeout(function() {
+				inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
+				setTimeout( function() {
 					equal( document.activeElement, inputs[ 0 ],
 						"Honor preventDefault, allowing custom focus management" );
 					done();
@@ -198,19 +198,19 @@ asyncTest( "focus tabbable", function() {
 	}
 
 	step1();
-});
+} );
 
 test( "#7960: resizable handles below modal overlays", function() {
 	expect( 1 );
 
 	var resizable = $( "<div>" ).resizable(),
-		dialog = $( "<div>" ).dialog({ modal: true }),
+		dialog = $( "<div>" ).dialog( { modal: true } ),
 		resizableZindex = parseInt( resizable.find( ".ui-resizable-handle" ).css( "zIndex" ), 10 ),
 		overlayZindex = parseInt( $( ".ui-widget-overlay" ).css( "zIndex" ), 10 );
 
 	ok( resizableZindex < overlayZindex, "Resizable handles have lower z-index than modal overlay" );
 	dialog.dialog( "destroy" );
-});
+} );
 
 asyncTest( "Prevent tabbing out of dialogs", function() {
 	expect( 3 );
@@ -219,13 +219,13 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 		inputs = element.find( "input" );
 
 	// Remove close button to test focus on just the two buttons
-	element.dialog( "widget" ).find( ".ui-button").remove();
+	element.dialog( "widget" ).find( ".ui-button" ).remove();
 
 	function checkTab() {
 		equal( document.activeElement, inputs[ 0 ], "Tab key event moved focus within the modal" );
 
 		// check shift tab
-		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB, shiftKey: true });
+		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB, shiftKey: true } );
 		setTimeout( checkShiftTab );
 	}
 
@@ -237,27 +237,27 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	}
 
 	inputs[ 1 ].focus();
-	setTimeout(function() {
+	setTimeout( function() {
 		equal( document.activeElement, inputs[ 1 ], "Focus set on second input" );
-		inputs.eq( 1 ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
+		inputs.eq( 1 ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
 
 		setTimeout( checkTab );
-	});
-});
+	} );
+} );
 
 asyncTest( "#9048: multiple modal dialogs opened and closed in different order", function() {
 	expect( 1 );
-	$( "#dialog1, #dialog2" ).dialog({ autoOpen: false, modal:true });
+	$( "#dialog1, #dialog2" ).dialog( { autoOpen: false, modal:true } );
 	$( "#dialog1" ).dialog( "open" );
 	$( "#dialog2" ).dialog( "open" );
 	$( "#dialog1" ).dialog( "close" );
-	setTimeout(function() {
+	setTimeout( function() {
 		$( "#dialog2" ).dialog( "close" );
 		$( "#favorite-animal" ).focus();
 		ok( true, "event handlers cleaned up (no errors thrown)" );
 		start();
-	});
-});
+	} );
+} );
 
 asyncTest( "interaction between overlay and other dialogs", function() {
 	$.widget( "ui.testWidget", $.ui.dialog, {
@@ -265,11 +265,11 @@ asyncTest( "interaction between overlay and other dialogs", function() {
 			modal: true,
 			autoOpen: false
 		}
-	});
+	} );
 	expect( 2 );
-	var first = $( "<div><input id='input-1'></div>" ).dialog({
+	var first = $( "<div><input id='input-1'></div>" ).dialog( {
 			modal: true
-		}),
+		} ),
 		firstInput = first.find( "input" ),
 		second = $( "<div><input id='input-2'></div>" ).testWidget(),
 		secondInput = second.find( "input" );
@@ -280,18 +280,18 @@ asyncTest( "interaction between overlay and other dialogs", function() {
 	$( "body" ).focus();
 
 	// Wait for the modal to init
-	setTimeout(function() {
+	setTimeout( function() {
 		second.testWidget( "open" );
 
 		// Simulate user tabbing from address bar to an element outside the dialog
 		$( "#favorite-animal" ).focus();
-		setTimeout(function() {
+		setTimeout( function() {
 			equal( document.activeElement, secondInput[ 0 ] );
 
 			// Last active dialog must receive focus
 			firstInput.focus();
 			$( "#favorite-animal" ).focus();
-			setTimeout(function() {
+			setTimeout( function() {
 				equal( document.activeElement, firstInput[ 0 ] );
 
 				// Cleanup
@@ -300,9 +300,9 @@ asyncTest( "interaction between overlay and other dialogs", function() {
 				delete $.ui.testWidget;
 				delete $.fn.testWidget;
 				start();
-			});
-		});
-	});
-});
+			} );
+		} );
+	} );
+} );
 
 } );

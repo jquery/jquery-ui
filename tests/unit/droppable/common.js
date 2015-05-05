@@ -21,6 +21,6 @@ common.testWidget( "droppable", {
 		out: null,
 		over: null
 	}
-});
+} );
 
 } );

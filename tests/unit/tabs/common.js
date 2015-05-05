@@ -26,6 +26,6 @@ common.testWidget( "tabs", {
 		create: null,
 		load: null
 	}
-});
+} );
 
 } );

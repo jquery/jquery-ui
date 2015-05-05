@@ -40,9 +40,9 @@ test( "markup structure", function( assert ) {
 	assert.hasClasses( panels[ 1 ], "ui-tabs-panel ui-widget-content" );
 	assert.hasClasses( panels[ 2 ], "ui-tabs-panel ui-widget-content" );
 	equal( panels.length, 3, "There are exactly 3 tab panels" );
-});
+} );
 
-$.each({
+$.each( {
 	"deep ul": "#tabs3",
 	"multiple lists, ul first": "#tabs4",
 	"multiple lists, ol first": "#tabs5",
@@ -53,8 +53,8 @@ $.each({
 		var element = $( selector ).tabs();
 		assert.hasClasses( element, "ui-tabs" );
 		assert.hasClasses( $( selector + "-list" ), "ui-tabs-nav" );
-	});
-});
+	} );
+} );
 
 // #5893 - Sublist in the tab list are considered as tab
 test( "nested list", function() {
@@ -62,7 +62,7 @@ test( "nested list", function() {
 
 	var element = $( "#tabs6" ).tabs();
 	equal( element.tabs( "instance" ).anchors.length, 2, "should contain 2 tab" );
-});
+} );
 
 test( "disconnected from DOM", function() {
 	expect( 2 );
@@ -70,7 +70,7 @@ test( "disconnected from DOM", function() {
 	var element = $( "#tabs1" ).remove().tabs();
 	equal( element.find( ".ui-tabs-nav" ).length, 1, "should initialize nav" );
 	equal( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
-});
+} );
 
 test( "non-tab list items", function() {
 	expect( 2 );
@@ -79,17 +79,17 @@ test( "non-tab list items", function() {
 	equal( element.tabs( "option", "active" ), 0, "defaults to first tab" );
 	equal( element.find( ".ui-tabs-nav li.ui-state-active" ).index(), 1,
 		"first actual tab is active" );
-});
+} );
 
 test( "aria-controls", function() {
 	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),
 		tabs = element.find( ".ui-tabs-nav li" );
-	tabs.each(function() {
+	tabs.each( function() {
 		var tab = $( this ),
 			anchor = tab.find( ".ui-tabs-anchor" );
 		equal( anchor.prop( "hash" ).substring( 1 ), tab.attr( "aria-controls" ) );
-	});
+	} );
 
 	element = $( "#tabs2" ).tabs();
 	tabs = element.find( ".ui-tabs-nav li" );
@@ -97,20 +97,20 @@ test( "aria-controls", function() {
 	equal( tabs.eq( 1 ).attr( "aria-controls" ), "inline-style" );
 	ok( /^ui-id-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
 	equal( tabs.eq( 3 ).attr( "aria-controls" ), "custom-id" );
-});
+} );
 
 test( "accessibility", function() {
 	expect( 49 );
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			active: 1,
 			disabled: [ 2 ]
-		}),
+		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		anchors = tabs.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
 	equal( element.find( ".ui-tabs-nav" ).attr( "role" ), "tablist", "tablist role" );
-	tabs.each(function( index ) {
+	tabs.each( function( index ) {
 		var tab = tabs.eq( index ),
 			anchor = anchors.eq( index ),
 			anchorId = anchor.attr( "id" ),
@@ -121,7 +121,7 @@ test( "accessibility", function() {
 		equal( anchor.attr( "tabindex" ), -1, "anchor " + index + " tabindex" );
 		equal( panel.attr( "role" ), "tabpanel", "panel " + index + " role" );
 		equal( panel.attr( "aria-labelledby" ), anchorId, "panel " + index + " aria-labelledby" );
-	});
+	} );
 
 	equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
 	equal( tabs.eq( 1 ).attr( "tabindex" ), 0, "active tab has tabindex=0" );
@@ -155,7 +155,7 @@ test( "accessibility", function() {
 	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
 	equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
-});
+} );
 
 asyncTest( "accessibility - ajax", function( assert ) {
 	expect( 6 );
@@ -169,19 +169,19 @@ asyncTest( "accessibility - ajax", function( assert ) {
 	assert.hasClasses( tab, "ui-tabs-loading" );
 	equal( panel.attr( "aria-busy" ), "true", "panel has aria-busy during load" );
 	element.one( "tabsload", function() {
-		setTimeout(function() {
+		setTimeout( function() {
 			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
 			assert.lacksClasses( tab, "ui-tabs-loading" );
 			start();
 		}, 1 );
-	});
-});
+	} );
+} );
 
 asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function( assert ) {
 	expect( 92 );
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			collapsible: true
-		}),
+		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		panels = element.find( ".ui-tabs-panel" ),
 		keyCode = $.ui.keyCode;
@@ -328,10 +328,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 	}
 
 	setTimeout( step1 );
-});
+} );
 
 // Navigation with CTRL and COMMAND (both behave the same)
-$.each({
+$.each( {
 	ctrl: "CTRL",
 	meta: "COMMAND"
 }, function( modifier, label ) {
@@ -547,8 +547,8 @@ $.each({
 		}
 
 		setTimeout( step1 );
-	});
-});
+	} );
+} );
 
 asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function( assert ) {
 	expect( 50 );
@@ -640,34 +640,34 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function( a
 	}
 
 	setTimeout( step1 );
-});
+} );
 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
 	expect( 1 );
 
-	$( "#tabs2" ).tabs({
+	$( "#tabs2" ).tabs( {
 		active: 2,
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
 			ok( /test.html$/.test( ui.ajaxSettings.url ), "should ignore fragment identifier" );
 		}
-	});
-});
+	} );
+} );
 
 test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", function() {
 	expect( 2 );
 
-	var element = $("<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>");
-	element.appendTo("#qunit-fixture");
-	element.tabs({
+	var element = $( "<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>" );
+	element.appendTo( "#qunit-fixture" );
+	element.tabs( {
 		beforeLoad: function() {
 			event.preventDefault();
 			ok( false, "should not be an ajax tab" );
 		}
-	});
+	} );
 
-	equal( element.find(".ui-tabs-nav li").attr("aria-controls"), "tab", "aria-contorls attribute is correct" );
+	equal( element.find( ".ui-tabs-nav li" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
 	state( element, 1 );
-});
+} );
 
 } );
