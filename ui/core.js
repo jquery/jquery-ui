@@ -88,7 +88,15 @@ $.extend( $.ui, {
 		if ( element && element.nodeName.toLowerCase() !== "body" ) {
 			$( element ).blur();
 		}
-	}
+	},
+
+	// Internal use only
+	escapeSelector: ( function() {
+		var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
+		return function( selector ) {
+			return selector.replace( selectorEscape, "\\$1" );
+		};
+	} )()
 } );
 
 // plugins
@@ -126,6 +134,48 @@ $.fn.extend( {
 				$( this ).removeAttr( "id" );
 			}
 		} );
+	},
+
+	// Support: IE8 Only
+	// IE8 does not support the form attribute and when it is supplied. It overwrites the form prop
+	// with a string, so we need to find the proper form.
+	form: function() {
+		return typeof this[ 0 ].form === "string" ? this.closest( "form" ) : $( this[ 0 ].form );
+	},
+
+	labels: function() {
+		var ancestor, selector, id, labels, ancestors;
+
+		// Check control.labels first
+		if ( this[ 0 ].labels && this[ 0 ].labels.length ) {
+			return this.pushStack( this[ 0 ].labels );
+		}
+
+		// Support: IE <= 11, FF <= 37, Android <= 2.3 only
+		// Above browsers do not support control.labels. Everything below is to support them
+		// as well as document fragments. control.labels does not work on document fragments
+		labels = this.eq( 0 ).parents( "label" );
+
+		// Look for the label based on the id
+		id = this.attr( "id" );
+		if ( id ) {
+
+			// We don't search against the document in case the element
+			// is disconnected from the DOM
+			ancestor = this.eq( 0 ).parents().last();
+
+			// Get a full set of top level ancestors
+			ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
+
+			// Create a selector for the label based on the id
+			selector = "label[for='" + $.ui.escapeSelector( id ) + "']";
+
+			labels = labels.add( ancestors.find( selector ).addBack( selector ) );
+
+		}
+
+		// Return whatever we have found for labels
+		return this.pushStack( labels );
 	}
 } );
 

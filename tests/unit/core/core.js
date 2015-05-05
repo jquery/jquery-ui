@@ -138,4 +138,67 @@ test( "uniqueId / removeUniqueId", function() {
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
+test( "Labels", function() {
+	expect( 2 );
+
+	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ];
+	var dom = $( "#labels-fragment" );
+
+	function testLabels( testType ) {
+		var labels = dom.find( "#test" ).labels();
+		var found = labels.map( function() {
+
+				// Support: Core 1.9 Only
+				// We use $.trim() because core 1.9.x silently fails when white space is present
+				return $.trim( $( this ).text() );
+			} ).get();
+
+		deepEqual( found, expected,
+			".labels() finds all labels in " + testType + ", and sorts them in DOM order" );
+	}
+
+	testLabels( "the DOM" );
+
+	// Detach the dom to test on a fragment
+	dom.detach();
+	testLabels( "document fragments" );
+} );
+
+( function() {
+	var domAttached = $( "#form-test" );
+	var domDetached = $( "#form-test-detached" ).detach();
+
+	function testForm( name, dom ) {
+		var inputs = dom.find( "input" );
+
+		inputs.each( function() {
+			var input = $( this );
+
+			asyncTest( name + this.id.replace( /_/g, " " ), function() {
+				expect( 1 );
+				var form = input.form();
+
+				// If input has a form the value should reset to "" if not it should be "changed"
+				var value = form.length ? "" : "changed";
+
+				input.val( "changed" );
+
+				// If there is a form we reset just that. If there is not a form, reset every form.
+				// The idea is if a form is found resetting that form should reset the input.
+				// If no form is found no amount of resetting should change the value.
+				( form.length ? form : dom.find( "form" ).addBack( "form" ) ).each( function() {
+					this.reset();
+				} );
+
+				setTimeout( function() {
+					equal( input.val(), value, "Proper form found for #" + input.attr( "id" ) );
+					start();
+				} );
+			} );
+		} );
+	}
+
+	testForm( "form: attached: ", domAttached );
+	testForm( "form: detached: ", domDetached );
+} )();
 } );

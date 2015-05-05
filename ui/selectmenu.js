@@ -90,8 +90,8 @@ return $.widget( "ui.selectmenu", {
 			);
 
 		// Associate existing label with the new button
-		this.label = $( "label[for='" + this.ids.element + "']" ).attr( "for", this.ids.button );
-		this._on( this.label, {
+		this.labels = this.element.labels().attr( "for", this.ids.button );
+		this._on( this.labels, {
 			click: function( event ) {
 				this.button.focus();
 				event.preventDefault();
@@ -423,7 +423,8 @@ return $.widget( "ui.selectmenu", {
 				return;
 			}
 
-			if ( !$( event.target ).closest( ".ui-selectmenu-menu, #" + this.ids.button ).length ) {
+			if ( !$( event.target ).closest( ".ui-selectmenu-menu, #" +
+					$.ui.escapeSelector( this.ids.button ) ).length ) {
 				this.close( event );
 			}
 		}
@@ -671,7 +672,7 @@ return $.widget( "ui.selectmenu", {
 		this.button.remove();
 		this.element.show();
 		this.element.removeUniqueId();
-		this.label.attr( "for", this.ids.element );
+		this.labels.attr( "for", this.ids.element );
 	}
 } );
 
