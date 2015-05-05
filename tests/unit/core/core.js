@@ -138,9 +138,6 @@ test( "uniqueId / removeUniqueId", function() {
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
 });
 
-// Support: Core 1.9 Only, IE8 Only
-// The use of $.trim() in the two tests below this is to account for IE8 missing
-// string.trim() We need to trim the values at all because of a bug in core 1.9.x
 test( "labels", function() {
 	expect( 2 );
 
@@ -150,6 +147,9 @@ test( "labels", function() {
 	function testLabels( testType ) {
 		var labels = dom.find( "#test" ).labels(),
 			found = labels.map( function() {
+
+				// Support: Core 1.9 Only
+				// We use $.trim() because core 1.9.x silently fails when white space is present
 				return $.trim( $( this ).text() );
 			} ).get();
 
@@ -165,60 +165,44 @@ test( "labels", function() {
 
 } );
 
-asyncTest( "form", function() {
-	expect( 12 );
+var domAttached = $( "#form-test" );
+var domDetached = $( "#form-test-detached" ).detach();
 
-	var dom = $( "#form-dom" ),
-		domInputs = dom.find( "input" ),
-		formTests = [],
-		fragmentDom = $( $.trim( $( "#form-fragment" ).html() ) ),
-		fragmentInputs = fragmentDom.find( "input" ).add( fragmentDom.filter( "input " ) );
+function testForm( name, dom ) {
+	var inputs = dom.find( "input" );
 
-	function testInputReset( input, dom ) {
-		var form = input.form(),
+	inputs.each( function() {
+		var input = $( this );
 
-			// If the input has a form value should be reset, other wise it should still be changed
-			resolveValue = form.length ? "" : "changed",
+		asyncTest( name + this.id.replace( /_/g, " " ), function() {
+			expect( 1 );
+			var form = input.form(),
 
-			// Create a deffered to resolve after the form has been reset
-			deffered = new $.Deferred();
+				// If input has a form the value should reset to "" if not it should be "changed"
+				value = form.length ? "" : "changed";
 
-		// When the deffered is resolved check if the input has beem reset or not
-		deffered.then( function( value ) {
-			equal( input.val(), value, "Proper form found for #" + input.attr( "id" ) );
+			function reset() {
+				setTimeout( function() {
+					equal( input.val(), value, "Proper form found for #" + input.attr( "id" ) );
+					start();
+				});
+			}
+
+			input.val( "changed" );
+
+			reset();
+
+			// If there is a form we reset just that. If there is not a form, reset every form.
+			// The idea is if a form is found resetting that form should reset the input.
+			// If no form is found no amount of resetting should change the value.
+			( form.length ? form : dom.find( "form" ).addBack( "form" ) ).trigger( "reset" );
+
 		} );
-
-		input.val( "changed" );
-
-		// If there is a form we reset just that. If there is not a form, reset every form.
-		// The idea is if a form is found resetting that form should reset the input.
-		// If no form is found no amount of resetting should change the value.
-		( form.length ? form : dom.find( "form" ).add( dom.filter( form ) ) ).trigger( "reset" );
-
-		// We need to wait for the form to actually reset then resolve the deffered
-		setTimeout( function() {
-			deffered.resolve( resolveValue );
-		} );
-		return deffered;
-	}
-
-	// Remove fragment DOM so id's are not duplicated and we know we are finding the detached forms
-	$( "#form-fragment" ).remove();
-
-	// Iterate over each set of inputs attached and detached and push the deffereds the test helper
-	// returns to an array
-	domInputs.each( function() {
-		formTests.push( testInputReset( $( this ), $( document ) ) );
 	} );
+}
 
-	fragmentInputs.each( function() {
-		formTests.push( testInputReset( $( this ), fragmentDom ) );
-	} );
+testForm( "form: attached: ", domAttached );
+testForm( "form: detached: ", domDetached );
 
-	// We are doing a whole pile of async tests here so we will start when they all resolve
-	$.when.apply( formTests ).then( function() {
-		start();
-	} );
-} );
 
 } );
