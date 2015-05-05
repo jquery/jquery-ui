@@ -26,6 +26,6 @@ common.testWidget( "tooltip", {
 		create: null,
 		open: null
 	}
-});
+} );
 
 } );

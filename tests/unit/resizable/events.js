@@ -4,31 +4,31 @@ define( [
 	"ui/resizable"
 ], function( $, testHelper ) {
 
-module("resizable: events");
+module( "resizable: events" );
 
-test("start", function() {
+test( "start", function() {
 
-	expect(5);
+	expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
 
-	$("#resizable1").resizable({
+	$( "#resizable1" ).resizable( {
 		handles: "all",
-		start: function(event, ui) {
+		start: function( event, ui ) {
 			equal( ui.size.width, 100, "compare width" );
 			equal( ui.size.height, 100, "compare height" );
 			equal( ui.originalSize.width, 100, "compare original width" );
 			equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
-	});
+	} );
 
-	testHelper.drag(handle, 50, 50);
+	testHelper.drag( handle, 50, 50 );
 
-	equal(count, 1, "start callback should happen exactly once");
+	equal( count, 1, "start callback should happen exactly once" );
 
-});
+} );
 
 test( "resize", function() {
 
@@ -37,7 +37,7 @@ test( "resize", function() {
 	var count = 0,
 		handle = ".ui-resizable-se";
 
-	$("#resizable1").resizable({
+	$( "#resizable1" ).resizable( {
 		handles: "all",
 		resize: function( event, ui ) {
 			if ( count === 0 ) {
@@ -53,13 +53,13 @@ test( "resize", function() {
 			}
 			count++;
 		}
-	});
+	} );
 
 	testHelper.drag( handle, 50, 50 );
 
 	equal( count, 2, "resize callback should happen exactly once per size adjustment" );
 
-});
+} );
 
 test( "resize (min/max dimensions)", function() {
 
@@ -68,7 +68,7 @@ test( "resize (min/max dimensions)", function() {
 	var count = 0,
 		handle = ".ui-resizable-se";
 
-	$("#resizable1").resizable({
+	$( "#resizable1" ).resizable( {
 		handles: "all",
 		minWidth: 60,
 		minHeight: 60,
@@ -81,13 +81,13 @@ test( "resize (min/max dimensions)", function() {
 			equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
-	});
+	} );
 
 	testHelper.drag( handle, -200, -200 );
 
 	equal( count, 1, "resize callback should happen exactly once per size adjustment" );
 
-});
+} );
 
 test( "resize (containment)", function() {
 
@@ -95,12 +95,12 @@ test( "resize (containment)", function() {
 
 	var count = 0,
 		handle = ".ui-resizable-se",
-		container = $("#resizable1").wrap("<div>").parent().css({
+		container = $( "#resizable1" ).wrap( "<div>" ).parent().css( {
 			height: "100px",
 			width: "100px"
-		});
+		} );
 
-	$("#resizable1").resizable({
+	$( "#resizable1" ).resizable( {
 		handles: "all",
 		containment: container,
 		resize: function( event, ui ) {
@@ -110,7 +110,7 @@ test( "resize (containment)", function() {
 			equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
-	});
+	} );
 
 	// Prove you can't resize outside containment by dragging southeast corner southeast
 	testHelper.drag( handle, 100, 100 );
@@ -120,45 +120,45 @@ test( "resize (containment)", function() {
 
 	equal( count, 1, "resize callback should happen exactly once per size adjustment" );
 
-});
+} );
 
-test("resize (grid)", function() {
+test( "resize (grid)", function() {
 
-	expect(5);
+	expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
 
-	$("#resizable1").resizable({
+	$( "#resizable1" ).resizable( {
 		handles: "all",
 		grid: 50,
-		resize: function(event, ui) {
+		resize: function( event, ui ) {
 			equal( ui.size.width, 150, "compare width" );
 			equal( ui.size.height, 150, "compare height" );
 			equal( ui.originalSize.width, 100, "compare original width" );
 			equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
-	});
+	} );
 
-	testHelper.drag(handle, 50, 50);
+	testHelper.drag( handle, 50, 50 );
 
-	equal(count, 1, "resize callback should happen exactly once per grid-unit size adjustment");
+	equal( count, 1, "resize callback should happen exactly once per grid-unit size adjustment" );
 
-});
+} );
 
 test( "resize, custom adjustment", function() {
 	expect( 4 );
 
 	var handle = ".ui-resizable-se",
-		element = $( "#resizable1" ).resizable({
+		element = $( "#resizable1" ).resizable( {
 			resize: function( event, ui ) {
 				ui.size.width = 100;
 				ui.size.height = 200;
 				ui.position.left = 300;
 				ui.position.top = 400;
 			}
-		});
+		} );
 
 	testHelper.drag( handle, 50, 50 );
 
@@ -166,31 +166,31 @@ test( "resize, custom adjustment", function() {
 	equal( element.height(), 200, "resize event can control height" );
 	equal( element.position().left, 300, "resize event can control left" );
 	equal( element.position().top, 400, "resize event can control top" );
-});
+} );
 
-test("stop", function() {
+test( "stop", function() {
 
-	expect(5);
+	expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
 
-	$("#resizable1").resizable({
+	$( "#resizable1" ).resizable( {
 		handles: "all",
-		stop: function(event, ui) {
+		stop: function( event, ui ) {
 			equal( ui.size.width, 150, "compare width" );
 			equal( ui.size.height, 150, "compare height" );
 			equal( ui.originalSize.width, 100, "compare original width" );
 			equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
-	});
+	} );
 
-	testHelper.drag(handle, 50, 50);
+	testHelper.drag( handle, 50, 50 );
 
-	equal(count, 1, "stop callback should happen exactly once");
+	equal( count, 1, "stop callback should happen exactly once" );
 
-});
+} );
 
 test( "resize (containment) works with parent with negative offset", function() {
 
@@ -204,30 +204,30 @@ test( "resize (containment) works with parent with negative offset", function() 
 		increaseWidthBy = 50;
 
 	// position fixed container in window top left
-	fixedContainer.css({
+	fixedContainer.css( {
 		width: 400,
 		height: 100,
 		position: "fixed",
 		top: 0,
 		left: 0
-	});
+	} );
 
 	// position absolute container within fixed on slightly outside window
-	absoluteContainer.css({
+	absoluteContainer.css( {
 		width: 400,
 		height: 100,
 		position: "absolute",
 		top: 0,
 		left: -50
-	});
+	} );
 
 	// set up resizable to be contained within absolute container
-	target.resizable({
+	target.resizable( {
 		handles: "all",
 		containment: "parent"
-	}).css({
+	} ).css( {
 		width: 300
-	});
+	} );
 
 	widthBefore = target.width();
 
@@ -237,6 +237,6 @@ test( "resize (containment) works with parent with negative offset", function() 
 
 	equal( widthAfter, ( widthBefore + increaseWidthBy ), "resizable width should be increased by the value dragged" );
 
-});
+} );
 
 } );

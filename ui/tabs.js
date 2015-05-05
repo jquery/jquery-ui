@@ -119,6 +119,7 @@ $.widget( "ui.tabs", {
 			locationHash = location.hash.substring( 1 );
 
 		if ( active === null ) {
+
 			// check the fragment identifier in the URL
 			if ( locationHash ) {
 				this.tabs.each( function( i, tab ) {
@@ -189,15 +190,18 @@ $.widget( "ui.tabs", {
 			selectedIndex = 0;
 			break;
 		case $.ui.keyCode.SPACE:
+
 			// Activate only, no collapsing
 			event.preventDefault();
 			clearTimeout( this.activating );
 			this._activate( selectedIndex );
 			return;
 		case $.ui.keyCode.ENTER:
+
 			// Toggle (cancel delayed activation, allow collapsing)
 			event.preventDefault();
 			clearTimeout( this.activating );
+
 			// Determine if we should collapse or activate
 			this._activate( selectedIndex === this.options.active ? false : selectedIndex );
 			return;
@@ -277,12 +281,14 @@ $.widget( "ui.tabs", {
 
 	_setOption: function( key, value ) {
 		if ( key === "active" ) {
+
 			// _activate() will handle invalid values and update this.options
 			this._activate( value );
 			return;
 		}
 
 		if ( key === "disabled" ) {
+
 			// don't use the widget factory's disabled handling
 			this._setupDisabled( value );
 			return;
@@ -328,18 +334,23 @@ $.widget( "ui.tabs", {
 		if ( options.active === false || !this.anchors.length ) {
 			options.active = false;
 			this.active = $();
+
 		// was active, but active tab is gone
 		} else if ( this.active.length && !$.contains( this.tablist[ 0 ], this.active[ 0 ] ) ) {
+
 			// all remaining tabs are disabled
 			if ( this.tabs.length === options.disabled.length ) {
 				options.active = false;
 				this.active = $();
+
 			// activate previous tab
 			} else {
 				this._activate( this._findNextTab( Math.max( 0, options.active - 1 ), false ) );
 			}
+
 		// was active, active tab still exists
 		} else {
+
 			// make sure active index is correct
 			options.active = this.tabs.index( this.active );
 		}
@@ -441,8 +452,10 @@ $.widget( "ui.tabs", {
 				selector = anchor.hash;
 				panelId = selector.substring( 1 );
 				panel = that.element.find( that._sanitizeSelector( selector ) );
+
 			// remote tab
 			} else {
+
 				// If the tab doesn't already have aria-controls,
 				// generate an id by using a throw-away element
 				panelId = tab.attr( "aria-controls" ) || $( {} ).uniqueId()[ 0 ].id;
@@ -525,6 +538,7 @@ $.widget( "ui.tabs", {
 		}
 
 		this._off( this.anchors.add( this.tabs ).add( this.panels ) );
+
 		// Always prevent the default action, even when disabled
 		this._on( true, this.anchors, {
 			click: function( event ) {
@@ -593,12 +607,16 @@ $.widget( "ui.tabs", {
 		event.preventDefault();
 
 		if ( tab.hasClass( "ui-state-disabled" ) ||
+
 				// tab is already loading
 				tab.hasClass( "ui-tabs-loading" ) ||
+
 				// can't switch durning an animation
 				this.running ||
+
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
+
 				// allow canceling activation
 				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			return;
@@ -664,6 +682,7 @@ $.widget( "ui.tabs", {
 			"aria-selected": "false",
 			"aria-expanded": "false"
 		} );
+
 		// If we're switching tabs, remove the old tab from the tab order.
 		// If we're opening from collapsed state, remove the previous tab from the tab order.
 		// If we're collapsing, then keep the collapsing tab in the tab order.
@@ -711,6 +730,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_getIndex: function( index ) {
+
 		// meta-function to give users option to provide a href string instead of a numerical index.
 		if ( typeof index === "string" ) {
 			index = this.anchors.index( this.anchors.filter( "[href$='" + index + "']" ) );
@@ -844,6 +864,7 @@ $.widget( "ui.tabs", {
 
 			this.xhr
 				.done( function( response, status, jqXHR ) {
+
 					// support: jQuery <1.8
 					// http://bugs.jquery.com/ticket/11778
 					setTimeout( function() {
@@ -854,6 +875,7 @@ $.widget( "ui.tabs", {
 					}, 1 );
 				} )
 				.fail( function( jqXHR, status ) {
+
 					// support: jQuery <1.8
 					// http://bugs.jquery.com/ticket/11778
 					setTimeout( function() {

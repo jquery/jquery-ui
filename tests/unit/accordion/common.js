@@ -27,6 +27,6 @@ common.testWidget( "accordion", {
 		beforeActivate: null,
 		create: null
 	}
-});
+} );
 
 } );

@@ -49,6 +49,6 @@ common.testWidget( "dialog", {
 		resizeStart: null,
 		resizeStop: null
 	}
-});
+} );
 
 } );

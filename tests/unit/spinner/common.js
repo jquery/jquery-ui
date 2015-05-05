@@ -30,6 +30,6 @@ common.testWidget( "spinner", {
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

@@ -3,7 +3,7 @@ define( [
 	"ui/sortable"
 ], function( $ ) {
 
-module("sortable: options");
+module( "sortable: options" );
 
 /*
 test("{ appendTo: 'parent' }, default", function() {
@@ -19,14 +19,14 @@ test( "{ axis: false }, default", function() {
 	expect( 2 );
 
 	var offsetAfter,
-		element = $( "#sortable" ).sortable({
+		element = $( "#sortable" ).sortable( {
 			axis: false,
 			change: function() {
 				offsetAfter = item.offset();
 				notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: false" );
 				notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: false" );
 			}
-		}),
+		} ),
 		item = element.find( "li" ).eq( 0 ),
 		offsetBefore = item.offset();
 
@@ -34,21 +34,21 @@ test( "{ axis: false }, default", function() {
 		dx: 50,
 		dy: 25,
 		moves: 1
-	});
-});
+	} );
+} );
 
 test( "{ axis: 'x' }", function() {
 	expect( 2 );
 
 	var offsetAfter,
-		element = $( "#sortable" ).sortable({
+		element = $( "#sortable" ).sortable( {
 			axis: "x",
 			change: function() {
 				offsetAfter = item.offset();
 				notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: x" );
 				equal( offsetAfter.top, offsetBefore.top, "y axis constrained when axis: x" );
 			}
-		}),
+		} ),
 		item = element.find( "li" ).eq( 0 ),
 		offsetBefore = item.offset();
 
@@ -56,21 +56,21 @@ test( "{ axis: 'x' }", function() {
 		dx: 50,
 		dy: 25,
 		moves: 1
-	});
-});
+	} );
+} );
 
 test( "{ axis: 'y' }", function() {
 	expect( 2 );
 
 	var offsetAfter,
-		element = $( "#sortable" ).sortable({
+		element = $( "#sortable" ).sortable( {
 			axis: "y",
 			change: function() {
 				offsetAfter = item.offset();
 				equal( offsetAfter.left, offsetBefore.left, "x axis constrained when axis: y" );
 				notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: y" );
 			}
-		}),
+		} ),
 		item = element.find( "li" ).eq( 0 ),
 		offsetBefore = item.offset();
 
@@ -78,33 +78,33 @@ test( "{ axis: 'y' }", function() {
 		dx: 50,
 		dy: 25,
 		moves: 1
-	});
-});
+	} );
+} );
 
 asyncTest( "#7415: Incorrect revert animation with axis: 'y'", function() {
   expect( 2 );
 	var expectedLeft,
-		element = $( "#sortable" ).sortable({
+		element = $( "#sortable" ).sortable( {
 			axis: "y",
 			revert: true,
 			stop: start,
 			sort: function() {
 				expectedLeft = item.css( "left" );
 			}
-		}),
+		} ),
 		item = element.find( "li" ).eq( 0 );
 
 	item.simulate( "drag", {
 		dy: 300,
 		dx: 50
-	});
+	} );
 
-	setTimeout(function() {
+	setTimeout( function() {
 		var top = parseFloat( item.css( "top" ) );
 		equal( item.css( "left" ), expectedLeft, "left not animated" );
 		ok( top > 0 && top < 300, "top is animated" );
 	}, 100 );
-});
+} );
 
 /*
 test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
@@ -124,15 +124,15 @@ test( "#8792: issues with floated items in connected lists", function() {
 
 	$( "#qunit-fixture" )
 		.html( "<ul class='c'><li>a</li><li>a</li></ul><ul class='c'><li>a</li><li>a</li></ul>" )
-		.find( "ul" ).css({ "float": "left", width: "100px" }).end()
-		.find( "li" ).css({ "float": "left", width: "50px", height: "50px" });
+		.find( "ul" ).css( { "float": "left", width: "100px" } ).end()
+		.find( "li" ).css( { "float": "left", width: "50px", height: "50px" } );
 
-	$( "#qunit-fixture .c" ).sortable({
+	$( "#qunit-fixture .c" ).sortable( {
 		connectWith: "#qunit-fixture .c",
 		change: function() {
 			changeCount++;
 		}
-	});
+	} );
 
 	element = $( "#qunit-fixture li:eq(0)" );
 
@@ -140,7 +140,7 @@ test( "#8792: issues with floated items in connected lists", function() {
 	element.simulate( "drag", {
 		dx: 55,
 		moves: 15
-	});
+	} );
 
 	equal( changeCount, 1, "change fired only once (no jitters) when dragging a floated sortable in it's own container" );
 
@@ -149,37 +149,37 @@ test( "#8792: issues with floated items in connected lists", function() {
 	element.simulate( "drag", {
 		dx: 100,
 		moves: 15
-	});
+	} );
 
 	equal( changeCount, 3, "change fired once for each expected change when dragging a floated sortable to a connected container" );
-});
+} );
 
 test( "#8301: single axis with connected list", function() {
 	expect( 1 );
 
-	var element = $( "#sortable" ).sortable({
+	var element = $( "#sortable" ).sortable( {
 		axis: "y",
 		tolerance: "pointer",
 		connectWith: ".connected"
-	});
+	} );
 
 	$( "<ul class='connected'><li>Item 7</li><li>Item 8</li></ul>" )
-		.sortable({
+		.sortable( {
 			axis: "y",
 			tolerance: "pointer",
 			connectWith: "#sortable",
 			receive: function() {
 				ok( true, "connected list received item" );
 			}
-		})
+		} )
 		.insertAfter( element );
 
 	element.find( "li" ).eq( 0 ).simulate( "drag", {
 		handle: "corner",
 		dy: 120,
 		moves: 1
-	});
-});
+	} );
+} );
 
 /*
 test("{ connectWith: false }, default", function() {
@@ -330,44 +330,44 @@ test("{ placeholder: false }, default", function() {
 test( "{ placeholder: false } img", function() {
 	expect( 3 );
 
-	var element = $( "#sortable-images" ).sortable({
+	var element = $( "#sortable-images" ).sortable( {
 		start: function( event, ui ) {
 			ok( ui.placeholder.attr( "src" ).indexOf( "images/jqueryui_32x32.png" ) > 0, "placeholder img has correct src" );
 			equal( ui.placeholder.height(), 32, "placeholder has correct height" );
 			equal( ui.placeholder.width(), 32, "placeholder has correct width" );
 		}
-	});
+	} );
 
 	element.find( "img" ).eq( 0 ).simulate( "drag", {
 		dy: 1
-	});
-});
+	} );
+} );
 
 test( "{ placeholder: String }", function( assert ) {
 	expect( 1 );
 
-	var element = $( "#sortable" ).sortable({
+	var element = $( "#sortable" ).sortable( {
 		placeholder: "test",
 		start: function( event, ui ) {
 			assert.hasClasses( ui.placeholder, "test" );
 		}
-	});
+	} );
 
 	element.find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 1
-	});
-});
+	} );
+} );
 
 test( "{ placholder: String } tr", function( assert ) {
 	expect( 4 );
 
 	var originalWidths,
-		element = $( "#sortable-table tbody" ).sortable({
+		element = $( "#sortable-table tbody" ).sortable( {
 			placeholder: "test",
 			start: function( event, ui ) {
-				var currentWidths = otherRow.children().map(function() {
+				var currentWidths = otherRow.children().map( function() {
 					return $( this ).width();
-				}).get();
+				} ).get();
 				assert.hasClasses( ui.placeholder, "test" );
 				deepEqual( currentWidths, originalWidths, "table cells maintian size" );
 				equal( ui.placeholder.children().length, dragRow.children().length,
@@ -375,29 +375,29 @@ test( "{ placholder: String } tr", function( assert ) {
 				equal( ui.placeholder.children().html(), $( "<span>&#160;</span>" ).html(),
 					"placeholder td has content for forced dimensions" );
 			}
-		}),
+		} ),
 		rows = element.children( "tr" ),
 		dragRow = rows.eq( 0 ),
 		otherRow = rows.eq( 1 );
 
-	originalWidths = otherRow.children().map(function() {
+	originalWidths = otherRow.children().map( function() {
 		return $( this ).width();
-	}).get();
+	} ).get();
 	dragRow.simulate( "drag", {
 		dy: 1
-	});
-});
+	} );
+} );
 
 test( "{ placholder: String } tbody", function() {
 	expect( 6 );
 
 	var originalWidths,
-		element = $( "#sortable-table" ).sortable({
+		element = $( "#sortable-table" ).sortable( {
 			placeholder: "test",
 			start: function( event, ui ) {
-				var currentWidths = otherBody.children().map(function() {
+				var currentWidths = otherBody.children().map( function() {
 					return $( this ).width();
-				}).get();
+				} ).get();
 				ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
 				deepEqual( currentWidths, originalWidths, "table cells maintain size" );
 				equal( ui.placeholder.children().length, 1,
@@ -411,18 +411,18 @@ test( "{ placholder: String } tbody", function() {
 					$( "<span>&#160;</span>" ).html(),
 					"placeholder td has content for forced dimensions" );
 			}
-		}),
+		} ),
 		bodies = element.children( "tbody" ),
 		dragBody = bodies.eq( 0 ),
 		otherBody = bodies.eq( 1 );
 
-	originalWidths = otherBody.children().map(function() {
+	originalWidths = otherBody.children().map( function() {
 		return $( this ).width();
-	}).get();
+	} ).get();
 	dragBody.simulate( "drag", {
 		dy: 1
-	});
-});
+	} );
+} );
 
 /*
 test("{ revert: false }, default", function() {

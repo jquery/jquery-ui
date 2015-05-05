@@ -19,6 +19,6 @@ common.testWidget( "progressbar", {
 		complete: null,
 		create: null
 	}
-});
+} );
 
 } );

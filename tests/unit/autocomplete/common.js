@@ -32,6 +32,6 @@ common.testWidget( "autocomplete", {
 		search: null,
 		select: null
 	}
-});
+} );
 
 } );

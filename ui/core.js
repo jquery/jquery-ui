@@ -147,6 +147,7 @@ function focusable( element, hasTabindex ) {
 		"a" === nodeName ?
 			element.href || hasTabindex :
 			hasTabindex ) &&
+
 		// the element and all of its ancestors must be visible
 		visible( element );
 }
@@ -165,6 +166,7 @@ $.extend( $.expr[ ":" ], {
 				return !!$.data( elem, dataName );
 			};
 		} ) :
+
 		// support: jQuery <1.8
 		function( elem, i, match ) {
 			return !!$.data( elem, match[ 3 ] );

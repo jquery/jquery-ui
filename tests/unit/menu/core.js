@@ -23,9 +23,9 @@ test( "markup structure", function( assert ) {
 	equal( items.eq( 1 ).children().length, 1, "Item has exactly 1 child when it does not have a sub menu" );
 	assert.hasClasses( items[ 2 ], "ui-menu-item" );
 	equal( items.eq( 2 ).children().length, 1, "Item has exactly 1 child when it does not have a sub menu" );
-});
+} );
 
-test( "accessibility", function () {
+test( "accessibility", function() {
 	expect( 4 );
 	var element = $( "#menu1" ).menu();
 
@@ -39,7 +39,7 @@ test( "accessibility", function () {
 	ok( /^ui-id-\d+$/.test( element.attr( "aria-activedescendant" ) ), "aria-activedescendant from generated id" );
 
 	// Item roles are tested in the role option tests
-});
+} );
 
 asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", function() {
 	expect( 1 );
@@ -49,15 +49,15 @@ asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", functio
 
 	$( "#testID1" ).bind( "click", function() {
 		$( "#test9044" ).focus();
-	});
+	} );
 
 	testHelper.click( element, "3" );
 	setTimeout( function() {
 		equal( document.activeElement.id, "test9044", "Focus was swallowed by menu" );
 		$( "#test9044" ).remove();
 		start();
-	});
-});
+	} );
+} );
 
 asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected item for Selectmenu", function( assert ) {
 	expect( 1 );
@@ -70,7 +70,7 @@ asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected 
 	setTimeout( function() {
 		assert.hasClasses( wrapper, "ui-state-active" );
 		start();
-	});
-});
+	} );
+} );
 
 } );

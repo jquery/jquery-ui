@@ -62,6 +62,7 @@ $.widget( "ui.dialog", {
 			at: "center",
 			of: window,
 			collision: "fit",
+
 			// Ensure the titlebar is always visible
 			using: function( pos ) {
 				var topOffset = $( this ).css( pos ).offset().top;
@@ -170,6 +171,7 @@ $.widget( "ui.dialog", {
 		this.element
 			.removeUniqueId()
 			.css( this.originalCss )
+
 			// Without detaching first, the following becomes really slow
 			.detach();
 
@@ -180,6 +182,7 @@ $.widget( "ui.dialog", {
 		}
 
 		next = originalPosition.parent.children().eq( originalPosition.index );
+
 		// Don't try to place the dialog next to itself (#8613)
 		if ( next.length && next[ 0 ] !== this.element[ 0 ] ) {
 			next.before( this.element );
@@ -284,6 +287,7 @@ $.widget( "ui.dialog", {
 	},
 
 	_focusTabbable: function() {
+
 		// Set focus to the first match:
 		// 1. An element that was focused previously
 		// 2. First element inside the dialog matching [autofocus]
@@ -321,6 +325,7 @@ $.widget( "ui.dialog", {
 		}
 		event.preventDefault();
 		checkFocus.call( this );
+
 		// support: IE
 		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
 		// so we check again later
@@ -331,6 +336,7 @@ $.widget( "ui.dialog", {
 		this.uiDialog = $( "<div>" )
 			.hide()
 			.attr( {
+
 				// Setting tabIndex makes the div focusable
 				tabIndex: -1,
 				role: "dialog"
@@ -392,10 +398,12 @@ $.widget( "ui.dialog", {
 			"ui-dialog-titlebar", "ui-widget-header ui-helper-clearfix" );
 		this._on( this.uiDialogTitlebar, {
 			mousedown: function( event ) {
+
 				// Don't prevent click on close button (#8838)
 				// Focusing a dialog that is partially scrolled out of view
 				// causes the browser to scroll it into view, preventing the click event
 				if ( !$( event.target ).closest( ".ui-dialog-titlebar-close" ) ) {
+
 					// Dialog isn't getting focus when dragging (#8063)
 					this.uiDialog.focus();
 				}
@@ -472,8 +480,10 @@ $.widget( "ui.dialog", {
 			props = $.isFunction( props ) ?
 				{ click: props, text: name } :
 				props;
+
 			// Default to a non-submitting button
 			props = $.extend( { type: "button" }, props );
+
 			// Change the context for the click callback to be the main element
 			click = props.click;
 			props.click = function() {
@@ -537,6 +547,7 @@ $.widget( "ui.dialog", {
 		var that = this,
 			options = this.options,
 			handles = options.resizable,
+
 			// .ui-resizable has position: relative defined in the stylesheet
 			// but dialogs have to use absolute or fixed positioning
 			position = this.uiDialog.css( "position" ),
@@ -631,6 +642,7 @@ $.widget( "ui.dialog", {
 	},
 
 	_position: function() {
+
 		// Need to show the dialog to get the actual offset in the position plugin
 		var isVisible = this.uiDialog.is( ":visible" );
 		if ( !isVisible ) {
@@ -687,6 +699,7 @@ $.widget( "ui.dialog", {
 
 		if ( key === "closeText" ) {
 			this.uiDialogTitlebarClose.button( {
+
 				// Ensure that we always pass a string
 				label: "" + value
 			} );
@@ -708,6 +721,7 @@ $.widget( "ui.dialog", {
 		}
 
 		if ( key === "resizable" ) {
+
 			// currently resizable, becoming non-resizable
 			isResizable = uiDialog.is( ":data(ui-resizable)" );
 			if ( isResizable && !value ) {
@@ -731,6 +745,7 @@ $.widget( "ui.dialog", {
 	},
 
 	_size: function() {
+
 		// If the user has resized the dialog, the .ui-dialog and .ui-dialog-content
 		// divs will both have width and height set, so we need to reset them
 		var nonContentHeight, minContentHeight, maxContentHeight,

@@ -85,6 +85,7 @@ return $.widget( "ui.accordion", {
 		}
 
 		this._processPanels();
+
 		// handle negative values
 		if ( options.active < 0 ) {
 			options.active += this.headers.length;
@@ -145,6 +146,7 @@ return $.widget( "ui.accordion", {
 
 	_setOption: function( key, value ) {
 		if ( key === "active" ) {
+
 			// _activate() will handle invalid values and update this.options
 			this._activate( value );
 			return;
@@ -236,21 +238,27 @@ return $.widget( "ui.accordion", {
 		if ( ( options.active === false && options.collapsible === true ) || !this.headers.length ) {
 			options.active = false;
 			this.active = $();
+
 		// active false only when collapsible is true
 		} else if ( options.active === false ) {
 			this._activate( 0 );
+
 		// was active, but active panel is gone
 		} else if ( this.active.length && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
+
 			// all remaining panel are disabled
 			if ( this.headers.length === this.headers.find( ".ui-state-disabled" ).length ) {
 				options.active = false;
 				this.active = $();
+
 			// activate previous panel
 			} else {
 				this._activate( Math.max( 0, options.active - 1 ) );
 			}
+
 		// was active, active panel still exists
 		} else {
+
 			// make sure active index is correct
 			options.active = this.headers.index( this.active );
 		}
@@ -425,8 +433,10 @@ return $.widget( "ui.accordion", {
 		event.preventDefault();
 
 		if (
+
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
+
 				// allow canceling activation
 				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			return;
@@ -485,6 +495,7 @@ return $.widget( "ui.accordion", {
 			"aria-selected": "false",
 			"aria-expanded": "false"
 		} );
+
 		// if we're switching panels, remove the old header from the tab order
 		// if we're opening from collapsed state, remove the previous header from the tab order
 		// if we're collapsing, then keep the collapsing header in the tab order
@@ -529,6 +540,7 @@ return $.widget( "ui.accordion", {
 		if ( typeof options === "string" ) {
 			easing = options;
 		}
+
 		// fall back from options to animation in case of partial down settings
 		easing = easing || options.easing || animate.easing;
 		duration = duration || options.duration || animate.duration;

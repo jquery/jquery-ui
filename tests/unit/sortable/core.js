@@ -9,12 +9,12 @@ module( "sortable: core" );
 test( "#9314: Sortable: Items cannot be dragged directly into bottom position", function() {
 	expect( 1 );
 
-	var el = $( ".connectWith" ).sortable({
+	var el = $( ".connectWith" ).sortable( {
 			connectWith: ".connectWith"
-		});
+		} );
 
 	testHelper.sort( $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
-});
+} );
 
 test( "ui-sortable-handle applied to appropriate element", function( assert ) {
 	expect( 8 );
@@ -37,6 +37,6 @@ test( "ui-sortable-handle applied to appropriate element", function( assert ) {
 
 	el.sortable( "destroy" );
 	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
-});
+} );
 
 } );
