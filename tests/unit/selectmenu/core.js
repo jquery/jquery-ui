@@ -327,6 +327,24 @@ $.each([
 			start();
 		});
 	});
+
+	asyncTest( "Selectmenu should reset when its parent form resets", function() {
+		expect( 2 );
+
+		var element = $( "#speed" ).selectmenu(),
+			widget = element.selectmenu( "widget" ),
+			initialValue = element.val(),
+			form = element.closest( "form" );
+
+		element.val( "Slower" );
+		element.selectmenu( "refresh" );
+		equal( widget.text(), "Slower" );
+		form[ 0 ].reset();
+		setTimeout(function() {
+			equal( widget.text(), initialValue );
+			start();
+		});
+	});
 });
 
 } );

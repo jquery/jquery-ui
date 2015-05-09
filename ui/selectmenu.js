@@ -72,6 +72,7 @@ return $.widget( "ui.selectmenu", {
 
 		this._drawButton();
 		this._drawMenu();
+		this._handleFormReset();
 
 		this._rendered = false;
 		this.menuItems = $();
@@ -202,6 +203,17 @@ return $.widget( "ui.selectmenu", {
 		this.menuInstance._isDivider = function() {
 			return false;
 		};
+	},
+
+	_handleFormReset: function() {
+		var that = this;
+		this._on( this.element.closest( "form" ), {
+			reset: function() {
+				setTimeout( function() {
+					that.refresh();
+				} );
+			}
+		} );
 	},
 
 	refresh: function() {
