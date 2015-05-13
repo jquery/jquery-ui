@@ -709,7 +709,7 @@ test( "cursor, default, switching after initialization", function() {
 });
 
 test( "cursorAt", function() {
-	expect( 24 );
+	expect( 28 );
 
 	var deltaX = -3,
 		deltaY = -3,
@@ -719,7 +719,11 @@ test( "cursorAt", function() {
 			"[ 10, 20 ]": { x: 10, y: 20, cursorAt: [ 10, 20 ] },
 			"'10 20'": { x: 10, y: 20, cursorAt: "10 20" },
 			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt: { left: 20, top: 40 } },
-			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } }
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } },
+			"function, {left: 10, top: 20}": {x: 10, y: 20, cursorAt: function () {
+				if (this.id.indexOf('draggable') === 0)
+					return { left: 10, top: 20 }
+			}}
 		};
 
 	$.each( tests, function( testName, testData ) {
@@ -750,7 +754,7 @@ test( "cursorAt", function() {
 });
 
 test( "cursorAt, switching after initialization", function() {
-	expect( 24 );
+	expect( 28 );
 
 	var deltaX = -3,
 		deltaY = -3,
@@ -760,7 +764,11 @@ test( "cursorAt, switching after initialization", function() {
 			"[ 10, 20 ]": { x: 10, y: 20, cursorAt: [ 10, 20 ] },
 			"'10 20'": { x: 10, y: 20, cursorAt: "10 20" },
 			"{ left: 20, top: 40 }": { x: 20, y: 40, cursorAt: { left: 20, top: 40 } },
-			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } }
+			"{ right: 10, bottom: 20 }": { x: 10, y: 20, cursorAt: { right: 10, bottom: 20 } },
+			"function, {left: 10, top: 20}": {x: 10, y: 20, cursorAt: function () {
+				if (this.id.indexOf('draggable') === 0)
+					return { left: 10, top: 20 }
+			}}
 		};
 
 	$.each( tests, function( testName, testData ) {
