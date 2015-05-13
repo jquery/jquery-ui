@@ -386,7 +386,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			obj = { left: +obj[0], top: +obj[1] || 0 };
 		}
 		if ($.isFunction(obj)) {
-			obj = obj.call( this.element[ 0 ] )
+			obj = obj.call( this.element[ 0 ] );
 		}
 		if ("left" in obj) {
 			this.offset.click.left = obj.left + this.margins.left;
