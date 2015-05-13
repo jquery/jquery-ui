@@ -394,7 +394,9 @@ test( "inheritance", function() {
 		"extension class option array overwrites base");
 
 	delete $.ui.testWidgetBase;
+	delete $.fn.testWidgetBase;
 	delete $.ui.testWidgetExtension;
+	delete $.fn.testWidgetExtension;
 });
 
 test( "._super()", function() {
@@ -430,7 +432,9 @@ test( "._super()", function() {
 	instance = $( "<div>" ).testWidget3().testWidget3( "instance" );
 	instance.method( 5 );
 	delete $.ui.testWidget3;
+	delete $.fn.testWidget3;
 	delete $.ui.testWidget2;
+	delete $.fn.testWidget2;
 });
 
 test( "._superApply()", function() {
@@ -467,7 +471,9 @@ test( "._superApply()", function() {
 	instance = $( "<div>" ).testWidget3().testWidget3( "instance" );
 	instance.method( 5, 10 );
 	delete $.ui.testWidget3;
+	delete $.fn.testWidget3;
 	delete $.ui.testWidget2;
+	delete $.fn.testWidget2;
 });
 
 test( ".option() - getter", function() {
@@ -1375,7 +1381,9 @@ test( "redefine deep prototype chain", function() {
 	instance.method( "level 1" );
 
 	delete $.ui.testWidget3;
+	delete $.fn.testWidget3;
 	delete $.ui.testWidget2;
+	delete $.fn.testWidget2;
 });
 
 test( "redefine - widgetEventPrefix", function() {
