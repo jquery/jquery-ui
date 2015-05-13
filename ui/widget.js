@@ -62,6 +62,10 @@ $.widget = function( name, base, prototype ) {
 		base = $.Widget;
 	}
 
+	if ( $.isArray( prototype ) ) {
+		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
+	}
+
 	// create selector for plugin
 	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
 		return !!$.data( elem, fullName );

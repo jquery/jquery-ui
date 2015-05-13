@@ -476,6 +476,85 @@ test( "._superApply()", function() {
 	delete $.fn.testWidget2;
 });
 
+test( "mixins", function() {
+	expect( 5 );
+
+	var mixin1 = {
+		foo: function() {
+			equal( method, "foo", "Methods from first mixin are copied over" );
+		}
+	};
+	var mixin2 = {
+		bar: function() {
+			equal( method, "bar", "Methods from second mixin are copied over" );
+		}
+	};
+	var prototype = {
+		baz: function() {
+			equal( method, "baz", "Methods from protoype are copied over" );
+		}
+	};
+	var existingBar = mixin2.bar;
+	var method;
+
+	$.widget( "ui.testWidget", [ mixin1, mixin2, prototype ] );
+	method = "foo";
+	$.ui.testWidget.prototype.foo();
+	method = "bar";
+	$.ui.testWidget.prototype.bar();
+	method = "baz";
+	$.ui.testWidget.prototype.baz();
+
+	mixin1.foo = function() {
+		ok( false, "Changes to a mixin don't change the prototype" );
+	};
+	method = "foo";
+	$.ui.testWidget.prototype.foo();
+
+	$.ui.testWidget.prototype.bar = function() {};
+	strictEqual( mixin2.bar, existingBar, "Changes to a prototype don't change the mixin" );
+});
+
+test( "mixins with inheritance", function() {
+	expect( 4 );
+
+	var mixin1 = {
+		foo: function() {
+			equal( method, "foo", "Methods from first mixin are copied over" );
+		}
+	};
+	var mixin2 = {
+		bar: function() {
+			equal( method, "bar", "Methods from second mixin are copied over" );
+		}
+	};
+	var parentPrototype = {
+		baz: function() {
+			equal( method, "baz", "Methods from parent protoype are copied over" );
+		}
+	};
+	var childPrototype = {
+		qux: function() {
+			equal( method, "qux", "Methods from child protoype are copied over" );
+		}
+	};
+	var method;
+
+	$.widget( "ui.testWidget", [ mixin1, parentPrototype ] );
+	$.widget( "ui.testWidget2", $.ui.testWidget, [ mixin2, childPrototype ] );
+	method = "foo";
+	$.ui.testWidget2.prototype.foo();
+	method = "bar";
+	$.ui.testWidget2.prototype.bar();
+	method = "baz";
+	$.ui.testWidget2.prototype.baz();
+	method = "qux";
+	$.ui.testWidget2.prototype.qux();
+
+	delete $.ui.testWidget2;
+	delete $.fn.testWidget2;
+});
+
 test( ".option() - getter", function() {
 	expect( 6 );
 	$.widget( "ui.testWidget", {
