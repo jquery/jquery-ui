@@ -59,7 +59,7 @@
 					text: "Close",
 					click: closeDownload
 				}]);
-				$(".ui-dialog button").last().focus();
+				$(".ui-dialog button").last().trigger( "focus" );
 			}
 		});
 
@@ -81,7 +81,7 @@
 			progressbar.progressbar( "value", false );
 			progressLabel
 				.text( "Starting download..." );
-			downloadButton.focus();
+			downloadButton.trigger( "focus" );
 		}
 	});
 	</script>
