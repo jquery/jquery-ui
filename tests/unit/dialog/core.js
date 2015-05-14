@@ -103,7 +103,7 @@ asyncTest( "focus tabbable", function() {
 		// Support: IE8
 		// For some reason the focus doesn't get set properly if we don't
 		// focus the body first.
-		$( "body" ).focus();
+		$( "body" ).trigger( "focus" );
 
 		element = $( markup ).dialog( options );
 		setTimeout(function() {
@@ -116,7 +116,7 @@ asyncTest( "focus tabbable", function() {
 
 	function step1() {
 		checkFocus( "<div><input><input></div>", options, function( done ) {
-			var input = element.find( "input:last" ).focus().blur();
+			var input = element.find( "input:last" ).trigger( "focus" ).trigger( "blur" );
 			element.dialog( "instance" )._focusTabbable();
 			setTimeout(function() {
 				equal( document.activeElement, input[ 0 ],
@@ -177,9 +177,9 @@ asyncTest( "focus tabbable", function() {
 			{
 				open: function() {
 					var inputs = $( this ).find( "input" );
-					inputs.last().keydown(function( event ) {
+					inputs.last().on( "keydown",function( event ) {
 						event.preventDefault();
-						inputs.first().focus();
+						inputs.first().trigger( "focus" );
 					});
 				}
 			},
@@ -253,7 +253,7 @@ asyncTest( "#9048: multiple modal dialogs opened and closed in different order",
 	$( "#dialog1" ).dialog( "close" );
 	setTimeout(function() {
 		$( "#dialog2" ).dialog( "close" );
-		$( "#favorite-animal" ).focus();
+		$( "#favorite-animal" ).trigger( "focus" );
 		ok( true, "event handlers cleaned up (no errors thrown)" );
 		start();
 	});
@@ -277,20 +277,20 @@ asyncTest( "interaction between overlay and other dialogs", function() {
 	// Support: IE8
 	// For some reason the focus doesn't get set properly if we don't
 	// focus the body first.
-	$( "body" ).focus();
+	$( "body" ).trigger( "focus" );
 
 	// Wait for the modal to init
 	setTimeout(function() {
 		second.testWidget( "open" );
 
 		// Simulate user tabbing from address bar to an element outside the dialog
-		$( "#favorite-animal" ).focus();
+		$( "#favorite-animal" ).trigger( "focus" );
 		setTimeout(function() {
 			equal( document.activeElement, secondInput[ 0 ] );
 
 			// Last active dialog must receive focus
-			firstInput.focus();
-			$( "#favorite-animal" ).focus();
+			firstInput.trigger( "focus" );
+			$( "#favorite-animal" ).trigger( "focus" );
 			setTimeout(function() {
 				equal( document.activeElement, firstInput[ 0 ] );
 

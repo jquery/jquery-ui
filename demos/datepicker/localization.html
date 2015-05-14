@@ -16,7 +16,7 @@
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker( $.datepicker.regional[ "fr" ] );
-		$( "#locale" ).change(function() {
+		$( "#locale" ).on( "change", function() {
 			$( "#datepicker" ).datepicker( "option",
 				$.datepicker.regional[ $( this ).val() ] );
 		});

@@ -18,7 +18,7 @@
 	$(function() {
 		$( "#rerun" )
 			.button()
-			.click(function() {
+			.on( "click", function() {
 				alert( "Running the last action" );
 			})
 			.next()
@@ -28,7 +28,7 @@
 						primary: "ui-icon-triangle-1-s"
 					}
 				})
-				.click(function() {
+				.on( "click", function() {
 					var menu = $( this ).parent().next().show().position({
 						my: "left top",
 						at: "left bottom",

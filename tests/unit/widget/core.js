@@ -131,7 +131,7 @@ test( "jQuery usage", function() {
 
 	shouldCreate = true;
 	elem = $( "<div>" )
-		.bind( "testwidgetcreate", function() {
+		.on( "testwidgetcreate", function() {
 			ok( shouldCreate, "create event triggered on instantiation" );
 		})
 		.testWidget();
@@ -823,7 +823,7 @@ test( "_on() with delegate", function() {
 		_create: function() {
 			var uuid = this.uuid;
 			this.element = {
-				bind: function( event, handler ) {
+				on: function( event, handler ) {
 					equal( event, "click.testWidget" + uuid );
 					ok( $.isFunction(handler) );
 				},
@@ -831,7 +831,7 @@ test( "_on() with delegate", function() {
 			};
 			this.widget = function() {
 				return {
-					delegate: function( selector, event, handler ) {
+					on: function( event, selector, handler ) {
 						equal( selector, "a" );
 						equal( event, "click.testWidget" + uuid );
 						ok( $.isFunction(handler) );
@@ -844,7 +844,7 @@ test( "_on() with delegate", function() {
 			});
 			this.widget = function() {
 				return {
-					delegate: function( selector, event, handler ) {
+					on: function( event, selector, handler ) {
 						equal( selector, "form fieldset > input" );
 						equal( event, "change.testWidget" + uuid );
 						ok( $.isFunction(handler) );
@@ -926,7 +926,7 @@ test( "_off() - single event", function() {
 	widget._on( element, { foo: function() {
 		ok( shouldTriggerWidget, "foo called from _on" );
 	}});
-	element.bind( "foo", function() {
+	element.on( "foo", function() {
 		ok( shouldTriggerOther, "foo called from bind" );
 	});
 	shouldTriggerWidget = true;
@@ -952,7 +952,7 @@ test( "_off() - multiple events", function() {
 			ok( shouldTriggerWidget, "bar called from _on" );
 		}
 	});
-	element.bind( "foo bar", function( event ) {
+	element.on( "foo bar", function( event ) {
 		ok( shouldTriggerOther, event.type + " called from bind" );
 	});
 	shouldTriggerWidget = true;
@@ -980,7 +980,7 @@ test( "_off() - all events", function() {
 			ok( shouldTriggerWidget, "bar called from _on" );
 		}
 	});
-	element.bind( "foo bar", function( event ) {
+	element.on( "foo bar", function( event ) {
 		ok( shouldTriggerOther, event.type + " called from bind" );
 	});
 	shouldTriggerWidget = true;
@@ -1073,7 +1073,7 @@ test( "._trigger() - no event, no ui", function() {
 		}
 	});
 	$( document ).add( "#widget-wrapper" ).add( "#widget" )
-		.bind( "testwidgetfoo", function( event, ui ) {
+		.on( "testwidgetfoo", function( event, ui ) {
 			deepEqual( ui, {}, "empty ui hash passed" );
 			handlers.push( this );
 		});
@@ -1086,7 +1086,7 @@ test( "._trigger() - no event, no ui", function() {
 		"callback"
 	], "event bubbles and then invokes callback" );
 
-	$( document ).unbind( "testwidgetfoo" );
+	$( document ).off( "testwidgetfoo" );
 });
 
 test( "._trigger() - cancelled event", function() {
@@ -1101,7 +1101,7 @@ test( "._trigger() - cancelled event", function() {
 			ok( true, "callback invoked even if event is cancelled" );
 		}
 	})
-	.bind( "testwidgetfoo", function() {
+	.on( "testwidgetfoo", function() {
 		ok( true, "event was triggered" );
 		return false;
 	});
@@ -1148,7 +1148,7 @@ test( "._trigger() - provide event and ui", function() {
 			}, "ui object modified" );
 		}
 	});
-	$( "#widget" ).bind( "testwidgetfoo", function( event, ui ) {
+	$( "#widget" ).on( "testwidgetfoo", function( event, ui ) {
 		equal( event.originalEvent, originalEvent, "original event object passed" );
 		deepEqual( ui, {
 			foo: "bar",
@@ -1159,7 +1159,7 @@ test( "._trigger() - provide event and ui", function() {
 		}, "ui hash passed" );
 		ui.foo = "notbar";
 	});
-	$( "#widget-wrapper" ).bind( "testwidgetfoo", function( event, ui ) {
+	$( "#widget-wrapper" ).on( "testwidgetfoo", function( event, ui ) {
 		equal( event.originalEvent, originalEvent, "original event object passed" );
 		deepEqual( ui, {
 			foo: "notbar",
@@ -1206,7 +1206,7 @@ test( "._trigger() - array as ui", function() {
 			this._trigger( "foo", null, [ ui, extra ] );
 		}
 	});
-	$( "#widget" ).bind( "testwidgetfoo", function( event, ui, extra ) {
+	$( "#widget" ).on( "testwidgetfoo", function( event, ui, extra ) {
 		deepEqual( ui, {
 			foo: "bar",
 			baz: {
@@ -1249,7 +1249,7 @@ test( "._trigger() - instance as element", function() {
 			deepEqual( ui, { foo: "bar" }, "ui object passed to callback" );
 		}
 	});
-	$( instance ).bind( "testwidgetfoo", function( event, ui ) {
+	$( instance ).on( "testwidgetfoo", function( event, ui ) {
 		equal( event.type, "testwidgetfoo", "event object passed to event handler" );
 		deepEqual( ui, { foo: "bar" }, "ui object passed to event handler" );
 	});

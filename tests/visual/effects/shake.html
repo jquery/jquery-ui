@@ -10,7 +10,7 @@
 	<script src="../../../ui/effect-shake.js"></script>
 	<script>
 	$(function() {
-		$( "#btn" ).click(function() {
+		$( "#btn" ).on( "click", function() {
 			$( ".shake" ).effect( "shake", {
 				duration: +$( "#duration" ).val(),
 				mode: "toggle"

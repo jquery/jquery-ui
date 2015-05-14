@@ -181,7 +181,7 @@ test( "max", function() {
 	element.spinner( "value", 1000 );
 	equal( element.val(), 100, "max constrained in value method" );
 
-	element.val( 1000 ).blur();
+	element.val( 1000 ).trigger( "blur" );
 	equal( element.val(), 1000, "max not constrained if manual entry" );
 });
 
@@ -209,7 +209,7 @@ test( "min", function() {
 	element.spinner( "value", -1000 );
 	equal( element.val(), -100, "min constrained in value method" );
 
-	element.val( -1000 ).blur();
+	element.val( -1000 ).trigger( "blur" );
 	equal( element.val(), -1000, "min not constrained if manual entry" );
 });
 

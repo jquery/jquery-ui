@@ -8,9 +8,9 @@ module("button: events");
 test("buttonset works with single-quote named elements (#7505)", function() {
 	expect( 1 );
 	$("#radio3").buttonset();
-	$("#radio33").click( function(){
+	$("#radio33").on( "click", function(){
 		ok( true, "button clicks work with single-quote named elements" );
-	}).click();
+	}).trigger( "click" );
 });
 
 asyncTest( "when button loses focus, ensure active state is removed (#8559)", function( assert ) {
@@ -22,10 +22,10 @@ asyncTest( "when button loses focus, ensure active state is removed (#8559)", fu
 		element.one( "blur", function() {
 			assert.lacksClasses( element, "ui-state-active", "button loses active state appropriately" );
 			start();
-		}).blur();
+		}).trigger( "blur" );
 	});
 
-	element.focus();
+	element.trigger( "focus" );
 	setTimeout(function() {
 		element
 			.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } )

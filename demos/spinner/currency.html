@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#currency" ).change(function() {
+		$( "#currency" ).on( "change", function() {
 			$( "#spinner" ).spinner( "option", "culture", $( this ).val() );
 		});
 

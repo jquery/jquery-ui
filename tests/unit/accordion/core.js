@@ -38,7 +38,7 @@ $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( typ
 test( "handle click on header-descendant", function() {
 	expect( 1 );
 	var element = $( "#navigation" ).accordion();
-	$( "#navigation h2:eq(1) a" ).click();
+	$( "#navigation h2:eq(1) a" ).trigger( "click" );
 	state( element, 0, 1, 0 );
 });
 

@@ -134,7 +134,7 @@ test( "tolerance, intersect", function() {
 			left: 0
 		});
 
-		droppable.unbind( "drop" ).bind( "drop", function() {
+		droppable.off( "drop" ).on( "drop", function() {
 			equal( true, data[ 2 ], data[ 3 ] );
 		});
 
@@ -173,7 +173,7 @@ test( "tolerance, pointer", function() {
 	$.each( dataset, function() {
 		var data = this;
 
-		droppable.unbind( "drop" ).bind( "drop", function() {
+		droppable.off( "drop" ).on( "drop", function() {
 			equal( true, data[ 2 ], data[ 3 ] );
 		});
 
@@ -187,7 +187,7 @@ test( "tolerance, pointer", function() {
 	draggable.css({ top: 0, left: 0 }).draggable( "option", "axis", "x" );
 	droppable.css({ top: 15, left: 15 });
 
-	droppable.unbind( "drop" ).bind( "drop", function() {
+	droppable.off( "drop" ).on( "drop", function() {
 		ok( true, "drop fires as long as pointer is within droppable" );
 	});
 

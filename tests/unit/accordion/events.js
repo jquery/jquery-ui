@@ -82,7 +82,7 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
 		state( element, 1, 0, 0 );
 	});
-	headers.eq( 1 ).click();
+	headers.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
@@ -142,7 +142,7 @@ test( "activate", function() {
 		equal( ui.newPanel.length, 1 );
 		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
 	});
-	headers.eq( 1 ).click();
+	headers.eq( 1 ).trigger( "click" );
 
 	element.one( "accordionactivate", function( event, ui ) {
 		equal( ui.oldHeader.length, 1 );

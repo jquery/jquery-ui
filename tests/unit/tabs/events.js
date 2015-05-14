@@ -85,7 +85,7 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		state( element, 1, 0, 0 );
 	});
-	anchors.eq( 1 ).click();
+	anchors.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
 	// collapsing
@@ -156,7 +156,7 @@ test( "activate", function() {
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		state( element, 0, 1, 0 );
 	});
-	anchors.eq( 1 ).click();
+	anchors.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
 	// collapsing
@@ -251,7 +251,7 @@ test( "beforeLoad", function() {
 		event.preventDefault();
 		state( element, 0, 0, 1, 0, 0 );
 	});
-	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 3 ).click();
+	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 3 ).trigger( "click" );
 	state( element, 0, 0, 0, 1, 0 );
 	// .toLowerCase() is needed to convert <P> to <p> in old IEs
 	equal( panel.html().toLowerCase(), "<p>testing</p>", "panel html after" );
@@ -315,7 +315,7 @@ asyncTest( "load", function() {
 			state( element, 0, 0, 0, 0, 1 );
 			start();
 		});
-		element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 4 ).click();
+		element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 4 ).trigger( "click" );
 	}
 });
 

@@ -8,7 +8,7 @@ define( [
 
 module( "datepicker: core", {
 	setup: function() {
-		$( "body" ).focus();
+		$( "body" ).trigger( "focus" );
 	}
 });
 

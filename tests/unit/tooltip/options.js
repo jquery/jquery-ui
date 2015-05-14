@@ -208,7 +208,7 @@ test( "track and programmatic focus", function() {
 	expect( 1 );
 	$( "#qunit-fixture div input" ).tooltip({
 		track: true
-	}).focus();
+	}).trigger( "focus" );
 	equal( "inputtitle", $( ".ui-tooltip" ).text() );
 });
 

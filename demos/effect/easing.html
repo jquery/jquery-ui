@@ -79,7 +79,7 @@
 			ctx.stroke();
 
 			// animate on click
-			graph.click(function() {
+			graph.on( "click", function() {
 				wrap
 					.animate( { height: "hide" }, 2000, name )
 					.delay( 800 )

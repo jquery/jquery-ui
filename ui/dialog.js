@@ -207,7 +207,7 @@ $.widget( "ui.dialog", {
 		this._destroyOverlay();
 		this._untrackInstance();
 
-		if ( !this.opener.filter( ":focusable" ).focus().length ) {
+		if ( !this.opener.filter( ":focusable" ).trigger( "focus" ).length ) {
 
 			// Hiding a focused element doesn't trigger blur in WebKit
 			// so in case we have nothing to focus on, explicitly blur the active element
@@ -307,7 +307,7 @@ $.widget( "ui.dialog", {
 		if ( !hasFocus.length ) {
 			hasFocus = this.uiDialog;
 		}
-		hasFocus.eq( 0 ).focus();
+		hasFocus.eq( 0 ).trigger( "focus" );
 	},
 
 	_keepFocus: function( event ) {
@@ -357,12 +357,12 @@ $.widget( "ui.dialog", {
 
 				if ( ( event.target === last[ 0 ] || event.target === this.uiDialog[ 0 ] ) && !event.shiftKey ) {
 					this._delay( function() {
-						first.focus();
+						first.trigger( "focus" );
 					} );
 					event.preventDefault();
 				} else if ( ( event.target === first[ 0 ] || event.target === this.uiDialog[ 0 ] ) && event.shiftKey ) {
 					this._delay( function() {
-						last.focus();
+						last.trigger( "focus" );
 					} );
 					event.preventDefault();
 				}
@@ -397,7 +397,7 @@ $.widget( "ui.dialog", {
 				// causes the browser to scroll it into view, preventing the click event
 				if ( !$( event.target ).closest( ".ui-dialog-titlebar-close" ) ) {
 					// Dialog isn't getting focus when dragging (#8063)
-					this.uiDialog.focus();
+					this.uiDialog.trigger( "focus" );
 				}
 			}
 		} );
@@ -476,18 +476,20 @@ $.widget( "ui.dialog", {
 			props = $.extend( { type: "button" }, props );
 			// Change the context for the click callback to be the main element
 			click = props.click;
-			props.click = function() {
-				click.apply( that.element[ 0 ], arguments );
-			};
 			buttonOptions = {
 				icons: props.icons,
 				text: props.showText
 			};
 			delete props.icons;
 			delete props.showText;
+			delete props.click;
+
 			$( "<button></button>", props )
 				.button( buttonOptions )
-				.appendTo( that.uiButtonSet );
+				.appendTo( that.uiButtonSet )
+				.on( "click", function() {
+					click.apply( that.element[ 0 ], arguments );
+				} );
 		} );
 		this._addClass( this.uiDialog, "ui-dialog-buttons" );
 		this.uiDialogButtonPane.appendTo( this.uiDialog );
@@ -859,7 +861,7 @@ $.widget( "ui.dialog", {
 
 			if ( !overlays ) {
 				this.document
-					.unbind( "focusin" )
+					.off( "focusin" )
 					.removeData( "ui-dialog-overlays" );
 			} else {
 				this.document.data( "ui-dialog-overlays", overlays );

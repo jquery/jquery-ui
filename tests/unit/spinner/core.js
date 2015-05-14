@@ -114,7 +114,7 @@ asyncTest( "blur input while spinning with UP", function() {
 		value = element.val();
 		ok( value > 11, "repeating while key is down" );
 
-		element.bind( "blur", function() {
+		element.on( "blur", function() {
 			value = element.val();
 			setTimeout( step3, 750 );
 		})[ 0 ].blur();
@@ -225,16 +225,16 @@ test( "ARIA attributes", function() {
 test( "focus text field when pressing button", function() {
 	expect( 2 );
 	var element = $( "#spin" ).spinner();
-	$( "body" ).focus();
+	$( "body" ).trigger( "focus" );
 	ok( element[ 0 ] !== document.activeElement, "not focused before" );
-	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown();
+	element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" );
 	ok( element[ 0 ] === document.activeElement, "focused after" );
 });
 
 test( "don't clear invalid value on blur", function() {
 	expect( 1 );
 	var element = $( "#spin" ).spinner();
-	element.focus().val( "a" ).blur();
+	element.trigger( "focus" ).val( "a" ).trigger( "blur" );
 	equal( element.val(), "a" );
 });
 

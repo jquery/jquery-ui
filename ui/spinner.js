@@ -165,7 +165,7 @@ return $.widget( "ui.spinner", {
 			function checkFocus() {
 				var isActive = this.element[ 0 ] === $.ui.safeActiveElement( this.document[ 0 ] );
 				if ( !isActive ) {
-					this.element.focus();
+					this.element.trigger( "focus" );
 					this.previous = previous;
 					// support: IE
 					// IE sets focus asynchronously, so we need to check if focus

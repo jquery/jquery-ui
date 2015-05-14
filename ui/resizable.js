@@ -237,7 +237,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		this._handles = this._handles.add( this.element.find( ".ui-resizable-handle" ) );
 		this._handles.disableSelection();
 
-		this._handles.mouseover(function() {
+		this._handles.on( "mouseover", function() {
 			if (!that.resizing) {
 				if (this.className) {
 					axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
@@ -250,14 +250,14 @@ $.widget("ui.resizable", $.ui.mouse, {
 			this._handles.hide();
 			this._addClass( "ui-resizable-autohide" );
 			$(this.element)
-				.mouseenter(function() {
+				.on( "mouseenter", function() {
 					if (o.disabled) {
 						return;
 					}
 					that._removeClass( "ui-resizable-autohide" );
 					that._handles.show();
 				})
-				.mouseleave(function() {
+				.on( "mouseleave", function() {
 					if (o.disabled) {
 						return;
 					}
@@ -280,7 +280,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				$(exp)
 					.removeData("resizable")
 					.removeData("ui-resizable")
-					.unbind(".resizable")
+					.off(".resizable")
 					.find(".ui-resizable-handle")
 						.remove();
 			};
