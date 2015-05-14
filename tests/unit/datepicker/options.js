@@ -154,9 +154,9 @@ test("change", function() {
 
 			testHelper.onFocus( inp, function() {
 				ok( !dp.is( ":visible" ), "Button - not rendered on focus" );
-				button.click();
+				button.trigger( "click" );
 				ok( dp.is( ":visible" ), "Button - rendered on button click" );
-				button.click();
+				button.trigger( "click" );
 				ok( !dp.is( ":visible" ), "Button - hidden on second button click" );
 				inp.datepicker( "hide" ).datepicker( "destroy" );
 
@@ -183,9 +183,9 @@ test("change", function() {
 
 			testHelper.onFocus( inp, function() {
 				ok( !dp.is( ":visible" ), "Image button - not rendered on focus" );
-				image.click();
+				image.trigger( "click" );
 				ok( dp.is( ":visible" ), "Image button - rendered on image click" );
-				image.click();
+				image.trigger( "click" );
 				ok( !dp.is( ":visible" ), "Image button - hidden on second image click" );
 				inp.datepicker( "hide" ).datepicker( "destroy" );
 
@@ -214,9 +214,9 @@ test("change", function() {
 					ok( dp.is( ":visible" ), "Both - rendered on focus" );
 					body.simulate( "mousedown", {} );
 					ok( !dp.is( ":visible" ), "Both - hidden on external click" );
-					button.click();
+					button.trigger( "click" );
 					ok( dp.is( ":visible" ), "Both - rendered on button click" );
-					button.click();
+					button.trigger( "click" );
 					ok( !dp.is( ":visible" ), "Both - hidden on second button click" );
 					inp.datepicker( "hide" ).datepicker( "destroy" );
 

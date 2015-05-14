@@ -19,7 +19,7 @@
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker();
-		$( "#anim" ).change(function() {
+		$( "#anim" ).on( "change", function() {
 			$( "#datepicker" ).datepicker( "option", "showAnim", $( this ).val() );
 		});
 	});

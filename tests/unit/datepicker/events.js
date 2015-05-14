@@ -137,14 +137,14 @@ test("beforeShowDay-getDate", function() {
 		// support: IE <9, jQuery <1.8
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>January&#xa0;2010</span>" ).text(), "Initial month");
-	$("a.ui-datepicker-next", dp).click();
-	$("a.ui-datepicker-next", dp).click();
+	$("a.ui-datepicker-next", dp).trigger( "click" );
+	$("a.ui-datepicker-next", dp).trigger( "click" );
 	// contains non-breaking space
 	equal($("div.ui-datepicker-title").text(),
 		$( "<span>March&#xa0;2010</span>" ).text(), "After next clicks");
 	inp.datepicker("hide").datepicker("show");
-	$("a.ui-datepicker-prev", dp).click();
-	$("a.ui-datepicker-prev", dp).click();
+	$("a.ui-datepicker-prev", dp).trigger( "click" );
+	$("a.ui-datepicker-prev", dp).trigger( "click" );
 	// contains non-breaking space
 	equal($("div.ui-datepicker-title").text(),
 		$( "<span>November&#xa0;2009</span>" ).text(), "After prev clicks");

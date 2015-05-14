@@ -214,8 +214,8 @@ $.extend(Datepicker.prototype, {
 			return;
 		}
 		this._attachments(input, inst);
-		input.addClass(this.markerClassName).keydown(this._doKeyDown).
-			keypress(this._doKeyPress).keyup(this._doKeyUp);
+		input.addClass(this.markerClassName).on( "keydown", this._doKeyDown).
+			on( "keypress", this._doKeyPress).on( "keyup", this._doKeyUp);
 		this._autoSize(inst);
 		$.data(target, "datepicker", inst);
 		//If disabled option is true, disable the datepicker once it has been attached to the input (see ticket #5665)
@@ -238,7 +238,7 @@ $.extend(Datepicker.prototype, {
 			input[isRTL ? "before" : "after"](inst.append);
 		}
 
-		input.unbind("focus", this._showDatepicker);
+		input.off("focus", this._showDatepicker);
 
 		if (inst.trigger) {
 			inst.trigger.remove();
@@ -246,7 +246,7 @@ $.extend(Datepicker.prototype, {
 
 		showOn = this._get(inst, "showOn");
 		if (showOn === "focus" || showOn === "both") { // pop-up date picker when in the marked field
-			input.focus(this._showDatepicker);
+			input.on( "focus", this._showDatepicker );
 		}
 		if (showOn === "button" || showOn === "both") { // pop-up date picker when button clicked
 			buttonText = this._get(inst, "buttonText");
@@ -258,7 +258,7 @@ $.extend(Datepicker.prototype, {
 					html(!buttonImage ? buttonText : $("<img/>").attr(
 					{ src:buttonImage, alt:buttonText, title:buttonText })));
 			input[isRTL ? "before" : "after"](inst.trigger);
-			inst.trigger.click(function() {
+			inst.trigger.on( "click", function() {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput === input[0]) {
 					$.datepicker._hideDatepicker();
 				} else if ($.datepicker._datepickerShowing && $.datepicker._lastInput !== input[0]) {
@@ -339,7 +339,7 @@ $.extend(Datepicker.prototype, {
 			id = "dp" + this.uuid;
 			this._dialogInput = $("<input type='text' id='" + id +
 				"' style='position: absolute; top: -100px; width: 0px;'/>");
-			this._dialogInput.keydown(this._doKeyDown);
+			this._dialogInput.on( "keydown", this._doKeyDown );
 			$("body").append(this._dialogInput);
 			inst = this._dialogInst = this._newInst(this._dialogInput, false);
 			inst.settings = {};
@@ -390,10 +390,10 @@ $.extend(Datepicker.prototype, {
 			inst.append.remove();
 			inst.trigger.remove();
 			$target.removeClass(this.markerClassName).
-				unbind("focus", this._showDatepicker).
-				unbind("keydown", this._doKeyDown).
-				unbind("keypress", this._doKeyPress).
-				unbind("keyup", this._doKeyUp);
+				off("focus", this._showDatepicker).
+				off("keydown", this._doKeyDown).
+				off("keypress", this._doKeyPress).
+				off("keyup", this._doKeyUp);
 		} else if (nodeName === "div" || nodeName === "span") {
 			$target.removeClass(this.markerClassName).empty();
 		}
@@ -798,7 +798,7 @@ $.extend(Datepicker.prototype, {
 			}
 
 			if ( $.datepicker._shouldFocusInput( inst ) ) {
-				inst.input.focus();
+				inst.input.trigger( "focus" );
 			}
 
 			$.datepicker._curInst = inst;
@@ -832,7 +832,7 @@ $.extend(Datepicker.prototype, {
 			"Class"]("ui-datepicker-rtl");
 
 		if (inst === $.datepicker._curInst && $.datepicker._datepickerShowing && $.datepicker._shouldFocusInput( inst ) ) {
-			inst.input.focus();
+			inst.input.trigger( "focus" );
 		}
 
 		// deffered render of the years select (to avoid flashes on Firefox)
@@ -941,7 +941,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Tidy up after a dialog display. */
 	_tidyDialog: function(inst) {
-		inst.dpDiv.removeClass(this._dialogClass).unbind(".ui-datepicker-calendar");
+		inst.dpDiv.removeClass(this._dialogClass).off(".ui-datepicker-calendar");
 	},
 
 	/* Close date picker if clicked elsewhere. */
@@ -1058,7 +1058,7 @@ $.extend(Datepicker.prototype, {
 			this._hideDatepicker();
 			this._lastInput = inst.input[0];
 			if (typeof(inst.input[0]) !== "object") {
-				inst.input.focus(); // restore focus
+				inst.input.trigger( "focus" ); // restore focus
 			}
 			this._lastInput = null;
 		}
@@ -1624,7 +1624,7 @@ $.extend(Datepicker.prototype, {
 					return false;
 				}
 			};
-			$(this).bind(this.getAttribute("data-event"), handler[this.getAttribute("data-handler")]);
+			$(this).on(this.getAttribute("data-event"), handler[this.getAttribute("data-handler")]);
 		});
 	},
 
@@ -2007,7 +2007,7 @@ $.extend(Datepicker.prototype, {
  */
 function datepicker_bindHover(dpDiv) {
 	var selector = "button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";
-	return dpDiv.delegate(selector, "mouseout", function() {
+	return dpDiv.on( "mouseout", selector, function() {
 			$(this).removeClass("ui-state-hover");
 			if (this.className.indexOf("ui-datepicker-prev") !== -1) {
 				$(this).removeClass("ui-datepicker-prev-hover");
@@ -2016,7 +2016,7 @@ function datepicker_bindHover(dpDiv) {
 				$(this).removeClass("ui-datepicker-next-hover");
 			}
 		})
-		.delegate( selector, "mouseover", datepicker_handleMouseover );
+		.on( "mouseover", selector, datepicker_handleMouseover );
 }
 
 function datepicker_handleMouseover() {
@@ -2056,7 +2056,7 @@ $.fn.datepicker = function(options){
 
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
-		$(document).mousedown($.datepicker._checkExternalClick);
+		$(document).on( "mousedown", $.datepicker._checkExternalClick );
 		$.datepicker.initialized = true;
 	}
 
