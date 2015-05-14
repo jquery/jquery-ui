@@ -44,7 +44,7 @@ function spinner_modifier( fn ) {
 	};
 }
 
-return $.widget( "ui.spinner", {
+$.widget( "ui.spinner", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
@@ -214,13 +214,26 @@ return $.widget( "ui.spinner", {
 		"mouseleave .ui-spinner-button": "_stop"
 	},
 
-	_draw: function() {
-		var uiSpinner = this.uiSpinner = this.element
+	// Support mobile enhanced option and make backcompat more sane
+	_enhance: function() {
+		this.uiSpinner = this.element
 			.attr( "autocomplete", "off" )
-			.wrap( this._uiSpinnerHtml() )
+			.wrap( "<span>" )
 			.parent()
-				// add buttons
-				.append( this._buttonHtml() );
+
+				// Add buttons
+				.append(
+					"<a>" +
+						"<span>&#9650;</span>" +
+					"</a>" +
+					"<a>" +
+						"<span>&#9660;</span>" +
+					"</a>"
+				);
+	},
+
+	_draw: function() {
+		this._enhance();
 
 		this._addClass( this.uiSpinner, "ui-spinner", "ui-widget ui-widget-content" );
 		this._addClass( "ui-spinner-input" );
@@ -228,7 +241,7 @@ return $.widget( "ui.spinner", {
 		this.element.attr( "role", "spinbutton" );
 
 		// button bindings
-		this.buttons = uiSpinner.children( "a" )
+		this.buttons = this.uiSpinner.children( "a" )
 			.attr( "tabIndex", -1 )
 			.button();
 
@@ -244,9 +257,9 @@ return $.widget( "ui.spinner", {
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height
-		if ( this.buttons.height() > Math.ceil( uiSpinner.height() * 0.5 ) &&
-				uiSpinner.height() > 0 ) {
-			uiSpinner.height( uiSpinner.height() );
+		if ( this.buttons.height() > Math.ceil( this.uiSpinner.height() * 0.5 ) &&
+				this.uiSpinner.height() > 0 ) {
+			this.uiSpinner.height( this.uiSpinner.height() );
 		}
 
 		// disable spinner if element was already disabled
@@ -275,20 +288,6 @@ return $.widget( "ui.spinner", {
 		}
 
 		return false;
-	},
-
-	_uiSpinnerHtml: function() {
-		return "<span>";
-	},
-
-	_buttonHtml: function() {
-		return "" +
-			"<a>" +
-				"<span>&#9650;</span>" +
-			"</a>" +
-			"<a>" +
-				"<span>&#9660;</span>" +
-			"</a>";
 	},
 
 	_start: function( event ) {
@@ -532,5 +531,38 @@ return $.widget( "ui.spinner", {
 		return this.uiSpinner;
 	}
 } );
+
+// DEPRECATED
+// TODO: switch return back to widget declaration at top of file when this is removed
+if ( $.uiBackCompat !== false ) {
+
+	// Backcompat for spinner html extension points
+	$.widget( "ui.spinner", $.ui.spinner, {
+		_enhance: function() {
+			this.uiSpinner = this.element
+				.attr( "autocomplete", "off" )
+				.wrap( this._uiSpinnerHtml() )
+				.parent()
+
+					// Add buttons
+					.append( this._buttonHtml() );
+		},
+		_uiSpinnerHtml: function() {
+			return "<span>";
+		},
+
+		_buttonHtml: function() {
+			return "" +
+				"<a>" +
+					"<span>&#9650;</span>" +
+				"</a>" +
+				"<a>" +
+					"<span>&#9660;</span>" +
+				"</a>";
+		}
+	} );
+}
+
+return $.ui.spinner;
 
 } ) );
