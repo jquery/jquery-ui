@@ -16,7 +16,7 @@
 	<script>
 	$(function() {
 		var state = true;
-		$( "#button" ).click(function() {
+		$( "#button" ).on( "click", function() {
 			if ( state ) {
 				$( "#effect" ).animate({
 					backgroundColor: "#aa0000",
