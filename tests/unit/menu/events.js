@@ -62,7 +62,7 @@ asyncTest( "handle blur", function() {
 
 	click( element, "1" );
 	setTimeout(function() {
-		element.blur();
+		element.trigger( "blur" );
 		setTimeout(function() {
 			start();
 		}, 350 );
@@ -303,7 +303,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 		equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
 		setTimeout( menukeyboard1 );
 	});
-	element.focus();
+	element.trigger( "focus" );
 
 	function menukeyboard1() {
 		log( "keydown", true );
@@ -498,7 +498,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 		equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
 		setTimeout( menukeyboard1 );
 	});
-	element.focus();
+	element.trigger( "focus" );
 
 	function menukeyboard1() {
 		log( "keydown", true );
@@ -593,7 +593,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 		equal( logOutput(), "keydown,1", "Keydown focus but not select disabled item" );
 		setTimeout( menukeyboard1, 50 );
 	});
-	element.focus();
+	element.trigger( "focus" );
 
 	function menukeyboard1() {
 		log( "keydown", true );
@@ -645,7 +645,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with dividers and
 		equal( logOutput(), "keydown,2,Ada", "Keydown skips initial group label" );
 		setTimeout( menukeyboard1, 50 );
 	});
-	element.focus();
+	element.trigger( "focus" );
 
 	function menukeyboard1() {
 		log( "keydown", true );

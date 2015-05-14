@@ -47,8 +47,8 @@ asyncTest( "#9044: Autofocus issue with dialog opened from menu widget", functio
 
 	$( "<input>", { id: "test9044" } ).appendTo( "body" );
 
-	$( "#testID1" ).bind( "click", function() {
-		$( "#test9044" ).focus();
+	$( "#testID1" ).on( "click", function() {
+		$( "#test9044" ).trigger( "focus" );
 	});
 
 	testHelper.click( element, "3" );
