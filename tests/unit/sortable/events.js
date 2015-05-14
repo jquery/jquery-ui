@@ -198,7 +198,7 @@ test("#4752: link event firing on sortable with connect list", function () {
 		}
 	});
 
-	$("#qunit-fixture ul").bind("click.ui-sortable-test", function () {
+	$("#qunit-fixture ul").on("click.ui-sortable-test", function () {
 		fired.click = true;
 	});
 
