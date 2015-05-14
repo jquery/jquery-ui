@@ -6,7 +6,7 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([ "../jquery.ui.datepicker" ], factory );
+		define([ "datepicker" ], factory );
 	} else {
 
 		// Browser globals
