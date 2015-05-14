@@ -137,20 +137,20 @@ asyncTest( "programmatic focus with async content", function() {
 		}
 	});
 
-	element.bind( "tooltipopen", function( event ) {
+	element.on( "tooltipopen", function( event ) {
 		deepEqual( event.originalEvent.type, "focusin" );
 
-		element.bind( "tooltipclose", function( event ) {
+		element.on( "tooltipclose", function( event ) {
 			deepEqual( event.originalEvent.type, "focusout" );
 			start();
 		});
 
 		setTimeout(function() {
-			element.blur();
+			element.trigger( "blur" );
 		});
 	});
 
-	element.focus();
+	element.trigger( "focus" );
 });
 
 asyncTest( "destroy during hide animation; only one close event", function() {
@@ -161,7 +161,7 @@ asyncTest( "destroy during hide animation; only one close event", function() {
 		hide: true
 	});
 
-	element.bind( "tooltipclose", function() {
+	element.on( "tooltipclose", function() {
 		ok( true, "tooltip closed" );
 	});
 

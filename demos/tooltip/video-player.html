@@ -74,7 +74,7 @@
 				},
 				text: !!$( this ).attr( "title" )
 			});
-			button.not( ".menu" ).click(function() {
+			button.not( ".menu" ).on( "click", function() {
 				notify( button );
 			});
 		});
@@ -83,7 +83,7 @@
 		});
 
 		$( "button.menu" )
-			.click(function() {
+			.on( "click", function() {
 				$( document ).tooltip( "close", { currentTarget: this });
 				var menu = $( this ).next().show().position({
 					my: "left top",

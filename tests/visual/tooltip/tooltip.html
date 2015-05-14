@@ -100,8 +100,8 @@
 			show: {
 				delay: 500
 			}
-		}).click(function() {
-			$( "#focus-on-me" ).focus();
+		}).on( "click", function() {
+			$( "#focus-on-me" ).trigger( "focus" );
 		});
 	});
 	</script>
