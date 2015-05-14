@@ -48,7 +48,7 @@
 		});
 
 		// addTab form: calls addTab function on submit and closes the dialog
-		var form = dialog.find( "form" ).submit(function( event ) {
+		var form = dialog.find( "form" ).on( "submit", function( event ) {
 			addTab();
 			dialog.dialog( "close" );
 			event.preventDefault();
@@ -70,18 +70,18 @@
 		// addTab button: just opens the dialog
 		$( "#add_tab" )
 			.button()
-			.click(function() {
+			.on( "click", function() {
 				dialog.dialog( "open" );
 			});
 
 		// close icon: removing the tab on click
-		tabs.delegate( "span.ui-icon-close", "click", function() {
+		tabs.on( "click", "span.ui-icon-close", function() {
 			var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
 			$( "#" + panelId ).remove();
 			tabs.tabs( "refresh" );
 		});
 
-		tabs.bind( "keyup", function( event ) {
+		tabs.on( "keyup", function( event ) {
 			if ( event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE ) {
 				var panelId = tabs.find( ".ui-tabs-active" ).remove().attr( "aria-controls" );
 				$( "#" + panelId ).remove();

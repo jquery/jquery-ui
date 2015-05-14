@@ -233,7 +233,7 @@ $.widget( "ui.tabs", {
 		// Ctrl+up moves focus to the current tab
 		if ( event.ctrlKey && event.keyCode === $.ui.keyCode.UP ) {
 			event.preventDefault();
-			this.active.focus();
+			this.active.trigger( "focus" );
 		}
 	},
 
@@ -271,7 +271,7 @@ $.widget( "ui.tabs", {
 
 	_focusNextTab: function( index, goingForward ) {
 		index = this._findNextTab( index, goingForward );
-		this.tabs.eq( index ).focus();
+		this.tabs.eq( index ).trigger( "focus" );
 		return index;
 	},
 
@@ -394,7 +394,7 @@ $.widget( "ui.tabs", {
 
 		// Prevent users from focusing disabled tabs via click
 		this.tablist
-			.delegate( "> li", "mousedown" + this.eventNamespace, function( event ) {
+			.on( "mousedown" + this.eventNamespace, "> li", function( event ) {
 				if ( $( this ).is( ".ui-state-disabled" ) ) {
 					event.preventDefault();
 				}
@@ -406,7 +406,7 @@ $.widget( "ui.tabs", {
 			// We don't have to worry about focusing the previously focused
 			// element since clicking on a non-focusable element should focus
 			// the body anyway.
-			.delegate( ".ui-tabs-anchor", "focus" + this.eventNamespace, function() {
+			.on( "focus" + this.eventNamespace, ".ui-tabs-anchor", function() {
 				if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
 					this.blur();
 				}
@@ -726,7 +726,7 @@ $.widget( "ui.tabs", {
 
 		this.tablist
 			.removeAttr( "role" )
-			.unbind( this.eventNamespace );
+			.off( this.eventNamespace );
 
 		this.anchors
 			.removeAttr( "role tabIndex" )
