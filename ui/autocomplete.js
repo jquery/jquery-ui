@@ -233,7 +233,7 @@ $.widget( "ui.autocomplete", {
 					// we restore focus to ensure that the menu closes properly based on the user's
 					// next actions.
 					if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
-						this.element.focus();
+						this.element.trigger( "focus" );
 					}
 				} );
 
@@ -262,7 +262,7 @@ $.widget( "ui.autocomplete", {
 				if ( this.isNewMenu ) {
 					this.isNewMenu = false;
 					if ( event.originalEvent && /^mouse/.test( event.originalEvent.type ) ) {
-						this.menu.blur();
+						this.menu.trigger( "blur" );
 
 						this.document.one( "mousemove", function() {
 							$( event.target ).trigger( event.originalEvent );
@@ -293,7 +293,7 @@ $.widget( "ui.autocomplete", {
 
 				// only trigger when focus was lost (click on menu)
 				if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
-					this.element.focus();
+					this.element.trigger( "focus" );
 					this.previous = previous;
 					// #6109 - IE triggers two focus events and the second
 					// is asynchronous, so we need to reset the previous

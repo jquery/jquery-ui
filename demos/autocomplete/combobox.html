@@ -92,11 +92,11 @@
 					})
 					.removeClass( "ui-corner-all" )
 					.addClass( "custom-combobox-toggle ui-corner-right" )
-					.mousedown(function() {
+					.on( "mousedown", function() {
 						wasOpen = input.autocomplete( "widget" ).is( ":visible" );
 					})
-					.click(function() {
-						input.focus();
+					.on( "click", function() {
+						input.trigger( "focus" );
 
 						// Close if already visible
 						if ( wasOpen ) {
@@ -165,7 +165,7 @@
 
 	$(function() {
 		$( "#combobox" ).combobox();
-		$( "#toggle" ).click(function() {
+		$( "#toggle" ).on( "click", function() {
 			$( "#combobox" ).toggle();
 		});
 	});
