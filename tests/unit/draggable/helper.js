@@ -84,7 +84,7 @@ return $.extend( helper, {
 			element = $( el ),
 			beginOffset = element.offset();
 
-		element.bind( "dragstop", function() {
+		element.on( "dragstop", function() {
 			ok( false, "should not drag " + msg );
 		});
 
@@ -100,7 +100,7 @@ return $.extend( helper, {
 		equal( newOffset.left, beginOffset.left, "Offset left should not be different" );
 		equal( newOffset.top, beginOffset.top, "Offset top should not be different" );
 
-		element.unbind( "dragstop" );
+		element.off( "dragstop" );
 	},
 
 	setScrollable: function( what, isScrollable ) {
@@ -139,7 +139,7 @@ return $.extend( helper, {
 	},
 
 	trackMouseCss: function( el ) {
-		el.bind( "drag", function() {
+		el.on( "drag", function() {
 			el.data( "last_dragged_cursor", $( "body" ).css( "cursor" ) );
 		});
 	},
@@ -149,7 +149,7 @@ return $.extend( helper, {
 		el.draggable( "option", "helper", "clone" );
 
 		// Get what parent is at time of drag
-		el.bind( "drag", function(e, ui) {
+		el.on( "drag", function(e, ui) {
 			el.data( "last_dragged_parent", ui.helper.parent()[ 0 ] );
 		});
 	}
