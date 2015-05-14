@@ -171,7 +171,7 @@ test("buttons - advanced", function( assert ) {
 	assert.hasClasses( buttons, "additional-class" );
 	deepEqual( buttons.button("option", "icons"), { primary: "ui-icon-cancel", secondary: null } );
 	equal( buttons.button( "option", "text" ), false );
-	buttons.click();
+	buttons.trigger( "click" );
 
 	element.remove();
 });

@@ -84,7 +84,7 @@ asyncTest("#9000: Dialog leaves broken event handler after close/destroy in cert
 	expect( 1 );
 	$( "#dialog1" ).dialog({ modal:true }).dialog( "close" ).dialog( "destroy" );
 	setTimeout(function() {
-		$( "#favorite-animal" ).focus();
+		$( "#favorite-animal" ).trigger( "focus" );
 		ok( true, "close and destroy modal dialog before its really opened" );
 		start();
 	});
@@ -223,23 +223,23 @@ asyncTest( "#8958: dialog can be opened while opening", function() {
 	// Support: IE8
 	// For some reason the #favorite-color input doesn't get focus if we don't
 	// focus the body first, causing the test to hang.
-	$( "body" ).focus();
+	$( "body" ).trigger( "focus" );
 
 	$( "#favorite-animal" )
 		// We focus the input to start the test. Once it receives focus, the
 		// dialog will open. Opening the dialog, will cause an element inside
 		// the dialog to gain focus, thus blurring the input.
-		.bind( "focus", function() {
+		.on( "focus", function() {
 			element.dialog( "open" );
 		})
 		// When the input blurs, the dialog is in the process of opening. We
 		// try to open the dialog again, to make sure that dialogs properly
 		// handle a call to the open() method during the process of the dialog
 		// being opened.
-		.bind( "blur", function() {
+		.on( "blur", function() {
 			element.dialog( "open" );
 		})
-		.focus();
+		.trigger( "focus" );
 });
 
 test("#5531: dialog width should be at least minWidth on creation", function () {
