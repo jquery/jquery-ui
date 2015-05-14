@@ -116,7 +116,7 @@ test( "Stray mousemove after mousedown still drags", function() {
 	// In IE8, when content is placed under the mouse (e.g. when draggable content is replaced
 	// on mousedown), mousemove is triggered on those elements even though the mouse hasn't moved.
 	// Support: IE <9
-	element.bind( "mousedown", function() {
+	element.on( "mousedown", function() {
 		$( document ).simulate( "mousemove", { button: -1 });
 	});
 
