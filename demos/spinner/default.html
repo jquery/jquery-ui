@@ -15,24 +15,24 @@
 	$(function() {
 		var spinner = $( "#spinner" ).spinner();
 
-		$( "#disable" ).click(function() {
+		$( "#disable" ).on( "click", function() {
 			if ( spinner.spinner( "option", "disabled" ) ) {
 				spinner.spinner( "enable" );
 			} else {
 				spinner.spinner( "disable" );
 			}
 		});
-		$( "#destroy" ).click(function() {
+		$( "#destroy" ).on( "click", function() {
 			if ( spinner.spinner( "instance" ) ) {
 				spinner.spinner( "destroy" );
 			} else {
 				spinner.spinner();
 			}
 		});
-		$( "#getvalue" ).click(function() {
+		$( "#getvalue" ).on( "click", function() {
 			alert( spinner.spinner( "value" ) );
 		});
-		$( "#setvalue" ).click(function() {
+		$( "#setvalue" ).on( "click", function() {
 			spinner.spinner( "value", 5 );
 		});
 

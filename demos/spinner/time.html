@@ -41,7 +41,7 @@
 	$(function() {
 		$( "#spinner" ).timespinner();
 
-		$( "#culture" ).change(function() {
+		$( "#culture" ).on( "change", function() {
 			var current = $( "#spinner" ).timespinner( "value" );
 			Globalize.culture( $(this).val() );
 			$( "#spinner" ).timespinner( "value", current );

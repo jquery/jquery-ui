@@ -29,9 +29,9 @@ test( "start", function() {
 	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 
 	shouldStart( true, "button up" );
-	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
+	element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
 	shouldStart( true, "button down" );
-	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+	element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
 
 	shouldStart( true, "stepUp" );
 	element.spinner( "stepUp" );
@@ -68,9 +68,9 @@ test( "spin", function() {
 	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 
 	shouldSpin( true, "button up" );
-	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
+	element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
 	shouldSpin( true, "button down" );
-	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+	element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
 
 	shouldSpin( true, "stepUp" );
 	element.spinner( "stepUp" );
@@ -107,9 +107,9 @@ test( "stop", function() {
 	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 
 	shouldStop( true, "button up" );
-	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
+	element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
 	shouldStop( true, "button down" );
-	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+	element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
 
 	shouldStop( true, "stepUp" );
 	element.spinner( "stepUp" );
@@ -200,7 +200,7 @@ asyncTest( "change", function() {
 			shouldChange( false, "blur after many keys, same final value" );
 
 			shouldChange( false, "button up, before blur" );
-			element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
+			element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
 			shouldChange( true, "blur after button up" );
 		}, step7 );
 	}
@@ -208,7 +208,7 @@ asyncTest( "change", function() {
 	function step7() {
 		focusWrap(function() {
 			shouldChange( false, "button down, before blur" );
-			element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+			element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
 			shouldChange( true, "blur after button down" );
 		}, step8 );
 	}
@@ -216,10 +216,10 @@ asyncTest( "change", function() {
 	function step8() {
 		focusWrap(function() {
 			shouldChange( false, "many buttons, same final value, before blur" );
-			element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
-			element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
-			element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
-			element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+			element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
+			element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
+			element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
+			element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
 			shouldChange( false, "blur after many buttons, same final value" );
 		}, step9 );
 	}

@@ -21,7 +21,7 @@
 			numberFormat: "n"
 		});
 
-		$( "#culture" ).change(function() {
+		$( "#culture" ).on( "change", function() {
 			var current = $( "#spinner" ).spinner( "value" );
 			Globalize.culture( $(this).val() );
 			$( "#spinner" ).spinner( "value", current );
