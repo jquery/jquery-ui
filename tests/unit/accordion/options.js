@@ -60,7 +60,7 @@ test( "{ active: Number }", function() {
 	equal( element.accordion( "option", "active" ), 0 );
 	state( element, 1, 0, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).click();
+	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
@@ -269,7 +269,7 @@ test( "{ collapsible: false }", function() {
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).click();
+	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 });
@@ -289,7 +289,7 @@ test( "{ collapsible: true }", function() {
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	element.find( ".ui-accordion-header" ).eq( 1 ).click();
+	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
 	equal( element.accordion( "option", "active" ), false );
 	state( element, 0, 0, 0 );
 });
@@ -306,7 +306,7 @@ test( "{ event: null }", function() {
 	state( element, 0, 1, 0 );
 
 	// ensure default click handler isn't bound
-	element.find( ".ui-accordion-header" ).eq( 2 ).click();
+	element.find( ".ui-accordion-header" ).eq( 2 ).trigger( "click" );
 	equal( element.accordion( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 });
