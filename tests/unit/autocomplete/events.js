@@ -66,7 +66,7 @@ $.each([
 				}),
 			menu = element.autocomplete( "widget" );
 
-		element.simulate( "focus" )[ settings.valueMethod ]( "j" ).keydown();
+		element.simulate( "focus" )[ settings.valueMethod ]( "j" ).trigger( "keydown" );
 		setTimeout(function() {
 			ok( menu.is( ":visible" ), "menu is visible after delay" );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -112,10 +112,10 @@ asyncTest( "cancel search", function() {
 			}
 		}),
 		menu = element.autocomplete( "widget" );
-	element.val( "ja" ).keydown();
+	element.val( "ja" ).trigger( "keydown" );
 	setTimeout(function() {
 		ok( menu.is( ":hidden" ), "menu is hidden after first search" );
-		element.val( "java" ).keydown();
+		element.val( "java" ).trigger( "keydown" );
 		setTimeout(function() {
 			ok( menu.is( ":visible" ), "menu is visible after second search" );
 			equal( menu.find( ".ui-menu-item" ).length, 2, "# of menu items" );
@@ -135,7 +135,7 @@ asyncTest( "cancel focus", function() {
 				return false;
 			}
 		});
-	element.val( "ja" ).keydown();
+	element.val( "ja" ).trigger( "keydown" );
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( element.val(), customVal );
@@ -154,7 +154,7 @@ asyncTest( "cancel select", function() {
 				return false;
 			}
 		});
-	element.val( "ja" ).keydown();
+	element.val( "ja" ).trigger( "keydown" );
 	setTimeout(function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -179,7 +179,7 @@ asyncTest( "blur during remote search", function() {
 			ok( false, "opened after a blur" );
 		}
 	});
-	ac.val( "ro" ).keydown();
+	ac.val( "ro" ).trigger( "keydown" );
 });
 
 } );

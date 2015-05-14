@@ -87,7 +87,7 @@ function autoFocusTest( afValue, focusedLength ) {
 			start();
 		}
 	});
-	element.val( "ja" ).keydown();
+	element.val( "ja" ).trigger( "keydown" );
 	stop();
 }
 
@@ -108,7 +108,7 @@ asyncTest( "delay", function() {
 			delay: 25
 		}),
 		menu = element.autocomplete( "widget" );
-	element.val( "ja" ).keydown();
+	element.val( "ja" ).trigger( "keydown" );
 
 	ok( menu.is( ":hidden" ), "menu is closed immediately after search" );
 
@@ -125,7 +125,7 @@ asyncTest( "disabled", function( assert ) {
 			delay: 0
 		}),
 		menu = element.autocomplete( "disable" ).autocomplete( "widget" );
-	element.val( "ja" ).keydown();
+	element.val( "ja" ).trigger( "keydown" );
 
 	ok( menu.is( ":hidden" ) );
 
