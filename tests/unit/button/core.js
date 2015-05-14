@@ -44,15 +44,15 @@ test("radio groups", function( assert ) {
 	assertClasses(":eq(0)", ":eq(1)", ":eq(2)");
 
 	// click outside of forms
-	$("#radio0 .ui-button:eq(1)").click();
+	$("#radio0 .ui-button:eq(1)").trigger( "click" );
 	assertClasses(":eq(1)", ":eq(1)", ":eq(2)");
 
 	// click in first form
-	$("#radio1 .ui-button:eq(0)").click();
+	$("#radio1 .ui-button:eq(0)").trigger( "click" );
 	assertClasses(":eq(1)", ":eq(0)", ":eq(2)");
 
 	// click in second form
-	$("#radio2 .ui-button:eq(0)").click();
+	$("#radio2 .ui-button:eq(0)").trigger( "click" );
 	assertClasses(":eq(1)", ":eq(0)", ":eq(0)");
 });
 
@@ -112,7 +112,7 @@ if ( !$.ui.ie || ( document.documentMode && document.documentMode > 8 ) ) {
 	asyncTest( "ensure checked and aria after single click on checkbox label button, see #5518", function( assert ) {
 		expect( 3 );
 
-		$("#check2").button().change( function() {
+		$("#check2").button().on( "change", function() {
 			var lbl = $( this ).button("widget");
 			ok( this.checked, "checked ok" );
 			ok( lbl.attr("aria-pressed") === "true", "aria ok" );
@@ -200,7 +200,7 @@ asyncTest( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyb
 	var check = $( "#check" ).button(),
 		label = $( "label[for='check']" );
 	assert.lacksClasses( label, "ui-state-focus" );
-	check.focus();
+	check.trigger( "focus" );
 	setTimeout(function() {
 		assert.hasClasses( label, "ui-state-focus" );
 		start();

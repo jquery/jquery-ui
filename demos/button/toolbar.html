@@ -35,7 +35,7 @@
 				primary: "ui-icon-play"
 			}
 		})
-		.click(function() {
+		.on( "click", function() {
 			var options;
 			if ( $( this ).text() === "play" ) {
 				options = {
@@ -60,7 +60,7 @@
 				primary: "ui-icon-stop"
 			}
 		})
-		.click(function() {
+		.on( "click", function() {
 			$( "#play" ).button( "option", {
 				label: "play",
 				icons: {
