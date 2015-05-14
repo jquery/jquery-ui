@@ -21,12 +21,12 @@
 			total *= this.options.length;
 		});
 
-		opts.change( doAnim );
-		doer.click( doAnim );
-		$( "#cyclePrev" ).click(function() {
+		opts.on( "change", doAnim );
+		doer.on( "click", doAnim );
+		$( "#cyclePrev" ).on( "click", function() {
 			cycle( -1 );
 		});
-		$( "#cycleNext" ).click(function() {
+		$( "#cycleNext" ).on( "click", function() {
 			cycle( 1 );
 		});
 

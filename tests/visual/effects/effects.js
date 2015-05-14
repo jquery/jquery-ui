@@ -8,7 +8,7 @@ function effect( elem, name, options ) {
 		easing: "easeOutQuint"
 	});
 
-	$( elem ).click(function() {
+	$( elem ).on( "click", function() {
 		$( this )
 			.addClass( "current" )
 			// delaying the initial animation makes sure that the queue stays in tact
@@ -21,7 +21,7 @@ function effect( elem, name, options ) {
 	});
 }
 
-$( "#hide" ).click(function() {
+$( "#hide" ).on( "click", function() {
 	$( this )
 		.addClass( "current" )
 		.hide( duration )
@@ -60,7 +60,7 @@ effect( "#pulsate", "pulsate", { times: 2 } );
 effect( "#puff", "puff", {} );
 effect( "#scale", "scale", {} );
 effect( "#size", "size", {} );
-$( "#sizeToggle" ).click(function() {
+$( "#sizeToggle" ).on( "click", function() {
 	var options = { to: { width: 300, height: 300 } };
 	$( this )
 		.addClass( "current" )
@@ -71,7 +71,7 @@ $( "#sizeToggle" ).click(function() {
 		});
 });
 
-$( "#shake" ).click(function() {
+$( "#shake" ).on( "click", function() {
 	$( this )
 		.addClass( "current" )
 		.effect( "shake", {}, 100, function() {
@@ -84,7 +84,7 @@ effect( "#slideUp", "slide", { direction: "up" } );
 effect( "#slideLeft", "slide", { direction: "left" } );
 effect( "#slideRight", "slide", { direction: "right" } );
 
-$( "#transfer" ).click(function() {
+$( "#transfer" ).on( "click", function() {
 	$( this )
 		.addClass( "current" )
 		.effect( "transfer", { to: "div:eq(0)" }, 1000, function() {
@@ -92,15 +92,15 @@ $( "#transfer" ).click(function() {
 		});
 });
 
-$( "#addClass" ).click(function() {
+$( "#addClass" ).on( "click", function() {
 	$( this ).addClass( "current", duration, function() {
 		$( this ).removeClass( "current" );
 	});
 });
-$( "#removeClass" ).click(function() {
+$( "#removeClass" ).on( "click", function() {
 	$( this ).addClass( "current" ).removeClass( "current", duration );
 });
-$( "#toggleClass" ).click(function() {
+$( "#toggleClass" ).on( "click", function() {
 	$( this ).toggleClass( "current", duration );
 });
 
