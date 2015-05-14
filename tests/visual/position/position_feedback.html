@@ -64,7 +64,7 @@
 				using: using
 			};
 		};
-		$( document ).bind( "mousemove", function( event ) {
+		$( document ).on( "mousemove", function( event ) {
 			element.position( positionWithOffset(
 				event.pageX - targetOffset.left, event.pageY - targetOffset.top ) );
 			oppositeElement.position( positionWithOffset(

@@ -71,14 +71,14 @@
 			right( $( "img:eq(1)" ), animate );
 			left( $( "img:eq(2)" ).prependTo( "#container" ) );
 		}
-		$( "#previous" ).click( previous );
-		$( "#next" ).click( next );
+		$( "#previous" ).on( "click", previous );
+		$( "#next" ).on( "click", next );
 
-		$( "img" ).click(function( event ) {
+		$( "img" ).on( "click", function( event ) {
 			$( "img" ).index( this ) === 0 ? previous( event ) : next( event );
 		});
 
-		$( window ).resize(function() {
+		$( window ).on( "resize", function() {
 			left( $( "img:eq(0)" ), animate );
 			center( $( "img:eq(1)" ), animate );
 			right( $( "img:eq(2)" ), animate );
