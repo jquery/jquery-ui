@@ -26,7 +26,7 @@
 		});
 		$( "<li>Create: " + ($.now() - start) + "ms</li>" ).appendTo( "#log" );
 
-		$( "#opener" ).click(function() {
+		$( "#opener" ).on( "click", function() {
 			start = $.now();
 			$( "#dialog" ).dialog( "open" );
 			$( "<li>Open: " + ($.now() - start) + "ms</li>" ).appendTo( "#log" );

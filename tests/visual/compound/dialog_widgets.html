@@ -31,7 +31,7 @@
 		$( "#autocomplete" ).autocomplete({
 			source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl" ]
 		});
-		$( "button" ).button().click(function() {
+		$( "button" ).button().on( "click", function() {
 			$( "#dialog2" ).dialog( "open" );
 		});
 		$( "#datepicker" ).datepicker();
