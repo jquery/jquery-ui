@@ -96,7 +96,7 @@ function jqueryUrl() {
 	if ( version === "git" || version === "compat-git" ) {
 		url = "http://code.jquery.com/jquery-" + version;
 	} else {
-		url = "../../../external/jquery-" + ( version || "1.11.2" ) + "/jquery";
+		url = "../../../external/jquery-" + ( version || "1.11.3" ) + "/jquery";
 	}
 
 	return url;
