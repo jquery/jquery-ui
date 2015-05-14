@@ -3,7 +3,7 @@ module.exports = function( grunt ) {
 "use strict";
 
 var versions = {
-		"git1": "git1",
+		"compat-git": "compat-git",
 		"1.11": "1.11.0 1.11.1 1.11.2",
 		"1.10": "1.10.0 1.10.1 1.10.2",
 		"1.9": "1.9.0 1.9.1",
