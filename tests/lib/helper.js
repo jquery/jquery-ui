@@ -21,11 +21,11 @@ exports.onFocus = function( element, onFocus ) {
 		if ( !event.originalEvent ) {
 			return;
 		}
-		element.unbind( "focus", fn );
+		element.off( "focus", fn );
 		onFocus();
 	};
 
-	element.bind( "focus", fn )[ 0 ].focus();
+	element.on( "focus", fn )[ 0 ].focus();
 };
 
 return exports;
