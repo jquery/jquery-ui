@@ -19,7 +19,7 @@
 		$( "#accordion" ).accordion({
 			icons: icons
 		});
-		$( "#toggle" ).button().click(function() {
+		$( "#toggle" ).button().on( "click", function() {
 			if ( $( "#accordion" ).accordion( "option", "icons" ) ) {
 				$( "#accordion" ).accordion( "option", "icons", null );
 			} else {
