@@ -146,7 +146,7 @@ test("icons", function() {
 test( "#5295 - button does not remove hoverstate if disabled" , function( assert ) {
 	expect( 1 );
 	var btn = $("#button").button();
-	btn.hover( function() {
+	btn.on( "hover", function() {
 		btn.button( "disable" );
 	});
 	btn.trigger( "mouseenter" );
