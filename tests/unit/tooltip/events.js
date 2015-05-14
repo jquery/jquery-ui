@@ -29,12 +29,12 @@ test( "mouse events", function() {
 	expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip();
 
-	element.bind( "tooltipopen", function( event ) {
+	element.on( "tooltipopen", function( event ) {
 		deepEqual( event.originalEvent.type, "mouseover" );
 	});
 	element.trigger( "mouseover" );
 
-	element.bind( "tooltipclose", function( event ) {
+	element.on( "tooltipclose", function( event ) {
 		deepEqual( event.originalEvent.type, "mouseleave" );
 	});
 	element.trigger( "focusout" );
@@ -45,12 +45,12 @@ test( "focus events", function() {
 	expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip();
 
-	element.bind( "tooltipopen", function( event ) {
+	element.on( "tooltipopen", function( event ) {
 		deepEqual( event.originalEvent.type, "focusin" );
 	});
 	element.trigger( "focusin" );
 
-	element.bind( "tooltipclose", function( event ) {
+	element.on( "tooltipclose", function( event ) {
 		deepEqual( event.originalEvent.type, "focusout" );
 	});
 	element.trigger( "mouseleave" );

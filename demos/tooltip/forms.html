@@ -36,7 +36,7 @@
 		$( "<button>" )
 			.text( "Show help" )
 			.button()
-			.click(function() {
+			.on( "click", function() {
 				tooltips.tooltip( "open" );
 			})
 			.insertAfter( "form" );
