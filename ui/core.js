@@ -86,7 +86,7 @@ $.extend( $.ui, {
 		// Support: IE9 - 10 only
 		// If the <body> is blurred, IE will switch windows, see #9420
 		if ( element && element.nodeName.toLowerCase() !== "body" ) {
-			$( element ).blur();
+			$( element ).trigger( "blur" );
 		}
 	},
 
@@ -303,14 +303,14 @@ $.fn.extend( {
 			"mousedown";
 
 		return function() {
-			return this.bind( eventType + ".ui-disableSelection", function( event ) {
+			return this.on( eventType + ".ui-disableSelection", function( event ) {
 				event.preventDefault();
 			} );
 		};
 	} )(),
 
 	enableSelection: function() {
-		return this.unbind( ".ui-disableSelection" );
+		return this.off( ".ui-disableSelection" );
 	}
 } );
 
