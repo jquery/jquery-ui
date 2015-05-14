@@ -124,7 +124,7 @@
 		}
 
 		// resolve the icons behavior with event delegation
-		$( "ul.gallery > li" ).click(function( event ) {
+		$( "ul.gallery > li" ).on( "click", function( event ) {
 			var $item = $( this ),
 				$target = $( event.target );
 
