@@ -214,7 +214,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = index;
 
 		this._addClass( closestHandle, null, "ui-state-active" );
-		closestHandle.focus();
+		closestHandle.trigger( "focus" );
 
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
