@@ -25,7 +25,8 @@
 			"./core",
 			"./widget",
 			"./position",
-			"./menu"
+			"./menu",
+			"./form-reset-mixin"
 		], factory );
 	} else {
 
@@ -34,7 +35,7 @@
 	}
 }( function( $ ) {
 
-return $.widget( "ui.selectmenu", {
+return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	version: "@VERSION",
 	defaultElement: "<select>",
 	options: {
@@ -72,6 +73,7 @@ return $.widget( "ui.selectmenu", {
 
 		this._drawButton();
 		this._drawMenu();
+		this._bindFormResetHandler();
 
 		this._rendered = false;
 		this.menuItems = $();
@@ -673,7 +675,8 @@ return $.widget( "ui.selectmenu", {
 		this.element.show();
 		this.element.removeUniqueId();
 		this.labels.attr( "for", this.ids.element );
+		this._unbindFormResetHandler();
 	}
-} );
+} ] );
 
 } ) );
