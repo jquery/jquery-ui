@@ -14,7 +14,7 @@
 
 datepicker.regional.fy = {
 	closeText: 'Slute',
-	prevText: 'Foarrige',
+	prevText: 'Foarige',
 	nextText: 'Folgjende',
 	currentText: 'Hjoed',
 	monthNames: ['jannewaris', 'febrewaris', 'maart', 'april', 'maaie', 'juny',
