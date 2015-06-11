@@ -13,6 +13,7 @@ requirejs.config({
 		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
 		"testswarm": "http://swarm.jquery.org/js/inject.js?" + (new Date()).getTime(),
+		"text": "../../../external/requirejs-text/text",
 		"ui": "../../../ui"
 	},
 	shim: {
