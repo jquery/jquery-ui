@@ -1,8 +1,11 @@
 define( [
 	"jquery",
 	"lib/helper",
+	"lib/bootstrap",
+	"lib/css",
+	"text!tests/accordion/accordion.html",
 	"ui/accordion"
-], function( $, helper ) {
+], function( $, helper, bootstrap, cssjs, htmlContent ) {
 
 return $.extend( helper, {
 	equalHeight: function( assert, accordion, height ) {
@@ -15,9 +18,13 @@ return $.extend( helper, {
 		var animate = $.ui.accordion.prototype.options.animate;
 		return {
 			setup: function() {
+				bootstrap( { widget: "accordion" } );
+				cssjs( { module: "core accordion" } );
+				$("body").append(htmlContent);
 				$.ui.accordion.prototype.options.animate = false;
 			},
 			teardown: function() {
+				$("#qunit-fixture").remove();
 				$.ui.accordion.prototype.options.animate = animate;
 			}
 		};

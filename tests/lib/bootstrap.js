@@ -80,15 +80,15 @@ function jqueryUrl() {
 }
 
 // Load test modules based on data attributes
-// - data-modules: list of test modules to load
-// - data-widget: A widget to load test modules for
+// - modules: list of test modules to load
+// - widget: A widget to load test modules for
 //   - Automatically loads common, core, events, methods, and options
-// - data-deprecated: Loads the deprecated test modules for a widget
-// - data-no-back-compat: Set $.uiBackCompat to false
+// - deprecated: Loads the deprecated test modules for a widget
+// - no-back-compat: Set $.uiBackCompat to false
 return function( options ) {
 
 	// Read the modules
-	var modules = options[ "data-modules" ];
+	var modules = options[ "modules" ];
 	if ( modules ) {
 		modules = modules
 			.replace( /^\s+|\s+$/g, "" )
@@ -96,9 +96,9 @@ return function( options ) {
 	} else {
 		modules = [];
 	}
-	var widget = options[ "data-widget" ];
-	var deprecated = !!options[ "data-deprecated" ];
-	var noBackCompat = !!options[ "data-no-back-compat" ];
+	var widget = options[ "widget" ];
+	var deprecated = !!options[ "deprecated" ];
+	var noBackCompat = !!options[ "no-back-compat" ];
 
 	if ( widget ) {
 		modules = modules.concat([
