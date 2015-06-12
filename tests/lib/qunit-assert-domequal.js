@@ -5,7 +5,7 @@
  * otherwise the text. Then compares the result using deepEqual().
  */
 define( [
-	"qunit",
+	"intern!qunit",
 	"jquery"
 ], function( QUnit, $ ) {
 

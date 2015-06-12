@@ -1,5 +1,5 @@
 define( [
-	"qunit",
+	"intern!qunit",
 	"jquery",
 	"qunit-assert-classes",
 	"qunit-assert-close",

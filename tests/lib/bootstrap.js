@@ -1,29 +1,5 @@
 ( function() {
 
-requirejs.config({
-	paths: {
-		"globalize": "../../../external/globalize/globalize",
-		"globalize/ja-JP": "../../../external/globalize/globalize.culture.ja-JP",
-		"jquery": jqueryUrl(),
-		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
-		"jshint": "../../../external/jshint/jshint",
-		"lib": "../../lib",
-		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
-		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
-		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
-		"qunit": "../../../external/qunit/qunit",
-		"testswarm": "http://swarm.jquery.org/js/inject.js?" + (new Date()).getTime(),
-		"text": "../../../external/requirejs-text/text",
-		"ui": "../../../ui"
-	},
-	shim: {
-		"globalize/ja-JP": [ "globalize" ],
-		"jquery-simulate": [ "jquery" ],
-		"qunit-assert-close": [ "qunit" ],
-		"testswarm": [ "qunit" ]
-	}
-});
-
 // Create a module that disables back compat for UI modules
 define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
 	$.uiBackCompat = false;
@@ -109,14 +85,10 @@ function jqueryUrl() {
 //   - Automatically loads common, core, events, methods, and options
 // - data-deprecated: Loads the deprecated test modules for a widget
 // - data-no-back-compat: Set $.uiBackCompat to false
-(function() {
-
-	// Find the script element
-	var scripts = document.getElementsByTagName( "script" );
-	var script = scripts[ scripts.length - 1 ];
+return function( options ) {
 
 	// Read the modules
-	var modules = script.getAttribute( "data-modules" );
+	var modules = options[ "data-modules" ];
 	if ( modules ) {
 		modules = modules
 			.replace( /^\s+|\s+$/g, "" )
@@ -124,9 +96,9 @@ function jqueryUrl() {
 	} else {
 		modules = [];
 	}
-	var widget = script.getAttribute( "data-widget" );
-	var deprecated = !!script.getAttribute( "data-deprecated" );
-	var noBackCompat = !!script.getAttribute( "data-no-back-compat" );
+	var widget = options[ "data-widget" ];
+	var deprecated = !!options[ "data-deprecated" ];
+	var noBackCompat = !!options[ "data-no-back-compat" ];
 
 	if ( widget ) {
 		modules = modules.concat([
@@ -142,6 +114,6 @@ function jqueryUrl() {
 	}
 
 	requireTests( modules, noBackCompat );
-} )();
+};
 
 } )();
