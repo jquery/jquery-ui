@@ -1,4 +1,4 @@
-(function () {
+define(function () {
 	return function( options ) {
 
 		function includeStyle( url ) {
@@ -21,4 +21,4 @@
 		// Load the QUnit stylesheet
 		includeStyle( "external/qunit/qunit.css" );
 	}
-} )();
+});

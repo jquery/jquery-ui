@@ -3,7 +3,7 @@ define( [
 	"lib/helper",
 	"lib/bootstrap",
 	"lib/css",
-	"text!tests/accordion/accordion.html",
+	"text!unit/accordion/accordion.html",
 	"ui/accordion"
 ], function( $, helper, bootstrap, cssjs, htmlContent ) {
 

@@ -3,7 +3,7 @@ define( [
 	"jquery",
 	"./helper",
 	"ui/accordion"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var setupTeardown = testHelper.setupTeardown,
 	state = testHelper.state;
