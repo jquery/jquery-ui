@@ -133,6 +133,7 @@ uiFiles.forEach(function( file ) {
 
 // grunt plugins
 require( "load-grunt-tasks" )( grunt );
+grunt.loadNpmTasks( 'intern' )
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -316,6 +317,7 @@ grunt.initConfig({
 				"qunit-composite/LICENSE.txt": "qunit-composite/LICENSE.txt",
 
 				"requirejs/require.js": "requirejs/require.js",
+				"requirejs-text/text.js": "requirejs-text/text.js",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
