@@ -4,7 +4,7 @@ define( [
 	"qunit-assert-classes",
 	"qunit-assert-close",
 	"lib/qunit-assert-domequal",
-	"phantom-bridge"
+	// "phantom-bridge"
 ], function( QUnit, $ ) {
 
 QUnit.config.autostart = false;

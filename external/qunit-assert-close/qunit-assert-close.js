@@ -9,6 +9,8 @@
  * @param Number maxDifference (the maximum inclusive difference allowed between the actual and expected numbers)
  * @param String message (optional)
  */
+define([ "qunit" ], function (QUnit) {
+
 function close(actual, expected, maxDifference, message) {
   var actualDiff = (actual === expected) ? 0 : Math.abs(actual - expected),
       result = actualDiff <= maxDifference;
@@ -103,4 +105,5 @@ notClose.percent = function notClosePercent(actual, expected, minPercentDifferen
 QUnit.extend(QUnit.assert, {
   close: close,
   notClose: notClose
+});
 });

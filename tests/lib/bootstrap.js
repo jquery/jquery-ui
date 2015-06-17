@@ -7,11 +7,6 @@ define(function() {
 		return $;
 	} );
 
-	// Create a dummy bridge if we're not actually testing in PhantomJS
-	if ( !/PhantomJS/.test( navigator.userAgent ) ) {
-		define( "phantom-bridge", function() {} );
-	}
-
 	// Load all modules in series
 	function requireModules( dependencies, callback, modules ) {
 		if ( !dependencies.length ) {
