@@ -24,11 +24,9 @@ define( [ "./config-helper" ], function ( configHelper ) {
 				"jquery-simulate": "external/jquery-simulate/jquery.simulate",
 				"jshint": "external/jshint/jshint",
 				"lib": "tests/lib",
-				"phantom-bridge": "node_modules/grunt-contrib-qunit/phantomjs/bridge",
 				"qunit": "intern!qunit",
 				"qunit-assert-classes": "external/qunit-assert-classes/qunit-assert-classes",
 				"qunit-assert-close": "external/qunit-assert-close/qunit-assert-close",
-				"testswarm": "http://swarm.jquery.org/js/inject.js?" + (new Date()).getTime(),
 				"text": "external/requirejs-text/text",
 				"ui": "ui",
 				"unit": "tests/unit"
@@ -41,12 +39,11 @@ define( [ "./config-helper" ], function ( configHelper ) {
 			shim: {
 				"globalize/ja-JP": [ "globalize" ],
 				"jquery-simulate": [ "jquery" ],
-				"qunit-assert-close": [ "qunit" ],
-				"testswarm": [ "qunit" ]
+				"qunit-assert-close": [ "qunit" ]
 			}
 		},
 		suites: [
-		"test/unit/all",
+			"tests/unit/all",
 		],
 		excludeInstrumentation: /^(?:node_modules|test)\//
 	};
