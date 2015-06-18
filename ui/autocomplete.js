@@ -262,7 +262,7 @@ $.widget( "ui.autocomplete", {
 				if ( this.isNewMenu ) {
 					this.isNewMenu = false;
 					if ( event.originalEvent && /^mouse/.test( event.originalEvent.type ) ) {
-						this.menu.trigger( "blur" );
+						this.menu._trigger( "blur" );
 
 						this.document.one( "mousemove", function() {
 							$( event.target ).trigger( event.originalEvent );
