@@ -35,12 +35,6 @@ define(function() {
 			"jquery-simulate"
 		].concat( dependencies );
 
-		// Load the TestSwarm injector, if necessary
-		/* Remove comment once this is figured out */
-		// if ( parseUrl().swarmURL ) {
-		// 	dependencies.push( "testswarm" );
-		// }
-
 		requireModules( dependencies, function( QUnit ) {
 			QUnit.start();
 		} );

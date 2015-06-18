@@ -20,7 +20,7 @@ return $.extend( helper, {
 			setup: function() {
 				bootstrap( { widget: "accordion" } );
 				cssjs( { module: "core accordion" } );
-				$("body").append(htmlContent);
+				$("html").append(htmlContent);
 				$.ui.accordion.prototype.options.animate = false;
 			},
 			teardown: function() {
@@ -31,11 +31,11 @@ return $.extend( helper, {
 	},
 
 	state: function( assert, accordion ) {
-		var expected = $.makeArray( arguments ).slice( 1 ),
+		var expected = $.makeArray( arguments ).slice( 2 ),
 			actual = accordion.find( ".ui-accordion-content" ).map(function() {
 				return $( this ).css( "display" ) === "none" ? 0 : 1;
 			}).get();
-		assert.push( assert.deepEqual(actual, expected), actual, expected );
+		assert.push( assert.deepEqual(actual, expected), actual, expected, "State Assert" );
 	}
 } );
 
