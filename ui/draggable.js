@@ -455,8 +455,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_cacheHelperProportions: function() {
 		this.helperProportions = {
-			width: this.helper.outerWidth(),
-			height: this.helper.outerHeight()
+			width: this.helper[ 0 ].getBoundingClientRect().width,
+			height: this.helper[ 0 ].getBoundingClientRect().height
 		};
 	},
 
