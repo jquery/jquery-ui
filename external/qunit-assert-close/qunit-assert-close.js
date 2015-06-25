@@ -1,3 +1,16 @@
+( function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define("", [
+			"qunit"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( QUnit );
+	}
+}( function( QUnit ) {
 /**
  * Checks that the first two arguments are equal, or are numbers close enough to be considered equal
  * based on a specified maximum allowable difference.
@@ -9,13 +22,11 @@
  * @param Number maxDifference (the maximum inclusive difference allowed between the actual and expected numbers)
  * @param String message (optional)
  */
-define([ "qunit" ], function (QUnit) {
-
 function close(actual, expected, maxDifference, message) {
-  var actualDiff = (actual === expected) ? 0 : Math.abs(actual - expected),
-      result = actualDiff <= maxDifference;
-  message = message || (actual + " should be within " + maxDifference + " (inclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff));
-  QUnit.push(result, actual, expected, message);
+	var actualDiff = (actual === expected) ? 0 : Math.abs(actual - expected),
+			result = actualDiff <= maxDifference;
+	message = message || (actual + " should be within " + maxDifference + " (inclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff));
+	QUnit.push(result, actual, expected, message);
 }
 
 
@@ -31,23 +42,23 @@ function close(actual, expected, maxDifference, message) {
  * @param String message (optional)
  */
 close.percent = function closePercent(actual, expected, maxPercentDifference, message) {
-  var actualDiff, result;
-  if (actual === expected) {
-    actualDiff = 0;
-    result = actualDiff <= maxPercentDifference;
-  }
-  else if (actual !== 0 && expected !== 0 && expected !== Infinity && expected !== -Infinity) {
-    actualDiff = Math.abs(100 * (actual - expected) / expected);
-    result = actualDiff <= maxPercentDifference;
-  }
-  else {
-    // Dividing by zero (0)!  Should return `false` unless the max percentage was `Infinity`
-    actualDiff = Infinity;
-    result = maxPercentDifference === Infinity;
-  }
-  message = message || (actual + " should be within " + maxPercentDifference + "% (inclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff + "%"));
+	var actualDiff, result;
+	if (actual === expected) {
+		actualDiff = 0;
+		result = actualDiff <= maxPercentDifference;
+	}
+	else if (actual !== 0 && expected !== 0 && expected !== Infinity && expected !== -Infinity) {
+		actualDiff = Math.abs(100 * (actual - expected) / expected);
+		result = actualDiff <= maxPercentDifference;
+	}
+	else {
+		// Dividing by zero (0)!  Should return `false` unless the max percentage was `Infinity`
+		actualDiff = Infinity;
+		result = maxPercentDifference === Infinity;
+	}
+	message = message || (actual + " should be within " + maxPercentDifference + "% (inclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff + "%"));
 
-  QUnit.push(result, actual, expected, message);
+	QUnit.push(result, actual, expected, message);
 };
 
 
@@ -63,10 +74,10 @@ close.percent = function closePercent(actual, expected, maxPercentDifference, me
  * @param String message (optional)
  */
 function notClose(actual, expected, minDifference, message) {
-  var actualDiff = Math.abs(actual - expected),
-      result = actualDiff > minDifference;
-  message = message || (actual + " should not be within " + minDifference + " (exclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff));
-  QUnit.push(result, actual, expected, message);
+	var actualDiff = Math.abs(actual - expected),
+			result = actualDiff > minDifference;
+	message = message || (actual + " should not be within " + minDifference + " (exclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff));
+	QUnit.push(result, actual, expected, message);
 }
 
 
@@ -82,28 +93,28 @@ function notClose(actual, expected, minDifference, message) {
  * @param String message (optional)
  */
 notClose.percent = function notClosePercent(actual, expected, minPercentDifference, message) {
-  var actualDiff, result;
-  if (actual === expected) {
-    actualDiff = 0;
-    result = actualDiff > minPercentDifference;
-  }
-  else if (actual !== 0 && expected !== 0 && expected !== Infinity && expected !== -Infinity) {
-    actualDiff = Math.abs(100 * (actual - expected) / expected);
-    result = actualDiff > minPercentDifference;
-  }
-  else {
-    // Dividing by zero (0)!  Should only return `true` if the min percentage was `Infinity`
-    actualDiff = Infinity;
-    result = minPercentDifference !== Infinity;
-  }
-  message = message || (actual + " should not be within " + minPercentDifference + "% (exclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff + "%"));
+	var actualDiff, result;
+	if (actual === expected) {
+		actualDiff = 0;
+		result = actualDiff > minPercentDifference;
+	}
+	else if (actual !== 0 && expected !== 0 && expected !== Infinity && expected !== -Infinity) {
+		actualDiff = Math.abs(100 * (actual - expected) / expected);
+		result = actualDiff > minPercentDifference;
+	}
+	else {
+		// Dividing by zero (0)!  Should only return `true` if the min percentage was `Infinity`
+		actualDiff = Infinity;
+		result = minPercentDifference !== Infinity;
+	}
+	message = message || (actual + " should not be within " + minPercentDifference + "% (exclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff + "%"));
 
-  QUnit.push(result, actual, expected, message);
+	QUnit.push(result, actual, expected, message);
 };
 
 
 QUnit.extend(QUnit.assert, {
-  close: close,
-  notClose: notClose
+	close: close,
+	notClose: notClose
 });
-});
+}));

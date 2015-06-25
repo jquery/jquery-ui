@@ -7,6 +7,9 @@ define( [
 	"ui/accordion"
 ], function( $, helper, bootstrap, cssjs, htmlContent ) {
 
+bootstrap( { widget: "accordion" } );
+cssjs( { module: "core accordion" } );
+
 return $.extend( helper, {
 	equalHeight: function( assert, accordion, height ) {
 		accordion.find( ".ui-accordion-content" ).each(function() {
@@ -18,8 +21,6 @@ return $.extend( helper, {
 		var animate = $.ui.accordion.prototype.options.animate;
 		return {
 			setup: function() {
-				bootstrap( { widget: "accordion" } );
-				cssjs( { module: "core accordion" } );
 				$("html").append(htmlContent);
 				$.ui.accordion.prototype.options.animate = false;
 			},

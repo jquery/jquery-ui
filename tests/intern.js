@@ -13,8 +13,8 @@ define( [ "./config-helper" ], function ( configHelper ) {
 		maxConcurrency: 2,
 		tunnel: "BrowserStackTunnel",
 		loaders: {
-		"host-node": "requirejs",
-		"host-browser": "external/requirejs/require.js"
+			"host-node": "requirejs",
+			"host-browser": "external/requirejs/require.js"
 		},
 		loaderOptions: {
 			paths: {
@@ -24,23 +24,29 @@ define( [ "./config-helper" ], function ( configHelper ) {
 				"jquery-simulate": "external/jquery-simulate/jquery.simulate",
 				"jshint": "external/jshint/jshint",
 				"lib": "tests/lib",
-				"qunit": "intern!qunit",
 				"qunit-assert-classes": "external/qunit-assert-classes/qunit-assert-classes",
 				"qunit-assert-close": "external/qunit-assert-close/qunit-assert-close",
 				"text": "external/requirejs-text/text",
 				"ui": "ui",
-				"unit": "tests/unit"
+				"unit": "tests/unit",
 			},
 			map: {
 				"*": {
-					"qunit": "intern!qunit"
+					"qunit": "node_modules/intern/lib/interfaces/qunit",
+					"intern/dojo": "node_modules/intern/node_modules/dojo",
+					"dojo": 'node_modules/intern/node_modules/dojo',
+					"chai": 'node_modules/intern/node_modules/chai/chai',
+					"diff": 'node_modules/intern/node_modules/diff/diff'
 				}
 			},
 			shim: {
 				"globalize/ja-JP": [ "globalize" ],
 				"jquery-simulate": [ "jquery" ],
 				"qunit-assert-close": [ "qunit" ]
-			}
+			},
+			packages: [
+				{ name: 'intern', location: "node_modules/intern" }
+			]
 		},
 		suites: [
 			"tests/unit/all",

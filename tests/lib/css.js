@@ -1,8 +1,8 @@
-define(function () {
+define( [] , function () {
 	return function( options ) {
 
 		function includeStyle( url ) {
-			document.write( "<link rel='stylesheet' href='../../../" + url + "'>" );
+			document.write( "<link rel='stylesheet' href='../../" + url + "'>" );
 		}
 
 		// Find the script element
