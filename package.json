@@ -71,7 +71,7 @@
 		"grunt-html": "4.0.1",
 		"grunt-jscs": "1.5.0",
 	    "grunt-selenium-server": "0.1.2",
-	    "intern": "git://github.com/apsdehal/intern#iss-415",
+	    "intern": "git://github.com/theintern/intern",
 		"load-grunt-tasks": "0.3.0",
 		"rimraf": "2.1.4",
 	    "requirejs": "2.1.17",

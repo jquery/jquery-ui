@@ -32,21 +32,14 @@ define( [ "./config-helper" ], function ( configHelper ) {
 			},
 			map: {
 				"*": {
-					"qunit": "node_modules/intern/lib/interfaces/qunit",
-					"intern/dojo": "node_modules/intern/node_modules/dojo",
-					"dojo": 'node_modules/intern/node_modules/dojo',
-					"chai": 'node_modules/intern/node_modules/chai/chai',
-					"diff": 'node_modules/intern/node_modules/diff/diff'
+					"qunit": "intern!qunit"
 				}
 			},
 			shim: {
 				"globalize/ja-JP": [ "globalize" ],
 				"jquery-simulate": [ "jquery" ],
 				"qunit-assert-close": [ "qunit" ]
-			},
-			packages: [
-				{ name: 'intern', location: "node_modules/intern" }
-			]
+			}
 		},
 		suites: [
 			"tests/unit/all",

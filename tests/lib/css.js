@@ -1,4 +1,4 @@
-define( [] , function () {
+define( [], function () {
 	return function( options ) {
 
 		function includeStyle( url ) {

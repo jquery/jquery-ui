@@ -1,4 +1,4 @@
-define( [ "require" ], function ( require ) {
+define( [], function() {
 
 	// Create a module that disables back compat for UI modules
 	define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
@@ -29,11 +29,11 @@ define( [ "require" ], function ( require ) {
 
 	// Load a set of test file along with the required test infrastructure
 	function requireTests( dependencies, noBackCompat ) {
-		dependencies = dependencies.concat([
+		dependencies = [
+			"lib/qunit",
 			noBackCompat ? "jquery-no-back-compat" : "jquery",
-			"jquery-simulate",
-			"lib/qunit"
-		]);
+			"jquery-simulate"
+		].concat( dependencies );
 
 		requireModules( dependencies, function( QUnit ) {
 			QUnit.start();
