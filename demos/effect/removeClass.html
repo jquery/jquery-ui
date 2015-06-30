@@ -13,8 +13,8 @@
 	#effect { position: relative;  width: 240px;  padding: 1em;  letter-spacing: 0; font-size: 1.2em; border: 1px solid #000; background: #eee; color: #333; }
 	.newClass { text-indent: 40px; letter-spacing: .4em; width: 410px; height: 100px; padding: 30px; margin: 10px; font-size: 1.6em; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		$( "#button" ).on( "click", function() {
 			$( "#effect" ).removeClass( "newClass", 1000, callback );
 		});
@@ -24,7 +24,6 @@
 				$( "#effect" ).addClass( "newClass" );
 			}, 1500 );
 		}
-	});
 	</script>
 </head>
 <body>
