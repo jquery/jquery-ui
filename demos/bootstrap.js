@@ -27,7 +27,12 @@
 	require.config( {
 		baseUrl: "../../ui",
 		paths: {
-			jquery: "../../external/jquery/jquery"
+			jquery: "../../external/jquery/jquery",
+			globalize: "../../external/globalize/",
+			mousewheel: "../../external/jquery-mousewheel/jquery.mousewheel"
+		},
+		shim: {
+			"globalize/globalize.culture*": [ "globalize/globalize" ]
 		}
 	} );
 
