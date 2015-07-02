@@ -24,15 +24,18 @@ var effectsAll = [
 	"effect-slide"
 ];
 
+// Hide the page while things are loading to prevent a FOUC
+document.documentElement.className = "demo-loading";
+
 require.config( {
 	baseUrl: "../../ui",
 	paths: {
 		jquery: "../external/jquery/jquery",
-		external: "../external",
+		external: "../external/"
 	},
 	shim: {
-		"external/globalize/globalize.culture.de-DE.js": [ "external/globalize/globalize" ],
-		"external/globalize/globalize.culture.js-JP.js": [ "external/globalize/globalize" ]
+		"external/globalize/globalize.culture.de-DE": [ "external/globalize/globalize" ],
+		"external/globalize/globalize.culture.ja-JP": [ "external/globalize/globalize" ]
 	}
 } );
 
@@ -45,7 +48,7 @@ modules = modules ? modules.replace( /^\s+|\s+$/g, "" ).split( /\s+/ ) : [];
 modules.push( pathParts[ pathParts.length - 2 ] );
 
 require( modules, function() {
-	$( "body" ).css( "visibility", "visible" );
+	$( "html" ).removeClass( "demo-loading" );
 
 	// We wrap the code in an IIFE so that return statements work and we
 	// dont polute the global scope with variables
