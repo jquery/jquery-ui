@@ -201,6 +201,15 @@ grunt.initConfig({
 				requireSpacesInsideParentheses: null
 			},
 			src: [ "Gruntfile.js", "build/tasks/*.js" ]
+		},
+		demos: {
+			options: {
+
+				// While the style guide removed onevar upgrading jscs to allow it causes too many
+				// errors right now
+				disallowMultipleVarDecl: null
+			},
+			src: "demos/**/*.js"
 		}
 	},
 	uglify: minify,
@@ -249,7 +258,8 @@ grunt.initConfig({
 			"Gruntfile.js",
 			"build/**/*.js",
 			"tests/unit/**/*.js",
-			"tests/lib/**/*.js"
+			"tests/lib/**/*.js",
+			"demos/**/*.js"
 		]
 	},
 	csslint: {
