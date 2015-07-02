@@ -27,12 +27,11 @@ var effectsAll = [
 require.config( {
 	baseUrl: "../../ui",
 	paths: {
-		jquery: "../../external/jquery/jquery",
-		globalize: "../../external/globalize/",
-		mousewheel: "../../external/jquery-mousewheel/jquery.mousewheel"
+		jquery: "../external/jquery/jquery",
+		external: "../external",
 	},
 	shim: {
-		"globalize/globalize.culture*": [ "globalize/globalize" ]
+		"external/globalize/globalize.culture*": [ "external/globalize/globalize" ]
 	}
 } );
 
