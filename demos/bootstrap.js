@@ -1,4 +1,5 @@
-(function() {
+/* globals window:true, document:true, $:true */
+( function() {
 
 // Find the script element
 var scripts = document.getElementsByTagName( "script" );
@@ -54,4 +55,5 @@ require( modules, function() {
 	// dont polute the global scope with variables
 	$.globalEval( "(function(){ " + $( script ).html() + "})();" );
 } );
-})();
+
+} )();
