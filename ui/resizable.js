@@ -344,16 +344,16 @@ $.widget("ui.resizable", $.ui.mouse, {
 				width: this.helper.width(),
 				height: this.helper.height()
 			} : {
-				width: el.width(),
-				height: el.height()
+				width: el.outerWidth(),
+				height:el.outerHeight()
 			};
 
 		this.originalSize = this._helper ? {
 				width: el.outerWidth(),
 				height: el.outerHeight()
 			} : {
-				width: el.width(),
-				height: el.height()
+				width: el.outerWidth(),
+				height: el.outerHeight()
 			};
 
 		this.sizeDiff = {
