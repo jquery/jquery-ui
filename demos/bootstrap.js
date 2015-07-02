@@ -31,7 +31,8 @@ require.config( {
 		external: "../external",
 	},
 	shim: {
-		"external/globalize/globalize.culture*": [ "external/globalize/globalize" ]
+		"external/globalize/globalize.culture.de-DE.js": [ "external/globalize/globalize" ],
+		"external/globalize/globalize.culture.js-JP.js": [ "external/globalize/globalize" ]
 	}
 } );
 
