@@ -49,11 +49,12 @@ modules = modules ? modules.replace( /^\s+|\s+$/g, "" ).split( /\s+/ ) : [];
 modules.push( pathParts[ pathParts.length - 2 ] );
 
 require( modules, function() {
-	$( "html" ).removeClass( "demo-loading" );
+	var newScript = document.createElement( "script" );
 
-	// We wrap the code in an IIFE so that return statements work and we
-	// dont polute the global scope with variables
-	$.globalEval( "(function(){ " + $( script ).html() + "})();" );
+	document.documentElement.className = "";
+
+	newScript.text = "( function() { " + script.innerHTML + " } )();";
+	document.head.appendChild( newScript ).parentNode.removeChild( newScript );
 } );
 
 } )();
