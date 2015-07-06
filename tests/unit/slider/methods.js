@@ -111,8 +111,54 @@ test( "value", function() {
 	equal( element.slider( "value" ), 460, "value is restricted to maximum valid step" );
 } );
 
-//test( "values", function() {
-//	ok(false, "missing test - untested code is broken code." );
-//});
+test( "values, single step", function() {
+	expect( 8 );
+
+	var element = $( "<div></div>" ).slider( {
+		range: false,
+		min: 10,
+		max: 100,
+		step: 1,
+		values: [ 20 ]
+	} );
+
+	deepEqual( element.slider( "values" ), [ 20 ], "range: false, values - get value for handle" );
+	equal( element.slider( "values", 0 ), 20, "values (index) - get value of handle" );
+
+	element.slider( "values", 0, 5 );
+	equal( element.slider( "values", 0 ), 10, "values (index) - restrict against min" );
+
+	element.slider( "values", 0, 110 );
+	equal( element.slider( "values", 0 ), 100, "values (index) - restrict against max" );
+
+	element.slider( "option", "range", true );
+	element.slider( "values", [ 20, 90 ] );
+
+	deepEqual( element.slider( "values" ), [ 20, 90 ], "range: true, values - get value for all handles" );
+	equal( element.slider( "values", 0 ), 20, "values (index) - 1st handle" );
+	equal( element.slider( "values", 1 ), 90, "values (index) - 2nd handle" );
+
+	element.slider( "values", [ 5, 110 ] );
+	deepEqual( element.slider( "values" ), [ 10, 100 ], "values - restricted against min and max" );
+	element.slider( "destroy" );
+} );
+
+test( "values, multi step", function() {
+	expect( 2 );
+
+	var element = $( "<div></div>" ).slider( {
+		range: false,
+		min: 9,
+		max: 20,
+		step: 3,
+		values: [ 9, 12 ]
+	} );
+	deepEqual( element.slider( "values" ), [ 9, 12 ], "values - evenly divisible by step" );
+
+	element.slider( "values", [ 10, 20 ] );
+	deepEqual( element.slider( "values" ), [ 9, 18 ], "values - not evenly divisible by step" );
+
+	element.slider( "destroy" );
+} );
 
 } );
