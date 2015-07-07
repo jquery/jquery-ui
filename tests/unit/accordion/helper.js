@@ -1,13 +1,16 @@
 define( [
+	"intern!qunit",
 	"jquery",
 	"lib/helper",
-	"lib/bootstrap",
 	"lib/css",
-	"text!unit/accordion/accordion.html",
-	"ui/accordion"
-], function( $, helper, bootstrap, cssjs, htmlContent ) {
-
-bootstrap( { widget: "accordion" } );
+	// "text!tests/unit/accordion/accordion.html",
+	"ui/accordion",
+	"jquery-simulate"
+], function( QUnit, $, helper, cssjs
+	// , htmlContent
+	) {
+var htmlContent = "hi";
+// QUnit.start();
 cssjs( { module: "core accordion" } );
 
 return $.extend( helper, {

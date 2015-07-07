@@ -1,5 +1,5 @@
 define( [
-	"lib/qunit",
+	"intern!qunit",
 	"jquery",
 	"./helper",
 	"ui/accordion"

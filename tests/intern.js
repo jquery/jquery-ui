@@ -29,6 +29,7 @@ define( [ "./config-helper" ], function ( configHelper ) {
 				"text": "external/requirejs-text/text",
 				"ui": "ui",
 				"unit": "tests/unit",
+				"intern!qunit": "node_modules/intern/lib/interfaces/qunit"
 			},
 			map: {
 				"*": {
