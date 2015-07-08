@@ -371,7 +371,7 @@ QUnit.test( "{ header: custom }", function( assert ) {
 QUnit.test( "{ heightStyle: 'auto' }", function( assert ) {
 	assert.expect( 3 );
 	var element = $( "#navigation" ).accordion({ heightStyle: "auto" });
-	equalHeight( element, 105 );
+	equalHeight( assert, element, 105 );
 });
 
 QUnit.test( "{ heightStyle: 'content' }", function( assert ) {
@@ -389,7 +389,7 @@ QUnit.test( "{ heightStyle: 'fill' }", function( assert ) {
 	assert.expect( 3 );
 	$( "#navigationWrapper" ).height( 500 );
 	var element = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeight( element, 455 );
+	equalHeight( assert, element, 455 );
 });
 
 QUnit.test( "{ heightStyle: 'fill' } with sibling", function( assert ) {
@@ -403,7 +403,7 @@ QUnit.test( "{ heightStyle: 'fill' } with sibling", function( assert ) {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeight( element , 355 );
+	equalHeight( assert, element , 355 );
 });
 
 QUnit.test( "{ heightStyle: 'fill' } with multiple siblings", function( assert ) {
@@ -432,7 +432,7 @@ QUnit.test( "{ heightStyle: 'fill' } with multiple siblings", function( assert )
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeight( element, 305 );
+	equalHeight( assert, element, 305 );
 });
 
 QUnit.test( "{ icons: false }", function( assert ) {
