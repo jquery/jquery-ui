@@ -24,7 +24,7 @@ return $.extend( helper, {
 		var animate = $.ui.accordion.prototype.options.animate;
 		return {
 			setup: function() {
-				$("html").append(htmlContent);
+				$("body").append(htmlContent);
 				$.ui.accordion.prototype.options.animate = false;
 			},
 			teardown: function() {

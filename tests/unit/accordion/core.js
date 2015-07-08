@@ -119,6 +119,7 @@ QUnit.test( "accessibility", function ( assert ) {
 });
 
 QUnit.asyncTest( "keyboard support", function( assert ) {
+	console.log(QUnit.config.testTimeout)
 	assert.expect( 13 );
 	var element = $( "#list1" ).accordion(),
 		headers = element.find( ".ui-accordion-header" ),
