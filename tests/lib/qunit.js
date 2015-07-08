@@ -2,14 +2,14 @@ define( [
 	"intern!qunit",
 	"jquery",
 	"qunit-assert-classes",
-	"qunit-assert-close",
+	"external/qunit-assert-close/qunit-assert-close",
 	"lib/qunit-assert-domequal",
 	// "phantom-bridge"
 ], function( QUnit, $ ) {
 
-QUnit.config.autostart = false;
+// QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;
-
+QUnit.config.testTimeout = 3000;
 // QUnit.config.urlConfig.push({
 // 	id: "nojshint",
 // 	label: "Skip JSHint",

@@ -3,13 +3,13 @@ define( [
 	"jquery",
 	"lib/helper",
 	"lib/css",
-	// "text!tests/unit/accordion/accordion.html",
+	"text!tests/unit/accordion/accordion.html",
 	"ui/accordion",
 	"jquery-simulate"
 ], function( QUnit, $, helper, cssjs
-	// , htmlContent
+	, htmlContent
 	) {
-var htmlContent = "hi";
+// var htmlContent = "hi";
 // QUnit.start();
 cssjs( { module: "core accordion" } );
 

@@ -25,7 +25,7 @@ define( [ "./config-helper" ], function ( configHelper ) {
 				"jshint": "external/jshint/jshint",
 				"lib": "tests/lib",
 				"qunit-assert-classes": "external/qunit-assert-classes/qunit-assert-classes",
-				"qunit-assert-close": "external/qunit-assert-close/qunit-assert-close",
+				// "qunit-assert-close": "external/qunit-assert-close/qunit-assert-close",
 				"text": "external/requirejs-text/text",
 				"ui": "ui",
 				"unit": "tests/unit",
