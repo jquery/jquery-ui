@@ -1,4 +1,4 @@
-/* globals window:true, document:true, $:true */
+/* globals window:true, document:true */
 ( function() {
 
 // Find the script element
