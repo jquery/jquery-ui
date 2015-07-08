@@ -7,7 +7,6 @@ define( [
 	// "phantom-bridge"
 ], function( QUnit, $ ) {
 
-// QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;
 QUnit.config.testTimeout = 3000;
 // QUnit.config.urlConfig.push({
