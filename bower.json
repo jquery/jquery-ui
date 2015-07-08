@@ -16,7 +16,7 @@
 		"jshint": "2.4.4",
 		"qunit": "1.18.0",
 		"qunit-assert-classes": "1.0.2",
-		"qunit-assert-close": "JamesMGreene/qunit-assert-close#v1.1.1",
+		"qunit-assert-close": "apsdehal/qunit-assert-close#amd-patch",
 		"qunit-composite": "JamesMGreene/qunit-composite#v1.1.0",
 		"requirejs": "2.1.14",
 		"requirejs-text": "2.0.14",
