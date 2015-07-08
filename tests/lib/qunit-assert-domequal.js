@@ -18,7 +18,7 @@ var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 
 	function done() {
 		var actual = extract( selector, message );
-		assert.push( QUnit.equiv( actual, expected ), actual, expected, message );
+		assert.deepEqual( actual, expected, message );
 	}
 
 	// Run modifier (async or sync), then compare state via done()

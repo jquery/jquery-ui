@@ -16,7 +16,7 @@ cssjs( { module: "core accordion" } );
 return $.extend( helper, {
 	equalHeight: function( assert, accordion, height ) {
 		accordion.find( ".ui-accordion-content" ).each(function() {
-			equal( $( this ).outerHeight(), height );
+			assert.equal( $( this ).outerHeight(), height );
 		});
 	},
 
