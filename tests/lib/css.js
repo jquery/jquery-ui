@@ -2,7 +2,10 @@ define( [], function () {
 	return function( options ) {
 
 		function includeStyle( url ) {
-			document.write( "<link rel='stylesheet' href='../../" + url + "'>" );
+			var link = document.createElement( "link" );
+			link.rel = "stylesheet"
+			link.href = "../../" + url;
+			document.head.appendChild( link );
 		}
 
 		// Find the script element
