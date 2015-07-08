@@ -39,7 +39,7 @@ return $.extend( helper, {
 			actual = accordion.find( ".ui-accordion-content" ).map(function() {
 				return $( this ).css( "display" ) === "none" ? 0 : 1;
 			}).get();
-		assert.push( assert.deepEqual(actual, expected), actual, expected, "State Assert" );
+		assert.deepEqual(actual, expected, "State Assert")
 	}
 } );
 
