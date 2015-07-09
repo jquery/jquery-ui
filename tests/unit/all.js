@@ -2,5 +2,9 @@ define([
 	"tests/unit/accordion/core",
 	"tests/unit/accordion/events",
 	"tests/unit/accordion/methods",
-	"tests/unit/accordion/options"
+	"tests/unit/accordion/options",
+	"tests/unit/autocomplete/core",
+	"tests/unit/autocomplete/events",
+	"tests/unit/autocomplete/methods",
+	"tests/unit/autocomplete/options",
 ]);

@@ -8,7 +8,7 @@ define( [
 ], function( QUnit, $ ) {
 
 QUnit.config.requireExpects = true;
-QUnit.config.testTimeout = 3000;
+QUnit.config.testTimeout = 10000;
 // QUnit.config.urlConfig.push({
 // 	id: "nojshint",
 // 	label: "Skip JSHint",

@@ -68,7 +68,7 @@ function testBasicUsage( widget ) {
 exports.testWidget = function( widget, settings ) {
 	QUnit.module( widget + ": common widget" );
 
-	exports.testJshint( widget );
+	// exports.testJshint( widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );
@@ -82,7 +82,8 @@ exports.testJshint = function( module ) {
 
 	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
 	// https://github.com/jshint/jshint/issues/1384
-	if ( QUnit.urlParams.nojshint || !Function.prototype.bind ) {
+	if ( //QUnit.urlParams.nojshint ||
+		!Function.prototype.bind ) {
 		return;
 	}
 

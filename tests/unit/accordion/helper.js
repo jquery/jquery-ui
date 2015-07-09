@@ -5,12 +5,9 @@ define( [
 	"lib/css",
 	"text!tests/unit/accordion/accordion.html",
 	"ui/accordion",
-	"jquery-simulate"
-], function( QUnit, $, helper, cssjs
-	, htmlContent
-	) {
-// var htmlContent = "hi";
-// QUnit.start();
+	"jquery-simulate",
+	"./common"
+], function( QUnit, $, helper, cssjs, htmlContent ) {
 cssjs( { module: "core accordion" } );
 
 return $.extend( helper, {
