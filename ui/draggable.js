@@ -23,6 +23,7 @@
 			"./core",
 			"./data",
 			"./mouse",
+			"./plugin",
 			"./version",
 			"./widget"
 		], factory );
