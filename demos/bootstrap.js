@@ -9,20 +9,20 @@ var script = scripts[ scripts.length - 1 ];
 var modules = script.getAttribute( "data-modules" );
 var pathParts = window.location.pathname.split( "/" );
 var effectsAll = [
-	"effect-blind",
-	"effect-bounce",
-	"effect-clip",
-	"effect-drop",
-	"effect-explode",
-	"effect-fade",
-	"effect-fold",
-	"effect-highlight",
-	"effect-puff",
-	"effect-pulsate",
-	"effect-scale",
-	"effect-shake",
-	"effect-size",
-	"effect-slide"
+	"effects/effect-blind",
+	"effects/effect-bounce",
+	"effects/effect-clip",
+	"effects/effect-drop",
+	"effects/effect-explode",
+	"effects/effect-fade",
+	"effects/effect-fold",
+	"effects/effect-highlight",
+	"effects/effect-puff",
+	"effects/effect-pulsate",
+	"effects/effect-scale",
+	"effects/effect-shake",
+	"effects/effect-size",
+	"effects/effect-slide"
 ];
 var widgets = [
 	"accordion",
@@ -37,6 +37,11 @@ function getPath( module ) {
 	for ( var i = 0; i < widgets.length; i++ ) {
 		if ( widgets[ i ] === module ) {
 			return "widgets/" + module;
+		}
+	}
+	for ( var j = 0; j < effectsAll.length; j++ ) {
+		if ( module !== "effect" && effectsAll[ j ].indexOf( module ) !== -1 ) {
+			return "effects/" + module;
 		}
 	}
 	return module;
