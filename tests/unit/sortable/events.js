@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"./helper",
 	"ui/sortable",
-	"ui/draggable"
+	"ui/widgets/draggable"
 ], function( $, testHelper ) {
 
 module("sortable: events");

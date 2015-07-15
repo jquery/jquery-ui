@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/draggable"
+	"ui/widgets/draggable"
 ], function( $, testHelper ) {
 
 var element;
