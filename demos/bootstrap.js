@@ -28,7 +28,8 @@ var widgets = [
 	"accordion",
 	"autocomplete",
 	"button",
-	"datepicker"
+	"datepicker",
+	"dialog"
 ];
 
 function getPath( module ) {

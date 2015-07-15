@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/dialog",
+	"ui/widgets/dialog",
 	"ui/effect-blind",
 	"ui/effect-explode"
 ], function( $, testHelper ) {
