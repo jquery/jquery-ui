@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/slider"
+	"ui/widgets/slider"
 ], function( common ) {
 
 common.testWidget( "slider", {

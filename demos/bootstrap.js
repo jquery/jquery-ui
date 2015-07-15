@@ -37,7 +37,8 @@ var widgets = [
 	"progressbar",
 	"resizable",
 	"selectable",
-	"selectmenu"
+	"selectmenu",
+	"slider"
 ];
 
 function getPath( module ) {
