@@ -25,6 +25,7 @@
 			"./core",
 			"./escape-selector",
 			"./keycode",
+			"./safe-active-element",
 			"./version",
 			"./widget"
 		], factory );

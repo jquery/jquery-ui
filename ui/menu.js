@@ -25,8 +25,9 @@
 			"./core",
 			"./version",
 			"./keycode",
-			"./widget",
-			"./position"
+			"./position",
+			"./safe-active-element",
+			"./widget"
 		], factory );
 	} else {
 
