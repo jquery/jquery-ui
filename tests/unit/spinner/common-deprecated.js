@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/spinner"
+	"ui/widgets/spinner"
 ], function( common ) {
 
 common.testWidget( "spinner", {
