@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/tabs"
+	"ui/widgets/tabs"
 ], function( $, testHelper ) {
 
 var state = testHelper.state;
