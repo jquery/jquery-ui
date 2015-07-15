@@ -30,7 +30,8 @@ var widgets = [
 	"button",
 	"datepicker",
 	"dialog",
-	"draggable"
+	"draggable",
+	"droppable"
 ];
 
 function getPath( module ) {

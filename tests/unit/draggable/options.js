@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"./helper",
 	"ui/widgets/draggable",
-	"ui/droppable",
+	"ui/widgets/droppable",
 	"ui/sortable"
 ], function( $, testHelper ) {
 
