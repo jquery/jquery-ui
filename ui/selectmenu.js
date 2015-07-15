@@ -24,7 +24,7 @@
 			"jquery",
 			"./version",
 			"./escape-selector",
-			"./menu",
+			"./widgets/menu",
 			"./keycode",
 			"./labels",
 			"./position",

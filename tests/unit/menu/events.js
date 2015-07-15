@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/menu"
+	"ui/widgets/menu"
 ], function( $, testHelper ) {
 
 var log = testHelper.log,
