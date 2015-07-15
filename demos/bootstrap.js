@@ -24,7 +24,9 @@ var effectsAll = [
 	"effect-size",
 	"effect-slide"
 ];
-var widgets = [];
+var widgets = [
+	"accordion"
+];
 
 function getPath( module ) {
 	for ( var i = 0; i < widgets.length; i++ ) {
