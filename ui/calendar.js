@@ -13,24 +13,25 @@
 //>>docs: http://api.jqueryui.com/calendar/
 //>>demos: http://jqueryui.com/calendar/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		// TODO Add globalize and $.date
 		// TODO: Keep button even if its optional?
-		define([
+		define( [
 			"jquery",
+			"globalize",
 			"./core",
 			"./widget",
-			"./button"
+			"./button",
+			"date"
 		], factory );
 	} else {
 
 		// Browser globals
-		factory( jQuery );
+		factory( jQuery, Globalize );
 	}
-}(function( $ ) {
+}( function( $, Globalize ) {
 
 return $.widget( "ui.calendar", {
 	version: "@VERSION",
@@ -89,7 +90,7 @@ return $.widget( "ui.calendar", {
 			"mouseenter .ui-calendar-calendar button": "_hover",
 			"mouseleave .ui-calendar-calendar button": "_hover",
 			"keydown .ui-calendar-calendar": "_handleKeydown"
-		});
+		} );
 
 		this._createCalendar();
 	},
@@ -179,10 +180,10 @@ return $.widget( "ui.calendar", {
 
 		this.element
 			.addClass( classes )
-			.attr({
+			.attr( {
 				role: "region",
 				"aria-labelledby": this.id + "-title"
-			})
+			} )
 			.html( pickerHtml );
 
 		this._createButtonPane();
@@ -446,7 +447,7 @@ return $.widget( "ui.calendar", {
 			$( "<button></button>", props )
 				.button( buttonOptions )
 				.appendTo( that.buttonSet );
-		});
+		} );
 		this.element.addClass( "ui-calendar-buttons" );
 		this.buttonPane.appendTo( this.element );
 	},
@@ -504,10 +505,10 @@ return $.widget( "ui.calendar", {
 	},
 
 	_setHiddenPicker: function() {
-		this.element.attr({
+		this.element.attr( {
 			"aria-hidden": "true",
 			"aria-expanded": "false"
-		});
+		} );
 	},
 
 	value: function( value ) {
@@ -565,7 +566,7 @@ return $.widget( "ui.calendar", {
 			if ( key in that.refreshRelatedOptions ) {
 				refresh = true;
 			}
-		});
+		} );
 
 		if ( refresh ) {
 			this._refresh();
@@ -608,6 +609,6 @@ return $.widget( "ui.calendar", {
 			this.date.setFormat( value );
 		}
 	}
-});
+} );
 
-}));
+} ) );

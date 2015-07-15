@@ -4,7 +4,20 @@
  * Based on Marc Grabanski's jQuery Date Plugin
  * http://marcgrabanski.com/articles/jquery-date-plugin
  */
-(function( $, undefined ) {
+( function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [
+			"jquery",
+			"globalize"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery, Globalize );
+	}
+}( function( $, Globalize ) {
 
 var weekdays = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ],
 	weekdaysRev = {
@@ -201,4 +214,4 @@ $.date.prototype = {
 	}
 };
 
-}( jQuery ));
+} ) );

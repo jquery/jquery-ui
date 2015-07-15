@@ -12,12 +12,15 @@
 //>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
 //>>docs: http://api.jqueryui.com/progressbar/
 //>>demos: http://jqueryui.com/progressbar/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/progressbar.css
+//>>css.theme: ../themes/base/theme.css
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./core",
 			"./widget"
@@ -27,11 +30,16 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
+		classes: {
+			"ui-progressbar": "ui-corner-all",
+			"ui-progressbar-value": "ui-corner-left",
+			"ui-progressbar-complete": "ui-corner-right"
+		},
 		max: 100,
 		value: 0,
 
@@ -42,31 +50,26 @@ return $.widget( "ui.progressbar", {
 	min: 0,
 
 	_create: function() {
+
 		// Constrain initial value
 		this.oldValue = this.options.value = this._constrainedValue();
 
-		this.element
-			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
-			.attr({
-				// Only set static values, aria-valuenow and aria-valuemax are
-				// set inside _refreshValue()
-				role: "progressbar",
-				"aria-valuemin": this.min
-			});
+		this.element.attr( {
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
-			.appendTo( this.element );
+			// Only set static values; aria-valuenow and aria-valuemax are
+			// set inside _refreshValue()
+			role: "progressbar",
+			"aria-valuemin": this.min
+		} );
+		this._addClass( "ui-progressbar", "ui-widget ui-widget-content" );
 
+		this.valueDiv = $( "<div>" ).appendTo( this.element );
+		this._addClass( this.valueDiv, "ui-progressbar-value", "ui-widget-header" );
 		this._refreshValue();
 	},
 
 	_destroy: function() {
-		this.element
-			.removeClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-valuemin" )
-			.removeAttr( "aria-valuemax" )
-			.removeAttr( "aria-valuenow" );
+		this.element.removeAttr( "role aria-valuemin aria-valuemax aria-valuenow" );
 
 		this.valueDiv.remove();
 	},
@@ -113,9 +116,8 @@ return $.widget( "ui.progressbar", {
 			value = Math.max( this.min, value );
 		}
 		if ( key === "disabled" ) {
-			this.element
-				.toggleClass( "ui-state-disabled", !!value )
-				.attr( "aria-disabled", value );
+			this.element.attr( "aria-disabled", value );
+			this._toggleClass( null, "ui-state-disabled", !!value );
 		}
 		this._super( key, value );
 	},
@@ -130,21 +132,24 @@ return $.widget( "ui.progressbar", {
 
 		this.valueDiv
 			.toggle( this.indeterminate || value > this.min )
-			.toggleClass( "ui-corner-right", value === this.options.max )
-			.width( percentage.toFixed(0) + "%" );
+			.width( percentage.toFixed( 0 ) + "%" );
 
-		this.element.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
+		this
+			._toggleClass( this.valueDiv, "ui-progressbar-complete", null,
+				value === this.options.max )
+			._toggleClass( "ui-progressbar-indeterminate", null, this.indeterminate );
 
 		if ( this.indeterminate ) {
 			this.element.removeAttr( "aria-valuenow" );
 			if ( !this.overlayDiv ) {
-				this.overlayDiv = $( "<div class='ui-progressbar-overlay'></div>" ).appendTo( this.valueDiv );
+				this.overlayDiv = $( "<div>" ).appendTo( this.valueDiv );
+				this._addClass( this.overlayDiv, "ui-progressbar-overlay" );
 			}
 		} else {
-			this.element.attr({
+			this.element.attr( {
 				"aria-valuemax": this.options.max,
 				"aria-valuenow": value
-			});
+			} );
 			if ( this.overlayDiv ) {
 				this.overlayDiv.remove();
 				this.overlayDiv = null;
@@ -159,6 +164,6 @@ return $.widget( "ui.progressbar", {
 			this._trigger( "complete" );
 		}
 	}
-});
+} );
 
-}));
+} ) );

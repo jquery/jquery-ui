@@ -23,7 +23,7 @@
 		Globalize.locale( select.val() );
 		datepicker.datepicker();
 
-		select.change( function() {
+		select.on( "change", function() {
 			Globalize.locale( $( this ).val() );
 			datepicker.datepicker( "valueAsDate", datepicker.datepicker( "valueAsDate" ) );
 		});

@@ -1,4 +1,7 @@
-(function( $ ) {
+define( [
+	"jquery",
+	"ui/core"
+], function( $ ) {
 
 module( "core - selectors" );
 
@@ -251,4 +254,11 @@ test( "tabbable - dimensionless parent with overflow", function() {
 	isTabbable( "#dimensionlessParent", "input" );
 });
 
-})( jQuery );
+test( "escapeSelector", function() {
+	expect( 1 );
+
+	equal( $( "#" + $.ui.escapeSelector( "weird-['x']-id" ) ).length, 1,
+		"properly escapes selectors to use as an id" );
+} );
+
+} );

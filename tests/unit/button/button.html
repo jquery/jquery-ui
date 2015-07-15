@@ -4,29 +4,9 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Button Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "button" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/button.js"
-		]
-	});
-	</script>
-
-	<script src="button_common.js"></script>
-	<script src="button_core.js"></script>
-	<script src="button_events.js"></script>
-	<script src="button_methods.js"></script>
-	<script src="button_options.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core button"></script>
+	<script src="../../lib/bootstrap.js" data-widget="button"></script>
 </head>
 <body>
 

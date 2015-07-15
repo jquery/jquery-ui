@@ -20,7 +20,9 @@
 	$(function() {
 		$( "#draggable" ).draggable();
 		$( "#droppable" ).droppable({
-			hoverClass: "ui-state-hover",
+			classes: {
+				"ui-droppable-hover": "ui-state-hover"
+			},
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )
@@ -32,7 +34,9 @@
 		$( "#draggable2" ).draggable();
 		$( "#droppable2" ).droppable({
 			accept: "#draggable2",
-			activeClass: "ui-state-default",
+			classes: {
+				"ui-droppable-active": "ui-state-default"
+			},
 			drop: function( event, ui ) {
 				$( this )
 					.addClass( "ui-state-highlight" )
@@ -66,7 +70,7 @@
 </div>
 
 <div class="demo-description">
-<p>Change the droppable's appearance on hover, or when the droppable is active (an acceptable draggable is dropped on it).  Use the <code>hoverClass</code> or <code>activeClass</code> options to specify respective classes.</p>
+<p>Change the droppable's appearance on hover, or when the droppable is active (an acceptable draggable is dropped on it).  Set the values of the <code>ui-droppable-hover</code> or <code>ui-droppable-active</code> properties on the <code>classes</code> option to specify the respective classes.</p>
 </div>
 </body>
 </html>

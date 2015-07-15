@@ -15,7 +15,7 @@
 //>>docs: http://api.jqueryui.com/position/
 //>>demos: http://jqueryui.com/position/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -25,8 +25,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
-(function() {
+}( function( $ ) {
+( function() {
 
 $.ui = $.ui || {};
 
@@ -41,6 +41,26 @@ var cachedScrollbarWidth, supportsOffsetFractions,
 	rpercent = /%$/,
 	_position = $.fn.position;
 
+// Support: IE <=9 only
+supportsOffsetFractions = function() {
+	var element = $( "<div>" )
+			.css( "position", "absolute" )
+			.appendTo( "body" )
+			.offset( {
+				top: 1.5,
+				left: 1.5
+			} ),
+		support = element.offset().top === 1.5;
+
+	element.remove();
+
+	supportsOffsetFractions = function() {
+		return support;
+	};
+
+	return support;
+};
+
 function getOffsets( offsets, width, height ) {
 	return [
 		parseFloat( offsets[ 0 ] ) * ( rpercent.test( offsets[ 0 ] ) ? width / 100 : 1 ),
@@ -53,7 +73,7 @@ function parseCss( element, property ) {
 }
 
 function getDimensions( elem ) {
-	var raw = elem[0];
+	var raw = elem[ 0 ];
 	if ( raw.nodeType === 9 ) {
 		return {
 			width: elem.width(),
@@ -89,7 +109,7 @@ $.position = {
 		}
 		var w1, w2,
 			div = $( "<div style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
-			innerDiv = div.children()[0];
+			innerDiv = div.children()[ 0 ];
 
 		$( "body" ).append( div );
 		w1 = innerDiv.offsetWidth;
@@ -98,12 +118,12 @@ $.position = {
 		w2 = innerDiv.offsetWidth;
 
 		if ( w1 === w2 ) {
-			w2 = div[0].clientWidth;
+			w2 = div[ 0 ].clientWidth;
 		}
 
 		div.remove();
 
-		return (cachedScrollbarWidth = w1 - w2);
+		return ( cachedScrollbarWidth = w1 - w2 );
 	},
 	getScrollInfo: function( within ) {
 		var overflowX = within.isWindow || within.isDocument ? "" :
@@ -111,9 +131,9 @@ $.position = {
 			overflowY = within.isWindow || within.isDocument ? "" :
 				within.element.css( "overflow-y" ),
 			hasOverflowX = overflowX === "scroll" ||
-				( overflowX === "auto" && within.width < within.element[0].scrollWidth ),
+				( overflowX === "auto" && within.width < within.element[ 0 ].scrollWidth ),
 			hasOverflowY = overflowY === "scroll" ||
-				( overflowY === "auto" && within.height < within.element[0].scrollHeight );
+				( overflowY === "auto" && within.height < within.element[ 0 ].scrollHeight );
 		return {
 			width: hasOverflowY ? $.position.scrollbarWidth() : 0,
 			height: hasOverflowX ? $.position.scrollbarWidth() : 0
@@ -121,7 +141,7 @@ $.position = {
 	},
 	getWithinInfo: function( element ) {
 		var withinElement = $( element || window ),
-			isWindow = $.isWindow( withinElement[0] ),
+			isWindow = $.isWindow( withinElement[ 0 ] ),
 			isDocument = !!withinElement[ 0 ] && withinElement[ 0 ].nodeType === 9;
 		return {
 			element: withinElement,
@@ -152,7 +172,7 @@ $.fn.position = function( options ) {
 		offsets = {};
 
 	dimensions = getDimensions( target );
-	if ( target[0].preventDefault ) {
+	if ( target[ 0 ].preventDefault ) {
 		// force left top to allow flipping
 		options.at = "left top";
 	}
@@ -169,7 +189,7 @@ $.fn.position = function( options ) {
 			horizontalOffset,
 			verticalOffset;
 
-		if ( pos.length === 1) {
+		if ( pos.length === 1 ) {
 			pos = rhorizontal.test( pos[ 0 ] ) ?
 				pos.concat( [ "center" ] ) :
 				rvertical.test( pos[ 0 ] ) ?
@@ -192,7 +212,7 @@ $.fn.position = function( options ) {
 			rposition.exec( pos[ 0 ] )[ 0 ],
 			rposition.exec( pos[ 1 ] )[ 0 ]
 		];
-	});
+	} );
 
 	// normalize collision option
 	if ( collision.length === 1 ) {
@@ -215,7 +235,7 @@ $.fn.position = function( options ) {
 	basePosition.left += atOffset[ 0 ];
 	basePosition.top += atOffset[ 1 ];
 
-	return this.each(function() {
+	return this.each( function() {
 		var collisionPosition, using,
 			elem = $( this ),
 			elemWidth = elem.outerWidth(),
@@ -243,7 +263,7 @@ $.fn.position = function( options ) {
 		position.top += myOffset[ 1 ];
 
 		// if the browser doesn't support fractions, then round for consistent results
-		if ( !supportsOffsetFractions ) {
+		if ( !supportsOffsetFractions() ) {
 			position.left = round( position.left );
 			position.top = round( position.top );
 		}
@@ -268,9 +288,9 @@ $.fn.position = function( options ) {
 					at: options.at,
 					within: within,
 					elem: elem
-				});
+				} );
 			}
-		});
+		} );
 
 		if ( options.using ) {
 			// adds feedback as second argument to using callback, if present
@@ -313,7 +333,7 @@ $.fn.position = function( options ) {
 		}
 
 		elem.offset( $.extend( position, { using: using } ) );
-	});
+	} );
 };
 
 $.ui.position = {
@@ -475,47 +495,8 @@ $.ui.position = {
 	}
 };
 
-// fraction support test
-(function() {
-	var testElement, testElementParent, testElementStyle, offsetLeft, i,
-		body = document.getElementsByTagName( "body" )[ 0 ],
-		div = document.createElement( "div" );
-
-	//Create a "fake body" for testing based on method used in jQuery.support
-	testElement = document.createElement( body ? "div" : "body" );
-	testElementStyle = {
-		visibility: "hidden",
-		width: 0,
-		height: 0,
-		border: 0,
-		margin: 0,
-		background: "none"
-	};
-	if ( body ) {
-		$.extend( testElementStyle, {
-			position: "absolute",
-			left: "-1000px",
-			top: "-1000px"
-		});
-	}
-	for ( i in testElementStyle ) {
-		testElement.style[ i ] = testElementStyle[ i ];
-	}
-	testElement.appendChild( div );
-	testElementParent = body || document.documentElement;
-	testElementParent.insertBefore( testElement, testElementParent.firstChild );
-
-	div.style.cssText = "position: absolute; left: 10.7432222px;";
-
-	offsetLeft = $( div ).offset().left;
-	supportsOffsetFractions = offsetLeft > 10 && offsetLeft < 11;
-
-	testElement.innerHTML = "";
-	testElementParent.removeChild( testElement );
-})();
-
-})();
+} )();
 
 return $.ui.position;
 
-}));
+} ) );

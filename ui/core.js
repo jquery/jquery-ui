@@ -14,7 +14,7 @@
 //>>docs: http://api.jqueryui.com/category/ui-core/
 //>>demos: http://jqueryui.com/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,7 +24,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 // $.ui might exist from components with no dependencies, e.g., $.ui.position
 $.ui = $.ui || {};
@@ -49,11 +49,58 @@ $.extend( $.ui, {
 		SPACE: 32,
 		TAB: 9,
 		UP: 38
-	}
-});
+	},
+
+	// Internal use only
+	safeActiveElement: function( document ) {
+		var activeElement;
+
+		// Support: IE 9 only
+		// IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
+		try {
+			activeElement = document.activeElement;
+		} catch ( error ) {
+			activeElement = document.body;
+		}
+
+		// Support: IE 9 - 11 only
+		// IE may return null instead of an element
+		// Interestingly, this only seems to occur when NOT in an iframe
+		if ( !activeElement ) {
+			activeElement = document.body;
+		}
+
+		// Support: IE 11 only
+		// IE11 returns a seemingly empty object in some cases when accessing
+		// document.activeElement from an <iframe>
+		if ( !activeElement.nodeName ) {
+			activeElement = document.body;
+		}
+
+		return activeElement;
+	},
+
+	// Internal use only
+	safeBlur: function( element ) {
+
+		// Support: IE9 - 10 only
+		// If the <body> is blurred, IE will switch windows, see #9420
+		if ( element && element.nodeName.toLowerCase() !== "body" ) {
+			$( element ).trigger( "blur" );
+		}
+	},
+
+	// Internal use only
+	escapeSelector: ( function() {
+		var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
+		return function( selector ) {
+			return selector.replace( selectorEscape, "\\$1" );
+		};
+	} )()
+} );
 
 // plugins
-$.fn.extend({
+$.fn.extend( {
 	scrollParent: function( includeHidden ) {
 		var position = this.css( "position" ),
 			excludeStaticParent = position === "absolute",
@@ -64,34 +111,76 @@ $.fn.extend({
 					return false;
 				}
 				return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) );
-			}).eq( 0 );
+			} ).eq( 0 );
 
 		return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
 	},
 
-	uniqueId: (function() {
+	uniqueId: ( function() {
 		var uuid = 0;
 
 		return function() {
-			return this.each(function() {
+			return this.each( function() {
 				if ( !this.id ) {
 					this.id = "ui-id-" + ( ++uuid );
 				}
-			});
+			} );
 		};
-	})(),
+	} )(),
 
 	removeUniqueId: function() {
-		return this.each(function() {
+		return this.each( function() {
 			if ( /^ui-id-\d+$/.test( this.id ) ) {
 				$( this ).removeAttr( "id" );
 			}
-		});
+		} );
+	},
+
+	// Support: IE8 Only
+	// IE8 does not support the form attribute and when it is supplied. It overwrites the form prop
+	// with a string, so we need to find the proper form.
+	form: function() {
+		return typeof this[ 0 ].form === "string" ? this.closest( "form" ) : $( this[ 0 ].form );
+	},
+
+	labels: function() {
+		var ancestor, selector, id, labels, ancestors;
+
+		// Check control.labels first
+		if ( this[ 0 ].labels && this[ 0 ].labels.length ) {
+			return this.pushStack( this[ 0 ].labels );
+		}
+
+		// Support: IE <= 11, FF <= 37, Android <= 2.3 only
+		// Above browsers do not support control.labels. Everything below is to support them
+		// as well as document fragments. control.labels does not work on document fragments
+		labels = this.eq( 0 ).parents( "label" );
+
+		// Look for the label based on the id
+		id = this.attr( "id" );
+		if ( id ) {
+
+			// We don't search against the document in case the element
+			// is disconnected from the DOM
+			ancestor = this.eq( 0 ).parents().last();
+
+			// Get a full set of top level ancestors
+			ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
+
+			// Create a selector for the label based on the id
+			selector = "label[for='" + $.ui.escapeSelector( id ) + "']";
+
+			labels = labels.add( ancestors.find( selector ).addBack( selector ) );
+
+		}
+
+		// Return whatever we have found for labels
+		return this.pushStack( labels );
 	}
-});
+} );
 
 // selectors
-function focusable( element, isTabIndexNotNaN ) {
+function focusable( element, hasTabindex ) {
 	var map, mapName, img,
 		nodeName = element.nodeName.toLowerCase();
 	if ( "area" === nodeName ) {
@@ -106,44 +195,53 @@ function focusable( element, isTabIndexNotNaN ) {
 	return ( /^(input|select|textarea|button|object)$/.test( nodeName ) ?
 		!element.disabled :
 		"a" === nodeName ?
-			element.href || isTabIndexNotNaN :
-			isTabIndexNotNaN) &&
+			element.href || hasTabindex :
+			hasTabindex ) &&
 		// the element and all of its ancestors must be visible
 		visible( element );
 }
 
 function visible( element ) {
 	return $.expr.filters.visible( element ) &&
-		!$( element ).parents().addBack().filter(function() {
+		!$( element ).parents().addBack().filter( function() {
 			return $.css( this, "visibility" ) === "hidden";
-		}).length;
+		} ).length;
 }
 
 $.extend( $.expr[ ":" ], {
 	data: $.expr.createPseudo ?
-		$.expr.createPseudo(function( dataName ) {
+		$.expr.createPseudo( function( dataName ) {
 			return function( elem ) {
 				return !!$.data( elem, dataName );
 			};
-		}) :
+		} ) :
 		// support: jQuery <1.8
 		function( elem, i, match ) {
 			return !!$.data( elem, match[ 3 ] );
 		},
 
 	focusable: function( element ) {
-		return focusable( element, !isNaN( $.attr( element, "tabindex" ) ) );
+		return focusable( element, $.attr( element, "tabindex" ) != null );
 	},
 
 	tabbable: function( element ) {
 		var tabIndex = $.attr( element, "tabindex" ),
-			isTabIndexNaN = isNaN( tabIndex );
-		return ( isTabIndexNaN || tabIndex >= 0 ) && focusable( element, !isTabIndexNaN );
+			hasTabindex = tabIndex != null;
+		return ( !hasTabindex || tabIndex >= 0 ) && focusable( element, hasTabindex );
 	}
-});
+} );
 
-// support: jQuery <1.8
-if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
+// support: jQuery 1.7 only
+// Not a great way to check versions, but since we only support 1.7+ and only
+// need to detect <1.8, this is a simple check that should suffice. Checking
+// for "1.7." would be a bit safer, but the version string is 1.7, not 1.7.0
+// and we'll never reach 1.70.0 (if we do, we certainly won't be supporting
+// 1.7 anymore). See #11197 for why we're not using feature detection.
+if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
+
+	// Setters for .innerWidth(), .innerHeight(), .outerWidth(), .outerHeight()
+	// Unlike jQuery Core 1.8+, these only support numeric values to set the
+	// dimensions in pixels
 	$.each( [ "Width", "Height" ], function( i, name ) {
 		var side = name === "Width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ],
 			type = name.toLowerCase(),
@@ -163,7 +261,7 @@ if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
 				if ( margin ) {
 					size -= parseFloat( $.css( elem, "margin" + this ) ) || 0;
 				}
-			});
+			} );
 			return size;
 		}
 
@@ -172,25 +270,22 @@ if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
 				return orig[ "inner" + name ].call( this );
 			}
 
-			return this.each(function() {
+			return this.each( function() {
 				$( this ).css( type, reduce( this, size ) + "px" );
-			});
+			} );
 		};
 
-		$.fn[ "outer" + name] = function( size, margin ) {
+		$.fn[ "outer" + name ] = function( size, margin ) {
 			if ( typeof size !== "number" ) {
 				return orig[ "outer" + name ].call( this, size );
 			}
 
-			return this.each(function() {
-				$( this).css( type, reduce( this, size, true, margin ) + "px" );
-			});
+			return this.each( function() {
+				$( this ).css( type, reduce( this, size, true, margin ) + "px" );
+			} );
 		};
-	});
-}
+	} );
 
-// support: jQuery <1.8
-if ( !$.fn.addBack ) {
 	$.fn.addBack = function( selector ) {
 		return this.add( selector == null ?
 			this.prevObject : this.prevObject.filter( selector )
@@ -201,23 +296,23 @@ if ( !$.fn.addBack ) {
 // deprecated
 $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
-$.fn.extend({
-	disableSelection: (function() {
+$.fn.extend( {
+	disableSelection: ( function() {
 		var eventType = "onselectstart" in document.createElement( "div" ) ?
 			"selectstart" :
 			"mousedown";
 
 		return function() {
-			return this.bind( eventType + ".ui-disableSelection", function( event ) {
+			return this.on( eventType + ".ui-disableSelection", function( event ) {
 				event.preventDefault();
-			});
+			} );
 		};
-	})(),
+	} )(),
 
 	enableSelection: function() {
-		return this.unbind( ".ui-disableSelection" );
+		return this.off( ".ui-disableSelection" );
 	}
-});
+} );
 
 // $.ui.plugin is deprecated. Use $.widget() extensions instead.
 $.ui.plugin = {
@@ -249,4 +344,4 @@ $.ui.plugin = {
 	}
 };
 
-}));
+} ) );

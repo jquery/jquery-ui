@@ -12,14 +12,14 @@
 		var target = $( ".target" ),
 			duration = 2000;
 
-		$( ".toggle" ).click(function( event ) {
+		$( ".toggle" ).on( "click", function( event ) {
 			event.preventDefault();
 			target.toggle( "clip", {
 				direction: "horizontal"
 			}, duration );
 		});
 
-		$( ".effect-toggle" ).click(function( event ) {
+		$( ".effect-toggle" ).on( "click", function( event ) {
 			event.preventDefault();
 			target.effect( "clip", {
 				direction: "vertical",
@@ -27,7 +27,7 @@
 			}, duration );
 		});
 
-		$( ".effect-default" ).click(function( event ) {
+		$( ".effect-default" ).on( "click", function( event ) {
 			event.preventDefault();
 			target.effect( "clip", {
 				direction: "vertical"

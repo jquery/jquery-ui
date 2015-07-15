@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/fold-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "fold", "hide", function( options, done ) {
 
@@ -69,7 +69,7 @@ return $.effects.define( "fold", "hide", function( options, done ) {
 
 	// Animate
 	element
-		.queue(function( next ) {
+		.queue( function( next ) {
 			if ( placeholder ) {
 				placeholder
 					.animate( $.effects.clipToBox( animation1 ), duration, options.easing )
@@ -77,12 +77,12 @@ return $.effects.define( "fold", "hide", function( options, done ) {
 			}
 
 			next();
-		})
+		} )
 		.animate( animation1, duration, options.easing )
 		.animate( animation2, duration, options.easing )
 		.queue( done );
 
 	$.effects.unshift( element, queuelen, 4 );
-});
+} );
 
-}));
+} ) );

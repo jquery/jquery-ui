@@ -4,32 +4,9 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Resizable Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "resizable" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/mouse.js",
-			"ui/resizable.js"
-		]
-	});
-	</script>
-
-	<script src="resizable_common.js"></script>
-	<script src="resizable_core.js"></script>
-	<script src="resizable_events.js"></script>
-	<script src="resizable_methods.js"></script>
-	<script src="resizable_options.js"></script>
-	<script src="resizable_test_helpers.js"></script>
-
-	<script src="../swarminject.js"></script>
-
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core resizable"></script>
+	<script src="../../lib/bootstrap.js" data-widget="resizable"></script>
 	<style>
 	#container {
 		width: 300px;
@@ -69,6 +46,7 @@
 
 <div id="container">
 	<div id="resizable1">I'm a resizable.</div>
+	<div id="resizer1" class="ui-resizable-handle ui-resizable-s"></div>
 </div>
 
 <div id="container2">

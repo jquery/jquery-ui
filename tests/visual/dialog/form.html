@@ -23,11 +23,11 @@
 			modal: true
 		});
 
-		$( "#open-form" ).click(function() {
+		$( "#open-form" ).on( "click", function() {
 			$( "#form-dialog" ).dialog( "open" );
 		});
 
-		$( "#open-prompt" ).click(function() {
+		$( "#open-prompt" ).on( "click", function() {
 			$( "#prompt-dialog" ).dialog( "open" );
 		});
 	});

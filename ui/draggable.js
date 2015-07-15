@@ -12,6 +12,7 @@
 //>>description: Enables dragging functionality for any element.
 //>>docs: http://api.jqueryui.com/draggable/
 //>>demos: http://jqueryui.com/draggable/
+//>>css.structure: ../themes/base/draggable.css
 
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -70,10 +71,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this._setPositionRelative();
 		}
 		if (this.options.addClasses){
-			this.element.addClass("ui-draggable");
+			this._addClass( "ui-draggable" );
 		}
 		if (this.options.disabled){
-			this.element.addClass("ui-draggable-disabled");
+			this._addClass( "ui-draggable-disabled" );
 		}
 		this._setHandleClassName();
 
@@ -93,7 +94,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 			this.destroyOnClear = true;
 			return;
 		}
-		this.element.removeClass( "ui-draggable ui-draggable-dragging ui-draggable-disabled" );
 		this._removeHandleClassName();
 		this._mouseDestroy();
 	},
@@ -141,25 +141,14 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_blurActiveElement: function( event ) {
-		var document = this.document[ 0 ];
 
 		// Only need to blur if the event occurred on the draggable itself, see #10527
 		if ( !this.handleElement.is( event.target ) ) {
 			return;
 		}
 
-		// support: IE9
-		// IE9 throws an "Unspecified error" accessing document.activeElement from an <iframe>
-		try {
-
-			// Support: IE9, IE10
-			// If the <body> is blurred, IE will switch windows, see #9520
-			if ( document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body" ) {
-
-				// Blur any element that currently has focus, see #4261
-				$( document.activeElement ).blur();
-			}
-		} catch ( error ) {}
+		// Blur any element that currently has focus, see #4261
+		$.ui.safeBlur( $.ui.safeActiveElement( this.document[ 0 ] ) );
 	},
 
 	_mouseStart: function(event) {
@@ -169,7 +158,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
 
-		this.helper.addClass("ui-draggable-dragging");
+		this._addClass( this.helper, "ui-draggable-dragging" );
 
 		//Cache the helper size
 		this._cacheHelperProportions();
@@ -223,10 +212,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if ($.ui.ddmanager && !o.dropBehaviour) {
 			$.ui.ddmanager.prepareOffsets(this, event);
 		}
-
-		// Reset helper's right/bottom css if they're set and set explicit width/height instead
-		// as this prevents resizing of elements with right/bottom set (see #7772)
-		this._normalizeRightBottom();
 
 		this._mouseDrag(event, true); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 
@@ -324,7 +309,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		// Only need to focus if the event occurred on the draggable itself, see #10527
 		if ( this.handleElement.is( event.target ) ) {
 			// The interaction is over; whether or not the click resulted in a drag, focus the element
-			this.element.focus();
+			this.element.trigger( "focus" );
 		}
 
 		return $.ui.mouse.prototype._mouseUp.call(this, event);
@@ -351,11 +336,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_setHandleClassName: function() {
 		this.handleElement = this.options.handle ?
 			this.element.find( this.options.handle ) : this.element;
-		this.handleElement.addClass( "ui-draggable-handle" );
+		this._addClass( this.handleElement, "ui-draggable-handle" );
 	},
 
 	_removeHandleClassName: function() {
-		this.handleElement.removeClass( "ui-draggable-handle" );
+		this._removeClass( this.handleElement, "ui-draggable-handle" );
 	},
 
 	_createHelper: function(event) {
@@ -659,7 +644,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_clear: function() {
-		this.helper.removeClass("ui-draggable-dragging");
+		this._removeClass( this.helper, "ui-draggable-dragging" );
 		if (this.helper[0] !== this.element[0] && !this.cancelHelperRemoval) {
 			this.helper.remove();
 		}
@@ -667,17 +652,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.cancelHelperRemoval = false;
 		if ( this.destroyOnClear ) {
 			this.destroy();
-		}
-	},
-
-	_normalizeRightBottom: function() {
-		if ( this.options.axis !== "y" && this.helper.css( "right" ) !== "auto" ) {
-			this.helper.width( this.helper.width() );
-			this.helper.css( "right", "auto" );
-		}
-		if ( this.options.axis !== "x" && this.helper.css( "bottom" ) !== "auto" ) {
-			this.helper.height( this.helper.height() );
-			this.helper.css( "bottom", "auto" );
 		}
 	},
 

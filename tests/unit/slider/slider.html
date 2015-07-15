@@ -4,30 +4,19 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Slider Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-	<script>
-	TestHelpers.loadResources({
-		css: [ "core", "slider" ],
-		js: [
-			"ui/core.js",
-			"ui/widget.js",
-			"ui/mouse.js",
-			"ui/slider.js"
-		]
-	});
-	</script>
-
-	<script src="slider_common.js"></script>
-	<script src="slider_core.js"></script>
-	<script src="slider_events.js"></script>
-	<script src="slider_methods.js"></script>
-	<script src="slider_options.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core slider"></script>
+	<script src="../../lib/bootstrap.js" data-widget="slider"></script>
+	<style>
+	#slider2.ui-slider-horizontal {
+		height: 12px;
+		width: 500px;
+	}
+	#slider2.ui-slider-vertical {
+		width: 12px;
+		height: 500px;
+	}
+	</style>
 </head>
 <body>
 
@@ -35,6 +24,7 @@
 <div id="qunit-fixture">
 
 <div id="slider1"></div>
+<div id="slider2"></div>
 <div id="slider3" style="position: relative; margin: 40px; width: 217px; height: 28px;">
 	<div class="ui-slider-handle" style="position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px;"></div>
 </div>

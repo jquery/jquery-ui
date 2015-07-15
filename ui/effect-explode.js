@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/explode-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "explode", "hide", function( options, done ) {
 
@@ -54,13 +54,13 @@ return $.effects.define( "explode", "hide", function( options, done ) {
 	}
 
 	// clone the element for each row and cell.
-	for ( i = 0; i < rows ; i++ ) { // ===>
+	for ( i = 0; i < rows; i++ ) { // ===>
 		top = offset.top + i * height;
-		my = i - ( rows - 1 ) / 2 ;
+		my = i - ( rows - 1 ) / 2;
 
-		for ( j = 0; j < cells ; j++ ) { // |||
+		for ( j = 0; j < cells; j++ ) { // |||
 			left = offset.left + j * width;
-			mx = j - ( cells - 1 ) / 2 ;
+			mx = j - ( cells - 1 ) / 2;
 
 			// Create a clone of the now hidden main element that will be absolute positioned
 			// within a wrapper div off the -left and -top equal to size of our pieces
@@ -68,40 +68,41 @@ return $.effects.define( "explode", "hide", function( options, done ) {
 				.clone()
 				.appendTo( "body" )
 				.wrap( "<div></div>" )
-				.css({
+				.css( {
 					position: "absolute",
 					visibility: "visible",
 					left: -j * width,
 					top: -i * height
-				})
+				} )
 
-			// select the wrapper - make it overflow: hidden and absolute positioned based on
-			// where the original was located +left and +top equal to the size of pieces
+				// select the wrapper - make it overflow: hidden and absolute positioned based on
+				// where the original was located +left and +top equal to the size of pieces
 				.parent()
-				.addClass( "ui-effects-explode" )
-				.css({
-					position: "absolute",
-					overflow: "hidden",
-					width: width,
-					height: height,
-					left: left + ( show ? mx * width : 0 ),
-					top: top + ( show ? my * height : 0 ),
-					opacity: show ? 0 : 1
-				}).animate({
-					left: left + ( show ? 0 : mx * width ),
-					top: top + ( show ? 0 : my * height ),
-					opacity: show ? 1 : 0
-				}, options.duration || 500, options.easing, childComplete );
+					.addClass( "ui-effects-explode" )
+					.css( {
+						position: "absolute",
+						overflow: "hidden",
+						width: width,
+						height: height,
+						left: left + ( show ? mx * width : 0 ),
+						top: top + ( show ? my * height : 0 ),
+						opacity: show ? 0 : 1
+					} )
+					.animate( {
+						left: left + ( show ? 0 : mx * width ),
+						top: top + ( show ? 0 : my * height ),
+						opacity: show ? 1 : 0
+					}, options.duration || 500, options.easing, childComplete );
 		}
 	}
 
 	function animComplete() {
-		element.css({
+		element.css( {
 			visibility: "visible"
-		});
+		} );
 		$( pieces ).remove();
 		done();
 	}
-});
+} );
 
-}));
+} ) );

@@ -1,6 +1,20 @@
 /**
  * CLDR locale data
  */
+( function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [
+			"globalize"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( Globalize );
+	}
+}( function( Globalize ) {
+
 Globalize.load({
 	"main": {
 		"en": {
@@ -3117,3 +3131,7 @@ $.each( regions, function( name, value ) {
 		datepicker : value
 	});
 });
+
+return Globalize;
+
+} ) );

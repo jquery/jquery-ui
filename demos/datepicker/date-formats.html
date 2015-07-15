@@ -20,7 +20,7 @@
 		var value,
 			datepicker = $( "#datepicker" ).datepicker();
 
-		$( "#format" ).change( function() {
+		$( "#format" ).on( "change", function() {
 			value = $( this ).val();
 
 			if ( value === "iso" ) {

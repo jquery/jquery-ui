@@ -22,6 +22,8 @@
 			.selectmenu()
 			.selectmenu( "menuWidget" )
 				.addClass( "overflow" );
+
+		$( "#salutation" ).selectmenu();
 	});
 	</script>
 	<style>
@@ -31,9 +33,6 @@
 		label {
 			display: block;
 			margin: 30px 0 0 0;
-		}
-		select {
-			width: 200px;
 		}
 		.overflow {
 			height: 200px;
@@ -89,6 +88,16 @@
 			<option>17</option>
 			<option>18</option>
 			<option>19</option>
+		</select>
+
+		<label for="salutation">Select a title</label>
+		<select name="salutation" id="salutation">
+			<option disabled selected>Please pick one</option>
+			<option>Mr.</option>
+			<option>Mrs.</option>
+			<option>Dr.</option>
+			<option>Prof.</option>
+			<option>Other</option>
 		</select>
 	</fieldset>
 

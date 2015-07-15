@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/transfer-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,12 +26,12 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 if ( $.uiBackCompat !== false ) {
 	return $.effects.define( "transfer", function( options, done ) {
 		$( this ).transfer( options, done );
-	});
+	} );
 }
 
-}));
+} ) );

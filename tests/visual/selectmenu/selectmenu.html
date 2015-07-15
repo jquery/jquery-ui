@@ -34,34 +34,34 @@
 		});
 		eventsSelectmenu.show();
 
-		$("#destroy").click( function() {
+		$("#destroy").on( "click", function() {
 			eventsSelectmenu.selectmenu("destroy");
 			return false;
 		});
 
-		$("#refresh_add").click( function() {
+		$("#refresh_add").on( "click", function() {
 			eventsSelectmenu.append('<option value="fastsound">Speed of light</option>');
 			eventsSelectmenu.selectmenu("refresh");
 			return false;
 		});
 
-		$("#refresh_selected").click( function() {
+		$("#refresh_selected").on( "click", function() {
 			eventsSelectmenu[0].selectedIndex = 0;
 			eventsSelectmenu.selectmenu("refresh");
 			return false;
 		});
 
-		$("#refresh").click( function() {
+		$("#refresh").on( "click", function() {
 			eventsSelectmenu.selectmenu("refresh");
 			return false;
 		});
 
-		$("#open").click( function() {
+		$("#open").on( "click", function() {
 			eventsSelectmenu.selectmenu("open");
 			return false;
 		});
 
-		$("#close").click( function() {
+		$("#close").on( "click", function() {
 			eventsSelectmenu.selectmenu("close");
 			return false;
 		});
@@ -70,7 +70,7 @@
 		$('#disabled1, #disabled2, #disabled3').selectmenu();
 		var disabled4 = $('#disabled4').selectmenu();
 
-		$("#disable_select").bind("click", function() {
+		$("#disable_select").on("click", function() {
 			if (disable_select) {
 				disable_select = false;
 				disabled4.selectmenu("disable");
@@ -82,7 +82,7 @@
 			return false;
 		});
 
-		$("#disable_option").bind("click", function() {
+		$("#disable_option").on("click", function() {
 			if (disable_option) {
 				disable_option = false;
 				disabled4.find("option:eq(0)").attr("disabled", "disabled");
@@ -94,7 +94,7 @@
 			return false;
 		});
 
-		$("#disable_optgroup").bind("click", function() {
+		$("#disable_optgroup").on("click", function() {
 			if (disable_optgroup) {
 				disable_optgroup = false;
 				disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");

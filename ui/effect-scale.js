@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/scale-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect",
 			"./effect-size"
@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "scale", function( options, done ) {
 
@@ -50,6 +50,6 @@ return $.effects.define( "scale", function( options, done ) {
 	}
 
 	$.effects.effect.size.call( this, newOptions, done );
-});
+} );
 
-}));
+} ) );

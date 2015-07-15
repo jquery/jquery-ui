@@ -61,15 +61,15 @@
 				width: 600
 			});
 
-		$( "#open-dialog" ).click(function() {
+		$( "#open-dialog" ).on( "click", function() {
 			dialog.dialog( "open" );
 		});
 
-		$( "#open-datepicker" ).click(function() {
+		$( "#open-datepicker" ).on( "click", function() {
 			datepickerDialog.dialog( "open" );
 		});
 
-		$( "#open-autocomplete" ).click(function() {
+		$( "#open-autocomplete" ).on( "click", function() {
 			autocompleteDialog.dialog( "open" );
 		});
 
@@ -85,7 +85,7 @@
 			]
 		});
 
-		$( "#destroy-dialog" ).click(function() {
+		$( "#destroy-dialog" ).on( "click", function() {
 			dialog.dialog( "destroy" ).show();
 			$( this ).remove();
 		});

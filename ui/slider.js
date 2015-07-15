@@ -12,6 +12,9 @@
 //>>description: Displays a flexible slider with ranges and accessibility via keyboard.
 //>>docs: http://api.jqueryui.com/slider/
 //>>demos: http://jqueryui.com/slider/
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/slider.css
+//>>css.theme: ../themes/base/theme.css
 
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -36,6 +39,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 	options: {
 		animate: false,
+		classes: {
+			"ui-slider": "ui-corner-all",
+			"ui-slider-handle": "ui-corner-all",
+
+			// Note: ui-widget-header isn't the most fittingly semantic framework class for this
+			// element, but worked best visually with a variety of themes
+			"ui-slider-range": "ui-corner-all ui-widget-header"
+		},
 		distance: 0,
 		max: 100,
 		min: 0,
@@ -65,12 +76,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseInit();
 		this._calculateNewMax();
 
-		this.element
-			.addClass( "ui-slider" +
-				" ui-slider-" + this.orientation +
-				" ui-widget" +
-				" ui-widget-content" +
-				" ui-corner-all");
+		this._addClass( "ui-slider ui-slider-" + this.orientation,
+			"ui-widget ui-widget-content" );
 
 		this._refresh();
 		this._setOption( "disabled", this.options.disabled );
@@ -88,8 +95,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	_createHandles: function() {
 		var i, handleCount,
 			options = this.options,
-			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
-			handle = "<span class='ui-slider-handle ui-state-default ui-corner-all' tabindex='0'></span>",
+			existingHandles = this.element.find( ".ui-slider-handle" ),
+			handle = "<span tabindex='0'></span>",
 			handles = [];
 
 		handleCount = ( options.values && options.values.length ) || 1;
@@ -105,6 +112,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this.handles = existingHandles.add( $( handles.join( "" ) ).appendTo( this.element ) );
 
+		this._addClass( this.handles, "ui-slider-handle", "ui-state-default" );
+
 		this.handle = this.handles.eq( 0 );
 
 		this.handles.each(function( i ) {
@@ -113,8 +122,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_createRange: function() {
-		var options = this.options,
-			classes = "";
+		var options = this.options;
 
 		if ( options.range ) {
 			if ( options.range === true ) {
@@ -128,24 +136,22 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			if ( !this.range || !this.range.length ) {
-				this.range = $( "<div></div>" )
+				this.range = $( "<div>" )
 					.appendTo( this.element );
 
-				classes = "ui-slider-range" +
-				// note: this isn't the most fittingly semantic framework class for this element,
-				// but worked best visually with a variety of themes
-				" ui-widget-header ui-corner-all";
+				this._addClass( this.range, "ui-slider-range" );
 			} else {
-				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
-					// Handle range switching from true to min/max
-					.css({
-						"left": "",
-						"bottom": ""
-					});
-			}
+				this._removeClass( this.range, "ui-slider-range-min ui-slider-range-max" );
 
-			this.range.addClass( classes +
-				( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
+				// Handle range switching from true to min/max
+				this.range.css({
+					"left": "",
+					"bottom": ""
+				});
+			}
+			if ( options.range === "min" || options.range === "max" ) {
+				this._addClass( this.range, "ui-slider-range-" + options.range );
+			}
 		} else {
 			if ( this.range ) {
 				this.range.remove();
@@ -166,14 +172,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		if ( this.range ) {
 			this.range.remove();
 		}
-
-		this.element
-			.removeClass( "ui-slider" +
-				" ui-slider-horizontal" +
-				" ui-slider-vertical" +
-				" ui-widget" +
-				" ui-widget-content" +
-				" ui-corner-all" );
 
 		this._mouseDestroy();
 	},
@@ -215,9 +213,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		this._handleIndex = index;
 
-		closestHandle
-			.addClass( "ui-state-active" )
-			.focus();
+		this._addClass( closestHandle, null, "ui-state-active" );
+		closestHandle.trigger( "focus" );
 
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
@@ -251,7 +248,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_mouseStop: function( event ) {
-		this.handles.removeClass( "ui-state-active" );
+		this._removeClass( this.handles, null, "ui-state-active" );
 		this._mouseSliding = false;
 
 		this._stop( event, this._handleIndex );
@@ -300,88 +297,72 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this._trimAlignValue( valueMouse );
 	},
 
-	_start: function( event, index ) {
+	_uiHash: function( index, value, values ) {
 		var uiHash = {
 			handle: this.handles[ index ],
-			value: this.value()
+			handleIndex: index,
+			value: value !== undefined ? value : this.value()
 		};
-		if ( this.options.values && this.options.values.length ) {
-			uiHash.value = this.values( index );
-			uiHash.values = this.values();
+
+		if ( this._hasMultipleValues() ) {
+			uiHash.value = value !== undefined ? value : this.values( index );
+			uiHash.values = values || this.values();
 		}
-		return this._trigger( "start", event, uiHash );
+
+		return uiHash;
+	},
+
+	_hasMultipleValues: function() {
+		return this.options.values && this.options.values.length;
+	},
+
+	_start: function( event, index ) {
+		return this._trigger( "start", event, this._uiHash( index ) );
 	},
 
 	_slide: function( event, index, newVal ) {
-		var otherVal,
-			newValues,
-			allowed;
+		var allowed, otherVal,
+			currentValue = this.value(),
+			newValues = this.values();
 
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			otherVal = this.values( index ? 0 : 1 );
+			currentValue = this.values( index );
 
-			if ( ( this.options.values.length === 2 && this.options.range === true ) &&
-					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
-				) {
-				newVal = otherVal;
+			if ( this.options.values.length === 2 && this.options.range === true ) {
+				newVal =  index === 0 ? Math.min( otherVal, newVal ) : Math.max( otherVal, newVal );
 			}
 
-			if ( newVal !== this.values( index ) ) {
-				newValues = this.values();
-				newValues[ index ] = newVal;
-				// A slide can be canceled by returning false from the slide callback
-				allowed = this._trigger( "slide", event, {
-					handle: this.handles[ index ],
-					value: newVal,
-					values: newValues
-				} );
-				otherVal = this.values( index ? 0 : 1 );
-				if ( allowed !== false ) {
-					this.values( index, newVal );
-				}
-			}
+			newValues[ index ] = newVal;
+		}
+
+		if ( newVal === currentValue ) {
+			return;
+		}
+
+		allowed = this._trigger( "slide", event, this._uiHash( index, newVal, newValues ) );
+
+		// A slide can be canceled by returning false from the slide callback
+		if ( allowed === false ) {
+			return;
+		}
+
+		if ( this._hasMultipleValues() ) {
+			this.values( index, newVal );
 		} else {
-			if ( newVal !== this.value() ) {
-				// A slide can be canceled by returning false from the slide callback
-				allowed = this._trigger( "slide", event, {
-					handle: this.handles[ index ],
-					value: newVal
-				} );
-				if ( allowed !== false ) {
-					this.value( newVal );
-				}
-			}
+			this.value( newVal );
 		}
 	},
 
 	_stop: function( event, index ) {
-		var uiHash = {
-			handle: this.handles[ index ],
-			value: this.value()
-		};
-		if ( this.options.values && this.options.values.length ) {
-			uiHash.value = this.values( index );
-			uiHash.values = this.values();
-		}
-
-		this._trigger( "stop", event, uiHash );
+		this._trigger( "stop", event, this._uiHash( index ) );
 	},
 
 	_change: function( event, index ) {
 		if ( !this._keySliding && !this._mouseSliding ) {
-			var uiHash = {
-				handle: this.handles[ index ],
-				value: this.value()
-			};
-			if ( this.options.values && this.options.values.length ) {
-				uiHash.value = this.values( index );
-				uiHash.values = this.values();
-			}
-
 			//store the last changed value index for reference when handles overlap
 			this._lastChangedValue = index;
-
-			this._trigger( "change", event, uiHash );
+			this._trigger( "change", event, this._uiHash( index ) );
 		}
 	},
 
@@ -418,7 +399,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				}
 				this._refreshValue();
 			} else {
-				if ( this.options.values && this.options.values.length ) {
+				if ( this._hasMultipleValues() ) {
 					return this._values( index );
 				} else {
 					return this.value();
@@ -448,7 +429,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 
 		if ( key === "disabled" ) {
-			this.element.toggleClass( "ui-state-disabled", !!value );
+			this._toggleClass( null, "ui-state-disabled", !!value );
 		}
 
 		this._super( key, value );
@@ -456,10 +437,12 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		switch ( key ) {
 			case "orientation":
 				this._detectOrientation();
-				this.element
-					.removeClass( "ui-slider-horizontal ui-slider-vertical" )
-					.addClass( "ui-slider-" + this.orientation );
+				this._removeClass( "ui-slider-horizontal ui-slider-vertical" )
+					._addClass( "ui-slider-" + this.orientation );
 				this._refreshValue();
+				if ( this.options.range ) {
+					this._refreshRange( value );
+				}
 
 				// Reset positioning from previous orientation
 				this.handles.css( value === "horizontal" ? "bottom" : "left", "" );
@@ -473,7 +456,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			case "values":
 				this._animateOff = true;
 				this._refreshValue();
-				for ( i = 0; i < valsLength; i += 1 ) {
+
+				// Start from the last handle to prevent unreachable handles (#9046)
+				for ( i = valsLength - 1; i >= 0; i-- ) {
 					this._change( null, i );
 				}
 				this._animateOff = false;
@@ -516,7 +501,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			val = this._trimAlignValue( val );
 
 			return val;
-		} else if ( this.options.values && this.options.values.length ) {
+		} else if ( this._hasMultipleValues() ) {
 			// .slice() creates a copy of the array
 			// this copy gets trimmed by min and max and then returned
 			vals = this.options.values.slice();
@@ -555,7 +540,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var max = this.options.max,
 			min = this._valueMin(),
 			step = this.options.step,
-			aboveMin = Math.floor( ( max - min ) / step ) * step;
+			aboveMin = Math.floor( ( +( max - min ).toFixed( this._precision() ) ) / step ) * step;
 		max = aboveMin + min;
 		this.max = parseFloat( max.toFixed( this._precision() ) );
 	},
@@ -582,6 +567,15 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this.max;
 	},
 
+	_refreshRange: function ( orientation ) {
+		if ( orientation === "vertical" ) {
+			this.range.css( { "width": "", "left": "" } );
+		}
+		if ( orientation === "horizontal" ) {
+			this.range.css( { "height": "", "bottom": "" } );
+		}
+	},
+
 	_refreshValue: function() {
 		var lastValPercent, valPercent, value, valueMin, valueMax,
 			oRange = this.options.range,
@@ -590,7 +584,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			animate = ( !this._animateOff ) ? o.animate : false,
 			_set = {};
 
-		if ( this.options.values && this.options.values.length ) {
+		if ( this._hasMultipleValues() ) {
 			this.handles.each(function( i ) {
 				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
@@ -628,13 +622,13 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: valPercent + "%" }, o.animate );
 			}
 			if ( oRange === "max" && this.orientation === "horizontal" ) {
-				this.range[ animate ? "animate" : "css" ]( { width: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
+				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: ( 100 - valPercent ) + "%" }, o.animate );
 			}
 			if ( oRange === "min" && this.orientation === "vertical" ) {
 				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { height: valPercent + "%" }, o.animate );
 			}
 			if ( oRange === "max" && this.orientation === "vertical" ) {
-				this.range[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
+				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, o.animate );
 			}
 		}
 	},
@@ -656,7 +650,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 					event.preventDefault();
 					if ( !this._keySliding ) {
 						this._keySliding = true;
-						$( event.target ).addClass( "ui-state-active" );
+						this._addClass( $( event.target ), null, "ui-state-active" );
 						allowed = this._start( event, index );
 						if ( allowed === false ) {
 							return;
@@ -666,7 +660,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			}
 
 			step = this.options.step;
-			if ( this.options.values && this.options.values.length ) {
+			if ( this._hasMultipleValues() ) {
 				curVal = newVal = this.values( index );
 			} else {
 				curVal = newVal = this.value();
@@ -713,7 +707,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this._keySliding = false;
 				this._stop( event, index );
 				this._change( event, index );
-				$( event.target ).removeClass( "ui-state-active" );
+				this._removeClass( $( event.target ), null, "ui-state-active" );
 			}
 		}
 	}

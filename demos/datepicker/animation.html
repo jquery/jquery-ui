@@ -25,7 +25,7 @@
 	<script>
 	$(function() {
 		$( "#datepicker" ).datepicker();
-		$( "#anim" ).change(function() {
+		$( "#anim" ).on( "change", function() {
 			var value = $( this ).val(),
 				hideValue = $( this ).find( "option:selected" ).data( "hide" );
 			$( "#datepicker" )

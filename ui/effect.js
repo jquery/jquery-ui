@@ -991,7 +991,7 @@ if ( $.uiBackCompat !== false ) {
 
 			// Fixes #7595 - Elements lose focus when wrapped.
 			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
-				$( active ).focus();
+				$( active ).trigger( "focus" );
 			}
 
 			wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually lose the reference to the wrapped element
@@ -1032,7 +1032,7 @@ if ( $.uiBackCompat !== false ) {
 
 				// Fixes #7595 - Elements lose focus when wrapped.
 				if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
-					$( active ).focus();
+					$( active ).trigger( "focus" );
 				}
 			}
 
@@ -1505,7 +1505,9 @@ $.fn.extend({
 				})
 				.animate( animation, options.duration, options.easing, function() {
 					transfer.remove();
-					done();
+					if ( $.isFunction( done ) ) {
+						done();
+					}
 				});
 	}
 });

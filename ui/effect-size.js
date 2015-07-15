@@ -13,11 +13,11 @@
 //>>docs: http://api.jqueryui.com/size-effect/
 //>>demos: http://jqueryui.com/effect/
 
-(function( factory ) {
+( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+}( function( $ ) {
 
 return $.effects.define( "size", function( options, done ) {
 
@@ -109,8 +109,8 @@ return $.effects.define( "size", function( options, done ) {
 	// Animate the children if desired
 	if ( scale === "content" || scale === "both" ) {
 
-		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat( cProps );
-		hProps = hProps.concat([ "marginLeft", "marginRight" ]);
+		vProps = vProps.concat( [ "marginTop", "marginBottom" ] ).concat( cProps );
+		hProps = hProps.concat( [ "marginLeft", "marginRight" ] );
 
 		// Only animate children with width attributes specified
 		// TODO: is this right? should we include anything with css width specified as well
@@ -154,8 +154,8 @@ return $.effects.define( "size", function( options, done ) {
 				if ( restore ) {
 					$.effects.restoreStyle( child );
 				}
-			});
-		});
+			} );
+		} );
 	}
 
 	// Animate
@@ -183,8 +183,8 @@ return $.effects.define( "size", function( options, done ) {
 
 			done();
 		}
-	});
+	} );
 
-});
+} );
 
-}));
+} ) );

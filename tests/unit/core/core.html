@@ -4,21 +4,9 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Core Test Suite</title>
 
-	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit/qunit.css">
-	<script src="../../../external/qunit/qunit.js"></script>
-	<script src="../../../external/jquery-simulate/jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-	<script>
-	TestHelpers.loadResources({
-		js: [ "ui/core.js" ]
-	});
-	</script>
-
-	<script src="core.js"></script>
-	<script src="selector.js"></script>
-
-	<script src="../swarminject.js"></script>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js"></script>
+	<script src="../../lib/bootstrap.js" data-modules="core selector"></script>
 	<style>
 	.zindex {
 		z-index: 100;
@@ -120,6 +108,83 @@
 
 <div id="dimensions" style="float: left; height: 50px; width: 100px; margin: 1px 12px 11px 2px; border-style: solid; border-width: 3px 14px 13px 4px; padding: 5px 16px 15px 6px;"></div>
 
+<div id="labels-fragment">
+	<label for="test">1</label>
+	<div>
+		<div>
+			<form>
+				<label for="test">2</label>
+				<label>3
+					<input id="test">
+				</label>
+				<label for="test">4</label>
+			</form>
+			<label for="test">5</label>
+		</div>
+		<div>
+			<div>
+				<form>
+					<label for="test">6</label>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div>
+			<form>
+				<label for="test">7</label>
+				<label>
+				</label>
+				<label for="test">8</label>
+			</form>
+			<label for="test">9</label>
+		</div>
+		<div>
+			<div>
+				<form>
+					<input id="test-2">
+					<label for="test">10</label>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="weird-['x']-id"></div>
+</div>
+
+<!-- This is intentionally outside the test fixture. We don't want this
+markup to be removed and reinserted between tests, as it will remove saved
+refrences in the tests. -->
+<div id="form-test">
+	<input id="body:_implicit_form">
+	<input id="body:_explicit_form" form="form-1">
+	<form id="form-1">
+		<input id="form-1:_implicit_form">
+		<input id="form-1:_explicit_form" form="form-1">
+	</form>
+	<form id="form-2">
+		<input id="form-2:_implicit_form">
+		<input id="form-2:_explicit_form_other_form" form="form-1">
+	</form>
+</div>
+<div id="form-test-detached">
+	<input id="fragment:_implicit_form">
+
+	<!-- Support: Chrome > 33
+	When an input with a form attribute is inside a fragment, and not contained by any form,
+	the form property returns the proper form. However resetting the form does not reset the
+	input. The following input is commented out to stop the test from failing in this case.
+	<input id="fragment:_explicit_form" form="form-3">
+	-->
+	<form id="form-3">
+		<input id="form-3:_implicit_form">
+		<input id="form-3:_explicit_form" form="form-3">
+	</form>
+	<form id="form-4">
+		<input id="form-4:_implicit_form">
+		<input id="form-4:_explicit_form_other_form" form="form-3">
+	</form>
 </div>
 </body>
 </html>

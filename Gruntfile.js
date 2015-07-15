@@ -77,10 +77,30 @@ var
 			"dist/jquery-ui.min.js"
 		]
 	},
-	component = grunt.option( "component" ) || "**";
+	component = grunt.option( "component" ) || "**",
+
+	jscsBad = [
+		"ui/button.js",
+		"ui/datepicker.js",
+		"ui/draggable.js",
+		"ui/droppable.js",
+		"ui/effect.js",
+		"ui/mouse.js",
+		"ui/resizable.js",
+		"ui/selectable.js",
+		"ui/slider.js",
+		"ui/sortable.js"
+	],
+
+	htmllintBad = [
+		"demos/tabs/ajax/content*.html",
+		"demos/tooltip/ajax/content*.html",
+		"tests/unit/core/core.html",
+		"tests/unit/tabs/data/test.html"
+	];
 
 function mapMinFile( file ) {
-	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
+	return "dist/" + file.replace( /ui\//, "minified/" );
 }
 
 function expandFiles( files ) {
@@ -159,25 +179,54 @@ grunt.initConfig({
 			dest: "dist/jquery-ui.css"
 		}
 	},
+
+	// Remove the requireSpacesInsideParentheses override once everything is fixed
 	jscs: {
-		// datepicker and sortable are getting rewritten, ignore until that's done
-		ui: [ "ui/*.js", "!ui/datepicker.js", "!ui/sortable.js" ],
-		// TODO enable this once we have a tool that can auto format files
-		// tests: "tests/unit/**/*.js",
-		grunt: [ "Gruntfile.js", "build/tasks/*.js" ]
+		"ui-good": [ "ui/*.js" ].concat( jscsBad.map( function( file ) {
+			return "!" + file;
+		} ) ),
+		"ui-bad": {
+			options: {
+				requireSpacesInsideParentheses: null
+			},
+			src: jscsBad
+		},
+		tests: {
+			options: {
+				requireSpacesInsideParentheses: null
+			},
+			src: "tests/unit/**/*.js"
+		},
+		grunt: {
+			options: {
+				requireSpacesInsideParentheses: null
+			},
+			src: [ "Gruntfile.js", "build/tasks/*.js" ]
+		}
 	},
 	uglify: minify,
 	htmllint: {
-		// ignore files that contain invalid html, used only for ajax content testing
-		all: grunt.file.expand( [ "demos/**/*.html", "tests/**/*.html" ] ).filter(function( file ) {
-			return !/(?:ajax\/content\d\.html|tabs\/data\/test\.html|tests\/unit\/core\/core.*\.html)/.test( file );
-		})
+		good: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
+			return "!" + file;
+		} ) ),
+		bad: {
+			options: {
+				ignore: [
+					/Start tag seen without seeing a doctype first/,
+					/Element “head” is missing a required instance of child element “title”/,
+					/Element “object” is missing one or more of the following/,
+					/The “codebase” attribute on the “object” element is obsolete/
+				]
+			},
+			src: htmllintBad
+		}
 	},
 	qunit: {
 		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
 			return !( /(all|index|test)\.html$/ ).test( file );
 		}),
 		options: {
+			inject: false,
 			page: {
 				viewportSize: { width: 700, height: 500 }
 			}
@@ -191,7 +240,8 @@ grunt.initConfig({
 			"ui/*.js",
 			"Gruntfile.js",
 			"build/**/*.js",
-			"tests/unit/**/*.js"
+			"tests/unit/**/*.js",
+			"tests/lib/**/*.js"
 		]
 	},
 	csslint: {
@@ -228,7 +278,19 @@ grunt.initConfig({
 			files: {
 				"qunit/qunit.js": "qunit/qunit/qunit.js",
 				"qunit/qunit.css": "qunit/qunit/qunit.css",
-				"qunit/MIT-LICENSE.txt": "qunit/MIT-LICENSE.txt",
+				"qunit/LICENSE.txt": "qunit/LICENSE.txt",
+
+				"qunit-assert-classes/qunit-assert-classes.js": "qunit-assert-classes/qunit-assert-classes.js",
+				"qunit-assert-classes/LICENSE.txt": "qunit-assert-classes/LICENSE",
+
+				"qunit-assert-close/qunit-assert-close.js": "qunit-assert-close/qunit-assert-close.js",
+				"qunit-assert-close/MIT-LICENSE.txt": "qunit-assert-close/MIT-LICENSE.txt",
+
+				"qunit-composite/qunit-composite.js": "qunit-composite/qunit-composite.js",
+				"qunit-composite/qunit-composite.css": "qunit-composite/qunit-composite.css",
+				"qunit-composite/LICENSE.txt": "qunit-composite/LICENSE.txt",
+
+				"requirejs/require.js": "requirejs/require.js",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
@@ -239,7 +301,7 @@ grunt.initConfig({
 				"jshint/jshint.js": "jshint/dist/jshint.js",
 				"jshint/LICENSE": "jshint/LICENSE",
 
-				"jquery/jquery.js": "jquery-1.x/jquery.js",
+				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",
 
 				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
@@ -278,6 +340,18 @@ grunt.initConfig({
 				"jquery-1.10.2/jquery.js": "jquery-1.10.2/jquery.js",
 				"jquery-1.10.2/MIT-LICENSE.txt": "jquery-1.10.2/MIT-LICENSE.txt",
 
+				"jquery-1.11.0/jquery.js": "jquery-1.11.0/dist/jquery.js",
+				"jquery-1.11.0/MIT-LICENSE.txt": "jquery-1.11.0/MIT-LICENSE.txt",
+
+				"jquery-1.11.1/jquery.js": "jquery-1.11.1/dist/jquery.js",
+				"jquery-1.11.1/MIT-LICENSE.txt": "jquery-1.11.1/MIT-LICENSE.txt",
+
+				"jquery-1.11.2/jquery.js": "jquery-1.11.2/dist/jquery.js",
+				"jquery-1.11.2/MIT-LICENSE.txt": "jquery-1.11.2/MIT-LICENSE.txt",
+
+				"jquery-1.11.3/jquery.js": "jquery-1.11.3/dist/jquery.js",
+				"jquery-1.11.3/MIT-LICENSE.txt": "jquery-1.11.3/MIT-LICENSE.txt",
+
 				"jquery-2.0.0/jquery.js": "jquery-2.0.0/jquery.js",
 				"jquery-2.0.0/MIT-LICENSE.txt": "jquery-2.0.0/MIT-LICENSE.txt",
 
@@ -288,7 +362,19 @@ grunt.initConfig({
 				"jquery-2.0.2/MIT-LICENSE.txt": "jquery-2.0.2/MIT-LICENSE.txt",
 
 				"jquery-2.0.3/jquery.js": "jquery-2.0.3/jquery.js",
-				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt"
+				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt",
+
+				"jquery-2.1.0/jquery.js": "jquery-2.1.0/dist/jquery.js",
+				"jquery-2.1.0/MIT-LICENSE.txt": "jquery-2.1.0/MIT-LICENSE.txt",
+
+				"jquery-2.1.1/jquery.js": "jquery-2.1.1/dist/jquery.js",
+				"jquery-2.1.1/MIT-LICENSE.txt": "jquery-2.1.1/MIT-LICENSE.txt",
+
+				"jquery-2.1.2/jquery.js": "jquery-2.1.2/dist/jquery.js",
+				"jquery-2.1.2/MIT-LICENSE.txt": "jquery-2.1.2/MIT-LICENSE.txt",
+
+				"jquery-2.1.3/jquery.js": "jquery-2.1.3/dist/jquery.js",
+				"jquery-2.1.3/MIT-LICENSE.txt": "jquery-2.1.3/MIT-LICENSE.txt"
 			}
 		}
 	},

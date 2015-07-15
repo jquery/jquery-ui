@@ -19,6 +19,7 @@
 		// AMD. Register as an anonymous module.
 		define([
 			"jquery",
+			"globalize",
 			"./core",
 			"./widget",
 			"./calendar",
@@ -27,9 +28,9 @@
 	} else {
 
 		// Browser globals
-		factory( jQuery );
+		factory( jQuery, Globalize );
 	}
-}(function( $ ) {
+}(function( $, Globalize ) {
 
 var widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
@@ -205,7 +206,7 @@ var widget = $.widget( "ui.datepicker", {
 		}
 
 		if ( !element || !element[ 0 ] ) {
-			element = this.element.closest( ".ui-front" );
+			element = this.element.closest( ".ui-front, dialog" );
 		}
 
 		if ( !element.length ) {

@@ -23,10 +23,10 @@
 	 */
 	$.event.special.hoverintent = {
 		setup: function() {
-			$( this ).bind( "mouseover", jQuery.event.special.hoverintent.handler );
+			$( this ).on( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		teardown: function() {
-			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
+			$( this ).off( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		handler: function( event ) {
 			var currentX, currentY, timeout,
@@ -42,8 +42,8 @@
 
 			function clear() {
 				target
-					.unbind( "mousemove", track )
-					.unbind( "mouseout", clear );
+					.off( "mousemove", track )
+					.off( "mouseout", clear );
 				clearTimeout( timeout );
 			}
 
@@ -75,7 +75,7 @@
 			}
 
 			timeout = setTimeout( handler, 100 );
-			target.bind({
+			target.on({
 				mousemove: track,
 				mouseout: clear
 			});
