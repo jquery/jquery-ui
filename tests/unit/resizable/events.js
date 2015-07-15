@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/resizable"
+	"ui/widgets/resizable"
 ], function( $, testHelper ) {
 
 module("resizable: events");

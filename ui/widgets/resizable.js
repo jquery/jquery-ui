@@ -22,11 +22,11 @@
 		// AMD. Register as an anonymous module.
 		define([
 			"jquery",
-			"./disable-selection",
-			"./widgets/mouse",
-			"./plugin",
-			"./version",
-			"./widget"
+			"./mouse",
+			"../disable-selection",
+			"../plugin",
+			"../version",
+			"../widget"
 		], factory );
 	} else {
 
