@@ -23,7 +23,7 @@
 		define([
 			"jquery",
 			"./keycode",
-			"./mouse",
+			"./widgets/mouse",
 			"./version",
 			"./widget"
 		], factory );

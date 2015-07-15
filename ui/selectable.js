@@ -21,7 +21,7 @@
 		define([
 			"jquery",
 			"./version",
-			"./mouse",
+			"./widgets/mouse",
 			"./widget"
 		], factory );
 	} else {

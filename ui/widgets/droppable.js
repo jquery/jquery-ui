@@ -20,7 +20,7 @@
 		define([
 			"jquery",
 			"./draggable",
-			"../mouse",
+			"./mouse",
 			"../version",
 			"../widget"
 		], factory );

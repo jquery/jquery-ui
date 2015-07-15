@@ -24,7 +24,7 @@
 			"jquery",
 			"./button",
 			"./draggable",
-			"../mouse",
+			"./mouse",
 			"../resizable",
 			"../focusable",
 			"../keycode",
