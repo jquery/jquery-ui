@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/tooltip"
+	"ui/widgets/tooltip"
 ], function( $ ) {
 
 module( "tooltip: core" );
