@@ -26,7 +26,8 @@ var effectsAll = [
 ];
 var widgets = [
 	"accordion",
-	"autocomplete"
+	"autocomplete",
+	"button"
 ];
 
 function getPath( module ) {

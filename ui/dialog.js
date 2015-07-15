@@ -26,7 +26,7 @@
 			"./version",
 			"./keycode",
 			"./widget",
-			"./button",
+			"./widgets/button",
 			"./draggable",
 			"./focusable",
 			"./mouse",
