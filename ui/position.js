@@ -19,7 +19,7 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [ "jquery" ], factory );
+		define( [ "jquery", "./version" ], factory );
 	} else {
 
 		// Browser globals
@@ -27,9 +27,6 @@
 	}
 }( function( $ ) {
 ( function() {
-
-$.ui = $.ui || {};
-
 var cachedScrollbarWidth, supportsOffsetFractions,
 	max = Math.max,
 	abs = Math.abs,

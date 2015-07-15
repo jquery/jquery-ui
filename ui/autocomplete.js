@@ -25,6 +25,7 @@
 			"./core",
 			"./widget",
 			"./position",
+			"./version",
 			"./menu"
 		], factory );
 	} else {

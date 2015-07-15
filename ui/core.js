@@ -18,7 +18,9 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [ "jquery" ], factory );
+		define( [
+			"jquery",
+			"./version" ], factory );
 	} else {
 
 		// Browser globals
@@ -26,11 +28,7 @@
 	}
 }( function( $ ) {
 
-// $.ui might exist from components with no dependencies, e.g., $.ui.position
-$.ui = $.ui || {};
-
 $.extend( $.ui, {
-	version: "@VERSION",
 
 	keyCode: {
 		BACKSPACE: 8,
