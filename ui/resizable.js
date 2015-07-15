@@ -23,7 +23,7 @@
 		define([
 			"jquery",
 			"./disable-selection",
-			"./mouse",
+			"./widgets/mouse",
 			"./plugin",
 			"./version",
 			"./widget"

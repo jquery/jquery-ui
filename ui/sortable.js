@@ -24,7 +24,7 @@
 			"./data",
 			"./version",
 			"./ie",
-			"./mouse",
+			"./widgets/mouse",
 			"./scroll-parent",
 			"./widget"
 		], factory );
