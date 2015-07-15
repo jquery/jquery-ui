@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/datepicker",
+	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-fr",
 	"ui/i18n/datepicker-he",
 	"ui/i18n/datepicker-zh-CN"
