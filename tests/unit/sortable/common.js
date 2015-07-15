@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/sortable"
+	"ui/widgets/sortable"
 ], function( common ) {
 
 common.testWidget( "sortable", {

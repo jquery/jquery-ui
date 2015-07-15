@@ -3,7 +3,7 @@ define( [
 	"./helper",
 	"ui/widgets/draggable",
 	"ui/widgets/droppable",
-	"ui/sortable"
+	"ui/widgets/sortable"
 ], function( $, testHelper ) {
 
 // TODO: This doesn't actually test whether append happened, possibly remove
