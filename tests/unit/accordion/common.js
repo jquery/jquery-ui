@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/accordion"
+	"ui/widgets/accordion"
 ], function( common ) {
 
 common.testWidget( "accordion", {

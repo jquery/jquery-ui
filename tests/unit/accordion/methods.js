@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/accordion"
+	"ui/widgets/accordion"
 ], function( $, testHelper ) {
 
 var equalHeight = testHelper.equalHeight,
