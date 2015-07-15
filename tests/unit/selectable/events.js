@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/selectable"
+	"ui/widgets/selectable"
 ], function( $, testHelpers ) {
 
 module("selectable: events");

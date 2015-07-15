@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/selectable"
+	"ui/widgets/selectable"
 ], function( common ) {
 
 common.testWidget( "selectable", {
