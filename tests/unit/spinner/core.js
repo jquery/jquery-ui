@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/spinner"
+	"ui/widgets/spinner"
 ], function( $, testHelper ) {
 
 var simulateKeyDownUp = testHelper.simulateKeyDownUp;

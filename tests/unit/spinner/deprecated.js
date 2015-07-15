@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/spinner"
+	"ui/widgets/spinner"
 ], function( $ ) {
 
 var originalSpinner = $.ui.spinner.prototype;
