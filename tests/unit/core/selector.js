@@ -1,6 +1,7 @@
 define( [
 	"jquery",
-	"ui/core"
+	"ui/core",
+	"ui/data"
 ], function( $ ) {
 
 module( "core - selectors" );

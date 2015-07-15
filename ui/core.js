@@ -20,6 +20,7 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
+			"./data",
 			"./version" ], factory );
 	} else {
 
@@ -207,17 +208,6 @@ function visible( element ) {
 }
 
 $.extend( $.expr[ ":" ], {
-	data: $.expr.createPseudo ?
-		$.expr.createPseudo( function( dataName ) {
-			return function( elem ) {
-				return !!$.data( elem, dataName );
-			};
-		} ) :
-		// support: jQuery <1.8
-		function( elem, i, match ) {
-			return !!$.data( elem, match[ 3 ] );
-		},
-
 	focusable: function( element ) {
 		return focusable( element, $.attr( element, "tabindex" ) != null );
 	},
