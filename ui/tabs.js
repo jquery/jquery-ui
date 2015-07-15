@@ -24,6 +24,7 @@
 			"jquery",
 			"./core",
 			"./escape-selector",
+			"./keycode",
 			"./version",
 			"./widget"
 		], factory );

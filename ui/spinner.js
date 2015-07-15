@@ -24,6 +24,7 @@
 			"jquery",
 			"./core",
 			"./version",
+			"./keycode",
 			"./widget",
 			"./button"
 		], factory );

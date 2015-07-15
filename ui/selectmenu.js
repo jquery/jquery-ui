@@ -25,10 +25,10 @@
 			"./core",
 			"./version",
 			"./escape-selector",
-			"./widget",
+			"./menu",
 			"./position",
-			"./menu"
-		], factory );
+			"./version",
+			"./widget" ], factory );
 	} else {
 
 		// Browser globals
