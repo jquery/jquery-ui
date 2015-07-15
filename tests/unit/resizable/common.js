@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/resizable"
+	"ui/widgets/resizable"
 ], function( common ) {
 
 common.testWidget( "resizable", {

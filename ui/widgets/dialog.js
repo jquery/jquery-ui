@@ -25,7 +25,7 @@
 			"./button",
 			"./draggable",
 			"./mouse",
-			"../resizable",
+			"./resizable",
 			"../focusable",
 			"../keycode",
 			"../position",

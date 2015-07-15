@@ -3,7 +3,7 @@ define( [
 	"./helper",
 	"ui/widgets/draggable",
 	"ui/widgets/droppable",
-	"ui/resizable"
+	"ui/widgets/resizable"
 ], function( $, testHelper ) {
 
 module( "draggable: core" );
