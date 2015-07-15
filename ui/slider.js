@@ -24,6 +24,7 @@
 			"jquery",
 			"./core",
 			"./mouse",
+			"./version",
 			"./widget"
 		], factory );
 	} else {

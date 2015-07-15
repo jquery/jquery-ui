@@ -4,7 +4,8 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
-			"ui/core"
+			"ui/core",
+			"./version"
 		], factory );
 	} else {
 

@@ -28,7 +28,8 @@
 			"./draggable",
 			"./mouse",
 			"./position",
-			"./resizable"
+			"./resizable",
+			"./version"
 		], factory );
 	} else {
 
