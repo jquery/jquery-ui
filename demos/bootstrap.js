@@ -32,7 +32,8 @@ var widgets = [
 	"dialog",
 	"draggable",
 	"droppable",
-	"menu"
+	"menu",
+	"progressbar"
 ];
 
 function getPath( module ) {
