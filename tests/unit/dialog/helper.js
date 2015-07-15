@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/dialog"
+	"ui/widgets/dialog"
 ], function( $, helper ) {
 
 return $.extend( helper, {

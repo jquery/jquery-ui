@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/dialog"
+	"ui/widgets/dialog"
 ], function( $ ) {
 
 module("dialog: methods", {
