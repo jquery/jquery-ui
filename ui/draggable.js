@@ -24,6 +24,7 @@
 			"./data",
 			"./mouse",
 			"./plugin",
+			"./safe-active-element",
 			"./version",
 			"./widget"
 		], factory );
