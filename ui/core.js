@@ -21,7 +21,9 @@
 		define( [
 			"jquery",
 			"./data",
-			"./version" ], factory );
+			"./disable-selection",
+			"./version"
+		], factory );
 	} else {
 
 		// Browser globals
@@ -283,24 +285,6 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 
 // deprecated
 $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
-
-$.fn.extend( {
-	disableSelection: ( function() {
-		var eventType = "onselectstart" in document.createElement( "div" ) ?
-			"selectstart" :
-			"mousedown";
-
-		return function() {
-			return this.on( eventType + ".ui-disableSelection", function( event ) {
-				event.preventDefault();
-			} );
-		};
-	} )(),
-
-	enableSelection: function() {
-		return this.off( ".ui-disableSelection" );
-	}
-} );
 
 // $.ui.plugin is deprecated. Use $.widget() extensions instead.
 $.ui.plugin = {
