@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/progressbar"
+	"ui/widgets/progressbar"
 ], function( $ ) {
 
 module( "progressbar: options" );
