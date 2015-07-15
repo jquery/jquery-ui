@@ -38,7 +38,8 @@ var widgets = [
 	"resizable",
 	"selectable",
 	"selectmenu",
-	"slider"
+	"slider",
+	"sortable"
 ];
 
 function getPath( module ) {
