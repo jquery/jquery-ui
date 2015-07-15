@@ -27,7 +27,8 @@ var effectsAll = [
 var widgets = [
 	"accordion",
 	"autocomplete",
-	"button"
+	"button",
+	"datepicker"
 ];
 
 function getPath( module ) {

@@ -2,7 +2,7 @@ define( [
 	"jquery",
 	"lib/common",
 	"./helper",
-	"ui/datepicker",
+	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-he"
 ], function( $, common, testHelper ) {
 
