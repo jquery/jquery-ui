@@ -41,7 +41,8 @@ var widgets = [
 	"slider",
 	"sortable",
 	"spinner",
-	"tabs"
+	"tabs",
+	"tooltip"
 ];
 
 function getPath( module ) {

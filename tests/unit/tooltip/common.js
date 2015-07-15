@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/tooltip"
+	"ui/widgets/tooltip"
 ], function( common ) {
 
 common.testWidget( "tooltip", {
