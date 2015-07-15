@@ -22,9 +22,9 @@
 		// AMD. Register as an anonymous module.
 		define([
 			"jquery",
-			"./core",
 			"./data",
 			"./keycode",
+			"./labels",
 			"./version",
 			"./widget"
 		], factory );
