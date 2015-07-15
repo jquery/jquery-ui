@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/button"
+	"ui/widgets/button"
 ], function( $ ) {
 
 module("button: methods");

@@ -26,7 +26,7 @@
 			"./keycode",
 			"./safe-active-element",
 			"./widget",
-			"./button"
+			"./widgets/button"
 		], factory );
 	} else {
 
