@@ -23,10 +23,10 @@
 		define( [
 			"jquery",
 			"./core",
+			"./keycode",
+			"./position",
 			"./version",
-			"./widget",
-			"./position"
-		], factory );
+			"./widget" ], factory );
 	} else {
 
 		// Browser globals

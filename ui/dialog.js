@@ -23,6 +23,7 @@
 		define( [
 			"jquery",
 			"./core",
+			"./keycode",
 			"./widget",
 			"./button",
 			"./draggable",
