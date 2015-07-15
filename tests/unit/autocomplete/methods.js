@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/autocomplete"
+	"ui/widgets/autocomplete"
 ], function( $ ) {
 
 module( "autocomplete: methods" );

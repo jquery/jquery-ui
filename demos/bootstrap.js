@@ -25,7 +25,8 @@ var effectsAll = [
 	"effect-slide"
 ];
 var widgets = [
-	"accordion"
+	"accordion",
+	"autocomplete"
 ];
 
 function getPath( module ) {
