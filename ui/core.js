@@ -25,6 +25,7 @@
 			"./escape-selector",
 			"./focusable",
 			"./form",
+			"./ie",
 			"./version"
 		], factory );
 	} else {
@@ -237,9 +238,6 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 		);
 	};
 }
-
-// deprecated
-$.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 // $.ui.plugin is deprecated. Use $.widget() extensions instead.
 $.ui.plugin = {
