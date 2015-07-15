@@ -2,7 +2,8 @@ define( [
 	"jquery",
 	"lib/common",
 	"ui/core",
-	"ui/form"
+	"ui/form",
+	"ui/labels"
 ], function( $, common ) {
 
 module( "core - jQuery extensions" );

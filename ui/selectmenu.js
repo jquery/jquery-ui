@@ -26,9 +26,12 @@
 			"./version",
 			"./escape-selector",
 			"./menu",
+			"./keycode",
+			"./labels",
 			"./position",
 			"./version",
-			"./widget" ], factory );
+			"./widget"
+		], factory );
 	} else {
 
 		// Browser globals
