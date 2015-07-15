@@ -21,6 +21,7 @@
 		define([
 			"jquery",
 			"./core",
+			"./data",
 			"./mouse",
 			"./version",
 			"./widget"

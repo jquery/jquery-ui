@@ -23,6 +23,7 @@
 		define([
 			"jquery",
 			"./core",
+			"./data",
 			"./version",
 			"./widget"
 		], factory );
