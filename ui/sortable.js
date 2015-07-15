@@ -22,6 +22,7 @@
 			"jquery",
 			"./core",
 			"./data",
+			"./ie",
 			"./mouse",
 			"./version",
 			"./widget"
