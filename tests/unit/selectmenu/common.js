@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/selectmenu"
+	"ui/widgets/selectmenu"
 ], function( common ) {
 
 common.testWidget( "selectmenu", {

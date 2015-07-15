@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/selectmenu"
+	"ui/widgets/selectmenu"
 ], function( $ ) {
 
 module( "selectmenu: methods" );
