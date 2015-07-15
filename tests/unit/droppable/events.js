@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/droppable"
+	"ui/widgets/droppable"
 ], function( $ ) {
 
 module( "droppable: events" );

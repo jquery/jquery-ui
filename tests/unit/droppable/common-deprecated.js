@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/droppable"
+	"ui/widgets/droppable"
 ], function( common ) {
 
 common.testWidget( "droppable", {
