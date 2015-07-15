@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/effect-scale"
+	"ui/effects/effect-scale"
 ], function( $ ) {
 
 module( "effect.scale: Scale" );
