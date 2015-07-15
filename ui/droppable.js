@@ -22,7 +22,7 @@
 			"./version",
 			"./widget",
 			"./mouse",
-			"./draggable"
+			"./widgets/draggable"
 		], factory );
 	} else {
 

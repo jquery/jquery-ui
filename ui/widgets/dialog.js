@@ -23,9 +23,9 @@
 		define( [
 			"jquery",
 			"./button",
+			"./draggable",
 			"../mouse",
 			"../resizable",
-			"../draggable",
 			"../focusable",
 			"../keycode",
 			"../position",
