@@ -22,9 +22,10 @@
 			"jquery",
 			"./core",
 			"./data",
+			"./version",
 			"./ie",
 			"./mouse",
-			"./version",
+			"./scroll-parent",
 			"./widget"
 		], factory );
 	} else {
