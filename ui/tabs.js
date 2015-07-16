@@ -23,6 +23,7 @@
 		define( [
 			"jquery",
 			"./core",
+			"./escape-selector",
 			"./version",
 			"./widget"
 		], factory );

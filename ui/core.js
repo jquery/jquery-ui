@@ -22,6 +22,7 @@
 			"jquery",
 			"./data",
 			"./disable-selection",
+			"./escape-selector",
 			"./focusable",
 			"./version"
 		], factory );
@@ -90,15 +91,7 @@ $.extend( $.ui, {
 		if ( element && element.nodeName.toLowerCase() !== "body" ) {
 			$( element ).trigger( "blur" );
 		}
-	},
-
-	// Internal use only
-	escapeSelector: ( function() {
-		var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
-		return function( selector ) {
-			return selector.replace( selectorEscape, "\\$1" );
-		};
-	} )()
+	}
 } );
 
 // plugins
