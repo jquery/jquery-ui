@@ -31,6 +31,7 @@
 			"./plugin",
 			"./safe-active-element",
 			"./safe-blur",
+			"./tabbable",
 			"./version"
 		], factory );
 	} else {
@@ -75,14 +76,6 @@ $.fn.extend( {
 				$( this ).removeAttr( "id" );
 			}
 		} );
-	}
-} );
-
-$.extend( $.expr[ ":" ], {
-	tabbable: function( element ) {
-		var tabIndex = $.attr( element, "tabindex" ),
-			hasTabindex = tabIndex != null;
-		return ( !hasTabindex || tabIndex >= 0 ) && $.ui.focusable( element, hasTabindex );
 	}
 } );
 
