@@ -255,15 +255,55 @@ test("{ dropOnEmpty: true }, default", function() {
 test("{ dropOnEmpty: false }", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
-test("{ forcePlaceholderSize: false }, default", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+QUnit.test( "{ forcePlaceholderSize: false } table rows", function( assert ) {
+	assert.expect( 1 );
 
-test("{ forcePlaceholderSize: true }", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+	var element = $( "#sortable-table2 tbody" );
 
+	element.sortable( {
+		placeholder: "test",
+		forcePlaceholderSize: false,
+		start: function( event, ui ) {
+			assert.notEqual( ui.placeholder.height(), ui.item.height(),
+				"placeholder is same height as item" );
+		}
+	} );
+
+	// This row has a non-standard height
+	$( "tr", element ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	} );
+} );
+
+QUnit.test( "{ forcePlaceholderSize: true } table rows", function( assert ) {
+	assert.expect( 2 );
+
+	// Table should have the placeholder's height set the same as the row we're dragging
+	var element = $( "#sortable-table2 tbody" );
+
+	element.sortable( {
+		placeholder: "test",
+		forcePlaceholderSize: true,
+		start: function( event, ui ) {
+			assert.equal( ui.placeholder.height(), ui.item.height(),
+				"placeholder is same height as item" );
+		}
+	} );
+
+	// First row has a non-standard height
+	$( "tr", element ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	} );
+
+	// Second row's height is normal
+	$( "tr", element ).eq( 1 ).simulate( "drag", {
+		dy: 1
+	} );
+} );
+
+/*
 test("{ forceHelperSize: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
