@@ -34,7 +34,8 @@
 			"./resizable",
 			"./safe-active-element",
 			"./safe-blur",
-			"./tabbable"
+			"./tabbable",
+			"./unique-id"
 		], factory );
 	} else {
 

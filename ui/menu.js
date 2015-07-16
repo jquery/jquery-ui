@@ -27,6 +27,7 @@
 			"./keycode",
 			"./position",
 			"./safe-active-element",
+			"./unique-id",
 			"./widget"
 		], factory );
 	} else {

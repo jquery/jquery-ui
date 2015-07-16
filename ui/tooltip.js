@@ -22,11 +22,12 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
-			"./core",
 			"./keycode",
 			"./position",
+			"./unique-id",
 			"./version",
-			"./widget" ], factory );
+			"./widget"
+		], factory );
 	} else {
 
 		// Browser globals
