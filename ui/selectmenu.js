@@ -24,6 +24,7 @@
 			"jquery",
 			"./core",
 			"./version",
+			"./escape-selector",
 			"./widget",
 			"./position",
 			"./menu"
