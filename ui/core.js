@@ -30,6 +30,7 @@
 			"./jquery-1-7",
 			"./plugin",
 			"./safe-active-element",
+			"./safe-blur",
 			"./version"
 		], factory );
 	} else {
@@ -38,19 +39,6 @@
 		factory( jQuery );
 	}
 }( function( $ ) {
-
-$.extend( $.ui, {
-
-	// Internal use only
-	safeBlur: function( element ) {
-
-		// Support: IE9 - 10 only
-		// If the <body> is blurred, IE will switch windows, see #9420
-		if ( element && element.nodeName.toLowerCase() !== "body" ) {
-			$( element ).trigger( "blur" );
-		}
-	}
-} );
 
 // plugins
 $.fn.extend( {

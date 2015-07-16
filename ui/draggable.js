@@ -25,6 +25,7 @@
 			"./mouse",
 			"./plugin",
 			"./safe-active-element",
+			"./safe-blur",
 			"./version",
 			"./widget"
 		], factory );

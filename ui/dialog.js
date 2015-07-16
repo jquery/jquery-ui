@@ -31,7 +31,8 @@
 			"./mouse",
 			"./position",
 			"./resizable",
-			"./safe-active-element"
+			"./safe-active-element",
+			"./safe-blur"
 		], factory );
 	} else {
 
