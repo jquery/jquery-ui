@@ -32,7 +32,8 @@
 			"./position",
 			"./resizable",
 			"./safe-active-element",
-			"./safe-blur"
+			"./safe-blur",
+			"./tabbable"
 		], factory );
 	} else {
 
