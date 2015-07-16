@@ -26,6 +26,7 @@
 			"./widget",
 			"./button",
 			"./draggable",
+			"./focusable",
 			"./mouse",
 			"./position",
 			"./resizable",
