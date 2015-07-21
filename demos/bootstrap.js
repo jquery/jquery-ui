@@ -24,6 +24,22 @@ var effectsAll = [
 	"effect-size",
 	"effect-slide"
 ];
+var widgets = [];
+
+function getPath( module ) {
+	for ( var i = 0; i < widgets.length; i++ ) {
+		if ( widgets[ i ] === module ) {
+			return "widgets/" + module;
+		}
+	}
+	return module;
+}
+function fixPaths( modules ) {
+	for ( var i = 0; i < modules.length; i++ ) {
+		modules[ i ] = getPath( modules[ i ] );
+	}
+	return modules;
+}
 
 // Hide the page while things are loading to prevent a FOUC
 document.documentElement.className = "demo-loading";
@@ -40,6 +56,7 @@ require.config( {
 	}
 } );
 
+
 // Replace effects all shortcut modules with all the effects modules
 if ( modules && modules.indexOf( "effects-all" ) !== -1 ) {
 	modules = modules.replace( /effects-all/, effectsAll.join( " " ) );
@@ -47,6 +64,7 @@ if ( modules && modules.indexOf( "effects-all" ) !== -1 ) {
 
 modules = modules ? modules.replace( /^\s+|\s+$/g, "" ).split( /\s+/ ) : [];
 modules.push( pathParts[ pathParts.length - 2 ] );
+modules = fixPaths( modules );
 
 require( modules, function() {
 	var newScript = document.createElement( "script" );
