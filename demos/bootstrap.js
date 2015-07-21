@@ -54,7 +54,7 @@ require( modules, function() {
 	document.documentElement.className = "";
 
 	newScript.text = "( function() { " + script.innerHTML + " } )();";
-	document.head.appendChild( script ).parentNode.removeChild( script );
+	document.head.appendChild( newScript ).parentNode.removeChild( newScript );
 } );
 
 } )();
