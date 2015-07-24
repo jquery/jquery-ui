@@ -8,11 +8,15 @@
 	<script src="../../lib/css.js" data-modules="core accordion"></script>
 	<script src="../../lib/bootstrap.js" data-widget="accordion"></script>
 	<style>
-	#list, #list1 *, #navigation, #navigation * {
+	#list, #list1 *, #navigation, #navigation *, #collapsible, #collapsible * {
 		margin: 0;
 		padding: 0;
 		font-size: 12px;
 		line-height: 15px;
+	}
+	#collapsibleWrapper {
+		width: 300px;
+		float: left;
 	}
 	</style>
 </head>
@@ -108,6 +112,19 @@
 		Accordion Content 3
 	</dd>
 </dl>
+
+<div id="collapsibleWrapper">
+	<div id="collapsible">
+		<h3>Header</h3>
+		<div>
+			<p>
+				The calculated height of this accordion should be the same
+				regardless of whether the accordion was collapsed or not
+				when the height was calculated.
+			</p>
+		</div>
+	</div>
+</div>
 
 </div>
 </body>
