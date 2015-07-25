@@ -1,5 +1,6 @@
 define([
-	"jquery"
+	"jquery",
+	"qunit"
 ], function( $ ) {
 
 var exports = {};

@@ -51,6 +51,7 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
+		"chromedriver": "2.13.0",
 		"commitplease": "2.0.0",
 		"grunt": "0.4.2",
 		"grunt-bowercopy": "1.1.0",
@@ -64,8 +65,11 @@
 		"grunt-git-authors": "2.0.0",
 		"grunt-html": "4.0.1",
 		"grunt-jscs": "1.5.0",
+	    "grunt-selenium-server": "0.1.2",
+	    "intern": "git://github.com/theintern/intern",
 		"load-grunt-tasks": "0.3.0",
 		"rimraf": "2.1.4",
+	    "requirejs": "2.1.17",
 		"testswarm": "1.1.0"
 	},
 	"keywords": []

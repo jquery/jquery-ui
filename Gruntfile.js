@@ -96,7 +96,15 @@ var
 		"demos/tooltip/ajax/content*.html",
 		"tests/unit/core/core.html",
 		"tests/unit/tabs/data/test.html"
-	];
+	],
+
+	serverOptions = {},
+	binPath = require( "chromedriver" ).path,
+	rdefineEnd = /\}\);[^}\w]*$/,
+	pkg = grunt.file.readJSON( "package.json" );
+
+serverOptions[ "Dwebdriver.chrome.driver=" + binPath ] = "";
+
 
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /ui\//, "minified/" );
@@ -125,6 +133,7 @@ uiFiles.forEach(function( file ) {
 
 // grunt plugins
 require( "load-grunt-tasks" )( grunt );
+grunt.loadNpmTasks( 'intern' )
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -176,6 +185,24 @@ grunt.initConfig({
 			},
 			src: cssFiles,
 			dest: "dist/jquery-ui.css"
+		}
+	},
+
+	intern: {
+		options: {
+			runType: "runner"
+		},
+		unitLocal: {
+			options: {
+				config: "tests/intern-local",
+				suites: [ "tests/unit/all" ]
+			}
+		},
+		unitCi: {
+			options: {
+				config: "tests/intern",
+				suites: [ "tests/unit/all" ]
+			}
 		}
 	},
 
@@ -309,6 +336,7 @@ grunt.initConfig({
 				"qunit-composite/LICENSE.txt": "qunit-composite/LICENSE.txt",
 
 				"requirejs/require.js": "requirejs/require.js",
+				"requirejs-text/text.js": "requirejs-text/text.js",
 
 				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
 				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
@@ -397,6 +425,22 @@ grunt.initConfig({
 		}
 	},
 
+	"start-selenium-server": {
+		dev: {
+			options: {
+				downloadUrl: "https://selenium-release.storage.googleapis.com/2.45/" +
+					"selenium-server-standalone-2.45.0.jar",
+				downloadLocation: "node_modules/grunt-selenium-server/",
+				serverOptions: serverOptions,
+				systemProperties: {}
+			}
+		}
+	},
+
+	"stop-selenium-server": {
+		dev: {}
+	},
+
 	authors: {
 		prior: [
 			"Paul Bakaus <paul.bakaus@gmail.com>",
@@ -460,5 +504,7 @@ grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllin
 grunt.registerTask( "test", [ "qunit" ]);
 grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ]);
 grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ]);
+
+grunt.registerTask( "test-local", [ "start-selenium-server", "intern:unitLocal", "stop-selenium-server" ])
 
 };
