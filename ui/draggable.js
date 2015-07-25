@@ -688,6 +688,12 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 			item: draggable.element
 		});
 
+		// Store draggable helper's container if it's not set to 'parent'
+		// so restoring it works as expected
+		if ( draggable.options.appendTo !== "parent" ) {
+			draggable._trueParent = $( draggable.options.appendTo );
+		}
+
 		draggable.sortables = [];
 		$( draggable.options.connectToSortable ).each(function() {
 			var sortable = $( this ).sortable( "instance" );
@@ -860,7 +866,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 
 					// Restore and recalculate the draggable's offset considering the sortable
 					// may have modified them in unexpected ways. (#8809, #10669)
-					ui.helper.appendTo( draggable._parent );
+					ui.helper.appendTo( draggable._trueParent || draggable._parent );
 					draggable._refreshOffsets( event );
 					ui.position = draggable._generatePosition( event, true );
 
