@@ -467,6 +467,15 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	},
 
+	_cacheMargins: function() {
+		this.margins = {
+			left: (parseInt(this.element.css("marginLeft"), 10) || 0),
+			top: (parseInt(this.element.css("marginTop"), 10) || 0),
+			right: (parseInt(this.element.css("marginRight"), 10) || 0),
+			bottom: (parseInt(this.element.css("marginBottom"), 10) || 0)
+		};
+	},
+
 	_updatePrevProperties: function() {
 		this.prevPosition = {
 			top: this.position.top,
@@ -819,6 +828,7 @@ $.ui.plugin.add( "resizable", "containment", {
 			return;
 		}
 
+		that._cacheMargins();
 		that.containerElement = $( ce );
 
 		if ( /document/.test( oc ) || oc === document ) {
@@ -916,8 +926,10 @@ $.ui.plugin.add( "resizable", "containment", {
 		isOffsetRelative = /relative|absolute/.test( that.containerElement.css( "position" ) );
 
 		if ( isParent && isOffsetRelative ) {
-			that.offset.left = that.parentData.left + that.position.left;
-			that.offset.top = that.parentData.top + that.position.top;
+			that.offset.left = that.parentData.left + that.position.left +
+				that.margins.left + that.margins.right;
+			that.offset.top = that.parentData.top + that.position.top +
+				that.margins.top + that.margins.bottom;
 		} else {
 			that.offset.left = that.element.offset().left;
 			that.offset.top = that.element.offset().top;

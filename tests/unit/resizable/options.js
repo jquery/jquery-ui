@@ -234,6 +234,24 @@ test( "containment - immediate parent", function() {
 	equal( element.height(), 250, "Relative with Top, contained within container height" );
 });
 
+test("containment (child with margin)", function () {
+	expect(2);
+
+	var element = $( "#child" ).css({
+		"margin-bottom": "20px",
+		"margin-right": "20px"
+	}).resizable({
+		containment: "parent",
+		handles: "all"
+	});
+
+	testHelper.drag( ".ui-resizable-e", 400, 0 );
+	equal( element.width(), 280, "Position contained within container width" );
+
+	testHelper.drag( ".ui-resizable-s", 0, 400 );
+	equal( element.height(), 280, "Position contained within container height" );
+});
+
 test("grid", function() {
 	expect(4);
 
