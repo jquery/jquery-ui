@@ -487,14 +487,17 @@ $.widget("ui.resizable", $.ui.mouse, {
 		if ( this.position.left !== this.prevPosition.left ) {
 			props.left = this.position.left + "px";
 		}
+
+		this.helper.css( props );
+
 		if ( this.size.width !== this.prevSize.width ) {
 			props.width = this.size.width + "px";
+			this.helper.width(this.size.width);
 		}
 		if ( this.size.height !== this.prevSize.height ) {
 			props.height = this.size.height + "px";
+			this.helper.height(this.size.height);
 		}
-
-		this.helper.css( props );
 
 		return props;
 	},
@@ -995,7 +998,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 		$(o.alsoResize).each(function() {
 			var el = $(this);
 			el.data("ui-resizable-alsoresize", {
-				width: parseInt(el.width(), 10), height: parseInt(el.height(), 10),
+				width: parseInt(el.css("width"), 10), height: parseInt(el.css("height"), 10),
 				left: parseInt(el.css("left"), 10), top: parseInt(el.css("top"), 10)
 			});
 		});
