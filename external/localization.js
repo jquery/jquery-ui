@@ -20,11 +20,11 @@ Globalize.load({
 		"ar": {
 			"identity": {
 				"version": {
-					"_cldrVersion": "25",
-					"_number": "$Revision: 91 $"
+					"_cldrVersion": "27.0.1",
+					"_number": "$Revision: 11294 $"
 				},
 				"generation": {
-					"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+					"_date": "$Date: 2015-02-23 16:50:24 -0600 (Mon, 23 Feb 2015) $"
 				},
 				"language": "ar"
 			},
@@ -245,34 +245,34 @@ Globalize.load({
 							"format": {
 								"abbreviated": {
 									"am": "ص",
-									"noon": "noon",
+									"noon": "ظهرا",
 									"pm": "م"
 								},
 								"narrow": {
-									"am": "a",
-									"noon": "n",
-									"pm": "p"
+									"am": "ص",
+									"noon": "ظ",
+									"pm": "م"
 								},
 								"wide": {
 									"am": "ص",
-									"noon": "noon",
+									"noon": "ظهرا",
 									"pm": "م"
 								}
 							},
 							"stand-alone": {
 								"abbreviated": {
 									"am": "ص",
-									"noon": "noon",
+									"noon": "ظهرا",
 									"pm": "م"
 								},
 								"narrow": {
-									"am": "a",
-									"noon": "n",
-									"pm": "p"
+									"am": "ص",
+									"noon": "ظ",
+									"pm": "م"
 								},
 								"wide": {
 									"am": "ص",
-									"noon": "noon",
+									"noon": "ظهرا",
 									"pm": "م"
 								}
 							}
@@ -282,19 +282,19 @@ Globalize.load({
 								"0": "قبل الميلاد",
 								"0-alt-variant": "BCE",
 								"1": "ميلادي",
-								"1-alt-variant": "CE"
+								"1-alt-variant": "بعد الميلاد"
 							},
 							"eraAbbr": {
 								"0": "ق.م",
 								"0-alt-variant": "BCE",
 								"1": "م",
-								"1-alt-variant": "CE"
+								"1-alt-variant": "ب.م"
 							},
 							"eraNarrow": {
 								"0": "ق.م",
 								"0-alt-variant": "BCE",
 								"1": "م",
-								"1-alt-variant": "CE"
+								"1-alt-variant": "ب.م"
 							}
 						},
 						"dateFormats": {
@@ -315,6 +315,7 @@ Globalize.load({
 							"medium": "{1} {0}",
 							"short": "{1} {0}",
 							"availableFormats": {
+								"E": "ccc",
 								"EHm": "E HH:mm",
 								"EHms": "E HH:mm:ss",
 								"Ed": "E، d",
@@ -327,6 +328,8 @@ Globalize.load({
 								"H": "HH",
 								"Hm": "HH:mm",
 								"Hms": "HH:mm:ss",
+								"Hmsv": "HH:mm:ss v",
+								"Hmv": "HH:mm v",
 								"M": "L",
 								"MEd": "E، d/M",
 								"MMM": "LLL",
@@ -340,6 +343,8 @@ Globalize.load({
 								"h": "h a",
 								"hm": "h:mm a",
 								"hms": "h:mm:ss a",
+								"hmsv": "h:mm:ss a v",
+								"hmv": "h:mm a v",
 								"ms": "mm:ss",
 								"y": "y",
 								"yM": "M‏/y",
@@ -467,6 +472,415 @@ Globalize.load({
 						}
 					}
 				}
+			},
+			"numbers": {
+				"defaultNumberingSystem": "arab",
+				"otherNumberingSystems": {
+					"native": "arab"
+				},
+				"minimumGroupingDigits": "1",
+				"symbols-numberSystem-arab": {
+					"decimal": "٫",
+					"group": "٬",
+					"list": "؛",
+					"percentSign": "٪",
+					"plusSign": "‏+",
+					"minusSign": "‏-",
+					"exponential": "اس",
+					"superscriptingExponent": "×",
+					"perMille": "؉",
+					"infinity": "∞",
+					"nan": "ليس رقم",
+					"timeSeparator": "،"
+				},
+				"symbols-numberSystem-latn": {
+					"decimal": ".",
+					"group": ",",
+					"list": ";",
+					"percentSign": "%",
+					"plusSign": "‎+",
+					"minusSign": "‎-",
+					"exponential": "E",
+					"superscriptingExponent": "×",
+					"perMille": "‰",
+					"infinity": "∞",
+					"nan": "NaN",
+					"timeSeparator": ":"
+				},
+				"decimalFormats-numberSystem-arab": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-zero": "0 ألف",
+							"1000-count-one": "0 ألف",
+							"1000-count-two": "0 ألف",
+							"1000-count-few": "0 ألف",
+							"1000-count-many": "0 ألف",
+							"1000-count-other": "0 ألف",
+							"10000-count-zero": "00 ألف",
+							"10000-count-one": "00 ألف",
+							"10000-count-two": "00 ألف",
+							"10000-count-few": "00 ألف",
+							"10000-count-many": "00 ألف",
+							"10000-count-other": "00 ألف",
+							"100000-count-zero": "000 ألف",
+							"100000-count-one": "000 ألف",
+							"100000-count-two": "000 ألف",
+							"100000-count-few": "000 ألف",
+							"100000-count-many": "000 ألف",
+							"100000-count-other": "000 ألف",
+							"1000000-count-zero": "0 مليون",
+							"1000000-count-one": "0 مليون",
+							"1000000-count-two": "0 مليون",
+							"1000000-count-few": "0 مليون",
+							"1000000-count-many": "0 مليون",
+							"1000000-count-other": "0 مليون",
+							"10000000-count-zero": "00 مليون",
+							"10000000-count-one": "00 مليون",
+							"10000000-count-two": "00 مليون",
+							"10000000-count-few": "00 مليون",
+							"10000000-count-many": "00 مليون",
+							"10000000-count-other": "00 مليون",
+							"100000000-count-zero": "000 مليون",
+							"100000000-count-one": "000 مليون",
+							"100000000-count-two": "000 مليون",
+							"100000000-count-few": "000 مليون",
+							"100000000-count-many": "000 مليون",
+							"100000000-count-other": "000 مليون",
+							"1000000000-count-zero": "0 بليون",
+							"1000000000-count-one": "0 بليون",
+							"1000000000-count-two": "0 بليون",
+							"1000000000-count-few": "0 بليون",
+							"1000000000-count-many": "0 بليون",
+							"1000000000-count-other": "0 بليون",
+							"10000000000-count-zero": "00 بليون",
+							"10000000000-count-one": "00 بليون",
+							"10000000000-count-two": "00 بليون",
+							"10000000000-count-few": "00 بليون",
+							"10000000000-count-many": "00 بليون",
+							"10000000000-count-other": "00 بليون",
+							"100000000000-count-zero": "000 بليون",
+							"100000000000-count-one": "000 بليون",
+							"100000000000-count-two": "000 بليون",
+							"100000000000-count-few": "000 بليون",
+							"100000000000-count-many": "000 بليون",
+							"100000000000-count-other": "000 بليون",
+							"1000000000000-count-zero": "0 تريليون",
+							"1000000000000-count-one": "0 تريليون",
+							"1000000000000-count-two": "0 تريليون",
+							"1000000000000-count-few": "0 تريليون",
+							"1000000000000-count-many": "0 تريليون",
+							"1000000000000-count-other": "0 تريليون",
+							"10000000000000-count-zero": "00 تريليون",
+							"10000000000000-count-one": "00 تريليون",
+							"10000000000000-count-two": "00 تريليون",
+							"10000000000000-count-few": "00 تريليون",
+							"10000000000000-count-many": "00 تريليون",
+							"10000000000000-count-other": "00 تريليون",
+							"100000000000000-count-zero": "000 تريليون",
+							"100000000000000-count-one": "000 تريليون",
+							"100000000000000-count-two": "000 تريليون",
+							"100000000000000-count-few": "000 تريليون",
+							"100000000000000-count-many": "000 تريليون",
+							"100000000000000-count-other": "000 تريليون"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-zero": "0 ألف",
+							"1000-count-one": "0 ألف",
+							"1000-count-two": "0 ألف",
+							"1000-count-few": "0 ألف",
+							"1000-count-many": "0 ألف",
+							"1000-count-other": "0 ألف",
+							"10000-count-zero": "00 ألف",
+							"10000-count-one": "00 ألف",
+							"10000-count-two": "00 ألف",
+							"10000-count-few": "00 ألف",
+							"10000-count-many": "00 ألف",
+							"10000-count-other": "00 ألف",
+							"100000-count-zero": "000 ألف",
+							"100000-count-one": "000 ألف",
+							"100000-count-two": "000 ألف",
+							"100000-count-few": "000 ألف",
+							"100000-count-many": "000 ألف",
+							"100000-count-other": "000 ألف",
+							"1000000-count-zero": "0 مليو",
+							"1000000-count-one": "0 مليو",
+							"1000000-count-two": "0 مليو",
+							"1000000-count-few": "0 مليو",
+							"1000000-count-many": "0 مليو",
+							"1000000-count-other": "0 مليو",
+							"10000000-count-zero": "00 مليو",
+							"10000000-count-one": "00 مليو",
+							"10000000-count-two": "00 مليو",
+							"10000000-count-few": "00 مليو",
+							"10000000-count-many": "00 مليو",
+							"10000000-count-other": "00 مليو",
+							"100000000-count-zero": "000 مليو",
+							"100000000-count-one": "000 مليو",
+							"100000000-count-two": "000 مليو",
+							"100000000-count-few": "000 مليو",
+							"100000000-count-many": "000 مليو",
+							"100000000-count-other": "000 مليو",
+							"1000000000-count-zero": "0 بليو",
+							"1000000000-count-one": "0 بليو",
+							"1000000000-count-two": "0 بليو",
+							"1000000000-count-few": "0 بليو",
+							"1000000000-count-many": "0 بليو",
+							"1000000000-count-other": "0 بليو",
+							"10000000000-count-zero": "00 بليو",
+							"10000000000-count-one": "00 بليو",
+							"10000000000-count-two": "00 بليو",
+							"10000000000-count-few": "00 بليو",
+							"10000000000-count-many": "00 بليو",
+							"10000000000-count-other": "00 بليو",
+							"100000000000-count-zero": "000 بليو",
+							"100000000000-count-one": "000 بليو",
+							"100000000000-count-two": "000 بليو",
+							"100000000000-count-few": "000 بليو",
+							"100000000000-count-many": "000 بليو",
+							"100000000000-count-other": "000 بليو",
+							"1000000000000-count-zero": "0 ترليو",
+							"1000000000000-count-one": "0 ترليو",
+							"1000000000000-count-two": "0 ترليو",
+							"1000000000000-count-few": "0 ترليو",
+							"1000000000000-count-many": "0 ترليو",
+							"1000000000000-count-other": "0 ترليو",
+							"10000000000000-count-zero": "00 ترليو",
+							"10000000000000-count-one": "00 ترليو",
+							"10000000000000-count-two": "00 ترليو",
+							"10000000000000-count-few": "00 ترليو",
+							"10000000000000-count-many": "00 ترليو",
+							"10000000000000-count-other": "00 ترليو",
+							"100000000000000-count-zero": "000 ترليو",
+							"100000000000000-count-one": "000 ترليو",
+							"100000000000000-count-two": "000 ترليو",
+							"100000000000000-count-few": "000 ترليو",
+							"100000000000000-count-many": "000 ترليو",
+							"100000000000000-count-other": "000 ترليو"
+						}
+					}
+				},
+				"decimalFormats-numberSystem-latn": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-zero": "0 ألف",
+							"1000-count-one": "0 ألف",
+							"1000-count-two": "0 ألف",
+							"1000-count-few": "0 آلاف",
+							"1000-count-many": "0 ألف",
+							"1000-count-other": "0 ألف",
+							"10000-count-zero": "00 ألف",
+							"10000-count-one": "00 ألف",
+							"10000-count-two": "00 ألف",
+							"10000-count-few": "00 ألف",
+							"10000-count-many": "00 ألف",
+							"10000-count-other": "00 ألف",
+							"100000-count-zero": "000 ألف",
+							"100000-count-one": "000 ألف",
+							"100000-count-two": "000 ألف",
+							"100000-count-few": "000 ألف",
+							"100000-count-many": "000 ألف",
+							"100000-count-other": "000 ألف",
+							"1000000-count-zero": "0 مليون",
+							"1000000-count-one": "0 مليون",
+							"1000000-count-two": "0 مليون",
+							"1000000-count-few": "0 ملايين",
+							"1000000-count-many": "0 مليون",
+							"1000000-count-other": "0 مليون",
+							"10000000-count-zero": "00 مليون",
+							"10000000-count-one": "00 مليون",
+							"10000000-count-two": "00 مليون",
+							"10000000-count-few": "00 ملايين",
+							"10000000-count-many": "00 مليون",
+							"10000000-count-other": "00 مليون",
+							"100000000-count-zero": "000 مليون",
+							"100000000-count-one": "000 مليون",
+							"100000000-count-two": "000 مليون",
+							"100000000-count-few": "000 مليون",
+							"100000000-count-many": "000 مليون",
+							"100000000-count-other": "000 مليون",
+							"1000000000-count-zero": "0 بليون",
+							"1000000000-count-one": "0 بليون",
+							"1000000000-count-two": "0 بليون",
+							"1000000000-count-few": "0 بلايين",
+							"1000000000-count-many": "0 بليون",
+							"1000000000-count-other": "0 بليون",
+							"10000000000-count-zero": "00 بليون",
+							"10000000000-count-one": "00 بليون",
+							"10000000000-count-two": "00 بليون",
+							"10000000000-count-few": "00 بليون",
+							"10000000000-count-many": "00 بليون",
+							"10000000000-count-other": "00 بليون",
+							"100000000000-count-zero": "000 بليون",
+							"100000000000-count-one": "000 بليون",
+							"100000000000-count-two": "000 بليون",
+							"100000000000-count-few": "000 بليون",
+							"100000000000-count-many": "000 بليون",
+							"100000000000-count-other": "000 بليون",
+							"1000000000000-count-zero": "0 تريليون",
+							"1000000000000-count-one": "0 تريليون",
+							"1000000000000-count-two": "0 تريليون",
+							"1000000000000-count-few": "0 تريليونات",
+							"1000000000000-count-many": "0 تريليون",
+							"1000000000000-count-other": "0 تريليون",
+							"10000000000000-count-zero": "00 تريليون",
+							"10000000000000-count-one": "00 تريليون",
+							"10000000000000-count-two": "00 تريليون",
+							"10000000000000-count-few": "00 تريليون",
+							"10000000000000-count-many": "00 تريليون",
+							"10000000000000-count-other": "00 تريليون",
+							"100000000000000-count-zero": "000 تريليون",
+							"100000000000000-count-one": "000 تريليون",
+							"100000000000000-count-two": "000 تريليون",
+							"100000000000000-count-few": "000 تريليون",
+							"100000000000000-count-many": "000 تريليون",
+							"100000000000000-count-other": "000 تريليون"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-zero": "0 ألف",
+							"1000-count-one": "0 ألف",
+							"1000-count-two": "0 ألف",
+							"1000-count-few": "0 آلاف",
+							"1000-count-many": "0 ألف",
+							"1000-count-other": "0 ألف",
+							"10000-count-zero": "00 ألف",
+							"10000-count-one": "00 ألف",
+							"10000-count-two": "00 ألف",
+							"10000-count-few": "00 ألف",
+							"10000-count-many": "00 ألف",
+							"10000-count-other": "00 ألف",
+							"100000-count-zero": "000 ألف",
+							"100000-count-one": "000 ألف",
+							"100000-count-two": "000 ألف",
+							"100000-count-few": "000 ألف",
+							"100000-count-many": "000 ألف",
+							"100000-count-other": "000 ألف",
+							"1000000-count-zero": "0 مليو",
+							"1000000-count-one": "0 مليو",
+							"1000000-count-two": "0 مليو",
+							"1000000-count-few": "0 مليو",
+							"1000000-count-many": "0 مليو",
+							"1000000-count-other": "0 مليو",
+							"10000000-count-zero": "00 مليو",
+							"10000000-count-one": "00 مليو",
+							"10000000-count-two": "00 مليو",
+							"10000000-count-few": "00 مليو",
+							"10000000-count-many": "00 مليو",
+							"10000000-count-other": "00 مليو",
+							"100000000-count-zero": "000 مليو",
+							"100000000-count-one": "000 مليو",
+							"100000000-count-two": "000 مليو",
+							"100000000-count-few": "000 مليو",
+							"100000000-count-many": "000 مليو",
+							"100000000-count-other": "000 مليو",
+							"1000000000-count-zero": "0 بليو",
+							"1000000000-count-one": "0 بليو",
+							"1000000000-count-two": "0 بليو",
+							"1000000000-count-few": "0 بليو",
+							"1000000000-count-many": "0 بليو",
+							"1000000000-count-other": "0 بليو",
+							"10000000000-count-zero": "00 بليو",
+							"10000000000-count-one": "00 بليو",
+							"10000000000-count-two": "00 بليو",
+							"10000000000-count-few": "00 بليو",
+							"10000000000-count-many": "00 بليو",
+							"10000000000-count-other": "00 بليو",
+							"100000000000-count-zero": "000 بليو",
+							"100000000000-count-one": "000 بليو",
+							"100000000000-count-two": "000 بليو",
+							"100000000000-count-few": "000 بليو",
+							"100000000000-count-many": "000 بليو",
+							"100000000000-count-other": "000 بليو",
+							"1000000000000-count-zero": "0 ترليو",
+							"1000000000000-count-one": "0 ترليو",
+							"1000000000000-count-two": "0 ترليو",
+							"1000000000000-count-few": "0 ترليو",
+							"1000000000000-count-many": "0 ترليو",
+							"1000000000000-count-other": "0 ترليو",
+							"10000000000000-count-zero": "00 ترليو",
+							"10000000000000-count-one": "00 ترليو",
+							"10000000000000-count-two": "00 ترليو",
+							"10000000000000-count-few": "00 ترليو",
+							"10000000000000-count-many": "00 ترليو",
+							"10000000000000-count-other": "00 ترليو",
+							"100000000000000-count-zero": "000 ترليو",
+							"100000000000000-count-one": "000 ترليو",
+							"100000000000000-count-two": "000 ترليو",
+							"100000000000000-count-few": "000 ترليو",
+							"100000000000000-count-many": "000 ترليو",
+							"100000000000000-count-other": "000 ترليو"
+						}
+					}
+				},
+				"scientificFormats-numberSystem-arab": {
+					"standard": "#E0"
+				},
+				"scientificFormats-numberSystem-latn": {
+					"standard": "#E0"
+				},
+				"percentFormats-numberSystem-arab": {
+					"standard": "#,##0%"
+				},
+				"percentFormats-numberSystem-latn": {
+					"standard": "#,##0%"
+				},
+				"currencyFormats-numberSystem-arab": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "¤#,##0.00;(¤#,##0.00)",
+					"standard": "¤ #,##0.00",
+					"unitPattern-count-zero": "{0} {1}",
+					"unitPattern-count-one": "{0} {1}",
+					"unitPattern-count-two": "{0} {1}",
+					"unitPattern-count-few": "{0} {1}",
+					"unitPattern-count-many": "{0} {1}",
+					"unitPattern-count-other": "{0} {1}"
+				},
+				"currencyFormats-numberSystem-latn": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "¤#,##0.00;(¤#,##0.00)",
+					"standard": "¤ #,##0.00",
+					"unitPattern-count-zero": "{0} {1}",
+					"unitPattern-count-one": "{0} {1}",
+					"unitPattern-count-two": "{0} {1}",
+					"unitPattern-count-few": "{0} {1}",
+					"unitPattern-count-many": "{0} {1}",
+					"unitPattern-count-other": "{0} {1}"
+				},
+				"miscPatterns-numberSystem-arab": {
+					"atLeast": "+{0}",
+					"range": "{0}–{1}"
+				},
+				"miscPatterns-numberSystem-latn": {
+					"atLeast": "+{0}",
+					"range": "{0}–{1}"
+				}
 			}
 		}
 	}
@@ -477,11 +891,11 @@ Globalize.load({
 		"es": {
 			"identity": {
 				"version": {
-					"_cldrVersion": "25",
-					"_number": "$Revision: 91 $"
+					"_cldrVersion": "27.0.1",
+					"_number": "$Revision: 11321 $"
 				},
 				"generation": {
-					"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+					"_date": "$Date: 2015-02-26 14:20:05 -0600 (Thu, 26 Feb 2015) $"
 				},
 				"language": "es"
 			},
@@ -665,10 +1079,10 @@ Globalize.load({
 									"4": "T4"
 								},
 								"narrow": {
-									"1": "1T",
-									"2": "2T",
-									"3": "3T",
-									"4": "4T"
+									"1": "1",
+									"2": "2",
+									"3": "3",
+									"4": "4"
 								},
 								"wide": {
 									"1": "1.er trimestre",
@@ -685,10 +1099,10 @@ Globalize.load({
 									"4": "T4"
 								},
 								"narrow": {
-									"1": "1T",
-									"2": "2T",
-									"3": "3T",
-									"4": "4T"
+									"1": "1",
+									"2": "2",
+									"3": "3",
+									"4": "4"
 								},
 								"wide": {
 									"1": "1.er trimestre",
@@ -702,34 +1116,34 @@ Globalize.load({
 							"format": {
 								"abbreviated": {
 									"am": "a. m.",
-									"noon": "noon",
+									"noon": "mediodía",
 									"pm": "p. m."
 								},
 								"narrow": {
 									"am": "a.m.",
-									"noon": "n",
+									"noon": "m.",
 									"pm": "p.m."
 								},
 								"wide": {
 									"am": "a. m.",
-									"noon": "noon",
+									"noon": "mediodía",
 									"pm": "p. m."
 								}
 							},
 							"stand-alone": {
 								"abbreviated": {
 									"am": "a. m.",
-									"noon": "noon",
+									"noon": "mediodía",
 									"pm": "p. m."
 								},
 								"narrow": {
 									"am": "a.m.",
-									"noon": "n",
+									"noon": "m.",
 									"pm": "p.m."
 								},
 								"wide": {
 									"am": "a. m.",
-									"noon": "noon",
+									"noon": "mediodía",
 									"pm": "p. m."
 								}
 							}
@@ -737,9 +1151,9 @@ Globalize.load({
 						"eras": {
 							"eraNames": {
 								"0": "antes de Cristo",
-								"0-alt-variant": "a. e. c.",
-								"1": "anno Dómini",
-								"1-alt-variant": "e. c."
+								"0-alt-variant": "antes de la era común",
+								"1": "después de Cristo",
+								"1-alt-variant": "era común"
 							},
 							"eraAbbr": {
 								"0": "a. C.",
@@ -757,7 +1171,7 @@ Globalize.load({
 						"dateFormats": {
 							"full": "EEEE, d 'de' MMMM 'de' y",
 							"long": "d 'de' MMMM 'de' y",
-							"medium": "d/M/y",
+							"medium": "d MMM y",
 							"short": "d/M/yy"
 						},
 						"timeFormats": {
@@ -772,25 +1186,32 @@ Globalize.load({
 							"medium": "{1} {0}",
 							"short": "{1} {0}",
 							"availableFormats": {
+								"E": "ccc",
 								"EHm": "E, H:mm",
 								"EHms": "E, H:mm:ss",
 								"Ed": "E d",
 								"Ehm": "E, h:mm a",
 								"Ehms": "E, h:mm:ss a",
 								"Gy": "y G",
-								"GyMMM": "MMM 'de' y G",
-								"GyMMMEd": "E, d 'de' MMMM 'de' y G",
-								"GyMMMd": "d MMM 'de' y G",
+								"GyMMM": "MMM y G",
+								"GyMMMEd": "E, d MMM y G",
+								"GyMMMM": "MMMM 'de' y G",
+								"GyMMMMEd": "E, d 'de' MMMM 'de' y G",
+								"GyMMMMd": "d 'de' MMMM 'de' y G",
+								"GyMMMd": "d MMM y G",
 								"H": "H",
 								"Hm": "H:mm",
 								"Hms": "H:mm:ss",
+								"Hmsv": "H:mm:ss v",
+								"Hmsvvvv": "H:mm:ss (vvvv)",
+								"Hmv": "H:mm v",
 								"M": "L",
 								"MEd": "E, d/M",
 								"MMM": "LLL",
-								"MMMEd": "E d 'de' MMM",
+								"MMMEd": "E, d MMM",
+								"MMMMEd": "E, d 'de' MMMM",
 								"MMMMd": "d 'de' MMMM",
-								"MMMd": "d 'de' MMM",
-								"MMMdd": "dd-MMM",
+								"MMMd": "d MMM",
 								"MMd": "d/M",
 								"MMdd": "d/M",
 								"Md": "d/M",
@@ -798,15 +1219,20 @@ Globalize.load({
 								"h": "h a",
 								"hm": "h:mm a",
 								"hms": "h:mm:ss a",
+								"hmsv": "h:mm:ss a v",
+								"hmsvvvv": "h:mm:ss a (vvvv)",
+								"hmv": "h:mm a v",
 								"ms": "mm:ss",
 								"y": "y",
 								"yM": "M/y",
 								"yMEd": "EEE, d/M/y",
 								"yMM": "M/y",
-								"yMMM": "MMM 'de' y",
-								"yMMMEd": "EEE, d 'de' MMMM 'de' y",
+								"yMMM": "MMM y",
+								"yMMMEd": "EEE, d MMM y",
 								"yMMMM": "MMMM 'de' y",
-								"yMMMd": "d 'de' MMM 'de' y",
+								"yMMMMEd": "EEE, d 'de' MMMM 'de' y",
+								"yMMMMd": "d 'de' MMMM 'de' y",
+								"yMMMd": "d MMM y",
 								"yMd": "d/M/y",
 								"yQQQ": "QQQ y",
 								"yQQQQ": "QQQQ 'de' y"
@@ -854,6 +1280,14 @@ Globalize.load({
 									"M": "E, d MMM–E, d MMM",
 									"d": "E, d MMM–E, d MMM"
 								},
+								"MMMMEd": {
+									"M": "E, d 'de' MMMM–E, d 'de' MMMM",
+									"d": "E, d 'de' MMMM–E, d 'de' MMMM"
+								},
+								"MMMMd": {
+									"M": "d 'de' MMMM–d 'de' MMMM",
+									"d": "d–d 'de' MMMM"
+								},
 								"MMMd": {
 									"M": "d MMM–d MMM",
 									"d": "d–d MMM"
@@ -900,18 +1334,28 @@ Globalize.load({
 									"y": "MMM y–MMM y"
 								},
 								"yMMMEd": {
-									"M": "E, d MMM–E, d MMM 'de' y",
-									"d": "E, d MMM–E, d MMM 'de' y",
-									"y": "E, d MMM 'de' y–E, d MMM 'de' y"
+									"M": "E, d MMM–E, d MMM y",
+									"d": "E, d MMM–E, d MMM y",
+									"y": "E, d MMM y–E, d MMM y"
 								},
 								"yMMMM": {
 									"M": "MMMM–MMMM 'de' y",
 									"y": "MMMM 'de' y–MMMM 'de' y"
 								},
+								"yMMMMEd": {
+									"M": "E, d 'de' MMMM–E, d 'de' MMMM 'de' y",
+									"d": "E, d 'de' MMMM–E, d 'de' MMMM 'de' y",
+									"y": "E, d 'de' MMMM 'de' y–E, d 'de' MMMM 'de' y"
+								},
+								"yMMMMd": {
+									"M": "d 'de' MMMM–d 'de' MMMM 'de' y",
+									"d": "d–d 'de' MMMM 'de' y",
+									"y": "d 'de' MMMM 'de' y–d 'de' MMMM 'de' y"
+								},
 								"yMMMd": {
-									"M": "d MMM–d MMM 'de' y",
+									"M": "d MMM–d MMM y",
 									"d": "d–d MMM y",
-									"y": "d MMM 'de' y–d MMM 'de' y"
+									"y": "d MMM y–d MMM y"
 								},
 								"yMd": {
 									"M": "d/M/y–d/M/y",
@@ -921,6 +1365,114 @@ Globalize.load({
 							}
 						}
 					}
+				}
+			},
+			"numbers": {
+				"defaultNumberingSystem": "latn",
+				"otherNumberingSystems": {
+					"native": "latn"
+				},
+				"minimumGroupingDigits": "1",
+				"symbols-numberSystem-latn": {
+					"decimal": ",",
+					"group": ".",
+					"list": ";",
+					"percentSign": "%",
+					"plusSign": "+",
+					"minusSign": "-",
+					"exponential": "E",
+					"superscriptingExponent": "×",
+					"perMille": "‰",
+					"infinity": "∞",
+					"nan": "NaN",
+					"timeSeparator": ":"
+				},
+				"decimalFormats-numberSystem-latn": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-one": "0 mil",
+							"1000-count-other": "0 mil",
+							"10000-count-one": "00 mil",
+							"10000-count-other": "00 mil",
+							"100000-count-one": "000 mil",
+							"100000-count-other": "000 mil",
+							"1000000-count-one": "0 millón",
+							"1000000-count-other": "0 millones",
+							"10000000-count-one": "00 millones",
+							"10000000-count-other": "00 millones",
+							"100000000-count-one": "000 millones",
+							"100000000-count-other": "000 millones",
+							"1000000000-count-one": "0 mil millones",
+							"1000000000-count-other": "0 mil millones",
+							"10000000000-count-one": "00 mil millones",
+							"10000000000-count-other": "00 mil millones",
+							"100000000000-count-one": "000 mil millones",
+							"100000000000-count-other": "000 mil millones",
+							"1000000000000-count-one": "0 billón",
+							"1000000000000-count-other": "0 billones",
+							"10000000000000-count-one": "00 billones",
+							"10000000000000-count-other": "00 billones",
+							"100000000000000-count-one": "000 billones",
+							"100000000000000-count-other": "000 billones"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-one": "0 K",
+							"1000-count-other": "0 K",
+							"10000-count-one": "00 K",
+							"10000-count-other": "00 K",
+							"100000-count-one": "000 K",
+							"100000-count-other": "000 K",
+							"1000000-count-one": "0 M",
+							"1000000-count-other": "0 M",
+							"10000000-count-one": "00 M",
+							"10000000-count-other": "00 M",
+							"100000000-count-one": "000 M",
+							"100000000-count-other": "000 M",
+							"1000000000-count-one": "0000 M",
+							"1000000000-count-other": "0000 M",
+							"10000000000-count-one": "00 MRD",
+							"10000000000-count-other": "00 MRD",
+							"100000000000-count-one": "000 MRD",
+							"100000000000-count-other": "000 MRD",
+							"1000000000000-count-one": "0 B",
+							"1000000000000-count-other": "0 B",
+							"10000000000000-count-one": "00 B",
+							"10000000000000-count-other": "00 B",
+							"100000000000000-count-one": "000 B",
+							"100000000000000-count-other": "000 B"
+						}
+					}
+				},
+				"scientificFormats-numberSystem-latn": {
+					"standard": "#E0"
+				},
+				"percentFormats-numberSystem-latn": {
+					"standard": "#,##0 %"
+				},
+				"currencyFormats-numberSystem-latn": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "#,##0.00 ¤",
+					"standard": "#,##0.00 ¤",
+					"unitPattern-count-one": "{0} {1}",
+					"unitPattern-count-other": "{0} {1}"
+				},
+				"miscPatterns-numberSystem-latn": {
+					"atLeast": "Más de {0}",
+					"range": "{0}-{1}"
 				}
 			}
 		}
@@ -932,13 +1484,121 @@ Globalize.load({
 		"en": {
 			"identity": {
 				"version": {
-					"_cldrVersion": "25",
-					"_number": "$Revision: 91 $"
+					"_cldrVersion": "27.0.1",
+					"_number": "$Revision: 11348 $"
 				},
 				"generation": {
-					"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+					"_date": "$Date: 2015-03-05 01:15:52 -0600 (Thu, 05 Mar 2015) $"
 				},
 				"language": "en"
+			},
+			"numbers": {
+				"defaultNumberingSystem": "latn",
+				"otherNumberingSystems": {
+					"native": "latn"
+				},
+				"minimumGroupingDigits": "1",
+				"symbols-numberSystem-latn": {
+					"decimal": ".",
+					"group": ",",
+					"list": ";",
+					"percentSign": "%",
+					"plusSign": "+",
+					"minusSign": "-",
+					"exponential": "E",
+					"superscriptingExponent": "×",
+					"perMille": "‰",
+					"infinity": "∞",
+					"nan": "NaN",
+					"timeSeparator": ":"
+				},
+				"decimalFormats-numberSystem-latn": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-one": "0 thousand",
+							"1000-count-other": "0 thousand",
+							"10000-count-one": "00 thousand",
+							"10000-count-other": "00 thousand",
+							"100000-count-one": "000 thousand",
+							"100000-count-other": "000 thousand",
+							"1000000-count-one": "0 million",
+							"1000000-count-other": "0 million",
+							"10000000-count-one": "00 million",
+							"10000000-count-other": "00 million",
+							"100000000-count-one": "000 million",
+							"100000000-count-other": "000 million",
+							"1000000000-count-one": "0 billion",
+							"1000000000-count-other": "0 billion",
+							"10000000000-count-one": "00 billion",
+							"10000000000-count-other": "00 billion",
+							"100000000000-count-one": "000 billion",
+							"100000000000-count-other": "000 billion",
+							"1000000000000-count-one": "0 trillion",
+							"1000000000000-count-other": "0 trillion",
+							"10000000000000-count-one": "00 trillion",
+							"10000000000000-count-other": "00 trillion",
+							"100000000000000-count-one": "000 trillion",
+							"100000000000000-count-other": "000 trillion"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-one": "0K",
+							"1000-count-other": "0K",
+							"10000-count-one": "00K",
+							"10000-count-other": "00K",
+							"100000-count-one": "000K",
+							"100000-count-other": "000K",
+							"1000000-count-one": "0M",
+							"1000000-count-other": "0M",
+							"10000000-count-one": "00M",
+							"10000000-count-other": "00M",
+							"100000000-count-one": "000M",
+							"100000000-count-other": "000M",
+							"1000000000-count-one": "0B",
+							"1000000000-count-other": "0B",
+							"10000000000-count-one": "00B",
+							"10000000000-count-other": "00B",
+							"100000000000-count-one": "000B",
+							"100000000000-count-other": "000B",
+							"1000000000000-count-one": "0T",
+							"1000000000000-count-other": "0T",
+							"10000000000000-count-one": "00T",
+							"10000000000000-count-other": "00T",
+							"100000000000000-count-one": "000T",
+							"100000000000000-count-other": "000T"
+						}
+					}
+				},
+				"scientificFormats-numberSystem-latn": {
+					"standard": "#E0"
+				},
+				"percentFormats-numberSystem-latn": {
+					"standard": "#,##0%"
+				},
+				"currencyFormats-numberSystem-latn": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "¤#,##0.00;(¤#,##0.00)",
+					"standard": "¤#,##0.00",
+					"unitPattern-count-one": "{0} {1}",
+					"unitPattern-count-other": "{0} {1}"
+				},
+				"miscPatterns-numberSystem-latn": {
+					"atLeast": "{0}+",
+					"range": "{0}–{1}"
+				}
 			},
 			"dates": {
 				"calendars": {
@@ -1235,6 +1895,7 @@ Globalize.load({
 							"medium": "{1}, {0}",
 							"short": "{1}, {0}",
 							"availableFormats": {
+								"E": "ccc",
 								"EHm": "E HH:mm",
 								"EHms": "E HH:mm:ss",
 								"Ed": "d E",
@@ -1247,6 +1908,8 @@ Globalize.load({
 								"H": "HH",
 								"Hm": "HH:mm",
 								"Hms": "HH:mm:ss",
+								"Hmsv": "HH:mm:ss v",
+								"Hmv": "HH:mm v",
 								"M": "L",
 								"MEd": "E, M/d",
 								"MMM": "LLL",
@@ -1257,6 +1920,8 @@ Globalize.load({
 								"h": "h a",
 								"hm": "h:mm a",
 								"hms": "h:mm:ss a",
+								"hmsv": "h:mm:ss a v",
+								"hmv": "h:mm a v",
 								"ms": "mm:ss",
 								"y": "y",
 								"yM": "M/y",
@@ -1389,11 +2054,11 @@ Globalize.load({
 		"de": {
 			"identity": {
 				"version": {
-					"_cldrVersion": "25",
-					"_number": "$Revision: 91 $"
+					"_cldrVersion": "27.0.1",
+					"_number": "$Revision: 11304 $"
 				},
 				"generation": {
-					"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+					"_date": "$Date: 2015-02-24 11:35:18 -0600 (Tue, 24 Feb 2015) $"
 				},
 				"language": "de"
 			},
@@ -1619,13 +2284,13 @@ Globalize.load({
 									"evening": "abends",
 									"morning": "vormittags",
 									"night": "nachts",
-									"noon": "Mittag",
+									"noon": "mittags",
 									"pm": "nachm."
 								},
 								"narrow": {
-									"am": "a",
-									"noon": "n",
-									"pm": "p"
+									"am": "vm.",
+									"noon": "m.",
+									"pm": "nm."
 								},
 								"wide": {
 									"afternoon": "nachmittags",
@@ -1634,7 +2299,7 @@ Globalize.load({
 									"evening": "abends",
 									"morning": "vormittags",
 									"night": "nachts",
-									"noon": "Mittag",
+									"noon": "mittags",
 									"pm": "nachm."
 								}
 							},
@@ -1646,22 +2311,22 @@ Globalize.load({
 									"evening": "abends",
 									"morning": "vormittags",
 									"night": "nachts",
-									"noon": "Mittag",
+									"noon": "mittags",
 									"pm": "nachm."
 								},
 								"narrow": {
-									"am": "a",
-									"noon": "n",
-									"pm": "p"
+									"am": "vm.",
+									"noon": "m.",
+									"pm": "nm."
 								},
 								"wide": {
-									"afternoon": "Nachmittag",
+									"afternoon": "nachmittags",
 									"am": "vorm.",
-									"earlyMorning": "Morgen",
-									"evening": "Abend",
-									"morning": "Vormittag",
-									"night": "Nacht",
-									"noon": "Mittag",
+									"earlyMorning": "morgens",
+									"evening": "abends",
+									"morning": "vormittags",
+									"night": "nachts",
+									"noon": "mittags",
 									"pm": "nachm."
 								}
 							}
@@ -1669,9 +2334,9 @@ Globalize.load({
 						"eras": {
 							"eraNames": {
 								"0": "v. Chr.",
-								"0-alt-variant": "vor der gewöhnlichen Zeitrechnung",
+								"0-alt-variant": "vor unserer Zeitrechnung",
 								"1": "n. Chr.",
-								"1-alt-variant": "der gewöhnlichen Zeitrechnung"
+								"1-alt-variant": "unserer Zeitrechnung"
 							},
 							"eraAbbr": {
 								"0": "v. Chr.",
@@ -1681,9 +2346,9 @@ Globalize.load({
 							},
 							"eraNarrow": {
 								"0": "v. Chr.",
-								"0-alt-variant": "vdZ",
+								"0-alt-variant": "v. u. Z.",
 								"1": "n. Chr.",
-								"1-alt-variant": "dZ"
+								"1-alt-variant": "u. Z."
 							}
 						},
 						"dateFormats": {
@@ -1699,11 +2364,12 @@ Globalize.load({
 							"short": "HH:mm"
 						},
 						"dateTimeFormats": {
-							"full": "{1} {0}",
-							"long": "{1} {0}",
-							"medium": "{1} {0}",
-							"short": "{1} {0}",
+							"full": "{1} 'um' {0}",
+							"long": "{1} 'um' {0}",
+							"medium": "{1}, {0}",
+							"short": "{1}, {0}",
 							"availableFormats": {
+								"E": "ccc",
 								"EHm": "E, HH:mm",
 								"EHms": "E, HH:mm:ss",
 								"Ed": "E, d.",
@@ -1716,6 +2382,8 @@ Globalize.load({
 								"H": "HH 'Uhr'",
 								"Hm": "HH:mm",
 								"Hms": "HH:mm:ss",
+								"Hmsv": "HH:mm:ss v",
+								"Hmv": "HH:mm v",
 								"M": "L",
 								"MEd": "E, d.M.",
 								"MMM": "LLL",
@@ -1729,6 +2397,8 @@ Globalize.load({
 								"h": "h a",
 								"hm": "h:mm a",
 								"hms": "h:mm:ss a",
+								"hmsv": "h:mm:ss a v",
+								"hmv": "h:mm a v",
 								"ms": "mm:ss",
 								"y": "y",
 								"yM": "M.y",
@@ -1757,105 +2427,213 @@ Globalize.load({
 								"Year": "{1} {0}"
 							},
 							"intervalFormats": {
-								"intervalFormatFallback": "{0} - {1}",
+								"intervalFormatFallback": "{0} – {1}",
 								"H": {
-									"H": "HH-HH 'Uhr'"
+									"H": "HH–HH 'Uhr'"
 								},
 								"Hm": {
-									"H": "HH:mm-HH:mm",
-									"m": "HH:mm-HH:mm"
+									"H": "HH:mm–HH:mm",
+									"m": "HH:mm–HH:mm"
 								},
 								"Hmv": {
-									"H": "HH:mm-HH:mm v",
-									"m": "HH:mm-HH:mm v"
+									"H": "HH:mm–HH:mm v",
+									"m": "HH:mm–HH:mm v"
 								},
 								"Hv": {
-									"H": "HH-HH 'Uhr' v"
+									"H": "HH–HH 'Uhr' v"
 								},
 								"M": {
-									"M": "M.-M."
+									"M": "M.–M."
 								},
 								"MEd": {
-									"M": "E, dd.MM. - E, dd.MM.",
-									"d": "E, dd.MM. - E, dd.MM."
+									"M": "E, dd.MM. – E, dd.MM.",
+									"d": "E, dd.MM. – E, dd.MM."
 								},
 								"MMM": {
-									"M": "MMM-MMM"
+									"M": "MMM–MMM"
 								},
 								"MMMEd": {
-									"M": "E, d. MMM - E, d. MMM",
-									"d": "E, d. - E, d. MMM"
+									"M": "E, d. MMM – E, d. MMM",
+									"d": "E, d. – E, d. MMM"
 								},
 								"MMMM": {
-									"M": "LLLL-LLLL"
+									"M": "LLLL–LLLL"
 								},
 								"MMMd": {
-									"M": "d. MMM - d. MMM",
-									"d": "d.-d. MMM"
+									"M": "d. MMM – d. MMM",
+									"d": "d.–d. MMM"
 								},
 								"Md": {
-									"M": "dd.MM. - dd.MM.",
-									"d": "dd.MM. - dd.MM."
+									"M": "dd.MM. – dd.MM.",
+									"d": "dd.MM. – dd.MM."
 								},
 								"d": {
-									"d": "d.-d."
+									"d": "d.–d."
 								},
 								"h": {
-									"a": "h a - h a",
-									"h": "h-h a"
+									"a": "h a – h a",
+									"h": "h–h a"
 								},
 								"hm": {
-									"a": "h:mm a - h:mm a",
-									"h": "h:mm-h:mm a",
-									"m": "h:mm-h:mm a"
+									"a": "h:mm a – h:mm a",
+									"h": "h:mm–h:mm a",
+									"m": "h:mm–h:mm a"
 								},
 								"hmv": {
-									"a": "h:mm a - h:mm a v",
-									"h": "h:mm-h:mm a v",
-									"m": "h:mm-h:mm a v"
+									"a": "h:mm a – h:mm a v",
+									"h": "h:mm–h:mm a v",
+									"m": "h:mm–h:mm a v"
 								},
 								"hv": {
-									"a": "h a - h a v",
-									"h": "h-h a v"
+									"a": "h a – h a v",
+									"h": "h–h a v"
 								},
 								"y": {
-									"y": "y-y"
+									"y": "y–y"
 								},
 								"yM": {
-									"M": "MM.y - MM.y",
-									"y": "MM.y - MM.y"
+									"M": "MM.y – MM.y",
+									"y": "MM.y – MM.y"
 								},
 								"yMEd": {
-									"M": "E, dd.MM.y - E, dd.MM.y",
-									"d": "E, dd.MM.y - E, dd.MM.y",
-									"y": "E, dd.MM.y - E, dd.MM.y"
+									"M": "E, dd.MM.y – E, dd.MM.y",
+									"d": "E, dd.MM.y – E, dd.MM.y",
+									"y": "E, dd.MM.y – E, dd.MM.y"
 								},
 								"yMMM": {
-									"M": "MMM-MMM y",
-									"y": "MMM y - MMM y"
+									"M": "MMM–MMM y",
+									"y": "MMM y – MMM y"
 								},
 								"yMMMEd": {
-									"M": "E, d. MMM - E, d. MMM y",
-									"d": "E, d. - E, d. MMM y",
-									"y": "E, d. MMM y - E, d. MMM y"
+									"M": "E, d. MMM – E, d. MMM y",
+									"d": "E, d. – E, d. MMM y",
+									"y": "E, d. MMM y – E, d. MMM y"
 								},
 								"yMMMM": {
-									"M": "MMMM-MMMM y",
-									"y": "MMMM y - MMMM y"
+									"M": "MMMM–MMMM y",
+									"y": "MMMM y – MMMM y"
 								},
 								"yMMMd": {
-									"M": "d. MMM - d. MMM y",
-									"d": "d.-d. MMM y",
-									"y": "d. MMM y - d. MMM y"
+									"M": "d. MMM – d. MMM y",
+									"d": "d.–d. MMM y",
+									"y": "d. MMM y – d. MMM y"
 								},
 								"yMd": {
-									"M": "dd.MM.y - dd.MM.y",
-									"d": "dd.MM.y - dd.MM.y",
-									"y": "dd.MM.y - dd.MM.y"
+									"M": "dd.MM.y – dd.MM.y",
+									"d": "dd.MM.y – dd.MM.y",
+									"y": "dd.MM.y – dd.MM.y"
 								}
 							}
 						}
 					}
+				}
+			},
+			"numbers": {
+				"defaultNumberingSystem": "latn",
+				"otherNumberingSystems": {
+					"native": "latn"
+				},
+				"minimumGroupingDigits": "1",
+				"symbols-numberSystem-latn": {
+					"decimal": ",",
+					"group": ".",
+					"list": ";",
+					"percentSign": "%",
+					"plusSign": "+",
+					"minusSign": "-",
+					"exponential": "E",
+					"superscriptingExponent": "·",
+					"perMille": "‰",
+					"infinity": "∞",
+					"nan": "NaN",
+					"timeSeparator": ":"
+				},
+				"decimalFormats-numberSystem-latn": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-one": "0 Tausend",
+							"1000-count-other": "0 Tausend",
+							"10000-count-one": "00 Tausend",
+							"10000-count-other": "00 Tausend",
+							"100000-count-one": "000 Tausend",
+							"100000-count-other": "000 Tausend",
+							"1000000-count-one": "0 Million",
+							"1000000-count-other": "0 Millionen",
+							"10000000-count-one": "00 Millionen",
+							"10000000-count-other": "00 Millionen",
+							"100000000-count-one": "000 Millionen",
+							"100000000-count-other": "000 Millionen",
+							"1000000000-count-one": "0 Milliarde",
+							"1000000000-count-other": "0 Milliarden",
+							"10000000000-count-one": "00 Milliarden",
+							"10000000000-count-other": "00 Milliarden",
+							"100000000000-count-one": "000 Milliarden",
+							"100000000000-count-other": "000 Milliarden",
+							"1000000000000-count-one": "0 Billion",
+							"1000000000000-count-other": "0 Billionen",
+							"10000000000000-count-one": "00 Billionen",
+							"10000000000000-count-other": "00 Billionen",
+							"100000000000000-count-one": "000 Billionen",
+							"100000000000000-count-other": "000 Billionen"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-one": "0 Tsd'.'",
+							"1000-count-other": "0 Tsd'.'",
+							"10000-count-one": "00 Tsd'.'",
+							"10000-count-other": "00 Tsd'.'",
+							"100000-count-one": "000 Tsd'.'",
+							"100000-count-other": "000 Tsd'.'",
+							"1000000-count-one": "0 Mio'.'",
+							"1000000-count-other": "0 Mio'.'",
+							"10000000-count-one": "00 Mio'.'",
+							"10000000-count-other": "00 Mio'.'",
+							"100000000-count-one": "000 Mio'.'",
+							"100000000-count-other": "000 Mio'.'",
+							"1000000000-count-one": "0 Mrd'.'",
+							"1000000000-count-other": "0 Mrd'.'",
+							"10000000000-count-one": "00 Mrd'.'",
+							"10000000000-count-other": "00 Mrd'.'",
+							"100000000000-count-one": "000 Mrd'.'",
+							"100000000000-count-other": "000 Mrd'.'",
+							"1000000000000-count-one": "0 Bio'.'",
+							"1000000000000-count-other": "0 Bio'.'",
+							"10000000000000-count-one": "00 Bio'.'",
+							"10000000000000-count-other": "00 Bio'.'",
+							"100000000000000-count-one": "000 Bio'.'",
+							"100000000000000-count-other": "000 Bio'.'"
+						}
+					}
+				},
+				"scientificFormats-numberSystem-latn": {
+					"standard": "#E0"
+				},
+				"percentFormats-numberSystem-latn": {
+					"standard": "#,##0 %"
+				},
+				"currencyFormats-numberSystem-latn": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "#,##0.00 ¤",
+					"standard": "#,##0.00 ¤",
+					"unitPattern-count-one": "{0} {1}",
+					"unitPattern-count-other": "{0} {1}"
+				},
+				"miscPatterns-numberSystem-latn": {
+					"atLeast": "{0}+",
+					"range": "{0}–{1}"
 				}
 			}
 		}
@@ -1867,13 +2645,13 @@ Globalize.load({
 		"zh": {
 			"identity": {
 				"version": {
-					"_cldrVersion": "25",
-					"_number": "$Revision: 91 $"
+					"_cldrVersion": "27.0.1",
+					"_number": "$Revision: 11294 $"
 				},
 				"generation": {
-					"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+					"_date": "$Date: 2015-02-23 16:50:24 -0600 (Mon, 23 Feb 2015) $"
 				},
-				"language": "root"
+				"language": "zh"
 			},
 			"dates": {
 				"calendars": {
@@ -2187,8 +2965,8 @@ Globalize.load({
 							"short": "yy/M/d"
 						},
 						"timeFormats": {
-							"full": "zzzzah:mm:ss",
-							"long": "zah:mm:ss",
+							"full": "zzzz ah:mm:ss",
+							"long": "z ah:mm:ss",
 							"medium": "ah:mm:ss",
 							"short": "ah:mm"
 						},
@@ -2198,6 +2976,7 @@ Globalize.load({
 							"medium": "{1} {0}",
 							"short": "{1} {0}",
 							"availableFormats": {
+								"E": "ccc",
 								"EHm": "EHH:mm",
 								"EHms": "EHH:mm:ss",
 								"Ed": "d日E",
@@ -2210,6 +2989,8 @@ Globalize.load({
 								"H": "H时",
 								"Hm": "HH:mm",
 								"Hms": "HH:mm:ss",
+								"Hmsv": "v HH:mm:ss",
+								"Hmv": "v HH:mm",
 								"M": "M月",
 								"MEd": "M/dE",
 								"MMM": "LLL",
@@ -2222,9 +3003,11 @@ Globalize.load({
 								"h": "ah时",
 								"hm": "ah:mm",
 								"hms": "ah:mm:ss",
+								"hmsv": "v ah:mm:ss",
+								"hmv": "v ah:mm",
 								"ms": "mm:ss",
 								"y": "y年",
-								"yM": "y/M",
+								"yM": "y年M月",
 								"yMEd": "y/M/dE",
 								"yMM": "y年M月",
 								"yMMM": "y年M月",
@@ -2346,6 +3129,167 @@ Globalize.load({
 						}
 					}
 				}
+			},
+			"numbers": {
+				"defaultNumberingSystem": "latn",
+				"otherNumberingSystems": {
+					"native": "hanidec",
+					"traditional": "hans",
+					"finance": "hansfin"
+				},
+				"minimumGroupingDigits": "1",
+				"symbols-numberSystem-hanidec": {
+					"decimal": ".",
+					"group": ",",
+					"list": ";",
+					"percentSign": "%",
+					"plusSign": "+",
+					"minusSign": "-",
+					"exponential": "E",
+					"superscriptingExponent": "×",
+					"perMille": "‰",
+					"infinity": "∞",
+					"nan": "NaN",
+					"timeSeparator": ":"
+				},
+				"symbols-numberSystem-latn": {
+					"decimal": ".",
+					"group": ",",
+					"list": ";",
+					"percentSign": "%",
+					"plusSign": "+",
+					"minusSign": "-",
+					"exponential": "E",
+					"superscriptingExponent": "×",
+					"perMille": "‰",
+					"infinity": "∞",
+					"nan": "NaN",
+					"timeSeparator": ":"
+				},
+				"decimalFormats-numberSystem-hanidec": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-other": "0千",
+							"10000-count-other": "0万",
+							"100000-count-other": "00万",
+							"1000000-count-other": "000万",
+							"10000000-count-other": "0000万",
+							"100000000-count-other": "0亿",
+							"1000000000-count-other": "00亿",
+							"10000000000-count-other": "000亿",
+							"100000000000-count-other": "0000亿",
+							"1000000000000-count-other": "0兆",
+							"10000000000000-count-other": "00兆",
+							"100000000000000-count-other": "000兆"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-other": "0千",
+							"10000-count-other": "0万",
+							"100000-count-other": "00万",
+							"1000000-count-other": "000万",
+							"10000000-count-other": "0000万",
+							"100000000-count-other": "0亿",
+							"1000000000-count-other": "00亿",
+							"10000000000-count-other": "000亿",
+							"100000000000-count-other": "0000亿",
+							"1000000000000-count-other": "0兆",
+							"10000000000000-count-other": "00兆",
+							"100000000000000-count-other": "000兆"
+						}
+					}
+				},
+				"decimalFormats-numberSystem-latn": {
+					"standard": "#,##0.###",
+					"long": {
+						"decimalFormat": {
+							"1000-count-other": "0千",
+							"10000-count-other": "0万",
+							"100000-count-other": "00万",
+							"1000000-count-other": "000万",
+							"10000000-count-other": "0000万",
+							"100000000-count-other": "0亿",
+							"1000000000-count-other": "00亿",
+							"10000000000-count-other": "000亿",
+							"100000000000-count-other": "0000亿",
+							"1000000000000-count-other": "0兆",
+							"10000000000000-count-other": "00兆",
+							"100000000000000-count-other": "000兆"
+						}
+					},
+					"short": {
+						"decimalFormat": {
+							"1000-count-other": "0千",
+							"10000-count-other": "0万",
+							"100000-count-other": "00万",
+							"1000000-count-other": "000万",
+							"10000000-count-other": "0000万",
+							"100000000-count-other": "0亿",
+							"1000000000-count-other": "00亿",
+							"10000000000-count-other": "000亿",
+							"100000000000-count-other": "0000亿",
+							"1000000000000-count-other": "0兆",
+							"10000000000000-count-other": "00兆",
+							"100000000000000-count-other": "000兆"
+						}
+					}
+				},
+				"scientificFormats-numberSystem-hanidec": {
+					"standard": "#E0"
+				},
+				"scientificFormats-numberSystem-latn": {
+					"standard": "#E0"
+				},
+				"percentFormats-numberSystem-hanidec": {
+					"standard": "#,##0%"
+				},
+				"percentFormats-numberSystem-latn": {
+					"standard": "#,##0%"
+				},
+				"currencyFormats-numberSystem-hanidec": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "¤#,##0.00;(¤#,##0.00)",
+					"standard": "¤ #,##0.00",
+					"unitPattern-count-other": "{0}{1}"
+				},
+				"currencyFormats-numberSystem-latn": {
+					"currencySpacing": {
+						"beforeCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						},
+						"afterCurrency": {
+							"currencyMatch": "[:^S:]",
+							"surroundingMatch": "[:digit:]",
+							"insertBetween": " "
+						}
+					},
+					"accounting": "¤#,##0.00;(¤#,##0.00)",
+					"standard": "¤ #,##0.00",
+					"unitPattern-count-other": "{0}{1}"
+				},
+				"miscPatterns-numberSystem-hanidec": {
+					"atLeast": "{0}+",
+					"range": "{0}-{1}"
+				},
+				"miscPatterns-numberSystem-latn": {
+					"atLeast": "{0}+",
+					"range": "{0}-{1}"
+				}
 			}
 		}
 	}
@@ -2354,26 +3298,40 @@ Globalize.load({
 Globalize.load({
 	"supplemental": {
 		"version": {
-			"_cldrVersion": "25",
-			"_number": "$Revision: 91 $"
+			"_unicodeVersion": "7.0.0",
+			"_number": "$Revision: 11318 $"
 		},
 		"generation": {
-			"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+			"_date": "$Date: 2015-02-25 23:47:56 -0600 (Wed, 25 Feb 2015) $"
 		},
 		"likelySubtags": {
 			"aa": "aa-Latn-ET",
 			"ab": "ab-Cyrl-GE",
+			"abr": "abr-Latn-GH",
 			"ace": "ace-Latn-ID",
 			"ach": "ach-Latn-UG",
+			"ada": "ada-Latn-GH",
 			"ady": "ady-Cyrl-RU",
+			"ae": "ae-Avst-IR",
+			"aeb": "aeb-Arab-TN",
 			"af": "af-Latn-ZA",
 			"agq": "agq-Latn-CM",
 			"ak": "ak-Latn-GH",
+			"akk": "akk-Xsux-IQ",
+			"aln": "aln-Latn-XK",
 			"alt": "alt-Cyrl-RU",
 			"am": "am-Ethi-ET",
 			"amo": "amo-Latn-NG",
 			"aoz": "aoz-Latn-ID",
 			"ar": "ar-Arab-EG",
+			"arc": "arc-Armi-IR",
+			"arc-Nbat": "arc-Nbat-JO",
+			"arc-Palm": "arc-Palm-SY",
+			"arn": "arn-Latn-CL",
+			"aro": "aro-Latn-BO",
+			"arq": "arq-Arab-DZ",
+			"ary": "ary-Arab-MA",
+			"arz": "arz-Arab-EG",
 			"as": "as-Beng-IN",
 			"asa": "asa-Latn-TZ",
 			"ast": "ast-Latn-ES",
@@ -2385,40 +3343,54 @@ Globalize.load({
 			"az-Arab": "az-Arab-IR",
 			"az-IR": "az-Arab-IR",
 			"az-RU": "az-Cyrl-RU",
+			"azb": "azb-Arab-IR",
 			"ba": "ba-Cyrl-RU",
 			"bal": "bal-Arab-PK",
 			"ban": "ban-Latn-ID",
 			"bap": "bap-Deva-NP",
+			"bar": "bar-Latn-AT",
 			"bas": "bas-Latn-CM",
 			"bax": "bax-Bamu-CM",
 			"bbc": "bbc-Latn-ID",
 			"bbj": "bbj-Latn-CM",
+			"bci": "bci-Latn-CI",
 			"be": "be-Cyrl-BY",
 			"bem": "bem-Latn-ZM",
+			"bew": "bew-Latn-ID",
 			"bez": "bez-Latn-TZ",
 			"bfd": "bfd-Latn-CM",
 			"bfq": "bfq-Taml-IN",
 			"bft": "bft-Arab-PK",
 			"bfy": "bfy-Deva-IN",
 			"bg": "bg-Cyrl-BG",
+			"bgc": "bgc-Deva-IN",
 			"bgx": "bgx-Grek-TR",
+			"bh": "bh-Kthi-IN",
 			"bhb": "bhb-Deva-IN",
+			"bhi": "bhi-Deva-IN",
+			"bhk": "bhk-Latn-PH",
 			"bho": "bho-Deva-IN",
 			"bi": "bi-Latn-VU",
 			"bik": "bik-Latn-PH",
 			"bin": "bin-Latn-NG",
 			"bjj": "bjj-Deva-IN",
+			"bjn": "bjn-Latn-ID",
 			"bkm": "bkm-Latn-CM",
 			"bku": "bku-Latn-PH",
+			"blt": "blt-Tavt-VN",
 			"bm": "bm-Latn-ML",
 			"bmq": "bmq-Latn-ML",
 			"bn": "bn-Beng-BD",
 			"bo": "bo-Tibt-CN",
+			"bpy": "bpy-Beng-IN",
+			"bqi": "bqi-Arab-IR",
 			"bqv": "bqv-Latn-CI",
 			"br": "br-Latn-FR",
 			"bra": "bra-Deva-IN",
+			"brh": "brh-Arab-PK",
 			"brx": "brx-Deva-IN",
 			"bs": "bs-Latn-BA",
+			"bsq": "bsq-Bass-LR",
 			"bss": "bss-Latn-CM",
 			"bto": "bto-Latn-PH",
 			"btv": "btv-Deva-PK",
@@ -2427,39 +3399,47 @@ Globalize.load({
 			"bug": "bug-Latn-ID",
 			"bum": "bum-Latn-CM",
 			"bvb": "bvb-Latn-GQ",
-			"bya": "bya-Latn-ID",
 			"byn": "byn-Ethi-ER",
 			"byv": "byv-Latn-CM",
 			"bze": "bze-Latn-ML",
 			"ca": "ca-Latn-ES",
 			"cch": "cch-Latn-NG",
 			"ccp": "ccp-Beng-IN",
+			"ccp-Cakm": "ccp-Cakm-BD",
 			"ce": "ce-Cyrl-RU",
 			"ceb": "ceb-Latn-PH",
 			"cgg": "cgg-Latn-UG",
 			"ch": "ch-Latn-GU",
 			"chk": "chk-Latn-FM",
 			"chm": "chm-Cyrl-RU",
+			"cho": "cho-Latn-US",
 			"chp": "chp-Latn-CA",
 			"chr": "chr-Cher-US",
 			"cja": "cja-Arab-KH",
 			"cjm": "cjm-Cham-VN",
 			"ckb": "ckb-Arab-IQ",
 			"co": "co-Latn-FR",
+			"cop": "cop-Copt-EG",
+			"cps": "cps-Latn-PH",
 			"cr": "cr-Cans-CA",
 			"crj": "crj-Cans-CA",
 			"crk": "crk-Cans-CA",
 			"crl": "crl-Cans-CA",
 			"crm": "crm-Cans-CA",
+			"crs": "crs-Latn-SC",
 			"cs": "cs-Latn-CZ",
 			"csb": "csb-Latn-PL",
 			"csw": "csw-Cans-CA",
+			"ctd": "ctd-Pauc-MM",
 			"cu": "cu-Cyrl-RU",
+			"cu-Glag": "cu-Glag-BG",
 			"cv": "cv-Cyrl-RU",
 			"cy": "cy-Latn-GB",
 			"da": "da-Latn-DK",
+			"dak": "dak-Latn-US",
 			"dar": "dar-Cyrl-RU",
 			"dav": "dav-Latn-KE",
+			"dcc": "dcc-Arab-IN",
 			"de": "de-Latn-DE",
 			"den": "den-Latn-CA",
 			"dgr": "dgr-Latn-CA",
@@ -2468,6 +3448,7 @@ Globalize.load({
 			"doi": "doi-Arab-IN",
 			"dsb": "dsb-Latn-DE",
 			"dtm": "dtm-Latn-ML",
+			"dtp": "dtp-Latn-MY",
 			"dua": "dua-Latn-CM",
 			"dv": "dv-Thaa-MV",
 			"dyo": "dyo-Latn-SN",
@@ -2476,16 +3457,24 @@ Globalize.load({
 			"ebu": "ebu-Latn-KE",
 			"ee": "ee-Latn-GH",
 			"efi": "efi-Latn-NG",
+			"egl": "egl-Latn-IT",
+			"egy": "egy-Egyp-EG",
+			"eky": "eky-Kali-MM",
 			"el": "el-Grek-GR",
 			"en": "en-Latn-US",
+			"en-Shaw": "en-Shaw-GB",
 			"eo": "eo-Latn-001",
 			"es": "es-Latn-ES",
+			"esu": "esu-Latn-US",
 			"et": "et-Latn-EE",
+			"ett": "ett-Ital-IT",
 			"eu": "eu-Latn-ES",
 			"ewo": "ewo-Latn-CM",
+			"ext": "ext-Latn-ES",
 			"fa": "fa-Arab-IR",
 			"fan": "fan-Latn-GQ",
 			"ff": "ff-Latn-SN",
+			"ffm": "ffm-Latn-ML",
 			"fi": "fi-Latn-FI",
 			"fil": "fil-Latn-PH",
 			"fit": "fit-Latn-SE",
@@ -2493,12 +3482,22 @@ Globalize.load({
 			"fo": "fo-Latn-FO",
 			"fon": "fon-Latn-BJ",
 			"fr": "fr-Latn-FR",
+			"frc": "frc-Latn-US",
+			"frp": "frp-Latn-FR",
+			"frr": "frr-Latn-DE",
+			"frs": "frs-Latn-DE",
+			"fud": "fud-Latn-WF",
+			"fuq": "fuq-Latn-NE",
 			"fur": "fur-Latn-IT",
+			"fuv": "fuv-Latn-NG",
 			"fy": "fy-Latn-NL",
 			"ga": "ga-Latn-IE",
 			"gaa": "gaa-Latn-GH",
 			"gag": "gag-Latn-MD",
+			"gan": "gan-Hans-CN",
+			"gay": "gay-Latn-ID",
 			"gbm": "gbm-Deva-IN",
+			"gbz": "gbz-Arab-IR",
 			"gcr": "gcr-Latn-GF",
 			"gd": "gd-Latn-GB",
 			"gez": "gez-Ethi-ET",
@@ -2507,14 +3506,21 @@ Globalize.load({
 			"gjk": "gjk-Arab-PK",
 			"gju": "gju-Arab-PK",
 			"gl": "gl-Latn-ES",
+			"glk": "glk-Arab-IR",
 			"gn": "gn-Latn-PY",
+			"gom": "gom-Deva-IN",
 			"gon": "gon-Telu-IN",
 			"gor": "gor-Latn-ID",
 			"gos": "gos-Latn-NL",
+			"got": "got-Goth-UA",
+			"grc": "grc-Cprt-CY",
+			"grc-Linb": "grc-Linb-GR",
 			"grt": "grt-Beng-IN",
 			"gsw": "gsw-Latn-CH",
 			"gu": "gu-Gujr-IN",
 			"gub": "gub-Latn-BR",
+			"guc": "guc-Latn-CO",
+			"gur": "gur-Latn-GH",
 			"guz": "guz-Latn-KE",
 			"gv": "gv-Latn-IM",
 			"gvr": "gvr-Deva-NP",
@@ -2522,27 +3528,37 @@ Globalize.load({
 			"ha": "ha-Latn-NG",
 			"ha-CM": "ha-Arab-CM",
 			"ha-SD": "ha-Arab-SD",
+			"hak": "hak-Hans-CN",
 			"haw": "haw-Latn-US",
+			"haz": "haz-Arab-AF",
 			"he": "he-Hebr-IL",
 			"hi": "hi-Deva-IN",
+			"hif": "hif-Deva-FJ",
 			"hil": "hil-Latn-PH",
+			"hmd": "hmd-Plrd-CN",
 			"hnd": "hnd-Arab-PK",
 			"hne": "hne-Deva-IN",
+			"hnj": "hnj-Hmng-LA",
 			"hnn": "hnn-Latn-PH",
+			"hno": "hno-Arab-PK",
 			"ho": "ho-Latn-PG",
 			"hoc": "hoc-Deva-IN",
 			"hoj": "hoj-Deva-IN",
 			"hr": "hr-Latn-HR",
 			"hsb": "hsb-Latn-DE",
+			"hsn": "hsn-Hans-CN",
 			"ht": "ht-Latn-HT",
 			"hu": "hu-Latn-HU",
 			"hy": "hy-Armn-AM",
+			"hz": "hz-Latn-NA",
 			"ia": "ia-Latn-FR",
+			"iba": "iba-Latn-MY",
 			"ibb": "ibb-Latn-NG",
 			"id": "id-Latn-ID",
 			"ig": "ig-Latn-NG",
 			"ii": "ii-Yiii-CN",
 			"ik": "ik-Latn-US",
+			"ikt": "ikt-Latn-CA",
 			"ilo": "ilo-Latn-PH",
 			"in": "in-Latn-ID",
 			"inh": "inh-Cyrl-RU",
@@ -2550,16 +3566,20 @@ Globalize.load({
 			"it": "it-Latn-IT",
 			"iu": "iu-Cans-CA",
 			"iw": "iw-Hebr-IL",
+			"izh": "izh-Latn-RU",
 			"ja": "ja-Jpan-JP",
+			"jam": "jam-Latn-JM",
 			"jgo": "jgo-Latn-CM",
 			"ji": "ji-Hebr-UA",
 			"jmc": "jmc-Latn-TZ",
 			"jml": "jml-Deva-NP",
+			"jut": "jut-Latn-DK",
 			"jv": "jv-Latn-ID",
 			"jw": "jw-Latn-ID",
 			"ka": "ka-Geor-GE",
 			"kaa": "kaa-Cyrl-UZ",
 			"kab": "kab-Latn-DZ",
+			"kac": "kac-Latn-MM",
 			"kaj": "kaj-Latn-NG",
 			"kam": "kam-Latn-KE",
 			"kao": "kao-Latn-ML",
@@ -2572,15 +3592,18 @@ Globalize.load({
 			"ken": "ken-Latn-CM",
 			"kfo": "kfo-Latn-CI",
 			"kfr": "kfr-Deva-IN",
+			"kfy": "kfy-Deva-IN",
 			"kg": "kg-Latn-CD",
 			"kge": "kge-Latn-ID",
 			"kgp": "kgp-Latn-BR",
 			"kha": "kha-Latn-IN",
 			"khb": "khb-Talu-CN",
+			"khn": "khn-Deva-IN",
 			"khq": "khq-Latn-ML",
 			"kht": "kht-Mymr-IN",
 			"khw": "khw-Arab-PK",
 			"ki": "ki-Latn-KE",
+			"kiu": "kiu-Latn-TR",
 			"kj": "kj-Latn-NA",
 			"kjg": "kjg-Laoo-LA",
 			"kk": "kk-Cyrl-KZ",
@@ -2602,6 +3625,7 @@ Globalize.load({
 			"kpe": "kpe-Latn-LR",
 			"krc": "krc-Cyrl-RU",
 			"kri": "kri-Latn-SL",
+			"krj": "krj-Latn-PH",
 			"krl": "krl-Latn-RU",
 			"kru": "kru-Deva-IN",
 			"ks": "ks-Arab-IN",
@@ -2616,6 +3640,7 @@ Globalize.load({
 			"kvr": "kvr-Latn-ID",
 			"kvx": "kvx-Arab-PK",
 			"kw": "kw-Latn-GB",
+			"kxm": "kxm-Thai-TH",
 			"kxp": "kxp-Arab-PK",
 			"ky": "ky-Cyrl-KG",
 			"ky-Arab": "ky-Arab-CN",
@@ -2623,8 +3648,11 @@ Globalize.load({
 			"ky-Latn": "ky-Latn-TR",
 			"ky-TR": "ky-Latn-TR",
 			"la": "la-Latn-VA",
+			"lab": "lab-Lina-GR",
+			"lad": "lad-Hebr-IL",
 			"lag": "lag-Latn-TZ",
 			"lah": "lah-Arab-PK",
+			"laj": "laj-Latn-UG",
 			"lb": "lb-Latn-LU",
 			"lbe": "lbe-Cyrl-RU",
 			"lbw": "lbw-Latn-ID",
@@ -2634,16 +3662,21 @@ Globalize.load({
 			"lg": "lg-Latn-UG",
 			"li": "li-Latn-NL",
 			"lif": "lif-Deva-NP",
+			"lif-Limb": "lif-Limb-IN",
+			"lij": "lij-Latn-IT",
 			"lis": "lis-Lisu-CN",
+			"ljp": "ljp-Latn-ID",
 			"lki": "lki-Arab-IR",
 			"lkt": "lkt-Latn-US",
 			"lmn": "lmn-Telu-IN",
-			"lmo": "lmo-Latn-CH",
+			"lmo": "lmo-Latn-IT",
 			"ln": "ln-Latn-CD",
 			"lo": "lo-Laoo-LA",
 			"lol": "lol-Latn-CD",
 			"loz": "loz-Latn-ZM",
+			"lrc": "lrc-Arab-IR",
 			"lt": "lt-Latn-LT",
+			"ltg": "ltg-Latn-LV",
 			"lu": "lu-Latn-CD",
 			"lua": "lua-Latn-CD",
 			"luo": "luo-Latn-KE",
@@ -2651,6 +3684,8 @@ Globalize.load({
 			"luz": "luz-Arab-IR",
 			"lv": "lv-Latn-LV",
 			"lwl": "lwl-Thai-TH",
+			"lzh": "lzh-Hans-CN",
+			"lzz": "lzz-Latn-TR",
 			"mad": "mad-Latn-ID",
 			"maf": "maf-Latn-CM",
 			"mag": "mag-Deva-IN",
@@ -2666,6 +3701,7 @@ Globalize.load({
 			"mdr": "mdr-Latn-ID",
 			"men": "men-Latn-SL",
 			"mer": "mer-Latn-KE",
+			"mfa": "mfa-Arab-TH",
 			"mfe": "mfe-Latn-MU",
 			"mg": "mg-Latn-MG",
 			"mgh": "mgh-Latn-MZ",
@@ -2683,41 +3719,56 @@ Globalize.load({
 			"mni": "mni-Beng-IN",
 			"mnw": "mnw-Mymr-MM",
 			"moe": "moe-Latn-CA",
+			"moh": "moh-Latn-CA",
 			"mos": "mos-Latn-BF",
 			"mr": "mr-Deva-IN",
 			"mrd": "mrd-Deva-NP",
 			"mrj": "mrj-Cyrl-RU",
+			"mru": "mru-Mroo-BD",
 			"ms": "ms-Latn-MY",
 			"ms-CC": "ms-Arab-CC",
 			"ms-ID": "ms-Arab-ID",
 			"mt": "mt-Latn-MT",
+			"mtr": "mtr-Deva-IN",
 			"mua": "mua-Latn-CM",
+			"mus": "mus-Latn-US",
 			"mvy": "mvy-Arab-PK",
 			"mwk": "mwk-Latn-ML",
 			"mwr": "mwr-Deva-IN",
+			"mwv": "mwv-Latn-ID",
 			"mxc": "mxc-Latn-ZW",
 			"my": "my-Mymr-MM",
 			"myv": "myv-Cyrl-RU",
+			"myx": "myx-Latn-UG",
+			"myz": "myz-Mand-IR",
+			"mzn": "mzn-Arab-IR",
 			"na": "na-Latn-NR",
+			"nan": "nan-Hans-CN",
 			"nap": "nap-Latn-IT",
 			"naq": "naq-Latn-NA",
 			"nb": "nb-Latn-NO",
 			"nch": "nch-Latn-MX",
 			"nd": "nd-Latn-ZW",
+			"ndc": "ndc-Latn-MZ",
 			"nds": "nds-Latn-DE",
 			"ne": "ne-Deva-NP",
 			"new": "new-Deva-NP",
 			"ng": "ng-Latn-NA",
+			"ngl": "ngl-Latn-MZ",
 			"nhe": "nhe-Latn-MX",
 			"nhw": "nhw-Latn-MX",
 			"nij": "nij-Latn-ID",
 			"niu": "niu-Latn-NU",
+			"njo": "njo-Latn-IN",
 			"nl": "nl-Latn-NL",
 			"nmg": "nmg-Latn-CM",
 			"nn": "nn-Latn-NO",
 			"nnh": "nnh-Latn-CM",
 			"no": "no-Latn-NO",
 			"nod": "nod-Lana-TH",
+			"noe": "noe-Deva-IN",
+			"non": "non-Runr-SE",
+			"nqo": "nqo-Nkoo-GN",
 			"nr": "nr-Latn-ZA",
 			"nsk": "nsk-Cans-CA",
 			"nso": "nso-Latn-ZA",
@@ -2727,31 +3778,50 @@ Globalize.load({
 			"ny": "ny-Latn-MW",
 			"nym": "nym-Latn-TZ",
 			"nyn": "nyn-Latn-UG",
+			"nzi": "nzi-Latn-GH",
 			"oc": "oc-Latn-FR",
 			"om": "om-Latn-ET",
 			"or": "or-Orya-IN",
 			"os": "os-Cyrl-GE",
+			"otk": "otk-Orkh-MN",
 			"pa": "pa-Guru-IN",
 			"pa-Arab": "pa-Arab-PK",
 			"pa-PK": "pa-Arab-PK",
 			"pag": "pag-Latn-PH",
+			"pal": "pal-Phli-IR",
+			"pal-Phlp": "pal-Phlp-CN",
 			"pam": "pam-Latn-PH",
 			"pap": "pap-Latn-AW",
 			"pau": "pau-Latn-PW",
+			"pcd": "pcd-Latn-FR",
 			"pcm": "pcm-Latn-NG",
+			"pdc": "pdc-Latn-US",
+			"pdt": "pdt-Latn-CA",
+			"peo": "peo-Xpeo-IR",
+			"pfl": "pfl-Latn-DE",
+			"phn": "phn-Phnx-LB",
+			"pka": "pka-Brah-IN",
 			"pko": "pko-Latn-KE",
 			"pl": "pl-Latn-PL",
+			"pms": "pms-Latn-IT",
+			"pnt": "pnt-Grek-GR",
 			"pon": "pon-Latn-FM",
+			"pra": "pra-Khar-PK",
 			"prd": "prd-Arab-IR",
 			"prg": "prg-Latn-001",
 			"ps": "ps-Arab-AF",
 			"pt": "pt-Latn-BR",
 			"puu": "puu-Latn-GA",
 			"qu": "qu-Latn-PE",
+			"quc": "quc-Latn-GT",
+			"qug": "qug-Latn-EC",
 			"raj": "raj-Latn-IN",
 			"rcf": "rcf-Latn-RE",
 			"rej": "rej-Latn-ID",
+			"rgn": "rgn-Latn-IT",
 			"ria": "ria-Latn-IN",
+			"rif": "rif-Tfng-MA",
+			"rif-NL": "rif-Latn-NL",
 			"rjs": "rjs-Deva-NP",
 			"rkt": "rkt-Beng-BD",
 			"rm": "rm-Latn-CH",
@@ -2764,8 +3834,10 @@ Globalize.load({
 			"ro": "ro-Latn-RO",
 			"rob": "rob-Latn-ID",
 			"rof": "rof-Latn-TZ",
+			"rtm": "rtm-Latn-FJ",
 			"ru": "ru-Cyrl-RU",
 			"rue": "rue-Cyrl-UA",
+			"rug": "rug-Latn-SB",
 			"rw": "rw-Latn-RW",
 			"rwk": "rwk-Latn-TZ",
 			"ryu": "ryu-Kana-JP",
@@ -2777,43 +3849,57 @@ Globalize.load({
 			"sat": "sat-Latn-IN",
 			"saz": "saz-Saur-IN",
 			"sbp": "sbp-Latn-TZ",
+			"sc": "sc-Latn-IT",
+			"sck": "sck-Deva-IN",
 			"scn": "scn-Latn-IT",
 			"sco": "sco-Latn-GB",
 			"scs": "scs-Latn-CA",
 			"sd": "sd-Arab-PK",
 			"sd-Deva": "sd-Deva-IN",
-			"sdh": "sdh-Arab-IR",
+			"sd-Khoj": "sd-Khoj-IN",
+			"sd-Sind": "sd-Sind-IN",
+			"sdc": "sdc-Latn-IT",
 			"se": "se-Latn-NO",
 			"sef": "sef-Latn-CI",
 			"seh": "seh-Latn-MZ",
+			"sei": "sei-Latn-MX",
 			"ses": "ses-Latn-ML",
 			"sg": "sg-Latn-CF",
+			"sga": "sga-Ogam-IE",
+			"sgs": "sgs-Latn-LT",
 			"shi": "shi-Tfng-MA",
 			"shn": "shn-Mymr-MM",
 			"si": "si-Sinh-LK",
 			"sid": "sid-Latn-ET",
 			"sk": "sk-Latn-SK",
+			"skr": "skr-Arab-PK",
 			"sl": "sl-Latn-SI",
+			"sli": "sli-Latn-PL",
+			"sly": "sly-Latn-ID",
 			"sm": "sm-Latn-WS",
 			"sma": "sma-Latn-SE",
 			"smj": "smj-Latn-SE",
 			"smn": "smn-Latn-FI",
+			"smp": "smp-Samr-IL",
 			"sms": "sms-Latn-FI",
 			"sn": "sn-Latn-ZW",
 			"snk": "snk-Latn-ML",
 			"so": "so-Latn-SO",
+			"sou": "sou-Thai-TH",
 			"sq": "sq-Latn-AL",
 			"sr": "sr-Cyrl-RS",
 			"sr-ME": "sr-Latn-ME",
 			"sr-RO": "sr-Latn-RO",
 			"sr-RU": "sr-Latn-RU",
 			"sr-TR": "sr-Latn-TR",
+			"srb": "srb-Sora-IN",
 			"srn": "srn-Latn-SR",
 			"srr": "srr-Latn-SN",
 			"srx": "srx-Deva-IN",
 			"ss": "ss-Latn-ZA",
 			"ssy": "ssy-Latn-ER",
 			"st": "st-Latn-ZA",
+			"stq": "stq-Latn-DE",
 			"su": "su-Latn-ID",
 			"suk": "suk-Latn-TZ",
 			"sus": "sus-Latn-GN",
@@ -2821,9 +3907,11 @@ Globalize.load({
 			"sw": "sw-Latn-TZ",
 			"swb": "swb-Arab-YT",
 			"swc": "swc-Latn-CD",
+			"swv": "swv-Deva-IN",
 			"sxn": "sxn-Latn-ID",
 			"syl": "syl-Beng-BD",
 			"syr": "syr-Syrc-IQ",
+			"szl": "szl-Latn-PL",
 			"ta": "ta-Taml-IN",
 			"taj": "taj-Deva-NP",
 			"tbw": "tbw-Latn-PH",
@@ -2847,21 +3935,27 @@ Globalize.load({
 			"tiv": "tiv-Latn-NG",
 			"tk": "tk-Latn-TM",
 			"tkl": "tkl-Latn-TK",
+			"tkr": "tkr-Latn-AZ",
 			"tkt": "tkt-Deva-NP",
 			"tl": "tl-Latn-PH",
+			"tly": "tly-Latn-AZ",
 			"tmh": "tmh-Latn-NE",
 			"tn": "tn-Latn-ZA",
 			"to": "to-Latn-TO",
+			"tog": "tog-Latn-MW",
 			"tpi": "tpi-Latn-PG",
 			"tr": "tr-Latn-TR",
+			"tru": "tru-Latn-TR",
 			"trv": "trv-Latn-TW",
 			"ts": "ts-Latn-ZA",
+			"tsd": "tsd-Grek-GR",
 			"tsf": "tsf-Deva-NP",
 			"tsg": "tsg-Latn-PH",
 			"tsj": "tsj-Tibt-BT",
 			"tt": "tt-Cyrl-RU",
 			"ttj": "ttj-Latn-UG",
 			"tts": "tts-Thai-TH",
+			"ttt": "ttt-Latn-AZ",
 			"tum": "tum-Latn-MW",
 			"tvl": "tvl-Latn-TV",
 			"twq": "twq-Latn-NE",
@@ -2873,6 +3967,7 @@ Globalize.load({
 			"ug-Cyrl": "ug-Cyrl-KZ",
 			"ug-KZ": "ug-Cyrl-KZ",
 			"ug-MN": "ug-Cyrl-MN",
+			"uga": "uga-Ugar-SY",
 			"uk": "uk-Cyrl-UA",
 			"uli": "uli-Latn-FM",
 			"umb": "umb-Latn-AO",
@@ -2883,7 +3978,7 @@ Globalize.load({
 			"und-009": "en-Latn-AU",
 			"und-011": "en-Latn-NG",
 			"und-013": "es-Latn-MX",
-			"und-014": "en-Latn-KE",
+			"und-014": "sw-Latn-TZ",
 			"und-015": "ar-Arab-EG",
 			"und-017": "sw-Latn-CD",
 			"und-018": "en-Latn-ZA",
@@ -2896,7 +3991,7 @@ Globalize.load({
 			"und-039": "it-Latn-IT",
 			"und-053": "en-Latn-AU",
 			"und-054": "en-Latn-PG",
-			"und-057": "en-Latn-KI",
+			"und-057": "en-Latn-GU",
 			"und-061": "sm-Latn-WS",
 			"und-142": "zh-Hans-CN",
 			"und-143": "uz-Latn-UZ",
@@ -2919,6 +4014,7 @@ Globalize.load({
 			"und-AW": "nl-Latn-AW",
 			"und-AX": "sv-Latn-AX",
 			"und-AZ": "az-Latn-AZ",
+			"und-Aghb": "lez-Aghb-RU",
 			"und-Arab": "ar-Arab-EG",
 			"und-Arab-CC": "ms-Arab-CC",
 			"und-Arab-CN": "ug-Arab-CN",
@@ -2930,8 +4026,8 @@ Globalize.load({
 			"und-Arab-MU": "ur-Arab-MU",
 			"und-Arab-NG": "ha-Arab-NG",
 			"und-Arab-PK": "ur-Arab-PK",
+			"und-Arab-TH": "mfa-Arab-TH",
 			"und-Arab-TJ": "fa-Arab-TJ",
-			"und-Arab-TR": "zza-Arab-TR",
 			"und-Arab-YT": "swb-Arab-YT",
 			"und-Armi": "arc-Armi-IR",
 			"und-Armn": "hy-Armn-AM",
@@ -2954,11 +4050,12 @@ Globalize.load({
 			"und-BY": "be-Cyrl-BY",
 			"und-Bali": "ban-Bali-ID",
 			"und-Bamu": "bax-Bamu-CM",
+			"und-Bass": "bsq-Bass-LR",
 			"und-Batk": "bbc-Batk-ID",
 			"und-Beng": "bn-Beng-BD",
 			"und-Bopo": "zh-Bopo-TW",
-			"und-Brah": "pra-Brah-IN",
-			"und-Brai": "und-Brai-FR",
+			"und-Brah": "pka-Brah-IN",
+			"und-Brai": "fr-Brai-FR",
 			"und-Bugi": "bug-Bugi-ID",
 			"und-Buhd": "bku-Buhd-PH",
 			"und-CD": "sw-Latn-CD",
@@ -3002,8 +4099,10 @@ Globalize.load({
 			"und-DZ": "ar-Arab-DZ",
 			"und-Deva": "hi-Deva-IN",
 			"und-Deva-BT": "ne-Deva-BT",
+			"und-Deva-FJ": "hif-Deva-FJ",
 			"und-Deva-MU": "bho-Deva-MU",
 			"und-Deva-PK": "btv-Deva-PK",
+			"und-Dupl": "fr-Dupl-FR",
 			"und-EA": "es-Latn-EA",
 			"und-EC": "es-Latn-EC",
 			"und-EE": "et-Latn-EE",
@@ -3014,9 +4113,9 @@ Globalize.load({
 			"und-ET": "am-Ethi-ET",
 			"und-EU": "en-Latn-GB",
 			"und-Egyp": "egy-Egyp-EG",
+			"und-Elba": "sq-Elba-AL",
 			"und-Ethi": "am-Ethi-ET",
 			"und-FI": "fi-Latn-FI",
-			"und-FM": "chk-Latn-FM",
 			"und-FO": "fo-Latn-FO",
 			"und-FR": "fr-Latn-FR",
 			"und-GA": "fr-Latn-GA",
@@ -3034,6 +4133,7 @@ Globalize.load({
 			"und-Geor": "ka-Geor-GE",
 			"und-Glag": "cu-Glag-BG",
 			"und-Goth": "got-Goth-UA",
+			"und-Gran": "sa-Gran-IN",
 			"und-Grek": "el-Grek-GR",
 			"und-Grek-TR": "bgx-Grek-TR",
 			"und-Gujr": "gu-Gujr-IN",
@@ -3056,6 +4156,7 @@ Globalize.load({
 			"und-Hebr-UA": "yi-Hebr-UA",
 			"und-Hebr-US": "yi-Hebr-US",
 			"und-Hira": "ja-Hira-JP",
+			"und-Hmng": "hnj-Hmng-LA",
 			"und-IC": "es-Latn-IC",
 			"und-ID": "id-Latn-ID",
 			"und-IL": "he-Hebr-IL",
@@ -3069,6 +4170,7 @@ Globalize.load({
 			"und-JP": "ja-Jpan-JP",
 			"und-Java": "jv-Java-ID",
 			"und-Jpan": "ja-Jpan-JP",
+			"und-KE": "sw-Latn-KE",
 			"und-KG": "ky-Cyrl-KG",
 			"und-KH": "km-Khmr-KH",
 			"und-KM": "ar-Arab-KM",
@@ -3080,6 +4182,7 @@ Globalize.load({
 			"und-Kana": "ja-Kana-JP",
 			"und-Khar": "pra-Khar-PK",
 			"und-Khmr": "km-Khmr-KH",
+			"und-Khoj": "sd-Khoj-IN",
 			"und-Knda": "kn-Knda-IN",
 			"und-Kore": "ko-Kore-KR",
 			"und-Kthi": "bh-Kthi-IN",
@@ -3095,21 +4198,17 @@ Globalize.load({
 			"und-Lana": "nod-Lana-TH",
 			"und-Laoo": "lo-Laoo-LA",
 			"und-Latn-AF": "tk-Latn-AF",
-			"und-Latn-AM": "az-Latn-AM",
-			"und-Latn-BG": "tr-Latn-BG",
+			"und-Latn-AM": "ku-Latn-AM",
 			"und-Latn-CN": "za-Latn-CN",
 			"und-Latn-CY": "tr-Latn-CY",
 			"und-Latn-DZ": "fr-Latn-DZ",
 			"und-Latn-ET": "en-Latn-ET",
 			"und-Latn-GE": "ku-Latn-GE",
-			"und-Latn-GR": "tr-Latn-GR",
-			"und-Latn-IL": "ro-Latn-IL",
 			"und-Latn-IR": "tk-Latn-IR",
 			"und-Latn-KM": "fr-Latn-KM",
-			"und-Latn-KZ": "de-Latn-KZ",
-			"und-Latn-LB": "fr-Latn-LB",
 			"und-Latn-MA": "fr-Latn-MA",
 			"und-Latn-MK": "sq-Latn-MK",
+			"und-Latn-MM": "kac-Latn-MM",
 			"und-Latn-MO": "pt-Latn-MO",
 			"und-Latn-MR": "fr-Latn-MR",
 			"und-Latn-RU": "krl-Latn-RU",
@@ -3119,6 +4218,7 @@ Globalize.load({
 			"und-Latn-UA": "pl-Latn-UA",
 			"und-Lepc": "lep-Lepc-IN",
 			"und-Limb": "lif-Limb-IN",
+			"und-Lina": "lab-Lina-GR",
 			"und-Linb": "grc-Linb-GR",
 			"und-Lisu": "lis-Lisu-CN",
 			"und-Lyci": "xlc-Lyci-TR",
@@ -3142,11 +4242,16 @@ Globalize.load({
 			"und-MX": "es-Latn-MX",
 			"und-MY": "ms-Latn-MY",
 			"und-MZ": "pt-Latn-MZ",
+			"und-Mahj": "hi-Mahj-IN",
 			"und-Mand": "myz-Mand-IR",
+			"und-Mani": "xmn-Mani-CN",
+			"und-Mend": "men-Mend-SL",
 			"und-Merc": "xmr-Merc-SD",
 			"und-Mero": "xmr-Mero-SD",
 			"und-Mlym": "ml-Mlym-IN",
+			"und-Modi": "mr-Modi-IN",
 			"und-Mong": "mn-Mong-CN",
+			"und-Mroo": "mru-Mroo-BD",
 			"und-Mtei": "mni-Mtei-IN",
 			"und-Mymr": "my-Mymr-MM",
 			"und-Mymr-IN": "kht-Mymr-IN",
@@ -3158,6 +4263,8 @@ Globalize.load({
 			"und-NL": "nl-Latn-NL",
 			"und-NO": "nb-Latn-NO",
 			"und-NP": "ne-Deva-NP",
+			"und-Narb": "xna-Narb-SA",
+			"und-Nbat": "arc-Nbat-JO",
 			"und-Nkoo": "man-Nkoo-GN",
 			"und-OM": "ar-Arab-OM",
 			"und-Ogam": "sga-Ogam-IE",
@@ -3178,8 +4285,12 @@ Globalize.load({
 			"und-PT": "pt-Latn-PT",
 			"und-PW": "pau-Latn-PW",
 			"und-PY": "gn-Latn-PY",
+			"und-Palm": "arc-Palm-SY",
+			"und-Pauc": "ctd-Pauc-MM",
+			"und-Perm": "kv-Perm-RU",
 			"und-Phag": "lzh-Phag-CN",
 			"und-Phli": "pal-Phli-IR",
+			"und-Phlp": "pal-Phlp-CN",
 			"und-Phnx": "phn-Phnx-LB",
 			"und-Plrd": "hmd-Plrd-CN",
 			"und-Prti": "xpr-Prti-IR",
@@ -3211,6 +4322,8 @@ Globalize.load({
 			"und-Saur": "saz-Saur-IN",
 			"und-Shaw": "en-Shaw-GB",
 			"und-Shrd": "sa-Shrd-IN",
+			"und-Sidd": "sa-Sidd-IN",
+			"und-Sind": "sd-Sind-IN",
 			"und-Sinh": "si-Sinh-LK",
 			"und-Sora": "srb-Sora-IN",
 			"und-Sund": "su-Sund-ID",
@@ -3245,24 +4358,27 @@ Globalize.load({
 			"und-Thai-KH": "kdt-Thai-KH",
 			"und-Thai-LA": "kdt-Thai-LA",
 			"und-Tibt": "bo-Tibt-CN",
+			"und-Tirh": "mai-Tirh-IN",
 			"und-UA": "uk-Cyrl-UA",
 			"und-UG": "sw-Latn-UG",
 			"und-UY": "es-Latn-UY",
 			"und-UZ": "uz-Latn-UZ",
 			"und-Ugar": "uga-Ugar-SY",
-			"und-VA": "la-Latn-VA",
+			"und-VA": "it-Latn-VA",
 			"und-VE": "es-Latn-VE",
 			"und-VN": "vi-Latn-VN",
 			"und-VU": "bi-Latn-VU",
 			"und-Vaii": "vai-Vaii-LR",
 			"und-WF": "fr-Latn-WF",
 			"und-WS": "sm-Latn-WS",
+			"und-Wara": "hoc-Wara-IN",
 			"und-XK": "sq-Latn-XK",
 			"und-Xpeo": "peo-Xpeo-IR",
 			"und-Xsux": "akk-Xsux-IQ",
 			"und-YE": "ar-Arab-YE",
 			"und-YT": "fr-Latn-YT",
 			"und-Yiii": "ii-Yiii-CN",
+			"und-ZW": "sn-Latn-ZW",
 			"unr": "unr-Beng-IN",
 			"unr-Deva": "unr-Deva-NP",
 			"unr-NP": "unr-Deva-NP",
@@ -3274,32 +4390,58 @@ Globalize.load({
 			"uz-CN": "uz-Cyrl-CN",
 			"vai": "vai-Vaii-LR",
 			"ve": "ve-Latn-ZA",
+			"vec": "vec-Latn-IT",
+			"vep": "vep-Latn-RU",
 			"vi": "vi-Latn-VN",
 			"vic": "vic-Latn-SX",
+			"vls": "vls-Latn-BE",
+			"vmf": "vmf-Latn-DE",
+			"vmw": "vmw-Latn-MZ",
 			"vo": "vo-Latn-001",
+			"vot": "vot-Latn-RU",
+			"vro": "vro-Latn-EE",
 			"vun": "vun-Latn-TZ",
 			"wa": "wa-Latn-BE",
 			"wae": "wae-Latn-CH",
 			"wal": "wal-Ethi-ET",
 			"war": "war-Latn-PH",
+			"wbp": "wbp-Latn-AU",
+			"wbq": "wbq-Telu-IN",
+			"wbr": "wbr-Deva-IN",
+			"wls": "wls-Latn-WF",
 			"wo": "wo-Latn-SN",
+			"wtm": "wtm-Deva-IN",
+			"wuu": "wuu-Hans-CN",
 			"xav": "xav-Latn-BR",
+			"xcr": "xcr-Cari-TR",
 			"xh": "xh-Latn-ZA",
+			"xlc": "xlc-Lyci-TR",
+			"xld": "xld-Lydi-TR",
+			"xmf": "xmf-Geor-GE",
+			"xmn": "xmn-Mani-CN",
+			"xmr": "xmr-Merc-SD",
+			"xna": "xna-Narb-SA",
+			"xnr": "xnr-Deva-IN",
 			"xog": "xog-Latn-UG",
+			"xpr": "xpr-Prti-IR",
+			"xsa": "xsa-Sarb-YE",
 			"xsr": "xsr-Deva-NP",
 			"yao": "yao-Latn-MZ",
 			"yap": "yap-Latn-FM",
 			"yav": "yav-Latn-CM",
 			"ybb": "ybb-Latn-CM",
-			"yi": "yi-Hebr-UA",
+			"yi": "yi-Hebr-001",
 			"yo": "yo-Latn-NG",
+			"yrl": "yrl-Latn-BR",
 			"yua": "yua-Latn-MX",
 			"za": "za-Latn-CN",
+			"zdj": "zdj-Arab-KM",
 			"zea": "zea-Latn-NL",
 			"zgh": "zgh-Tfng-MA",
 			"zh": "zh-Hans-CN",
 			"zh-AU": "zh-Hant-AU",
 			"zh-BN": "zh-Hant-BN",
+			"zh-Bopo": "zh-Bopo-TW",
 			"zh-GB": "zh-Hant-GB",
 			"zh-GF": "zh-Hant-GF",
 			"zh-HK": "zh-Hant-HK",
@@ -3317,7 +4459,7 @@ Globalize.load({
 			"zh-VN": "zh-Hant-VN",
 			"zmi": "zmi-Latn-MY",
 			"zu": "zu-Latn-ZA",
-			"zza": "zza-Arab-TR"
+			"zza": "zza-Latn-TR"
 		}
 	}
 });
@@ -3325,11 +4467,11 @@ Globalize.load({
 Globalize.load({
 	"supplemental": {
 		"version": {
-			"_cldrVersion": "25",
-			"_number": "$Revision: 91 $"
+			"_unicodeVersion": "7.0.0",
+			"_number": "$Revision: 11318 $"
 		},
 		"generation": {
-			"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+			"_date": "$Date: 2015-02-25 23:47:56 -0600 (Wed, 25 Feb 2015) $"
 		},
 		"timeData": {
 			"001": {
@@ -3416,6 +4558,10 @@ Globalize.load({
 				"_allowed": "H h",
 				"_preferred": "h"
 			},
+			"BQ": {
+				"_allowed": "H",
+				"_preferred": "H"
+			},
 			"BR": {
 				"_allowed": "H",
 				"_preferred": "H"
@@ -3437,6 +4583,10 @@ Globalize.load({
 				"_preferred": "h"
 			},
 			"CD": {
+				"_allowed": "H",
+				"_preferred": "H"
+			},
+			"CG": {
 				"_allowed": "H",
 				"_preferred": "H"
 			},
@@ -3939,11 +5089,11 @@ Globalize.load({
 Globalize.load({
 	"supplemental": {
 		"version": {
-			"_cldrVersion": "25",
-			"_number": "$Revision: 91 $"
+			"_unicodeVersion": "7.0.0",
+			"_number": "$Revision: 11318 $"
 		},
 		"generation": {
-			"_date": "$Date: 2014-03-13 22:27:12 -0500 (Thu, 13 Mar 2014) $"
+			"_date": "$Date: 2015-02-25 23:47:56 -0600 (Wed, 25 Feb 2015) $"
 		},
 		"weekData": {
 			"minDays": {
@@ -4157,13 +5307,16 @@ Globalize.load({
 				"001": "sat",
 				"AE": "fri",
 				"BH": "fri",
+				"DZ": "fri",
 				"EG": "fri",
 				"IL": "fri",
 				"IQ": "fri",
+				"IR": "fri",
 				"JO": "fri",
 				"KW": "fri",
 				"LY": "fri",
 				"MA": "fri",
+				"OM": "fri",
 				"QA": "fri",
 				"SA": "fri",
 				"SD": "fri",
@@ -4171,15 +5324,13 @@ Globalize.load({
 				"TN": "fri",
 				"YE": "fri",
 				"AF": "thu",
-				"DZ": "thu",
-				"IR": "thu",
-				"OM": "thu",
 				"IN": "sun"
 			},
 			"weekendEnd": {
 				"001": "sun",
 				"AE": "sat",
 				"BH": "sat",
+				"DZ": "sat",
 				"EG": "sat",
 				"IL": "sat",
 				"IQ": "sat",
@@ -4187,6 +5338,7 @@ Globalize.load({
 				"KW": "sat",
 				"LY": "sat",
 				"MA": "sat",
+				"OM": "sat",
 				"QA": "sat",
 				"SA": "sat",
 				"SD": "sat",
@@ -4194,9 +5346,7 @@ Globalize.load({
 				"TN": "sat",
 				"YE": "sat",
 				"AF": "fri",
-				"DZ": "fri",
-				"IR": "fri",
-				"OM": "fri"
+				"IR": "fri"
 			}
 		}
 	}

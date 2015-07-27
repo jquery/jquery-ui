@@ -19,7 +19,7 @@
 		"qunit-assert-close": "JamesMGreene/qunit-assert-close#v1.1.1",
 		"qunit-composite": "JamesMGreene/qunit-composite#v1.1.0",
 		"requirejs": "2.1.14",
-	  	"globalize": "1.0.0-alpha.7",
+	  	"globalize": "1.0.0",
 
 		"jquery-1.7.0": "jquery#1.7.0",
 		"jquery-1.7.1": "jquery#1.7.1",

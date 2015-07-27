@@ -1,13 +1,17 @@
-/*!
- * Globalize v1.0.0-alpha.7
+/**
+ * Globalize v1.0.0
  *
  * http://github.com/jquery/globalize
  *
- * Copyright 2010, 2014 jQuery Foundation, Inc. and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-09-30T12:31Z
+ * Date: 2015-04-23T12:02Z
+ */
+/*!
+ * Globalize v1.0.0 2015-04-23T12:02Z Released under the MIT license
+ * http://git.io/TrdQbw
  */
 (function( root, factory ) {
 
@@ -54,7 +58,7 @@ var toString = function( variable ) {
  *
  * Return the formatted message. For example:
  *
- * - formatMessage( "{0} second", 1 ); // 1 second
+ * - formatMessage( "{0} second", [ 1 ] ); // 1 second
  *
  * - formatMessage( "{0}/{1}", ["m", "s"] ); // m/s
  *
@@ -77,6 +81,23 @@ var formatMessage = function( message, data ) {
 
 
 
+var objectExtend = function() {
+	var destination = arguments[ 0 ],
+		sources = [].slice.call( arguments, 1 );
+
+	sources.forEach(function( source ) {
+		var prop;
+		for ( prop in source ) {
+			destination[ prop ] = source[ prop ];
+		}
+	});
+
+	return destination;
+};
+
+
+
+
 var createError = function( code, message, attributes ) {
 	var error;
 
@@ -84,10 +105,7 @@ var createError = function( code, message, attributes ) {
 	error = new Error( message );
 	error.code = code;
 
-	// extend( error, attributes );
-	Object.keys( attributes ).forEach(function( attribute ) {
-		error[ attribute ] = attributes[ attribute ];
-	});
+	objectExtend( error, attributes );
 
 	return error;
 };
@@ -228,6 +246,28 @@ var alwaysCldr = function( localeOrCldr ) {
 
 
 
+// ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?redirectlocale=en-US&redirectslug=JavaScript%2FGuide%2FRegular_Expressions
+var regexpEscape = function( string ) {
+	return string.replace( /([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1" );
+};
+
+
+
+
+var stringPad = function( str, count, right ) {
+	var length;
+	if ( typeof str !== "string" ) {
+		str = String( str );
+	}
+	for ( length = str.length; length < count; length += 1 ) {
+		str = ( right ? ( str + "0" ) : ( "0" + str ) );
+	}
+	return str;
+};
+
+
+
+
 function validateLikelySubtags( cldr ) {
 	cldr.once( "get", validateCldr );
 	cldr.get( "supplemental/likelySubtags" );
@@ -256,18 +296,16 @@ function Globalize( locale ) {
 }
 
 /**
- * Globalize.load( json )
+ * Globalize.load( json, ... )
  *
  * @json [JSON]
  *
  * Load resolved or unresolved cldr data.
  * Somewhat equivalent to previous Globalize.addCultureInfo(...).
  */
-Globalize.load = function( json ) {
-	validateParameterPresence( json, "json" );
-	validateParameterTypePlainObject( json, "json" );
-
-	Cldr.load( json );
+Globalize.load = function() {
+	// validations are delegated to Cldr.load().
+	Cldr.load.apply( Cldr, arguments );
 };
 
 /**
@@ -298,6 +336,9 @@ Globalize._alwaysArray = alwaysArray;
 Globalize._createError = createError;
 Globalize._formatMessage = formatMessage;
 Globalize._isPlainObject = isPlainObject;
+Globalize._objectExtend = objectExtend;
+Globalize._regexpEscape = regexpEscape;
+Globalize._stringPad = stringPad;
 Globalize._validate = validate;
 Globalize._validateCldr = validateCldr;
 Globalize._validateDefaultLocale = validateDefaultLocale;

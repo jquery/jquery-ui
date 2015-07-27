@@ -26,7 +26,8 @@
 			"date",
 			"./button",
 			"./core",
-			"./button"		], factory );
+			"./button"
+		], factory );
 	} else {
 
 		// Browser globals
@@ -178,8 +179,8 @@ return $.widget( "ui.calendar", {
 
 	_setLocale: function( locale ) {
 		var globalize = new Globalize( locale ),
-			weekdayShortFormatter = globalize.dateFormatter({ pattern: "EEEEEE" }),
-			weekdayNarrowFormatter = globalize.dateFormatter({ pattern: "EEEEE" });
+			weekdayShortFormatter = globalize.dateFormatter({ raw: "EEEEEE" }),
+			weekdayNarrowFormatter = globalize.dateFormatter({ raw: "EEEEE" });
 
 		this._format = globalize.dateFormatter({ date: "short" });
 		this._parse = globalize.dateParser({ date: "short" });
@@ -192,9 +193,9 @@ return $.widget( "ui.calendar", {
 
 				return shortWeekday.length > 3 ? weekdayNarrowFormatter( date ) : shortWeekday;
 			},
-			formatWeekdayFull: globalize.dateFormatter({ pattern: "EEEE" }),
-			formatMonth: globalize.dateFormatter({ pattern: "MMMM" }),
-			formatWeekOfYear: globalize.dateFormatter({ pattern: "w" }),
+			formatWeekdayFull: globalize.dateFormatter({ raw: "EEEE" }),
+			formatMonth: globalize.dateFormatter({ raw: "MMMM" }),
+			formatWeekOfYear: globalize.dateFormatter({ raw: "w" }),
 			parse: this._parse
 		};
 	},

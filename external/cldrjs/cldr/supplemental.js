@@ -1,15 +1,15 @@
 /**
- * CLDR JavaScript Library v0.3.8
+ * CLDR JavaScript Library v0.4.1
  * http://jquery.com/
  *
  * Copyright 2013 Rafael Xavier de Souza
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-07-13T05:05Z
+ * Date: 2015-02-25T13:51Z
  */
 /*!
- * CLDR JavaScript Library v0.3.8 2014-07-13T05:05Z MIT license © Rafael Xavier
+ * CLDR JavaScript Library v0.4.1 2015-02-25T13:51Z MIT license © Rafael Xavier
  * http://git.io/h4lmVg
  */
 (function( factory ) {
@@ -29,7 +29,6 @@
 
 	// Build optimization hack to avoid duplicating functions across modules.
 	var alwaysArray = Cldr._alwaysArray;
-
 
 
 
@@ -95,6 +94,7 @@
 	};
 
 	return Cldr;
+
 
 
 
