@@ -39,6 +39,7 @@ return $.widget( "ui.calendar", {
 	version: "@VERSION",
 	options: {
 		buttons: [],
+		dateFormat: { date: "short" },
 		eachDay: $.noop,
 		labels: {
 			"datePickerRole": "date picker",
@@ -58,7 +59,9 @@ return $.widget( "ui.calendar", {
 	},
 
 	refreshRelatedOptions: {
+		dateFormat: true,
 		eachDay: true,
+		locale: true,
 		max: true,
 		min: true,
 		showWeek: true,
@@ -70,7 +73,7 @@ return $.widget( "ui.calendar", {
 		this.labels = this.options.labels;
 		this.buttonClickContext = this.element[ 0 ];
 
-		this._setLocale( this.options.locale );
+		this._setLocale( this.options.locale, this.options.dateFormat );
 
 		this.date = new $.ui.calendarDate( this.options.value, this._calendarDateOptions );
 		this.viewDate = this.date.clone();
@@ -177,13 +180,13 @@ return $.widget( "ui.calendar", {
 		).addClass( "ui-state-focus" );
 	},
 
-	_setLocale: function( locale ) {
+	_setLocale: function( locale, dateFormat ) {
 		var globalize = new Globalize( locale ),
 			weekdayShortFormatter = globalize.dateFormatter({ raw: "EEEEEE" }),
 			weekdayNarrowFormatter = globalize.dateFormatter({ raw: "EEEEE" });
 
-		this._format = globalize.dateFormatter({ date: "short" });
-		this._parse = globalize.dateParser({ date: "short" });
+		this._format = globalize.dateFormatter( dateFormat );
+		this._parse = globalize.dateParser( dateFormat );
 		this._calendarDateOptions = {
 			firstDay: globalize.cldr.supplemental.weekData.firstDay(),
 			formatWeekdayShort: function( date ) {
@@ -590,7 +593,8 @@ return $.widget( "ui.calendar", {
 
 	_setOptions: function( options ) {
 		var that = this,
-			refresh = false;
+			refresh = false,
+			dateAttributes = false;
 
 		$.each( options, function( key, value ) {
 			that._setOption( key, value );
@@ -598,8 +602,16 @@ return $.widget( "ui.calendar", {
 			if ( key in that.refreshRelatedOptions ) {
 				refresh = true;
 			}
+			if ( key === "dateFormat" || key === "locale" ) {
+				dateAttributes = true;
+			}
 		} );
 
+		if ( dateAttributes ) {
+			this._setLocale( this.options.locale, this.options.dateFormat );
+			this.date.setAttributes( this._calendarDateOptions );
+			this.viewDate.setAttributes( this._calendarDateOptions );
+		}
 		if ( refresh ) {
 			this._refresh();
 		}
@@ -635,12 +647,6 @@ return $.widget( "ui.calendar", {
 
 		if ( key === "eachDay" ) {
 			this.viewDate.eachDay = value;
-		}
-
-		if ( key === "locale" ) {
-			this._setLocale( value );
-			this.date.setAttributes( this._calendarDateOptions );
-			this.refresh();
 		}
 	}
 } );
