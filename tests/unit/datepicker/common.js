@@ -10,6 +10,7 @@ common.testWidget( "datepicker", {
 		buttons: [],
 		classes: {},
 		disabled: false,
+		dateFormat: { date: "short" },
 		eachDay: $.noop,
 		labels: {
 			"datePickerRole": "date picker",

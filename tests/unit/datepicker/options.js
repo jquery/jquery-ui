@@ -45,13 +45,14 @@ test( "appendTo", function() {
 });
 
 test( "Pass-through options", function() {
-	expect( 9 );
+	expect( 11 );
 
 	var options = {
 			buttons: { "Test": $.noop },
 			dateFormat: { date: "full" },
 			disabled: true,
 			eachDay: function( day ) { day; },
+			locale: "de",
 			max: new Date( 2000, 0, 1 ),
 			min: new Date( 2000, 0, 2 ),
 			numberOfMonths: 3,
@@ -71,6 +72,10 @@ test( "Pass-through options", function() {
 
 		if ( key === "dateFormat" ) {
 			equal( input.val(), "Wednesday, January 1, 2014", "option " + key + ": updated format" );
+		}
+
+		if ( key === "locale" ) {
+			equal( input.val(), "Mittwoch, 1. Januar 2014", "option " + key + ": updated locale" );
 		}
 	});
 });
