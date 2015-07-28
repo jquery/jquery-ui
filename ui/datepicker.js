@@ -79,11 +79,11 @@ var widget = $.widget( "ui.datepicker", {
 			options = {};
 
 		if ( max !== undefined ) {
-			options.max = Globalize.parseDate( max, { pattern: "yyyy-MM-dd" } );
+			options.max = Globalize.parseDate( max, { raw: "yyyy-MM-dd" } );
 		}
 
 		if ( min !== undefined ) {
-			options.min = Globalize.parseDate( min, { pattern: "yyyy-MM-dd" } );
+			options.min = Globalize.parseDate( min, { raw: "yyyy-MM-dd" } );
 		}
 
 		return options;
@@ -285,7 +285,7 @@ var widget = $.widget( "ui.datepicker", {
 
 		this._format = globalize.dateFormatter({ date: "short" });
 		this._parse = globalize.dateParser({ date: "short" });
-		this._parseYMD = globalize.dateParser({ pattern: "yyyy-MM-dd" });
+		this._parseYMD = globalize.dateParser({ raw: "yyyy-MM-dd" });
 	},
 
 	_buildPosition: function() {
