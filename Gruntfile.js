@@ -150,16 +150,6 @@ grunt.initConfig({
 	},
 	compare_size: compareFiles,
 	concat: {
-		ui: {
-			options: {
-				banner: createBanner( uiFiles ),
-				stripBanners: {
-					block: true
-				}
-			},
-			src: uiFiles,
-			dest: "dist/jquery-ui.js"
-		},
 		i18n: {
 			options: {
 				banner: createBanner( allI18nFiles )
@@ -176,6 +166,27 @@ grunt.initConfig({
 			},
 			src: cssFiles,
 			dest: "dist/jquery-ui.css"
+		}
+	},
+	requirejs: {
+		js: {
+			options: {
+				baseUrl: "./",
+				paths: {
+					jquery: "./external/jquery/jquery",
+					external: "./external/"
+				},
+				preserveLicenseComments: false,
+				optimize: "none",
+				findNestedDependencies: true,
+				skipModuleInsertion: true,
+				exclude: [ "jquery" ],
+				include: expandFiles( [ "ui/**/*.js", "!ui/i18n/*" ] ),
+				out: "dist/jquery-ui.js",
+				wrap: {
+					start: createBanner( uiFiles ),
+				}
+			}
 		}
 	},
 
@@ -455,10 +466,10 @@ grunt.registerTask( "update-authors", function() {
 	});
 });
 
-grunt.registerTask( "default", [ "lint", "test" ]);
+grunt.registerTask( "default", [ "lint", "requirejs", "test" ]);
 grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
 grunt.registerTask( "test", [ "qunit" ]);
-grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ]);
-grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ]);
+grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ]);
+grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ]);
 
 };
