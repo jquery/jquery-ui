@@ -59,6 +59,7 @@
 		"grunt-contrib-csslint": "0.2.0",
 		"grunt-contrib-jshint": "0.7.1",
 		"grunt-contrib-qunit": "0.6.0",
+		"grunt-contrib-requirejs": "0.4.4",
 		"grunt-contrib-uglify": "0.1.1",
 		"grunt-esformatter": "0.2.0",
 		"grunt-git-authors": "2.0.0",
