@@ -177,7 +177,7 @@ return $.widget("ui.mouse", {
 			this._mouseStop(event);
 		}
 
-		if (this.options.delay && this._mouseDelayTimer) {
+		if (this._mouseDelayTimer) {
 			clearTimeout(this._mouseDelayTimer);
 		}
 
