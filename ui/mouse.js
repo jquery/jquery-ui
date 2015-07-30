@@ -177,6 +177,10 @@ return $.widget("ui.mouse", {
 			this._mouseStop(event);
 		}
 
+		if (this._mouseDelayTimer) {
+			clearTimeout(this._mouseDelayTimer);
+		}
+
 		mouseHandled = false;
 		return false;
 	},
