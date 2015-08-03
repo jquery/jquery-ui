@@ -12,7 +12,6 @@
 //>>group: UI Core
 //>>description: The core of jQuery UI, required for all interactions and widgets.
 //>>docs: http://api.jqueryui.com/category/ui-core/
-//>>demos: http://jqueryui.com/
 
 // This file is deprecated in 1.12.0 to be removed in 1.13
 ( function() {
