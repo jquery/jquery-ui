@@ -34,25 +34,16 @@ $.ui.focusable = function( element, hasTabindex ) {
 		if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
 			return false;
 		}
-		img = $( "img[usemap='#" + mapName + "']" )[ 0 ];
-		return !!img && visible( img );
+		img = $( "img[usemap='#" + mapName + "']" );
+		return img.length > 0 && img.is( ":visible" );
 	}
 	return ( /^(input|select|textarea|button|object)$/.test( nodeName ) ?
 		!element.disabled :
 		"a" === nodeName ?
 			element.href || hasTabindex :
 			hasTabindex ) &&
-
-		// The element and all of its ancestors must be visible
-		visible( element );
+		$( element ).is( ":visible" ) && $( element ).css( "visibility" ) === "visible";
 };
-
-function visible( element ) {
-	return $.expr.filters.visible( element ) &&
-		!$( element ).parents().addBack().filter( function() {
-			return $.css( this, "visibility" ) === "hidden";
-		} ).length;
-}
 
 $.extend( $.expr[ ":" ], {
 	focusable: function( element ) {
