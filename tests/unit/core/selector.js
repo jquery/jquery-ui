@@ -125,13 +125,16 @@ test( "focusable - disabled elements", function() {
 } );
 
 test( "focusable - hidden styles", function() {
-	expect( 8 );
+	expect( 10 );
 
 	isNotFocusable( "#displayNoneAncestor-input", "input, display: none parent" );
 	isNotFocusable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
 
 	isNotFocusable( "#visibilityHiddenAncestor-input", "input, visibility: hidden parent" );
 	isNotFocusable( "#visibilityHiddenAncestor-span", "span with tabindex, visibility: hidden parent" );
+
+	isFocusable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
+	isFocusable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
 
 	isNotFocusable( "#displayNone-input", "input, display: none" );
 	isNotFocusable( "#visibilityHidden-input", "input, visibility: hidden" );
@@ -210,13 +213,16 @@ test( "tabbable - disabled elements", function() {
 } );
 
 test( "tabbable - hidden styles", function() {
-	expect( 8 );
+	expect( 10 );
 
 	isNotTabbable( "#displayNoneAncestor-input", "input, display: none parent" );
 	isNotTabbable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
 
 	isNotTabbable( "#visibilityHiddenAncestor-input", "input, visibility: hidden parent" );
 	isNotTabbable( "#visibilityHiddenAncestor-span", "span with tabindex, visibility: hidden parent" );
+
+	isTabbable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
+	isTabbable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
 
 	isNotTabbable( "#displayNone-input", "input, display: none" );
 	isNotTabbable( "#visibilityHidden-input", "input, visibility: hidden" );
