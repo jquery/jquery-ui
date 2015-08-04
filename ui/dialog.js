@@ -860,9 +860,8 @@ $.widget( "ui.dialog", {
 			var overlays = this.document.data( "ui-dialog-overlays" ) - 1;
 
 			if ( !overlays ) {
-				this.document
-					.off( "focusin" )
-					.removeData( "ui-dialog-overlays" );
+				this._off( this.document, "focusin" );
+				this.document.removeData( "ui-dialog-overlays" );
 			} else {
 				this.document.data( "ui-dialog-overlays", overlays );
 			}

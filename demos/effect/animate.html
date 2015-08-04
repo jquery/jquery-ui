@@ -4,8 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Effects - Animate demo</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/effect.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 		.toggler { width: 500px; height: 200px; position: relative; }
@@ -13,8 +11,8 @@
 		#effect { width: 240px; height: 170px; padding: 0.4em; position: relative; background: #fff; }
 		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		var state = true;
 		$( "#button" ).on( "click", function() {
 			if ( state ) {
@@ -32,7 +30,6 @@
 			}
 			state = !state;
 		});
-	});
 	</script>
 </head>
 <body>

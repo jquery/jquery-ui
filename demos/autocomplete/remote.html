@@ -4,20 +4,14 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Remote datasource</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/menu.js"></script>
-	<script src="../../ui/autocomplete.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	.ui-autocomplete-loading {
 		background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 	}
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		function log( message ) {
 			$( "<div>" ).text( message ).prependTo( "#log" );
 			$( "#log" ).scrollTop( 0 );
@@ -32,7 +26,6 @@
 					"Nothing selected, input was " + this.value );
 			}
 		});
-	});
 	</script>
 </head>
 <body>

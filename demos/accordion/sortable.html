@@ -4,19 +4,9 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion - Sortable</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/mouse.js"></script>
-	<script src="../../ui/sortable.js"></script>
-	<script src="../../ui/accordion.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<style>
-	/* IE has layout issues when sorting (see #5413) */
-	.group { zoom: 1 }
-	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="sortable">
 		$( "#accordion" )
 			.accordion({
 				header: "> div > h3"
@@ -33,7 +23,6 @@
 					$( this ).accordion( "refresh" );
 				}
 			});
-	});
 	</script>
 </head>
 <body>

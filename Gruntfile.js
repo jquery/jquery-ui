@@ -201,13 +201,31 @@ grunt.initConfig({
 				requireSpacesInsideParentheses: null
 			},
 			src: [ "Gruntfile.js", "build/tasks/*.js" ]
+		},
+		demos: {
+			options: {
+
+				// While the style guide removed onevar upgrading jscs to allow it causes too many
+				// errors right now
+				disallowMultipleVarDecl: null
+			},
+			src: "demos/**/*.js"
 		}
 	},
 	uglify: minify,
 	htmllint: {
-		good: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
+		good: [ "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
 			return "!" + file;
 		} ) ),
+		demos: {
+			options: {
+				ignore: [
+				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
+			] },
+			src: [ "demos/**/*.html" ].concat( htmllintBad.map( function( file ) {
+				return "!" + file;
+			} ) )
+		},
 		bad: {
 			options: {
 				ignore: [
@@ -240,7 +258,8 @@ grunt.initConfig({
 			"Gruntfile.js",
 			"build/**/*.js",
 			"tests/unit/**/*.js",
-			"tests/lib/**/*.js"
+			"tests/lib/**/*.js",
+			"demos/**/*.js"
 		]
 	},
 	csslint: {
