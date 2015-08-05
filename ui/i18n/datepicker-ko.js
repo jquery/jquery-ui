@@ -1,5 +1,5 @@
 /* Korean initialisation for the jQuery calendar extension. */
-/* Written by DaeKwon Kang (ncrash.dk@gmail.com), Edited by Genie. */
+/* Written by DaeKwon Kang (ncrash.dk@gmail.com), Edited by Genie and Myeongjin Lee. */
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -24,7 +24,7 @@ datepicker.regional['ko'] = {
 	dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
 	dayNamesShort: ['일','월','화','수','목','금','토'],
 	dayNamesMin: ['일','월','화','수','목','금','토'],
-	weekHeader: 'Wk',
+	weekHeader: '주',
 	dateFormat: 'yy-mm-dd',
 	firstDay: 0,
 	isRTL: false,
