@@ -418,7 +418,7 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_documentClick: {
-		mousedown: function( event ) {
+		"mousedown touchend": function( event ) {
 			if ( !this.isOpen ) {
 				return;
 			}
