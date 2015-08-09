@@ -1,9 +1,9 @@
 define( [
 	"jquery",
-	"ui/controlgroup",
-	"ui/checkboxradio",
-	"ui/selectmenu",
-	"ui/button"
+	"ui/widgets/controlgroup",
+	"ui/widgets/checkboxradio",
+	"ui/widgets/selectmenu",
+	"ui/widgets/button"
 ], function( $ ) {
 
 module( "Controlgroup: methods" );

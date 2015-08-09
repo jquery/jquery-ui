@@ -4,23 +4,13 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Controlgroup - Default Functionality</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/checkboxradio.js"></script>
-	<script src="../../ui/menu.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/selectmenu.js"></script>
-	<script src="../../ui/controlgroup.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		$( ".controlgroup" ).controlgroup()
 		$( ".controlgroup-vertical" ).controlgroup({
 			"direction": "vertical"
 		});
-	});
 	</script>
 	<style>
 		.ui-controlgroup-vertical {
