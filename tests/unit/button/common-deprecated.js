@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/button"
+	"ui/widgets/button"
 ], function( common ) {
 
 common.testWidget( "button", {
