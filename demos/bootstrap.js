@@ -30,6 +30,7 @@ var widgets = [
 	"accordion",
 	"autocomplete",
 	"button",
+	"checkboxradio",
 	"datepicker",
 	"dialog",
 	"draggable",
