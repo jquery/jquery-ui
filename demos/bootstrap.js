@@ -31,6 +31,7 @@ var widgets = [
 	"autocomplete",
 	"button",
 	"checkboxradio",
+	"controlgroup",
 	"datepicker",
 	"dialog",
 	"draggable",
