@@ -2,12 +2,19 @@
  * jQuery UI Checkboxradio @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/checkboxradio/
  */
+
+//>>label: Checkboxradio
+//>>group: Widgets
+//>>description: Enhances a form with multiple themeable checkboxes or radio buttons.
+//>>docs: http://api.jqueryui.com/checkboxradio/
+//>>demos: http://jqueryui.com/checkboxradio/
+//>>css.structure: ../themes/base/core.css, ../themes/base/button.css, ../themes/base/checkboxradio.css
+//>>css.theme: ../themes/base/theme.css
+
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
