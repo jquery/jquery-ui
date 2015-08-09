@@ -4,18 +4,9 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Controlgroup - Toolbar</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/checkboxradio.js"></script>
-	<script src="../../ui/menu.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/selectmenu.js"></script>
-	<script src="../../ui/controlgroup.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="button checkboxradio selectmenu">
 		var iframe = $( "<iframe id='display' contenteditable='true'>" ),
 			contents = iframe.appendTo( "body" );
 
@@ -54,7 +45,6 @@
 				return false;
 			});
 		});
-	});
 	</script>
 	<style>
 		#zoom, #fontsize {
