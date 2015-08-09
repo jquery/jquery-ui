@@ -2,12 +2,19 @@
  * jQuery UI Controlgroup @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/controlgroup/
  */
+
+//>>label: Controlgroup
+//>>group: Widgets
+//>>description: Visually groups form control widgets
+//>>docs: http://api.jqueryui.com/controlgroup/
+//>>demos: http://jqueryui.com/controlgroup/
+//>>css.structure: ../themes/base/core.css, ../themes/base/controlgroup.css
+//>>css.theme: ../themes/base/theme.css
+
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
