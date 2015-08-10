@@ -73,6 +73,9 @@
 	vertical-align: middle;
 	margin-top: -.25em;
 	position: relative;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
 }
 
 .ui-widget-icon-block {

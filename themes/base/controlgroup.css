@@ -28,3 +28,9 @@
 .ui-controlgroup-vertical label.ui-button {
 	box-sizing: border-box;
 }
+.ui-controlgroup .ui-spinner {
+	padding-top: .225em;
+	padding-bottom: .225em;
+	border-color: #ccc;
+	float: left;
+}

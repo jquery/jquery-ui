@@ -38,7 +38,8 @@ return $.widget( "ui.controlgroup", {
 		items: {
 			"button": "input[type=button], input[type=submit], input[type=reset], button, a",
 			"checkboxradio": "input[type='checkbox'], input[type='radio']",
-			"selectmenu": "select"
+			"selectmenu": "select",
+			"spinner": ".ui-spinner-input"
 		},
 		direction: "horizontal",
 		excludeInvisible: true
@@ -83,14 +84,13 @@ return $.widget( "ui.controlgroup", {
 
 				// Don't set data or add to the collection if the method is destroy
 				widgets.each( function() {
+					var element = $( this );
 
 					// Set data on the widget element pointing to the this.element of the widget
 					// and telling us what type of widget this is
 					var widgetElement =
-						$( this )[ widget ]( "widget" ).data( "ui-controlgroup-data", {
-							"widgetType": widget,
-							"element": $( this )
-						} );
+						element[ widget ]( "widget" ).data( "ui-controlgroup-data", element.data( "ui-" +
+								widget.charAt(0).toUpperCase() + widget.slice(1) ) );
 
 					childWidgets.push( widgetElement[ 0 ] );
 				} );
@@ -104,8 +104,9 @@ return $.widget( "ui.controlgroup", {
 		this.childWidgets.each( function() {
 			var element = $( this ),
 				data = element.data( "ui-controlgroup-data" );
-
-			data.element[ data.widgetType ]( method );
+			if( data[ method ] ) {
+				data[ method ]();
+			}
 		} );
 	},
 
@@ -120,6 +121,15 @@ return $.widget( "ui.controlgroup", {
 		}[ position ];
 
 		return result;
+	},
+
+	_spinner_options: function( position, direction ) {
+		var options = this._buildSimpleOptions( position, direction, "ui-spinner" );
+
+		options.classes[ "ui-spinner-up" ] = "";
+		options.classes[ "ui-spinner-down" ] = "";
+
+		return options;
 	},
 
 	_button_options: function( position, direction ) {
@@ -191,11 +201,12 @@ return $.widget( "ui.controlgroup", {
 
 			// We do this last because we need to make sure all enhancment is done
 			// before determining first and last
-			[ "first", "last" ].forEach( function( value ) {
-				var data = children[ value ]().data( "ui-controlgroup-data" );
-				if ( that[ "_" + data.widgetType + "_options" ] ) {
-					data.element[ data.widgetType ](
-						that[ "_" + data.widgetType + "_options" ](
+			$.each( [ "first", "last" ], function( index, value ) {
+				var instance = children[ value ]().data( "ui-controlgroup-data" );
+				console.log( instance )
+				if ( that[ "_" + instance.widgetName + "_options" ] ) {
+					instance.element[ instance.widgetName ](
+						that[ "_" + instance.widgetName + "_options" ](
 							value,
 							that.options.direction === "vertical"
 						)
