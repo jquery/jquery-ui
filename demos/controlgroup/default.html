@@ -14,7 +14,7 @@
 		}
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
-	<script src="../bootstrap.js" data-modules="button checkboxradio selectmenu">
+	<script src="../bootstrap.js" data-modules="button checkboxradio selectmenu spinner">
 		$( ".controlgroup" ).controlgroup()
 		$( ".controlgroup-vertical" ).controlgroup({
 			"direction": "vertical"
@@ -27,6 +27,7 @@
 	<fieldset>
 		<legend>Rental Car</legend>
 		<div class="controlgroup">
+			<input class="ui-spinner-input">
 			<select>
 				<option>Compact car</option>
 				<option>Midsize car</option>
@@ -36,6 +37,7 @@
 				<option>Truck</option>
 				<option>Van</option>
 			</select>
+			<input class="ui-spinner-input">
 			<label for="transmission-standard">Standard</label>
 			<input type="radio" name="transmission" id="transmission-standard">
 			<label for="transmission-automatic">Automatic</label>
@@ -43,6 +45,7 @@
 			<label for="insurance">Insurance</label>
 			<input type="checkbox" name="insurance" id="insurance">
 			<button>Book Now!</button>
+			<input class="ui-spinner-input">
 		</div>
 	</fieldset>
 	<br/>
