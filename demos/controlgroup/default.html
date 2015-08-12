@@ -9,8 +9,15 @@
 		.ui-controlgroup-vertical {
 			width: 150px;
 		}
-		.ui-controlgroup.ui-controlgroup-vertical > button.ui-button {
+		.ui-controlgroup.ui-controlgroup-vertical > button.ui-button,
+		.ui-controlgroup.ui-controlgroup-vertical > .ui-controlgroup-label {
 			text-align: center;
+		}
+		#car-type-button {
+			width: 120px;
+		}
+		.ui-controlgroup-horizontal .ui-spinner {
+			width: 50px;
 		}
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
@@ -27,8 +34,7 @@
 	<fieldset>
 		<legend>Rental Car</legend>
 		<div class="controlgroup">
-			<input class="ui-spinner-input">
-			<select>
+			<select id="car-type">
 				<option>Compact car</option>
 				<option>Midsize car</option>
 				<option>Full size car</option>
@@ -37,15 +43,15 @@
 				<option>Truck</option>
 				<option>Van</option>
 			</select>
-			<input class="ui-spinner-input">
 			<label for="transmission-standard">Standard</label>
 			<input type="radio" name="transmission" id="transmission-standard">
 			<label for="transmission-automatic">Automatic</label>
 			<input type="radio" name="transmission" id="transmission-automatic">
 			<label for="insurance">Insurance</label>
 			<input type="checkbox" name="insurance" id="insurance">
+			<label for="horizontal-spinner" class="ui-controlgroup-label"># of cars</label>
+			<input id="horizontal-spinner" class="ui-spinner-input">
 			<button>Book Now!</button>
-			<input class="ui-spinner-input">
 		</div>
 	</fieldset>
 	<br/>
@@ -67,6 +73,8 @@
 			<input type="radio" name="transmission-v" id="transmission-automatic-v">
 			<label for="insurance-v">Insurance</label>
 			<input type="checkbox" name="insurance" id="insurance-v">
+			<label for="vertical-spinner" class="ui-controlgroup-label"># of cars</label>
+			<input id="vertical-spinner" class="ui-spinner-input">
 			<button>Book Now!</button>
 		</div>
 	</fieldset>
