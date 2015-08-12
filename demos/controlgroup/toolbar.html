@@ -6,247 +6,267 @@
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<link rel="stylesheet" href="../demos.css">
 	<style>
+		#zoom-button {
+			width: 55px;
+		}
+		#fontname-button,
+		#fontsize-button {
+			width: 45px;
+		}
+		#forecolor-button {
+			width: 50px;
+		}
+		#hilitecolor-button {
+			width: 70px;
+		}
+		#bold {
+			font-weight: bold;
+		}
+		#italic {
+			font-style: italic;
+		}
+		#underline {
+			text-decoration: underline;
+		}
 		.toolbar {
 			font-size: .75em;
 		}
-		.toolbar .ui-selectmenu-button {
-			width: auto;
-			float: left;
-		}
-		#zoom, #fontsize {
-			min-width: 75px;
-		}
-		#input {
-			display: none;
-		}
-		#input, #display {
-			width: 98%;
-			height: 300px;
-			border: 2px inset #ccc;
+		#page {
+			width: 440px;
+			left: 50%;
+			position: relative;
+			margin-left: -226px;
+			height: 450px;
+			border: 1px solid #888;
+			box-shadow: 7px 7px 3px #ccc;
 			font-size: 11px;
 			font-family: "Lucida Grande";
 			zoom: 100%;
 			padding: 5px;
+			white-space: pre-line;
+			overflow: scroll;
+		}
+		.wrap {
+			width: 588px;
 		}
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js" data-modules="button checkboxradio selectmenu">
-		var iframe = $( "<iframe id='display' contenteditable='true'>" ),
-			contents = iframe.appendTo( "body" );
+		var page = $( "#page" );
+		var basicControls = [ "#print", "#bold", "#italic", "#undo", "#redo" ];
+		var valueControls = [ "#fontsize", "#forecolor", "#hilitecolor", "#backcolor", "fontname" ];
 
-		// Support: Firefox <= 36, IE <= 11
-		// These browsers require us to wait for next tick before interacting with the iframe
-		setTimeout(function(){
+		$( "#print" ).button({
+			"icon": "ui-icon-print",
+			"showLabel": false
+		});
+		$( "#redo" ).button({
+			"icon": "ui-icon-arrowreturnthick-1-e",
+			"showLabel": false
+		});
+		$( "#undo" ).button({
+			"icon": "ui-icon-arrowreturnthick-1-w",
+			"showLabel": false
+		});
 
-			contents = contents.contents();
-			contents[ 0 ].designMode = "On";
-			contents[ 0 ].contenteditable = true;
-			contents.find( "body" ).append( $( "#input" ).clone().attr( "id", "output" ) );
-
-			$( "#print" ).button({
-				"icon": "ui-icon-print",
-				"showLabel": false
-			});
-			$( "#redo" ).button({
-				"icon": "ui-icon-arrowreturnthick-1-e",
-				"showLabel": false
-			});
-			$( "#undo" ).button({
-				"icon": "ui-icon-arrowreturnthick-1-w",
-				"showLabel": false
-			});
-			$( "#print, #bold, #italic, #underline, #undo, #redo" ).on( "click", function() {
-				contents[ 0 ].execCommand( this.id );
-			});
-			$( "#fontsize, #forecolor, #hilitecolor, #backcolor, #fontname" ).on( "change selectmenuchange", function() {
-				contents[ 0 ].execCommand( this.id, false, $( this ).val() );
-			});
-			$( ".toolbar" ).controlgroup();
-			$( "#zoom" ).on( "selectmenuchange", function() {
-				contents.find( "#output" ).css({ "zoom": $( this ).val() });
-			})
-			$( "form" ).on( "submit", function( event ) {
-				return false;
-			});
+		$( ".toolbar" ).controlgroup();
+		$( "#zoom" ).on( "selectmenuchange", function() {
+			page.css({ "zoom": $( this ).val() });
+		})
+		$( basicControls.concat( valueControls ).join( ", " ) ).on( "click change selectmenuchange", function() {
+				document.execCommand(
+					this.id,
+					false,
+					$( this ).val()
+				);
+		});
+		$( "form" ).on( "submit", function( event ) {
+			return false;
 		});
 	</script>
 </head>
 <body>
-<div class="toolbar">
-		<button id="print">Print</button>
-		<button id="undo">Undo</button>
-		<button id="redo">Redo</button>
-		<select id="zoom">
-			<option>50%</option>
-			<option>75%</option>
-			<option>90%</option>
-			<option selected>100%</option>
-			<option>125%</option>
-			<option>150%</option>
-			<option>200%</option>
-		</select>
-		<select id="fontname">
-			<option>Arial</option>
-			<option>Comic Sans MS</option>
-			<option>Courier New</option>
-			<option>Georgia</option>
-			<option>Impact</option>
-			<option selected>Lucida Grande</option>
-			<option>Times New Roman</option>
-			<option>Verdana</option>
-		</select>
-		<select id="fontsize">
-			<option value="1">8px</option>
-			<option value="2">9px</option>
-			<option value="3" selected>10px</option>
-			<option value="4">11px</option>
-			<option value="5">12px</option>
-			<option value="6">14px</option>
-			<option value="7">18px</option>
-			<option value="8">24px</option>
-			<option value="9">30px</option>
-			<option value="10">36px</option>
-		</select>
-		<select id="hilitecolor" title="Background color">
-			<option value="white">Highlight: None</option>
-			<option value="red">Highlight: Red</option>
-			<option value="yellow">Highlight: Yellow</option>
-			<option value="green">Highlight: Green</option>
-			<option value="blue">Highlight: Blue</option>
-			<option value="grey">Highlight: Grey</option>
-			<option value="purple">Highlight: Purple</option>
-			<option value="orange">Highlight: Orange</option>
-		</select>
-		<select id="forecolor">
-			<option value="black" selected>Font: Black</option>
-			<option value="white">Font: White</option>
-			<option value="red">Font: Red</option>
-			<option value="yellow">Font: Yellow</option>
-			<option value="green">Font: Green</option>
-			<option value="blue">Font: Blue</option>
-			<option value="#ccc">Font: Grey</option>
-			<option value="purple">Font: Purple</option>
-			<option value="orange">Font: Orange</option>
-		</select>
-		<button id="bold">B</button>
-		<button id="italic">I</button>
-		<button id="underline">U</button>
+<div class="wrap">
+	<div class="toolbar">
+			<button id="print">Print</button>
+			<button id="undo">Undo</button>
+			<button id="redo">Redo</button>
+			<select id="zoom">
+				<option value="100%" selected>Zoom</option>
+				<option>50%</option>
+				<option>75%</option>
+				<option>90%</option>
+				<option>100%</option>
+				<option>125%</option>
+				<option>150%</option>
+				<option>200%</option>
+			</select>
+			<select id="fontname">
+				<option value="Lucida Grande" selected>Font</option>
+				<option>Arial</option>
+				<option>Comic Sans MS</option>
+				<option>Courier New</option>
+				<option>Georgia</option>
+				<option>Impact</option>
+				<option>Lucida Grande</option>
+				<option>Times New Roman</option>
+				<option>Verdana</option>
+			</select>
+			<select id="fontsize">
+				<option value="3" selected>Size</option>
+				<option value="1">8px</option>
+				<option value="2">9px</option>
+				<option value="3">10px</option>
+				<option value="4">11px</option>
+				<option value="5">12px</option>
+				<option value="6">14px</option>
+				<option value="7">18px</option>
+				<option value="8">24px</option>
+				<option value="9">30px</option>
+				<option value="10">36px</option>
+			</select>
+			<select id="hilitecolor" title="Background color">
+				<option value="white">Highlight</option>
+				<option value="white">None</option>
+				<option value="red">Red</option>
+				<option value="yellow">Yellow</option>
+				<option value="green">Green</option>
+				<option value="blue">Blue</option>
+				<option value="grey">Grey</option>
+				<option value="purple">Purple</option>
+				<option value="orange">Orange</option>
+			</select>
+			<select id="forecolor">
+				<option value="black" selected>Color</option>
+				<option value="black">Black</option>
+				<option value="white">White</option>
+				<option value="red">Red</option>
+				<option value="yellow">Yellow</option>
+				<option value="green">Green</option>
+				<option value="blue">Blue</option>
+				<option value="#ccc">Grey</option>
+				<option value="purple">Purple</option>
+				<option value="orange">Orange</option>
+			</select>
+			<button id="bold">B</button>
+			<button id="italic">I</button>
+			<button id="underline">U</button>
 
+	</div>
+	<pre id="page" contenteditable='true'>
+	The Rime of the Ancient Mariner (text of 1834)
+	BY SAMUEL TAYLOR COLERIDGE
+	Argument
+
+	How a Ship having passed the Line was driven by storms to the cold Country towards the South Pole;
+	and how from thence she made her course to the tropical Latitude of the Great Pacific Ocean; and 
+	of the strange things that befell; and in what manner the Ancyent Marinere came back to his own
+	Country.
+
+	PART I
+	It is an ancient Mariner,
+	And he stoppeth one of three.
+	'By thy long grey beard and glittering eye,
+	Now wherefore stopp'st thou me?
+
+	The Bridegroom's doors are opened wide,
+	And I am next of kin;
+	The guests are met, the feast is set:
+	May'st hear the merry din.'
+
+	He holds him with his skinny hand,
+	'There was a ship,' quoth he.
+	'Hold off! unhand me, grey-beard loon!'
+	Eftsoons his hand dropt he.
+
+	He holds him with his glittering eye—
+	The Wedding-Guest stood still,
+	And listens like a three years' child:
+	The Mariner hath his will.
+
+	The Wedding-Guest sat on a stone:
+	He cannot choose but hear;
+	And thus spake on that ancient man,
+	The bright-eyed Mariner.
+
+	'The ship was cheered, the harbour cleared,
+	Merrily did we drop
+	Below the kirk, below the hill,
+	Below the lighthouse top.
+
+	The Sun came up upon the left,
+	Out of the sea came he!
+	And he shone bright, and on the right
+	Went down into the sea.
+
+	Higher and higher every day,
+	Till over the mast at noon—'
+	The Wedding-Guest here beat his breast,
+	For he heard the loud bassoon.
+
+	The bride hath paced into the hall,
+	Red as a rose is she;
+	Nodding their heads before her goes
+	The merry minstrelsy.
+
+	The Wedding-Guest he beat his breast,
+	Yet he cannot choose but hear;
+	And thus spake on that ancient man,
+	The bright-eyed Mariner.
+
+	And now the STORM-BLAST came, and he
+	Was tyrannous and strong:
+	He struck with his o'ertaking wings,
+	And chased us south along.
+
+	With sloping masts and dipping prow,
+	As who pursued with yell and blow
+	Still treads the shadow of his foe,
+	And forward bends his head,
+	The ship drove fast, loud roared the blast,
+	And southward aye we fled.
+
+	And now there came both mist and snow,
+	And it grew wondrous cold:
+	And ice, mast-high, came floating by,
+	As green as emerald.
+
+	And through the drifts the snowy clifts
+	Did send a dismal sheen:
+	Nor shapes of men nor beasts we ken—
+	The ice was all between.
+
+	The ice was here, the ice was there,
+	The ice was all around:
+	It cracked and growled, and roared and howled,
+	Like noises in a swound!
+
+	At length did cross an Albatross,
+	Thorough the fog it came;
+	As if it had been a Christian soul,
+	We hailed it in God's name.
+
+	It ate the food it ne'er had eat,
+	And round and round it flew.
+	The ice did split with a thunder-fit;
+	The helmsman steered us through!
+
+	And a good south wind sprung up behind;
+	The Albatross did follow,
+	And every day, for food or play,
+	Came to the mariner's hollo!
+
+	In mist or cloud, on mast or shroud,
+	It perched for vespers nine;
+	Whiles all the night, through fog-smoke white,
+	Glimmered the white Moon-shine.'
+
+	'God save thee, ancient Mariner!
+	From the fiends, that plague thee thus!—
+	Why look'st thou so?'—With my cross-bow
+	I shot the ALBATROSS.
+	</pre>
 </div>
-<br/><br/>
-<pre id="input">
-The Rime of the Ancient Mariner (text of 1834)
-BY SAMUEL TAYLOR COLERIDGE
-Argument
-
-How a Ship having passed the Line was driven by storms to the cold Country towards the South Pole;
-and how from thence she made her course to the tropical Latitude of the Great Pacific Ocean; and 
-of the strange things that befell; and in what manner the Ancyent Marinere came back to his own
-Country.
-
-PART I
-It is an ancient Mariner,
-And he stoppeth one of three.
-'By thy long grey beard and glittering eye,
-Now wherefore stopp'st thou me?
-
-The Bridegroom's doors are opened wide,
-And I am next of kin;
-The guests are met, the feast is set:
-May'st hear the merry din.'
-
-He holds him with his skinny hand,
-'There was a ship,' quoth he.
-'Hold off! unhand me, grey-beard loon!'
-Eftsoons his hand dropt he.
-
-He holds him with his glittering eye—
-The Wedding-Guest stood still,
-And listens like a three years' child:
-The Mariner hath his will.
-
-The Wedding-Guest sat on a stone:
-He cannot choose but hear;
-And thus spake on that ancient man,
-The bright-eyed Mariner.
-
-'The ship was cheered, the harbour cleared,
-Merrily did we drop
-Below the kirk, below the hill,
-Below the lighthouse top.
-
-The Sun came up upon the left,
-Out of the sea came he!
-And he shone bright, and on the right
-Went down into the sea.
-
-Higher and higher every day,
-Till over the mast at noon—'
-The Wedding-Guest here beat his breast,
-For he heard the loud bassoon.
-
-The bride hath paced into the hall,
-Red as a rose is she;
-Nodding their heads before her goes
-The merry minstrelsy.
-
-The Wedding-Guest he beat his breast,
-Yet he cannot choose but hear;
-And thus spake on that ancient man,
-The bright-eyed Mariner.
-
-And now the STORM-BLAST came, and he
-Was tyrannous and strong:
-He struck with his o'ertaking wings,
-And chased us south along.
-
-With sloping masts and dipping prow,
-As who pursued with yell and blow
-Still treads the shadow of his foe,
-And forward bends his head,
-The ship drove fast, loud roared the blast,
-And southward aye we fled.
-
-And now there came both mist and snow,
-And it grew wondrous cold:
-And ice, mast-high, came floating by,
-As green as emerald.
-
-And through the drifts the snowy clifts
-Did send a dismal sheen:
-Nor shapes of men nor beasts we ken—
-The ice was all between.
-
-The ice was here, the ice was there,
-The ice was all around:
-It cracked and growled, and roared and howled,
-Like noises in a swound!
-
-At length did cross an Albatross,
-Thorough the fog it came;
-As if it had been a Christian soul,
-We hailed it in God's name.
-
-It ate the food it ne'er had eat,
-And round and round it flew.
-The ice did split with a thunder-fit;
-The helmsman steered us through!
-
-And a good south wind sprung up behind;
-The Albatross did follow,
-And every day, for food or play,
-Came to the mariner's hollo!
-
-In mist or cloud, on mast or shroud,
-It perched for vespers nine;
-Whiles all the night, through fog-smoke white,
-Glimmered the white Moon-shine.'
-
-'God save thee, ancient Mariner!
-From the fiends, that plague thee thus!—
-Why look'st thou so?'—With my cross-bow
-I shot the ALBATROSS.
-</pre>
 <div class="demo-description">
 	<p>A sample editor toolbar</p>
 	<p>Highlight text and edit it using the buttons and dropdowns in the toolbar</p>

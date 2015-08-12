@@ -39,7 +39,8 @@ return $.widget( "ui.controlgroup", {
 			"button": "input[type=button], input[type=submit], input[type=reset], button, a",
 			"checkboxradio": "input[type='checkbox'], input[type='radio']",
 			"selectmenu": "select",
-			"spinner": ".ui-spinner-input"
+			"spinner": ".ui-spinner-input",
+			"controlgroupLabel": ".ui-controlgroup-label"
 		},
 		direction: "horizontal",
 		excludeInvisible: true
@@ -67,7 +68,7 @@ return $.widget( "ui.controlgroup", {
 
 		// First we iterate over each of the items options
 		$.each( this.options.items, function( widget, selector ) {
-			var widgets,
+			var widgets, labels,
 				options = {};
 
 			// We assume everything is in the middle to start because we can't determine
@@ -94,17 +95,22 @@ return $.widget( "ui.controlgroup", {
 
 					childWidgets.push( widgetElement[ 0 ] );
 				} );
+			} else if ( selector && widget === "controlgroupLabel" ) {
+				labels = that.element.find( selector );
+				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
+				Array.prototype.push.apply( childWidgets, labels );
 			}
 		} );
 
 		this.childWidgets = $( $.unique( childWidgets ) );
+		this._addClass( this.childWidgets, "ui-controlgroup-item" );
 	},
 
 	_callChildMethod: function( method ) {
 		this.childWidgets.each( function() {
 			var element = $( this ),
 				data = element.data( "ui-controlgroup-data" );
-			if( data[ method ] ) {
+			if( data && data[ method ] ) {
 				data[ method ]();
 			}
 		} );
@@ -203,7 +209,7 @@ return $.widget( "ui.controlgroup", {
 			// before determining first and last
 			$.each( [ "first", "last" ], function( index, value ) {
 				var instance = children[ value ]().data( "ui-controlgroup-data" );
-				console.log( instance )
+
 				if ( that[ "_" + instance.widgetName + "_options" ] ) {
 					instance.element[ instance.widgetName ](
 						that[ "_" + instance.widgetName + "_options" ](
