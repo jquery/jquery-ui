@@ -230,12 +230,8 @@ $.widget( "ui.spinner", {
 
 				// Add buttons
 				.append(
-					"<a>" +
-						"<span>&#9650;</span>" +
-					"</a>" +
-					"<a>" +
-						"<span>&#9660;</span>" +
-					"</a>"
+					"<a></a>" +
+					"<a></a>"
 				);
 	},
 
@@ -250,6 +246,7 @@ $.widget( "ui.spinner", {
 		// Button bindings
 		this.buttons = this.uiSpinner.children( "a" )
 			.attr( "tabIndex", -1 )
+			.attr( "aria-hidden", true )
 			.button( {
 				classes: {
 					"ui-button": ""
@@ -261,8 +258,14 @@ $.widget( "ui.spinner", {
 
 		this._addClass( this.buttons.first(), "ui-spinner-button ui-spinner-up" );
 		this._addClass( this.buttons.last(), "ui-spinner-button ui-spinner-down" );
-		this.buttons.first().button( "option", "icon", this.options.icons.up );
-		this.buttons.last().button( "option", "icon", this.options.icons.down );
+		this.buttons.first().button( {
+			"icon": this.options.icons.up,
+			"showLabel": false
+		} );
+		this.buttons.last().button({
+			"icon": this.options.icons.down,
+			"showLabel": false
+		} );
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height
@@ -562,12 +565,8 @@ if ( $.uiBackCompat !== false ) {
 
 		_buttonHtml: function() {
 			return "" +
-				"<a>" +
-					"<span>&#9650;</span>" +
-				"</a>" +
-				"<a>" +
-					"<span>&#9660;</span>" +
-				"</a>";
+				"<a></a>" +
+				"<a></a>";
 		}
 	} );
 }
