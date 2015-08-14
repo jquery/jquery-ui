@@ -11,6 +11,7 @@
 
 .ui-controlgroup {
 	vertical-align: middle;
+	display: inline-block;
 }
 .ui-controlgroup > .ui-controlgroup-item {
 	float: left;
@@ -31,8 +32,9 @@
 .ui-controlgroup-vertical .ui-controlgroup-item {
 	box-sizing: border-box;
 }
-.ui-controlgroup-label {
-	padding: .4em 1em;
+.ui-controlgroup .ui-controlgroup-label {
+	font-size: .83em;
+	padding: .6em 1em;
 }
 .ui-controlgroup-horizontal .ui-controlgroup-label + .ui-controlgroup-item {
 	border-left: none;

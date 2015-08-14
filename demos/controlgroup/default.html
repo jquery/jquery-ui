@@ -16,8 +16,8 @@
 		#car-type-button {
 			width: 120px;
 		}
-		.ui-controlgroup-horizontal .ui-spinner {
-			width: 50px;
+		.ui-controlgroup-horizontal .ui-spinner-input {
+			width: 20px;
 		}
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
@@ -26,6 +26,7 @@
 		$( ".controlgroup-vertical" ).controlgroup({
 			"direction": "vertical"
 		});
+		$( ".button" ).button();
 	</script>
 </head>
 <body>
@@ -33,6 +34,7 @@
 	<h1>Controlgroup</h1>
 	<fieldset>
 		<legend>Rental Car</legend>
+		<button class="button">button</button>
 		<div class="controlgroup">
 			<select id="car-type">
 				<option>Compact car</option>

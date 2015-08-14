@@ -80,25 +80,25 @@ return $.widget( "ui.controlgroup", {
 			// Make sure the widget actually exists and has a selector set
 			if ( $.fn[ widget ] && selector ) {
 
-				// Find instances of this widget inside controlgroup and run method or set options
+				// Find instances of this widget inside controlgroup and set options
 				widgets = that.element.find( selector )[ widget ]( options );
 
-				// Don't set data or add to the collection if the method is destroy
 				widgets.each( function() {
-					var element = $( this );
+					var element = $( this ),
 
 					// Set data on the widget element pointing to the this.element of the widget
 					// and telling us what type of widget this is
-					var widgetElement =
-						element[ widget ]( "widget" ).data( "ui-controlgroup-data", element.data( "ui-" +
-								widget.charAt(0).toUpperCase() + widget.slice(1) ) );
+					widgetElement = element[ widget ]( "widget" ).data(
+						"ui-controlgroup-data",
+						element.data( "ui-" + widget.charAt(0).toUpperCase() + widget.slice(1) )
+					);
 
 					childWidgets.push( widgetElement[ 0 ] );
 				} );
 			} else if ( selector && widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
-				Array.prototype.push.apply( childWidgets, labels );
+				Array.prototype.push.apply( childWidgets, labels.get() );
 			}
 		} );
 
@@ -114,6 +114,15 @@ return $.widget( "ui.controlgroup", {
 				data[ method ]();
 			}
 		} );
+	},
+
+	_updateCornerClass: function( element, position ) {
+		var remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right",
+			add =
+				this._buildSimpleOptions( position, this.options.direction, "label" ).classes.label;
+
+		this._removeClass( element, null, remove );
+		this._addClass( element, null, add );
 	},
 
 	_buildSimpleOptions: function( position, direction, key ) {
@@ -217,6 +226,8 @@ return $.widget( "ui.controlgroup", {
 							that.options.direction === "vertical"
 						)
 					);
+				} else {
+					that._updateCornerClass( children[ value ](), value );
 				}
 			} );
 
