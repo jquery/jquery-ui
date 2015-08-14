@@ -12,7 +12,9 @@ common.testWidget( "controlgroup", {
 		items: {
 			"button": "input[type=button], input[type=submit], input[type=reset], button, a",
 			"checkboxradio": "input[type='checkbox'], input[type='radio']",
-			"selectmenu": "select"
+			"selectmenu": "select",
+			"spinner": ".ui-spinner-input",
+			"controlgroupLabel": ".ui-controlgroup-label"
 		},
 		direction: "horizontal",
 		excludeInvisible: true,
