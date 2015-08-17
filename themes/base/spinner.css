@@ -40,9 +40,9 @@
 }
 /* more specificity required here to override default borders */
 .ui-spinner a.ui-spinner-button {
-	border-top: none;
-	border-bottom: none;
-	border-right: none;
+	border-top-style: none;
+	border-bottom-style: none;
+	border-right-style: none;
 }
 /* vertically center icon */
 .ui-spinner .ui-icon {
