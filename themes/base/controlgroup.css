@@ -33,8 +33,10 @@
 	box-sizing: border-box;
 }
 .ui-controlgroup .ui-controlgroup-label {
-	font-size: .83em;
-	padding: .6em 1em;
+	padding: .4em 1em;
+}
+.ui-controlgroup .ui-controlgroup-label span {
+	font-size: 80%;
 }
 .ui-controlgroup-horizontal .ui-controlgroup-label + .ui-controlgroup-item {
 	border-left: none;
@@ -45,3 +47,23 @@
 .ui-controlgroup-horizontal .ui-controlgroup-label.ui-widget-content {
 	border-right: none;
 }
+.ui-controlgroup-vertical .ui-controlgroup-label.ui-widget-content {
+	border-bottom: none;
+}
+
+/* Spinner specific style fixes */
+.ui-controlgroup-vertical .ui-spinner {
+	padding-right: .4em;
+}
+.ui-controlgroup-vertical .ui-spinner-input {
+	margin: .4em;
+	padding: 0;
+
+	/* Support IE8, Android < 4.4 */
+	width: 85%;
+	width: calc( 100% - 22px );
+}
+.ui-controlgroup-vertical .ui-spinner .ui-spinner-up {
+	border-top-style: solid;
+}
+
