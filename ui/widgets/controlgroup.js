@@ -97,6 +97,9 @@ return $.widget( "ui.controlgroup", {
 				} );
 			} else if ( selector && widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
+				labels.each( function() {
+					$( this ).contents().wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
+				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
 				Array.prototype.push.apply( childWidgets, labels.get() );
 			}
@@ -117,9 +120,9 @@ return $.widget( "ui.controlgroup", {
 	},
 
 	_updateCornerClass: function( element, position ) {
-		var remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right",
-			add =
-				this._buildSimpleOptions( position, this.options.direction, "label" ).classes.label;
+		var direction = this.options.direction === "vertical"
+			remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right",
+			add = this._buildSimpleOptions( position, direction, "label" ).classes.label;
 
 		this._removeClass( element, null, remove );
 		this._addClass( element, null, add );
@@ -219,7 +222,7 @@ return $.widget( "ui.controlgroup", {
 			$.each( [ "first", "last" ], function( index, value ) {
 				var instance = children[ value ]().data( "ui-controlgroup-data" );
 
-				if ( that[ "_" + instance.widgetName + "_options" ] ) {
+				if ( instance && that[ "_" + instance.widgetName + "_options" ] ) {
 					instance.element[ instance.widgetName ](
 						that[ "_" + instance.widgetName + "_options" ](
 							value,
