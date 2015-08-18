@@ -8,6 +8,5 @@
 	"important": false,
 	"outline-none": false,
 	"overqualified-elements": false,
-	"text-indent": false,
-	"box-sizing": false
+	"text-indent": false
 }
