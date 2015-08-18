@@ -18,7 +18,8 @@
 	margin-left: 0;
 	margin-right: 0;
 }
-.ui-controlgroup > .ui-controlgroup-item:focus {
+.ui-controlgroup > .ui-controlgroup-item:focus,
+.ui-controlgroup > .ui-controlgroup-item.ui-visual-focus {
 	z-index: 9999;
 }
 .ui-controlgroup-vertical > .ui-controlgroup-item {
