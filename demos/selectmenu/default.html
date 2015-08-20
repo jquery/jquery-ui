@@ -5,27 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>jQuery UI Selectmenu - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/menu.js"></script>
-	<script src="../../ui/selectmenu.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
-		$( "#speed" ).selectmenu();
-
-		$( "#files" ).selectmenu();
-
-		$( "#number" )
-			.selectmenu()
-			.selectmenu( "menuWidget" )
-				.addClass( "overflow" );
-
-		$( "#salutation" ).selectmenu();
-	});
-	</script>
 	<style>
 		fieldset {
 			border: 0;
@@ -38,6 +18,19 @@
 			height: 200px;
 		}
 	</style>
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
+		$( "#speed" ).selectmenu();
+
+		$( "#files" ).selectmenu();
+
+		$( "#number" )
+			.selectmenu()
+			.selectmenu( "menuWidget" )
+				.addClass( "overflow" );
+
+		$( "#salutation" ).selectmenu();
+	</script>
 </head>
 <body>
 

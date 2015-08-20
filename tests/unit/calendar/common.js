@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/calendar",
+	"ui/widgets/calendar",
 	"globalize-locales"
 ], function( common ) {
 

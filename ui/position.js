@@ -19,7 +19,7 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [ "jquery" ], factory );
+		define( [ "jquery", "./version" ], factory );
 	} else {
 
 		// Browser globals
@@ -27,9 +27,6 @@
 	}
 }( function( $ ) {
 ( function() {
-
-$.ui = $.ui || {};
-
 var cachedScrollbarWidth, supportsOffsetFractions,
 	max = Math.max,
 	abs = Math.abs,
@@ -142,12 +139,13 @@ $.position = {
 	getWithinInfo: function( element ) {
 		var withinElement = $( element || window ),
 			isWindow = $.isWindow( withinElement[ 0 ] ),
-			isDocument = !!withinElement[ 0 ] && withinElement[ 0 ].nodeType === 9;
+			isDocument = !!withinElement[ 0 ] && withinElement[ 0 ].nodeType === 9,
+			hasOffset = !isWindow && !isDocument;
 		return {
 			element: withinElement,
 			isWindow: isWindow,
 			isDocument: isDocument,
-			offset: withinElement.offset() || { left: 0, top: 0 },
+			offset: hasOffset ? $( element ).offset() : { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
 			width: withinElement.outerWidth(),

@@ -1,9 +1,9 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/draggable",
-	"ui/droppable",
-	"ui/resizable"
+	"ui/widgets/draggable",
+	"ui/widgets/droppable",
+	"ui/widgets/resizable"
 ], function( $, testHelper ) {
 
 module( "draggable: core" );

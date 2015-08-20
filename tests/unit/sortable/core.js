@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/sortable"
+	"ui/widgets/sortable"
 ], function( $, testHelper ) {
 
 module( "sortable: core" );

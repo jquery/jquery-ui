@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/dialog"
+	"ui/widgets/dialog"
 ], function( $ ) {
 
 // TODO add teardown callback to remove dialogs

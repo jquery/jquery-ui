@@ -4,16 +4,11 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Vertical Tabs functionality</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/tabs.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
 		$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-	});
 	</script>
 	<style>
 	.ui-tabs-vertical { width: 55em; }

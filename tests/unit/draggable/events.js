@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/draggable"
+	"ui/widgets/draggable"
 ], function( $ ) {
 
 var element;

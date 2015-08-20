@@ -33,7 +33,7 @@ You can also run the unit tests inside phantomjs by [setting up your environment
 
 jQuery UI uses the [Grunt](http://gruntjs.com/) build system.
 
-To build jQuery UI, [setup your environment](CONTRIBUTING.md#environment-minimum-required) and then run the following commands:
+To build jQuery UI, [set up your environment](CONTRIBUTING.md#environment-minimum-required) and then run the following commands:
 
 ```sh
 # Run the concat task to concatenate files

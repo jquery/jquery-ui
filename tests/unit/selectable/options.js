@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/selectable"
+	"ui/widgets/selectable"
 ], function( $ ) {
 
 module("selectable: options");

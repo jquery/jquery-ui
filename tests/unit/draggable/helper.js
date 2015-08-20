@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/draggable"
+	"ui/widgets/draggable"
 ], function( $, helper ) {
 
 return $.extend( helper, {

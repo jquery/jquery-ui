@@ -4,20 +4,14 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Droppable - Prevent propagation</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/mouse.js"></script>
-	<script src="../../ui/draggable.js"></script>
-	<script src="../../ui/droppable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#draggable { width: 100px; height: 40px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
 	#droppable, #droppable2 { width: 230px; height: 120px; padding: 0.5em; float: left; margin: 10px; }
 	#droppable-inner, #droppable2-inner { width: 170px; height: 60px; padding: 0.5em; float: left; margin: 10px; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		$( "#draggable" ).draggable();
 
 		$( "#droppable, #droppable-inner" ).droppable({
@@ -47,7 +41,6 @@
 						.html( "Dropped!" );
 			}
 		});
-	});
 	</script>
 </head>
 <body>

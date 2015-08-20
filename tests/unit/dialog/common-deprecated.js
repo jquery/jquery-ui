@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/dialog"
+	"ui/widgets/dialog"
 ], function( common ) {
 
 common.testWidget( "dialog", {

@@ -1,9 +1,9 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/dialog",
-	"ui/effect-blind",
-	"ui/effect-explode"
+	"ui/widgets/dialog",
+	"ui/effects/effect-blind",
+	"ui/effects/effect-explode"
 ], function( $, testHelper ) {
 
 module("dialog: options");

@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/tabs"
+	"ui/widgets/tabs"
 ], function( $, helper ) {
 
 return $.extend( helper, {

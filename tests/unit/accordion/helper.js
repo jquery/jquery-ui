@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/accordion"
+	"ui/widgets/accordion"
 ], function( $, helper ) {
 
 return $.extend( helper, {

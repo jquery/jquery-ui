@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/autocomplete"
+	"ui/widgets/autocomplete"
 ], function( common ) {
 
 common.testWidget( "autocomplete", {

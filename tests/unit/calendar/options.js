@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/calendar"
+	"ui/widgets/calendar"
 ], function( $, testHelper ) {
 
 module( "calendar: options" );

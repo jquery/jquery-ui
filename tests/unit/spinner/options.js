@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/spinner",
+	"ui/widgets/spinner",
 	"globalize-old",
 	"globalize-old/ja-JP"
 ], function( $ ) {

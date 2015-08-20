@@ -67,7 +67,7 @@ function testBasicUsage( widget ) {
 exports.testWidget = function( widget, settings ) {
 	module( widget + ": common widget" );
 
-	exports.testJshint( widget );
+	exports.testJshint( "/widgets/" + widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );

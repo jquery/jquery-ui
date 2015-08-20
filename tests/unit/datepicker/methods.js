@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/datepicker"
+	"ui/widgets/datepicker"
 ], function( $, testHelper ) {
 
 module( "datepicker: methods" );

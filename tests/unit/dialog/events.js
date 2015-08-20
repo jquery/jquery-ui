@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/dialog"
+	"ui/widgets/dialog"
 ], function( $, testHelper ) {
 
 module("dialog: events");

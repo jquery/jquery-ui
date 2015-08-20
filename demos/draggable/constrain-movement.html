@@ -4,11 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Draggable - Constrain movement</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/mouse.js"></script>
-	<script src="../../ui/draggable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	.draggable { width: 90px; height: 90px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
@@ -18,14 +13,13 @@
 	#containment-wrapper { width: 95%; height:150px; border:2px solid #ccc; padding: 10px; }
 	h3 { clear: left; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		$( "#draggable" ).draggable({ axis: "y" });
 		$( "#draggable2" ).draggable({ axis: "x" });
 
 		$( "#draggable3" ).draggable({ containment: "#containment-wrapper", scroll: false });
 		$( "#draggable5" ).draggable({ containment: "parent" });
-	});
 	</script>
 </head>
 <body>

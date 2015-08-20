@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/resizable"
+	"ui/widgets/resizable"
 ], function( $ ) {
 
 module( "resizable: methods" );

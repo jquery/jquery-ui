@@ -15,8 +15,8 @@
 		height:120px; float:left; margin:15px
 	}
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		// setup master volume
 		$( "#master" ).slider({
 			value: 60,
@@ -35,7 +35,6 @@
 				orientation: "vertical"
 			});
 		});
-	});
 	</script>
 </head>
 <body>

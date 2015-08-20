@@ -28,6 +28,9 @@
 	font-family: Arial,Helvetica,sans-serif/*{ffDefault}*/;
 	font-size: 1em;
 }
+.ui-widget.ui-widget-content {
+	border: 1px solid #c5c5c5/*{borderColorDefault}*/;
+}
 .ui-widget-content {
 	border: 1px solid #dddddd/*{borderColorContent}*/;
 	background: #ffffff/*{bgColorContent}*/ /*{bgImgUrlContent}*/ /*{bgContentXPos}*/ /*{bgContentYPos}*/ /*{bgContentRepeat}*/;

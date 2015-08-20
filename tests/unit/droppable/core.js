@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/droppable"
+	"ui/widgets/droppable"
 ], function( $, testHelper ) {
 
 module("droppable: core");

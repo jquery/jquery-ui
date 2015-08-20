@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/sortable"
+	"ui/widgets/sortable"
 ], function( $ ) {
 
 module("sortable: options");

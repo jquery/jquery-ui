@@ -24,30 +24,6 @@ var
 
 	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
 
-	cssFiles = [
-		"core",
-		"accordion",
-		"autocomplete",
-		"calendar",
-		"button",
-		"datepicker",
-		"dialog",
-		"draggable",
-		"menu",
-		"progressbar",
-		"resizable",
-		"selectable",
-		"selectmenu",
-		"sortable",
-		"slider",
-		"spinner",
-		"tabs",
-		"tooltip",
-		"theme"
-	].map(function( component ) {
-		return "themes/base/" + component + ".css";
-	}),
-
 	// minified files
 	minify = {
 		options: {
@@ -150,33 +126,30 @@ grunt.initConfig({
 		dist: "<%= pkg.name %>-<%= pkg.version %>"
 	},
 	compare_size: compareFiles,
-	concat: {
-		ui: {
+	requirejs: {
+		js: {
 			options: {
-				banner: createBanner( uiFiles ),
-				stripBanners: {
-					block: true
+				baseUrl: "./",
+				paths: {
+					jquery: "./external/jquery/jquery",
+					external: "./external/"
+				},
+				preserveLicenseComments: false,
+				optimize: "none",
+				findNestedDependencies: true,
+				skipModuleInsertion: true,
+				exclude: [ "jquery" ],
+				include: expandFiles( [
+					"ui/**/*.js",
+					"!ui/widgets/calendar.js",
+					"!ui/widgets/datepicker.js",
+					"!ui/i18n/*"
+				] ),
+				out: "dist/jquery-ui.js",
+				wrap: {
+					start: createBanner( uiFiles ),
 				}
-			},
-			src: uiFiles,
-			dest: "dist/jquery-ui.js"
-		},
-		i18n: {
-			options: {
-				banner: createBanner( allI18nFiles )
-			},
-			src: allI18nFiles,
-			dest: "dist/i18n/jquery-ui-i18n.js"
-		},
-		css: {
-			options: {
-				banner: createBanner( cssFiles ),
-				stripBanners: {
-					block: true
-				}
-			},
-			src: cssFiles,
-			dest: "dist/jquery-ui.css"
+			}
 		}
 	},
 
@@ -202,13 +175,31 @@ grunt.initConfig({
 				requireSpacesInsideParentheses: null
 			},
 			src: [ "Gruntfile.js", "build/tasks/*.js" ]
+		},
+		demos: {
+			options: {
+
+				// While the style guide removed onevar upgrading jscs to allow it causes too many
+				// errors right now
+				disallowMultipleVarDecl: null
+			},
+			src: "demos/**/*.js"
 		}
 	},
 	uglify: minify,
 	htmllint: {
-		good: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
+		good: [ "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
 			return "!" + file;
 		} ) ),
+		demos: {
+			options: {
+				ignore: [
+				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
+			] },
+			src: [ "demos/**/*.html" ].concat( htmllintBad.map( function( file ) {
+				return "!" + file;
+			} ) )
+		},
 		bad: {
 			options: {
 				ignore: [
@@ -241,7 +232,8 @@ grunt.initConfig({
 			"Gruntfile.js",
 			"build/**/*.js",
 			"tests/unit/**/*.js",
-			"tests/lib/**/*.js"
+			"tests/lib/**/*.js",
+			"demos/**/*.js"
 		]
 	},
 	csslint: {
@@ -447,10 +439,10 @@ grunt.registerTask( "update-authors", function() {
 	});
 });
 
-grunt.registerTask( "default", [ "lint", "test" ]);
+grunt.registerTask( "default", [ "lint", "requirejs", "test" ]);
 grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
 grunt.registerTask( "test", [ "qunit" ]);
-grunt.registerTask( "sizer", [ "concat:ui", "uglify:main", "compare_size:all" ]);
-grunt.registerTask( "sizer_all", [ "concat:ui", "uglify", "compare_size" ]);
+grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ]);
+grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ]);
 
 };

@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/draggable"
+	"ui/widgets/draggable"
 ], function( common ) {
 
 common.testWidget( "draggable", {

@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/datepicker",
+	"ui/widgets/datepicker",
 	"globalize-locales"
 ], function( common ) {
 

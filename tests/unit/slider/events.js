@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/slider"
+	"ui/widgets/slider"
 ], function( $ ) {
 
 module( "slider: events" );

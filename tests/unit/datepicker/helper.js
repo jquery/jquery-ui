@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/datepicker"
+	"ui/widgets/datepicker"
 ], function( $, helper ) {
 
 return $.extend( helper, {

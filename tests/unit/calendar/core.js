@@ -1,9 +1,8 @@
 define( [
 	"jquery",
 	"./helper",
-	"globalize",
-	"ui/calendar"
-], function( $, testHelper, Globalize ) {
+	"ui/widgets/calendar"
+], function( $, testHelper ) {
 
 module( "calendar: core" );
 

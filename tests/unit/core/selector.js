@@ -1,6 +1,9 @@
 define( [
 	"jquery",
-	"ui/core"
+	"ui/data",
+	"ui/escape-selector",
+	"ui/focusable",
+	"ui/tabbable"
 ], function( $ ) {
 
 module( "core - selectors" );
