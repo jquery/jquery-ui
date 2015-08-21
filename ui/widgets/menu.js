@@ -52,7 +52,7 @@ return $.widget( "ui.menu", {
 		},
 		role: "menu",
 
-		// callbacks
+		// Callbacks
 		blur: null,
 		focus: null,
 		select: null
