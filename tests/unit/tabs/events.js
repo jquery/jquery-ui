@@ -58,7 +58,7 @@ test( "beforeActivate", function() {
 		anchors = tabs.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
-	// from collapsed
+	// From collapsed
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 0, "oldTab length" );
@@ -72,7 +72,7 @@ test( "beforeActivate", function() {
 	element.tabs( "option", "active", 0 );
 	state( element, 1, 0, 0 );
 
-	// switching tabs
+	// Switching tabs
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		equal( event.originalEvent.type, "click", "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -88,7 +88,7 @@ test( "beforeActivate", function() {
 	anchors.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
-	// collapsing
+	// Collapsing
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -102,7 +102,7 @@ test( "beforeActivate", function() {
 	element.tabs( "option", "active", false );
 	state( element, 0, 0, 0 );
 
-	// prevent activation
+	// Prevent activation
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 0, "oldTab length" );
@@ -129,7 +129,7 @@ test( "activate", function() {
 		anchors = element.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
-	// from collapsed
+	// From collapsed
 	element.one( "tabsactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 0, "oldTab length" );
@@ -143,7 +143,7 @@ test( "activate", function() {
 	element.tabs( "option", "active", 0 );
 	state( element, 1, 0, 0 );
 
-	// switching tabs
+	// Switching tabs
 	element.one( "tabsactivate", function( event, ui ) {
 		equal( event.originalEvent.type, "click", "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -159,7 +159,7 @@ test( "activate", function() {
 	anchors.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
-	// collapsing
+	// Collapsing
 	element.one( "tabsactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -173,7 +173,7 @@ test( "activate", function() {
 	element.tabs( "option", "active", false );
 	state( element, 0, 0, 0 );
 
-	// prevent activation
+	// Prevent activation
 	element.one( "tabsbeforeactivate", function( event ) {
 		ok( true, "tabsbeforeactivate" );
 		event.preventDefault();
@@ -190,7 +190,7 @@ test( "beforeLoad", function() {
 	var tab, panelId, panel,
 		element = $( "#tabs2" );
 
-	// init
+	// Init
 	element.one( "tabsbeforeload", function( event, ui ) {
 		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
@@ -234,7 +234,7 @@ test( "beforeLoad", function() {
 	state( element, 0, 0, 1, 0, 0 );
 	equal( panel.html(), "", "panel html after" );
 
-	// click, change panel content
+	// Click, change panel content
 	element.one( "tabsbeforeload", function( event, ui ) {
 		tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
 		panelId = tab.attr( "aria-controls" );
@@ -263,7 +263,7 @@ asyncTest( "load", function() {
 	var tab, panelId, panel,
 		element = $( "#tabs2" );
 
-	// init
+	// Init
 	element.one( "tabsload", function( event, ui ) {
 		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
