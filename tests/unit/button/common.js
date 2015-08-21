@@ -14,9 +14,9 @@ common.testWidget( "button", {
 		label: null,
 		text: true,
 
-		// callbacks
+		// Callbacks
 		create: null
 	}
-});
+} );
 
 } );
