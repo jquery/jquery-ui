@@ -22,7 +22,7 @@ common.testWidget( "autocomplete", {
 		},
 		source: null,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		close: null,
 		create: null,
@@ -32,6 +32,6 @@ common.testWidget( "autocomplete", {
 		search: null,
 		select: null
 	}
-});
+} );
 
 } );
