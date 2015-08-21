@@ -224,7 +224,7 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	function checkTab() {
 		equal( document.activeElement, inputs[ 0 ], "Tab key event moved focus within the modal" );
 
-		// check shift tab
+		// Check shift tab
 		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB, shiftKey: true });
 		setTimeout( checkShiftTab );
 	}

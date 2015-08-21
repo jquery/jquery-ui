@@ -81,7 +81,7 @@ $.widget( "ui.dialog", {
 		title: null,
 		width: 300,
 
-		// callbacks
+		// Callbacks
 		beforeClose: null,
 		close: null,
 		drag: null,
@@ -353,7 +353,7 @@ $.widget( "ui.dialog", {
 					return;
 				}
 
-				// prevent tabbing out of dialogs
+				// Prevent tabbing out of dialogs
 				if ( event.keyCode !== $.ui.keyCode.TAB || event.isDefaultPrevented() ) {
 					return;
 				}
@@ -408,7 +408,7 @@ $.widget( "ui.dialog", {
 			}
 		} );
 
-		// support: IE
+		// Support: IE
 		// Use type="button" to prevent enter keypresses in textboxes from closing the
 		// dialog in IE (#9312)
 		this.uiDialogTitlebarClose = $( "<button type='button'></button>" )
@@ -464,7 +464,7 @@ $.widget( "ui.dialog", {
 		var that = this,
 			buttons = this.options.buttons;
 
-		// if we already have a button pane, remove it
+		// If we already have a button pane, remove it
 		this.uiDialogButtonPane.remove();
 		this.uiButtonSet.empty();
 
@@ -722,12 +722,12 @@ $.widget( "ui.dialog", {
 				uiDialog.resizable( "destroy" );
 			}
 
-			// currently resizable, changing handles
+			// Currently resizable, changing handles
 			if ( isResizable && typeof value === "string" ) {
 				uiDialog.resizable( "option", "handles", value );
 			}
 
-			// currently non-resizable, becoming resizable
+			// Currently non-resizable, becoming resizable
 			if ( !isResizable && value !== false ) {
 				this._makeResizable();
 			}
@@ -756,7 +756,7 @@ $.widget( "ui.dialog", {
 			options.width = options.minWidth;
 		}
 
-		// reset wrapper sizing
+		// Reset wrapper sizing
 		// determine the height of all the non-content elements
 		nonContentHeight = this.uiDialog.css( {
 			height: "auto",

@@ -76,7 +76,7 @@ test( "focus", function() {
 	other.dialog( "moveToTop" );
 	element.trigger( "mousedown" );
 
-	// triggers just once when already on top
+	// Triggers just once when already on top
 	element.dialog( "open" );
 	element.dialog( "moveToTop" );
 	element.trigger( "mousedown" );
