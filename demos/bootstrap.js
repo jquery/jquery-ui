@@ -1,4 +1,4 @@
-/* globals window:true, document:true */
+/* globals window, document */
 ( function() {
 
 // Find the script element
@@ -79,7 +79,6 @@ require.config( {
 		"external/globalize/globalize.culture.ja-JP": [ "external/globalize/globalize" ]
 	}
 } );
-
 
 // Replace effects all shortcut modules with all the effects modules
 if ( modules && modules.indexOf( "effects-all" ) !== -1 ) {
