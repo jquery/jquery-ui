@@ -41,7 +41,7 @@ $.widget( "ui.droppable", {
 		scope: "default",
 		tolerance: "intersect",
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		deactivate: null,
 		drop: null,
@@ -388,7 +388,7 @@ $.ui.ddmanager = {
 				}
 			}
 
-			// we just moved into a greedy child
+			// We just moved into a greedy child
 			if ( parentInstance && c === "isover" ) {
 				parentInstance.isover = false;
 				parentInstance.isout = true;
@@ -399,7 +399,7 @@ $.ui.ddmanager = {
 			this[c === "isout" ? "isover" : "isout"] = false;
 			this[c === "isover" ? "_over" : "_out"].call( this, event );
 
-			// we just moved out of a greedy child
+			// We just moved out of a greedy child
 			if ( parentInstance && c === "isout" ) {
 				parentInstance.isout = false;
 				parentInstance.isover = true;
