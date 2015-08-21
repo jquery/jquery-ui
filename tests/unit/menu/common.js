@@ -18,7 +18,7 @@ common.testWidget( "menu", {
 		},
 		role: "menu",
 
-		// callbacks
+		// Callbacks
 		blur: null,
 		create: null,
 		focus: null,
