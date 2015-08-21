@@ -360,7 +360,7 @@ $.extend(Datepicker.prototype, {
 				[(browserWidth / 2) - 100 + scrollX, (browserHeight / 2) - 150 + scrollY];
 		}
 
-		// move input on screen for focus, but hidden behind dialog
+		// Move input on screen for focus, but hidden behind dialog
 		this._dialogInput.css("left", (this._pos[0] + 20) + "px").css("top", this._pos[1] + "px");
 		inst.settings.onSelect = onSelect;
 		this._inDialog = true;
@@ -547,7 +547,7 @@ $.extend(Datepicker.prototype, {
 		}
 	},
 
-	// change method deprecated
+	// Change method deprecated
 	_changeDatepicker: function(target, name, value) {
 		this._optionDatepicker(target, name, value);
 	},
@@ -611,7 +611,7 @@ $.extend(Datepicker.prototype, {
 						if (onSelect) {
 							dateStr = $.datepicker._formatDate(inst);
 
-							// trigger custom callback
+							// Trigger custom callback
 							onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
 						} else {
 							$.datepicker._hideDatepicker();
@@ -836,7 +836,7 @@ $.extend(Datepicker.prototype, {
 			inst.input.trigger( "focus" );
 		}
 
-		// deffered render of the years select (to avoid flashes on Firefox)
+		// Deffered render of the years select (to avoid flashes on Firefox)
 		if( inst.yearshtml ){
 			origyearshtml = inst.yearshtml;
 			setTimeout(function(){
@@ -869,7 +869,7 @@ $.extend(Datepicker.prototype, {
 		offset.left -= (isFixed && offset.left === inst.input.offset().left) ? $(document).scrollLeft() : 0;
 		offset.top -= (isFixed && offset.top === (inst.input.offset().top + inputHeight)) ? $(document).scrollTop() : 0;
 
-		// now check if datepicker is showing outside window viewport - move to a better place if so.
+		// Now check if datepicker is showing outside window viewport - move to a better place if so.
 		offset.left -= Math.min(offset.left, (offset.left + dpWidth > viewWidth && viewWidth > dpWidth) ?
 			Math.abs(offset.left + dpWidth - viewWidth) : 0);
 		offset.top -= Math.min(offset.top, (offset.top + dpHeight > viewHeight && viewHeight > dpHeight) ?
@@ -1824,7 +1824,7 @@ $.extend(Datepicker.prototype, {
 			html = "<div class='ui-datepicker-title'>",
 			monthHtml = "";
 
-		// month selection
+		// Month selection
 		if (secondary || !changeMonth) {
 			monthHtml += "<span class='ui-datepicker-month'>" + monthNames[drawMonth] + "</span>";
 		} else {
@@ -1845,7 +1845,7 @@ $.extend(Datepicker.prototype, {
 			html += monthHtml + (secondary || !(changeMonth && changeYear) ? "&#xa0;" : "");
 		}
 
-		// year selection
+		// Year selection
 		if ( !inst.yearshtml ) {
 			inst.yearshtml = "";
 			if (secondary || !changeYear) {
