@@ -91,7 +91,7 @@ $.widget( "ui.spinner", {
 		this._on( this._events );
 		this._refresh();
 
-		// turning off autocomplete prevents the browser from remembering the
+		// Turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
 		this._on( this.window, {
@@ -178,11 +178,11 @@ $.widget( "ui.spinner", {
 				}
 			}
 
-			// ensure focus is on (or stays on) the text field
+			// Ensure focus is on (or stays on) the text field
 			event.preventDefault();
 			checkFocus.call( this );
 
-			// support: IE
+			// Support: IE
 			// IE doesn't prevent moving focus even with event.preventDefault()
 			// so we set a flag to know when we should ignore the blur event
 			// and check (again) if focus moved off of the input.
@@ -242,7 +242,7 @@ $.widget( "ui.spinner", {
 
 		this.element.attr( "role", "spinbutton" );
 
-		// button bindings
+		// Button bindings
 		this.buttons = this.uiSpinner.children( "a" )
 			.attr( "tabIndex", -1 )
 			.button();
@@ -264,7 +264,7 @@ $.widget( "ui.spinner", {
 			this.uiSpinner.height( this.uiSpinner.height() );
 		}
 
-		// disable spinner if element was already disabled
+		// Disable spinner if element was already disabled
 		if ( this.options.disabled ) {
 			this.disable();
 		}
@@ -360,7 +360,7 @@ $.widget( "ui.spinner", {
 		var base, aboveMin,
 			options = this.options;
 
-		// make sure we're at a valid step
+		// Make sure we're at a valid step
 		// - find out where we are relative to the base (min or 0)
 		base = options.min !== null ? options.min : 0;
 		aboveMin = value - base;
@@ -369,10 +369,10 @@ $.widget( "ui.spinner", {
 		// - rounding is based on 0, so adjust back to our base
 		value = base + aboveMin;
 
-		// fix precision from bad JS floating point math
+		// Fix precision from bad JS floating point math
 		value = parseFloat( value.toFixed( this._precision() ) );
 
-		// clamp the value
+		// Clamp the value
 		if ( options.max !== null && value > options.max ) {
 			return options.max;
 		}
@@ -461,16 +461,16 @@ $.widget( "ui.spinner", {
 	isValid: function() {
 		var value = this.value();
 
-		// null is invalid
+		// Null is invalid
 		if ( value === null ) {
 			return false;
 		}
 
-		// if value gets adjusted, it's invalid
+		// If value gets adjusted, it's invalid
 		return value === this._adjustValue( value );
 	},
 
-	// update the value without triggering change
+	// Update the value without triggering change
 	_value: function( value, allowAny ) {
 		var parsed;
 		if ( value !== "" ) {
