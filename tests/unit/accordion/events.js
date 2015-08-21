@@ -16,17 +16,17 @@ test( "create", function() {
 		headers = element.children( "h3" ),
 		contents = headers.next();
 
-	element.accordion({
+	element.accordion( {
 		create: function( event, ui ) {
 			equal( ui.header.length, 1, "header length" );
 			strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], contents[ 0 ], "panel" );
 		}
-	});
+	} );
 	element.accordion( "destroy" );
 
-	element.accordion({
+	element.accordion( {
 		active: 2,
 		create: function( event, ui ) {
 			equal( ui.header.length, 1, "header length" );
@@ -34,26 +34,26 @@ test( "create", function() {
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], contents[ 2 ], "panel" );
 		}
-	});
+	} );
 	element.accordion( "destroy" );
 
-	element.accordion({
+	element.accordion( {
 		active: false,
 		collapsible: true,
 		create: function( event, ui ) {
 			equal( ui.header.length, 0, "header length" );
 			equal( ui.panel.length, 0, "panel length" );
 		}
-	});
+	} );
 	element.accordion( "destroy" );
-});
+} );
 
 test( "beforeActivate", function() {
 	expect( 38 );
-	var element = $( "#list1" ).accordion({
+	var element = $( "#list1" ).accordion( {
 			active: false,
 			collapsible: true
-		}),
+		} ),
 		headers = element.find( ".ui-accordion-header" ),
 		content = element.find( ".ui-accordion-content" );
 
@@ -66,7 +66,7 @@ test( "beforeActivate", function() {
 		equal( ui.newPanel.length, 1 );
 		strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
 		state( element, 0, 0, 0 );
-	});
+	} );
 	element.accordion( "option", "active", 0 );
 	state( element, 1, 0, 0 );
 
@@ -81,7 +81,7 @@ test( "beforeActivate", function() {
 		equal( ui.newPanel.length, 1 );
 		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
 		state( element, 1, 0, 0 );
-	});
+	} );
 	headers.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
@@ -94,7 +94,7 @@ test( "beforeActivate", function() {
 		equal( ui.newHeader.length, 0 );
 		equal( ui.newPanel.length, 0 );
 		state( element, 0, 1, 0 );
-	});
+	} );
 	element.accordion( "option", "active", false );
 	state( element, 0, 0, 0 );
 
@@ -108,17 +108,17 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newPanel[ 0 ], content[ 2 ] );
 		event.preventDefault();
 		state( element, 0, 0, 0 );
-	});
+	} );
 	element.accordion( "option", "active", 2 );
 	state( element, 0, 0, 0 );
-});
+} );
 
 test( "activate", function() {
 	expect( 21 );
-	var element = $( "#list1" ).accordion({
+	var element = $( "#list1" ).accordion( {
 			active: false,
 			collapsible: true
-		}),
+		} ),
 		headers = element.find( ".ui-accordion-header" ),
 		content = element.find( ".ui-accordion-content" );
 
@@ -129,7 +129,7 @@ test( "activate", function() {
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
 		equal( ui.newPanel.length, 1 );
 		strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
-	});
+	} );
 	element.accordion( "option", "active", 0 );
 
 	element.one( "accordionactivate", function( event, ui ) {
@@ -141,7 +141,7 @@ test( "activate", function() {
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
 		equal( ui.newPanel.length, 1 );
 		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
-	});
+	} );
 	headers.eq( 1 ).trigger( "click" );
 
 	element.one( "accordionactivate", function( event, ui ) {
@@ -151,18 +151,18 @@ test( "activate", function() {
 		strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
 		equal( ui.newHeader.length, 0 );
 		equal( ui.newPanel.length, 0 );
-	});
+	} );
 	element.accordion( "option", "active", false );
 
-	// prevent activation
+	// Prevent activation
 	element.one( "accordionbeforeactivate", function( event ) {
 		ok( true );
 		event.preventDefault();
-	});
+	} );
 	element.one( "accordionactivate", function() {
 		ok( false );
-	});
+	} );
 	element.accordion( "option", "active", 1 );
-});
+} );
 
 } );

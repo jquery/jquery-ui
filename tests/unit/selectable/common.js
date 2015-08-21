@@ -15,7 +15,7 @@ common.testWidget( "selectable", {
 		filter: "*",
 		tolerance: "touch",
 
-		// callbacks
+		// Callbacks
 		create: null,
 		selected: null,
 		selecting: null,

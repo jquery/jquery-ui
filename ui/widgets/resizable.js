@@ -60,7 +60,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		// See #7960
 		zIndex: 90,
 
-		// callbacks
+		// Callbacks
 		resize: null,
 		start: null,
 		stop: null
@@ -153,7 +153,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				display: "block"
 			}) );
 
-			// support: IE9
+			// Support: IE9
 			// avoid IE jump (hard set the margin)
 			this.originalElement.css({ margin: this.originalElement.css("margin") });
 
@@ -796,7 +796,7 @@ $.ui.plugin.add("resizable", "animate", {
 						$(pr[0]).css({ width: data.width, height: data.height });
 					}
 
-					// propagating resize, and updating values for each animation step
+					// Propagating resize, and updating values for each animation step
 					that._updateCache(data);
 					that._propagate("resize", event);
 

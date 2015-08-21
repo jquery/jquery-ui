@@ -30,7 +30,7 @@ function notPresent( value, array, message ) {
 // minDuration is used for "short" animate tests where we are only concerned about the final
 var minDuration = 15,
 
-	// duration is used for "long" animates where we plan on testing properties during animation
+	// Duration is used for "long" animates where we plan on testing properties during animation
 	duration = 200;
 
 module( "effects.core" );
@@ -115,11 +115,11 @@ asyncTest( "animateClass works with colors", function() {
 
 	expect(2);
 
-	// we want to catch the first frame of animation
+	// We want to catch the first frame of animation
 	jQuery.fx.step.backgroundColor = function( fx ) {
 		oldStep.apply( this, arguments );
 
-		// make sure it has animated somewhere we can detect
+		// Make sure it has animated somewhere we can detect
 		if ( fx.pos > 255 / 2000 ) {
 			jQuery.fx.step.backgroundColor = oldStep;
 			notPresent( test.css("backgroundColor"),
@@ -206,14 +206,14 @@ function( assert ) {
 	expect( 2 );
 	var test = $( "div.ticket7106" );
 
-	// ensure the class stays and that the css property stays
+	// Ensure the class stays and that the css property stays
 	function animationComplete() {
 		assert.hasClasses( test, "testClass", "class change during animateClass was not lost" );
 		equal( test.height(), 100, "css change during animateClass was not lost" );
 		start();
 	}
 
-	// add a class and change a style property after starting an animated class
+	// Add a class and change a style property after starting an animated class
 	test.addClass( "animate", minDuration, animationComplete )
 		.addClass( "testClass" )
 		.height( 100 );

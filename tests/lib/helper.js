@@ -1,4 +1,4 @@
-define([
+define( [
 	"jquery"
 ], function( $ ) {
 
@@ -9,10 +9,10 @@ exports.forceScrollableWindow = function( appendTo ) {
 	// The main testable area is 10000x10000 so to enforce scrolling,
 	// this DIV must be greater than 10000 to work
 	return $( "<div>" )
-		.css({
+		.css( {
 			height: "11000px",
 			width: "11000px"
-		})
+		} )
 		.appendTo( appendTo || "#qunit-fixture" );
 };
 
@@ -30,4 +30,4 @@ exports.onFocus = function( element, onFocus ) {
 
 return exports;
 
-});
+} );

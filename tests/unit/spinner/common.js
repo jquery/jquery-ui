@@ -23,7 +23,7 @@ common.testWidget( "spinner", {
 		page: 10,
 		step: 1,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		create: null,
 		spin: null,

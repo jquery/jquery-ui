@@ -333,7 +333,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 		equal( logOutput(), "keydown,4", "Keydown LEFT (close submenu)" );
 
-		// re-open submenu
+		// Re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 		setTimeout( menukeyboard3 );
 	}
@@ -525,7 +525,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 		equal( logOutput(), "keydown,1", "Keydown LEFT (close submenu)" );
 
-		// re-open submenu
+		// Re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 		setTimeout( menukeyboard3, 50 );
 	}

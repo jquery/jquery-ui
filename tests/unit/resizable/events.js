@@ -203,7 +203,7 @@ test( "resize (containment) works with parent with negative offset", function() 
 		fixedContainer = absoluteContainer.wrap( "<div />" ).parent(),
 		increaseWidthBy = 50;
 
-	// position fixed container in window top left
+	// Position fixed container in window top left
 	fixedContainer.css({
 		width: 400,
 		height: 100,
@@ -212,7 +212,7 @@ test( "resize (containment) works with parent with negative offset", function() 
 		left: 0
 	});
 
-	// position absolute container within fixed on slightly outside window
+	// Position absolute container within fixed on slightly outside window
 	absoluteContainer.css({
 		width: 400,
 		height: 100,
@@ -221,7 +221,7 @@ test( "resize (containment) works with parent with negative offset", function() 
 		left: -50
 	});
 
-	// set up resizable to be contained within absolute container
+	// Set up resizable to be contained within absolute container
 	target.resizable({
 		handles: "all",
 		containment: "parent"

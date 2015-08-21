@@ -1,4 +1,4 @@
-define([
+define( [
 	"jquery"
 ], function( $ ) {
 
@@ -17,8 +17,8 @@ function testWidgetDefaults( widget, defaults ) {
 				return;
 			}
 			deepEqual( pluginDefaults[ key ], val, key );
-		});
-	});
+		} );
+	} );
 
 	// Ensure that all defaults were tested
 	test( "tested defaults", function() {
@@ -26,15 +26,15 @@ function testWidgetDefaults( widget, defaults ) {
 		$.each( pluginDefaults, function( key ) {
 			expect( ++count );
 			ok( key in defaults, key );
-		});
-	});
+		} );
+	} );
 }
 
 function testWidgetOverrides( widget ) {
 	if ( $.uiBackCompat === false ) {
 		test( "$.widget overrides", function() {
 			expect( 4 );
-			$.each([
+			$.each( [
 				"_createWidget",
 				"destroy",
 				"option",
@@ -42,8 +42,8 @@ function testWidgetOverrides( widget ) {
 			], function( i, method ) {
 				strictEqual( $.ui[ widget ].prototype[ method ],
 					$.Widget.prototype[ method ], "should not override " + method );
-			});
-		});
+			} );
+		} );
 	}
 }
 
@@ -61,7 +61,7 @@ function testBasicUsage( widget ) {
 		// Ensure manipulating removed elements works (#3664)
 		$( defaultElement ).appendTo( "body" ).remove()[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - removed" );
-	});
+	} );
 }
 
 exports.testWidget = function( widget, settings ) {
@@ -74,7 +74,7 @@ exports.testWidget = function( widget, settings ) {
 	test( "version", function() {
 		expect( 1 );
 		ok( "version" in $.ui[ widget ].prototype, "version property exists" );
-	});
+	} );
 };
 
 exports.testJshint = function( module ) {
@@ -120,14 +120,14 @@ exports.testJshint = function( module ) {
 					ok( passed, errors );
 					start();
 				} )
-				.fail(function( hintError, srcError ) {
+				.fail( function( hintError, srcError ) {
 					ok( false, "error loading source: " + ( hintError || srcError ).statusText );
 					start();
 				} );
-		});
-	});
+		} );
+	} );
 };
 
 return exports;
 
-});
+} );

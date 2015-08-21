@@ -78,7 +78,7 @@ return $.widget("ui.mouse", {
 
 		this._mouseMoved = false;
 
-		// we may have missed mouseup (out of window)
+		// We may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
 
 		this._mouseDownEvent = event;
@@ -112,7 +112,7 @@ return $.widget("ui.mouse", {
 			$.removeData(event.target, this.widgetName + ".preventClickEvent");
 		}
 
-		// these delegates are required to keep context
+		// These delegates are required to keep context
 		this._mouseMoveDelegate = function(event) {
 			return that._mouseMove(event);
 		};

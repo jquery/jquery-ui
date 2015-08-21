@@ -62,7 +62,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		tolerance: "intersect",
 		zIndex: 1000,
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeStop: null,
 		change: null,
@@ -258,7 +258,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 		if( o.cursor && o.cursor !== "auto" ) { // cursor option
 			body = this.document.find( "body" );
 
-			// support: IE
+			// Support: IE
 			this.storedCursor = body.css( "cursor" );
 			body.css( "cursor", o.cursor );
 
@@ -400,7 +400,7 @@ return $.widget("ui.sortable", $.ui.mouse, {
 				continue;
 			}
 
-			// cannot intersect with itself
+			// Cannot intersect with itself
 			// no useless actions that have been done before
 			// no action if the item moved is the parent of the item checked
 			if (itemElement !== this.currentItem[0] &&
@@ -860,17 +860,17 @@ return $.widget("ui.sortable", $.ui.mouse, {
 			innermostContainer = null,
 			innermostIndex = null;
 
-		// get innermost container that intersects with item
+		// Get innermost container that intersects with item
 		for (i = this.containers.length - 1; i >= 0; i--) {
 
-			// never consider a container that's located within the item itself
+			// Never consider a container that's located within the item itself
 			if($.contains(this.currentItem[0], this.containers[i].element[0])) {
 				continue;
 			}
 
 			if(this._intersectsWith(this.containers[i].containerCache)) {
 
-				// if we've already found a container and it's more "inner" than this, then continue
+				// If we've already found a container and it's more "inner" than this, then continue
 				if(innermostContainer && $.contains(this.containers[i].element[0], innermostContainer.element[0])) {
 					continue;
 				}
@@ -888,12 +888,12 @@ return $.widget("ui.sortable", $.ui.mouse, {
 
 		}
 
-		// if no intersecting containers found, return
+		// If no intersecting containers found, return
 		if(!innermostContainer) {
 			return;
 		}
 
-		// move the item into the container if it's not there already
+		// Move the item into the container if it's not there already
 		if(this.containers.length === 1) {
 			if (!this.containers[innermostIndex].containerCache.over) {
 				this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));

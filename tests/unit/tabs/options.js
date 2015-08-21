@@ -155,7 +155,7 @@ test( "collapsible", function( assert ) {
 test( "disabled", function( assert ) {
 	expect( 23 );
 
-	// fully enabled by default
+	// Fully enabled by default
 	var event,
 		element = $( "#tabs1" ).tabs();
 	disabled( element, false );
@@ -164,7 +164,7 @@ test( "disabled", function( assert ) {
 	assert.lacksClasses( element.tabs( "widget" ), "ui-tabs-disabled" );
 	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
-	// disable single tab
+	// Disable single tab
 	element.tabs( "option", "disabled", [ 1 ] );
 	disabled( element, [ 1 ] );
 
@@ -172,7 +172,7 @@ test( "disabled", function( assert ) {
 	assert.lacksClasses( element.tabs( "widget" ), "ui-tabs-disabled" );
 	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
-	// disabled active tab
+	// Disabled active tab
 	element.tabs( "option", "disabled", [ 0, 1 ] );
 	disabled( element, [ 0, 1 ] );
 
@@ -180,7 +180,7 @@ test( "disabled", function( assert ) {
 	assert.lacksClasses( element.tabs( "widget" ), "ui-tabs-disabled" );
 	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
-	// disable all tabs
+	// Disable all tabs
 	element.tabs( "option", "disabled", [ 0, 1, 2 ] );
 	disabled( element, true );
 
@@ -192,7 +192,7 @@ test( "disabled", function( assert ) {
 	element.find( ".ui-tabs-anchor" ).eq( 0 ).trigger( event );
 	ok( event.isDefaultPrevented(), "click is prevented for disabled tab" );
 
-	// enable all tabs
+	// Enable all tabs
 	element.tabs( "option", "disabled", [] );
 	disabled( element, false );
 });
@@ -209,7 +209,7 @@ test( "{ event: null }", function() {
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	// ensure default click handler isn't bound
+	// Ensure default click handler isn't bound
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 2 ).trigger( "click" );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
@@ -227,7 +227,7 @@ test( "{ event: custom }", function() {
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-	// ensure default click handler isn't bound
+	// Ensure default click handler isn't bound
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 2 ).trigger( "click" );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
@@ -238,7 +238,7 @@ test( "{ event: custom }", function() {
 
 	element.tabs( "option", "event", "custom3" );
 
-	// ensure old event handlers are unbound
+	// Ensure old event handlers are unbound
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 1 ).trigger( "custom1" );
 	equal( element.tabs( "option", "active" ), 2 );
 	state( element, 0, 0, 1 );

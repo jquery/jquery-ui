@@ -100,20 +100,20 @@ function extract( selector, message ) {
 	$.each( domEqual.properties, function( index, attr ) {
 		var value = elem.prop( attr );
 		result[ attr ] = value != null ? value : "";
-	});
+	} );
 	$.each( domEqual.attributes, function( index, attr ) {
 		var value = elem.attr( attr );
 		result[ attr ] = value != null ? value : "";
-	});
+	} );
 	result.style = getElementStyles( elem[ 0 ] );
 	result.events = $._data( elem[ 0 ], "events" );
 	result.data = $.extend( {}, elem.data() );
 	delete result.data[ $.expando ];
 	children = elem.children();
 	if ( children.length ) {
-		result.children = elem.children().map(function() {
+		result.children = elem.children().map( function() {
 			return extract( $( this ) );
-		}).get();
+		} ).get();
 	} else {
 		result.text = elem.text();
 	}

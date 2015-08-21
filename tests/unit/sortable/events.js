@@ -25,7 +25,7 @@ test("start", function() {
 	ok(hash.item, "UI hash includes: item");
 	ok(!hash.sender, "UI hash does not include: sender");
 
-	// todo: see if these events should actually have sane values in them
+	// Todo: see if these events should actually have sane values in them
 	ok("position" in hash, "UI hash includes: position");
 	ok("offset" in hash, "UI hash includes: offset");
 });

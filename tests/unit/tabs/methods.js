@@ -110,13 +110,13 @@ test( "refresh", function() {
 	state( element, 1, 0, 0 );
 	disabled( element, false );
 
-	// disable tab via markup
+	// Disable tab via markup
 	element.find( ".ui-tabs-nav li" ).eq( 1 ).addClass( "ui-state-disabled" );
 	element.tabs( "refresh" );
 	state( element, 1, 0, 0 );
 	disabled( element, [ 1 ] );
 
-	// add remote tab
+	// Add remote tab
 	element.find( ".ui-tabs-nav" ).append( "<li id='newTab'><a href='data/test.html'>new</a></li>" );
 	element.tabs( "refresh" );
 	state( element, 1, 0, 0, 0 );
@@ -124,13 +124,13 @@ test( "refresh", function() {
 	equal( element.find( "#" + $( "#newTab" ).attr( "aria-controls" ) ).length, 1,
 		"panel added for remote tab" );
 
-	// remove all tabs
+	// Remove all tabs
 	element.find( ".ui-tabs-nav li, .ui-tabs-panel" ).remove();
 	element.tabs( "refresh" );
 	state( element );
 	equal( element.tabs( "option", "active" ), false, "no active tab" );
 
-	// add tabs
+	// Add tabs
 	element.find( ".ui-tabs-nav" )
 		.append( "<li class='ui-state-disabled'><a href='#newTab2'>new 2</a></li>" )
 		.append( "<li><a href='#newTab3'>new 3</a></li>" )
@@ -145,26 +145,26 @@ test( "refresh", function() {
 	state( element, 0, 0, 0, 0 );
 	disabled( element, [ 0 ] );
 
-	// activate third tab
+	// Activate third tab
 	element.tabs( "option", "active", 2 );
 	state( element, 0, 0, 1, 0 );
 	disabled( element, [ 0 ] );
 
-	// remove fourth tab, third tab should stay active
+	// Remove fourth tab, third tab should stay active
 	element.find( ".ui-tabs-nav li" ).eq( 3 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 3 ).remove();
 	element.tabs( "refresh" );
 	state( element, 0, 0, 1 );
 	disabled( element, [ 0 ] );
 
-	// remove third (active) tab, second tab should become active
+	// Remove third (active) tab, second tab should become active
 	element.find( ".ui-tabs-nav li" ).eq( 2 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 2 ).remove();
 	element.tabs( "refresh" );
 	state( element, 0, 1 );
 	disabled( element, [ 0 ] );
 
-	// remove first tab, previously active tab (now first) should stay active
+	// Remove first tab, previously active tab (now first) should stay active
 	element.find( ".ui-tabs-nav li" ).eq( 0 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 0 ).remove();
 	element.tabs( "refresh" );
@@ -182,7 +182,7 @@ test( "refresh - looping", function() {
 	state( element, 0, 1, 0 );
 	disabled( element, [ 0 ] );
 
-	// remove active, jump to previous
+	// Remove active, jump to previous
 	// previous is disabled, just back one more
 	// reached first tab, move to end
 	// activate last tab
@@ -197,7 +197,7 @@ asyncTest( "load", function() {
 
 	var element = $( "#tabs2" ).tabs();
 
-	// load content of inactive tab
+	// Load content of inactive tab
 	// useful for preloading content with custom caching
 	element.one( "tabsbeforeload", function( event, ui ) {
 		var tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),

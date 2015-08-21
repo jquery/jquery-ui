@@ -13,7 +13,7 @@ test( "destroy", function( assert ) {
 		element.tooltip().tooltip( "destroy" );
 	});
 
-	// make sure that open tooltips are removed on destroy
+	// Make sure that open tooltips are removed on destroy
 	assert.domEqual( "#tooltipped1", function() {
 		element
 			.tooltip()
