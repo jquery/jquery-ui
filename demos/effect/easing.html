@@ -37,7 +37,7 @@
 				ctx = canvas.getContext( "2d" );
 			ctx.fillStyle = "black";
 
-			// draw background
+			// Draw background
 			ctx.beginPath();
 			ctx.moveTo( cradius, 0 );
 			ctx.quadraticCurveTo( 0, 0, 0, cradius );
@@ -49,21 +49,21 @@
 			ctx.lineTo( cradius, 0 );
 			ctx.fill();
 
-			// draw bottom line
+			// Draw bottom line
 			ctx.strokeStyle = "#555";
 			ctx.beginPath();
 			ctx.moveTo( width * 0.1, drawHeight + .5 );
 			ctx.lineTo( width * 0.9, drawHeight + .5 );
 			ctx.stroke();
 
-			// draw top line
+			// Draw top line
 			ctx.strokeStyle = "#555";
 			ctx.beginPath();
 			ctx.moveTo( width * 0.1, drawHeight * .3 - .5 );
 			ctx.lineTo( width * 0.9, drawHeight * .3 - .5 );
 			ctx.stroke();
 
-			// plot easing
+			// Plot easing
 			ctx.strokeStyle = "white";
 			ctx.beginPath();
 			ctx.lineWidth = 2;
@@ -76,7 +76,7 @@
 			});
 			ctx.stroke();
 
-			// animate on click
+			// Animate on click
 			graph.on( "click", function() {
 				wrap
 					.animate( { height: "hide" }, 2000, name )
