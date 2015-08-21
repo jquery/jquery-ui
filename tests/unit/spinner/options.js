@@ -147,7 +147,7 @@ test( "culture, null", function() {
 	element.spinner( "stepUp" );
 	equal( element.val(), "¥1", "formatted after step" );
 
-	// reset culture
+	// Reset culture
 	Globalize.culture( "default" );
 });
 
