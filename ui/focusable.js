@@ -24,7 +24,7 @@
 	}
 } ( function( $ ) {
 
-// selectors
+// Selectors
 $.ui.focusable = function( element, hasTabindex ) {
 	var map, mapName, img,
 		nodeName = element.nodeName.toLowerCase();
@@ -42,7 +42,8 @@ $.ui.focusable = function( element, hasTabindex ) {
 		"a" === nodeName ?
 			element.href || hasTabindex :
 			hasTabindex ) &&
-		// the element and all of its ancestors must be visible
+
+		// The element and all of its ancestors must be visible
 		visible( element );
 };
 
