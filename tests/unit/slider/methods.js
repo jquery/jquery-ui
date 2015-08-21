@@ -88,7 +88,7 @@ test( "value", function() {
 	equal( element.slider( "value", 2 ), element, "value method is chainable" );
 	equal( element.slider( "option", "value" ), 1, "value method set respects max" );
 
-	// set max value with step 0.01
+	// Set max value with step 0.01
 	element.slider( "option", {
 		min: 2,
 		value: 2,
