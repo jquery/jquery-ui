@@ -15,7 +15,7 @@ common.testWidget( "droppable", {
 		scope: "default",
 		tolerance: "intersect",
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		create: null,
 		deactivate: null,
