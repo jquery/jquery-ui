@@ -22,11 +22,11 @@ common.testWidget( "accordion", {
 			"header": "ui-icon-triangle-1-e"
 		},
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeActivate: null,
 		create: null
 	}
-});
+} );
 
 } );
