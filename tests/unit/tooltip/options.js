@@ -161,7 +161,7 @@ test( "items", function() {
 	element.tooltip( "open", event );
 	deepEqual( $( "#" + $( "#fixture-span" ).data( "ui-tooltip-id" ) ).text(), "title-text" );
 
-	// make sure default [title] doesn't get used
+	// Make sure default [title] doesn't get used
 	event.target = $( "#tooltipped1" )[ 0 ];
 	element.tooltip( "open", event );
 	deepEqual( $( "#tooltipped1" ).data( "ui-tooltip-id" ), undefined );

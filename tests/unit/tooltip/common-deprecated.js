@@ -21,7 +21,7 @@ common.testWidget( "tooltip", {
 		tooltipClass: null,
 		track: false,
 
-		// callbacks
+		// Callbacks
 		close: null,
 		create: null,
 		open: null
