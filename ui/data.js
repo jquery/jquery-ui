@@ -30,7 +30,8 @@ return $.extend( $.expr[ ":" ], {
 				return !!$.data( elem, dataName );
 			};
 		} ) :
-		// support: jQuery <1.8
+
+		// Support: jQuery <1.8
 		function( elem, i, match ) {
 			return !!$.data( elem, match[ 3 ] );
 		}
