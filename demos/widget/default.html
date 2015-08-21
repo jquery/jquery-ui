@@ -30,12 +30,12 @@
 				green: 0,
 				blue: 0,
 
-				// callbacks
+				// Callbacks
 				change: null,
 				random: null
 			},
 
-			// the constructor
+			// The constructor
 			_create: function() {
 				this.element
 					// add a class for theming
@@ -50,7 +50,7 @@
 				.appendTo( this.element )
 				.button();
 
-				// bind click events on the changer button to the random method
+				// Bind click events on the changer button to the random method
 				this._on( this.changer, {
 					// _on won't call random when widget is disabled
 					click: "random"
@@ -58,7 +58,7 @@
 				this._refresh();
 			},
 
-			// called when created, and later when changing options
+			// Called when created, and later when changing options
 			_refresh: function() {
 				this.element.css( "background-color", "rgb(" +
 					this.options.red +"," +
@@ -66,11 +66,11 @@
 					this.options.blue + ")"
 				);
 
-				// trigger a callback/event
+				// Trigger a callback/event
 				this._trigger( "change" );
 			},
 
-			// a public method to change the color to a random value
+			// A public method to change the color to a random value
 			// can be called directly via .colorize( "random" )
 			random: function( event ) {
 				var colors = {
@@ -79,13 +79,13 @@
 					blue: Math.floor( Math.random() * 256 )
 				};
 
-				// trigger an event, check if it's canceled
+				// Trigger an event, check if it's canceled
 				if ( this._trigger( "random", event, colors ) !== false ) {
 					this.option( colors );
 				}
 			},
 
-			// events bound via _on are removed automatically
+			// Events bound via _on are removed automatically
 			// revert other modifications here
 			_destroy: function() {
 				// remove generated elements
@@ -115,16 +115,16 @@
 			}
 		});
 
-		// initialize with default options
+		// Initialize with default options
 		$( "#my-widget1" ).colorize();
 
-		// initialize with two customized options
+		// Initialize with two customized options
 		$( "#my-widget2" ).colorize({
 			red: 60,
 			blue: 60
 		});
 
-		// initialize with custom green value
+		// Initialize with custom green value
 		// and a random callback to allow only colors with enough green
 		$( "#my-widget3" ).colorize( {
 			green: 128,
@@ -133,7 +133,7 @@
 			}
 		});
 
-		// click to toggle enabled/disabled
+		// Click to toggle enabled/disabled
 		$( "#disable" ).on( "click", function() {
 			// use the custom selector created for each widget to find all instances
 			// all instances are toggled together, so we can check the state from the first
@@ -144,7 +144,7 @@
 			}
 		});
 
-		// click to set options after initialization
+		// Click to set options after initialization
 		$( "#green" ).on( "click", function() {
 			$( ":custom-colorize" ).colorize( "option", {
 				red: 64,
