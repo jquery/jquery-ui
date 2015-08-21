@@ -191,7 +191,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 	equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 	tabs.eq( 0 ).simulate( "focus" );
 
-	// down, right, down (wrap), up (wrap)
+	// Down, right, down (wrap), up (wrap)
 	function step1() {
 		assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "first tab has focus" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
@@ -242,7 +242,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		setTimeout( step2, 25 );
 	}
 
-	// left, home, space
+	// Left, home, space
 	function step2() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
@@ -280,7 +280,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		setTimeout( step3 );
 	}
 
-	// end, enter
+	// End, enter
 	function step3() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
@@ -307,7 +307,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		setTimeout( step4 );
 	}
 
-	// enter (collapse)
+	// Enter (collapse)
 	function step4() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
@@ -347,7 +347,7 @@ $.each({
 		equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 		tabs.eq( 0 ).simulate( "focus" );
 
-		// down
+		// Down
 		function step1() {
 			var eventProperties = { keyCode: keyCode.DOWN };
 			eventProperties[ modifier + "Key" ] = true;
@@ -371,7 +371,7 @@ $.each({
 			setTimeout( step2, 25 );
 		}
 
-		// right
+		// Right
 		function step2() {
 			var eventProperties = { keyCode: keyCode.RIGHT };
 			eventProperties[ modifier + "Key" ] = true;
@@ -398,7 +398,7 @@ $.each({
 			setTimeout( step3, 25 );
 		}
 
-		// down (wrap)
+		// Down (wrap)
 		function step3() {
 			var eventProperties = { keyCode: keyCode.DOWN };
 			eventProperties[ modifier + "Key" ] = true;
@@ -421,7 +421,7 @@ $.each({
 			setTimeout( step4, 25 );
 		}
 
-		// up (wrap)
+		// Up (wrap)
 		function step4() {
 			var eventProperties = { keyCode: keyCode.UP };
 			eventProperties[ modifier + "Key" ] = true;
@@ -445,7 +445,7 @@ $.each({
 			setTimeout( step5, 25 );
 		}
 
-		// left
+		// Left
 		function step5() {
 			var eventProperties = { keyCode: keyCode.LEFT };
 			eventProperties[ modifier + "Key" ] = true;
@@ -472,7 +472,7 @@ $.each({
 			setTimeout( step6, 25 );
 		}
 
-		// home
+		// Home
 		function step6() {
 			var eventProperties = { keyCode: keyCode.HOME };
 			eventProperties[ modifier + "Key" ] = true;
@@ -499,7 +499,7 @@ $.each({
 			setTimeout( step7, 25 );
 		}
 
-		// end
+		// End
 		function step7() {
 			var eventProperties = { keyCode: keyCode.END };
 			eventProperties[ modifier + "Key" ] = true;
@@ -523,7 +523,7 @@ $.each({
 			setTimeout( step8, 25 );
 		}
 
-		// space
+		// Space
 		function step8() {
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
