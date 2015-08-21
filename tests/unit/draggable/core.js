@@ -67,11 +67,11 @@ test( "resizable handle with complex markup (#8756 / #8757)", function() {
 	var handle = $(".ui-resizable-w div"),
 		target = $( "#draggable1" ).draggable().resizable({ handles: "all" });
 
-	// todo: fix resizable so it doesn't require a mouseover
+	// Todo: fix resizable so it doesn't require a mouseover
 	handle.simulate("mouseover").simulate( "drag", { dx: -50 } );
 	equal( target.width(), 250, "compare width" );
 
-	// todo: fix resizable so it doesn't require a mouseover
+	// Todo: fix resizable so it doesn't require a mouseover
 	handle.simulate("mouseover").simulate( "drag", { dx: 50 } );
 	equal( target.width(), 200, "compare width" );
 });
@@ -215,7 +215,7 @@ test( "scroll offset with fixed ancestors", function() {
 $( [ "hidden", "auto", "scroll" ] ).each(function() {
 	var overflow = this;
 
-	// http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
+	// Http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
 	// http://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
 	test( "position in scrollable parent with overflow: " + overflow, function() {
 		expect( 2 );
@@ -230,7 +230,7 @@ $( [ "hidden", "auto", "scroll" ] ).each(function() {
 			dragDelta = 20,
 			delta = 100,
 
-			// we scroll after each drag event, so subtract 1 from number of moves for expected
+			// We scroll after each drag event, so subtract 1 from number of moves for expected
 			expected = delta + ( ( moves - 1 ) * dragDelta ),
 			element = $( "#dragged" ).draggable({
 				drag: function() {
@@ -300,13 +300,13 @@ asyncTest( "blur behavior", function() {
 
 		testHelper.move( focusElement, 1, 1 );
 
-		// http://bugs.jqueryui.com/ticket/10527
+		// Http://bugs.jqueryui.com/ticket/10527
 		// Draggable: Can't select option in modal dialog (IE8)
 		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
 
 		testHelper.move( element, 50, 50 );
 
-		// http://bugs.jqueryui.com/ticket/4261
+		// Http://bugs.jqueryui.com/ticket/4261
 		// active element should blur when mousing down on a draggable
 		notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
 		start();

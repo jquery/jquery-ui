@@ -37,7 +37,7 @@ common.testWidget( "draggable", {
 		distance: 1,
 		iframeFix: false,
 
-		// callbacks
+		// Callbacks
 		create: null,
 		drag: null,
 		start: null,

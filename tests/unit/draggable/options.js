@@ -278,12 +278,12 @@ test( "connectToSortable, dragging out of a sortable", function() {
 		// Position issue when connected to sortable
 		deepEqual( ui.helper.offset(), offsetExpected, "draggable offset is correct" );
 
-		// http://bugs.jqueryui.com/ticket/7734
+		// Http://bugs.jqueryui.com/ticket/7734
 		// HTML IDs are removed when dragging to a Sortable
 		equal( sortItem[ 0 ], dragHelper[ 0 ], "both have the same helper" );
 		equal( sortItem.attr( "id" ), dragHelper.attr( "id" ), "both have the same id" );
 
-		// http://bugs.jqueryui.com/ticket/9481
+		// Http://bugs.jqueryui.com/ticket/9481
 		// connectToSortable causes sortable revert to fail on second attempt
 		equal( sortable.sortable( "option", "revert" ), 100, "sortable revert behavior is preserved" );
 	});
@@ -357,7 +357,7 @@ test( "connectToSortable, dragging multiple elements in and out of sortable", fu
 		moves: 10
 	});
 
-	// http://bugs.jqueryui.com/ticket/9675
+	// Http://bugs.jqueryui.com/ticket/9675
 	// Animation issue with revert and connectToSortable
 	sortable.one( "sortstop", function( event, ui ) {
 		ok( !$.contains( document, ui.placeholder[ 0 ] ), "placeholder was removed" );
@@ -419,7 +419,7 @@ test( "connectToSortable, dragging through a sortable", function() {
 		sortable = $( "#sortable2" ).sortable(),
 		sortableOffset = sortable.offset();
 
-	// http://bugs.jqueryui.com/ticket/10669
+	// Http://bugs.jqueryui.com/ticket/10669
 	// Draggable: Position issue with connectToSortable
 	draggable.one( "dragstop", function() {
 		equal( draggable.parent().attr( "id" ), "sortable", "restored draggable to original parent" );
@@ -1022,7 +1022,7 @@ asyncTest( "revert and revertDuration", function() {
 		}
 	});
 
-	// animation are async, so test for it asynchronously
+	// Animation are async, so test for it asynchronously
 	testHelper.move( element, 50, 50 );
 	setTimeout( function() {
 		ok( $( "#draggable2" ).is( ":animated" ), "revert: true with revertDuration should animate" );
@@ -1191,7 +1191,7 @@ test( "snap, snapMode, and snapTolerance", function( assert ) {
 		}),
 		element2 = $( "#draggable2" ).draggable();
 
-	// http://bugs.jqueryui.com/ticket/9724
+	// Http://bugs.jqueryui.com/ticket/9724
 	// Draggable: Snapping coordinates thrown off by margin on draggable
 	element.css( "margin", "3px" );
 
