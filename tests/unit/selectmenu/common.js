@@ -21,7 +21,7 @@ common.testWidget( "selectmenu", {
 		},
 		width: false,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		close: null,
 		create: null,
