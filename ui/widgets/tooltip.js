@@ -59,7 +59,7 @@ $.widget( "ui.tooltip", {
 		show: true,
 		track: false,
 
-		// callbacks
+		// Callbacks
 		close: null,
 		open: null
 	},
@@ -139,14 +139,14 @@ $.widget( "ui.tooltip", {
 	_disable: function() {
 		var that = this;
 
-		// close open tooltips
+		// Close open tooltips
 		$.each( this.tooltips, function( id, tooltipData ) {
 			var event = $.Event( "blur" );
 			event.target = event.currentTarget = tooltipData.element[ 0 ];
 			that.close( event, true );
 		} );
 
-		// remove title attributes to prevent native tooltips
+		// Remove title attributes to prevent native tooltips
 		this.element.find( this.options.items ).addBack().each( function() {
 			var element = $( this );
 			if ( element.is( "[title]" ) ) {
@@ -185,7 +185,7 @@ $.widget( "ui.tooltip", {
 
 		target.data( "ui-tooltip-open", true );
 
-		// kill parent tooltips, custom or native, for hover
+		// Kill parent tooltips, custom or native, for hover
 		if ( event && event.type === "mouseover" ) {
 			target.parents().each( function() {
 				var parent = $( this ),
@@ -232,7 +232,7 @@ $.widget( "ui.tooltip", {
 					return;
 				}
 
-				// jQuery creates a special event for focusin when it doesn't
+				// JQuery creates a special event for focusin when it doesn't
 				// exist natively. To improve performance, the native event
 				// object is reused and the type is changed. Therefore, we can't
 				// rely on the type being correct after the event finished
@@ -264,7 +264,7 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		// if we have a title, clear it to prevent the native tooltip
+		// If we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
 		//
@@ -377,7 +377,7 @@ $.widget( "ui.tooltip", {
 
 		tooltip = tooltipData.tooltip;
 
-		// disabling closes the tooltip, so we need to track when we're closing
+		// Disabling closes the tooltip, so we need to track when we're closing
 		// to avoid an infinite loop in case the tooltip becomes disabled on close
 		if ( tooltipData.closing ) {
 			return;
@@ -386,7 +386,7 @@ $.widget( "ui.tooltip", {
 		// Clear the interval for delayed tracking tooltips
 		clearInterval( this.delayedShow );
 
-		// only set title if we had one before (see comment in _open())
+		// Only set title if we had one before (see comment in _open())
 		// If the title attribute has changed since open(), don't restore
 		if ( target.data( "ui-tooltip-title" ) && !target.attr( "title" ) ) {
 			target.attr( "title", target.data( "ui-tooltip-title" ) );
@@ -462,7 +462,7 @@ $.widget( "ui.tooltip", {
 	_destroy: function() {
 		var that = this;
 
-		// close open tooltips
+		// Close open tooltips
 		$.each( this.tooltips, function( id, tooltipData ) {
 			// Delegate to close method to handle common cleanup
 			var event = $.Event( "blur" ),

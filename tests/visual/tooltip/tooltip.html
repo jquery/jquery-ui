@@ -20,7 +20,7 @@
 		// default
 		$( "#context1, form, #childish, #nested-input" ).tooltip();
 
-		// custom class, replaces ui-widget-content
+		// Custom class, replaces ui-widget-content
 		$( "#context2" ).tooltip({
 			classes: {
 				"ui-tooltip": "ui-corner-all ui-widget-header"
@@ -32,7 +32,7 @@
 			}
 		});
 
-		// synchronous content
+		// Synchronous content
 		$( "#footnotes" ).tooltip({
 			items: "[href^='#']",
 			content: function() {
@@ -40,7 +40,7 @@
 			}
 		});
 
-		// asynchronous content
+		// Asynchronous content
 		$( "#async" ).tooltip({
 			content: function( response ) {
 				setTimeout(function() {
@@ -50,7 +50,7 @@
 			}
 		});
 
-		// asynchronous content with caching
+		// Asynchronous content with caching
 		var content;
 		$( "#async2" ).tooltip({
 			content: function( response ) {
@@ -65,7 +65,7 @@
 			}
 		});
 
-		// custom position
+		// Custom position
 		$( "#right2" ).tooltip({
 			classes: {
 				"ui-tooltip": "ui-corner-all ui-state-highlight"
