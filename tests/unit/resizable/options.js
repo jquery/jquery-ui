@@ -126,7 +126,7 @@ test("aspectRatio: 'preserve' (ne)", function() {
 test( "aspectRatio: Resizing can move objects", function() {
 	expect( 7 );
 
-	// http://bugs.jqueryui.com/ticket/7018 - Resizing can move objects
+	// Http://bugs.jqueryui.com/ticket/7018 - Resizing can move objects
 	var handleW = ".ui-resizable-w",
 		handleNW = ".ui-resizable-nw",
 		target = $( "#resizable1" ).resizable({
@@ -143,7 +143,7 @@ test( "aspectRatio: Resizing can move objects", function() {
 	equal( target.height(), 100, "compare height - no size change" );
 	equal( target.position().left, 75, "compare left - no movement" );
 
-	// http://bugs.jqueryui.com/ticket/9107 - aspectRatio and containment not handled correctly
+	// Http://bugs.jqueryui.com/ticket/9107 - aspectRatio and containment not handled correctly
 	$( "#container" ).css({ width: 200, height: 300, position: "absolute", left: 100, top: 100 });
 	$( "#resizable1" ).css({ width: 100, height: 100, left: 0, top: 0 });
 
@@ -173,7 +173,7 @@ test( "containment", function() {
 test( "containment - not immediate parent", function() {
 	expect( 4 );
 
-	// http://bugs.jqueryui.com/ticket/7485 - Resizable: Containment calculation is wrong
+	// Http://bugs.jqueryui.com/ticket/7485 - Resizable: Containment calculation is wrong
 	// when containment element is not the immediate parent
 	var element = $( "#child" ).resizable({
 		containment: "#container2",
@@ -205,7 +205,7 @@ test( "containment - not immediate parent", function() {
 test( "containment - immediate parent", function() {
 	expect( 4 );
 
-	// http://bugs.jqueryui.com/ticket/10140 - Resizable: Width calculation is wrong when containment element is "position: relative"
+	// Http://bugs.jqueryui.com/ticket/10140 - Resizable: Width calculation is wrong when containment element is "position: relative"
 	// when containment element is  immediate parent
 	var element = $( "#child" ).resizable({
 		containment: "parent",
@@ -302,7 +302,7 @@ test( "grid - Resizable: can be moved when grid option is set (#9611)", function
 test( "grid - maintains grid with padding and border when approaching no dimensions", function() {
 	expect( 2 );
 
-	// http://bugs.jqueryui.com/ticket/10437 - Resizable: border with grid option working wrong
+	// Http://bugs.jqueryui.com/ticket/10437 - Resizable: border with grid option working wrong
 	var handle = ".ui-resizable-nw",
 		target = $( "#resizable1" ).css({
 			padding: 5,
