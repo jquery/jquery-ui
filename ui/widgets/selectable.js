@@ -40,7 +40,7 @@ return $.widget("ui.selectable", $.ui.mouse, {
 		filter: "*",
 		tolerance: "touch",
 
-		// callbacks
+		// Callbacks
 		selected: null,
 		selecting: null,
 		start: null,
@@ -55,7 +55,7 @@ return $.widget("ui.selectable", $.ui.mouse, {
 
 		this.dragged = false;
 
-		// cache selectee children based on filter
+		// Cache selectee children based on filter
 		this.refresh = function() {
 			that.selectees = $(that.options.filter, that.element[0]);
 			that._addClass( that.selectees, "ui-selectee" );
