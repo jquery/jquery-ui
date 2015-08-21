@@ -33,7 +33,7 @@ common.testWidget( "sortable", {
 		tolerance: "intersect",
 		zIndex: 1000,
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeStop: null,
 		change: null,
