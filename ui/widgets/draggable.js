@@ -65,7 +65,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		stack: false,
 		zIndex: false,
 
-		// callbacks
+		// Callbacks
 		drag: null,
 		start: null,
 		stop: null
@@ -108,7 +108,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		this._blurActiveElement( event );
 
-		// among others, prevent a drag on a resizable-handle
+		// Among others, prevent a drag on a resizable-handle
 		if (this.helper || o.disabled || $(event.target).closest(".ui-resizable-handle").length > 0) {
 			return false;
 		}
@@ -362,7 +362,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			helper.appendTo((o.appendTo === "parent" ? this.element[0].parentNode : o.appendTo));
 		}
 
-		// http://bugs.jqueryui.com/ticket/9446
+		// Http://bugs.jqueryui.com/ticket/9446
 		// a helper function can return the original element
 		// which wouldn't have been set to relative in _create
 		if ( helperIsFunction && helper[ 0 ] === this.element[ 0 ] ) {
@@ -700,7 +700,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 			if ( sortable && !sortable.options.disabled ) {
 				draggable.sortables.push( sortable );
 
-				// refreshPositions is called at drag start to refresh the containerCache
+				// RefreshPositions is called at drag start to refresh the containerCache
 				// which is used in drag. This ensures it's initialized and synchronized
 				// with any changes that might have happened on the page since initialization.
 				sortable.refreshPositions();
@@ -825,7 +825,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 						this.refreshPositions();
 					});
 
-					// hack so receive/update callbacks work (mostly)
+					// Hack so receive/update callbacks work (mostly)
 					draggable.currentItem = draggable.element;
 					sortable.fromOutside = draggable;
 				}
@@ -854,7 +854,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					sortable._trigger( "out", event, sortable._uiHash( sortable ) );
 					sortable._mouseStop( event, true );
 
-					// restore sortable behaviors that were modfied
+					// Restore sortable behaviors that were modfied
 					// when the draggable entered the sortable area (#9481)
 					sortable.options.revert = sortable.options._revert;
 					sortable.options.helper = sortable.options._helper;
