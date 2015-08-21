@@ -136,7 +136,7 @@ test( "#8792: issues with floated items in connected lists", function() {
 
 	element = $( "#qunit-fixture li:eq(0)" );
 
-	// move the first li to the right of the second li in the first ul
+	// Move the first li to the right of the second li in the first ul
 	element.simulate( "drag", {
 		dx: 55,
 		moves: 15
@@ -144,7 +144,7 @@ test( "#8792: issues with floated items in connected lists", function() {
 
 	equal( changeCount, 1, "change fired only once (no jitters) when dragging a floated sortable in it's own container" );
 
-	// move the first li ( which is now in the second spot )
+	// Move the first li ( which is now in the second spot )
 	// through the first spot in the second ul to the second spot in the second ul
 	element.simulate( "drag", {
 		dx: 100,
