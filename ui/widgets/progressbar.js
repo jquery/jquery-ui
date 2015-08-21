@@ -90,7 +90,7 @@ return $.widget( "ui.progressbar", {
 
 		this.indeterminate = newValue === false;
 
-		// sanitize value
+		// Sanitize value
 		if ( typeof newValue !== "number" ) {
 			newValue = 0;
 		}
