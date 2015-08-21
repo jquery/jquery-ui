@@ -20,7 +20,7 @@ test( "disabled", function( assert ){
 		count++;
 	});
 
-	// enabled
+	// Enabled
 	assert.lacksClasses( element, "ui-slider-disabled" );
 	equal( element.slider( "option", "disabled" ), false , "is not disabled" );
 
@@ -30,7 +30,7 @@ test( "disabled", function( assert ){
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal( count, 2, "slider moved" );
 
-	// disabled
+	// Disabled
 	element.slider( "option", "disabled", true );
 	assert.hasClasses( element, "ui-slider-disabled" );
 	equal( element.slider( "option", "disabled" ), true, "is disabled" );
@@ -240,7 +240,7 @@ test( "step", function() {
 test( "values", function() {
 	expect( 2 );
 
-	// testing multiple ranges on the same page, the object reference to the values
+	// Testing multiple ranges on the same page, the object reference to the values
 	// property is preserved via multiple range elements, so updating options.values
 	// of 1 slider updates options.values of all the others
 	var ranges = $([
@@ -270,7 +270,7 @@ test( "range", function( assert ) {
 	expect( 32 );
 	var range;
 
-	// min
+	// Min
 	element = $( "<div></div>" ).slider({
 		range: "min",
 		min: 1,
@@ -282,7 +282,7 @@ test( "range", function( assert ) {
 	equal( element.find( ".ui-slider-range-min" ).length, 1, "range min" );
 	element.slider( "destroy" );
 
-	// max
+	// Max
 	element = $( "<div></div>" ).slider({
 		range: "max",
 		min: 1,
@@ -294,7 +294,7 @@ test( "range", function( assert ) {
 	equal( element.find( ".ui-slider-range-max" ).length, 1, "range max" );
 	element.slider( "destroy" );
 
-	// true
+	// True
 	element = $( "<div></div>" ).slider({
 		range: true,
 		min: 1,

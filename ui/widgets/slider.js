@@ -57,14 +57,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		value: 0,
 		values: null,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		slide: null,
 		start: null,
 		stop: null
 	},
 
-	// number of pages in a slider
+	// Number of pages in a slider
 	// (how many times can you page up/down to go through the whole range)
 	numPages: 5,
 
@@ -516,7 +516,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
-	// returns the step-aligned value that val is closest to, between (inclusive) min and max
+	// Returns the step-aligned value that val is closest to, between (inclusive) min and max
 	_trimAlignValue: function( val ) {
 		if ( val <= this._valueMin() ) {
 			return this._valueMin();
