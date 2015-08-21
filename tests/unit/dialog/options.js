@@ -344,7 +344,7 @@ test("minWidth", function( assert ) {
 test( "position, default center on window", function( assert ) {
 	expect( 2 );
 
-	// dialogs alter the window width and height in Firefox
+	// Dialogs alter the window width and height in Firefox
 	// so we collect that information before creating the dialog
 	// Support: Firefox
 	var winWidth = $( window ).width(),
@@ -360,7 +360,7 @@ test( "position, default center on window", function( assert ) {
 test( "position, right bottom at right bottom via ui.position args", function( assert ) {
 	expect( 2 );
 
-	// dialogs alter the window width and height in Firefox
+	// Dialogs alter the window width and height in Firefox
 	// so we collect that information before creating the dialog
 	// Support: Firefox
 	var winWidth = $( window ).width(),
@@ -469,7 +469,7 @@ test( "title", function() {
 		equal( titleText(), "foo", "title after init" );
 	element.remove();
 
-	// make sure attroperties are properly ignored - #5742 - .attr() might return a DOMElement
+	// Make sure attroperties are properly ignored - #5742 - .attr() might return a DOMElement
 	element = $( "<form><input name='title'></form>" ).dialog();
 		// some browsers return a non-breaking space and some return "&nbsp;"
 		// so we get the text to normalize to the actual non-breaking space
