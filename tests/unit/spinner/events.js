@@ -15,7 +15,7 @@ test( "start", function() {
 	function shouldStart( expectation, msg ) {
 		element.spinner( "option", "start", function() {
 			ok( expectation, msg );
-		});
+		} );
 	}
 
 	shouldStart( true, "key UP" );
@@ -45,7 +45,7 @@ test( "start", function() {
 
 	shouldStart( false, "value" );
 	element.spinner( "value", 999 );
-});
+} );
 
 test( "spin", function() {
 	expect( 10 );
@@ -54,7 +54,7 @@ test( "spin", function() {
 	function shouldSpin( expectation, msg ) {
 		element.spinner( "option", "spin", function() {
 			ok( expectation, msg );
-		});
+		} );
 	}
 
 	shouldSpin( true, "key UP" );
@@ -84,7 +84,7 @@ test( "spin", function() {
 
 	shouldSpin( false, "value" );
 	element.spinner( "value", 999 );
-});
+} );
 
 test( "stop", function() {
 	expect( 10 );
@@ -93,7 +93,7 @@ test( "stop", function() {
 	function shouldStop( expectation, msg ) {
 		element.spinner( "option", "stop", function() {
 			ok( expectation, msg );
-		});
+		} );
 	}
 
 	shouldStop( true, "key UP" );
@@ -123,7 +123,7 @@ test( "stop", function() {
 
 	shouldStop( false, "value" );
 	element.spinner( "value", 999 );
-});
+} );
 
 asyncTest( "change", function() {
 	expect( 12 );
@@ -132,22 +132,22 @@ asyncTest( "change", function() {
 	function shouldChange( expectation, msg ) {
 		element.spinner( "option", "change", function() {
 			ok( expectation, msg );
-		});
+		} );
 	}
 
 	function focusWrap( fn, next ) {
-		element[0].focus();
+		element[ 0 ].focus();
 		setTimeout( function() {
 			fn();
-			setTimeout(function() {
-				element[0].blur();
+			setTimeout( function() {
+				element[ 0 ].blur();
 				setTimeout( next );
-			});
-		});
+			} );
+		} );
 	}
 
 	function step1() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "key UP, before blur" );
 			simulateKeyDownUp( element, $.ui.keyCode.UP );
 			shouldChange( true, "blur after key UP" );
@@ -155,7 +155,7 @@ asyncTest( "change", function() {
 	}
 
 	function step2() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "key DOWN, before blur" );
 			simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 			shouldChange( true, "blur after key DOWN" );
@@ -163,7 +163,7 @@ asyncTest( "change", function() {
 	}
 
 	function step3() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "key PAGE_UP, before blur" );
 			simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 			shouldChange( true, "blur after key PAGE_UP" );
@@ -171,7 +171,7 @@ asyncTest( "change", function() {
 	}
 
 	function step4() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "key PAGE_DOWN, before blur" );
 			simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 			shouldChange( true, "blur after key PAGE_DOWN" );
@@ -179,7 +179,7 @@ asyncTest( "change", function() {
 	}
 
 	function step5() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "many keys, before blur" );
 			simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 			simulateKeyDownUp( element, $.ui.keyCode.UP );
@@ -191,7 +191,7 @@ asyncTest( "change", function() {
 	}
 
 	function step6() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "many keys, same final value, before blur" );
 			simulateKeyDownUp( element, $.ui.keyCode.UP );
 			simulateKeyDownUp( element, $.ui.keyCode.UP );
@@ -206,7 +206,7 @@ asyncTest( "change", function() {
 	}
 
 	function step7() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "button down, before blur" );
 			element.spinner( "widget" ).find( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
 			shouldChange( true, "blur after button down" );
@@ -214,7 +214,7 @@ asyncTest( "change", function() {
 	}
 
 	function step8() {
-		focusWrap(function() {
+		focusWrap( function() {
 			shouldChange( false, "many buttons, same final value, before blur" );
 			element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
 			element.spinner( "widget" ).find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
@@ -258,6 +258,6 @@ asyncTest( "change", function() {
 	}
 
 	setTimeout( step1 );
-});
+} );
 
 } );
