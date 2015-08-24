@@ -13,7 +13,7 @@ test( "dialogClass", function( assert ) {
 	assert.lacksClasses( widget, "foo", "dialogClass not specified. class not added" );
 	element.remove();
 
-	element = $( "<div>" ).dialog({ dialogClass: "foo" });
+	element = $( "<div>" ).dialog( { dialogClass: "foo" } );
 	widget = element.dialog( "widget" );
 	assert.hasClasses( widget, "foo", "dialogClass in init, foo class added" );
 	element.dialog( "option", "dialogClass", "foobar" );
@@ -21,10 +21,10 @@ test( "dialogClass", function( assert ) {
 	assert.hasClasses( widget, "foobar", "dialogClass changed, new one was added" );
 	element.remove();
 
-	element = $( "<div>" ).dialog({ dialogClass: "foo bar" });
+	element = $( "<div>" ).dialog( { dialogClass: "foo bar" } );
 	widget = element.dialog( "widget" );
 	assert.hasClasses( widget, "foo bar", "dialogClass in init, two classes." );
 	element.remove();
-});
+} );
 
 } );
