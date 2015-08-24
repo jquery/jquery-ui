@@ -41,7 +41,7 @@ function run( position, v, h, vo, ho ) {
 		}
 		test.css( css );
 		test.effect( effect );
-	});
+	} );
 }
 
 function suite( position ) {
@@ -55,18 +55,18 @@ function suite( position ) {
 	*/
 }
 
-$(function() {
+$( function() {
 	suite( "absolute" );
 	suite( "relative" );
 	var fixedElem = $( "<div>" )
-		.css({
+		.css( {
 			position: "fixed",
 			top: 10
-		})
+		} )
 		.appendTo( "body" );
 	if ( fixedElem.offset().top === 10 ) {
 		suite( "fixed" );
 	}
-});
+} );
 
 } );
