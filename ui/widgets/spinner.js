@@ -75,6 +75,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
+
 		// handle string values that need to be parsed
 		this._setOption( "max", this.options.max );
 		this._setOption( "min", this.options.min );
@@ -83,6 +84,7 @@ $.widget( "ui.spinner", {
 		// Only format if there is a value, prevents the field from being marked
 		// as invalid in Firefox, see #9573.
 		if ( this.value() !== "" ) {
+
 			// Format the value, but don't constrain.
 			this._value( this.element.val(), true );
 		}
@@ -169,6 +171,7 @@ $.widget( "ui.spinner", {
 				if ( !isActive ) {
 					this.element.trigger( "focus" );
 					this.previous = previous;
+
 					// support: IE
 					// IE sets focus asynchronously, so we need to check if focus
 					// moved off of the input because the user clicked on the button.
@@ -200,6 +203,7 @@ $.widget( "ui.spinner", {
 		},
 		"mouseup .ui-spinner-button": "_stop",
 		"mouseenter .ui-spinner-button": function( event ) {
+
 			// button will add ui-state-active if mouse was down while mouseleave and kept down
 			if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
 				return;
@@ -210,6 +214,7 @@ $.widget( "ui.spinner", {
 			}
 			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 		},
+
 		// TODO: do we really want to consider this a stop?
 		// shouldn't we just stop the repeater and wait until mouseup before
 		// we trigger the stop event?
@@ -364,8 +369,10 @@ $.widget( "ui.spinner", {
 		// - find out where we are relative to the base (min or 0)
 		base = options.min !== null ? options.min : 0;
 		aboveMin = value - base;
+
 		// - round to the nearest step
 		aboveMin = Math.round( aboveMin / options.step ) * options.step;
+
 		// - rounding is based on 0, so adjust back to our base
 		value = base + aboveMin;
 
@@ -453,6 +460,7 @@ $.widget( "ui.spinner", {
 		this.element.attr( {
 			"aria-valuemin": this.options.min,
 			"aria-valuemax": this.options.max,
+
 			// TODO: what should we do with values that can't be parsed?
 			"aria-valuenow": this._parse( this.element.val() )
 		} );
