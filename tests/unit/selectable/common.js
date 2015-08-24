@@ -24,6 +24,6 @@ common.testWidget( "selectable", {
 		unselected: null,
 		unselecting: null
 	}
-});
+} );
 
 } );
