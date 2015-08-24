@@ -24,6 +24,6 @@ common.testWidget( "menu", {
 		focus: null,
 		select: null
 	}
-});
+} );
 
 } );
