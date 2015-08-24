@@ -253,7 +253,7 @@ test( "createPlaceholder: preserves layout affecting properties", function() {
 	deepEqual( before.position.top - position, placeholder.position().top, "position top preserved" );
 	deepEqual( before.position.left - position, placeholder.position().left, "position left preserved" );
 
-	deepEqual( before.float, placeholder.css( "float" ), "float preserved" );
+	deepEqual( before[ "float" ], placeholder.css( "float" ), "float preserved" );
 	deepEqual( before.outerWidth, placeholder.outerWidth( true ), "width preserved" );
 	deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
 } );
