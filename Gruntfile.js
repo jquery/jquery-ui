@@ -139,7 +139,10 @@ grunt.initConfig({
 	jscs: {
 		all: {
 			options: {
-				requireCapitalizedComments: null
+				requireCapitalizedComments: null,
+				fix: true,
+				maxErrors: 5000000,
+				config: ".jscsrc"
 			},
 			files: {
 				src: [ "demos/**/*.js", "build/**/*.js", "tests/**/*.js", "ui/**/*.js" ]
