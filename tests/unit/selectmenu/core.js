@@ -18,15 +18,15 @@ test( "markup structure", function( assert ) {
 	assert.lacksClasses( button, "ui-selectmenu-button-open" );
 	assert.hasClasses( menuWrap, "ui-selectmenu-menu" );
 	assert.lacksClasses( menuWrap, "ui-selectmenu-menu-open" );
-});
+} );
 
 asyncTest( "accessibility", function() {
 	var wrappers, button, menu,
 		element = $( "#speed" ).attr( "title", "A demo title" );
 
-	element.find( "option" ).each(function( index ) {
+	element.find( "option" ).each( function( index ) {
 		$( this ).attr( "title", "A demo title #" + index );
-	});
+	} );
 
 	element.selectmenu();
 	button = element.selectmenu( "widget" );
@@ -37,7 +37,7 @@ asyncTest( "accessibility", function() {
 
 	expect( 13 + wrappers.length * 3 );
 
-	setTimeout(function() {
+	setTimeout( function() {
 		equal( button.attr( "role" ), "combobox", "button role" );
 		equal( button.attr( "aria-haspopup" ), "true", "button aria-haspopup" );
 		equal( button.attr( "aria-expanded" ), "false", "button aria-expanded" );
@@ -62,13 +62,13 @@ asyncTest( "accessibility", function() {
 		);
 		$.each( wrappers, function( index ) {
 			var item = $( this );
-			equal( item.attr( "role" ), "option", "menu item #" + index +" role" );
-			equal( item.attr( "tabindex" ), -1, "menu item #" + index +" tabindex" );
+			equal( item.attr( "role" ), "option", "menu item #" + index + " role" );
+			equal( item.attr( "tabindex" ), -1, "menu item #" + index + " tabindex" );
 			equal( item.attr( "title" ), "A demo title #" + index, "menu item #" + index + " title" );
-		});
+		} );
 		start();
-	});
-});
+	} );
+} );
 
 test( "_renderButtonItem()", function() {
 	expect( 2 );
@@ -102,9 +102,9 @@ test( "_renderButtonItem()", function() {
 		button.text(),
 		"click: button item text"
 	);
-});
+} );
 
-$.each([
+$.each( [
 	{
 		type: "default",
 		selector: "#speed"
@@ -127,7 +127,7 @@ $.each([
 			selected = element.find( "option:selected" ).next();
 
 		button.simulate( "focus" );
-		setTimeout(function() {
+		setTimeout( function() {
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -143,13 +143,13 @@ $.each([
 			);
 			equal(
 				element.find( "option:selected" ).val(),
-				selected.val() ,
+				selected.val(),
 				"original select state"
 			);
 			equal( button.text(), selected.text(), "button text" );
 			start();
-		});
-	});
+		} );
+	} );
 
 	asyncTest( "state synchronization - after click on item - " + settings.type, function() {
 		expect( 4 );
@@ -161,7 +161,7 @@ $.each([
 			selected = element.find( "option" ).last();
 
 		button.simulate( "focus" );
-		setTimeout(function() {
+		setTimeout( function() {
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			button.trigger( "click" );
@@ -184,7 +184,7 @@ $.each([
 			equal( button.text(), selected.text(), "button text" );
 			start();
 		}, 1 );
-	});
+	} );
 
 	asyncTest( "state synchronization - " +
 			"after focus item and keydown on button - " + settings.type, function() {
@@ -199,7 +199,7 @@ $.each([
 		// Init menu
 		button.simulate( "focus" );
 
-		setTimeout(function() {
+		setTimeout( function() {
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			// Open menu and click first item
@@ -213,20 +213,20 @@ $.each([
 			// Close and use keyboard control on button
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 			button.simulate( "focus" );
-			setTimeout(function() {
+			setTimeout( function() {
 				button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 
 				equal( menu.attr( "aria-activedescendant" ), wrappers.eq( 1 ).attr( "id" ),
 					"menu aria-activedescendant" );
 				equal( button.attr( "aria-activedescendant" ), wrappers.eq( 1 ).attr( "id" ),
 					"button aria-activedescendant" );
-				equal( element.find( "option:selected" ).val(), options.eq( 1 ).val() ,
+				equal( element.find( "option:selected" ).val(), options.eq( 1 ).val(),
 					"original select state" );
 				equal( button.text(), options.eq( 1 ).text(), "button text" );
 				start();
-			});
-		});
-	});
+			} );
+		} );
+	} );
 
 	asyncTest( "item looping - " + settings.type, function() {
 		expect( 4 );
@@ -237,7 +237,7 @@ $.each([
 			menu = element.selectmenu( "menuWidget" );
 
 		button.simulate( "focus" );
-		setTimeout(function() {
+		setTimeout( function() {
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			button.trigger( "click" );
@@ -252,8 +252,8 @@ $.each([
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 			equal( element[ 0 ].selectedIndex, wrappers.length - 1, "No looping behind last item" );
 			start();
-		});
-	});
+		} );
+	} );
 
 	asyncTest( "item focus and active state - " + settings.type, function() {
 		expect( 4 );
@@ -264,11 +264,11 @@ $.each([
 			menu = element.selectmenu( "menuWidget" );
 
 		button.simulate( "focus" );
-		setTimeout(function() {
+		setTimeout( function() {
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			button.trigger( "click" );
-			setTimeout(function() {
+			setTimeout( function() {
 				checkItemClasses();
 
 				wrappers.eq( 3 ).simulate( "mouseover" ).trigger( "click" );
@@ -282,12 +282,12 @@ $.each([
 				$( document ).trigger( "click" );
 
 				button.trigger( "click" );
-				setTimeout(function() {
+				setTimeout( function() {
 					checkItemClasses();
 					start();
-				});
-			});
-		});
+				} );
+			} );
+		} );
 
 		function checkItemClasses() {
 			focusedItem = menu.find( ".ui-menu-item-wrapper.ui-state-active" );
@@ -295,7 +295,7 @@ $.each([
 			equal( focusedItem.attr( "id" ), wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"selected item has ui-state-focus class" );
 		}
-	});
+	} );
 
 	asyncTest( "empty option - " + settings.type, function( assert ) {
 		expect( 7 );
@@ -309,7 +309,7 @@ $.each([
 		menu = element.selectmenu( "menuWidget" );
 
 		button.simulate( "focus" );
-		setTimeout(function() {
+		setTimeout( function() {
 			wrappers = menu.find( "li:not(.ui-selectmenu-optgroup) .ui-menu-item-wrapper" );
 			wrapper = wrappers.first();
 
@@ -325,8 +325,8 @@ $.each([
 			equal( wrapper.attr( "role" ), "option", "empty item has role option" );
 
 			start();
-		});
-	});
-});
+		} );
+	} );
+} );
 
 } );
