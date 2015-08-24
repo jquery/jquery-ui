@@ -48,6 +48,6 @@ common.testWidget( "sortable", {
 		stop: null,
 		update: null
 	}
-});
+} );
 
 } );
