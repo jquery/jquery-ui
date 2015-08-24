@@ -30,15 +30,15 @@ test( "{ active: default }", function() {
 	state( element, 0, 0, 0, 1, 0 );
 	element.tabs( "destroy" );
 	location.hash = "#";
-});
+} );
 
 test( "{ active: false }", function() {
 	expect( 7 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		active: false,
 		collapsible: true
-	});
+	} );
 	state( element, 0, 0, 0 );
 	equal( element.find( ".ui-tabs-nav .ui-state-active" ).length, 0, "no tabs selected" );
 	strictEqual( element.tabs( "option", "active" ), false );
@@ -48,19 +48,19 @@ test( "{ active: false }", function() {
 	equal( element.tabs( "option", "active" ), 0 );
 
 	element.tabs( "destroy" );
-	element.tabs({
+	element.tabs( {
 		active: false
-	});
+	} );
 	state( element, 1, 0, 0 );
 	strictEqual( element.tabs( "option", "active" ), 0 );
-});
+} );
 
 test( "{ active: Number }", function() {
 	expect( 8 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		active: 2
-	});
+	} );
 	equal( element.tabs( "option", "active" ), 2 );
 	state( element, 0, 0, 1 );
 
@@ -75,14 +75,14 @@ test( "{ active: Number }", function() {
 	element.tabs( "option", "active", 10 );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
-});
+} );
 
 test( "{ active: -Number }", function() {
 	expect( 8 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		active: -1
-	});
+	} );
 	equal( element.tabs( "option", "active" ), 2 );
 	state( element, 0, 0, 1 );
 
@@ -97,7 +97,7 @@ test( "{ active: -Number }", function() {
 	element.tabs( "option", "active", -3 );
 	equal( element.tabs( "option", "active" ), 0 );
 	state( element, 1, 0, 0 );
-});
+} );
 
 test( "active - mismatched tab/panel order", function() {
 	expect( 3 );
@@ -109,15 +109,15 @@ test( "active - mismatched tab/panel order", function() {
 	element.tabs( "option", "active", 0 );
 	state( element, 1, 0 );
 	location.hash = "#";
-});
+} );
 
 test( "collapsible", function( assert ) {
 	expect( 13 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		active: 1,
 		collapsible: true
-	});
+	} );
 	assert.hasClasses( element, "ui-tabs-collapsible" );
 	element.tabs( "option", "active", false );
 	equal( element.tabs( "option", "active" ), false );
@@ -138,10 +138,10 @@ test( "collapsible", function( assert ) {
 
 	assert.hasClasses( element, "ui-tabs-collapsible" );
 
-	element.tabs({
+	element.tabs( {
 		active: 1,
 		collapsible: false
-	});
+	} );
 	element.tabs( "option", "active", false );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
@@ -150,7 +150,7 @@ test( "collapsible", function( assert ) {
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
 
-});
+} );
 
 test( "disabled", function( assert ) {
 	expect( 23 );
@@ -195,14 +195,14 @@ test( "disabled", function( assert ) {
 	// Enable all tabs
 	element.tabs( "option", "disabled", [] );
 	disabled( element, false );
-});
+} );
 
 test( "{ event: null }", function() {
 	expect( 5 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		event: null
-	});
+	} );
 	state( element, 1, 0, 0 );
 
 	element.tabs( "option", "active", 1 );
@@ -213,14 +213,14 @@ test( "{ event: null }", function() {
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 2 ).trigger( "click" );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
-});
+} );
 
 test( "{ event: custom }", function() {
 	expect( 11 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 		event: "custom1 custom2"
-	});
+	} );
 	state( element, 1, 0, 0 );
 
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 1 ).trigger( "custom1" );
@@ -246,88 +246,88 @@ test( "{ event: custom }", function() {
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 1 ).trigger( "custom3" );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
-});
+} );
 
 test( "{ heightStyle: 'auto' }", function() {
 	expect( 2 );
-	var element = $( "#tabs8" ).tabs({ heightStyle: "auto" });
+	var element = $( "#tabs8" ).tabs( { heightStyle: "auto" } );
 	equalHeight( element, 45 );
-});
+} );
 
 test( "{ heightStyle: 'content' }", function() {
 	expect( 2 );
-	var element = $( "#tabs8" ).tabs({ heightStyle: "content" }),
-		sizes = element.find( ".ui-tabs-panel" ).map(function() {
+	var element = $( "#tabs8" ).tabs( { heightStyle: "content" } ),
+		sizes = element.find( ".ui-tabs-panel" ).map( function() {
 			return $( this ).height();
-		}).get();
+		} ).get();
 	equal( sizes[ 0 ], 45 );
 	equal( sizes[ 1 ], 15 );
-});
+} );
 
 test( "{ heightStyle: 'fill' }", function() {
 	expect( 4 );
 	$( "#tabs8Wrapper" ).height( 500 );
-	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	var element = $( "#tabs8" ).tabs( { heightStyle: "fill" } );
 	equalHeight( element, 485 );
 	element.tabs( "destroy" );
 
-	element = $( "#tabs8" ).css({
+	element = $( "#tabs8" ).css( {
 		"border": "1px solid black",
 		"padding": "1px 0"
-	});
-	element.tabs({ heightStyle: "fill" });
+	} );
+	element.tabs( { heightStyle: "fill" } );
 	equalHeight( element, 481 );
-});
+} );
 
 test( "{ heightStyle: 'fill' } with sibling", function() {
 	expect( 2 );
 	$( "#tabs8Wrapper" ).height( 500 );
 	$( "<p>Lorem Ipsum</p>" )
-		.css({
+		.css( {
 			height: 50,
 			marginTop: 20,
 			marginBottom: 30
-		})
+		} )
 		.prependTo( "#tabs8Wrapper" );
-	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	var element = $( "#tabs8" ).tabs( { heightStyle: "fill" } );
 	equalHeight( element, 385 );
-});
+} );
 
 test( "{ heightStyle: 'fill' } with multiple siblings", function() {
 	expect( 2 );
 	$( "#tabs8Wrapper" ).height( 500 );
 	$( "<p>Lorem Ipsum</p>" )
-		.css({
+		.css( {
 			height: 50,
 			marginTop: 20,
 			marginBottom: 30
-		})
+		} )
 		.prependTo( "#tabs8Wrapper" );
 	$( "<p>Lorem Ipsum</p>" )
-		.css({
+		.css( {
 			height: 50,
 			marginTop: 20,
 			marginBottom: 30,
 			position: "absolute"
-		})
+		} )
 		.prependTo( "#tabs8Wrapper" );
 	$( "<p>Lorem Ipsum</p>" )
-		.css({
+		.css( {
 			height: 25,
 			marginTop: 10,
 			marginBottom: 15
-		})
+		} )
 		.prependTo( "#tabs8Wrapper" );
-	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	var element = $( "#tabs8" ).tabs( { heightStyle: "fill" } );
 	equalHeight( element, 335 );
-});
+} );
 
 test( "hide and show: false", function() {
 	expect( 3 );
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			show: false,
 			hide: false
-		}),
+		} ),
 		widget = element.tabs( "instance" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function() {
@@ -341,34 +341,34 @@ test( "hide and show: false", function() {
 	element.tabs( "option", "active", 1 );
 	ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
 	ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
-});
+} );
 
 asyncTest( "hide and show - animation", function() {
 	expect( 5 );
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			show: "drop",
 			hide: 2000
-		}),
+		} ),
 		widget = element.tabs( "instance" ),
 		panels = element.find( ".ui-tabs-panel" );
 	widget._show = function( element, options, callback ) {
 		strictEqual( element[ 0 ], panels[ 1 ], "correct element in _show()" );
 		equal( options, "drop", "correct options in _show()" );
-		setTimeout(function() {
+		setTimeout( function() {
 			callback();
-		});
+		} );
 	};
 	widget._hide = function( element, options, callback ) {
 		strictEqual( element[ 0 ], panels[ 0 ], "correct element in _hide()" );
 		equal( options, 2000, "correct options in _hide()" );
-		setTimeout(function() {
+		setTimeout( function() {
 			callback();
 			start();
-		});
+		} );
 	};
 
 	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
 	element.tabs( "option", "active", 1 );
-});
+} );
 
 } );
