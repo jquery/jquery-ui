@@ -1,3 +1,4 @@
+/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 /*!
  * jQuery UI Datepicker @VERSION
  * http://jqueryui.com

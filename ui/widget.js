@@ -25,8 +25,8 @@
 	}
 }( function( $ ) {
 
-var widget_uuid = 0,
-	widget_slice = Array.prototype.slice;
+var widgetUuid = 0,
+	widgetSlice = Array.prototype.slice;
 
 $.cleanData = ( function( orig ) {
 	return function( elems ) {
@@ -175,7 +175,7 @@ $.widget = function( name, base, prototype ) {
 };
 
 $.widget.extend = function( target ) {
-	var input = widget_slice.call( arguments, 1 ),
+	var input = widgetSlice.call( arguments, 1 ),
 		inputIndex = 0,
 		inputLength = input.length,
 		key,
@@ -207,7 +207,7 @@ $.widget.bridge = function( name, object ) {
 	var fullName = object.prototype.widgetFullName || name;
 	$.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string",
-			args = widget_slice.call( arguments, 1 ),
+			args = widgetSlice.call( arguments, 1 ),
 			returnValue = this;
 
 		if ( isMethodCall ) {
@@ -274,7 +274,7 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
-		this.uuid = widget_uuid++;
+		this.uuid = widgetUuid++;
 		this.eventNamespace = "." + this.widgetName + this.uuid;
 
 		this.bindings = $();
