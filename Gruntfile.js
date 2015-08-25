@@ -135,13 +135,9 @@ grunt.initConfig({
 		}
 	},
 
-	// Remove the requireSpacesInsideParentheses override once everything is fixed
 	jscs: {
 		all: {
 			options: {
-				requireCapitalizedComments: null,
-				fix: true,
-				maxErrors: 5000000,
 				config: ".jscsrc"
 			},
 			files: {
