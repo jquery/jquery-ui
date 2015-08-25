@@ -257,9 +257,17 @@ test( "numberOfMonths", function() {
 	);
 
 	// Test for jumping in weekday rendering after click on last day of last grid
-	equal( container.find( "thead:last th:last" ).text(), "Sa", "Before click: Last day is saturday" );
 	container.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
-	equal( container.find( "thead:last th:last" ).text(), "Sa", "After click: Last day is saturday" );
+	equal( container.find( "thead:last th:last" ).text(), "Sa",
+		"After mousedown last month: Last day is Saturday"
+	);
+
+	// Test if using cursor down to go to the next month advances three month
+	container.find( "tbody:first td[id]:first button" ).trigger( "mousedown" );
+	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+	equal( container.find( ".ui-calendar-month:first" ).text(), "May",
+		"After move to previous month: First month is May"
+	);
 });
 
 /*

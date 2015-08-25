@@ -150,7 +150,14 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( this._needsRefresh() ) {
-			this._refresh();
+			if ( this.options.numberOfMonths > 1 && this.date.year() === this.viewDate.year() ) {
+				this.viewDate.adjust( "M", this.options.numberOfMonths *
+					( this.date.month() > this.viewDate.month() ? 1 : -1 )
+				);
+				this.refresh();
+			} else {
+				this._refresh();
+			}
 			this.grid.focus();
 		}
 
