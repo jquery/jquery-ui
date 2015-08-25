@@ -30,6 +30,6 @@ common.testWidget( "slider", {
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

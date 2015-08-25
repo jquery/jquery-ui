@@ -11,17 +11,17 @@ test( "destroy", function( assert ) {
 
 	assert.domEqual( "#tooltipped1", function() {
 		element.tooltip().tooltip( "destroy" );
-	});
+	} );
 
 	// Make sure that open tooltips are removed on destroy
 	assert.domEqual( "#tooltipped1", function() {
 		element
 			.tooltip()
-			.tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
+			.tooltip( "open", $.Event( "mouseover", { target: element[ 0 ] } ) )
 			.tooltip( "destroy" );
-	});
+	} );
 	equal( $( ".ui-tooltip" ).length, 0 );
-});
+} );
 
 test( "open/close", function() {
 	expect( 3 );
@@ -37,14 +37,14 @@ test( "open/close", function() {
 	element.tooltip( "close" );
 	ok( tooltip.is( ":hidden" ) );
 	$.fx.off = false;
-});
+} );
 
 // #8626 - Calling open() without an event
 test( "open/close with tracking", function() {
 	expect( 3 );
 	$.fx.off = true;
 	var tooltip,
-		element = $( "#tooltipped1" ).tooltip({ track: true });
+		element = $( "#tooltipped1" ).tooltip( { track: true } );
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
@@ -54,7 +54,7 @@ test( "open/close with tracking", function() {
 	element.tooltip( "close" );
 	ok( tooltip.is( ":hidden" ) );
 	$.fx.off = false;
-});
+} );
 
 test( "enable/disable", function( assert ) {
 	expect( 11 );
@@ -91,7 +91,7 @@ test( "enable/disable", function( assert ) {
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
 	ok( tooltip.is( ":visible" ) );
 	$.fx.off = false;
-});
+} );
 
 test( "widget", function() {
 	expect( 2 );
@@ -99,7 +99,7 @@ test( "widget", function() {
 		widgetElement = element.tooltip( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
-});
+} );
 
 test( "preserve changes to title attributes on close and destroy", function() {
 	expect( 6 );
@@ -110,14 +110,19 @@ test( "preserve changes to title attributes on close and destroy", function() {
 
 	// 1. Changes to title attribute are preserved on close()
 	tests[ 0 ] = { title: changed, expected: changed, method: "close" };
+
 	// 2. Changes to title attribute are preserved on destroy()
-	tests[ 1 ] = { title: changed, expected: changed , method: "destroy" };
+	tests[ 1 ] = { title: changed, expected: changed, method: "destroy" };
+
 	// 3. Changes to title attribute are NOT preserved when set to empty string on close()
 	tests[ 2 ] = { title: "", expected: original, method: "close" };
+
 	// 4. Changes to title attribute are NOT preserved when set to empty string on destroy()
 	tests[ 3 ] = { title: "", expected: original, method: "destroy" };
+
 	// 5. Changes to title attribute NOT preserved when attribute has been removed on close()
 	tests[ 4 ] = { expected: original, method: "close" };
+
 	// 6. Changes to title attribute NOT preserved when attribute has been removed on destroy()
 	tests[ 5 ] = { expected: original, method: "destroy" };
 
@@ -134,6 +139,6 @@ test( "preserve changes to title attributes on close and destroy", function() {
 		equal( $( "#tooltipped1" ).attr( "title" ), test.expected );
 
 	} );
-});
+} );
 
 } );

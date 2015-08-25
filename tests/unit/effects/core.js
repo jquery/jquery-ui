@@ -45,13 +45,13 @@ asyncTest( ".hide() with step", function() {
 			step = $.noop;
 		};
 
-	element.hide({
+	element.hide( {
 		step: function() {
 			step();
 		},
 		complete: start
-	});
-});
+	} );
+} );
 
 test( "Immediate Return Conditions", function() {
 	var hidden = $( "div.hidden" ),
@@ -59,19 +59,19 @@ test( "Immediate Return Conditions", function() {
 	expect( 3 );
 	hidden.hide( "blind", function() {
 		equal( ++count, 1, "Hide on hidden returned immediately" );
-	}).show().show( "blind", function() {
+	} ).show().show( "blind", function() {
 		equal( ++count, 2, "Show on shown returned immediately" );
-	});
+	} );
 	equal( ++count, 3, "Both Functions worked properly" );
-});
+} );
 
 test( ".hide() with hidden parent", function() {
 	expect( 1 );
 	var element = $( "div.hidden" ).children();
 	element.hide( "blind", function() {
 		equal( element.css( "display" ), "none", "display: none" );
-	});
-});
+	} );
+} );
 
 asyncTest( "Parse of null for options", function() {
 	var hidden = $( "div.hidden" ),
@@ -80,8 +80,8 @@ asyncTest( "Parse of null for options", function() {
 	hidden.show( "blind", null, 1, function() {
 		equal( ++count, 1, "null for options still works" );
 		start();
-	});
-});
+	} );
+} );
 
 test( "removeClass", function() {
 	expect( 3 );
@@ -92,28 +92,28 @@ test( "removeClass", function() {
 	equal( "destroyed", element[ 0 ].className );
 	element.removeClass();
 	equal( "", element[ 0 ].className );
-});
+} );
 
 module( "effects.core: animateClass" );
 
 asyncTest( "animateClass works with borderStyle", function() {
-	var test = $("div.animateClass");
-	expect(3);
-	test.toggleClass("testAddBorder", minDuration, function() {
-		test.toggleClass("testAddBorder", minDuration, function() {
-			equal( test.css("borderLeftStyle"), "none", "None border set" );
+	var test = $( "div.animateClass" );
+	expect( 3 );
+	test.toggleClass( "testAddBorder", minDuration, function() {
+		test.toggleClass( "testAddBorder", minDuration, function() {
+			equal( test.css( "borderLeftStyle" ), "none", "None border set" );
 			start();
-		});
-		equal( test.css("borderLeftStyle"), "solid", "None border not immedately set" );
-	});
-	equal( test.css("borderLeftStyle"), "solid", "Solid border immedately set" );
-});
+		} );
+		equal( test.css( "borderLeftStyle" ), "solid", "None border not immedately set" );
+	} );
+	equal( test.css( "borderLeftStyle" ), "solid", "Solid border immedately set" );
+} );
 
 asyncTest( "animateClass works with colors", function() {
-	var test = $("div.animateClass"),
+	var test = $( "div.animateClass" ),
 		oldStep = jQuery.fx.step.backgroundColor;
 
-	expect(2);
+	expect( 2 );
 
 	// We want to catch the first frame of animation
 	jQuery.fx.step.backgroundColor = function( fx ) {
@@ -122,21 +122,21 @@ asyncTest( "animateClass works with colors", function() {
 		// Make sure it has animated somewhere we can detect
 		if ( fx.pos > 255 / 2000 ) {
 			jQuery.fx.step.backgroundColor = oldStep;
-			notPresent( test.css("backgroundColor"),
+			notPresent( test.css( "backgroundColor" ),
 				[ "#000000", "#ffffff", "#000", "#fff", "rgb(0, 0, 0)", "rgb(255,255,255)" ],
 				"Color is not endpoints in middle." );
 			test.stop( true, true );
 		}
 	};
 
-	test.toggleClass("testChangeBackground", {
+	test.toggleClass( "testChangeBackground", {
 		duration: 2000,
 		complete: function() {
-			present( test.css("backgroundColor"), [ "#ffffff", "#fff", "rgb(255, 255, 255)" ], "Color is final" );
+			present( test.css( "backgroundColor" ), [ "#ffffff", "#fff", "rgb(255, 255, 255)" ], "Color is final" );
 			start();
 		}
-	});
-});
+	} );
+} );
 
 asyncTest( "animateClass calls step option", 1, function() {
 	var test = jQuery( "div.animateClass" ),
@@ -150,23 +150,23 @@ asyncTest( "animateClass calls step option", 1, function() {
 		step: function() {
 			step();
 		}
-	});
-});
+	} );
+} );
 
 asyncTest( "animateClass works with children", 3, function() {
 	var animatedChild,
-		test = $("div.animateClass"),
-		h2 = test.find("h2");
+		test = $( "div.animateClass" ),
+		h2 = test.find( "h2" );
 
-	test.toggleClass("testChildren", {
+	test.toggleClass( "testChildren", {
 		children: true,
 		duration: duration,
 		complete: function() {
-			equal( h2.css("fontSize"), "20px", "Text size is final during complete");
-			test.toggleClass("testChildren", {
+			equal( h2.css( "fontSize" ), "20px", "Text size is final during complete" );
+			test.toggleClass( "testChildren", {
 				duration: duration,
 				complete: function() {
-					equal( h2.css("fontSize"), "10px", "Text size revertted after class removed");
+					equal( h2.css( "fontSize" ), "10px", "Text size revertted after class removed" );
 
 					start();
 				},
@@ -175,7 +175,7 @@ asyncTest( "animateClass works with children", 3, function() {
 						ok( false, "Error - Animating property on h2" );
 					}
 				}
-			});
+			} );
 		},
 		step: function( val, fx ) {
 			if ( fx.prop === "fontSize" && fx.elem === h2[ 0 ] && !animatedChild ) {
@@ -183,12 +183,12 @@ asyncTest( "animateClass works with children", 3, function() {
 				animatedChild = true;
 			}
 		}
-	});
-});
+	} );
+} );
 
 asyncTest( "animateClass clears style properties when stopped", function() {
-	var test = $("div.animateClass"),
-		style = test[0].style,
+	var test = $( "div.animateClass" ),
+		style = test[ 0 ].style,
 		orig = style.cssText;
 
 	expect( 2 );
@@ -199,7 +199,7 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 	test.stop( true, true );
 	equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
 	start();
-});
+} );
 
 asyncTest( "animateClass: css and class changes during animation are not lost (#7106)",
 function( assert ) {
@@ -217,7 +217,7 @@ function( assert ) {
 	test.addClass( "animate", minDuration, animationComplete )
 		.addClass( "testClass" )
 		.height( 100 );
-});
+} );
 
 test( "createPlaceholder: only created for static or relative elements", function() {
 	expect( 4 );
@@ -226,16 +226,16 @@ test( "createPlaceholder: only created for static or relative elements", functio
 	ok( $.effects.createPlaceholder( $( ".static" ) ).length, "placeholder created for static element" );
 	ok( !$.effects.createPlaceholder( $( ".absolute" ) ), "placeholder not created for absolute element" );
 	ok( !$.effects.createPlaceholder( $( ".fixed" ) ), "placeholder not created for fixed element" );
-});
+} );
 
 test( "createPlaceholder: preserves layout affecting properties", function() {
 	expect( 7 );
 
 	var position = 5,
-		element = $( ".relative" ).css({
+		element = $( ".relative" ).css( {
 			top: position,
 			left: position
-		}),
+		} ),
 		before = {
 			offset: element.offset(),
 			outerWidth: element.outerWidth( true ),
@@ -256,7 +256,7 @@ test( "createPlaceholder: preserves layout affecting properties", function() {
 	deepEqual( before[ "float" ], placeholder.css( "float" ), "float preserved" );
 	deepEqual( before.outerWidth, placeholder.outerWidth( true ), "width preserved" );
 	deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
-});
+} );
 
 module( "transfer" );
 
@@ -321,47 +321,47 @@ $.each( $.effects.effect, function( effect ) {
 
 		hidden
 			.queue( queueTest() )
-			.queue( duringTest(function() {
+			.queue( duringTest( function() {
 				ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .show(\"" + effect + "\", time)" );
-			}) )
-			.show( effect, minDuration, queueTest(function() {
+			} ) )
+			.show( effect, minDuration, queueTest( function() {
 				equal( hidden.css( "display" ), "block",
 					"Hidden is shown after .show(\"" + effect + "\", time)" );
 				ok( !$( ".ui-effects-placeholder" ).length,
 					"No placeholder remains after .show(\"" + effect + "\", time)" );
-			}) )
+			} ) )
 			.queue( queueTest() )
-			.queue( duringTest(function() {
+			.queue( duringTest( function() {
 				ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .hide(\"" + effect + "\", time)" );
-			}) )
-			.hide( effect, minDuration, queueTest(function() {
+			} ) )
+			.hide( effect, minDuration, queueTest( function() {
 				equal( hidden.css( "display" ), "none",
 					"Back to hidden after .hide(\"" + effect + "\", time)" );
 				ok( !$( ".ui-effects-placeholder" ).length,
 					"No placeholder remains after .hide(\"" + effect + "\", time)" );
-			}) )
-			.queue( queueTest(function() {
+			} ) )
+			.queue( queueTest( function() {
 				deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains" );
 				start();
-			}) );
-	});
+			} ) );
+	} );
 
 	asyncTest( "relative width & height - properties are preserved", function() {
-		var test = $("div.relWidth.relHeight"),
+		var test = $( "div.relWidth.relHeight" ),
 			width = test.width(), height = test.height(),
-			cssWidth = test[0].style.width, cssHeight = test[0].style.height;
+			cssWidth = test[ 0 ].style.width, cssHeight = test[ 0 ].style.height;
 
 		expect( 4 );
 		test.toggle( effect, minDuration, function() {
-			equal( test[0].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
-			equal( test[0].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
+			equal( test[ 0 ].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
+			equal( test[ 0 ].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
 			start();
-		});
+		} );
 		equal( test.width(), width, "Width is the same px after animation started" );
 		equal( test.height(), height, "Height is the same px after animation started" );
-	});
-});
+	} );
+} );
 
 } );

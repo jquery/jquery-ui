@@ -43,6 +43,6 @@ common.testWidget( "draggable", {
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

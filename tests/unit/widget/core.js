@@ -11,7 +11,7 @@ module( "widget factory", {
 			delete $.fn.testWidget;
 		}
 	}
-});
+} );
 
 common.testJshint( "widget" );
 
@@ -36,7 +36,7 @@ test( "widget creation", function() {
 	$.ui.testWidget.prototype.creationTest();
 	equal( $.ui.testWidget.prototype.option, $.Widget.prototype.option,
 		"option method copied over from base widget" );
-});
+} );
 
 test( "element normalization", function() {
 	expect( 11 );
@@ -44,6 +44,7 @@ test( "element normalization", function() {
 	$.widget( "ui.testWidget", {} );
 
 	$.ui.testWidget.prototype._create = function() {
+
 		// workaround for core ticket #8381
 		this.element.appendTo( "#qunit-fixture" );
 		ok( this.element.is( "div" ), "generated div" );
@@ -82,20 +83,21 @@ test( "element normalization", function() {
 
 	$.ui.testWidget.prototype.defaultElement = null;
 	$.ui.testWidget.prototype._create = function() {
+
 		// using strictEqual throws an error (Maximum call stack size exceeded)
 		ok( this.element[ 0 ] === this, "instance as element" );
 	};
 	$.ui.testWidget();
-});
+} );
 
 test( "custom selector expression", function() {
 	expect( 1 );
 	var elem = $( "<div>" ).appendTo( "#qunit-fixture" );
 	$.widget( "ui.testWidget", {} );
 	elem.testWidget();
-	deepEqual( $( ":ui-testwidget" )[0], elem[0] );
+	deepEqual( $( ":ui-testwidget" )[ 0 ], elem[ 0 ] );
 	elem.testWidget( "destroy" );
-});
+} );
 
 test( "jQuery usage", function() {
 	expect( 14 );
@@ -127,19 +129,19 @@ test( "jQuery usage", function() {
 		jQueryObject: function() {
 			return $( "body" );
 		}
-	});
+	} );
 
 	shouldCreate = true;
 	elem = $( "<div>" )
 		.on( "testwidgetcreate", function() {
 			ok( shouldCreate, "create event triggered on instantiation" );
-		})
+		} )
 		.testWidget();
 	shouldCreate = false;
 
 	instance = elem.testWidget( "instance" );
 	equal( typeof instance, "object", "instance stored in .data(pluginName)" );
-	equal( instance.element[0], elem[0], "element stored on widget" );
+	equal( instance.element[ 0 ], elem[ 0 ], "element stored on widget" );
 	ret = elem.testWidget( "methodWithParams", "value1", "value2" );
 	equal( ret, elem, "jQuery object returned from method call" );
 
@@ -154,7 +156,7 @@ test( "jQuery usage", function() {
 
 	elem.testWidget( "destroy" );
 	equal( elem.testWidget( "instance" ), null );
-});
+} );
 
 test( "direct usage", function() {
 	expect( 9 );
@@ -181,7 +183,7 @@ test( "direct usage", function() {
 				return this.getterSetterVal;
 			}
 		}
-	});
+	} );
 
 	elem = $( "<div>" )[ 0 ];
 
@@ -200,14 +202,14 @@ test( "direct usage", function() {
 	equal( ret, 5, "getter/setter can act as getter" );
 	instance.getterSetterMethod( 30 );
 	equal( instance.getterSetterVal, 30, "getter/setter can act as setter" );
-});
+} );
 
 test( "error handling", function() {
 	expect( 3 );
 	var error = $.error;
 	$.widget( "ui.testWidget", {
-		_privateMethod: function () {}
-	});
+		_privateMethod: function() {}
+	} );
 	$.error = function( msg ) {
 		equal( msg, "cannot call methods on testWidget prior to initialization; " +
 			"attempted to call method 'missing'", "method call before init" );
@@ -218,13 +220,13 @@ test( "error handling", function() {
 			"invalid method call on widget instance" );
 	};
 	$( "<div>" ).testWidget().testWidget( "missing" );
-	$.error = function ( msg ) {
+	$.error = function( msg ) {
 		equal( msg, "no such method '_privateMethod' for testWidget widget instance",
 			"invalid method call on widget instance" );
 	};
 	$( "<div>" ).testWidget().testWidget( "_privateMethod" );
 	$.error = error;
-});
+} );
 
 test( "merge multiple option arguments", function() {
 	expect( 1 );
@@ -241,10 +243,10 @@ test( "merge multiple option arguments", function() {
 					option4a: "valuea",
 					option4b: "valueb"
 				}
-			});
+			} );
 		}
-	});
-	$( "<div>" ).testWidget({
+	} );
+	$( "<div>" ).testWidget( {
 		option1: "valuex",
 		option2: "valuex",
 		option3: "value3",
@@ -261,8 +263,8 @@ test( "merge multiple option arguments", function() {
 		option4: {
 			option4a: "valuea"
 		}
-	});
-});
+	} );
+} );
 
 test( "._getCreateOptions()", function() {
 	expect( 3 );
@@ -292,11 +294,11 @@ test( "._getCreateOptions()", function() {
 				option1: "override1",
 				option2: "value2",
 				option3: "value3"
-			});
+			} );
 		}
-	});
-	$( "<div>" ).testWidget({ option2: "value2" });
-});
+	} );
+	$( "<div>" ).testWidget( { option2: "value2" } );
+} );
 
 test( "._getCreateEventData()", function() {
 	expect( 1 );
@@ -305,13 +307,13 @@ test( "._getCreateEventData()", function() {
 		_getCreateEventData: function() {
 			return data;
 		}
-	});
-	$( "<div>" ).testWidget({
+	} );
+	$( "<div>" ).testWidget( {
 		create: function( event, ui ) {
 			strictEqual( ui, data, "event data" );
 		}
-	});
-});
+	} );
+} );
 
 test( "re-init", function() {
 	expect( 3 );
@@ -328,10 +330,10 @@ test( "re-init", function() {
 		_setOption: function( key ) {
 			actions.push( "option" + key );
 		}
-	});
+	} );
 
 	actions = [];
-	div.testWidget({ foo: "bar" });
+	div.testWidget( { foo: "bar" } );
 	deepEqual( actions, [ "create", "init" ], "correct methods called on init" );
 
 	actions = [];
@@ -339,9 +341,9 @@ test( "re-init", function() {
 	deepEqual( actions, [ "init" ], "correct methods call on re-init" );
 
 	actions = [];
-	div.testWidget({ foo: "bar" });
+	div.testWidget( { foo: "bar" } );
 	deepEqual( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
-});
+} );
 
 test( "redeclare", function() {
 	expect( 2 );
@@ -351,10 +353,11 @@ test( "redeclare", function() {
 
 	$.widget( "ui.testWidget", {} );
 	equal( $.ui.testWidget.prototype.widgetEventPrefix, "testWidget" );
-});
+} );
 
 test( "inheritance", function() {
 	expect( 6 );
+
 	// #5830 - Widget: Using inheritance overwrites the base classes options
 	$.widget( "ui.testWidgetBase", {
 		options: {
@@ -364,7 +367,7 @@ test( "inheritance", function() {
 			},
 			arr: [ "testing" ]
 		}
-	});
+	} );
 
 	$.widget( "ui.testWidgetExtension", $.ui.testWidgetBase, {
 		options: {
@@ -373,31 +376,31 @@ test( "inheritance", function() {
 			},
 			arr: [ "alpha", "beta" ]
 		}
-	});
+	} );
 
 	equal( $.ui.testWidgetBase.prototype.widgetEventPrefix, "testWidgetBase",
 		"base class event prefix" );
 	deepEqual( $.ui.testWidgetBase.prototype.options.obj, {
 		key1: "foo",
 		key2: "bar"
-	}, "base class option object not overridden");
+	}, "base class option object not overridden" );
 	deepEqual( $.ui.testWidgetBase.prototype.options.arr, [ "testing" ],
-		"base class option array not overridden");
+		"base class option array not overridden" );
 
 	equal( $.ui.testWidgetExtension.prototype.widgetEventPrefix, "testWidgetExtension",
 		"extension class event prefix" );
 	deepEqual( $.ui.testWidgetExtension.prototype.options.obj, {
 		key1: "baz",
 		key2: "bar"
-	}, "extension class option object extends base");
+	}, "extension class option object extends base" );
 	deepEqual( $.ui.testWidgetExtension.prototype.options.arr, [ "alpha", "beta" ],
-		"extension class option array overwrites base");
+		"extension class option array overwrites base" );
 
 	delete $.ui.testWidgetBase;
 	delete $.fn.testWidgetBase;
 	delete $.ui.testWidgetExtension;
 	delete $.fn.testWidgetExtension;
-});
+} );
 
 test( "._super()", function() {
 	expect( 9 );
@@ -409,25 +412,25 @@ test( "._super()", function() {
 			deepEqual( b, 20, "second parameter passed to testWidget" );
 			return a + b;
 		}
-	});
+	} );
 
 	$.widget( "ui.testWidget2", $.ui.testWidget, {
 		method: function( a, b ) {
 			deepEqual( this, instance, "this is correct in testWidget2" );
 			deepEqual( a, 5, "parameter passed to testWidget2" );
 			deepEqual( b, 10, "parameter passed to testWidget2" );
-			return this._super( a, b*2 );
+			return this._super( a, b * 2 );
 		}
-	});
+	} );
 
 	$.widget( "ui.testWidget3", $.ui.testWidget2, {
 		method: function( a ) {
 			deepEqual( this, instance, "this is correct in testWidget3" );
 			deepEqual( a, 5, "parameter passed to testWidget3" );
-			var ret = this._super( a, a*2 );
+			var ret = this._super( a, a * 2 );
 			deepEqual( ret, 25, "super returned value" );
 		}
-	});
+	} );
 
 	instance = $( "<div>" ).testWidget3().testWidget3( "instance" );
 	instance.method( 5 );
@@ -435,7 +438,7 @@ test( "._super()", function() {
 	delete $.fn.testWidget3;
 	delete $.ui.testWidget2;
 	delete $.fn.testWidget2;
-});
+} );
 
 test( "._superApply()", function() {
 	expect( 10 );
@@ -447,7 +450,7 @@ test( "._superApply()", function() {
 			deepEqual( b, 10, "second parameter passed to testWidget" );
 			return a + b;
 		}
-	});
+	} );
 
 	$.widget( "ui.testWidget2", $.ui.testWidget, {
 		method: function( a, b ) {
@@ -456,7 +459,7 @@ test( "._superApply()", function() {
 			deepEqual( b, 10, "second parameter passed to testWidget2" );
 			return this._superApply( arguments );
 		}
-	});
+	} );
 
 	$.widget( "ui.testWidget3", $.ui.testWidget2, {
 		method: function( a, b ) {
@@ -466,7 +469,7 @@ test( "._superApply()", function() {
 			var ret = this._superApply( arguments );
 			deepEqual( ret, 15, "super returned value" );
 		}
-	});
+	} );
 
 	instance = $( "<div>" ).testWidget3().testWidget3( "instance" );
 	instance.method( 5, 10 );
@@ -474,7 +477,7 @@ test( "._superApply()", function() {
 	delete $.fn.testWidget3;
 	delete $.ui.testWidget2;
 	delete $.fn.testWidget2;
-});
+} );
 
 test( "mixins", function() {
 	expect( 5 );
@@ -513,7 +516,7 @@ test( "mixins", function() {
 
 	$.ui.testWidget.prototype.bar = function() {};
 	strictEqual( mixin2.bar, existingBar, "Changes to a prototype don't change the mixin" );
-});
+} );
 
 test( "mixins with inheritance", function() {
 	expect( 4 );
@@ -553,25 +556,25 @@ test( "mixins with inheritance", function() {
 
 	delete $.ui.testWidget2;
 	delete $.fn.testWidget2;
-});
+} );
 
 test( ".option() - getter", function() {
 	expect( 6 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
-	});
+	} );
 
 	var options,
-		div = $( "<div>" ).testWidget({
+		div = $( "<div>" ).testWidget( {
 			foo: "bar",
 			baz: 5,
 			qux: [ "quux", "quuux" ]
-		});
+		} );
 
 	deepEqual( div.testWidget( "option", "x" ), null, "non-existent option" );
-	deepEqual( div.testWidget( "option", "foo"), "bar", "single option - string" );
-	deepEqual( div.testWidget( "option", "baz"), 5, "single option - number" );
-	deepEqual( div.testWidget( "option", "qux"), [ "quux", "quuux" ],
+	deepEqual( div.testWidget( "option", "foo" ), "bar", "single option - string" );
+	deepEqual( div.testWidget( "option", "baz" ), 5, "single option - number" );
+	deepEqual( div.testWidget( "option", "qux" ), [ "quux", "quuux" ],
 		"single option - array" );
 
 	options = div.testWidget( "option" );
@@ -584,28 +587,28 @@ test( ".option() - getter", function() {
 		qux: [ "quux", "quuux" ]
 	}, "full options hash returned" );
 	options.foo = "notbar";
-	deepEqual( div.testWidget( "option", "foo"), "bar",
+	deepEqual( div.testWidget( "option", "foo" ), "bar",
 		"modifying returned options hash does not modify plugin instance" );
-});
+} );
 
 test( ".option() - deep option getter", function() {
 	expect( 5 );
 	$.widget( "ui.testWidget", {} );
-	var div = $( "<div>" ).testWidget({
+	var div = $( "<div>" ).testWidget( {
 		foo: {
 			bar: "baz",
 			qux: {
 				quux: "xyzzy"
 			}
 		}
-	});
+	} );
 	equal( div.testWidget( "option", "foo.bar" ), "baz", "one level deep - string" );
 	deepEqual( div.testWidget( "option", "foo.qux" ), { quux: "xyzzy" },
 		"one level deep - object" );
 	equal( div.testWidget( "option", "foo.qux.quux" ), "xyzzy", "two levels deep - string" );
 	equal( div.testWidget( "option", "x.y" ), null, "top level non-existent" );
 	equal( div.testWidget( "option", "foo.x.y" ), null, "one level deep - non-existent" );
-});
+} );
 
 test( ".option() - delegate to ._setOptions()", function() {
 	expect( 2 );
@@ -616,21 +619,21 @@ test( ".option() - delegate to ._setOptions()", function() {
 		_setOptions: function( options ) {
 			calls.push( options );
 		}
-	});
+	} );
 	div = $( "<div>" ).testWidget();
 
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
-	deepEqual( calls, [{ foo: "bar" }], "_setOptions called for single option" );
+	deepEqual( calls, [ { foo: "bar" } ], "_setOptions called for single option" );
 
 	calls = [];
 	div.testWidget( "option", {
 		bar: "qux",
 		quux: "quuux"
-	});
-	deepEqual( calls, [{ bar: "qux", quux: "quuux" }],
+	} );
+	deepEqual( calls, [ { bar: "qux", quux: "quuux" } ],
 		"_setOptions called with multiple options" );
-});
+} );
 
 test( ".option() - delegate to ._setOption()", function() {
 	expect( 3 );
@@ -639,34 +642,34 @@ test( ".option() - delegate to ._setOption()", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {},
 		_setOption: function( key, val ) {
-			calls.push({
+			calls.push( {
 				key: key,
 				val: val
-			});
+			} );
 		}
-	});
+	} );
 	div = $( "<div>" ).testWidget();
 
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
-	deepEqual( calls, [{ key: "foo", val: "bar" }],
+	deepEqual( calls, [ { key: "foo", val: "bar" } ],
 		"_setOption called for single option" );
 
 	calls = [];
 	div.testWidget( "option", "foo", undefined );
-	deepEqual( calls, [{ key: "foo", val: undefined }],
+	deepEqual( calls, [ { key: "foo", val: undefined } ],
 		"_setOption called for single option where value is undefined" );
 
 	calls = [];
 	div.testWidget( "option", {
 		bar: "qux",
 		quux: "quuux"
-	});
+	} );
 	deepEqual( calls, [
 		{ key: "bar", val: "qux" },
 		{ key: "quux", val: "quuux" }
 	], "_setOption called with multiple options" );
-});
+} );
 
 test( ".option() - deep option setter", function() {
 	expect( 9 );
@@ -697,7 +700,7 @@ test( ".option() - deep option setter", function() {
 		{ bar: "baz", qux: { quux: "quuux", newOpt: "newVal" } },
 		"add property" );
 	div.testWidget( "option", "foo.qux.newOpt", "newVal" );
-});
+} );
 
 test( ".enable()", function() {
 	expect( 2 );
@@ -707,9 +710,9 @@ test( ".enable()", function() {
 			deepEqual( key, "disabled", "_setOption called with disabled option" );
 			deepEqual( val, false, "disabled set to false" );
 		}
-	});
+	} );
 	$( "<div>" ).testWidget().testWidget( "enable" );
-});
+} );
 
 test( ".disable()", function() {
 	expect( 2 );
@@ -719,19 +722,19 @@ test( ".disable()", function() {
 			deepEqual( key, "disabled", "_setOption called with disabled option" );
 			deepEqual( val, true, "disabled set to true" );
 		}
-	});
+	} );
 	$( "<div>" ).testWidget().testWidget( "disable" );
-});
+} );
 
 test( ".widget() - base", function() {
 	expect( 2 );
 	var constructor = $.widget( "ui.testWidget", {
 			_create: function() {}
-		}),
+		} ),
 		div = $( "<div>" ).testWidget();
-	deepEqual( div[0], div.testWidget( "widget" )[0]);
+	deepEqual( div[ 0 ], div.testWidget( "widget" )[ 0 ] );
 	deepEqual( constructor, $.ui.testWidget, "$.widget returns the constructor" );
-});
+} );
 
 test( ".widget() - overriden", function() {
 	expect( 1 );
@@ -741,9 +744,9 @@ test( ".widget() - overriden", function() {
 		widget: function() {
 			return wrapper;
 		}
-	});
-	deepEqual( wrapper[0], $( "<div>" ).testWidget().testWidget( "widget" )[0] );
-});
+	} );
+	deepEqual( wrapper[ 0 ], $( "<div>" ).testWidget().testWidget( "widget" )[ 0 ] );
+} );
 
 test( ".instance()", function() {
 	expect( 2 );
@@ -751,13 +754,13 @@ test( ".instance()", function() {
 
 	$.widget( "ui.testWidget", {
 		_create: function() {}
-	});
+	} );
 
 	div = $( "<div>" );
 	equal( div.testWidget( "instance" ), undefined );
 	div.testWidget();
 	equal( div.testWidget( "instance" ), div.testWidget( "instance" ) );
-});
+} );
 
 test( "._on() to element (default)", function() {
 	expect( 12 );
@@ -765,22 +768,22 @@ test( "._on() to element (default)", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
-			this._on({
+			this._on( {
 				keyup: this.keyup,
 				keydown: "keydown"
-			});
+			} );
 		},
 		keyup: function( event ) {
 			equal( that, this );
-			equal( that.element[0], event.currentTarget );
+			equal( that.element[ 0 ], event.currentTarget );
 			equal( "keyup", event.type );
 		},
 		keydown: function( event ) {
 			equal( that, this );
-			equal( that.element[0], event.currentTarget );
+			equal( that.element[ 0 ], event.currentTarget );
 			equal( "keydown", event.type );
 		}
-	});
+	} );
 	widget = $( "<div></div>" )
 		.testWidget()
 		.trigger( "keyup" )
@@ -797,7 +800,7 @@ test( "._on() to element (default)", function() {
 		.testWidget( "destroy" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-});
+} );
 
 test( "._on() to element with suppressDisabledCheck", function() {
 	expect( 18 );
@@ -808,19 +811,19 @@ test( "._on() to element with suppressDisabledCheck", function() {
 			this._on( true, {
 				keyup: this.keyup,
 				keydown: "keydown"
-			});
+			} );
 		},
 		keyup: function( event ) {
 			equal( that, this );
-			equal( that.element[0], event.currentTarget );
+			equal( that.element[ 0 ], event.currentTarget );
 			equal( "keyup", event.type );
 		},
 		keydown: function( event ) {
 			equal( that, this );
-			equal( that.element[0], event.currentTarget );
+			equal( that.element[ 0 ], event.currentTarget );
 			equal( "keydown", event.type );
 		}
-	});
+	} );
 	widget = $( "<div></div>" )
 		.testWidget()
 		.trigger( "keyup" )
@@ -837,7 +840,7 @@ test( "._on() to element with suppressDisabledCheck", function() {
 		.testWidget( "destroy" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-});
+} );
 
 test( "._on() to descendent", function() {
 	expect( 12 );
@@ -848,19 +851,20 @@ test( "._on() to descendent", function() {
 			this._on( this.element.find( "strong" ), {
 				keyup: this.keyup,
 				keydown: "keydown"
-			});
+			} );
 		},
 		keyup: function( event ) {
 			equal( that, this );
-			equal( that.element.find( "strong" )[0], event.currentTarget );
+			equal( that.element.find( "strong" )[ 0 ], event.currentTarget );
 			equal( "keyup", event.type );
 		},
-		keydown: function(event) {
+		keydown: function( event ) {
 			equal( that, this );
-			equal( that.element.find( "strong" )[0], event.currentTarget );
+			equal( that.element.find( "strong" )[ 0 ], event.currentTarget );
 			equal( "keydown", event.type );
 		}
-	});
+	} );
+
 	// trigger events on both widget and descendent to ensure that only descendent receives them
 	widget = $( "<div><p><strong>hello</strong> world</p></div>" )
 		.testWidget()
@@ -894,7 +898,7 @@ test( "._on() to descendent", function() {
 	descendant
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-});
+} );
 
 test( "_on() with delegate", function() {
 	expect( 8 );
@@ -904,7 +908,7 @@ test( "_on() with delegate", function() {
 			this.element = {
 				on: function( event, handler ) {
 					equal( event, "click.testWidget" + uuid );
-					ok( $.isFunction(handler) );
+					ok( $.isFunction( handler ) );
 				},
 				trigger: $.noop
 			};
@@ -913,30 +917,30 @@ test( "_on() with delegate", function() {
 					on: function( event, selector, handler ) {
 						equal( selector, "a" );
 						equal( event, "click.testWidget" + uuid );
-						ok( $.isFunction(handler) );
+						ok( $.isFunction( handler ) );
 					}
 				};
 			};
-			this._on({
+			this._on( {
 				"click": "handler",
 				"click a": "handler"
-			});
+			} );
 			this.widget = function() {
 				return {
 					on: function( event, selector, handler ) {
 						equal( selector, "form fieldset > input" );
 						equal( event, "change.testWidget" + uuid );
-						ok( $.isFunction(handler) );
+						ok( $.isFunction( handler ) );
 					}
 				};
 			};
-			this._on({
+			this._on( {
 				"change form fieldset > input": "handler"
-			});
+			} );
 		}
-	});
+	} );
 	$.ui.testWidget();
-});
+} );
 
 test( "_on() with delegate to descendent", function() {
 	expect( 4 );
@@ -947,7 +951,7 @@ test( "_on() with delegate to descendent", function() {
 			this._on( this.target, {
 				"keyup": "handlerDirect",
 				"keyup strong": "handlerDelegated"
-			});
+			} );
 			this.child.trigger( "keyup" );
 		},
 		handlerDirect: function( event ) {
@@ -958,9 +962,9 @@ test( "_on() with delegate to descendent", function() {
 			deepEqual( event.currentTarget, this.child[ 0 ] );
 			deepEqual( event.target, this.child[ 0 ] );
 		}
-	});
+	} );
 	$.ui.testWidget();
-});
+} );
 
 test( "_on() to common element", function() {
 	expect( 4 );
@@ -971,7 +975,7 @@ test( "_on() to common element", function() {
 				"with:colons": "_colonHandler",
 				"with-dashes": "_dashHandler",
 				"with-dashes:and-colons": "_commbinedHandler"
-			});
+			} );
 		},
 		_handler: function() {
 			ok( true, "handler triggered" );
@@ -985,7 +989,7 @@ test( "_on() to common element", function() {
 		_commbinedHandler: function() {
 			ok( true, "combined handler triggered" );
 		}
-	});
+	} );
 	var widget = $( "#widget" ).testWidget().testWidget( "instance" );
 	$( "#widget-wrapper" ).testWidget();
 	widget.destroy();
@@ -993,7 +997,7 @@ test( "_on() to common element", function() {
 	$( document ).trigger( "with:colons" );
 	$( document ).trigger( "with-dashes" );
 	$( document ).trigger( "with-dashes:and-colons" );
-});
+} );
 
 test( "_off() - single event", function() {
 	expect( 3 );
@@ -1004,17 +1008,17 @@ test( "_off() - single event", function() {
 		widget = element.testWidget().testWidget( "instance" );
 	widget._on( element, { foo: function() {
 		ok( shouldTriggerWidget, "foo called from _on" );
-	}});
+	} } );
 	element.on( "foo", function() {
 		ok( shouldTriggerOther, "foo called from bind" );
-	});
+	} );
 	shouldTriggerWidget = true;
 	shouldTriggerOther = true;
 	element.trigger( "foo" );
 	shouldTriggerWidget = false;
 	widget._off( element, "foo" );
 	element.trigger( "foo" );
-});
+} );
 
 test( "_off() - multiple events", function() {
 	expect( 6 );
@@ -1030,10 +1034,10 @@ test( "_off() - multiple events", function() {
 		bar: function() {
 			ok( shouldTriggerWidget, "bar called from _on" );
 		}
-	});
+	} );
 	element.on( "foo bar", function( event ) {
 		ok( shouldTriggerOther, event.type + " called from bind" );
-	});
+	} );
 	shouldTriggerWidget = true;
 	shouldTriggerOther = true;
 	element.trigger( "foo" );
@@ -1042,7 +1046,7 @@ test( "_off() - multiple events", function() {
 	widget._off( element, "foo bar" );
 	element.trigger( "foo" );
 	element.trigger( "bar" );
-});
+} );
 
 test( "_off() - all events", function() {
 	expect( 6 );
@@ -1058,10 +1062,10 @@ test( "_off() - all events", function() {
 		bar: function() {
 			ok( shouldTriggerWidget, "bar called from _on" );
 		}
-	});
+	} );
 	element.on( "foo bar", function( event ) {
 		ok( shouldTriggerOther, event.type + " called from bind" );
-	});
+	} );
 	shouldTriggerWidget = true;
 	shouldTriggerOther = true;
 	element.trigger( "foo" );
@@ -1070,7 +1074,7 @@ test( "_off() - all events", function() {
 	widget._off( element );
 	element.trigger( "foo" );
 	element.trigger( "bar" );
-});
+} );
 
 test( "._hoverable()", function( assert ) {
 	expect( 10 );
@@ -1078,7 +1082,7 @@ test( "._hoverable()", function( assert ) {
 		_create: function() {
 			this._hoverable( this.element.children() );
 		}
-	});
+	} );
 
 	var div = $( "#widget" ).testWidget().children();
 	assert.lacksClasses( div, "ui-state-hover", "not hovered on init" );
@@ -1102,7 +1106,7 @@ test( "._hoverable()", function( assert ) {
 	assert.lacksClasses( div, "ui-state-hover", "not hovered after destroy" );
 	div.trigger( "mouseenter" );
 	assert.lacksClasses( div, "ui-state-hover", "event handler removed on destroy" );
-});
+} );
 
 test( "._focusable()", function( assert ) {
 	expect( 10 );
@@ -1110,7 +1114,7 @@ test( "._focusable()", function( assert ) {
 		_create: function() {
 			this._focusable( this.element.children() );
 		}
-	});
+	} );
 
 	var div = $( "#widget" ).testWidget().children();
 	assert.lacksClasses( div, "ui-state-focus", "not focused on init" );
@@ -1134,7 +1138,7 @@ test( "._focusable()", function( assert ) {
 	assert.lacksClasses( div, "ui-state-focus", "not focused after destroy" );
 	div.trigger( "focusin" );
 	assert.lacksClasses( div, "ui-state-focus", "event handler removed on destroy" );
-});
+} );
 
 test( "._trigger() - no event, no ui", function() {
 	expect( 7 );
@@ -1142,20 +1146,20 @@ test( "._trigger() - no event, no ui", function() {
 
 	$.widget( "ui.testWidget", {
 		_create: function() {}
-	});
+	} );
 
-	$( "#widget" ).testWidget({
+	$( "#widget" ).testWidget( {
 		foo: function( event, ui ) {
 			deepEqual( event.type, "testwidgetfoo", "correct event type in callback" );
 			deepEqual( ui, {}, "empty ui hash passed" );
 			handlers.push( "callback" );
 		}
-	});
+	} );
 	$( document ).add( "#widget-wrapper" ).add( "#widget" )
 		.on( "testwidgetfoo", function( event, ui ) {
 			deepEqual( ui, {}, "empty ui hash passed" );
 			handlers.push( this );
-		});
+		} );
 	deepEqual( $( "#widget" ).testWidget( "instance" )._trigger( "foo" ), true,
 		"_trigger returns true when event is not cancelled" );
 	deepEqual( handlers, [
@@ -1166,42 +1170,42 @@ test( "._trigger() - no event, no ui", function() {
 	], "event bubbles and then invokes callback" );
 
 	$( document ).off( "testwidgetfoo" );
-});
+} );
 
 test( "._trigger() - cancelled event", function() {
 	expect( 3 );
 
 	$.widget( "ui.testWidget", {
 		_create: function() {}
-	});
+	} );
 
-	$( "#widget" ).testWidget({
+	$( "#widget" ).testWidget( {
 		foo: function() {
 			ok( true, "callback invoked even if event is cancelled" );
 		}
-	})
+	} )
 	.on( "testwidgetfoo", function() {
 		ok( true, "event was triggered" );
 		return false;
-	});
+	} );
 	deepEqual( $( "#widget" ).testWidget( "instance" )._trigger( "foo" ), false,
 		"_trigger returns false when event is cancelled" );
-});
+} );
 
 test( "._trigger() - cancelled callback", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
-	});
+	} );
 
-	$( "#widget" ).testWidget({
+	$( "#widget" ).testWidget( {
 		foo: function() {
 			return false;
 		}
-	});
+	} );
 	deepEqual( $( "#widget" ).testWidget( "instance" )._trigger( "foo" ), false,
 		"_trigger returns false when callback returns false" );
-});
+} );
 
 test( "._trigger() - provide event and ui", function() {
 	expect( 7 );
@@ -1226,7 +1230,7 @@ test( "._trigger() - provide event and ui", function() {
 				}
 			}, "ui object modified" );
 		}
-	});
+	} );
 	$( "#widget" ).on( "testwidgetfoo", function( event, ui ) {
 		equal( event.originalEvent, originalEvent, "original event object passed" );
 		deepEqual( ui, {
@@ -1237,7 +1241,7 @@ test( "._trigger() - provide event and ui", function() {
 			}
 		}, "ui hash passed" );
 		ui.foo = "notbar";
-	});
+	} );
 	$( "#widget-wrapper" ).on( "testwidgetfoo", function( event, ui ) {
 		equal( event.originalEvent, originalEvent, "original event object passed" );
 		deepEqual( ui, {
@@ -1248,8 +1252,8 @@ test( "._trigger() - provide event and ui", function() {
 			}
 		}, "modified ui hash passed" );
 		ui.baz.qux = 10;
-	});
-	$( "#widget" ).testWidget({
+	} );
+	$( "#widget" ).testWidget( {
 		foo: function( event, ui ) {
 			equal( event.originalEvent, originalEvent, "original event object passed" );
 			deepEqual( ui, {
@@ -1261,11 +1265,12 @@ test( "._trigger() - provide event and ui", function() {
 			}, "modified ui hash passed" );
 			ui.baz.quux = "jQuery";
 		}
-	})
+	} )
 	.testWidget( "testEvent" );
-});
+} );
 
 test( "._trigger() - array as ui", function() {
+
 	// #6795 - Widget: handle array arguments to _trigger consistently
 	expect( 4 );
 
@@ -1284,7 +1289,7 @@ test( "._trigger() - array as ui", function() {
 				};
 			this._trigger( "foo", null, [ ui, extra ] );
 		}
-	});
+	} );
 	$( "#widget" ).on( "testwidgetfoo", function( event, ui, extra ) {
 		deepEqual( ui, {
 			foo: "bar",
@@ -1296,8 +1301,8 @@ test( "._trigger() - array as ui", function() {
 		deepEqual( extra, {
 			bar: 5
 		}, "event: extra argument passed" );
-	});
-	$( "#widget" ).testWidget({
+	} );
+	$( "#widget" ).testWidget( {
 		foo: function( event, ui, extra ) {
 			deepEqual( ui, {
 				foo: "bar",
@@ -1310,9 +1315,9 @@ test( "._trigger() - array as ui", function() {
 				bar: 5
 			}, "callback: extra argument passed" );
 		}
-	})
+	} )
 	.testWidget( "testEvent" );
-});
+} );
 
 test( "._trigger() - instance as element", function() {
 	expect( 4 );
@@ -1321,21 +1326,21 @@ test( "._trigger() - instance as element", function() {
 		testEvent: function() {
 			this._trigger( "foo", null, { foo: "bar" } );
 		}
-	});
-	var instance = $.ui.testWidget({
+	} );
+	var instance = $.ui.testWidget( {
 		foo: function( event, ui ) {
 			equal( event.type, "testwidgetfoo", "event object passed to callback" );
 			deepEqual( ui, { foo: "bar" }, "ui object passed to callback" );
 		}
-	});
+	} );
 	$( instance ).on( "testwidgetfoo", function( event, ui ) {
 		equal( event.type, "testwidgetfoo", "event object passed to event handler" );
 		deepEqual( ui, { foo: "bar" }, "ui object passed to event handler" );
-	});
+	} );
 	instance.testEvent();
-});
+} );
 
-(function() {
+( function() {
 	function shouldDestroy( expected, callback ) {
 		expect( 1 );
 		var destroyed = false;
@@ -1344,7 +1349,7 @@ test( "._trigger() - instance as element", function() {
 			destroy: function() {
 				destroyed = true;
 			}
-		});
+		} );
 		callback();
 		equal( destroyed, expected );
 	}
@@ -1352,52 +1357,52 @@ test( "._trigger() - instance as element", function() {
 	test( "auto-destroy - .remove()", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().remove();
-		});
-	});
+		} );
+	} );
 
 	test( "auto-destroy - .remove() when disabled", function() {
 		shouldDestroy( true, function() {
-			$( "#widget" ).testWidget({ disabled: true }).remove();
-		});
-	});
+			$( "#widget" ).testWidget( { disabled: true } ).remove();
+		} );
+	} );
 
 	test( "auto-destroy - .remove() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().remove();
-		});
-	});
+		} );
+	} );
 
 	test( "auto-destroy - .remove() on child", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().children().remove();
-		});
-	});
+		} );
+	} );
 
 	test( "auto-destroy - .empty()", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().empty();
-		});
-	});
+		} );
+	} );
 
 	test( "auto-destroy - .empty() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().empty();
-		});
-	});
+		} );
+	} );
 
 	test( "auto-destroy - .detach()", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().detach();
-		});
-	});
+		} );
+	} );
 
 	test( "destroy - remove event bubbling", function() {
 		shouldDestroy( false, function() {
 			$( "<div>child</div>" ).appendTo( $( "#widget" ).testWidget() )
 				.trigger( "remove" );
-		});
-	});
-}());
+		} );
+	} );
+}() );
 
 test( "redefine", function() {
 	expect( 4 );
@@ -1406,19 +1411,19 @@ test( "redefine", function() {
 			strictEqual( this, instance, "original invoked with correct this" );
 			equal( str, "bar", "original invoked with correct parameter" );
 		}
-	});
+	} );
 	$.ui.testWidget.foo = "bar";
 	$.widget( "ui.testWidget", $.ui.testWidget, {
 		method: function( str ) {
 			equal( str, "foo", "new invoked with correct parameter" );
 			this._super( "bar" );
 		}
-	});
+	} );
 
-	var instance = new $.ui.testWidget({});
+	var instance = new $.ui.testWidget( {} );
 	instance.method( "foo" );
 	equal( $.ui.testWidget.foo, "bar", "static properties remain" );
-});
+} );
 
 test( "redefine deep prototype chain", function() {
 	expect( 8 );
@@ -1427,21 +1432,22 @@ test( "redefine deep prototype chain", function() {
 			strictEqual( this, instance, "original invoked with correct this" );
 			equal( str, "level 4", "original invoked with correct parameter" );
 		}
-	});
+	} );
 	$.widget( "ui.testWidget2", $.ui.testWidget, {
 		method: function( str ) {
 			strictEqual( this, instance, "testWidget2 invoked with correct this" );
 			equal( str, "level 2", "testWidget2 invoked with correct parameter" );
 			this._super( "level 3" );
 		}
-	});
+	} );
 	$.widget( "ui.testWidget3", $.ui.testWidget2, {
 		method: function( str ) {
 			strictEqual( this, instance, "testWidget3 invoked with correct this" );
 			equal( str, "level 1", "testWidget3 invoked with correct parameter" );
 			this._super( "level 2" );
 		}
-	});
+	} );
+
 	// redefine testWidget after other widgets have inherited from it
 	// this tests whether the inheriting widgets get updated prototype chains
 	$.widget( "ui.testWidget", $.ui.testWidget, {
@@ -1450,27 +1456,28 @@ test( "redefine deep prototype chain", function() {
 			equal( str, "level 3", "new invoked with correct parameter" );
 			this._super( "level 4" );
 		}
-	});
+	} );
+
 	// redefine testWidget3 after it has been automatically redefined
 	// this tests whether we properly handle _super() when the topmost prototype
 	// doesn't have the method defined
 	$.widget( "ui.testWidget3", $.ui.testWidget3, {} );
 
-	var instance = new $.ui.testWidget3({});
+	var instance = new $.ui.testWidget3( {} );
 	instance.method( "level 1" );
 
 	delete $.ui.testWidget3;
 	delete $.fn.testWidget3;
 	delete $.ui.testWidget2;
 	delete $.fn.testWidget2;
-});
+} );
 
 test( "redefine - widgetEventPrefix", function() {
 	expect( 2 );
 
 	$.widget( "ui.testWidget", {
 		widgetEventPrefix: "test"
-	});
+	} );
 	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
 		"cusotm prefix in original" );
 
@@ -1478,7 +1485,7 @@ test( "redefine - widgetEventPrefix", function() {
 	equal( $.ui.testWidget.prototype.widgetEventPrefix, "test",
 		"cusotm prefix in extension" );
 
-});
+} );
 
 test( "mixins", function() {
 	expect( 2 );
@@ -1493,12 +1500,12 @@ test( "mixins", function() {
 		method: function() {
 			return "testWidget1";
 		}
-	});
+	} );
 	$.widget( "ui.testWidget2", {
 		method: function() {
 			return "testWidget2";
 		}
-	});
+	} );
 	$.widget( "ui.testWidget1", $.ui.testWidget1, mixin );
 	$.widget( "ui.testWidget2", $.ui.testWidget2, mixin );
 
@@ -1506,7 +1513,7 @@ test( "mixins", function() {
 		"mixed testWidget1", "testWidget1 mixin successful" );
 	equal( $( "<div>" ).testWidget2().testWidget2( "method" ),
 		"mixed testWidget2", "testWidget2 mixin successful" );
-});
+} );
 
 asyncTest( "_delay", function() {
 	expect( 6 );
@@ -1516,13 +1523,13 @@ asyncTest( "_delay", function() {
 		defaultElement: null,
 		_create: function() {
 			that = this;
-			var timer = this._delay(function() {
+			var timer = this._delay( function() {
 				strictEqual( this, that );
 				equal( order, 1 );
 				start();
-			}, 500);
+			}, 500 );
 			ok( timer !== undefined );
-			timer = this._delay("callback");
+			timer = this._delay( "callback" );
 			ok( timer !== undefined );
 		},
 		callback: function() {
@@ -1530,9 +1537,9 @@ asyncTest( "_delay", function() {
 			equal( order, 0 );
 			order += 1;
 		}
-	});
+	} );
 	$( "#widget" ).testWidget();
-});
+} );
 
 test( "$.widget.bridge()", function() {
 	expect( 14 );
@@ -1557,13 +1564,13 @@ test( "$.widget.bridge()", function() {
 		option: function( options ) {
 			deepEqual( options, {} );
 		}
-	});
+	} );
 
 	$.widget.bridge( "testWidget", TestWidget );
 
 	ok( $.isFunction( $.fn.testWidget ), "jQuery plugin was created" );
 
-	strictEqual( elem.testWidget({ foo: "bar" }), elem, "plugin returns original jQuery object" );
+	strictEqual( elem.testWidget( { foo: "bar" } ), elem, "plugin returns original jQuery object" );
 	instance = elem.data( "testWidget" );
 	equal( typeof instance, "object", "instance stored in .data(pluginName)" );
 	equal( typeof elem.testWidget( "instance" ), "object", "also retrievable via instance method" );
@@ -1581,7 +1588,7 @@ test( "$.widget.bridge()", function() {
 		ok( "_init", "_init now exists, so its called" );
 	};
 	elem.testWidget();
-});
+} );
 
 test( "$.widget.bridge() - widgetFullName", function() {
 	expect( 1 );
@@ -1596,6 +1603,6 @@ test( "$.widget.bridge() - widgetFullName", function() {
 	elem.testWidget();
 	instance = elem.data( "custom-widget" );
 	equal( typeof instance, "object", "instance stored in .data(widgetFullName)" );
-});
+} );
 
 } );

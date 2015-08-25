@@ -13,17 +13,17 @@ test( "programmatic triggers", function() {
 	element.one( "tooltipopen", function( event, ui ) {
 		tooltip = ui.tooltip;
 		ok( !( "originalEvent" in event ), "open" );
-		strictEqual( ui.tooltip[0],
-			$( "#" + element.data( "ui-tooltip-id" ) )[0], "ui.tooltip" );
-	});
+		strictEqual( ui.tooltip[ 0 ],
+			$( "#" + element.data( "ui-tooltip-id" ) )[ 0 ], "ui.tooltip" );
+	} );
 	element.tooltip( "open" );
 
 	element.one( "tooltipclose", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "close" );
-		strictEqual( ui.tooltip[0], tooltip[0], "ui.tooltip" );
-	});
+		strictEqual( ui.tooltip[ 0 ], tooltip[ 0 ], "ui.tooltip" );
+	} );
 	element.tooltip( "close" );
-});
+} );
 
 test( "mouse events", function() {
 	expect( 2 );
@@ -31,15 +31,15 @@ test( "mouse events", function() {
 
 	element.on( "tooltipopen", function( event ) {
 		deepEqual( event.originalEvent.type, "mouseover" );
-	});
+	} );
 	element.trigger( "mouseover" );
 
 	element.on( "tooltipclose", function( event ) {
 		deepEqual( event.originalEvent.type, "mouseleave" );
-	});
+	} );
 	element.trigger( "focusout" );
 	element.trigger( "mouseleave" );
-});
+} );
 
 test( "focus events", function() {
 	expect( 2 );
@@ -47,14 +47,14 @@ test( "focus events", function() {
 
 	element.on( "tooltipopen", function( event ) {
 		deepEqual( event.originalEvent.type, "focusin" );
-	});
+	} );
 	element.trigger( "focusin" );
 
 	element.on( "tooltipclose", function( event ) {
 		deepEqual( event.originalEvent.type, "focusout" );
-	});
+	} );
 	element.trigger( "mouseleave" );
 	element.trigger( "focusout" );
-});
+} );
 
 } );

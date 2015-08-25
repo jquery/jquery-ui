@@ -63,7 +63,7 @@
 		"grunt-esformatter": "0.2.0",
 		"grunt-git-authors": "2.0.0",
 		"grunt-html": "4.0.1",
-		"grunt-jscs": "1.5.0",
+		"grunt-jscs": "2.1.0",
 		"load-grunt-tasks": "0.3.0",
 		"rimraf": "2.1.4",
 		"testswarm": "1.1.0"
