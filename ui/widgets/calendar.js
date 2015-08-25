@@ -29,7 +29,8 @@
 			"../version",
 			"../keycode",
 			"../unique-id",
-			"../tabbable"
+			"../tabbable",
+			"../escape-selector"
 		], factory );
 	} else {
 
@@ -170,7 +171,7 @@ return $.widget( "ui.calendar", {
 			// Check if the needed day is already present in our grid due
 			// to eachDay option changes (eg. other-months demo)
 			return !this.grid.find(
-					this._sanitizeSelector( "#" + this._getDayId( this.date ) )
+				"#" + $.ui.escapeSelector( this._getDayId( this.date ) )
 				).length;
 		}
 
@@ -186,7 +187,7 @@ return $.widget( "ui.calendar", {
 			.removeClass( "ui-state-focus" );
 
 		this.activeDescendant = this.grid.find(
-			this._sanitizeSelector( "#" + id ) + " > button"
+			"#" + $.ui.escapeSelector( id ) + " > button"
 		).addClass( "ui-state-focus" );
 	},
 
@@ -543,10 +544,6 @@ return $.widget( "ui.calendar", {
 
 	_getTranslation: function( key ) {
 		return $( "<a>" ).text( this.labels[ key ] ).html();
-	},
-
-	_sanitizeSelector: function( hash ) {
-		return hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g, "\\$&" ) : "";
 	},
 
 	_setHiddenPicker: function() {
