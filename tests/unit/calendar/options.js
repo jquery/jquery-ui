@@ -232,7 +232,35 @@ test( "min / max", function() {
 	element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );});
+	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
+});
+
+test( "numberOfMonths", function() {
+	expect( 5 );
+	var date = new Date( 2015, 8 - 1, 1 ),
+		input = $( "#calendar" ).calendar({
+			numberOfMonths: 3,
+			value: date
+		}),
+		container = input.calendar( "widget" );
+
+	equal( container.find( ".ui-calendar-group" ).length, 3, "3 calendar grids" );
+	equal(
+		container.find( "tbody:first td[id]:first" ).attr( "id" ),
+		"calendar-2015-7-1",
+		"Correct id set for first day of first grid"
+	);
+	equal(
+		container.find( "tbody:last td[id]:last" ).attr( "id" ),
+		"calendar-2015-9-31",
+		"Correct id set for last day of third grid"
+	);
+
+	// Test for jumping in weekday rendering after click on last day of last grid
+	equal( container.find( "thead:last th:last" ).text(), "Sa", "Before click: Last day is saturday" );
+	container.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
+	equal( container.find( "thead:last th:last" ).text(), "Sa", "After click: Last day is saturday" );
+});
 
 /*
 // TODO: Move this to $.date, Globalize or calendar widget

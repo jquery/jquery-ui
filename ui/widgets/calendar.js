@@ -329,7 +329,7 @@ return $.widget( "ui.calendar", {
 		var cells = "",
 			i = 0,
 			weekDayLength = this.viewDate.weekdays().length,
-			weekdays = this.date.weekdays();
+			weekdays = this.viewDate.weekdays();
 
 		if ( this.options.showWeek ) {
 			cells += "<th class='ui-calendar-week-col'>" + this._getTranslation( "weekHeader" ) + "</th>";
