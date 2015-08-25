@@ -54,8 +54,8 @@ $.extend( _Date.prototype, {
 		this.firstDay = weekdaysRev[ this.attributes.firstDay ];
 	},
 
-	//TODO: same as the underlying Date object's terminology, but still misleading.
-	//TODO: We can use .setTime() instead of new Date and rename to setTimestamp.
+	// TODO: Same as the underlying Date object's terminology, but still misleading.
+	// TODO: We can use .setTime() instead of new Date and rename to setTimestamp.
 	setTime: function( time ) {
 		this.dateObject = new Date( time );
 		return this;
@@ -92,7 +92,7 @@ $.extend( _Date.prototype, {
 			month = date.getMonth();
 
 		// Check if Leap, and February and day is 29th
-		if ( this.isLeapYear( year ) && month == 1 && day == 29 ) {
+		if ( this.isLeapYear( year ) && month === 1 && day === 29 ) {
 
 			// set day to last day of February
 			day = this.daysInMonth( year, month );
@@ -109,12 +109,12 @@ $.extend( _Date.prototype, {
 
 	adjust: function( period, offset ) {
 		var date = this.dateObject,
-			day = period == "D" ? date.getDate() + offset : date.getDate(),
-			month = period == "M" ? date.getMonth() + offset : date.getMonth(),
-			year = period == "Y" ? date.getFullYear() + offset : date.getFullYear();
+			day = period === "D" ? date.getDate() + offset : date.getDate(),
+			month = period === "M" ? date.getMonth() + offset : date.getMonth(),
+			year = period === "Y" ? date.getFullYear() + offset : date.getFullYear();
 
 		// If not day, update the day to the new month and year
-		if ( period != "D" ) {
+		if ( period !== "D" ) {
 			day = Math.max( 1, Math.min( day, this.daysInMonth( year, month ) ) );
 		}
 		this.dateObject = new Date( year, month, day, date.getHours(),
@@ -147,7 +147,7 @@ $.extend( _Date.prototype, {
 
 	isLeapYear: function( year ) {
 		year = year || this.dateObject.getFullYear();
-		return new Date( year, 1, 29 ).getMonth() == 1;
+		return new Date( year, 1, 29 ).getMonth() === 1;
 	},
 
 	weekdays: function() {
@@ -228,7 +228,7 @@ $.extend( _Date.prototype, {
 	equal: function( other ) {
 		var format = function( date ) {
 			return "" + date.getFullYear() + date.getMonth() + date.getDate();
-		}
+		};
 		return format( this.dateObject ) === format( other );
 	},
 
