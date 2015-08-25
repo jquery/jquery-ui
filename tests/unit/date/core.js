@@ -1,19 +1,21 @@
 define( [
 	"jquery",
-	"globalize",
+	"./helper",
 	"date"
-], function( $, Globalize ) {
+], function( $, testHelper ) {
 
 module( "date: core" );
 
+var attributes = testHelper.getAttributes( "en" );
+
 test( "Instantiation", function() {
 	expect( 2 );
-	ok( new $.date() instanceof $.date, "constructor function" );
-	ok( $.date() instanceof $.date, "instantiation without new" );
+	ok( new $.ui.calendarDate( null, attributes ) instanceof $.ui.calendarDate, "constructor function" );
+	ok( $.ui.calendarDate( null, attributes ) instanceof $.ui.calendarDate, "instantiation without new" );
 });
 
 test( "Check Sets and Gets", 6, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 	equal( date.setYear( 2012 ).year(), 2012, "Set year and retrieve" );
 	equal( date.setMonth( 9 ).month(), 9, "Set month and retrieve" );
 	equal( date.setDay( 15 ).day(), 15, "Set day and retrieve" );
@@ -23,7 +25,7 @@ test( "Check Sets and Gets", 6, function() {
 });
 
 test( "Date Adjustments - Normal Use Cases", 10, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 
 	// Use October 15, 2012
 	date.setFullDate( 2012, 9, 15 );
@@ -48,7 +50,7 @@ test( "Date Adjustments - Normal Use Cases", 10, function() {
 });
 
 test( "Date Adjustments - Month Overflow Edge Cases", 2, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 
 	// Use May 31 2012
 	date.setFullDate( 2012, 4, 31 );
@@ -59,7 +61,7 @@ test( "Date Adjustments - Month Overflow Edge Cases", 2, function() {
 });
 
 test( "Date Adjustments - Leap Year Edge Cases", 1, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 
 	// Use February 29 2012 a Leap year
 	date.setFullDate( 2012, 1, 29 );
@@ -68,7 +70,7 @@ test( "Date Adjustments - Leap Year Edge Cases", 1, function() {
 });
 
 test( "List days of Week", 2, function() {
-	var date = $.date(),
+	var date = $.ui.calendarDate( null, attributes ),
 		offset0 = [
 			{ "fullname": "Sunday", "shortname": "Su" },
 			{ "fullname": "Monday", "shortname": "Mo" },
@@ -89,15 +91,12 @@ test( "List days of Week", 2, function() {
 		];
 
 	deepEqual( date.weekdays(), offset0, "Get weekdays with start of day on 0 (English)" );
-	Globalize.locale( "de" );
+	date = $.ui.calendarDate( null, testHelper.getAttributes( "de" ) );
 	deepEqual( date.weekdays(), offset1, "Get weekdays with start of day on 1 (Germany)" );
-
-	// Revert Globalize changes back to English
-	Globalize.locale( "en" );
 });
 
 test( "Leap Year Check", 8, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 	ok( date.setYear( 2008 ).isLeapYear(), "2008 is a Leap Year" );
 	ok( !date.setYear( 2009 ).isLeapYear(), "2009 is not a Leap Year" );
 	ok( !date.setYear( 2010 ).isLeapYear(), "2010 is not a Leap Year" );
@@ -109,7 +108,7 @@ test( "Leap Year Check", 8, function() {
 });
 
 test( "Days in Month", 3, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 	date.setFullDate( 2012, 1, 1 );
 	equal( date.daysInMonth(), 29, "Leap Year implicit check for 29 days" );
 	equal( date.daysInMonth( 2012, 1 ), 29, "Leap Year explicit check for 29 days" );
@@ -117,23 +116,22 @@ test( "Days in Month", 3, function() {
 });
 
 test( "Month Name", 2, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 	equal( date.setMonth( 3 ).monthName(), "April", "Month name return April (English)" );
-	Globalize.locale( "de" );
+	date = $.ui.calendarDate( null, testHelper.getAttributes( "de" ) );
 	equal( date.setMonth( 2 ).monthName(), "März", "Month name return March (German)" );
-	Globalize.locale( "en" );
 });
 
 test( "Clone", 2, function() {
-	var date = $.date(),
+	var date = $.ui.calendarDate( null, attributes ),
 		date2 = date.clone();
 	ok( date2, "Created cloned object" );
 	notEqual( date.adjust( "Y", 1 ).year(), date2.year(), "Object manipulated independently" );
 });
 
 test( "Days", 1, function() {
-	//TODO needs work
-	var date = $.date();
+	// TODO needs work
+	var date = $.ui.calendarDate( null, attributes );
 	date.eachDay = function( day ) {
 		if ( day.lead && day.date > 20 ) {
 			day.selectable = false;
@@ -158,7 +156,7 @@ test( "Days", 1, function() {
 });
 
 test( "Months", 5, function(){
-	var date = $.date(),
+	var date = $.ui.calendarDate( null, attributes ),
 		firstMonth = date.months( 1 )[ 0 ],
 		lastMonth = date.months( 1 )[ 1 ];
 
@@ -171,7 +169,7 @@ test( "Months", 5, function(){
 });
 
 test( "Equal", 4, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 	date.setFullDate( 2012, 9, 16 );
 	ok( date.equal( new Date( 2012, 9, 16 ) ), "Does date equal provide date" );
 	ok( !date.equal( new Date( 2011, 9, 16 ) ), "Does date year not equal provide date" );
@@ -180,18 +178,8 @@ test( "Equal", 4, function() {
 });
 
 test( "Date", 1, function() {
-	var date = $.date();
+	var date = $.ui.calendarDate( null, attributes );
 	ok( date.date() instanceof Date, "Date returned" );
-});
-
-test( "Format", 4, function() {
-	var date = $.date();
-	date.setFullDate( 2012, 9, 16 );
-	equal( date.format({ date: "short" }), "10/16/12", "Checking default US format" );
-	equal( date.format({ pattern: "yyyy/MM/dd" }), "2012/10/16", "Checking yyyy/MM/dd format" );
-	equal( date.format({ pattern: "yy/dd/MM" }), "12/16/10", "Checking yy/dd/MM format" );
-	equal( date.format({ pattern: "MMMM dd, yyyy" }), "October 16, 2012",
-		"Checking MMMM dd, yyyy format" );
 });
 
 } );
