@@ -251,12 +251,12 @@ test( "min / max", function() {
 
 	element
 		.calendar( "option", { max: null } )
-		.calendar( "value", "1/4/15" )
-		.calendar( "option", { max: maxDate } );
+		.calendar( "value", "1/4/09" )
+		.calendar( "option", { min: minDate, max: maxDate } );
 	ok( nextButton.hasClass( "ui-state-disabled" ), "Other year: Next button disabled" );
-	nextButton.simulate( "click" );
+	prevButton.simulate( "click" );
 	ok( nextButton.hasClass( "ui-state-disabled" ), "Other year: Next button disabled after click" );
-	nextButton.simulate( "click" );
+	prevButton.simulate( "click" );
 	ok( !nextButton.hasClass( "ui-state-disabled" ), "Other year: Next button enabled after click" );
 });
 
