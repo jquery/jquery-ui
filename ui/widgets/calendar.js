@@ -233,6 +233,10 @@ return $.widget( "ui.calendar", {
 			} )
 			.html( pickerHtml );
 
+		this.prevButton = this.element.find( ".ui-calendar-prev" );
+		this.nextButton = this.element.find( ".ui-calendar-next" );
+		this._refreshHeaderButtons();
+
 		this._createButtonPane();
 
 		this.grid = this.element.find( ".ui-calendar-calendar" );
@@ -283,24 +287,14 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildPreviousLink: function() {
-		var prevText = this._getTranslation( "prevText" );
-
-		return "<button class='ui-calendar-prev ui-corner-all' title='" +
-					prevText + "'>" +
-			"<span class='ui-icon ui-icon-circle-triangle-w'>" +
-				prevText +
-			"</span>" +
+		return "<button class='ui-calendar-prev ui-corner-all'>" +
+			"<span class='ui-icon ui-icon-circle-triangle-w'></span>" +
 		"</button>";
 	},
 
 	_buildNextLink: function() {
-		var nextText = this._getTranslation( "nextText" );
-
-		return "<button class='ui-calendar-next ui-corner-all' title='" +
-					nextText + "'>" +
-			"<span class='ui-icon ui-icon-circle-triangle-e'>" +
-				nextText +
-			"</span>" +
+		return "<button class='ui-calendar-next ui-corner-all'>" +
+			"<span class='ui-icon ui-icon-circle-triangle-e'></span>" +
 		"</button>";
 	},
 
@@ -517,14 +511,49 @@ return $.widget( "ui.calendar", {
 			this.grid = $( this._buildGrid() );
 			this.element.find( ".ui-calendar-title" ).html( this._buildTitle() );
 			this.element.find( ".ui-calendar-calendar" ).replaceWith( this.grid );
-			$( ".ui-calendar-prev", this.element ).attr( "title", this.labels.prevText )
-				.children().html( this.labels.prevText );
-			$( ".ui-calendar-next", this.element ).attr( "title", this.labels.nextText )
-				.children().html( this.labels.nextText );
-			this._createButtons();
 		} else {
 			this._refreshMultiplePicker();
 		}
+
+		this._refreshHeaderButtons();
+		this._createButtons();
+	},
+
+	_refreshHeaderButtons: function() {
+		var prevText = this._getTranslation( "prevText" ),
+			nextText = this._getTranslation( "nextText" );
+
+		this.prevButton.attr( "title", prevText ).children().html( prevText );
+		this.nextButton.attr( "title", nextText ).children().html( nextText );
+		this._headerButtonsState();
+	},
+
+	_headerButtonsState: function() {
+		var months = this.viewDate.months( this.options.numberOfMonths - 1 ),
+			i = 0;
+
+		for ( ; i < months.length; i++ ) {
+			if ( this.options.min !== null && months[ i ].first ) {
+				this._disableElement( this.prevButton,
+					( this.options.min.getMonth() >= months[ i ].month() &&
+					this.options.min.getFullYear() === months[ i ].year() ) ||
+					this.options.min.getFullYear() > months[ i ].year()
+				);
+			}
+			if ( this.options.max !== null && months[ i ].last ) {
+				this._disableElement( this.nextButton,
+					( this.options.max.getMonth() <= months[ i].month() &&
+					this.options.max.getFullYear() === months[ i ].year() ) ||
+					this.options.max.getFullYear() < months[ i ].year()
+				);
+			}
+		}
+	},
+
+	_disableElement: function( element, state ) {
+		element
+			.attr( "aria-disabled", state )
+			.toggleClass( "ui-state-disabled", state );
 	},
 
 	_refreshMultiplePicker: function() {

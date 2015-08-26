@@ -191,10 +191,13 @@ test( "showWeek", function() {
 });
 
 test( "min / max", function() {
-	expect( 7 );
+	expect( 14 );
 
 	// With existing date
 	var element = $( "#calendar" ).calendar(),
+		container = element.calendar( "widget" ),
+		prevButton = container.find( ".ui-calendar-prev" ),
+		nextButton = container.find( ".ui-calendar-next" ),
 		minDate = new Date( 2008, 2 - 1, 29 ),
 		maxDate = new Date( 2008, 12 - 1, 7 );
 
@@ -233,6 +236,28 @@ test( "min / max", function() {
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/09" );
 	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
+
+	element
+		.calendar( "option", { min: minDate, max: maxDate } )
+		.calendar( "value", "3/4/08" );
+	ok( !prevButton.hasClass( "ui-state-disabled" ), "Prev button enabled" );
+	prevButton.simulate( "click" );
+	ok( prevButton.hasClass( "ui-state-disabled" ), "Prev button disabled" );
+
+	element.calendar( "value", "11/4/08" );
+	ok( !nextButton.hasClass( "ui-state-disabled" ), "Next button enabled" );
+	nextButton.simulate( "click" );
+	ok( nextButton.hasClass( "ui-state-disabled" ), "Next button disabled" );
+
+	element
+		.calendar( "option", { max: null } )
+		.calendar( "value", "1/4/15" )
+		.calendar( "option", { max: maxDate } );
+	ok( nextButton.hasClass( "ui-state-disabled" ), "Other year: Next button disabled" );
+	nextButton.simulate( "click" );
+	ok( nextButton.hasClass( "ui-state-disabled" ), "Other year: Next button disabled after click" );
+	nextButton.simulate( "click" );
+	ok( !nextButton.hasClass( "ui-state-disabled" ), "Other year: Next button enabled after click" );
 });
 
 test( "numberOfMonths", function() {
