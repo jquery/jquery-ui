@@ -8,8 +8,8 @@
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
 		var now = new Date(),
-			dateMin = new Date( now.getFullYear(), now.getMonth(), now.getDay() + 1 ),
-			dateMax = new Date( now.getFullYear(), now.getMonth(), now.getDay() + 8 );
+			dateMin = new Date( now.getFullYear(), now.getMonth(), now.getDate() + 1 ),
+			dateMax = new Date( now.getFullYear(), now.getMonth(), now.getDate() + 8 );
 
 		$( "#calendar" ).calendar({
 			min: dateMin,
