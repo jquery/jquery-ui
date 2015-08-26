@@ -75,7 +75,7 @@ $.extend( _Date.prototype, {
 		// the new date will me May 1.  We will honor the month the user wants to set and if and overflow
 		// occurs, set to last day of month.
 		var date = this.dateObject,
-			days = date.getDay(), year = date.getFullYear();
+			days = date.getDate(), year = date.getFullYear();
 		if ( days > this.daysInMonth( year, month ) ) {
 
 			// Overflow
