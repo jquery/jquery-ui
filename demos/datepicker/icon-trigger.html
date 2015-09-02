@@ -18,15 +18,14 @@
 			} ),
 			widget = datepicker.datepicker( "widget" );
 
-		$( "<a href='#'>")
-			.append( "<img src='images/calendar.gif' tabindex='0' alt='Open Datepicker'>" )
+		$( "<button>" )
+			.append( "<img src='images/calendar.gif' alt='Open Datepicker'>" )
 			.insertAfter( datepicker )
-			.on( "click", function( event ) {
+			.on( "click", function() {
 				allowOpen = true;
 				if ( widget.is( ":hidden" ) ) {
 					datepicker.focus();
 				}
-				event.preventDefault();
 			});
 	</script>
 </head>
