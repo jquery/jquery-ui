@@ -271,7 +271,7 @@ test( "min / max", function() {
 });
 
 test( "numberOfMonths", function() {
-	expect( 5 );
+	expect( 6 );
 	var date = new Date( 2015, 8 - 1, 1 ),
 		input = $( "#calendar" ).calendar({
 			numberOfMonths: 3,
@@ -297,11 +297,17 @@ test( "numberOfMonths", function() {
 		"After mousedown last month: Last day is Saturday"
 	);
 
-	// Test if using cursor down to go to the next month advances three month
+	// Test if using cursor to go to the next / prev month advances three month
 	container.find( "tbody:first td[id]:first button" ).trigger( "mousedown" );
 	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal( container.find( ".ui-calendar-month:first" ).text(), "May",
 		"After move to previous month: First month is May"
+	);
+
+	container.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
+	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+	equal( container.find( ".ui-calendar-month:last" ).text(), "October",
+		"After move to next month: Last month is October"
 	);
 });
 
