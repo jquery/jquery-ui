@@ -416,7 +416,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valsLength = 0;
 
 		if ( key === "range" && this.options.range === true ) {
-			if ( value === "min" ) {
+			if ( value === "min" || value === false ) {
 				this.options.value = this._values( 0 );
 				this.options.values = null;
 			} else if ( value === "max" ) {

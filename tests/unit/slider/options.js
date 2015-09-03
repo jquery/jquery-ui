@@ -374,12 +374,12 @@ test( "range", function( assert ) {
 		max: 10,
 		step: 1
 	}).slider( "option", "range", false );
-	equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from true to false, both handles remain" );
+	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from true to false, only one handle should remain" );
 	equal( element.find( ".ui-slider-range" ).length, 0, "range switch from true to false" );
-	equal( element.slider( "option", "value" ), 0 , "option value" );
+	equal( element.slider( "option", "value" ), 1 , "option value" );
 	equal( element.slider( "value" ), 1 , "value" );
-	deepEqual( element.slider( "option", "values" ), [1, 1], "option values" );
-	deepEqual( element.slider( "values" ), [1, 1], "values" );
+	deepEqual( element.slider( "option", "values" ), null, "option values" );
+	deepEqual( element.slider( "values" ), [], "values" );
 	element.slider( "destroy" );
 });
 
