@@ -107,6 +107,8 @@ function Datepicker() {
 		appendText: "", // Display text following the input box, e.g. showing the format
 		buttonText: "...", // Text for trigger button
 		buttonImage: "", // URL for trigger button image
+		buttonImageWidth: "", // in case the image is SVG, we need a defined width
+		buttonImageHeight: "", // in case the image is SVG, we need a defined height
 		buttonImageOnly: false, // True if the image appears alone, false if it appears on a button
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
@@ -228,6 +230,7 @@ $.extend(Datepicker.prototype, {
 	/* Make attachments based on settings. */
 	_attachments: function(input, inst) {
 		var showOn, buttonText, buttonImage,
+            buttonImageWidth, buttonImageHeight,
 			appendText = this._get(inst, "appendText"),
 			isRTL = this._get(inst, "isRTL");
 
@@ -252,12 +255,14 @@ $.extend(Datepicker.prototype, {
 		if (showOn === "button" || showOn === "both") { // pop-up date picker when button clicked
 			buttonText = this._get(inst, "buttonText");
 			buttonImage = this._get(inst, "buttonImage");
+			buttonImageWidth = this._get(inst, "buttonImageWidth");
+			buttonImageHeight = this._get(inst, "buttonImageHeight");
 			inst.trigger = $(this._get(inst, "buttonImageOnly") ?
 				$("<img/>").addClass(this._triggerClass).
-					attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
+					attr({ src: buttonImage, alt: buttonText, title: buttonText, width: buttonImageWidth, height: buttonImageHeight }) :
 				$("<button type='button'></button>").addClass(this._triggerClass).
 					html(!buttonImage ? buttonText : $("<img/>").attr(
-					{ src:buttonImage, alt:buttonText, title:buttonText })));
+					{ src:buttonImage, alt:buttonText, title:buttonText, width:buttonImageWidth, height:buttonImageHeight })));
 			input[isRTL ? "before" : "after"](inst.trigger);
 			inst.trigger.on( "click", function() {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput === input[0]) {
