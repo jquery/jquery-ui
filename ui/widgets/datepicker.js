@@ -151,6 +151,7 @@ function Datepicker() {
 	this.regional.en = $.extend( true, {}, this.regional[ "" ]);
 	this.regional[ "en-US" ] = $.extend( true, {}, this.regional.en );
 	this.dpDiv = datepicker_bindHover($("<div id='" + this._mainDivId + "' class='ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>"));
+	this.isFixed = false;
 }
 
 $.extend(Datepicker.prototype, {
@@ -736,7 +737,7 @@ $.extend(Datepicker.prototype, {
 			return;
 		}
 
-		var inst, beforeShow, beforeShowSettings, isFixed,
+		var inst, beforeShow, beforeShowSettings,
 			offset, showAnim, duration;
 
 		inst = $.datepicker._getInst(input);
@@ -766,10 +767,9 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._pos[1] += input.offsetHeight; // add the height
 		}
 
-		isFixed = false;
 		$(input).parents().each(function() {
-			isFixed |= $(this).css("position") === "fixed";
-			return !isFixed;
+			this.isFixed |= $(this).css("position") === "fixed";
+			return !this.isFixed;
 		});
 
 		offset = {left: $.datepicker._pos[0], top: $.datepicker._pos[1]};
@@ -781,9 +781,9 @@ $.extend(Datepicker.prototype, {
 		$.datepicker._updateDatepicker(inst);
 		// fix width for dynamic number of date pickers
 		// and adjust position before showing
-		offset = $.datepicker._checkOffset(inst, offset, isFixed);
+		offset = $.datepicker._checkOffset(inst, offset, this.isFixed);
 		inst.dpDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
-			"static" : (isFixed ? "fixed" : "absolute")), display: "none",
+			"static" : (this.isFixed ? "fixed" : "absolute")), display: "none",
 			left: offset.left + "px", top: offset.top + "px"});
 
 		if (!inst.inline) {
@@ -847,6 +847,19 @@ $.extend(Datepicker.prototype, {
 				origyearshtml = inst.yearshtml = null;
 			}, 0);
 		}
+	},
+
+	//Update datepicker height dynamically when users do some operations
+	_updateDatepickerHeight: function(inst) {
+		var position = $(inst.input).offset();
+		var inputHeight = inst.input.outerHeight();
+		var offset = {top: position.top + inputHeight};
+		var dpHeight = inst.dpDiv.outerHeight();
+		var viewHeight = document.documentElement.clientHeight + (this.isFixed ? 0 : $(document).scrollTop());
+
+		offset.top -= Math.min(offset.top, (offset.top + dpHeight > viewHeight && viewHeight > dpHeight) ? Math.abs(dpHeight + inputHeight) : 0);
+
+		inst.dpDiv.css({top: offset.top + "px"});
 	},
 
 	// #6694 - don't focus the input if it's already focused
@@ -976,6 +989,7 @@ $.extend(Datepicker.prototype, {
 			(period === "M" ? this._get(inst, "showCurrentAtPos") : 0), // undo positioning
 			period);
 		this._updateDatepicker(inst);
+		this._updateDatepickerHeight(inst);
 	},
 
 	/* Action for current link. */
