@@ -224,7 +224,6 @@ $.extend( _Date.prototype, {
 		return new _Date( new Date( date.getTime() ), this.attributes );
 	},
 
-	// TODO compare year, month, day each for better performance
 	equal: function( other ) {
 		var format = function( date ) {
 			return "" + date.getFullYear() + date.getMonth() + date.getDate();

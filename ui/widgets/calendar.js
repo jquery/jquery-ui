@@ -17,7 +17,6 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		// TODO: Keep button even if its optional?
 		define( [
 			"jquery",
 			"globalize",
