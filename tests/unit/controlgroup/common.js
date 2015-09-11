@@ -23,6 +23,6 @@ common.testWidget( "controlgroup", {
 		// Callbacks
 		create: null
 	}
-});
+} );
 
 } );
