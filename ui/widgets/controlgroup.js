@@ -73,8 +73,8 @@ return $.widget( "ui.controlgroup", {
 
 			// We assume everything is in the middle to start because we can't determine
 			// first / last elements until all enhancments are done.
-			if ( that[ "_" + widget + "_options" ] ) {
-				options = that[ "_" + widget + "_options" ]( "middle" );
+			if ( that[ "_" + widget + "Options" ] ) {
+				options = that[ "_" + widget + "Options" ]( "middle" );
 			}
 
 			// Make sure the widget actually exists and has a selector set
@@ -90,7 +90,7 @@ return $.widget( "ui.controlgroup", {
 					// and telling us what type of widget this is
 					widgetElement = element[ widget ]( "widget" ).data(
 						"ui-controlgroup-data",
-						element.data( "ui-" + widget.charAt(0).toUpperCase() + widget.slice(1) )
+						element.data( "ui-" + widget.charAt( 0 ).toUpperCase() + widget.slice( 1 ) )
 					);
 
 					childWidgets.push( widgetElement[ 0 ] );
@@ -113,14 +113,14 @@ return $.widget( "ui.controlgroup", {
 		this.childWidgets.each( function() {
 			var element = $( this ),
 				data = element.data( "ui-controlgroup-data" );
-			if( data && data[ method ] ) {
+			if ( data && data[ method ] ) {
 				data[ method ]();
 			}
 		} );
 	},
 
 	_updateCornerClass: function( element, position ) {
-		var direction = this.options.direction === "vertical"
+		var direction = this.options.direction === "vertical",
 			remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right",
 			add = this._buildSimpleOptions( position, direction, "label" ).classes.label;
 
@@ -141,7 +141,7 @@ return $.widget( "ui.controlgroup", {
 		return result;
 	},
 
-	_spinner_options: function( position, direction ) {
+	_spinnerOptions: function( position, direction ) {
 		var options = this._buildSimpleOptions( position, direction, "ui-spinner" );
 
 		options.classes[ "ui-spinner-up" ] = "";
@@ -150,15 +150,15 @@ return $.widget( "ui.controlgroup", {
 		return options;
 	},
 
-	_button_options: function( position, direction ) {
+	_buttonOptions: function( position, direction ) {
 		return this._buildSimpleOptions( position, direction, "ui-button" );
 	},
 
-	_checkboxradio_options: function( position, direction ) {
+	_checkboxradioOptions: function( position, direction ) {
 		return this._buildSimpleOptions( position, direction, "ui-checkboxradio-label" );
 	},
 
-	_selectmenu_options: function( position, direction ) {
+	_selectmenuOptions: function( position, direction ) {
 		return {
 			width: direction ? "auto" : false,
 			classes: {
@@ -222,9 +222,9 @@ return $.widget( "ui.controlgroup", {
 			$.each( [ "first", "last" ], function( index, value ) {
 				var instance = children[ value ]().data( "ui-controlgroup-data" );
 
-				if ( instance && that[ "_" + instance.widgetName + "_options" ] ) {
+				if ( instance && that[ "_" + instance.widgetName + "Options" ] ) {
 					instance.element[ instance.widgetName ](
-						that[ "_" + instance.widgetName + "_options" ](
+						that[ "_" + instance.widgetName + "Options" ](
 							value,
 							that.options.direction === "vertical"
 						)
