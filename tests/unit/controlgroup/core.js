@@ -64,6 +64,6 @@ test( "selectmenu: open/close corners", function( assert ) {
 	selects.eq( 2 ).selectmenu( "close" );
 	assert.hasClasses( selectButton, "ui-corner-bottom",
 		"vertical: Last selectmenu gets ui-corner-bottom when closed" );
-});
+} );
 
 } );

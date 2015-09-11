@@ -12,8 +12,8 @@ test( "destroy", function( assert ) {
 	expect( 1 );
 	assert.domEqual( ".controlgroup", function() {
 		$( ".controlgroup" ).controlgroup().controlgroup( "destroy" );
-	});
-});
+	} );
+} );
 test( "disable", function( assert ) {
 	expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "disable" );
@@ -21,7 +21,7 @@ test( "disable", function( assert ) {
 		"The widget does not get the disabled class, because we disable each child widget" );
 	strictEqual( element.find( ".ui-state-disabled" ).length, 6,
 		"Child widgets are disabled" );
-});
+} );
 
 test( "enable", function( assert ) {
 	expect( 2 );
@@ -30,7 +30,7 @@ test( "enable", function( assert ) {
 		"ui-state-disabled is not present on widget after enabling" );
 	strictEqual( element.find( "ui-state-disabled" ).length, 0,
 		"Child widgets are disabled" );
-});
+} );
 
 var tests = {
 		"checkboxradio": "<input type='checkbox'>",
@@ -63,9 +63,9 @@ $.each( tests, function( widget, html ) {
 
 			var i, control, currentClasses,
 				controls = [],
-				element = $( "<div>" ).controlgroup({
+				element = $( "<div>" ).controlgroup( {
 					direction: name
-				}).appendTo( "body" );
+				} ).appendTo( "body" );
 
 			// checks the elements with in the controlgroup against the expected class list
 			function checkCornerClasses( classList ) {
@@ -143,8 +143,8 @@ $.each( tests, function( widget, html ) {
 			// remove the controlgroup before we start the next set
 			element.remove();
 
-		});
-	});
-});
+		} );
+	} );
+} );
 
 } );
