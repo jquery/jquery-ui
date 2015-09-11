@@ -183,8 +183,8 @@ return $.widget( "ui.mouse", {
 			this._mouseStop( event );
 		}
 
-		if (this._mouseDelayTimer) {
-			clearTimeout(this._mouseDelayTimer);
+		if ( this._mouseDelayTimer ) {
+			clearTimeout( this._mouseDelayTimer );
 			delete this._mouseDelayTimer;
 		}
 
