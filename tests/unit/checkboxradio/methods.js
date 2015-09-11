@@ -46,14 +46,14 @@ $.each( [ "checkbox", "radio" ], function( index, value ) {
 			assert.lacksClasses( icon, "ui-icon-check" );
 		}
 		assert.lacksClasses( widget, "ui-checkboxradio-checked" );
-	});
+	} );
 
-	test( value + ": destroy", function( assert ){
+	test( value + ": destroy", function( assert ) {
 		expect( 1 );
 		assert.domEqual( "#" + value + "-method-destroy", function() {
 			$( "#" + value + "-method-destroy" ).checkboxradio().checkboxradio( "destroy" );
-		});
-	});
+		} );
+	} );
 
 	test( value + ": disable / enable", function( assert ) {
 		expect( 4 );
@@ -69,9 +69,9 @@ $.each( [ "checkbox", "radio" ], function( index, value ) {
 		assert.lacksClasses( widget, "ui-state-disabled" );
 		strictEqual( input.is( ":disabled" ), false,
 			value + " has disabled prop removed when enable is called" );
-	});
+	} );
 
-	test(  value + ": widget returns the label", function(){
+	test(  value + ": widget returns the label", function() {
 		var input = $( "#" + value + "-method-refresh" ),
 			label = $( "#" + value + "-method-refresh-label" );
 
@@ -80,7 +80,7 @@ $.each( [ "checkbox", "radio" ], function( index, value ) {
 		input.checkboxradio();
 		strictEqual( input.checkboxradio( "widget" )[ 0 ], label[ 0 ],
 			"widget method returns label" );
-	});
+	} );
 
 } );
 
@@ -92,6 +92,6 @@ test( "Input wrapped in a label preserved on refresh", function() {
 
 	input.checkboxradio( "refresh" );
 	strictEqual( input.parent()[ 0 ], element[ 0 ], "Input preserved" );
-});
+} );
 
 } );

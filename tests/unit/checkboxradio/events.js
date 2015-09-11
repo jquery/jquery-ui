@@ -20,7 +20,7 @@ asyncTest(
 
 		form.get( 0 ).reset();
 
-		setTimeout(function() {
+		setTimeout( function() {
 			assert.hasClasses( widget, "ui-state-active" );
 			start();
 		}, 1 );
@@ -33,7 +33,7 @@ asyncTest( "Checkbox shows focus when using keyboard navigation", function( asse
 			label = $( "label[for='check']" );
 		assert.lacksClasses( label, "ui-state-focus" );
 		check.focus();
-		setTimeout(function() {
+		setTimeout( function() {
 			assert.hasClasses( label, "ui-state-focus" );
 			start();
 		} );
