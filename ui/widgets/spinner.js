@@ -262,7 +262,7 @@ $.widget( "ui.spinner", {
 			"icon": this.options.icons.up,
 			"showLabel": false
 		} );
-		this.buttons.last().button({
+		this.buttons.last().button( {
 			"icon": this.options.icons.down,
 			"showLabel": false
 		} );
