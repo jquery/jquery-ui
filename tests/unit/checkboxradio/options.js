@@ -22,9 +22,9 @@ function assertEnabled( checkbox, assert ) {
 test( "disabled", function( assert ) {
 	var checkbox = $( "#checkbox-option-disabled" );
 	expect( 6 );
-	checkbox.checkboxradio({
+	checkbox.checkboxradio( {
 		disabled: true
-	});
+	} );
 
 	assertDisabled( checkbox, assert );
 
@@ -33,7 +33,7 @@ test( "disabled", function( assert ) {
 
 	checkbox.checkboxradio( "option", "disabled", true );
 	assertDisabled( checkbox, assert );
-});
+} );
 test( "disabled - prop true on init", function( assert ) {
 	expect( 2 );
 	var checkbox = $( "#checkbox-option-disabled" );
@@ -42,17 +42,17 @@ test( "disabled - prop true on init", function( assert ) {
 	checkbox.checkboxradio();
 
 	assertDisabled( checkbox, assert );
-});
+} );
 test( "disabled - explicit null value, checks the DOM", function( assert ) {
 	expect( 2 );
 	var checkbox = $( "#checkbox-option-disabled" );
 
 	checkbox.prop( "disabled", true );
-	checkbox.checkboxradio({
+	checkbox.checkboxradio( {
 		disabled: null
-	});
+	} );
 	assertDisabled( checkbox, assert );
-});
+} );
 
 function assertNoIcon( checkbox ) {
 	strictEqual( checkbox.checkboxradio( "widget" ).find( "span.ui-icon" ).length, 0,
@@ -73,9 +73,9 @@ test( "icon - false on init", function() {
 
 	expect( 1 );
 
-	checkbox.checkboxradio({ icon: false });
+	checkbox.checkboxradio( { icon: false } );
 	assertNoIcon( checkbox );
-});
+} );
 
 test( "icon - default unchecked", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" );
@@ -84,8 +84,8 @@ test( "icon - default unchecked", function( assert ) {
 
 	checkbox.checkboxradio();
 	assertIcon( checkbox, false, assert );
-});
-test( "icon", function( assert ){
+} );
+test( "icon", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" );
 
 	expect( 8 );
@@ -108,7 +108,7 @@ test( "icon", function( assert ){
 	checkbox.checkboxradio( "option", "icon", true );
 	assertIcon( checkbox, false, assert );
 
-});
+} );
 
 test( "label - default", function() {
 	var checkbox = $( "#checkbox-option-label" ),
@@ -122,12 +122,12 @@ test( "label - default", function() {
 		"checkbox label", "When no value passed on create text from dom is used for option" );
 	strictEqual( widget.text(),
 		" checkbox label", "When no value passed on create text from dom is used in dom" );
-});
+} );
 test( "label - explicit value", function() {
 	expect( 5 );
-	var checkbox = $( "#checkbox-option-label" ).checkboxradio({
+	var checkbox = $( "#checkbox-option-label" ).checkboxradio( {
 			label: "foo"
-		}),
+		} ),
 		widget = checkbox.checkboxradio( "widget" ),
 		icon = widget.find( ".ui-icon" ),
 		iconSpace = widget.find( ".ui-checkboxradio-icon-space" );
@@ -142,7 +142,7 @@ test( "label - explicit value", function() {
 		"Icon space is preserved when label is set on init when wrapped in label" );
 	strictEqual( $( "#checkbox-option-label" ).length, 1,
 		"Element is preserved when label is set on init when wrapped in label" );
-});
+} );
 
 test( "label - explicit null value", function() {
 	var checkbox = $( "#checkbox-option-label" ),
@@ -153,16 +153,16 @@ test( "label - explicit null value", function() {
 	// We are testing the default here because the default null is a special value which means to check
 	// the DOM, so we need to make sure this happens correctly checking the options should never return
 	// null. It should always be true or false
-	checkbox.checkboxradio({
+	checkbox.checkboxradio( {
 		label: null
-	});
+	} );
 	widget = checkbox.checkboxradio( "widget" );
 	strictEqual( checkbox.checkboxradio( "option", "label" ),
 		"checkbox label", "When null is passed on create text from dom is used for option" );
 	strictEqual( widget.text(),
 		" checkbox label", "When null is passed on create text from dom is used in dom" );
 
-});
+} );
 
 test( "label", function() {
 	var checkbox = $( "#checkbox-option-label" ),
@@ -184,6 +184,6 @@ test( "label", function() {
 	strictEqual( widget.text(),
 		" bar", "When null is passed text from dom is used in dom" );
 
-});
+} );
 
 } );

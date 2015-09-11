@@ -17,6 +17,6 @@ common.testWidget( "checkboxradio", {
 		// Callbacks
 		create: null
 	}
-});
+} );
 
 } );

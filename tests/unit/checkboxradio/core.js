@@ -6,13 +6,13 @@ define( [
 module( "Checkboxradio: core" );
 test( "Checkbox - Initial class structure", function( assert ) {
 	expect( 2 );
-	var input = $("#check"),
-		label = $("label[for=check]");
+	var input = $( "#check" ),
+		label = $( "label[for=check]" );
 
 	input.checkboxradio();
 	assert.hasClasses( input, "ui-helper-hidden-accessible ui-checkboxradio" );
 	assert.hasClasses( label, "ui-button ui-widget ui-checkboxradio-label ui-corner-all" );
-});
+} );
 
 test( "Radios - Initial class structure", function( assert ) {
 	expect( 6 );
@@ -22,11 +22,11 @@ test( "Radios - Initial class structure", function( assert ) {
 	inputs.checkboxradio();
 	inputs.each( function() {
 		assert.hasClasses( this, "ui-helper-hidden-accessible" );
-	});
+	} );
 	labels.each( function() {
 		assert.hasClasses( this, "ui-button" );
-	});
-});
+	} );
+} );
 
 asyncTest( "Ensure checked after single click on checkbox label button", function( assert ) {
 	expect( 2 );
@@ -36,17 +36,17 @@ asyncTest( "Ensure checked after single click on checkbox label button", functio
 		ok( this.checked, "checked ok" );
 
 		assert.hasClasses( label, "ui-state-active" );
-	});
+	} );
 
 	// Support: Opera
 	// Opera doesn't trigger a change event when this is done synchronously.
 	// This seems to be a side effect of another test, but until that can be
 	// tracked down, this delay will have to do.
-	setTimeout(function() {
+	setTimeout( function() {
 		$( "#check2" ).checkboxradio( "widget" ).simulate( "click" );
 		start();
-	});
-});
+	} );
+} );
 
 test( "Checkbox creation requires a label, and finds it in all cases", function( assert ) {
 	expect( 7 );
@@ -66,7 +66,7 @@ test( "Checkbox creation requires a label, and finds it in all cases", function(
 		group.find( "input[type=checkbox]" ).checkboxradio();
 		assert.hasClasses( group.find( "label" ), "ui-button" );
 	} );
-});
+} );
 
 test( "Calling checkboxradio on an unsupported element throws an error", function( assert ) {
 	expect( 2 );
@@ -86,7 +86,7 @@ test( "Calling checkboxradio on an unsupported element throws an error", functio
 		error,
 		"Proper error thrown"
 	);
-});
+} );
 test( "Calling checkboxradio on an input with no label throws an error", function( assert ) {
 	expect( 1 );
 	var error = new Error( "No label found for checkboxradio widget" );
@@ -97,6 +97,6 @@ test( "Calling checkboxradio on an input with no label throws an error", functio
 		error,
 		"Proper error thrown"
 	);
-});
+} );
 
 } );
