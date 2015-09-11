@@ -138,7 +138,7 @@ grunt.initConfig({
 	jscs: {
 		all: {
 			options: {
-				config: ".jscsrc"
+				config: true
 			},
 			files: {
 				src: [ "demos/**/*.js", "build/**/*.js", "tests/**/*.js", "ui/**/*.js" ]
