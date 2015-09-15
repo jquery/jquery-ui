@@ -316,4 +316,11 @@ test( "source, update after init", function() {
 	equal( menu.find( ".ui-menu-item" ).text(), "php" );
 } );
 
+test( "Autocomplete attribute", function() {
+	expect( 1 );
+	var element = $( "#autocomplete" ).autocomplete();
+	equal( element.attr( "autocomplete" ), "false",
+		"Should be false, Off prevents chrome working" );
+} );
+
 } );
