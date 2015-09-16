@@ -2,7 +2,7 @@
  * jQuery UI Controlgroup @VERSION
  * http://jqueryui.com
  *
- * Copyright 2013 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -60,7 +60,7 @@
 	margin: .4em;
 	padding: 0;
 
-	/* Support IE8, Android < 4.4 */
+	/* Support: IE8 only, Android < 4.4 only */
 	width: 85%;
 	width: calc( 100% - 22px );
 }

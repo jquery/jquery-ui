@@ -34,16 +34,16 @@ return $.widget( "ui.controlgroup", {
 	version: "@VERSION",
 	defaultElement: "<div>",
 	options: {
+		direction: "horizontal",
 		disabled: null,
+		excludeInvisible: true,
 		items: {
 			"button": "input[type=button], input[type=submit], input[type=reset], button, a",
+			"controlgroupLabel": ".ui-controlgroup-label",
 			"checkboxradio": "input[type='checkbox'], input[type='radio']",
 			"selectmenu": "select",
-			"spinner": ".ui-spinner-input",
-			"controlgroupLabel": ".ui-controlgroup-label"
-		},
-		direction: "horizontal",
-		excludeInvisible: true
+			"spinner": ".ui-spinner-input"
+		}
 	},
 
 	_create: function() {
@@ -80,15 +80,16 @@ return $.widget( "ui.controlgroup", {
 			// Make sure the widget actually exists and has a selector set
 			if ( $.fn[ widget ] && selector ) {
 
-				// Find instances of this widget inside controlgroup and set options
+				// Find instances of this widget inside controlgroup init them
 				widgets = that.element.find( selector )[ widget ]( options );
 
 				widgets.each( function() {
-					var element = $( this ),
+					var element = $( this );
 
-					// Set data on the widget element pointing to the this.element of the widget
-					// and telling us what type of widget this is
-					widgetElement = element[ widget ]( "widget" ).data(
+					// Store an instance of the controlgroup to be able to refrence
+					var widgetElement = element[ widget ]( "widget" );
+
+					widgetElement.data(
 						"ui-controlgroup-data",
 						element.data( "ui-" + widget.charAt( 0 ).toUpperCase() + widget.slice( 1 ) )
 					);
@@ -101,7 +102,7 @@ return $.widget( "ui.controlgroup", {
 					$( this ).contents().wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
-				Array.prototype.push.apply( childWidgets, labels.get() );
+				childWidgets = childWidgets.concat( labels.get() );
 			}
 		} );
 
@@ -120,15 +121,15 @@ return $.widget( "ui.controlgroup", {
 	},
 
 	_updateCornerClass: function( element, position ) {
-		var direction = this.options.direction === "vertical",
-			remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right",
-			add = this._buildSimpleOptions( position, direction, "label" ).classes.label;
+		var remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right";
+		var add = this._buildSimpleOptions( position, "label" ).classes.label;
 
 		this._removeClass( element, null, remove );
 		this._addClass( element, null, add );
 	},
 
-	_buildSimpleOptions: function( position, direction, key ) {
+	_buildSimpleOptions: function( position, key ) {
+		var direction = this.options.direction === "vertical";
 		var result = {
 			classes: {}
 		};
@@ -141,8 +142,8 @@ return $.widget( "ui.controlgroup", {
 		return result;
 	},
 
-	_spinnerOptions: function( position, direction ) {
-		var options = this._buildSimpleOptions( position, direction, "ui-spinner" );
+	_spinnerOptions: function( position ) {
+		var options = this._buildSimpleOptions( position, "ui-spinner" );
 
 		options.classes[ "ui-spinner-up" ] = "";
 		options.classes[ "ui-spinner-down" ] = "";
@@ -150,15 +151,16 @@ return $.widget( "ui.controlgroup", {
 		return options;
 	},
 
-	_buttonOptions: function( position, direction ) {
-		return this._buildSimpleOptions( position, direction, "ui-button" );
+	_buttonOptions: function( position ) {
+		return this._buildSimpleOptions( position, "ui-button" );
 	},
 
-	_checkboxradioOptions: function( position, direction ) {
-		return this._buildSimpleOptions( position, direction, "ui-checkboxradio-label" );
+	_checkboxradioOptions: function( position ) {
+		return this._buildSimpleOptions( position, "ui-checkboxradio-label" );
 	},
 
-	_selectmenuOptions: function( position, direction ) {
+	_selectmenuOptions: function( position ) {
+		var direction = this.options.direction === "vertical";
 		return {
 			width: direction ? "auto" : false,
 			classes: {
@@ -167,16 +169,12 @@ return $.widget( "ui.controlgroup", {
 					"ui-selectmenu-button-closed": null
 				},
 				first: {
-					"ui-selectmenu-button-open":
-					"ui-corner-" + ( direction ? "top" : "tl" ),
-					"ui-selectmenu-button-closed":
-					"ui-corner-" + ( direction ? "top" : "left" )
+					"ui-selectmenu-button-open": "ui-corner-" + ( direction ? "top" : "tl" ),
+					"ui-selectmenu-button-closed": "ui-corner-" + ( direction ? "top" : "left" )
 				},
 				last: {
-					"ui-selectmenu-button-open":
-					direction ? null : "ui-corner-tr",
-					"ui-selectmenu-button-closed":
-					"ui-corner-" + ( direction ? "bottom" : "right" )
+					"ui-selectmenu-button-open": direction ? null : "ui-corner-tr",
+					"ui-selectmenu-button-closed": "ui-corner-" + ( direction ? "bottom" : "right" )
 				}
 
 			}[ position ]
@@ -224,10 +222,7 @@ return $.widget( "ui.controlgroup", {
 
 				if ( instance && that[ "_" + instance.widgetName + "Options" ] ) {
 					instance.element[ instance.widgetName ](
-						that[ "_" + instance.widgetName + "Options" ](
-							value,
-							that.options.direction === "vertical"
-						)
+						that[ "_" + instance.widgetName + "Options" ]( value )
 					);
 				} else {
 					that._updateCornerClass( children[ value ](), value );

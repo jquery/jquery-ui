@@ -73,15 +73,16 @@
 		$( "#zoom" ).on( "selectmenuchange", function() {
 			page.css({ "zoom": $( this ).val() });
 		})
-		$( basicControls.concat( valueControls ).join( ", " ) ).on( "click change selectmenuchange", function() {
+		$( basicControls.concat( valueControls ).join( ", " ) ).on( "click change selectmenuchange",
+			function() {
 				document.execCommand(
 					this.id,
 					false,
 					$( this ).val()
 				);
-		});
+			} );
 		$( "form" ).on( "submit", function( event ) {
-			return false;
+			event.preventDefault();
 		});
 	</script>
 </head>
@@ -92,7 +93,7 @@
 			<button id="undo">Undo</button>
 			<button id="redo">Redo</button>
 			<select id="zoom">
-				<option value="100%" selected>Zoom</option>
+				<option selected disabled>Zoom</option>
 				<option>50%</option>
 				<option>75%</option>
 				<option>90%</option>
@@ -102,7 +103,7 @@
 				<option>200%</option>
 			</select>
 			<select id="fontname">
-				<option value="Lucida Grande" selected>Font</option>
+				<option selected disabled>Font</option>
 				<option>Arial</option>
 				<option>Comic Sans MS</option>
 				<option>Courier New</option>
@@ -113,7 +114,7 @@
 				<option>Verdana</option>
 			</select>
 			<select id="fontsize">
-				<option value="3" selected>Size</option>
+				<option selected disabled>Size</option>
 				<option value="1">8px</option>
 				<option value="2">9px</option>
 				<option value="3">10px</option>
@@ -126,7 +127,7 @@
 				<option value="10">36px</option>
 			</select>
 			<select id="hilitecolor" title="Background color">
-				<option value="white">Highlight</option>
+				<option selected disabled>Highlight</option>
 				<option value="white">None</option>
 				<option value="red">Red</option>
 				<option value="yellow">Yellow</option>
@@ -136,8 +137,8 @@
 				<option value="purple">Purple</option>
 				<option value="orange">Orange</option>
 			</select>
-			<select id="forecolor">
-				<option value="black" selected>Color</option>
+			<select id="forecolor" title="Color">
+				<option selected disabled>Color</option>
 				<option value="black">Black</option>
 				<option value="white">White</option>
 				<option value="red">Red</option>
