@@ -8,20 +8,20 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
-		$( ".widget button" ).first()
-			.button()
-			.next().button( {
+		$( ".widget button" )
+			.eq( 0 ).button()
+			.end().eq( 1 ).button( {
 				icon: "ui-icon-gear",
 				showLabel: false
-			} ).next().button( {
+			} ).end().eq( 2 ).button( {
 				icon: "ui-icon-gear"
-			} ).next().button( {
+			} ).end().eq( 3 ).button( {
 				icon: "ui-icon-gear",
 				iconPosition: "end"
-			} ).next().button( {
+			} ).end().eq( 4 ).button( {
 				icon: "ui-icon-gear",
 				iconPosition: "top"
-			} ).next().button( {
+			} ).end().eq( 5 ).button( {
 				icon: "ui-icon-gear",
 				iconPosition: "bottom"
 			} );
