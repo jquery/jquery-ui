@@ -322,7 +322,9 @@ $.Widget.prototype = {
 		this._init();
 	},
 
-	_getCreateOptions: $.noop,
+	_getCreateOptions: function() {
+		return {};
+	},
 
 	_getCreateEventData: $.noop,
 

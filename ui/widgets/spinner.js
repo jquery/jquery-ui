@@ -104,8 +104,8 @@ $.widget( "ui.spinner", {
 	},
 
 	_getCreateOptions: function() {
-		var options = {},
-			element = this.element;
+		var options = this._super();
+		var element = this.element;
 
 		$.each( [ "min", "max", "step" ], function( i, option ) {
 			var value = element.attr( option );

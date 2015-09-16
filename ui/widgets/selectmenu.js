@@ -646,7 +646,11 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_getCreateOptions: function() {
-		return { disabled: this.element.prop( "disabled" ) };
+		var options = this._super();
+
+		options.disabled = this.element.prop( "disabled" );
+
+		return options;
 	},
 
 	_parseOptions: function( options ) {
