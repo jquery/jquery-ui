@@ -6,7 +6,7 @@ define( [
 module( "selectmenu: core" );
 
 test( "markup structure", function( assert ) {
-	expect( 5 );
+	expect( 4 );
 
 	var element = $( "#files" ).selectmenu(),
 		button = element.selectmenu( "widget" ),
@@ -15,8 +15,7 @@ test( "markup structure", function( assert ) {
 
 	assert.hasClasses( button,
 		"ui-selectmenu-button ui-selectmenu-button-closed ui-widget" );
-	assert.lacksClasses( button, "ui-selectmenu-button-open" );
-	assert.lacksClasses( button, "ui-selectmenu-open" );
+	assert.lacksClasses( button, "ui-selectmenu-button-open ui-selectmenu-open" );
 	assert.hasClasses( menuWrap, "ui-selectmenu-menu" );
 	assert.lacksClasses( menuWrap, "ui-selectmenu-menu-open" );
 } );
