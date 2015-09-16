@@ -267,7 +267,7 @@ test( "merge multiple option arguments", function() {
 } );
 
 test( "._getCreateOptions()", function() {
-	expect( 3 );
+	expect( 4 );
 	$.widget( "ui.testWidget", {
 		options: {
 			option1: "valuex",
@@ -275,6 +275,9 @@ test( "._getCreateOptions()", function() {
 			option3: "value3"
 		},
 		_getCreateOptions: function() {
+			var superOptions = this._super();
+
+			deepEqual( superOptions, {}, "Base implementation returns empty object" );
 
 			// Support: IE8
 			// Strict equality fails when comparing this.window in ie8
