@@ -57,8 +57,6 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 		labels = this.element.labels();
 
-		// Todo: For now we will use the last label we need to check about the best
-		// way to handle multiple labels with some accessability experts
 		this.label = $( labels[ labels.length - 1 ] );
 		if ( !this.label.length ) {
 			$.error( "No label found for checkboxradio widget" );
@@ -70,8 +68,8 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		// input itself.
 		this.label.contents().not( this.element ).each( function() {
 
-			// The label contents could be text html or a mix we concat each element to get a string
-			// representation of the label without the input as part of it.
+			// The label contents could be text, html, or a mix. We concat each element to get a string
+			// representation of the label, without the input as part of it.
 			that.originalLabel += this.nodeType === 3 ? $( this ).text() : this.outerHTML;
 		} );
 
@@ -96,7 +94,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		this.formParent = this.form.length ? this.form : $( "body" );
 
 		if ( this.options.disabled == null ) {
-			this.options.disabled = this.element[ 0 ].disabled || false;
+			this.options.disabled = this.element[ 0 ].disabled;
 		}
 
 		this._setOption( "disabled", this.options.disabled );
@@ -121,11 +119,11 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		}
 
 		this._on( {
-			"change": "_toggleClasses",
-			"focus": function() {
+			change: "_toggleClasses",
+			focus: function() {
 				this._addClass( this.label, null, "ui-state-focus ui-visual-focus" );
 			},
-			"blur": function() {
+			blur: function() {
 				this._removeClass( this.label, null, "ui-state-focus ui-visual-focus" );
 			}
 		} );
@@ -150,15 +148,15 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	},
 
 	_getRadioGroup: function() {
-		var name = this.element[ 0 ].name,
-			that = this,
-			radios = $( [] );
+		var name = this.element[ 0 ].name;
+		var formParent = this.formParent[ 0 ];
+		var radios = $( [] );
 
 		if ( name ) {
 			name = $.ui.escapeSelector( name );
 			radios = this.formParent.find( "[name='" + $.ui.escapeSelector( name ) + "']" ).filter( function() {
 				var form = $( this ).form();
-				return ( form.length ? form : $( "body" ) )[ 0 ] === that.formParent[ 0 ];
+				return ( form.length ? form : $( "body" ) )[ 0 ] === formParent;
 			} );
 		}
 		return radios.not( this.element );
@@ -198,7 +196,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 	_setOption: function( key, value ) {
 
-		// We don't alow the value to be set to nothing
+		// We don't allow the value to be set to nothing
 		if ( key === "label" && !value ) {
 			return;
 		}

@@ -7,28 +7,45 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js" data-modules="controlgroup">
-		$( "input" ).checkboxradio();
-		$( "[name='shape']").on( "change", function(){
-			$( ".shape" ).removeClass( "circle pill square rectangle" )
-				.addClass( $( this ).val() );
-		});
-		$( ".toggle" ).on( "change", function(){
-			if ( $( this ).is( ".brand-toggle" ) ) {
-				var checked = $( this ).is( ":checked" ),
-					value = $( "[name='brand']" ).filter( ":checked" ).attr( "data-" + this.id )
-				$( ".shape" ).css( this.id, checked ? value : "" );
+		function handleShape( e ) {
+			$( ".shape" )
+				.removeClass( "circle pill square rectangle" )
+				.addClass( $( e.target ).val() );
+		};
+		function handleToggle( e ) {
+			var target = $( e.target );
+
+			if ( target.is( ".brand-toggle" ) ) {
+				var checked = target.is( ":checked" ),
+					value = $( "[name='brand']" )
+						.filter( ":checked" )
+						.attr( "data-" + target[ 0 ].id )
+				$( ".shape" ).css( target[ 0 ].id, checked ? value : "" );
 			} else {
-				$( ".shape" ).toggleClass( this.id, $( this ).is( ":checked") );
+				$( ".shape" ).toggleClass( target[ 0 ].id, target.is( ":checked") );
 			}
-		});
-		$( "[name='brand']").on( "change", function(){
-			$( "input" ).filter( ":checked" ).not( this ).trigger( "change" );
-		});
-		$( "input" ).filter( ":checked" ).trigger( "change" );
+		}
+		function updateBrand() {
+			handleShape( { target: $( "[name='shape']:checked" ) } );
+			$( ".toggle:checked" ).each( function() {
+				handleToggle( { target: $( this ) } );
+			} );
+		}
+
+		// Initalize widgets
+		$( "input" ).checkboxradio();
 		$( ".shape-bar, .brand" ).controlgroup();
-		$( ".toggles" ).controlgroup({
+		$( ".toggles" ).controlgroup( {
 			direction: "vertical"
-		});
+		} );
+
+		// Bind event handlers
+		$( "[name='shape']").on( "change", handleShape );
+		$( ".toggle" ).on( "change", handleToggle );
+		$( "[name='brand']").on( "change", updateBrand );
+
+		// Set initial values
+		updateBrand();
 	</script>
 	<style>
 		.shape {
@@ -74,15 +91,15 @@
 		<h3>1.) Select a brand</h3>
 		<div class="brand">
 			<label for="brand-jquery">jQuery</label>
-			<input data-background-color="#0769AD" data-color="#7ACEF4" data-background-image="url(images/jquery.png)" type="radio" name="brand" id="brand-jquery">
+			<input type="radio" name="brand" id="brand-jquery" data-background-color="#0769AD" data-color="#7ACEF4" data-background-image="url(images/jquery.png)">
 			<label for="brand-jquery-ui">jQuery UI</label>
-			<input data-background-color="#B24926" data-color="#FAA523" data-background-image="url(images/jquery-ui.png)" type="radio" name="brand" id="brand-jquery-ui" checked>
+			<input type="radio" name="brand" id="brand-jquery-ui" data-background-color="#B24926" data-color="#FAA523" data-background-image="url(images/jquery-ui.png)" checked>
 			<label for="brand-jquery-mobile">jQuery Mobile</label>
-			<input data-background-color="#108040" data-color="#3EB249" data-background-image="url(images/jquery-mobile.png)" type="radio" name="brand" id="brand-jquery-mobile">
+			<input type="radio" name="brand" id="brand-jquery-mobile" data-background-color="#108040" data-color="#3EB249" data-background-image="url(images/jquery-mobile.png)">
 			<label for="brand-sizzle">Sizzle</label>
-			<input data-background-color="#9A1B1E" data-color="#FAA523" data-background-image="url(images/sizzle.png)" type="radio" name="brand" id="brand-sizzle">
+			<input type="radio" name="brand" id="brand-sizzle" data-background-color="#9A1B1E" data-color="#FAA523" data-background-image="url(images/sizzle.png)">
 			<label for="brand-qunit">QUnit</label>
-			<input data-background-color="#390F39" data-color="#9C3493" data-background-image="url(images/qunit.png)" type="radio" name="brand" id="brand-qunit">
+			<input type="radio" name="brand" id="brand-qunit" data-background-color="#390F39" data-color="#9C3493" data-background-image="url(images/qunit.png)">
 		</div>
 	</div>
 	<div class="shape-wrap">
