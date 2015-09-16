@@ -102,7 +102,6 @@ a.ui-button:focus {
 	text-decoration: none;
 }
 
-/* This cant be configured with themeroller because its new may end up added later */
 .ui-visual-focus {
 	box-shadow: 0 0 3px 1px rgb(94, 158, 214);
 }
