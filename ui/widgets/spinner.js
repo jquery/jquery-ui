@@ -230,8 +230,7 @@ $.widget( "ui.spinner", {
 
 				// Add buttons
 				.append(
-					"<a></a>" +
-					"<a></a>"
+					"<a></a><a></a>"
 				);
 	},
 
@@ -564,9 +563,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_buttonHtml: function() {
-			return "" +
-				"<a></a>" +
-				"<a></a>";
+			return "<a></a><a></a>";
 		}
 	} );
 }
