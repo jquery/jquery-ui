@@ -74,7 +74,7 @@ input.ui-button.ui-icon-notext .ui-icon {
 }
 
 /* workarounds */
-/* Support: FireFox >= 4 */
+/* Support: Firefox 5 - 40 */
 input.ui-button::-moz-focus-inner,
 button.ui-button::-moz-focus-inner {
 	border: 0;
