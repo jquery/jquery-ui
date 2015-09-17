@@ -68,11 +68,11 @@ $.widget( "ui.resizable", $.ui.mouse, {
 	},
 
 	_num: function( value ) {
-		return parseInt( value, 10 ) || 0;
+		return parseFloat( value ) || 0;
 	},
 
 	_isNumber: function( value ) {
-		return !isNaN( parseInt( value, 10 ) );
+		return !isNaN( parseFloat( value ) );
 	},
 
 	_hasScroll: function( el, a ) {
@@ -440,9 +440,9 @@ $.widget( "ui.resizable", $.ui.mouse, {
 				width: ( that.helper.width()  - soffsetw ),
 				height: ( that.helper.height() - soffseth )
 			};
-			left = ( parseInt( that.element.css( "left" ), 10 ) +
+			left = ( parseFloat( that.element.css( "left" ) ) +
 				( that.position.left - that.originalPosition.left ) ) || null;
-			top = ( parseInt( that.element.css( "top" ), 10 ) +
+			top = ( parseFloat( that.element.css( "top" ) ) +
 				( that.position.top - that.originalPosition.top ) ) || null;
 
 			if ( !o.animate ) {
@@ -640,8 +640,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			];
 
 		for ( ; i < 4; i++ ) {
-			widths[ i ] = ( parseInt( borders[ i ], 10 ) || 0 );
-			widths[ i ] += ( parseInt( paddings[ i ], 10 ) || 0 );
+			widths[ i ] = ( parseFloat( borders[ i ] ) || 0 );
+			widths[ i ] += ( parseFloat( paddings[ i ] ) || 0 );
 		}
 
 		return {
@@ -776,9 +776,9 @@ $.ui.plugin.add( "resizable", "animate", {
 			soffseth = ista && that._hasScroll( pr[ 0 ], "left" ) ? 0 : that.sizeDiff.height,
 			soffsetw = ista ? 0 : that.sizeDiff.width,
 			style = { width: ( that.size.width - soffsetw ), height: ( that.size.height - soffseth ) },
-			left = ( parseInt( that.element.css( "left" ), 10 ) +
+			left = ( parseFloat( that.element.css( "left" ) ) +
 				( that.position.left - that.originalPosition.left ) ) || null,
-			top = ( parseInt( that.element.css( "top" ), 10 ) +
+			top = ( parseFloat( that.element.css( "top" ) ) +
 				( that.position.top - that.originalPosition.top ) ) || null;
 
 		that.element.animate(
@@ -788,10 +788,10 @@ $.ui.plugin.add( "resizable", "animate", {
 				step: function() {
 
 					var data = {
-						width: parseInt( that.element.css( "width" ), 10 ),
-						height: parseInt( that.element.css( "height" ), 10 ),
-						top: parseInt( that.element.css( "top" ), 10 ),
-						left: parseInt( that.element.css( "left" ), 10 )
+						width: parseFloat( that.element.css( "width" ) ),
+						height: parseFloat( that.element.css( "height" ) ),
+						top: parseFloat( that.element.css( "top" ) ),
+						left: parseFloat( that.element.css( "left" ) )
 					};
 
 					if ( pr && pr.length ) {
@@ -999,8 +999,8 @@ $.ui.plugin.add( "resizable", "alsoResize", {
 		$( o.alsoResize ).each( function() {
 			var el = $( this );
 			el.data( "ui-resizable-alsoresize", {
-				width: parseInt( el.width(), 10 ), height: parseInt( el.height(), 10 ),
-				left: parseInt( el.css( "left" ), 10 ), top: parseInt( el.css( "top" ), 10 )
+				width: parseFloat( el.width() ), height: parseFloat( el.height() ),
+				left: parseFloat( el.css( "left" ) ), top: parseFloat( el.css( "top" ) )
 			} );
 		} );
 	},
