@@ -4,7 +4,8 @@ define( [
 	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-fr",
 	"ui/i18n/datepicker-he",
-	"ui/i18n/datepicker-zh-CN"
+	"ui/i18n/datepicker-zh-CN",
+	"ui/ie"
 ], function( $, testHelper ) {
 
 module( "datepicker: options" );
