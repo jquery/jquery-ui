@@ -318,6 +318,11 @@ $.Widget.prototype = {
 			options );
 
 		this._create();
+
+		if ( this.options.disabled ) {
+			this._setOptionDisabled( this.options.disabled );
+		}
+
 		this._trigger( "create", null, this._getCreateEventData() );
 		this._init();
 	},
@@ -419,13 +424,7 @@ $.Widget.prototype = {
 		this.options[ key ] = value;
 
 		if ( key === "disabled" ) {
-			this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
-
-			// If the widget is becoming disabled, then nothing is interactive
-			if ( value ) {
-				this._removeClass( this.hoverable, null, "ui-state-hover" );
-				this._removeClass( this.focusable, null, "ui-state-focus" );
-			}
+			this._setOptionDisabled( value );
 		}
 
 		return this;
@@ -459,6 +458,16 @@ $.Widget.prototype = {
 				classes: value,
 				add: true
 			} ) );
+		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
+
+		// If the widget is becoming disabled, then nothing is interactive
+		if ( value ) {
+			this._removeClass( this.hoverable, null, "ui-state-hover" );
+			this._removeClass( this.focusable, null, "ui-state-focus" );
 		}
 	},
 
