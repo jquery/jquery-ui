@@ -729,6 +729,39 @@ test( ".disable()", function() {
 	$( "<div>" ).testWidget().testWidget( "disable" );
 } );
 
+test( "._setOptionDisabled()", function() {
+	expect( 3 );
+
+	var method;
+	var widget;
+
+	$.widget( "ui.testWidget", {
+		_setOptionDisabled: function( value ) {
+			method( value );
+		}
+	} );
+
+	method = function() {
+		ok( false, "._setOptionDisabled() called on init when not disabled" );
+	};
+	$( "<div>" ).testWidget();
+
+	method = function( value ) {
+		strictEqual( value, true, "._setOptionDisabled called on init when disabled" );
+	};
+	widget = $( "<div>" ).testWidget( { disabled: true } );
+
+	method = function( value ) {
+		strictEqual( value, false, "._setOptionDisabled called when enabling" );
+	};
+	widget.testWidget( "enable" );
+
+	method = function( value ) {
+		strictEqual( value, true, "._setOptionDisabled called when disabling" );
+	};
+	widget.testWidget( "option", "disabled", true );
+} );
+
 test( ".widget() - base", function() {
 	expect( 2 );
 	var constructor = $.widget( "ui.testWidget", {
