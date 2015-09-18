@@ -438,11 +438,12 @@ $.widget( "ui.spinner", {
 	_setOptions: spinnerModifer( function( options ) {
 		this._super( options );
 	} ),
-
+	/* Globalize's parseFloat function has been replaced by parseNumber. As below, numberFormat should be a JSON object.
+	The function uses its "style" property to parse. */
 	_parse: function( val ) {
 		if ( typeof val === "string" && val !== "" ) {
 			val = window.Globalize && this.options.numberFormat ?
-				Globalize.parseFloat( val, 10, this.options.culture ) : +val;
+				Globalize./*parseFloat*/parseNumber( val, /*10, this.options.culture */this.options.numberFormat ) : +val;
 		}
 		return val === "" || isNaN( val ) ? null : val;
 	},
@@ -451,8 +452,11 @@ $.widget( "ui.spinner", {
 		if ( value === "" ) {
 			return "";
 		}
+		/* Globalize's format function has been replaced by a function, formatNumber, that takes two arguments:
+		the value and an JSON object that contains the other arguments under specific parameter names. The NumberFormat
+		property should now be a user-instantiated object. */
 		return window.Globalize && this.options.numberFormat ?
-			Globalize.format( value, this.options.numberFormat, this.options.culture ) :
+			Globalize.formatNumber( value, this.options.numberFormat/*, this.options.culture */) :
 			value;
 	},
 
