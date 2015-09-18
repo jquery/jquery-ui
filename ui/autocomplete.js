@@ -309,7 +309,7 @@ $.widget( "ui.autocomplete", {
 			}
 		});
 
-		this.liveRegion = $( "<span>", {
+		this.liveRegion = $( "<div>", {
 				role: "status",
 				"aria-live": "assertive",
 				"aria-relevant": "additions"
