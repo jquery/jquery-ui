@@ -105,10 +105,6 @@ $.widget( "ui.tooltip", {
 		// IDs of parent tooltips where we removed the title attribute
 		this.parents = {};
 
-		if ( this.options.disabled ) {
-			this._disable();
-		}
-
 		// Append the aria-live region so tooltips announce correctly
 		this.liveRegion = $( "<div>" )
 			.attr( {
@@ -123,14 +119,6 @@ $.widget( "ui.tooltip", {
 	_setOption: function( key, value ) {
 		var that = this;
 
-		if ( key === "disabled" ) {
-			this[ value ? "_disable" : "_enable" ]();
-			this.options[ key ] = value;
-
-			// disable element style changes
-			return;
-		}
-
 		this._super( key, value );
 
 		if ( key === "content" ) {
@@ -138,6 +126,10 @@ $.widget( "ui.tooltip", {
 				that._updateContent( tooltipData.element );
 			} );
 		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this[ value ? "_disable" : "_enable" ]();
 	},
 
 	_disable: function() {
