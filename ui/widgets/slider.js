@@ -81,7 +81,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			"ui-widget ui-widget-content" );
 
 		this._refresh();
-		this._setOption( "disabled", this.options.disabled );
 
 		this._animateOff = false;
 	},
@@ -430,10 +429,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valsLength = this.options.values.length;
 		}
 
-		if ( key === "disabled" ) {
-			this._toggleClass( null, "ui-state-disabled", !!value );
-		}
-
 		this._super( key, value );
 
 		switch ( key ) {
@@ -479,6 +474,12 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this._animateOff = false;
 				break;
 		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this._toggleClass( null, "ui-state-disabled", !!value );
 	},
 
 	//internal value getter
