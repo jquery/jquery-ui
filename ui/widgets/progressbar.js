@@ -117,11 +117,14 @@ return $.widget( "ui.progressbar", {
 			// Don't allow a max less than min
 			value = Math.max( this.min, value );
 		}
-		if ( key === "disabled" ) {
-			this.element.attr( "aria-disabled", value );
-			this._toggleClass( null, "ui-state-disabled", !!value );
-		}
 		this._super( key, value );
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this.element.attr( "aria-disabled", value );
+		this._toggleClass( null, "ui-state-disabled", !!value );
 	},
 
 	_percentage: function() {
