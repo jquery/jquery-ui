@@ -10,7 +10,7 @@
 	#draggable p { cursor: move; }
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
-	<script src="../bootstrap.js">
+	<script src="../bootstrap.js" data-modules="disable-selection">
 		$( "#draggable" ).draggable({ handle: "p" });
 		$( "#draggable2" ).draggable({ cancel: "p.ui-widget-header" });
 		$( "div, p" ).disableSelection();
