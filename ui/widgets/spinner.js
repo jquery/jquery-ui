@@ -268,11 +268,6 @@ $.widget( "ui.spinner", {
 				this.uiSpinner.height() > 0 ) {
 			this.uiSpinner.height( this.uiSpinner.height() );
 		}
-
-		// Disable spinner if element was already disabled
-		if ( this.options.disabled ) {
-			this.disable();
-		}
 	},
 
 	_keydown: function( event ) {
@@ -427,12 +422,14 @@ $.widget( "ui.spinner", {
 		}
 
 		this._super( key, value );
+	},
 
-		if ( key === "disabled" ) {
-			this._toggleClass( this.uiSpinner, null, "ui-state-disabled", !!value );
-			this.element.prop( "disabled", !!value );
-			this.buttons.button( value ? "disable" : "enable" );
-		}
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this._toggleClass( this.uiSpinner, null, "ui-state-disabled", !!value );
+		this.element.prop( "disabled", !!value );
+		this.buttons.button( value ? "disable" : "enable" );
 	},
 
 	_setOptions: spinnerModifer( function( options ) {
