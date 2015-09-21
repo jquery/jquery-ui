@@ -71,11 +71,6 @@ return $.widget( "ui.menu", {
 				tabIndex: 0
 			} );
 
-		if ( this.options.disabled ) {
-			this._addClass( null, "ui-state-disabled" );
-			this.element.attr( "aria-disabled", "true" );
-		}
-
 		this._addClass( "ui-menu", "ui-widget ui-widget-content" );
 		this._on( {
 
@@ -359,11 +354,14 @@ return $.widget( "ui.menu", {
 			this._removeClass( icons, null, this.options.icons.submenu )
 				._addClass( icons, null, value.submenu );
 		}
-		if ( key === "disabled" ) {
-			this.element.attr( "aria-disabled", value );
-			this._toggleClass( null, "ui-state-disabled", !!value );
-		}
 		this._super( key, value );
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this.element.attr( "aria-disabled", String( value ) );
+		this._toggleClass( null, "ui-state-disabled", !!value );
 	},
 
 	focus: function( event, item ) {
