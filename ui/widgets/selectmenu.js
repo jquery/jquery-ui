@@ -79,10 +79,6 @@ return $.widget( "ui.selectmenu", {
 
 		this._rendered = false;
 		this.menuItems = $();
-
-		if ( this.options.disabled ) {
-			this.disable();
-		}
 	},
 
 	_drawButton: function() {
@@ -562,22 +558,24 @@ return $.widget( "ui.selectmenu", {
 			this.menuWrap.appendTo( this._appendTo() );
 		}
 
-		if ( key === "disabled" ) {
-			this.menuInstance.option( "disabled", value );
-			this.button.attr( "aria-disabled", value );
-			this._toggleClass( this.button, null, "ui-state-disabled", value );
-
-			this.element.prop( "disabled", value );
-			if ( value ) {
-				this.button.attr( "tabindex", -1 );
-				this.close();
-			} else {
-				this.button.attr( "tabindex", 0 );
-			}
-		}
-
 		if ( key === "width" ) {
 			this._resizeButton();
+		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this.menuInstance.option( "disabled", value );
+		this.button.attr( "aria-disabled", value );
+		this._toggleClass( this.button, null, "ui-state-disabled", value );
+
+		this.element.prop( "disabled", value );
+		if ( value ) {
+			this.button.attr( "tabindex", -1 );
+			this.close();
+		} else {
+			this.button.attr( "tabindex", 0 );
 		}
 	},
 
