@@ -129,6 +129,11 @@ $.widget( "ui.dialog", {
 			this.options.title = this.originalTitle;
 		}
 
+		// Dialogs can't be disabled
+		if ( this.options.disabled ) {
+			this.options.disabled = false;
+		}
+
 		this._createWrapper();
 
 		this.element
