@@ -78,9 +78,6 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		if ( this.options.addClasses ) {
 			this._addClass( "ui-draggable" );
 		}
-		if ( this.options.disabled ) {
-			this._addClass( "ui-draggable-disabled" );
-		}
 		this._setHandleClassName();
 
 		this._mouseInit();
