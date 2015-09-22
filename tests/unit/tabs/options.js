@@ -185,7 +185,7 @@ test( "disabled", function( assert ) {
 	disabled( element, true );
 
 	assert.lacksClasses( element.tabs( "widget" ), "ui-state-disabled" );
-	assert.lacksClasses( element.tabs( "widget" ), "ui-tabs-disabled" );
+	assert.hasClasses( element.tabs( "widget" ), "ui-tabs-disabled" );
 	ok( !element.tabs( "widget" ).attr( "aria-disabled" ), "after: wrapper doesn't have aria-disabled attr" );
 
 	event = $.Event( "click" );

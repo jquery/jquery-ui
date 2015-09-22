@@ -291,13 +291,6 @@ $.widget( "ui.tabs", {
 			return;
 		}
 
-		if ( key === "disabled" ) {
-
-			// don't use the widget factory's disabled handling
-			this._setupDisabled( value );
-			return;
-		}
-
 		this._super( key, value );
 
 		if ( key === "collapsible" ) {
@@ -363,7 +356,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_refresh: function() {
-		this._setupDisabled( this.options.disabled );
+		this._setOptionDisabled( this.options.disabled );
 		this._setupEvents( this.options.event );
 		this._setupHeightStyle( this.options.heightStyle );
 
@@ -507,7 +500,7 @@ $.widget( "ui.tabs", {
 			.data( "ui-tabs-destroy", true );
 	},
 
-	_setupDisabled: function( disabled ) {
+	_setOptionDisabled: function( disabled ) {
 		var currentItem, li, i;
 
 		if ( $.isArray( disabled ) ) {
@@ -531,6 +524,9 @@ $.widget( "ui.tabs", {
 		}
 
 		this.options.disabled = disabled;
+
+		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null,
+			disabled === true );
 	},
 
 	_setupEvents: function( event ) {
@@ -804,7 +800,7 @@ $.widget( "ui.tabs", {
 				} );
 			}
 		}
-		this._setupDisabled( disabled );
+		this._setOptionDisabled( disabled );
 	},
 
 	disable: function( index ) {
@@ -826,7 +822,7 @@ $.widget( "ui.tabs", {
 				disabled = [ index ];
 			}
 		}
-		this._setupDisabled( disabled );
+		this._setOptionDisabled( disabled );
 	},
 
 	load: function( index, event ) {
