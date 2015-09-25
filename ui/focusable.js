@@ -42,8 +42,19 @@ $.ui.focusable = function( element, hasTabindex ) {
 		"a" === nodeName ?
 			element.href || hasTabindex :
 			hasTabindex ) &&
-		$( element ).is( ":visible" ) && $( element ).css( "visibility" ) === "visible";
+		$( element ).is( ":visible" ) && visible( $( element ) );
 };
+
+// Support: IE 8 only
+// IE 8 doesn't resolve inherit to visible/hidden for computed values
+function visible( element ) {
+	var visibility = element.css( "visibility" );
+	while ( visibility === "inherit" ) {
+		element = element.parent();
+		visibility = element.css( "visibility" );
+	}
+	return visibility !== "hidden";
+}
 
 $.extend( $.expr[ ":" ], {
 	focusable: function( element ) {

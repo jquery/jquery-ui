@@ -81,10 +81,20 @@
 		<input id="visibilityHiddenAncestor-input">
 		<span tabindex="1" id="visibilityHiddenAncestor-span">.</span>
 
-		<span id="nestedVisibilityOverrideAncestor" style="visibility: visible">
+		<span id="nestedVisibilityOverrideAncestor" style="visibility: visible;">
 			<input id="nestedVisibilityOverrideAncestor-input">
 			<span tabindex="1" id="nestedVisibilityOverrideAncestor-span">.</span>
 		</span>
+
+		<span tabIndex="1" id="nestedVisibilityInheritWithHiddenAncestor"
+			style="visibility: inherit;">.</span>
+		<input id="nestedVisibilityInheritWithHiddenAncestor-input" style="visibility: inherit;">
+	</div>
+
+	<div id="visibilityVisibleAncestor" style="visibility: visible;">
+		<span tabIndex="1" id="nestedVisibilityInheritWithVisibleAncestor"
+			style="visibility: inherit;">.</span>
+		<input id="nestedVisibilityInheritWithVisibleAncestor-input" style="visibility: inherit;">
 	</div>
 
 	<span tabindex="1" id="displayNone-span" style="display: none;">.</span>
