@@ -88,7 +88,7 @@ test( "data", function() {
 } );
 
 test( "focusable - visible, enabled elements", function() {
-	expect( 18 );
+	expect( 20 );
 
 	isNotFocusable( "#formNoTabindex", "form" );
 	isFocusable( "#formTabindex", "form with tabindex" );
@@ -108,6 +108,10 @@ test( "focusable - visible, enabled elements", function() {
 	isNotFocusable( "#visibleAncestor-div", "div" );
 	isFocusable( "#visibleAncestor-spanWithTabindex", "span with tabindex" );
 	isFocusable( "#visibleAncestor-divWithNegativeTabindex", "div with tabindex" );
+	isFocusable( "#nestedVisibilityInheritWithVisibleAncestor",
+			"span, visibility: inherit inside visibility: visible parent" );
+	isFocusable( "#nestedVisibilityInheritWithVisibleAncestor-input",
+			"input, visibility: inherit inside visibility: visible parent" );
 } );
 
 test( "focusable - disabled elements", function() {
@@ -125,7 +129,7 @@ test( "focusable - disabled elements", function() {
 } );
 
 test( "focusable - hidden styles", function() {
-	expect( 10 );
+	expect( 12 );
 
 	isNotFocusable( "#displayNoneAncestor-input", "input, display: none parent" );
 	isNotFocusable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
@@ -135,6 +139,9 @@ test( "focusable - hidden styles", function() {
 
 	isFocusable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
 	isFocusable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
+
+	isNotFocusable( "#nestedVisibilityInheritWithHiddenAncestor", "span, visibility: inherit inside visibility: hidden parent" );
+	isNotFocusable( "#nestedVisibilityInheritWithHiddenAncestor-input", "input, visibility: inherit inside visibility: hidden parent" );
 
 	isNotFocusable( "#displayNone-input", "input, display: none" );
 	isNotFocusable( "#visibilityHidden-input", "input, visibility: hidden" );

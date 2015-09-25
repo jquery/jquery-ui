@@ -45,6 +45,8 @@ $.ui.focusable = function( element, hasTabindex ) {
 		$( element ).is( ":visible" ) && visible( $( element ) );
 };
 
+// Support: IE 8 only
+// IE 8 doesn't resolve inherit to visible/hidden for computed values
 function visible( element ) {
 	var visibility = element.css( "visibility" );
 	while ( visibility === "inherit" ) {
