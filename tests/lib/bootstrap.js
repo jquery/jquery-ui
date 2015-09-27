@@ -2,7 +2,6 @@
 
 requirejs.config({
 	paths: {
-		"date": "../../../external/date",
 		"cldr": "../../../external/cldrjs/cldr",
 		"globalize": "../../../external/globalize/globalize",
 		"globalize-locales": "../../../external/localization",
@@ -20,7 +19,7 @@ requirejs.config({
 		"ui": "../../../ui"
 	},
 	shim: {
-		"date": [ "globalize-locales" ],
+		"ui/date": [ "globalize-locales" ],
 		"globalize-old/ja-JP": [ "globalize-old" ],
 		"jquery-simulate": [ "jquery" ],
 		"qunit-assert-close": [ "qunit" ],

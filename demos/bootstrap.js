@@ -73,7 +73,6 @@ require.config( {
 	baseUrl: "../../ui",
 	paths: {
 		cldr: "../external/cldrjs/cldr",
-		date: "../external/date",
 		globalize: "../external/globalize/globalize",
 		"globalize-locales": "../external/localization",
 		jquery: "../external/jquery/jquery",

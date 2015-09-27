@@ -9,8 +9,7 @@
 
 		// AMD. Register as an anonymous module.
 		define( [
-			"jquery"
-		], factory );
+			"jquery", "./version" ], factory );
 	} else {
 
 		// Browser globals
@@ -18,10 +17,7 @@
 	}
 }( function( $ ) {
 
-$.ui = $.ui || {};
-
-var _Date,
-	weekdaysRev = {
+var weekdaysRev = {
 		"sun": 0,
 		"mon": 1,
 		"tue": 2,
@@ -31,9 +27,9 @@ var _Date,
 		"sat": 6
 	};
 
-_Date = function( date, attributes ) {
-	if ( !( this instanceof _Date ) ) {
-		return new _Date( date, attributes );
+$.ui.date = function( date, attributes ) {
+	if ( !( this instanceof $.ui.date ) ) {
+		return new $.ui.date( date, attributes );
 	}
 
 	this.setAttributes( attributes );
@@ -47,7 +43,7 @@ _Date = function( date, attributes ) {
 	this.dateObject = this.dateObject || new Date();
 };
 
-$.extend( _Date.prototype, {
+$.extend( $.ui.date.prototype, {
 
 	setAttributes: function( attributes ) {
 		this.attributes = attributes;
@@ -172,7 +168,7 @@ $.extend( _Date.prototype, {
 
 	days: function() {
 		var result = [],
-			today = new _Date( new Date(), this.attributes ),
+			today = new $.ui.date( new Date(), this.attributes ),
 			date = this.dateObject,
 			firstDayOfMonth = new Date( this.year(), date.getMonth(), 1 ).getDay(),
 			leadDays = ( firstDayOfMonth - this.firstDay + 7 ) % 7,
@@ -221,7 +217,7 @@ $.extend( _Date.prototype, {
 
 	clone: function() {
 		var date = this.dateObject;
-		return new _Date( new Date( date.getTime() ), this.attributes );
+		return new $.ui.date( new Date( date.getTime() ), this.attributes );
 	},
 
 	equal: function( other ) {
@@ -236,6 +232,6 @@ $.extend( _Date.prototype, {
 	}
 });
 
-return $.ui.calendarDate = _Date;
+return $.ui.date;
 
 } ) );

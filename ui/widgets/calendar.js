@@ -22,7 +22,7 @@
 			"globalize",
 			"globalize/date",
 			"globalize-locales",
-			"date",
+			"../date",
 			"./button",
 			"../widget",
 			"../version",
@@ -78,7 +78,7 @@ return $.widget( "ui.calendar", {
 
 		this._setLocale( this.options.locale, this.options.dateFormat );
 
-		this.date = new $.ui.calendarDate( this.options.value, this._calendarDateOptions );
+		this.date = new $.ui.date( this.options.value, this._calendarDateOptions );
 		this.viewDate = this.date.clone();
 		this.viewDate.eachDay = this.options.eachDay;
 
