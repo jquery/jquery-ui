@@ -65,38 +65,6 @@ $.extend( $.ui.date.prototype, {
 		return this;
 	},
 
-	setMonth: function( month ) {
-
-		// Overflow example:  Month is October 31 (yeah Halloween) and month is changed to April with 30 days,
-		// the new date will me May 1.  We will honor the month the user wants to set and if and overflow
-		// occurs, set to last day of month.
-		var date = this.dateObject,
-			days = date.getDate(), year = date.getFullYear();
-		if ( days > this.daysInMonth( year, month ) ) {
-
-			// Overflow
-			days = this.daysInMonth( year, month );
-		}
-		this.dateObject = new Date( year, month, days, date.getHours(),
-			date.getMinutes(), date.getSeconds() );
-		return this;
-	},
-
-	setYear: function( year ) {
-		var date = this.dateObject,
-			day = date.getDate(),
-			month = date.getMonth();
-
-		// Check if Leap, and February and day is 29th
-		if ( this.isLeapYear( year ) && month === 1 && day === 29 ) {
-
-			// set day to last day of February
-			day = this.daysInMonth( year, month );
-		}
-		this.dateObject = new Date( year, month, day, date.getHours(),
-			date.getMinutes(), date.getSeconds() );
-		return this;
-	},
 
 	setFullDate: function( year, month, day ) {
 		this.dateObject = new Date( year, month, day );
@@ -139,11 +107,6 @@ $.extend( $.ui.date.prototype, {
 
 	year: function() {
 		return this.dateObject.getFullYear();
-	},
-
-	isLeapYear: function( year ) {
-		year = year || this.dateObject.getFullYear();
-		return new Date( year, 1, 29 ).getMonth() === 1;
 	},
 
 	weekdays: function() {

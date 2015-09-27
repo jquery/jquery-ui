@@ -14,14 +14,13 @@ test( "Instantiation", function() {
 	ok( $.ui.date( null, attributes ) instanceof $.ui.date, "instantiation without new" );
 });
 
-test( "Check Sets and Gets", 6, function() {
+test( "Check Sets and Gets", 4, function() {
 	var date = $.ui.date( null, attributes );
-	equal( date.setYear( 2012 ).year(), 2012, "Set year and retrieve" );
-	equal( date.setMonth( 9 ).month(), 9, "Set month and retrieve" );
 	equal( date.setDay( 15 ).day(), 15, "Set day and retrieve" );
 	equal( date.setFullDate( 2012, 9, 15 ).year(), 2012, "Set full date and retrieve year" );
 	equal( date.month(), 9, "Set full date and retrieve month" );
 	equal( date.day(), 15, "Set full date and retrieve day" );
+	// TODO Add setTime test
 });
 
 test( "Date Adjustments - Normal Use Cases", 10, function() {
@@ -95,18 +94,6 @@ test( "List days of Week", 2, function() {
 	deepEqual( date.weekdays(), offset1, "Get weekdays with start of day on 1 (Germany)" );
 });
 
-test( "Leap Year Check", 8, function() {
-	var date = $.ui.date( null, attributes );
-	ok( date.setYear( 2008 ).isLeapYear(), "2008 is a Leap Year" );
-	ok( !date.setYear( 2009 ).isLeapYear(), "2009 is not a Leap Year" );
-	ok( !date.setYear( 2010 ).isLeapYear(), "2010 is not a Leap Year" );
-	ok( !date.setYear( 2011 ).isLeapYear(), "2011 is not a Leap Year" );
-	ok( date.isLeapYear( 2012 ), "2012 is a Leap Year" );
-	ok( !date.isLeapYear( 2013 ), "2013 is not a Leap Year" );
-	ok( !date.isLeapYear( 2014 ), "2014 is not a Leap year" );
-	ok( !date.isLeapYear( 2015 ), "2015 is not a Leap year" );
-});
-
 test( "Days in Month", 3, function() {
 	var date = $.ui.date( null, attributes );
 	date.setFullDate( 2012, 1, 1 );
@@ -117,9 +104,9 @@ test( "Days in Month", 3, function() {
 
 test( "Month Name", 2, function() {
 	var date = $.ui.date( null, attributes );
-	equal( date.setMonth( 3 ).monthName(), "April", "Month name return April (English)" );
+	equal( date.setFullDate( 2012, 3, 1 ).monthName(), "April", "Month name return April (English)" );
 	date = $.ui.date( null, testHelper.getAttributes( "de" ) );
-	equal( date.setMonth( 2 ).monthName(), "März", "Month name return March (German)" );
+	equal( date.setFullDate( 2012, 2, 1 ).monthName(), "März", "Month name return March (German)" );
 });
 
 test( "Clone", 2, function() {
@@ -130,7 +117,7 @@ test( "Clone", 2, function() {
 });
 
 test( "Days", 1, function() {
-	// TODO needs work
+	// TODO Needs work
 	var date = $.ui.date( null, attributes );
 	date.eachDay = function( day ) {
 		if ( day.lead && day.date > 20 ) {
