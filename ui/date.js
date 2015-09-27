@@ -65,7 +65,6 @@ $.extend( $.ui.date.prototype, {
 		return this;
 	},
 
-
 	setFullDate: function( year, month, day ) {
 		this.dateObject = new Date( year, month, day );
 		return this;
@@ -110,7 +109,7 @@ $.extend( $.ui.date.prototype, {
 	},
 
 	weekdays: function() {
-		var date,
+		var date, dow,
 			firstDay = this.firstDay,
 			result = [];
 
@@ -118,32 +117,34 @@ $.extend( $.ui.date.prototype, {
 		date = new Date( this.dateObject.getTime() );
 		date.setDate( date.getDate() + firstDay - 1 - date.getDay() );
 
-		for ( var dow = 0; dow < 7; dow++ ) {
+		for ( dow = 0; dow < 7; dow++ ) {
 			date.setTime( date.getTime() + 86400000 );
-			result.push({
+			result.push( {
 				shortname: this.attributes.formatWeekdayShort( date ),
 				fullname: this.attributes.formatWeekdayFull( date )
-			});
+			} );
 		}
 
 		return result;
 	},
 
 	days: function() {
-		var result = [],
+		var row, week, dayx, day,
+			result = [],
 			today = new $.ui.date( new Date(), this.attributes ),
 			date = this.dateObject,
 			firstDayOfMonth = new Date( this.year(), date.getMonth(), 1 ).getDay(),
 			leadDays = ( firstDayOfMonth - this.firstDay + 7 ) % 7,
 			rows = Math.ceil( ( leadDays + this.daysInMonth() ) / 7 ),
 			printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
-		for ( var row = 0; row < rows; row++ ) {
-			var week = result[ result.length ] = {
+
+		for ( row = 0; row < rows; row++ ) {
+			week = result[ result.length ] = {
 				number: this.attributes.formatWeekOfYear( printDate ),
 				days: []
 			};
-			for ( var dayx = 0; dayx < 7; dayx++ ) {
-				var day = week.days[ week.days.length ] = {
+			for ( dayx = 0; dayx < 7; dayx++ ) {
+				day = week.days[ week.days.length ] = {
 					lead: printDate.getMonth() !== date.getMonth(),
 					date: printDate.getDate(),
 					month: printDate.getMonth(),
@@ -165,10 +166,10 @@ $.extend( $.ui.date.prototype, {
 
 	// specialized for multi-month template, could be used in general
 	months: function( add ) {
-		var clone,
+		var clone, i,
 			result = [ this ];
 
-		for ( var i = 0; i < add; i++ ) {
+		for ( i = 0; i < add; i++ ) {
 			clone = this.clone();
 			clone.adjust( "M", i + 1 );
 			result.push( clone );
@@ -193,7 +194,7 @@ $.extend( $.ui.date.prototype, {
 	date: function() {
 		return this.dateObject;
 	}
-});
+} );
 
 return $.ui.date;
 
