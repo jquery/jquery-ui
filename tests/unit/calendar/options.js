@@ -298,6 +298,7 @@ test( "numberOfMonths", function() {
 	);
 
 	// Test if using cursor to go to the next / prev month advances three month
+	// Focus doesn't work here so we use an additional mouse down event
 	container.find( "tbody:first td[id]:first button" ).trigger( "mousedown" );
 	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 	equal( container.find( ".ui-calendar-month:first" ).text(), "May",
