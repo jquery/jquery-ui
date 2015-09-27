@@ -86,12 +86,14 @@ return $.widget( "ui.calendar", {
 			"click .ui-calendar-prev": function( event ) {
 				event.preventDefault();
 				this.date.adjust( "M", -this.options.numberOfMonths );
-				this._refresh();
+				this.viewDate.setTime( this.date.date().getTime() );
+				this.refresh();
 			},
 			"click .ui-calendar-next": function( event ) {
 				event.preventDefault();
 				this.date.adjust( "M", this.options.numberOfMonths );
-				this._refresh();
+				this.viewDate.setTime( this.date.date().getTime() );
+				this.refresh();
 			},
 			"mousedown .ui-calendar-calendar button": function( event ) {
 				event.preventDefault();
@@ -156,7 +158,8 @@ return $.widget( "ui.calendar", {
 				);
 				this.refresh();
 			} else {
-				this._refresh();
+				this.viewDate.setTime( this.date.date().getTime() );
+				this.refresh();
 			}
 			this.grid.focus();
 		}
@@ -491,11 +494,6 @@ return $.widget( "ui.calendar", {
 		this.buttonPane.appendTo( this.element );
 	},
 
-	_refresh: function() {
-		this.viewDate.setTime( this.date.date().getTime() );
-		this.refresh();
-	},
-
 	// Refreshing the entire calendar during interaction confuses screen readers, specifically
 	// because the grid heading is marked up as a live region and will often not update if it's
 	// destroyed and recreated instead of just having its text change. Additionally, interacting
@@ -648,7 +646,8 @@ return $.widget( "ui.calendar", {
 			this.viewDate.setAttributes( this._calendarDateOptions );
 		}
 		if ( refresh ) {
-			this._refresh();
+			this.viewDate.setTime( this.date.date().getTime() );
+			this.refresh();
 		}
 	},
 
