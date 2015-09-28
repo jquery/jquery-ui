@@ -270,7 +270,7 @@ return $.widget( "ui.menu", {
 	},
 
 	_activate: function( event ) {
-		if ( !this.active.is( ".ui-state-disabled" ) ) {
+		if ( this.active && !this.active.is( ".ui-state-disabled" ) ) {
 			if ( this.active.children( "[aria-haspopup='true']" ).length ) {
 				this.expand( event );
 			} else {
