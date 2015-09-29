@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/selectmenu"
+	"ui/widgets/selectmenu"
 ], function( $ ) {
 
 module( "selectmenu: options" );
@@ -11,7 +11,7 @@ test( "appendTo: null", function() {
 	var element = $( "#speed" ).selectmenu();
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ], document.body,
 		"defaults to body" );
-});
+} );
 
 test( "appendTo: explicit", function() {
 	expect( 6 );
@@ -19,9 +19,9 @@ test( "appendTo: explicit", function() {
 	var detached = $( "<div>" ),
 		element = $( "#speed" );
 
-	element.selectmenu({
+	element.selectmenu( {
 		appendTo: ".selectmenu-wrap"
-	});
+	} );
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ],
 		$( "#selectmenu-wrap1" )[ 0 ], "first found element" );
 	equal( $( "#selectmenu-wrap2 .ui-selectmenu" ).length, 0, "only appends to one element" );
@@ -32,16 +32,16 @@ test( "appendTo: explicit", function() {
 		$( "#selectmenu-wrap1" )[ 0 ], "modified after init" );
 	element.selectmenu( "destroy" );
 
-	element.selectmenu({
+	element.selectmenu( {
 		appendTo: detached
-	});
+	} );
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ], detached[ 0 ],
 		"detached jQuery object" );
 	element.selectmenu( "destroy" );
 
-	element.selectmenu({
+	element.selectmenu( {
 		appendTo: detached[ 0 ]
-	});
+	} );
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ], detached[ 0 ],
 		"detached DOM element" );
 	element.selectmenu( "destroy" );
@@ -50,7 +50,7 @@ test( "appendTo: explicit", function() {
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ], detached[ 0 ],
 		"detached DOM element via option()" );
 	element.selectmenu( "destroy" );
-});
+} );
 
 test( "appendTo: ui-front", function() {
 	expect( 2 );
@@ -63,12 +63,12 @@ test( "appendTo: ui-front", function() {
 		$( "#selectmenu-wrap2" )[ 0 ], "null, inside .ui-front" );
 	element.selectmenu( "destroy" );
 
-	element.selectmenu({
+	element.selectmenu( {
 		appendTo: $()
-	});
+	} );
 	equal( element.selectmenu( "menuWidget" ).parent().parent()[ 0 ],
 		$( "#selectmenu-wrap2" )[ 0 ], "empty jQuery object, inside .ui-front" );
-});
+} );
 
 test( "CSS styles", function( assert ) {
 	expect( 5 );
@@ -84,7 +84,7 @@ test( "CSS styles", function( assert ) {
 	assert.hasClasses( button.find( "span.ui-icon" ), "ui-icon-triangle-1-s" );
 	assert.hasClasses( menu, "ui-corner-bottom" );
 	assert.lacksClasses( button, "ui-corner-all" );
-});
+} );
 
 test( "width", function() {
 	expect( 6 );
@@ -120,9 +120,9 @@ test( "width", function() {
 	element
 		.selectmenu( "destroy" )
 		.css( "width", "100%" )
-		.selectmenu({ width: null });
+		.selectmenu( { width: null } );
 	button = element.selectmenu( "widget" );
 	equal( button.outerWidth(), 300, "button width fills container" );
-});
+} );
 
 } );

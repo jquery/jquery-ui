@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/autocomplete"
+	"ui/widgets/autocomplete"
 ], function( $ ) {
 
 module( "autocomplete: methods" );
@@ -9,16 +9,16 @@ test( "destroy", function( assert ) {
 	expect( 1 );
 	assert.domEqual( "#autocomplete", function() {
 		$( "#autocomplete" ).autocomplete().autocomplete( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "search, close", function() {
 	expect( 6 );
 	var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl" ],
-		element = $( "#autocomplete" ).autocomplete({
+		element = $( "#autocomplete" ).autocomplete( {
 			source: data,
 			minLength: 0
-		}),
+		} ),
 		menu = element.autocomplete( "widget" );
 
 	ok( menu.is( ":hidden" ), "menu is hidden on init" );
@@ -35,7 +35,7 @@ test( "search, close", function() {
 
 	element.autocomplete( "close" );
 	ok( menu.is( ":hidden" ), "menu is hidden after close" );
-});
+} );
 
 test( "widget", function( assert ) {
 	expect( 2 );
@@ -43,6 +43,6 @@ test( "widget", function( assert ) {
 		widgetElement = element.autocomplete( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	assert.hasClasses( widgetElement, "ui-menu" );
-});
+} );
 
 } );

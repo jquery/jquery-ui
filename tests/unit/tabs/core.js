@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/tabs"
+	"ui/widgets/tabs"
 ], function( $, testHelper ) {
 
 var state = testHelper.state;
@@ -40,9 +40,9 @@ test( "markup structure", function( assert ) {
 	assert.hasClasses( panels[ 1 ], "ui-tabs-panel ui-widget-content" );
 	assert.hasClasses( panels[ 2 ], "ui-tabs-panel ui-widget-content" );
 	equal( panels.length, 3, "There are exactly 3 tab panels" );
-});
+} );
 
-$.each({
+$.each( {
 	"deep ul": "#tabs3",
 	"multiple lists, ul first": "#tabs4",
 	"multiple lists, ol first": "#tabs5",
@@ -53,8 +53,8 @@ $.each({
 		var element = $( selector ).tabs();
 		assert.hasClasses( element, "ui-tabs" );
 		assert.hasClasses( $( selector + "-list" ), "ui-tabs-nav" );
-	});
-});
+	} );
+} );
 
 // #5893 - Sublist in the tab list are considered as tab
 test( "nested list", function() {
@@ -62,7 +62,7 @@ test( "nested list", function() {
 
 	var element = $( "#tabs6" ).tabs();
 	equal( element.tabs( "instance" ).anchors.length, 2, "should contain 2 tab" );
-});
+} );
 
 test( "disconnected from DOM", function() {
 	expect( 2 );
@@ -70,7 +70,7 @@ test( "disconnected from DOM", function() {
 	var element = $( "#tabs1" ).remove().tabs();
 	equal( element.find( ".ui-tabs-nav" ).length, 1, "should initialize nav" );
 	equal( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
-});
+} );
 
 test( "non-tab list items", function() {
 	expect( 2 );
@@ -79,17 +79,17 @@ test( "non-tab list items", function() {
 	equal( element.tabs( "option", "active" ), 0, "defaults to first tab" );
 	equal( element.find( ".ui-tabs-nav li.ui-state-active" ).index(), 1,
 		"first actual tab is active" );
-});
+} );
 
 test( "aria-controls", function() {
 	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),
 		tabs = element.find( ".ui-tabs-nav li" );
-	tabs.each(function() {
+	tabs.each( function() {
 		var tab = $( this ),
 			anchor = tab.find( ".ui-tabs-anchor" );
 		equal( anchor.prop( "hash" ).substring( 1 ), tab.attr( "aria-controls" ) );
-	});
+	} );
 
 	element = $( "#tabs2" ).tabs();
 	tabs = element.find( ".ui-tabs-nav li" );
@@ -97,20 +97,20 @@ test( "aria-controls", function() {
 	equal( tabs.eq( 1 ).attr( "aria-controls" ), "inline-style" );
 	ok( /^ui-id-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
 	equal( tabs.eq( 3 ).attr( "aria-controls" ), "custom-id" );
-});
+} );
 
 test( "accessibility", function() {
 	expect( 49 );
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			active: 1,
 			disabled: [ 2 ]
-		}),
+		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		anchors = tabs.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
 	equal( element.find( ".ui-tabs-nav" ).attr( "role" ), "tablist", "tablist role" );
-	tabs.each(function( index ) {
+	tabs.each( function( index ) {
 		var tab = tabs.eq( index ),
 			anchor = anchors.eq( index ),
 			anchorId = anchor.attr( "id" ),
@@ -121,7 +121,7 @@ test( "accessibility", function() {
 		equal( anchor.attr( "tabindex" ), -1, "anchor " + index + " tabindex" );
 		equal( panel.attr( "role" ), "tabpanel", "panel " + index + " role" );
 		equal( panel.attr( "aria-labelledby" ), anchorId, "panel " + index + " aria-labelledby" );
-	});
+	} );
 
 	equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
 	equal( tabs.eq( 1 ).attr( "tabindex" ), 0, "active tab has tabindex=0" );
@@ -155,7 +155,7 @@ test( "accessibility", function() {
 	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
 	equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded=false" );
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
-});
+} );
 
 asyncTest( "accessibility - ajax", function( assert ) {
 	expect( 6 );
@@ -169,19 +169,19 @@ asyncTest( "accessibility - ajax", function( assert ) {
 	assert.hasClasses( tab, "ui-tabs-loading" );
 	equal( panel.attr( "aria-busy" ), "true", "panel has aria-busy during load" );
 	element.one( "tabsload", function() {
-		setTimeout(function() {
+		setTimeout( function() {
 			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
 			assert.lacksClasses( tab, "ui-tabs-loading" );
 			start();
 		}, 1 );
-	});
-});
+	} );
+} );
 
 asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function( assert ) {
 	expect( 92 );
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			collapsible: true
-		}),
+		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		panels = element.find( ".ui-tabs-panel" ),
 		keyCode = $.ui.keyCode;
@@ -191,7 +191,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 	equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 	tabs.eq( 0 ).simulate( "focus" );
 
-	// down, right, down (wrap), up (wrap)
+	// Down, right, down (wrap), up (wrap)
 	function step1() {
 		assert.hasClasses( tabs.eq( 0 ), "ui-state-focus", "first tab has focus" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
@@ -242,7 +242,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		setTimeout( step2, 25 );
 	}
 
-	// left, home, space
+	// Left, home, space
 	function step2() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
@@ -280,7 +280,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		setTimeout( step3 );
 	}
 
-	// end, enter
+	// End, enter
 	function step3() {
 		equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
@@ -307,7 +307,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		setTimeout( step4 );
 	}
 
-	// enter (collapse)
+	// Enter (collapse)
 	function step4() {
 		equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );
@@ -328,10 +328,10 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 	}
 
 	setTimeout( step1 );
-});
+} );
 
 // Navigation with CTRL and COMMAND (both behave the same)
-$.each({
+$.each( {
 	ctrl: "CTRL",
 	meta: "COMMAND"
 }, function( modifier, label ) {
@@ -347,7 +347,7 @@ $.each({
 		equal( tabs.filter( ".ui-state-focus" ).length, 0, "no tabs focused on init" );
 		tabs.eq( 0 ).simulate( "focus" );
 
-		// down
+		// Down
 		function step1() {
 			var eventProperties = { keyCode: keyCode.DOWN };
 			eventProperties[ modifier + "Key" ] = true;
@@ -371,7 +371,7 @@ $.each({
 			setTimeout( step2, 25 );
 		}
 
-		// right
+		// Right
 		function step2() {
 			var eventProperties = { keyCode: keyCode.RIGHT };
 			eventProperties[ modifier + "Key" ] = true;
@@ -398,7 +398,7 @@ $.each({
 			setTimeout( step3, 25 );
 		}
 
-		// down (wrap)
+		// Down (wrap)
 		function step3() {
 			var eventProperties = { keyCode: keyCode.DOWN };
 			eventProperties[ modifier + "Key" ] = true;
@@ -421,7 +421,7 @@ $.each({
 			setTimeout( step4, 25 );
 		}
 
-		// up (wrap)
+		// Up (wrap)
 		function step4() {
 			var eventProperties = { keyCode: keyCode.UP };
 			eventProperties[ modifier + "Key" ] = true;
@@ -445,7 +445,7 @@ $.each({
 			setTimeout( step5, 25 );
 		}
 
-		// left
+		// Left
 		function step5() {
 			var eventProperties = { keyCode: keyCode.LEFT };
 			eventProperties[ modifier + "Key" ] = true;
@@ -472,7 +472,7 @@ $.each({
 			setTimeout( step6, 25 );
 		}
 
-		// home
+		// Home
 		function step6() {
 			var eventProperties = { keyCode: keyCode.HOME };
 			eventProperties[ modifier + "Key" ] = true;
@@ -499,7 +499,7 @@ $.each({
 			setTimeout( step7, 25 );
 		}
 
-		// end
+		// End
 		function step7() {
 			var eventProperties = { keyCode: keyCode.END };
 			eventProperties[ modifier + "Key" ] = true;
@@ -523,7 +523,7 @@ $.each({
 			setTimeout( step8, 25 );
 		}
 
-		// space
+		// Space
 		function step8() {
 			equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
 			ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
@@ -547,8 +547,8 @@ $.each({
 		}
 
 		setTimeout( step1 );
-	});
-});
+	} );
+} );
 
 asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function( assert ) {
 	expect( 50 );
@@ -640,34 +640,34 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function( a
 	}
 
 	setTimeout( step1 );
-});
+} );
 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
 	expect( 1 );
 
-	$( "#tabs2" ).tabs({
+	$( "#tabs2" ).tabs( {
 		active: 2,
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
 			ok( /test.html$/.test( ui.ajaxSettings.url ), "should ignore fragment identifier" );
 		}
-	});
-});
+	} );
+} );
 
 test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", function() {
 	expect( 2 );
 
-	var element = $("<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>");
-	element.appendTo("#qunit-fixture");
-	element.tabs({
+	var element = $( "<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>" );
+	element.appendTo( "#qunit-fixture" );
+	element.tabs( {
 		beforeLoad: function() {
 			event.preventDefault();
 			ok( false, "should not be an ajax tab" );
 		}
-	});
+	} );
 
-	equal( element.find(".ui-tabs-nav li").attr("aria-controls"), "tab", "aria-contorls attribute is correct" );
+	equal( element.find( ".ui-tabs-nav li" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
 	state( element, 1 );
-});
+} );
 
 } );

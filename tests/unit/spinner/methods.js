@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/spinner"
+	"ui/widgets/spinner"
 ], function( $, testHelper ) {
 
 var simulateKeyDownUp = testHelper.simulateKeyDownUp;
@@ -12,8 +12,8 @@ test( "destroy", function( assert ) {
 	expect( 1 );
 	assert.domEqual( "#spin", function() {
 		$( "#spin" ).spinner().spinner( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "disable", function( assert ) {
 	expect( 15 );
@@ -26,7 +26,7 @@ test( "disable", function( assert ) {
 	element.spinner( "disable" );
 	assert.hasClasses( wrapper, "ui-state-disabled ui-spinner-disabled" );
 	ok( !wrapper.attr( "aria-disabled" ), "after: wrapper does not have aria-disabled attr" );
-	ok( element.is( ":disabled"), "after: input has disabled attribute" );
+	ok( element.is( ":disabled" ), "after: input has disabled attribute" );
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( 2, element.val(), "keyboard - value does not change on key UP" );
@@ -47,7 +47,7 @@ test( "disable", function( assert ) {
 	equal( 2, element.val(), "mouse - value does not change on clicking down button" );
 
 	element.spinner( "stepUp", 6 );
-	equal( 8, element.val(), "script - stepUp 6 steps changes value");
+	equal( 8, element.val(), "script - stepUp 6 steps changes value" );
 
 	element.spinner( "stepDown" );
 	equal( 7, element.val(), "script - stepDown 1 step changes value" );
@@ -57,11 +57,11 @@ test( "disable", function( assert ) {
 
 	element.spinner( "pageDown" );
 	equal( 7, element.val(), "script - pageDown 1 page changes value" );
-});
+} );
 
 test( "enable", function( assert ) {
 	expect( 5 );
-	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true }),
+	var element = $( "#spin" ).val( 1 ).spinner( { disabled: true } ),
 		wrapper = element.spinner( "widget" );
 
 	assert.hasClasses( wrapper, "ui-spinner-disabled" );
@@ -74,15 +74,15 @@ test( "enable", function( assert ) {
 
 	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( 2, element.val(), "keyboard - value changes on key UP" );
-});
+} );
 
 test( "isValid", function() {
 	expect( 8 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).spinner( {
 			min: 0,
 			max: 10,
 			step: 2
-		}),
+		} ),
 		spinner = element.spinner( "instance" );
 	ok( !spinner.isValid(), "initial state is invalid" );
 
@@ -106,14 +106,14 @@ test( "isValid", function() {
 
 	element.val( "1" );
 	ok( !spinner.isValid(), "step mismatch is invalid" );
-});
+} );
 
 test( "pageDown", function() {
 	expect( 4 );
-	var element = $( "#spin" ).val( -12 ).spinner({
+	var element = $( "#spin" ).val( -12 ).spinner( {
 		page: 20,
 		min: -100
-	});
+	} );
 
 	element.spinner( "pageDown" );
 	equal( element.val(), -32, "pageDown 1 page" );
@@ -126,14 +126,14 @@ test( "pageDown", function() {
 
 	element.spinner( "pageDown", 10 );
 	equal( element.val(), -100, "value at min and pageDown 10 pages" );
-});
+} );
 
 test( "pageUp", function() {
 	expect( 4 );
-	var element = $( "#spin" ).val( 12 ).spinner({
+	var element = $( "#spin" ).val( 12 ).spinner( {
 		page: 20,
 		max: 100
-	});
+	} );
 
 	element.spinner( "pageUp" );
 	equal( element.val(), 32, "pageUp 1 page" );
@@ -146,14 +146,14 @@ test( "pageUp", function() {
 
 	element.spinner( "pageUp", 10 );
 	equal( element.val(), 100, "value at max and pageUp 10 pages" );
-});
+} );
 
 test( "stepDown", function() {
 	expect( 4 );
-	var element = $( "#spin" ).val( 0 ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner( {
 		step: 2,
 		min: -15
-	});
+	} );
 
 	element.spinner( "stepDown" );
 	equal( element.val(), "-1", "stepDown 1 step" );
@@ -166,14 +166,14 @@ test( "stepDown", function() {
 
 	element.spinner( "stepDown" );
 	equal( element.val(), "-15", "at min and stepDown 1 step" );
-});
+} );
 
 test( "stepUp", function() {
 	expect( 4 );
-	var element = $( "#spin" ).val( 0 ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner( {
 		step: 2,
 		max: 16
-	});
+	} );
 
 	element.spinner( "stepUp" );
 	equal( element.val(), 2, "stepUp 1 step" );
@@ -186,19 +186,19 @@ test( "stepUp", function() {
 
 	element.spinner( "stepUp" );
 	equal( element.val(), 16, "at max and stepUp 1 step" );
-});
+} );
 
 test( "value", function() {
 	expect( 2 );
-	var element = $( "#spin" ).val( 0 ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner( {
 		step: 3
-	});
+	} );
 
 	element.spinner( "value", 10 );
 	equal( element.val(), 9, "change value via value method" );
 
 	equal( element.spinner( "value" ), 9, "get value via value method" );
-});
+} );
 
 test( "widget", function() {
 	expect( 2 );
@@ -206,6 +206,6 @@ test( "widget", function() {
 		widgetElement = element.spinner( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element.parent()[ 0 ], "parent element" );
-});
+} );
 
 } );

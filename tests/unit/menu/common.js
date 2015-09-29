@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/menu"
+	"ui/widgets/menu"
 ], function( common ) {
 
 common.testWidget( "menu", {
@@ -18,12 +18,12 @@ common.testWidget( "menu", {
 		},
 		role: "menu",
 
-		// callbacks
+		// Callbacks
 		blur: null,
 		create: null,
 		focus: null,
 		select: null
 	}
-});
+} );
 
 } );

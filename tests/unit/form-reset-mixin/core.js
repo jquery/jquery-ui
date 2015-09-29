@@ -26,7 +26,7 @@ module( "widget factory", {
 		delete $.ui.testWidget;
 		delete $.fn.testWidget;
 	}
-});
+} );
 
 common.testJshint( "form-reset-mixin" );
 
@@ -38,7 +38,7 @@ asyncTest( "form reset", function() {
 
 	inputs.testWidget();
 	form.on( "reset", function() {
-		setTimeout(function() {
+		setTimeout( function() {
 			deepEqual( $.ui.testWidget.refreshed, [ "input1", "input2", "input3", "input4" ],
 				"All widgets are refreshed on form reset" );
 			equal( form.data( "ui-form-reset-instances" ).length, 4,
@@ -61,7 +61,7 @@ asyncTest( "destroy", function() {
 			.testWidget( "destroy" );
 
 	form.on( "reset", function() {
-		setTimeout(function() {
+		setTimeout( function() {
 			deepEqual( $.ui.testWidget.refreshed, [ "input1", "input3", "input4" ],
 				"All widgets are refreshed on form reset" );
 			deepEqual( form.data( "ui-form-reset-instances" ).length, 3,
@@ -82,7 +82,7 @@ asyncTest( "destroy all", function() {
 		.testWidget( "destroy" );
 
 	form.on( "reset", function() {
-		setTimeout(function() {
+		setTimeout( function() {
 			deepEqual( $.ui.testWidget.refreshed, [], "No widgets are refreshed after destroy" );
 			strictEqual( form.data( "ui-form-reset-instances" ), undefined,
 				"Form data is removed when the last widget instance is destroyed" );

@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/slider"
+	"ui/widgets/slider"
 ], function( $ ) {
 
 var element, options;
@@ -11,18 +11,18 @@ function handle() {
 
 module( "slider: options" );
 
-test( "disabled", function( assert ){
+test( "disabled", function( assert ) {
 	expect( 8 );
 	var count = 0;
 
 	element = $( "#slider1" ).slider();
 	element.on( "slidestart", function() {
 		count++;
-	});
+	} );
 
-	// enabled
+	// Enabled
 	assert.lacksClasses( element, "ui-slider-disabled" );
-	equal( element.slider( "option", "disabled" ), false , "is not disabled" );
+	equal( element.slider( "option", "disabled" ), false, "is not disabled" );
 
 	handle().simulate( "drag", { dx: 10 } );
 	equal( count, 1, "slider moved" );
@@ -30,7 +30,7 @@ test( "disabled", function( assert ){
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal( count, 2, "slider moved" );
 
-	// disabled
+	// Disabled
 	element.slider( "option", "disabled", true );
 	assert.hasClasses( element, "ui-slider-disabled" );
 	equal( element.slider( "option", "disabled" ), true, "is disabled" );
@@ -40,7 +40,7 @@ test( "disabled", function( assert ){
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 	equal( count, 2, "slider did not move" );
-});
+} );
 
 test( "max", function() {
 	expect( 5 );
@@ -87,7 +87,7 @@ test( "max", function() {
 	ok( element.slider( "value" ) === options.max, "value method will max, step is changed and step is float" );
 	element.slider( "destroy" );
 
-});
+} );
 
 test( "min", function() {
 	expect( 2 );
@@ -106,7 +106,7 @@ test( "min", function() {
 	ok( element.slider( "value" ) === options.min, "value method is contained by min" );
 	element.slider( "destroy" );
 
-});
+} );
 
 test( "orientation", function( assert ) {
 	expect( 14 );
@@ -126,7 +126,7 @@ test( "orientation", function( assert ) {
 	assert.hasClasses( element, "ui-slider-horizontal" );
 	assert.lacksClasses( element, "ui-slider-vertical" );
 	equal( element.find( ".ui-slider-handle" )[ 0 ].style.bottom, "", "CSS bottom reset" );
-	equal( handle()[0].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
+	equal( handle()[ 0 ].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
 
 	element.slider( "destroy" ) ;
 
@@ -143,17 +143,17 @@ test( "orientation", function( assert ) {
 	assert.hasClasses( element, "ui-slider-vertical" );
 	assert.lacksClasses( element, "ui-slider-horizontal" );
 	equal( element.find( ".ui-slider-handle" )[ 0 ].style.left, "", "CSS left reset" );
-	equal( handle()[0].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %" );
+	equal( handle()[ 0 ].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %" );
 
 	element.slider( "destroy" );
 
 	newValue = 7;
-	rangeSize = 500 - (500 * newValue / 10);
-	element = $( "#slider2" ).slider({
+	rangeSize = 500 - ( 500 * newValue / 10 );
+	element = $( "#slider2" ).slider( {
 		range: "max",
 		min: 0,
 		max: 10
-	});
+	} );
 
 	element.slider( "option", "value", newValue );
 	element.slider( "option", "orientation", "vertical" );
@@ -170,11 +170,11 @@ test( "orientation", function( assert ) {
 
 	element.slider( "destroy" );
 
-	element = $( "#slider2" ).slider({
+	element = $( "#slider2" ).slider( {
 		range: true,
 		min: 0,
 		max: 100
-	});
+	} );
 	element.slider( "option", { values: [ 60, 70 ] } );
 	notEqual( element.find( ".ui-slider-range " ).position().left, 0,
 		"range should not pull over to the track's border" );
@@ -183,19 +183,19 @@ test( "orientation", function( assert ) {
 		"range should pull over to the track's border" );
 
 	element.slider( "destroy" );
-});
+} );
 
 //spec: http://wiki.jqueryui.com/Slider#specs
 // value option/method: the value option is not restricted by min/max/step.
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 test( "step", function() {
 	expect( 9 );
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		min: 0,
 		value: 0,
 		step: 10,
 		max: 100
-	});
+	} );
 	equal( element.slider( "value" ), 0 );
 
 	element.slider( "value", 1 );
@@ -210,12 +210,12 @@ test( "step", function() {
 	element.slider( "value", 19 );
 	equal( element.slider( "value" ), 20 );
 
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		min: 0,
 		value: 0,
 		step: 20,
 		max: 100
-	});
+	} );
 	element.slider( "value", 0 );
 
 	element.slider( "option", "value", 1 );
@@ -231,7 +231,7 @@ test( "step", function() {
 	equal( element.slider( "value" ), 20 );
 
 	element.slider( "destroy" );
-});
+} );
 
 //test( "value", function() {
 //	ok(false, "missing test - untested code is broken code." );
@@ -240,16 +240,16 @@ test( "step", function() {
 test( "values", function() {
 	expect( 2 );
 
-	// testing multiple ranges on the same page, the object reference to the values
+	// Testing multiple ranges on the same page, the object reference to the values
 	// property is preserved via multiple range elements, so updating options.values
 	// of 1 slider updates options.values of all the others
-	var ranges = $([
+	var ranges = $( [
 		document.createElement( "div" ),
 		document.createElement( "div" )
-	]).slider({
+	] ).slider( {
 		range: true,
 		values: [ 25, 75 ]
-	});
+	} );
 
 	notStrictEqual(
 		ranges.eq( 0 ).slider( "instance" ).options.values,
@@ -264,43 +264,43 @@ test( "values", function() {
 		ranges.eq( 1 ).slider( "values", 0 ),
 		"the values for multiple sliders should be different"
 	);
-});
+} );
 
 test( "range", function( assert ) {
 	expect( 32 );
 	var range;
 
-	// min
-	element = $( "<div></div>" ).slider({
+	// Min
+	element = $( "<div></div>" ).slider( {
 		range: "min",
 		min: 1,
 		max: 10,
 		step: 1
-	});
+	} );
 
 	equal( element.find( ".ui-slider-handle" ).length, 1, "range min, one handle" );
 	equal( element.find( ".ui-slider-range-min" ).length, 1, "range min" );
 	element.slider( "destroy" );
 
-	// max
-	element = $( "<div></div>" ).slider({
+	// Max
+	element = $( "<div></div>" ).slider( {
 		range: "max",
 		min: 1,
 		max: 10,
 		step: 1
-	});
+	} );
 
 	equal( element.find( ".ui-slider-handle" ).length, 1, "range max, one handle" );
 	equal( element.find( ".ui-slider-range-max" ).length, 1, "range max" );
 	element.slider( "destroy" );
 
-	// true
-	element = $( "<div></div>" ).slider({
+	// True
+	element = $( "<div></div>" ).slider( {
 		range: true,
 		min: 1,
 		max: 10,
 		step: 1
-	});
+	} );
 
 	range = element.find( ".ui-slider-range" );
 	equal( element.find( ".ui-slider-handle" ).length, 2, "range true, two handles" );
@@ -308,12 +308,12 @@ test( "range", function( assert ) {
 	element.slider( "destroy" );
 
 	// Change range from min to max
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		range: "min",
 		min: 1,
 		max: 10,
 		step: 1
-	}).slider( "option", "range", "max" );
+	} ).slider( "option", "range", "max" );
 
 	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from min to max, one handle" );
 	equal( element.find( ".ui-slider-range-min" ).length, 0, "range switch from min to max" );
@@ -321,12 +321,12 @@ test( "range", function( assert ) {
 	element.slider( "destroy" );
 
 	// Change range from max to min
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		range: "max",
 		min: 1,
 		max: 10,
 		step: 1
-	}).slider( "option", "range", "min" );
+	} ).slider( "option", "range", "min" );
 
 	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from max to min, one handle" );
 	equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from max to min" );
@@ -334,53 +334,53 @@ test( "range", function( assert ) {
 	element.slider( "destroy" );
 
 	// Change range from max to true
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		range: "max",
 		min: 1,
 		max: 10,
 		step: 1
-	}).slider( "option", "range", true );
+	} ).slider( "option", "range", true );
 
 	equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from max to true, two handles" );
 	equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from max to true" );
 	equal( element.find( ".ui-slider-range-min" ).length, 0, "range switch from max to true" );
-	equal( element.slider( "option", "value" ), 0 , "option value" );
-	equal( element.slider( "value" ), 1 , "value" );
-	deepEqual( element.slider( "option", "values" ), [1, 1], "option values" );
-	deepEqual( element.slider( "values" ), [1, 1], "values" );
+	equal( element.slider( "option", "value" ), 0, "option value" );
+	equal( element.slider( "value" ), 1, "value" );
+	deepEqual( element.slider( "option", "values" ), [ 1, 1 ], "option values" );
+	deepEqual( element.slider( "values" ), [ 1, 1 ], "values" );
 	element.slider( "destroy" );
 
 	// Change range from true to min
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		range: true,
 		min: 1,
 		max: 10,
 		step: 1
-	}).slider( "option", "range", "min" );
+	} ).slider( "option", "range", "min" );
 
 	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from true to min, one handle" );
 	equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from true to min" );
 	equal( element.find( ".ui-slider-range-min" ).length, 1, "range switch from true to min" );
 	equal( element.slider( "option", "value" ), 1, "value" );
-	equal( element.slider( "value" ), 1 , "value" );
+	equal( element.slider( "value" ), 1, "value" );
 	equal( element.slider( "option", "values" ), null, "values" );
-	deepEqual( element.slider( "values" ), [] , "values" );
+	deepEqual( element.slider( "values" ), [], "values" );
 	element.slider( "destroy" );
 
 	// Change range from true to false
-	element = $( "<div></div>" ).slider({
+	element = $( "<div></div>" ).slider( {
 		range: true,
 		min: 1,
 		max: 10,
 		step: 1
-	}).slider( "option", "range", false );
+	} ).slider( "option", "range", false );
 	equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from true to false, both handles remain" );
 	equal( element.find( ".ui-slider-range" ).length, 0, "range switch from true to false" );
-	equal( element.slider( "option", "value" ), 0 , "option value" );
-	equal( element.slider( "value" ), 1 , "value" );
-	deepEqual( element.slider( "option", "values" ), [1, 1], "option values" );
-	deepEqual( element.slider( "values" ), [1, 1], "values" );
+	equal( element.slider( "option", "value" ), 0, "option value" );
+	equal( element.slider( "value" ), 1, "value" );
+	deepEqual( element.slider( "option", "values" ), [ 1, 1 ], "option values" );
+	deepEqual( element.slider( "values" ), [ 1, 1 ], "values" );
 	element.slider( "destroy" );
-});
+} );
 
 } );

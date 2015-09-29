@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/sortable"
+	"ui/widgets/sortable"
 ], function( common ) {
 
 common.testWidget( "sortable", {
@@ -33,7 +33,7 @@ common.testWidget( "sortable", {
 		tolerance: "intersect",
 		zIndex: 1000,
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeStop: null,
 		change: null,
@@ -48,6 +48,6 @@ common.testWidget( "sortable", {
 		stop: null,
 		update: null
 	}
-});
+} );
 
 } );

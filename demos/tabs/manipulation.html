@@ -4,13 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Simple manipulation</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/tabs.js"></script>
-	<script src="../../ui/dialog.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#dialog label, #dialog input { display:block; }
@@ -20,8 +13,8 @@
 	#tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
 	#add_tab { cursor: pointer; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="dialog">
 		var tabTitle = $( "#tab_title" ),
 			tabContent = $( "#tab_content" ),
 			tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
@@ -29,7 +22,7 @@
 
 		var tabs = $( "#tabs" ).tabs();
 
-		// modal dialog init: custom buttons and a "close" callback resetting the form inside
+		// Modal dialog init: custom buttons and a "close" callback resetting the form inside
 		var dialog = $( "#dialog" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -47,14 +40,14 @@
 			}
 		});
 
-		// addTab form: calls addTab function on submit and closes the dialog
+		// AddTab form: calls addTab function on submit and closes the dialog
 		var form = dialog.find( "form" ).on( "submit", function( event ) {
 			addTab();
 			dialog.dialog( "close" );
 			event.preventDefault();
 		});
 
-		// actual addTab function: adds new tab using the input from the form above
+		// Actual addTab function: adds new tab using the input from the form above
 		function addTab() {
 			var label = tabTitle.val() || "Tab " + tabCounter,
 				id = "tabs-" + tabCounter,
@@ -67,14 +60,14 @@
 			tabCounter++;
 		}
 
-		// addTab button: just opens the dialog
+		// AddTab button: just opens the dialog
 		$( "#add_tab" )
 			.button()
 			.on( "click", function() {
 				dialog.dialog( "open" );
 			});
 
-		// close icon: removing the tab on click
+		// Close icon: removing the tab on click
 		tabs.on( "click", "span.ui-icon-close", function() {
 			var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
 			$( "#" + panelId ).remove();
@@ -88,7 +81,6 @@
 				tabs.tabs( "refresh" );
 			}
 		});
-	});
 	</script>
 </head>
 <body>

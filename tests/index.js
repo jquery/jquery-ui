@@ -1,4 +1,4 @@
-$(function() {
+$( function() {
 
 $( "#main" )
 	.addClass( "ui-widget" )
@@ -7,4 +7,4 @@ $( "#main" )
 		.next()
 			.addClass( "ui-widget-content ui-corner-bottom" );
 
-});
+} );

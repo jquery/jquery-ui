@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/button"
+	"ui/widgets/button"
 ], function( common ) {
 
 common.testWidget( "button", {
@@ -14,9 +14,9 @@ common.testWidget( "button", {
 		label: null,
 		text: true,
 
-		// callbacks
+		// Callbacks
 		create: null
 	}
-});
+} );
 
 } );

@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/droppable"
+	"ui/widgets/droppable"
 ], function( $ ) {
 
 module( "droppable: events" );
@@ -13,7 +13,7 @@ test( "droppable destruction/recreation on drop event", function( assert ) {
 			drop: function() {
 				var element = $( this ),
 					newDroppable = $( "<div>" )
-						.css({ width: 100, height: 100 })
+						.css( { width: 100, height: 100 } )
 						.text( "Droppable" );
 				element.after( newDroppable );
 				element.remove();
@@ -33,10 +33,10 @@ test( "droppable destruction/recreation on drop event", function( assert ) {
 	draggable.simulate( "drag", {
 		dx: dx,
 		dy: dy
-	});
+	} );
 
 	assert.lacksClasses( droppable2, "active", "subsequent droppable no longer active" );
-});
+} );
 
 // todo: comment the following in when ready to actually test
 /*

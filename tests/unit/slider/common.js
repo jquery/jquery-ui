@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/slider"
+	"ui/widgets/slider"
 ], function( common ) {
 
 common.testWidget( "slider", {
@@ -23,13 +23,13 @@ common.testWidget( "slider", {
 		value: 0,
 		values: null,
 
-		// callbacks
+		// Callbacks
 		create: null,
 		change: null,
 		slide: null,
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

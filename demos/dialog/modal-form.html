@@ -4,16 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Dialog - Modal form</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/mouse.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/draggable.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/resizable.js"></script>
-	<script src="../../ui/dialog.js"></script>
-	<script src="../../ui/effect.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 		label, input { display:block; }
@@ -26,8 +16,8 @@
 		.ui-dialog .ui-state-error { padding: .3em; }
 		.validateTips { border: 1px solid transparent; padding: 0.3em; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="effect">
 		var dialog, form,
 
 			// From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
@@ -116,7 +106,6 @@
 		$( "#create-user" ).button().on( "click", function() {
 			dialog.dialog( "open" );
 		});
-	});
 	</script>
 </head>
 <body>

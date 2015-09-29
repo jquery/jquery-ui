@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/menu"
+	"ui/widgets/menu"
 ], function( $, testHelper ) {
 
 var log = testHelper.log,
@@ -12,25 +12,25 @@ module( "menu: methods", {
 	setup: function() {
 		testHelper.clearLog();
 	}
-});
+} );
 
 test( "destroy", function( assert ) {
 	expect( 2 );
 	assert.domEqual( "#menu2", function() {
 		$( "#menu2" ).menu().menu( "destroy" );
-	});
+	} );
 	assert.domEqual( "#menu5", function() {
-		$( "#menu5").menu().menu( "destroy" );
-	});
-});
+		$( "#menu5" ).menu().menu( "destroy" );
+	} );
+} );
 
 test( "enable/disable", function( assert ) {
 	expect( 3 );
-	var element = $( "#menu1" ).menu({
+	var element = $( "#menu1" ).menu( {
 		select: function() {
 			log();
 		}
-	});
+	} );
 	element.menu( "disable" );
 	assert.hasClasses( element, "ui-state-disabled" );
 	log( "click", true );
@@ -42,7 +42,7 @@ test( "enable/disable", function( assert ) {
 	click( element, "1" );
 	log( "afterclick" );
 	equal( logOutput(), "click,afterclick,click,1,afterclick", "Click order not valid." );
-});
+} );
 
 test( "refresh", function() {
 	expect( 5 );
@@ -56,7 +56,7 @@ test( "refresh", function() {
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.children( ":last" ).remove().end().menu( "refresh" );
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
-});
+} );
 
 test( "refresh submenu", function() {
 	expect( 2 );
@@ -65,7 +65,7 @@ test( "refresh submenu", function() {
 	element.find( "ul" ).addBack().append( "<li><a href=\"#\">New Item</a></li>" );
 	element.menu( "refresh" );
 	equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
-});
+} );
 
 test( "refresh icons (see #9377)", function( assert ) {
 	expect( 3 );
@@ -79,7 +79,7 @@ test( "refresh icons (see #9377)", function( assert ) {
 	element.find( "li:first .ui-menu-item-wrapper" ).html( "Save" );
 	element.menu( "refresh" );
 	assert.lacksClasses( element, "ui-menu-icons" );
-});
+} );
 
 test( "widget", function() {
 	expect( 2 );
@@ -87,7 +87,7 @@ test( "widget", function() {
 		widgetElement = element.menu( "widget" );
 	equal( widgetElement.length, 1, "one element" );
 	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
-});
+} );
 
 // TODO: test focus method
 

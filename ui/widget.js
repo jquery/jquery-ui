@@ -17,7 +17,7 @@
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [ "jquery" ], factory );
+		define( [ "jquery", "./version" ], factory );
 	} else {
 
 		// Browser globals
@@ -25,8 +25,8 @@
 	}
 }( function( $ ) {
 
-var widget_uuid = 0,
-	widget_slice = Array.prototype.slice;
+var widgetUuid = 0;
+var widgetSlice = Array.prototype.slice;
 
 $.cleanData = ( function( orig ) {
 	return function( elems ) {
@@ -40,7 +40,7 @@ $.cleanData = ( function( orig ) {
 					$( elem ).triggerHandler( "remove" );
 				}
 
-			// http://bugs.jquery.com/ticket/8235
+			// Http://bugs.jquery.com/ticket/8235
 			} catch ( e ) {}
 		}
 		orig( elems );
@@ -48,14 +48,15 @@ $.cleanData = ( function( orig ) {
 } )( $.cleanData );
 
 $.widget = function( name, base, prototype ) {
-	var fullName, existingConstructor, constructor, basePrototype,
-		// proxiedPrototype allows the provided prototype to remain unmodified
-		// so that it can be used as a mixin for multiple widgets (#8876)
-		proxiedPrototype = {},
-		namespace = name.split( "." )[ 0 ];
+	var existingConstructor, constructor, basePrototype;
 
+	// ProxiedPrototype allows the provided prototype to remain unmodified
+	// so that it can be used as a mixin for multiple widgets (#8876)
+	var proxiedPrototype = {};
+
+	var namespace = name.split( "." )[ 0 ];
 	name = name.split( "." )[ 1 ];
-	fullName = namespace + "-" + name;
+	var fullName = namespace + "-" + name;
 
 	if ( !prototype ) {
 		prototype = base;
@@ -66,7 +67,7 @@ $.widget = function( name, base, prototype ) {
 		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
 	}
 
-	// create selector for plugin
+	// Create selector for plugin
 	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
 		return !!$.data( elem, fullName );
 	};
@@ -74,30 +75,35 @@ $.widget = function( name, base, prototype ) {
 	$[ namespace ] = $[ namespace ] || {};
 	existingConstructor = $[ namespace ][ name ];
 	constructor = $[ namespace ][ name ] = function( options, element ) {
-		// allow instantiation without "new" keyword
+
+		// Allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
 			return new constructor( options, element );
 		}
 
-		// allow instantiation without initializing for simple inheritance
+		// Allow instantiation without initializing for simple inheritance
 		// must use "new" keyword (the code above always passes args)
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
 	};
-	// extend with the existing constructor to carry over any static properties
+
+	// Extend with the existing constructor to carry over any static properties
 	$.extend( constructor, existingConstructor, {
 		version: prototype.version,
-		// copy the object used to create the prototype in case we need to
+
+		// Copy the object used to create the prototype in case we need to
 		// redefine the widget later
 		_proto: $.extend( {}, prototype ),
-		// track widgets that inherit from this widget in case this widget is
+
+		// Track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
 		_childConstructors: []
 	} );
 
 	basePrototype = new base();
-	// we need to make the options hash a property directly on the new instance
+
+	// We need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
 	basePrototype.options = $.widget.extend( {}, basePrototype.options );
@@ -107,16 +113,18 @@ $.widget = function( name, base, prototype ) {
 			return;
 		}
 		proxiedPrototype[ prop ] = ( function() {
-			var _super = function() {
-					return base.prototype[ prop ].apply( this, arguments );
-				},
-				_superApply = function( args ) {
-					return base.prototype[ prop ].apply( this, args );
-				};
+			function _super() {
+				return base.prototype[ prop ].apply( this, arguments );
+			}
+
+			function _superApply( args ) {
+				return base.prototype[ prop ].apply( this, args );
+			}
+
 			return function() {
-				var __super = this._super,
-					__superApply = this._superApply,
-					returnValue;
+				var __super = this._super;
+				var __superApply = this._superApply;
+				var returnValue;
 
 				this._super = _super;
 				this._superApply = _superApply;
@@ -131,6 +139,7 @@ $.widget = function( name, base, prototype ) {
 		} )();
 	} );
 	constructor.prototype = $.widget.extend( basePrototype, {
+
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
@@ -150,11 +159,13 @@ $.widget = function( name, base, prototype ) {
 		$.each( existingConstructor._childConstructors, function( i, child ) {
 			var childPrototype = child.prototype;
 
-			// redefine the child widget using the same prototype that was
+			// Redefine the child widget using the same prototype that was
 			// originally used, but inherit from the new version of the base
-			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
+				child._proto );
 		} );
-		// remove the list of existing child constructors from the old constructor
+
+		// Remove the list of existing child constructors from the old constructor
 		// so the old child constructors can be garbage collected
 		delete existingConstructor._childConstructors;
 	} else {
@@ -167,21 +178,25 @@ $.widget = function( name, base, prototype ) {
 };
 
 $.widget.extend = function( target ) {
-	var input = widget_slice.call( arguments, 1 ),
-		inputIndex = 0,
-		inputLength = input.length,
-		key,
-		value;
+	var input = widgetSlice.call( arguments, 1 );
+	var inputIndex = 0;
+	var inputLength = input.length;
+	var key;
+	var value;
+
 	for ( ; inputIndex < inputLength; inputIndex++ ) {
 		for ( key in input[ inputIndex ] ) {
 			value = input[ inputIndex ][ key ];
 			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+
 				// Clone objects
 				if ( $.isPlainObject( value ) ) {
 					target[ key ] = $.isPlainObject( target[ key ] ) ?
 						$.widget.extend( {}, target[ key ], value ) :
+
 						// Don't extend strings, arrays, etc. with objects
 						$.widget.extend( {}, value );
+
 				// Copy everything else by reference
 				} else {
 					target[ key ] = value;
@@ -195,26 +210,31 @@ $.widget.extend = function( target ) {
 $.widget.bridge = function( name, object ) {
 	var fullName = object.prototype.widgetFullName || name;
 	$.fn[ name ] = function( options ) {
-		var isMethodCall = typeof options === "string",
-			args = widget_slice.call( arguments, 1 ),
-			returnValue = this;
+		var isMethodCall = typeof options === "string";
+		var args = widgetSlice.call( arguments, 1 );
+		var returnValue = this;
 
 		if ( isMethodCall ) {
 			this.each( function() {
-				var methodValue,
-					instance = $.data( this, fullName );
+				var methodValue;
+				var instance = $.data( this, fullName );
+
 				if ( options === "instance" ) {
 					returnValue = instance;
 					return false;
 				}
+
 				if ( !instance ) {
 					return $.error( "cannot call methods on " + name + " prior to initialization; " +
 						"attempted to call method '" + options + "'" );
 				}
+
 				if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
 					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
 				}
+
 				methodValue = instance[ options ].apply( instance, args );
+
 				if ( methodValue !== instance && methodValue !== undefined ) {
 					returnValue = methodValue && methodValue.jquery ?
 						returnValue.pushStack( methodValue.get() ) :
@@ -253,17 +273,19 @@ $.Widget.prototype = {
 	widgetName: "widget",
 	widgetEventPrefix: "",
 	defaultElement: "<div>",
+
 	options: {
 		classes: {},
 		disabled: false,
 
-		// callbacks
+		// Callbacks
 		create: null
 	},
+
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
-		this.uuid = widget_uuid++;
+		this.uuid = widgetUuid++;
 		this.eventNamespace = "." + this.widgetName + this.uuid;
 
 		this.bindings = $();
@@ -281,9 +303,11 @@ $.Widget.prototype = {
 				}
 			} );
 			this.document = $( element.style ?
-				// element within the document
+
+				// Element within the document
 				element.ownerDocument :
-				// element is window or document
+
+				// Element is window or document
 				element.document || element );
 			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
 		}
@@ -294,12 +318,23 @@ $.Widget.prototype = {
 			options );
 
 		this._create();
+
+		if ( this.options.disabled ) {
+			this._setOptionDisabled( this.options.disabled );
+		}
+
 		this._trigger( "create", null, this._getCreateEventData() );
 		this._init();
 	},
-	_getCreateOptions: $.noop,
+
+	_getCreateOptions: function() {
+		return {};
+	},
+
 	_getCreateEventData: $.noop,
+
 	_create: $.noop,
+
 	_init: $.noop,
 
 	destroy: function() {
@@ -310,7 +345,7 @@ $.Widget.prototype = {
 			that._removeClass( value, key );
 		} );
 
-		// we can probably remove the unbind calls in 2.0
+		// We can probably remove the unbind calls in 2.0
 		// all event bindings should go through this._on()
 		this.element
 			.off( this.eventNamespace )
@@ -319,9 +354,10 @@ $.Widget.prototype = {
 			.off( this.eventNamespace )
 			.removeAttr( "aria-disabled" );
 
-		// clean up events and states
+		// Clean up events and states
 		this.bindings.off( this.eventNamespace );
 	},
+
 	_destroy: $.noop,
 
 	widget: function() {
@@ -329,18 +365,20 @@ $.Widget.prototype = {
 	},
 
 	option: function( key, value ) {
-		var options = key,
-			parts,
-			curOption,
-			i;
+		var options = key;
+		var parts;
+		var curOption;
+		var i;
 
 		if ( arguments.length === 0 ) {
-			// don't return a reference to the internal hash
+
+			// Don't return a reference to the internal hash
 			return $.widget.extend( {}, this.options );
 		}
 
 		if ( typeof key === "string" ) {
-			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
+
+			// Handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
 			options = {};
 			parts = key.split( "." );
 			key = parts.shift();
@@ -367,6 +405,7 @@ $.Widget.prototype = {
 
 		return this;
 	},
+
 	_setOptions: function( options ) {
 		var key;
 
@@ -376,6 +415,7 @@ $.Widget.prototype = {
 
 		return this;
 	},
+
 	_setOption: function( key, value ) {
 		if ( key === "classes" ) {
 			this._setOptionClasses( value );
@@ -384,17 +424,12 @@ $.Widget.prototype = {
 		this.options[ key ] = value;
 
 		if ( key === "disabled" ) {
-			this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
-
-			// If the widget is becoming disabled, then nothing is interactive
-			if ( value ) {
-				this._removeClass( this.hoverable, null, "ui-state-hover" );
-				this._removeClass( this.focusable, null, "ui-state-focus" );
-			}
+			this._setOptionDisabled( value );
 		}
 
 		return this;
 	},
+
 	_setOptionClasses: function( value ) {
 		var classKey, elements, currentElements;
 
@@ -426,16 +461,27 @@ $.Widget.prototype = {
 		}
 	},
 
+	_setOptionDisabled: function( value ) {
+		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
+
+		// If the widget is becoming disabled, then nothing is interactive
+		if ( value ) {
+			this._removeClass( this.hoverable, null, "ui-state-hover" );
+			this._removeClass( this.focusable, null, "ui-state-focus" );
+		}
+	},
+
 	enable: function() {
 		return this._setOptions( { disabled: false } );
 	},
+
 	disable: function() {
 		return this._setOptions( { disabled: true } );
 	},
 
 	_classes: function( options ) {
-		var full = [],
-			that = this;
+		var full = [];
+		var that = this;
 
 		options = $.extend( {
 			element: this.element,
@@ -491,17 +537,17 @@ $.Widget.prototype = {
 	},
 
 	_on: function( suppressDisabledCheck, element, handlers ) {
-		var delegateElement,
-			instance = this;
+		var delegateElement;
+		var instance = this;
 
-		// no suppressDisabledCheck flag, shuffle arguments
+		// No suppressDisabledCheck flag, shuffle arguments
 		if ( typeof suppressDisabledCheck !== "boolean" ) {
 			handlers = element;
 			element = suppressDisabledCheck;
 			suppressDisabledCheck = false;
 		}
 
-		// no element argument, shuffle and use this.element
+		// No element argument, shuffle and use this.element
 		if ( !handlers ) {
 			handlers = element;
 			element = this.element;
@@ -513,7 +559,8 @@ $.Widget.prototype = {
 
 		$.each( handlers, function( event, handler ) {
 			function handlerProxy() {
-				// allow widgets to customize the disabled handling
+
+				// Allow widgets to customize the disabled handling
 				// - disabled as an array instead of boolean
 				// - disabled class as method for disabling individual parts
 				if ( !suppressDisabledCheck &&
@@ -525,15 +572,16 @@ $.Widget.prototype = {
 					.apply( instance, arguments );
 			}
 
-			// copy the guid so direct unbinding works
+			// Copy the guid so direct unbinding works
 			if ( typeof handler !== "string" ) {
 				handlerProxy.guid = handler.guid =
 					handler.guid || handlerProxy.guid || $.guid++;
 			}
 
-			var match = event.match( /^([\w:-]*)\s*(.*)$/ ),
-				eventName = match[ 1 ] + instance.eventNamespace,
-				selector = match[ 2 ];
+			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
+			var eventName = match[ 1 ] + instance.eventNamespace;
+			var selector = match[ 2 ];
+
 			if ( selector ) {
 				delegateElement.on( eventName, selector, handlerProxy );
 			} else {
@@ -587,19 +635,20 @@ $.Widget.prototype = {
 	},
 
 	_trigger: function( type, event, data ) {
-		var prop, orig,
-			callback = this.options[ type ];
+		var prop, orig;
+		var callback = this.options[ type ];
 
 		data = data || {};
 		event = $.Event( event );
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
-		// the original event may come from any element
+
+		// The original event may come from any element
 		// so we need to reset the target on the new event
 		event.target = this.element[ 0 ];
 
-		// copy original event properties over to the new event
+		// Copy original event properties over to the new event
 		orig = event.originalEvent;
 		if ( orig ) {
 			for ( prop in orig ) {
@@ -621,21 +670,26 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		if ( typeof options === "string" ) {
 			options = { effect: options };
 		}
-		var hasOptions,
-			effectName = !options ?
-				method :
-				options === true || typeof options === "number" ?
-					defaultEffect :
-					options.effect || defaultEffect;
+
+		var hasOptions;
+		var effectName = !options ?
+			method :
+			options === true || typeof options === "number" ?
+				defaultEffect :
+				options.effect || defaultEffect;
+
 		options = options || {};
 		if ( typeof options === "number" ) {
 			options = { duration: options };
 		}
+
 		hasOptions = !$.isEmptyObject( options );
 		options.complete = callback;
+
 		if ( options.delay ) {
 			element.delay( options.delay );
 		}
+
 		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
 			element[ method ]( options );
 		} else if ( effectName !== method && element[ effectName ] ) {

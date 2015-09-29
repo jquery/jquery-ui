@@ -48,13 +48,13 @@ module( "widget factory classes", {
 				this.span.remove();
 				this.element.unwrap();
 			}
-		});
+		} );
 	},
 	teardown: function() {
 		delete $.ui.classesWidget;
 		delete $.fn.classesWidget;
 	}
-});
+} );
 
 function elementHasClasses( widget, method, assert ) {
 	var toggle = method === "toggle" ? ( ", true" ) : "";
@@ -96,13 +96,13 @@ test( ".option() - classes setter", function( assert ) {
 
 	elementHasClasses( testWidget.element, "add", assert );
 
-	testWidget.option({
+	testWidget.option( {
 		classes: {
 			"ui-classes-span": "custom-theme-span",
 			"ui-classes-widget": "ui-theme-widget custom-theme-widget",
 			"ui-classes-element": "ui-theme-element-2"
 		}
-	});
+	} );
 
 	assert.lacksClasses( testWidget.element, "ui-theme-element",
 		"Removing a class from the value removes the class" );
@@ -116,15 +116,15 @@ test( ".option() - classes setter", function( assert ) {
 		"Adding a class to an empty value works as expected" );
 	assert.hasClasses( testWidget.wrapper, "ui-classes-widget custom-theme-widget",
 		"Appending a class to the current value works as expected" );
-});
+} );
 
 test( ".destroy() - class removal", function( assert ) {
 	expect( 1 );
 
 	assert.domEqual( "#widget", function() {
 		$( "#widget" ).classesWidget().classesWidget( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "._add/_remove/_toggleClass()", function( assert ) {
 	expect( 24 );
@@ -141,6 +141,6 @@ test( "._add/_remove/_toggleClass()", function( assert ) {
 
 	widget.classesWidget( "removeClasses" );
 	elementLacksClasses( widget, "remove", assert );
-});
+} );
 
 } );

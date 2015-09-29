@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/tabs"
+	"ui/widgets/tabs"
 ], function( common ) {
 
 common.testWidget( "tabs", {
@@ -19,13 +19,13 @@ common.testWidget( "tabs", {
 		hide: null,
 		show: null,
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeActivate: null,
 		beforeLoad: null,
 		create: null,
 		load: null
 	}
-});
+} );
 
 } );

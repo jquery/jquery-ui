@@ -4,10 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Progressbar - Custom Label</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/progressbar.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	.ui-progressbar {
@@ -21,8 +17,8 @@
 		text-shadow: 1px 1px 0 #fff;
 	}
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		var progressbar = $( "#progressbar" ),
 			progressLabel = $( ".progress-label" );
 
@@ -47,7 +43,6 @@
 		}
 
 		setTimeout( progress, 2000 );
-	});
 	</script>
 </head>
 <body>

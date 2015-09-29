@@ -8,7 +8,7 @@ return $.extend( helper, {
 		$( handle ).simulate( "drag", {
 			dx: dx,
 			dy: dy
-		});
+		} );
 		equal( $( handle ).parent().children().index( handle ), index, msg );
 	}
 } );

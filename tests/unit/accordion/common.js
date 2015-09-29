@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/accordion"
+	"ui/widgets/accordion"
 ], function( common ) {
 
 common.testWidget( "accordion", {
@@ -22,11 +22,11 @@ common.testWidget( "accordion", {
 			"header": "ui-icon-triangle-1-e"
 		},
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeActivate: null,
 		create: null
 	}
-});
+} );
 
 } );

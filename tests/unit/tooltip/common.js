@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/tooltip"
+	"ui/widgets/tooltip"
 ], function( common ) {
 
 common.testWidget( "tooltip", {
@@ -20,11 +20,11 @@ common.testWidget( "tooltip", {
 		show: true,
 		track: false,
 
-		// callbacks
+		// Callbacks
 		close: null,
 		create: null,
 		open: null
 	}
-});
+} );
 
 } );

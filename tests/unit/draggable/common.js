@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/draggable"
+	"ui/widgets/draggable"
 ], function( common ) {
 
 common.testWidget( "draggable", {
@@ -37,12 +37,12 @@ common.testWidget( "draggable", {
 		distance: 1,
 		iframeFix: false,
 
-		// callbacks
+		// Callbacks
 		create: null,
 		drag: null,
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

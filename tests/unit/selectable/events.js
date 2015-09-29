@@ -1,40 +1,40 @@
 define( [
 	"jquery",
 	"lib/helper",
-	"ui/selectable"
+	"ui/widgets/selectable"
 ], function( $, testHelpers ) {
 
-module("selectable: events");
+module( "selectable: events" );
 
 test( "start", function() {
 	expect( 2 );
-	var el = $("#selectable1");
-	el.selectable({
+	var el = $( "#selectable1" );
+	el.selectable( {
 		start: function() {
 			ok( true, "drag fired start callback" );
-			equal( this, el[0], "context of callback" );
+			equal( this, el[ 0 ], "context of callback" );
 		}
-	});
+	} );
 	el.simulate( "drag", {
 		dx: 20,
 		dy: 20
-	});
-});
+	} );
+} );
 
 test( "stop", function() {
 	expect( 2 );
-	var el = $("#selectable1");
-	el.selectable({
+	var el = $( "#selectable1" );
+	el.selectable( {
 		start: function() {
 			ok( true, "drag fired stop callback" );
-			equal( this, el[0], "context of callback" );
+			equal( this, el[ 0 ], "context of callback" );
 		}
-	});
+	} );
 	el.simulate( "drag", {
 		dx: 20,
 		dy: 20
-	});
-});
+	} );
+} );
 
 test( "mousedown: initial position of helper", function() {
 	expect( 2 );
@@ -48,7 +48,7 @@ test( "mousedown: initial position of helper", function() {
 	element.simulate( "mousedown", {
 		clientX: 10,
 		clientY: 10
-	});
+	} );
 
 	helperOffset = $( ".ui-selectable-helper" ).offset();
 	ok( helperOffset.top, 110, "Scroll top should be accounted for." );
@@ -58,6 +58,6 @@ test( "mousedown: initial position of helper", function() {
 	element.simulate( "mouseup" );
 	contentToForceScroll.remove();
 	$( window ).scrollTop( 0 ).scrollLeft( 0 );
-});
+} );
 
 } );

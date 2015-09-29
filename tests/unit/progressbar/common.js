@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/progressbar"
+	"ui/widgets/progressbar"
 ], function( common ) {
 
 common.testWidget( "progressbar", {
@@ -19,6 +19,6 @@ common.testWidget( "progressbar", {
 		complete: null,
 		create: null
 	}
-});
+} );
 
 } );

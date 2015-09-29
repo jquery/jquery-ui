@@ -1,6 +1,6 @@
 define( [
 	"lib/common",
-	"ui/droppable"
+	"ui/widgets/droppable"
 ], function( common ) {
 
 common.testWidget( "droppable", {
@@ -15,7 +15,7 @@ common.testWidget( "droppable", {
 		scope: "default",
 		tolerance: "intersect",
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		create: null,
 		deactivate: null,
@@ -23,6 +23,6 @@ common.testWidget( "droppable", {
 		out: null,
 		over: null
 	}
-});
+} );
 
 } );

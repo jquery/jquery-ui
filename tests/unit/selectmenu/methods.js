@@ -1,6 +1,6 @@
 define( [
 	"jquery",
-	"ui/selectmenu"
+	"ui/widgets/selectmenu"
 ], function( $ ) {
 
 module( "selectmenu: methods" );
@@ -9,8 +9,8 @@ test( "destroy", function( assert ) {
 	expect( 1 );
 	assert.domEqual( "#speed", function() {
 		$( "#speed" ).selectmenu().selectmenu( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "open / close", function() {
 	expect( 5 );
@@ -27,7 +27,7 @@ test( "open / close", function() {
 	element.selectmenu( "close" );
 	ok( menu.is( ":hidden" ), "close: menu hidden" );
 	equal( menu.attr( "aria-hidden" ), "true", "close: menu aria-disabled" );
-});
+} );
 
 test( "enable / disable", function() {
 	expect( 10 );
@@ -49,7 +49,7 @@ test( "enable / disable", function() {
 	equal( button.attr( "aria-disabled" ), "false", "enable: button ARIA" );
 	equal( button.attr( "tabindex" ), 0, "enable: button tabindex" );
 	equal( menu.attr( "aria-disabled" ), "false", "enable: menu ARIA" );
-});
+} );
 
 test( "refresh - structure", function() {
 	expect( 3 );
@@ -73,7 +73,7 @@ test( "refresh - structure", function() {
 	equal( options.length, menuItems.length, "menu item length" );
 	equal( "Added option", menuItems.last().text(), "added item" );
 	equal( "Changed value", menuItems.eq( 0 ).text(), "changed item" );
-});
+} );
 
 asyncTest( "refresh - change selected option", function() {
 	expect( 4 );
@@ -84,7 +84,7 @@ asyncTest( "refresh - change selected option", function() {
 	equal( element.find( "option:selected" ).text(), button.text(), "button text after init" );
 
 	button.simulate( "focus" );
-	setTimeout(function() {
+	setTimeout( function() {
 		equal( element.find( "option:selected" ).text(), button.text(), "button text after focus" );
 
 		element[ 0 ].selectedIndex = 0;
@@ -98,8 +98,8 @@ asyncTest( "refresh - change selected option", function() {
 		equal( "Selected option", button.text(), "button text after adding selected option" );
 
 		start();
-	});
-});
+	} );
+} );
 
 test( "refresh - disabled select", function() {
 	expect( 4 );
@@ -115,7 +115,7 @@ test( "refresh - disabled select", function() {
 	equal( button.attr( "aria-disabled" ), "true", "button ARIA" );
 	equal( button.attr( "tabindex" ), -1, "button tabindex" );
 	equal( menu.attr( "aria-disabled" ), "true", "menu ARIA" );
-});
+} );
 
 test( "refresh - disabled option", function( assert ) {
 	expect( 1 );
@@ -129,7 +129,7 @@ test( "refresh - disabled option", function( assert ) {
 
 	disabledItem = menu.find( "li" ).not( ".ui-selectmenu-optgroup" ).eq( 2 );
 	assert.hasClasses( disabledItem, "ui-state-disabled" );
-});
+} );
 
 test( "refresh - disabled optgroup", function( assert ) {
 	var i, item,
@@ -156,7 +156,7 @@ test( "refresh - disabled optgroup", function( assert ) {
 		item = item.next( "li" );
 		assert.hasClasses( item, "ui-state-disabled" );
 	}
-});
+} );
 
 test( "refresh - remove all options", function() {
 	expect( 2 );
@@ -170,7 +170,7 @@ test( "refresh - remove all options", function() {
 	equal( button.find( ".ui-selectmenu-text" ).html(), $( "<span>&#160;</span>" ).html(),
 		"Empty button text" );
 	equal( menu.children().length, 0, "Empty menu" );
-});
+} );
 
 test( "widget and menuWidget", function( assert ) {
 	expect( 4 );
@@ -184,6 +184,6 @@ test( "widget and menuWidget", function( assert ) {
 
 	equal( menu.length, 1, "Menu Widget: one element" );
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );
-});
+} );
 
 } );

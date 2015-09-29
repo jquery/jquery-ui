@@ -4,16 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Droppable - Simple photo manager</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/position.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/mouse.js"></script>
-	<script src="../../ui/draggable.js"></script>
-	<script src="../../ui/droppable.js"></script>
-	<script src="../../ui/resizable.js"></script>
-	<script src="../../ui/button.js"></script>
-	<script src="../../ui/dialog.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#gallery { float: left; width: 65%; min-height: 12em; }
@@ -29,13 +19,14 @@
 	#trash h4 .ui-icon { float: left; }
 	#trash .gallery h5 { display: none; }
 	</style>
-	<script>
-	$(function() {
-		// there's the gallery and the trash
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="dialog">
+
+		// There's the gallery and the trash
 		var $gallery = $( "#gallery" ),
 			$trash = $( "#trash" );
 
-		// let the gallery items be draggable
+		// Let the gallery items be draggable
 		$( "li", $gallery ).draggable({
 			cancel: "a.ui-icon", // clicking an icon won't initiate dragging
 			revert: "invalid", // when not dropped, the item will revert back to its initial position
@@ -44,7 +35,7 @@
 			cursor: "move"
 		});
 
-		// let the trash be droppable, accepting the gallery items
+		// Let the trash be droppable, accepting the gallery items
 		$trash.droppable({
 			accept: "#gallery > li",
 			classes: {
@@ -55,7 +46,7 @@
 			}
 		});
 
-		// let the gallery be droppable as well, accepting items from the trash
+		// Let the gallery be droppable as well, accepting items from the trash
 		$gallery.droppable({
 			accept: "#trash li",
 			classes: {
@@ -66,7 +57,7 @@
 			}
 		});
 
-		// image deletion function
+		// Image deletion function
 		var recycle_icon = "<a href='link/to/recycle/script/when/we/have/js/off' title='Recycle this image' class='ui-icon ui-icon-refresh'>Recycle image</a>";
 		function deleteImage( $item ) {
 			$item.fadeOut(function() {
@@ -84,7 +75,7 @@
 			});
 		}
 
-		// image recycle function
+		// Image recycle function
 		var trash_icon = "<a href='link/to/trash/script/when/we/have/js/off' title='Delete this image' class='ui-icon ui-icon-trash'>Delete image</a>";
 		function recycleImage( $item ) {
 			$item.fadeOut(function() {
@@ -102,7 +93,7 @@
 			});
 		}
 
-		// image preview function, demonstrating the ui.dialog used as a modal window
+		// Image preview function, demonstrating the ui.dialog used as a modal window
 		function viewLargerImage( $link ) {
 			var src = $link.attr( "href" ),
 				title = $link.siblings( "img" ).attr( "alt" ),
@@ -123,7 +114,7 @@
 			}
 		}
 
-		// resolve the icons behavior with event delegation
+		// Resolve the icons behavior with event delegation
 		$( "ul.gallery > li" ).on( "click", function( event ) {
 			var $item = $( this ),
 				$target = $( event.target );
@@ -138,7 +129,6 @@
 
 			return false;
 		});
-	});
 	</script>
 </head>
 <body>

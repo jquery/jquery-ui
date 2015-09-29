@@ -1,7 +1,7 @@
 define( [
 	"jquery",
 	"./helper",
-	"ui/tabs"
+	"ui/widgets/tabs"
 ], function( $, testHelper ) {
 
 var state = testHelper.state;
@@ -15,17 +15,17 @@ test( "create", function() {
 		tabs = element.find( "ul li" ),
 		panels = element.children( "div" );
 
-	element.tabs({
+	element.tabs( {
 		create: function( event, ui ) {
 			equal( ui.tab.length, 1, "tab length" );
 			strictEqual( ui.tab[ 0 ], tabs[ 0 ], "tab" );
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], panels[ 0 ], "panel" );
 		}
-	});
+	} );
 	element.tabs( "destroy" );
 
-	element.tabs({
+	element.tabs( {
 		active: 2,
 		create: function( event, ui ) {
 			equal( ui.tab.length, 1, "tab length" );
@@ -33,32 +33,32 @@ test( "create", function() {
 			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], panels[ 2 ], "panel" );
 		}
-	});
+	} );
 	element.tabs( "destroy" );
 
-	element.tabs({
+	element.tabs( {
 		active: false,
 		collapsible: true,
 		create: function( event, ui ) {
 			equal( ui.tab.length, 0, "tab length" );
 			equal( ui.panel.length, 0, "panel length" );
 		}
-	});
+	} );
 	element.tabs( "destroy" );
-});
+} );
 
 test( "beforeActivate", function() {
 	expect( 38 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			active: false,
 			collapsible: true
-		}),
+		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		anchors = tabs.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
-	// from collapsed
+	// From collapsed
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 0, "oldTab length" );
@@ -68,11 +68,11 @@ test( "beforeActivate", function() {
 		equal( ui.newPanel.length, 1, "newPanel length" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 0 ], "newPanel" );
 		state( element, 0, 0, 0 );
-	});
+	} );
 	element.tabs( "option", "active", 0 );
 	state( element, 1, 0, 0 );
 
-	// switching tabs
+	// Switching tabs
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		equal( event.originalEvent.type, "click", "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -84,11 +84,11 @@ test( "beforeActivate", function() {
 		equal( ui.newPanel.length, 1, "newPanel length" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		state( element, 1, 0, 0 );
-	});
+	} );
 	anchors.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
-	// collapsing
+	// Collapsing
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -98,11 +98,11 @@ test( "beforeActivate", function() {
 		equal( ui.newTab.length, 0, "newTab length" );
 		equal( ui.newPanel.length, 0, "newPanel length" );
 		state( element, 0, 1, 0 );
-	});
+	} );
 	element.tabs( "option", "active", false );
 	state( element, 0, 0, 0 );
 
-	// prevent activation
+	// Prevent activation
 	element.one( "tabsbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 0, "oldTab length" );
@@ -113,23 +113,23 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		event.preventDefault();
 		state( element, 0, 0, 0 );
-	});
+	} );
 	element.tabs( "option", "active", 1 );
 	state( element, 0, 0, 0 );
-});
+} );
 
 test( "activate", function() {
 	expect( 30 );
 
-	var element = $( "#tabs1" ).tabs({
+	var element = $( "#tabs1" ).tabs( {
 			active: false,
 			collapsible: true
-		}),
+		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		anchors = element.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
-	// from collapsed
+	// From collapsed
 	element.one( "tabsactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 0, "oldTab length" );
@@ -139,11 +139,11 @@ test( "activate", function() {
 		equal( ui.newPanel.length, 1, "newPanel length" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 0 ], "newPanel" );
 		state( element, 1, 0, 0 );
-	});
+	} );
 	element.tabs( "option", "active", 0 );
 	state( element, 1, 0, 0 );
 
-	// switching tabs
+	// Switching tabs
 	element.one( "tabsactivate", function( event, ui ) {
 		equal( event.originalEvent.type, "click", "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -155,11 +155,11 @@ test( "activate", function() {
 		equal( ui.newPanel.length, 1, "newPanel length" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		state( element, 0, 1, 0 );
-	});
+	} );
 	anchors.eq( 1 ).trigger( "click" );
 	state( element, 0, 1, 0 );
 
-	// collapsing
+	// Collapsing
 	element.one( "tabsactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( ui.oldTab.length, 1, "oldTab length" );
@@ -169,20 +169,20 @@ test( "activate", function() {
 		equal( ui.newTab.length, 0, "newTab length" );
 		equal( ui.newPanel.length, 0, "newPanel length" );
 		state( element, 0, 0, 0 );
-	});
+	} );
 	element.tabs( "option", "active", false );
 	state( element, 0, 0, 0 );
 
-	// prevent activation
+	// Prevent activation
 	element.one( "tabsbeforeactivate", function( event ) {
 		ok( true, "tabsbeforeactivate" );
 		event.preventDefault();
-	});
+	} );
 	element.one( "tabsactivate", function() {
 		ok( false, "tabsactivate" );
-	});
+	} );
 	element.tabs( "option", "active", 1 );
-});
+} );
 
 test( "beforeLoad", function() {
 	expect( 32 );
@@ -190,7 +190,7 @@ test( "beforeLoad", function() {
 	var tab, panelId, panel,
 		element = $( "#tabs2" );
 
-	// init
+	// Init
 	element.one( "tabsbeforeload", function( event, ui ) {
 		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
@@ -206,8 +206,8 @@ test( "beforeLoad", function() {
 		equal( ui.panel.html(), "", "panel html" );
 		event.preventDefault();
 		state( element, 0, 0, 1, 0, 0 );
-	});
-	element.tabs({ active: 2 });
+	} );
+	element.tabs( { active: 2 } );
 	state( element, 0, 0, 1, 0, 0 );
 	equal( panel.html(), "", "panel html after" );
 	element.tabs( "destroy" );
@@ -228,13 +228,13 @@ test( "beforeLoad", function() {
 		equal( ui.panel.html(), "", "panel html" );
 		event.preventDefault();
 		state( element, 1, 0, 0, 0, 0 );
-	});
+	} );
 	element.tabs();
 	element.tabs( "option", "active", 2 );
 	state( element, 0, 0, 1, 0, 0 );
 	equal( panel.html(), "", "panel html after" );
 
-	// click, change panel content
+	// Click, change panel content
 	element.one( "tabsbeforeload", function( event, ui ) {
 		tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
 		panelId = tab.attr( "aria-controls" );
@@ -250,12 +250,13 @@ test( "beforeLoad", function() {
 		ui.panel.html( "<p>testing</p>" );
 		event.preventDefault();
 		state( element, 0, 0, 1, 0, 0 );
-	});
+	} );
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 3 ).trigger( "click" );
 	state( element, 0, 0, 0, 1, 0 );
+
 	// .toLowerCase() is needed to convert <P> to <p> in old IEs
 	equal( panel.html().toLowerCase(), "<p>testing</p>", "panel html after" );
-});
+} );
 
 asyncTest( "load", function() {
 	expect( 21 );
@@ -263,7 +264,7 @@ asyncTest( "load", function() {
 	var tab, panelId, panel,
 		element = $( "#tabs2" );
 
-	// init
+	// Init
 	element.one( "tabsload", function( event, ui ) {
 		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
@@ -277,10 +278,11 @@ asyncTest( "load", function() {
 		equal( ui.panel.find( "p" ).length, 1, "panel html" );
 		state( element, 0, 0, 1, 0, 0 );
 		tabsload1();
-	});
-	element.tabs({ active: 2 });
+	} );
+	element.tabs( { active: 2 } );
 
 	function tabsload1() {
+
 		// .option()
 		element.one( "tabsload", function( event, ui ) {
 			tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
@@ -295,11 +297,12 @@ asyncTest( "load", function() {
 			equal( ui.panel.find( "p" ).length, 1, "panel html" );
 			state( element, 0, 0, 0, 1, 0 );
 			tabsload2();
-		});
+		} );
 		element.tabs( "option", "active", 3 );
 	}
 
 	function tabsload2() {
+
 		// click, change panel content
 		element.one( "tabsload", function( event, ui ) {
 			tab = element.find( ".ui-tabs-nav li" ).eq( 4 );
@@ -314,9 +317,9 @@ asyncTest( "load", function() {
 			equal( ui.panel.find( "p" ).length, 1, "panel html" );
 			state( element, 0, 0, 0, 0, 1 );
 			start();
-		});
+		} );
 		element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 4 ).trigger( "click" );
 	}
-});
+} );
 
 } );

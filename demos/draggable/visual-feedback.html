@@ -4,11 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Draggable - Visual feedback</title>
 	<link rel="stylesheet" href="../../themes/base/all.css">
-	<script src="../../external/jquery/jquery.js"></script>
-	<script src="../../ui/core.js"></script>
-	<script src="../../ui/widget.js"></script>
-	<script src="../../ui/mouse.js"></script>
-	<script src="../../ui/draggable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#draggable, #draggable2, #draggable3, #set div { width: 90px; height: 90px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
@@ -16,8 +11,8 @@
 	#set { clear:both; float:left; width: 368px; height: 120px; }
 	p { clear:both; margin:0; padding:1em 0; }
 	</style>
-	<script>
-	$(function() {
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
 		$( "#draggable" ).draggable({ helper: "original" });
 		$( "#draggable2" ).draggable({ opacity: 0.7, helper: "clone" });
 		$( "#draggable3" ).draggable({
@@ -28,7 +23,6 @@
 			}
 		});
 		$( "#set div" ).draggable({ stack: "#set div" });
-	});
 	</script>
 </head>
 <body>
