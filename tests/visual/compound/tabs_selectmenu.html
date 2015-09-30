@@ -5,18 +5,10 @@
 	<title>Compound Visual Test : Selectmenu in Tabs</title>
 	<link rel="stylesheet" href="../visual.css">
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/position.js"></script>
-	<script src="../../../ui/menu.js"></script>
-	<script src="../../../ui/selectmenu.js"></script>
-	<script src="../../../ui/tabs.js"></script>
-	<script>
-	$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="tabs selectmenu" data-composite="true">
 		$( "#tabs" ).tabs();
 		$( "select" ).selectmenu();
-	});
 	</script>
 	<style>
 		select { width: 200px; }

@@ -4,13 +4,15 @@
 	<meta charset="utf-8">
 	<title>Menu Visual Test: Default</title>
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/position.js"></script>
-	<script src="../../../ui/menu.js"></script>
-	<script>
-	$(function() {
+	<style>
+		.ui-menu { width: 250px; margin-bottom: 2em; }
+		.menu4 { height: 225px; overflow-y: auto; overflow-x: hidden; }
+		.address-item { border-bottom: 1px solid #999; }
+		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
+		.address-content { display: block; margin-bottom: .2em; padding-left: 10px; }
+	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js">
 		function logger( event, ui ) {
 			$( "<p>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
 		}
@@ -42,15 +44,7 @@
 			items: "> :not('.ui-menu-group')",
 			select: logger
 		});
-	});
 	</script>
-	<style>
-		.ui-menu { width: 250px; margin-bottom: 2em; }
-		.menu4 { height: 225px; overflow-y: auto; overflow-x: hidden; }
-		.address-item { border-bottom: 1px solid #999; }
-		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
-		.address-content { display: block; margin-bottom: .2em; padding-left: 10px; }
-	</style>
 </head>
 <body>
 

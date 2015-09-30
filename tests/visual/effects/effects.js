@@ -1,5 +1,3 @@
-$( function() {
-
 var duration = 1000,
 	wait = 500;
 
@@ -103,6 +101,4 @@ $( "#removeClass" ).on( "click", function() {
 } );
 $( "#toggleClass" ).on( "click", function() {
 	$( this ).toggleClass( "current", duration );
-} );
-
 } );

@@ -11,11 +11,23 @@
 			margin: 20px auto;
 		}
 	</style>
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/mouse.js"></script>
-	<script src="../../../ui/slider.js"></script>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js">
+		var el = $( "#slider" ).slider({
+			range: true,
+			min: 0,
+			max: 100,
+			values: [ 0, 50 ]
+		});
+
+		$( "#set-max-values" ).on( "click", function() {
+			el.slider( "option", { values: [ 100, 100 ] } );
+		});
+
+		$( "#set-min-values" ).on( "click", function() {
+			el.slider( "option", { values: [ 0, 0 ] } );
+		});
+	</script>
 </head>
 <body>
 <div id="wrapper">
@@ -26,22 +38,5 @@
 	<button id="set-max-values">set values to max</button>
 	<button id="set-min-values">set values to min</button>
 </div>
-
-<script>
-	var el = $( "#slider" ).slider({
-		range: true,
-		min: 0,
-		max: 100,
-		values: [ 0, 50 ]
-	});
-
-	$( "#set-max-values" ).on( "click", function() {
-		el.slider( "option", { values: [ 100, 100 ] } );
-	});
-
-	$( "#set-min-values" ).on( "click", function() {
-		el.slider( "option", { values: [ 0, 0 ] } );
-	});
-</script>
 </body>
 </html>

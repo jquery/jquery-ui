@@ -4,20 +4,8 @@
 	<meta charset="utf-8">
 	<title>Dialog Visual Test</title>
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/mouse.js"></script>
-	<script src="../../../ui/draggable.js"></script>
-	<script src="../../../ui/position.js"></script>
-	<script src="../../../ui/resizable.js"></script>
-	<script src="../../../ui/button.js"></script>
-	<script src="../../../ui/dialog.js"></script>
-	<script src="../../../ui/effect.js"></script>
-	<script src="../../../ui/effect-blind.js"></script>
-	<script src="../../../ui/effect-explode.js"></script>
-	<script>
-	$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="effect-blind effect-explode">
 		$( "#dialog" ).dialog({
 			autoOpen: false,
 			show: {
@@ -34,7 +22,6 @@
 		$( "#opener" ).on( "click", function() {
 			$( "#dialog" ).dialog( "open" );
 		});
-	});
 	</script>
 </head>
 <body>

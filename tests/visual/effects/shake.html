@@ -4,20 +4,6 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Effects Test Suite</title>
 	<link rel="stylesheet" href="effects.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/effect.js"></script>
-	<script src="../../../ui/effect-scale.js"></script>
-	<script src="../../../ui/effect-shake.js"></script>
-	<script>
-	$(function() {
-		$( "#btn" ).on( "click", function() {
-			$( ".shake" ).effect( "shake", {
-				duration: +$( "#duration" ).val(),
-				mode: "toggle"
-			});
-		});
-	});
-	</script>
 	<style>
 	#inputbox {
 		background: green;
@@ -54,6 +40,15 @@
 		padding: 10px;
 	}
 	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="effect-shake" data-composite="true">
+		$( "#btn" ).on( "click", function() {
+			$( ".shake" ).effect( "shake", {
+				duration: +$( "#duration" ).val(),
+				mode: "toggle"
+			});
+		});
+	</script>
 </head>
 <body>
 

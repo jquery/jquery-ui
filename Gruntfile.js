@@ -147,15 +147,12 @@ grunt.initConfig({
 	},
 	uglify: minify,
 	htmllint: {
-		good: [ "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
-			return "!" + file;
-		} ) ),
-		demos: {
+		good: {
 			options: {
 				ignore: [
 				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
 			] },
-			src: [ "demos/**/*.html" ].concat( htmllintBad.map( function( file ) {
+			src: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
 				return "!" + file;
 			} ) )
 		},

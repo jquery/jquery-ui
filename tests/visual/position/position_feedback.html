@@ -4,13 +4,67 @@
 	<meta charset="utf-8">
 	<title>Position Visual Test: Feedback</title>
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/position.js"></script>
-	<script src="../../../ui/menu.js"></script>
-	<script>
-	$(function() {
+	<style>
+	#target, .element {
+		position: absolute;
+		border: 1px solid black;
+		border-radius: 5px;
+		width: 75px;
+		height: 25px;
+		padding: 5px;
+		font-size: 62.5%;
+	}
+	#target {
+		height: 75px;
+	}
+	.element:before {
+		font-size: 12pt;
+		content: "↑";
+		position: absolute;
+		top: -19px;
+		left: 5px;
+	}
+	.right:before {
+		left: auto;
+		right: 5px;
+	}
+	.bottom:before {
+		content: "↓";
+		top: auto;
+		bottom: -19px;
+	}
+	.center:before {
+		left: 50%;
+		right: auto;
+	}
+	.middle:before {
+		top: 50%;
+		bottom: auto;
+	}
+	.horizontal:before {
+		height: 10px;
+		top: 50%;
+		margin-top: -8px;
+		bottom: auto;
+		left: -18px;
+		right: auto;
+		content: "←";
+	}
+	.right.horizontal:before {
+		left: auto;
+		right: -18px;
+		content: "→";
+	}
+	.bottom.horizontal:before {
+		top: auto;
+		bottom: 5px;
+	}
+	.top.horizontal:before {
+		top: 5px;
+	}
+	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js">
 		function using( position, feedback ) {
 			$( this )
 				.css( position )
@@ -74,67 +128,7 @@
 			rightElement.position( positionWithOffset(
 				0.9 * (event.pageX - targetOffset.left), -0.9 * (event.pageY - targetOffset.top) ) );
 		});
-	});
 	</script>
-	<style>
-	#target, .element {
-		position: absolute;
-		border: 1px solid black;
-		border-radius: 5px;
-		width: 75px;
-		height: 25px;
-		padding: 5px;
-		font-size: 62.5%;
-	}
-	#target {
-		height: 75px;
-	}
-	.element:before {
-		font-size: 12pt;
-		content: "↑";
-		position: absolute;
-		top: -19px;
-		left: 5px;
-	}
-	.right:before {
-		left: auto;
-		right: 5px;
-	}
-	.bottom:before {
-		content: "↓";
-		top: auto;
-		bottom: -19px;
-	}
-	.center:before {
-		left: 50%;
-		right: auto;
-	}
-	.middle:before {
-		top: 50%;
-		bottom: auto;
-	}
-	.horizontal:before {
-		height: 10px;
-		top: 50%;
-		margin-top: -8px;
-		bottom: auto;
-		left: -18px;
-		right: auto;
-		content: "←";
-	}
-	.right.horizontal:before {
-		left: auto;
-		right: -18px;
-		content: "→";
-	}
-	.bottom.horizontal:before {
-		top: auto;
-		bottom: 5px;
-	}
-	.top.horizontal:before {
-		top: 5px;
-	}
-	</style>
 </head>
 <body>
 

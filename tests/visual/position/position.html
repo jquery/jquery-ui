@@ -3,12 +3,6 @@
 <head>
 	<meta charset="utf-8">
 	<title>Position Visual Test</title>
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/mouse.js"></script>
-	<script src="../../../ui/draggable.js"></script>
-	<script src="../../../ui/position.js"></script>
 	<style>
 		.demo {
 			position: relative;
@@ -34,8 +28,8 @@
 			margin: 0 15px 15px 0;
 		}
 	</style>
-	<script>
-		$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="draggable">
 			var within = $( ".demo" ),
 				positionable = $( ".positionable" );
 			function position() {
@@ -67,7 +61,6 @@
 			$( "select, input" ).on( "click keyup change", function() { position(); } );
 
 			position();
-		});
 	</script>
 </head>
 <body>

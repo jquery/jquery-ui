@@ -4,11 +4,9 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Effects Test Suite</title>
 	<link rel="stylesheet" href="effects.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/effect.js"></script>
-	<script src="../../../ui/effect-clip.js"></script>
-	<script>
-	$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="effect effect-clip"
+		data-composite="true">
 		var target = $( ".target" ),
 			duration = 2000;
 
@@ -33,7 +31,6 @@
 				direction: "vertical"
 			}, duration );
 		});
-	});
 	</script>
 	<style>
 	.clipped {
