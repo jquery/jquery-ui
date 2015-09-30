@@ -12,7 +12,8 @@
 //>>description: Visually groups form control widgets
 //>>docs: http://api.jqueryui.com/controlgroup/
 //>>demos: http://jqueryui.com/controlgroup/
-//>>css.structure: ../themes/base/core.css, ../themes/base/controlgroup.css
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/controlgroup.css
 //>>css.theme: ../themes/base/theme.css
 
 ( function( factory ) {
@@ -71,28 +72,9 @@ return $.widget( "ui.controlgroup", {
 			var widgets, labels,
 				options = {};
 
-			// We assume everything is in the middle to start because we can't determine
-			// first / last elements until all enhancments are done.
-			if ( that[ "_" + widget + "Options" ] ) {
-				options = that[ "_" + widget + "Options" ]( "middle" );
-			}
-
 			// Make sure the widget actually exists and has a selector set
-			if ( $.fn[ widget ] && selector ) {
-
-				// Find instances of this widget inside controlgroup and init them
-				widgets = that.element.find( selector )[ widget ]( options );
-
-				widgets.each( function() {
-					var element = $( this );
-
-					// Store an instance of the controlgroup to be able to reference it later
-					var widgetElement = element[ widget ]( "widget" );
-					$.data( widgetElement[ 0 ], "ui-controlgroup-data",
-						element[ widget ]( "instance" ) );
-
-					childWidgets.push( widgetElement[ 0 ] );
-				} );
+			if ( !$.fn[ widget ] || !selector ) {
+				return;
 			} else if ( selector && widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
 				labels.each( function() {
@@ -100,7 +82,29 @@ return $.widget( "ui.controlgroup", {
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
 				childWidgets = childWidgets.concat( labels.get() );
+				return;
 			}
+
+			// We assume everything is in the middle to start because we can't determine
+			// first / last elements until all enhancments are done.
+			if ( that[ "_" + widget + "Options" ] ) {
+				options = that[ "_" + widget + "Options" ]( "middle" );
+			}
+
+			// Find instances of this widget inside controlgroup and init them
+			widgets = that.element.find( selector )[ widget ]( options );
+
+			widgets.each( function() {
+				var element = $( this );
+
+				// Store an instance of the controlgroup to be able to reference
+				// from the outermost element for changing options and refresh
+				var widgetElement = element[ widget ]( "widget" );
+				$.data( widgetElement[ 0 ], "ui-controlgroup-data",
+					element[ widget ]( "instance" ) );
+
+				childWidgets.push( widgetElement[ 0 ] );
+			} );
 		} );
 
 		this.childWidgets = $( $.unique( childWidgets ) );
