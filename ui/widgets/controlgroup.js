@@ -88,10 +88,8 @@ return $.widget( "ui.controlgroup", {
 
 					// Store an instance of the controlgroup to be able to reference it later
 					var widgetElement = element[ widget ]( "widget" );
-					widgetElement.data(
-						"ui-controlgroup-data",
-						element.data( "ui-" + widget.charAt( 0 ).toUpperCase() + widget.slice( 1 ) )
-					);
+					$.data( widgetElement[ 0 ], "ui-controlgroup-data",
+						element[ widget ]( "instance" ) );
 
 					childWidgets.push( widgetElement[ 0 ] );
 				} );
