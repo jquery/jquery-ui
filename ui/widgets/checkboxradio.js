@@ -12,7 +12,9 @@
 //>>description: Enhances a form with multiple themeable checkboxes or radio buttons.
 //>>docs: http://api.jqueryui.com/checkboxradio/
 //>>demos: http://jqueryui.com/checkboxradio/
-//>>css.structure: ../themes/base/core.css, ../themes/base/button.css, ../themes/base/checkboxradio.css
+//>>css.structure: ../themes/base/core.css
+//>>css.structure: ../themes/base/button.css
+//>>css.structure: ../themes/base/checkboxradio.css
 //>>css.theme: ../themes/base/theme.css
 
 ( function( factory ) {
@@ -46,9 +48,9 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	},
 
 	_getCreateOptions: function() {
-		var disabled, labels,
-			that = this,
-			options = this._super() || {};
+		var disabled, labels;
+		var that = this;
+		var options = this._super() || {};
 
 		// We read the type here, because it makes more sense to throw a element type error first,
 		// rather then the error for lack of a label. Often if its the wrong type, it
@@ -152,14 +154,13 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		var formParent = this.formParent[ 0 ];
 		var radios = $( [] );
 
-		if ( name ) {
-			name = $.ui.escapeSelector( name );
-			radios = this.formParent.find( "[name='" + $.ui.escapeSelector( name ) + "']" ).filter( function() {
-				var form = $( this ).form();
-				return ( form.length ? form : $( "body" ) )[ 0 ] === formParent;
-			} );
-		}
-		return radios.not( this.element );
+		if ( !name ) {
+			return $( [] );
+		}``
+		return this.formParent.find( "[name='" + $.ui.escapeSelector( name ) + "']" ).filter( function() {
+			var form = $( this ).form();
+			return ( form.length ? form : $( "body" ) )[ 0 ] === formParent;
+		} ).not( this.element );
 	},
 
 	_toggleClasses: function() {
@@ -207,7 +208,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 			this._toggleClass( this.label, null, "ui-state-disabled", value );
 			this.element[ 0 ].disabled = value;
 
-			// Don't refresh if disabled
+			// Don't refresh when setting disabled
 			return;
 		}
 		this.refresh();
