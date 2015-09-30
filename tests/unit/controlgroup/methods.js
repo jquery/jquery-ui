@@ -83,7 +83,7 @@ $.each( tests, function( widget, html ) {
 			}
 
 			// Hide each element and check the corner classes
-			function iterateHidden( excludeInvisible ) {
+			function iterateHidden( onlyVisible ) {
 				for ( i = 0; i < 4; i++ ) {
 
 					$( controls ).each( showElements );
@@ -91,7 +91,7 @@ $.each( tests, function( widget, html ) {
 					controls[ i ][ widget ]( "widget" ).hide();
 
 					currentClasses = classes.slice( 0 );
-					if ( excludeInvisible ) {
+					if ( onlyVisible ) {
 						if ( i === 0 ) {
 							currentClasses[ i + 1 ] = classes[ i ];
 							currentClasses[ i ] = false;
@@ -128,7 +128,7 @@ $.each( tests, function( widget, html ) {
 			iterateHidden( true );
 
 			// Set the exclude option to false so we no longer care about hidden
-			element.controlgroup( "option", "excludeInvisible", false );
+			element.controlgroup( "option", "onlyVisible", false );
 
 			// Iterate hiding the elements again and check their corner classes
 			iterateHidden();
