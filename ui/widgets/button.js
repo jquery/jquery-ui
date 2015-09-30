@@ -121,7 +121,9 @@ $.widget( "ui.button", {
 	},
 
 	_enhance: function() {
-		this.element.attr( "role", "button" );
+		if ( !this.element.is( "button" ) ) {
+			this.element.attr( "role", "button" );
+		}
 
 		if ( this.options.icon ) {
 			this._updateIcon( "icon", this.options.icon );
