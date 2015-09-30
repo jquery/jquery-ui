@@ -80,15 +80,14 @@ return $.widget( "ui.controlgroup", {
 			// Make sure the widget actually exists and has a selector set
 			if ( $.fn[ widget ] && selector ) {
 
-				// Find instances of this widget inside controlgroup init them
+				// Find instances of this widget inside controlgroup and init them
 				widgets = that.element.find( selector )[ widget ]( options );
 
 				widgets.each( function() {
 					var element = $( this );
 
-					// Store an instance of the controlgroup to be able to refrence
+					// Store an instance of the controlgroup to be able to reference it later
 					var widgetElement = element[ widget ]( "widget" );
-
 					widgetElement.data(
 						"ui-controlgroup-data",
 						element.data( "ui-" + widget.charAt( 0 ).toUpperCase() + widget.slice( 1 ) )
