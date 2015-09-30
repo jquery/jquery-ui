@@ -17,7 +17,7 @@ common.testWidget( "controlgroup", {
 			"controlgroupLabel": ".ui-controlgroup-label"
 		},
 		direction: "horizontal",
-		excludeInvisible: true,
+		onlyVisible: true,
 		classes: {},
 
 		// Callbacks

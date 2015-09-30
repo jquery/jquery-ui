@@ -36,7 +36,7 @@ return $.widget( "ui.controlgroup", {
 	options: {
 		direction: "horizontal",
 		disabled: null,
-		excludeInvisible: true,
+		onlyVisible: true,
 		items: {
 			"button": "input[type=button], input[type=submit], input[type=reset], button, a",
 			"controlgroupLabel": ".ui-controlgroup-label",
@@ -209,7 +209,7 @@ return $.widget( "ui.controlgroup", {
 		children = this.childWidgets;
 
 		// We filter here because we need to track all childWidgets not just the visible ones
-		if ( this.options.excludeInvisible ) {
+		if ( this.options.onlyVisible ) {
 			children = children.filter( ":visible" );
 		}
 

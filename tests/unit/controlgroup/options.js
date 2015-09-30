@@ -73,21 +73,21 @@ test( "items: custom widget", function() {
 		"Custom widget called" );
 } );
 
-test( "excludeInvisible", function( assert ) {
+test( "onlyVisible", function( assert ) {
 	expect( 4 );
 	var element = $( ".controlgroup" ).controlgroup( {
-			excludeInvisible: false
+			onlyVisible: false
 		} ),
 		buttons = element.children( ".ui-button" );
 
 	assert.lacksClassStart( buttons.eq( 1 ), "ui-corner" );
 	assert.hasClasses( buttons.eq( 0 ), "ui-corner-left",
-		"ExcludeInvisible: false: First button hidden second button doesn't get a corner class" );
+		"onlyVisible: false: First button hidden second button doesn't get a corner class" );
 
-	element.controlgroup( "option", "excludeInvisible", true );
+	element.controlgroup( "option", "onlyVisible", true );
 	assert.lacksClassStart( buttons.eq( 0 ), "ui-corner" );
 	assert.hasClasses( buttons.eq( 1 ), "ui-corner-left",
-		"ExcludeInvisible: true: First button is hidden second button get corner class" );
+		"onlyVisible: true: First button is hidden second button get corner class" );
 } );
 
 test( "direction", function( assert ) {
