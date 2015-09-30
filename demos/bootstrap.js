@@ -81,6 +81,7 @@ require.config( {
 	baseUrl: window.location.pathname.indexOf( "demos/" ) !== -1 ? "../../ui" : "../../../ui",
 	paths: {
 		jquery: "../external/jquery/jquery",
+		pep: "../external/pep/pep",
 		external: "../external/"
 	},
 	shim: {

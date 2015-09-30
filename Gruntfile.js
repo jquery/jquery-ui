@@ -119,6 +119,7 @@ grunt.initConfig({
 				baseUrl: "./",
 				paths: {
 					jquery: "./external/jquery/jquery",
+					pep: "./external/pep/pep",
 					external: "./external/"
 				},
 				preserveLicenseComments: false,
@@ -129,7 +130,7 @@ grunt.initConfig({
 				include: expandFiles( [ "ui/**/*.js", "!ui/i18n/*" ] ),
 				out: "dist/jquery-ui.js",
 				wrap: {
-					start: createBanner( uiFiles ),
+					start: createBanner( uiFiles )
 				}
 			}
 		}
@@ -248,6 +249,9 @@ grunt.initConfig({
 
 				"jshint/jshint.js": "jshint/dist/jshint.js",
 				"jshint/LICENSE": "jshint/LICENSE",
+
+				"pep/pep.js": "pepjs/dist/pep.js",
+				"pep/LICENSE.txt": "pepjs/LICENSE.txt",
 
 				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",

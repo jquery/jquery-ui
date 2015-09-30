@@ -316,7 +316,7 @@ $.ui.ddmanager = {
 			}
 
 			// Activate the droppable if used directly from draggables
-			if ( type === "mousedown" ) {
+			if ( type === "pointerdown" ) {
 				m[ i ]._activate.call( m[ i ], event );
 			}
 

@@ -8,6 +8,7 @@ requirejs.config( {
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
 		"lib": "../../lib",
+		"pep": "../../../external/pep/pep",
 		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",

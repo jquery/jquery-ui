@@ -18,6 +18,7 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
+			"pep",
 			"../ie",
 			"../version",
 			"../widget"
@@ -30,7 +31,7 @@
 }( function( $ ) {
 
 var mouseHandled = false;
-$( document ).on( "mouseup", function() {
+$( document ).on( "pointerup", function() {
 	mouseHandled = false;
 } );
 
@@ -45,7 +46,7 @@ return $.widget( "ui.mouse", {
 		var that = this;
 
 		this.element
-			.on( "mousedown." + this.widgetName, function( event ) {
+			.on( "pointerdown." + this.widgetName, function( event ) {
 				return that._mouseDown( event );
 			} )
 			.on( "click." + this.widgetName, function( event ) {
@@ -56,6 +57,9 @@ return $.widget( "ui.mouse", {
 				}
 			} );
 
+		// Add touch-based dragging
+		this.element.attr( "touch-action", "none" );
+
 		this.started = false;
 	},
 
@@ -65,9 +69,12 @@ return $.widget( "ui.mouse", {
 		this.element.off( "." + this.widgetName );
 		if ( this._mouseMoveDelegate ) {
 			this.document
-				.off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-				.off( "mouseup." + this.widgetName, this._mouseUpDelegate );
+				.off( "pointermove." + this.widgetName, this._mouseMoveDelegate )
+				.off( "pointerup." + this.widgetName, this._mouseUpDelegate );
 		}
+
+		// Remove touch-based dragging
+		this.element.removeAttr( "touch-action" );
 	},
 
 	_mouseDown: function( event ) {
@@ -85,12 +92,15 @@ return $.widget( "ui.mouse", {
 		this._mouseDownEvent = event;
 
 		var that = this,
-			btnIsLeft = ( event.which === 1 ),
+			isPrimary = event.originalEvent.isPrimary,
+
+			// PEP does not support event.which
+			btnIsLeft = ( event.button === 0 ),
 
 			// event.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
 			elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ? $( event.target ).closest( this.options.cancel ).length : false );
-		if ( !btnIsLeft || elIsCancel || !this._mouseCapture( event ) ) {
+		if ( !btnIsLeft || !isPrimary || elIsCancel || !this._mouseCapture( event ) ) {
 			return true;
 		}
 
@@ -123,8 +133,8 @@ return $.widget( "ui.mouse", {
 		};
 
 		this.document
-			.on( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-			.on( "mouseup." + this.widgetName, this._mouseUpDelegate );
+			.on( "pointermove." + this.widgetName, this._mouseMoveDelegate )
+			.on( "pointerup." + this.widgetName, this._mouseUpDelegate );
 
 		event.preventDefault();
 
@@ -133,6 +143,11 @@ return $.widget( "ui.mouse", {
 	},
 
 	_mouseMove: function( event ) {
+
+		// Ignore multi-touch events
+		if ( !event.originalEvent.isPrimary ) {
+			return true;
+		}
 
 		// Only check for mouseups outside the document if you've moved inside the document
 		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
@@ -145,12 +160,12 @@ return $.widget( "ui.mouse", {
 				return this._mouseUp( event );
 
 			// Iframe mouseup check - mouseup occurred in another document
-			} else if ( !event.which ) {
+			} else if ( !event.buttons ) {
 				return this._mouseUp( event );
 			}
 		}
 
-		if ( event.which || event.button ) {
+		if ( event.buttons || event.button ) {
 			this._mouseMoved = true;
 		}
 
@@ -170,8 +185,8 @@ return $.widget( "ui.mouse", {
 
 	_mouseUp: function( event ) {
 		this.document
-			.off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-			.off( "mouseup." + this.widgetName, this._mouseUpDelegate );
+			.off( "pointermove." + this.widgetName, this._mouseMoveDelegate )
+			.off( "pointerup." + this.widgetName, this._mouseUpDelegate );
 
 		if ( this._mouseStarted ) {
 			this._mouseStarted = false;
