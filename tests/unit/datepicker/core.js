@@ -12,7 +12,7 @@ module( "datepicker: core", {
 	}
 } );
 
-common.testJshint( "datepicker" );
+common.testJshint( "widgets/datepicker" );
 
 test( "initialization - Reinitialization after body had been emptied.", function() {
 	expect( 1 );

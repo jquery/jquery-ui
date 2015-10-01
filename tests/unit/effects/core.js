@@ -287,7 +287,7 @@ asyncTest( "transfer() with callback", function() {
 $.each( $.effects.effect, function( effect ) {
 	module( "effects." + effect );
 
-	common.testJshint( "effect-" + effect );
+	common.testJshint( "effects/effect-" + effect );
 
 	if ( effect === "transfer" ) {
 		return;
