@@ -9,7 +9,8 @@ asyncTest( "Anchor recieves click event when spacebar is pressed", function() {
 	expect( 1 );
 	var element = $( "#anchor-button" ).button();
 
-	element.on( "click", function() {
+	element.on( "click", function( event ) {
+		event.preventDefault();
 		ok( true, "click occcured as a result of spacebar" );
 		start();
 	} );
