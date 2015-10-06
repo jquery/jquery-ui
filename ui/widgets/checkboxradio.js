@@ -59,6 +59,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 		labels = this.element.labels();
 
+		// If there are multiple labels, use the last one
 		this.label = $( labels[ labels.length - 1 ] );
 		if ( !this.label.length ) {
 			$.error( "No label found for checkboxradio widget" );
@@ -152,11 +153,11 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	_getRadioGroup: function() {
 		var name = this.element[ 0 ].name;
 		var formParent = this.formParent[ 0 ];
-		var radios = $( [] );
 
 		if ( !name ) {
 			return $( [] );
-		}``
+		}
+
 		return this.formParent.find( "[name='" + $.ui.escapeSelector( name ) + "']" ).filter( function() {
 			var form = $( this ).form();
 			return ( form.length ? form : $( "body" ) )[ 0 ] === formParent;
