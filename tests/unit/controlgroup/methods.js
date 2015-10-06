@@ -35,7 +35,7 @@ test( "enable", function( assert ) {
 var tests = {
 		"checkboxradio": "<input type='checkbox'>",
 		"selectmenu": "<select><option>foo</option></select>",
-		"button": "<button>"
+		"button": "<button>button text</button>"
 	},
 	orientations = {
 		"horizontal": [
@@ -108,7 +108,7 @@ $.each( tests, function( widget, html ) {
 			// Add a label for each element and then append the element to the control group
 			for ( i = 0; i < 4; i++ ) {
 				control = $( html ).attr( "id", "id" + i )
-					.add( $( "<label>" ).clone().attr( "for", "id" + i ) );
+					.add( $( "<label>label text</label>" ).clone().attr( "for", "id" + i ) );
 
 				controls.push( control );
 				element.append( control );
