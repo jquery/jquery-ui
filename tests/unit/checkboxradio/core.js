@@ -55,7 +55,7 @@ test( "Checkbox creation requires a label, and finds it in all cases", function(
 		"<span><input type='checkbox' id='t7092b'><label for='t7092b'></label></span>",
 		"<span><span><input type='checkbox' id='t7092c'></span><label for='t7092c'></label></span>",
 		"<span><input type='checkbox' id='t7092d'></span><span><label for='t7092d'></label></span>",
-		"<span><input type='checkbox' id='t7092e'><span><label for='t7092e'></label></span>",
+		"<span><input type='checkbox' id='t7092e'><span><label for='t7092e'></label></span></span>",
 		"<span><label><input type='checkbox' id='t7092f'></label></span>",
 		"<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>"
 	];
