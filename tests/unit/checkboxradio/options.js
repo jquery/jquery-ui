@@ -120,8 +120,8 @@ test( "label - default", function() {
 	widget = checkbox.checkboxradio( "widget" );
 	strictEqual( checkbox.checkboxradio( "option", "label" ),
 		"checkbox label", "When no value passed on create text from dom is used for option" );
-	strictEqual( widget.text(),
-		" checkbox label", "When no value passed on create text from dom is used in dom" );
+	strictEqual( $.trim( widget.text() ),
+		"checkbox label", "When no value passed on create text from dom is used in dom" );
 } );
 test( "label - explicit value", function() {
 	expect( 5 );
@@ -134,8 +134,8 @@ test( "label - explicit value", function() {
 
 	strictEqual( checkbox.checkboxradio( "option", "label" ),
 		"foo", "When value is passed on create value is used for option" );
-	strictEqual( widget.text(),
-		" foo", "When value is passed on create value is used in dom" );
+	strictEqual( $.trim( widget.text() ),
+		"foo", "When value is passed on create value is used in dom" );
 	strictEqual( icon.length, 1,
 		"Icon is preserved when label is set on init when wrapped in label" );
 	strictEqual( iconSpace.length, 1,
@@ -159,8 +159,8 @@ test( "label - explicit null value", function() {
 	widget = checkbox.checkboxradio( "widget" );
 	strictEqual( checkbox.checkboxradio( "option", "label" ),
 		"checkbox label", "When null is passed on create text from dom is used for option" );
-	strictEqual( widget.text(),
-		" checkbox label", "When null is passed on create text from dom is used in dom" );
+	strictEqual( $.trim( widget.text() ),
+		"checkbox label", "When null is passed on create text from dom is used in dom" );
 
 } );
 
@@ -175,14 +175,14 @@ test( "label", function() {
 	checkbox.checkboxradio( "option", "label", "bar" );
 	strictEqual( checkbox.checkboxradio( "option", "label" ),
 		"bar", "When value is passed value is used for option" );
-	strictEqual( widget.text(),
-		" bar", "When value is passed value is used in dom" );
+	strictEqual( $.trim( widget.text() ),
+		"bar", "When value is passed value is used in dom" );
 
 	checkbox.checkboxradio( "option", "label", null );
 	strictEqual( checkbox.checkboxradio( "option", "label" ),
 		"bar", "When null is passed text from dom is used for option" );
-	strictEqual( widget.text(),
-		" bar", "When null is passed text from dom is used in dom" );
+	strictEqual( $.trim( widget.text() ),
+		"bar", "When null is passed text from dom is used in dom" );
 
 } );
 
