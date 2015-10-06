@@ -137,7 +137,7 @@ test( "icon position", function( assert ) {
 		"Button has iconPosition beginning by default" );
 	equal( button.contents()[ 0 ], icon[ 0 ], "icon is prepended when position is begining" );
 	equal( icon.next()[ 0 ], space[ 0 ], "icon is followed by a space when position is begining" );
-	equal( space.text(), " ",
+	equal( space.length, 1,
 		"ui-button-icon-space contains a breaking space iconPosition:beginning" );
 	assert.lacksClasses( icon, "ui-widget-icon-block" );
 
@@ -148,7 +148,7 @@ test( "icon position", function( assert ) {
 	equal( button.button( "option", "iconPosition" ), "end", "Button has iconPosition end" );
 	equal( button.contents().last()[ 0 ], icon[ 0 ], "icon is appended when position is end" );
 	equal( icon.prev()[ 0 ], space[ 0 ], "icon is preceeded by a space when position is end" );
-	equal( space.text(), " ",
+	equal( space.length, 1,
 		"ui-button-icon-space contains a breaking space iconPosition:beginning" );
 	assert.lacksClasses( icon, "ui-widget-icon-block" );
 
