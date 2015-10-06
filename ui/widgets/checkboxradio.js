@@ -226,14 +226,14 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 			}
 
 			if ( this.type === "checkbox" ) {
-				toAdd += checked ? "ui-icon-check" : "ui-icon-blank";
+				toAdd += checked ? "ui-icon-check ui-state-highlight" : "ui-icon-blank";
 				this._removeClass( this.icon, null, checked ? "ui-icon-blank" : "ui-icon-check" );
 			} else {
 				toAdd += "ui-icon-blank";
 			}
 			this._addClass( this.icon, "ui-checkboxradio-icon", toAdd );
 			if ( !checked ) {
-				this._removeClass( this.icon, null, "ui-icon-check" );
+				this._removeClass( this.icon, null, "ui-icon-check ui-state-highlight" );
 			}
 			this.icon.prependTo( this.label ).after( this.iconSpace );
 		} else if ( this.icon !== undefined ) {
