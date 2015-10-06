@@ -67,6 +67,9 @@ function assertIcon( checkbox, icon, assert ) {
 	assert.hasClasses( iconElement, "ui-checkboxradio-icon ui-corner-all ui-icon " +
 		"ui-icon-background ui-icon-" + icon,
 		"Icon has proper classes" );
+	if ( icon === "blank" ) {
+		assert.lacksClasses( iconElement, "ui-icon-check ui-state-highlight" );
+	}
 }
 test( "icon - false on init", function() {
 	var checkbox = $( "#checkbox-option-icon" );
@@ -76,36 +79,43 @@ test( "icon - false on init", function() {
 	checkbox.checkboxradio( { icon: false } );
 	assertNoIcon( checkbox );
 } );
-
 test( "icon - default unchecked", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" );
 
-	expect( 2 );
+	expect( 3 );
 
 	checkbox.checkboxradio();
 	assertIcon( checkbox, false, assert );
 } );
+test( "icon - default checked", function( assert ) {
+	var checkbox = $( "#checkbox-option-icon" ).attr( "checked", true );
+
+	expect( 2 );
+
+	checkbox.checkboxradio();
+	assertIcon( checkbox, "check ui-state-highlight", assert );
+} );
 test( "icon", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" );
 
-	expect( 8 );
+	expect( 9 );
 
 	checkbox.prop( "checked", true );
 
 	checkbox.checkboxradio();
-	assertIcon( checkbox, "check", assert );
+	assertIcon( checkbox, "check ui-state-highlight", assert );
 
 	checkbox.checkboxradio( "option", "icon", false );
 	assertNoIcon( checkbox );
 
 	checkbox.checkboxradio( "option", "icon", true );
-	assertIcon( checkbox, "check", assert );
+	assertIcon( checkbox, "check ui-state-highlight", assert );
 
 	checkbox.checkboxradio( "option", "icon", false );
 	assertNoIcon( checkbox );
 
+	checkbox.checkboxradio( "option", "icon", true );
 	checkbox.prop( "checked", false ).checkboxradio( "refresh" );
-	checkbox.checkboxradio( "option", "icon", true );
 	assertIcon( checkbox, false, assert );
 
 } );
