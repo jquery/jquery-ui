@@ -69,13 +69,15 @@ return $.widget( "ui.controlgroup", {
 
 		// First we iterate over each of the items options
 		$.each( this.options.items, function( widget, selector ) {
-			var widgets, labels,
-				options = {};
+			var labels;
+			var options = {};
 
 			// Make sure the widget actually exists and has a selector set
 			if ( !$.fn[ widget ] || !selector ) {
 				return;
-			} else if ( selector && widget === "controlgroupLabel" ) {
+			}
+
+			if ( widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
 				labels.each( function() {
 					$( this ).contents().wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
@@ -92,19 +94,19 @@ return $.widget( "ui.controlgroup", {
 			}
 
 			// Find instances of this widget inside controlgroup and init them
-			widgets = that.element.find( selector )[ widget ]( options );
+			that.element
+				.find( selector )[ widget ]( options )
+				.each( function() {
+					var element = $( this );
 
-			widgets.each( function() {
-				var element = $( this );
+					// Store an instance of the controlgroup to be able to reference
+					// from the outermost element for changing options and refresh
+					var widgetElement = element[ widget ]( "widget" );
+					$.data( widgetElement[ 0 ], "ui-controlgroup-data",
+						element[ widget ]( "instance" ) );
 
-				// Store an instance of the controlgroup to be able to reference
-				// from the outermost element for changing options and refresh
-				var widgetElement = element[ widget ]( "widget" );
-				$.data( widgetElement[ 0 ], "ui-controlgroup-data",
-					element[ widget ]( "instance" ) );
-
-				childWidgets.push( widgetElement[ 0 ] );
-			} );
+					childWidgets.push( widgetElement[ 0 ] );
+				} );
 		} );
 
 		this.childWidgets = $( $.unique( childWidgets ) );
