@@ -20,11 +20,11 @@ common.testWidget( "tooltip", {
 		show: true,
 		track: false,
 
-		// callbacks
+		// Callbacks
 		close: null,
 		create: null,
 		open: null
 	}
-});
+} );
 
 } );

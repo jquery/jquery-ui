@@ -4,24 +4,10 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Effects Test Suite</title>
 	<link rel="stylesheet" href="effects.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/effect.js"></script>
-	<script src="../../../ui/effect-blind.js"></script>
-	<script src="../../../ui/effect-bounce.js"></script>
-	<script src="../../../ui/effect-clip.js"></script>
-	<script src="../../../ui/effect-drop.js"></script>
-	<script src="../../../ui/effect-explode.js"></script>
-	<script src="../../../ui/effect-fade.js"></script>
-	<script src="../../../ui/effect-fold.js"></script>
-	<script src="../../../ui/effect-highlight.js"></script>
-	<script src="../../../ui/effect-puff.js"></script>
-	<script src="../../../ui/effect-pulsate.js"></script>
-	<script src="../../../ui/effect-scale.js"></script>
-	<script src="../../../ui/effect-size.js"></script>
-	<script src="../../../ui/effect-shake.js"></script>
-	<script src="../../../ui/effect-slide.js"></script>
-	<script src="../../../ui/effect-transfer.js"></script>
-	<script src="effects.js"></script>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="effects-all" data-composite="true">
+		require( ["./effects.js"] );
+	</script>
 </head>
 <body>
 

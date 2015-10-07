@@ -1,6 +1,6 @@
 ( function() {
 
-requirejs.config({
+requirejs.config( {
 	paths: {
 		"cldr": "../../../external/cldrjs/cldr",
 		"globalize": "../../../external/globalize/globalize",
@@ -15,7 +15,7 @@ requirejs.config({
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
-		"testswarm": "http://swarm.jquery.org/js/inject.js?" + (new Date()).getTime(),
+		"testswarm": "http://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
 		"ui": "../../../ui"
 	},
 	shim: {
@@ -25,7 +25,7 @@ requirejs.config({
 		"qunit-assert-close": [ "qunit" ],
 		"testswarm": [ "qunit" ]
 	}
-});
+} );
 
 // Create a module that disables back compat for UI modules
 define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
@@ -112,7 +112,7 @@ function jqueryUrl() {
 //   - Automatically loads common, core, events, methods, and options
 // - data-deprecated: Loads the deprecated test modules for a widget
 // - data-no-back-compat: Set $.uiBackCompat to false
-(function() {
+( function() {
 
 	// Find the script element
 	var scripts = document.getElementsByTagName( "script" );
@@ -132,16 +132,21 @@ function jqueryUrl() {
 	var noBackCompat = !!script.getAttribute( "data-no-back-compat" );
 
 	if ( widget ) {
-		modules = modules.concat([
+		modules = modules.concat( [
 			( deprecated ? "common-deprecated" : "common" ),
 			"core",
 			"events",
 			"methods",
 			"options"
-		]);
+		] );
 		if ( deprecated ) {
 			modules = modules.concat( "deprecated" );
 		}
+	}
+
+	// Load the jQuery 1.7 fixes, if necessary
+	if ( parseFloat( parseUrl().jquery ) === 1.7 ) {
+		modules.push( "ui/jquery-1-7" );
 	}
 
 	requireTests( modules, noBackCompat );

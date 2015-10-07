@@ -38,15 +38,15 @@ return $.effects.define( "explode", "hide", function( options, done ) {
 		mode = options.mode,
 		show = mode === "show",
 
-		// show and then visibility:hidden the element before calculating offset
+		// Show and then visibility:hidden the element before calculating offset
 		offset = element.show().css( "visibility", "hidden" ).offset(),
 
-		// width and height of a piece
+		// Width and height of a piece
 		width = Math.ceil( element.outerWidth() / cells ),
 		height = Math.ceil( element.outerHeight() / rows ),
 		pieces = [];
 
-	// children animate complete:
+	// Children animate complete:
 	function childComplete() {
 		pieces.push( this );
 		if ( pieces.length === rows * cells ) {
@@ -54,7 +54,7 @@ return $.effects.define( "explode", "hide", function( options, done ) {
 		}
 	}
 
-	// clone the element for each row and cell.
+	// Clone the element for each row and cell.
 	for ( i = 0; i < rows; i++ ) { // ===>
 		top = offset.top + i * height;
 		my = i - ( rows - 1 ) / 2;
@@ -76,7 +76,7 @@ return $.effects.define( "explode", "hide", function( options, done ) {
 					top: -i * height
 				} )
 
-				// select the wrapper - make it overflow: hidden and absolute positioned based on
+				// Select the wrapper - make it overflow: hidden and absolute positioned based on
 				// where the original was located +left and +top equal to the size of pieces
 				.parent()
 					.addClass( "ui-effects-explode" )

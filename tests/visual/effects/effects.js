@@ -1,24 +1,23 @@
-$(function() {
-
 var duration = 1000,
 	wait = 500;
 
 function effect( elem, name, options ) {
 	$.extend( options, {
 		easing: "easeOutQuint"
-	});
+	} );
 
 	$( elem ).on( "click", function() {
 		$( this )
 			.addClass( "current" )
+
 			// delaying the initial animation makes sure that the queue stays in tact
 			.delay( 10 )
 			.hide( name, options, duration )
 			.delay( wait )
 			.show( name, options, duration, function() {
 				$( this ).removeClass( "current" );
-			});
-	});
+			} );
+	} );
 }
 
 $( "#hide" ).on( "click", function() {
@@ -28,8 +27,8 @@ $( "#hide" ).on( "click", function() {
 		.delay( wait )
 		.show( duration, function() {
 			$( this ).removeClass( "current" );
-		});
-});
+		} );
+} );
 
 effect( "#blindLeft", "blind", { direction: "left" } );
 effect( "#blindUp", "blind", { direction: "up" } );
@@ -68,16 +67,16 @@ $( "#sizeToggle" ).on( "click", function() {
 		.delay( wait )
 		.toggle( "size", options, duration, function() {
 			$( this ).removeClass( "current" );
-		});
-});
+		} );
+} );
 
 $( "#shake" ).on( "click", function() {
 	$( this )
 		.addClass( "current" )
 		.effect( "shake", {}, 100, function() {
 			$( this ).removeClass( "current" );
-		});
-});
+		} );
+} );
 
 effect( "#slideDown", "slide", { direction: "down" } );
 effect( "#slideUp", "slide", { direction: "up" } );
@@ -89,19 +88,17 @@ $( "#transfer" ).on( "click", function() {
 		.addClass( "current" )
 		.effect( "transfer", { to: "div:eq(0)" }, 1000, function() {
 			$( this ).removeClass( "current" );
-		});
-});
+		} );
+} );
 
 $( "#addClass" ).on( "click", function() {
 	$( this ).addClass( "current", duration, function() {
 		$( this ).removeClass( "current" );
-	});
-});
+	} );
+} );
 $( "#removeClass" ).on( "click", function() {
 	$( this ).addClass( "current" ).removeClass( "current", duration );
-});
+} );
 $( "#toggleClass" ).on( "click", function() {
 	$( this ).toggleClass( "current", duration );
-});
-
-});
+} );

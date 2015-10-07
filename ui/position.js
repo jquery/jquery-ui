@@ -159,7 +159,7 @@ $.fn.position = function( options ) {
 		return _position.apply( this, arguments );
 	}
 
-	// make a copy, we don't want to modify arguments
+	// Make a copy, we don't want to modify arguments
 	options = $.extend( {}, options );
 
 	var atOffset, targetWidth, targetHeight, targetOffset, basePosition, dimensions,
@@ -171,16 +171,18 @@ $.fn.position = function( options ) {
 
 	dimensions = getDimensions( target );
 	if ( target[ 0 ].preventDefault ) {
-		// force left top to allow flipping
+
+		// Force left top to allow flipping
 		options.at = "left top";
 	}
 	targetWidth = dimensions.width;
 	targetHeight = dimensions.height;
 	targetOffset = dimensions.offset;
-	// clone to reuse original targetOffset later
+
+	// Clone to reuse original targetOffset later
 	basePosition = $.extend( {}, targetOffset );
 
-	// force my and at to have valid horizontal and vertical positions
+	// Force my and at to have valid horizontal and vertical positions
 	// if a value is missing or invalid, it will be converted to center
 	$.each( [ "my", "at" ], function() {
 		var pos = ( options[ this ] || "" ).split( " " ),
@@ -197,7 +199,7 @@ $.fn.position = function( options ) {
 		pos[ 0 ] = rhorizontal.test( pos[ 0 ] ) ? pos[ 0 ] : "center";
 		pos[ 1 ] = rvertical.test( pos[ 1 ] ) ? pos[ 1 ] : "center";
 
-		// calculate offsets
+		// Calculate offsets
 		horizontalOffset = roffset.exec( pos[ 0 ] );
 		verticalOffset = roffset.exec( pos[ 1 ] );
 		offsets[ this ] = [
@@ -205,14 +207,14 @@ $.fn.position = function( options ) {
 			verticalOffset ? verticalOffset[ 0 ] : 0
 		];
 
-		// reduce to just the positions without the offsets
+		// Reduce to just the positions without the offsets
 		options[ this ] = [
 			rposition.exec( pos[ 0 ] )[ 0 ],
 			rposition.exec( pos[ 1 ] )[ 0 ]
 		];
 	} );
 
-	// normalize collision option
+	// Normalize collision option
 	if ( collision.length === 1 ) {
 		collision[ 1 ] = collision[ 0 ];
 	}
@@ -260,7 +262,7 @@ $.fn.position = function( options ) {
 		position.left += myOffset[ 0 ];
 		position.top += myOffset[ 1 ];
 
-		// if the browser doesn't support fractions, then round for consistent results
+		// If the browser doesn't support fractions, then round for consistent results
 		if ( !supportsOffsetFractions() ) {
 			position.left = round( position.left );
 			position.top = round( position.top );
@@ -291,7 +293,8 @@ $.fn.position = function( options ) {
 		} );
 
 		if ( options.using ) {
-			// adds feedback as second argument to using callback, if present
+
+			// Adds feedback as second argument to using callback, if present
 			using = function( props ) {
 				var left = targetOffset.left - position.left,
 					right = left + targetWidth - elemWidth,
@@ -345,16 +348,19 @@ $.ui.position = {
 				overRight = collisionPosLeft + data.collisionWidth - outerWidth - withinOffset,
 				newOverRight;
 
-			// element is wider than within
+			// Element is wider than within
 			if ( data.collisionWidth > outerWidth ) {
-				// element is initially over the left side of within
+
+				// Element is initially over the left side of within
 				if ( overLeft > 0 && overRight <= 0 ) {
 					newOverRight = position.left + overLeft + data.collisionWidth - outerWidth - withinOffset;
 					position.left += overLeft - newOverRight;
-				// element is initially over right side of within
+
+				// Element is initially over right side of within
 				} else if ( overRight > 0 && overLeft <= 0 ) {
 					position.left = withinOffset;
-				// element is initially over both left and right sides of within
+
+				// Element is initially over both left and right sides of within
 				} else {
 					if ( overLeft > overRight ) {
 						position.left = withinOffset + outerWidth - data.collisionWidth;
@@ -362,13 +368,16 @@ $.ui.position = {
 						position.left = withinOffset;
 					}
 				}
-			// too far left -> align with left edge
+
+			// Too far left -> align with left edge
 			} else if ( overLeft > 0 ) {
 				position.left += overLeft;
-			// too far right -> align with right edge
+
+			// Too far right -> align with right edge
 			} else if ( overRight > 0 ) {
 				position.left -= overRight;
-			// adjust based on position and margin
+
+			// Adjust based on position and margin
 			} else {
 				position.left = max( position.left - collisionPosLeft, position.left );
 			}
@@ -382,16 +391,19 @@ $.ui.position = {
 				overBottom = collisionPosTop + data.collisionHeight - outerHeight - withinOffset,
 				newOverBottom;
 
-			// element is taller than within
+			// Element is taller than within
 			if ( data.collisionHeight > outerHeight ) {
-				// element is initially over the top of within
+
+				// Element is initially over the top of within
 				if ( overTop > 0 && overBottom <= 0 ) {
 					newOverBottom = position.top + overTop + data.collisionHeight - outerHeight - withinOffset;
 					position.top += overTop - newOverBottom;
-				// element is initially over bottom of within
+
+				// Element is initially over bottom of within
 				} else if ( overBottom > 0 && overTop <= 0 ) {
 					position.top = withinOffset;
-				// element is initially over both top and bottom of within
+
+				// Element is initially over both top and bottom of within
 				} else {
 					if ( overTop > overBottom ) {
 						position.top = withinOffset + outerHeight - data.collisionHeight;
@@ -399,13 +411,16 @@ $.ui.position = {
 						position.top = withinOffset;
 					}
 				}
-			// too far up -> align with top
+
+			// Too far up -> align with top
 			} else if ( overTop > 0 ) {
 				position.top += overTop;
-			// too far down -> align with bottom edge
+
+			// Too far down -> align with bottom edge
 			} else if ( overBottom > 0 ) {
 				position.top -= overBottom;
-			// adjust based on position and margin
+
+			// Adjust based on position and margin
 			} else {
 				position.top = max( position.top - collisionPosTop, position.top );
 			}

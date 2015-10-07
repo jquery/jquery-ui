@@ -51,7 +51,7 @@ $.widget( "ui.autocomplete", {
 		},
 		source: null,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		close: null,
 		focus: null,
@@ -65,6 +65,7 @@ $.widget( "ui.autocomplete", {
 	pending: 0,
 
 	_create: function() {
+
 		// Some browsers only repeat keydown events, not keypress events,
 		// so we use the suppressKeyPress flag to determine if we've already
 		// handled the keydown event. #7269
@@ -120,8 +121,10 @@ $.widget( "ui.autocomplete", {
 					this._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
+
 					// when menu is open and has focus
 					if ( this.menu.active ) {
+
 						// #6055 - Opera still allows the keypress to occur
 						// which causes forms to submit
 						suppressKeyPress = true;
@@ -140,6 +143,7 @@ $.widget( "ui.autocomplete", {
 							this._value( this.term );
 						}
 						this.close( event );
+
 						// Different browsers have different default behavior for escape
 						// Single press can mean undo or clear
 						// Double press in IE means clear the whole form
@@ -148,6 +152,7 @@ $.widget( "ui.autocomplete", {
 					break;
 				default:
 					suppressKeyPressRepeat = true;
+
 					// search timeout should be triggered before the input value is changed
 					this._searchTimeout( event );
 					break;
@@ -165,7 +170,7 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
-				// replicate some key handlers to allow them to repeat in Firefox and Opera
+				// Replicate some key handlers to allow them to repeat in Firefox and Opera
 				var keyCode = $.ui.keyCode;
 				switch ( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -210,6 +215,7 @@ $.widget( "ui.autocomplete", {
 		this.menu = $( "<ul>" )
 			.appendTo( this._appendTo() )
 			.menu( {
+
 				// disable ARIA support, the live region takes care of that
 				role: null
 			} )
@@ -219,6 +225,7 @@ $.widget( "ui.autocomplete", {
 		this._addClass( this.menu.element, "ui-autocomplete", "ui-front" );
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
+
 				// prevent moving focus out of the text field
 				event.preventDefault();
 
@@ -239,7 +246,7 @@ $.widget( "ui.autocomplete", {
 					}
 				} );
 
-				// clicking on the scrollbar causes focus to shift to the body
+				// Clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
 				// so we have to track the next mousedown and close the menu if
 				// the user clicks somewhere outside of the autocomplete
@@ -259,6 +266,7 @@ $.widget( "ui.autocomplete", {
 			},
 			menufocus: function( event, ui ) {
 				var label, item;
+
 				// support: Firefox
 				// Prevent accidental activation of menu items in Firefox (#7024 #9118)
 				if ( this.isNewMenu ) {
@@ -276,6 +284,7 @@ $.widget( "ui.autocomplete", {
 
 				item = ui.item.data( "ui-autocomplete-item" );
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
+
 					// use value to match what will end up in the input, if it was a key event
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
 						this._value( item.value );
@@ -293,10 +302,11 @@ $.widget( "ui.autocomplete", {
 				var item = ui.item.data( "ui-autocomplete-item" ),
 					previous = this.previous;
 
-				// only trigger when focus was lost (click on menu)
+				// Only trigger when focus was lost (click on menu)
 				if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
 					this.element.trigger( "focus" );
 					this.previous = previous;
+
 					// #6109 - IE triggers two focus events and the second
 					// is asynchronous, so we need to reset the previous
 					// term synchronously and asynchronously :-(
@@ -309,6 +319,7 @@ $.widget( "ui.autocomplete", {
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
 					this._value( item.value );
 				}
+
 				// reset the term after the select event
 				// this allows custom select handling to work properly
 				this.term = this._value();
@@ -318,7 +329,7 @@ $.widget( "ui.autocomplete", {
 			}
 		} );
 
-		this.liveRegion = $( "<span>", {
+		this.liveRegion = $( "<div>", {
 			role: "status",
 			"aria-live": "assertive",
 			"aria-relevant": "additions"
@@ -327,7 +338,7 @@ $.widget( "ui.autocomplete", {
 
 		this._addClass( this.liveRegion, null, "ui-helper-hidden-accessible" );
 
-		// turning off autocomplete prevents the browser from remembering the
+		// Turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
 		this._on( this.window, {
@@ -427,7 +438,7 @@ $.widget( "ui.autocomplete", {
 	search: function( value, event ) {
 		value = value != null ? value : this._value();
 
-		// always save the actual value, not the one passed as an argument
+		// Always save the actual value, not the one passed as an argument
 		this.term = this._value();
 
 		if ( value.length < this.options.minLength ) {
@@ -473,6 +484,7 @@ $.widget( "ui.autocomplete", {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
+
 			// use ._close() instead of .close() so we don't cancel future searches
 			this._close();
 		}
@@ -499,6 +511,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_normalize: function( items ) {
+
 		// assume all items have the right format when the first item is complete
 		if ( items.length && items[ 0 ].label && items[ 0 ].value ) {
 			return items;
@@ -523,7 +536,7 @@ $.widget( "ui.autocomplete", {
 		this.isNewMenu = true;
 		this.menu.refresh();
 
-		// size and position menu
+		// Size and position menu
 		ul.show();
 		this._resizeMenu();
 		ul.position( $.extend( {
@@ -538,6 +551,7 @@ $.widget( "ui.autocomplete", {
 	_resizeMenu: function() {
 		var ul = this.menu.element;
 		ul.outerWidth( Math.max(
+
 			// Firefox wraps long text (possibly a rounding bug)
 			// so we add 1px to avoid the wrapping (#7513)
 			ul.width( "" ).outerWidth() + 1,
@@ -592,7 +606,7 @@ $.widget( "ui.autocomplete", {
 		if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
 			this._move( keyEvent, event );
 
-			// prevents moving cursor to beginning/end of the text field in some browsers
+			// Prevents moving cursor to beginning/end of the text field in some browsers
 			event.preventDefault();
 		}
 	}
@@ -610,7 +624,7 @@ $.extend( $.ui.autocomplete, {
 	}
 } );
 
-// live region extension, adding a `messages` option
+// Live region extension, adding a `messages` option
 // NOTE: This is an experimental API. We are still investigating
 // a full solution for string manipulation and internationalization.
 $.widget( "ui.autocomplete", $.ui.autocomplete, {

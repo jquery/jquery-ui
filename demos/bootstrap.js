@@ -1,4 +1,4 @@
-/* globals window:true, document:true */
+/* globals window, document */
 ( function() {
 
 // Find the script element
@@ -7,6 +7,7 @@ var script = scripts[ scripts.length - 1 ];
 
 // Read the modules
 var modules = script.getAttribute( "data-modules" );
+var composite = script.getAttribute( "data-composite" ) || false;
 var pathParts = window.location.pathname.split( "/" );
 var effectsAll = [
 	"effects/effect-blind",
@@ -22,7 +23,8 @@ var effectsAll = [
 	"effects/effect-scale",
 	"effects/effect-shake",
 	"effects/effect-size",
-	"effects/effect-slide"
+	"effects/effect-slide",
+	"effects/effect-transfer"
 ];
 var widgets = [
 	"accordion",
@@ -53,8 +55,13 @@ function getPath( module ) {
 		}
 	}
 	for ( var j = 0; j < effectsAll.length; j++ ) {
-		if ( module !== "effect" && effectsAll[ j ].indexOf( module ) !== -1 ) {
-			return "effects/" + module;
+		if ( module !== "effect" ) {
+			if ( effectsAll[ j ] === module ) {
+				return module;
+			}
+			if ( effectsAll[ j ].indexOf( module ) !== -1 ) {
+				return "effects/" + module;
+			}
 		}
 	}
 	return module;
@@ -70,7 +77,7 @@ function fixPaths( modules ) {
 document.documentElement.className = "demo-loading";
 
 require.config( {
-	baseUrl: "../../ui",
+	baseUrl: window.location.pathname.indexOf( "demos/" ) !== -1 ? "../../ui" : "../../../ui",
 	paths: {
 		cldr: "../external/cldrjs/cldr",
 		globalize: "../external/globalize/globalize",
@@ -84,14 +91,15 @@ require.config( {
 	}
 } );
 
-
 // Replace effects all shortcut modules with all the effects modules
 if ( modules && modules.indexOf( "effects-all" ) !== -1 ) {
 	modules = modules.replace( /effects-all/, effectsAll.join( " " ) );
 }
 
 modules = modules ? modules.replace( /^\s+|\s+$/g, "" ).split( /\s+/ ) : [];
-modules.push( pathParts[ pathParts.length - 2 ] );
+if ( !composite ) {
+	modules.push( pathParts[ pathParts.length - 2 ] );
+}
 modules = fixPaths( modules );
 
 require( modules, function() {

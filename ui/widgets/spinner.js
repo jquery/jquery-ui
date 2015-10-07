@@ -35,7 +35,7 @@
 	}
 }( function( $ ) {
 
-function spinner_modifier( fn ) {
+function spinnerModifer( fn ) {
 	return function() {
 		var previous = this.element.val();
 		fn.apply( this, arguments );
@@ -75,6 +75,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
+
 		// handle string values that need to be parsed
 		this._setOption( "max", this.options.max );
 		this._setOption( "min", this.options.min );
@@ -83,6 +84,7 @@ $.widget( "ui.spinner", {
 		// Only format if there is a value, prevents the field from being marked
 		// as invalid in Firefox, see #9573.
 		if ( this.value() !== "" ) {
+
 			// Format the value, but don't constrain.
 			this._value( this.element.val(), true );
 		}
@@ -91,7 +93,7 @@ $.widget( "ui.spinner", {
 		this._on( this._events );
 		this._refresh();
 
-		// turning off autocomplete prevents the browser from remembering the
+		// Turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
 		this._on( this.window, {
@@ -102,8 +104,8 @@ $.widget( "ui.spinner", {
 	},
 
 	_getCreateOptions: function() {
-		var options = {},
-			element = this.element;
+		var options = this._super();
+		var element = this.element;
 
 		$.each( [ "min", "max", "step" ], function( i, option ) {
 			var value = element.attr( option );
@@ -169,6 +171,7 @@ $.widget( "ui.spinner", {
 				if ( !isActive ) {
 					this.element.trigger( "focus" );
 					this.previous = previous;
+
 					// support: IE
 					// IE sets focus asynchronously, so we need to check if focus
 					// moved off of the input because the user clicked on the button.
@@ -178,11 +181,11 @@ $.widget( "ui.spinner", {
 				}
 			}
 
-			// ensure focus is on (or stays on) the text field
+			// Ensure focus is on (or stays on) the text field
 			event.preventDefault();
 			checkFocus.call( this );
 
-			// support: IE
+			// Support: IE
 			// IE doesn't prevent moving focus even with event.preventDefault()
 			// so we set a flag to know when we should ignore the blur event
 			// and check (again) if focus moved off of the input.
@@ -200,6 +203,7 @@ $.widget( "ui.spinner", {
 		},
 		"mouseup .ui-spinner-button": "_stop",
 		"mouseenter .ui-spinner-button": function( event ) {
+
 			// button will add ui-state-active if mouse was down while mouseleave and kept down
 			if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
 				return;
@@ -210,6 +214,7 @@ $.widget( "ui.spinner", {
 			}
 			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 		},
+
 		// TODO: do we really want to consider this a stop?
 		// shouldn't we just stop the repeater and wait until mouseup before
 		// we trigger the stop event?
@@ -242,7 +247,7 @@ $.widget( "ui.spinner", {
 
 		this.element.attr( "role", "spinbutton" );
 
-		// button bindings
+		// Button bindings
 		this.buttons = this.uiSpinner.children( "a" )
 			.attr( "tabIndex", -1 )
 			.button();
@@ -262,11 +267,6 @@ $.widget( "ui.spinner", {
 		if ( this.buttons.height() > Math.ceil( this.uiSpinner.height() * 0.5 ) &&
 				this.uiSpinner.height() > 0 ) {
 			this.uiSpinner.height( this.uiSpinner.height() );
-		}
-
-		// disable spinner if element was already disabled
-		if ( this.options.disabled ) {
-			this.disable();
 		}
 	},
 
@@ -360,19 +360,21 @@ $.widget( "ui.spinner", {
 		var base, aboveMin,
 			options = this.options;
 
-		// make sure we're at a valid step
+		// Make sure we're at a valid step
 		// - find out where we are relative to the base (min or 0)
 		base = options.min !== null ? options.min : 0;
 		aboveMin = value - base;
+
 		// - round to the nearest step
 		aboveMin = Math.round( aboveMin / options.step ) * options.step;
+
 		// - rounding is based on 0, so adjust back to our base
 		value = base + aboveMin;
 
-		// fix precision from bad JS floating point math
+		// Fix precision from bad JS floating point math
 		value = parseFloat( value.toFixed( this._precision() ) );
 
-		// clamp the value
+		// Clamp the value
 		if ( options.max !== null && value > options.max ) {
 			return options.max;
 		}
@@ -420,15 +422,17 @@ $.widget( "ui.spinner", {
 		}
 
 		this._super( key, value );
-
-		if ( key === "disabled" ) {
-			this._toggleClass( this.uiSpinner, null, "ui-state-disabled", !!value );
-			this.element.prop( "disabled", !!value );
-			this.buttons.button( value ? "disable" : "enable" );
-		}
 	},
 
-	_setOptions: spinner_modifier( function( options ) {
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this._toggleClass( this.uiSpinner, null, "ui-state-disabled", !!value );
+		this.element.prop( "disabled", !!value );
+		this.buttons.button( value ? "disable" : "enable" );
+	},
+
+	_setOptions: spinnerModifer( function( options ) {
 		this._super( options );
 	} ),
 
@@ -453,6 +457,7 @@ $.widget( "ui.spinner", {
 		this.element.attr( {
 			"aria-valuemin": this.options.min,
 			"aria-valuemax": this.options.max,
+
 			// TODO: what should we do with values that can't be parsed?
 			"aria-valuenow": this._parse( this.element.val() )
 		} );
@@ -461,16 +466,16 @@ $.widget( "ui.spinner", {
 	isValid: function() {
 		var value = this.value();
 
-		// null is invalid
+		// Null is invalid
 		if ( value === null ) {
 			return false;
 		}
 
-		// if value gets adjusted, it's invalid
+		// If value gets adjusted, it's invalid
 		return value === this._adjustValue( value );
 	},
 
-	// update the value without triggering change
+	// Update the value without triggering change
 	_value: function( value, allowAny ) {
 		var parsed;
 		if ( value !== "" ) {
@@ -494,7 +499,7 @@ $.widget( "ui.spinner", {
 		this.uiSpinner.replaceWith( this.element );
 	},
 
-	stepUp: spinner_modifier( function( steps ) {
+	stepUp: spinnerModifer( function( steps ) {
 		this._stepUp( steps );
 	} ),
 	_stepUp: function( steps ) {
@@ -504,7 +509,7 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	stepDown: spinner_modifier( function( steps ) {
+	stepDown: spinnerModifer( function( steps ) {
 		this._stepDown( steps );
 	} ),
 	_stepDown: function( steps ) {
@@ -514,11 +519,11 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	pageUp: spinner_modifier( function( pages ) {
+	pageUp: spinnerModifer( function( pages ) {
 		this._stepUp( ( pages || 1 ) * this.options.page );
 	} ),
 
-	pageDown: spinner_modifier( function( pages ) {
+	pageDown: spinnerModifer( function( pages ) {
 		this._stepDown( ( pages || 1 ) * this.options.page );
 	} ),
 
@@ -526,7 +531,7 @@ $.widget( "ui.spinner", {
 		if ( !arguments.length ) {
 			return this._parse( this.element.val() );
 		}
-		spinner_modifier( this._value ).call( this, newVal );
+		spinnerModifer( this._value ).call( this, newVal );
 	},
 
 	widget: function() {

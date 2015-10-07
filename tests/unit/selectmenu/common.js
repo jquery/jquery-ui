@@ -21,7 +21,7 @@ common.testWidget( "selectmenu", {
 		},
 		width: false,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		close: null,
 		create: null,
@@ -29,6 +29,6 @@ common.testWidget( "selectmenu", {
 		open: null,
 		select: null
 	}
-});
+} );
 
 } );

@@ -11,9 +11,14 @@
 			dateMin = new Date( now.getFullYear(), now.getMonth(), now.getDate() + 1 ),
 			dateMax = new Date( now.getFullYear(), now.getMonth(), now.getDate() + 8 );
 
+		dateMin = new Date( 2008, 2 - 1, 29 );
+		dateMax = new Date( 2008, 12 - 1, 7 );
+
+
 		$( "#calendar" ).calendar({
 			min: dateMin,
-			max: dateMax
+			max: dateMax,
+			value: new Date( 2008, 1 - 1, 4 )
 		});
 	</script>
 </head>

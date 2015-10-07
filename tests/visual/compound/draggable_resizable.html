@@ -5,12 +5,6 @@
 	<title>Compound Visual Test: Draggable and Resizable block element</title>
 	<link rel="stylesheet" href="../visual.css">
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/mouse.js"></script>
-	<script src="../../../ui/draggable.js"></script>
-	<script src="../../../ui/resizable.js"></script>
 	<style>
 	.draggable {
 		margin: 0.5em;
@@ -21,8 +15,9 @@
 		position: absolute !important;
 	}
 	</style>
-	<script>
-	$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="draggable resizable"
+		data-composite="true">
 		$( ".draggable" )
 			.addClass( "ui-widget ui-widget-header ui-corner-all" )
 			.draggable({
@@ -33,7 +28,6 @@
 				handles: "s"
 			});
 		$( ".draggable:last" ).addClass( "absolute" );
-	});
 	</script>
 </head>
 <body>

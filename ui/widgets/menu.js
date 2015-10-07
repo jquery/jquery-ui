@@ -52,7 +52,7 @@ return $.widget( "ui.menu", {
 		},
 		role: "menu",
 
-		// callbacks
+		// Callbacks
 		blur: null,
 		focus: null,
 		select: null
@@ -70,11 +70,6 @@ return $.widget( "ui.menu", {
 				role: this.options.role,
 				tabIndex: 0
 			} );
-
-		if ( this.options.disabled ) {
-			this._addClass( null, "ui-state-disabled" );
-			this.element.attr( "aria-disabled", "true" );
-		}
 
 		this._addClass( "ui-menu", "ui-widget ui-widget-content" );
 		this._on( {
@@ -136,6 +131,7 @@ return $.widget( "ui.menu", {
 			mouseleave: "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
 			focus: function( event, keepActiveItem ) {
+
 				// If there's already an active item, keep it active
 				// If not, activate the first item
 				var item = this.active || this.element.find( this.options.items ).eq( 0 );
@@ -358,11 +354,14 @@ return $.widget( "ui.menu", {
 			this._removeClass( icons, null, this.options.icons.submenu )
 				._addClass( icons, null, value.submenu );
 		}
-		if ( key === "disabled" ) {
-			this.element.attr( "aria-disabled", value );
-			this._toggleClass( null, "ui-state-disabled", !!value );
-		}
 		this._super( key, value );
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this.element.attr( "aria-disabled", String( value ) );
+		this._toggleClass( null, "ui-state-disabled", !!value );
 	},
 
 	focus: function( event, item ) {
@@ -475,6 +474,7 @@ return $.widget( "ui.menu", {
 	collapseAll: function( event, all ) {
 		clearTimeout( this.timer );
 		this.timer = this._delay( function() {
+
 			// If we were passed an event, look for the submenu that contains the event
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
@@ -633,6 +633,7 @@ return $.widget( "ui.menu", {
 	},
 
 	select: function( event ) {
+
 		// TODO: It should never be possible to not have an active item at this
 		// point, but the tests don't trigger mouseenter before click.
 		this.active = this.active || $( event.target ).closest( ".ui-menu-item" );

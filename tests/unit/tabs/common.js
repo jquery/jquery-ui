@@ -19,13 +19,13 @@ common.testWidget( "tabs", {
 		hide: null,
 		show: null,
 
-		// callbacks
+		// Callbacks
 		activate: null,
 		beforeActivate: null,
 		beforeLoad: null,
 		create: null,
 		load: null
 	}
-});
+} );
 
 } );

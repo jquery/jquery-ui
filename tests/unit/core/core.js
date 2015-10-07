@@ -17,7 +17,7 @@ test( "innerWidth - getter", function() {
 	equal( el.innerWidth(), 122, "getter passthru" );
 	el.hide();
 	equal( el.innerWidth(), 122, "getter passthru when hidden" );
-});
+} );
 
 test( "innerWidth - setter", function() {
 	expect( 2 );
@@ -28,7 +28,7 @@ test( "innerWidth - setter", function() {
 	el.hide();
 	el.innerWidth( 100 );
 	equal( el.width(), 78, "width set properly when hidden" );
-});
+} );
 
 test( "innerHeight - getter", function() {
 	expect( 2 );
@@ -37,7 +37,7 @@ test( "innerHeight - getter", function() {
 	equal( el.innerHeight(), 70, "getter passthru" );
 	el.hide();
 	equal( el.innerHeight(), 70, "getter passthru when hidden" );
-});
+} );
 
 test( "innerHeight - setter", function() {
 	expect( 2 );
@@ -48,7 +48,7 @@ test( "innerHeight - setter", function() {
 	el.hide();
 	el.innerHeight( 50 );
 	equal( el.height(), 30, "height set properly when hidden" );
-});
+} );
 
 test( "outerWidth - getter", function() {
 	expect( 2 );
@@ -57,7 +57,7 @@ test( "outerWidth - getter", function() {
 	equal( el.outerWidth(), 140, "getter passthru" );
 	el.hide();
 	equal( el.outerWidth(), 140, "getter passthru when hidden" );
-});
+} );
 
 test( "outerWidth - setter", function() {
 	expect( 2 );
@@ -68,16 +68,16 @@ test( "outerWidth - setter", function() {
 	el.hide();
 	el.outerWidth( 120 );
 	equal( el.width(), 80, "width set properly when hidden" );
-});
+} );
 
 test( "outerWidth(true) - getter", function() {
 	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equal( el.outerWidth(true), 154, "getter passthru w/ margin" );
+	equal( el.outerWidth( true ), 154, "getter passthru w/ margin" );
 	el.hide();
-	equal( el.outerWidth(true), 154, "getter passthru w/ margin when hidden" );
-});
+	equal( el.outerWidth( true ), 154, "getter passthru w/ margin when hidden" );
+} );
 
 test( "outerWidth(true) - setter", function() {
 	expect( 2 );
@@ -88,7 +88,7 @@ test( "outerWidth(true) - setter", function() {
 	el.hide();
 	el.outerWidth( 120, true );
 	equal( el.width(), 66, "width set properly when hidden" );
-});
+} );
 
 test( "outerHeight - getter", function() {
 	expect( 2 );
@@ -97,7 +97,7 @@ test( "outerHeight - getter", function() {
 	equal( el.outerHeight(), 86, "getter passthru" );
 	el.hide();
 	equal( el.outerHeight(), 86, "getter passthru when hidden" );
-});
+} );
 
 test( "outerHeight - setter", function() {
 	expect( 2 );
@@ -108,16 +108,16 @@ test( "outerHeight - setter", function() {
 	el.hide();
 	el.outerHeight( 70 );
 	equal( el.height(), 34, "height set properly when hidden" );
-});
+} );
 
 test( "outerHeight(true) - getter", function() {
 	expect( 2 );
 	var el = $( "#dimensions" );
 
-	equal( el.outerHeight(true), 98, "getter passthru w/ margin" );
+	equal( el.outerHeight( true ), 98, "getter passthru w/ margin" );
 	el.hide();
-	equal( el.outerHeight(true), 98, "getter passthru w/ margin when hidden" );
-});
+	equal( el.outerHeight( true ), 98, "getter passthru w/ margin when hidden" );
+} );
 
 test( "outerHeight(true) - setter", function() {
 	expect( 2 );
@@ -128,7 +128,7 @@ test( "outerHeight(true) - setter", function() {
 	el.hide();
 	el.outerHeight( 80, true );
 	equal( el.height(), 32, "height set properly when hidden" );
-});
+} );
 
 test( "uniqueId / removeUniqueId", function() {
 	expect( 3 );
@@ -138,7 +138,7 @@ test( "uniqueId / removeUniqueId", function() {
 	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
 	el.removeUniqueId();
 	equal( el.attr( "id" ), null, "unique id has been removed from element" );
-});
+} );
 
 test( "Labels", function() {
 	expect( 2 );

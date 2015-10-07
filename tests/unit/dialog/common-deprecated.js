@@ -36,7 +36,7 @@ common.testWidget( "dialog", {
 		title: null,
 		width: 300,
 
-		// callbacks
+		// Callbacks
 		beforeClose: null,
 		close: null,
 		create: null,
@@ -49,6 +49,6 @@ common.testWidget( "dialog", {
 		resizeStart: null,
 		resizeStop: null
 	}
-});
+} );
 
 } );

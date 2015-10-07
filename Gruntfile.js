@@ -55,19 +55,6 @@ var
 	},
 	component = grunt.option( "component" ) || "**",
 
-	jscsBad = [
-		"ui/button.js",
-		"ui/datepicker.js",
-		"ui/draggable.js",
-		"ui/droppable.js",
-		"ui/effect.js",
-		"ui/mouse.js",
-		"ui/resizable.js",
-		"ui/selectable.js",
-		"ui/slider.js",
-		"ui/sortable.js"
-	],
-
 	htmllintBad = [
 		"demos/tabs/ajax/content*.html",
 		"demos/tooltip/ajax/content*.html",
@@ -153,50 +140,24 @@ grunt.initConfig({
 		}
 	},
 
-	// Remove the requireSpacesInsideParentheses override once everything is fixed
 	jscs: {
-		"ui-good": [ "ui/*.js" ].concat( jscsBad.map( function( file ) {
-			return "!" + file;
-		} ) ),
-		"ui-bad": {
+		all: {
 			options: {
-				requireSpacesInsideParentheses: null
+				config: true
 			},
-			src: jscsBad
-		},
-		tests: {
-			options: {
-				requireSpacesInsideParentheses: null
-			},
-			src: "tests/unit/**/*.js"
-		},
-		grunt: {
-			options: {
-				requireSpacesInsideParentheses: null
-			},
-			src: [ "Gruntfile.js", "build/tasks/*.js" ]
-		},
-		demos: {
-			options: {
-
-				// While the style guide removed onevar upgrading jscs to allow it causes too many
-				// errors right now
-				disallowMultipleVarDecl: null
-			},
-			src: "demos/**/*.js"
+			files: {
+				src: [ "demos/**/*.js", "build/**/*.js", "tests/**/*.js", "ui/**/*.js" ]
+			}
 		}
 	},
 	uglify: minify,
 	htmllint: {
-		good: [ "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
-			return "!" + file;
-		} ) ),
-		demos: {
+		good: {
 			options: {
 				ignore: [
 				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
 			] },
-			src: [ "demos/**/*.html" ].concat( htmllintBad.map( function( file ) {
+			src: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
 				return "!" + file;
 			} ) )
 		},

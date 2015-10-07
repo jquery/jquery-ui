@@ -58,7 +58,7 @@ return $.widget( "ui.selectmenu", {
 		},
 		width: false,
 
-		// callbacks
+		// Callbacks
 		change: null,
 		close: null,
 		focus: null,
@@ -79,10 +79,6 @@ return $.widget( "ui.selectmenu", {
 
 		this._rendered = false;
 		this.menuItems = $();
-
-		if ( this.options.disabled ) {
-			this.disable();
-		}
 	},
 
 	_drawButton: function() {
@@ -169,7 +165,7 @@ return $.widget( "ui.selectmenu", {
 				select: function( event, ui ) {
 					event.preventDefault();
 
-					// support: IE8
+					// Support: IE8
 					// If the item was selected via a click, the text selection
 					// will be destroyed in IE
 					that._setSelection();
@@ -410,12 +406,12 @@ return $.widget( "ui.selectmenu", {
 			selection.removeAllRanges();
 			selection.addRange( this.range );
 
-		// support: IE8
+		// Support: IE8
 		} else {
 			this.range.select();
 		}
 
-		// support: IE
+		// Support: IE
 		// Setting the text selection kills the button focus in IE, but
 		// restoring the focus doesn't kill the selection.
 		this.button.focus();
@@ -446,7 +442,7 @@ return $.widget( "ui.selectmenu", {
 					this.range = selection.getRangeAt( 0 );
 				}
 
-			// support: IE8
+			// Support: IE8
 			} else {
 				this.range = document.selection.createRange();
 			}
@@ -562,22 +558,24 @@ return $.widget( "ui.selectmenu", {
 			this.menuWrap.appendTo( this._appendTo() );
 		}
 
-		if ( key === "disabled" ) {
-			this.menuInstance.option( "disabled", value );
-			this.button.attr( "aria-disabled", value );
-			this._toggleClass( this.button, null, "ui-state-disabled", value );
-
-			this.element.prop( "disabled", value );
-			if ( value ) {
-				this.button.attr( "tabindex", -1 );
-				this.close();
-			} else {
-				this.button.attr( "tabindex", 0 );
-			}
-		}
-
 		if ( key === "width" ) {
 			this._resizeButton();
+		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._super( value );
+
+		this.menuInstance.option( "disabled", value );
+		this.button.attr( "aria-disabled", value );
+		this._toggleClass( this.button, null, "ui-state-disabled", value );
+
+		this.element.prop( "disabled", value );
+		if ( value ) {
+			this.button.attr( "tabindex", -1 );
+			this.close();
+		} else {
+			this.button.attr( "tabindex", 0 );
 		}
 	},
 
@@ -638,7 +636,7 @@ return $.widget( "ui.selectmenu", {
 		this.menu.outerWidth( Math.max(
 			this.button.outerWidth(),
 
-			// support: IE10
+			// Support: IE10
 			// IE10 wraps long text (possibly a rounding bug)
 			// so we add 1px to avoid the wrapping
 			this.menu.width( "" ).outerWidth() + 1
@@ -646,7 +644,11 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_getCreateOptions: function() {
-		return { disabled: this.element.prop( "disabled" ) };
+		var options = this._super();
+
+		options.disabled = this.element.prop( "disabled" );
+
+		return options;
 	},
 
 	_parseOptions: function( options ) {

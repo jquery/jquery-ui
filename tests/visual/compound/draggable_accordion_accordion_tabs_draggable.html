@@ -5,13 +5,6 @@
 	<title>Compound Visual Test : Draggable in Accordion</title>
 	<link rel="stylesheet" href="../visual.css">
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/mouse.js"></script>
-	<script src="../../../ui/accordion.js"></script>
-	<script src="../../../ui/draggable.js"></script>
-	<script src="../../../ui/tabs.js"></script>
 	<style>
 	#main-draggable {
 		width: 300px;
@@ -27,8 +20,9 @@
 		margin: 0.5em;
 	}
 	</style>
-	<script>
-	$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="accordion draggable tabs"
+		data-composite="true">
 		$( ".draggable" )
 			.addClass( "ui-widget ui-widget-content ui-corner-all" )
 			.draggable({
@@ -44,7 +38,6 @@
 		$( "#main-draggable" ).draggable({
 			handle: "#main-draggable-handle"
 		});
-	});
 	</script>
 </head>
 <body>

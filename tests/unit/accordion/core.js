@@ -32,33 +32,33 @@ $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( typ
 		deepEqual( element.find( ".ui-accordion-header" ).next().get(),
 			element.find( ".ui-accordion-content" ).get(),
 			"content panels come immediately after headers" );
-	});
-});
+	} );
+} );
 
 test( "handle click on header-descendant", function() {
 	expect( 1 );
 	var element = $( "#navigation" ).accordion();
 	$( "#navigation h2:eq(1) a" ).trigger( "click" );
 	state( element, 0, 1, 0 );
-});
+} );
 
-test( "accessibility", function () {
+test( "accessibility", function() {
 	expect( 61 );
-	var element = $( "#list1" ).accordion({
+	var element = $( "#list1" ).accordion( {
 			active: 1,
 			collapsible: true
-		}),
+		} ),
 		headers = element.find( ".ui-accordion-header" );
 
 	equal( element.attr( "role" ), "tablist", "element role" );
-	headers.each(function( i ) {
+	headers.each( function( i ) {
 		var header = headers.eq( i ),
 			panel = header.next();
 		equal( header.attr( "role" ), "tab", "header " + i + " role" );
 		equal( header.attr( "aria-controls" ), panel.attr( "id" ), "header " + i + " aria-controls" );
 		equal( panel.attr( "role" ), "tabpanel", "panel " + i + " role" );
 		equal( panel.attr( "aria-labelledby" ), header.attr( "id" ), "panel " + i + " aria-labelledby" );
-	});
+	} );
 
 	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
 	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab (1) has aria-selected=true" );
@@ -115,7 +115,7 @@ test( "accessibility", function () {
 	equal( headers.eq( 2 ).attr( "aria-expanded" ), "false", "inactive tab (2) has aria-expanded=false" );
 	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "inactive tabpanel (2) has aria-hidden=true" );
 
-});
+} );
 
 asyncTest( "keyboard support", function( assert ) {
 	expect( 13 );
@@ -180,7 +180,7 @@ asyncTest( "keyboard support", function( assert ) {
 	}
 
 	function step9() {
-		equal( element.accordion( "option", "active" ) , 2, "ENTER activates panel" );
+		equal( element.accordion( "option", "active" ), 2, "ENTER activates panel" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.SPACE } );
 		setTimeout( step10 );
 	}
@@ -202,6 +202,6 @@ asyncTest( "keyboard support", function( assert ) {
 		assert.hasClasses( headers.eq( 1 ), "ui-state-focus", "CTRL+UP moves focus to header" );
 		start();
 	}
-});
+} );
 
 } );

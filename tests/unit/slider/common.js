@@ -23,13 +23,13 @@ common.testWidget( "slider", {
 		value: 0,
 		values: null,
 
-		// callbacks
+		// Callbacks
 		create: null,
 		change: null,
 		slide: null,
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

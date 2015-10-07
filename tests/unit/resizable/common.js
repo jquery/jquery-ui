@@ -29,12 +29,12 @@ common.testWidget( "resizable", {
 		minWidth: 10,
 		zIndex: 90,
 
-		// callbacks
+		// Callbacks
 		create: null,
 		resize: null,
 		start: null,
 		stop: null
 	}
-});
+} );
 
 } );

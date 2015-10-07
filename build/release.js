@@ -55,6 +55,7 @@ function buildCDNPackage( callback ) {
 }
 
 Release.define( {
+	npmPublish: true,
 	issueTracker: "trac",
 	contributorReportId: 22,
 	changelogShell: function() {
