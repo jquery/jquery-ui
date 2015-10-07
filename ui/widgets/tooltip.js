@@ -318,7 +318,8 @@ $.widget( "ui.tooltip", {
 		// Handle tracking tooltips that are shown with a delay (#8644). As soon
 		// as the tooltip is visible, position the tooltip using the most recent
 		// event.
-		if ( this.options.show && this.options.show.delay ) {
+		// Adds the check to add the timers only when both delay and track options are set (#14682)
+		if ( this.options.track && this.options.show && this.options.show.delay ) {
 			delayedShow = this.delayedShow = setInterval( function() {
 				if ( tooltip.is( ":visible" ) ) {
 					position( positionOption.of );
