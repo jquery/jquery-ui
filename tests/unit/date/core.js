@@ -12,7 +12,7 @@ test( "Instantiation", function() {
 	expect( 2 );
 	ok( new $.ui.date( null, attributes ) instanceof $.ui.date, "constructor function" );
 	ok( $.ui.date( null, attributes ) instanceof $.ui.date, "instantiation without new" );
-});
+} );
 
 test( "Check Sets and Gets", 4, function() {
 	var date = $.ui.date( null, attributes );
@@ -20,8 +20,9 @@ test( "Check Sets and Gets", 4, function() {
 	equal( date.setFullDate( 2012, 9, 15 ).year(), 2012, "Set full date and retrieve year" );
 	equal( date.month(), 9, "Set full date and retrieve month" );
 	equal( date.day(), 15, "Set full date and retrieve day" );
+
 	// TODO Add setTime test
-});
+} );
 
 test( "Date Adjustments - Normal Use Cases", 10, function() {
 	var date = $.ui.date( null, attributes );
@@ -46,7 +47,7 @@ test( "Date Adjustments - Normal Use Cases", 10, function() {
 	equal( date.adjust( "D", 1 ).year(), 2013, "Add 1 day to change year from 2012 to 2013" );
 	equal( date.adjust( "D", -1 ).year(), 2012,
 		"Subtract 1 day to change month from 2013 to 2012" );
-});
+} );
 
 test( "Date Adjustments - Month Overflow Edge Cases", 2, function() {
 	var date = $.ui.date( null, attributes );
@@ -57,7 +58,7 @@ test( "Date Adjustments - Month Overflow Edge Cases", 2, function() {
 		"Add 1 month from May to June sets days to 30, last day in June (prevent Overflow)" );
 	equal( date.adjust( "M", -1 ).day(), 30,
 		"Subtract 1 month from June to May sets days to 30 in May" );
-});
+} );
 
 test( "Date Adjustments - Leap Year Edge Cases", 1, function() {
 	var date = $.ui.date( null, attributes );
@@ -66,7 +67,7 @@ test( "Date Adjustments - Leap Year Edge Cases", 1, function() {
 	date.setFullDate( 2012, 1, 29 );
 	equal( date.adjust( "Y", 1 ).day(), 28,
 		"Feb 29 2012, add a year to convert to Feb 28, 2013" );
-});
+} );
 
 test( "List days of Week", 2, function() {
 	var date = $.ui.date( null, attributes ),
@@ -92,7 +93,7 @@ test( "List days of Week", 2, function() {
 	deepEqual( date.weekdays(), offset0, "Get weekdays with start of day on 0 (English)" );
 	date = $.ui.date( null, testHelper.getAttributes( "de" ) );
 	deepEqual( date.weekdays(), offset1, "Get weekdays with start of day on 1 (Germany)" );
-});
+} );
 
 test( "Days in Month", 3, function() {
 	var date = $.ui.date( null, attributes );
@@ -100,23 +101,24 @@ test( "Days in Month", 3, function() {
 	equal( date.daysInMonth(), 29, "Leap Year implicit check for 29 days" );
 	equal( date.daysInMonth( 2012, 1 ), 29, "Leap Year explicit check for 29 days" );
 	equal( date.daysInMonth( 2011, 3 ), 30, "April has 30 days" );
-});
+} );
 
 test( "Month Name", 2, function() {
 	var date = $.ui.date( null, attributes );
 	equal( date.setFullDate( 2012, 3, 1 ).monthName(), "April", "Month name return April (English)" );
 	date = $.ui.date( null, testHelper.getAttributes( "de" ) );
 	equal( date.setFullDate( 2012, 2, 1 ).monthName(), "März", "Month name return March (German)" );
-});
+} );
 
 test( "Clone", 2, function() {
 	var date = $.ui.date( null, attributes ),
 		date2 = date.clone();
 	ok( date2, "Created cloned object" );
 	notEqual( date.adjust( "Y", 1 ).year(), date2.year(), "Object manipulated independently" );
-});
+} );
 
 test( "Days", 1, function() {
+
 	// TODO Needs work
 	var date = $.ui.date( null, attributes );
 	date.eachDay = function( day ) {
@@ -139,10 +141,10 @@ test( "Days", 1, function() {
 			day.title = "A good day!";
 		}
 	};
-	ok( date.days(), "Date days() returns");
-});
+	ok( date.days(), "Date days() returns" );
+} );
 
-test( "Months", 5, function(){
+test( "Months", 5, function() {
 	var date = $.ui.date( null, attributes ),
 		firstMonth = date.months( 1 )[ 0 ],
 		lastMonth = date.months( 1 )[ 1 ];
@@ -153,7 +155,7 @@ test( "Months", 5, function(){
 	ok( !lastMonth.first );
 
 	ok( firstMonth.month() === lastMonth.month() - 1 );
-});
+} );
 
 test( "Equal", 4, function() {
 	var date = $.ui.date( null, attributes );
@@ -162,11 +164,11 @@ test( "Equal", 4, function() {
 	ok( !date.equal( new Date( 2011, 9, 16 ) ), "Does date year not equal provide date" );
 	ok( !date.equal( new Date( 2012, 8, 16 ) ), "Does date month not equal provide date" );
 	ok( !date.equal( new Date( 2012, 9, 15 ) ), "Does date day not equal provide date" );
-});
+} );
 
 test( "Date", 1, function() {
 	var date = $.ui.date( null, attributes );
 	ok( date.date() instanceof Date, "Date returned" );
-});
+} );
 
 } );

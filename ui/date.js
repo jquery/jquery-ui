@@ -59,6 +59,7 @@ $.extend( $.ui.date.prototype, {
 
 	setDay: function( day ) {
 		var date = this.dateObject;
+
 		// FIXME: Why not to use .setDate?
 		this.dateObject = new Date( date.getFullYear(), date.getMonth(), day, date.getHours(),
 			date.getMinutes(), date.getSeconds() );

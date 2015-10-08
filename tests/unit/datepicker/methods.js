@@ -15,8 +15,8 @@ test( "destroy", function( assert ) {
 		ok( input.attr( "aria-owns" ), "aria-owns attribute added" );
 		ok( input.attr( "aria-haspopup" ), "aria-haspopup attribute added" );
 		input.datepicker( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "enable / disable", function() {
 	expect( 10 );
@@ -37,7 +37,7 @@ test( "enable / disable", function() {
 	ok( !input.hasClass( "ui-state-disabled" ), "no longer has disabled state class name" );
 	equal( input.attr( "aria-disabled" ), "false", "no longer has ARIA disabled" );
 	equal( input.attr( "disabled" ), undefined, "input no longer disabled" );
-});
+} );
 
 test( "widget", function() {
 	expect( 1 );
@@ -45,12 +45,12 @@ test( "widget", function() {
 	var actual = $( "#datepicker" ).datepicker().datepicker( "widget" );
 	deepEqual( $( "body > .ui-front" )[ 0 ],  actual[ 0 ] );
 	actual.remove();
-});
+} );
 
 test( "open / close", function() {
 	expect( 7 );
 
-	var input = testHelper.initNewInput({ show: false, hide: false }),
+	var input = testHelper.initNewInput( { show: false, hide: false } ),
 		calendar = input.datepicker( "widget" );
 
 	ok( calendar.is( ":hidden" ), "calendar hidden on init" );
@@ -64,7 +64,7 @@ test( "open / close", function() {
 	ok( !calendar.is( ":visible" ), "close: calendar hidden" );
 	equal( calendar.attr( "aria-hidden" ), "true", "close: calendar aria-hidden" );
 	equal( calendar.attr( "aria-expanded" ), "false", "close: calendar aria-expanded" );
-});
+} );
 
 test( "value", function() {
 	expect( 4 );
@@ -84,7 +84,7 @@ test( "value", function() {
 
 	input.val( "abc" );
 	strictEqual( input.datepicker( "value" ), null, "Invalid values should return null." );
-});
+} );
 
 test( "valueAsDate", function() {
 	expect( 6 );
@@ -110,7 +110,7 @@ test( "valueAsDate", function() {
 	strictEqual( input.datepicker( "valueAsDate" ), null, "Set date - default" );
 	input.datepicker( "valueAsDate", date1 );
 	testHelper.equalsDate( input.datepicker( "valueAsDate" ), date1, "Set date - 2008-06-04" );
-});
+} );
 
 test( "isValid", function() {
 	expect( 2 );
@@ -123,6 +123,6 @@ test( "isValid", function() {
 	ok( !input.datepicker( "isValid" ) );
 
 	input.datepicker( "destroy" );
-});
+} );
 
 } );

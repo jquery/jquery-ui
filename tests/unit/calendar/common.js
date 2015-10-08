@@ -28,6 +28,6 @@ common.testWidget( "calendar", {
 		create: null,
 		select: null
 	}
-});
+} );
 
 } );

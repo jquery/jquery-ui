@@ -17,7 +17,7 @@ test( "beforeOpen", function() {
 			open: function() {
 				ok( input.datepicker( "widget" ).is( ":visible" ), "calendar open on open" );
 			}
-		});
+		} );
 
 	input
 		.datepicker( "open" )
@@ -29,9 +29,9 @@ test( "beforeOpen", function() {
 			open: function() {
 				ok( false, "calendar should not open when openBefore is canceled" );
 			}
-		})
+		} )
 		.datepicker( "open" );
-});
+} );
 
 test( "close", function() {
 	expect( 4 );
@@ -41,7 +41,7 @@ test( "close", function() {
 			close: function() {
 				ok( shouldFire, "close event fired" );
 			}
-		});
+		} );
 
 	shouldFire = false;
 	input.datepicker( "open" );
@@ -62,7 +62,7 @@ test( "close", function() {
 	input.datepicker( "open" );
 	shouldFire = true;
 	input.datepicker( "widget" ).find( "tbody tr:first button:first" ).simulate( "mousedown" );
-});
+} );
 
 test( "open", function() {
 	expect( 2 );
@@ -72,11 +72,11 @@ test( "open", function() {
 				ok( true, "open event fired on open" );
 				ok( widget.is( ":visible" ), "calendar open on open" );
 			}
-		}),
+		} ),
 		widget = input.datepicker( "widget" );
 
 	input.datepicker( "open" );
-});
+} );
 
 asyncTest( "select", function() {
 	expect( 4 );
@@ -90,7 +90,7 @@ asyncTest( "select", function() {
 					"select originalEvent " + message
 				);
 			}
-		}),
+		} ),
 		widget = input.datepicker( "widget" ),
 		message = "";
 
@@ -99,7 +99,7 @@ asyncTest( "select", function() {
 		input
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			widget.find( "tbody tr:first button:first" ).simulate( "mousedown" );
 			input.datepicker( "close" );
 			step2();
@@ -111,7 +111,7 @@ asyncTest( "select", function() {
 		input
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -125,7 +125,7 @@ asyncTest( "select", function() {
 		input
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 			input.datepicker( "close" );
 			start();
@@ -133,6 +133,6 @@ asyncTest( "select", function() {
 	}
 
 	step1();
-});
+} );
 
 } );

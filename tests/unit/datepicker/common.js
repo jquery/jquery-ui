@@ -37,6 +37,6 @@ common.testWidget( "datepicker", {
 		open: null,
 		select: null
 	}
-});
+} );
 
 } );

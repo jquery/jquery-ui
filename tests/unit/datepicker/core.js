@@ -19,7 +19,7 @@ test( "input's value determines starting date", function() {
 	equal( picker.find( ".ui-state-active" ).html(), "1", "correct day highlighted" );
 
 	input.val( "" ).datepicker( "destroy" );
-});
+} );
 
 asyncTest( "base structure", function() {
 	expect( 5 );
@@ -29,7 +29,7 @@ asyncTest( "base structure", function() {
 
 	input.focus();
 
-	setTimeout(function() {
+	setTimeout( function() {
 		ok( widget.is( ":visible" ), "Datepicker visible" );
 		equal( widget.children().length, 2, "Child count" );
 		ok( widget.is( ".ui-calendar" ), "Class ui-calendar" );
@@ -39,7 +39,7 @@ asyncTest( "base structure", function() {
 		input.datepicker( "close" );
 		start();
 	}, 50 );
-});
+} );
 
 asyncTest( "Keyboard handling: input", function() {
 	expect( 10 );
@@ -53,7 +53,7 @@ asyncTest( "Keyboard handling: input", function() {
 		ok( !picker.is( ":visible" ), "datepicker closed" );
 
 		input.val( "" ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			ok( picker.is( ":visible" ), "Keystroke down opens datepicker" );
 			input.datepicker( "destroy" );
 			step2();
@@ -67,7 +67,7 @@ asyncTest( "Keyboard handling: input", function() {
 		ok( !picker.is( ":visible" ), "datepicker closed" );
 
 		input.val( "" ).simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		setTimeout(function() {
+		setTimeout( function() {
 			ok( picker.is( ":visible" ), "Keystroke up opens datepicker" );
 			input.datepicker( "destroy" );
 			step3();
@@ -121,12 +121,12 @@ asyncTest( "Keyboard handling: input", function() {
 	}
 
 	step1();
-});
+} );
 
 // TODO: implement
 test( "ARIA", function() {
 	expect( 0 );
-});
+} );
 
 asyncTest( "mouse", function() {
 	expect( 4 );
@@ -136,7 +136,7 @@ asyncTest( "mouse", function() {
 
 	input.datepicker( "open" );
 
-	setTimeout(function() {
+	setTimeout( function() {
 		input.val( "4/4/08" ).datepicker( "refresh" ).datepicker( "open" );
 		$( ".ui-calendar-calendar tbody button:contains(12)", picker ).simulate( "mousedown", {} );
 		testHelper.equalsDate(
@@ -168,6 +168,6 @@ asyncTest( "mouse", function() {
 
 		start();
 	}, 100 );
-});
+} );
 
 } );

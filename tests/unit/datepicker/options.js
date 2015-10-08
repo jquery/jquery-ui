@@ -17,12 +17,12 @@ test( "appendTo", function() {
 	equal( container, document.body, "defaults to body" );
 	input.datepicker( "destroy" );
 
-	input.datepicker({ appendTo: "#qunit-fixture" });
+	input.datepicker( { appendTo: "#qunit-fixture" } );
 	container = input.datepicker( "widget" ).parent()[ 0 ];
 	equal( container, $( "#qunit-fixture" )[ 0 ], "child of specified element" );
 	input.datepicker( "destroy" );
 
-	input.datepicker({ appendTo: "#does-not-exist" });
+	input.datepicker( { appendTo: "#does-not-exist" } );
 	container = input.datepicker( "widget" ).parent()[ 0 ];
 	equal( container, document.body, "set to body if element does not exist" );
 	input.datepicker( "destroy" );
@@ -33,16 +33,16 @@ test( "appendTo", function() {
 	equal( container, $( "#qunit-fixture" )[ 0 ], "modified after init" );
 	input.datepicker( "destroy" );
 
-	input.datepicker({ appendTo: detached });
+	input.datepicker( { appendTo: detached } );
 	container = input.datepicker( "widget" ).parent()[ 0 ];
 	equal( container, detached[ 0 ], "detached jQuery object" );
 	input.datepicker( "destroy" );
 
-	input.datepicker({ appendTo: detached[ 0 ] });
+	input.datepicker( { appendTo: detached[ 0 ] } );
 	container = input.datepicker( "widget" ).parent()[ 0 ];
 	equal( container, detached[ 0 ], "detached DOM element" );
 	input.datepicker( "destroy" );
-});
+} );
 
 test( "Pass-through options", function() {
 	expect( 11 );
@@ -77,20 +77,20 @@ test( "Pass-through options", function() {
 		if ( key === "locale" ) {
 			equal( input.val(), "Mittwoch, 1. Januar 2014", "option " + key + ": updated locale" );
 		}
-	});
-});
+	} );
+} );
 
-asyncTest( "position", function(assert) {
+asyncTest( "position", function( assert ) {
 	expect( 3 );
-	var input = $( "<input>" ).datepicker().appendTo( "body" ).css({
+	var input = $( "<input>" ).datepicker().appendTo( "body" ).css( {
 			position: "absolute",
 			top: 0,
 			left: 0
-		}),
+		} ),
 		container = input.datepicker( "widget" );
 
 	input.datepicker( "open" );
-	setTimeout(function() {
+	setTimeout( function() {
 		assert.close( input.offset().left, container.offset().left, 1, "left sides line up by default" );
 		assert.close( container.offset().top, input.offset().top + input.outerHeight(), 1,
 			"datepicker directly under input by default" );
@@ -99,21 +99,21 @@ asyncTest( "position", function(assert) {
 		input.datepicker( "option", "position", {
 			my: "left top",
 			at: "right bottom"
-		});
+		} );
 		assert.close( container.offset().left, input.offset().left + input.outerWidth(), 1,
 			"datepicker on right hand side of input after position change" );
 
 		input.remove();
 		start();
-	});
-});
+	} );
+} );
 
 test( "Stop datepicker from appearing with beforeOpen event handler", function() {
 	expect( 3 );
 
 	var input = testHelper.init( "#datepicker", {
 		beforeOpen: function() {}
-	});
+	} );
 
 	input.datepicker( "open" );
 	ok( input.datepicker( "widget" ).is( ":visible" ), "beforeOpen returns nothing" );
@@ -123,7 +123,7 @@ test( "Stop datepicker from appearing with beforeOpen event handler", function()
 		beforeOpen: function() {
 			return true;
 		}
-	});
+	} );
 	input.datepicker( "open" );
 	ok( input.datepicker( "widget" ).is( ":visible" ), "beforeOpen returns true" );
 	input.datepicker( "close" ).datepicker( "destroy" );
@@ -132,10 +132,10 @@ test( "Stop datepicker from appearing with beforeOpen event handler", function()
 		beforeOpen: function() {
 			return false;
 		}
-	});
+	} );
 	input.datepicker( "open" );
 	ok( !input.datepicker( "widget" ).is( ":visible" ), "beforeOpen returns false" );
 	input.datepicker( "destroy" );
-});
+} );
 
 } );

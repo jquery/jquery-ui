@@ -6,13 +6,13 @@ define( [
 
 module( "calendar: options" );
 
-test("buttons", function() {
+test( "buttons", function() {
 	expect( 21 );
 
 	var button, i, newButtons,
 		buttons = {
 			"Ok": function( event ) {
-				ok(true, "button click fires callback" );
+				ok( true, "button click fires callback" );
 				equal( this, element[ 0 ], "context of callback" );
 				equal( event.target, button[ 0 ], "event target" );
 			},
@@ -22,7 +22,7 @@ test("buttons", function() {
 				equal( event.target, button[ 1 ], "event target" );
 			}
 		},
-		element = $( "#calendar" ).calendar({ buttons: buttons });
+		element = $( "#calendar" ).calendar( { buttons: buttons } );
 
 	button = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
 	equal( button.length, 2, "number of buttons" );
@@ -31,7 +31,7 @@ test("buttons", function() {
 	$.each( buttons, function( key ) {
 		equal( button.eq( i ).text(), key, "text of button " + ( i + 1 ) );
 		i++;
-	});
+	} );
 
 	ok( button.parent().hasClass( "ui-calendar-buttonset" ), "buttons in container" );
 	ok(
@@ -69,7 +69,7 @@ test("buttons", function() {
 	$.each( newButtons, function( key ) {
 		equal( button.eq( i ).text(), key, "text of button " + ( i + 1 ) );
 		i += 1;
-	});
+	} );
 
 	element.calendar( "option", "buttons", null );
 	button = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
@@ -78,14 +78,14 @@ test("buttons", function() {
 	equal( element.hasClass( "ui-calendar-buttons" ), false, "calendar element removes class about having buttons" );
 
 	element.remove();
-});
+} );
 
 test( "buttons - advanced", function() {
 	expect( 7 );
 
 	var buttons,
-		element = $( "#calendar" ).calendar({
-			buttons: [{
+		element = $( "#calendar" ).calendar( {
+			buttons: [ {
 				text: "a button",
 				"class": "additional-class",
 				id: "my-button-id",
@@ -96,8 +96,8 @@ test( "buttons - advanced", function() {
 					primary: "ui-icon-cancel"
 				},
 				showText: false
-			}]
-		});
+			} ]
+		} );
 
 	buttons = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
 	equal( buttons.length, 1, "correct number of buttons" );
@@ -109,7 +109,7 @@ test( "buttons - advanced", function() {
 	buttons.click();
 
 	element.remove();
-});
+} );
 
 test( "dateFormat", function() {
 	expect( 2 );
@@ -122,7 +122,7 @@ test( "dateFormat", function() {
 
 	element.calendar( "option", "dateFormat", { date: "full" } );
 	equal( element.calendar( "value" ), "Wednesday, January 1, 2014", "updated formatting" );
-});
+} );
 
 test( "eachDay", function() {
 	expect( 5 );
@@ -140,7 +140,7 @@ test( "eachDay", function() {
 		if ( day.date === 1 ) {
 			day.render = false;
 		}
-	});
+	} );
 	firstCell = picker.find( "td[id]:first" );
 	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 2, "first available day is the 2nd" );
@@ -150,7 +150,7 @@ test( "eachDay", function() {
 		if ( day.date === 1 ) {
 			day.selectable = false;
 		}
-	});
+	} );
 	firstCell = picker.find( "td[id]:first" );
 	ok( firstCell.find( "button" ).prop( "disabled" ), "the 1st is not selectable" );
 
@@ -158,11 +158,11 @@ test( "eachDay", function() {
 		if ( day.date === 1 ) {
 			day.extraClasses = "ui-custom";
 		}
-	});
+	} );
 	ok( picker.find( "td[id]:first button" ).hasClass( "ui-custom" ), "extraClasses applied" );
 
 	input.calendar( "destroy" );
-});
+} );
 
 test( "showWeek", function() {
 	expect( 7 );
@@ -174,7 +174,7 @@ test( "showWeek", function() {
 		"no week column cells present" );
 	input.calendar( "destroy" );
 
-	input = $( "#calendar" ).calendar({ showWeek: true });
+	input = $( "#calendar" ).calendar( { showWeek: true } );
 	container = input.calendar( "widget" );
 	equal( container.find( "thead th" ).length, 8, "7 days + a column cell" );
 	ok( container.find( "thead th:first" ).is( ".ui-calendar-week-col" ),
@@ -188,7 +188,7 @@ test( "showWeek", function() {
 	equal( container.find( "thead th" ).length, 7, "no week column" );
 	input.calendar( "option", "showWeek", true );
 	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
-});
+} );
 
 test( "min / max", function() {
 	expect( 17 );
@@ -268,15 +268,15 @@ test( "min / max", function() {
 	ok( prevButton.hasClass( "ui-state-disabled" ), "Other year below min: Prev button disabled after click" );
 	nextButton.simulate( "click" );
 	ok( !prevButton.hasClass( "ui-state-disabled" ), "Other year below min: Prev button enabled after click" );
-});
+} );
 
 test( "numberOfMonths", function() {
 	expect( 6 );
 	var date = new Date( 2015, 8 - 1, 1 ),
-		input = $( "#calendar" ).calendar({
+		input = $( "#calendar" ).calendar( {
 			numberOfMonths: 3,
 			value: date
-		}),
+		} ),
 		container = input.calendar( "widget" );
 
 	equal( container.find( ".ui-calendar-group" ).length, 3, "3 calendar grids" );
@@ -310,7 +310,7 @@ test( "numberOfMonths", function() {
 	equal( container.find( ".ui-calendar-month:last" ).text(), "October",
 		"After move to next month: Last month is October"
 	);
-});
+} );
 
 /*
 // TODO: Move this to $.date, Globalize or calendar widget

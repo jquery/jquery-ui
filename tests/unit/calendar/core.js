@@ -51,7 +51,7 @@ test( "base structure", function() {
 		element.calendar( "option", "buttons", {
 			"test": function() {},
 			"test button": function() {}
-		});
+		} );
 
 		equal( dp.children().length, 3, "Structure buttons - child count (header, calendar, buttonpane)" );
 
@@ -65,6 +65,7 @@ test( "base structure", function() {
 	}
 
 	function step3() {
+
 		// Multi-month 2
 		element = $( "#calendar" ).calendar( { numberOfMonths: 2 } );
 		dp = element.calendar( "widget" );
@@ -79,7 +80,7 @@ test( "base structure", function() {
 	}
 
 	step1();
-});
+} );
 
 test( "Localization", function() {
 	expect( 10 );
@@ -130,7 +131,7 @@ test( "Localization", function() {
 		.calendar( "option", optionsDe )
 		.calendar( "refresh" );
 	testLocalization( "After init: " );
-});
+} );
 
 asyncTest( "keyboard handling", function() {
 	expect( 10 );
@@ -138,12 +139,12 @@ asyncTest( "keyboard handling", function() {
 	var element = $( "#calendar" );
 
 	function step1() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper
 			.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -156,7 +157,7 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step2() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
@@ -171,10 +172,10 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step3() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -187,10 +188,10 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step4() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -203,10 +204,10 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step5() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -219,11 +220,11 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step6() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP, altKey: true } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -236,10 +237,10 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step7() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -252,11 +253,11 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step8() {
-		element.calendar({ value: new Date( 2014, 1 - 1, 1 ) });
+		element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN, altKey: true } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -270,10 +271,10 @@ asyncTest( "keyboard handling", function() {
 
 	// Check for moving to short months
 	function step9() {
-		element.calendar({ value: new Date( 2014, 3 - 1, 31 ) });
+		element.calendar( { value: new Date( 2014, 3 - 1, 31 ) } );
 
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -286,10 +287,10 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	function step10() {
-		element.calendar({ value: new Date( 2016, 1 - 1, 30 ) });
+		element.calendar( { value: new Date( 2016, 1 - 1, 30 ) } );
 
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		setTimeout(function() {
+		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			testHelper.equalsDate(
 				element.calendar( "valueAsDate" ),
@@ -302,7 +303,7 @@ asyncTest( "keyboard handling", function() {
 	}
 
 	step1();
-});
+} );
 
 asyncTest( "mouse", function() {
 	expect( 6 );
@@ -319,7 +320,7 @@ asyncTest( "mouse", function() {
 			"Mouse click"
 		);
 
-		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4) );
+		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-calendar tbody button:contains(12)", element ).simulate( "mousedown" );
 		testHelper.equalsDate(
 			element.calendar( "valueAsDate" ),
@@ -328,7 +329,7 @@ asyncTest( "mouse", function() {
 		);
 
 		// Previous/next
-		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4) );
+		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-prev", element ).simulate( "click" );
 		$( ".ui-calendar-calendar tbody button:contains(16)", element ).simulate( "mousedown" );
 		testHelper.equalsDate(
@@ -337,7 +338,7 @@ asyncTest( "mouse", function() {
 			"Mouse click - previous"
 		);
 
-		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4) );
+		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-next", element ).simulate( "click" );
 		$( ".ui-calendar-calendar tbody button:contains(18)", element ).simulate( "mousedown" );
 		testHelper.equalsDate(
@@ -352,11 +353,11 @@ asyncTest( "mouse", function() {
 	// Previous/next with minimum/maximum
 	function step2() {
 		element.calendar( "destroy" );
-		element.calendar({
-			value: new Date( 2008, 3 - 1, 4),
+		element.calendar( {
+			value: new Date( 2008, 3 - 1, 4 ),
 			min: new Date( 2008, 2 - 1, 2 ),
 			max: new Date( 2008, 2 - 1, 26 )
-		});
+		} );
 
 		$( ".ui-calendar-prev", element ).simulate( "click" );
 		$( "tbody button:contains(16)", element ).simulate( "mousedown" );
@@ -370,11 +371,11 @@ asyncTest( "mouse", function() {
 
 	function step3() {
 		element.calendar( "destroy" );
-		element.calendar({
-			value: new Date( 2008, 1 - 1, 4),
+		element.calendar( {
+			value: new Date( 2008, 1 - 1, 4 ),
 			min: new Date( 2008, 2 - 1, 2 ),
 			max: new Date( 2008, 2 - 1, 26 )
-		});
+		} );
 
 		$( ".ui-calendar-next", element ).simulate( "click" );
 		$( "tbody button:contains(18)", element ).simulate( "mousedown" );
@@ -387,6 +388,6 @@ asyncTest( "mouse", function() {
 	}
 
 	step1();
-});
+} );
 
 } );

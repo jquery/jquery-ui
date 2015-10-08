@@ -11,8 +11,8 @@ test( "destroy", function( assert ) {
 
 	assert.domEqual( "#calendar", function() {
 		$( "#calendar" ).calendar().calendar( "destroy" );
-	});
-});
+	} );
+} );
 
 test( "enable / disable", function() {
 	expect( 8 );
@@ -30,7 +30,7 @@ test( "enable / disable", function() {
 	ok( !element.hasClass( "ui-calendar-disabled" ), "no longer has disabled widget class name" );
 	ok( !element.hasClass( "ui-state-disabled" ), "no longer has disabled state class name" );
 	equal( element.attr( "aria-disabled" ), "false", "no longer has ARIA disabled" );
-});
+} );
 
 test( "widget", function() {
 	expect( 1 );
@@ -39,7 +39,7 @@ test( "widget", function() {
 		widget = element.calendar( "widget" );
 
 	strictEqual( widget[ 0 ],  element[ 0 ] );
-});
+} );
 
 test( "value", function() {
 	expect( 3 );
@@ -54,7 +54,7 @@ test( "value", function() {
 
 	element.calendar( "value", "abc" );
 	equal( element.calendar( "value" ), "1/1/14", "Setting invalid values should be ignored." );
-});
+} );
 
 test( "valueAsDate", function() {
 	expect( 11 );
@@ -77,7 +77,7 @@ test( "valueAsDate", function() {
 	equal( element.calendar( "valueAsDate" ), null, "Set date - default" );
 
 	element.calendar( "valueAsDate", date1 );
-	testHelper.equalsDate(element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
+	testHelper.equalsDate( element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
 
 	// With minimum/maximum
 	element = $( "#calendar" ).calendar();
@@ -140,6 +140,6 @@ test( "valueAsDate", function() {
 		dateAndTimeClone.getTime(),
 		"Date object passed should not be changed by valueAsDate"
 	);
-});
+} );
 
 } );

@@ -195,8 +195,8 @@ return $.widget( "ui.calendar", {
 
 	_setLocale: function( locale, dateFormat ) {
 		var globalize = new Globalize( locale ),
-			weekdayShortFormatter = globalize.dateFormatter({ raw: "EEEEEE" }),
-			weekdayNarrowFormatter = globalize.dateFormatter({ raw: "EEEEE" });
+			weekdayShortFormatter = globalize.dateFormatter( { raw: "EEEEEE" } ),
+			weekdayNarrowFormatter = globalize.dateFormatter( { raw: "EEEEE" } );
 
 		this._format = globalize.dateFormatter( dateFormat );
 		this._parse = globalize.dateParser( dateFormat );
@@ -209,9 +209,9 @@ return $.widget( "ui.calendar", {
 
 				return shortWeekday.length > 3 ? weekdayNarrowFormatter( date ) : shortWeekday;
 			},
-			formatWeekdayFull: globalize.dateFormatter({ raw: "EEEE" }),
-			formatMonth: globalize.dateFormatter({ raw: "MMMM" }),
-			formatWeekOfYear: globalize.dateFormatter({ raw: "w" }),
+			formatWeekdayFull: globalize.dateFormatter( { raw: "EEEE" } ),
+			formatMonth: globalize.dateFormatter( { raw: "MMMM" } ),
+			formatWeekOfYear: globalize.dateFormatter( { raw: "w" } ),
 			parse: this._parse
 		};
 	},
@@ -539,7 +539,7 @@ return $.widget( "ui.calendar", {
 			}
 			if ( this.options.max !== null && months[ i ].last ) {
 				this._disableElement( this.nextButton,
-					( this.options.max.getMonth() <= months[ i].month() &&
+					( this.options.max.getMonth() <= months[ i ].month() &&
 					this.options.max.getFullYear() === months[ i ].year() ) ||
 					this.options.max.getFullYear() < months[ i ].year()
 				);
