@@ -690,8 +690,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			this._addClass( this.helper, this._helper );
 			this.helper.css( {
-				width: this.element.outerWidth() - 1,
-				height: this.element.outerHeight() - 1,
+				width: this.element.outerWidth(),
+				height: this.element.outerHeight(),
 				position: "absolute",
 				left: this.elementOffset.left + "px",
 				top: this.elementOffset.top + "px",
