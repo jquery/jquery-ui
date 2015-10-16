@@ -412,10 +412,10 @@ asyncTest( "Close on click outside when focus remains", function() {
 	} );
 
 	element.val( "j" ).autocomplete( "search", "j" );
-	setTimeout(function() {
+	setTimeout( function() {
 		ok( menu.is( ":visible" ), "menu displays initially" );
 		$( "body" ).simulate( "mousedown" );
-		setTimeout(function() {
+		setTimeout( function() {
 			ok( menu.is( ":hidden" ), "menu closes after clicking elsewhere" );
 			start();
 		} );
