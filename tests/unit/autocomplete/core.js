@@ -398,4 +398,28 @@ asyncTest( "Search if the user retypes the same value (#7434)", function() {
 	} );
 } );
 
+asyncTest( "Close on click outside when focus remains", function() {
+	expect( 2 );
+
+	var element = $( "#autocomplete" ).autocomplete( {
+		source: [ "java", "javascript" ],
+		delay: 0
+	} );
+	var menu = element.autocomplete( "widget" );
+
+	$( "body" ).on( "mousedown", function( event ) {
+		// event.preventDefault();
+	} );
+
+	element.val( "j" ).autocomplete( "search", "j" );
+	setTimeout(function() {
+		ok( menu.is( ":visible" ), "menu displays initially" );
+		$( "body" ).mousedown();
+		setTimeout(function() {
+			ok( menu.is( ":hidden" ), "menu closes after clicking elsewhere" );
+			start();
+		} );
+	} );
+} );
+
 } );
