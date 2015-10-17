@@ -24,6 +24,31 @@ var
 
 	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
 
+	cssFiles = [
+		"core",
+		"accordion",
+		"autocomplete",
+		"button",
+		"checkboxradio",
+		"controlgroup",
+		"datepicker",
+		"dialog",
+		"draggable",
+		"menu",
+		"progressbar",
+		"resizable",
+		"selectable",
+		"selectmenu",
+		"sortable",
+		"slider",
+		"spinner",
+		"tabs",
+		"tooltip",
+		"theme"
+	].map(function( component ) {
+		return "themes/base/" + component + ".css";
+	}),
+
 	// minified files
 	minify = {
 		options: {
@@ -113,6 +138,18 @@ grunt.initConfig({
 		dist: "<%= pkg.name %>-<%= pkg.version %>"
 	},
 	compare_size: compareFiles,
+	concat: {
+		css: {
+			options: {
+				banner: createBanner( cssFiles ),
+				stripBanners: {
+					block: true
+				}
+			},
+			src: cssFiles,
+			dest: "dist/jquery-ui.css"
+		}
+	},
 	requirejs: {
 		js: {
 			options: {
@@ -126,7 +163,7 @@ grunt.initConfig({
 				findNestedDependencies: true,
 				skipModuleInsertion: true,
 				exclude: [ "jquery" ],
-				include: expandFiles( [ "ui/**/*.js", "!ui/i18n/*" ] ),
+				include: expandFiles( [ "ui/**/*.js", "!ui/core.js", "!ui/i18n/*" ] ),
 				out: "dist/jquery-ui.js",
 				wrap: {
 					start: createBanner( uiFiles ),
