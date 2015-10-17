@@ -89,8 +89,8 @@ test( "_renderButtonItem()", function() {
 	element.selectmenu( "refresh" );
 	option = element.find( "option:selected" );
 	equal(
-		" " + option.text() + element[ 0 ].selectedIndex,
-		button.text(),
+		$.trim( button.text() ),
+		option.text() + element[ 0 ].selectedIndex,
 		"refresh: button item text"
 	);
 
@@ -98,8 +98,8 @@ test( "_renderButtonItem()", function() {
 	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
 	option = element.find( "option" ).last();
 	equal(
-		" " + option.text() + element[ 0 ].selectedIndex,
-		button.text(),
+		$.trim( button.text() ),
+		option.text() + element[ 0 ].selectedIndex,
 		"click: button item text"
 	);
 } );
@@ -146,7 +146,7 @@ $.each( [
 				selected.val(),
 				"original select state"
 			);
-			equal( button.text(), " " + selected.text(), "button text" );
+			equal( $.trim( button.text() ), selected.text(), "button text" );
 			start();
 		} );
 	} );
@@ -181,7 +181,7 @@ $.each( [
 				selected.val(),
 				"original select state"
 			);
-			equal( button.text(), " " + selected.text(), "button text" );
+			equal( $.trim( button.text() ), selected.text(), "button text" );
 			start();
 		}, 1 );
 	} );
@@ -222,7 +222,7 @@ $.each( [
 					"button aria-activedescendant" );
 				equal( element.find( "option:selected" ).val(), options.eq( 1 ).val(),
 					"original select state" );
-				equal( button.text(), " " + options.eq( 1 ).text(), "button text" );
+				equal( $.trim( button.text() ), options.eq( 1 ).text(), "button text" );
 				start();
 			} );
 		} );

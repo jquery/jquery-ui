@@ -165,7 +165,7 @@ test( "buttons - advanced", function( assert ) {
 	buttons = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal( buttons.length, 1, "correct number of buttons" );
 	equal( buttons.attr( "id" ), "my-button-id", "correct id" );
-	equal( buttons.text().trim(), "a button", "correct label" );
+	equal( $.trim( buttons.text() ), "a button", "correct label" );
 	assert.hasClasses( buttons, "additional-class" );
 	deepEqual( buttons.button( "option", "icon" ), "ui-icon-cancel" );
 	equal( buttons.button( "option", "showLabel" ), false );
@@ -209,17 +209,17 @@ test( "closeText", function() {
 	expect( 3 );
 
 	var element = $( "<div></div>" ).dialog();
-		equal( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text().trim(), "Close",
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "Close",
 			"default close text" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( { closeText: "foo" } );
-		equal( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text().trim(), "foo",
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "foo",
 			"closeText on init" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog().dialog( "option", "closeText", "bar" );
-		equal( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text().trim(), "bar",
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "bar",
 			"closeText via option method" );
 	element.remove();
 } );

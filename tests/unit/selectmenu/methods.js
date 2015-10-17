@@ -81,21 +81,21 @@ asyncTest( "refresh - change selected option", function() {
 	var element = $( "#speed" ).selectmenu(),
 		button = element.selectmenu( "widget" );
 
-	equal( button.text(), " Medium", "button text after init" );
+	equal( $.trim( button.text() ), "Medium", "button text after init" );
 
 	button.simulate( "focus" );
 
 	setTimeout( function() {
-		equal( button.text(), " Medium", "button text after focus" );
+		equal( $.trim( button.text() ), "Medium", "button text after focus" );
 
 		element[ 0 ].selectedIndex = 0;
 		element.selectmenu( "refresh" );
-		equal( button.text(), " Slower", "button text after changing selected option" );
+		equal( $.trim( button.text() ), "Slower", "button text after changing selected option" );
 
 		element.find( "option" ).prop( "selected", false );
 		element.append( "<option selected value=\"selected_option\">Selected option</option>" );
 		element.selectmenu( "refresh" );
-		equal( button.text(), " Selected option", "button text after adding selected option" );
+		equal( $.trim( button.text() ), "Selected option", "button text after adding selected option" );
 
 		start();
 	} );
