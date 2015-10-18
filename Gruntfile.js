@@ -423,6 +423,7 @@ grunt.registerTask( "update-authors", function() {
 });
 
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ]);
+grunt.registerTask( "jenkins", [ "default", "concat" ]);
 grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
 grunt.registerTask( "test", [ "qunit" ]);
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ]);
