@@ -345,4 +345,21 @@ test( "ui-draggable-handle managed correctly in nested draggables", function( as
 	assert.hasClasses( child, "ui-draggable-handle", "child retains class name on destroy" );
 } );
 
+test( "does not stop propagation to window", function( assert ) {
+	expect( 1 );
+	var element = $( "#draggable1" ).draggable();
+
+	var handler = function() {
+		assert.ok( true, "mouseup propagates to window" );
+	};
+	$( window ).on( "mouseup", handler );
+
+	element.simulate( "drag", {
+		dx: 10,
+		dy: 10
+	} );
+
+	$( window ).off( "mouseup", handler );
+} );
+
 } );

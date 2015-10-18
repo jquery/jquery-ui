@@ -189,7 +189,7 @@ return $.widget( "ui.mouse", {
 		}
 
 		mouseHandled = false;
-		return false;
+		event.preventDefault();
 	},
 
 	_mouseDistanceMet: function( event ) {
