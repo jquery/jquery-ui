@@ -12,7 +12,7 @@
 //>>description: Enables items in a list to be sorted using the mouse.
 //>>docs: http://api.jqueryui.com/sortable/
 //>>demos: http://jqueryui.com/sortable/
-//>>css.structure: ../themes/base/sortable.css
+//>>css.structure: ../../themes/base/sortable.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -12,9 +12,9 @@
 //>>description: Visually groups form control widgets
 //>>docs: http://api.jqueryui.com/controlgroup/
 //>>demos: http://jqueryui.com/controlgroup/
-//>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/controlgroup.css
-//>>css.theme: ../themes/base/theme.css
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/controlgroup.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -9,7 +9,7 @@
  */
 
 //>>label: Core
-//>>group: UI Core
+//>>group: Core
 //>>description: The core of jQuery UI, required for all interactions and widgets.
 //>>docs: http://api.jqueryui.com/category/ui-core/
 

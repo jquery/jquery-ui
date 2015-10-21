@@ -12,7 +12,7 @@
 //>>description: Allows groups of elements to be selected with the mouse.
 //>>docs: http://api.jqueryui.com/selectable/
 //>>demos: http://jqueryui.com/selectable/
-//>>css.structure: ../themes/base/selectable.css
+//>>css.structure: ../../themes/base/selectable.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

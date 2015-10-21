@@ -8,7 +8,7 @@
  */
 
 //>>label: Mouse
-//>>group: UI Core
+//>>group: Widgets
 //>>description: Abstracts mouse-based interactions to assist in creating certain widgets.
 //>>docs: http://api.jqueryui.com/mouse/
 

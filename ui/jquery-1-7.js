@@ -9,7 +9,7 @@
  */
 
 //>>label: jQuery 1.7 Support
-//>>group: UI Core
+//>>group: Core
 //>>description: Support version 1.7.x of jQuery core
 
 ( function( factory ) {
