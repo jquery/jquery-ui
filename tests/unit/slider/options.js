@@ -238,18 +238,34 @@ test( "step", function() {
 //});
 
 test( "values", function() {
-	expect( 2 );
+	expect( 6 );
 
 	// Testing multiple ranges on the same page, the object reference to the values
 	// property is preserved via multiple range elements, so updating options.values
 	// of 1 slider updates options.values of all the others
+
 	var ranges = $( [
-		document.createElement( "div" ),
-		document.createElement( "div" )
-	] ).slider( {
-		range: true,
-		values: [ 25, 75 ]
-	} );
+				document.createElement( "div" ),
+				document.createElement( "div" )
+			] ).slider( {
+				range: true,
+				values: [ 25, 75 ]
+			} ),
+			element = $( "<div></div>" ).slider( {
+				range: true,
+				min: 10,
+				max: 100,
+				step: 1,
+				values: [ 15, 1 ]
+			} );
+
+	ranges = $( [
+			document.createElement( "div" ),
+			document.createElement( "div" )
+		] ).slider( {
+			range: true,
+			values: [ 25, 75 ]
+		} );
 
 	notStrictEqual(
 		ranges.eq( 0 ).slider( "instance" ).options.values,
@@ -264,11 +280,24 @@ test( "values", function() {
 		ranges.eq( 1 ).slider( "values", 0 ),
 		"the values for multiple sliders should be different"
 	);
+
+	deepEqual( element.slider( "values" ), [ 15, 15 ], "handles restricted properly when set programmatically - 2nd handle reset" );
+
+	element.slider( "option", "values", [ 0, 200 ] );
+	deepEqual( element.slider( "values" ), [ 10, 100 ], "option values - restricted min and max" );
+
+	element.slider( "option", "values", [ 15, 1 ] );
+	deepEqual( element.slider( "values" ), [ 15, 15 ], "option values - restricted 2nd Handle" );
+
+	element.slider( "option", "values", [ 15, 15 ] );
+	element.slider( "option", "values", [ 25, 15 ] );
+	deepEqual( element.slider( "values" ), [ 25, 25 ], "option values - restricted 2nd Handle" );
+
 } );
 
 test( "range", function( assert ) {
 	expect( 32 );
-	var range;
+	var element,range;
 
 	// Min
 	element = $( "<div></div>" ).slider( {

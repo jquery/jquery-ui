@@ -76,6 +76,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
+		this._cleanValues();
 
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
 			"ui-widget ui-widget-content" );
@@ -157,6 +158,41 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this.range.remove();
 			}
 			this.range = null;
+		}
+	},
+
+	_cleanValues: function( index, newValue ) {
+		var values;
+
+		if ( this.options.range === true ) {
+			if ( arguments.length === 2 ) {
+				values = this.options.values;
+				if ( index === 0 && newValue > values[ 1 ] ) {
+					newValue = values[ 1 ];
+				}else if ( index === 1 && newValue < values[ 0 ] ) {
+					newValue = values[ 0 ];
+				}
+				return newValue;
+			}
+
+			values = arguments[ 0 ] || this.options.values;
+			if ( values ) {
+				if ( values[ 0 ] > values[ 1 ] ) {
+					values[ 1 ] = values[ 0 ];
+				}
+
+				if ( !arguments.length ) {
+					this.options.values = values;
+				}
+
+				return values;
+			}
+		} else {
+			if ( $.isArray( arguments[ 0 ] ) ) {
+				return arguments[ 0 ];
+			} else {
+				return newValue;
+			}
 		}
 	},
 
@@ -385,6 +421,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		if ( arguments.length > 1 ) {
 			this.options.values[ index ] = this._trimAlignValue( newValue );
+			this.options.values[ index ] = this._cleanValues( index, newValue );
 			this._refreshValue();
 			this._change( null, index );
 			return;
@@ -393,7 +430,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		if ( arguments.length ) {
 			if ( $.isArray( arguments[ 0 ] ) ) {
 				vals = this.options.values;
-				newValues = arguments[ 0 ];
+				newValues = this._cleanValues( arguments[ 0 ] );
 				for ( i = 0; i < vals.length; i += 1 ) {
 					vals[ i ] = this._trimAlignValue( newValues[ i ] );
 					this._change( null, i );
@@ -452,6 +489,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				break;
 			case "values":
 				this._animateOff = true;
+				this._cleanValues();
 				this._refreshValue();
 
 				// Start from the last handle to prevent unreachable handles (#9046)

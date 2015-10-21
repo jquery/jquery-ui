@@ -161,4 +161,53 @@ test( "values, multi step", function() {
 	element.slider( "destroy" );
 } );
 
+test( "values", function() {
+	expect( 12 );
+
+	var element = $( "<div></div>" ).slider( {
+		range: true,
+		min: 10,
+		max: 100,
+		step: 1
+	} );
+
+	element.slider( "values", [ 20, 90 ] );
+	deepEqual( element.slider( "values" ), [ 20, 90 ], "Values (array) - get value for all handles" );
+
+	element.slider( "values", [ 0, 200 ] );
+	deepEqual( element.slider( "values" ), [ 10, 100 ], "Values (array) - restricted min and max" );
+
+	element.slider( "values", 0, 50 );
+	equal( element.slider( "values", 0 ), 50, "Values (index,value) - set first handle" );
+
+	element.slider( "values", 1, 75 );
+	equal( element.slider( "values", 1 ), 75, "Values (index,value) - set second handle" );
+
+	element.slider( "values", 0, 5 );
+	equal( element.slider( "values", 0 ), 10, "Values (index,value) - 1st handle restricted properly, against min" );
+
+	element.slider( "values", 0, 90 );
+	equal( element.slider( "values", 0 ), element.slider( "values", 1 ), "Values (index,value) - 1st handle restricted properly, against 2nd handle" );
+
+	element.slider( "values", 1, 110 );
+	equal( element.slider( "values", 1 ), 100, "Values (index,value) - 2nd handle restricted properly, against max" );
+
+	element.slider( "values", 1, 40 );
+	equal( element.slider( "values", 1 ), element.slider( "values", 0 ), "Values (index,value) - 2nd handle restricted properly, against 1st handle" );
+
+	element.slider( "values", [ 50, 75 ] );
+
+	element.slider( "values", [ 0, 75 ] );
+	deepEqual( element.slider( "values" ), [ 10, 75 ], "Values (array) - Setting both handles - against  min" );
+
+	element.slider( "values", [ 0, 90 ] );
+	deepEqual( element.slider( "values" ), [ 10, 90 ], "Values (array) - 1st handle restricted properly, against 2nd handle" );
+
+	element.slider( "values", 1, 110 );
+	deepEqual( element.slider( "values" ), [ 10, 100 ], "Values (array) - 2nd handle restricted properly, against max" );
+
+	element.slider( "values", [ 75, 50 ] );
+	deepEqual( element.slider( "values" ), [ 75, 75 ], "Values (array) - Setting both handles - 2nd Handle resets to 1st" );
+} );
+
 } );
