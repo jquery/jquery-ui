@@ -119,7 +119,7 @@ a.ui-button:active,
 .ui-icon-background,
 .ui-state-active .ui-icon-background {
 	border: #003eff/*{borderColorActive}*/;
-	background-color: #ffffff/*{bgColorActive}*/;
+	background-color: #ffffff/*{fcColorActive}*/;
 }
 .ui-state-active a,
 .ui-state-active a:link,
