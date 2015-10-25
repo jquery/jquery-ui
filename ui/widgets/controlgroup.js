@@ -61,6 +61,12 @@ return $.widget( "ui.controlgroup", {
 		this._callChildMethod( "destroy" );
 		this.childWidgets.removeData( "ui-controlgroup-data" );
 		this.element.removeAttr( "role" );
+		if ( this.options.items.controlgroupLabel ) {
+			this.element
+				.find( this.options.items.controlgroupLabel )
+				.find( ".ui-controlgroup-label-contents" )
+				.contents().unwrap();
+		}
 	},
 
 	_initWidgets: function() {
@@ -72,8 +78,8 @@ return $.widget( "ui.controlgroup", {
 			var labels;
 			var options = {};
 
-			// Make sure the widget actually exists and has a selector set
-			if ( !$.fn[ widget ] || !selector ) {
+			// Make sure the widget has a selector set
+			if ( !selector ) {
 				return;
 			}
 
@@ -84,6 +90,11 @@ return $.widget( "ui.controlgroup", {
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
 				childWidgets = childWidgets.concat( labels.get() );
+				return;
+			}
+
+			// Make sure the widget actually exists
+			if ( !$.fn[ widget ] ) {
 				return;
 			}
 

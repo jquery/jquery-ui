@@ -5,7 +5,7 @@
 	<title>jQuery UI Controlgroup Test Suite</title>
 
 	<script src="../../../external/requirejs/require.js"></script>
-	<script src="../../lib/css.js" data-modules="core button checkboxradio selectmenu controlgroup"></script>
+	<script src="../../lib/css.js" data-modules="core button checkboxradio selectmenu spinner controlgroup"></script>
 	<script src="../../lib/bootstrap.js" data-modules="common core methods options"></script>
 </head>
 <body>
@@ -28,6 +28,8 @@
 		</select>
 		<div class="test"></div>
 		<button>Button with icon on the bottom</button>
+		<label for="spinner" class="ui-controlgroup-label"># of cars</label>
+		<input id="spinner" class="ui-spinner-input">
 		<select>
 			<option>Fast</option>
 			<option>Medium</option>
