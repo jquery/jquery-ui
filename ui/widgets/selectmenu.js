@@ -24,6 +24,7 @@
 			"jquery",
 			"./menu",
 			"../escape-selector",
+			"../form-reset-mixin",
 			"../keycode",
 			"../labels",
 			"../position",
@@ -38,7 +39,7 @@
 	}
 }( function( $ ) {
 
-return $.widget( "ui.selectmenu", {
+return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	version: "@VERSION",
 	defaultElement: "<select>",
 	options: {
@@ -76,6 +77,7 @@ return $.widget( "ui.selectmenu", {
 
 		this._drawButton();
 		this._drawMenu();
+		this._bindFormResetHandler();
 
 		this._rendered = false;
 		this.menuItems = $();
@@ -675,12 +677,13 @@ return $.widget( "ui.selectmenu", {
 	},
 
 	_destroy: function() {
+		this._unbindFormResetHandler();
 		this.menuWrap.remove();
 		this.button.remove();
 		this.element.show();
 		this.element.removeUniqueId();
 		this.labels.attr( "for", this.ids.element );
 	}
-} );
+} ] );
 
 } ) );
