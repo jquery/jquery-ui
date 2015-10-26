@@ -1,3 +1,17 @@
+/*!
+ * jQuery UI Form Reset Mixin @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: Form Reset Mixin
+//>>group: Core
+//>>description: Refresh input widgets when their form is reset
+//>>docs: http://api.jqueryui.com/form-reset-mixin/
+
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
