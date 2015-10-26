@@ -238,7 +238,7 @@ $.widget( "ui.button", {
 
 		// Make sure we can't end up with a button that has neither text nor icon
 		if ( key === "showLabel" ) {
-				this._toggleClass( this._classes( "ui-button-icon-only" ), null, !value );
+				this._toggleClass( "ui-button-icon-only", null, !value );
 				this._updateTooltip();
 		}
 
