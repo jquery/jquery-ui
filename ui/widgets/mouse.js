@@ -146,7 +146,16 @@ return $.widget( "ui.mouse", {
 
 			// Iframe mouseup check - mouseup occurred in another document
 			} else if ( !event.which ) {
-				return this._mouseUp( event );
+
+				// Support: Safari 8
+				// Safari sets which to 0 if you press any of the following keys
+				// during a drag (#14461)
+				if ( event.originalEvent.altKey || event.originalEvent.ctrlKey ||
+						event.originalEvent.metaKey || event.originalEvent.shiftKey ) {
+					this.ignoreMissingWhich = true;
+				} else if ( !this.ignoreMissingWhich ) {
+					return this._mouseUp( event );
+				}
 			}
 		}
 
@@ -188,6 +197,7 @@ return $.widget( "ui.mouse", {
 			delete this._mouseDelayTimer;
 		}
 
+		this.ignoreMissingWhich = false;
 		mouseHandled = false;
 		event.preventDefault();
 	},
