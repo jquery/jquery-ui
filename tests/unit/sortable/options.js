@@ -87,7 +87,6 @@ asyncTest( "#7415: Incorrect revert animation with axis: 'y'", function() {
 		element = $( "#sortable" ).sortable( {
 			axis: "y",
 			revert: true,
-			stop: start,
 			sort: function() {
 				expectedLeft = item.css( "left" );
 			}
@@ -103,6 +102,7 @@ asyncTest( "#7415: Incorrect revert animation with axis: 'y'", function() {
 		var top = parseFloat( item.css( "top" ) );
 		equal( item.css( "left" ), expectedLeft, "left not animated" );
 		ok( top > 0 && top < 300, "top is animated" );
+		start();
 	}, 100 );
 } );
 
