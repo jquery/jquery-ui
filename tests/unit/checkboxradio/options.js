@@ -8,8 +8,7 @@ module( "Checkboxradio: options" );
 function assertDisabled( checkbox, assert ) {
 	assert.hasClasses( checkbox.checkboxradio( "widget" ), "ui-state-disabled",
 		"label gets ui-state-disabled" );
-	strictEqual( checkbox.is( ":disabled" ), true,
-		"checkbox is disabled" );
+	strictEqual( checkbox.is( ":disabled" ), true, "checkbox is disabled" );
 }
 
 function assertEnabled( checkbox, assert ) {
@@ -20,8 +19,9 @@ function assertEnabled( checkbox, assert ) {
 }
 
 test( "disabled", function( assert ) {
-	var checkbox = $( "#checkbox-option-disabled" );
 	expect( 6 );
+
+	var checkbox = $( "#checkbox-option-disabled" );
 	checkbox.checkboxradio( {
 		disabled: true
 	} );
@@ -34,6 +34,7 @@ test( "disabled", function( assert ) {
 	checkbox.checkboxradio( "option", "disabled", true );
 	assertDisabled( checkbox, assert );
 } );
+
 test( "disabled - prop true on init", function( assert ) {
 	expect( 2 );
 	var checkbox = $( "#checkbox-option-disabled" );
@@ -43,6 +44,7 @@ test( "disabled - prop true on init", function( assert ) {
 
 	assertDisabled( checkbox, assert );
 } );
+
 test( "disabled - explicit null value, checks the DOM", function( assert ) {
 	expect( 2 );
 	var checkbox = $( "#checkbox-option-disabled" );
@@ -58,6 +60,7 @@ function assertNoIcon( checkbox ) {
 	strictEqual( checkbox.checkboxradio( "widget" ).find( "span.ui-icon" ).length, 0,
 		"Label does not contain an icon" );
 }
+
 function assertIcon( checkbox, icon, assert ) {
 	var iconElement = checkbox.checkboxradio( "widget" ).find( ".ui-icon" );
 
@@ -71,6 +74,7 @@ function assertIcon( checkbox, icon, assert ) {
 		assert.lacksClasses( iconElement, "ui-icon-check ui-state-highlight" );
 	}
 }
+
 test( "icon - false on init", function() {
 	var checkbox = $( "#checkbox-option-icon" );
 
@@ -79,6 +83,7 @@ test( "icon - false on init", function() {
 	checkbox.checkboxradio( { icon: false } );
 	assertNoIcon( checkbox );
 } );
+
 test( "icon - default unchecked", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" );
 
@@ -87,6 +92,7 @@ test( "icon - default unchecked", function( assert ) {
 	checkbox.checkboxradio();
 	assertIcon( checkbox, false, assert );
 } );
+
 test( "icon - default checked", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" ).attr( "checked", true );
 
@@ -95,6 +101,7 @@ test( "icon - default checked", function( assert ) {
 	checkbox.checkboxradio();
 	assertIcon( checkbox, "check ui-state-highlight", assert );
 } );
+
 test( "icon", function( assert ) {
 	var checkbox = $( "#checkbox-option-icon" );
 
@@ -117,7 +124,6 @@ test( "icon", function( assert ) {
 	checkbox.checkboxradio( "option", "icon", true );
 	checkbox.prop( "checked", false ).checkboxradio( "refresh" );
 	assertIcon( checkbox, false, assert );
-
 } );
 
 test( "label - default", function() {
@@ -133,6 +139,7 @@ test( "label - default", function() {
 	strictEqual( $.trim( widget.text() ),
 		"checkbox label", "When no value passed on create text from dom is used in dom" );
 } );
+
 test( "label - explicit value", function() {
 	expect( 5 );
 	var checkbox = $( "#checkbox-option-label" ).checkboxradio( {
@@ -160,9 +167,9 @@ test( "label - explicit null value", function() {
 
 	expect( 2 );
 
-	// We are testing the default here because the default null is a special value which means to check
-	// the DOM, so we need to make sure this happens correctly checking the options should never return
-	// null. It should always be true or false
+	// The default null is a special value which means to check the DOM.
+	// We need to make sure that the option never return null.
+	// It should always be true or false after initialization.
 	checkbox.checkboxradio( {
 		label: null
 	} );
@@ -175,10 +182,10 @@ test( "label - explicit null value", function() {
 } );
 
 test( "label", function() {
+	expect( 4 );
+
 	var checkbox = $( "#checkbox-option-label" ),
 		widget;
-
-	expect( 4 );
 
 	checkbox.checkboxradio();
 	widget = checkbox.checkboxradio( "widget" );
@@ -193,7 +200,6 @@ test( "label", function() {
 		"bar", "When null is passed text from dom is used for option" );
 	strictEqual( $.trim( widget.text() ),
 		"bar", "When null is passed text from dom is used in dom" );
-
 } );
 
 } );

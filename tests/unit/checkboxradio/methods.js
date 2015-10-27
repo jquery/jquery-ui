@@ -72,16 +72,15 @@ $.each( [ "checkbox", "radio" ], function( index, value ) {
 	} );
 
 	test(  value + ": widget returns the label", function() {
+		expect( 1 );
+
 		var input = $( "#" + value + "-method-refresh" ),
 			label = $( "#" + value + "-method-refresh-label" );
-
-		expect( 1 );
 
 		input.checkboxradio();
 		strictEqual( input.checkboxradio( "widget" )[ 0 ], label[ 0 ],
 			"widget method returns label" );
 	} );
-
 } );
 
 test( "Input wrapped in a label preserved on refresh", function() {

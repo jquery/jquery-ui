@@ -6,13 +6,13 @@ define( [
 common.testWidget( "checkboxradio", {
 	noDefaultElement: true,
 	defaults: {
-		disabled: null,
-		label: null,
-		icon: true,
 		classes: {
 			"ui-checkboxradio-label": "ui-corner-all",
 			"ui-checkboxradio-icon": "ui-corner-all"
 		},
+		disabled: null,
+		icon: true,
+		label: null,
 
 		// Callbacks
 		create: null

@@ -28,16 +28,15 @@ asyncTest(
 );
 
 asyncTest( "Checkbox shows focus when using keyboard navigation", function( assert ) {
-		expect( 2 );
-		var check = $( "#check" ).checkboxradio(),
-			label = $( "label[for='check']" );
-		assert.lacksClasses( label, "ui-state-focus" );
-		check.focus();
-		setTimeout( function() {
-			assert.hasClasses( label, "ui-state-focus" );
-			start();
-		} );
-	}
-);
+	expect( 2 );
+	var check = $( "#check" ).checkboxradio(),
+		label = $( "label[for='check']" );
+	assert.lacksClasses( label, "ui-state-focus" );
+	check.focus();
+	setTimeout( function() {
+		assert.hasClasses( label, "ui-state-focus" );
+		start();
+	} );
+} );
 
 } );

@@ -4,6 +4,7 @@ define( [
 ], function( $ ) {
 
 module( "Checkboxradio: core" );
+
 test( "Checkbox - Initial class structure", function( assert ) {
 	expect( 2 );
 	var input = $( "#check" ),
@@ -70,7 +71,10 @@ test( "Checkbox creation requires a label, and finds it in all cases", function(
 
 test( "Calling checkboxradio on an unsupported element throws an error", function( assert ) {
 	expect( 2 );
-	var error = new Error( "Can't create checkboxradio on element.nodeName=div and element.type=undefined" );
+
+	var error = new Error(
+		"Can't create checkboxradio on element.nodeName=div and element.type=undefined"
+	);
 	assert.raises(
 		function() {
 			$( "<div>" ).checkboxradio();
@@ -78,7 +82,10 @@ test( "Calling checkboxradio on an unsupported element throws an error", functio
 		error,
 		"Proper error thrown"
 	);
-	error = new Error( "Can't create checkboxradio on element.nodeName=input and element.type=button" );
+
+	error = new Error(
+		"Can't create checkboxradio on element.nodeName=input and element.type=button"
+	);
 	assert.raises(
 		function() {
 			$( "<input type='button'>" ).checkboxradio();
@@ -87,8 +94,10 @@ test( "Calling checkboxradio on an unsupported element throws an error", functio
 		"Proper error thrown"
 	);
 } );
+
 test( "Calling checkboxradio on an input with no label throws an error", function( assert ) {
 	expect( 1 );
+
 	var error = new Error( "No label found for checkboxradio widget" );
 	assert.raises(
 		function() {
