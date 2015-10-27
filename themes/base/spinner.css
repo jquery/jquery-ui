@@ -23,10 +23,10 @@
 	margin: .2em 0;
 	vertical-align: middle;
 	margin-left: .4em;
-	margin-right: 22px;
+	margin-right: 2em;
 }
 .ui-spinner-button {
-	width: 16px;
+	width: 1.6em;
 	height: 50%;
 	font-size: .5em;
 	padding: 0;
@@ -43,13 +43,6 @@
 	border-top-style: none;
 	border-bottom-style: none;
 	border-right-style: none;
-}
-/* vertically center icon */
-.ui-spinner .ui-icon {
-	position: absolute;
-	margin-top: -8px;
-	top: 50%;
-	left: 0;
 }
 .ui-spinner-up {
 	top: 0;
