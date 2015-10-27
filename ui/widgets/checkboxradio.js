@@ -93,9 +93,6 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 		this._bindFormResetHandler();
 
-		// this.form is set by the form-reset-mixin
-		this.formParent = this.form.length ? this.form : $( "body" );
-
 		if ( this.options.disabled == null ) {
 			this.options.disabled = this.element[ 0 ].disabled;
 		}
@@ -151,17 +148,25 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	},
 
 	_getRadioGroup: function() {
+		var group;
 		var name = this.element[ 0 ].name;
-		var formParent = this.formParent[ 0 ];
+		var nameSelector = "[name='" + $.ui.escapeSelector( name ) + "']";
 
 		if ( !name ) {
 			return $( [] );
 		}
 
-		return this.formParent.find( "[name='" + $.ui.escapeSelector( name ) + "']" ).filter( function() {
-			var form = $( this ).form();
-			return ( form.length ? form : $( "body" ) )[ 0 ] === formParent;
-		} ).not( this.element );
+		if ( this.form.length ) {
+			group = $( this.form[ 0 ].elements ).filter( nameSelector );
+		} else {
+
+			// Not inside a form, check all inputs that also are not inside a form
+			group = $( nameSelector ).filter( function() {
+				return $( this ).form().length === 0;
+			} );
+		}
+
+		return group.not( this.element );
 	},
 
 	_toggleClasses: function() {
