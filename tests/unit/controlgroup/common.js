@@ -8,6 +8,8 @@ define( [
 
 common.testWidget( "controlgroup", {
 	defaults: {
+		classes: {},
+		direction: "horizontal",
 		disabled: null,
 		items: {
 			"button": "input[type=button], input[type=submit], input[type=reset], button, a",
@@ -16,9 +18,7 @@ common.testWidget( "controlgroup", {
 			"spinner": ".ui-spinner-input",
 			"controlgroupLabel": ".ui-controlgroup-label"
 		},
-		direction: "horizontal",
 		onlyVisible: true,
-		classes: {},
 
 		// Callbacks
 		create: null

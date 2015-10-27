@@ -14,6 +14,7 @@ test( "destroy", function( assert ) {
 		$( ".controlgroup" ).controlgroup().controlgroup( "destroy" );
 	} );
 } );
+
 test( "disable", function( assert ) {
 	expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "disable" );
@@ -142,7 +143,6 @@ $.each( tests, function( widget, html ) {
 
 			// remove the controlgroup before we start the next set
 			element.remove();
-
 		} );
 	} );
 } );

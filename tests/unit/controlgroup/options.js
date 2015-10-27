@@ -59,6 +59,7 @@ $.widget( "ui.test", {
 	// Controlgroup requires a refresh method to exist
 	refresh: $.noop
 } );
+
 test( "items: custom widget", function() {
 	expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup( {
