@@ -53,16 +53,11 @@
 }
 
 /* Spinner specific style fixes */
-.ui-controlgroup-vertical .ui-spinner {
-	padding-right: .4em;
-}
 .ui-controlgroup-vertical .ui-spinner-input {
-	margin: .4em;
-	padding: 0;
 
 	/* Support: IE8 only, Android < 4.4 only */
-	width: 85%;
-	width: calc( 100% - 22px );
+	width: 75%;
+	width: calc( 100% - 2.4em );
 }
 .ui-controlgroup-vertical .ui-spinner .ui-spinner-up {
 	border-top-style: solid;
