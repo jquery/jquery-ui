@@ -86,6 +86,21 @@ test( "label, explicit value", function() {
 	deepEqual( button.button( "option", "label" ), "xxx" );
 } );
 
+test( "label, escape html", function() {
+	expect( 4 );
+	var label = "<div>bloob</div>";
+	var button = $( "#button" ).button( {
+		label: label
+	} );
+
+	deepEqual( button.text(), label );
+	deepEqual( button.button( "option", "label" ), label );
+
+	button.button( "option", "label", label );
+	deepEqual( button.text(), label );
+	deepEqual( button.button( "option", "label" ), label );
+} );
+
 test( "label, default, with input type submit", function() {
 	expect( 2 );
 	var button = $( "#submit" ).button();
