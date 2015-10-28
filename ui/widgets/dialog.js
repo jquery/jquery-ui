@@ -426,7 +426,7 @@ $.widget( "ui.dialog", {
 		// dialog in IE (#9312)
 		this.uiDialogTitlebarClose = $( "<button type='button'></button>" )
 			.button( {
-				label: this.options.closeText,
+				label: $( "<a>" ).text( this.options.closeText ).html(),
 				icon: "ui-icon-closethick",
 				showLabel: false
 			} )
@@ -715,7 +715,7 @@ $.widget( "ui.dialog", {
 			this.uiDialogTitlebarClose.button( {
 
 				// Ensure that we always pass a string
-				label: "" + value
+				label: $( "<a>" ).text( "" + this.options.closeText ).html()
 			} );
 		}
 

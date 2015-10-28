@@ -206,7 +206,7 @@ test( "closeOnEscape", function() {
 } );
 
 test( "closeText", function() {
-	expect( 3 );
+	expect( 4 );
 
 	var element = $( "<div></div>" ).dialog();
 		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "Close",
@@ -221,6 +221,11 @@ test( "closeText", function() {
 	element = $( "<div></div>" ).dialog().dialog( "option", "closeText", "bar" );
 		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "bar",
 			"closeText via option method" );
+	element.remove();
+
+	element = $( "<div></div>" ).dialog( { closeText: "<span>foo</span>" } );
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "<span>foo</span>",
+			"closeText is escaped" );
 	element.remove();
 } );
 
