@@ -93,7 +93,7 @@ $.widget( "ui.button", {
 			if ( this.isInput ) {
 				this.element.val( this.options.label );
 			} else {
-				this.element.html( this.options.label );
+				this.element.text( this.options.label );
 			}
 		}
 		this._addClass( "ui-button", "ui-widget" );
@@ -249,7 +249,7 @@ $.widget( "ui.button", {
 
 				// If there is an icon, append it, else nothing then append the value
 				// this avoids removal of the icon when setting label text
-				this.element.html( value );
+				this.element.text( value );
 				if ( this.icon ) {
 					this._attachIcon( this.options.iconPosition );
 					this._attachIconSpace( this.options.iconPosition );
