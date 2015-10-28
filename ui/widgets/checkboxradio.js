@@ -150,7 +150,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	_getRadioGroup: function() {
 		var group;
 		var name = this.element[ 0 ].name;
-		var nameSelector = "[name='" + $.ui.escapeSelector( name ) + "']";
+		var nameSelector = "input[name='" + $.ui.escapeSelector( name ) + "']";
 
 		if ( !name ) {
 			return $( [] );
