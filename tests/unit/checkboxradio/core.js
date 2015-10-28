@@ -48,6 +48,25 @@ asyncTest( "Ensure checked after single click on checkbox label button", functio
 	} );
 } );
 
+test( "Handle form association via form attribute", function( assert ) {
+	expect( 4 );
+
+	var radio1 = $( "#crazy-form-1" ).checkboxradio();
+	var radio1Label = radio1.checkboxradio( "widget" );
+	var radio2 = $( "#crazy-form-2" ).checkboxradio();
+	var radio2Label = radio2.checkboxradio( "widget" );
+
+	radio2.change( function() {
+		ok( this.checked, "#2 checked" );
+		ok( !radio1[ 0 ].checked, "#1 not checked" );
+
+		assert.hasClasses( radio2Label, "ui-state-active" );
+		assert.lacksClasses( radio1Label, "ui-state-active" );
+	} );
+
+	radio2Label.simulate( "click" );
+} );
+
 test( "Checkbox creation requires a label, and finds it in all cases", function( assert ) {
 	expect( 7 );
 	var groups = [
