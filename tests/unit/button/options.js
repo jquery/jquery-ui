@@ -76,6 +76,15 @@ test( "label, default", function() {
 	deepEqual( button.button( "option", "label" ), "Label" );
 } );
 
+test( "label, with html markup", function() {
+	expect( 3 );
+	var button = $( "#button2" ).button();
+
+	deepEqual( button.text(), "label with span" );
+	deepEqual( button.html().toLowerCase(), "label <span>with span</span>" );
+	deepEqual( button.button( "option", "label" ).toLowerCase(), "label <span>with span</span>" );
+} );
+
 test( "label, explicit value", function() {
 	expect( 2 );
 	var button = $( "#button" ).button( {
