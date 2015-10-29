@@ -91,6 +91,6 @@ Release.define( {
 };
 
 module.exports.dependencies = [
-	"download.jqueryui.com@2.0.15",
+	"download.jqueryui.com@2.1.1",
 	"shelljs@0.2.6"
 ];
