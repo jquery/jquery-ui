@@ -289,3 +289,25 @@ Simen Bekkhus <sbekkhus91@gmail.com>
 Chen Eshchar <eshcharc@gmail.com>
 Bruno Pérel <brunoperel@gmail.com>
 Mohammed Alshehri <m@dralshehri.com>
+Lisa Seacat DeLuca <ldeluca@us.ibm.com>
+Anne-Gaelle Colom <coloma@westminster.ac.uk>
+Adam Foster <slimfoster@gmail.com>
+Luke Page <luke.a.page@gmail.com>
+Daniel Owens <daniel@matchstickmixup.com>
+Michael Orchard <morchard@scottlogic.co.uk>
+Marcus Warren <marcus@envoke.com>
+Nils Heuermann <nils@world-of-scripts.de>
+Marco Ziech <marco@ziech.net>
+Patricia Juarez <patrixd@gmail.com>
+Ben Mosher <me@benmosher.com>
+Ablay Keldibek <atomio.ak@gmail.com>
+Thomas Applencourt <thomas.applencourt@irsamc.ups-tlse.fr>
+Jiabao Wu <jiabao.foss@gmail.com>
+Eric Lee Carraway <github@ericcarraway.com>
+Victor Homyakov <vkhomyackov@gmail.com>
+Myeongjin Lee <aranet100@gmail.com>
+Liran Sharir <lsharir@gmail.com>
+Weston Ruter <weston@xwp.co>
+Mani Mishra <manimishra902@gmail.com>
+Hannah Methvin <hannahmethvin@gmail.com>
+Leonardo Balter <leonardo.balter@gmail.com>
