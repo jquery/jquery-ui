@@ -514,6 +514,10 @@ return $.widget( "ui.menu", {
 
 	_isDivider: function( item ) {
 
+		if ( item.find( "*[aria-label]" ).length > 0 ) {
+			return false;
+		}
+
 		// Match hyphen, em dash, en dash
 		return !/[^\-\u2014\u2013\s]/.test( item.text() );
 	},
