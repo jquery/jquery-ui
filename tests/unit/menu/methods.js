@@ -45,7 +45,7 @@ test( "enable/disable", function( assert ) {
 } );
 
 test( "refresh", function() {
-	expect( 5 );
+	expect( 8 );
 	var element = $( "#menu1" ).menu();
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.append( "<li><a href='#'>test item</a></li>" ).menu( "refresh" );
@@ -53,9 +53,16 @@ test( "refresh", function() {
 	element.find( ".ui-menu-item:last" ).remove().end().menu( "refresh" );
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.append( "<li>---</li>" ).menu( "refresh" );
-	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items - should 'divider-vise' an item with hyphens" );
 	element.children( ":last" ).remove().end().menu( "refresh" );
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+	element.append( "<li></li>" ).menu( "refresh" );
+	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items - should 'divider-vise' an empty item" );
+	element.append( "<li><a href='#'></a></li>" ).menu( "refresh" );
+	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items - should 'divider-vise' an empty item, with children" );
+	element.append( "<li><a href='#' aria-label='some text'></a></li>" ).menu( "refresh" );
+	equal( element.find( ".ui-menu-item" ).length, 6, "Incorrect number of menu items - should _not_ 'divider-vise' an empty item, with children, with 'aria-label'" );
+
 } );
 
 test( "refresh submenu", function() {
