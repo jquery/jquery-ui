@@ -100,6 +100,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 	_create: function() {
 
 		var n, i, handle, axis, hname,
+			marginTop, marginRight, marginBottom, marginLeft,
 			that = this,
 			o = this.options;
 		this._addClass( "ui-resizable" );
@@ -131,11 +132,16 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			this.elementIsWrapper = true;
 
+			marginTop = this.originalElement.css( "marginTop" );
+			marginRight = this.originalElement.css( "marginRight" );
+			marginBottom = this.originalElement.css( "marginBottom" );
+			marginLeft = this.originalElement.css( "marginLeft" );
+
 			this.element.css( {
-				marginLeft: this.originalElement.css( "marginLeft" ),
-				marginTop: this.originalElement.css( "marginTop" ),
-				marginRight: this.originalElement.css( "marginRight" ),
-				marginBottom: this.originalElement.css( "marginBottom" )
+				marginLeft: marginLeft,
+				marginTop: marginTop,
+				marginRight: marginRight,
+				marginBottom: marginBottom
 			} );
 			this.originalElement.css( {
 				marginLeft: 0,
@@ -157,7 +163,12 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			// Support: IE9
 			// avoid IE jump (hard set the margin)
-			this.originalElement.css( { margin: this.originalElement.css( "margin" ) } );
+			this.originalElement.css( {
+				marginTop: marginTop,
+				marginRight: marginRight,
+				marginBottom: marginBottom,
+				marginLeft: marginLeft
+			} );
 
 			this._proportionallyResize();
 		}
