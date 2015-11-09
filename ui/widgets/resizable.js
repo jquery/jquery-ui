@@ -1032,7 +1032,7 @@ $.ui.plugin.add( "resizable", "alsoResize", {
 	},
 
 	stop: function() {
-		$( this ).removeData( "resizable-alsoresize" );
+		$( this ).removeData( "ui-resizable-alsoresize" );
 	}
 } );
 
