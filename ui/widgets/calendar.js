@@ -201,7 +201,9 @@ return $.widget( "ui.calendar", {
 		this._format = globalize.dateFormatter( dateFormat );
 		this._parse = globalize.dateParser( dateFormat );
 		this._calendarDateOptions = {
-			firstDay: globalize.cldr.supplemental.weekData.firstDay(),
+
+			// Calculate localized first day of week (reference is first saturday)
+			firstDay: ( 6 - globalize.dateFormatter( { raw: "c" } )( new Date( 1970, 0, 3 ) ) + 1 ),
 			formatWeekdayShort: function( date ) {
 
 				// Return the short weekday if its length is < 3. Otherwise, its narrow form.

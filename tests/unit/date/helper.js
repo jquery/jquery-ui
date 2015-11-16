@@ -12,7 +12,7 @@ return $.extend( helper, {
 			weekdayNarrowFormatter = globalize.dateFormatter( { raw: "EEEEE" } );
 
 		return {
-			firstDay: globalize.cldr.supplemental.weekData.firstDay(),
+			firstDay: ( 6 - globalize.dateFormatter( { raw: "c" } )( new Date( 1970, 0, 3 ) ) + 1 ),
 			formatWeekdayShort: function( date ) {
 
 				// Return the short weekday if its length is < 3. Otherwise, its narrow form.

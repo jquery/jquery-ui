@@ -17,16 +17,6 @@
 	}
 }( function( $ ) {
 
-var weekdaysRev = {
-		"sun": 0,
-		"mon": 1,
-		"tue": 2,
-		"wed": 3,
-		"thu": 4,
-		"fri": 5,
-		"sat": 6
-	};
-
 $.ui.date = function( date, attributes ) {
 	if ( !( this instanceof $.ui.date ) ) {
 		return new $.ui.date( date, attributes );
@@ -47,7 +37,7 @@ $.extend( $.ui.date.prototype, {
 
 	setAttributes: function( attributes ) {
 		this.attributes = attributes;
-		this.firstDay = weekdaysRev[ this.attributes.firstDay ];
+		this.firstDay = this.attributes.firstDay;
 	},
 
 	// TODO: Same as the underlying Date object's terminology, but still misleading.
