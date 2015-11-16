@@ -123,7 +123,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	},
 
 	_blockFrames: function( selector ) {
-		this.iframeBlocks = this.document.find( selector ).map( function() {
+		this.iframeBlocks = this.iframeBlocks || this.document.find( selector ).map( function() {
 			var iframe = $( this );
 
 			return $( "<div>" )
