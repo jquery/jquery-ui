@@ -196,14 +196,13 @@ return $.widget( "ui.calendar", {
 	_setLocale: function( locale, dateFormat ) {
 		var globalize = new Globalize( locale ),
 			weekdayShortFormatter = globalize.dateFormatter( { raw: "EEEEEE" } ),
-			weekdayNarrowFormatter = globalize.dateFormatter( { raw: "EEEEE" } );
+			weekdayNarrowFormatter = globalize.dateFormatter( { raw: "EEEEE" } ),
+			firstDayRaw = globalize.dateFormatter( { raw: "c" } )( new Date( 1970, 0, 3 ) );
 
 		this._format = globalize.dateFormatter( dateFormat );
 		this._parse = globalize.dateParser( dateFormat );
 		this._calendarDateOptions = {
-
-			// Calculate localized first day of week (reference is first saturday)
-			firstDay: ( 6 - globalize.dateFormatter( { raw: "c" } )( new Date( 1970, 0, 3 ) ) + 1 ),
+			firstDay: ( 7 - globalize.parseNumber( firstDayRaw ) ),
 			formatWeekdayShort: function( date ) {
 
 				// Return the short weekday if its length is < 3. Otherwise, its narrow form.
