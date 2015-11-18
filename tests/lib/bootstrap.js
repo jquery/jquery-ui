@@ -3,7 +3,7 @@
 requirejs.config( {
 	paths: {
 		"cldr": "../../../external/cldrjs/cldr",
-		"globalize": "../../../external/globalize/globalize",
+		"globalize-runtime": "../../../external/globalize/globalize-runtime",
 		"globalize-locales": "../../../external/localization",
 		"globalize-old": "../../../external/globalize-old/globalize",
 		"globalize-old/ja-JP": "../../../external/globalize-old/globalize.culture.ja-JP",
@@ -17,6 +17,11 @@ requirejs.config( {
 		"qunit": "../../../external/qunit/qunit",
 		"testswarm": "http://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
 		"ui": "../../../ui"
+	},
+	map: {
+		"*": {
+			"globalize": "globalize-runtime"
+		}
 	},
 	shim: {
 		"ui/date": [ "globalize-locales" ],
