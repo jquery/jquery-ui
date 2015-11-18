@@ -80,10 +80,15 @@ require.config( {
 	baseUrl: window.location.pathname.indexOf( "demos/" ) !== -1 ? "../../ui" : "../../../ui",
 	paths: {
 		cldr: "../external/cldrjs/cldr",
-		globalize: "../external/globalize/globalize",
+		"globalize-runtime": "../external/globalize/globalize-runtime",
 		"globalize-locales": "../external/localization",
 		jquery: "../external/jquery/jquery",
 		external: "../external/"
+	},
+	map: {
+		"*": {
+			"globalize": "globalize-runtime"
+		}
 	},
 	shim: {
 		"external/globalize-old/globalize.culture.de-DE": [ "external/globalize-old/globalize" ],

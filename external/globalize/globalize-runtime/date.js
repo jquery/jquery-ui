@@ -1,5 +1,5 @@
 /**
- * Globalize v1.0.0
+ * Globalize Runtime v1.1.0-rc.6
  *
  * http://github.com/jquery/globalize
  *
@@ -7,10 +7,10 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2015-04-23T12:02Z
+ * Date: 2015-11-18T10:38Z
  */
 /*!
- * Globalize v1.0.0 2015-04-23T12:02Z Released under the MIT license
+ * Globalize Runtime v1.1.0-rc.6 2015-11-18T10:38Z Released under the MIT license
  * http://git.io/TrdQbw
  */
 (function( root, factory ) {
@@ -20,149 +20,34 @@
 
 		// AMD
 		define([
-			"cldr",
-			"../globalize",
-			"./number",
-			"cldr/event",
-			"cldr/supplemental"
+			"../globalize-runtime",
+			"./number"
 		], factory );
 	} else if ( typeof exports === "object" ) {
 
 		// Node, CommonJS
-		module.exports = factory( require( "cldrjs" ), require( "globalize" ) );
+		module.exports = factory(
+			require( "../globalize-runtime" ),
+			require( "./number" )
+		);
 	} else {
 
 		// Extend global
-		factory( root.Cldr, root.Globalize );
+		factory( root.Globalize );
 	}
-}(this, function( Cldr, Globalize ) {
+}(this, function( Globalize ) {
 
-var createError = Globalize._createError,
-	createErrorUnsupportedFeature = Globalize._createErrorUnsupportedFeature,
-	formatMessage = Globalize._formatMessage,
-	numberSymbol = Globalize._numberSymbol,
+var createErrorUnsupportedFeature = Globalize._createErrorUnsupportedFeature,
 	regexpEscape = Globalize._regexpEscape,
+	runtimeKey = Globalize._runtimeKey,
 	stringPad = Globalize._stringPad,
-	validateCldr = Globalize._validateCldr,
-	validateDefaultLocale = Globalize._validateDefaultLocale,
 	validateParameterPresence = Globalize._validateParameterPresence,
 	validateParameterType = Globalize._validateParameterType,
-	validateParameterTypePlainObject = Globalize._validateParameterTypePlainObject,
 	validateParameterTypeString = Globalize._validateParameterTypeString;
 
 
 var validateParameterTypeDate = function( value, name ) {
 	validateParameterType( value, name, value === undefined || value instanceof Date, "Date" );
-};
-
-
-
-
-var createErrorInvalidParameterValue = function( name, value ) {
-	return createError( "E_INVALID_PAR_VALUE", "Invalid `{name}` value ({value}).", {
-		name: name,
-		value: value
-	});
-};
-
-
-
-
-/**
- * expandPattern( options, cldr )
- *
- * @options [Object] if String, it's considered a skeleton. Object accepts:
- * - skeleton: [String] lookup availableFormat;
- * - date: [String] ( "full" | "long" | "medium" | "short" );
- * - time: [String] ( "full" | "long" | "medium" | "short" );
- * - datetime: [String] ( "full" | "long" | "medium" | "short" );
- * - raw: [String] For more info see datetime/format.js.
- *
- * @cldr [Cldr instance].
- *
- * Return the corresponding pattern.
- * Eg for "en":
- * - "GyMMMd" returns "MMM d, y G";
- * - { skeleton: "GyMMMd" } returns "MMM d, y G";
- * - { date: "full" } returns "EEEE, MMMM d, y";
- * - { time: "full" } returns "h:mm:ss a zzzz";
- * - { datetime: "full" } returns "EEEE, MMMM d, y 'at' h:mm:ss a zzzz";
- * - { raw: "dd/mm" } returns "dd/mm";
- */
-
-var dateExpandPattern = function( options, cldr ) {
-	var dateSkeleton, result, skeleton, timeSkeleton, type;
-
-	function combineDateTime( type, datePattern, timePattern ) {
-		return formatMessage(
-			cldr.main([
-				"dates/calendars/gregorian/dateTimeFormats",
-				type
-			]),
-			[ timePattern, datePattern ]
-		);
-	}
-
-	switch ( true ) {
-		case "skeleton" in options:
-			skeleton = options.skeleton;
-			result = cldr.main([
-				"dates/calendars/gregorian/dateTimeFormats/availableFormats",
-				skeleton
-			]);
-			if ( !result ) {
-				timeSkeleton = skeleton.split( /[^hHKkmsSAzZOvVXx]/ ).slice( -1 )[ 0 ];
-				dateSkeleton = skeleton.split( /[^GyYuUrQqMLlwWdDFgEec]/ )[ 0 ];
-				if ( /(MMMM|LLLL).*[Ec]/.test( dateSkeleton ) ) {
-					type = "full";
-				} else if ( /MMMM/g.test( dateSkeleton ) ) {
-					type = "long";
-				} else if ( /MMM/g.test( dateSkeleton ) || /LLL/g.test( dateSkeleton ) ) {
-					type = "medium";
-				} else {
-					type = "short";
-				}
-				result = combineDateTime( type,
-					cldr.main([
-						"dates/calendars/gregorian/dateTimeFormats/availableFormats",
-						dateSkeleton
-					]),
-					cldr.main([
-						"dates/calendars/gregorian/dateTimeFormats/availableFormats",
-						timeSkeleton
-					])
-				);
-			}
-			break;
-
-		case "date" in options:
-		case "time" in options:
-			result = cldr.main([
-				"dates/calendars/gregorian",
-				"date" in options ? "dateFormats" : "timeFormats",
-				( options.date || options.time )
-			]);
-			break;
-
-		case "datetime" in options:
-			result = combineDateTime( options.datetime,
-				cldr.main([ "dates/calendars/gregorian/dateFormats", options.datetime ]),
-				cldr.main([ "dates/calendars/gregorian/timeFormats", options.datetime ])
-			);
-			break;
-
-		case "raw" in options:
-			result = options.raw;
-			break;
-
-		default:
-			throw createErrorInvalidParameterValue({
-				name: "options",
-				value: options
-			});
-	}
-
-	return result;
 };
 
 
@@ -249,25 +134,11 @@ var dateDayOfYear = function( date ) {
 
 
 
-var dateWeekDays = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ];
-
-
-
-
-/**
- * firstDayOfWeek
- */
-var dateFirstDayOfWeek = function( cldr ) {
-	return dateWeekDays.indexOf( cldr.supplemental.weekData.firstDay() );
-};
-
-
-
-
 /**
  * millisecondsInDay
  */
 var dateMillisecondsInDay = function( date ) {
+
 	// TODO Handle daylight savings discontinuities
 	return date - dateStartOf( date, "day" );
 };
@@ -275,7 +146,7 @@ var dateMillisecondsInDay = function( date ) {
 
 
 
-var datePatternRe = (/([a-z])\1*|'([^']|'')+'|''|./ig);
+var datePatternRe = ( /([a-z])\1*|'([^']|'')+'|''|./ig );
 
 
 
@@ -325,6 +196,11 @@ var dateTimezoneHourFormat = function( date, format, timeSeparator, formatNumber
 
 
 
+var dateWeekDays = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ];
+
+
+
+
 /**
  * format( date, properties )
  *
@@ -345,12 +221,14 @@ var dateFormat = function( date, numberFormatters, properties ) {
 			length = current.length;
 
 		if ( chr === "j" ) {
+
 			// Locale preferred hHKk.
 			// http://www.unicode.org/reports/tr35/tr35-dates.html#Time_Data
 			chr = properties.preferredTime;
 		}
 
 		if ( chr === "Z" ) {
+
 			// Z..ZZZ: same as "xxxx".
 			if ( length < 4 ) {
 				chr = "x";
@@ -377,6 +255,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 
 			// Year
 			case "y":
+
 				// Plain year.
 				// The length specifies the padding, but for two letters it also specifies the
 				// maximum length.
@@ -388,6 +267,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 				break;
 
 			case "Y":
+
 				// Year in "Week of Year"
 				// The length specifies the padding, but for two letters it also specifies the
 				// maximum length.
@@ -426,6 +306,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 
 			// Week
 			case "w":
+
 				// Week of Year.
 				// woy = ceil( ( doy + dow of 1/1 ) / 7 ) - minDaysStuff ? 1 : 0.
 				// TODO should pad on ww? Not documented, but I guess so.
@@ -435,6 +316,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 				break;
 
 			case "W":
+
 				// Week of Month.
 				// wom = ceil( ( dom + dow of `1/month` ) / 7 ) - minDaysStuff ? 1 : 0.
 				ret = dateDayOfWeek( dateStartOf( date, "month" ), properties.firstDay );
@@ -452,6 +334,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 				break;
 
 			case "F":
+
 				// Day of Week in month. eg. 2nd Wed in July.
 				ret = Math.floor( date.getDate() / 7 ) + 1;
 				break;
@@ -460,6 +343,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 			case "e":
 			case "c":
 				if ( length <= 2 ) {
+
 					// Range is [1-7] (deduced by example provided on documentation)
 					// TODO Should pad with zeros (not specified in the docs)?
 					ret = dateDayOfWeek( date, properties.firstDay ) + 1;
@@ -515,6 +399,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 			// Zone
 			case "z":
 			case "O":
+
 				// O: "{gmtFormat}+H;{gmtFormat}-H" or "{gmtZeroFormat}", eg. "GMT-8" or "GMT".
 				// OOOO: "{gmtFormat}{hourFormat}" or "{gmtZeroFormat}", eg. "GMT-08:00" or "GMT".
 				if ( date.getTimezoneOffset() === 0 ) {
@@ -531,6 +416,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 				break;
 
 			case "X":
+
 				// Same as x*, except it uses "Z" for zero offset.
 				if ( date.getTimezoneOffset() === 0 ) {
 					ret = "Z";
@@ -539,6 +425,7 @@ var dateFormat = function( date, numberFormatters, properties ) {
 
 			/* falls through */
 			case "x":
+
 				// x: hourFormat("+HH;-HH")
 				// xx or xxxx: hourFormat("+HHmm;-HHmm")
 				// xxx or xxxxx: hourFormat("+HH:mm;-HH:mm")
@@ -575,233 +462,14 @@ var dateFormat = function( date, numberFormatters, properties ) {
 
 
 
-/**
- * properties( pattern, cldr )
- *
- * @pattern [String] raw pattern.
- * ref: http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns
- *
- * @cldr [Cldr instance].
- *
- * Return the properties given the pattern and cldr.
- *
- * TODO Support other calendar types.
- */
-var dateFormatProperties = function( pattern, cldr ) {
-	var properties = {
-			pattern: pattern,
-			timeSeparator: numberSymbol( "timeSeparator", cldr )
-		},
-		widths = [ "abbreviated", "wide", "narrow" ];
+var dateFormatterFn = function( numberFormatters, properties ) {
+	return function dateFormatter( value ) {
+		validateParameterPresence( value, "value" );
+		validateParameterTypeDate( value, "value" );
 
-	function setNumberFormatterPattern( pad ) {
-		if ( !properties.numberFormatters ) {
-			properties.numberFormatters = {};
-		}
-		properties.numberFormatters[ pad ] = stringPad( "", pad );
-	}
+		return dateFormat( value, numberFormatters, properties );
+	};
 
-	pattern.replace( datePatternRe, function( current ) {
-		var formatNumber,
-			chr = current.charAt( 0 ),
-			length = current.length;
-
-		if ( chr === "j" ) {
-			// Locale preferred hHKk.
-			// http://www.unicode.org/reports/tr35/tr35-dates.html#Time_Data
-			properties.preferredTime = chr = cldr.supplemental.timeData.preferred();
-		}
-
-		// ZZZZ: same as "OOOO".
-		if ( chr === "Z" && length === 4 ) {
-			chr = "O";
-			length = 4;
-		}
-
-		switch ( chr ) {
-
-			// Era
-			case "G":
-				properties.eras = cldr.main([
-					"dates/calendars/gregorian/eras",
-					length <= 3 ? "eraAbbr" : ( length === 4 ? "eraNames" : "eraNarrow" )
-				]);
-				break;
-
-			// Year
-			case "y":
-				// Plain year.
-				formatNumber = true;
-				break;
-
-			case "Y":
-				// Year in "Week of Year"
-				properties.firstDay = dateFirstDayOfWeek( cldr );
-				properties.minDays = cldr.supplemental.weekData.minDays();
-				formatNumber = true;
-				break;
-
-			case "u": // Extended year. Need to be implemented.
-			case "U": // Cyclic year name. Need to be implemented.
-				throw createErrorUnsupportedFeature({
-					feature: "year pattern `" + chr + "`"
-				});
-
-			// Quarter
-			case "Q":
-			case "q":
-				if ( length > 2 ) {
-					if ( !properties.quarters ) {
-						properties.quarters = {};
-					}
-					if ( !properties.quarters[ chr ] ) {
-						properties.quarters[ chr ] = {};
-					}
-					properties.quarters[ chr ][ length ] = cldr.main([
-						"dates/calendars/gregorian/quarters",
-						chr === "Q" ? "format" : "stand-alone",
-						widths[ length - 3 ]
-					]);
-				} else {
-					formatNumber = true;
-				}
-				break;
-
-			// Month
-			case "M":
-			case "L":
-				if ( length > 2 ) {
-					if ( !properties.months ) {
-						properties.months = {};
-					}
-					if ( !properties.months[ chr ] ) {
-						properties.months[ chr ] = {};
-					}
-					properties.months[ chr ][ length ] = cldr.main([
-						"dates/calendars/gregorian/months",
-						chr === "M" ? "format" : "stand-alone",
-						widths[ length - 3 ]
-					]);
-				} else {
-					formatNumber = true;
-				}
-				break;
-
-			// Week - Week of Year (w) or Week of Month (W).
-			case "w":
-			case "W":
-				properties.firstDay = dateFirstDayOfWeek( cldr );
-				properties.minDays = cldr.supplemental.weekData.minDays();
-				formatNumber = true;
-				break;
-
-			// Day
-			case "d":
-			case "D":
-			case "F":
-				formatNumber = true;
-				break;
-
-			case "g":
-				// Modified Julian day. Need to be implemented.
-				throw createErrorUnsupportedFeature({
-					feature: "Julian day pattern `g`"
-				});
-
-			// Week day
-			case "e":
-			case "c":
-				if ( length <= 2 ) {
-					properties.firstDay = dateFirstDayOfWeek( cldr );
-					formatNumber = true;
-					break;
-				}
-
-			/* falls through */
-			case "E":
-				if ( !properties.days ) {
-					properties.days = {};
-				}
-				if ( !properties.days[ chr ] ) {
-					properties.days[ chr ] = {};
-				}
-				if ( length === 6 ) {
-
-					// If short day names are not explicitly specified, abbreviated day names are
-					// used instead.
-					// http://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras
-					// http://unicode.org/cldr/trac/ticket/6790
-					properties.days[ chr ][ length ] = cldr.main([
-							"dates/calendars/gregorian/days",
-							chr === "c" ? "stand-alone" : "format",
-							"short"
-						]) || cldr.main([
-							"dates/calendars/gregorian/days",
-							chr === "c" ? "stand-alone" : "format",
-							"abbreviated"
-						]);
-				} else {
-					properties.days[ chr ][ length ] = cldr.main([
-						"dates/calendars/gregorian/days",
-						chr === "c" ? "stand-alone" : "format",
-						widths[ length < 3 ? 0 : length - 3 ]
-					]);
-				}
-				break;
-
-			// Period (AM or PM)
-			case "a":
-				properties.dayPeriods = cldr.main(
-					"dates/calendars/gregorian/dayPeriods/format/wide"
-				);
-				break;
-
-			// Hour
-			case "h": // 1-12
-			case "H": // 0-23
-			case "K": // 0-11
-			case "k": // 1-24
-
-			// Minute
-			case "m":
-
-			// Second
-			case "s":
-			case "S":
-			case "A":
-				formatNumber = true;
-				break;
-
-			// Zone
-			case "z":
-			case "O":
-				// O: "{gmtFormat}+H;{gmtFormat}-H" or "{gmtZeroFormat}", eg. "GMT-8" or "GMT".
-				// OOOO: "{gmtFormat}{hourFormat}" or "{gmtZeroFormat}", eg. "GMT-08:00" or "GMT".
-				properties.gmtFormat = cldr.main( "dates/timeZoneNames/gmtFormat" );
-				properties.gmtZeroFormat = cldr.main( "dates/timeZoneNames/gmtZeroFormat" );
-				properties.tzLongHourFormat = cldr.main( "dates/timeZoneNames/hourFormat" );
-
-			/* falls through */
-			case "Z":
-			case "X":
-			case "x":
-				setNumberFormatterPattern( 1 );
-				setNumberFormatterPattern( 2 );
-				break;
-
-			case "v":
-			case "V":
-				throw createErrorUnsupportedFeature({
-					feature: "timezone pattern `" + chr + "`"
-				});
-		}
-
-		if ( formatNumber ) {
-			setNumberFormatterPattern( length );
-		}
-	});
-
-	return properties;
 };
 
 
@@ -815,7 +483,7 @@ var dateFormatProperties = function( pattern, cldr ) {
  * Returns an indication whether the specified year is a leap year.
  */
 var dateIsLeapYear = function( year ) {
-	return new Date(year, 1, 29).getMonth() === 1;
+	return new Date( year, 1, 29 ).getMonth() === 1;
 };
 
 
@@ -829,7 +497,7 @@ var dateIsLeapYear = function( year ) {
  * Return the last day of the given date's month
  */
 var dateLastDayOfMonth = function( date ) {
-	return new Date( date.getFullYear(), date.getMonth() + 1, 0).getDate();
+	return new Date( date.getFullYear(), date.getMonth() + 1, 0 ).getDate();
 };
 
 
@@ -908,6 +576,7 @@ var dateParse = function( value, tokens, properties ) {
 		var century, chr, value, length;
 
 		if ( token.type === "literal" ) {
+
 			// continue
 			return true;
 		}
@@ -916,6 +585,7 @@ var dateParse = function( value, tokens, properties ) {
 		length = token.type.length;
 
 		if ( chr === "j" ) {
+
 			// Locale preferred hHKk.
 			// http://www.unicode.org/reports/tr35/tr35-dates.html#Time_Data
 			chr = properties.preferredTimeData;
@@ -936,6 +606,7 @@ var dateParse = function( value, tokens, properties ) {
 					if ( outOfRange( value, 0, 99 ) ) {
 						return false;
 					}
+
 					// mimic dojo/date/locale: choose century to apply, according to a sliding
 					// window of 80 years before and 20 years after present year.
 					century = Math.floor( date.getFullYear() / 100 ) * 100;
@@ -990,6 +661,7 @@ var dateParse = function( value, tokens, properties ) {
 				break;
 
 			case "F":
+
 				// Day of Week in month. eg. 2nd Wed in July.
 				// Skip
 				break;
@@ -998,6 +670,7 @@ var dateParse = function( value, tokens, properties ) {
 			case "e":
 			case "c":
 			case "E":
+
 				// Skip.
 				// value = arrayIndexOf( dateWeekDays, token.value );
 				break;
@@ -1104,6 +777,7 @@ var dateParse = function( value, tokens, properties ) {
 	}
 
 	if ( era === 0 ) {
+
 		// 1 BC = year 0
 		date.setFullYear( date.getFullYear() * -1 + 1 );
 	}
@@ -1117,7 +791,7 @@ var dateParse = function( value, tokens, properties ) {
 		if ( outOfRange( daysOfYear, 1, dateIsLeapYear( date.getFullYear() ) ? 366 : 365 ) ) {
 			return null;
 		}
-		date.setMonth(0);
+		date.setMonth( 0 );
 		date.setDate( daysOfYear );
 	}
 
@@ -1136,22 +810,6 @@ var dateParse = function( value, tokens, properties ) {
 	date = dateStartOf( date, units[ truncateAt ] );
 
 	return date;
-};
-
-
-
-
-/**
- * parseProperties( cldr )
- *
- * @cldr [Cldr instance].
- *
- * Return parser properties.
- */
-var dateParseProperties = function( cldr ) {
-	return {
-		preferredTimeData: cldr.supplemental.timeData.preferred()
-	};
 };
 
 
@@ -1319,6 +977,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 		length = current.length;
 
 		if ( chr === "Z" ) {
+
 			// Z..ZZZ: same as "xxxx".
 			if ( length < 4 ) {
 				chr = "x";
@@ -1370,6 +1029,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			// Quarter
 			case "Q":
 			case "q":
+
 				// number l=1:{1}, l=2:{2}.
 				// lookup l=3...
 				oneDigitIfLengthOne() || twoDigitsIfLengthTwo() || lookup([
@@ -1382,6 +1042,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			// Month
 			case "M":
 			case "L":
+
 				// number l=1:{1,2}, l=2:{2}.
 				// lookup l=3...
 				oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo() || lookup([
@@ -1393,6 +1054,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 			// Day
 			case "D":
+
 				// number {l,3}.
 				if ( length <= 3 ) {
 
@@ -1404,6 +1066,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 			case "W":
 			case "F":
+
 				// number l=1:{1}.
 				oneDigitIfLengthOne();
 				break;
@@ -1411,6 +1074,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			// Week day
 			case "e":
 			case "c":
+
 				// number l=1:{1}, l=2:{2}.
 				// lookup for length >=3.
 				if ( length <= 2 ) {
@@ -1421,6 +1085,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			/* falls through */
 			case "E":
 				if ( length === 6 ) {
+
 					// Note: if short day names are not explicitly specified, abbreviated day
 					// names are used instead http://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras
 					lookup([
@@ -1458,11 +1123,13 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			case "j":
 			case "m":
 			case "s":
+
 				// number l1:{1,2}, l2:{2}.
 				oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo();
 				break;
 
 			case "S":
+
 				// number {l}.
 
 				// Unicode equivalent to /\d{length}/
@@ -1471,6 +1138,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 				break;
 
 			case "A":
+
 				// number {l+5}.
 
 				// Unicode equivalent to /\d{length+5}/
@@ -1481,6 +1149,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			// Zone
 			case "z":
 			case "O":
+
 				// O: "{gmtFormat}+H;{gmtFormat}-H" or "{gmtZeroFormat}", eg. "GMT-8" or "GMT".
 				// OOOO: "{gmtFormat}{hourFormat}" or "{gmtZeroFormat}", eg. "GMT-08:00" or "GMT".
 				if ( value === properties[ "timeZoneNames/gmtZeroFormat" ] ) {
@@ -1499,6 +1168,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 				break;
 
 			case "X":
+
 				// Same as x*, except it uses "Z" for zero offset.
 				if ( value === "Z" ) {
 					token.value = 0;
@@ -1508,6 +1178,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 			/* falls through */
 			case "x":
+
 				// x: hourFormat("+HH;-HH")
 				// xx or xxxx: hourFormat("+HHmm;-HHmm")
 				// xxx or xxxxx: hourFormat("+HH:mm;-HH:mm")
@@ -1560,239 +1231,8 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 
 
-/**
- * tokenizerProperties( pattern, cldr )
- *
- * @pattern [String] raw pattern.
- *
- * @cldr [Cldr instance].
- *
- * Return Object with data that will be used by tokenizer.
- */
-var dateTokenizerProperties = function( pattern, cldr ) {
-	var properties = {
-			pattern: pattern,
-			timeSeparator: numberSymbol( "timeSeparator", cldr )
-		},
-		widths = [ "abbreviated", "wide", "narrow" ];
-
-	function populateProperties( path, value ) {
-
-		// The `dates` and `calendars` trim's purpose is to reduce properties' key size only.
-		properties[ path.replace( /^.*\/dates\//, "" ).replace( /calendars\//, "" ) ] = value;
-	}
-
-	cldr.on( "get", populateProperties );
-
-	pattern.match( datePatternRe ).forEach(function( current ) {
-		var chr, length;
-
-		chr = current.charAt( 0 ),
-		length = current.length;
-
-		if ( chr === "Z" && length < 5 ) {
-				chr = "O";
-				length = 4;
-		}
-
-		switch ( chr ) {
-
-			// Era
-			case "G":
-				cldr.main([
-					"dates/calendars/gregorian/eras",
-					length <= 3 ? "eraAbbr" : ( length === 4 ? "eraNames" : "eraNarrow" )
-				]);
-				break;
-
-			// Year
-			case "u": // Extended year. Need to be implemented.
-			case "U": // Cyclic year name. Need to be implemented.
-				throw createErrorUnsupportedFeature({
-					feature: "year pattern `" + chr + "`"
-				});
-
-			// Quarter
-			case "Q":
-			case "q":
-				if ( length > 2 ) {
-					cldr.main([
-						"dates/calendars/gregorian/quarters",
-						chr === "Q" ? "format" : "stand-alone",
-						widths[ length - 3 ]
-					]);
-				}
-				break;
-
-			// Month
-			case "M":
-			case "L":
-				// number l=1:{1,2}, l=2:{2}.
-				// lookup l=3...
-				if ( length > 2 ) {
-					cldr.main([
-						"dates/calendars/gregorian/months",
-						chr === "M" ? "format" : "stand-alone",
-						widths[ length - 3 ]
-					]);
-				}
-				break;
-
-			// Day
-			case "g":
-				// Modified Julian day. Need to be implemented.
-				throw createErrorUnsupportedFeature({
-					feature: "Julian day pattern `g`"
-				});
-
-			// Week day
-			case "e":
-			case "c":
-				// lookup for length >=3.
-				if ( length <= 2 ) {
-					break;
-				}
-
-			/* falls through */
-			case "E":
-				if ( length === 6 ) {
-					// Note: if short day names are not explicitly specified, abbreviated day
-					// names are used instead http://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras
-					cldr.main([
-						"dates/calendars/gregorian/days",
-						[ chr === "c" ? "stand-alone" : "format" ],
-						"short"
-					]) || cldr.main([
-						"dates/calendars/gregorian/days",
-						[ chr === "c" ? "stand-alone" : "format" ],
-						"abbreviated"
-					]);
-				} else {
-					cldr.main([
-						"dates/calendars/gregorian/days",
-						[ chr === "c" ? "stand-alone" : "format" ],
-						widths[ length < 3 ? 0 : length - 3 ]
-					]);
-				}
-				break;
-
-			// Period (AM or PM)
-			case "a":
-				cldr.main([
-					"dates/calendars/gregorian/dayPeriods/format/wide"
-				]);
-				break;
-
-			// Zone
-			case "z":
-			case "O":
-				cldr.main( "dates/timeZoneNames/gmtFormat" );
-				cldr.main( "dates/timeZoneNames/gmtZeroFormat" );
-				cldr.main( "dates/timeZoneNames/hourFormat" );
-				break;
-
-			case "v":
-			case "V":
-				throw createErrorUnsupportedFeature({
-					feature: "timezone pattern `" + chr + "`"
-				});
-		}
-	});
-
-	cldr.off( "get", populateProperties );
-
-	return properties;
-};
-
-
-
-
-function validateRequiredCldr( path, value ) {
-	validateCldr( path, value, {
-		skip: [
-			/dates\/calendars\/gregorian\/dateTimeFormats\/availableFormats/,
-			/dates\/calendars\/gregorian\/days\/.*\/short/,
-			/supplemental\/timeData\/(?!001)/,
-			/supplemental\/weekData\/(?!001)/
-		]
-	});
-}
-
-/**
- * .dateFormatter( options )
- *
- * @options [Object] see date/expand_pattern for more info.
- *
- * Return a date formatter function (of the form below) according to the given options and the
- * default/instance locale.
- *
- * fn( value )
- *
- * @value [Date]
- *
- * Return a function that formats a date according to the given `format` and the default/instance
- * locale.
- */
-Globalize.dateFormatter =
-Globalize.prototype.dateFormatter = function( options ) {
-	var cldr, numberFormatters, pad, pattern, properties;
-
-	validateParameterTypePlainObject( options, "options" );
-
-	cldr = this.cldr;
-	options = options || { skeleton: "yMd" };
-
-	validateDefaultLocale( cldr );
-
-	cldr.on( "get", validateRequiredCldr );
-	pattern = dateExpandPattern( options, cldr );
-	properties = dateFormatProperties( pattern, cldr );
-	cldr.off( "get", validateRequiredCldr );
-
-	// Create needed number formatters.
-	numberFormatters = properties.numberFormatters;
-	delete properties.numberFormatters;
-	for ( pad in numberFormatters ) {
-		numberFormatters[ pad ] = this.numberFormatter({
-			raw: numberFormatters[ pad ]
-		});
-	}
-
-	return function( value ) {
-		validateParameterPresence( value, "value" );
-		validateParameterTypeDate( value, "value" );
-		return dateFormat( value, numberFormatters, properties );
-	};
-};
-
-/**
- * .dateParser( options )
- *
- * @options [Object] see date/expand_pattern for more info.
- *
- * Return a function that parses a string date according to the given `formats` and the
- * default/instance locale.
- */
-Globalize.dateParser =
-Globalize.prototype.dateParser = function( options ) {
-	var cldr, numberParser, parseProperties, pattern, tokenizerProperties;
-
-	validateParameterTypePlainObject( options, "options" );
-
-	cldr = this.cldr;
-	options = options || { skeleton: "yMd" };
-
-	validateDefaultLocale( cldr );
-
-	cldr.on( "get", validateRequiredCldr );
-	pattern = dateExpandPattern( options, cldr );
-	tokenizerProperties = dateTokenizerProperties( pattern, cldr );
-	parseProperties = dateParseProperties( cldr );
-	cldr.off( "get", validateRequiredCldr );
-
-	numberParser = this.numberParser({ raw: "0" });
-
-	return function( value ) {
+var dateParserFn = function( numberParser, parseProperties, tokenizerProperties ) {
+	return function dateParser( value ) {
 		var tokens;
 
 		validateParameterPresence( value, "value" );
@@ -1803,15 +1243,28 @@ Globalize.prototype.dateParser = function( options ) {
 	};
 };
 
-/**
- * .formatDate( value, options )
- *
- * @value [Date]
- *
- * @options [Object] see date/expand_pattern for more info.
- *
- * Formats a date or number according to the given options string and the default/instance locale.
- */
+
+
+
+Globalize._dateFormatterFn = dateFormatterFn;
+Globalize._dateParserFn = dateParserFn;
+Globalize._dateFormat = dateFormat;
+Globalize._dateParser = dateParse;
+Globalize._dateTokenizer = dateTokenizer;
+Globalize._validateParameterTypeDate = validateParameterTypeDate;
+
+Globalize.dateFormatter =
+Globalize.prototype.dateFormatter = function( options ) {
+	options = options || { skeleton: "yMd" };
+	return Globalize[ runtimeKey( "dateFormatter", this._locale, [ options ] ) ];
+};
+
+Globalize.dateParser =
+Globalize.prototype.dateParser = function( options ) {
+	options = options || { skeleton: "yMd" };
+	return Globalize[ runtimeKey( "dateParser", this._locale, [ options ] ) ];
+};
+
 Globalize.formatDate =
 Globalize.prototype.formatDate = function( value, options ) {
 	validateParameterPresence( value, "value" );
@@ -1820,15 +1273,6 @@ Globalize.prototype.formatDate = function( value, options ) {
 	return this.dateFormatter( options )( value );
 };
 
-/**
- * .parseDate( value, options )
- *
- * @value [String]
- *
- * @options [Object] see date/expand_pattern for more info.
- *
- * Return a Date instance or null.
- */
 Globalize.parseDate =
 Globalize.prototype.parseDate = function( value, options ) {
 	validateParameterPresence( value, "value" );

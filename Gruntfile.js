@@ -234,9 +234,9 @@ grunt.initConfig({
 				"cldrjs/cldr/supplemental.js": "cldrjs/dist/cldr/supplemental.js",
 				"cldrjs/LICENSE-MIT": "cldrjs/LICENSE-MIT",
 
-				"globalize/globalize.js": "globalize/dist/globalize.js",
-				"globalize/globalize/number.js": "globalize/dist/globalize/number.js",
-				"globalize/globalize/date.js": "globalize/dist/globalize/date.js",
+				"globalize/globalize-runtime.js": "globalize/dist/globalize-runtime.js",
+				"globalize/globalize-runtime/number.js": "globalize/dist/globalize-runtime/number.js",
+				"globalize/globalize-runtime/date.js": "globalize/dist/globalize-runtime/date.js",
 				"globalize/LICENSE.txt": "globalize/LICENSE.txt",
 
 				"qunit/qunit.js": "qunit/qunit/qunit.js",
@@ -398,6 +398,39 @@ grunt.registerTask( "update-authors", function() {
 			authors.join( "\n" ) + "\n" );
 		done();
 	});
+});
+
+grunt.registerTask( "compile-globalize", function() {
+	var formatters,
+		Globalize = require( "globalize" ),
+		globalizeCompiler = require( "globalize-compiler" ),
+		cldrData = require( "cldr-data" ),
+		languages = [ "ar", "en", "de", "es", "zh" ];
+
+	Globalize.load( cldrData.entireMainFor.apply( this, languages ) );
+	Globalize.load( cldrData.entireSupplemental() );
+
+	formatters = languages.reduce( function( ret, language ) {
+		var globalize = Globalize( language );
+
+		ret = ret.concat([
+			globalize.dateFormatter( { raw: "EEEEEE" } ),
+			globalize.dateFormatter( { raw: "EEEEE" } ),
+			globalize.dateFormatter( { raw: "EEEE" } ),
+			globalize.dateFormatter( { raw: "MMMM" } ),
+			globalize.dateFormatter( { raw: "w" } ),
+			globalize.dateFormatter( { raw: "c" } ),
+			globalize.dateFormatter( { date: "short" } ),
+			globalize.dateParser( { date: "short" } ),
+			globalize.dateFormatter( { date: "long" } ),
+			globalize.dateParser( { date: "long" } ),
+			globalize.numberParser()
+		]);
+
+		return ret;
+	}, [] );
+
+	grunt.file.write( "external/localization.js", globalizeCompiler.compile( formatters ) );
 });
 
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ]);

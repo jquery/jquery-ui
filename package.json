@@ -52,7 +52,9 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
+		"cldr-data": ">=26",
 		"commitplease": "2.0.0",
+		"globalize-compiler": "0.1.1",
 		"grunt": "0.4.2",
 		"grunt-bowercopy": "1.1.0",
 		"grunt-compare-size": "0.4.0",
