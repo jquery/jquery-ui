@@ -424,6 +424,8 @@ grunt.registerTask( "compile-globalize", function() {
 			globalize.dateParser( { date: "short" } ),
 			globalize.dateFormatter( { date: "long" } ),
 			globalize.dateParser( { date: "long" } ),
+			globalize.dateFormatter( { date: "full" } ),
+			globalize.dateParser( { date: "full" } ),
 			globalize.numberParser()
 		]);
 
