@@ -15,7 +15,7 @@
 			value = $( this ).val();
 
 			if ( value === "iso" ) {
-				datepicker.datepicker( "option", "dateFormat", { pattern: "yyyy-MM-dd" } );
+				datepicker.datepicker( "option", "dateFormat", { raw: "yyyy-MM-dd" } );
 			} else {
 				datepicker.datepicker( "option", "dateFormat", { date: value } );
 			}
