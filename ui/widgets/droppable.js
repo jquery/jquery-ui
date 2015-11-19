@@ -104,8 +104,6 @@ $.widget( "ui.droppable", {
 		var drop = $.ui.ddmanager.droppables[ this.options.scope ];
 
 		this._splice( drop );
-
-		$.ui.ddmanager.current = null;
 	},
 
 	_setOption: function( key, value ) {
