@@ -9,6 +9,7 @@ return $.extend( helper, {
 	getAttributes: function( locale ) {
 		var globalize = new Globalize( locale ),
 			weekdayShortFormatter = globalize.dateFormatter( { raw: "EEEEEE" } ),
+			weekdayNarrowFormatter = globalize.dateFormatter( { raw: "EEEEE" } ),
 			firstDayRaw = globalize.dateFormatter( { raw: "c" } )( new Date( 1970, 0, 3 ) );
 
 		return {

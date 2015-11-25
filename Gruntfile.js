@@ -411,7 +411,7 @@ grunt.registerTask( "compile-globalize", function() {
 	Globalize.load( cldrData.entireSupplemental() );
 
 	formatters = languages.reduce( function( ret, language ) {
-		var globalize = Globalize( language );
+		var globalize = new Globalize( language );
 
 		ret = ret.concat([
 			globalize.dateFormatter( { raw: "EEEEEE" } ),
