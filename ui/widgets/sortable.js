@@ -867,6 +867,12 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			if ( $.contains( this.currentItem[ 0 ], this.containers[ i ].element[ 0 ] ) ) {
 				continue;
 			}
+			
+			//@xwartz Never consider a container that's `display:none` 
+			if(this.containers[i].element.css('display') === 'none') {
+				continue;
+
+			}
 
 			if ( this._intersectsWith( this.containers[ i ].containerCache ) ) {
 
