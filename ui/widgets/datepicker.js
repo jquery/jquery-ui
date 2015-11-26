@@ -862,6 +862,7 @@ $.extend( Datepicker.prototype, {
 				origyearshtml = inst.yearshtml = null;
 			}, 0 );
 		}
+		inst.drawMonth += this._get( inst, "showCurrentAtPos" );
 	},
 
 	// #6694 - don't focus the input if it's already focused
@@ -987,9 +988,7 @@ $.extend( Datepicker.prototype, {
 		if ( this._isDisabledDatepicker( target[ 0 ] ) ) {
 			return;
 		}
-		this._adjustInstDate( inst, offset +
-			( period === "M" ? this._get( inst, "showCurrentAtPos" ) : 0 ), // undo positioning
-			period );
+		this._adjustInstDate( inst, offset, period );
 		this._updateDatepicker( inst );
 	},
 
