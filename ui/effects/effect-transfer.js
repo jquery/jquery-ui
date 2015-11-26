@@ -29,10 +29,12 @@
 	}
 }( function( $ ) {
 
+var effect;
 if ( $.uiBackCompat !== false ) {
-	return $.effects.define( "transfer", function( options, done ) {
+	effect = $.effects.define( "transfer", function( options, done ) {
 		$( this ).transfer( options, done );
 	} );
 }
+return effect;
 
 } ) );
