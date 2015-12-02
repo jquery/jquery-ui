@@ -1,9 +1,17 @@
-/*
- * Calendar math built on jquery-global
+/*!
+ * jQuery UI Date @VERSION
+ * http://jqueryui.com
  *
- * Based on Marc Grabanski's jQuery Date Plugin
- * http://marcgrabanski.com/articles/jquery-date-plugin
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
  */
+
+//>>label: Date
+//>>group: Core
+//>>description: Calendar math built on Globalize.
+//>>docs: http://api.jqueryui.com/date/
+
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
