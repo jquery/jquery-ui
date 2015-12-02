@@ -89,14 +89,12 @@ return $.widget( "ui.calendar", {
 			"click .ui-calendar-prev": function( event ) {
 				event.preventDefault();
 				this.date.adjust( "M", -this.options.numberOfMonths );
-				this.viewDate.setTime( this.date.date().getTime() );
-				this.refresh();
+				this._updateView();
 			},
 			"click .ui-calendar-next": function( event ) {
 				event.preventDefault();
 				this.date.adjust( "M", this.options.numberOfMonths );
-				this.viewDate.setTime( this.date.date().getTime() );
-				this.refresh();
+				this._updateView();
 			},
 			"mousedown .ui-calendar-calendar button": function( event ) {
 				event.preventDefault();
@@ -104,16 +102,17 @@ return $.widget( "ui.calendar", {
 				this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
 				this.refresh();
 				this._trigger( "select", event );
-				this.grid.focus();
+				this.activeDescendant.closest( this.grid ).focus();
 			},
-			"mouseenter .ui-calendar-header button": "_hover",
-			"mouseleave .ui-calendar-header button": "_hover",
+			"mouseenter .ui-calendar-header-buttons button": "_hover",
+			"mouseleave .ui-calendar-header-buttons button": "_hover",
 			"mouseenter .ui-calendar-calendar button": "_hover",
 			"mouseleave .ui-calendar-calendar button": "_hover",
 			"keydown .ui-calendar-calendar": "_handleKeydown"
 		} );
 
 		this._createCalendar();
+		this._setActiveDescendant();
 	},
 
 	_hover: function( event ) {
@@ -150,24 +149,27 @@ return $.widget( "ui.calendar", {
 			this.date.adjust( "D", 7 );
 			break;
 		default:
-			event.preventDefault();
 			return;
 		}
 
 		if ( this._needsRefresh() ) {
-			if ( this.options.numberOfMonths > 1 && this.date.year() === this.viewDate.year() ) {
-				this.viewDate.adjust( "M", this.options.numberOfMonths *
-					( this.date.month() > this.viewDate.month() ? 1 : -1 )
-				);
-				this.refresh();
-			} else {
-				this.viewDate.setTime( this.date.date().getTime() );
-				this.refresh();
-			}
-			this.grid.focus();
+			this._updateView();
+			this.activeDescendant.closest( this.grid ).focus();
+		} else {
+			this._setActiveDescendant();
+		}
+	},
+
+	_updateView: function() {
+		if ( this.options.numberOfMonths > 1 && this.date.year() === this.viewDate.year() ) {
+			this.viewDate.adjust( "M", this.options.numberOfMonths *
+				( this.date.month() > this.viewDate.month() ? 1 : -1 )
+			);
+		} else {
+			this.viewDate.setTime( this.date.date().getTime() );
 		}
 
-		this._setActiveDescendant();
+		this.refresh();
 	},
 
 	_needsRefresh: function() {
@@ -222,12 +224,12 @@ return $.widget( "ui.calendar", {
 
 	_createCalendar: function() {
 		var classes = "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all",
-			pickerHtml = "";
+			pickerHtml = this._buildHeaderButtons();
 
 		if ( this.options.numberOfMonths === 1 ) {
-			pickerHtml = this._buildHeader() + this._buildGrid();
+			pickerHtml += this._buildHeader() + this._buildGrid();
 		} else {
-			pickerHtml = this._buildMultiplePicker();
+			pickerHtml += this._buildMultiplePicker();
 			classes += " ui-calendar-multi";
 		}
 
@@ -266,15 +268,10 @@ return $.widget( "ui.calendar", {
 				headerClass += " ui-corner-right";
 			}
 
-			html += "<div class='ui-calendar-group'>" +
-				"<div class='" + headerClass + "'>";
-			if ( months[ i ].first ) {
-				html += this._buildPreviousLink();
-			} else if ( months[ i ].last ) {
-				html += this._buildNextLink();
-			}
-
-			html += this._buildTitlebar() + "</div>" + this._buildGrid() + "</div>";
+			html += "<div class='ui-calendar-group'>";
+			html += "<div class='" + headerClass + "'>" +
+						this._buildTitlebar() + "</div>";
+			html += this._buildGrid() + "</div>";
 		}
 
 		html += "<div class='ui-calendar-row-break'></div>";
@@ -286,9 +283,14 @@ return $.widget( "ui.calendar", {
 
 	_buildHeader: function() {
 		return "<div class='ui-calendar-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
+				this._buildTitlebar() +
+			"</div>";
+	},
+
+	_buildHeaderButtons: function() {
+		return "<div class='ui-calendar-header-buttons'>" +
 				this._buildPreviousLink() +
 				this._buildNextLink() +
-				this._buildTitlebar() +
 			"</div>";
 	},
 
@@ -505,21 +507,21 @@ return $.widget( "ui.calendar", {
 
 	// Refreshing the entire calendar during interaction confuses screen readers, specifically
 	// because the grid heading is marked up as a live region and will often not update if it's
-	// destroyed and recreated instead of just having its text change. Additionally, interacting
-	// with the prev and next links would cause loss of focus issues because the links being
-	// interacted with will disappear while focused.
+	// destroyed and recreated instead of just having its text change.
 	refresh: function() {
 		this.labels = this.options.labels;
 
 		// Determine which day gridcell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
-			this.grid = $( this._buildGrid() );
 			this.element.find( ".ui-calendar-title" ).html( this._buildTitle() );
-			this.element.find( ".ui-calendar-calendar" ).replaceWith( this.grid );
+			this.element.find( ".ui-calendar-calendar" ).replaceWith( this._buildGrid() );
 		} else {
 			this._refreshMultiplePicker();
 		}
+
+		this.grid = this.element.find( ".ui-calendar-calendar" );
+		this._setActiveDescendant();
 
 		this._refreshHeaderButtons();
 		this._createButtons();
@@ -571,10 +573,6 @@ return $.widget( "ui.calendar", {
 			this.viewDate.adjust( "M", 1 );
 		}
 		this.viewDate.adjust( "M", -this.options.numberOfMonths );
-
-		// TODO: This assumes focus is on the first grid. For multi pickers, the widget needs
-		// to maintain the currently focused grid and base queries like this off of it.
-		this.element.find( ".ui-state-focus" ).not( ":first" ).removeClass( "ui-state-focus" );
 	},
 
 	_getTranslation: function( key ) {
