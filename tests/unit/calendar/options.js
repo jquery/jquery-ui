@@ -92,20 +92,18 @@ test( "buttons - advanced", function() {
 				click: function() {
 					equal( this, element[ 0 ], "correct context" );
 				},
-				icons: {
-					primary: "ui-icon-cancel"
-				},
-				showText: false
+				icon: "ui-icon-cancel",
+				showLabel: false
 			} ]
 		} );
 
 	buttons = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
 	equal( buttons.length, 1, "correct number of buttons" );
 	equal( buttons.attr( "id" ), "my-button-id", "correct id" );
-	equal ( buttons.text(), "a button", "correct label" );
+	equal ( $.trim( buttons.text() ), "a button", "correct label" );
 	ok( buttons.hasClass( "additional-class" ), "additional classes added" );
-	deepEqual( buttons.button( "option", "icons" ), { primary: "ui-icon-cancel", secondary: null } );
-	equal( buttons.button( "option", "text" ), false );
+	equal( buttons.button( "option", "icon" ), "ui-icon-cancel" );
+	equal( buttons.button( "option", "showLabel" ), false );
 	buttons.click();
 
 	element.remove();
