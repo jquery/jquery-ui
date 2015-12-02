@@ -76,6 +76,7 @@ return $.widget( "ui.calendar", {
 
 	_create: function() {
 		this.id = this.element.uniqueId().attr( "id" );
+		this.gridId = this.id;
 		this.labels = this.options.labels;
 		this.buttonClickContext = this.element[ 0 ];
 
@@ -228,6 +229,7 @@ return $.widget( "ui.calendar", {
 
 		if ( this.options.numberOfMonths === 1 ) {
 			pickerHtml += this._buildHeader() + this._buildGrid();
+			this.element.attr( "aria-labelledby", this.gridId + "-title" );
 		} else {
 			pickerHtml += this._buildMultiplePicker();
 			classes += " ui-calendar-multi";
@@ -235,10 +237,7 @@ return $.widget( "ui.calendar", {
 
 		this.element
 			.addClass( classes )
-			.attr( {
-				role: "region",
-				"aria-labelledby": this.id + "-title"
-			} )
+			.attr( "role", "region" )
 			.html( pickerHtml );
 
 		this.prevButton = this.element.find( ".ui-calendar-prev" );
@@ -255,12 +254,16 @@ return $.widget( "ui.calendar", {
 			html = "",
 			currentDate = this.viewDate,
 			months = this.viewDate.months( this.options.numberOfMonths - 1 ),
+			labelledby = [],
 			i = 0;
 
 		for ( ; i < months.length; i++ ) {
 
 			// TODO: Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
 			this.viewDate = months[ i ];
+			this.gridId = this.id + "-" + i;
+
+			labelledby.push( this.gridId + "-title" );
 			headerClass = "ui-calendar-header ui-widget-header ui-helper-clearfix";
 			if ( months[ i ].first ) {
 				headerClass += " ui-corner-left";
@@ -275,6 +278,8 @@ return $.widget( "ui.calendar", {
 		}
 
 		html += "<div class='ui-calendar-row-break'></div>";
+
+		this.element.attr( "aria-labelledby", labelledby.join( " " ) );
 
 		this.viewDate = currentDate;
 
@@ -307,8 +312,8 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildTitlebar: function() {
-		return "<div role='header' id='" + this.id + "-title'>" +
-			"<div id='" + this.id + "-month-label' class='ui-calendar-title'>" +
+		return "<div role='header' id='" + this.gridId + "-title'>" +
+			"<div id='" + this.gridId + "-month-label' class='ui-calendar-title'>" +
 					this._buildTitle() +
 				"</div>" +
 				"<span class='ui-helper-hidden-accessible'>, " +
@@ -328,7 +333,7 @@ return $.widget( "ui.calendar", {
 
 	_buildGrid: function() {
 		return "<table class='ui-calendar-calendar' role='grid' aria-readonly='true' " +
-				"aria-labelledby='" + this.id + "-month-label' tabindex='0' " +
+				"aria-labelledby='" + this.gridId + "-month-label' tabindex='0' " +
 				"aria-activedescendant='" + this._getDayId( this.date ) + "'>" +
 				this._buildGridHeading() +
 				this._buildGridBody() +
