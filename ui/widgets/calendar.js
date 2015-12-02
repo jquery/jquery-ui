@@ -478,18 +478,23 @@ return $.widget( "ui.calendar", {
 
 			// Change the context for the click callback to be the main element
 			click = props.click;
-			props.click = function() {
-				click.apply( that.buttonClickContext, arguments );
-			};
 			buttonOptions = {
-				icons: props.icons,
-				text: props.showText
+				icon: props.icon,
+				iconPosition: props.iconPosition,
+				showLabel: props.showLabel
 			};
-			delete props.icons;
-			delete props.showText;
+
+			delete props.click;
+			delete props.icon;
+			delete props.iconPosition;
+			delete props.showLabel;
+
 			$( "<button></button>", props )
 				.button( buttonOptions )
-				.appendTo( that.buttonSet );
+				.appendTo( that.buttonSet )
+				.on( "click", function() {
+					click.apply( that.buttonClickContext, arguments );
+				} );
 		} );
 		this.element.addClass( "ui-calendar-buttons" );
 		this.buttonPane.appendTo( this.element );
