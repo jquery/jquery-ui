@@ -24,6 +24,31 @@ var
 
 	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
 
+	cssFiles = [
+		"core",
+		"accordion",
+		"autocomplete",
+		"button",
+		"checkboxradio",
+		"controlgroup",
+		"datepicker",
+		"dialog",
+		"draggable",
+		"menu",
+		"progressbar",
+		"resizable",
+		"selectable",
+		"selectmenu",
+		"sortable",
+		"slider",
+		"spinner",
+		"tabs",
+		"tooltip",
+		"theme"
+	].map(function( component ) {
+		return "themes/base/" + component + ".css";
+	}),
+
 	// minified files
 	minify = {
 		options: {
@@ -113,6 +138,18 @@ grunt.initConfig({
 		dist: "<%= pkg.name %>-<%= pkg.version %>"
 	},
 	compare_size: compareFiles,
+	concat: {
+		css: {
+			options: {
+				banner: createBanner( cssFiles ),
+				stripBanners: {
+					block: true
+				}
+			},
+			src: cssFiles,
+			dest: "dist/jquery-ui.css"
+		}
+	},
 	requirejs: {
 		js: {
 			options: {
@@ -436,6 +473,7 @@ grunt.registerTask( "compile-globalize", function() {
 });
 
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ]);
+grunt.registerTask( "jenkins", [ "default", "concat" ]);
 grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
 grunt.registerTask( "test", [ "qunit" ]);
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ]);

@@ -12,7 +12,7 @@
 //>>description: Enables dragging functionality for any element.
 //>>docs: http://api.jqueryui.com/draggable/
 //>>demos: http://jqueryui.com/draggable/
-//>>css.structure: ../themes/base/draggable.css
+//>>css.structure: ../../themes/base/draggable.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -255,7 +255,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		if ( !noPropagation ) {
 			var ui = this._uiHash();
 			if ( this._trigger( "drag", event, ui ) === false ) {
-				this._mouseUp( {} );
+				this._mouseUp( new $.Event( "mouseup", event ) );
 				return false;
 			}
 			this.position = ui.position;
@@ -322,7 +322,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	cancel: function() {
 
 		if ( this.helper.is( ".ui-draggable-dragging" ) ) {
-			this._mouseUp( {} );
+			this._mouseUp( new $.Event( "mouseup", { target: this.element[ 0 ] } ) );
 		} else {
 			this._clear();
 		}

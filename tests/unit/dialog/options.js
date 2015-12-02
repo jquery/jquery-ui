@@ -156,10 +156,8 @@ test( "buttons - advanced", function( assert ) {
 					click: function() {
 						equal( this, element[ 0 ], "correct context" );
 					},
-					icons: {
-						primary: "ui-icon-cancel"
-					},
-					showText: false
+					icon: "ui-icon-cancel",
+					showLabel: false
 				}
 			]
 		} );
@@ -167,10 +165,10 @@ test( "buttons - advanced", function( assert ) {
 	buttons = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	equal( buttons.length, 1, "correct number of buttons" );
 	equal( buttons.attr( "id" ), "my-button-id", "correct id" );
-	equal( buttons.text(), "a button", "correct label" );
+	equal( $.trim( buttons.text() ), "a button", "correct label" );
 	assert.hasClasses( buttons, "additional-class" );
-	deepEqual( buttons.button( "option", "icons" ), { primary: "ui-icon-cancel", secondary: null } );
-	equal( buttons.button( "option", "text" ), false );
+	deepEqual( buttons.button( "option", "icon" ), "ui-icon-cancel" );
+	equal( buttons.button( "option", "showLabel" ), false );
 	buttons.trigger( "click" );
 
 	element.remove();
@@ -208,21 +206,26 @@ test( "closeOnEscape", function() {
 } );
 
 test( "closeText", function() {
-	expect( 3 );
+	expect( 4 );
 
 	var element = $( "<div></div>" ).dialog();
-		equal( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close span" ).text(), "Close",
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "Close",
 			"default close text" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( { closeText: "foo" } );
-		equal( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close span" ).text(), "foo",
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "foo",
 			"closeText on init" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog().dialog( "option", "closeText", "bar" );
-		equal( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close span" ).text(), "bar",
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "bar",
 			"closeText via option method" );
+	element.remove();
+
+	element = $( "<div></div>" ).dialog( { closeText: "<span>foo</span>" } );
+		equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "<span>foo</span>",
+			"closeText is escaped" );
 	element.remove();
 } );
 

@@ -81,21 +81,21 @@ asyncTest( "refresh - change selected option", function() {
 	var element = $( "#speed" ).selectmenu(),
 		button = element.selectmenu( "widget" );
 
-	equal( element.find( "option:selected" ).text(), button.text(), "button text after init" );
+	equal( $.trim( button.text() ), "Medium", "button text after init" );
 
 	button.simulate( "focus" );
+
 	setTimeout( function() {
-		equal( element.find( "option:selected" ).text(), button.text(), "button text after focus" );
+		equal( $.trim( button.text() ), "Medium", "button text after focus" );
 
 		element[ 0 ].selectedIndex = 0;
 		element.selectmenu( "refresh" );
-		equal( element.find( "option:selected" ).text(), button.text(),
-			"button text after changing selected option" );
+		equal( $.trim( button.text() ), "Slower", "button text after changing selected option" );
 
 		element.find( "option" ).prop( "selected", false );
 		element.append( "<option selected value=\"selected_option\">Selected option</option>" );
 		element.selectmenu( "refresh" );
-		equal( "Selected option", button.text(), "button text after adding selected option" );
+		equal( $.trim( button.text() ), "Selected option", "button text after adding selected option" );
 
 		start();
 	} );
@@ -180,7 +180,7 @@ test( "widget and menuWidget", function( assert ) {
 		menu = element.selectmenu( "menuWidget" );
 
 	equal( button.length, 1, "button: one element" );
-	assert.hasClasses( button, "ui-selectmenu-button" );
+	assert.hasClasses( button, "ui-button" );
 
 	equal( menu.length, 1, "Menu Widget: one element" );
 	ok( menu.is( "ul.ui-menu" ), "Menu Widget: element and class" );

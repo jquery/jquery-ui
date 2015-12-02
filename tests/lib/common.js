@@ -70,7 +70,9 @@ exports.testWidget = function( widget, settings ) {
 	exports.testJshint( "/widgets/" + widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
-	testBasicUsage( widget );
+	if ( !settings.noDefaultElement ) {
+		testBasicUsage( widget );
+	}
 	test( "version", function() {
 		expect( 1 );
 		ok( "version" in $.ui[ widget ].prototype, "version property exists" );

@@ -154,7 +154,7 @@ test( "Months", 5, function() {
 	ok( lastMonth.last );
 	ok( !lastMonth.first );
 
-	ok( firstMonth.month() === lastMonth.month() - 1 );
+	equal( firstMonth.month(), lastMonth.month() - 1 );
 } );
 
 test( "Equal", 4, function() {

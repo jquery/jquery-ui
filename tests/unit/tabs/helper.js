@@ -47,7 +47,10 @@ return $.extend( helper, {
 
 	equalHeight: function( tabs, height ) {
 		tabs.find( ".ui-tabs-panel" ).each( function() {
-			equal( $( this ).outerHeight(), height );
+
+			// Handle overly-precise values
+			var actualHeight = parseFloat( $( this ).outerHeight().toFixed( 1 ) );
+			equal( actualHeight, height );
 		} );
 	},
 

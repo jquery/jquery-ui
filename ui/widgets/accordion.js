@@ -12,9 +12,9 @@
 //>>description: Displays collapsible content panels for presenting information in a limited amount of space.
 //>>docs: http://api.jqueryui.com/accordion/
 //>>demos: http://jqueryui.com/accordion/
-//>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/accordion.css
-//>>css.theme: ../themes/base/theme.css
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/accordion.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

@@ -12,9 +12,9 @@
 //>>description: Transforms a set of container elements into a tab structure.
 //>>docs: http://api.jqueryui.com/tabs/
 //>>demos: http://jqueryui.com/tabs/
-//>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/tabs.css
-//>>css.theme: ../themes/base/theme.css
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/tabs.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {

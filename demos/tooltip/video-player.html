@@ -35,7 +35,7 @@
 	}
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
-	<script src="../bootstrap.js" data-modules="button menu effect effect-blind">
+	<script src="../bootstrap.js" data-modules="button controlgroup menu effect effect-blind">
 		function notify( input ) {
 			var msg = "Selected " + $.trim( input.data( "tooltip-title" ) || input.text() );
 			$( "<div>" )
@@ -70,8 +70,10 @@
 				notify( button );
 			});
 		});
-		$( ".set" ).buttonset({
-			items: "button"
+		$( ".set" ).controlgroup({
+			items: {
+				"button" : "button"
+			}
 		});
 
 		$( "button.menu" )

@@ -15,7 +15,7 @@ test( "markup structure", function( assert ) {
 
 	assert.hasClasses( button,
 		"ui-selectmenu-button ui-selectmenu-button-closed ui-widget" );
-	assert.lacksClasses( button, "ui-selectmenu-button-open" );
+	assert.lacksClasses( button, "ui-selectmenu-button-open ui-selectmenu-open" );
 	assert.hasClasses( menuWrap, "ui-selectmenu-menu" );
 	assert.lacksClasses( menuWrap, "ui-selectmenu-menu-open" );
 } );
@@ -89,8 +89,8 @@ test( "_renderButtonItem()", function() {
 	element.selectmenu( "refresh" );
 	option = element.find( "option:selected" );
 	equal(
+		$.trim( button.text() ),
 		option.text() + element[ 0 ].selectedIndex,
-		button.text(),
 		"refresh: button item text"
 	);
 
@@ -98,8 +98,8 @@ test( "_renderButtonItem()", function() {
 	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
 	option = element.find( "option" ).last();
 	equal(
+		$.trim( button.text() ),
 		option.text() + element[ 0 ].selectedIndex,
-		button.text(),
 		"click: button item text"
 	);
 } );
@@ -146,7 +146,7 @@ $.each( [
 				selected.val(),
 				"original select state"
 			);
-			equal( button.text(), selected.text(), "button text" );
+			equal( $.trim( button.text() ), selected.text(), "button text" );
 			start();
 		} );
 	} );
@@ -181,7 +181,7 @@ $.each( [
 				selected.val(),
 				"original select state"
 			);
-			equal( button.text(), selected.text(), "button text" );
+			equal( $.trim( button.text() ), selected.text(), "button text" );
 			start();
 		}, 1 );
 	} );
@@ -222,7 +222,7 @@ $.each( [
 					"button aria-activedescendant" );
 				equal( element.find( "option:selected" ).val(), options.eq( 1 ).val(),
 					"original select state" );
-				equal( button.text(), options.eq( 1 ).text(), "button text" );
+				equal( $.trim( button.text() ), options.eq( 1 ).text(), "button text" );
 				start();
 			} );
 		} );
@@ -328,5 +328,23 @@ $.each( [
 		} );
 	} );
 } );
+
+	asyncTest( "Selectmenu should reset when its parent form resets", function() {
+		expect( 2 );
+
+		var element = $( "#speed" ).selectmenu(),
+			widget = element.selectmenu( "widget" ),
+			initialValue = element.val(),
+			form = element.closest( "form" );
+
+		element.val( "Slower" );
+		element.selectmenu( "refresh" );
+		equal( $.trim( widget.text() ), "Slower" );
+		form[ 0 ].reset();
+		setTimeout( function() {
+			equal( $.trim( widget.text() ), initialValue );
+			start();
+		} );
+	} );
 
 } );
