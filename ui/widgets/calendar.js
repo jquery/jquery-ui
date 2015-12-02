@@ -12,6 +12,9 @@
 //>>description: Displays a calendar for inline date selection.
 //>>docs: http://api.jqueryui.com/calendar/
 //>>demos: http://jqueryui.com/calendar/
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/calendar.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
