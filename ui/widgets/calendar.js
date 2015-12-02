@@ -2,12 +2,12 @@
  * jQuery UI Calendar @VERSION
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  */
 
-//>>label: Datepicker
+//>>label: Calendar
 //>>group: Widgets
 //>>description: Displays a calendar for inline date selection.
 //>>docs: http://api.jqueryui.com/calendar/
