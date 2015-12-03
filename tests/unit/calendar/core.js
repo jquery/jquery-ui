@@ -7,22 +7,26 @@ define( [
 module( "calendar: core" );
 
 test( "base structure", function() {
-	expect( 26 );
+	expect( 28 );
 
-	var header, title, table, thead, week, child, buttonpane,
+	var buttons, header, title, table, thead, week, child, buttonpane,
 		element = $( "#calendar" ).calendar(),
 		dp = element.calendar( "widget" );
 
 	function step1() {
 		ok( !dp.is( ".ui-calendar-rtl" ), "Structure - not right-to-left" );
 		ok( !dp.is( ".ui-calendar-multi" ), "Structure - not multi-month" );
-		equal( dp.children().length, 2, "Structure - child count (header, calendar)" );
+		equal( dp.children().length, 3, "Structure - child count (header, calendar)" );
 
-		header = dp.children( ":first" );
+		buttons = dp.children( ":first" );
+		ok( buttons.is( "div.ui-calendar-header-buttons" ), "Structure - header button division" );
+		equal( buttons.children().length, 2, "Structure - header buttons child count" );
+		ok( buttons.children( ":first" ).is( ".ui-calendar-prev" ) && buttons.children( ":first" ).html() !== "", "Structure - prev link" );
+		ok( buttons.children( ":last" ).is( ".ui-calendar-next" ) && buttons.children( ":last" ).html() !== "", "Structure - next link" );
+
+		header = dp.children( ":eq(1)" );
 		ok( header.is( "div.ui-calendar-header" ), "Structure - header division" );
-		equal( header.children().length, 3, "Structure - header child count" );
-		ok( header.children( ":first" ).is( ".ui-calendar-prev" ) && header.children( ":first" ).html() !== "", "Structure - prev link" );
-		ok( header.children( ":eq(1)" ).is( ".ui-calendar-next" ) && header.children( ":eq(1)" ).html() !== "", "Structure - next link" );
+		equal( header.children().length, 1, "Structure - header child count" );
 
 		title = header.children( ":last" ).children( ":first" );
 		ok( title.is( "div.ui-calendar-title" ) && title.html() !== "", "Structure - title division" );
@@ -30,7 +34,7 @@ test( "base structure", function() {
 		ok( title.children( ":first" ).is( "span.ui-calendar-month" ) && title.children( ":first" ).text() !== "", "Structure - month text" );
 		ok( title.children( ":last" ).is( "span.ui-calendar-year" ) && title.children( ":last" ).text() !== "", "Structure - year text" );
 
-		table = dp.children( ":eq(1)" );
+		table = dp.children( ":eq(2)" );
 		ok( table.is( "table.ui-calendar-calendar" ), "Structure - month table" );
 		ok( table.children( ":first" ).is( "thead" ), "Structure - month table thead" );
 
@@ -53,7 +57,7 @@ test( "base structure", function() {
 			"test button": function() {}
 		} );
 
-		equal( dp.children().length, 3, "Structure buttons - child count (header, calendar, buttonpane)" );
+		equal( dp.children().length, 4, "Structure buttons - child count (header buttons, header, calendar, buttonpane)" );
 
 		buttonpane = dp.children( ".ui-calendar-buttonpane" );
 		equal( buttonpane.children( "div.ui-calendar-buttonset" ).length, 1, "Structure buttons - buttonset" );
@@ -71,9 +75,9 @@ test( "base structure", function() {
 		dp = element.calendar( "widget" );
 
 		ok( dp.is( ".ui-calendar-multi" ), "Structure multi [2] - multi-month" );
-		equal( dp.children().length, 3, "Structure multi [2] - child count" );
+		equal( dp.children().length, 4, "Structure multi [2] - child count" );
 
-		child = dp.children( ":eq(2)" );
+		child = dp.children( ":eq(3)" );
 		ok( child.is( "div.ui-calendar-row-break" ), "Structure multi [2] - row break" );
 
 		element.calendar( "destroy" );
