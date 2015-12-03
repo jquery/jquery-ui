@@ -193,11 +193,23 @@ var widget = $.widget( "ui.datepicker", {
 			clearTimeout( this.closeTimer );
 		},
 
-		// TODO on TAB (or shift TAB), make sure it ends up on something useful in DOM order
-		keyup: function( event ) {
+		keydown: function( event ) {
 			if ( event.keyCode === $.ui.keyCode.ESCAPE && this.calendar.is( ":visible" ) ) {
 				this.close( event );
 				this._focusTrigger();
+			}
+
+			if ( event.keyCode === $.ui.keyCode.TAB && this.calendar.is( ":visible" ) ) {
+				var element = $( event.target );
+
+				// Reset focus when leaving widget
+				if (
+					( event.shiftKey && element.is( this.calendarInstance.prevButton ) ) ||
+					( !event.shiftKey && element.is( this.calendarInstance.grid.last() ) )
+				) {
+					this.close( event );
+					this._focusTrigger();
+				}
 			}
 		}
 	},
@@ -262,19 +274,13 @@ var widget = $.widget( "ui.datepicker", {
 			.hide();
 		this._show( this.calendar, this.options.show );
 
-		// Take trigger out of tab order to allow shift-tab to skip trigger
-		// TODO Does this really make sense? related bug: tab-shift moves focus to last element on page
-		this.element.attr( "tabindex", -1 );
 		this.isOpen = true;
-
 		this._trigger( "open", event );
 	},
 
 	close: function( event ) {
 		this._setHiddenPicker();
 		this._hide( this.calendar, this.options.hide );
-
-		this.element.attr( "tabindex", 0 );
 
 		this.isOpen = false;
 		this._trigger( "close", event );
