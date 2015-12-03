@@ -99,7 +99,7 @@ return $.widget( "ui.calendar", {
 			},
 			"mousedown .ui-calendar-calendar button": function( event ) {
 				this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
-				this.refresh();
+				this._updateDayElement( "ui-state-active" );
 				this._trigger( "select", event );
 
 				// Allow datepicker to handle focus
@@ -181,25 +181,29 @@ return $.widget( "ui.calendar", {
 
 			// Check if the needed day is already present in our grid due
 			// to eachDay option changes (eg. other-months demo)
-			return !this.grid.find(
-				"#" + $.ui.escapeSelector( this._getDayId( this.date ) )
-				).length;
+			return !this._getDateElement( this._getDayId( this.date ) ).length;
 		}
 
 		return false;
 	},
 
 	_setActiveDescendant: function() {
+		this.activeDescendant = this._updateDayElement( "ui-state-focus" );
+	},
+
+	_updateDayElement: function( selector ) {
 		var id = this._getDayId( this.date );
 
 		this.grid
 			.attr( "aria-activedescendant", id )
-			.find( ".ui-state-focus" )
-			.removeClass( "ui-state-focus" );
+			.find( "button." + selector )
+			.removeClass( selector );
 
-		this.activeDescendant = this.grid.find(
-			"#" + $.ui.escapeSelector( id ) + " > button"
-		).addClass( "ui-state-focus" );
+		return this._getDateElement( id ).children( "button" ).addClass( selector );
+	},
+
+	_getDateElement: function( id ) {
+		return this.grid.find( "#" + $.ui.escapeSelector( id ) );
 	},
 
 	_setLocale: function( locale, dateFormat ) {
@@ -519,7 +523,7 @@ return $.widget( "ui.calendar", {
 	refresh: function() {
 		this.labels = this.options.labels;
 
-		// Determine which day gridcell to focus after refresh
+		// Determine which day grid cell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
 			this.element.find( ".ui-calendar-title" ).html( this._buildTitle() );
