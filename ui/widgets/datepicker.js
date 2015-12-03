@@ -107,6 +107,7 @@ var widget = $.widget( "ui.datepicker", {
 				select: function( event ) {
 					that.element.val( that.calendarInstance.value() );
 					that.close();
+					event.preventDefault();
 					that._focusTrigger();
 					that._trigger( "select", event );
 				}

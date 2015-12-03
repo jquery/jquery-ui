@@ -98,12 +98,15 @@ return $.widget( "ui.calendar", {
 				this._updateView();
 			},
 			"mousedown .ui-calendar-calendar button": function( event ) {
-				event.preventDefault();
-
 				this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
 				this.refresh();
 				this._trigger( "select", event );
-				this.activeDescendant.closest( this.grid ).focus();
+
+				// Allow datepicker to handle focus
+				if ( !event.isDefaultPrevented() ) {
+					this.activeDescendant.closest( this.grid ).focus();
+					event.preventDefault();
+				}
 			},
 			"mouseenter .ui-calendar-header-buttons button": "_hover",
 			"mouseleave .ui-calendar-header-buttons button": "_hover",
