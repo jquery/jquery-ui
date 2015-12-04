@@ -3,34 +3,19 @@ define( [
 	"ui/widgets/button"
 ], function( $ ) {
 
-module( "button: events" );
+module( "Button: events" );
 
-test( "buttonset works with single-quote named elements (#7505)", function() {
+asyncTest( "Anchor recieves click event when spacebar is pressed", function() {
 	expect( 1 );
-	$( "#radio3" ).buttonset();
-	$( "#radio33" ).on( "click", function() {
-		ok( true, "button clicks work with single-quote named elements" );
-	} ).trigger( "click" );
-} );
+	var element = $( "#anchor-button" ).button();
 
-asyncTest( "when button loses focus, ensure active state is removed (#8559)", function( assert ) {
-	expect( 1 );
-
-	var element = $( "#button" ).button();
-
-	element.one( "keypress", function() {
-		element.one( "blur", function() {
-			assert.lacksClasses( element, "ui-state-active", "button loses active state appropriately" );
-			start();
-		} ).trigger( "blur" );
+	element.on( "click", function( event ) {
+		event.preventDefault();
+		ok( true, "click occcured as a result of spacebar" );
+		start();
 	} );
 
-	element.trigger( "focus" );
-	setTimeout( function() {
-		element
-			.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } )
-			.simulate( "keypress", { keyCode: $.ui.keyCode.ENTER } );
-	} );
+	element.trigger( $.Event( "keyup", { keyCode: $.ui.keyCode.SPACE } ) );
 } );
 
 } );

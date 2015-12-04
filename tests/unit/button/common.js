@@ -5,14 +5,14 @@ define( [
 
 common.testWidget( "button", {
 	defaults: {
-		classes: {},
-		disabled: null,
-		icons: {
-			primary: null,
-			secondary: null
+		classes: {
+			"ui-button": "ui-corner-all"
 		},
+		disabled: null,
+		icon: null,
+		iconPosition: "beginning",
 		label: null,
-		text: true,
+		showLabel: true,
 
 		// Callbacks
 		create: null

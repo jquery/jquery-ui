@@ -31,6 +31,8 @@ var widgets = [
 	"autocomplete",
 	"button",
 	"calendar",
+	"checkboxradio",
+	"controlgroup",
 	"datepicker",
 	"dialog",
 	"draggable",
@@ -113,7 +115,7 @@ require( modules, function() {
 	document.documentElement.className = "";
 
 	newScript.text = "( function() { " + script.innerHTML + " } )();";
-	document.head.appendChild( newScript ).parentNode.removeChild( newScript );
+	document.body.appendChild( newScript ).parentNode.removeChild( newScript );
 } );
 
 } )();

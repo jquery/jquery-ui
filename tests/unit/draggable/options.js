@@ -6,6 +6,8 @@ define( [
 	"ui/widgets/sortable"
 ], function( $, testHelper ) {
 
+module( "draggable: options" );
+
 // TODO: This doesn't actually test whether append happened, possibly remove
 test( "{ appendTo: 'parent' }, default, no clone", function() {
 	expect( 4 );

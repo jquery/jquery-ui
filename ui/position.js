@@ -10,7 +10,7 @@
  */
 
 //>>label: Position
-//>>group: UI Core
+//>>group: Core
 //>>description: Positions elements relative to other elements.
 //>>docs: http://api.jqueryui.com/position/
 //>>demos: http://jqueryui.com/position/

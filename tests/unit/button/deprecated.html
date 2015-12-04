@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Button Deprecated Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core button"></script>
+	<script src="../../lib/bootstrap.js" data-widget="button" data-deprecated="true"></script>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+<div class="buttonset"><button id="button">Label</button><button>button 2</button></div>
+<div><button id="button2">label <span>with span</span></button></div>
+
+<div id="radio0" style="margin-top: 2em;">
+	<input type="radio" id="radio01" name="radio" checked="checked"><label for="radio01">Choice 1</label>
+	<input type="radio" id="radio02" name="radio"><label for="radio02">Choice 2</label>
+	<input type="radio" id="radio03" name="radio"><label for="radio03">Choice 3</label>
+</div>
+<div id="checkbox0">
+	<input type="checkbox" id="checkbox01" name="checkbox"><label for="checkbox01">Choice 1</label>
+	<input type="checkbox" id="checkbox02" name="checkbox"><label for="checkbox02">Choice 2</label>
+	<input type="checkbox" id="checkbox03" name="checkbox"><label for="checkbox03">Choice 3</label>
+</div>
+<form>
+	<div id="radio1" style="margin-top: 2em;">
+		<input type="radio" id="radio11" name="radio"><label for="radio11">Choice 1</label>
+		<input type="radio" id="radio12" name="radio" checked="checked"><label for="radio12">Choice 2</label>
+		<input type="radio" id="radio13" name="radio"><label for="radio13">Choice 3</label>
+	</div>
+</form>
+<form>
+	<div id="radio2" style="margin-top: 2em;">
+		<input type="radio" id="radio21" name="radio"><label for="radio21">Choice 1</label>
+		<input type="radio" id="radio22" name="radio"><label for="radio22">Choice 2</label>
+		<input type="radio" id="radio23" name="radio" checked="checked"><label for="radio23">Choice 3</label>
+	</div>
+</form>
+<form>
+	<div id="radio3">
+		<input type="radio" id="radio31" name="data['Page']['parse']"><label for="radio31">Choice 1</label>
+		<input type="radio" id="radio32" name="data['Page']['parse']" checked="checked"><label for="radio32">Choice 2</label>
+		<input type="radio" id="radio33" name="data['Page']['parse']"><label for="radio33">Choice 3</label>
+	</div>
+</form>
+
+<input type="checkbox" id="check"><label for="check">Toggle</label>
+<input type="checkbox" id="check2"><label for="check2">Checkbox</label>
+
+<div><input id="submit" type="submit" value="Label"></div>
+<button id="button-disabled" disabled>Button</button>
+<button id="button1">Button</button>
+<a href="#" id="anchor-button">Anchor Button</a>
+
+</div>
+</body>
+</html>

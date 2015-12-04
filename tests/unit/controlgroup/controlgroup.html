@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Controlgroup Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core button checkboxradio selectmenu spinner controlgroup"></script>
+	<script src="../../lib/bootstrap.js" data-modules="common core methods options"></script>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<div class="controlgroup">
+		<button style="display:none">Button with icon only</button>
+		<select>
+			<option>Fast</option>
+			<option>Medium</option>
+			<option>Slow</option>
+		</select>
+		<label for="checkbox">Checkbox</label>
+		<input type="checkbox" value="checkbox" id="checkbox" />
+		<select>
+			<option>Fast</option>
+			<option>Medium</option>
+			<option>Slow</option>
+		</select>
+		<div class="test"></div>
+		<button>Button with icon on the bottom</button>
+		<label for="spinner" class="ui-controlgroup-label"># of cars</label>
+		<input id="spinner" class="ui-spinner-input">
+		<select>
+			<option>Fast</option>
+			<option>Medium</option>
+			<option>Slow</option>
+		</select>
+	</div>
+</div>
+</body>
+</html>

@@ -18,6 +18,10 @@
 	position: relative;
 	padding: .2em 0;
 }
+.ui-calendar .ui-calendar-header-buttons {
+	position: relative;
+	z-index: 1;
+}
 .ui-calendar .ui-calendar-prev,
 .ui-calendar .ui-calendar-next {
 	cursor: pointer;

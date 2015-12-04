@@ -12,9 +12,9 @@
 //>>description: Displays customizable dialog windows.
 //>>docs: http://api.jqueryui.com/dialog/
 //>>demos: http://jqueryui.com/dialog/
-//>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/dialog.css
-//>>css.theme: ../themes/base/theme.css
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/dialog.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -426,11 +426,9 @@ $.widget( "ui.dialog", {
 		// dialog in IE (#9312)
 		this.uiDialogTitlebarClose = $( "<button type='button'></button>" )
 			.button( {
-				label: this.options.closeText,
-				icons: {
-					primary: "ui-icon-closethick"
-				},
-				text: false
+				label: $( "<a>" ).text( this.options.closeText ).html(),
+				icon: "ui-icon-closethick",
+				showLabel: false
 			} )
 			.appendTo( this.uiDialogTitlebar );
 
@@ -498,12 +496,15 @@ $.widget( "ui.dialog", {
 			// Change the context for the click callback to be the main element
 			click = props.click;
 			buttonOptions = {
-				icons: props.icons,
-				text: props.showText
+				icon: props.icon,
+				iconPosition: props.iconPosition,
+				showLabel: props.showLabel
 			};
-			delete props.icons;
-			delete props.showText;
+
 			delete props.click;
+			delete props.icon;
+			delete props.iconPosition;
+			delete props.showLabel;
 
 			$( "<button></button>", props )
 				.button( buttonOptions )
@@ -714,7 +715,7 @@ $.widget( "ui.dialog", {
 			this.uiDialogTitlebarClose.button( {
 
 				// Ensure that we always pass a string
-				label: "" + value
+				label: $( "<a>" ).text( "" + this.options.closeText ).html()
 			} );
 		}
 

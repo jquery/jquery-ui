@@ -12,9 +12,9 @@
 //>>description: Displays buttons to easily input numbers via the keyboard or mouse.
 //>>docs: http://api.jqueryui.com/spinner/
 //>>demos: http://jqueryui.com/spinner/
-//>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/spinner.css
-//>>css.theme: ../themes/base/theme.css
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/spinner.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -230,12 +230,7 @@ $.widget( "ui.spinner", {
 
 				// Add buttons
 				.append(
-					"<a>" +
-						"<span>&#9650;</span>" +
-					"</a>" +
-					"<a>" +
-						"<span>&#9660;</span>" +
-					"</a>"
+					"<a></a><a></a>"
 				);
 	},
 
@@ -250,17 +245,26 @@ $.widget( "ui.spinner", {
 		// Button bindings
 		this.buttons = this.uiSpinner.children( "a" )
 			.attr( "tabIndex", -1 )
-			.button();
+			.attr( "aria-hidden", true )
+			.button( {
+				classes: {
+					"ui-button": ""
+				}
+			} );
 
 		// TODO: Right now button does not support classes this is already updated in button PR
 		this._removeClass( this.buttons, "ui-corner-all" );
 
 		this._addClass( this.buttons.first(), "ui-spinner-button ui-spinner-up" );
 		this._addClass( this.buttons.last(), "ui-spinner-button ui-spinner-down" );
-		this._addClass( this.buttons.first().find( ".ui-button-text span" ), null,
-			"ui-icon " + this.options.icons.up );
-		this._addClass( this.buttons.last().find( ".ui-button-text span" ), null,
-			"ui-icon " + this.options.icons.down );
+		this.buttons.first().button( {
+			"icon": this.options.icons.up,
+			"showLabel": false
+		} );
+		this.buttons.last().button( {
+			"icon": this.options.icons.down,
+			"showLabel": false
+		} );
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height
@@ -559,13 +563,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_buttonHtml: function() {
-			return "" +
-				"<a>" +
-					"<span>&#9650;</span>" +
-				"</a>" +
-				"<a>" +
-					"<span>&#9660;</span>" +
-				"</a>";
+			return "<a></a><a></a>";
 		}
 	} );
 }

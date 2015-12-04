@@ -12,9 +12,9 @@
 //>>description: Enables resize functionality for any element.
 //>>docs: http://api.jqueryui.com/resizable/
 //>>demos: http://jqueryui.com/resizable/
-//>>css.structure: ../themes/base/core.css
-//>>css.structure: ../themes/base/resizable.css
-//>>css.theme: ../themes/base/theme.css
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/resizable.css
+//>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -99,7 +99,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_create: function() {
 
-		var n, i, handle, axis, hname,
+		var n, i, handle, axis, hname, margins,
 			that = this,
 			o = this.options;
 		this._addClass( "ui-resizable" );
@@ -131,18 +131,15 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			this.elementIsWrapper = true;
 
-			this.element.css( {
-				marginLeft: this.originalElement.css( "marginLeft" ),
+			margins = {
 				marginTop: this.originalElement.css( "marginTop" ),
 				marginRight: this.originalElement.css( "marginRight" ),
-				marginBottom: this.originalElement.css( "marginBottom" )
-			} );
-			this.originalElement.css( {
-				marginLeft: 0,
-				marginTop: 0,
-				marginRight: 0,
-				marginBottom: 0
-			} );
+				marginBottom: this.originalElement.css( "marginBottom" ),
+				marginLeft: this.originalElement.css( "marginLeft" )
+			};
+
+			this.element.css( margins );
+			this.originalElement.css( "margin", 0 );
 
 			// support: Safari
 			// Prevent Safari textarea resize
@@ -157,7 +154,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			// Support: IE9
 			// avoid IE jump (hard set the margin)
-			this.originalElement.css( { margin: this.originalElement.css( "margin" ) } );
+			this.originalElement.css( margins );
 
 			this._proportionallyResize();
 		}
@@ -690,8 +687,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			this._addClass( this.helper, this._helper );
 			this.helper.css( {
-				width: this.element.outerWidth() - 1,
-				height: this.element.outerHeight() - 1,
+				width: this.element.outerWidth(),
+				height: this.element.outerHeight(),
 				position: "absolute",
 				left: this.elementOffset.left + "px",
 				top: this.elementOffset.top + "px",
@@ -1035,7 +1032,7 @@ $.ui.plugin.add( "resizable", "alsoResize", {
 	},
 
 	stop: function() {
-		$( this ).removeData( "resizable-alsoresize" );
+		$( this ).removeData( "ui-resizable-alsoresize" );
 	}
 } );
 
