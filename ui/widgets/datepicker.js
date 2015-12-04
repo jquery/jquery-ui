@@ -1023,6 +1023,8 @@ $.extend( Datepicker.prototype, {
 
 		if ( period === "M" ) {
 			this._adjustInstDate( inst, this._get( inst, "showCurrentAtPos" ), period );
+		} else {
+			this._notifyChange( inst );
 		}
 		this._updateDatepicker( inst );
 	},
