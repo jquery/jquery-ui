@@ -280,7 +280,7 @@ return $.widget( "ui.calendar", {
 
 			html += "<div class='ui-calendar-group'>";
 			html += "<div class='" + headerClass + "'>" +
-						this._buildTitlebar() + "</div>";
+				this._buildTitlebar() + "</div>";
 			html += this._buildGrid() + "</div>";
 		}
 
@@ -295,15 +295,15 @@ return $.widget( "ui.calendar", {
 
 	_buildHeader: function() {
 		return "<div class='ui-calendar-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
-				this._buildTitlebar() +
-			"</div>";
+			this._buildTitlebar() +
+		"</div>";
 	},
 
 	_buildHeaderButtons: function() {
 		return "<div class='ui-calendar-header-buttons'>" +
-				this._buildPreviousLink() +
-				this._buildNextLink() +
-			"</div>";
+			this._buildPreviousLink() +
+			this._buildNextLink() +
+		"</div>";
 	},
 
 	_buildPreviousLink: function() {
@@ -321,12 +321,12 @@ return $.widget( "ui.calendar", {
 	_buildTitlebar: function() {
 		return "<div role='header' id='" + this.gridId + "-title'>" +
 			"<div id='" + this.gridId + "-month-label' class='ui-calendar-title'>" +
-					this._buildTitle() +
-				"</div>" +
-				"<span class='ui-helper-hidden-accessible'>, " +
-					this._getTranslation( "datePickerRole" ) +
-				"</span>" +
-			"</div>";
+				this._buildTitle() +
+			"</div>" +
+			"<span class='ui-helper-hidden-accessible'>, " +
+				this._getTranslation( "datePickerRole" ) +
+			"</span>" +
+		"</div>";
 	},
 
 	_buildTitle: function() {
@@ -340,11 +340,11 @@ return $.widget( "ui.calendar", {
 
 	_buildGrid: function() {
 		return "<table class='ui-calendar-calendar' role='grid' aria-readonly='true' " +
-				"aria-labelledby='" + this.gridId + "-month-label' tabindex='0' " +
-				"aria-activedescendant='" + this._getDayId( this.date ) + "'>" +
-				this._buildGridHeading() +
-				this._buildGridBody() +
-			"</table>";
+			"aria-labelledby='" + this.gridId + "-month-label' tabindex='0' " +
+			"aria-activedescendant='" + this._getDayId( this.date ) + "'>" +
+			this._buildGridHeading() +
+			this._buildGridBody() +
+		"</table>";
 	},
 
 	_buildGridHeading: function() {
@@ -361,16 +361,16 @@ return $.widget( "ui.calendar", {
 		}
 
 		return "<thead role='presentation'>" +
-				"<tr role='row'>" + cells + "</tr>" +
-			"</thead>";
+			"<tr role='row'>" + cells + "</tr>" +
+		"</thead>";
 	},
 
 	_buildGridHeaderCell: function( day ) {
 		return "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
-				"<span title='" + day.fullname + "'>" +
-					day.shortname +
-				"</span>" +
-			"</th>";
+			"<span title='" + day.fullname + "'>" +
+				day.shortname +
+			"</span>" +
+		"</th>";
 	},
 
 	_buildGridBody: function() {
