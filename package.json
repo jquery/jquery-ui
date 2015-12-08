@@ -45,7 +45,7 @@
 		"type": "git",
 		"url": "git://github.com/jquery/jquery-ui.git"
 	},
-	"bugs": "http://bugs.jqueryui.com/",
+	"bugs": "https://bugs.jqueryui.com/",
 	"license": "MIT",
 	"scripts": {
 		"test": "grunt"
