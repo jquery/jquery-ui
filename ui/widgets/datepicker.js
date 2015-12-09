@@ -136,6 +136,7 @@ function Datepicker() {
 			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
+		onRender: null, // Define a callback function for once the datepicker HTML has been appended
 		onSelect: null, // Define a callback function when a date is selected
 		onChangeMonthYear: null, // Define a callback function when the month or year is changed
 		onClose: null, // Define a callback function when the datepicker is closed
@@ -862,6 +863,10 @@ $.extend( Datepicker.prototype, {
 				origyearshtml = inst.yearshtml = null;
 			}, 0 );
 		}
+		
+		if(inst.settings.onRender) {
+                        inst.settings.onRender();
+                }
 	},
 
 	// #6694 - don't focus the input if it's already focused
