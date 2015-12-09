@@ -863,8 +863,7 @@ $.extend( Datepicker.prototype, {
 				origyearshtml = inst.yearshtml = null;
 			}, 0 );
 		}
-		
-		if(inst.settings.onRender) {
+		if ( inst.settings.onRender ) {
                         inst.settings.onRender();
                 }
 	},
