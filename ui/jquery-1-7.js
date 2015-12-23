@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Support for jQuery core 1.7.x @VERSION
+ * jQuery UI Support for jQuery core 1.7.x 1.12.0-beta.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

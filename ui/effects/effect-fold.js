@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Fold @VERSION
+ * jQuery UI Effects Fold 1.12.0-beta.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
