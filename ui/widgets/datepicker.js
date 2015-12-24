@@ -94,6 +94,7 @@ function Datepicker() {
 		dayNamesShort: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], // For formatting
 		dayNamesMin: [ "Su","Mo","Tu","We","Th","Fr","Sa" ], // Column headings for days starting at Sunday
 		weekHeader: "Wk", // Column header for week of the year
+		weekPosition: "left",
 		dateFormat: "mm/dd/yy", // See format options on parseDate
 		firstDay: 0, // The first day of the week, Sun = 0, Mon = 1, ...
 		isRTL: false, // True if right-to-left language, false if left-to-right
@@ -1734,6 +1735,7 @@ $.extend( Datepicker.prototype, {
 		firstDay = ( isNaN( firstDay ) ? 0 : firstDay );
 
 		showWeek = this._get( inst, "showWeek" );
+		weekPosition = (this._get(inst, "weekPosition") === "right") ? "right" : "left";
 		dayNames = this._get( inst, "dayNames" );
 		dayNamesMin = this._get( inst, "dayNamesMin" );
 		monthNames = this._get( inst, "monthNames" );
@@ -1771,12 +1773,15 @@ $.extend( Datepicker.prototype, {
 					row > 0 || col > 0, monthNames, monthNamesShort ) + // draw month headers
 					"</div><table class='ui-datepicker-calendar'><thead>" +
 					"<tr>";
-				thead = ( showWeek ? "<th class='ui-datepicker-week-col'>" + this._get( inst, "weekHeader" ) + "</th>" : "" );
+				thead = (( showWeek && weekPosition === "left" ) ? '<th class="ui-datepicker-week-col">' + this._get(inst, 'weekHeader') + '</th>' : "");
 				for ( dow = 0; dow < 7; dow++ ) { // days of the week
 					day = ( dow + firstDay ) % 7;
 					thead += "<th scope='col'" + ( ( dow + firstDay + 6 ) % 7 >= 5 ? " class='ui-datepicker-week-end'" : "" ) + ">" +
 						"<span title='" + dayNames[ day ] + "'>" + dayNamesMin[ day ] + "</span></th>";
 				}
+
+				thead += (( showWeek && weekPosition === "right" ) ? '<th class="ui-datepicker-week-col">' + this._get(inst, 'weekHeader') + '</th>' : "");
+
 				calender += thead + "</tr></thead><tbody>";
 				daysInMonth = this._getDaysInMonth( drawYear, drawMonth );
 				if ( drawYear === inst.selectedYear && drawMonth === inst.selectedMonth ) {
@@ -1789,8 +1794,8 @@ $.extend( Datepicker.prototype, {
 				printDate = this._daylightSavingAdjust( new Date( drawYear, drawMonth, 1 - leadDays ) );
 				for ( dRow = 0; dRow < numRows; dRow++ ) { // create date picker rows
 					calender += "<tr>";
-					tbody = ( !showWeek ? "" : "<td class='ui-datepicker-week-col'>" +
-						this._get( inst, "calculateWeek" )( printDate ) + "</td>" );
+					var calculatedWeek = this._get(inst, 'calculateWeek')(printDate);
+					var tbody = ( showWeek && weekPosition === "left" ) ? '<td class="ui-datepicker-week-col">' + calculatedWeek + '</td>' : "";
 					for ( dow = 0; dow < 7; dow++ ) { // create date picker days
 						daySettings = ( beforeShowDay ?
 							beforeShowDay.apply( ( inst.input ? inst.input[ 0 ] : null ), [ printDate ] ) : [ true, "" ] );
@@ -1820,6 +1825,7 @@ $.extend( Datepicker.prototype, {
 						printDate.setDate( printDate.getDate() + 1 );
 						printDate = this._daylightSavingAdjust( printDate );
 					}
+					tbody += ( showWeek && weekPosition === "right" ) ? '<td class="ui-datepicker-week-col">' + calculatedWeek + '</td>' : "";
 					calender += tbody + "</tr>";
 				}
 				drawMonth++;
