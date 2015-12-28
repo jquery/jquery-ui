@@ -1657,7 +1657,7 @@ $.extend( Datepicker.prototype, {
 	/* Generate the HTML for the current state of the date picker. */
 	_generateHTML: function( inst ) {
 		var maxDraw, prevText, prev, nextText, next, currentText, gotoDate,
-			controls, buttonPanel, firstDay, showWeek, dayNames, dayNamesMin,
+			controls, buttonPanel, firstDay, showWeek, weekPosition, dayNames, dayNamesMin,
 			monthNames, monthNamesShort, beforeShowDay, showOtherMonths,
 			selectOtherMonths, defaultDate, html, dow, row, group, col, selectedDate,
 			cornerClass, calender, thead, day, daysInMonth, leadDays, curRows, numRows,
@@ -1773,14 +1773,14 @@ $.extend( Datepicker.prototype, {
 					row > 0 || col > 0, monthNames, monthNamesShort ) + // draw month headers
 					"</div><table class='ui-datepicker-calendar'><thead>" +
 					"<tr>";
-				thead = (( showWeek && weekPosition === "left" ) ? '<th class="ui-datepicker-week-col">' + this._get(inst, 'weekHeader') + '</th>' : "");
+				thead = (( showWeek && weekPosition === "left" ) ? "<th class='ui-datepicker-week-col'>" + this._get(inst, "weekHeader") + "</th>" : "");
 				for ( dow = 0; dow < 7; dow++ ) { // days of the week
 					day = ( dow + firstDay ) % 7;
 					thead += "<th scope='col'" + ( ( dow + firstDay + 6 ) % 7 >= 5 ? " class='ui-datepicker-week-end'" : "" ) + ">" +
 						"<span title='" + dayNames[ day ] + "'>" + dayNamesMin[ day ] + "</span></th>";
 				}
 
-				thead += (( showWeek && weekPosition === "right" ) ? '<th class="ui-datepicker-week-col">' + this._get(inst, 'weekHeader') + '</th>' : "");
+				thead += (( showWeek && weekPosition === "right" ) ? "<th class='ui-datepicker-week-col'>" + this._get(inst, "weekHeader") + "</th>" : "");
 
 				calender += thead + "</tr></thead><tbody>";
 				daysInMonth = this._getDaysInMonth( drawYear, drawMonth );
@@ -1794,8 +1794,8 @@ $.extend( Datepicker.prototype, {
 				printDate = this._daylightSavingAdjust( new Date( drawYear, drawMonth, 1 - leadDays ) );
 				for ( dRow = 0; dRow < numRows; dRow++ ) { // create date picker rows
 					calender += "<tr>";
-					var calculatedWeek = this._get(inst, 'calculateWeek')(printDate);
-					var tbody = ( showWeek && weekPosition === "left" ) ? '<td class="ui-datepicker-week-col">' + calculatedWeek + '</td>' : "";
+					var calculatedWeek = this._get(inst, "calculateWeek")(printDate);
+					tbody = ( showWeek && weekPosition === "left" ) ? "<td class='ui-datepicker-week-col'>" + calculatedWeek + "</td>" : "";
 					for ( dow = 0; dow < 7; dow++ ) { // create date picker days
 						daySettings = ( beforeShowDay ?
 							beforeShowDay.apply( ( inst.input ? inst.input[ 0 ] : null ), [ printDate ] ) : [ true, "" ] );
@@ -1825,7 +1825,7 @@ $.extend( Datepicker.prototype, {
 						printDate.setDate( printDate.getDate() + 1 );
 						printDate = this._daylightSavingAdjust( printDate );
 					}
-					tbody += ( showWeek && weekPosition === "right" ) ? '<td class="ui-datepicker-week-col">' + calculatedWeek + '</td>' : "";
+					tbody += ( showWeek && weekPosition === "right" ) ? "<td class='ui-datepicker-week-col'>" + calculatedWeek + "</td>" : "";
 					calender += tbody + "</tr>";
 				}
 				drawMonth++;
