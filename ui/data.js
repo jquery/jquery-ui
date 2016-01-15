@@ -7,7 +7,7 @@
  * http://jquery.org/license
  */
 
-//>>label: :data
+//>>label: :data Selector
 //>>group: Core
 //>>description: Selects elements which have data stored under the specified key.
 //>>docs: http://api.jqueryui.com/data-selector/
