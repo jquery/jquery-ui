@@ -12,11 +12,12 @@
 	}
 	</style>
 	<script src="../../../external/requirejs/require.js"></script>
-	<script src="../../../demos/bootstrap.js">
+	<script src="../../../demos/bootstrap.js"
+		data-modules="effect effect-explode effect-bounce effect-blind effect-drop">
 		$( "pre" ).each(function( index, elem ) {
 			$( elem )
 				.attr( "title", "animated tooltips" )
-				.tooltip( $.parseJSON( $( elem ).text() ) );
+				.tooltip( JSON.parse( $( elem ).text() ) );
 		});
 	</script>
 </head>
