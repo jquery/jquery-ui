@@ -145,16 +145,16 @@ test( "Days", 1, function() {
 } );
 
 test( "Months", 5, function() {
-	var date = $.ui.date( null, attributes ),
-		firstMonth = date.months( 1 )[ 0 ],
-		lastMonth = date.months( 1 )[ 1 ];
+	var date = $.ui.date( new Date( 2015, 11 - 1, 15 ), attributes ),
+		currentMonth = date.months( 1 )[ 0 ],
+		nextMonth = date.months( 1 )[ 1 ];
 
-	ok( firstMonth.first );
-	ok( !lastMonth.first );
-	ok( lastMonth.last );
-	ok( !lastMonth.first );
+	ok( currentMonth.first, "Current month marked as first" );
+	ok( !nextMonth.first, "Next month not marked as first" );
+	ok( nextMonth.last, "Next month marked as last" );
 
-	equal( firstMonth.month(), lastMonth.month() - 1 );
+	equal( currentMonth.month(), 10, "Current month index is November" );
+	equal( nextMonth.month(), 11, "Next month index is December" );
 } );
 
 test( "Equal", 4, function() {
