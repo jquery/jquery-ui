@@ -140,7 +140,8 @@ function Datepicker() {
 		onChangeMonthYear: null, // Define a callback function when the month or year is changed
 		onClose: null, // Define a callback function when the datepicker is closed
 		numberOfMonths: 1, // Number of months to show at a time
-		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
+		showCurrentAtPos: 0, // The position in multiple months at which to show the current month (starting at 0)
+		showSelectorAtPos: 0, // Where to show the month/year selectors when using multiple months (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
 		stepBigMonths: 12, // Number of months to step back/forward for the big links
 		altField: "", // Selector for an alternate field to store selected dates into
@@ -1670,6 +1671,7 @@ $.extend( Datepicker.prototype, {
 			navigationAsDateFormat = this._get( inst, "navigationAsDateFormat" ),
 			numMonths = this._getNumberOfMonths( inst ),
 			showCurrentAtPos = this._get( inst, "showCurrentAtPos" ),
+			showSelectorAtPos = this._get( inst, "showSelectorAtPos" ),
 			stepMonths = this._get( inst, "stepMonths" ),
 			isMultiMonth = ( numMonths[ 0 ] !== 1 || numMonths[ 1 ] !== 1 ),
 			currentDate = this._daylightSavingAdjust( ( !inst.currentDay ? new Date( 9999, 9, 9 ) :
@@ -1678,7 +1680,9 @@ $.extend( Datepicker.prototype, {
 			maxDate = this._getMinMaxDate( inst, "max" ),
 			drawMonth = inst.drawMonth - showCurrentAtPos,
 			drawYear = inst.drawYear;
-
+		
+		if (showSelectorAtPos<0 || showSelectorAtPos>=(((numMonths[0]-1)*numMonths[1])+numMonths[1])) showSelectorAtPos=0;
+		
 		if ( drawMonth < 0 ) {
 			drawMonth += 12;
 			drawYear--;
@@ -1768,7 +1772,7 @@ $.extend( Datepicker.prototype, {
 					( /all|left/.test( cornerClass ) && row === 0 ? ( isRTL ? next : prev ) : "" ) +
 					( /all|right/.test( cornerClass ) && row === 0 ? ( isRTL ? prev : next ) : "" ) +
 					this._generateMonthYearHeader( inst, drawMonth, drawYear, minDate, maxDate,
-					row > 0 || col > 0, monthNames, monthNamesShort ) + // draw month headers
+					(row*numMonths[1] + col) !== showSelectorAtPos, monthNames, monthNamesShort ) + // draw month headers
 					"</div><table class='ui-datepicker-calendar'><thead>" +
 					"<tr>";
 				thead = ( showWeek ? "<th class='ui-datepicker-week-col'>" + this._get( inst, "weekHeader" ) + "</th>" : "" );
