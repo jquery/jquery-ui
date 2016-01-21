@@ -99,8 +99,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_create: function() {
 
-		var n, i, handle, axis, hname, margins,
-			that = this,
+		var margins,
 			o = this.options;
 		this._addClass( "ui-resizable" );
 
@@ -159,6 +158,80 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			this._proportionallyResize();
 		}
 
+		this._setupHandles();
+
+		if ( o.autoHide ) {
+			$( this.element )
+				.on( "mouseenter", function() {
+					if ( o.disabled ) {
+						return;
+					}
+					that._removeClass( "ui-resizable-autohide" );
+					that._handles.show();
+				} )
+				.on( "mouseleave", function() {
+					if ( o.disabled ) {
+						return;
+					}
+					if ( !that.resizing ) {
+						that._addClass( "ui-resizable-autohide" );
+						that._handles.hide();
+					}
+				} );
+		}
+
+		this._mouseInit();
+	},
+
+	_destroy: function() {
+
+		this._mouseDestroy();
+
+		var wrapper,
+			_destroy = function( exp ) {
+				$( exp )
+					.removeData( "resizable" )
+					.removeData( "ui-resizable" )
+					.off( ".resizable" )
+					.find( ".ui-resizable-handle" )
+						.remove();
+			};
+
+		// TODO: Unwrap at same DOM position
+		if ( this.elementIsWrapper ) {
+			_destroy( this.element );
+			wrapper = this.element;
+			this.originalElement.css( {
+				position: wrapper.css( "position" ),
+				width: wrapper.outerWidth(),
+				height: wrapper.outerHeight(),
+				top: wrapper.css( "top" ),
+				left: wrapper.css( "left" )
+			} ).insertAfter( wrapper );
+			wrapper.remove();
+		}
+
+		this.originalElement.css( "resize", this.originalResizeStyle );
+		_destroy( this.originalElement );
+
+		return this;
+	},
+
+	_setOption: function( key, value ) {
+		this._super( key, value );
+
+		switch ( key ) {
+		case "handles":
+			this._removeHandles();
+			this._setupHandles();
+			break;
+		default:
+			break;
+		}
+	},
+
+	_setupHandles: function() {
+		var o = this.options, handle, i, n, hname, axis, that = this;
 		this.handles = o.handles ||
 			( !$( ".ui-resizable-handle", this.element ).length ?
 				"e,s,se" : {
@@ -250,60 +323,11 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		if ( o.autoHide ) {
 			this._handles.hide();
 			this._addClass( "ui-resizable-autohide" );
-			$( this.element )
-				.on( "mouseenter", function() {
-					if ( o.disabled ) {
-						return;
-					}
-					that._removeClass( "ui-resizable-autohide" );
-					that._handles.show();
-				} )
-				.on( "mouseleave", function() {
-					if ( o.disabled ) {
-						return;
-					}
-					if ( !that.resizing ) {
-						that._addClass( "ui-resizable-autohide" );
-						that._handles.hide();
-					}
-				} );
 		}
-
-		this._mouseInit();
 	},
 
-	_destroy: function() {
-
-		this._mouseDestroy();
-
-		var wrapper,
-			_destroy = function( exp ) {
-				$( exp )
-					.removeData( "resizable" )
-					.removeData( "ui-resizable" )
-					.off( ".resizable" )
-					.find( ".ui-resizable-handle" )
-						.remove();
-			};
-
-		// TODO: Unwrap at same DOM position
-		if ( this.elementIsWrapper ) {
-			_destroy( this.element );
-			wrapper = this.element;
-			this.originalElement.css( {
-				position: wrapper.css( "position" ),
-				width: wrapper.outerWidth(),
-				height: wrapper.outerHeight(),
-				top: wrapper.css( "top" ),
-				left: wrapper.css( "left" )
-			} ).insertAfter( wrapper );
-			wrapper.remove();
-		}
-
-		this.originalElement.css( "resize", this.originalResizeStyle );
-		_destroy( this.originalElement );
-
-		return this;
+	_removeHandles: function() {
+		this._handles.remove();
 	},
 
 	_mouseCapture: function( event ) {
