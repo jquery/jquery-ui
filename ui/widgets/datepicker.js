@@ -1680,7 +1680,7 @@ $.extend( Datepicker.prototype, {
 			maxDate = this._getMinMaxDate( inst, "max" ),
 			drawMonth = inst.drawMonth - showCurrentAtPos,
 			drawYear = inst.drawYear;
-		if ( showSelectorAtPos < 0 || showSelectorAtPos >= ( ( ( numMonths[ 0 ] - 1 )*numMonths[ 1 ] ) + numMonths[ 1 ]) ) { 
+		if ( showSelectorAtPos < 0 || showSelectorAtPos >= ( ( ( numMonths[ 0 ] - 1 ) * numMonths[ 1 ] ) + numMonths[ 1 ] ) ) {
 			showSelectorAtPos = 0;
 		}
 		if ( drawMonth < 0 ) {
