@@ -52,7 +52,7 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"commitplease": "2.0.0",
+		"commitplease": "2.3.0",
 		"grunt": "0.4.5",
 		"grunt-bowercopy": "1.2.4",
 		"grunt-compare-size": "0.4.0",
