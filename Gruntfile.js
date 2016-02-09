@@ -238,21 +238,6 @@ grunt.initConfig({
 		}
 	},
 
-	esformatter: {
-		options: {
-			preset: "jquery"
-		},
-		ui: "ui/*.js",
-		tests: "tests/unit/**/*.js",
-		build: {
-			options: {
-				skipHashbang: true
-			},
-			src: "build/**/*.js"
-		},
-		grunt: "Gruntfile.js"
-	},
-
 	bowercopy: {
 		all: {
 			options: {
