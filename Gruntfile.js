@@ -378,7 +378,7 @@ grunt.initConfig({
 });
 
 grunt.registerTask( "update-authors", function() {
-	var getAuthors = require( "grunt-git-authors" ),
+	var getAuthors = require( "grunt-git-authors" ).getAuthors,
 		done = this.async();
 
 	getAuthors({
