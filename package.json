@@ -61,7 +61,7 @@
 		"grunt-contrib-jshint": "0.12.0",
 		"grunt-contrib-qunit": "1.0.1",
 		"grunt-contrib-requirejs": "0.4.4",
-		"grunt-contrib-uglify": "0.1.1",
+		"grunt-contrib-uglify": "0.11.1",
 		"grunt-esformatter": "0.2.0",
 		"grunt-git-authors": "2.0.0",
 		"grunt-html": "4.0.1",
