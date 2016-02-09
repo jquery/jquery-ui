@@ -517,19 +517,19 @@ test( "minMax", function() {
 	inp.datepicker( "setDate", "12/30/" + new Date().getFullYear() );
 	ok( dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - next button disabled at 12/30/maxYear" );
 
-	inp.datepicker( "option", {
+	inp.val( "" ).datepicker( "option", {
 		minDate: new Date( 1900, 0, 1 ),
 		maxDate: "-7Y",
 		yearRange: "1900:-7"
-	} ).val( "" );
+	} );
 	ok( dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - relative - next button disabled" );
 	ok( !dp.find( ".ui-datepicker-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - relative - prev button enabled" );
 
-	inp.datepicker( "option", {
+	inp.val( "" ).datepicker( "option", {
 		minDate: new Date( 1900, 0, 1 ),
 		maxDate: "1/25/2007",
 		yearRange: "1900:2007"
-	} ).val( "" );
+	} );
 	ok( dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - absolute - next button disabled" );
 	ok( !dp.find( ".ui-datepicker-prev" ).hasClass( "ui-state-disabled" ), "Year Range Test - absolute - prev button enabled" );
 } );
