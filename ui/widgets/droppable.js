@@ -366,9 +366,10 @@ $.ui.ddmanager = {
 			$.ui.ddmanager.prepareOffsets( draggable, event );
 		}
 
+		var droppables = $.ui.ddmanager.droppables[ draggable.options.scope ] || [];
+		
 		// Run through all droppables and check their positions based on specific tolerance options
-		$.each( $.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
-
+		$.each( droppables, function() {
 			if ( this.options.disabled || this.greedyChild || !this.visible ) {
 				return;
 			}
@@ -390,27 +391,40 @@ $.ui.ddmanager = {
 
 				if ( parent.length ) {
 					parentInstance = $( parent[ 0 ] ).droppable( "instance" );
-					parentInstance.greedyChild = ( c === "isover" );
+					parentInstance.enteredGreedyChild = parentInstance.enteredGreedyChild || ( c === "isover" );
+					parentInstance.leftGreedyChild = parentInstance.leftGreedyChild || ( c === "isout" );
 				}
-			}
-
-			// We just moved into a greedy child
-			if ( parentInstance && c === "isover" ) {
-				parentInstance.isover = false;
-				parentInstance.isout = true;
-				parentInstance._out.call( parentInstance, event );
 			}
 
 			this[ c ] = true;
 			this[ c === "isout" ? "isover" : "isout" ] = false;
-			this[ c === "isover" ? "_over" : "_out" ].call( this, event );
-
-			// We just moved out of a greedy child
-			if ( parentInstance && c === "isout" ) {
-				parentInstance.isout = false;
-				parentInstance.isover = true;
-				parentInstance._over.call( parentInstance, event );
+			this.c = c;
+		} );
+		
+		$.each( droppables, function() {
+			if ( this.enteredGreedyChild ) {
+				this.greedyChild = true
+				this.isover = false
+				this.isout = true
+				this.c = "isout"
 			}
+			// Only move into the parent if we haven't moved into another greedy child
+			if ( this.leftGreedyChild && !this.enteredGreedyChild ) {
+				this.greedyChild = false
+				this.isover = true
+				this.isout = false
+				this.c = "isover"
+			}
+
+			if ( !this.c ) {
+				return;
+			}
+
+			this[this.c === "isover" ? "_over" : "_out"].call( this, event );
+
+			this.leftGreedyChild = false;
+			this.enteredGreedyChild = false;
+			this.c = null;
 		} );
 
 	},
