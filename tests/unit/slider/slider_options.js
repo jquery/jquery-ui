@@ -40,7 +40,7 @@ test( "disabled", function(){
 });
 
 test( "max", function() {
-	expect( 5 );
+	expect( 7 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -54,7 +54,7 @@ test( "max", function() {
 	element.slider( options );
 	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
 	ok( element.slider( "value" ) === options.max, "value method is contained by max" );
-	
+
 	options = {
 		max: 9,
 		min: 1,
@@ -65,7 +65,7 @@ test( "max", function() {
 
 	element.slider( options );
 	ok( element.slider( "value" ) === 7, "value method is within max, edge Case" );
-	
+
 	options.step = 2;
 
 	element.slider( options );
@@ -84,7 +84,24 @@ test( "max", function() {
 	ok( element.slider( "value" ) === options.max, "value method will max, step is changed and step is float" );
 	element.slider( "destroy" );
 
-});
+	options = {
+		max: 10.75,
+		min: 1.22,
+		orientation: "horizontal",
+		step: 0.01,
+		value: 10.75
+	};
+
+	element.slider( options );
+	ok( element.slider( "value" ) === options.max, "value method will max, step is changed, step is float and max is float" );
+	element.slider( "destroy" );
+
+	options.max = 10.749999999;
+
+	element.slider( options );
+	ok( element.slider( "value" ) === 10.74, "value method will max, step is changed, step is float, max is float and not divisible" );
+	element.slider( "destroy" );
+} );
 
 test( "min", function() {
 	expect( 2 );
