@@ -82,7 +82,7 @@ $.widget( "ui.autocomplete", {
 		// Inputs are always single-line, even if inside a contentEditable element
 		// IE also treats inputs as contentEditable
 		// All other element types are determined by whether or not they're contentEditable
-		this.isMultiLine = isTextarea || !isInput && this.element.prop( "isContentEditable" );
+		this.isMultiLine = isTextarea || !isInput && this._isContentEditable( this.element );
 
 		this.valueMethod = this.element[ isTextarea || isInput ? "val" : "text" ];
 		this.isNewMenu = true;
@@ -614,6 +614,22 @@ $.widget( "ui.autocomplete", {
 			// Prevents moving cursor to beginning/end of the text field in some browsers
 			event.preventDefault();
 		}
+	},
+
+	// Support: Chrome <=50
+	// We should be able to just use this.element.prop( "isContentEditable" )
+	// but hidden elements always report false in Chrome.
+	// https://code.google.com/p/chromium/issues/detail?id=313082
+	_isContentEditable: function( element ) {
+		if ( !element.length ) {
+			return false;
+		}
+
+		var editable = element.prop( "contentEditable" );
+
+		return editable === "true" ? true :
+			editable === "false" ? false :
+			this._isContentEditable( element.parent() );
 	}
 } );
 
