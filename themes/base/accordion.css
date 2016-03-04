@@ -21,3 +21,14 @@
 	border-top: 0;
 	overflow: auto;
 }
+
+/* RTL support */
+.ui-accordion-rtl {
+	direction: rtl;
+}
+.ui-accordion-rtl .ui-accordion .ui-accordion-header {
+	padding: .5em .7em .5em .5em;
+}
+.ui-accordion-header-iconRtl.ui-icon {
+	transform: scaleX(-1);
+}

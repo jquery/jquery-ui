@@ -331,6 +331,10 @@ $.Widget.prototype = {
 		return {};
 	},
 
+	isRtl: function() {
+		return this.element.css( "direction" ) === "rtl";
+	},
+
 	_getCreateEventData: $.noop,
 
 	_create: $.noop,
