@@ -13,22 +13,11 @@
 	cursor: pointer;
 	position: relative;
 	margin: 2px 0 0 0;
-	padding: .5em .5em .5em .7em;
+	padding: .5em;
 	font-size: 100%;
 }
 .ui-accordion .ui-accordion-content {
 	padding: 1em 2.2em;
 	border-top: 0;
 	overflow: auto;
-}
-
-/* RTL support */
-.ui-accordion-rtl {
-	direction: rtl;
-}
-.ui-accordion-rtl .ui-accordion .ui-accordion-header {
-	padding: .5em .7em .5em .5em;
-}
-.ui-accordion-header-iconRtl.ui-icon {
-	transform: scaleX(-1);
 }

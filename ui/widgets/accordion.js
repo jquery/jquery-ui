@@ -78,9 +78,6 @@ return $.widget( "ui.accordion", {
 		var options = this.options;
 
 		this.prevShow = this.prevHide = $();
-		if ( this.isRtl() ) {
-			this._addClass( ".ui-accordion-rtl" );
-		}
 		this._addClass( "ui-accordion", "ui-widget ui-helper-reset" );
 		this.element.attr( "role", "tablist" );
 
@@ -111,9 +108,6 @@ return $.widget( "ui.accordion", {
 
 		if ( icons ) {
 			icon = $( "<span>" );
-			if ( this.isRtl() ) {
-				this._addClass( icon, "ui-accordion-header-iconRtl" );
-			}
 			this._addClass( icon, "ui-accordion-header-icon", "ui-icon " + icons.header );
 			icon.prependTo( this.headers );
 			children = this.active.children( ".ui-accordion-header-icon" );

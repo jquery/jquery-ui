@@ -8,7 +8,12 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
-		$( "#accordion" ).accordion();
+		var icons = {
+			header: "ui-icon-triangle-1-w"
+		};
+		$( "#accordion" ).accordion({
+			icons: icons
+		});
 	</script>
 </head>
 <body dir="rtl">
