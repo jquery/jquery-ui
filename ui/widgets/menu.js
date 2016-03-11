@@ -487,6 +487,10 @@ return $.widget( "ui.menu", {
 			this._close( currentMenu );
 
 			this.blur( event );
+
+			// Work around active item staying active after menu is blurred
+			this._removeClass( currentMenu.find( ".ui-state-active" ), null, "ui-state-active" );
+
 			this.activeMenu = currentMenu;
 		}, this.delay );
 	},
@@ -498,14 +502,10 @@ return $.widget( "ui.menu", {
 			startMenu = this.active ? this.active.parent() : this.element;
 		}
 
-		var active = startMenu
-			.find( ".ui-menu" )
-				.hide()
-				.attr( "aria-hidden", "true" )
-				.attr( "aria-expanded", "false" )
-			.end()
-			.find( ".ui-state-active" ).not( ".ui-menu-item-wrapper" );
-		this._removeClass( active, null, "ui-state-active" );
+		startMenu.find( ".ui-menu" )
+			.hide()
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" );
 	},
 
 	_closeOnDocumentClick: function( event ) {
