@@ -169,6 +169,9 @@ $.widget( "ui.button", {
 		// If the icon is on top or bottom we need to add the ui-widget-icon-block class and remove
 		// the iconSpace if there is one.
 		if ( displayBlock ) {
+			if ( this.isRtl() ) {
+				this._addClass( this.icon, null, "ui-rtl" );
+			}
 			this._addClass( this.icon, null, "ui-widget-icon-block" );
 			if ( this.iconSpace ) {
 				this.iconSpace.remove();
