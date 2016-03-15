@@ -224,7 +224,7 @@ $.widget( "ui.autocomplete", {
 
 		this._addClass( this.menu.element, "ui-autocomplete", "ui-front" );
 		if ( this.isRtl() ) {
-			this._addClass( this.menu.element, "ui-autocomplete-menu-rtl" );
+			this._addClass( this.menu.element, "ui-rtl" );
 		}
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
@@ -542,10 +542,9 @@ $.widget( "ui.autocomplete", {
 		// Size and position menu
 		ul.show();
 		this._resizeMenu();
-		var pos = this.isRtl() ? { my: "right top", at: "right bottom", collision: "none" } : this.options.position;
 		ul.position( $.extend( {
 			of: this.element
-		}, pos ) );
+		}, this.options.position ) );
 
 		if ( this.options.autoFocus ) {
 			this.menu.next();
@@ -556,7 +555,6 @@ $.widget( "ui.autocomplete", {
 			mousedown: "_closeOnClickOutside"
 		} );
 	},
-
 	_resizeMenu: function() {
 		var ul = this.menu.element;
 		ul.outerWidth( Math.max(

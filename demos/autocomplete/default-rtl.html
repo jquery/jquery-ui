@@ -24,6 +24,7 @@
 			"Haskell",
 			"Java",
 			"JavaScript",
+			"J too loooooooooooooooooooooooong item",
 			"Lisp",
 			"Perl",
 			"PHP",
@@ -35,6 +36,12 @@
 		$( "#tags" ).autocomplete({
 			source: availableTags
 		});
+		var instance = $( "#tags" ).autocomplete("instance");
+		var pos = {	my: "left top",	at: "left bottom", collision: "none" };
+		if(instance.isRtl()){
+			pos = {	my: "right top", at: "right bottom", collision: "none" };
+		}
+		instance.option("position", pos);
 	</script>
 </head>
 <body>

@@ -14,6 +14,6 @@
 	left: 0;
 	cursor: default;
 }
-.ui-autocomplete-menu-rtl {
+.ui-rtl {
 	direction: rtl;
 }
