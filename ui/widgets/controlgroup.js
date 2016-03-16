@@ -213,6 +213,9 @@ return $.widget( "ui.controlgroup", {
 		var children,
 			that = this;
 
+		if ( this.isRtl() ) {
+			this._addClass( "ui-controlgroup-rtl" );
+		}
 		this._addClass( "ui-controlgroup ui-controlgroup-" + this.options.direction );
 
 		if ( this.options.direction === "horizontal" ) {

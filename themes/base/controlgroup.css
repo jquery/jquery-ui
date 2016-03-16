@@ -63,3 +63,19 @@
 	border-top-style: solid;
 }
 
+/* Rtl support*/
+.ui-controlgroup-rtl.ui-controlgroup > .ui-controlgroup-item {
+	float: right;
+}
+.ui-controlgroup-rtl.ui-controlgroup-vertical > .ui-controlgroup-item {
+	float: none;
+	text-align: right;
+}
+.ui-controlgroup-rtl.ui-controlgroup-horizontal .ui-controlgroup-label + .ui-controlgroup-item {
+	border-left: none;
+	border-right: none;
+}
+.ui-controlgroup-rtl.ui-controlgroup-horizontal .ui-controlgroup-label.ui-widget-content {
+	border-right: none;
+	border-left: none;
+}
