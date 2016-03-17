@@ -100,7 +100,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 	_create: function() {
 
 		var margins,
-			o = this.options;
+			o = this.options,
+			that = this;
 		this._addClass( "ui-resizable" );
 
 		$.extend( this, {
