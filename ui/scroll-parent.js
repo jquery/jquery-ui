@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Scroll Parent @VERSION
+ * jQuery UI Scroll Parent 1.12.0-rc.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

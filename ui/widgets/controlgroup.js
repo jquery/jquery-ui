@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Controlgroup @VERSION
+ * jQuery UI Controlgroup 1.12.0-rc.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -32,7 +32,7 @@
 }( function( $ ) {
 
 return $.widget( "ui.controlgroup", {
-	version: "@VERSION",
+	version: "1.12.0-rc.1",
 	defaultElement: "<div>",
 	options: {
 		direction: "horizontal",

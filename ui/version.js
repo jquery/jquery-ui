@@ -12,6 +12,6 @@
 
 $.ui = $.ui || {};
 
-return $.ui.version = "@VERSION";
+return $.ui.version = "1.12.0-rc.1";
 
 } ) );

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Tooltip @VERSION
+ * jQuery UI Tooltip 1.12.0-rc.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -36,7 +36,7 @@
 }( function( $ ) {
 
 $.widget( "ui.tooltip", {
-	version: "@VERSION",
+	version: "1.12.0-rc.1",
 	options: {
 		classes: {
 			"ui-tooltip": "ui-corner-all ui-widget-shadow"

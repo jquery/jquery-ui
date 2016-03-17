@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Checkboxradio @VERSION
+ * jQuery UI Checkboxradio 1.12.0-rc.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -36,7 +36,7 @@
 }( function( $ ) {
 
 $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
-	version: "@VERSION",
+	version: "1.12.0-rc.1",
 	options: {
 		disabled: null,
 		label: null,
