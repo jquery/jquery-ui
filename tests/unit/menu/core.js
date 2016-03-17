@@ -73,4 +73,34 @@ asyncTest( "#9532: Need a way in Menu to keep ui-state-active class on selected 
 	} );
 } );
 
+asyncTest( "active menu item styling", function( assert ) {
+	expect( 5 );
+	function isActive( item ) {
+		assert.hasClasses( item.children( ".ui-menu-item-wrapper" ), "ui-state-active" );
+	}
+	function isInactive( item ) {
+		assert.lacksClasses( item.children( ".ui-menu-item-wrapper" ), "ui-state-active" );
+	}
+	$.ui.menu.prototype.delay = 0;
+	var element = $( "#menu4" ).menu();
+	var parentItem = element.children( "li:eq(1)" );
+	var childItem = parentItem.find( "li:eq(0)" );
+	element.menu( "focus", null, parentItem );
+	setTimeout( function() {
+		isActive( parentItem );
+		element.menu( "focus", null, childItem );
+		setTimeout( function() {
+			isActive( parentItem );
+			isActive( childItem );
+			element.blur();
+			setTimeout( function() {
+				isInactive( parentItem );
+				isInactive( childItem );
+				$.ui.menu.prototype.delay = 300;
+				start();
+			}, 50 );
+		} );
+	} );
+} );
+
 } );

@@ -238,21 +238,6 @@ grunt.initConfig({
 		}
 	},
 
-	esformatter: {
-		options: {
-			preset: "jquery"
-		},
-		ui: "ui/*.js",
-		tests: "tests/unit/**/*.js",
-		build: {
-			options: {
-				skipHashbang: true
-			},
-			src: "build/**/*.js"
-		},
-		grunt: "Gruntfile.js"
-	},
-
 	bowercopy: {
 		all: {
 			options: {
@@ -393,7 +378,7 @@ grunt.initConfig({
 });
 
 grunt.registerTask( "update-authors", function() {
-	var getAuthors = require( "grunt-git-authors" ),
+	var getAuthors = require( "grunt-git-authors" ).getAuthors,
 		done = this.async();
 
 	getAuthors({

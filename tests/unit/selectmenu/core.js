@@ -6,18 +6,22 @@ define( [
 module( "selectmenu: core" );
 
 test( "markup structure", function( assert ) {
-	expect( 4 );
+	expect( 7 );
 
 	var element = $( "#files" ).selectmenu(),
 		button = element.selectmenu( "widget" ),
+		icon = button.find( ".ui-icon" ),
 		menu = element.selectmenu( "menuWidget" ),
 		menuWrap = menu.parent();
 
+	assert.strictEqual( icon.length, 1, "Exactly one icon exists" );
+	assert.hasClasses( icon, "ui-selectmenu-icon" );
 	assert.hasClasses( button,
 		"ui-selectmenu-button ui-selectmenu-button-closed ui-widget" );
 	assert.lacksClasses( button, "ui-selectmenu-button-open ui-selectmenu-open" );
 	assert.hasClasses( menuWrap, "ui-selectmenu-menu" );
 	assert.lacksClasses( menuWrap, "ui-selectmenu-menu-open" );
+	assert.strictEqual( icon[ 0 ], button.children().last()[ 0 ], "Icon is last child of button" );
 } );
 
 asyncTest( "accessibility", function() {

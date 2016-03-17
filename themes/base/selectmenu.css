@@ -40,3 +40,7 @@
 	white-space: nowrap;
 	width: 14em;
 }
+.ui-selectmenu-icon.ui-icon {
+	float: right;
+	margin-top: 0;
+}

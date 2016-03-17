@@ -143,14 +143,19 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	},
 
 	_blurActiveElement: function( event ) {
+		var activeElement = $.ui.safeActiveElement( this.document[ 0 ] ),
+			target = $( event.target );
 
-		// Only need to blur if the event occurred on the draggable itself, see #10527
-		if ( !this.handleElement.is( event.target ) ) {
+		// Only blur if the event occurred on an element that is:
+		// 1) within the draggable handle
+		// 2) but not within the currently focused element
+		// See #10527, #12472
+		if ( this._getHandle( event ) && target.closest( activeElement ).length ) {
 			return;
 		}
 
 		// Blur any element that currently has focus, see #4261
-		$.ui.safeBlur( $.ui.safeActiveElement( this.document[ 0 ] ) );
+		$.ui.safeBlur( activeElement );
 	},
 
 	_mouseStart: function( event ) {

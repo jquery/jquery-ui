@@ -1411,7 +1411,7 @@ $.extend( Datepicker.prototype, {
 							break;
 						case "y":
 							output += ( lookAhead( "y" ) ? date.getFullYear() :
-								( date.getYear() % 100 < 10 ? "0" : "" ) + date.getYear() % 100 );
+								( date.getFullYear() % 100 < 10 ? "0" : "" ) + date.getFullYear() % 100 );
 							break;
 						case "@":
 							output += date.getTime();
