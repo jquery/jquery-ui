@@ -99,3 +99,21 @@
 .ui-draggable .ui-dialog-titlebar {
 	cursor: move;
 }
+/* Rtl Support */
+.ui-dialog-rtl.ui-dialog .ui-dialog-titlebar-close {
+	right: auto;
+	left: .3em;
+}
+.ui-dialog-rtl.ui-dialog .ui-dialog-title {
+	float: right;
+}
+.ui-dialog-rtl.ui-dialog .ui-dialog-buttonpane {
+	text-align: right;
+	padding: .3em .4em .5em 1em;
+}
+.ui-dialog-rtl.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+	float: left;
+}
+.ui-dialog-rtl.ui-dialog .ui-dialog-buttonpane button {
+	margin: .5em 0 .5em .4em;
+}

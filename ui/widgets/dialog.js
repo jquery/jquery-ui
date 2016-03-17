@@ -354,6 +354,9 @@ $.widget( "ui.dialog", {
 			} )
 			.appendTo( this._appendTo() );
 
+		if ( this.isRtl() ) {
+			this._addClass( this.uiDialog, "ui-dialog-rtl" );
+		}
 		this._addClass( this.uiDialog, "ui-dialog", "ui-widget ui-widget-content ui-front" );
 		this._on( this.uiDialog, {
 			keydown: function( event ) {
