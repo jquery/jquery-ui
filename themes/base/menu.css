@@ -13,7 +13,7 @@
 	padding: 0;
 	margin: 0;
 	display: block;
-	outline: none;
+	outline: 0;
 }
 .ui-menu .ui-menu {
 	position: absolute;
