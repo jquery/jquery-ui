@@ -237,6 +237,9 @@ $.widget( "ui.spinner", {
 	_draw: function() {
 		this._enhance();
 
+		if ( this.isRtl() ) {
+			this._addClass( this.uiSpinner, "ui-spinner-rtl" );
+		}
 		this._addClass( this.uiSpinner, "ui-spinner", "ui-widget ui-widget-content" );
 		this._addClass( "ui-spinner-input" );
 

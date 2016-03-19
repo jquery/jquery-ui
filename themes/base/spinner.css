@@ -50,3 +50,17 @@
 .ui-spinner-down {
 	bottom: 0;
 }
+/* Rtl Support*/
+.ui-spinner-rtl .ui-spinner-input {
+	margin-left: 2em;
+	margin-right: .4em;
+}
+.ui-spinner-rtl .ui-spinner-button {
+	right: auto;
+	left: 0;
+}
+.ui-spinner-rtl.ui-spinner a.ui-spinner-button {
+	border-right-style: inherit;
+	border-left-style: none;
+}
+
