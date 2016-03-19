@@ -40,3 +40,10 @@
 	white-space: nowrap;
 	width: 14em;
 }
+/* Rtl Support */
+.ui-selectmenu-rtl {
+	direction: rtl;
+}
+.ui-selectmenu-rtl.ui-selectmenu-button.ui-button {
+	text-align: right;
+}

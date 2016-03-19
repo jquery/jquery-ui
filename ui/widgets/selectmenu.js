@@ -116,6 +116,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		} )
 			.insertAfter( this.element );
 
+		if ( this.isRtl() ) {
+			this._addClass( this.button, "ui-selectmenu-rtl" );
+		}
 		this._addClass( this.button, "ui-selectmenu-button ui-selectmenu-button-closed",
 			"ui-button ui-widget" );
 
@@ -155,6 +158,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 
 		// Wrap menu
 		this.menuWrap = $( "<div>" ).append( this.menu );
+		if ( this.isRtl() ) {
+			this._addClass( this.menuWrap, "ui-selectmenu-rtl" );
+		}
 		this._addClass( this.menuWrap, "ui-selectmenu-menu", "ui-front" );
 		this.menuWrap.appendTo( this._appendTo() );
 
