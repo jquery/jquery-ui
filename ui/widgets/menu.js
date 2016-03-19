@@ -71,6 +71,9 @@ return $.widget( "ui.menu", {
 				tabIndex: 0
 			} );
 
+		if ( this.isRtl() ) {
+			this._addClass( "ui-menu-rtl" );
+		}
 		this._addClass( "ui-menu", "ui-widget ui-widget-content" );
 		this._on( {
 

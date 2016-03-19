@@ -62,3 +62,20 @@
 	left: auto;
 	right: 0;
 }
+/* Rtl Support*/
+
+.ui-menu-rtl.ui-menu .ui-menu-item-wrapper {
+	padding: 3px .4em 3px 1em;
+}
+.ui-menu-rtl.ui-menu-icons .ui-menu-item-wrapper {
+	padding-left: 0;
+	padding-right: 2em;
+}
+.ui-menu-rtl.ui-menu .ui-icon {
+	left: auto;
+	right: .2em;
+}
+.ui-menu-rtl.ui-menu .ui-menu-icon {
+	left: 0;
+	right: auto;
+}
