@@ -49,3 +49,11 @@
 	padding: 1em 1.4em;
 	background: none;
 }
+/* Rtl Support */
+.ui-tabs-rtl.ui-tabs .ui-tabs-nav li {
+	float: right;
+	margin: 1px 0 0 .2em;
+}
+.ui-tabs-rtl.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	float: right;
+}

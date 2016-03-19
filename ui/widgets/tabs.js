@@ -87,6 +87,9 @@ $.widget( "ui.tabs", {
 
 		this.running = false;
 
+		if ( this.isRtl() ) {
+			this._addClass( "ui-tabs-rtl" );
+		}
 		this._addClass( "ui-tabs", "ui-widget ui-widget-content" );
 		this._toggleClass( "ui-tabs-collapsible", null, options.collapsible );
 
