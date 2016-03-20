@@ -73,3 +73,19 @@
 .ui-slider-vertical .ui-slider-range-max {
 	top: 0;
 }
+/* Rtl Support*/
+.ui-slider-rtl.ui-slider {
+	text-align: right;
+}
+.ui-slider-rtl.ui-slider-horizontal .ui-slider-handle {
+	margin-left: 0;
+	margin-right: -.6em;
+}
+.ui-slider-rtl.ui-slider-horizontal .ui-slider-range-min {
+	left: auto;
+	right: 0;
+}
+.ui-slider-rtl.ui-slider-horizontal .ui-slider-range-max {
+	right: auto;
+	left: 0;
+}

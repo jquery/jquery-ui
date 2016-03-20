@@ -77,6 +77,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseInit();
 		this._calculateNewMax();
 
+		if ( this.isRtl() ) {
+			this._addClass( "ui-slider-rtl" );
+		}
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
 			"ui-widget ui-widget-content" );
 
@@ -287,7 +290,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		if ( percentMouse < 0 ) {
 			percentMouse = 0;
 		}
-		if ( this.orientation === "vertical" ) {
+		if ( this.orientation === "vertical" || this.isRtl() ) {
 			percentMouse = 1 - percentMouse;
 		}
 
@@ -587,16 +590,18 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			that = this,
 			animate = ( !this._animateOff ) ? o.animate : false,
 			_set = {};
+		var handlePos = this.isRtl() ? "right" : "left";
 
 		if ( this._hasMultipleValues() ) {
 			this.handles.each( function( i ) {
 				valPercent = ( that.values( i ) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
-				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
+				_set[ that.orientation === "horizontal" ? handlePos : "bottom" ] = valPercent + "%";
 				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 				if ( that.options.range === true ) {
 					if ( that.orientation === "horizontal" ) {
 						if ( i === 0 ) {
-							that.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { left: valPercent + "%" }, o.animate );
+							var pos = handlePos === "right" ? { right: valPercent + "%" } : { left: valPercent + "%" };
+							that.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( pos, o.animate );
 						}
 						if ( i === 1 ) {
 							that.range[ animate ? "animate" : "css" ]( { width: ( valPercent - lastValPercent ) + "%" }, { queue: false, duration: o.animate } );
@@ -619,7 +624,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valPercent = ( valueMax !== valueMin ) ?
 					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
 					0;
-			_set[ this.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
+			_set[ this.orientation === "horizontal" ? handlePos : "bottom" ] = valPercent + "%";
 			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 
 			if ( oRange === "min" && this.orientation === "horizontal" ) {
