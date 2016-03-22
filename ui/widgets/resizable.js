@@ -617,6 +617,9 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			data.left = null;
 		}
 
+		if ( this.isRtl() && /se|sw|w|e|ne|nw/.test( a ) && ( isminw || ismaxw ) ) {
+			data.left = null;
+		}
 		return data;
 	},
 
@@ -707,10 +710,16 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_change: {
 		e: function( event, dx ) {
+			if ( this.isRtl() ) {
+				return { left: this.originalPosition.left + dx, width: this.originalSize.width + dx };
+			}
 			return { width: this.originalSize.width + dx };
 		},
 		w: function( event, dx ) {
 			var cs = this.originalSize, sp = this.originalPosition;
+			if ( this.isRtl() ) {
+				return { width: cs.width - dx };
+			}
 			return { left: sp.left + dx, width: cs.width - dx };
 		},
 		n: function( event, dx, dy ) {
