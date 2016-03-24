@@ -582,7 +582,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			isminw = this._isNumber( data.width ) && o.minWidth && ( o.minWidth > data.width ),
 			isminh = this._isNumber( data.height ) && o.minHeight && ( o.minHeight > data.height ),
 			dw = this.originalPosition.left + this.originalSize.width,
-			dh = this.position.top + this.size.height,
+			dh = this.originalPosition.top + this.originalSize.height,
 			cw = /sw|nw|w/.test( a ), ch = /nw|ne|n/.test( a );
 		if ( isminw ) {
 			data.width = o.minWidth;
