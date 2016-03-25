@@ -147,7 +147,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		this.menu = $( "<ul>", {
 			"aria-hidden": "true",
 			"aria-labelledby": this.ids.button,
-			id: this.ids.menu
+			id: this.ids.menu,
+			style: "overflow-y:auto",
+			height: "200px"
 		} );
 
 		// Wrap menu
