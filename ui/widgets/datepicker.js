@@ -1914,7 +1914,7 @@ $.extend( Datepicker.prototype, {
 	/* Adjust one of the date sub-fields. */
 	_adjustInstDate: function( inst, offset, period ) {
 		var year = inst.drawYear + ( period === "Y" ? offset : 0 ),
-			month = inst.drawMonth + ( period === "M" ? offset : 0 ),
+			month = inst.selectedMonth + ( period === "M" ? offset : 0 ),
 			day = Math.min( inst.selectedDay, this._getDaysInMonth( year, month ) ) + ( period === "D" ? offset : 0 ),
 			date = this._restrictMinMax( inst, this._daylightSavingAdjust( new Date( year, month, day ) ) );
 
