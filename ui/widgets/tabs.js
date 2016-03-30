@@ -733,7 +733,8 @@ $.widget( "ui.tabs", {
 
 		// meta-function to give users option to provide a href string instead of a numerical index.
 		if ( typeof index === "string" ) {
-			index = this.anchors.index( this.anchors.filter( "[href$='" + $.ui.escapeSelector( index ) + "']" ) );
+			index = this.anchors.index( this.anchors.filter( "[href$='" +
+				$.ui.escapeSelector( index ) + "']" ) );
 		}
 
 		return index;
