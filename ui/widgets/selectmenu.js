@@ -119,11 +119,10 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		this._addClass( this.button, "ui-selectmenu-button ui-selectmenu-button-closed",
 			"ui-button ui-widget" );
 
-		this.buttonItem = this._renderButtonItem( item )
-			.appendTo( this.button );
-
 		icon = $( "<span>" ).appendTo( this.button );
 		this._addClass( icon, "ui-selectmenu-icon", "ui-icon " + this.options.icons.button );
+		this.buttonItem = this._renderButtonItem( item )
+			.appendTo( this.button );
 
 		if ( this.options.width !== false ) {
 			this._resizeButton();
