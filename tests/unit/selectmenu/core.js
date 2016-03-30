@@ -21,7 +21,7 @@ test( "markup structure", function( assert ) {
 	assert.lacksClasses( button, "ui-selectmenu-button-open ui-selectmenu-open" );
 	assert.hasClasses( menuWrap, "ui-selectmenu-menu" );
 	assert.lacksClasses( menuWrap, "ui-selectmenu-menu-open" );
-	assert.strictEqual( icon[ 0 ], button.children().last()[ 0 ], "Icon is last child of button" );
+	assert.strictEqual( icon[ 0 ], button.children()[ 0 ], "Icon is first child of button" );
 } );
 
 asyncTest( "accessibility", function() {
