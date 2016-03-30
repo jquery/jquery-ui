@@ -410,6 +410,46 @@ test( "zIndex, applied to all handles", function() {
 	} );
 } );
 
+test( "setOption handles", function() {
+	expect( 8 );
+
+	var target = $( "<div></div>" ).resizable(),
+		handles = { "ui-resizable-e": false, "ui-resizable-s": false, "ui-resizable-se": false };
+
+	function checkHandles( handle, handles ) {
+		var found = false,
+			key,
+			$handle = $( handle );
+		for ( key in handles ) {
+			if ( handles.hasOwnProperty( key ) ) {
+				if ( $handle.hasClass( key ) ) {
+					found = true;
+					break;
+				}
+			}
+		}
+		ok ( found && !handles[ key ], "Checking whether " + key  + " handle was rendered and was not rendered twice" );
+		handles[ key ] = found;
+		found = false;
+	}
+
+	target.children( ".ui-resizable-handle" ).each( function( index, handle ) {
+		checkHandles( handle, handles );
+	} );
+
+	target.resizable( "option", "handles", "n, w, nw" );
+	handles = { "ui-resizable-n": false, "ui-resizable-w": false, "ui-resizable-nw": false };
+	target.children( ".ui-resizable-handle" ).each( function( index, handle ) {
+		checkHandles( handle, handles );
+	} );
+
+	target.resizable( "option", "handles", "s, w" );
+	handles = { "ui-resizable-s": false, "ui-resizable-w": false };
+	target.children( ".ui-resizable-handle" ).each( function( index, handle ) {
+		checkHandles( handle, handles );
+	} );
+} );
+
 test( "alsoResize + containment", function() {
 	expect( 4 );
 	var other = $( "<div>" )
