@@ -58,7 +58,9 @@ return $.effects.define( "shake", function( options, done ) {
 
 	// Shakes
 	for ( ; i < times; i++ ) {
-		element.animate( animation1, speed, options.easing ).animate( animation2, speed, options.easing );
+		element
+			.animate( animation1, speed, options.easing )
+			.animate( animation2, speed, options.easing );
 	}
 
 	element
