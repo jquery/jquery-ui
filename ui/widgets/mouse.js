@@ -89,7 +89,8 @@ return $.widget( "ui.mouse", {
 
 			// event.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
-			elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ? $( event.target ).closest( this.options.cancel ).length : false );
+			elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ?
+				$( event.target ).closest( this.options.cancel ).length : false );
 		if ( !btnIsLeft || elIsCancel || !this._mouseCapture( event ) ) {
 			return true;
 		}
@@ -141,7 +142,8 @@ return $.widget( "ui.mouse", {
 		if ( this._mouseMoved ) {
 
 			// IE mouseup check - mouseup happened when mouse was out of window
-			if ( $.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button ) {
+			if ( $.ui.ie && ( !document.documentMode || document.documentMode < 9 ) &&
+					!event.button ) {
 				return this._mouseUp( event );
 
 			// Iframe mouseup check - mouseup occurred in another document
