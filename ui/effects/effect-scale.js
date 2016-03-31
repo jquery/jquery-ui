@@ -9,7 +9,7 @@
 
 //>>label: Scale Effect
 //>>group: Effects
-//>>description: Grows or shrinks an element and its content. Restores an element to its original size.
+//>>description: Grows or shrinks an element and its content.
 //>>docs: http://api.jqueryui.com/scale-effect/
 //>>demos: http://jqueryui.com/effect/
 
