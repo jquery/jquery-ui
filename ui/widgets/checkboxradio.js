@@ -71,8 +71,8 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		// input itself.
 		this.label.contents().not( this.element ).each( function() {
 
-			// The label contents could be text, html, or a mix. We concat each element to get a string
-			// representation of the label, without the input as part of it.
+			// The label contents could be text, html, or a mix. We concat each element to get a
+			// string representation of the label, without the input as part of it.
 			that.originalLabel += this.nodeType === 3 ? $( this ).text() : this.outerHTML;
 		} );
 
