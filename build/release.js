@@ -52,7 +52,8 @@ function buildCDNPackage( callback ) {
 	var Package = require( "download.jqueryui.com/lib/package-1-12-themes" );
 	var Packager = require( "node-packager" );
 	var jqueryUi = new JqueryUi( path.resolve( "." ) );
-	var target = fs.createWriteStream( "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version + "-cdn.zip" );
+	var target = fs.createWriteStream( "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version +
+		"-cdn.zip" );
 	var packager = new Packager( jqueryUi.files().cache, Package, {
 		components: jqueryUi.components().map( function( component ) {
 			return component.name;
@@ -82,7 +83,8 @@ Release.define( {
 				"August", "September", "October", "November", "December" ],
 			now = new Date();
 		return "<script>{\n\t\"title\": \"jQuery UI " + Release.newVersion + " Changelog\"\n" +
-			"}</script>\n\nReleased on " + monthNames[ now.getMonth() ] + " " + now.getDate() + ", " + now.getFullYear() + "\n\n";
+			"}</script>\n\nReleased on " + monthNames[ now.getMonth() ] + " " + now.getDate() +
+			", " + now.getFullYear() + "\n\n";
 	},
 	generateArtifacts: function( fn ) {
 		var files = replaceAtVersion();
