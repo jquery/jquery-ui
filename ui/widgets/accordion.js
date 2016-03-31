@@ -9,7 +9,9 @@
 
 //>>label: Accordion
 //>>group: Widgets
+// jscs:disable maximumLineLength
 //>>description: Displays collapsible content panels for presenting information in a limited amount of space.
+// jscs:enable maximumLineLength
 //>>docs: http://api.jqueryui.com/accordion/
 //>>demos: http://jqueryui.com/accordion/
 //>>css.structure: ../../themes/base/core.css
