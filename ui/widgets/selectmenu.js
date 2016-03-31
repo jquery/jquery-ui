@@ -9,7 +9,9 @@
 
 //>>label: Selectmenu
 //>>group: Widgets
+// jscs:disable maximumLineLength
 //>>description: Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.
+// jscs:enable maximumLineLength
 //>>docs: http://api.jqueryui.com/selectmenu/
 //>>demos: http://jqueryui.com/selectmenu/
 //>>css.structure: ../../themes/base/core.css
