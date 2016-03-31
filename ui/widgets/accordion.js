@@ -239,7 +239,8 @@ return $.widget( "ui.accordion", {
 		this._processPanels();
 
 		// Was collapsed or no panel
-		if ( ( options.active === false && options.collapsible === true ) || !this.headers.length ) {
+		if ( ( options.active === false && options.collapsible === true ) ||
+				!this.headers.length ) {
 			options.active = false;
 			this.active = $();
 
