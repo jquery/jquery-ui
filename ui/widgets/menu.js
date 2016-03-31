@@ -81,6 +81,7 @@ return $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item": function( event ) {
 				var target = $( event.target );
+				var active = $( $.ui.safeActiveElement( this.document[ 0 ] ) );
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
 					this.select( event );
 
@@ -89,10 +90,13 @@ return $.widget( "ui.menu", {
 						this.mouseHandled = true;
 					}
 
+
+
 					// Open submenu on click
 					if ( target.has( ".ui-menu" ).length ) {
 						this.expand( event );
-					} else if ( !this.element.is( ":focus" ) && $( $.ui.safeActiveElement( this.document[ 0 ] ) ).closest( ".ui-menu" ).length ) {
+					} else if ( !this.element.is( ":focus" ) &&
+							active.closest( ".ui-menu" ).length ) {
 
 						// Redirect focus to the menu
 						this.element.trigger( "focus", [ true ] );
@@ -142,7 +146,11 @@ return $.widget( "ui.menu", {
 			},
 			blur: function( event ) {
 				this._delay( function() {
-					if ( !$.contains( this.element[ 0 ], $.ui.safeActiveElement( this.document[ 0 ] ) ) ) {
+					var notContained = !$.contains(
+						this.element[ 0 ],
+						$.ui.safeActiveElement( this.document[ 0 ] )
+					);
+					if ( notContained ) {
 						this.collapseAll( event );
 					}
 				} );
@@ -479,7 +487,8 @@ return $.widget( "ui.menu", {
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
 
-			// If we found no valid submenu ancestor, use the main menu to close all sub menus anyway
+			// If we found no valid submenu ancestor, use the main menu to close all
+			// sub menus anyway
 			if ( !currentMenu.length ) {
 				currentMenu = this.element;
 			}
