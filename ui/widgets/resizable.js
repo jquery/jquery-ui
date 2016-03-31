@@ -286,11 +286,15 @@ $.widget( "ui.resizable", $.ui.mouse, {
 					this._on( this.handles[ i ], { "mousedown": that._mouseDown } );
 				}
 
-				if ( this.elementIsWrapper && this.originalElement[ 0 ].nodeName.match( /^(textarea|input|select|button)$/i ) ) {
-
+				if ( this.elementIsWrapper &&
+						this.originalElement[ 0 ]
+							.nodeName
+							.match( /^(textarea|input|select|button)$/i ) ) {
 					axis = $( this.handles[ i ], this.element );
 
-					padWrapper = /sw|ne|nw|se|n|s/.test( i ) ? axis.outerHeight() : axis.outerWidth();
+					padWrapper = /sw|ne|nw|se|n|s/.test( i ) ?
+						axis.outerHeight() :
+						axis.outerWidth();
 
 					padPos = [ "padding",
 						/ne|nw|n/.test( i ) ? "Top" :
@@ -797,7 +801,10 @@ $.ui.plugin.add( "resizable", "animate", {
 			ista = pr.length && ( /textarea/i ).test( pr[ 0 ].nodeName ),
 			soffseth = ista && that._hasScroll( pr[ 0 ], "left" ) ? 0 : that.sizeDiff.height,
 			soffsetw = ista ? 0 : that.sizeDiff.width,
-			style = { width: ( that.size.width - soffsetw ), height: ( that.size.height - soffseth ) },
+			style = {
+				width: ( that.size.width - soffsetw ),
+				height: ( that.size.height - soffseth )
+			},
 			left = ( parseFloat( that.element.css( "left" ) ) +
 				( that.position.left - that.originalPosition.left ) ) || null,
 			top = ( parseFloat( that.element.css( "top" ) ) +
@@ -839,7 +846,9 @@ $.ui.plugin.add( "resizable", "containment", {
 			o = that.options,
 			el = that.element,
 			oc = o.containment,
-			ce = ( oc instanceof $ ) ? oc.get( 0 ) : ( /parent/.test( oc ) ) ? el.parent().get( 0 ) : oc;
+			ce = ( oc instanceof $ ) ?
+				oc.get( 0 ) :
+				( /parent/.test( oc ) ) ? el.parent().get( 0 ) : oc;
 
 		if ( !ce ) {
 			return;
