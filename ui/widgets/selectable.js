@@ -137,7 +137,8 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 			var doSelect,
 				selectee = $.data( this, "selectable-item" );
 			if ( selectee ) {
-				doSelect = ( !event.metaKey && !event.ctrlKey ) || !selectee.$element.hasClass( "ui-selected" );
+				doSelect = ( !event.metaKey && !event.ctrlKey ) ||
+					!selectee.$element.hasClass( "ui-selected" );
 				that._removeClass( selectee.$element, doSelect ? "ui-unselecting" : "ui-selected" )
 					._addClass( selectee.$element, doSelect ? "ui-selecting" : "ui-unselecting" );
 				selectee.unselecting = !doSelect;
@@ -190,9 +191,11 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 			}
 
 			if ( options.tolerance === "touch" ) {
-				hit = ( !( selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1 ) );
+				hit = ( !( selectee.left > x2 || selectee.right < x1 || selectee.top > y2 ||
+					selectee.bottom < y1 ) );
 			} else if ( options.tolerance === "fit" ) {
-				hit = ( selectee.left > x1 && selectee.right < x2 && selectee.top > y1 && selectee.bottom < y2 );
+				hit = ( selectee.left > x1 && selectee.right < x2 && selectee.top > y1 &&
+					selectee.bottom < y2 );
 			}
 
 			if ( hit ) {
