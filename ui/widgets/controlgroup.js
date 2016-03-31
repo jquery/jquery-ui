@@ -86,7 +86,8 @@ return $.widget( "ui.controlgroup", {
 			if ( widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
 				labels.each( function() {
-					$( this ).contents().wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
+					$( this ).contents()
+						.wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
 				childWidgets = childWidgets.concat( labels.get() );
