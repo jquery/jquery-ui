@@ -9,7 +9,9 @@
 
 //>>label: Effects Core
 //>>group: Effects
+// jscs:disable maximumLineLength
 //>>description: Extends the internal jQuery effects. Includes morphing and easing. Required by all other effects.
+// jscs:enable maximumLineLength
 //>>docs: http://api.jqueryui.com/category/effects-core/
 //>>demos: http://jqueryui.com/effect/
 
