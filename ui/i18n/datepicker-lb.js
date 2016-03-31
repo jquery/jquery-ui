@@ -21,7 +21,15 @@ datepicker.regional.lb = {
 	"Juli","August","September","Oktober","November","Dezember" ],
 	monthNamesShort: [ "Jan", "Feb", "Mäe", "Abr", "Mee", "Jun",
 	"Jul", "Aug", "Sep", "Okt", "Nov", "Dez" ],
-	dayNames: [ "Sonndeg", "Méindeg", "Dënschdeg", "Mëttwoch", "Donneschdeg", "Freideg", "Samschdeg" ],
+	dayNames: [
+		"Sonndeg",
+		"Méindeg",
+		"Dënschdeg",
+		"Mëttwoch",
+		"Donneschdeg",
+		"Freideg",
+		"Samschdeg"
+	],
 	dayNamesShort: [ "Son", "Méi", "Dën", "Mët", "Don", "Fre", "Sam" ],
 	dayNamesMin: [ "So","Mé","Dë","Më","Do","Fr","Sa" ],
 	weekHeader: "W",

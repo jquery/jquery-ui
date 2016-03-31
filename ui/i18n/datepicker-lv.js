@@ -21,7 +21,15 @@ datepicker.regional.lv = {
 	"Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Mai","Jūn",
 	"Jūl","Aug","Sep","Okt","Nov","Dec" ],
-	dayNames: [ "svētdiena","pirmdiena","otrdiena","trešdiena","ceturtdiena","piektdiena","sestdiena" ],
+	dayNames: [
+		"svētdiena",
+		"pirmdiena",
+		"otrdiena",
+		"trešdiena",
+		"ceturtdiena",
+		"piektdiena",
+		"sestdiena"
+	],
 	dayNamesShort: [ "svt","prm","otr","tre","ctr","pkt","sst" ],
 	dayNamesMin: [ "Sv","Pr","Ot","Tr","Ct","Pk","Ss" ],
 	weekHeader: "Ned.",

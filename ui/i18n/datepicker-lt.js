@@ -21,7 +21,15 @@ datepicker.regional.lt = {
 	"Liepa","Rugpjūtis","Rugsėjis","Spalis","Lapkritis","Gruodis" ],
 	monthNamesShort: [ "Sau","Vas","Kov","Bal","Geg","Bir",
 	"Lie","Rugp","Rugs","Spa","Lap","Gru" ],
-	dayNames: [ "sekmadienis","pirmadienis","antradienis","trečiadienis","ketvirtadienis","penktadienis","šeštadienis" ],
+	dayNames: [
+		"sekmadienis",
+		"pirmadienis",
+		"antradienis",
+		"trečiadienis",
+		"ketvirtadienis",
+		"penktadienis",
+		"šeštadienis"
+	],
 	dayNamesShort: [ "sek","pir","ant","tre","ket","pen","šeš" ],
 	dayNamesMin: [ "Se","Pr","An","Tr","Ke","Pe","Še" ],
 	weekHeader: "SAV",
