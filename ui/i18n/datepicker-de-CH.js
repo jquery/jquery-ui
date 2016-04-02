@@ -29,7 +29,7 @@ datepicker.regional[ "de-CH" ] = {
 	firstDay: 1,
 	isRTL: false,
 	showMonthAfterYear: false,
-	yearSuffix: ""};
+	yearSuffix: "" };
 datepicker.setDefaults( datepicker.regional[ "de-CH" ] );
 
 return datepicker.regional[ "de-CH" ];
