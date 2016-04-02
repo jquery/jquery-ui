@@ -255,7 +255,7 @@ Gan Eng Chin <engchin.gan@gmail.com>
 Gabriel Schulhof <gabriel.schulhof@intel.com>
 Alexander Schmitz <arschmitz@gmail.com>
 Vilhjálmur Skúlason <vis@dmm.is>
-Siebrand Mazeland <s.mazeland@xs4all.nl>
+Siebrand Mazeland <siebrand@kitano.nl>
 Mohsen Ekhtiari <mohsenekhtiari@yahoo.com>
 Pere Orga <gotrunks@gmail.com>
 Jasper de Groot <mail@ugomobi.com>
