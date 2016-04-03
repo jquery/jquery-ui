@@ -1,13 +1,14 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/dialog"
-], function( $ ) {
+], function( QUnit, $ ) {
 
 // TODO add teardown callback to remove dialogs
-module( "dialog: core" );
+QUnit.module( "dialog: core" );
 
-test( "markup structure", function( assert ) {
-	expect( 11 );
+QUnit.test( "markup structure", function( assert ) {
+	assert.expect( 11 );
 
 	var element = $( "<div>" ).dialog( {
 			buttons: [ {
@@ -25,20 +26,20 @@ test( "markup structure", function( assert ) {
 
 	assert.hasClasses( widget, "ui-dialog ui-dialog-buttons ui-widget ui-widget-content" );
 	assert.hasClasses( titlebar, "ui-dialog-titlebar ui-widget-header" );
-	equal( titlebar.length, 1, "Dialog has exactly one titlebar" );
+	assert.equal( titlebar.length, 1, "Dialog has exactly one titlebar" );
 	assert.hasClasses( close, "ui-dialog-titlebar-close ui-widget" );
-	equal( close.length, 1, "Titlebar has exactly one close button" );
-	equal( title.length, 1, "Titlebar has exactly one title" );
+	assert.equal( close.length, 1, "Titlebar has exactly one close button" );
+	assert.equal( title.length, 1, "Titlebar has exactly one title" );
 	assert.hasClasses( element, "ui-dialog-content ui-widget-content" );
 	assert.hasClasses( buttonpane, "ui-dialog-buttonpane ui-widget-content" );
-	equal( buttonpane.length, 1, "Dialog has exactly one buttonpane" );
-	equal( buttonset.length, 1, "Buttonpane has exactly one buttonset" );
-	equal( buttons.length, 1, "Buttonset contains exactly 1 button when created with 1" );
+	assert.equal( buttonpane.length, 1, "Dialog has exactly one buttonpane" );
+	assert.equal( buttonset.length, 1, "Buttonpane has exactly one buttonset" );
+	assert.equal( buttons.length, 1, "Buttonset contains exactly 1 button when created with 1" );
 
 } );
 
-test( "markup structure - no buttons", function( assert ) {
-	expect( 7 );
+QUnit.test( "markup structure - no buttons", function( assert ) {
+	assert.expect( 7 );
 
 	var element = $( "<div>" ).dialog(),
 		widget = element.dialog( "widget" ),
@@ -48,48 +49,49 @@ test( "markup structure - no buttons", function( assert ) {
 
 	assert.hasClasses( widget, "ui-dialog ui-widget ui-widget-content" );
 	assert.hasClasses( titlebar, "ui-dialog-titlebar ui-widget-header" );
-	equal( titlebar.length, 1, "Dialog has exactly one titlebar" );
+	assert.equal( titlebar.length, 1, "Dialog has exactly one titlebar" );
 	assert.hasClasses( close, "ui-dialog-titlebar-close ui-widget" );
-	equal( close.length, 1, "Titlebar has exactly one close button" );
-	equal( title.length, 1, "Titlebar has exactly one title" );
+	assert.equal( close.length, 1, "Titlebar has exactly one close button" );
+	assert.equal( title.length, 1, "Titlebar has exactly one title" );
 	assert.hasClasses( element, "ui-dialog-content ui-widget-content" );
 } );
 
-test( "title id", function() {
-	expect( 1 );
+QUnit.test( "title id", function( assert ) {
+	assert.expect( 1 );
 
 	var titleId,
 		element = $( "<div>" ).dialog();
 
 	titleId = element.dialog( "widget" ).find( ".ui-dialog-title" ).attr( "id" );
-	ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id" );
+	assert.ok( /ui-id-\d+$/.test( titleId ), "auto-numbered title id" );
 	element.remove();
 } );
 
-test( "ARIA", function() {
-	expect( 4 );
+QUnit.test( "ARIA", function( assert ) {
+	assert.expect( 4 );
 
 	var element = $( "<div>" ).dialog(),
 		wrapper = element.dialog( "widget" );
-	equal( wrapper.attr( "role" ), "dialog", "dialog role" );
-	equal( wrapper.attr( "aria-labelledby" ), wrapper.find( ".ui-dialog-title" ).attr( "id" ) );
-	equal( wrapper.attr( "aria-describedby" ), element.attr( "id" ), "aria-describedby added" );
+	assert.equal( wrapper.attr( "role" ), "dialog", "dialog role" );
+	assert.equal( wrapper.attr( "aria-labelledby" ), wrapper.find( ".ui-dialog-title" ).attr( "id" ) );
+	assert.equal( wrapper.attr( "aria-describedby" ), element.attr( "id" ), "aria-describedby added" );
 	element.remove();
 
 	element = $( "<div><div aria-describedby='section2'><p id='section2'>descriotion</p></div></div>" ).dialog();
-	equal( element.dialog( "widget" ).attr( "aria-describedby" ), null, "no aria-describedby added, as already present in markup" );
+	assert.equal( element.dialog( "widget" ).attr( "aria-describedby" ), null, "no aria-describedby added, as already present in markup" );
 	element.remove();
 } );
 
-test( "widget method", function() {
-	expect( 1 );
+QUnit.test( "widget method", function( assert ) {
+	assert.expect( 1 );
 	var dialog = $( "<div>" ).appendTo( "#qunit-fixture" ).dialog();
-	deepEqual( dialog.parent()[ 0 ], dialog.dialog( "widget" )[ 0 ] );
+	assert.deepEqual( dialog.parent()[ 0 ], dialog.dialog( "widget" )[ 0 ] );
 	dialog.remove();
 } );
 
-asyncTest( "focus tabbable", function() {
-	expect( 8 );
+QUnit.test( "focus tabbable", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 8 );
 	var element,
 		options = {
 			buttons: [ {
@@ -119,7 +121,7 @@ asyncTest( "focus tabbable", function() {
 			var input = element.find( "input:last" ).trigger( "focus" ).trigger( "blur" );
 			element.dialog( "instance" )._focusTabbable();
 			setTimeout( function() {
-				equal( document.activeElement, input[ 0 ],
+				assert.equal( document.activeElement, input[ 0 ],
 					"1. an element that was focused previously." );
 				done();
 			} );
@@ -128,7 +130,7 @@ asyncTest( "focus tabbable", function() {
 
 	function step2() {
 		checkFocus( "<div><input><input autofocus></div>", options, function( done ) {
-			equal( document.activeElement, element.find( "input" )[ 1 ],
+			assert.equal( document.activeElement, element.find( "input" )[ 1 ],
 				"2. first element inside the dialog matching [autofocus]" );
 			done();
 		}, step3 );
@@ -136,7 +138,7 @@ asyncTest( "focus tabbable", function() {
 
 	function step3() {
 		checkFocus( "<div><input><input></div>", options, function( done ) {
-			equal( document.activeElement, element.find( "input" )[ 0 ],
+			assert.equal( document.activeElement, element.find( "input" )[ 0 ],
 				"3. tabbable element inside the content element" );
 			done();
 		}, step4 );
@@ -144,7 +146,7 @@ asyncTest( "focus tabbable", function() {
 
 	function step4() {
 		checkFocus( "<div>text</div>", options, function( done ) {
-			equal( document.activeElement,
+			assert.equal( document.activeElement,
 				element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" )[ 0 ],
 				"4. tabbable element inside the buttonpane" );
 			done();
@@ -153,7 +155,7 @@ asyncTest( "focus tabbable", function() {
 
 	function step5() {
 		checkFocus( "<div>text</div>", {}, function( done ) {
-			equal( document.activeElement,
+			assert.equal( document.activeElement,
 				element.dialog( "widget" ).find( ".ui-dialog-titlebar .ui-dialog-titlebar-close" )[ 0 ],
 				"5. the close button" );
 			done();
@@ -165,7 +167,7 @@ asyncTest( "focus tabbable", function() {
 			element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).hide();
 			element.dialog( "open" );
 			setTimeout( function() {
-				equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
+				assert.equal( document.activeElement, element.parent()[ 0 ], "6. the dialog itself" );
 				done();
 			} );
 		}, step7 );
@@ -184,36 +186,39 @@ asyncTest( "focus tabbable", function() {
 				}
 			},
 			function( done ) {
-				var inputs = element.find( "input" );
-				equal( document.activeElement, inputs[ 1 ], "Focus starts on second input" );
+				var inputs = element.find( "input"
+					);
+				assert.equal
+				( document.activeElement, inputs[ 1 ],  "Focus starts on second input" );
 				inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
 				setTimeout( function() {
-					equal( document.activeElement, inputs[ 0 ],
+					assert.equal( document.activeElement, inputs[ 0 ],
 						"Honor preventDefault, allowing custom focus management" );
 					done();
 				}, 50 );
 			},
-			start
+			ready
 		);
 	}
 
 	step1();
 } );
 
-test( "#7960: resizable handles below modal overlays", function() {
-	expect( 1 );
+QUnit.test( "#7960: resizable handles below modal overlays", function( assert ) {
+	assert.expect( 1 );
 
 	var resizable = $( "<div>" ).resizable(),
 		dialog = $( "<div>" ).dialog( { modal: true } ),
 		resizableZindex = parseInt( resizable.find( ".ui-resizable-handle" ).css( "zIndex" ), 10 ),
 		overlayZindex = parseInt( $( ".ui-widget-overlay" ).css( "zIndex" ), 10 );
 
-	ok( resizableZindex < overlayZindex, "Resizable handles have lower z-index than modal overlay" );
+	assert.ok( resizableZindex < overlayZindex, "Resizable handles have lower z-index than modal overlay" );
 	dialog.dialog( "destroy" );
 } );
 
-asyncTest( "Prevent tabbing out of dialogs", function() {
-	expect( 3 );
+QUnit.test( "Prevent tabbing out of dialogs", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 
 	var element = $( "<div><input name='0'><input name='1'></div>" ).dialog(),
 		inputs = element.find( "input" );
@@ -222,7 +227,7 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	element.dialog( "widget" ).find( ".ui-button" ).remove();
 
 	function checkTab() {
-		equal( document.activeElement, inputs[ 0 ], "Tab key event moved focus within the modal" );
+		assert.equal( document.activeElement, inputs[ 0 ], "Tab key event move d focus  within the modal" );
 
 		// Check shift tab
 		$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB, shiftKey: true } );
@@ -230,23 +235,25 @@ asyncTest( "Prevent tabbing out of dialogs", function() {
 	}
 
 	function checkShiftTab() {
-		equal( document.activeElement, inputs[ 1 ], "Shift-Tab key event moved focus back to second input" );
+		assert.equal( document.activeElement, inputs[ 1 ], "Shift-Tab key event moved focus back to second input" );
 
 		element.remove();
-		setTimeout( start );
+		setTimeout( ready );
 	}
 
 	inputs[ 1 ].focus();
 	setTimeout( function() {
-		equal( document.activeElement, inputs[ 1 ], "Focus set on second input" );
+		assert.equal( document.activeElement, inputs[ 1 ], "Focus set on second input" );
 		inputs.eq( 1 ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
 
 		setTimeout( checkTab );
 	} );
 } );
 
-asyncTest( "#9048: multiple modal dialogs opened and closed in different order", function() {
-	expect( 1 );
+QUnit.test( "#9048: multiple modal dialogs opened and closed in different order",
+	function( assert )  {
+	var ready = assert.async();
+	assert.expect( 1 );
 	$( "#dialog1, #dialog2" ).dialog( { autoOpen: false, modal:true } );
 	$( "#dialog1" ).dialog( "open" );
 	$( "#dialog2" ).dialog( "open" );
@@ -254,19 +261,20 @@ asyncTest( "#9048: multiple modal dialogs opened and closed in different order",
 	setTimeout( function() {
 		$( "#dialog2" ).dialog( "close" );
 		$( "#favorite-animal" ).trigger( "focus" );
-		ok( true, "event handlers cleaned up (no errors thrown)" );
-		start();
+		assert.ok( true, "event handlers cleaned up (no errors thrown)" );
+		ready();
 	} );
 } );
 
-asyncTest( "interaction between overlay and other dialogs", function() {
+QUnit.test( "interaction between overlay and other dialogs", function( assert ) {
+	var ready = assert.async();
 	$.widget( "ui.testWidget", $.ui.dialog, {
 		options: {
 			modal: true,
 			autoOpen: false
 		}
 	} );
-	expect( 2 );
+	assert.expect( 2 );
 	var first = $( "<div><input id='input-1'></div>" ).dialog( {
 			modal: true
 		} ),
@@ -281,25 +289,28 @@ asyncTest( "interaction between overlay and other dialogs", function() {
 
 	// Wait for the modal to init
 	setTimeout( function() {
-		second.testWidget( "open" );
 
-		// Simulate user tabbing from address bar to an element outside the dialog
+		second.
+		testWidget
+		( "open" );
+
+		// Simulate user  tabbing  from address bar to an element outside the dialog
 		$( "#favorite-animal" ).trigger( "focus" );
 		setTimeout( function() {
-			equal( document.activeElement, secondInput[ 0 ] );
+			assert.equal( document.activeElement, secondInput[ 0 ] );
 
 			// Last active dialog must receive focus
 			firstInput.trigger( "focus" );
 			$( "#favorite-animal" ).trigger( "focus" );
 			setTimeout( function() {
-				equal( document.activeElement, firstInput[ 0 ] );
+				assert.equal( document.activeElement, firstInput[ 0 ] );
 
 				// Cleanup
 				first.remove();
 				second.remove();
 				delete $.ui.testWidget;
 				delete $.fn.testWidget;
-				start();
+				ready();
 			} );
 		} );
 	} );

@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/dialog"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "dialog (deprecated): options" );
+QUnit.module( "dialog (deprecated): options" );
 
-test( "dialogClass", function( assert ) {
-	expect( 5 );
+QUnit.test( "dialogClass", function( assert ) {
+	assert.expect( 5 );
 
 	var element = $( "<div>" ).dialog(),
 		widget = element.dialog( "widget" );
