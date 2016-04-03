@@ -1,8 +1,9 @@
 define( [
+	"qunit",
 	"jquery",
 	"lib/helper",
 	"ui/widgets/datepicker"
-], function( $, helper ) {
+], function( QUnit, $, helper ) {
 
 return $.extend( helper, {
 	addMonths: function( date, offset ) {
@@ -12,14 +13,14 @@ return $.extend( helper, {
 		return date;
 	},
 
-	equalsDate: function( d1, d2, message ) {
+	equalsDate: function( assert, d1, d2, message ) {
 		if ( !d1 || !d2 ) {
-			ok( false, message + " - missing date" );
+			assert.ok( false, message + " - missing date" );
 			return;
 		}
 		d1 = new Date( d1.getFullYear(), d1.getMonth(), d1.getDate() );
 		d2 = new Date( d2.getFullYear(), d2.getMonth(), d2.getDate() );
-		equal( d1.toString(), d2.toString(), message );
+		assert.equal( d1.toString(), d2.toString(), message );
 	},
 
 	init: function( id, options ) {
