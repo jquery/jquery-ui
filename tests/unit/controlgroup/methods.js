@@ -1,35 +1,36 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
 	"ui/widgets/button"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "Controlgroup: methods" );
+QUnit.module( "Controlgroup: methods" );
 
-test( "destroy", function( assert ) {
-	expect( 1 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 1 );
 	assert.domEqual( ".controlgroup", function() {
 		$( ".controlgroup" ).controlgroup().controlgroup( "destroy" );
 	} );
 } );
 
-test( "disable", function( assert ) {
-	expect( 2 );
+QUnit.test( "disable", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "disable" );
 	assert.lacksClasses( element, "ui-state-disabled",
 		"The widget does not get the disabled class, because we disable each child widget" );
-	strictEqual( element.find( ".ui-state-disabled" ).length, 6,
+	assert.strictEqual( element.find( ".ui-state-disabled" ).length, 6,
 		"Child widgets are disabled" );
 } );
 
-test( "enable", function( assert ) {
-	expect( 2 );
+QUnit.test( "enable", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "enable" );
 	assert.lacksClasses( element, "ui-state-disabled",
 		"ui-state-disabled is not present on widget after enabling" );
-	strictEqual( element.find( "ui-state-disabled" ).length, 0,
+	assert.strictEqual( element.find( "ui-state-disabled" ).length, 0,
 		"Child widgets are disabled" );
 } );
 
@@ -59,8 +60,8 @@ $.each( tests, function( widget, html ) {
 	// Check in both horizontal and vertical orientations
 	$.each( orientations, function( name, classes ) {
 
-		test( "refresh: " + widget + ": " + name, function( assert ) {
-			expect( 41 );
+		QUnit.test( "refresh: " + widget + ": " + name, function( assert ) {
+			assert.expect( 41 );
 
 			var i, control, currentClasses,
 				controls = [],
@@ -68,7 +69,7 @@ $.each( tests, function( widget, html ) {
 					direction: name
 				} ).appendTo( "body" );
 
-			// checks the elements with in the controlgroup against the expected class list
+			// Checks the elements with in the controlgroup against the expected class list
 			function checkCornerClasses( classList ) {
 				for ( var j = 0; j < 4; j++ ) {
 					if ( classList[ j ] ) {
@@ -118,14 +119,14 @@ $.each( tests, function( widget, html ) {
 			// Refresh the controlgroup now that its populated
 			element.controlgroup( "refresh" );
 			for ( i = 0; i < 4; i++ ) {
-				strictEqual( controls[ i ].is( ":ui-" + widget ), true,
+				assert.strictEqual( controls[ i ].is( ":ui-" + widget ), true,
 					name + ": " + widget + " " + i + ": is a " + widget + " widget" );
 			}
 
 			// Check that we have the right classes
 			checkCornerClasses( classes );
 
-			// hide each element and then check its classes
+			// Hide each element and then check its classes
 			iterateHidden( true );
 
 			// Set the exclude option to false so we no longer care about hidden
@@ -141,7 +142,7 @@ $.each( tests, function( widget, html ) {
 
 			assert.hasClasses( controls[ 0 ][ widget ]( "widget" ), "ui-state-disabled" );
 
-			// remove the controlgroup before we start the next set
+			// Remove the controlgroup before we start the next set
 			element.remove();
 		} );
 	} );

@@ -1,15 +1,16 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
 	"ui/widgets/button"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "Controlgroup: Core" );
+QUnit.module( "Controlgroup: Core" );
 
-test( "selectmenu: open/close corners", function( assert ) {
-	expect( 12 );
+QUnit.test( "selectmenu: open/close corners", function( assert ) {
+	assert.expect( 12 );
 	var element = $( ".controlgroup" ).controlgroup(),
 		selects = element.find( "select" ),
 		selectButton = selects.eq( 0 ).selectmenu( "widget" );
@@ -64,8 +65,8 @@ test( "selectmenu: open/close corners", function( assert ) {
 		"vertical: Last selectmenu gets ui-corner-bottom when closed" );
 } );
 
-test( "selectmenu: controlgroupLabel", function( assert ) {
-	expect( 2 );
+QUnit.test( "selectmenu: controlgroupLabel", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup();
 	var label = element.find( ".ui-controlgroup-label" );
 
