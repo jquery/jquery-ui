@@ -1,21 +1,22 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/draggable"
-], function( $ ) {
+], function( QUnit, $ ) {
 
 var element;
 
-module( "draggable: events", {
-	setup: function() {
+QUnit.module( "draggable: events", {
+	beforeEach: function() {
 		element = $( "<div>" ).appendTo( "#qunit-fixture" );
 	},
-	teardown: function() {
+	afterEach: function() {
 		element.draggable( "destroy" );
 	}
 } );
 
-test( "callbacks occurrence count", function() {
-	expect( 3 );
+QUnit.test( "callbacks occurrence count", function( assert ) {
+	assert.expect( 3 );
 
 	var start = 0,
 		stop = 0,
@@ -38,13 +39,13 @@ test( "callbacks occurrence count", function() {
 		dy: 10
 	} );
 
-	equal( start, 1, "start callback should happen exactly once" );
-	equal( dragc, 3, "drag callback should happen exactly once per mousemove" );
-	equal( stop, 1, "stop callback should happen exactly once" );
+	assert.equal( start, 1, "start callback should happen exactly once" );
+	assert.equal( dragc, 3, "drag callback should happen exactly once per mousemove" );
+	assert.equal( stop, 1, "stop callback should happen exactly once" );
 } );
 
-test( "stopping the start callback", function() {
-	expect( 3 );
+QUnit.test( "stopping the start callback", function( assert ) {
+	assert.expect( 3 );
 
 	var start = 0,
 		stop = 0,
@@ -68,13 +69,13 @@ test( "stopping the start callback", function() {
 		dy: 10
 	} );
 
-	equal( start, 1, "start callback should happen exactly once" );
-	equal( dragc, 0, "drag callback should not happen at all" );
-	equal( stop, 0, "stop callback should not happen if there wasnt even a start" );
+	assert.equal( start, 1, "start callback should happen exactly once" );
+	assert.equal( dragc, 0, "drag callback should not happen at all" );
+	assert.equal( stop, 0, "stop callback should not happen if there wasnt even a start" );
 } );
 
-test( "stopping the drag callback", function() {
-	expect( 2 );
+QUnit.test( "stopping the drag callback", function( assert ) {
+	assert.expect( 2 );
 
 	var start = 0,
 		stop = 0,
@@ -98,12 +99,12 @@ test( "stopping the drag callback", function() {
 		dy: 10
 	} );
 
-	equal( start, 1, "start callback should happen exactly once" );
-	equal( stop, 1, "stop callback should happen, as we need to actively stop the drag" );
+	assert.equal( start, 1, "start callback should happen exactly once" );
+	assert.equal( stop, 1, "stop callback should happen, as we need to actively stop the drag" );
 } );
 
-test( "stopping the stop callback", function() {
-	expect( 1 );
+QUnit.test( "stopping the stop callback", function( assert ) {
+	assert.expect( 1 );
 
 	element.draggable( {
 		helper: "clone",
@@ -117,13 +118,13 @@ test( "stopping the stop callback", function() {
 		dy: 10
 	} );
 
-	ok( element.draggable( "instance" ).helper, "the clone should not be deleted if the stop callback is stopped" );
+	assert.ok( element.draggable( "instance" ).helper, "the clone should not be deleted if the stop callback is stopped" );
 } );
 
 // http://bugs.jqueryui.com/ticket/6884
 // Draggable: ui.offset.left differs between the "start" and "drag" hooks
-test( "position and offset in hash is consistent between start, drag, and stop", function() {
-	expect( 4 );
+QUnit.test( "position and offset in hash is consistent between start, drag, and stop", function( assert ) {
+	assert.expect( 4 );
 
 	var startPos, startOffset, dragPos, dragOffset, stopPos, stopOffset;
 
@@ -155,10 +156,10 @@ test( "position and offset in hash is consistent between start, drag, and stop",
 	startOffset.left += 10;
 	startOffset.top += 10;
 
-	deepEqual( startPos, dragPos, "start position equals drag position plus distance" );
-	deepEqual( dragPos, stopPos, "drag position equals stop position" );
-	deepEqual( startOffset, dragOffset, "start offset equals drag offset plus distance" );
-	deepEqual( dragOffset, stopOffset, "drag offset equals stop offset" );
+	assert.deepEqual( startPos, dragPos, "start position equals drag position plus distance" );
+	assert.deepEqual( dragPos, stopPos, "drag position equals stop position" );
+	assert.deepEqual( startOffset, dragOffset, "start offset equals drag offset plus distance" );
+	assert.deepEqual( dragOffset, stopOffset, "drag offset equals stop offset" );
 } );
 
 } );

@@ -1,8 +1,9 @@
 define( [
+	"qunit",
 	"jquery",
 	"lib/helper",
 	"ui/widgets/draggable"
-], function( $, helper ) {
+], function( QUnit, $, helper ) {
 
 return $.extend( helper, {
 
@@ -16,40 +17,40 @@ return $.extend( helper, {
 		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
 	} )(),
 
-	testDragPosition: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+	testDragPosition: function( assert, el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
 
 		$( el ).one( "dragstop", function( event, ui ) {
 			var positionExpected = { left: ui.originalPosition.left + expectedDX, top: ui.originalPosition.top + expectedDY };
-			deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
+			assert.deepEqual( ui.position, positionExpected, "position dragged[" + dx + ", " + dy + "] " + msg );
 		} );
 	},
 
-	testDragOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+	testDragOffset: function( assert, el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
 
 		var offsetBefore = el.offset(),
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
 		$( el ).one( "dragstop", function( event, ui ) {
-			deepEqual( ui.offset, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+			assert.deepEqual( ui.offset, offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
 		} );
 	},
 
-	testDragHelperOffset: function( el, dx, dy, expectedDX, expectedDY, msg ) {
+	testDragHelperOffset: function( assert, el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
 
 		var offsetBefore = el.offset(),
 			offsetExpected = { left: offsetBefore.left + expectedDX, top: offsetBefore.top + expectedDY };
 
 		$( el ).one( "dragstop", function( event, ui ) {
-			deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
+			assert.deepEqual( ui.helper.offset(), offsetExpected, "offset dragged[" + dx + ", " + dy + "] " + msg );
 		} );
 	},
 
-	testDrag: function( el, handle, dx, dy, expectedDX, expectedDY, msg ) {
-		this.testDragPosition( el, dx, dy, expectedDX, expectedDY, msg );
-		this.testDragOffset( el, dx, dy, expectedDX, expectedDY, msg );
+	testDrag: function( assert, el, handle, dx, dy, expectedDX, expectedDY, msg ) {
+		this.testDragPosition( assert, el, dx, dy, expectedDX, expectedDY, msg );
+		this.testDragOffset( assert, el, dx, dy, expectedDX, expectedDY, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: dx,
@@ -57,10 +58,10 @@ return $.extend( helper, {
 		} );
 	},
 
-	shouldMovePositionButNotOffset: function( el, msg, handle ) {
+	shouldMovePositionButNotOffset: function( assert, el, msg, handle ) {
 		handle = handle || el;
-		this.testDragPosition( el, 100, 100, 100, 100, msg );
-		this.testDragHelperOffset( el, 100, 100, 0, 0, msg );
+		this.testDragPosition( assert, el, 100, 100, 100, 100, msg );
+		this.testDragHelperOffset( assert, el, 100, 100, 0, 0, msg );
 
 		$( handle ).simulate( "drag", {
 			dx: 100,
@@ -68,17 +69,17 @@ return $.extend( helper, {
 		} );
 	},
 
-	shouldMove: function( el, msg, handle ) {
+	shouldMove: function( assert, el, msg, handle ) {
 		handle = handle || el;
-		this.testDrag( el, handle, 100, 100, 100, 100, msg );
+		this.testDrag( assert, el, handle, 100, 100, 100, 100, msg );
 	},
 
-	shouldNotMove: function( el, msg, handle ) {
+	shouldNotMove: function( assert, el, msg, handle ) {
 		handle = handle || el;
-		this.testDrag( el, handle, 100, 100, 0, 0, msg );
+		this.testDrag( assert, el, handle, 100, 100, 0, 0, msg );
 	},
 
-	shouldNotDrag: function( el, msg, handle ) {
+	shouldNotDrag: function( assert, el, msg, handle ) {
 		handle = handle || el;
 
 		var newOffset,
@@ -86,7 +87,7 @@ return $.extend( helper, {
 			beginOffset = element.offset();
 
 		element.on( "dragstop", function() {
-			ok( false, "should not drag " + msg );
+			assert.ok( false, "should not drag " + msg );
 		} );
 
 		$( handle ).simulate( "drag", {
@@ -98,8 +99,8 @@ return $.extend( helper, {
 
 		// Also assert that draggable did not move, to ensure it isn't just
 		// that drag did not fire and draggable still somehow moved
-		equal( newOffset.left, beginOffset.left, "Offset left should not be different" );
-		equal( newOffset.top, beginOffset.top, "Offset top should not be different" );
+		assert.equal( newOffset.left, beginOffset.left, "Offset left should not be different" );
+		assert.equal( newOffset.top, beginOffset.top, "Offset top should not be different" );
 
 		element.off( "dragstop" );
 	},
@@ -109,10 +110,10 @@ return $.extend( helper, {
 		$( what ).css( { overflow: overflow, overflowX: overflow, overflowY: overflow } );
 	},
 
-	testScroll: function( el, position ) {
+	testScroll: function( assert, el, position ) {
 		var oldPosition = $( "#main" ).css( "position" );
 		$( "#main" ).css( { position: position, top: "0px", left: "0px" } );
-		this.shouldMove( el, position + " parent" );
+		this.shouldMove( assert, el, position + " parent" );
 		$( "#main" ).css( "position", oldPosition );
 	},
 

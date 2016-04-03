@@ -1,14 +1,15 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/draggable",
 	"ui/widgets/droppable",
 	"ui/widgets/resizable"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "draggable: core" );
+QUnit.module( "draggable: core" );
 
-test( "element types", function( assert ) {
+QUnit.test( "element types", function( assert ) {
 	var typeNames = (
 			"p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form" +
 			",table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr" +
@@ -16,7 +17,7 @@ test( "element types", function( assert ) {
 			",input,button,label,select,iframe"
 		).split( "," );
 
-	expect( typeNames.length * 2 );
+	assert.expect( typeNames.length * 2 );
 
 	$.each( typeNames, function( i ) {
 		var offsetBefore, offsetAfter,
@@ -44,18 +45,18 @@ test( "element types", function( assert ) {
 	} );
 } );
 
-test( "No options, relative", function() {
-	expect( 2 );
-	testHelper.shouldMove( $( "#draggable1" ).draggable(), "no options, relative" );
+QUnit.test( "No options, relative", function( assert ) {
+	assert.expect( 2 );
+	testHelper.shouldMove( assert, $( "#draggable1" ).draggable(), "no options, relative" );
 } );
 
-test( "No options, absolute", function() {
-	expect( 2 );
-	testHelper.shouldMove( $( "#draggable2" ).draggable(), "no options, absolute" );
+QUnit.test( "No options, absolute", function( assert ) {
+	assert.expect( 2 );
+	testHelper.shouldMove( assert, $( "#draggable2" ).draggable(), "no options, absolute" );
 } );
 
-test( "resizable handle with complex markup (#8756 / #8757)", function() {
-	expect( 2 );
+QUnit.test( "resizable handle with complex markup (#8756 / #8757)", function( assert ) {
+	assert.expect( 2 );
 
 	$( "#draggable1" )
 		.append(
@@ -69,19 +70,19 @@ test( "resizable handle with complex markup (#8756 / #8757)", function() {
 
 	// Todo: fix resizable so it doesn't require a mouseover
 	handle.simulate( "mouseover" ).simulate( "drag", { dx: -50 } );
-	equal( target.width(), 250, "compare width" );
+	assert.equal( target.width(), 250, "compare width" );
 
 	// Todo: fix resizable so it doesn't require a mouseover
 	handle.simulate( "mouseover" ).simulate( "drag", { dx: 50 } );
-	equal( target.width(), 200, "compare width" );
+	assert.equal( target.width(), 200, "compare width" );
 } );
 
-test( "#8269: Removing draggable element on drop", function() {
-	expect( 2 );
+QUnit.test( "#8269: Removing draggable element on drop", function( assert ) {
+	assert.expect( 2 );
 
 	var element = $( "#draggable1" ).wrap( "<div id='wrapper' />" ).draggable( {
 			stop: function() {
-				ok( true, "stop still called despite element being removed from DOM on drop" );
+				assert.ok( true, "stop still called despite element being removed from DOM on drop" );
 			}
 		} ),
 		dropOffset = $( "#droppable" ).offset();
@@ -89,14 +90,14 @@ test( "#8269: Removing draggable element on drop", function() {
 	$( "#droppable" ).droppable( {
 		drop: function() {
 			$( "#wrapper" ).remove();
-			ok( true, "element removed from DOM on drop" );
+			assert.ok( true, "element removed from DOM on drop" );
 		}
 	} );
 
 	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
 	if ( testHelper.unreliableContains ) {
-		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-		ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
+		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 	} else {
 		element.simulate( "drag", {
 			handle: "corner",
@@ -108,8 +109,8 @@ test( "#8269: Removing draggable element on drop", function() {
 
 // http://bugs.jqueryui.com/ticket/7778
 // drag element breaks in IE8 when its content is replaced onmousedown
-test( "Stray mousemove after mousedown still drags", function() {
-	expect( 2 );
+QUnit.test( "Stray mousemove after mousedown still drags", function( assert ) {
+	assert.expect( 2 );
 
 	var element = $( "#draggable1" ).draggable( { scroll: false } );
 
@@ -120,16 +121,16 @@ test( "Stray mousemove after mousedown still drags", function() {
 		$( document ).simulate( "mousemove", { button: -1 } );
 	} );
 
-	testHelper.shouldMove( element, "element is draggable" );
+	testHelper.shouldMove( assert, element, "element is draggable" );
 } );
 
-test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function() {
-	expect( 2 );
+QUnit.test( "#6258: not following mouse when scrolled and using overflow-y: scroll", function( assert ) {
+	assert.expect( 2 );
 
 	var element = $( "#draggable1" ).draggable( {
 			stop: function( event, ui ) {
-				equal( ui.position.left, 1, "left position is correct despite overflow on HTML" );
-				equal( ui.position.top, 1, "top position is correct despite overflow on HTML" );
+				assert.equal( ui.position.left, 1, "left position is correct despite overflow on HTML" );
+				assert.equal( ui.position.top, 1, "top position is correct despite overflow on HTML" );
 				$( "html" )
 					.css( "overflow-y", oldOverflowY )
 					.css( "overflow-x", oldOverflowX )
@@ -155,13 +156,13 @@ test( "#6258: not following mouse when scrolled and using overflow-y: scroll", f
 		} );
 } );
 
-test( "#9315: jumps down with offset of scrollbar", function() {
-	expect( 2 );
+QUnit.test( "#9315: jumps down with offset of scrollbar", function( assert ) {
+	assert.expect( 2 );
 
 	var element = $( "#draggable2" ).draggable( {
 			stop: function( event, ui ) {
-				equal( ui.position.left, 11, "left position is correct when position is absolute" );
-				equal( ui.position.top, 11, "top position is correct when position is absolute" );
+				assert.equal( ui.position.left, 11, "left position is correct when position is absolute" );
+				assert.equal( ui.position.top, 11, "top position is correct when position is absolute" );
 				$( "html" ).scrollTop( 0 ).scrollLeft( 0 );
 			}
 		} );
@@ -177,8 +178,8 @@ test( "#9315: jumps down with offset of scrollbar", function() {
 		} );
 } );
 
-test( "scroll offset with fixed ancestors", function() {
-	expect( 2 );
+QUnit.test( "scroll offset with fixed ancestors", function( assert ) {
+	assert.expect( 2 );
 
 	var startValue = 300,
 		element = $( "#draggable1" )
@@ -196,8 +197,8 @@ test( "scroll offset with fixed ancestors", function() {
 					$( document ).scrollTop( startValue ).scrollLeft( startValue );
 				},
 				stop: function( event, ui ) {
-					equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
-					equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
+					assert.equal( ui.position.left, 10, "left position is correct when parent position is fixed" );
+					assert.equal( ui.position.top, 10, "top position is correct when parent position is fixed" );
 					$( document ).scrollTop( 0 ).scrollLeft( 0 );
 				}
 			} );
@@ -219,8 +220,8 @@ $( [ "hidden", "auto", "scroll" ] ).each( function() {
 
 	// Http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
 	// http://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
-	test( "position in scrollable parent with overflow: " + overflow, function() {
-		expect( 2 );
+	QUnit.test( "position in scrollable parent with overflow: " + overflow, function( assert ) {
+		assert.expect( 2 );
 
 		$( "#qunit-fixture" ).html( "<div id='outer'><div id='inner'></div><div id='dragged'>a</div></div>" );
 		$( "#inner" ).css( { position: "absolute", width: "500px", height: "500px" } );
@@ -240,8 +241,8 @@ $( [ "hidden", "auto", "scroll" ] ).each( function() {
 					$( "#outer" ).scrollTop( startValue ).scrollLeft( startValue );
 				},
 				stop: function( event, ui ) {
-					equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
-					equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
+					assert.equal( ui.position.left, expected, "left position is correct when grandparent is scrolled" );
+					assert.equal( ui.position.top, expected, "top position is correct when grandparent is scrolled" );
 				}
 			} );
 
@@ -255,8 +256,8 @@ $( [ "hidden", "auto", "scroll" ] ).each( function() {
 	} );
 } );
 
-test( "#5727: draggable from iframe", function() {
-	expect( 1 );
+QUnit.test( "#5727: draggable from iframe", function( assert ) {
+	assert.expect( 1 );
 
 	var iframeBody, draggable1,
 		iframe = $( "<iframe />" ).appendTo( "#qunit-fixture" ),
@@ -270,53 +271,55 @@ test( "#5727: draggable from iframe", function() {
 
 	draggable1.draggable();
 
-	equal( draggable1.closest( iframeBody ).length, 1 );
+	assert.equal( draggable1.closest( iframeBody ).length, 1 );
 
 	// TODO: fix draggable within an IFRAME to fire events on the element properly
 	// and these testHelper.shouldMove relies on events for testing
-	//testHelper.shouldMove( draggable1, "draggable from an iframe" );
+	//testHelper.shouldMove( assert, draggable1, "draggable from an iframe" );
 } );
 
-test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function() {
-	expect( 2 );
+QUnit.test( "#8399: A draggable should become the active element after you are finished interacting with it, but not before.", function( assert ) {
+	assert.expect( 2 );
 
 	var element = $( "<a href='#'>link</a>" ).appendTo( "#qunit-fixture" ).draggable();
 
 	$( document ).one( "mousemove", function() {
-		notStrictEqual( document.activeElement, element.get( 0 ), "moving a draggable anchor did not make it the active element" );
+		assert.notStrictEqual( document.activeElement, element.get( 0 ), "moving a draggable anchor did not make it the active element" );
 	} );
 
 	testHelper.move( element, 50, 50 );
 
-	strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
+	assert.strictEqual( document.activeElement, element.get( 0 ), "finishing moving a draggable anchor made it the active element" );
 } );
 
-asyncTest( "blur behavior - handle is main element", function() {
-	expect( 3 );
+QUnit.test( "blur behavior - handle is main element", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 
 	var element = $( "#draggable1" ).draggable(),
 		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
 
 	testHelper.onFocus( focusElement, function() {
-		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
+		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
 
 		testHelper.move( focusElement, 1, 1 );
 
 		// Http://bugs.jqueryui.com/ticket/10527
 		// Draggable: Can't select option in modal dialog (IE8)
-		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
+		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
 
 		testHelper.move( element, 50, 50 );
 
 		// Http://bugs.jqueryui.com/ticket/4261
 		// active element should blur when mousing down on a draggable
-		notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
-		start();
+		assert.notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
+		ready();
 	} );
 } );
 
-asyncTest( "blur behavior - descendant of handle", function() {
-	expect( 2 );
+QUnit.test( "blur behavior - descendant of handle", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 
 	var element = $( "#draggable2" ).draggable( { handle: "span" } ),
 
@@ -325,18 +328,18 @@ asyncTest( "blur behavior - descendant of handle", function() {
 		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
 
 	testHelper.onFocus( focusElement, function() {
-		strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
+		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
 
 		testHelper.move( handle, 50, 50 );
 
 		// Elements outside of the handle should blur (#12472, #14905)
-		notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
-		start();
+		assert.notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
+		ready();
 	} );
 } );
 
-test( "ui-draggable-handle assigned to appropriate element", function( assert ) {
-	expect( 5 );
+QUnit.test( "ui-draggable-handle assigned to appropriate element", function( assert ) {
+	assert.expect( 5 );
 
 	var p = $( "<p>" ).appendTo( "#qunit-fixture" ),
 		element = $( "<div><p></p></div>" ).appendTo( "#qunit-fixture" ).draggable();
@@ -352,8 +355,8 @@ test( "ui-draggable-handle assigned to appropriate element", function( assert ) 
 	assert.lacksClasses( element.find( "p" ), "ui-draggable-handle" );
 } );
 
-test( "ui-draggable-handle managed correctly in nested draggables", function( assert ) {
-	expect( 4 );
+QUnit.test( "ui-draggable-handle managed correctly in nested draggables", function( assert ) {
+	assert.expect( 4 );
 	var parent = $( "<div><div></div></div>" ).draggable().appendTo( "#qunit-fixture" ),
 		child = parent.find( "div" ).draggable();
 
@@ -371,7 +374,7 @@ test( "ui-draggable-handle managed correctly in nested draggables", function( as
 QUnit[ document.documentMode === 8 ? "skip" : "test" ](
 	"does not stop propagation to window",
 	function( assert ) {
-		expect( 1 );
+		assert.expect( 1 );
 		var element = $( "#draggable1" ).draggable();
 
 		var handler = function() {
