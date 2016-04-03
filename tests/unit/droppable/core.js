@@ -1,18 +1,19 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/droppable"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "droppable: core" );
+QUnit.module( "droppable: core" );
 
-test( "element types", function() {
+QUnit.test( "element types", function( assert ) {
 	var typeNames = ( "p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form" +
 		",table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr" +
 		",acronym,code,samp,kbd,var,img,hr" +
 		",input,button,label,select,iframe" ).split( "," );
 
-	expect( typeNames.length );
+	assert.expect( typeNames.length );
 
 	$.each( typeNames, function( i ) {
 		var typeName = typeNames[ i ],
@@ -20,7 +21,7 @@ test( "element types", function() {
 
 		( typeName === "table" && el.append( "<tr><td>content</td></tr>" ) );
 		el.droppable();
-		testHelper.shouldDrop();
+		testHelper.shouldDrop( assert );
 		el.droppable( "destroy" );
 		el.remove();
 	} );

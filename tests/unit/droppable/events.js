@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/droppable"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "droppable: events" );
+QUnit.module( "droppable: events" );
 
-test( "droppable destruction/recreation on drop event", function( assert ) {
-	expect( 1 );
+QUnit.test( "droppable destruction/recreation on drop event", function( assert ) {
+	assert.expect( 1 );
 
 	var config = {
 			activeClass: "active",
@@ -38,9 +39,9 @@ test( "droppable destruction/recreation on drop event", function( assert ) {
 	assert.lacksClasses( droppable2, "active", "subsequent droppable no longer active" );
 } );
 
-// todo: comment the following in when ready to actually test
+// Todo: comment the following in when ready to actually test
 /*
-test("activate", function() {
+Test("activate", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
