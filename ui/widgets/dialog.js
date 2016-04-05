@@ -442,7 +442,7 @@ $.widget( "ui.dialog", {
 
 	_title: function( title ) {
 		if ( this.options.title ) {
-			title.text( this.options.title );
+			title.html( this.options.title );
 		} else {
 			title.html( "&#160;" );
 		}
