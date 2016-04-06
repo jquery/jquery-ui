@@ -1,50 +1,51 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/selectable"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "selectable: methods" );
+QUnit.module( "selectable: methods" );
 
-test( "init", function() {
-	expect( 5 );
+QUnit.test( "init", function( assert ) {
+	assert.expect( 5 );
 
 	$( "<div></div>" ).appendTo( "body" ).selectable().remove();
-	ok( true, ".selectable() called on element" );
+	assert.ok( true, ".selectable() called on element" );
 
 	$( [] ).selectable().remove();
-	ok( true, ".selectable() called on empty collection" );
+	assert.ok( true, ".selectable() called on empty collection" );
 
 	$( "<div></div>" ).selectable().remove();
-	ok( true, ".selectable() called on disconnected DOMElement" );
+	assert.ok( true, ".selectable() called on disconnected DOMElement" );
 
 	var el = $( "<div></div>" ).selectable();
 	el.selectable( "option", "foo" );
 	el.remove();
-	ok( true, "arbitrary option getter after init" );
+	assert.ok( true, "arbitrary option getter after init" );
 
 	$( "<div></div>" ).selectable().selectable( "option", "foo", "bar" ).remove();
-	ok( true, "arbitrary option setter after init" );
+	assert.ok( true, "arbitrary option setter after init" );
 } );
 
-test( "destroy", function() {
-	expect( 4 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 4 );
 
 	$( "<div></div>" ).appendTo( "body" ).selectable().selectable( "destroy" ).remove();
-	ok( true, ".selectable('destroy') called on element" );
+	assert.ok( true, ".selectable('destroy') called on element" );
 
 	$( [] ).selectable().selectable( "destroy" ).remove();
-	ok( true, ".selectable('destroy') called on empty collection" );
+	assert.ok( true, ".selectable('destroy') called on empty collection" );
 
 	$( "<div></div>" ).selectable().selectable( "destroy" ).remove();
-	ok( true, ".selectable('destroy') called on disconnected DOMElement" );
+	assert.ok( true, ".selectable('destroy') called on disconnected DOMElement" );
 
 	var expected = $( "<div></div>" ).selectable(),
 		actual = expected.selectable( "destroy" );
-	equal( actual, expected, "destroy is chainable" );
+	assert.equal( actual, expected, "destroy is chainable" );
 } );
 
-test( "enable", function() {
-	expect( 3 );
+QUnit.test( "enable", function( assert ) {
+	assert.expect( 3 );
 	var expected, actual,
 		fired = false,
 		el = $( "#selectable1" );
@@ -57,22 +58,22 @@ test( "enable", function() {
 		dx: 20,
 		dy: 20
 	} );
-	equal( fired, false, "start fired" );
+	assert.equal( fired, false, "start fired" );
 	el.selectable( "enable" );
 	el.simulate( "drag", {
 		dx: 20,
 		dy: 20
 	} );
-	equal( fired, true, "start fired" );
+	assert.equal( fired, true, "start fired" );
 	el.selectable( "destroy" );
 
 	expected = $( "<div></div>" ).selectable();
 	actual = expected.selectable( "enable" );
-	equal( actual, expected, "enable is chainable" );
+	assert.equal( actual, expected, "enable is chainable" );
 } );
 
-test( "disable", function( assert ) {
-	expect( 6 );
+QUnit.test( "disable", function( assert ) {
+	assert.expect( 6 );
 	var chainable,
 		fired = false,
 		element = $( "#selectable1" );
@@ -87,7 +88,7 @@ test( "disable", function( assert ) {
 		dx: 20,
 		dy: 20
 	} );
-	equal( fired, true, "start fired" );
+	assert.equal( fired, true, "start fired" );
 
 	chainable = element.selectable( "disable" );
 	fired = false;
@@ -96,16 +97,16 @@ test( "disable", function( assert ) {
 		dx: 20,
 		dy: 20
 	} );
-	equal( fired, false, "start fired" );
+	assert.equal( fired, false, "start fired" );
 
 	assert.lacksClasses( element.selectable( "widget" ), "ui-state-disabled" );
 
-	ok( !element.selectable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
+	assert.ok( !element.selectable( "widget" ).attr( "aria-disabled" ), "element does not get aria-disabled" );
 	assert.hasClasses( element.selectable( "widget" ), "ui-selectable-disabled" );
 
 	element.selectable( "destroy" );
 
-	equal( chainable, element, "disable is chainable" );
+	assert.equal( chainable, element, "disable is chainable" );
 } );
 
 } );
