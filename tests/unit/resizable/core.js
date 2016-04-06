@@ -1,13 +1,14 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/resizable"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "resizable: core" );
+QUnit.module( "resizable: core" );
 
 /*
-test("element types", function() {
+Test("element types", function() {
 	var typeNames = ("p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form"
 		+ ",table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr"
 		+ ",acronym,code,samp,kbd,var,img,object,hr"
@@ -25,133 +26,133 @@ test("element types", function() {
 });
 */
 
-test( "n", function() {
-	expect( 4 );
+QUnit.test( "n", function( assert ) {
+	assert.expect( 4 );
 
 	var handle = ".ui-resizable-n", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, 0, -50 );
-	equal( target.height(), 150, "compare height" );
+	assert.equal( target.height(), 150, "compare height" );
 
 	testHelper.drag( handle, 0, 50 );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.height(), 100, "compare height" );
 
-	equal( target[ 0 ].style.left, "", "left should not be modified" );
-	equal( target[ 0 ].style.width, "", "width should not be modified" );
+	assert.equal( target[ 0 ].style.left, "", "left should not be modified" );
+	assert.equal( target[ 0 ].style.width, "", "width should not be modified" );
 } );
 
-test( "s", function() {
-	expect( 5 );
+QUnit.test( "s", function( assert ) {
+	assert.expect( 5 );
 
 	var handle = ".ui-resizable-s", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, 0, 50 );
-	equal( target.height(), 150, "compare height" );
+	assert.equal( target.height(), 150, "compare height" );
 
 	testHelper.drag( handle, 0, -50 );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.height(), 100, "compare height" );
 
-	equal( target[ 0 ].style.top, "", "top should not be modified" );
-	equal( target[ 0 ].style.left, "", "left should not be modified" );
-	equal( target[ 0 ].style.width, "", "width should not be modified" );
+	assert.equal( target[ 0 ].style.top, "", "top should not be modified" );
+	assert.equal( target[ 0 ].style.left, "", "left should not be modified" );
+	assert.equal( target[ 0 ].style.width, "", "width should not be modified" );
 } );
 
-test( "e", function() {
-	expect( 5 );
+QUnit.test( "e", function( assert ) {
+	assert.expect( 5 );
 
 	var handle = ".ui-resizable-e", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, 50 );
-	equal( target.width(), 150, "compare width" );
+	assert.equal( target.width(), 150, "compare width" );
 
 	testHelper.drag( handle, -50 );
-	equal( target.width(), 100, "compare width" );
+	assert.equal( target.width(), 100, "compare width" );
 
-	equal( target[ 0 ].style.height, "", "height should not be modified" );
-	equal( target[ 0 ].style.top, "", "top should not be modified" );
-	equal( target[ 0 ].style.left, "", "left should not be modified" );
+	assert.equal( target[ 0 ].style.height, "", "height should not be modified" );
+	assert.equal( target[ 0 ].style.top, "", "top should not be modified" );
+	assert.equal( target[ 0 ].style.left, "", "left should not be modified" );
 } );
 
-test( "w", function() {
-	expect( 4 );
+QUnit.test( "w", function( assert ) {
+	assert.expect( 4 );
 
 	var handle = ".ui-resizable-w", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, -50 );
-	equal( target.width(), 150, "compare width" );
+	assert.equal( target.width(), 150, "compare width" );
 
 	testHelper.drag( handle, 50 );
-	equal( target.width(), 100, "compare width" );
+	assert.equal( target.width(), 100, "compare width" );
 
-	equal( target[ 0 ].style.height, "", "height should not be modified" );
-	equal( target[ 0 ].style.top, "", "top should not be modified" );
+	assert.equal( target[ 0 ].style.height, "", "height should not be modified" );
+	assert.equal( target[ 0 ].style.top, "", "top should not be modified" );
 } );
 
-test( "ne", function() {
-	expect( 5 );
+QUnit.test( "ne", function( assert ) {
+	assert.expect( 5 );
 
 	var handle = ".ui-resizable-ne", target = $( "#resizable1" ).css( { overflow: "hidden" } ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, -50, -50 );
-	equal( target.width(), 50, "compare width" );
-	equal( target.height(), 150, "compare height" );
+	assert.equal( target.width(), 50, "compare width" );
+	assert.equal( target.height(), 150, "compare height" );
 
 	testHelper.drag( handle, 50, 50 );
-	equal( target.width(), 100, "compare width" );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.width(), 100, "compare width" );
+	assert.equal( target.height(), 100, "compare height" );
 
-	equal( target[ 0 ].style.left, "", "left should not be modified" );
+	assert.equal( target[ 0 ].style.left, "", "left should not be modified" );
 } );
 
-test( "se", function() {
-	expect( 6 );
+QUnit.test( "se", function( assert ) {
+	assert.expect( 6 );
 
 	var handle = ".ui-resizable-se", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, 50, 50 );
-	equal( target.width(), 150, "compare width" );
-	equal( target.height(), 150, "compare height" );
+	assert.equal( target.width(), 150, "compare width" );
+	assert.equal( target.height(), 150, "compare height" );
 
 	testHelper.drag( handle, -50, -50 );
-	equal( target.width(), 100, "compare width" );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.width(), 100, "compare width" );
+	assert.equal( target.height(), 100, "compare height" );
 
-	equal( target[ 0 ].style.top, "", "top should not be modified" );
-	equal( target[ 0 ].style.left, "", "left should not be modified" );
+	assert.equal( target[ 0 ].style.top, "", "top should not be modified" );
+	assert.equal( target[ 0 ].style.left, "", "left should not be modified" );
 } );
 
-test( "sw", function() {
-	expect( 5 );
+QUnit.test( "sw", function( assert ) {
+	assert.expect( 5 );
 
 	var handle = ".ui-resizable-sw", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, -50, -50 );
-	equal( target.width(), 150, "compare width" );
-	equal( target.height(), 50, "compare height" );
+	assert.equal( target.width(), 150, "compare width" );
+	assert.equal( target.height(), 50, "compare height" );
 
 	testHelper.drag( handle, 50, 50 );
-	equal( target.width(), 100, "compare width" );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.width(), 100, "compare width" );
+	assert.equal( target.height(), 100, "compare height" );
 
-	equal( target[ 0 ].style.top, "", "top should not be modified" );
+	assert.equal( target[ 0 ].style.top, "", "top should not be modified" );
 } );
 
-test( "nw", function() {
-	expect( 4 );
+QUnit.test( "nw", function( assert ) {
+	assert.expect( 4 );
 
 	var handle = ".ui-resizable-nw", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, -50, -50 );
-	equal( target.width(), 150, "compare width" );
-	equal( target.height(), 150, "compare height" );
+	assert.equal( target.width(), 150, "compare width" );
+	assert.equal( target.height(), 150, "compare height" );
 
 	testHelper.drag( handle, 50, 50 );
-	equal( target.width(), 100, "compare width" );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.width(), 100, "compare width" );
+	assert.equal( target.height(), 100, "compare height" );
 } );
 
-test( "handle with complex markup (#8756)", function() {
-	expect( 2 );
+QUnit.test( "handle with complex markup (#8756)", function( assert ) {
+	assert.expect( 2 );
 
 	$( "#resizable1" )
 		.append(
@@ -164,14 +165,14 @@ test( "handle with complex markup (#8756)", function() {
 	var handle = ".ui-resizable-w div", target = $( "#resizable1" ).resizable( { handles: "all" } );
 
 	testHelper.drag( handle, -50 );
-	equal( target.width(), 150, "compare width" );
+	assert.equal( target.width(), 150, "compare width" );
 
 	testHelper.drag( handle, 50 );
-	equal( target.width(), 100, "compare width" );
+	assert.equal( target.width(), 100, "compare width" );
 } );
 
-test( "resizable accounts for scroll position correctly (#3815)", function() {
-	expect( 4 );
+QUnit.test( "resizable accounts for scroll position correctly (#3815)", function( assert ) {
+	assert.expect( 4 );
 
 	var position, top, left,
 		container = $( "<div style='overflow:scroll;height:300px;width:300px;position:relative;'></div>" ).appendTo( "#qunit-fixture" ),
@@ -187,14 +188,14 @@ test( "resizable accounts for scroll position correctly (#3815)", function() {
 	top = el.css( "top" );
 
 	testHelper.drag( handle, 50, 50 );
-	deepEqual( el.position(), position, "position stays the same when resized" );
-	equal( el.css( "left" ), left, "css('left') stays the same when resized" );
-	equal( el.css( "top" ), top, "css('top') stays the same when resized" );
-	equal( $( handle ).position().left, handlePosition + 50, "handle also moved" );
+	assert.deepEqual( el.position(), position, "position stays the same when resized" );
+	assert.equal( el.css( "left" ), left, "css('left') stays the same when resized" );
+	assert.equal( el.css( "top" ), top, "css('top') stays the same when resized" );
+	assert.equal( $( handle ).position().left, handlePosition + 50, "handle also moved" );
 } );
 
-test( "resizable stores correct size when using helper and grid (#9547)", function() {
-	expect( 2 );
+QUnit.test( "resizable stores correct size when using helper and grid (#9547)", function( assert ) {
+	assert.expect( 2 );
 
 	var handle = ".ui-resizable-se",
 		target = $( "#resizable1" ).resizable( {
@@ -204,12 +205,12 @@ test( "resizable stores correct size when using helper and grid (#9547)", functi
 		} );
 
 	testHelper.drag( handle, 1, 1 );
-	equal( target.width(), 100, "compare width" );
-	equal( target.height(), 100, "compare height" );
+	assert.equal( target.width(), 100, "compare width" );
+	assert.equal( target.height(), 100, "compare height" );
 } );
 
-test( "nested resizable", function() {
-	expect( 4 );
+QUnit.test( "nested resizable", function( assert ) {
+	assert.expect( 4 );
 
 	var outer = $( "<div id='outer' style='width:50px'></div>" ),
 		inner = $( "<div id='inner' style='width:30px'></div>" ),
@@ -228,14 +229,14 @@ test( "nested resizable", function() {
 	outerHandle = $( "#outer > .ui-resizable-e" );
 
 	testHelper.drag( innerHandle, 10 );
-	equal( inner.width(), 40, "compare width of inner element" );
+	assert.equal( inner.width(), 40, "compare width of inner element" );
 	testHelper.drag( innerHandle, -10 );
-	equal( inner.width(), 30, "compare width of inner element" );
+	assert.equal( inner.width(), 30, "compare width of inner element" );
 
 	testHelper.drag( outerHandle, 10 );
-	equal( outer.width(), 60, "compare width of outer element" );
+	assert.equal( outer.width(), 60, "compare width of outer element" );
 	testHelper.drag( outerHandle, -10 );
-	equal( outer.width(), 50, "compare width of outer element" );
+	assert.equal( outer.width(), 50, "compare width of outer element" );
 
 	inner.remove();
 	outer.remove();
