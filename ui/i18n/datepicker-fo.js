@@ -21,7 +21,15 @@ datepicker.regional.fo = {
 	"Juli","August","September","Oktober","November","Desember" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Mei","Jun",
 	"Jul","Aug","Sep","Okt","Nov","Des" ],
-	dayNames: [ "Sunnudagur","Mánadagur","Týsdagur","Mikudagur","Hósdagur","Fríggjadagur","Leyardagur" ],
+	dayNames: [
+		"Sunnudagur",
+		"Mánadagur",
+		"Týsdagur",
+		"Mikudagur",
+		"Hósdagur",
+		"Fríggjadagur",
+		"Leyardagur"
+	],
 	dayNamesShort: [ "Sun","Mán","Týs","Mik","Hós","Frí","Ley" ],
 	dayNamesMin: [ "Su","Má","Tý","Mi","Hó","Fr","Le" ],
 	weekHeader: "Vk",

@@ -21,7 +21,15 @@ datepicker.regional.et = {
 	"Juuli","August","September","Oktoober","November","Detsember" ],
 	monthNamesShort: [ "Jaan", "Veebr", "Märts", "Apr", "Mai", "Juuni",
 	"Juuli", "Aug", "Sept", "Okt", "Nov", "Dets" ],
-	dayNames: [ "Pühapäev", "Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev" ],
+	dayNames: [
+		"Pühapäev",
+		"Esmaspäev",
+		"Teisipäev",
+		"Kolmapäev",
+		"Neljapäev",
+		"Reede",
+		"Laupäev"
+	],
 	dayNamesShort: [ "Pühap", "Esmasp", "Teisip", "Kolmap", "Neljap", "Reede", "Laup" ],
 	dayNamesMin: [ "P","E","T","K","N","R","L" ],
 	weekHeader: "näd",

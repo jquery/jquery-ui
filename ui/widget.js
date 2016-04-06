@@ -225,12 +225,14 @@ $.widget.bridge = function( name, object ) {
 				}
 
 				if ( !instance ) {
-					return $.error( "cannot call methods on " + name + " prior to initialization; " +
+					return $.error( "cannot call methods on " + name +
+						" prior to initialization; " +
 						"attempted to call method '" + options + "'" );
 				}
 
 				if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
-					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
+					return $.error( "no such method '" + options + "' for " + name +
+						" widget instance" );
 				}
 
 				methodValue = instance[ options ].apply( instance, args );

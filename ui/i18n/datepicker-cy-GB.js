@@ -21,7 +21,15 @@ datepicker.regional[ "cy-GB" ] = {
 	"Gorffennaf","Awst","Medi","Hydref","Tachwedd","Rhagfyr" ],
 	monthNamesShort: [ "Ion", "Chw", "Maw", "Ebr", "Mai", "Meh",
 	"Gor", "Aws", "Med", "Hyd", "Tac", "Rha" ],
-	dayNames: [ "Dydd Sul", "Dydd Llun", "Dydd Mawrth", "Dydd Mercher", "Dydd Iau", "Dydd Gwener", "Dydd Sadwrn" ],
+	dayNames: [
+		"Dydd Sul",
+		"Dydd Llun",
+		"Dydd Mawrth",
+		"Dydd Mercher",
+		"Dydd Iau",
+		"Dydd Gwener",
+		"Dydd Sadwrn"
+	],
 	dayNamesShort: [ "Sul", "Llu", "Maw", "Mer", "Iau", "Gwe", "Sad" ],
 	dayNamesMin: [ "Su","Ll","Ma","Me","Ia","Gw","Sa" ],
 	weekHeader: "Wy",

@@ -173,12 +173,21 @@ grunt.initConfig({
 	},
 
 	jscs: {
-		all: {
+		ui: {
 			options: {
 				config: true
 			},
 			files: {
-				src: [ "demos/**/*.js", "build/**/*.js", "tests/**/*.js", "ui/**/*.js" ]
+				src: [ "demos/**/*.js", "build/**/*.js", "ui/**/*.js" ]
+			}
+		},
+		tests: {
+			options: {
+				config: true,
+				maximumLineLength: null
+			},
+			files: {
+				src: [ "tests/**/*.js" ]
 			}
 		}
 	},
