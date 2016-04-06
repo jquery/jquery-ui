@@ -1,21 +1,22 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/menu"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var log = testHelper.log,
 	logOutput = testHelper.logOutput,
 	click = testHelper.click;
 
-module( "menu: methods", {
-	setup: function() {
+QUnit.module( "menu: methods", {
+	beforeEach: function() {
 		testHelper.clearLog();
 	}
 } );
 
-test( "destroy", function( assert ) {
-	expect( 2 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 2 );
 	assert.domEqual( "#menu2", function() {
 		$( "#menu2" ).menu().menu( "destroy" );
 	} );
@@ -24,8 +25,8 @@ test( "destroy", function( assert ) {
 	} );
 } );
 
-test( "enable/disable", function( assert ) {
-	expect( 3 );
+QUnit.test( "enable/disable", function( assert ) {
+	assert.expect( 3 );
 	var element = $( "#menu1" ).menu( {
 		select: function() {
 			log();
@@ -41,34 +42,34 @@ test( "enable/disable", function( assert ) {
 	log( "click" );
 	click( element, "1" );
 	log( "afterclick" );
-	equal( logOutput(), "click,afterclick,click,1,afterclick", "Click order not valid." );
+	assert.equal( logOutput(), "click,afterclick,click,1,afterclick", "Click order not valid." );
 } );
 
-test( "refresh", function() {
-	expect( 5 );
+QUnit.test( "refresh", function( assert ) {
+	assert.expect( 5 );
 	var element = $( "#menu1" ).menu();
-	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.append( "<li><a href='#'>test item</a></li>" ).menu( "refresh" );
-	equal( element.find( ".ui-menu-item" ).length, 6, "Incorrect number of menu items" );
+	assert.equal( element.find( ".ui-menu-item" ).length, 6, "Incorrect number of menu items" );
 	element.find( ".ui-menu-item:last" ).remove().end().menu( "refresh" );
-	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.append( "<li>---</li>" ).menu( "refresh" );
-	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.children( ":last" ).remove().end().menu( "refresh" );
-	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
+	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 } );
 
-test( "refresh submenu", function() {
-	expect( 2 );
+QUnit.test( "refresh submenu", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#menu2" ).menu();
-	equal( element.find( "ul:first .ui-menu-item" ).length, 3 );
+	assert.equal( element.find( "ul:first .ui-menu-item" ).length, 3 );
 	element.find( "ul" ).addBack().append( "<li><a href=\"#\">New Item</a></li>" );
 	element.menu( "refresh" );
-	equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
+	assert.equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
 } );
 
-test( "refresh icons (see #9377)", function( assert ) {
-	expect( 3 );
+QUnit.test( "refresh icons (see #9377)", function( assert ) {
+	assert.expect( 3 );
 	var element = $( "#menu1" ).menu();
 	assert.lacksClasses( element, "ui-menu-icons" );
 	element.find( "li:first .ui-menu-item-wrapper" )
@@ -81,12 +82,12 @@ test( "refresh icons (see #9377)", function( assert ) {
 	assert.lacksClasses( element, "ui-menu-icons" );
 } );
 
-test( "widget", function() {
-	expect( 2 );
+QUnit.test( "widget", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#menu1" ).menu(),
 		widgetElement = element.menu( "widget" );
-	equal( widgetElement.length, 1, "one element" );
-	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+	assert.equal( widgetElement.length, 1, "one element" );
+	assert.strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 } );
 
 // TODO: test focus method
