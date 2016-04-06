@@ -1,10 +1,11 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widget"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "widget factory classes", {
-	setup: function() {
+QUnit.module( "widget factory classes", {
+	beforeEach: function() {
 		$.widget( "ui.classesWidget", {
 			options: {
 				classes: {
@@ -50,7 +51,7 @@ module( "widget factory classes", {
 			}
 		} );
 	},
-	teardown: function() {
+	afterEach: function() {
 		delete $.ui.classesWidget;
 		delete $.fn.classesWidget;
 	}
@@ -89,8 +90,8 @@ function elementLacksClasses( widget, method, assert ) {
 		"_" + method + "Class works with ( element, keys, null" + toggle + " )" );
 }
 
-test( ".option() - classes setter", function( assert ) {
-	expect( 11 );
+QUnit.test( ".option() - classes setter", function( assert ) {
+	assert.expect( 11 );
 
 	var testWidget = $.ui.classesWidget();
 
@@ -118,16 +119,16 @@ test( ".option() - classes setter", function( assert ) {
 		"Appending a class to the current value works as expected" );
 } );
 
-test( ".destroy() - class removal", function( assert ) {
-	expect( 1 );
+QUnit.test( ".destroy() - class removal", function( assert ) {
+	assert.expect( 1 );
 
 	assert.domEqual( "#widget", function() {
 		$( "#widget" ).classesWidget().classesWidget( "destroy" );
 	} );
 } );
 
-test( "._add/_remove/_toggleClass()", function( assert ) {
-	expect( 24 );
+QUnit.test( "._add/_remove/_toggleClass()", function( assert ) {
+	assert.expect( 24 );
 
 	var widget = $( "#widget" ).classesWidget();
 
