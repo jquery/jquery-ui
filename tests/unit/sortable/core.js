@@ -1,23 +1,24 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/sortable"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "sortable: core" );
+QUnit.module( "sortable: core" );
 
-test( "#9314: Sortable: Items cannot be dragged directly into bottom position", function() {
-	expect( 1 );
+QUnit.test( "#9314: Sortable: Items cannot be dragged directly into bottom position", function( assert ) {
+	assert.expect( 1 );
 
 	var el = $( ".connectWith" ).sortable( {
 			connectWith: ".connectWith"
 		} );
 
-	testHelper.sort( $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
+	testHelper.sort( assert, $( "li", el[ 1 ] )[ 0 ], 0, -12, 5, "Dragging the sortable into connected sortable" );
 } );
 
-test( "ui-sortable-handle applied to appropriate element", function( assert ) {
-	expect( 8 );
+QUnit.test( "ui-sortable-handle applied to appropriate element", function( assert ) {
+	assert.expect( 8 );
 	var item = "<li><p></p></li>",
 		el = $( "<ul>" + item + item + "</ul>" )
 			.sortable()
@@ -36,7 +37,7 @@ test( "ui-sortable-handle applied to appropriate element", function( assert ) {
 	assert.hasClasses( el.find( "p:last" ), "ui-sortable-handle" );
 
 	el.sortable( "destroy" );
-	equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
+	assert.equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
 } );
 
 } );
