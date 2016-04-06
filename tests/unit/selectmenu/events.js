@@ -1,26 +1,28 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/selectmenu"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "selectmenu: events", {
-	setup: function() {
+QUnit.module( "selectmenu: events", {
+	beforeEach: function() {
 		this.element = $( "#speed" );
 	}
 } );
 
-asyncTest( "change", function() {
-	expect( 3 );
+QUnit.test( "change", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 
 	var button, menu, options,
 		optionIndex = 1;
 
 	this.element.selectmenu( {
 		change: function( event, ui ) {
-			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
-			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
+			assert.equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
+			assert.equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
 				"ui.item.element contains original option element" );
-			equal( ui.item.value, options.eq( optionIndex ).text(),
+			assert.equal( ui.item.value, options.eq( optionIndex ).text(),
 				"ui.item.value property updated correctly" );
 		}
 	} );
@@ -34,18 +36,18 @@ asyncTest( "change", function() {
 	setTimeout( function() {
 		button.trigger( "click" );
 		menu.find( "li" ).eq( optionIndex ).simulate( "mouseover" ).trigger( "click" );
-		start();
+		ready();
 	} );
 } );
 
-test( "close", function() {
-	expect( 2 );
+QUnit.test( "close", function( assert ) {
+	assert.expect( 2 );
 
 	var shouldFire;
 
 	this.element.selectmenu( {
 		close: function() {
-			ok( shouldFire, "close event fired on close" );
+			assert.ok( shouldFire, "close event fired on close" );
 		}
 	} );
 
@@ -59,8 +61,9 @@ test( "close", function() {
 	$( "body" ).trigger( "mousedown" );
 } );
 
-asyncTest( "focus", function() {
-	expect( 9 );
+QUnit.test( "focus", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 9 );
 
 	var button, menu, links,
 		that = this,
@@ -69,9 +72,9 @@ asyncTest( "focus", function() {
 
 	this.element.selectmenu( {
 		focus: function( event, ui ) {
-			ok( true, "focus event fired on element #" + optionIndex + " mouseover" );
-			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
-			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
+			assert.ok( true, "focus event fired on element #" + optionIndex + " mouseover" );
+			assert.equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
+			assert.equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
 				"ui.item.element contains original option element" );
 		}
 	} );
@@ -92,30 +95,31 @@ asyncTest( "focus", function() {
 
 		// This tests for unwanted, additional focus event on close
 		that.element.selectmenu( "close" );
-		start();
+		ready();
 	} );
 } );
 
-test( "open", function() {
-	expect( 1 );
+QUnit.test( "open", function( assert ) {
+	assert.expect( 1 );
 
 	this.element.selectmenu( {
 		open: function() {
-			ok( true, "open event fired on open" );
+			assert.ok( true, "open event fired on open" );
 		}
 	} );
 
 	this.element.selectmenu( "open" );
 } );
 
-asyncTest( "select", function() {
-	expect( 3 );
+QUnit.test( "select", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 
 	this.element.selectmenu( {
 		select: function( event, ui ) {
-			ok( true, "select event fired on item select" );
-			equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
-			equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
+			assert.ok( true, "select event fired on item select" );
+			assert.equal( ui.item.index, optionIndex, "ui.item.index contains correct option index" );
+			assert.equal( ui.item.element[ 0 ], options.eq( optionIndex )[ 0 ],
 				"ui.item.element contains original option element" );
 		}
 	} );
@@ -129,7 +133,7 @@ asyncTest( "select", function() {
 	setTimeout( function() {
 		button.trigger( "click" );
 		menu.find( "li" ).eq( optionIndex ).simulate( "mouseover" ).trigger( "click" );
-		start();
+		ready();
 	} );
 } );
 
