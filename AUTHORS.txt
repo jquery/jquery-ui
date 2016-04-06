@@ -321,3 +321,4 @@ Piotr Baran <piotros@wp.pl>
 Mukul Hase <mukulhase@gmail.com>
 Konstantin Dinev <kdinev@mail.bw.edu>
 Rand Scullard <rand@randscullard.com>
+Dan Strohl
