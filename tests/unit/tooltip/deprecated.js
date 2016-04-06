@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/tooltip"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "tooltip: (deprecated) options" );
+QUnit.module( "tooltip: (deprecated) options" );
 
-test( "tooltipClass", function( assert ) {
-	expect( 1 );
+QUnit.test( "tooltipClass", function( assert ) {
+	assert.expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip( {
 		tooltipClass: "custom"
 	} ).tooltip( "open" );
