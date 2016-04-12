@@ -7,7 +7,7 @@
  * http://jquery.org/license
  */
 
-//>>label: focusable
+//>>label: :tabbable Selector
 //>>group: Core
 //>>description: Selects elements which can be tabbed to.
 //>>docs: http://api.jqueryui.com/tabbable-selector/

@@ -7,7 +7,7 @@
  * http://jquery.org/license
  */
 
-//>>label: focusable
+//>>label: :focusable Selector
 //>>group: Core
 //>>description: Selects elements which can be focused.
 //>>docs: http://api.jqueryui.com/focusable-selector/

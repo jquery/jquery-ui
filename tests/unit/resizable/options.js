@@ -410,6 +410,33 @@ test( "zIndex, applied to all handles", function() {
 	} );
 } );
 
+test( "setOption handles", function() {
+	expect( 11 );
+
+	var target = $( "<div></div>" ).resizable();
+
+	function checkHandles( expectedHandles ) {
+		expectedHandles = expectedHandles.map( function( value ) {
+			return ".ui-resizable-" + value;
+		} );
+
+		var handles = target.find( ".ui-resizable-handle" );
+
+		equal( handles.length, expectedHandles.length, "Correct number of handles found" );
+		$.each( expectedHandles, function( index, handleClass ) {
+			equal( handles.filter( handleClass ).length, 1, "Found " + handleClass );
+		} );
+	}
+
+	checkHandles( [ "e", "s", "se" ] );
+
+	target.resizable( "option", "handles", "n, w, nw" );
+	checkHandles( [ "n", "w", "nw" ] );
+
+	target.resizable( "option", "handles", "s, w" );
+	checkHandles( [ "s", "w" ] );
+} );
+
 test( "alsoResize + containment", function() {
 	expect( 4 );
 	var other = $( "<div>" )

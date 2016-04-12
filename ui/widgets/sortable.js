@@ -908,7 +908,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			floating = innermostContainer.floating || this._isFloating( this.currentItem );
 			posProperty = floating ? "left" : "top";
 			sizeProperty = floating ? "width" : "height";
-			axis = floating ? "clientX" : "clientY";
+			axis = floating ? "pageX" : "pageY";
 
 			for ( j = this.items.length - 1; j >= 0; j-- ) {
 				if ( !$.contains( this.containers[ innermostIndex ].element[ 0 ], this.items[ j ].item[ 0 ] ) ) {
@@ -1072,7 +1072,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				0 - this.offset.relative.left - this.offset.parent.left,
 				0 - this.offset.relative.top - this.offset.parent.top,
 				o.containment === "document" ? this.document.width() : this.window.width() - this.helperProportions.width - this.margins.left,
-				( o.containment === "document" ? this.document.width() : this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
+				( o.containment === "document" ? ( this.document.height() || document.body.parentNode.scrollHeight ) : this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
 			];
 		}
 

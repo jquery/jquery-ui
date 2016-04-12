@@ -33,10 +33,18 @@
 .ui-selectmenu-open {
 	display: block;
 }
-.ui-selectmenu-button.ui-button {
-	text-align: left;
+.ui-selectmenu-text {
+	display: block;
+	margin-right: 20px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+.ui-selectmenu-button.ui-button {
+	text-align: left;
 	white-space: nowrap;
 	width: 14em;
+}
+.ui-selectmenu-icon.ui-icon {
+	float: right;
+	margin-top: 0;
 }

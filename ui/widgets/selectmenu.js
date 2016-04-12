@@ -84,7 +84,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	},
 
 	_drawButton: function() {
-		var icon, space,
+		var icon,
 			that = this,
 			item = this._parseOption(
 				this.element.find( "option:selected" ),
@@ -119,12 +119,8 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		this._addClass( this.button, "ui-selectmenu-button ui-selectmenu-button-closed",
 			"ui-button ui-widget" );
 
-		icon = $( "<span>" ).prependTo( this.button );
-		space = $( "<span> </span>" );
-		this._addClass( space, "ui-selectmenu-icon-space" );
-		this._addClass( icon, null, "ui-icon " + this.options.icons.button );
-		icon.after( space );
-
+		icon = $( "<span>" ).appendTo( this.button );
+		this._addClass( icon, "ui-selectmenu-icon", "ui-icon " + this.options.icons.button );
 		this.buttonItem = this._renderButtonItem( item )
 			.appendTo( this.button );
 

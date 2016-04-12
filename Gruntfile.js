@@ -243,21 +243,6 @@ grunt.initConfig({
 		}
 	},
 
-	esformatter: {
-		options: {
-			preset: "jquery"
-		},
-		ui: "ui/*.js",
-		tests: "tests/unit/**/*.js",
-		build: {
-			options: {
-				skipHashbang: true
-			},
-			src: "build/**/*.js"
-		},
-		grunt: "Gruntfile.js"
-	},
-
 	bowercopy: {
 		all: {
 			options: {
@@ -408,7 +393,7 @@ grunt.initConfig({
 });
 
 grunt.registerTask( "update-authors", function() {
-	var getAuthors = require( "grunt-git-authors" ),
+	var getAuthors = require( "grunt-git-authors" ).getAuthors,
 		done = this.async();
 
 	getAuthors({
@@ -420,7 +405,9 @@ grunt.registerTask( "update-authors", function() {
 		}
 
 		authors = authors.map(function( author ) {
-			if ( author.match( /^Jacek Jędrzejewski </ ) ) {
+			if ( author.match( /^Dan Strohl </ ) ) {
+				return "Dan Strohl";
+			} else if ( author.match( /^Jacek Jędrzejewski </ ) ) {
 				return "Jacek Jędrzejewski (http://jacek.jedrzejewski.name)";
 			} else if ( author.match( /^Pawel Maruszczyk </ ) ) {
 				return "Pawel Maruszczyk (http://hrabstwo.net)";

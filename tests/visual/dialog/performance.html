@@ -10,17 +10,17 @@
 			html = new Array( 500 ).join( $.trim( $( "#template" ).html() ) );
 		$( html ).appendTo( "body" );
 
-		start = $.now();
+		start = new Date();
 		$( "#dialog" ).dialog({
 			modal: true,
 			autoOpen: false
 		});
-		$( "<li>Create: " + ($.now() - start) + "ms</li>" ).appendTo( "#log" );
+		$( "<li>Create: " + (new Date() - start) + "ms</li>" ).appendTo( "#log" );
 
 		$( "#opener" ).on( "click", function() {
-			start = $.now();
+			start = new Date();
 			$( "#dialog" ).dialog( "open" );
-			$( "<li>Open: " + ($.now() - start) + "ms</li>" ).appendTo( "#log" );
+			$( "<li>Open: " + (new Date() - start) + "ms</li>" ).appendTo( "#log" );
 		});
 	</script>
 </head>
