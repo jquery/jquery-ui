@@ -434,9 +434,9 @@ return $.widget( "ui.menu", {
 
 		this._removeClass( this.active.children( ".ui-menu-item-wrapper" ),
 			null, "ui-state-active" );
-		this.active = null;
 
 		this._trigger( "blur", event, { item: this.active } );
+		this.active = null;
 	},
 
 	_startOpening: function( submenu ) {

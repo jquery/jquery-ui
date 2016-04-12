@@ -48,20 +48,22 @@ test( "handle click on custom item menu", function() {
 } );
 
 asyncTest( "handle blur", function() {
-	expect( 1 );
+	expect( 2 );
 	var blurHandled = false,
+		index = 1,
 		element = $( "#menu1" ).menu( {
-			blur: function( event ) {
+			blur: function( event, ui ) {
 
 				// Ignore duplicate blur event fired by IE
 				if ( !blurHandled ) {
 					blurHandled = true;
 					equal( event.type, "menublur", "blur event.type is 'menublur'" );
+					strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
 				}
 			}
 		} );
 
-	click( element, "1" );
+	click( element, index );
 	setTimeout( function() {
 		element.trigger( "blur" );
 		setTimeout( function() {
@@ -71,20 +73,22 @@ asyncTest( "handle blur", function() {
 } );
 
 asyncTest( "handle blur via click outside", function() {
-	expect( 1 );
+	expect( 2 );
 	var blurHandled = false,
+		index = 1,
 		element = $( "#menu1" ).menu( {
-			blur: function( event ) {
+			blur: function( event, ui ) {
 
 				// Ignore duplicate blur event fired by IE
 				if ( !blurHandled ) {
 					blurHandled = true;
 					equal( event.type, "menublur", "blur event.type is 'menublur'" );
+					strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
 				}
 			}
 		} );
 
-	click( element, "1" );
+	click( element, index );
 	setTimeout( function() {
 		$( "<a>", { id: "remove" } ).appendTo( "body" ).trigger( "click" );
 		setTimeout( function() {
