@@ -1072,7 +1072,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				0 - this.offset.relative.left - this.offset.parent.left,
 				0 - this.offset.relative.top - this.offset.parent.top,
 				o.containment === "document" ? this.document.width() : this.window.width() - this.helperProportions.width - this.margins.left,
-				( o.containment === "document" ? this.document.width() : this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
+				( o.containment === "document" ? ( this.document.height() || document.body.parentNode.scrollHeight ) : this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
 			];
 		}
 
