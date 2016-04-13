@@ -321,7 +321,7 @@ return $.widget( "ui.calendar", {
 
 	_buildTitlebar: function() {
 		return "<div role='header' id='" + this.gridId + "-title'>" +
-			"<div id='" + this.gridId + "-month-label' class='ui-calendar-title'>" +
+			"<div id='" + this.gridId + "-month-label' role='alert' class='ui-calendar-title'>" +
 				this._buildTitle() +
 			"</div>" +
 			"<span class='ui-helper-hidden-accessible'>, " +
@@ -402,11 +402,16 @@ return $.widget( "ui.calendar", {
 
 	_buildDayCell: function( day ) {
 		var content = "",
+			dateObject = new Date( day.timestamp ),
+			dayName = this._calendarDateOptions.formatWeekdayFull( dateObject ),
 			attributes = [
 				"role='gridcell'",
-				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'"
+				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'",
+				"aria-label='" + dayName + ", " + this._format( dateObject ) + "'",
+				"aria-describedby='" + this.gridId + "-month-label'",
+				"aria-hidden='" + true + "'"
 			],
-			selectable = ( day.selectable && this._isValid( new Date( day.timestamp ) ) );
+			selectable = ( day.selectable && this._isValid( dateObject ) );
 
 		if ( day.render ) {
 			attributes.push( "id='" + this.id + "-" + day.year + "-" + day.month + "-" + day.date + "'" );
