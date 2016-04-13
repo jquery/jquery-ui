@@ -140,13 +140,10 @@ var widget = $.widget( "ui.datepicker", {
 					this.close( event );
 				}
 				break;
+			case $.ui.keyCode.ENTER:
 			case $.ui.keyCode.DOWN:
 			case $.ui.keyCode.UP:
-				clearTimeout( this.closeTimer );
-				this._delay( function() {
-					this.open( event );
-					this.calendarInstance.grid.focus();
-				}, 1 );
+				this.open( event );
 				break;
 			}
 		},
@@ -279,6 +276,10 @@ var widget = $.widget( "ui.datepicker", {
 
 		this.isOpen = true;
 		this._trigger( "open", event );
+
+		this._delay( function() {
+			this.calendarInstance.grid.focus();
+		} );
 	},
 
 	close: function( event ) {

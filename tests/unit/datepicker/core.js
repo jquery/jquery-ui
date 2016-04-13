@@ -52,9 +52,9 @@ asyncTest( "Keyboard handling: input", function() {
 
 		ok( !picker.is( ":visible" ), "datepicker closed" );
 
-		input.val( "" ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		input.val( "" ).focus();
 		setTimeout( function() {
-			ok( picker.is( ":visible" ), "Keystroke down opens datepicker" );
+			ok( picker.is( ":visible" ), "Datepicker opens when receiving focus" );
 			input.datepicker( "destroy" );
 			step2();
 		}, 100 );
