@@ -90,8 +90,6 @@ return $.widget( "ui.menu", {
 						this.mouseHandled = true;
 					}
 
-
-
 					// Open submenu on click
 					if ( target.has( ".ui-menu" ).length ) {
 						this.expand( event );
