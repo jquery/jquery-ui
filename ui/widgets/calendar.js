@@ -123,15 +123,17 @@ return $.widget( "ui.calendar", {
 	},
 
 	_handleKeydown: function( event ) {
+		var pageAltKey = ( event.altKey || event.ctrlKey && event.shiftKey );
+
 		switch ( event.keyCode ) {
 		case $.ui.keyCode.ENTER:
 			this.activeDescendant.mousedown();
 			return;
 		case $.ui.keyCode.PAGE_UP:
-			this.date.adjust( event.altKey ? "Y" : "M", -1 );
+			this.date.adjust( pageAltKey ? "Y" : "M", -1 );
 			break;
 		case $.ui.keyCode.PAGE_DOWN:
-			this.date.adjust( event.altKey ? "Y" : "M", 1 );
+			this.date.adjust( pageAltKey ? "Y" : "M", 1 );
 			break;
 		case $.ui.keyCode.END:
 			this.date.setDay( this.date.daysInMonth() );
