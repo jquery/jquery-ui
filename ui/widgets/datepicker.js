@@ -56,8 +56,8 @@ var widget = $.widget( "ui.datepicker", {
 		select: null
 	},
 
-	calendarOptions: [ "buttons", "disabled", "dateFormat", "eachDay", "labels",
-		"locale", "max", "min", "numberOfMonths", "showWeek" ],
+	calendarOptions: [ "buttons", "classes", "disabled", "dateFormat", "eachDay",
+		"labels", "locale", "max", "min", "numberOfMonths", "showWeek" ],
 
 	_create: function() {
 		this.suppressExpandOnFocus = false;
@@ -96,9 +96,8 @@ var widget = $.widget( "ui.datepicker", {
 		var that = this,
 			globalize = new Globalize( this.options.locale );
 
-		this.calendar = $( "<div>" )
-			.addClass( "ui-front ui-datepicker" )
-			.appendTo( this._appendTo() );
+		this.calendar = $( "<div>" ).appendTo( this._appendTo() );
+		this._addClass( this.calendar, "ui-datepicker", "ui-front" );
 
 		// Initialize calendar widget
 		this.calendarInstance = this.calendar
