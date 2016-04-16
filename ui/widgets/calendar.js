@@ -45,6 +45,13 @@ return $.widget( "ui.calendar", {
 	version: "@VERSION",
 	options: {
 		buttons: [],
+		classes: {
+			"ui-calendar": "ui-corner-all",
+			"ui-calendar-header-first": "ui-corner-left",
+			"ui-calendar-header-last": "ui-corner-right",
+			"ui-calendar-prev": "ui-corner-all",
+			"ui-calendar-next": "ui-corner-all"
+		},
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
 		labels: {
@@ -119,7 +126,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_hover: function( event ) {
-		$( event.currentTarget ).toggleClass( "ui-state-hover" );
+		this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
 	},
 
 	_handleKeydown: function( event ) {
@@ -193,14 +200,15 @@ return $.widget( "ui.calendar", {
 	},
 
 	_updateDayElement: function( state ) {
-		var id = this._getDayId( this.date );
+		var id = this._getDayId( this.date ),
+			button = this._getDateElement( id ).children( "button" );
 
-		this.grid
-			.attr( "aria-activedescendant", id )
-			.find( "button." + state )
-			.removeClass( state );
+		this.grid.attr( "aria-activedescendant", id );
 
-		return this._getDateElement( id ).children( "button" ).addClass( state );
+		this._removeClass( this.grid.find( "button." + state ), null, state );
+		this._addClass( button, null, state );
+
+		return button;
 	},
 
 	_getDateElement: function( id ) {
@@ -232,37 +240,40 @@ return $.widget( "ui.calendar", {
 	},
 
 	_createCalendar: function() {
-		var classes = "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all",
-			pickerHtml = this._buildHeaderButtons();
+		this.element
+			.attr( "role", "region" )
+			.append( this._buildHeaderButtons() );
 
 		if ( this.options.numberOfMonths === 1 ) {
-			pickerHtml += this._buildHeader() + this._buildGrid();
-			this.element.attr( "aria-labelledby", this.gridId + "-title" );
+			this._buildSinglePicker();
 		} else {
-			pickerHtml += this._buildMultiplePicker();
-			classes += " ui-calendar-multi";
+			this._buildMultiplePicker();
 		}
 
-		this.element
-			.addClass( classes )
-			.attr( "role", "region" )
-			.html( pickerHtml );
+		this._addClass( this.element, "ui-calendar", "ui-widget ui-widget-content ui-helper-clearfix" );
 
-		this.prevButton = this.element.find( ".ui-calendar-prev" );
-		this.nextButton = this.element.find( ".ui-calendar-next" );
 		this._refreshHeaderButtons();
-
 		this._createButtonPane();
 
 		this.grid = this.element.find( ".ui-calendar-calendar" );
 	},
 
+	_buildSinglePicker: function() {
+		var header = this._buildHeader();
+
+		this._addClass( header, "ui-calendar-header-first ui-calendar-header-last" );
+		this.element
+			.attr( "aria-labelledby", this.gridId + "-title" )
+			.append( header )
+			.append( this._buildGrid() );
+	},
+
 	_buildMultiplePicker: function() {
-		var headerClass,
-			html = "",
+		var element, header,
+			rowBreak = $( "<div>" ),
 			currentDate = this.viewDate,
 			months = this.viewDate.months( this.options.numberOfMonths - 1 ),
-			labelledby = [],
+			labelledBy = [],
 			i = 0;
 
 		for ( ; i < months.length; i++ ) {
@@ -270,108 +281,120 @@ return $.widget( "ui.calendar", {
 			// TODO: Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
 			this.viewDate = months[ i ];
 			this.gridId = this.id + "-" + i;
+			labelledBy.push( this.gridId + "-title" );
 
-			labelledby.push( this.gridId + "-title" );
-			headerClass = "ui-calendar-header ui-widget-header ui-helper-clearfix";
-			if ( months[ i ].first ) {
-				headerClass += " ui-corner-left";
-			} else if ( months[ i ].last ) {
-				headerClass += " ui-corner-right";
-			}
+			element = $( "<div>" );
+			this._addClass( element, "ui-calendar-group" );
 
-			html += "<div class='ui-calendar-group'>";
-			html += "<div class='" + headerClass + "'>" +
-				this._buildTitlebar() + "</div>";
-			html += this._buildGrid() + "</div>";
+			header = this._buildHeader();
+			this._addClass( header, "ui-calendar-header-" +
+				( ( months[ i ].first ) ? "first" : ( months[ i ].last ) ? "last" : "middle" )
+			);
+
+			element.appendTo( this.element )
+				.append( header )
+				.append( this._buildGrid() );
 		}
 
-		html += "<div class='ui-calendar-row-break'></div>";
+		this._addClass( this.element, "ui-calendar-multi" )
+			._addClass( rowBreak, "ui-calendar-row-break" );
 
-		this.element.attr( "aria-labelledby", labelledby.join( " " ) );
+		this.element
+			.attr( "aria-labelledby", labelledBy.join( " " ) )
+			.append( rowBreak );
 
 		this.viewDate = currentDate;
-
-		return html;
-	},
-
-	_buildHeader: function() {
-		return "<div class='ui-calendar-header ui-widget-header ui-helper-clearfix ui-corner-all'>" +
-			this._buildTitlebar() +
-		"</div>";
 	},
 
 	_buildHeaderButtons: function() {
-		return "<div class='ui-calendar-header-buttons'>" +
-			this._buildPreviousLink() +
-			this._buildNextLink() +
-		"</div>";
+		var buttons = $( "<div>" );
+
+		this.prevButton = $( "<button>", {
+			html: "<span class='ui-icon ui-icon-circle-triangle-w'></span>"
+		} );
+		this.nextButton = $( "<button>", {
+			html: "<span class='ui-icon ui-icon-circle-triangle-e'></span>"
+		} );
+
+		this._addClass( buttons, "ui-calendar-header-buttons" )
+			._addClass( this.prevButton, "ui-calendar-prev" )
+			._addClass( this.nextButton, "ui-calendar-next" );
+
+		return buttons
+			.append( this.prevButton )
+			.append( this.nextButton );
 	},
 
-	_buildPreviousLink: function() {
-		return "<button class='ui-calendar-prev ui-corner-all'>" +
-			"<span class='ui-icon ui-icon-circle-triangle-w'></span>" +
-		"</button>";
-	},
+	_buildHeader: function() {
+		var header = $( "<div>" ),
+			title = $( "<div>", { role: "header", id: this.gridId + "-title" } ),
+			notice = $( "<span>" ).text( ", " + this._getTranslation( "datePickerRole" ) );
 
-	_buildNextLink: function() {
-		return "<button class='ui-calendar-next ui-corner-all'>" +
-			"<span class='ui-icon ui-icon-circle-triangle-e'></span>" +
-		"</button>";
-	},
+		this._addClass( header, "ui-calendar-header", "ui-widget-header ui-helper-clearfix" )
+			._addClass( notice, null, "ui-helper-hidden-accessible" );
 
-	_buildTitlebar: function() {
-		return "<div role='header' id='" + this.gridId + "-title'>" +
-			"<div id='" + this.gridId + "-month-label' role='alert' class='ui-calendar-title'>" +
-				this._buildTitle() +
-			"</div>" +
-			"<span class='ui-helper-hidden-accessible'>, " +
-				this._getTranslation( "datePickerRole" ) +
-			"</span>" +
-		"</div>";
+		return header.append(
+			title
+				.append( this._buildTitle() )
+				.append( notice )
+		);
 	},
 
 	_buildTitle: function() {
-		return "<span class='ui-calendar-month'>" +
-			this.viewDate.monthName() +
-		"</span> " +
-		"<span class='ui-calendar-year'>" +
-			this.viewDate.year() +
-		"</span>";
+		var title = $( "<div>", { role: "alert", id: this.gridId + "-month-label" } ),
+			month = $( "<span>" ).text( this.viewDate.monthName() ),
+			year = $( "<span>" ).text( this.viewDate.year() );
+
+		this._addClass( title, "ui-calendar-title" )
+			._addClass( month, "ui-calendar-month" )
+			._addClass( year, "ui-calendar-year" );
+
+		return title
+			.append( month )
+			.append( " " )
+			.append( year );
 	},
 
 	_buildGrid: function() {
-		return "<table class='ui-calendar-calendar' role='grid' aria-readonly='true' " +
-			"aria-labelledby='" + this.gridId + "-month-label' tabindex='0' " +
-			"aria-activedescendant='" + this._getDayId( this.date ) + "'>" +
-			this._buildGridHeading() +
-			this._buildGridBody() +
-		"</table>";
+		var table = $( "<table>", {
+			role: "grid",
+			tabindex: 0,
+			"aria-readonly": true,
+			"aria-labelledby": this.gridId + "-month-label",
+			"aria-activedescendant": this._getDayId( this.date )
+		} );
+
+		this._addClass( table, "ui-calendar-calendar" );
+
+		return table
+			.append( this._buildGridHeading() )
+			.append( this._buildGridBody() );
 	},
 
 	_buildGridHeading: function() {
-		var cells = "",
+		var head = $( "<thead role='presentation'>" ),
+			week = $( "<th>" ),
+			row = $( "<tr role='row'>" ),
 			i = 0,
 			weekDayLength = this.viewDate.weekdays().length,
 			weekdays = this.viewDate.weekdays();
 
 		if ( this.options.showWeek ) {
-			cells += "<th class='ui-calendar-week-col'>" + this._getTranslation( "weekHeader" ) + "</th>";
-		}
-		for ( ; i < weekDayLength; i++ ) {
-			cells += this._buildGridHeaderCell( weekdays[ i ] );
+			this._addClass( week, "ui-calendar-week-col" );
+			row.append( week.text( this._getTranslation( "weekHeader" ) ) );
 		}
 
-		return "<thead role='presentation'>" +
-			"<tr role='row'>" + cells + "</tr>" +
-		"</thead>";
+		for ( ; i < weekDayLength; i++ ) {
+			row.append( this._buildGridHeaderCell( weekdays[ i ] ) );
+		}
+
+		return head.append( row );
 	},
 
 	_buildGridHeaderCell: function( day ) {
-		return "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
-			"<span title='" + day.fullname + "'>" +
-				day.shortname +
-			"</span>" +
-		"</th>";
+		return $( "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
+			"<span title='" + day.fullname + "'>" + day.shortname + "</span>" +
+		"</th>" );
 	},
 
 	_buildGridBody: function() {
@@ -468,12 +491,11 @@ return $.widget( "ui.calendar", {
 	},
 
 	_createButtonPane: function() {
-		this.buttonPane = $( "<div>" )
-			.addClass( "ui-calendar-buttonpane ui-widget-content ui-helper-clearfix" );
+		this.buttonPane = $( "<div>" );
+		this.buttonSet = $( "<div>" ).appendTo( this.buttonPane );
 
-		this.buttonSet = $( "<div>" )
-			.addClass( "ui-calendar-buttonset" )
-			.appendTo( this.buttonPane );
+		this._addClass( this.buttonPane, "ui-calendar-buttonpane", "ui-widget-content ui-helper-clearfix" )
+			._addClass( this.buttonSet, "ui-calendar-buttonset" );
 
 		this._createButtons();
 	},
@@ -486,7 +508,7 @@ return $.widget( "ui.calendar", {
 		this.buttonSet.empty();
 
 		if ( $.isEmptyObject( buttons ) || ( $.isArray( buttons ) && !buttons.length ) ) {
-			this.element.removeClass( "ui-calendar-buttons" );
+			this._removeClass( this.element, "ui-calendar-buttons" );
 			return;
 		}
 
@@ -519,7 +541,8 @@ return $.widget( "ui.calendar", {
 					click.apply( that.buttonClickContext, arguments );
 				} );
 		} );
-		this.element.addClass( "ui-calendar-buttons" );
+
+		this._addClass( this.element, "ui-calendar-buttons" );
 		this.buttonPane.appendTo( this.element );
 	},
 
@@ -532,15 +555,15 @@ return $.widget( "ui.calendar", {
 		// Determine which day grid cell to focus after refresh
 		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
-			this.element.find( ".ui-calendar-title" ).html( this._buildTitle() );
+			this.element.find( ".ui-calendar-title" ).replaceWith( this._buildTitle() );
 			this.element.find( ".ui-calendar-calendar" ).replaceWith( this._buildGrid() );
 		} else {
 			this._refreshMultiplePicker();
 		}
 
 		this.grid = this.element.find( ".ui-calendar-calendar" );
-		this._setActiveDescendant();
 
+		this._setActiveDescendant();
 		this._refreshHeaderButtons();
 		this._createButtons();
 	},
@@ -577,17 +600,16 @@ return $.widget( "ui.calendar", {
 	},
 
 	_disableElement: function( element, state ) {
-		element
-			.attr( "aria-disabled", state )
-			.toggleClass( "ui-state-disabled", state );
+		element.attr( "aria-disabled", state );
+		this._toggleClass( element, null, "ui-state-disabled", state );
 	},
 
 	_refreshMultiplePicker: function() {
 		var i = 0;
 
 		for ( ; i < this.options.numberOfMonths; i++ ) {
-			this.element.find( ".ui-calendar-title" ).eq( i ).html( this._buildTitle() );
-			this.element.find( ".ui-calendar-calendar" ).eq( i ).html( this._buildGrid() );
+			this.element.find( ".ui-calendar-title" ).eq( i ).replaceWith( this._buildTitle() );
+			this.element.find( ".ui-calendar-calendar" ).eq( i ).replaceWith( this._buildGrid() );
 			this.viewDate.adjust( "M", 1 );
 		}
 		this.viewDate.adjust( "M", -this.options.numberOfMonths );
@@ -642,8 +664,6 @@ return $.widget( "ui.calendar", {
 
 	_destroy: function() {
 		this.element
-			.off( ".calendar" )
-			.removeClass( "ui-calendar ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-calendar-multi" )
 			.removeAttr( "role aria-labelledby" )
 			.removeUniqueId()
 			.empty();

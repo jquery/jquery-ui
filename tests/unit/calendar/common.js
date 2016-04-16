@@ -7,7 +7,13 @@ define( [
 common.testWidget( "calendar", {
 	defaults: {
 		buttons: [],
-		classes: {},
+		classes: {
+			"ui-calendar": "ui-corner-all",
+			"ui-calendar-header-first": "ui-corner-left",
+			"ui-calendar-header-last": "ui-corner-right",
+			"ui-calendar-prev": "ui-corner-all",
+			"ui-calendar-next": "ui-corner-all"
+		},
 		disabled: false,
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
