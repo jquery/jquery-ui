@@ -57,7 +57,7 @@ var widget = $.widget( "ui.datepicker", {
 	},
 
 	calendarOptions: [ "buttons", "classes", "disabled", "dateFormat", "eachDay",
-		"labels", "locale", "max", "min", "numberOfMonths", "showWeek" ],
+		"icons", "labels", "locale", "max", "min", "numberOfMonths", "showWeek" ],
 
 	_create: function() {
 		this.suppressExpandOnFocus = false;
