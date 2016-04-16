@@ -17,6 +17,10 @@ common.testWidget( "calendar", {
 		disabled: false,
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
+		icons: {
+			prevButton: "ui-icon-circle-triangle-w",
+			nextButton: "ui-icon-circle-triangle-e"
+		},
 		labels: {
 			"datePickerRole": "date picker",
 			"nextText": "Next",

@@ -54,6 +54,10 @@ return $.widget( "ui.calendar", {
 		},
 		dateFormat: { date: "short" },
 		eachDay: $.noop,
+		icons: {
+			prevButton: "ui-icon-circle-triangle-w",
+			nextButton: "ui-icon-circle-triangle-e"
+		},
 		labels: {
 			"datePickerRole": "date picker",
 			"nextText": "Next",
@@ -309,20 +313,21 @@ return $.widget( "ui.calendar", {
 	_buildHeaderButtons: function() {
 		var buttons = $( "<div>" );
 
-		this.prevButton = $( "<button>", {
-			html: "<span class='ui-icon ui-icon-circle-triangle-w'></span>"
-		} );
-		this.nextButton = $( "<button>", {
-			html: "<span class='ui-icon ui-icon-circle-triangle-e'></span>"
-		} );
-
-		this._addClass( buttons, "ui-calendar-header-buttons" )
-			._addClass( this.prevButton, "ui-calendar-prev" )
-			._addClass( this.nextButton, "ui-calendar-next" );
+		this._addClass( buttons, "ui-calendar-header-buttons" );
 
 		return buttons
-			.append( this.prevButton )
-			.append( this.nextButton );
+			.append( this.prevButton = this._buildIconButton( "prev" ) )
+			.append( this.nextButton = this._buildIconButton( "next" ) );
+	},
+
+	_buildIconButton: function( key ) {
+		var button = $( "<button>" ),
+			icon = $( "<span>" );
+
+		this._addClass( button, "ui-calendar-" + key )
+			._addClass( icon, null, "ui-icon " + this.options.icons[ key + "Button" ] );
+
+		return button.append( icon );
 	},
 
 	_buildHeader: function() {
