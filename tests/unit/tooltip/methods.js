@@ -94,6 +94,20 @@ QUnit.test( "enable/disable", function( assert ) {
 	$.fx.off = false;
 } );
 
+QUnit.test( "enable/disable delegated", function( assert ) {
+	assert.expect( 1 );
+	var element = $( "#qunit-fixture" ).tooltip();
+	var tooltipped = $( "#tooltipped1" );
+
+	element.tooltip( "disable" );
+	element.tooltip( "enable" );
+
+	tooltipped.trigger( "mouseover" );
+	assert.equal( $( ".ui-tooltip" ).length, 1, "open" );
+
+	element.tooltip( "destroy" );
+} );
+
 QUnit.test( "widget", function( assert ) {
 	assert.expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip(),
