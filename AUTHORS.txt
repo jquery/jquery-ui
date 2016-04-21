@@ -322,3 +322,7 @@ Mukul Hase <mukulhase@gmail.com>
 Konstantin Dinev <kdinev@mail.bw.edu>
 Rand Scullard <rand@randscullard.com>
 Dan Strohl
+Maksim Ryzhikov <rv.maksim@gmail.com>
+Amine HADDAD <haddad@allegorie.tv>
+Amanpreet Singh <apsdehal@gmail.com>
+Alexey Balchunas <bleshik@gmail.com>
