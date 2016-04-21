@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Slider @VERSION
+ * jQuery UI Slider 1.12.0-rc.2
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -35,7 +35,7 @@
 }( function( $ ) {
 
 return $.widget( "ui.slider", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.12.0-rc.2",
 	widgetEventPrefix: "slide",
 
 	options: {
