@@ -253,7 +253,7 @@ $.widget( "ui.droppable", {
 	}
 } );
 
-var intersect = ( function() {
+var intersect = $.ui.intersect = ( function() {
 	function isOverAxis( x, reference, size ) {
 		return ( x >= reference ) && ( x < ( reference + size ) );
 	}
