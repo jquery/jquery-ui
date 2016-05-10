@@ -30,6 +30,7 @@
 		factory( jQuery );
 	}
 }( function( $ ) {
+var removeClassRegex = /ui-corner-([a-z]){2,6}/g;
 
 return $.widget( "ui.controlgroup", {
 	version: "@VERSION",
@@ -107,15 +108,20 @@ return $.widget( "ui.controlgroup", {
 
 			// Find instances of this widget inside controlgroup and init them
 			that.element
-				.find( selector )[ widget ]( options )
+				.find( selector )
 				.each( function() {
 					var element = $( this );
+					var instance = element[ widget ]( "instance" );
+					if ( instance ) {
+						options.classes = that._resolveClassesValues( options.classes, instance );
+					}
+					element[ widget ]( options );
 
 					// Store an instance of the controlgroup to be able to reference
 					// from the outermost element for changing options and refresh
 					var widgetElement = element[ widget ]( "widget" );
 					$.data( widgetElement[ 0 ], "ui-controlgroup-data",
-						element[ widget ]( "instance" ) );
+						instance ? instance : element[ widget ]( "instance" ) );
 
 					childWidgets.push( widgetElement[ 0 ] );
 				} );
@@ -149,7 +155,7 @@ return $.widget( "ui.controlgroup", {
 			classes: {}
 		};
 		result.classes[ key ] = {
-			"middle": null,
+			"middle": "",
 			"first": "ui-corner-" + ( direction ? "top" : "left" ),
 			"last": "ui-corner-" + ( direction ? "bottom" : "right" )
 		}[ position ];
@@ -180,20 +186,29 @@ return $.widget( "ui.controlgroup", {
 			width: direction ? "auto" : false,
 			classes: {
 				middle: {
-					"ui-selectmenu-button-open": null,
-					"ui-selectmenu-button-closed": null
+					"ui-selectmenu-button-open": "",
+					"ui-selectmenu-button-closed": ""
 				},
 				first: {
 					"ui-selectmenu-button-open": "ui-corner-" + ( direction ? "top" : "tl" ),
 					"ui-selectmenu-button-closed": "ui-corner-" + ( direction ? "top" : "left" )
 				},
 				last: {
-					"ui-selectmenu-button-open": direction ? null : "ui-corner-tr",
+					"ui-selectmenu-button-open": direction ? "" : "ui-corner-tr",
 					"ui-selectmenu-button-closed": "ui-corner-" + ( direction ? "bottom" : "right" )
 				}
 
 			}[ position ]
 		};
+	},
+
+	_resolveClassesValues: function( classes, instance ) {
+		$.each( classes, function( key ) {
+			var current = instance.options.classes[ key ] || "";
+			current = current.replace( removeClassRegex, "" ).trim();
+			classes[ key ] = ( current + " " + classes[ key ] ).replace( / +/g, " " );
+		} );
+		return classes;
 	},
 
 	_setOption: function( key, value ) {
@@ -236,9 +251,10 @@ return $.widget( "ui.controlgroup", {
 				var instance = children[ value ]().data( "ui-controlgroup-data" );
 
 				if ( instance && that[ "_" + instance.widgetName + "Options" ] ) {
-					instance.element[ instance.widgetName ](
-						that[ "_" + instance.widgetName + "Options" ]( value )
-					);
+					var options = that[ "_" + instance.widgetName + "Options" ]( value );
+
+					options.classes = that._resolveClassesValues( options.classes, instance );
+					instance.element[ instance.widgetName ]( options );
 				} else {
 					that._updateCornerClass( children[ value ](), value );
 				}
