@@ -148,4 +148,27 @@ $.each( tests, function( widget, html ) {
 	} );
 } );
 
+QUnit.test( "Child Classes Option: init", function( assert ) {
+	assert.expect( 1 );
+	var selectmenu = $( "#select-pre" ).selectmenu( {
+		classes: {
+			"ui-selectmenu-button-closed": "test-class"
+		}
+	} );
+	var controlgroup = $( ".controlgroup-pre" ).controlgroup();
+	assert.hasClasses( selectmenu.selectmenu( "widget" ), "test-class" );
+} );
+
+QUnit.test( "Child Classes Option: refresh", function( assert ) {
+	assert.expect( 1 );
+	var controlgroup = $( ".controlgroup-refresh" ).controlgroup();
+	var selectmenu = $( "#select-refresh" ).selectmenu( {
+		classes: {
+			"ui-selectmenu-button-closed": "test-class"
+		}
+	} );
+	controlgroup.controlgroup( "refresh" );
+	assert.hasClasses( selectmenu.selectmenu( "widget" ), "test-class" );
+} );
+
 } );
