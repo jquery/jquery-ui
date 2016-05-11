@@ -112,6 +112,11 @@ return $.widget( "ui.controlgroup", {
 				.each( function() {
 					var element = $( this );
 					var instance = element[ widget ]( "instance" );
+
+					// If the button is the child of a spinner ignore it
+					if ( widget === "button" && element.parent( ".ui-spinner" ).length ) {
+						return;
+					}
 					if ( instance ) {
 						options.classes = that._resolveClassesValues( options.classes, instance );
 					}
@@ -252,7 +257,6 @@ return $.widget( "ui.controlgroup", {
 
 				if ( instance && that[ "_" + instance.widgetName + "Options" ] ) {
 					var options = that[ "_" + instance.widgetName + "Options" ]( value );
-
 					options.classes = that._resolveClassesValues( options.classes, instance );
 					instance.element[ instance.widgetName ]( options );
 				} else {

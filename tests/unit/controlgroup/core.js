@@ -4,7 +4,8 @@ define( [
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
-	"ui/widgets/button"
+	"ui/widgets/button",
+	"ui/widgets/spinner"
 ], function( QUnit, $ ) {
 
 QUnit.module( "Controlgroup: Core" );
@@ -75,11 +76,11 @@ QUnit.test( "selectmenu: controlgroupLabel", function( assert ) {
 } );
 
 var assertSanatized = function( assert, initClasses, expectedClasses, message ) {
-	var selectmenu = $( "#select-sanatize" ).selectmenu({
+	var selectmenu = $( "#select-sanatize" ).selectmenu( {
 		classes: {
 			"ui-selectmenu-button-open": initClasses
 		}
-	}).selectmenu( "instance" );
+	} ).selectmenu( "instance" );
 	var classes = {
 		"ui-selectmenu-button-open": "ui-corner-top"
 	};
@@ -87,7 +88,7 @@ var assertSanatized = function( assert, initClasses, expectedClasses, message ) 
 	assert.deepEqual( result, {
 		"ui-selectmenu-button-open": expectedClasses + " ui-corner-top"
 	}, message );
-}
+};
 
 QUnit.test( "_resolveClassesValues", function( assert ) {
 	assert.expect( 6 );
