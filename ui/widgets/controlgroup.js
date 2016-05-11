@@ -30,7 +30,7 @@
 		factory( jQuery );
 	}
 }( function( $ ) {
-var removeClassRegex = /ui-corner-([a-z]){2,6}/g;
+var controlgroupCornerRegex = /ui-corner-([a-z]){2,6}/g;
 
 return $.widget( "ui.controlgroup", {
 	version: "@VERSION",
@@ -87,7 +87,12 @@ return $.widget( "ui.controlgroup", {
 			if ( widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
 				labels.each( function() {
-					$( this ).contents()
+					var element = $( this );
+
+					if ( element.children( ".ui-controlgroup-label-contents" ).length ) {
+						return;
+					}
+					element.contents()
 						.wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
@@ -210,8 +215,8 @@ return $.widget( "ui.controlgroup", {
 	_resolveClassesValues: function( classes, instance ) {
 		$.each( classes, function( key ) {
 			var current = instance.options.classes[ key ] || "";
-			current = current.replace( removeClassRegex, "" ).trim();
-			classes[ key ] = ( current + " " + classes[ key ] ).replace( / +/g, " " );
+			current = current.replace( controlgroupCornerRegex, "" ).trim();
+			classes[ key ] = ( current + " " + classes[ key ] ).replace( /\s+/g, " " );
 		} );
 		return classes;
 	},

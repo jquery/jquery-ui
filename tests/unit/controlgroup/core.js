@@ -92,12 +92,12 @@ var assertSanatized = function( assert, initClasses, expectedClasses, message ) 
 
 QUnit.test( "_resolveClassesValues", function( assert ) {
 	assert.expect( 6 );
-	assertSanatized( assert, "bar ui-corner-bottom", "bar", "Single Corner Class Removed end" );
-	assertSanatized( assert, "ui-corner-bottom bar", "bar", "Single Corner Class Removed beginning" );
-	assertSanatized( assert, "bar ui-corner-bottom ui-corner-left", "bar", "Multiple Corner Class Removed end" );
-	assertSanatized( assert, "ui-corner-bottom ui-corner-left bar", "bar", "Multiple Corner Class Removed beginning" );
-	assertSanatized( assert, "bar ui-corner-bottom ui-corner-left foo", "bar foo", "Multiple Corner Class Removed Middle" );
-	assertSanatized( assert, "bar", "bar", "No corner Class" );
+	assertSanatized( assert, "bar ui-corner-bottom", "bar", "Single corner class removed end" );
+	assertSanatized( assert, "ui-corner-bottom bar", "bar", "Single corner class removed beginning" );
+	assertSanatized( assert, "bar ui-corner-bottom ui-corner-left", "bar", "Multiple corner classes removed end" );
+	assertSanatized( assert, "ui-corner-bottom ui-corner-left bar", "bar", "Multiple corner classes removed beginning" );
+	assertSanatized( assert, "bar ui-corner-bottom ui-corner-left foo", "bar foo", "Multiple corner class removed middle" );
+	assertSanatized( assert, "bar", "bar", "No corner classes" );
 } );
 
 } );

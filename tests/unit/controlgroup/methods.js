@@ -177,4 +177,12 @@ QUnit.test( "Child Classes Option: refresh", function( assert ) {
 	assert.hasClasses( selectmenu.selectmenu( "widget" ), "test-class" );
 } );
 
+QUnit.test( "Controlgroup Label: refresh", function( assert ) {
+	assert.expect( 1 );
+	var controlgroup = $( ".controlgroup-refresh" ).controlgroup();
+	controlgroup.controlgroup( "refresh" );
+	assert.strictEqual( controlgroup.find( ".ui-controlgroup-label-contents" ).length, 1,
+		"Controlgroup label does not re-wrap on refresh" );
+} );
+
 } );
