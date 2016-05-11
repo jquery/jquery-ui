@@ -566,8 +566,8 @@ $.widget( "ui.autocomplete", {
 
 	_renderMenu: function( ul, items ) {
 		var length = items.length, index = 0;
-		for (; index < length; index++) {
-			this._renderItemData( ul, items[index] );
+		for ( ; index < length; index++ ) {
+			this._renderItemData( ul, items[ index ] );
 		}
 	},
 
