@@ -4,7 +4,8 @@ define( [
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
-	"ui/widgets/button"
+	"ui/widgets/button",
+	"ui/widgets/spinner"
 ], function( QUnit, $ ) {
 
 QUnit.module( "Controlgroup: options" );
@@ -13,7 +14,7 @@ QUnit.test( "disabled", function( assert ) {
 	assert.expect( 4 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "option", "disabled", true );
 	assert.lacksClasses( element, "ui-state-disabled" );
-	assert.equal( element.find( ".ui-state-disabled" ).length, 6, "Child widgets are disabled" );
+	assert.equal( element.find( ".ui-state-disabled" ).length, 9, "Child widgets are disabled" );
 
 	element.controlgroup( "option", "disabled", false );
 	assert.lacksClasses( element, "ui-state-disabled" );
