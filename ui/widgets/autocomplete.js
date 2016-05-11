@@ -565,10 +565,10 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderMenu: function( ul, items ) {
-		var that = this;
-		$.each( items, function( index, item ) {
-			that._renderItemData( ul, item );
-		} );
+		var length = items.length, index = 0;
+		for (; index < length; index++) {
+			this._renderItemData( ul, items[index] );
+		}
 	},
 
 	_renderItemData: function( ul, item ) {
