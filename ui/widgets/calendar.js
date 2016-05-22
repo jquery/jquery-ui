@@ -108,16 +108,7 @@ return $.widget( "ui.calendar", {
 				this.date.adjust( "M", this.options.numberOfMonths );
 				this._updateView();
 			},
-			"mousedown .ui-calendar-calendar button": function( event ) {
-				this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
-				this._updateDayElement( "ui-state-active" );
-
-				// Allow datepicker to handle focus
-				if ( this._trigger( "select", event ) !== false ) {
-					this.activeDescendant.closest( this.grid ).focus();
-					event.preventDefault();
-				}
-			},
+			"mousedown .ui-calendar-calendar button": "_select",
 			"mouseenter .ui-calendar-header-buttons button": "_hover",
 			"mouseleave .ui-calendar-header-buttons button": "_hover",
 			"mouseenter .ui-calendar-calendar button": "_hover",
@@ -133,12 +124,25 @@ return $.widget( "ui.calendar", {
 		this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
 	},
 
+	_select: function( event ) {
+		this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
+		this._updateDayElement( "ui-state-active" );
+
+		// Allow datepicker to handle focus
+		if ( this._trigger( "select", event ) !== false ) {
+			this.activeDescendant.closest( this.grid ).focus();
+			event.preventDefault();
+		}
+	},
+
 	_handleKeydown: function( event ) {
 		var pageAltKey = ( event.altKey || event.ctrlKey && event.shiftKey );
 
 		switch ( event.keyCode ) {
 		case $.ui.keyCode.ENTER:
-			this.activeDescendant.mousedown();
+			this._select(
+				$.Event( event, { currentTarget:  this.activeDescendant[ 0 ] } )
+			);
 			return;
 		case $.ui.keyCode.PAGE_UP:
 			this.date.adjust( pageAltKey ? "Y" : "M", -1 );
