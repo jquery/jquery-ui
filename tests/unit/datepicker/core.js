@@ -41,7 +41,7 @@ asyncTest( "base structure", function() {
 	}, 50 );
 } );
 
-asyncTest( "Keyboard handling: input", function() {
+asyncTest( "Keyboard handling: input", function( assert ) {
 	expect( 10 );
 	var picker, instance,
 		input = $( "#datepicker" ).datepicker();
@@ -84,7 +84,7 @@ asyncTest( "Keyboard handling: input", function() {
 			.datepicker( "refresh" )
 			.datepicker( "open" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		testHelper.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
+		assert.dateEqual( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 			"Keystroke enter - preset" );
 
 		input
@@ -99,7 +99,7 @@ asyncTest( "Keyboard handling: input", function() {
 			.val( "1/1/14" )
 			.datepicker( "open" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		testHelper.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
+		assert.dateEqual( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 			"Keystroke esc - preset" );
 
 		input
@@ -107,13 +107,13 @@ asyncTest( "Keyboard handling: input", function() {
 			.datepicker( "open" )
 			.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP } )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		testHelper.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
+		assert.dateEqual( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
 			"Keystroke esc - abandoned" );
 
 		input
 			.val( "1/2/14" )
 			.simulate( "keyup" );
-		testHelper.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 2 ),
+		assert.dateEqual( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 2 ),
 			"Picker updated as user types into input" );
 
 		input.datepicker( "destroy" );
@@ -128,7 +128,7 @@ test( "ARIA", function() {
 	expect( 0 );
 } );
 
-asyncTest( "mouse", function() {
+asyncTest( "mouse", function( assert ) {
 	expect( 4 );
 
 	var input = testHelper.init( $( "#datepicker" ).val( "" ) ),
@@ -139,7 +139,7 @@ asyncTest( "mouse", function() {
 	setTimeout( function() {
 		input.val( "4/4/08" ).datepicker( "refresh" ).datepicker( "open" );
 		$( ".ui-calendar-calendar tbody button:contains(12)", picker ).simulate( "mousedown", {} );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			input.datepicker( "valueAsDate" ),
 			new Date( 2008, 4 - 1, 12 ),
 			"Mouse click - preset"
@@ -151,7 +151,7 @@ asyncTest( "mouse", function() {
 
 		input.val( "4/4/08" ).datepicker( "refresh" ).datepicker( "open" );
 		input.simulate( "click" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			input.datepicker( "valueAsDate" ),
 			new Date( 2008, 4 - 1, 4 ),
 			"Mouse click - close + preset"
@@ -160,7 +160,7 @@ asyncTest( "mouse", function() {
 		input.val( "4/4/08" ).datepicker( "refresh" ).datepicker( "open" );
 		picker.find( "a.ui-calendar-prev" ).simulate( "click" );
 		input.simulate( "click" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			input.datepicker( "valueAsDate" ),
 			new Date( 2008, 4 - 1, 4 ),
 			"Mouse click - abandoned"

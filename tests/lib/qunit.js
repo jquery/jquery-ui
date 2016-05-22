@@ -4,6 +4,7 @@ define( [
 	"qunit-assert-classes",
 	"qunit-assert-close",
 	"lib/qunit-assert-domequal",
+	"lib/qunit-assert-dateequal",
 	"phantom-bridge"
 ], function( QUnit, $ ) {
 

@@ -86,7 +86,7 @@ test( "value", function() {
 	strictEqual( input.datepicker( "value" ), null, "Invalid values should return null." );
 } );
 
-test( "valueAsDate", function() {
+test( "valueAsDate", function( assert ) {
 	expect( 6 );
 
 	var input = testHelper.init( "#datepicker" ),
@@ -99,7 +99,7 @@ test( "valueAsDate", function() {
 		picker.find( "button[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
 		"First day marked as selected"
 	);
-	testHelper.equalsDate( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
+	assert.dateEqual( input.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
 
 	input.val( "a/b/c" );
 	equal( input.datepicker( "valueAsDate" ), null, "Invalid dates return null" );
@@ -109,7 +109,7 @@ test( "valueAsDate", function() {
 
 	strictEqual( input.datepicker( "valueAsDate" ), null, "Set date - default" );
 	input.datepicker( "valueAsDate", date1 );
-	testHelper.equalsDate( input.datepicker( "valueAsDate" ), date1, "Set date - 2008-06-04" );
+	assert.dateEqual( input.datepicker( "valueAsDate" ), date1, "Set date - 2008-06-04" );
 } );
 
 test( "isValid", function() {

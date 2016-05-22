@@ -1,8 +1,7 @@
 define( [
 	"jquery",
-	"./helper",
 	"ui/widgets/calendar"
-], function( $, testHelper ) {
+], function( $ ) {
 
 module( "calendar: options" );
 
@@ -188,7 +187,7 @@ test( "showWeek", function() {
 	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
 } );
 
-test( "min / max", function() {
+test( "min / max", function( assert ) {
 	expect( 17 );
 
 	// With existing date
@@ -202,38 +201,38 @@ test( "min / max", function() {
 	element
 		.calendar( "option", { min: minDate } )
 		.calendar( "value", "6/4/08" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
 
 	element
 		.calendar( "option", { min: minDate } )
 		.calendar( "value", "1/4/08" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
 
 	element
 		.calendar( "option", { min: null } )
 		.calendar( "value", "6/4/08" )
 		.calendar( "option", { max: maxDate } );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
 
 	element
 		.calendar( "option", { max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - setDate > max" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - setDate > max" );
 
 	element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/08" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
 
 	element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "6/4/08" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
 
 	element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
 
 	element
 		.calendar( "option", { min: minDate, max: maxDate } )

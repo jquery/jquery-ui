@@ -1,8 +1,7 @@
 define( [
 	"jquery",
-	"./helper",
 	"ui/widgets/calendar"
-], function( $, testHelper ) {
+], function( $ ) {
 
 module( "calendar: methods" );
 
@@ -56,7 +55,7 @@ test( "value", function() {
 	equal( element.calendar( "value" ), "1/1/14", "Setting invalid values should be ignored." );
 } );
 
-test( "valueAsDate", function() {
+test( "valueAsDate", function( assert ) {
 	expect( 11 );
 
 	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
@@ -69,7 +68,7 @@ test( "valueAsDate", function() {
 			.hasClass( "ui-state-active" ),
 		"First day marked as selected"
 	);
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
 
 	element.calendar( "destroy" );
 
@@ -77,7 +76,7 @@ test( "valueAsDate", function() {
 	equal( element.calendar( "valueAsDate" ), null, "Set date - default" );
 
 	element.calendar( "valueAsDate", date1 );
-	testHelper.equalsDate( element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
+	assert.dateEqual( element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
 
 	// With minimum/maximum
 	element = $( "#calendar" ).calendar();
@@ -89,13 +88,13 @@ test( "valueAsDate", function() {
 	element
 		.calendar( "option", { min: minDate } )
 		.calendar( "valueAsDate", date2 );
-	testHelper.equalsDate(
+	assert.dateEqual(
 		element.calendar( "valueAsDate" ),
 		date2, "Set date min/max - value > min"
 	);
 
 	element.calendar( "valueAsDate", date1 );
-	testHelper.equalsDate(
+	assert.dateEqual(
 		element.calendar( "valueAsDate" ),
 		date2,
 		"Set date min/max - value < min"
@@ -104,14 +103,14 @@ test( "valueAsDate", function() {
 	element
 		.calendar( "option", { max: maxDate, min: null } )
 		.calendar( "valueAsDate", date1 );
-	testHelper.equalsDate(
+	assert.dateEqual(
 		element.calendar( "valueAsDate" ),
 		date1,
 		"Set date min/max - value < max"
 	);
 
 	element.calendar( "valueAsDate", date2 );
-	testHelper.equalsDate(
+	assert.dateEqual(
 		element.calendar( "valueAsDate" ),
 		date1,
 		"Set date min/max - value > max"
@@ -120,14 +119,14 @@ test( "valueAsDate", function() {
 	element
 		.calendar( "option", { min: minDate } )
 		.calendar( "valueAsDate", date1 );
-	testHelper.equalsDate(
+	assert.dateEqual(
 		element.calendar( "valueAsDate" ),
 		date1,
 		"Set date min/max - value < min"
 	);
 
 	element.calendar( "valueAsDate", date2 );
-	testHelper.equalsDate(
+	assert.dateEqual(
 		element.calendar( "valueAsDate" ),
 		date1, "Set date min/max - value > max"
 	);

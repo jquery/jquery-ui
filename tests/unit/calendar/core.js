@@ -137,7 +137,7 @@ test( "Localization", function() {
 	testLocalization( "After init: " );
 } );
 
-asyncTest( "keyboard handling", function() {
+asyncTest( "keyboard handling", function( assert ) {
 	expect( 10 );
 
 	var element = $( "#calendar" );
@@ -150,7 +150,7 @@ asyncTest( "keyboard handling", function() {
 			.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 12 - 1, 31 ),
 				"Keystroke left to switch to previous day"
@@ -167,7 +167,7 @@ asyncTest( "keyboard handling", function() {
 			.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			new Date( 2014, 1 - 1, 2 ),
 			"Keystroke right to switch to next day"
@@ -181,7 +181,7 @@ asyncTest( "keyboard handling", function() {
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 12 - 1, 25 ),
 				"Keystroke up to move to the previous week"
@@ -197,7 +197,7 @@ asyncTest( "keyboard handling", function() {
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2014, 1 - 1, 8 ),
 				"Keystroke down to move to the next week"
@@ -213,7 +213,7 @@ asyncTest( "keyboard handling", function() {
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 12 - 1, 1 ),
 				"Keystroke Page Up moves date to previous month"
@@ -230,7 +230,7 @@ asyncTest( "keyboard handling", function() {
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP, altKey: true } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2013, 1 - 1, 1 ),
 				"Keystroke Page Up + ALT moves date to previous year"
@@ -246,7 +246,7 @@ asyncTest( "keyboard handling", function() {
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2014, 2 - 1, 1 ),
 				"Keystroke Page Down moves date to next month"
@@ -263,7 +263,7 @@ asyncTest( "keyboard handling", function() {
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN, altKey: true } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2015, 1 - 1, 1 ),
 				"Keystroke Page Down + ALT moves date to next year"
@@ -280,7 +280,7 @@ asyncTest( "keyboard handling", function() {
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2014, 2 - 1, 28 ),
 				"Keystroke Page Up and short months"
@@ -296,7 +296,7 @@ asyncTest( "keyboard handling", function() {
 		testHelper.focusGrid( element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			testHelper.equalsDate(
+			assert.dateEqual(
 				element.calendar( "valueAsDate" ),
 				new Date( 2016, 2 - 1, 29 ),
 				"Keystroke Page Down and leap years"
@@ -309,7 +309,7 @@ asyncTest( "keyboard handling", function() {
 	step1();
 } );
 
-asyncTest( "mouse", function() {
+asyncTest( "mouse", function( assert ) {
 	expect( 6 );
 
 	var element = $( "#calendar" ).calendar(),
@@ -318,7 +318,7 @@ asyncTest( "mouse", function() {
 	function step1() {
 		$( "tbody button:contains(10)", element ).simulate( "mousedown" );
 		date.setDate( 10 );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			date,
 			"Mouse click"
@@ -326,7 +326,7 @@ asyncTest( "mouse", function() {
 
 		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-calendar tbody button:contains(12)", element ).simulate( "mousedown" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 2 - 1, 12 ),
 			"Mouse click - preset"
@@ -336,7 +336,7 @@ asyncTest( "mouse", function() {
 		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-prev", element ).simulate( "click" );
 		$( ".ui-calendar-calendar tbody button:contains(16)", element ).simulate( "mousedown" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 1 - 1, 16 ),
 			"Mouse click - previous"
@@ -345,7 +345,7 @@ asyncTest( "mouse", function() {
 		element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-next", element ).simulate( "click" );
 		$( ".ui-calendar-calendar tbody button:contains(18)", element ).simulate( "mousedown" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 3 - 1, 18 ),
 			"Mouse click - next"
@@ -365,7 +365,7 @@ asyncTest( "mouse", function() {
 
 		$( ".ui-calendar-prev", element ).simulate( "click" );
 		$( "tbody button:contains(16)", element ).simulate( "mousedown" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 2 - 1, 16 ),
 			"Mouse click - previous + min/max"
@@ -383,7 +383,7 @@ asyncTest( "mouse", function() {
 
 		$( ".ui-calendar-next", element ).simulate( "click" );
 		$( "tbody button:contains(18)", element ).simulate( "mousedown" );
-		testHelper.equalsDate(
+		assert.dateEqual(
 			element.calendar( "valueAsDate" ),
 			new Date( 2008, 2 - 1, 18 ),
 			"Mouse click - next + min/max"
