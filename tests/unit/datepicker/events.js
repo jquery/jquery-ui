@@ -1,25 +1,34 @@
 define( [
 	"jquery",
-	"./helper",
 	"ui/widgets/datepicker"
-], function( $, testHelper ) {
+], function( $ ) {
 
-module( "datepicker: events" );
+module( "datepicker: events", {
+	setup: function() {
+		this.element = $( "#datepicker" ).datepicker( { show: false, hide: false } );
+		this.widget = this.element.datepicker( "widget" );
+	},
+	teardown: function() {
+		this.element.datepicker( "destroy" ).val( "" );
+	}
+} );
 
 test( "beforeOpen", function() {
 	expect( 3 );
 
-	var input = testHelper.init( "#datepicker", {
-			beforeOpen: function() {
-				ok( true, "beforeOpen event fired before open" );
-				ok( input.datepicker( "widget" ).is( ":hidden" ), "calendar hidden on beforeOpen" );
-			},
-			open: function() {
-				ok( input.datepicker( "widget" ).is( ":visible" ), "calendar open on open" );
-			}
-		} );
+	var that = this;
 
-	input
+	this.element.datepicker( {
+		beforeOpen: function() {
+			ok( true, "beforeOpen event fired before open" );
+			ok( that.element.datepicker( "widget" ).is( ":hidden" ), "calendar hidden on beforeOpen" );
+		},
+		open: function() {
+			ok( that.element.datepicker( "widget" ).is( ":visible" ), "calendar open on open" );
+		}
+	} );
+
+	this.element
 		.datepicker( "open" )
 		.datepicker( "close" )
 		.datepicker( "option", {
@@ -36,98 +45,101 @@ test( "beforeOpen", function() {
 test( "close", function() {
 	expect( 4 );
 
-	var shouldFire,
-		input = testHelper.init( "#datepicker", {
-			close: function() {
-				ok( shouldFire, "close event fired" );
-			}
-		} );
+	var shouldFire;
+
+	this.element.datepicker( {
+		close: function() {
+			ok( shouldFire, "close event fired" );
+		}
+	} );
 
 	shouldFire = false;
-	input.datepicker( "open" );
+	this.element.datepicker( "open" );
 	shouldFire = true;
-	input.datepicker( "close" );
+	this.element.datepicker( "close" );
 
 	shouldFire = false;
-	input.datepicker( "open" );
+	this.element.datepicker( "open" );
 	shouldFire = true;
 	$( "body" ).trigger( "mousedown" );
 
 	shouldFire = false;
-	input.datepicker( "open" );
+	this.element.datepicker( "open" );
 	shouldFire = true;
-	input.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+	this.element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 
 	shouldFire = false;
-	input.datepicker( "open" );
+	this.element.datepicker( "open" );
 	shouldFire = true;
-	input.datepicker( "widget" ).find( "tbody tr:first button:first" ).simulate( "mousedown" );
+	this.element.datepicker( "widget" ).find( "tbody tr:first button:first" ).simulate( "mousedown" );
 } );
 
 test( "open", function() {
 	expect( 2 );
 
-	var input = testHelper.init( "#datepicker", {
-			open: function() {
-				ok( true, "open event fired on open" );
-				ok( widget.is( ":visible" ), "calendar open on open" );
-			}
-		} ),
-		widget = input.datepicker( "widget" );
+	var that = this;
 
-	input.datepicker( "open" );
+	this.element.datepicker( {
+		open: function() {
+			ok( true, "open event fired on open" );
+			ok( that.widget.is( ":visible" ), "calendar open on open" );
+		}
+	} );
+
+	this.element.datepicker( "open" );
 } );
 
 asyncTest( "select", function() {
 	expect( 4 );
 
-	var input = testHelper.init( "#datepicker", {
-			select: function( event ) {
-				ok( true, "select event fired " + message );
-				equal(
-					event.originalEvent.type,
-					"calendarselect",
-					"select originalEvent " + message
-				);
-			}
-		} ),
-		widget = input.datepicker( "widget" ),
-		message = "";
+	var message = "",
+		that = this;
+
+	this.element.datepicker( {
+		select: function( event ) {
+			ok( true, "select event fired " + message );
+			equal(
+				event.originalEvent.type,
+				"calendarselect",
+				"select originalEvent " + message
+			);
+		}
+	} );
 
 	function step1() {
 		message = "on calendar cell click";
-		input
+		that.element
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout( function() {
-			widget.find( "tbody tr:first button:first" ).simulate( "mousedown" );
-			input.datepicker( "close" );
+			that.widget.find( "tbody tr:first button:first" ).simulate( "mousedown" );
+			that.element.datepicker( "close" );
 			step2();
 		}, 100 );
 	}
 
 	function step2() {
 		message = "on calendar cell enter";
-		input
+		that.element
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout( function() {
 			$( document.activeElement )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
 				.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			input.datepicker( "close" );
+			that.element.datepicker( "close" );
 			step3();
 		}, 100 );
 	}
 
 	function step3() {
 		message = "on calendar escape (not expected)";
-		input
+		that.element
 			.simulate( "focus" )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-			input.datepicker( "close" );
+			that.element.datepicker( "close" );
 			start();
 		}, 100 );
 	}
