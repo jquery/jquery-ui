@@ -3,27 +3,36 @@ define( [
 	"ui/widgets/calendar"
 ], function( $ ) {
 
-module( "calendar: options" );
+module( "calendar: options", {
+	setup: function() {
+		this.element = $( "#calendar" ).calendar();
+		this.widget = this.element.calendar( "widget" );
+	},
+	teardown: function() {
+		this.element.calendar( "destroy" );
+	}
+} );
 
 test( "buttons", function() {
 	expect( 21 );
 
 	var button, i, newButtons,
+		that = this,
 		buttons = {
 			"Ok": function( event ) {
 				ok( true, "button click fires callback" );
-				equal( this, element[ 0 ], "context of callback" );
+				equal( this, that.element[ 0 ], "context of callback" );
 				equal( event.target, button[ 0 ], "event target" );
 			},
 			"Cancel": function( event ) {
 				ok( true, "button click fires callback" );
-				equal( this, element[ 0 ], "context of callback" );
+				equal( this, that.element[ 0 ], "context of callback" );
 				equal( event.target, button[ 1 ], "event target" );
 			}
-		},
-		element = $( "#calendar" ).calendar( { buttons: buttons } );
+		};
 
-	button = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	this.element.calendar( { buttons: buttons } );
+	button = this.widget.find( ".ui-calendar-buttonpane button" );
 	equal( button.length, 2, "number of buttons" );
 
 	i = 0;
@@ -34,7 +43,7 @@ test( "buttons", function() {
 
 	ok( button.parent().hasClass( "ui-calendar-buttonset" ), "buttons in container" );
 	ok(
-		element.calendar( "widget" ).hasClass( "ui-calendar-buttons" ),
+		this.element.calendar( "widget" ).hasClass( "ui-calendar-buttons" ),
 		"calendar wrapper adds class about having buttons"
 	);
 
@@ -43,24 +52,24 @@ test( "buttons", function() {
 	newButtons = {
 		"Close": function( event ) {
 			ok( true, "button click fires callback" );
-			equal( this, element[ 0 ], "context of callback" );
+			equal( this, that.element[ 0 ], "context of callback" );
 			equal( event.target, button[ 0 ], "event target" );
 		}
 	};
 
 	deepEqual(
-		element.calendar( "option", "buttons" ),
+		this.element.calendar( "option", "buttons" ),
 		buttons,
 		".calendar('option', 'buttons') getter"
 	);
-	element.calendar( "option", "buttons", newButtons );
+	this.element.calendar( "option", "buttons", newButtons );
 	deepEqual(
-		element.calendar( "option", "buttons" ),
+		this.element.calendar( "option", "buttons" ),
 		newButtons,
 		".calendar('option', 'buttons', ...) setter"
 	);
 
-	button = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	button = this.element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
 	equal( button.length, 1, "number of buttons after setter" );
 	button.trigger( "click" );
 
@@ -70,33 +79,33 @@ test( "buttons", function() {
 		i += 1;
 	} );
 
-	element.calendar( "option", "buttons", null );
-	button = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	this.element.calendar( "option", "buttons", null );
+	button = this.widget.find( ".ui-calendar-buttonpane button" );
 	equal( button.length, 0, "all buttons have been removed" );
-	equal( element.find( ".ui-calendar-buttonset" ).length, 0, "buttonset has been removed" );
-	equal( element.hasClass( "ui-calendar-buttons" ), false, "calendar element removes class about having buttons" );
-
-	element.remove();
+	equal( this.element.find( ".ui-calendar-buttonset" ).length, 0, "buttonset has been removed" );
+	equal( this.element.hasClass( "ui-calendar-buttons" ), false, "calendar element removes class about having buttons" );
 } );
 
 test( "buttons - advanced", function() {
 	expect( 7 );
 
-	var buttons,
-		element = $( "#calendar" ).calendar( {
-			buttons: [ {
-				text: "a button",
-				"class": "additional-class",
-				id: "my-button-id",
-				click: function() {
-					equal( this, element[ 0 ], "correct context" );
-				},
-				icon: "ui-icon-cancel",
-				showLabel: false
-			} ]
-		} );
+	var that = this,
+		buttons;
 
-	buttons = element.calendar( "widget" ).find( ".ui-calendar-buttonpane button" );
+	this.element.calendar( {
+		buttons: [ {
+			text: "a button",
+			"class": "additional-class",
+			id: "my-button-id",
+			click: function() {
+				equal( this, that.element[ 0 ], "correct context" );
+			},
+			icon: "ui-icon-cancel",
+			showLabel: false
+		} ]
+	} );
+
+	buttons = this.widget.find( ".ui-calendar-buttonpane button" );
 	equal( buttons.length, 1, "correct number of buttons" );
 	equal( buttons.attr( "id" ), "my-button-id", "correct id" );
 	equal ( $.trim( buttons.text() ), "a button", "correct label" );
@@ -104,149 +113,137 @@ test( "buttons - advanced", function() {
 	equal( buttons.button( "option", "icon" ), "ui-icon-cancel" );
 	equal( buttons.button( "option", "showLabel" ), false );
 	buttons.click();
-
-	element.remove();
 } );
 
 test( "dateFormat", function() {
 	expect( 2 );
-	var element = $( "#calendar" ).calendar();
 
-	element.calendar( "value", "1/1/14" );
+	this.element.calendar( "value", "1/1/14" );
 
-	element.calendar( "widget" ).find( "td[id]:first button" ).trigger( "mousedown" );
-	equal( element.calendar( "value" ), "1/1/14", "default formatting" );
+	this.widget.find( "td[id]:first button" ).trigger( "mousedown" );
+	equal( this.element.calendar( "value" ), "1/1/14", "default formatting" );
 
-	element.calendar( "option", "dateFormat", { date: "full" } );
-	equal( element.calendar( "value" ), "Wednesday, January 1, 2014", "updated formatting" );
+	this.element.calendar( "option", "dateFormat", { date: "full" } );
+	equal( this.element.calendar( "value" ), "Wednesday, January 1, 2014", "updated formatting" );
 } );
 
 test( "eachDay", function() {
 	expect( 5 );
+
 	var timestamp,
-		input = $( "#calendar" ).calendar(),
-		picker = input.calendar( "widget" ),
-		firstCell = picker.find( "td[id]:first" );
+		firstCell = this.widget.find( "td[id]:first" );
 
 	equal( firstCell.find( "button" ).length, 1, "days are selectable by default" );
 	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 1, "first available day is the 1st by default" );
 
 	// Do not render the 1st of the month
-	input.calendar( "option", "eachDay", function( day ) {
+	this.element.calendar( "option", "eachDay", function( day ) {
 		if ( day.date === 1 ) {
 			day.render = false;
 		}
 	} );
-	firstCell = picker.find( "td[id]:first" );
+	firstCell = this.widget.find( "td[id]:first" );
 	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 2, "first available day is the 2nd" );
 
 	// Display the 1st of the month but make it not selectable.
-	input.calendar( "option", "eachDay", function( day ) {
+	this.element.calendar( "option", "eachDay", function( day ) {
 		if ( day.date === 1 ) {
 			day.selectable = false;
 		}
 	} );
-	firstCell = picker.find( "td[id]:first" );
+	firstCell = this.widget.find( "td[id]:first" );
 	ok( firstCell.find( "button" ).prop( "disabled" ), "the 1st is not selectable" );
 
-	input.calendar( "option", "eachDay", function( day ) {
+	this.element.calendar( "option", "eachDay", function( day ) {
 		if ( day.date === 1 ) {
 			day.extraClasses = "ui-custom";
 		}
 	} );
-	ok( picker.find( "td[id]:first button" ).hasClass( "ui-custom" ), "extraClasses applied" );
-
-	input.calendar( "destroy" );
+	ok( this.widget.find( "td[id]:first button" ).hasClass( "ui-custom" ), "extraClasses applied" );
 } );
 
 test( "showWeek", function() {
 	expect( 7 );
-	var input = $( "#calendar" ).calendar(),
-		container = input.calendar( "widget" );
 
-	equal( container.find( "thead th" ).length, 7, "just 7 days, no column cell" );
-	equal( container.find( ".ui-calendar-week-col" ).length, 0,
+	equal( this.widget.find( "thead th" ).length, 7, "just 7 days, no column cell" );
+	equal( this.widget.find( ".ui-calendar-week-col" ).length, 0,
 		"no week column cells present" );
-	input.calendar( "destroy" );
+	this.element.calendar( "destroy" );
 
-	input = $( "#calendar" ).calendar( { showWeek: true } );
-	container = input.calendar( "widget" );
-	equal( container.find( "thead th" ).length, 8, "7 days + a column cell" );
-	ok( container.find( "thead th:first" ).is( ".ui-calendar-week-col" ),
+	this.element.calendar( { showWeek: true } );
+	equal( this.widget.find( "thead th" ).length, 8, "7 days + a column cell" );
+	ok( this.widget.find( "thead th:first" ).is( ".ui-calendar-week-col" ),
 		"first cell should have ui-datepicker-week-col class name" );
-	equal( container.find( ".ui-calendar-week-col" ).length,
-		container.find( "tr" ).length, "one week cell for each week" );
-	input.calendar( "destroy" );
+	equal( this.widget.find( ".ui-calendar-week-col" ).length,
+		this.widget.find( "tr" ).length, "one week cell for each week" );
+	this.element.calendar( "destroy" );
 
-	input = $( "#calendar" ).calendar();
-	container = input.calendar( "widget" );
-	equal( container.find( "thead th" ).length, 7, "no week column" );
-	input.calendar( "option", "showWeek", true );
-	equal( container.find( "thead th" ).length, 8, "supports changing option after init" );
+	this.element.calendar();
+	equal( this.widget.find( "thead th" ).length, 7, "no week column" );
+	this.element.calendar( "option", "showWeek", true );
+	equal( this.widget.find( "thead th" ).length, 8, "supports changing option after init" );
 } );
 
 test( "min / max", function( assert ) {
 	expect( 17 );
 
 	// With existing date
-	var element = $( "#calendar" ).calendar(),
-		container = element.calendar( "widget" ),
-		prevButton = container.find( ".ui-calendar-prev" ),
-		nextButton = container.find( ".ui-calendar-next" ),
+	var prevButton = this.widget.find( ".ui-calendar-prev" ),
+		nextButton = this.widget.find( ".ui-calendar-next" ),
 		minDate = new Date( 2008, 2 - 1, 29 ),
 		maxDate = new Date( 2008, 12 - 1, 7 );
 
-	element
+	this.element
 		.calendar( "option", { min: minDate } )
 		.calendar( "value", "6/4/08" );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
 
-	element
+	this.element
 		.calendar( "option", { min: minDate } )
 		.calendar( "value", "1/4/08" );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
 
-	element
+	this.element
 		.calendar( "option", { min: null } )
 		.calendar( "value", "6/4/08" )
 		.calendar( "option", { max: maxDate } );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
 
-	element
+	this.element
 		.calendar( "option", { max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - setDate > max" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - setDate > max" );
 
-	element
+	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/08" );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
 
-	element
+	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "6/4/08" );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
 
-	element
+	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	assert.dateEqual( element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
 
-	element
+	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "3/4/08" );
 	ok( !prevButton.hasClass( "ui-state-disabled" ), "Prev button enabled" );
 	prevButton.simulate( "click" );
 	ok( prevButton.hasClass( "ui-state-disabled" ), "Prev button disabled" );
 
-	element.calendar( "value", "11/4/08" );
+	this.element.calendar( "value", "11/4/08" );
 	ok( !nextButton.hasClass( "ui-state-disabled" ), "Next button enabled" );
 	nextButton.simulate( "click" );
 	ok( nextButton.hasClass( "ui-state-disabled" ), "Next button disabled" );
 
-	element
+	this.element
 		.calendar( "option", { max: null } )
 		.calendar( "value", "1/4/09" )
 		.calendar( "option", { min: minDate, max: maxDate } );
@@ -256,7 +253,7 @@ test( "min / max", function( assert ) {
 	prevButton.simulate( "click" );
 	ok( !nextButton.hasClass( "ui-state-disabled" ), "Other year above max: Next button enabled after click" );
 
-	element
+	this.element
 		.calendar( "option", { min: null } )
 		.calendar( "value", "1/4/08" )
 		.calendar( "option", { min: minDate, max: maxDate } );
@@ -269,42 +266,46 @@ test( "min / max", function( assert ) {
 
 test( "numberOfMonths", function() {
 	expect( 6 );
-	var date = new Date( 2015, 8 - 1, 1 ),
-		input = $( "#calendar" ).calendar( {
+
+	var date = new Date( 2015, 8 - 1, 1 );
+
+	// Number of month option does not work after init
+	this.element
+		.calendar( "destroy" )
+		.calendar( {
 			numberOfMonths: 3,
 			value: date
-		} ),
-		container = input.calendar( "widget" );
+		} );
 
-	equal( container.find( ".ui-calendar-group" ).length, 3, "3 calendar grids" );
+	equal( this.widget.find( ".ui-calendar-group" ).length, 3, "3 calendar grids" );
 	equal(
-		container.find( "tbody:first td[id]:first" ).attr( "id" ),
+		this.widget.find( "tbody:first td[id]:first" ).attr( "id" ),
 		"calendar-2015-7-1",
 		"Correct id set for first day of first grid"
 	);
 	equal(
-		container.find( "tbody:last td[id]:last" ).attr( "id" ),
+		this.widget.find( "tbody:last td[id]:last" ).attr( "id" ),
 		"calendar-2015-9-31",
 		"Correct id set for last day of third grid"
 	);
 
 	// Test for jumping in weekday rendering after click on last day of last grid
-	container.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
-	equal( container.find( "thead:last th:last" ).text(), "Sa",
+	this.widget.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
+	equal( this.widget.find( "thead:last th:last" ).text(), "Sa",
 		"After mousedown last month: Last day is Saturday"
 	);
 
 	// Test if using cursor to go to the next / prev month advances three month
 	// Focus doesn't work here so we use an additional mouse down event
-	container.find( "tbody:first td[id]:first button" ).trigger( "mousedown" );
+	this.widget.find( "tbody:first td[id]:first button" ).trigger( "mousedown" );
 	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equal( container.find( ".ui-calendar-month:first" ).text(), "May",
+	equal( this.widget.find( ".ui-calendar-month:first" ).text(), "May",
 		"After move to previous month: First month is May"
 	);
 
-	container.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
+	this.widget.find( "tbody:last td[id]:last button" ).trigger( "mousedown" );
 	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( container.find( ".ui-calendar-month:last" ).text(), "October",
+	equal( this.widget.find( ".ui-calendar-month:last" ).text(), "October",
 		"After move to next month: Last month is October"
 	);
 } );
