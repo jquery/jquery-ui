@@ -44,7 +44,7 @@ $.widget( "ui.tabs", {
 		classes: {
 			"ui-tabs": "ui-corner-all",
 			"ui-tabs-nav": "ui-corner-all",
-			"ui-tab": "ui-corner-top",
+			"ui-tabs-tab": "ui-corner-top",
 			"ui-tabs-panel": "ui-corner-bottom"
 		},
 		collapsible: false,
