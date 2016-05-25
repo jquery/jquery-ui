@@ -89,10 +89,12 @@ QUnit.test( "data", function( assert ) {
 } );
 
 QUnit.test( "focusable - visible, enabled elements", function( assert ) {
-	assert.expect( 20 );
+	assert.expect( 22 );
 
 	assert.isNotFocusable( "#formNoTabindex", "form" );
 	assert.isFocusable( "#formTabindex", "form with tabindex" );
+	assert.isFocusable( "#enabledFieldset input", "input in enabled fieldset" );
+	assert.isNotFocusable( "#disabledFieldset input", "input in disabled fieldset" );
 	assert.isFocusable( "#visibleAncestor-inputTypeNone", "input, no type" );
 	assert.isFocusable( "#visibleAncestor-inputTypeText", "input, type text" );
 	assert.isFocusable( "#visibleAncestor-inputTypeCheckbox", "input, type checkbox" );
@@ -184,10 +186,12 @@ QUnit.test( "focusable - dimensionless parent with overflow", function( assert )
 } );
 
 QUnit.test( "tabbable - visible, enabled elements", function( assert ) {
-	assert.expect( 18 );
+	assert.expect( 20 );
 
 	assert.isNotTabbable( "#formNoTabindex", "form" );
 	assert.isTabbable( "#formTabindex", "form with tabindex" );
+	assert.isTabbable( "#enabledFieldset input", "input in enabled fieldset" );
+	assert.isNotTabbable( "#disabledFieldset input", "input in disabled fieldset" );
 	assert.isTabbable( "#visibleAncestor-inputTypeNone", "input, no type" );
 	assert.isTabbable( "#visibleAncestor-inputTypeText", "input, type text" );
 	assert.isTabbable( "#visibleAncestor-inputTypeCheckbox", "input, type checkbox" );
