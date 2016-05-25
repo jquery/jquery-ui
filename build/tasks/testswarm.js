@@ -47,8 +47,8 @@ function submit( commit, runs, configFile, extra, done ) {
 
 	if ( extra ) {
 
-		// jquery-git doesn't support IE 8.
-		if ( extra === "core git" ) {
+		// jQuery >= 2.0.0 don't support IE 8.
+		if ( extra.substring( 0, 6 ) !== "core 1" ) {
 			browserSets = "jquery-ui-future";
 		}
 
