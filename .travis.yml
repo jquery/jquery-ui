@@ -3,5 +3,3 @@ dist: trusty
 language: node_js
 node_js:
   - "0.12"
-before_script:
-  - npm install -g grunt-cli
