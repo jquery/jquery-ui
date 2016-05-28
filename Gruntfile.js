@@ -450,6 +450,7 @@ grunt.registerTask( "compile-globalize", function() {
 			globalize.dateParser( { date: "long" } ),
 			globalize.dateFormatter( { date: "full" } ),
 			globalize.dateParser( { date: "full" } ),
+			globalize.dateParser( { raw: "yyyy-MM-dd" } ),
 			globalize.numberParser()
 		]);
 
