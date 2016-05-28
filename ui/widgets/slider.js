@@ -529,7 +529,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		if ( val >= this._valueMax() ) {
 			return this._valueMax();
 		}
-		var step = ( this.options.step > 0 ) ? parseInt(this.options.step) : 1,
+		var step = ( this.options.step > 0 ) ? parseInt( this.options.step ) : 1,
 			valModStep = ( val - this._valueMin() ) % step,
 			alignValue = val - valModStep;
 
