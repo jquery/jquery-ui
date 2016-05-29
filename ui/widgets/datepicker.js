@@ -61,12 +61,13 @@ var widget = $.widget( "ui.datepicker", {
 
 	_create: function() {
 		this.suppressExpandOnFocus = false;
+		this._parse = new Globalize( this.options.locale ).dateParser( this.options.dateFormat );
 
 		if ( $.type( this.options.max ) === "string" ) {
-			this.options.max = Globalize.parseDate( this.options.max, { raw: "yyyy-MM-dd" } );
+			this.options.max = this._parse( this.options.max );
 		}
 		if ( $.type( this.options.min ) === "string" ) {
-			this.options.min = Globalize.parseDate( this.options.min, { raw: "yyyy-MM-dd" } );
+			this.options.min = this._parse( this.options.min );
 		}
 
 		this._createCalendar();
@@ -79,22 +80,22 @@ var widget = $.widget( "ui.datepicker", {
 	_getCreateOptions: function() {
 		var max = this.element.attr( "max" ),
 			min = this.element.attr( "min" ),
+			parser = new Globalize( "en" ).dateParser( { raw: "yyyy-MM-dd" } ),
 			options = {};
 
 		if ( max !== undefined ) {
-			options.max = Globalize.parseDate( max, { raw: "yyyy-MM-dd" } );
+			options.max = parser( max );
 		}
 
 		if ( min !== undefined ) {
-			options.min = Globalize.parseDate( min, { raw: "yyyy-MM-dd" } );
+			options.min = parser( min );
 		}
 
 		return options;
 	},
 
 	_createCalendar: function() {
-		var that = this,
-			globalize = new Globalize( this.options.locale );
+		var that = this;
 
 		this.calendar = $( "<div>" ).appendTo( this._appendTo() );
 		this._addClass( this.calendar, "ui-datepicker", "ui-front" );
@@ -102,7 +103,7 @@ var widget = $.widget( "ui.datepicker", {
 		// Initialize calendar widget
 		this.calendarInstance = this.calendar
 			.calendar( $.extend( {}, this.options, {
-				value: globalize.dateParser( this.options.dateFormat )( this.element.val() ),
+				value: this._parse( this.element.val() ),
 				select: function( event ) {
 					that.element.val( that.calendarInstance.value() );
 					that.close();
@@ -118,7 +119,6 @@ var widget = $.widget( "ui.datepicker", {
 		this.calendarInstance.buttonClickContext = that.element[ 0 ];
 
 		this._setHiddenPicker();
-
 		this.element.attr( {
 			"aria-haspopup": true,
 			"aria-owns": this.calendar.attr( "id" )
@@ -302,7 +302,7 @@ var widget = $.widget( "ui.datepicker", {
 
 	value: function( value ) {
 		if ( arguments.length ) {
-			this.valueAsDate( this.calendarInstance._parse( value ) );
+			this.valueAsDate( this._parse( value ) );
 		} else {
 			return this._getParsedValue() ? this.element.val() : null;
 		}
@@ -334,10 +334,16 @@ var widget = $.widget( "ui.datepicker", {
 	},
 
 	_getParsedValue: function() {
-		return this.calendarInstance._parse( this.element.val() );
+		return this._parse( this.element.val() );
 	},
 
 	_setOption: function( key, value ) {
+		if ( key === "max" || key === "min" ) {
+			if ( typeof value === "string" ) {
+				value = this._parse( value );
+			}
+		}
+
 		this._super( key, value );
 
 		if ( $.inArray( key, this.calendarOptions ) !== -1 ) {
