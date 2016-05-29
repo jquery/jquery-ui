@@ -10,6 +10,42 @@ module( "calendar: events", {
 	}
 } );
 
+test( "change", function() {
+	expect( 6 );
+
+	var shouldFire, eventType;
+
+	this.element.calendar( {
+		change: function( event ) {
+			ok( shouldFire, "change event fired" );
+			equal(
+				event.type,
+				"calendarchange",
+				"change event"
+			);
+			equal(
+				event.originalEvent.type,
+				eventType,
+				"change originalEvent on calendar button " + eventType
+			);
+		}
+	} );
+
+	shouldFire = true;
+	eventType = "mousedown";
+	this.element.find( "tbody button" ).last().simulate( eventType );
+
+	shouldFire = true;
+	eventType = "keydown";
+	testHelper.focusGrid( this.element )
+		.simulate( eventType, { keyCode: $.ui.keyCode.HOME } )
+		.simulate( eventType, { keyCode: $.ui.keyCode.ENTER } );
+
+	shouldFire = false;
+	eventType = "mousedown";
+	this.element.find( "tbody button" ).first().simulate( eventType );
+} );
+
 asyncTest( "select", function() {
 	expect( 6 );
 

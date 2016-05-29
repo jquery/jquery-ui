@@ -51,6 +51,7 @@ var widget = $.widget( "ui.datepicker", {
 
 		// callbacks
 		beforeOpen: null,
+		change: null,
 		close: null,
 		open: null,
 		select: null
@@ -104,6 +105,9 @@ var widget = $.widget( "ui.datepicker", {
 		this.calendarInstance = this.calendar
 			.calendar( $.extend( {}, this.options, {
 				value: this._parse( this.element.val() ),
+				change: function( event ) {
+					that._trigger( "change", event );
+				},
 				select: function( event ) {
 					that.element.val( that.calendarInstance.value() );
 					that.close();
@@ -172,6 +176,9 @@ var widget = $.widget( "ui.datepicker", {
 		},
 		blur: function() {
 			this.suppressExpandOnFocus = false;
+		},
+		change: function( event ) {
+			this._trigger( "change", event );
 		}
 	},
 

@@ -72,6 +72,7 @@ return $.widget( "ui.calendar", {
 		value: null,
 
 		// callbacks
+		change: null,
 		select: null
 	},
 
@@ -125,6 +126,8 @@ return $.widget( "ui.calendar", {
 	},
 
 	_select: function( event ) {
+		var oldValue = this.options.value ? this.options.value.getTime() : "";
+
 		this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
 		this._updateDayElement( "ui-state-active" );
 
@@ -132,6 +135,10 @@ return $.widget( "ui.calendar", {
 		if ( this._trigger( "select", event ) !== false ) {
 			this.activeDescendant.closest( this.grid ).focus();
 			event.preventDefault();
+		}
+
+		if ( oldValue !== this.options.value.getTime() ) {
+			this._trigger( "change", event );
 		}
 	},
 

@@ -42,6 +42,7 @@ common.testWidget( "datepicker", {
 
 		// callbacks
 		beforeOpen: null,
+		change: null,
 		close: null,
 		create: null,
 		open: null,

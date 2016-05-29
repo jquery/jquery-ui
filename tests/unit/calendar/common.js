@@ -35,6 +35,7 @@ common.testWidget( "calendar", {
 		value: null,
 
 		// callbacks
+		change: null,
 		create: null,
 		select: null
 	}
