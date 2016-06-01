@@ -72,7 +72,7 @@ function assertIcon( checkbox, icon, assert ) {
 		"ui-icon-background ui-icon-" + icon,
 		"Icon has proper classes" );
 	if ( icon === "blank" ) {
-		assert.lacksClasses( iconElement, "ui-icon-check ui-state-highlight" );
+		assert.lacksClasses( iconElement, "ui-icon-check ui-state-checked" );
 	}
 }
 
@@ -100,7 +100,7 @@ QUnit.test( "icon - default checked", function( assert ) {
 	assert.expect( 2 );
 
 	checkbox.checkboxradio();
-	assertIcon( checkbox, "check ui-state-highlight", assert );
+	assertIcon( checkbox, "check ui-state-checked", assert );
 } );
 
 QUnit.test( "icon", function( assert ) {
@@ -111,13 +111,13 @@ QUnit.test( "icon", function( assert ) {
 	checkbox.prop( "checked", true );
 
 	checkbox.checkboxradio();
-	assertIcon( checkbox, "check ui-state-highlight", assert );
+	assertIcon( checkbox, "check ui-state-checked", assert );
 
 	checkbox.checkboxradio( "option", "icon", false );
 	assertNoIcon( assert, checkbox );
 
 	checkbox.checkboxradio( "option", "icon", true );
-	assertIcon( checkbox, "check ui-state-highlight", assert );
+	assertIcon( checkbox, "check ui-state-checked", assert );
 
 	checkbox.checkboxradio( "option", "icon", false );
 	assertNoIcon( assert, checkbox );

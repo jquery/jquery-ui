@@ -176,11 +176,10 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		this._toggleClass( this.label, "ui-checkboxradio-checked", "ui-state-active", checked );
 
 		if ( this.options.icon && this.type === "checkbox" ) {
-
-			// We add ui-state-highlight to change the icon color
-			this._toggleClass( this.icon, null, "ui-icon-check ui-state-highlight", checked )
+			this._toggleClass( this.icon, null, "ui-icon-check ui-state-checked", checked )
 				._toggleClass( this.icon, null, "ui-icon-blank", !checked );
 		}
+
 		if ( this.type === "radio" ) {
 			this._getRadioGroup()
 				.each( function() {
@@ -233,14 +232,14 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 			}
 
 			if ( this.type === "checkbox" ) {
-				toAdd += checked ? "ui-icon-check ui-state-highlight" : "ui-icon-blank";
+				toAdd += checked ? "ui-icon-check ui-state-checked" : "ui-icon-blank";
 				this._removeClass( this.icon, null, checked ? "ui-icon-blank" : "ui-icon-check" );
 			} else {
 				toAdd += "ui-icon-blank";
 			}
 			this._addClass( this.icon, "ui-checkboxradio-icon", toAdd );
 			if ( !checked ) {
-				this._removeClass( this.icon, null, "ui-icon-check ui-state-highlight" );
+				this._removeClass( this.icon, null, "ui-icon-check ui-state-checked" );
 			}
 			this.icon.prependTo( this.label ).after( this.iconSpace );
 		} else if ( this.icon !== undefined ) {
