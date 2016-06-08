@@ -353,7 +353,7 @@ QUnit.test( "handle keyboard navigation on menu without scroll and with submenus
 	}
 
 	function menukeyboard3() {
-		log( "keydown", true );
+		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		assert.equal( logOutput(), "keydown,2", "Keydown PAGE_DOWN" );
 
