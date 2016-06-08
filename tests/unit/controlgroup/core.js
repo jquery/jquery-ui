@@ -100,4 +100,64 @@ QUnit.test( "_resolveClassesValues", function( assert ) {
 	assertSanatized( assert, "bar", "bar", "No corner classes" );
 } );
 
+QUnit.test( "Single controlgroup select - horizontal", function( assert ) {
+	assert.expect( 4 );
+	var group = $( ".controlgroup-single-select" ).controlgroup();
+	var select = group.find( ".ui-selectmenu-button" );
+
+	assert.hasClasses( select, "ui-corner-all" );
+	assert.lacksClasses( select,
+		"ui-corner-left ui-corner-right ui-corner-top ui-corner-left" +
+		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
+
+	group.find( "select" ).selectmenu( "open" );
+	assert.hasClasses( select, "ui-corner-top" );
+	assert.lacksClasses( select,
+		"ui-corner-left ui-corner-right ui-corner-all ui-corner-left" +
+		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
+} );
+
+QUnit.test( "Single controlgroup select - vertical", function( assert ) {
+	assert.expect( 4 );
+	var group = $( ".controlgroup-single-select" ).controlgroup( {
+		direction: "verticle"
+	} );
+	var select = group.find( ".ui-selectmenu-button" );
+
+	assert.hasClasses( select, "ui-corner-all" );
+	assert.lacksClasses( select,
+		"ui-corner-left ui-corner-right ui-corner-top ui-corner-left" +
+		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
+
+	group.find( "select" ).selectmenu( "open" );
+	assert.hasClasses( select, "ui-corner-top" );
+	assert.lacksClasses( select,
+		"ui-corner-left ui-corner-right ui-corner-all ui-corner-left" +
+		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
+} );
+
+QUnit.test( "Single controlgroup simple - horizontal", function( assert ) {
+	assert.expect( 2 );
+	var group = $( ".controlgroup-single-simple" ).controlgroup();
+	var button = group.find( "button" );
+
+	assert.hasClasses( button, "ui-corner-all" );
+	assert.lacksClasses( button,
+		"ui-corner-left ui-corner-right ui-corner-top ui-corner-left" +
+		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
+} );
+
+QUnit.test( "Single controlgroup simple - vertical", function( assert ) {
+	assert.expect( 2 );
+	var group = $( ".controlgroup-single-simple" ).controlgroup( {
+		direction: "verticle"
+	} );
+	var button = group.find( "button" );
+
+	assert.hasClasses( button, "ui-corner-all" );
+	assert.lacksClasses( button,
+		"ui-corner-left ui-corner-right ui-corner-top ui-corner-left" +
+		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
+} );
+
 } );
