@@ -160,4 +160,41 @@ QUnit.test( "Single controlgroup button - vertical", function( assert ) {
 		" ui-corner-tr ui-corner-tl ui-corner-bl ui corner-br" );
 } );
 
+QUnit.module( "Controlgroup: Non-empty class key", {
+	setup: function() {
+		this.classKey = $.ui.selectmenu.prototype.options.classes[ "ui-selectmenu-button-closed" ];
+		$.ui.selectmenu.prototype.options.classes[ "ui-selectmenu-button-closed" ] =
+			"something-custom";
+	},
+	teardown: function() {
+		$.ui.selectmenu.prototype.options.classes[ "ui-selectmenu-button-closed" ] = this.classKey;
+	}
+} );
+
+QUnit.test( "Controlgroup instantiates child widgets with correct options", function( assert ) {
+	assert.expect( 1 );
+
+	$( ".controlgroup-class-key-init" ).controlgroup();
+
+	assert.hasClasses( $( "#class-key-init-child" ).next(), "something-custom" );
+} );
+
+QUnit.test( "Controlgroup correctly assigns child widget classes options key", function( assert ) {
+	assert.expect( 2 );
+
+	$( ".controlgroup-class-key-dupe" ).controlgroup();
+
+	assert.strictEqual(
+		( $( "#class-key-dupe-first" )
+			.selectmenu( "option", "classes.ui-selectmenu-button-closed" )
+			.match( /something-custom/g ) || [] ).length, 1,
+		"Class 'something-custom' appears exactly once in the first widget's class key value" );
+
+	assert.strictEqual(
+		( $( "#class-key-dupe-second" )
+			.selectmenu( "option", "classes.ui-selectmenu-button-closed" )
+			.match( /something-custom/g ) || [] ).length, 1,
+		"Class 'something-custom' appears exactly once in the second widget's class key value" );
+} );
+
 } );
