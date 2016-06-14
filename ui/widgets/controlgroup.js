@@ -118,14 +118,25 @@ return $.widget( "ui.controlgroup", {
 					var element = $( this );
 					var instance = element[ widget ]( "instance" );
 
+					// We need to clone the default options for this type of widget to avoid
+					// polluting the variable options which has a wider scope than a single widget.
+					var instanceOptions = $.widget.extend( {}, options );
+
 					// If the button is the child of a spinner ignore it
+					// TODO: Find a more generic solution
 					if ( widget === "button" && element.parent( ".ui-spinner" ).length ) {
 						return;
 					}
-					if ( instance ) {
-						options.classes = that._resolveClassesValues( options.classes, instance );
+
+					// Create the widget if it doesn't exist
+					if ( !instance ) {
+						instance = element[ widget ]()[ widget ]( "instance" );
 					}
-					element[ widget ]( options );
+					if ( instance ) {
+						instanceOptions.classes =
+							that._resolveClassesValues( instanceOptions.classes, instance );
+					}
+					element[ widget ]( instanceOptions );
 
 					// Store an instance of the controlgroup to be able to reference
 					// from the outermost element for changing options and refresh
@@ -218,12 +229,13 @@ return $.widget( "ui.controlgroup", {
 	},
 
 	_resolveClassesValues: function( classes, instance ) {
+		var result = {};
 		$.each( classes, function( key ) {
 			var current = instance.options.classes[ key ] || "";
 			current = current.replace( controlgroupCornerRegex, "" ).trim();
-			classes[ key ] = ( current + " " + classes[ key ] ).replace( /\s+/g, " " );
+			result[ key ] = ( current + " " + classes[ key ] ).replace( /\s+/g, " " );
 		} );
-		return classes;
+		return result;
 	},
 
 	_setOption: function( key, value ) {
