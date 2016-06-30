@@ -432,9 +432,7 @@ grunt.registerTask( "update-authors", function() {
 		}
 
 		authors = authors.map(function( author ) {
-			if ( author.match( /^Dan Strohl </ ) ) {
-				return "Dan Strohl";
-			} else if ( author.match( /^Jacek Jędrzejewski </ ) ) {
+			if ( author.match( /^Jacek Jędrzejewski </ ) ) {
 				return "Jacek Jędrzejewski (http://jacek.jedrzejewski.name)";
 			} else if ( author.match( /^Pawel Maruszczyk </ ) ) {
 				return "Pawel Maruszczyk (http://hrabstwo.net)";
