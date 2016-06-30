@@ -78,7 +78,11 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		if ( this.options.addClasses ) {
 			this._addClass( "ui-draggable" );
 		}
-		this._setHandleClassName();
+
+		this.handleElement = $();
+		if ( !this.options.disabled ) {
+			this._setHandleClassName();
+		}
 
 		this._mouseInit();
 	},
@@ -87,6 +91,15 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		this._super( key, value );
 		if ( key === "handle" ) {
 			this._removeHandleClassName();
+			this._setHandleClassName();
+		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		// Remove the handle class when disabled since that controls touch-action
+		if ( value ) {
+			this._removeHandleClassName();
+		} else {
 			this._setHandleClassName();
 		}
 	},
