@@ -357,7 +357,7 @@ $.ui.ddmanager = {
 	    // Create a copy of the droppables in case the list changes during the drop (#9116)
 	    var allDroppables = ( $.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice();
 
-	    // Check activated droppables before dropping since result from "accept" might change (#8046)
+	    // Check droppables before dropping since result from accept might change (#8046)
 	    var activatedDroppables = [];
 
 	    $.each( allDroppables, function() {
@@ -382,7 +382,7 @@ $.ui.ddmanager = {
 	        }
 	    } );
 
-	    $.each( activatedDroppables, function () {
+	    $.each( activatedDroppables, function() {
 	        this.isout = true;
 	        this.isover = false;
 	        this._deactivate.call( this, event );
