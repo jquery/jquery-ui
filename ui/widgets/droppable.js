@@ -355,38 +355,38 @@ $.ui.ddmanager = {
 	    var dropped = false;
 
 	    // Create a copy of the droppables in case the list changes during the drop (#9116)
-	    var allDroppables = ($.ui.ddmanager.droppables[draggable.options.scope] || []).slice();
+	    var allDroppables = ( $.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice();
 
-	    // Need to check activated droppables before dropping, since drop might cause accept to return different result (#8046)
+	    // Check activated droppables before dropping since result from "accept" might change (#8046)
 	    var activatedDroppables = [];
 
-	    $.each(allDroppables, function () {
-	        if (!this.options) {
+	    $.each( allDroppables, function() {
+	        if ( !this.options ) {
 	            return;
 	        }
 
-	        if (!this.options.disabled && this.visible && this.accept.call(this.element[0],
-					(draggable.currentItem || draggable.element))) {
-	            activatedDroppables.push(this);
+	        if ( !this.options.disabled && this.visible && this.accept.call( this.element[ 0 ],
+					( draggable.currentItem || draggable.element ) ) ) {
+	            activatedDroppables.push( this );
 	        }
-	    });
+	    } );
 
-	    $.each(allDroppables, function () {
-	        if (!this.options) {
+	    $.each( allDroppables, function() {
+	        if ( !this.options ) {
 	            return;
 	        }
 
-	        if (!this.options.disabled && this.visible &&
-					$.ui.intersect(draggable, this, this.options.tolerance, event)) {
-	            dropped = this._drop.call(this, event) || dropped;
+	        if ( !this.options.disabled && this.visible &&
+					$.ui.intersect( draggable, this, this.options.tolerance, event ) ) {
+	            dropped = this._drop.call( this, event ) || dropped;
 	        }
-	    });
+	    } );
 
-	    $.each(activatedDroppables, function () {
+	    $.each( activatedDroppables, function () {
 	        this.isout = true;
 	        this.isover = false;
-	        this._deactivate.call(this, event);
-	    });
+	        this._deactivate.call( this, event );
+	    } );
 
 	    return dropped;
 
