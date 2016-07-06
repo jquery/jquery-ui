@@ -206,9 +206,13 @@ QUnit.test( "animateClass clears style properties when stopped", function( asser
 	test.addClass( "testChangeBackground", duration );
 	assert.notEqual( orig, style.cssText, "cssText is not the same after starting animation" );
 
-	test.stop( true, true );
-	assert.equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
-	ready();
+	test
+		.stop( true, true )
+		.promise()
+		.then( function() {
+			assert.equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
+			ready();
+		} );
 } );
 
 QUnit.test( "animateClass: css and class changes during animation are not lost (#7106)",
