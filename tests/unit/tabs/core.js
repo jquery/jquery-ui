@@ -647,18 +647,6 @@ QUnit.test( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function( 
 	setTimeout( step1 );
 } );
 
-QUnit.test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function( assert ) {
-	assert.expect( 1 );
-
-	$( "#tabs2" ).tabs( {
-		active: 2,
-		beforeLoad: function( event, ui ) {
-			event.preventDefault();
-			assert.ok( /test.html$/.test( ui.ajaxSettings.url ), "should ignore fragment identifier" );
-		}
-	} );
-} );
-
 QUnit.test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", function( assert ) {
 	assert.expect( 2 );
 
