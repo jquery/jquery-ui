@@ -203,8 +203,16 @@ QUnit.test( "track + show delay", function( assert ) {
 	event.pageY = topVal;
 	element.trigger( event );
 
-	assert.equal( $( ".ui-tooltip" ).css( "left" ), leftVal + offsetVal + "px" );
-	assert.equal( $( ".ui-tooltip" ).css( "top" ), topVal + offsetVal + "px" );
+	assert.close(
+		parseFloat( $( ".ui-tooltip" ).css( "left" ) ),
+		leftVal + offsetVal, 0.5,
+		"left position"
+	);
+	assert.close(
+		parseFloat( $( ".ui-tooltip" ).css( "top" ) ),
+		topVal + offsetVal, 0.5,
+		"top position"
+	);
 } );
 
 QUnit.test( "track and programmatic focus", function( assert ) {
