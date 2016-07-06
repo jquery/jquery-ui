@@ -281,7 +281,7 @@ grunt.initConfig({
 				"jshint/LICENSE": "jshint/LICENSE",
 
 				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
-				"jquery/MIT-LICENSE.txt": "jquery-1.x/MIT-LICENSE.txt",
+				"jquery/LICENSE.txt": "jquery-1.x/LICENSE.txt",
 
 				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
 				"jquery-1.7.0/MIT-LICENSE.txt": "jquery-1.7.0/MIT-LICENSE.txt",
@@ -386,7 +386,10 @@ grunt.initConfig({
 				"jquery-2.2.3/LICENSE.txt": "jquery-2.2.3/LICENSE.txt",
 
 				"jquery-2.2.4/jquery.js": "jquery-2.2.4/dist/jquery.js",
-				"jquery-2.2.4/LICENSE.txt": "jquery-2.2.4/LICENSE.txt"
+				"jquery-2.2.4/LICENSE.txt": "jquery-2.2.4/LICENSE.txt",
+
+				"jquery-3.0.0/jquery.js": "jquery-3.0.0/dist/jquery.js",
+				"jquery-3.0.0/LICENSE.txt": "jquery-3.0.0/LICENSE.txt"
 			}
 		}
 	},

@@ -55,6 +55,7 @@
 		"jquery-2.2.1": "jquery#2.2.1",
 		"jquery-2.2.2": "jquery#2.2.2",
 		"jquery-2.2.3": "jquery#2.2.3",
-		"jquery-2.2.4": "jquery#2.2.4"
+		"jquery-2.2.4": "jquery#2.2.4",
+		"jquery-3.0.0": "jquery#3.0.0"
 	}
 }
