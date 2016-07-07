@@ -417,7 +417,7 @@ QUnit.test( "setOption handles", function( assert ) {
 	var target = $( "<div></div>" ).resizable();
 
 	function checkHandles( expectedHandles ) {
-		expectedHandles = expectedHandles.map( function( value ) {
+		expectedHandles = $.map( expectedHandles, function( value ) {
 			return ".ui-resizable-" + value;
 		} );
 
