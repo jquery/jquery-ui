@@ -19,7 +19,6 @@
 		"qunit-assert-close": "JamesMGreene/qunit-assert-close#v1.1.1",
 		"qunit-composite": "JamesMGreene/qunit-composite#v1.1.0",
 		"requirejs": "2.1.14",
-
 		"jquery-1.7.0": "jquery#1.7.0",
 		"jquery-1.7.1": "jquery#1.7.1",
 		"jquery-1.7.2": "jquery#1.7.2",
@@ -58,5 +57,6 @@
 		"jquery-2.2.4": "jquery#2.2.4",
 		"jquery-3.0.0": "jquery#3.0.0",
 		"jquery-3.1.0": "jquery#3.1.0"
-	}
+	},
+	"version": "1.12.0"
 }
