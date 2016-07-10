@@ -1781,6 +1781,8 @@ $.extend(Datepicker.prototype, {
 							(unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<a class='ui-state-default" +
 							(printDate.getTime() === today.getTime() ? " ui-state-highlight" : "") +
 							(printDate.getTime() === currentDate.getTime() ? " ui-state-active" : "") + // highlight selected day
+							(printDate.getTime() > currentDate.getTime() ? " ui-datepicker-day-after-current" : "") + // day after selected 
+							(printDate.getTime() < currentDate.getTime() ? " ui-datepicker-day-before-current" : "") + // day before selected 
 							(otherMonth ? " ui-priority-secondary" : "") + // distinguish dates from other months
 							"' href='#'>" + printDate.getDate() + "</a>")) + "</td>"; // display selectable date
 						printDate.setDate(printDate.getDate() + 1);
