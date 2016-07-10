@@ -59,6 +59,7 @@ return $.effects.effect.pulsate = function( o, done ) {
 		if ( hide ) {
 			elem.hide();
 		}
+		elem.css( "opacity", "" );
 		done();
 	});
 
