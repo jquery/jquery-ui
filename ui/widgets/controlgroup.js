@@ -109,6 +109,8 @@ return $.widget( "ui.controlgroup", {
 			// first / last elements until all enhancments are done.
 			if ( that[ "_" + widget + "Options" ] ) {
 				options = that[ "_" + widget + "Options" ]( "middle" );
+			} else {
+				options = { classes: {} };
 			}
 
 			// Find instances of this widget inside controlgroup and init them
