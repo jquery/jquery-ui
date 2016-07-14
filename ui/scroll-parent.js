@@ -33,8 +33,8 @@ return $.fn.scrollParent = function( includeHidden ) {
 			if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
 				return false;
 			}
-			return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) +
-				parent.css( "overflow-x" ) );
+			var overflowState = parent.css(["overflow", "overflowX", "overflowY"]);
+			return (overflowRegex).test( overflowState.overflow + overflowState.overflowX + overflowState.overflowY );
 		} ).eq( 0 );
 
 	return position === "fixed" || !scrollParent.length ?
