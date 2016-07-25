@@ -28,4 +28,34 @@ QUnit.test( "dialogClass", function( assert ) {
 	element.remove();
 } );
 
+QUnit.test( "buttons - deprecated options", function( assert ) {
+	assert.expect( 7 );
+
+	var buttons,
+		element = $( "<div></div>" ).dialog( {
+			buttons: [
+				{
+					html: "a button",
+					"class": "additional-class",
+					id: "my-button-id",
+					click: function() {
+						assert.equal( this, element[ 0 ], "correct context" );
+					},
+					icons: { primary: "ui-icon-cancel" },
+					text: false
+				}
+			]
+		} );
+
+	buttons = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
+	assert.equal( buttons.length, 1, "correct number of buttons" );
+	assert.equal( buttons.attr( "id" ), "my-button-id", "correct id" );
+	assert.equal( $.trim( buttons.text() ), "a button", "correct label" );
+	assert.hasClasses( buttons, "additional-class" );
+	assert.deepEqual( buttons.button( "option", "icon" ), "ui-icon-cancel" );
+	assert.equal( buttons.button( "option", "showLabel" ), false );
+	buttons.trigger( "click" );
+
+	element.remove();
+} );
 } );
