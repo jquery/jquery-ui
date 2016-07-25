@@ -181,7 +181,7 @@ QUnit.test( "accessibility - ajax", function( assert ) {
 
 QUnit.test( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function( assert ) {
 	var ready = assert.async();
-	assert.expect( 92 );
+	assert.expect( 104 );
 	var element = $( "#tabs1" ).tabs( {
 			collapsible: true
 		} ),
@@ -326,6 +326,28 @@ QUnit.test( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER",
 		assert.ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
 		assert.equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
 		assert.equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
+
+		setTimeout( step5 );
+	}
+
+	function step5() {
+		tabs.eq( 1 ).hide();
+		element.tabs( "refresh" );
+		tabs.eq( 2 ).simulate( "keydown", { keyCode: keyCode.UP } );
+		assert.equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
+		assert.equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "third tab has aria-selected=false" );
+		assert.ok( panels.eq( 0 ).is( ":hidden" ), "first panel is hidden" );
+		assert.equal( tabs.eq( 0 ).attr( "aria-expanded" ), "false", "first tabs has aria-expanded=false" );
+		assert.equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
+		assert.ok( panels.eq( 2 ).is( ":hidden" ), "third panel is hidden" );
+		assert.equal( tabs.eq( 2 ).attr( "aria-expanded" ), "false", "third tab has aria-expanded=false" );
+		assert.equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
+
+		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
+		assert.equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "first tab has aria-selected=true" );
+		assert.ok( panels.eq( 0 ).is( ":visible" ), "first panel is visible" );
+		assert.equal( tabs.eq( 0 ).attr( "aria-expanded" ), "true", "first tab has aria-expanded=true" );
+		assert.equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "third panel has aria-hidden=false" );
 
 		setTimeout( ready );
 	}

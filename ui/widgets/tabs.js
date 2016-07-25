@@ -258,6 +258,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_findNextTab: function( index, goingForward ) {
+		var that = this;
 		var lastTabIndex = this.tabs.length - 1;
 
 		function constrain() {
@@ -270,7 +271,19 @@ $.widget( "ui.tabs", {
 			return index;
 		}
 
-		while ( $.inArray( constrain(), this.options.disabled ) !== -1 ) {
+		function canActivate( index ) {
+			if ( $.inArray( constrain(), that.options.disabled ) !== -1 ) {
+				return false;
+			}
+
+			if ( that.tabs.eq( index ).is( ":hidden" ) ) {
+				return false;
+			}
+
+			return true;
+		}
+
+		while ( !canActivate( index ) ) {
 			index = goingForward ? index + 1 : index - 1;
 		}
 
