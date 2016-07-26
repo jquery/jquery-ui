@@ -201,9 +201,6 @@ a.ui-button:active,
 .ui-widget-header .ui-icon {
 	background-image: url("images/ui-icons_444444_256x240.png")/*{iconsHeader}*/;
 }
-.ui-button .ui-icon {
-	background-image: url("images/ui-icons_777777_256x240.png")/*{iconsDefault}*/;
-}
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
@@ -222,6 +219,9 @@ a.ui-button:active,
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
 	background-image: url("images/ui-icons_cc0000_256x240.png")/*{iconsError}*/;
+}
+.ui-button .ui-icon {
+	background-image: url("images/ui-icons_777777_256x240.png")/*{iconsDefault}*/;
 }
 
 /* positioning */
