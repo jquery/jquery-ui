@@ -786,7 +786,7 @@ QUnit.test( ".widget() - overriden", function( assert ) {
 } );
 
 QUnit.test( ".instance()", function( assert ) {
-	assert.expect( 2 );
+	assert.expect( 3 );
 	var div;
 
 	$.widget( "ui.testWidget", {
@@ -794,9 +794,11 @@ QUnit.test( ".instance()", function( assert ) {
 	} );
 
 	div = $( "<div>" );
-	assert.equal( div.testWidget( "instance" ), undefined );
+	assert.equal( div.testWidget( "instance" ), undefined, "uninitialized" );
 	div.testWidget();
-	assert.equal( div.testWidget( "instance" ), div.testWidget( "instance" ) );
+	assert.equal( div.testWidget( "instance" ), div.testWidget( "instance" ), "initialized" );
+
+	assert.equal( $().testWidget( "instance" ), undefined, "empty set" );
 } );
 
 QUnit.test( "._on() to element (default)", function( assert ) {
