@@ -115,6 +115,7 @@ a.ui-button:active,
 	background: #007fff/*{bgColorActive}*/ /*{bgImgUrlActive}*/ /*{bgActiveXPos}*/ /*{bgActiveYPos}*/ /*{bgActiveRepeat}*/;
 	font-weight: normal/*{fwDefault}*/;
 	color: #ffffff/*{fcActive}*/;
+	outline: none;
 }
 .ui-icon-background,
 .ui-state-active .ui-icon-background {
