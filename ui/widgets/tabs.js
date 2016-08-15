@@ -64,7 +64,7 @@ $.widget( "ui.tabs", {
 		var rhash = /#.*$/;
 
 		return function( anchor ) {
-			var anchorUrl, locationUrl;
+			var anchorUrl, locationUrl, baseUrl;
 
 			anchorUrl = anchor.href.replace( rhash, "" );
 			locationUrl = location.href.replace( rhash, "" );
@@ -76,6 +76,11 @@ $.widget( "ui.tabs", {
 			try {
 				locationUrl = decodeURIComponent( locationUrl );
 			} catch ( error ) {}
+            
+            baseUrl = $("head base").attr('href');
+            if(baseUrl && baseUrl==anchorUrl){
+                return true;
+            }
 
 			return anchor.hash.length > 1 && anchorUrl === locationUrl;
 		};
