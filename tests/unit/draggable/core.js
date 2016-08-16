@@ -338,6 +338,27 @@ QUnit.test( "blur behavior - descendant of handle", function( assert ) {
 	} );
 } );
 
+QUnit.test( "blur behavior - off handle", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
+
+	var element = $( "#draggable2" ).draggable( { handle: "span" } ),
+		focusElement = $( "<div tabindex='1'></div>" ).appendTo( element );
+
+	testHelper.onFocus( focusElement, function() {
+		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused before mousing down on a draggable" );
+
+		testHelper.move( focusElement, 1, 1 );
+
+		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
+
+		testHelper.move( element, 1, 1 );
+
+		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down off the handle" );
+		ready();
+	} );
+} );
+
 QUnit.test( "ui-draggable-handle assigned to appropriate element", function( assert ) {
 	assert.expect( 5 );
 
