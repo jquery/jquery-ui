@@ -7,7 +7,7 @@
 		"external",
 		"tests"
 	],
-+       "license": "MIT",
+        "license": "MIT",
 	"dependencies": {
 		"jquery": ">=1.6"
 	},
