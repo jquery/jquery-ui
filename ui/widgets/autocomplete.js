@@ -188,7 +188,7 @@ $.widget( "ui.autocomplete", {
 				}
 			},
 			input: function( event ) {
-				if ( suppressInput ) {
+				if ( suppressInput || typeof suppressInput === 'undefined' ) {
 					suppressInput = false;
 					event.preventDefault();
 					return;
