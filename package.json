@@ -1,11 +1,11 @@
 {
-	"name": "jquery-ui",
+	"name": "jquery-ui-extension",
 	"title": "jQuery UI",
 	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
 	"version": "1.12.1-pre",
 	"homepage": "http://jqueryui.com",
 	"author": {
-		"name": "jQuery Foundation and other contributors",
+		"name": "Gray Young",
 		"url": "https://github.com/jquery/jquery-ui/blob/master/AUTHORS.txt"
 	},
 	"main": "ui/widget.js",
@@ -68,7 +68,11 @@
 		"grunt-jscs": "2.1.0",
 		"load-grunt-tasks": "3.4.0",
 		"rimraf": "2.5.1",
-		"testswarm": "1.1.0"
+		"testswarm": "1.1.0",
+		"gulp": "latest",
+		"gulp-load-plugins": "latest",
+		"gulp-size": "latest",
+		"gulp-sass": "latest"
 	},
 	"keywords": []
 }

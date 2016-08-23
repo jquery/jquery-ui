@@ -1,0 +1,218 @@
+/*!
+ * jQuery UI Extendtion CSS Framework 1.0.6
+ * https://github.com/GrayYoung/jQuery.UI.Extension
+ *
+ * Copyright Gray Young
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ */
+
+@import "../../external/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+@import "../../external/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
+
+/* Just Fix Safari On iPad Issue */
+@-webkit-keyframes uiCheckedFix {
+	from {
+		padding: 0;
+	}
+
+	to {
+		padding: 0;
+	}
+}
+
+/*== BEGIN - Checkbox/Radio */
+.radio-inline + .radio-inline, 
+.checkbox-inline + .checkbox-inline {
+	margin-left: 0;
+}
+
+.radio-inline, .checkbox-inline {
+	padding-left: 25px;
+	margin-right: 10px; // space out consecutive inline controls
+	line-height: 18px;
+}
+
+.checkbox, .radio {
+	label {
+		padding-left: 25px;
+		line-height: 18px;
+	}
+}
+
+.checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"], 
+.radio input[type="radio"], .radio-inline input[type="radio"] {
+	opacity: 0;
+	z-index: 1;
+	width: 18px;
+	height: 18px;
+	margin-top: 0;
+	margin-left: -25px;
+	line-height: 18px;
+	vertical-align: middle;
+
+	/*== Disabled | Readonly */
+	&[readonly], &[readonly] ~ * {
+		cursor: default;
+	}
+
+	&:disabled, &:disabled ~ * {
+		cursor: $cursor-disabled;
+	}
+
+	&:disabled, &[readonly] {
+		&, & + input[type="hidden"] {
+			& + .ui-appearance {
+				background-color: $input-bg-disabled;
+			}
+		}
+	}
+
+	&:focus {
+		&, & + input[type="hidden"] {
+			& + .ui-appearance {
+				$color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
+				border-color: $input-border-focus;
+				outline: 0;
+				@include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px $color-rgba);
+			}
+		}
+	}
+}
+
+.checkbox, .checkbox-inline, .radio, .radio-inline {
+	.ui-appearance {
+		display: inline-block;
+		position: absolute;
+		margin-left: -25px;
+		width: 18px;
+		height: 18px;
+		border: solid 1px $input-border;
+		background-color: white;
+		vertical-align: super;
+		text-align: center;
+		line-height: 1.1;
+		font-size: 14px;
+		color: $input-color;
+		-webkit-animation: uiCheckedFix infinite 1s;
+	}
+}
+
+.checkbox, .checkbox-inline {
+	input[type="checkbox"] {
+		&:checked, &:checked + input[type="hidden"] {
+			& + .ui-appearance:before {
+				content: "\f00c";
+			}
+		}
+	}
+}
+
+.radio, .radio-inline {
+	.ui-appearance {
+		border-radius: 50%;
+		box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .5) inset;
+	}
+
+	input[type="radio"] {
+		&:checked, &:checked + input[type="hidden"] {
+			& + .ui-appearance:before {
+				content: " ";
+				display: block;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 10px;
+				height: 10px;
+				margin-top: -5px;
+				margin-left: -5px;
+				border-radius: 50%;
+				background-color: $input-color;
+			}
+		}
+	}
+}
+/*== END - Checkbox & Radio */
+
+/*== BEGIN - Customize Select */
+.ui-select {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+
+	&:after, &:before {
+		display: block;
+		position: absolute;
+		right: 0;
+		z-index: 2;
+		width: 1.5em;
+		height: 25%;
+		line-height: $input-height-base / 4 !important;
+		text-align: center;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		transform: translate(0, 0);
+		font: normal normal normal 1.25em FontAwesome;
+		color: $input-color;
+	}
+
+	&:before {
+		content: "\f106";
+		top: 25%;
+	}
+
+	&:after {
+		content: "\f107";
+		top: 50%;
+	}
+
+	.form-control {
+		z-index: 1;
+		position: relative;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		padding-right: 1.5em;
+		line-height: 1 !important;
+
+		&::-ms-expand {
+			display: none
+		}
+	}
+
+	.dropdown-menu {
+		z-index: 100;
+		padding-top: 0;
+		padding-bottom: 0;
+		margin-top: 0;
+		width: 100%;
+		min-width: 0;
+		max-height: 400px;
+		overflow: auto;
+		margin-top: -1px;
+
+		&.top {
+			top : auto;
+			bottom : 100%;
+			margin-top : auto;
+			margin-bottom : -1px;
+		}
+	}
+}
+
+.form-group-sm .ui-select, .ui-select.ui-select-sm {
+	&:after, &:before {
+		line-height: $input-height-small / 4 !important;
+		font-size: 1em;
+	}
+}
+
+.form-group-lg .ui-select, .ui-select.ui-select-lg {
+	&:after, &:before {
+		line-height: $input-height-large / 4 !important;
+		font-size: 1.5em;
+	}
+}
+/*== END - Customize Select */

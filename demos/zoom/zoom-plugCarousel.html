@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- saved from url=(0014)about:internet -->
+<title>jQuery UI Zoom - Zoom & Carousel</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.css">
+<link rel="stylesheet" href="../../themes/base/all.css">
+<link rel="stylesheet" href="../../dist/themes/base/zoom.css">
+<link rel="stylesheet" href="../../dist/themes/base/carousel.css">
+<link rel="stylesheet" href="../demos.css">
+<script type="text/javascript" src="../../external/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../../ui/core.js"></script>
+<script type="text/javascript" src="../../ui/widget.js"></script>
+<script type="text/javascript" src="../../ui/mouse.js"></script>
+<script type="text/javascript" src="../../ui/draggable.js"></script>
+<script type="text/javascript" src="../../ui/position.js"></script>
+<script type="text/javascript" src="../../ui/button.js"></script>
+<script type="text/javascript" src="../../ui/effect.js"></script>
+<script type="text/javascript" src="../../ui/effect-explode.js"></script>
+<script type="text/javascript" src="../../ui/effect-scale.js"></script>
+<script type="text/javascript" src="../../ui/zoom.js"></script>
+<script type="text/javascript" src="../../ui/carousel.js"></script>
+<style>
+	#zoom {
+		width: 256px;
+		height: 256px;
+		border: solid 1px gray;
+		margin-bottom: 30px;
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#zoom').zoom({
+			show : {
+				effect : 'explode',
+				duration: 400,
+				queue : false
+			},
+			hide : {
+				effect : 'scale',
+				duration : 400,
+				queue : false
+			},
+		});
+		
+		$('#carousel').carousel({
+			width : 256,
+			select : function(event, ui) {
+				$('#showimg').attr('src', $('img', ui.item).attr('src'));
+				$('#zoom').attr('data-zoom-src', ui.item.attr('data-large'));
+				$('#zoom').zoom('refresh');
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<section class="container">
+		<h1>jQuery UI Zoom</h1>
+		<div id="zoom" data-zoom-src="http://270c81.medialib.glogster.com/media/d3/d330ffe572ba52de61bc3ecda8a4397aae9b3292c5d03e311eb61a4403539244/alost-alice-jpg.jpg">
+			<img id="showimg" src="../../external/images/Alice-In-Wonderland.jpg" />
+		</div>
+		<ul id="carousel">
+			<li data-large="http://270c81.medialib.glogster.com/media/d3/d330ffe572ba52de61bc3ecda8a4397aae9b3292c5d03e311eb61a4403539244/alost-alice-jpg.jpg">
+				<img src="../../external/images/Alice-In-Wonderland.jpg" />
+			</li>
+			<li data-large="http://www.womens-media.com/wp-content/uploads/2014/9/about-us_1.jpg">
+				<img src="../../external/images/All About Us.jpg" />
+			</li>
+			<li data-large="http://i2.itop.fm/album/Fools+Garden/Dish+of+the+Day">
+				<img src="../../external/images/Dish-Of-The-Day.jpg" />
+			</li>
+			<li data-large="http://www.pisnicky-akordy.cz/images/com_lyrics/albums/1/gary-barlow-forever-love-single.jpg">
+				<img src="../../external/images/Forever-Love-EP.jpg" />
+			</li>
+			<li data-large="https://lh4.googleusercontent.com/-jgc0QChSU8k/U7JPnzD6xOI/AAAAAAAAG1c/0_9qqW9CyWs/s0-d/GreysonChanceHoldOnTilTheNightGCFHeader12.jpg">
+				<img src="../../external/images/Hold-On-'Til-The-Night.jpg" />
+			</li>
+			<li data-large="http://static1.purepeople.com/articles/3/29/83/3/@/203993-enrique-iglesias-takin-back-my-love-637x0-1.jpg">
+				<img src="../../external/images/Takin'Back-My-Love.jpg" />
+			</li>
+			<li data-large="../../external/images/The-Fray.jpg">
+				<img src="../../external/images/The-Fray.jpg" />
+			</li>
+		</ul>
+		<div class="demo-description">
+			<code>
+				<pre>
+				</pre>
+			</code>
+		</div>
+	</section>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-	"name": "jquery-ui",
+	"name": "jquery-ui-extension",
 	"ignore": [
 		"**/.*",
 		"build",
@@ -9,7 +9,9 @@
 	],
 	"license": "MIT",
 	"dependencies": {
-		"jquery": ">=1.6"
+		"jquery": ">=1.6",
+		"font-awesome": "*",
+		"bootstrap-sass-official": "~3.*"
 	},
 	"devDependencies": {
 		"jquery-mousewheel": "3.1.12",
@@ -59,5 +61,21 @@
 		"jquery-2.2.4": "jquery#2.2.4",
 		"jquery-3.0.0": "jquery#3.0.0",
 		"jquery-3.1.0": "jquery#3.1.0"
-	}
+	},
+	"keywords": [
+		"zoom",
+		"carousel",
+		"thumbs",
+		"custom ui",
+		"form elements",
+		"select",
+		"radio",
+		"checkbox",
+		"jquery.ui",
+		"jquery-ui",
+		"jqueryui",
+		"widget",
+		"jquery"
+	],
+	"version": "1.12.1-pre"
 }

@@ -1,3 +1,7 @@
+This repository extend jquery/jquery-ui[https://github.com/jquery/jquery-ui], and add three new widgets zoom, carousel, elements.
+
+
+
 # [jQuery UI](http://jqueryui.com/) - Interactions and Widgets for the web
 
 jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of jQuery. Whether you're building highly interactive web applications, or you just need to add a date picker to a form control, jQuery UI is the perfect choice.

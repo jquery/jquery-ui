@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- saved from url=(0014)about:internet -->
+<title>jQuery UI Carousel - Default functionality</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.css">
+<link rel="stylesheet" href="../../themes/base/all.css">
+<link rel="stylesheet" href="../../dist/themes/base/carousel.css">
+<link rel="stylesheet" href="../demos.css">
+<script type="text/javascript" src="../../external/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../../ui/core.js"></script>
+<script type="text/javascript" src="../../ui/widget.js"></script>
+<script type="text/javascript" src="../../ui/button.js"></script>
+<script type="text/javascript" src="../../ui/effect.js"></script>
+<script type="text/javascript" src="../../ui/carousel.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#destroy').click(function() {
+			$('#carousel').carousel('destroy');
+		});
+		
+		$('#rebuild').click(function() {
+			$('#carousel').carousel({
+				width : 400
+			});
+		});
+		
+		$('#vertical').click(function() {
+			$('#carousel').carousel({
+				width : 'auto',
+				height : 300,
+				orientation : 'vertical'
+			});
+		});
+		
+		$('#autoH').click(function() {
+			$('#carousel').carousel({
+				height : 'auto',
+				width : 'auto',
+				keepButtons : true,
+				orientation : 'horizontal'
+			});
+		});
+		
+		$('#autoV').click(function() {
+			$('#carousel').carousel({
+				height : 'auto',
+				width : 'auto',
+				orientation : 'vertical'
+			});
+		});
+		
+		$('#reset').click(function() {
+			$('#carousel').carousel({
+				easing : 'easeOutBounce',
+				orientation : 'horizontal',
+				height : 'auto',
+				width : 320,
+				create : function(event, ui) {
+					$('h1').append(' Is Created')
+				},
+				select : function(event, ui) {
+					alert(ui.item.find('img').attr('src'));
+				}
+			});
+		}).click();
+	});
+</script>
+</head>
+<body>
+	<section class="container">
+		<h1>jQuery UI Carousel</h1>
+		<ul id="carousel">
+			<li><img src="../../external/images/Alice-In-Wonderland.jpg" /></li>
+			<li><img src="../../external/images/All About Us.jpg" /></li>
+			<li><img src="../../external/images/Dish-Of-The-Day.jpg" /></li>
+			<li><img src="../../external/images/Forever-Love-EP.jpg" /></li>
+			<li><img src="../../external/images/Hold-On-'Til-The-Night.jpg" /></li>
+			<li><img src="../../external/images/Takin'Back-My-Love.jpg" /></li>
+			<li><img src="../../external/images/The-Fray.jpg" /></li>
+		</ul>
+		<p>
+			<button id="destroy" type="button" class="ui-state-default ui-corner-all">Destroy</button>
+			<button id="rebuild" type="button" class="ui-state-default ui-corner-all">Rebuild</button>
+			<button id="vertical" type="button" class="ui-state-default ui-corner-all">Vertical Land</button>
+			<button id="reset" type="button" class="ui-state-default ui-corner-all">Reset</button>
+			<button id="autoH" type="button" class="ui-state-default ui-corner-all">Auto Horizontal</button>
+			<button id="autoV" type="button" class="ui-state-default ui-corner-all">Auto Vertical</button>
+		</p>
+		<div class="demo-description">
+			<code>
+				<pre>
+	$('#destroy').click(function() {
+		$('#carousel').carousel('destroy');
+	});
+	
+	$('#rebuild').click(function() {
+		$('#carousel').carousel({
+			width : 400
+		});
+	});
+	
+	$('#vertical').click(function() {
+		$('#carousel').carousel({
+			width : 'auto',
+			height : 300,
+			orientation : 'vertical'
+		});
+	});
+	
+	$('#autoH').click(function() {
+		$('#carousel').carousel({
+			height : 'auto',
+			width : 'auto',
+			keepButtons : true,
+			orientation : 'horizontal'
+		});
+	});
+	
+	$('#autoV').click(function() {
+		$('#carousel').carousel({
+			height : 'auto',
+			width : 'auto',
+			orientation : 'vertical'
+		});
+	});
+	
+	$('#reset').click(function() {
+		$('#carousel').carousel({
+			easing : 'easeOutBounce',
+			orientation : 'horizontal',
+			height : 'auto',
+			width : 320,
+			create : function(event, ui) {
+				$('h1').append(' Is Created')
+			},
+			select : function(event, ui) {
+				alert(ui.item.find('img').attr('src'));
+			}
+		});
+	}).click();
+				</pre>
+			</code>
+		</div>
+	</section>
+</body>
+</html>

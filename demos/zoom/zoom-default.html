@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- saved from url=(0014)about:internet -->
+<title>jQuery UI Zoom - Default functionality</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.css">
+<link rel="stylesheet" href="../../themes/base/all.css">
+<link rel="stylesheet" href="../../dist/themes/base/zoom.css">
+<script type="text/javascript" src="../../external/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../../ui/core.js"></script>
+<script type="text/javascript" src="../../ui/widget.js"></script>
+<script type="text/javascript" src="../../ui/mouse.js"></script>
+<script type="text/javascript" src="../../ui/draggable.js"></script>
+<script type="text/javascript" src="../../ui/position.js"></script>
+<script type="text/javascript" src="../../ui/effect.js"></script>
+<script type="text/javascript" src="../../ui/effect-explode.js"></script>
+<script type="text/javascript" src="../../ui/effect-scale.js"></script>
+<script type="text/javascript" src="../../ui/zoom.js"></script>
+<style>
+	#zoom {
+		width: 256px;
+		height: 256px;
+		border: solid 1px gray;
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#destroy').click(function() {
+			$('#zoom').zoom('destroy');	
+		});
+		
+		$('#rebuild').click(function() {
+			$('#zoom').zoom({
+				show : {
+					effect : 'explode',
+					duration: 400,
+					queue : false
+				},
+				hide : {
+					effect : 'scale',
+					duration : 400,
+					queue : false
+				},
+			});
+		}).click();
+
+		$('#standard').click(function() {
+			$('#zoom').zoom({
+				width : 100,
+				height : 100,
+				times : 3,
+				type : 'standard'
+			});
+		});
+		
+		$('#inner').click(function() {
+			$('#zoom').zoom({
+				type : 'inner',
+				width : 100
+			});	
+		});
+		
+		$('#draggable').click(function() {
+			$('#zoom').zoom({
+				type : 'drag'
+			});
+		});
+		
+		$('#alwaysOn').click(function() {
+			$('#zoom').zoom('option', {
+				alwaysOn : true
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<section class="container">
+		<h1>jQuery UI Zoom</h1>
+		<div id="zoom" data-zoom-src="http://270c81.medialib.glogster.com/media/d3/d330ffe572ba52de61bc3ecda8a4397aae9b3292c5d03e311eb61a4403539244/alost-alice-jpg.jpg">
+			<img src="../../external/images/Alice-In-Wonderland.jpg" />
+		</div>
+		<p>
+			<button id="destroy" type="button" class="ui-state-default ui-corner-all">Destroy</button>
+			<button id="rebuild" type="button" class="ui-state-default ui-corner-all">Rebuild</button>
+			<button id="standard" type="button" class="ui-state-default ui-corner-all">Standard Style</button>
+			<button id="inner" type="button" class="ui-state-default ui-corner-all">Inner Style</button>
+			<button id="draggable" type="button" class="ui-state-default ui-corner-all">Draggable Style</button>
+			<button id="alwaysOn" type="button" class="ui-state-default ui-corner-all">Always Show</button>
+		</p>
+		<div class="demo-description">
+			<code>
+				<pre>
+	$('#destroy').click(function() {
+		$('#zoom').zoom('destroy');			
+	});
+	
+	$('#rebuild').click(function() {
+		$('#zoom').zoom();		
+	}).click();		
+	
+	$('#standard').click(function() {
+		$('#zoom').zoom({
+			width : 100,
+			height : 100,
+			times : 3,
+			type : 'standard'
+		});		
+	});
+	
+	$('#inner').click(function() {
+		$('#zoom').zoom({
+			type : 'inner',
+			width : 100
+		});	
+	});
+	
+	$('#draggable').click(function() {
+		$('#zoom').zoom({
+			type : 'drag'
+		});		
+	});
+	
+	$('#alwaysOn').click(function() {
+		$('#zoom').zoom('option', {
+			alwaysOn : true	
+		});
+	});
+				</pre>
+			</code>
+		</div>
+	</section>
+</body>
+</html>

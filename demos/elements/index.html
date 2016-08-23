@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>jQuery UI Element(Custom UI for Form Element)</title>
+<link rel="stylesheet" type="text/css" href="http://grayyoung.github.io/css/bootstrap.css">
+<link rel="stylesheet" href="http://grayyoung.github.io/css/bootstrap-theme.css">
+<link rel="stylesheet" href="http://grayyoung.github.io/css/font-awesome.css">
+<link rel="stylesheet" href="../../themes/base/all.css">
+<link rel="stylesheet" href="../../dist/themes/base/elements.min.css">
+<script type="text/javascript" src="../../external/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/dist/js/lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../ui/core.js"></script>
+<script type="text/javascript" src="../../ui/widget.js"></script>
+<script type="text/javascript" src="../../ui/mouse.js"></script>
+<script type="text/javascript" src="../../ui/draggable.js"></script>
+<script type="text/javascript" src="../../ui/position.js"></script>
+<script type="text/javascript" src="../../ui/effect.js"></script>
+<script type="text/javascript" src="../../ui/effect-explode.js"></script>
+<script type="text/javascript" src="../../ui/effect-scale.js"></script>
+<script type="text/javascript" src="../../ui/elements.js"></script>
+</head>
+<body>
+	<section class="container">
+		<h1>jQuery UI Element(Custom UI for Form Element)</h1>
+		<form>
+			<fieldset>
+				<legend>Checkboxes Default (stacked) Example</legend>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="">
+						<i class="fa ui-appearance" aria-hidden="true"></i>
+						Option one is this and that&mdash;be sure to include why it's great
+					</label>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="" disabled>
+						<i class="fa ui-appearance" aria-hidden="true"></i>
+						Option two is disabled
+					</label>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="" readonly>
+						<i class="fa ui-appearance" aria-hidden="true"></i>
+						Option three is readonly
+					</label>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Radios Default (stacked) Example</legend>
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+						<i class="fa ui-appearance" aria-hidden="true"></i> 
+						Option one is this and that&mdash;be sure to include why it's great
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> 
+						<i class="fa ui-appearance" aria-hidden="true"></i>
+						Option two can be something else and selecting it will deselect option one
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+						<i class="fa ui-appearance" aria-hidden="true"></i> 
+						Option three is disabled
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios4" value="option4" readonly>
+						<i class="fa ui-appearance" aria-hidden="true"></i> 
+						Option four is readonly
+					</label>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Inline Checkboxes Default (stacked) Example</legend>
+				<label class="checkbox-inline">
+					<input type="checkbox" id="inlineCheckbox1" value="option1">
+					<i class="fa ui-appearance" aria-hidden="true"></i> 1
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" id="inlineCheckbox2" value="option2">
+					<i class="fa ui-appearance" aria-hidden="true"></i> 2
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" id="inlineCheckbox3" value="option3">
+					<i class="fa ui-appearance" aria-hidden="true"></i> 3
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>Inline Radios Default (stacked) Example</legend>
+				<label class="radio-inline">
+					<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+					<i class="fa ui-appearance" aria-hidden="true"></i> 1
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+					<i class="fa ui-appearance" aria-hidden="true"></i> 2
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 
+					<i class="fa ui-appearance" aria-hidden="true"></i> 3
+				</label>
+			</fieldset>
+			<fieldset class="form-horizontal">
+				<legend>Select Example</legend>
+				<div class="container-fluid">
+					<div class="form-group">
+						<span class="ui-select ui-select-lg">
+							<select class="form-control input-lg">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select>
+						</span>
+					</div>
+					<div class="form-group">
+						<span class="ui-select">
+							<select class="form-control">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select>
+						</span>
+					</div>
+					<div class="form-group">
+						<span class="ui-select ui-select-sm">
+							<select class="form-control input-sm">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select>
+						</span>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-horizontal">
+				<legend>Horizontal  Select Example</legend>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Country[disabled]</label>
+					<div class="col-sm-10">
+						<span class="ui-select">
+							<select name="state" class="form-control" disabled>
+								<option value="US" selected>United States</option>
+							</select>
+						</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Country[readonly]</label>
+					<div class="col-sm-10">
+						<span class="ui-select">
+							<select name="state" class="form-control" readonly>
+								<option value="US" selected>United States</option>
+							</select>
+						</span>
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<label class="col-sm-2 control-label">State</label>
+					<div class="col-sm-10">
+						<span class="ui-select">
+							<select name="state" class="form-control">
+								<option value="">State</option>
+								<option value="AL">Alabama</option>
+								<option value="AZ">Arizona</option>
+								<option value="AR">Arkansas</option>
+								<option selected="" value="CA">California</option>
+								<option value="CO">Colorado</option>
+								<option value="CT">Connecticut</option>
+								<option value="DC">D.C</option>
+								<option value="DE">Delaware</option>
+								<option value="FL">Florida</option>
+								<option value="GA">Georgia</option>
+								<option value="ID">Idaho</option>
+								<option value="IL">Illinois</option>
+								<option value="IN">Indiana</option>
+								<option value="IA">Iowa</option>
+								<option value="KS">Kansas</option>
+								<option value="KY">Kentucky</option>
+								<option value="LA">Louisiana</option>
+								<option value="ME">Maine</option>
+								<option value="MD">Maryland</option>
+								<option value="MA">Massachusetts</option>
+								<option value="MI">Michigan</option>
+								<option value="MN">Minnesota</option>
+								<option value="MS">Mississippi</option>
+								<option value="MO">Missouri</option>
+								<option value="MT">Montana</option>
+								<option value="NE">Nebraska</option>
+								<option value="NV">Nevada</option>
+								<option value="NH">New hampshire</option>
+								<option value="NJ">New jersey</option>
+								<option value="NM">New mexico</option>
+								<option value="NY">New york</option>
+								<option value="NC">North carolina</option>
+								<option value="ND">North dakota</option>
+								<option value="OH">Ohio</option>
+								<option value="OK">Oklahoma</option>
+								<option value="OR">Oregon</option>
+								<option value="PA">Pennsylvania</option>
+								<option value="RI">Rhode Island</option>
+								<option value="SC">South carolina</option>
+								<option value="SD">South dakota</option>
+								<option value="TN">Tennessee</option>
+								<option value="TX">Texas</option>
+								<option value="UT">Utah</option>
+								<option value="VT">Vermont</option>
+								<option value="VA">Virginia</option>
+								<option value="WA">Washington</option>
+								<option value="WV">West virginia</option>
+								<option value="WI">Wisconsin</option>
+								<option value="WY">Wyoming</option>
+							</select>
+						</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">State</label>
+					<div class="col-sm-10">
+						<span class="ui-select">
+							<select name="state" class="form-control">
+								<option value="">State</option>
+								<option value="AL">Alabama</option>
+								<option value="AZ">Arizona</option>
+								<option value="AR">Arkansas</option>
+								<option selected="" value="CA">California</option>
+								<option value="CO">Colorado</option>
+								<option value="CT">Connecticut</option>
+								<option value="DC">D.C</option>
+								<option value="DE">Delaware</option>
+								<option value="FL">Florida</option>
+								<option value="GA">Georgia</option>
+								<option value="ID">Idaho</option>
+								<option value="IL">Illinois</option>
+								<option value="IN">Indiana</option>
+								<option value="IA">Iowa</option>
+								<option value="KS">Kansas</option>
+								<option value="KY">Kentucky</option>
+								<option value="LA">Louisiana</option>
+								<option value="ME">Maine</option>
+								<option value="MD">Maryland</option>
+								<option value="MA">Massachusetts</option>
+								<option value="MI">Michigan</option>
+								<option value="MN">Minnesota</option>
+								<option value="MS">Mississippi</option>
+								<option value="MO">Missouri</option>
+								<option value="MT">Montana</option>
+								<option value="NE">Nebraska</option>
+								<option value="NV">Nevada</option>
+								<option value="NH">New hampshire</option>
+								<option value="NJ">New jersey</option>
+								<option value="NM">New mexico</option>
+								<option value="NY">New york</option>
+								<option value="NC">North carolina</option>
+								<option value="ND">North dakota</option>
+								<option value="OH">Ohio</option>
+								<option value="OK">Oklahoma</option>
+								<option value="OR">Oregon</option>
+								<option value="PA">Pennsylvania</option>
+								<option value="RI">Rhode Island</option>
+								<option value="SC">South carolina</option>
+								<option value="SD">South dakota</option>
+								<option value="TN">Tennessee</option>
+								<option value="TX">Texas</option>
+								<option value="UT">Utah</option>
+								<option value="VT">Vermont</option>
+								<option value="VA">Virginia</option>
+								<option value="WA">Washington</option>
+								<option value="WV">West virginia</option>
+								<option value="WI">Wisconsin</option>
+								<option value="WY">Wyoming</option>
+							</select>
+						</span>
+					</div>
+				</div>
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label">State</label>
+					<div class="col-sm-10">
+						<span class="ui-select">
+							<select name="state" class="form-control">
+								<option value="">State</option>
+								<option value="AL">Alabama</option>
+								<option value="AZ">Arizona</option>
+								<option value="AR">Arkansas</option>
+								<option selected="" value="CA">California</option>
+								<option value="CO">Colorado</option>
+								<option value="CT">Connecticut</option>
+								<option value="DC">D.C</option>
+								<option value="DE">Delaware</option>
+								<option value="FL">Florida</option>
+								<option value="GA">Georgia</option>
+								<option value="ID">Idaho</option>
+								<option value="IL">Illinois</option>
+								<option value="IN">Indiana</option>
+								<option value="IA">Iowa</option>
+								<option value="KS">Kansas</option>
+								<option value="KY">Kentucky</option>
+								<option value="LA">Louisiana</option>
+								<option value="ME">Maine</option>
+								<option value="MD">Maryland</option>
+								<option value="MA">Massachusetts</option>
+								<option value="MI">Michigan</option>
+								<option value="MN">Minnesota</option>
+								<option value="MS">Mississippi</option>
+								<option value="MO">Missouri</option>
+								<option value="MT">Montana</option>
+								<option value="NE">Nebraska</option>
+								<option value="NV">Nevada</option>
+								<option value="NH">New hampshire</option>
+								<option value="NJ">New jersey</option>
+								<option value="NM">New mexico</option>
+								<option value="NY">New york</option>
+								<option value="NC">North carolina</option>
+								<option value="ND">North dakota</option>
+								<option value="OH">Ohio</option>
+								<option value="OK">Oklahoma</option>
+								<option value="OR">Oregon</option>
+								<option value="PA">Pennsylvania</option>
+								<option value="RI">Rhode Island</option>
+								<option value="SC">South carolina</option>
+								<option value="SD">South dakota</option>
+								<option value="TN">Tennessee</option>
+								<option value="TX">Texas</option>
+								<option value="UT">Utah</option>
+								<option value="VT">Vermont</option>
+								<option value="VA">Virginia</option>
+								<option value="WA">Washington</option>
+								<option value="WV">West virginia</option>
+								<option value="WI">Wisconsin</option>
+								<option value="WY">Wyoming</option>
+							</select>
+						</span>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</section>
+</body>
+</html>

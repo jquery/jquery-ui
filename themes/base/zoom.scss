@@ -1,0 +1,25 @@
+/*!
+ * jQuery UI Extendtion - Zoom @VERSION
+ * https://github.com/GrayYoung/jQuery.UI.Extension
+ *
+ * Copyright Gray Young
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ */
+ .ui-zoom.ui-widget {
+ 	position: relative;
+ }
+
+.ui-zoom-cross {
+	width: 4em;
+	height: 4em;
+	cursor: move;
+	background-color: black;
+	opacity: 0.5;
+}
+
+.ui-zoom.ui-widget-content > .ui-zoom.ui-widget-content, 
+.ui-widget-content > .ui-zoom-content.ui-widget-content {
+	border-width: 0;
+}

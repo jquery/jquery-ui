@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>jQuery UI Carousel - Vertical</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.css">
+<link rel="stylesheet" href="../../themes/base/all.css">
+<link rel="stylesheet" href="../../dist/themes/base/carousel.css">
+<script src="../../external/jquery/dist/jquery.min.js"></script>
+<script src="../../ui/core.js"></script>
+<script src="../../ui/widget.js"></script>
+<script src="../../ui/button.js"></script>
+<script src="../../ui/effect.js"></script>
+<script src="../../ui/carousel.js"></script>
+<link rel="stylesheet" href="../demos.css">
+<script>
+	$(document).ready(function() {		
+		$("#carousel").carousel({
+			height : 320,
+			orientation : 'vertical'
+		});
+	});
+</script>
+</head>
+<body>
+	<div class="container">
+		<ul id="carousel">
+			<li><img src="../../external/images/Alice-In-Wonderland.jpg" /></li>
+			<li><img src="../../external/images/All About Us.jpg" /></li>
+			<li><img src="../../external/images/Dish-Of-The-Day.jpg" /></li>
+			<li><img src="../../external/images/Forever-Love-EP.jpg" /></li>
+			<li><img src="../../external/images/Hold-On-'Til-The-Night.jpg" /></li>
+			<li><img src="../../external/images/Takin'Back-My-Love.jpg" /></li>
+			<li><img src="../../external/images/The-Fray.jpg" /></li>
+		</ul>
+		<div class="demo-description">
+		</div>
+	</div>
+</body>
+</html>

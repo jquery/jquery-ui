@@ -1,0 +1,100 @@
+/*!
+ * jQuery UI Extendtion - Carousel @VERSION
+ * https://github.com/GrayYoung/jQuery.UI.Extension
+ *
+ * Copyright Gray Young
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ */
+ 
+$carousel-button-size: 1.5em;
+$carousel-item-width: 60px;
+$carousel-item-height: 60px;
+$carousel-item-gap: 0.1em;
+
+.ui-carousel-item {
+	display: block;
+	width: $carousel-item-width;
+	height: $carousel-item-height;
+	border: solid 1px white;
+	overflow: hidden;
+
+	> img, > a > img {
+		width: 100%;
+	}
+}
+
+.ui-carousel {
+	&.ui-widget {
+		position: relative;
+		clear: both;
+		overflow: hidden;
+		box-sizing: border-box;
+
+		.ui-button {
+			position: absolute;
+			box-sizing: border-box;
+		}
+
+		&.ui-horizontal {
+			padding-left: $carousel-button-size;
+			padding-right: $carousel-button-size;
+
+			> * {
+				float: left;
+			}
+
+			.ui-button {
+				top: 0;
+				left: 0;
+				width: $carousel-button-size;
+				height: 100%;
+
+				&.ui-role-next {
+					left: auto;
+					right: 0;
+				}
+			}
+
+			.ui-carousel-item {
+				float: left;
+
+				+ .ui-carousel-item {
+					margin-right: $carousel-item-gap;
+				}
+			}
+		}
+
+		&.ui-vertical {
+			padding-top: $carousel-button-size;
+			padding-bottom: $carousel-button-size;
+
+			.ui-carousel-item + .ui-carousel-item {
+				margin-top: $carousel-item-gap;
+			}
+
+			 > .ui-button {
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: $carousel-button-size;
+	
+				&.ui-role-next {
+					top: auto;
+					bottom: 0;
+				}
+			}
+		}
+
+		.ui-widget-content, .ui-carousel-content {
+			position: relative;
+		}
+
+		.ui-carousel-content {
+			padding: 0;
+			margin: 0;
+			overflow: hidden;
+		}
+	}
+}
