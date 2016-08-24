@@ -1,15 +1,28 @@
 /*!
- * jQuery UI Extendtion CSS Framework 1.0.6
+ * jQuery UI Extendtion @VERSION
  * https://github.com/GrayYoung/jQuery.UI.Extension
  *
  * Copyright Gray Young
  * Released under the MIT license.
  * http://jquery.org/license
  *
+ * :checked(http://www.w3schools.com/cssref/sel_checked.asp)
+ * :disabled(http://www.w3schools.com/cssref/sel_disabled.asp)
+ * :enabled(http://www.w3schools.com/cssref/sel_enabled.asp)
+ * :optional(http://www.w3schools.com/cssref/sel_optional.asp)
+ * :required(http://www.w3schools.com/cssref/sel_required.asp)
+ * :read-only(http://www.w3schools.com/cssref/sel_read-only.asp)
  */
 
-@import "../../external/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
-@import "../../external/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
+@import "../../external/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../../external/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+
+$ui-size-base:			floor(($font-size-base * $line-height-base));
+$ui-size-small:			floor(($font-size-small * $line-height-base));
+$ui-size-large:			floor(($font-size-large * $line-height-base));
+
+$ui-gap:					5px;
 
 /* Just Fix Safari On iPad Issue */
 @-webkit-keyframes uiCheckedFix {
@@ -29,15 +42,13 @@
 }
 
 .radio-inline, .checkbox-inline {
-	padding-left: 25px;
+	padding-left: $ui-size-base + $ui-gap;
 	margin-right: 10px; // space out consecutive inline controls
-	line-height: 18px;
 }
 
 .checkbox, .radio {
 	label {
-		padding-left: 25px;
-		line-height: 18px;
+		padding-left: $ui-size-base + $ui-gap;
 	}
 }
 
@@ -45,12 +56,11 @@
 .radio input[type="radio"], .radio-inline input[type="radio"] {
 	opacity: 0;
 	z-index: 1;
-	width: 18px;
-	height: 18px;
+	width: $ui-size-base;
+	height: $ui-size-base;
 	margin-top: 0;
-	margin-left: -25px;
-	line-height: 18px;
-	vertical-align: middle;
+	margin-left: -($ui-size-base + $ui-gap);
+	vertical-align: text-bottom;
 
 	/*== Disabled | Readonly */
 	&[readonly], &[readonly] ~ * {
@@ -83,17 +93,17 @@
 
 .checkbox, .checkbox-inline, .radio, .radio-inline {
 	.ui-appearance {
-		display: inline-block;
 		position: absolute;
-		margin-left: -25px;
-		width: 18px;
-		height: 18px;
+		display: inline-block;
+		margin-left: -($ui-size-base + $ui-gap);
+		width: $ui-size-base;
+		height: $ui-size-base;
 		border: solid 1px $input-border;
 		background-color: white;
-		vertical-align: super;
+		vertical-align: text-bottom;
 		text-align: center;
-		line-height: 1.1;
-		font-size: 14px;
+		line-height: $line-height-base;
+		font-size: $font-size-base;
 		color: $input-color;
 		-webkit-animation: uiCheckedFix infinite 1s;
 	}
@@ -113,22 +123,14 @@
 	.ui-appearance {
 		border-radius: 50%;
 		box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .5) inset;
+		line-height: $ui-size-base - 2;
+		font-size: $font-size-small;
 	}
 
 	input[type="radio"] {
 		&:checked, &:checked + input[type="hidden"] {
 			& + .ui-appearance:before {
-				content: " ";
-				display: block;
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				width: 10px;
-				height: 10px;
-				margin-top: -5px;
-				margin-left: -5px;
-				border-radius: 50%;
-				background-color: $input-color;
+				content: "\f111";
 			}
 		}
 	}

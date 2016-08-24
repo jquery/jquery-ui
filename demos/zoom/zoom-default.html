@@ -7,17 +7,7 @@
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 <link rel="stylesheet" href="/css/bootstrap-theme.css">
 <link rel="stylesheet" href="../../themes/base/all.css">
-<link rel="stylesheet" href="../../dist/themes/base/zoom.css">
-<script type="text/javascript" src="../../external/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="../../ui/core.js"></script>
-<script type="text/javascript" src="../../ui/widget.js"></script>
-<script type="text/javascript" src="../../ui/mouse.js"></script>
-<script type="text/javascript" src="../../ui/draggable.js"></script>
-<script type="text/javascript" src="../../ui/position.js"></script>
-<script type="text/javascript" src="../../ui/effect.js"></script>
-<script type="text/javascript" src="../../ui/effect-explode.js"></script>
-<script type="text/javascript" src="../../ui/effect-scale.js"></script>
-<script type="text/javascript" src="../../ui/zoom.js"></script>
+<script src="../../external/requirejs/require.js"></script>
 <style>
 	#zoom {
 		width: 256px;
@@ -25,7 +15,7 @@
 		border: solid 1px gray;
 	}
 </style>
-<script type="text/javascript">
+<script type="text/javascript" src="../bootstrap.js">
 	$(document).ready(function() {
 		$('#destroy').click(function() {
 			$('#zoom').zoom('destroy');	

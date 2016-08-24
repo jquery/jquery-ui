@@ -1,0 +1,62 @@
+/*!
+ * jQuery UI Extendtion - Carousel @VERSION
+ * https://github.com/GrayYoung/jQuery.UI.Extension
+ *
+ * Copyright Gray Young
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ */
+.ui-carousel-item {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border: solid 1px white;
+  overflow: hidden; }
+  .ui-carousel-item > img, .ui-carousel-item > a > img {
+    width: 100%; }
+
+.ui-carousel.ui-widget {
+  position: relative;
+  clear: both;
+  overflow: hidden;
+  box-sizing: border-box; }
+  .ui-carousel.ui-widget .ui-button {
+    position: absolute;
+    box-sizing: border-box; }
+  .ui-carousel.ui-widget.ui-horizontal {
+    padding-left: 1.5em;
+    padding-right: 1.5em; }
+    .ui-carousel.ui-widget.ui-horizontal > * {
+      float: left; }
+    .ui-carousel.ui-widget.ui-horizontal .ui-button {
+      top: 0;
+      left: 0;
+      width: 1.5em;
+      height: 100%; }
+      .ui-carousel.ui-widget.ui-horizontal .ui-button.ui-role-next {
+        left: auto;
+        right: 0; }
+    .ui-carousel.ui-widget.ui-horizontal .ui-carousel-item {
+      float: left; }
+      .ui-carousel.ui-widget.ui-horizontal .ui-carousel-item + .ui-carousel-item {
+        margin-right: 0.1em; }
+  .ui-carousel.ui-widget.ui-vertical {
+    padding-top: 1.5em;
+    padding-bottom: 1.5em; }
+    .ui-carousel.ui-widget.ui-vertical .ui-carousel-item + .ui-carousel-item {
+      margin-top: 0.1em; }
+    .ui-carousel.ui-widget.ui-vertical > .ui-button {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1.5em; }
+      .ui-carousel.ui-widget.ui-vertical > .ui-button.ui-role-next {
+        top: auto;
+        bottom: 0; }
+  .ui-carousel.ui-widget .ui-widget-content, .ui-carousel.ui-widget .ui-carousel-content {
+    position: relative; }
+  .ui-carousel.ui-widget .ui-carousel-content {
+    padding: 0;
+    margin: 0;
+    overflow: hidden; }

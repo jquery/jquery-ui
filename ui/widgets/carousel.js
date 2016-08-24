@@ -11,7 +11,7 @@
 
 (function(factory) {
 	if (typeof define === 'function' && define.amd) {
-		define([ 'jquery', './core', './widget', './button', './effect' ], factory);
+		define([ 'jquery', '../core', '../widget', '../effect', './button' ], factory);
 	} else {
 		factory(jQuery);
 	}

@@ -11,7 +11,7 @@
 	"dependencies": {
 		"jquery": ">=1.6",
 		"font-awesome": "*",
-		"bootstrap-sass-official": "~3.*"
+		"bootstrap-sass": "~3.*"
 	},
 	"devDependencies": {
 		"jquery-mousewheel": "3.1.12",

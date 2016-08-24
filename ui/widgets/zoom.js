@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Extendtion - Elements 1.0.6
+ * jQuery UI Extension - Zoom @VERSION
  * https://github.com/GrayYoung/jQuery.UI.Extension
  *
  * Copyright Gray Young
@@ -11,7 +11,7 @@
 
 (function(factory) {
 	if (typeof define === 'function' && define.amd) {
-		define([ 'jquery', './core', './widget', './position', './draggable', './effect' ], factory);
+		define([ 'jquery', '../core', '../widget', '../position', '../effect', './draggable' ], factory);
 	} else {
 		factory(jQuery);
 	}

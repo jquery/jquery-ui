@@ -30,12 +30,14 @@ var widgets = [
 	"accordion",
 	"autocomplete",
 	"button",
+	"carousel",
 	"checkboxradio",
 	"controlgroup",
 	"datepicker",
 	"dialog",
 	"draggable",
 	"droppable",
+	"elements",
 	"menu",
 	"mouse",
 	"progressbar",
@@ -46,7 +48,8 @@ var widgets = [
 	"sortable",
 	"spinner",
 	"tabs",
-	"tooltip"
+	"tooltip",
+	"zoom"
 ];
 
 function getPath( module ) {

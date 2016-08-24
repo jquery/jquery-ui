@@ -29,6 +29,7 @@ var
 		"accordion",
 		"autocomplete",
 		"button",
+		"carousel",
 		"checkboxradio",
 		"controlgroup",
 		"datepicker",

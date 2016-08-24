@@ -1,0 +1,155 @@
+/*!
+ * jQuery UI Extendtion @VERSION
+ * https://github.com/GrayYoung/jQuery.UI.Extension
+ *
+ * Copyright Gray Young
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * :checked(http://www.w3schools.com/cssref/sel_checked.asp)
+ * :disabled(http://www.w3schools.com/cssref/sel_disabled.asp)
+ * :enabled(http://www.w3schools.com/cssref/sel_enabled.asp)
+ * :optional(http://www.w3schools.com/cssref/sel_optional.asp)
+ * :required(http://www.w3schools.com/cssref/sel_required.asp)
+ * :read-only(http://www.w3schools.com/cssref/sel_read-only.asp)
+ */
+/* Just Fix Safari On iPad Issue */
+@-webkit-keyframes uiCheckedFix {
+  from {
+    padding: 0; }
+  to {
+    padding: 0; } }
+
+/*== BEGIN - Checkbox/Radio */
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-left: 0; }
+
+.radio-inline, .checkbox-inline {
+  padding-left: 25px;
+  margin-right: 10px; }
+
+.checkbox label, .radio label {
+  padding-left: 25px; }
+
+.checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"],
+.radio input[type="radio"], .radio-inline input[type="radio"] {
+  opacity: 0;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+  margin-left: -25px;
+  vertical-align: text-bottom;
+  /*== Disabled | Readonly */ }
+  .checkbox input[type="checkbox"][readonly], .checkbox input[type="checkbox"][readonly] ~ *, .checkbox-inline input[type="checkbox"][readonly], .checkbox-inline input[type="checkbox"][readonly] ~ *,
+  .radio input[type="radio"][readonly],
+  .radio input[type="radio"][readonly] ~ *, .radio-inline input[type="radio"][readonly], .radio-inline input[type="radio"][readonly] ~ * {
+    cursor: default; }
+  .checkbox input[type="checkbox"]:disabled, .checkbox input[type="checkbox"]:disabled ~ *, .checkbox-inline input[type="checkbox"]:disabled, .checkbox-inline input[type="checkbox"]:disabled ~ *,
+  .radio input[type="radio"]:disabled,
+  .radio input[type="radio"]:disabled ~ *, .radio-inline input[type="radio"]:disabled, .radio-inline input[type="radio"]:disabled ~ * {
+    cursor: not-allowed; }
+  .checkbox input[type="checkbox"]:disabled + .ui-appearance, .checkbox input[type="checkbox"]:disabled + input[type="hidden"] + .ui-appearance, .checkbox input[type="checkbox"][readonly] + .ui-appearance, .checkbox input[type="checkbox"][readonly] + input[type="hidden"] + .ui-appearance, .checkbox-inline input[type="checkbox"]:disabled + .ui-appearance, .checkbox-inline input[type="checkbox"]:disabled + input[type="hidden"] + .ui-appearance, .checkbox-inline input[type="checkbox"][readonly] + .ui-appearance, .checkbox-inline input[type="checkbox"][readonly] + input[type="hidden"] + .ui-appearance,
+  .radio input[type="radio"]:disabled + .ui-appearance,
+  .radio input[type="radio"]:disabled + input[type="hidden"] + .ui-appearance,
+  .radio input[type="radio"][readonly] + .ui-appearance,
+  .radio input[type="radio"][readonly] + input[type="hidden"] + .ui-appearance, .radio-inline input[type="radio"]:disabled + .ui-appearance, .radio-inline input[type="radio"]:disabled + input[type="hidden"] + .ui-appearance, .radio-inline input[type="radio"][readonly] + .ui-appearance, .radio-inline input[type="radio"][readonly] + input[type="hidden"] + .ui-appearance {
+    background-color: #eeeeee; }
+  .checkbox input[type="checkbox"]:focus + .ui-appearance, .checkbox input[type="checkbox"]:focus + input[type="hidden"] + .ui-appearance, .checkbox-inline input[type="checkbox"]:focus + .ui-appearance, .checkbox-inline input[type="checkbox"]:focus + input[type="hidden"] + .ui-appearance,
+  .radio input[type="radio"]:focus + .ui-appearance,
+  .radio input[type="radio"]:focus + input[type="hidden"] + .ui-appearance, .radio-inline input[type="radio"]:focus + .ui-appearance, .radio-inline input[type="radio"]:focus + input[type="hidden"] + .ui-appearance {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+
+.checkbox .ui-appearance, .checkbox-inline .ui-appearance, .radio .ui-appearance, .radio-inline .ui-appearance {
+  position: absolute;
+  display: inline-block;
+  margin-left: -25px;
+  width: 20px;
+  height: 20px;
+  border: solid 1px #ccc;
+  background-color: white;
+  vertical-align: text-bottom;
+  text-align: center;
+  line-height: 1.42857143;
+  font-size: 14px;
+  color: #555555;
+  -webkit-animation: uiCheckedFix infinite 1s; }
+
+.checkbox input[type="checkbox"]:checked + .ui-appearance:before, .checkbox input[type="checkbox"]:checked + input[type="hidden"] + .ui-appearance:before, .checkbox-inline input[type="checkbox"]:checked + .ui-appearance:before, .checkbox-inline input[type="checkbox"]:checked + input[type="hidden"] + .ui-appearance:before {
+  content: "\f00c"; }
+
+.radio .ui-appearance, .radio-inline .ui-appearance {
+  border-radius: 50%;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5) inset;
+  line-height: 18px;
+  font-size: 12px; }
+
+.radio input[type="radio"]:checked + .ui-appearance:before, .radio input[type="radio"]:checked + input[type="hidden"] + .ui-appearance:before, .radio-inline input[type="radio"]:checked + .ui-appearance:before, .radio-inline input[type="radio"]:checked + input[type="hidden"] + .ui-appearance:before {
+  content: "\f111"; }
+
+/*== END - Checkbox & Radio */
+/*== BEGIN - Customize Select */
+.ui-select {
+  position: relative;
+  display: inline-block;
+  width: 100%; }
+  .ui-select:after, .ui-select:before {
+    display: block;
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    width: 1.5em;
+    height: 25%;
+    line-height: 8.5px !important;
+    text-align: center;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+    font: normal normal normal 1.25em FontAwesome;
+    color: #555555; }
+  .ui-select:before {
+    content: "\f106";
+    top: 25%; }
+  .ui-select:after {
+    content: "\f107";
+    top: 50%; }
+  .ui-select .form-control {
+    z-index: 1;
+    position: relative;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 1.5em;
+    line-height: 1 !important; }
+    .ui-select .form-control::-ms-expand {
+      display: none; }
+  .ui-select .dropdown-menu {
+    z-index: 100;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    width: 100%;
+    min-width: 0;
+    max-height: 400px;
+    overflow: auto;
+    margin-top: -1px; }
+    .ui-select .dropdown-menu.top {
+      top: auto;
+      bottom: 100%;
+      margin-top: auto;
+      margin-bottom: -1px; }
+
+.form-group-sm .ui-select:after, .form-group-sm .ui-select:before, .ui-select.ui-select-sm:after, .ui-select.ui-select-sm:before {
+  line-height: 7.5px !important;
+  font-size: 1em; }
+
+.form-group-lg .ui-select:after, .form-group-lg .ui-select:before, .ui-select.ui-select-lg:after, .ui-select.ui-select-lg:before {
+  line-height: 11.5px !important;
+  font-size: 1.5em; }
+
+/*== END - Customize Select */
