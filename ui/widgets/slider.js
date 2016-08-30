@@ -76,6 +76,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
+		this._originalVal;
 
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
 			"ui-widget ui-widget-content" );
@@ -227,6 +228,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				( parseInt( closestHandle.css( "marginTop" ), 10 ) || 0 )
 		};
 
+		this._originalVal = this.values();
+
 		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
 			this._slide( event, index, normValue );
 		}
@@ -241,6 +244,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	_mouseDrag: function( event ) {
 		var position = { x: event.pageX, y: event.pageY },
 			normValue = this._normValueFromMouse( position );
+
+		if ( this._originalVal[ 0 ] === this._originalVal[ 1 ] &&
+			normValue > this._originalVal[ 0 ] ) {
+			this._handleIndex = 1;
+		} else if ( this._originalVal[ 0 ] === this._originalVal[ 1 ] &&
+			normValue < this._originalVal[ 0 ] ) {
+			this._handleIndex = 0;
+		}
 
 		this._slide( event, this._handleIndex, normValue );
 
