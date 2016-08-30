@@ -29,7 +29,7 @@ QUnit.assert.notPresent = function( value, array, message ) {
 };
 
 // MinDuration is used for "short" animate tests where we are only concerned about the final
-var minDuration = 15,
+var minDuration = 60,
 
 	// Duration is used for "long" animates where we plan on testing properties during animation
 	duration = 200;
@@ -332,7 +332,7 @@ $.each( $.effects.effect, function( effect ) {
 
 		function duringTest( fn ) {
 			return function( next ) {
-				setTimeout( fn );
+				setTimeout( fn, minDuration / 2 );
 				next();
 			};
 		}
