@@ -352,28 +352,43 @@ $.ui.ddmanager = {
 	},
 	drop: function( draggable, event ) {
 
-		var dropped = false;
+	    var dropped = false;
 
-		// Create a copy of the droppables in case the list changes during the drop (#9116)
-		$.each( ( $.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice(), function() {
+	    // Create a copy of the droppables in case the list changes during the drop (#9116)
+	    var allDroppables = ( $.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice();
 
-			if ( !this.options ) {
-				return;
-			}
-			if ( !this.options.disabled && this.visible &&
-					intersect( draggable, this, this.options.tolerance, event ) ) {
-				dropped = this._drop.call( this, event ) || dropped;
-			}
+	    // Check droppables before dropping since result from accept might change (#8046)
+	    var activatedDroppables = [];
 
-			if ( !this.options.disabled && this.visible && this.accept.call( this.element[ 0 ],
+	    $.each( allDroppables, function() {
+	        if ( !this.options ) {
+	            return;
+	        }
+
+	        if ( !this.options.disabled && this.visible && this.accept.call( this.element[ 0 ],
 					( draggable.currentItem || draggable.element ) ) ) {
-				this.isout = true;
-				this.isover = false;
-				this._deactivate.call( this, event );
-			}
+	            activatedDroppables.push( this );
+	        }
+	    } );
 
-		} );
-		return dropped;
+	    $.each( allDroppables, function() {
+	        if ( !this.options ) {
+	            return;
+	        }
+
+	        if ( !this.options.disabled && this.visible &&
+					$.ui.intersect( draggable, this, this.options.tolerance, event ) ) {
+	            dropped = this._drop.call( this, event ) || dropped;
+	        }
+	    } );
+
+	    $.each( activatedDroppables, function() {
+	        this.isout = true;
+	        this.isover = false;
+	        this._deactivate.call( this, event );
+	    } );
+
+	    return dropped;
 
 	},
 	dragStart: function( draggable, event ) {
