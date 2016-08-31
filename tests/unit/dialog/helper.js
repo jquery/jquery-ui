@@ -34,7 +34,7 @@ return $.extend( helper, {
 	},
 
 	shouldResize: function( assert, element, dw, dh, msg ) {
-		var actualDH, actualDW, heightAfter, widthAfter
+		var actualDH, actualDW, heightAfter, widthAfter,
 			d = element.dialog( "widget" ),
 			handle = $( ".ui-resizable-se", d ),
 			heightBefore = element.height(),
@@ -52,7 +52,7 @@ return $.extend( helper, {
 
 		// TODO: Switch to assert.close().
 		// Also change the testDrag() helper.
-		assert.ok( Math.abs(actualDH - dh) <= 1 && Math.abs(actualDW - dw) <= 1, "resized[50, 50] " + msg );
+		assert.ok( Math.abs( actualDH - dh ) <= 1 && Math.abs( actualDW - dw ) <= 1, "resized[50, 50] " + msg );
 	}
 } );
 
