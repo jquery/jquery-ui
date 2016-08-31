@@ -50,6 +50,8 @@ return $.extend( helper, {
 		actualDH = heightAfter - heightBefore;
 		actualDW = widthAfter - widthBefore;
 
+		// TODO: Switch to assert.close().
+		// Also change the testDrag() helper.
 		assert.ok( Math.abs(actualDH - dh) <= 1 && Math.abs(actualDW - dw) <= 1, "resized[50, 50] " + msg );
 	}
 } );
