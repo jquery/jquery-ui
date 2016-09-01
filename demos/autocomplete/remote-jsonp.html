@@ -10,7 +10,6 @@
 	.ui-autocomplete-loading {
 		background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 	}
-	#city { width: 25em; }
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
@@ -19,24 +18,22 @@
 			$( "#log" ).scrollTop( 0 );
 		}
 
-		$( "#city" ).autocomplete({
+		$( "#birds" ).autocomplete({
 			source: function( request, response ) {
 				$.ajax( {
-					url: "http://gd.geobytes.com/AutoCompleteCity",
+					url: "search.php",
 					dataType: "jsonp",
 					data: {
-						q: request.term
+						term: request.term
 					},
 					success: function( data ) {
-
-						// Handle 'no match' indicated by [ "" ] response
-						response( data.length === 1 && data[ 0 ].length === 0 ? [] : data );
+						response( data );
 					}
 				} );
 			},
-			minLength: 3,
+			minLength: 2,
 			select: function( event, ui ) {
-				log( "Selected: " + ui.item.label );
+				log( "Selected: " + ui.item.value + " aka " + ui.item.id );
 			}
 		} );
 	</script>
@@ -44,9 +41,8 @@
 <body>
 
 <div class="ui-widget">
-	<label for="city">Your city: </label>
-	<input id="city" type="text">
-	Powered by <a href="http://geobytes.com">geobytes.com</a>
+	<label for="birds">Birds: </label>
+	<input id="birds">
 </div>
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">
@@ -55,7 +51,8 @@
 </div>
 
 <div class="demo-description">
-<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are cities, displayed when at least three characters are entered into the field. The datasource is the <a href="http://geobytes.com">geobytes.com webservice</a>. That data is also available in callbacks, as illustrated by the Result area below the input.</p>
+<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are bird names, displayed when at least two characters are entered into the field.</p>
+<p>The datasource is a server-side script which returns JSONP data, specified via a function which uses <code>jQuery.ajax()</code> for the <code>source</code> option.</p>
 </div>
 </body>
 </html>
