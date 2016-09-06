@@ -117,7 +117,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this.handle = this.handles.eq( 0 );
 
 		this.handles.each( function( i ) {
-			$( this ).data( "ui-slider-handle-index", i );
+			$( this )
+				.data( "ui-slider-handle-index", i )
+				.attr( "tabIndex", 0 );
 		} );
 	},
 
