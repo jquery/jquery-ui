@@ -273,7 +273,7 @@ $.extend( Datepicker.prototype, {
 				} else {
 					$.datepicker._showDatepicker( input[ 0 ] );
 				}
-				return false;
+				//return false;
 			} );
 		}
 	},
