@@ -1,4 +1,4 @@
-This repository extend jquery/jquery-ui[https://github.com/jquery/jquery-ui], and add three new widgets zoom, carousel, elements.
+This repository extend [jquery/jquery-ui](https://github.com/jquery/jquery-ui), and add three new widgets zoom, carousel, elements.
 
 
 
