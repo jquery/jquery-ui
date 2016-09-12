@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Extendtion - Elements 1.0.6
+ * jQuery UI Extendtion - Carousel @VERSION
  * https://github.com/GrayYoung/jQuery.UI.Extension
  *
  * Copyright Gray Young
@@ -7,17 +7,36 @@
  * http://jquery.org/license
  *
  */
-
+ 
+//>>label: Carousel
+//>>group: Widgets
+// jscs:disable maximumLineLength
+//>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
+// jscs:enable maximumLineLength
+//>>docs: https://github.com/GrayYoung/jQuery.UI.Extension/wiki/Carousel
+//>>demos: https://grayyoung.github.io/jQuery.UI.Extension/demos/carousel
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/carousel.css
+//>>css.theme: ../../themes/base/theme.css
 
 (function(factory) {
-	if (typeof define === 'function' && define.amd) {
-		define([ 'jquery', '../core', '../widget', '../effect', './button' ], factory);
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [
+			"jquery",
+			"../version",
+			"../widget",
+			'./button'
+		], factory );
 	} else {
-		factory(jQuery);
+
+		// Browser globals
+		factory( jQuery );
 	}
 }(function($) {
 	return $.widget('ui.carousel', {
-		version : '1.0.3',
+		version : '@VERSION',
 		defaultElement : '<ol />',
 		options : {
 			active : -1,

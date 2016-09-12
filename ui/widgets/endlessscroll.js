@@ -35,27 +35,35 @@ return $.widget( "ui.endlessscroll", {
 	version: "@VERSION",
 	defaultElement: '.ui-endlessscroll',
 	options: {
-		target: document,
 		items: '> *',
 		directions: 'top bottom',
-		loader: 'Loading',
-		loaderAppendTo: '',
+		loader: '<div>Loading</div>',
+		disableURL: false,
 		param: 'page',
-		ajax: null,
-		change: null,
-		complete: null
+		source: null,
+
+		// Callbacks
+		response: null,
+		scroll: null,
+		stop: null,
+		end: null
 	},
 
 	_create: function() {
 		var _this = this, $document = this.document;
 
+		if(this.options.loader instanceof $) {
+			this._$loader = this.options.loader;
+		} else if(typeof this.options.loader === 'string') {
+			this._$loader = $(this.options.loader);
+		}
 		$document.on('mousewheel.ui.endlessscroll', function(event) {
 			var $document = $(this);
 
 			if(event.deltaY > 0 && $document.scrollTop() <= 0) {
-				$('.jq-product-listing').trigger('update', 'top');
+				_this.element.trigger('update', 'top');
 			} else if(event.deltaY < 0 && $document.scrollTop() >= $document.height() - $(window).height()) {
-				$('.jq-product-listing').trigger('update', 'bottom');
+				_this.element.trigger('update', 'bottom');
 			}
 		}).on('touchstart.ui.endlessscroll', function(event) {
 			var $document = $(this);
@@ -78,12 +86,23 @@ return $.widget( "ui.endlessscroll", {
 				}
 				//event.preventDefault();
 			}
-		}).data('ui.oddScrollTop', $document.scrollTop()).on('scroll.ui.endlessscroll', function(event) {
-			_this._throttle(_this._updateURL, this);
+		}).data('ui.oddScrollTop.endlessscroll', $document.scrollTop()).on('scroll.ui.endlessscroll', function(event) {
+			_this._throttle(_this._updateURL, _this);
+		});
+		this.element.attr({
+			role: 'status',
+			'aria-live': 'assertive',
+			'aria-relevant': 'additions'
+		}).bind('load.ui.endlessscroll', function() {
+			_this._throttle(_this._loadItems, _this);
 		});
 	},
 
 	_destroy: function() {
+		if(this._$loader) {
+			this._$loader.remove();
+		}
+		this.element.unbind('load.ui.endlessscroll');
 		this.document.off('mousewheel.ui.endlessscroll touchstart.ui.endlessscroll touchend.ui.endlessscroll');
 	},
 
@@ -93,7 +112,7 @@ return $.widget( "ui.endlessscroll", {
 		if ( $.isArray( this.options.source ) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				response( $.ui.autocomplete.filter( array, request.term ) );
+				response(array);
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -127,8 +146,7 @@ return $.widget( "ui.endlessscroll", {
 	},
 
 	_loadItems: function() {
-		var $container = $(this), $loadBtn = $('.load-more').addClass('hidden');
-		var $loading = $('<div class="text-center loading"><i class="fa fa-spinner fa-spin fa-4x"></i></div>');
+		var _this = this, $loadBtn = $('.load-more').addClass('hidden');
 		var updatingData = $container.data('updating'), mostPage;
 
 		// When User Skip Main Content to Footer, Prevent Load Items Automatically.
@@ -140,18 +158,18 @@ return $.widget( "ui.endlessscroll", {
 		if(updatingData.totalPages <= 1) {
 			$(document).off('scroll.listing mousewheel.listing touchstart.listing touchend.listing');
 		}
-		if($.type($container.data('mostTopPage')) === 'undefined') {
-			$container.data('mostTopPage', updatingData.page);
+		if($.type(this.element.data('mostTopPage')) === 'undefined') {
+			this.element.data('mostTopPage', updatingData.page);
 		}
 		if($.type($container.data('mostBottomPage')) === 'undefined') {
-			$container.data('mostBottomPage', updatingData.page);
+			this.element.data('mostBottomPage', updatingData.page);
 		}
 		if($.type(arguments[2]) === 'undefined') {
 			if(direction === 'top') {
-				mostPage = $container.data('mostTopPage');
+				mostPage = this.element.data('mostTopPage');
 				mostPage--;
 			} else {
-				mostPage = $container.data('mostBottomPage');
+				mostPage = this.element.data('mostBottomPage');
 				mostPage++;
 			}
 		} else if($.type(arguments[2]) === 'number') {
@@ -159,35 +177,34 @@ return $.widget( "ui.endlessscroll", {
 		} else {
 			throw new Error('Argument must be a valid number');
 		}
-		if(mostPage <= 0 || mostPage > updatingData.totalPages || $container.data('loading') === true) {
+		if(mostPage <= 0 || mostPage > updatingData.totalPages || this.element.data('loading') === true) {
 			return false;
 		}
-		$container.data('loading', true);
+		this.element.data('loading', true);
 		if(direction === 'top') {
-			$container.data('mostTopPage', mostPage)
-			$container.before($loading);
+			this.element.data('mostTopPage', mostPage);
+			if(this._$loader) {
+				this.element.before(this._$loader);
+			}
 		} else {
-			$container.data('mostBottomPage', mostPage);
-			$container.after($loading);
+			this.element.data('mostBottomPage', mostPage);
+			if(this._$loader) {
+				this.element.after(this._$loader);
+			}
 		}
-		updatingData.page = mostPage;
-		updatingData.tryOnIsVisible = $('.btn-choice.role-tryOnView').hasClass('active');
-		updatingData.tryOnImage = $('.tryOn-carousel .item.selected').data('target');
 		$.ajax($.extend({
-			url: updatingData.reqPath.replace(/page=\d*/gi, ''),
-			data: updatingData,
-			cache : false,
+			cache: false,
 			success: function(data){
 				var $items = $(data).find('.product-listing > .item');
-				var $anchor = $container.children('.item:first');
+				var $anchor = _this.element.children('.item:first');
 				var pageY = $(document).scrollTop(), oldAnchor = $anchor.offset().top;
 
 				$items.data('page', mostPage);
 				if(direction === 'top') {
-					$container.prepend($items);
-					$('body, html').scrollTop(pageY + $anchor.offset().top - oldAnchor - $loading.outerHeight(true));
+					_this.element.prepend($items);
+					$('body, html').scrollTop(pageY + $anchor.offset().top - oldAnchor - _this._$loader.outerHeight(true));
 				} else {
-					$container.append($items);
+					_this.element.append($items);
 				}
 				$items.find('.choices-color').each(function() {
 					var $this = $(this), isFull = $this.find('.color-item').size() > 4;
@@ -203,22 +220,19 @@ return $.widget( "ui.endlessscroll", {
 						$this.find(".carousel").removeClass('carousel');
 					}
 				});
-				$container.data('loading', false);
-				$loading.remove();
+				_this.element.data('ui.loading', false);
+				_this._$loader.remove();
 				$('.jq-product-listing').trigger('CriteoPLPTag', data);
 			},
-			error : function() {
-				$container.data('loading', false);
-				$loading.remove();
+			complete: function() {
+				_this.element.data('ui.loading', false);
+				_this._$loader.remove();
 			}
 		}, $.isPlainObject(this.options.ajax) && this.options.ajax || {}));
 	},
 
 	_updateURL: function () {
-		var options = this.opations, updatedURL = location.search.substr(1), 
-			page = 1, currentPage = parseInt(this._getUrlParam(this.options.param)), 
-			pattern = new RegExp('(^|\&)(' + this.options.param + '=[^\&]*)(\&|$)', 'gi');
-		var $document = this.document, $item;
+		var $document = this.document, $container = this.element;
 		var newScrollTop = $document.scrollTop(), oddScrollTop = $document.data('oddScrollTop'), 
 			wHeight = $(window).height(), containerTop = $container.offset().top, containerHeight = $container.height(), el_top, el_height;
 
@@ -232,7 +246,15 @@ return $.widget( "ui.endlessscroll", {
 		}
 		$document.data('oddScrollTop', newScrollTop);
 
-		this.element.find(this.options.items).each(function() {
+		if(this.options.disableURL === true) {
+			return;
+		}
+
+		var options = this.options, updatedURL = location.search.substr(1), 
+			page = 1, currentPage = parseInt(this._getUrlParam(this.options.param)), 
+			pattern = new RegExp('(^|\&)(' + this.options.param + '=[^\&]*)(\&|$)', 'gi'), $item;
+
+		$document.find(this.options.items).each(function() {
 			$item = $(this);
 			el_top = $item.offset().top, el_height = $item.height();
 

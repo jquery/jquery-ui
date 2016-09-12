@@ -8,16 +8,37 @@
  *
  */
 
+//>>label: Zoom
+//>>group: Widgets
+// jscs:disable maximumLineLength
+//>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
+// jscs:enable maximumLineLength
+//>>docs: https://github.com/GrayYoung/jQuery.UI.Extension/wiki/Zoom
+//>>demos: https://grayyoung.github.io/jQuery.UI.Extension/demos/zoom
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/zoom.scss
+//>>css.theme: ../../themes/base/theme.css
 
 (function(factory) {
-	if (typeof define === 'function' && define.amd) {
-		define([ 'jquery', '../core', '../widget', '../position', '../effect', './draggable' ], factory);
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [
+			"jquery",
+			"../version",
+			"../widget",
+			'../effect',
+			'../position',
+			'./draggable'
+		], factory );
 	} else {
-		factory(jQuery);
+
+		// Browser globals
+		factory( jQuery );
 	}
 }(function($) {
 	$.widget('ui.zoom', {
-		version : '1.0.3',
+		version : '@VERSION',
 		defaultElement : '<div />',
 		options : {
 			alwaysOn : false,

@@ -8,11 +8,30 @@
  *
  */
 
+//>>label: Elements
+//>>group: Widgets
+// jscs:disable maximumLineLength
+//>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
+// jscs:enable maximumLineLength
+//>>docs: https://github.com/GrayYoung/jQuery.UI.Extension/wiki/Customize-UI-of-Form-Eelements
+//>>demos: http://grayyoung.github.io/jQuery.UI.Extension/demos/elements
+//>>css.structure: ../../themes/base/core.css
+//>>css.structure: ../../themes/base/elements.scss
+//>>css.theme: ../../themes/base/theme.css
+
 (function(factory) {
 	if (typeof define === 'function' && define.amd) {
-		define([ 'jquery' ], factory);
+
+		// AMD. Register as an anonymous module.
+		define( [
+			"jquery",
+			"../version",
+			"../widget"
+		], factory );
 	} else {
-		factory(jQuery);
+
+		// Browser globals
+		factory( jQuery );
 	}
 }(function($) {
 	var $document = $(document);
