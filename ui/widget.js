@@ -514,6 +514,16 @@ $.Widget.prototype = {
 			}
 		}
 
+		this._on( options.element, {
+			"remove": function( event ) {
+				$.each( that.classesElementLookup, function( key, value ) {
+					if ( $.inArray( event.target ) ) {
+						that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
+					}
+				} );
+			}
+		} );
+
 		if ( options.keys ) {
 			processClassString( options.keys.match( /\S+/g ) || [], true );
 		}
