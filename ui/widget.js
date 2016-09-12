@@ -515,13 +515,7 @@ $.Widget.prototype = {
 		}
 
 		this._on( options.element, {
-			"remove": function( event ) {
-				$.each( that.classesElementLookup, function( key, value ) {
-					if ( $.inArray( event.target ) ) {
-						that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
-					}
-				} );
-			}
+			"remove": "_untrackClassesElement"
 		} );
 
 		if ( options.keys ) {
@@ -532,6 +526,15 @@ $.Widget.prototype = {
 		}
 
 		return full.join( " " );
+	},
+
+	_untrackClassesElement: function( event ) {
+		var that = this;
+		$.each( that.classesElementLookup, function( key, value ) {
+			if ( $.inArray( event.target, that.classesElementLookup[ key ] ) !== -1 ) {
+				that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
+			}
+		} );
 	},
 
 	_removeClass: function( element, keys, extra ) {
