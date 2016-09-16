@@ -2,7 +2,7 @@
 
 sleep( 2 );
 // no term passed - just exit early with no response
-if (!isset($_GET["term"]) || empty($_GET['term'])) exit ;
+if (empty($_GET['term'])) exit ;
 $q = strtolower($_GET["term"]);
 // remove slashes if they were magically added
 if (get_magic_quotes_gpc()) $q = stripslashes($q);
