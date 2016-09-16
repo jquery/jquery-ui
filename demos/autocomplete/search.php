@@ -585,7 +585,7 @@ foreach ($items as $key=>$value) {
 // json_encode is available in PHP 5.2 and above, or you can install a PECL module in earlier versions
 $output = json_encode($result);
 
-if ($_GET["callback"]) {
+if (isset($_GET["callback"]) && preg_match("/^[A-Za-z0-9_]+$/", $_GET["callback"])) {
 	$output = $_GET["callback"] . "($output);";
 }
 
