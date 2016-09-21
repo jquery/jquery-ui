@@ -92,7 +92,7 @@
 			
 			if(this.options.preload) {
 				if(!this.zoomImage.data('loaded')) {
-					var $loading = $('.ui-icon-loading', this.zoomView).size() < 1 ? $('<div class="ui-icon ui-icon-loading" />') : $('.ui-icon-loading', this.zoomView);
+					var $loading = $('.ui-icon-loading', this.zoomView).length < 1 ? $('<div class="ui-icon ui-icon-loading" />') : $('.ui-icon-loading', this.zoomView);
 					
 					this.zoomView.prepend($loading);
 					this.zoomImage.load(function() {
@@ -243,7 +243,7 @@
 		},
 		refresh : function() {
 			if(this.options.preload) {
-				var $loading = $('.ui-icon-loading', this.zoomView).size() < 1 ? $('<div class="ui-icon ui-icon-loading" />') : $('.ui-icon-loading', this.zoomView);
+				var $loading = $('.ui-icon-loading', this.zoomView).length < 1 ? $('<div class="ui-icon ui-icon-loading" />') : $('.ui-icon-loading', this.zoomView);
 					
 				this.zoomView.prepend($loading);
 				this.zoomImage.hide();

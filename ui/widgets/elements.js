@@ -58,8 +58,8 @@
 	$document.on('click.ui', '.ui-select > select', function(event) {
 		event.preventDefault();
 	}).on('mousedown.ui keypress.ui', '.ui-select > select', function(event) {
-		var $this = $(this);
-		var $ui = $this.parent('.ui-select');
+		var $this = $(this), $options = $this.children(), $ui = $this.parent('.ui-select');
+		var optionsSize = $options.length;
 
 		// Fix the issue that mouse events still happen on IE.
 		if($this.prop('disabled') === true) {
@@ -91,17 +91,13 @@
 
 			return true;
 		}
-		if($this.children().size() > 0 && !$this.data('dropdownMenu')) {
+		if(optionsSize > 0 && !$this.data('dropdownMenu')) {
 			var $list = $('<ol role="list" />').addClass('dropdown-menu').css({
 				visibility : 'hidden'
 			});
-
-			$this.data({
-				dropdownMenu : $list
-			});
-			$ui.append($list);
-			$this.children().each(function(index) {
-				var $option = $(this), $item = $('<li role="option" class="option' + (($option.prop('selected') || $this.prop('selectedIndex') === $option.prop('index')) ? ' active' : '') + '" data-index="' + $option.prop('index') + '" data-value="' + $option.val() + '"/>').append($('<a href="javascript:void(0);" tabindex="-1" role="presentation" />').text($option.text()));
+			var iterations = Math.floor(optionsSize / 8), leftover = optionsSize % 8, i = 0;
+			var appendItem = function($option) {
+				var $item = $('<li role="option" class="option' + (($option.prop('selected') || $this.prop('selectedIndex') === $option.prop('index')) ? ' active' : '') + '" data-index="' + $option.prop('index') + '" data-value="' + $option.val() + '"/>').append($('<a href="javascript:void(0);" tabindex="-1" role="presentation" />').text($option.text()));
 
 				$item.bind('click.ui', function(event) {
 					var $thisOption =  $(this);
@@ -109,8 +105,29 @@
 					$thisOption.closest('.ui-select').children('select').prop('selectedIndex', $thisOption.data('index')).focus().change();
 				});
 				$list.append($item);
+			};
+
+			if (leftover > 0){
+				do {
+					appendItem($options.eq(i++));
+				} while (--leftover > 0);
+			}
+			do {
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+				appendItem($options.eq(i++));
+			} while (--iterations > 0);
+
+			$this.data({
+				dropdownMenu : $list
 			});
 			$ui.addClass('open');
+			$ui.append($list);
 			if(($list.height() + $list.offset().top > $(document).scrollTop() + $(window).height()) && $(document).scrollTop() <= $ui.offset().top - $list.height()) {
 				$list.addClass('top');
 			}
