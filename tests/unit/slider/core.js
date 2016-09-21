@@ -25,6 +25,18 @@ QUnit.test( "markup structure", function( assert ) {
 	assert.hasClasses( handle[ 1 ], "ui-slider-handle" );
 } );
 
+QUnit.test( "custom handle", function( assert ) {
+	assert.expect( 3 );
+
+	var element = $( "#slider-custom-handle" ).slider();
+	var customHandle = $( ".custom-handle" );
+	var sliderHandles = element.find( ".ui-slider-handle" );
+
+	assert.equal( sliderHandles.length, 1, "Only one handle" );
+	assert.strictEqual( sliderHandles[ 0 ], customHandle[ 0 ], "Correct handle" );
+	assert.equal( customHandle.attr( "tabIndex" ), 0, "tabIndex" );
+} );
+
 QUnit.test( "keydown HOME on handle sets value to min", function( assert ) {
 	assert.expect( 2 );
 	element = $( "<div></div>" );

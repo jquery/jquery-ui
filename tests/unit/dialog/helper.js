@@ -33,11 +33,8 @@ return $.extend( helper, {
 		assert.ok( expectedDX - actualDX <= 1 && expectedDY - actualDY <= 1, "dragged[" + expectedDX + ", " + expectedDY + "] " + msg );
 	},
 
-	// TODO switch back to checking the size of the .ui-dialog element (var d)
-	// once we switch to using box-sizing: border-box (#9845) that should work fine
-	// using the element's dimensions to avoid subpixel errors
 	shouldResize: function( assert, element, dw, dh, msg ) {
-		var heightAfter, widthAfter, actual, expected,
+		var actualDH, actualDW, heightAfter, widthAfter,
 			d = element.dialog( "widget" ),
 			handle = $( ".ui-resizable-se", d ),
 			heightBefore = element.height(),
@@ -49,9 +46,13 @@ return $.extend( helper, {
 		widthAfter = element.width();
 
 		msg = msg ? msg + "." : "";
-		actual = { width: widthAfter, height: heightAfter },
-		expected = { width: widthBefore + dw, height: heightBefore + dh };
-		assert.deepEqual( actual, expected, "resized[" + 50 + ", " + 50 + "] " + msg );
+
+		actualDH = heightAfter - heightBefore;
+		actualDW = widthAfter - widthBefore;
+
+		// TODO: Switch to assert.close().
+		// Also change the testDrag() helper.
+		assert.ok( Math.abs( actualDH - dh ) <= 1 && Math.abs( actualDW - dw ) <= 1, "resized[50, 50] " + msg );
 	}
 } );
 

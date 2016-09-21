@@ -341,23 +341,39 @@ $.each( [
 	} );
 } );
 
-	QUnit.test( "Selectmenu should reset when its parent form resets", function( assert ) {
-		var ready = assert.async();
-		assert.expect( 2 );
+QUnit.test( "Selectmenu should reset when its parent form resets", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 
-		var element = $( "#speed" ).selectmenu(),
-			widget = element.selectmenu( "widget" ),
-			initialValue = element.val(),
-			form = element.closest( "form" );
+	var element = $( "#speed" ).selectmenu(),
+		widget = element.selectmenu( "widget" ),
+		initialValue = element.val(),
+		form = element.closest( "form" );
 
-		element.val( "Slower" );
-		element.selectmenu( "refresh" );
-		assert.equal( $.trim( widget.text() ), "Slower" );
-		form[ 0 ].reset();
-		setTimeout( function() {
-			assert.equal( $.trim( widget.text() ), initialValue );
-			ready();
-		} );
+	element.val( "Slower" );
+	element.selectmenu( "refresh" );
+	assert.equal( $.trim( widget.text() ), "Slower" );
+	form[ 0 ].reset();
+	setTimeout( function() {
+		assert.equal( $.trim( widget.text() ), initialValue );
+		ready();
 	} );
+} );
+
+QUnit.test( "Number pad input should change value", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
+
+	var element = $( "#number" ).selectmenu(),
+		button = element.selectmenu( "widget" );
+
+	button.simulate( "focus" );
+	button.simulate( "keydown", { keyCode: 101 } );
+
+	setTimeout( function() {
+		assert.equal( element.val(), 5 );
+		ready();
+	} );
+} );
 
 } );

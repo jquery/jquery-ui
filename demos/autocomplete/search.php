@@ -1,6 +1,6 @@
 <?php
 
-sleep( 3 );
+sleep( 2 );
 // no term passed - just exit early with no response
 if (empty($_GET['term'])) exit ;
 $q = strtolower($_GET["term"]);
@@ -573,7 +573,6 @@ $items = array(
 "Heuglin's Gull"=>"Larus heuglini"
 );
 
-
 $result = array();
 foreach ($items as $key=>$value) {
 	if (strpos(strtolower($key), $q) !== false) {
@@ -584,6 +583,12 @@ foreach ($items as $key=>$value) {
 }
 
 // json_encode is available in PHP 5.2 and above, or you can install a PECL module in earlier versions
-echo json_encode($result);
+$output = json_encode($result);
+
+if ($_GET["callback"]) {
+	$output = $_GET["callback"] . "($output);";
+}
+
+echo $output;
 
 ?>

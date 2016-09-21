@@ -35,6 +35,14 @@ function replaceAtVersion() {
 	return matches;
 }
 
+function removeExternals ( packager ) {
+	Object.keys( packager.builtFiles ).forEach( function( filepath ) {
+		if ( /^external\//.test( filepath ) ) {
+			delete packager.builtFiles[ filepath ];
+		}
+	} );
+}
+
 function addManifest( packager ) {
 	var output = packager.builtFiles;
 	output.MANIFEST = Object.keys( output ).sort( function( a, b ) {
@@ -62,6 +70,7 @@ function buildCDNPackage( callback ) {
 		themeVars: null
 	} );
 	packager.ready.then( function() {
+		removeExternals( packager );
 		addManifest( packager );
 		packager.toZip( target, {
 			basedir: ""

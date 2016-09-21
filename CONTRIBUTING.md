@@ -27,7 +27,7 @@ git clone git://github.com/jquery/jquery-ui.git
 cd jquery-ui
 ```
 
-The tests can run in any local web server. Ideally you should test your patch in appropriate web browsers and if possible run `grunt` to lint the code and run automated tests (this will happen automatically when you create a pull request). See the [Recommended Setup](#environment-recommended-setup) for setting up Node.js so that the grunt command works.
+The tests can run in any local web server. Ideally you should test your patch in appropriate web browsers and if possible run `npm test` to lint the code and run automated tests (this will happen automatically when you create a pull request). See the [Recommended Setup](#environment-recommended-setup) for setting up Node.js so that the `npm test` command works.
 
 ### Environment: Getting the Source
 
@@ -61,15 +61,9 @@ git pull upstream master
 
 ### Environment: Recommended Setup
 
-jQuery UI uses Node.js & Grunt to automate the building and validation of source code. Here is how to set that up:
+jQuery UI uses Node.js to automate the building and validation of source code. Here is how to set that up:
 
 * Get [Node.js](http://nodejs.org/) (includes NPM, necessary for the next step)
-* Install Grunt cli:
-
-```bash
-npm install -g grunt-cli
-```
-
 * Install local Node.js modules
 
 ```bash
@@ -87,10 +81,10 @@ The tests require a local web server and the samples contain some PHP, so a PHP 
 
 ### Running the Tests
 
-To lint the JavaScript, HTML, and CSS, as well as run a smoke test in PhantomJS, run grunt:
+To lint the JavaScript, HTML, and CSS, as well as run a smoke test in PhantomJS, run the full test suite through npm:
 
 ```bash
-grunt
+npm test
 ```
 
 To run the tests for a specific plugin in your browser, open the appropriate file from the `/tests/unit/` directory, for example: `http://localhost/tests/unit/accordion/accordion.html`. The domain will be dependent on your local server configuration; if there is a port, be sure to include it.

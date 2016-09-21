@@ -328,3 +328,6 @@ Amanpreet Singh <apsdehal@gmail.com>
 Alexey Balchunas <bleshik@gmail.com>
 Peter Kehl <peter.kehl@gmail.com>
 Peter Dave Hello <hsu@peterdavehello.org>
+Johannes Schäfer <johnschaefer@gmx.de>
+Ville Skyttä <ville.skytta@iki.fi>
+Ryan Oriecuia <ryan.oriecuia@visioncritical.com>

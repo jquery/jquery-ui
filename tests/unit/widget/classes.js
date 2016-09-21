@@ -15,6 +15,8 @@ QUnit.module( "widget factory classes", {
 			},
 			_create: function() {
 				this.span = $( "<span>" )
+					.add( "<span>" )
+					.add( "<span>" )
 					.appendTo( this.element );
 
 				this.element.wrap( "<div>" );
@@ -68,9 +70,9 @@ function elementHasClasses( widget, method, assert ) {
 		"_" + method + "Class works with ( null, extra" + toggle + " )" );
 	assert.hasClasses( widget.parent(), "ui-classes-widget ui-theme-widget",
 		"_" + method + "Class works with ( element, null, extra" + toggle + " )" );
-	assert.hasClasses( widget.find( "span" ), "ui-classes-span ui-core-span",
+	assert.hasClasses( widget.find( "span" )[ 0 ], "ui-classes-span ui-core-span",
 		"_" + method + "Class works with ( element, keys, extra" + toggle + " )" );
-	assert.hasClasses( widget.find( "span" ), "ui-core-span-null",
+	assert.hasClasses( widget.find( "span" )[ 0 ], "ui-core-span-null",
 		"_" + method + "Class works with ( element, keys, null" + toggle + " )" );
 }
 function elementLacksClasses( widget, method, assert ) {
@@ -84,9 +86,9 @@ function elementLacksClasses( widget, method, assert ) {
 		"_" + method + "Class works with ( null, extra" + toggle + " )" );
 	assert.lacksClasses( widget.parent(), "ui-classes-widget ui-theme-widget",
 		"_" + method + "Class works with ( element, null, extra" + toggle + " )" );
-	assert.lacksClasses( widget.find( "span" ), "ui-classes-span ui-core-span",
+	assert.lacksClasses( widget.find( "span" )[ 0 ], "ui-classes-span ui-core-span",
 		"_" + method + "Class works with ( element, keys, extra" + toggle + " )" );
-	assert.lacksClasses( widget.find( "span" ), "ui-core-span-null",
+	assert.lacksClasses( widget.find( "span" )[ 0 ], "ui-core-span-null",
 		"_" + method + "Class works with ( element, keys, null" + toggle + " )" );
 }
 
@@ -113,7 +115,7 @@ QUnit.test( ".option() - classes setter", function( assert ) {
 		"Setting to empty value leaves structure class" );
 	assert.lacksClasses( testWidget.element, "ui-theme-element-2",
 		"Setting empty value removes previous value classes" );
-	assert.hasClasses( testWidget.span, "ui-classes-span custom-theme-span",
+	assert.hasClasses( testWidget.span[ 0 ], "ui-classes-span custom-theme-span",
 		"Adding a class to an empty value works as expected" );
 	assert.hasClasses( testWidget.wrapper, "ui-classes-widget custom-theme-widget",
 		"Appending a class to the current value works as expected" );
@@ -142,6 +144,36 @@ QUnit.test( "._add/_remove/_toggleClass()", function( assert ) {
 
 	widget.classesWidget( "removeClasses" );
 	elementLacksClasses( widget, "remove", assert );
+} );
+
+QUnit.test( "Classes elements are untracked as they are removed from the DOM", function( assert ) {
+	assert.expect( 9 );
+
+	var widget = $( "#widget" ).classesWidget();
+	var instance = widget.classesWidget( "instance" );
+
+	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].length, 3,
+		"Widget is tracking 3 ui-classes-span elements" );
+	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].length, 3,
+		"Widget is tracking 3 ui-core-span-null elements" );
+	assert.equal( instance.classesElementLookup[ "ui-core-span" ].length, 3,
+		"Widget is tracking 3 ui-core-span elements" );
+
+	widget.find( "span" ).eq( 0 ).remove();
+	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].length, 2,
+		"After removing 1 span from dom 2 ui-classes-span elements are tracked" );
+	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].length, 2,
+		"After removing 1 span from dom 2 ui-core-span-null elements are tracked" );
+	assert.equal( instance.classesElementLookup[ "ui-core-span" ].length, 2,
+		"After removing 1 span from dom 2 ui-core-span elements are tracked" );
+
+	widget.find( "span" ).remove();
+	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].length, 0,
+		"No ui-classes-span elements are tracked after removing all spans" );
+	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].length, 0,
+		"No ui-core-span-null elements are tracked after removing all spans" );
+	assert.equal( instance.classesElementLookup[ "ui-core-span" ].length, 0,
+		"No ui-core-span elements are tracked after removing all spans" );
 } );
 
 } );
