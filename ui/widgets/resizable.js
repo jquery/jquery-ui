@@ -226,6 +226,9 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			this._removeHandles();
 			this._setupHandles();
 			break;
+		case "aspectRatio":
+			this._aspectRatio = !!value;
+			break;
 		default:
 			break;
 		}
