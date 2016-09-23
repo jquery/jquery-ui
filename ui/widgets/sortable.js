@@ -218,6 +218,11 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
+		
+		// Only after we got the offset, we can change the helper's position to absolute
+		// TODO: Still need to figure out a way to make relative sorting possible
+		this.helper.css( "position", "absolute" );
+		this.cssPosition = this.helper.css( "position" );
 
 		$.extend( this.offset, {
 			click: { //Where the click happened, relative to the element
@@ -230,11 +235,6 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			// only used for relative positioned helper
 			relative: this._getRelativeOffset()
 		} );
-
-		// Only after we got the offset, we can change the helper's position to absolute
-		// TODO: Still need to figure out a way to make relative sorting possible
-		this.helper.css( "position", "absolute" );
-		this.cssPosition = this.helper.css( "position" );
 
 		//Generate the original position
 		this.originalPosition = this._generatePosition( event );
