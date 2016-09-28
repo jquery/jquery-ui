@@ -156,7 +156,7 @@ QUnit.test( "aspectRatio: Resizing can move objects", function( assert ) {
 } );
 
 QUnit.test( "aspectRatio: aspectRatio can be changed after initialization", function( assert ) {
-	assert.expect( 2 );
+	assert.expect( 4 );
 
 	var target = $( "#resizable1" )
 		.resizable( { aspectRatio: 1 } )
@@ -168,6 +168,13 @@ QUnit.test( "aspectRatio: aspectRatio can be changed after initialization", func
 
 	assert.equal( target.width(), 180, "compare width - size change" );
 	assert.equal( target.height(), 100, "compare height - no size change" );
+
+	target.resizable( "option", "aspectRatio", 2 );
+
+	testHelper.drag( handle, -40 );
+
+	assert.equal( target.width(), 140, "compare width - size change" );
+	assert.equal( target.height(), 70, "compare height - size change in proper relation" );
 } );
 
 QUnit.test( "containment", function( assert ) {
