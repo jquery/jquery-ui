@@ -166,7 +166,7 @@ QUnit.test( "aspectRatio: aspectRatio can be changed after initialization", func
 
 	testHelper.drag( handle, 80 );
 
-	assert.equal( target.width(), 180, "compare width -  size change" );
+	assert.equal( target.width(), 180, "compare width - size change" );
 	assert.equal( target.height(), 100, "compare height - no size change" );
 } );
 
