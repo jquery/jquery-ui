@@ -119,7 +119,7 @@ a.ui-button:active,
 .ui-icon-background,
 .ui-state-active .ui-icon-background {
 	border: #003eff/*{borderColorActive}*/;
-	background-color: #ffffff/*{fcActive}*/;
+	background-color: #ffffff/*{bgColorContent}*/;
 }
 .ui-state-active a,
 .ui-state-active a:link,
@@ -204,8 +204,7 @@ a.ui-button:active,
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
-.ui-button:focus .ui-icon,
-.ui-state-default .ui-icon {
+.ui-button:focus .ui-icon {
 	background-image: url("images/ui-icons_555555_256x240.png")/*{iconsHover}*/;
 }
 .ui-state-active .ui-icon,
