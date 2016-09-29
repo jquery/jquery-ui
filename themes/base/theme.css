@@ -219,7 +219,8 @@ a.ui-button:active,
 .ui-state-error-text .ui-icon {
 	background-image: url("images/ui-icons_cc0000_256x240.png")/*{iconsError}*/;
 }
-.ui-button .ui-icon {
+.ui-button .ui-icon,
+.ui-state-default .ui-icon {
 	background-image: url("images/ui-icons_777777_256x240.png")/*{iconsDefault}*/;
 }
 
