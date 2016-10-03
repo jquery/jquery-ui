@@ -229,7 +229,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			relative: this._getRelativeOffset()
 		} );
 
-		// After we get the helper offset, but before we get the parent offset we can 
+		// After we get the helper offset, but before we get the parent offset we can
 		// change the helper's position to absolute
 		// TODO: Still need to figure out a way to make relative sorting possible
 		this.helper.css( "position", "absolute" );
