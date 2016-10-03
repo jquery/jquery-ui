@@ -224,6 +224,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				left: event.pageX - this.offset.left,
 				top: event.pageY - this.offset.top
 			},
+
 			// This is a relative to absolute position minus the actual position calculation -
 			// only used for relative positioned helper
 			relative: this._getRelativeOffset()
