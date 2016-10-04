@@ -802,17 +802,20 @@ QUnit.test( "cursorAt, switching after initialization", function( assert ) {
 } );
 
 QUnit.test( "disabled", function( assert ) {
-	assert.expect( 6 );
+	assert.expect( 9 );
 
 	var element = $( "#draggable1" ).draggable();
 
 	testHelper.shouldMove( assert, element, "disabled: default" );
+	assert.equal( element.css( "touch-action" ), "none", "touch-action: default" );
 
 	element.draggable( "option", "disabled", true );
 	testHelper.shouldNotDrag( assert, element, "option: disabled true" );
+	assert.equal( element.css( "touch-action" ), "auto", "touch-action: disabled true" );
 
 	element.draggable( "option", "disabled", false );
 	testHelper.shouldMove( assert, element, "option: disabled false" );
+	assert.equal( element.css( "touch-action" ), "none", "touch-action: disabled false" );
 } );
 
 QUnit.test( "{ grid: [50, 50] }, relative", function( assert ) {

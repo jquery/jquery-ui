@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  */
-.ui-draggable-handle {
+.ui-draggable-handle-enabled {
 	-ms-touch-action: none;
 	touch-action: none;
 }
