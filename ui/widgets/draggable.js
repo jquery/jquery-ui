@@ -95,6 +95,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	},
 
 	_setOptionDisabled: function( value ) {
+
 		// Remove touch-action for disabled draggables
 		if ( value ) {
 			this._removeClass( this.handleElement, "ui-draggable-handle-enabled" );
