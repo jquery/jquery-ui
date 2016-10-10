@@ -64,10 +64,11 @@ $.widget( "ui.tabs", {
 		var rhash = /#.*$/;
 
 		return function( anchor ) {
-			var anchorUrl, locationUrl;
+			var anchorUrl, locationUrl, baseUrl;
 
 			anchorUrl = anchor.href.replace( rhash, "" );
 			locationUrl = location.href.replace( rhash, "" );
+			baseUrl = document.baseURI;
 
 			// Decoding may throw an error if the URL isn't UTF-8 (#9518)
 			try {
@@ -76,8 +77,11 @@ $.widget( "ui.tabs", {
 			try {
 				locationUrl = decodeURIComponent( locationUrl );
 			} catch ( error ) {}
+			try {
+				baseUrl = decodeURIComponent( baseUrl );
+			} catch ( error ) {}
 
-			return anchor.hash.length > 1 && anchorUrl === locationUrl;
+			return anchor.hash.length > 1 && (anchorUrl === locationUrl || anchorUrl === baseUrl);
 		};
 	} )(),
 
