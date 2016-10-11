@@ -134,7 +134,7 @@ test( "eachDay", function( assert ) {
 		firstCell = this.widget.find( "td[id]:first" );
 
 	equal( firstCell.find( "button" ).length, 1, "days are selectable by default" );
-	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
+	timestamp = parseInt( firstCell.find( "button" ).attr( "data-ui-calendar-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 1, "first available day is the 1st by default" );
 
 	// Do not render the 1st of the month
@@ -144,7 +144,7 @@ test( "eachDay", function( assert ) {
 		}
 	} );
 	firstCell = this.widget.find( "td[id]:first" );
-	timestamp = parseInt( firstCell.find( "button" ).attr( "data-timestamp" ), 10 );
+	timestamp = parseInt( firstCell.find( "button" ).attr( "data-ui-calendar-timestamp" ), 10 );
 	equal( new Date( timestamp ).getDate(), 2, "first available day is the 2nd" );
 
 	// Display the 1st of the month but make it not selectable.
@@ -319,7 +319,11 @@ test( "value", function( assert ) {
 
 	this.element.calendar( "option", "value", date );
 	assert.dateEqual( this.element.calendar( "option", "value" ), date, "Value set" );
-	equal( this.widget.find( "table button.ui-state-active" ).data( "timestamp" ), 1463954400000, "Active button timestamp" );
+	equal(
+		this.widget.find( "table button.ui-state-active" ).data( "ui-calendar-timestamp" ),
+		1463954400000,
+		"Active button timestamp"
+	);
 
 	this.element.calendar( "option", "value", "invalid" );
 	assert.dateEqual( this.element.calendar( "option", "value" ), date, "Value after invalid parameter" );

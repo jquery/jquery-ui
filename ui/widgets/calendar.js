@@ -128,7 +128,7 @@ return $.widget( "ui.calendar", {
 	_select: function( event ) {
 		var oldValue = this.options.value ? this.options.value.getTime() : "";
 
-		this._setOption( "value", new Date( $( event.currentTarget ).data( "timestamp" ) ) );
+		this._setOption( "value", new Date( $( event.currentTarget ).data( "ui-calendar-timestamp" ) ) );
 		this._updateDayElement( "ui-state-active" );
 
 		// Allow datepicker to handle focus
@@ -489,7 +489,7 @@ return $.widget( "ui.calendar", {
 
 		attributes = " class='" + classes.join( " " ) + "'";
 		if ( selectable ) {
-			attributes += " tabindex='-1' data-timestamp='" + day.timestamp + "'";
+			attributes += " tabindex='-1' data-ui-calendar-timestamp='" + day.timestamp + "'";
 		} else {
 			attributes += " disabled='disabled'";
 		}

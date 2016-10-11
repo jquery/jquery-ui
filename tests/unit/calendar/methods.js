@@ -49,7 +49,7 @@ test( "value", function( assert ) {
 	assert.expect( 3 );
 
 	this.element.calendar( "value", "1/1/14" );
-	ok( this.element.find( "button[data-timestamp]:first" )
+	ok( this.element.find( "button[data-ui-calendar-timestamp]:first" )
 			.hasClass( "ui-state-active" ),
 		"first day marked as selected"
 	);
@@ -67,7 +67,7 @@ test( "valueAsDate", function( assert ) {
 		date2;
 
 	this.element.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
-	ok( this.element.find( "button[data-timestamp]:first" )
+	ok( this.element.find( "button[data-ui-calendar-timestamp]:first" )
 			.hasClass( "ui-state-active" ),
 		"First day marked as selected"
 	);

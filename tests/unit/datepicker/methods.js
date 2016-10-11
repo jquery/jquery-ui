@@ -75,7 +75,7 @@ test( "value", function( assert ) {
 
 	this.element.datepicker( "open" );
 	ok(
-		this.widget.find( "button[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
+		this.widget.find( "button[data-ui-calendar-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
 		"first day marked as selected"
 	);
 	equal( this.element.datepicker( "value" ), "1/1/14", "getter" );
@@ -92,7 +92,7 @@ test( "valueAsDate", function( assert ) {
 	this.element.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
 	equal( this.element.val(), "1/1/14", "Input's value set" );
 	ok(
-		this.widget.find( "button[data-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
+		this.widget.find( "button[data-ui-calendar-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
 		"First day marked as selected"
 	);
 	assert.dateEqual( this.element.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
