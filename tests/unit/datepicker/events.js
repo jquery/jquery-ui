@@ -13,8 +13,8 @@ module( "datepicker: events", {
 	}
 } );
 
-test( "beforeOpen", function() {
-	expect( 3 );
+test( "beforeOpen", function( assert ) {
+	assert.expect( 3 );
 
 	var that = this;
 
@@ -42,8 +42,8 @@ test( "beforeOpen", function() {
 		.datepicker( "open" );
 } );
 
-test( "change", function() {
-	expect( 4 );
+test( "change", function( assert ) {
+	assert.expect( 4 );
 
 	var shouldFire;
 
@@ -71,8 +71,8 @@ test( "change", function() {
 	this.widget.find( "tbody button" ).eq( 2 ).simulate( "mousedown" );
 } );
 
-test( "close", function() {
-	expect( 4 );
+test( "close", function( assert ) {
+	assert.expect( 4 );
 
 	var shouldFire;
 
@@ -103,8 +103,8 @@ test( "close", function() {
 	this.widget.find( "tbody tr:first button:first" ).simulate( "mousedown" );
 } );
 
-test( "open", function() {
-	expect( 2 );
+test( "open", function( assert ) {
+	assert.expect( 2 );
 
 	var that = this;
 
@@ -118,8 +118,8 @@ test( "open", function() {
 	this.element.datepicker( "open" );
 } );
 
-asyncTest( "select", function() {
-	expect( 4 );
+asyncTest( "select", function( assert ) {
+	assert.expect( 4 );
 
 	var message = "",
 		that = this;

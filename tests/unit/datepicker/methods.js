@@ -14,7 +14,7 @@ module( "datepicker: methods", {
 } );
 
 test( "destroy", function( assert ) {
-	expect( 3 );
+	assert.expect( 3 );
 
 	var input = $( "<input>" ).appendTo( "#qunit-fixture" );
 
@@ -26,8 +26,8 @@ test( "destroy", function( assert ) {
 	} );
 } );
 
-test( "enable / disable", function() {
-	expect( 10 );
+test( "enable / disable", function( assert ) {
+	assert.expect( 10 );
 
 	this.element.datepicker( "disable" );
 	ok( this.element.datepicker( "option", "disabled" ), "disabled option is set" );
@@ -44,15 +44,15 @@ test( "enable / disable", function() {
 	equal( this.element.attr( "disabled" ), undefined, "input no longer disabled" );
 } );
 
-test( "widget", function() {
-	expect( 1 );
+test( "widget", function( assert ) {
+	assert.expect( 1 );
 
 	deepEqual( $( "body > .ui-front" )[ 0 ],  this.widget[ 0 ] );
 	this.widget.remove();
 } );
 
-test( "open / close", function() {
-	expect( 7 );
+test( "open / close", function( assert ) {
+	assert.expect( 7 );
 
 	ok( this.widget.is( ":hidden" ), "calendar hidden on init" );
 
@@ -67,8 +67,8 @@ test( "open / close", function() {
 	equal( this.widget.attr( "aria-expanded" ), "false", "close: calendar aria-expanded" );
 } );
 
-test( "value", function() {
-	expect( 4 );
+test( "value", function( assert ) {
+	assert.expect( 4 );
 
 	this.element.datepicker( "value", "1/1/14" );
 	equal( this.element.val(), "1/1/14", "input's value set" );
@@ -85,7 +85,7 @@ test( "value", function() {
 } );
 
 test( "valueAsDate", function( assert ) {
-	expect( 5 );
+	assert.expect( 5 );
 
 	strictEqual( this.element.datepicker( "valueAsDate" ), null, "Default" );
 
@@ -101,8 +101,8 @@ test( "valueAsDate", function( assert ) {
 	equal( this.element.datepicker( "valueAsDate" ), null, "Invalid dates return null" );
 } );
 
-test( "isValid", function() {
-	expect( 2 );
+test( "isValid", function( assert ) {
+	assert.expect( 2 );
 
 	this.element.val( "1/1/14" );
 	ok( this.element.datepicker( "isValid" ) );

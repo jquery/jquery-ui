@@ -14,8 +14,8 @@ module( "calendar: core", {
 	}
 } );
 
-test( "base structure", function() {
-	expect( 28 );
+test( "base structure", function( assert ) {
+	assert.expect( 28 );
 
 	var that = this,
 		buttons, header, title, table, thead, week, child, buttonpane;
@@ -90,8 +90,8 @@ test( "base structure", function() {
 	step1();
 } );
 
-test( "Localization", function() {
-	expect( 10 );
+test( "Localization", function( assert ) {
+	assert.expect( 10 );
 
 	var that = this,
 		date = new Date( 2014, 0, 1 ),
@@ -142,7 +142,7 @@ test( "Localization", function() {
 } );
 
 asyncTest( "keyboard handling", function( assert ) {
-	expect( 10 );
+	assert.expect( 10 );
 
 	var that = this;
 
@@ -313,7 +313,7 @@ asyncTest( "keyboard handling", function( assert ) {
 } );
 
 asyncTest( "mouse", function( assert ) {
-	expect( 6 );
+	assert.expect( 6 );
 
 	var that = this,
 		date = new Date();

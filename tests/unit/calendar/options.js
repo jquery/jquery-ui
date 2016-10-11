@@ -13,8 +13,8 @@ module( "calendar: options", {
 	}
 } );
 
-test( "buttons", function() {
-	expect( 21 );
+test( "buttons", function( assert ) {
+	assert.expect( 21 );
 
 	var button, i, newButtons,
 		that = this,
@@ -86,8 +86,8 @@ test( "buttons", function() {
 	equal( this.element.hasClass( "ui-calendar-buttons" ), false, "calendar element removes class about having buttons" );
 } );
 
-test( "buttons - advanced", function() {
-	expect( 7 );
+test( "buttons - advanced", function( assert ) {
+	assert.expect( 7 );
 
 	var that = this,
 		buttons;
@@ -115,8 +115,8 @@ test( "buttons - advanced", function() {
 	buttons.click();
 } );
 
-test( "dateFormat", function() {
-	expect( 2 );
+test( "dateFormat", function( assert ) {
+	assert.expect( 2 );
 
 	this.element.calendar( "value", "1/1/14" );
 
@@ -127,8 +127,8 @@ test( "dateFormat", function() {
 	equal( this.element.calendar( "value" ), "Wednesday, January 1, 2014", "updated formatting" );
 } );
 
-test( "eachDay", function() {
-	expect( 5 );
+test( "eachDay", function( assert ) {
+	assert.expect( 5 );
 
 	var timestamp,
 		firstCell = this.widget.find( "td[id]:first" );
@@ -187,7 +187,7 @@ test( "showWeek", function() {
 } );
 
 test( "min / max", function( assert ) {
-	expect( 17 );
+	assert.expect( 17 );
 
 	// With existing date
 	var prevButton = this.widget.find( ".ui-calendar-prev" ),
@@ -264,8 +264,8 @@ test( "min / max", function( assert ) {
 	ok( !prevButton.hasClass( "ui-state-disabled" ), "Other year below min: Prev button enabled after click" );
 } );
 
-test( "numberOfMonths", function() {
-	expect( 6 );
+test( "numberOfMonths", function( assert ) {
+	assert.expect( 6 );
 
 	var date = new Date( 2015, 8 - 1, 1 );
 
@@ -311,7 +311,7 @@ test( "numberOfMonths", function() {
 } );
 
 test( "value", function( assert ) {
-	expect( 4 );
+	assert.expect( 4 );
 
 	var date = new Date( 2016, 5 - 1, 23 );
 

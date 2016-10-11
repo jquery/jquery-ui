@@ -13,8 +13,8 @@ module( "datepicker: options", {
 	}
 } );
 
-test( "appendTo", function() {
-	expect( 6 );
+test( "appendTo", function( assert ) {
+	assert.expect( 6 );
 
 	var container = this.widget.parent()[ 0 ],
 		detached = $( "<div>" );
@@ -49,7 +49,7 @@ test( "appendTo", function() {
 } );
 
 test( "min / max", function( assert ) {
-	expect( 10 );
+	assert.expect( 10 );
 
 	var min, max;
 
@@ -87,8 +87,8 @@ test( "min / max", function( assert ) {
 
 } );
 
-test( "Pass-through options", function() {
-	expect( 11 );
+test( "Pass-through options", function( assert ) {
+	assert.expect( 11 );
 
 	var options = {
 			buttons: { "Test": $.noop },
@@ -124,7 +124,7 @@ test( "Pass-through options", function() {
 } );
 
 asyncTest( "position", function( assert ) {
-	expect( 3 );
+	assert.expect( 3 );
 
 	var input = $( "<input>" ).datepicker().appendTo( "body" ).css( {
 			position: "absolute",
@@ -152,8 +152,8 @@ asyncTest( "position", function( assert ) {
 	} );
 } );
 
-test( "Stop datepicker from appearing with beforeOpen event handler - nothing", function() {
-	expect( 1 );
+test( "Stop datepicker from appearing with beforeOpen event handler - nothing", function( assert ) {
+	assert.expect( 1 );
 
 	this.element.datepicker( {
 		beforeOpen: function() {}
@@ -163,8 +163,8 @@ test( "Stop datepicker from appearing with beforeOpen event handler - nothing", 
 	ok( this.element.datepicker( "widget" ).is( ":visible" ), "beforeOpen returns nothing" );
 } );
 
-test( "Stop datepicker from appearing with beforeOpen event handler - true", function() {
-	expect( 1 );
+test( "Stop datepicker from appearing with beforeOpen event handler - true", function( assert ) {
+	assert.expect( 1 );
 
 	this.element.datepicker( {
 		beforeOpen: function() {
@@ -175,8 +175,8 @@ test( "Stop datepicker from appearing with beforeOpen event handler - true", fun
 	ok( this.element.datepicker( "widget" ).is( ":visible" ), "beforeOpen returns true" );
 } );
 
-test( "Stop datepicker from appearing with beforeOpen event handler - false", function() {
-	expect( 1 );
+test( "Stop datepicker from appearing with beforeOpen event handler - false", function( assert ) {
+	assert.expect( 1 );
 
 	this.element.datepicker( {
 		beforeOpen: function() {

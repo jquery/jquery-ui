@@ -10,8 +10,8 @@ module( "calendar: events", {
 	}
 } );
 
-test( "change", function() {
-	expect( 6 );
+test( "change", function( assert ) {
+	assert.expect( 6 );
 
 	var shouldFire, eventType;
 
@@ -46,8 +46,8 @@ test( "change", function() {
 	this.element.find( "tbody button" ).first().simulate( eventType );
 } );
 
-asyncTest( "select", function() {
-	expect( 6 );
+asyncTest( "select", function( assert ) {
+	assert.expect( 6 );
 
 	var that = this,
 		message, eventType;

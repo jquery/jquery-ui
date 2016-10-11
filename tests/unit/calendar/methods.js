@@ -14,7 +14,7 @@ module( "calendar: methods", {
 } );
 
 test( "destroy", function( assert ) {
-	expect( 1 );
+	assert.expect( 1 );
 
 	var div = $( "<div>" ).appendTo( "#qunit-fixture" );
 
@@ -23,8 +23,8 @@ test( "destroy", function( assert ) {
 	} );
 } );
 
-test( "enable / disable", function() {
-	expect( 8 );
+test( "enable / disable", function( assert ) {
+	assert.expect( 8 );
 
 	this.element.calendar( "disable" );
 	ok( this.element.calendar( "option", "disabled" ), "disabled option is set" );
@@ -39,14 +39,14 @@ test( "enable / disable", function() {
 	equal( this.element.attr( "aria-disabled" ), "false", "no longer has ARIA disabled" );
 } );
 
-test( "widget", function() {
-	expect( 1 );
+test( "widget", function( assert ) {
+	assert.expect( 1 );
 
 	strictEqual( this.widget[ 0 ],  this.element[ 0 ] );
 } );
 
-test( "value", function() {
-	expect( 3 );
+test( "value", function( assert ) {
+	assert.expect( 3 );
 
 	this.element.calendar( "value", "1/1/14" );
 	ok( this.element.find( "button[data-timestamp]:first" )
@@ -60,7 +60,7 @@ test( "value", function() {
 } );
 
 test( "valueAsDate", function( assert ) {
-	expect( 11 );
+	assert.expect( 11 );
 
 	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		date1 = new Date( 2008, 6 - 1, 4 ),

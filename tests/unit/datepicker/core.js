@@ -13,8 +13,8 @@ module( "datepicker: core", {
 	}
 } );
 
-test( "input's value determines starting date", function() {
-	expect( 3 );
+test( "input's value determines starting date", function( assert ) {
+	assert.expect( 3 );
 
 	this.element = $( "<input>" ).appendTo( "#qunit-fixture" );
 	this.element.val( "1/1/14" ).datepicker();
@@ -27,8 +27,8 @@ test( "input's value determines starting date", function() {
 	equal( this.widget.find( ".ui-state-active" ).html(), "1", "correct day highlighted" );
 } );
 
-asyncTest( "base structure", function() {
-	expect( 5 );
+asyncTest( "base structure", function( assert ) {
+	assert.expect( 5 );
 
 	var that = this;
 
@@ -46,8 +46,8 @@ asyncTest( "base structure", function() {
 	}, 50 );
 } );
 
-asyncTest( "Keyboard handling: focus", function() {
-	expect( 2 );
+asyncTest( "Keyboard handling: focus", function( assert ) {
+	assert.expect( 2 );
 
 	var that = this;
 
@@ -60,8 +60,8 @@ asyncTest( "Keyboard handling: focus", function() {
 	}, 100 );
 } );
 
-asyncTest( "Keyboard handling: keystroke up", function() {
-	expect( 2 );
+asyncTest( "Keyboard handling: keystroke up", function( assert ) {
+	assert.expect( 2 );
 
 	var that = this;
 
@@ -75,7 +75,7 @@ asyncTest( "Keyboard handling: keystroke up", function() {
 } );
 
 test( "Keyboard handling: input", function( assert ) {
-	expect( 6 );
+	assert.expect( 6 );
 
 	var that = this,
 		instance = that.element.datepicker( "instance" );
@@ -125,7 +125,7 @@ test( "ARIA", function() {
 } );
 
 asyncTest( "mouse", function( assert ) {
-	expect( 4 );
+	assert.expect( 4 );
 
 	var that = this;
 
