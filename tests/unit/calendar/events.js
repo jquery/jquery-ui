@@ -69,32 +69,26 @@ asyncTest( "select", function() {
 	} );
 
 	function step1() {
-		setTimeout( function() {
-			eventType = "mousedown";
-			message = "on calendar button " + eventType;
-			that.element.find( "table button:eq(1)" ).simulate( eventType );
-			step2();
-		}, 50 );
+		eventType = "mousedown";
+		message = "on calendar button " + eventType;
+		that.element.find( "table button:eq(1)" ).simulate( eventType );
+		setTimeout( step2, 50 );
 	}
 
 	function step2() {
-		setTimeout( function() {
-			eventType = "keydown";
-			message = "on calendar button " + eventType;
-			testHelper.focusGrid( that.element )
-				.simulate( eventType, { keyCode: $.ui.keyCode.END } )
-				.simulate( eventType, { keyCode: $.ui.keyCode.ENTER } );
-			step3();
-		}, 50 );
+		eventType = "keydown";
+		message = "on calendar button " + eventType;
+		testHelper.focusGrid( that.element )
+			.simulate( eventType, { keyCode: $.ui.keyCode.END } )
+			.simulate( eventType, { keyCode: $.ui.keyCode.ENTER } );
+		setTimeout( step3, 50 );
 	}
 
 	// This should not trigger another event
 	function step3() {
-		setTimeout( function() {
-			that.element.calendar( "disable" );
-			that.element.find( "table button:eq(10)" ).simulate( "mousedown" );
-			start();
-		}, 50 );
+		that.element.calendar( "disable" );
+		that.element.find( "table button:eq(10)" ).simulate( "mousedown" );
+		setTimeout( start, 50 );
 	}
 
 	step1();
