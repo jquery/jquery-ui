@@ -646,7 +646,8 @@ return $.widget( "ui.calendar", {
 		if ( arguments.length ) {
 			this.valueAsDate( this._parse( value ) );
 		} else {
-			return this._format( this.option( "value" ) );
+			return this.option( "value" ) ===  null ?
+				null :  this._format( this.option( "value" ) );
 		}
 	},
 
@@ -716,9 +717,9 @@ return $.widget( "ui.calendar", {
 		if ( key === "value" ) {
 			if ( this._isValid( value ) ) {
 				this.date.setTime( value.getTime() );
-				this._super( key, value );
+			} else {
+				value = null;
 			}
-			return;
 		}
 
 		if ( key === "max" || key === "min" ) {

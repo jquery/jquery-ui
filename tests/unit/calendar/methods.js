@@ -56,7 +56,7 @@ test( "value", function( assert ) {
 	equal( this.element.calendar( "value" ), "1/1/14", "getter" );
 
 	this.element.calendar( "value", "abc" );
-	equal( this.element.calendar( "value" ), "1/1/14", "Setting invalid values should be ignored." );
+	equal( this.element.calendar( "value" ), null, "Setting invalid values." );
 } );
 
 test( "valueAsDate", function( assert ) {
@@ -95,9 +95,9 @@ test( "valueAsDate", function( assert ) {
 	);
 
 	this.element.calendar( "valueAsDate", date1 );
-	assert.dateEqual(
+	equal(
 		this.element.calendar( "valueAsDate" ),
-		date2,
+		null,
 		"Set date min/max - value < min"
 	);
 
@@ -111,25 +111,25 @@ test( "valueAsDate", function( assert ) {
 	);
 
 	this.element.calendar( "valueAsDate", date2 );
-	assert.dateEqual(
+	equal(
 		this.element.calendar( "valueAsDate" ),
-		date1,
+		null,
 		"Set date min/max - value > max"
 	);
 
 	this.element
 		.calendar( "option", { min: minDate } )
 		.calendar( "valueAsDate", date1 );
-	assert.dateEqual(
+	equal(
 		this.element.calendar( "valueAsDate" ),
-		date1,
+		null,
 		"Set date min/max - value < min"
 	);
 
 	this.element.calendar( "valueAsDate", date2 );
-	assert.dateEqual(
+	equal(
 		this.element.calendar( "valueAsDate" ),
-		date1, "Set date min/max - value > max"
+		null, "Set date min/max - value > max"
 	);
 
 	dateAndTimeToSet = new Date( 2008, 3 - 1, 28, 1, 11, 0 );

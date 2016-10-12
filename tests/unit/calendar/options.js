@@ -203,7 +203,7 @@ test( "min / max", function( assert ) {
 	this.element
 		.calendar( "option", { min: minDate } )
 		.calendar( "value", "1/4/08" );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+	equal( this.element.calendar( "valueAsDate" ), null, "Min/max - value < min" );
 
 	this.element
 		.calendar( "option", { min: null } )
@@ -214,12 +214,12 @@ test( "min / max", function( assert ) {
 	this.element
 		.calendar( "option", { max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - setDate > max" );
+	equal( this.element.calendar( "valueAsDate" ), null, "Min/max - setDate > max" );
 
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/08" );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < min" );
+	equal( this.element.calendar( "valueAsDate" ), null, "Min/max - value < min" );
 
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
@@ -229,7 +229,7 @@ test( "min / max", function( assert ) {
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/09" );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > max" );
+	equal( this.element.calendar( "valueAsDate" ), null, "Min/max - value > max" );
 
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
@@ -326,7 +326,7 @@ test( "value", function( assert ) {
 	);
 
 	this.element.calendar( "option", "value", "invalid" );
-	assert.dateEqual( this.element.calendar( "option", "value" ), date, "Value after invalid parameter" );
+	equal( this.element.calendar( "option", "value" ), null, "Value after invalid parameter" );
 } );
 
 /*
