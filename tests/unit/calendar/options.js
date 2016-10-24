@@ -187,7 +187,7 @@ test( "showWeek", function() {
 } );
 
 test( "min / max", function( assert ) {
-	assert.expect( 17 );
+	assert.expect( 19 );
 
 	// With existing date
 	var prevButton = this.widget.find( ".ui-calendar-prev" ),
@@ -230,6 +230,14 @@ test( "min / max", function( assert ) {
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "1/4/09" );
 	equal( this.element.calendar( "valueAsDate" ), null, "Min/max - value > max" );
+
+	this.element.calendar( "option", { min: minDate } );
+	this.element.calendar( "option", { min: "invalid" } );
+	equal( this.element.calendar( "option", "min" ), null, "Min/max - invalid" );
+
+	this.element.calendar( "option", { min: maxDate } );
+	this.element.calendar( "option", { max: null } );
+	equal( this.element.calendar( "option", "max" ), null, "Min/max - null" );
 
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )

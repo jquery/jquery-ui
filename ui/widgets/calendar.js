@@ -723,7 +723,9 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( key === "max" || key === "min" ) {
-			if ( $.type( value ) === "date" || value === null ) {
+			if ( $.type( value ) !== "date" || value === null ) {
+				this._super( key, null );
+			} else {
 				this._super( key, value );
 			}
 			return;
