@@ -7,18 +7,18 @@ var
 	coreFiles = [
 		"core.js",
 		"widget.js",
-		"mouse.js",
-		"draggable.js",
-		"droppable.js",
-		"resizable.js",
-		"selectable.js",
-		"sortable.js",
+		"widgets/mouse.js",
+		"widgets/draggable.js",
+		"widgets/droppable.js",
+		"widgets/resizable.js",
+		"widgets/selectable.js",
+		"widgets/sortable.js",
 		"effect.js"
 	],
 
 	uiFiles = coreFiles.map(function( file ) {
 		return "ui/" + file;
-	}).concat( expandFiles( "ui/*.js" ).filter(function( file ) {
+	}).concat( expandFiles( "ui/**/*.js" ).filter(function( file ) {
 		return coreFiles.indexOf( file.substring( 3 ) ) === -1;
 	}) ),
 

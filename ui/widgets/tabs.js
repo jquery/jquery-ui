@@ -431,7 +431,6 @@ $.widget( "ui.tabs", {
 			return $( "a", this )[ 0 ];
 		} )
 			.attr( {
-				role: "presentation",
 				tabIndex: -1
 			} );
 		this._addClass( this.anchors, "ui-tabs-anchor" );

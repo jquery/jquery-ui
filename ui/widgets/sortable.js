@@ -224,17 +224,21 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				left: event.pageX - this.offset.left,
 				top: event.pageY - this.offset.top
 			},
-			parent: this._getParentOffset(),
 
 			// This is a relative to absolute position minus the actual position calculation -
 			// only used for relative positioned helper
 			relative: this._getRelativeOffset()
 		} );
 
-		// Only after we got the offset, we can change the helper's position to absolute
+		// After we get the helper offset, but before we get the parent offset we can
+		// change the helper's position to absolute
 		// TODO: Still need to figure out a way to make relative sorting possible
 		this.helper.css( "position", "absolute" );
 		this.cssPosition = this.helper.css( "position" );
+
+		$.extend( this.offset, {
+			parent: this._getParentOffset()
+		} );
 
 		//Generate the original position
 		this.originalPosition = this._generatePosition( event );
@@ -275,18 +279,21 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				$( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
 		}
 
-		if ( o.opacity ) { // opacity option
-			if ( this.helper.css( "opacity" ) ) {
-				this._storedOpacity = this.helper.css( "opacity" );
-			}
-			this.helper.css( "opacity", o.opacity );
-		}
-
+		// We need to make sure to grab the zIndex before setting the
+		// opacity, because setting the opacity to anything lower than 1
+		// causes the zIndex to change from "auto" to 0.
 		if ( o.zIndex ) { // zIndex option
 			if ( this.helper.css( "zIndex" ) ) {
 				this._storedZIndex = this.helper.css( "zIndex" );
 			}
 			this.helper.css( "zIndex", o.zIndex );
+		}
+
+		if ( o.opacity ) { // opacity option
+			if ( this.helper.css( "opacity" ) ) {
+				this._storedOpacity = this.helper.css( "opacity" );
+			}
+			this.helper.css( "opacity", o.opacity );
 		}
 
 		//Prepare scrolling
@@ -871,20 +878,20 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 	_createPlaceholder: function( that ) {
 		that = that || this;
-		var className,
+		var className, nodeName,
 			o = that.options;
 
 		if ( !o.placeholder || o.placeholder.constructor === String ) {
 			className = o.placeholder;
+			nodeName = that.currentItem[ 0 ].nodeName.toLowerCase();
 			o.placeholder = {
 				element: function() {
 
-					var nodeName = that.currentItem[ 0 ].nodeName.toLowerCase(),
-						element = $( "<" + nodeName + ">", that.document[ 0 ] );
+					var element = $( "<" + nodeName + ">", that.document[ 0 ] );
 
-						that._addClass( element, "ui-sortable-placeholder",
-								className || that.currentItem[ 0 ].className )
-							._removeClass( element, "ui-sortable-helper" );
+					that._addClass( element, "ui-sortable-placeholder",
+							className || that.currentItem[ 0 ].className )
+						._removeClass( element, "ui-sortable-helper" );
 
 					if ( nodeName === "tbody" ) {
 						that._createTrPlaceholder(
@@ -913,9 +920,15 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 						return;
 					}
 
-					//If the element doesn't have a actual height by itself (without styles coming
-					// from a stylesheet), it receives the inline height from the dragged item
-					if ( !p.height() ) {
+					// If the element doesn't have a actual height or width by itself (without
+					// styles coming from a stylesheet), it receives the inline height and width
+					// from the dragged item. Or, if it's a tbody or tr, it's going to have a height
+					// anyway since we're populating them with <td>s above, but they're unlikely to
+					// be the correct height on their own if the row heights are dynamic, so we'll
+					// always assign the height of the dragged item given forcePlaceholderSize
+					// is true.
+					if ( !p.height() || ( o.forcePlaceholderSize &&
+							( nodeName === "tbody" || nodeName === "tr" ) ) ) {
 						p.height(
 							that.currentItem.innerHeight() -
 							parseInt( that.currentItem.css( "paddingTop" ) || 0, 10 ) -

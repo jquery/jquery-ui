@@ -586,7 +586,10 @@ foreach ($items as $key=>$value) {
 $output = json_encode($result);
 
 if ($_GET["callback"]) {
-	$output = $_GET["callback"] . "($output);";
+	// Escape special characters to avoid XSS attacks via direct loads of this
+	// page with a callback that contains HTML. This is a lot easier than validating
+	// the callback name.
+	$output = htmlspecialchars($_GET["callback"]) . "($output);";
 }
 
 echo $output;

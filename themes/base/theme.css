@@ -116,10 +116,9 @@ a.ui-button:active,
 	font-weight: normal/*{fwDefault}*/;
 	color: #ffffff/*{fcActive}*/;
 }
-.ui-icon-background,
-.ui-state-active .ui-icon-background {
-	border: #003eff/*{borderColorActive}*/;
-	background-color: #ffffff/*{fcActive}*/;
+.ui-icon-background {
+	border: #dddddd/*{borderColorContent}*/;
+	background-color: #ffffff/*{bgColorContent}*/;
 }
 .ui-state-active a,
 .ui-state-active a:link,
@@ -136,10 +135,6 @@ a.ui-button:active,
 	border: 1px solid #dad55e/*{borderColorHighlight}*/;
 	background: #fffa90/*{bgColorHighlight}*/ /*{bgImgUrlHighlight}*/ /*{bgHighlightXPos}*/ /*{bgHighlightYPos}*/ /*{bgHighlightRepeat}*/;
 	color: #777620/*{fcHighlight}*/;
-}
-.ui-state-checked {
-	border: 1px solid #dad55e/*{borderColorHighlight}*/;
-	background: #fffa90/*{bgColorHighlight}*/;
 }
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
@@ -219,7 +214,8 @@ a.ui-button:active,
 .ui-state-error-text .ui-icon {
 	background-image: url("images/ui-icons_cc0000_256x240.png")/*{iconsError}*/;
 }
-.ui-button .ui-icon {
+.ui-button .ui-icon,
+.ui-state-default .ui-icon {
 	background-image: url("images/ui-icons_777777_256x240.png")/*{iconsDefault}*/;
 }
 

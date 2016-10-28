@@ -101,7 +101,7 @@ QUnit.test( "aria-controls", function( assert ) {
 } );
 
 QUnit.test( "accessibility", function( assert ) {
-	assert.expect( 49 );
+	assert.expect( 46 );
 	var element = $( "#tabs1" ).tabs( {
 			active: 1,
 			disabled: [ 2 ]
@@ -118,7 +118,6 @@ QUnit.test( "accessibility", function( assert ) {
 			panel = panels.eq( index );
 		assert.equal( tab.attr( "role" ), "tab", "tab " + index + " role" );
 		assert.equal( tab.attr( "aria-labelledby" ), anchorId, "tab " + index + " aria-labelledby" );
-		assert.equal( anchor.attr( "role" ), "presentation", "anchor " + index + " role" );
 		assert.equal( anchor.attr( "tabindex" ), -1, "anchor " + index + " tabindex" );
 		assert.equal( panel.attr( "role" ), "tabpanel", "panel " + index + " role" );
 		assert.equal( panel.attr( "aria-labelledby" ), anchorId, "panel " + index + " aria-labelledby" );

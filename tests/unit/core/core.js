@@ -180,7 +180,7 @@ QUnit.test( "Labels", function( assert ) {
 			QUnit.test( name + this.id.replace( /_/g, " " ), function( assert ) {
 				var ready = assert.async();
 				assert.expect( 1 );
-				var form = input.form();
+				var form = input._form();
 
 				// If input has a form the value should reset to "" if not it should be "changed"
 				var value = form.length ? "" : "changed";
