@@ -327,9 +327,9 @@ test( "value", function( assert ) {
 
 	this.element.calendar( "option", "value", date );
 	assert.dateEqual( this.element.calendar( "option", "value" ), date, "Value set" );
-	equal(
-		this.widget.find( "table button.ui-state-active" ).data( "ui-calendar-timestamp" ),
-		1463954400000,
+	assert.dateEqual(
+		new Date( this.widget.find( "table button.ui-state-active" ).data( "ui-calendar-timestamp" ) ),
+		new Date( 1463972400000 ),
 		"Active button timestamp"
 	);
 
