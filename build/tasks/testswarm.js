@@ -51,12 +51,6 @@ function submit( commit, runs, configFile, extra, done ) {
 		commitUrl = "https://github.com/jquery/jquery-ui/commit/" + commit;
 
 	if ( extra ) {
-
-		// jQuery >= 2.0.0 don't support IE 8.
-		if ( extra.substring( 0, 6 ) !== "core 1" ) {
-			browserSets = "jquery-ui-future";
-		}
-
 		extra = " (" + extra + ")";
 	}
 
