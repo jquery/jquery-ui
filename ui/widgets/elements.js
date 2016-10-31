@@ -99,11 +99,6 @@
 			var appendItem = function($option) {
 				var $item = $('<li role="option" class="option' + (($option.prop('selected') || $this.prop('selectedIndex') === $option.prop('index')) ? ' active' : '') + '" data-index="' + $option.prop('index') + '" data-value="' + $option.val() + '"/>').append($('<a href="javascript:void(0);" tabindex="-1" role="presentation" />').text($option.text()));
 
-				$item.bind('click.ui', function(event) {
-					var $thisOption =  $(this);
-
-					$thisOption.closest('.ui-select').children('select').prop('selectedIndex', $thisOption.data('index')).focus().change();
-				});
 				$list.append($item);
 			};
 
@@ -144,6 +139,12 @@
 
 					$ti.attr('tabindex', $ti.data('tabindex'));
 				});
+			}).on('click.ui', '> li', function() {
+				var $thisOption =  $(this), $select = $thisOption.closest('.ui-select').children('select');
+				var index = $thisOption.data('index');
+
+				$select.prop('selectedIndex', index).focus().change().triggerHandler('click');
+				$select.children().eq(index).trigger('click');
 			}).css('visibility', '');
 		}
 		$this.trigger('keyup.ui').focus();
@@ -162,7 +163,7 @@
 		var $this = $(this);
 
 		if($this.data('dropdownMenu')) {
-			$this.data('dropdownMenu').fadeOut(200, function() {
+			$this.data('dropdownMenu').fadeOut(300, function() {
 				$(this).remove();
 				$this.data('dropdownMenu', null).parent('.ui-select.open').removeClass('open');
 			});
