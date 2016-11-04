@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Labels @VERSION
+ * jQuery UI Labels 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

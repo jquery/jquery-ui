@@ -19,7 +19,7 @@
 
 $.ui = $.ui || {};
 
-return $.ui.version = "@VERSION";
+return $.ui.version = "1.12.2-pre";
 
 },
 	typeof global !== "undefined" ? global :

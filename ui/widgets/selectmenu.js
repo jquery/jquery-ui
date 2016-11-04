@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Selectmenu @VERSION
+ * jQuery UI Selectmenu 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -33,7 +33,7 @@
 			require( "../keycode" ),
 			require( "../labels" ),
 			require( "../position" ),
-			require( "unique-id" ),
+			require( "../unique-id" ),
 			require( "../version" ),
 			require( "../widget" )
 		);
@@ -60,7 +60,7 @@
 }( function( $ ) {
 
 return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,

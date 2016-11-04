@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Keycode @VERSION
+ * jQuery UI Keycode 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

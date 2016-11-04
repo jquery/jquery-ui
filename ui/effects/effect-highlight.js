@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Highlight @VERSION
+ * jQuery UI Effects Highlight 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

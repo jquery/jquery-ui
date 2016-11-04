@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Pulsate @VERSION
+ * jQuery UI Effects Pulsate 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

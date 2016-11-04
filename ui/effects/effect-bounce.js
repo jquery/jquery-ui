@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Bounce @VERSION
+ * jQuery UI Effects Bounce 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

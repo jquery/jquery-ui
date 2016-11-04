@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Progressbar @VERSION
+ * jQuery UI Progressbar 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -38,7 +38,7 @@
 }( function( $ ) {
 
 return $.widget( "ui.progressbar", {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	options: {
 		classes: {
 			"ui-progressbar": "ui-corner-all",

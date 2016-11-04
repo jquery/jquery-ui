@@ -162,11 +162,40 @@ grunt.initConfig({
 				optimize: "none",
 				findNestedDependencies: true,
 				skipModuleInsertion: true,
+				normalizeDirDefines: "all",
 				exclude: [ "jquery" ],
 				include: expandFiles( [ "ui/**/*.js", "!ui/core.js", "!ui/i18n/*" ] ),
 				out: "dist/jquery-ui.js",
 				wrap: {
 					start: createBanner( uiFiles ),
+				},
+				onBuildRead: function (moduleName, path, contents) {
+					if ( moduleName.indexOf( "ui/" ) ) {
+						return contents;
+					} else {
+						var pathPart = path.substring( path.indexOf( "/ui/" ) + 3, path.lastIndexOf( "/" ) + 1 );
+						return contents
+							.replace( /require\( "(\.\.?\/[^"]*)" \)/g, function(match, p1) {
+								return "require( \"../ui" + pathPart + p1 + "\" )";
+							} )
+							/*.replace( /(define\([\s\S]+\[)([^\]]*)(\])(,[\s\S]+factory|)([\s\S]+\))/g, function(match, p1, p2, p3, p4, p5, offset, string) {
+								return p1 + p2.replace( /"(\.\.?\/[^"]*)"/g, function(innerMatch, innerP1, innerOffset, innerString) {
+									return "\"../ui" + pathPart + innerP1 + "\"";
+								} ) + p3 + p4 + p5;
+							} )*/;
+					}
+				},
+				onBuildWrite: function (moduleName, path, contents) {
+					//Always return a value.
+					//This is just a contrived example.
+					return contents
+						.replace( /@VERSION/g, grunt.file.readJSON( "package.json" ).version )
+						.replace( /(define\([\s\S]+')([^']*)(',\[)([^\]]*)(\])(,[\s\S]+factory|)([\s\S]+\))/g, function(match, p1, p2, p3, p4, p5, p6, p7) {
+							var pathPart = p2.substring( p2.indexOf( "ui/" ) + 2, p2.lastIndexOf( "/" ) + 1 );
+							return p1 + p2 + p3 + p4.replace( /"(\.\.?\/[^"]*)"/g, function(innerMatch, innerP1) {
+								return "\"../ui" + pathPart + innerP1 + "\"";
+							} ) + p5 + p6 + p7;
+						} );
 				}
 			}
 		}

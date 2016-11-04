@@ -1,7 +1,7 @@
 // jscs:disable maximumLineLength
 /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 /*!
- * jQuery UI Datepicker @VERSION
+ * jQuery UI Datepicker 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -37,7 +37,7 @@
 	}
 }( function( $ ) {
 
-$.extend( $.ui, { datepicker: { version: "@VERSION" } } );
+$.extend( $.ui, { datepicker: { version: "1.12.2-pre" } } );
 
 var datepicker_instActive;
 
@@ -2114,7 +2114,7 @@ $.fn.datepicker = function( options ) {
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
-$.datepicker.version = "@VERSION";
+$.datepicker.version = "1.12.2-pre";
 
 return $.datepicker;
 

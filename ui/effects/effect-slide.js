@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Slide @VERSION
+ * jQuery UI Effects Slide 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

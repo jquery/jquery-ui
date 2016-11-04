@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Drop @VERSION
+ * jQuery UI Effects Drop 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
