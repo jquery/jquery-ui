@@ -17,8 +17,21 @@
 //>>css.structure: ../../themes/base/checkboxradio.css
 //>>css.theme: ../../themes/base/theme.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "../escape-selector" ),
+			require( "../form-reset-mixin" ),
+			require( "../labels" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define( [
@@ -30,8 +43,8 @@
 		], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
@@ -280,4 +293,9 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 return $.ui.checkboxradio;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

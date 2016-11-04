@@ -12,20 +12,27 @@
 //>>description: Abstracts mouse-based interactions to assist in creating certain widgets.
 //>>docs: http://api.jqueryui.com/mouse/
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "../ie" ),
+			require( "../version" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
-			"../ie",
-			"../version",
-			"../widget"
-		], factory );
+		define( [ "jquery", "../ie", "../version", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
@@ -223,4 +230,9 @@ return $.widget( "ui.mouse", {
 	_mouseCapture: function( /* event */ ) { return true; }
 } );
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

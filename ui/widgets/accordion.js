@@ -18,21 +18,28 @@
 //>>css.structure: ../../themes/base/accordion.css
 //>>css.theme: ../../themes/base/theme.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "../version" ),
+			require( "../keycode" ),
+			require( "../unique-id" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
-			"../version",
-			"../keycode",
-			"../unique-id",
-			"../widget"
-		], factory );
+		define( [ "jquery", "../version", "../keycode", "../unique-id", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
@@ -610,4 +617,9 @@ return $.widget( "ui.accordion", {
 	}
 } );
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );
