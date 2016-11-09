@@ -1,7 +1,8 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/slider"
-], function( $ ) {
+], function( QUnit, $ ) {
 
 var element, options;
 
@@ -9,10 +10,10 @@ function handle() {
 	return element.find( ".ui-slider-handle" );
 }
 
-module( "slider: options" );
+QUnit.module( "slider: options" );
 
-test( "disabled", function( assert ) {
-	expect( 8 );
+QUnit.test( "disabled", function( assert ) {
+	assert.expect( 8 );
 	var count = 0;
 
 	element = $( "#slider1" ).slider();
@@ -22,28 +23,28 @@ test( "disabled", function( assert ) {
 
 	// Enabled
 	assert.lacksClasses( element, "ui-slider-disabled" );
-	equal( element.slider( "option", "disabled" ), false, "is not disabled" );
+	assert.equal( element.slider( "option", "disabled" ), false, "is not disabled" );
 
 	handle().simulate( "drag", { dx: 10 } );
-	equal( count, 1, "slider moved" );
+	assert.equal( count, 1, "slider moved" );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( count, 2, "slider moved" );
+	assert.equal( count, 2, "slider moved" );
 
 	// Disabled
 	element.slider( "option", "disabled", true );
 	assert.hasClasses( element, "ui-slider-disabled" );
-	equal( element.slider( "option", "disabled" ), true, "is disabled" );
+	assert.equal( element.slider( "option", "disabled" ), true, "is disabled" );
 
 	handle().simulate( "drag", { dx: 10 } );
-	equal( count, 2, "slider did not move" );
+	assert.equal( count, 2, "slider did not move" );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( count, 2, "slider did not move" );
+	assert.equal( count, 2, "slider did not move" );
 } );
 
-test( "max", function() {
-	expect( 7 );
+QUnit.test( "max", function( assert ) {
+	assert.expect( 7 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -55,8 +56,8 @@ test( "max", function() {
 	};
 
 	element.slider( options );
-	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
-	ok( element.slider( "value" ) === options.max, "value method is contained by max" );
+	assert.ok( element.slider( "option", "value" ) === options.value, "value option is not contained by max" );
+	assert.ok( element.slider( "value" ) === options.max, "value method is contained by max" );
 
 	options = {
 		max: 9,
@@ -67,12 +68,12 @@ test( "max", function() {
 	};
 
 	element.slider( options );
-	ok( element.slider( "value" ) === 7, "value method is within max, edge Case" );
+	assert.ok( element.slider( "value" ) === 7, "value method is within max, edge Case" );
 
 	options.step = 2;
 
 	element.slider( options );
-	ok( element.slider( "value" ) === options.max, "value method will max, step is changed" );
+	assert.ok( element.slider( "value" ) === options.max, "value method will max, step is changed" );
 	element.slider( "destroy" );
 
 	options = {
@@ -84,7 +85,7 @@ test( "max", function() {
 	};
 
 	element.slider( options );
-	ok( element.slider( "value" ) === options.max, "value method will max, step is changed and step is float" );
+	assert.ok( element.slider( "value" ) === options.max, "value method will max, step is changed and step is float" );
 	element.slider( "destroy" );
 
 	options = {
@@ -96,18 +97,18 @@ test( "max", function() {
 	};
 
 	element.slider( options );
-	ok( element.slider( "value" ) === options.max, "value method will max, step is changed, step is float and max is float" );
+	assert.ok( element.slider( "value" ) === options.max, "value method will max, step is changed, step is float and max is float" );
 	element.slider( "destroy" );
 
 	options.max = 10.749999999;
 
 	element.slider( options );
-	ok( element.slider( "value" ) === 10.74, "value method will max, step is changed, step is float, max is float and not divisible" );
+	assert.ok( element.slider( "value" ) === 10.74, "value method will max, step is changed, step is float, max is float and not divisible" );
 	element.slider( "destroy" );
 } );
 
-test( "min", function() {
-	expect( 2 );
+QUnit.test( "min", function( assert ) {
+	assert.expect( 2 );
 	element = $( "<div></div>" );
 
 	options = {
@@ -119,14 +120,14 @@ test( "min", function() {
 	};
 
 	element.slider( options );
-	ok( element.slider( "option", "value" ) === options.value, "value option is not contained by min" );
-	ok( element.slider( "value" ) === options.min, "value method is contained by min" );
+	assert.ok( element.slider( "option", "value" ) === options.value, "value option is not contained by min" );
+	assert.ok( element.slider( "value" ) === options.min, "value method is contained by min" );
 	element.slider( "destroy" );
 
 } );
 
-test( "orientation", function( assert ) {
-	expect( 14 );
+QUnit.test( "orientation", function( assert ) {
+	assert.expect( 14 );
 	element = $( "#slider1" );
 
 	options = {
@@ -142,8 +143,8 @@ test( "orientation", function( assert ) {
 	element.slider( options ).slider( "option", "orientation", "horizontal" );
 	assert.hasClasses( element, "ui-slider-horizontal" );
 	assert.lacksClasses( element, "ui-slider-vertical" );
-	equal( element.find( ".ui-slider-handle" )[ 0 ].style.bottom, "", "CSS bottom reset" );
-	equal( handle()[ 0 ].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
+	assert.equal( element.find( ".ui-slider-handle" )[ 0 ].style.bottom, "", "CSS bottom reset" );
+	assert.equal( handle()[ 0 ].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
 
 	element.slider( "destroy" ) ;
 
@@ -159,8 +160,8 @@ test( "orientation", function( assert ) {
 	element.slider( options ).slider( "option", "orientation", "vertical" );
 	assert.hasClasses( element, "ui-slider-vertical" );
 	assert.lacksClasses( element, "ui-slider-horizontal" );
-	equal( element.find( ".ui-slider-handle" )[ 0 ].style.left, "", "CSS left reset" );
-	equal( handle()[ 0 ].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %" );
+	assert.equal( element.find( ".ui-slider-handle" )[ 0 ].style.left, "", "CSS left reset" );
+	assert.equal( handle()[ 0 ].style.bottom, percentVal + "%", "vertical slider handle is positioned with bottom: %" );
 
 	element.slider( "destroy" );
 
@@ -174,15 +175,15 @@ test( "orientation", function( assert ) {
 
 	element.slider( "option", "value", newValue );
 	element.slider( "option", "orientation", "vertical" );
-	equal( element.find( ".ui-slider-range" ).width(), 12,
+	assert.equal( element.find( ".ui-slider-range" ).width(), 12,
 		"range should occupy all horizontal space after changing orientation to vertical" );
-	equal( element.find( ".ui-slider-range" ).height(), rangeSize,
+	assert.equal( element.find( ".ui-slider-range" ).height(), rangeSize,
 		"range height of vertical slider should be proportional to the value" );
 
 	element.slider( "option", "orientation", "horizontal" );
-	equal( element.find( ".ui-slider-range " ).height(), 12,
+	assert.equal( element.find( ".ui-slider-range " ).height(), 12,
 		"range should occupy all vertical space after changing orientation to horizontal" );
-	equal( element.find( ".ui-slider-range" ).width(), rangeSize,
+	assert.equal( element.find( ".ui-slider-range" ).width(), rangeSize,
 		"range width of horizontal slider should be proportional to the value" );
 
 	element.slider( "destroy" );
@@ -193,10 +194,10 @@ test( "orientation", function( assert ) {
 		max: 100
 	} );
 	element.slider( "option", { values: [ 60, 70 ] } );
-	notEqual( element.find( ".ui-slider-range " ).position().left, 0,
+	assert.notEqual( element.find( ".ui-slider-range " ).position().left, 0,
 		"range should not pull over to the track's border" );
 	element.slider( "option", "orientation", "vertical" );
-	equal( element.find( ".ui-slider-range " ).position().left, 0,
+	assert.equal( element.find( ".ui-slider-range " ).position().left, 0,
 		"range should pull over to the track's border" );
 
 	element.slider( "destroy" );
@@ -205,27 +206,27 @@ test( "orientation", function( assert ) {
 //spec: http://wiki.jqueryui.com/Slider#specs
 // value option/method: the value option is not restricted by min/max/step.
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
-test( "step", function() {
-	expect( 9 );
+QUnit.test( "step", function( assert ) {
+	assert.expect( 9 );
 	element = $( "<div></div>" ).slider( {
 		min: 0,
 		value: 0,
 		step: 10,
 		max: 100
 	} );
-	equal( element.slider( "value" ), 0 );
+	assert.equal( element.slider( "value" ), 0 );
 
 	element.slider( "value", 1 );
-	equal( element.slider( "value" ), 0 );
+	assert.equal( element.slider( "value" ), 0 );
 
 	element.slider( "value", 9 );
-	equal( element.slider( "value" ), 10 );
+	assert.equal( element.slider( "value" ), 10 );
 
 	element.slider( "value", 11 );
-	equal( element.slider( "value" ), 10 );
+	assert.equal( element.slider( "value" ), 10 );
 
 	element.slider( "value", 19 );
-	equal( element.slider( "value" ), 20 );
+	assert.equal( element.slider( "value" ), 20 );
 
 	element = $( "<div></div>" ).slider( {
 		min: 0,
@@ -236,26 +237,26 @@ test( "step", function() {
 	element.slider( "value", 0 );
 
 	element.slider( "option", "value", 1 );
-	equal( element.slider( "value" ), 0 );
+	assert.equal( element.slider( "value" ), 0 );
 
 	element.slider( "option", "value", 9 );
-	equal( element.slider( "value" ), 0 );
+	assert.equal( element.slider( "value" ), 0 );
 
 	element.slider( "option", "value", 11 );
-	equal( element.slider( "value" ), 20 );
+	assert.equal( element.slider( "value" ), 20 );
 
 	element.slider( "option", "value", 19 );
-	equal( element.slider( "value" ), 20 );
+	assert.equal( element.slider( "value" ), 20 );
 
 	element.slider( "destroy" );
 } );
 
-//test( "value", function() {
+//Test( "value", function() {
 //	ok(false, "missing test - untested code is broken code." );
 //});
 
-test( "values", function() {
-	expect( 2 );
+QUnit.test( "values", function( assert ) {
+	assert.expect( 2 );
 
 	// Testing multiple ranges on the same page, the object reference to the values
 	// property is preserved via multiple range elements, so updating options.values
@@ -268,7 +269,7 @@ test( "values", function() {
 		values: [ 25, 75 ]
 	} );
 
-	notStrictEqual(
+	assert.notStrictEqual(
 		ranges.eq( 0 ).slider( "instance" ).options.values,
 		ranges.eq( 1 ).slider( "instance" ).options.values,
 		"multiple range sliders should not have a reference to the same options.values array"
@@ -276,15 +277,15 @@ test( "values", function() {
 
 	ranges.eq( 0 ).slider( "values", 0, 10 );
 
-	notEqual(
+	assert.notEqual(
 		ranges.eq( 0 ).slider( "values", 0 ),
 		ranges.eq( 1 ).slider( "values", 0 ),
 		"the values for multiple sliders should be different"
 	);
 } );
 
-test( "range", function( assert ) {
-	expect( 32 );
+QUnit.test( "range", function( assert ) {
+	assert.expect( 32 );
 	var range;
 
 	// Min
@@ -295,8 +296,8 @@ test( "range", function( assert ) {
 		step: 1
 	} );
 
-	equal( element.find( ".ui-slider-handle" ).length, 1, "range min, one handle" );
-	equal( element.find( ".ui-slider-range-min" ).length, 1, "range min" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 1, "range min, one handle" );
+	assert.equal( element.find( ".ui-slider-range-min" ).length, 1, "range min" );
 	element.slider( "destroy" );
 
 	// Max
@@ -307,8 +308,8 @@ test( "range", function( assert ) {
 		step: 1
 	} );
 
-	equal( element.find( ".ui-slider-handle" ).length, 1, "range max, one handle" );
-	equal( element.find( ".ui-slider-range-max" ).length, 1, "range max" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 1, "range max, one handle" );
+	assert.equal( element.find( ".ui-slider-range-max" ).length, 1, "range max" );
 	element.slider( "destroy" );
 
 	// True
@@ -320,7 +321,7 @@ test( "range", function( assert ) {
 	} );
 
 	range = element.find( ".ui-slider-range" );
-	equal( element.find( ".ui-slider-handle" ).length, 2, "range true, two handles" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 2, "range true, two handles" );
 	assert.lacksClasses( range, "ui-slider-range-max ui-slider-range-min" );
 	element.slider( "destroy" );
 
@@ -332,9 +333,9 @@ test( "range", function( assert ) {
 		step: 1
 	} ).slider( "option", "range", "max" );
 
-	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from min to max, one handle" );
-	equal( element.find( ".ui-slider-range-min" ).length, 0, "range switch from min to max" );
-	equal( element.find( ".ui-slider-range-max" ).length, 1, "range switch from min to max" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from min to max, one handle" );
+	assert.equal( element.find( ".ui-slider-range-min" ).length, 0, "range switch from min to max" );
+	assert.equal( element.find( ".ui-slider-range-max" ).length, 1, "range switch from min to max" );
 	element.slider( "destroy" );
 
 	// Change range from max to min
@@ -345,9 +346,9 @@ test( "range", function( assert ) {
 		step: 1
 	} ).slider( "option", "range", "min" );
 
-	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from max to min, one handle" );
-	equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from max to min" );
-	equal( element.find( ".ui-slider-range-min" ).length, 1, "range switch from max to min" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from max to min, one handle" );
+	assert.equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from max to min" );
+	assert.equal( element.find( ".ui-slider-range-min" ).length, 1, "range switch from max to min" );
 	element.slider( "destroy" );
 
 	// Change range from max to true
@@ -358,13 +359,13 @@ test( "range", function( assert ) {
 		step: 1
 	} ).slider( "option", "range", true );
 
-	equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from max to true, two handles" );
-	equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from max to true" );
-	equal( element.find( ".ui-slider-range-min" ).length, 0, "range switch from max to true" );
-	equal( element.slider( "option", "value" ), 0, "option value" );
-	equal( element.slider( "value" ), 1, "value" );
-	deepEqual( element.slider( "option", "values" ), [ 1, 1 ], "option values" );
-	deepEqual( element.slider( "values" ), [ 1, 1 ], "values" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from max to true, two handles" );
+	assert.equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from max to true" );
+	assert.equal( element.find( ".ui-slider-range-min" ).length, 0, "range switch from max to true" );
+	assert.equal( element.slider( "option", "value" ), 0, "option value" );
+	assert.equal( element.slider( "value" ), 1, "value" );
+	assert.deepEqual( element.slider( "option", "values" ), [ 1, 1 ], "option values" );
+	assert.deepEqual( element.slider( "values" ), [ 1, 1 ], "values" );
 	element.slider( "destroy" );
 
 	// Change range from true to min
@@ -375,13 +376,13 @@ test( "range", function( assert ) {
 		step: 1
 	} ).slider( "option", "range", "min" );
 
-	equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from true to min, one handle" );
-	equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from true to min" );
-	equal( element.find( ".ui-slider-range-min" ).length, 1, "range switch from true to min" );
-	equal( element.slider( "option", "value" ), 1, "value" );
-	equal( element.slider( "value" ), 1, "value" );
-	equal( element.slider( "option", "values" ), null, "values" );
-	deepEqual( element.slider( "values" ), [], "values" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 1, "range switch from true to min, one handle" );
+	assert.equal( element.find( ".ui-slider-range-max" ).length, 0, "range switch from true to min" );
+	assert.equal( element.find( ".ui-slider-range-min" ).length, 1, "range switch from true to min" );
+	assert.equal( element.slider( "option", "value" ), 1, "value" );
+	assert.equal( element.slider( "value" ), 1, "value" );
+	assert.equal( element.slider( "option", "values" ), null, "values" );
+	assert.deepEqual( element.slider( "values" ), [], "values" );
 	element.slider( "destroy" );
 
 	// Change range from true to false
@@ -391,12 +392,12 @@ test( "range", function( assert ) {
 		max: 10,
 		step: 1
 	} ).slider( "option", "range", false );
-	equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from true to false, both handles remain" );
-	equal( element.find( ".ui-slider-range" ).length, 0, "range switch from true to false" );
-	equal( element.slider( "option", "value" ), 0, "option value" );
-	equal( element.slider( "value" ), 1, "value" );
-	deepEqual( element.slider( "option", "values" ), [ 1, 1 ], "option values" );
-	deepEqual( element.slider( "values" ), [ 1, 1 ], "values" );
+	assert.equal( element.find( ".ui-slider-handle" ).length, 2, "range switch from true to false, both handles remain" );
+	assert.equal( element.find( ".ui-slider-range" ).length, 0, "range switch from true to false" );
+	assert.equal( element.slider( "option", "value" ), 0, "option value" );
+	assert.equal( element.slider( "value" ), 1, "value" );
+	assert.deepEqual( element.slider( "option", "values" ), [ 1, 1 ], "option values" );
+	assert.deepEqual( element.slider( "values" ), [ 1, 1 ], "values" );
 	element.slider( "destroy" );
 } );
 

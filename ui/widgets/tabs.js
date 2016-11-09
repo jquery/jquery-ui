@@ -44,8 +44,8 @@ $.widget( "ui.tabs", {
 		classes: {
 			"ui-tabs": "ui-corner-all",
 			"ui-tabs-nav": "ui-corner-all",
-			"ui-tab": "ui-corner-top",
-			"ui-tabs-panel": "ui-corner-bottom"
+			"ui-tabs-panel": "ui-corner-bottom",
+			"ui-tabs-tab": "ui-corner-top"
 		},
 		collapsible: false,
 		event: "click",
@@ -431,7 +431,6 @@ $.widget( "ui.tabs", {
 			return $( "a", this )[ 0 ];
 		} )
 			.attr( {
-				role: "presentation",
 				tabIndex: -1
 			} );
 		this._addClass( this.anchors, "ui-tabs-anchor" );
@@ -733,7 +732,8 @@ $.widget( "ui.tabs", {
 
 		// meta-function to give users option to provide a href string instead of a numerical index.
 		if ( typeof index === "string" ) {
-			index = this.anchors.index( this.anchors.filter( "[href$='" + $.ui.escapeSelector( index ) + "']" ) );
+			index = this.anchors.index( this.anchors.filter( "[href$='" +
+				$.ui.escapeSelector( index ) + "']" ) );
 		}
 
 		return index;
@@ -888,7 +888,10 @@ $.widget( "ui.tabs", {
 	_ajaxSettings: function( anchor, event, eventData ) {
 		var that = this;
 		return {
-			url: anchor.attr( "href" ),
+
+			// Support: IE <11 only
+			// Strip any hash that exists to prevent errors with the Ajax request
+			url: anchor.attr( "href" ).replace( /#.*$/, "" ),
 			beforeSend: function( jqXHR, settings ) {
 				return that._trigger( "beforeLoad", event,
 					$.extend( { jqXHR: jqXHR, ajaxSettings: settings }, eventData ) );

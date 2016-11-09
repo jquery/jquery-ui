@@ -1,11 +1,12 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/spinner"
-], function( $ ) {
+], function( QUnit, $ ) {
 
 var originalSpinner = $.ui.spinner.prototype;
-module( "spinner: deprecated", {
-	setup: function() {
+QUnit.module( "spinner: deprecated", {
+	beforeEach: function() {
 		$.widget( "ui.spinner", $.ui.spinner, {
 			_uiSpinnerHtml: function() {
 				return "<span class='spin-wrap'>";
@@ -23,13 +24,13 @@ module( "spinner: deprecated", {
 		} );
 	},
 
-	teardown: function() {
+	afterEach: function() {
 		$.ui.spinner.prototype = originalSpinner;
 	}
 } );
 
-test( "markup structure - custom", function( assert ) {
-	expect( 2 );
+QUnit.test( "markup structure - custom", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#spin" ).spinner(),
 		spinner = element.spinner( "widget" ),
 		up = spinner.find( ".ui-spinner-up" );

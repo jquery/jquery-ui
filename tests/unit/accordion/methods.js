@@ -1,47 +1,48 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/accordion"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var equalHeight = testHelper.equalHeight,
 	setupTeardown = testHelper.setupTeardown,
 	state = testHelper.state;
 
-module( "accordion: methods", setupTeardown() );
+QUnit.module( "accordion: methods", setupTeardown() );
 
-test( "destroy", function( assert ) {
-	expect( 1 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 1 );
 	assert.domEqual( "#list1", function() {
 		$( "#list1" ).accordion().accordion( "destroy" );
 	} );
 } );
 
-test( "enable/disable", function( assert ) {
-	expect( 7 );
+QUnit.test( "enable/disable", function( assert ) {
+	assert.expect( 7 );
 	var element = $( "#list1" ).accordion();
-	state( element, 1, 0, 0 );
+	state( assert, element, 1, 0, 0 );
 	element.accordion( "disable" );
 
 	assert.hasClasses( element, "ui-state-disabled" );
 
-	equal( element.attr( "aria-disabled" ), "true", "element gets aria-disabled" );
+	assert.equal( element.attr( "aria-disabled" ), "true", "element gets aria-disabled" );
 	assert.hasClasses( element, "ui-accordion-disabled" );
 
 	// Event does nothing
 	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
-	state( element, 1, 0, 0 );
+	state( assert, element, 1, 0, 0 );
 
 	// Option still works
 	element.accordion( "option", "active", 1 );
-	state( element, 0, 1, 0 );
+	state( assert, element, 0, 1, 0 );
 	element.accordion( "enable" );
 	element.accordion( "option", "active", 2 );
-	state( element, 0, 0, 1 );
+	state( assert, element, 0, 0, 1 );
 } );
 
-test( "refresh", function() {
-	expect( 19 );
+QUnit.test( "refresh", function( assert ) {
+	assert.expect( 19 );
 	var element = $( "#navigation" )
 		.parent()
 			.height( 300 )
@@ -49,37 +50,37 @@ test( "refresh", function() {
 		.accordion( {
 			heightStyle: "fill"
 		} );
-	equalHeight( element, 255 );
+	equalHeight( assert, element, 255 );
 
 	element.parent().height( 500 );
 	element.accordion( "refresh" );
-	equalHeight( element, 455 );
+	equalHeight( assert, element, 455 );
 
 	element = $( "#list1" );
 	element.accordion();
-	state( element, 1, 0, 0 );
+	state( assert, element, 1, 0, 0 );
 
 	// Disable panel via markup
 	element.find( "h3.bar" ).eq( 1 ).addClass( "ui-state-disabled" );
 	element.accordion( "refresh" );
-	state( element, 1, 0, 0 );
+	state( assert, element, 1, 0, 0 );
 
 	// Don't add multiple icons
 	element.accordion( "refresh" );
-	equal( element.find( ".ui-accordion-header-icon" ).length, 3 );
+	assert.equal( element.find( ".ui-accordion-header-icon" ).length, 3 );
 
 	// Add a panel
 	element
 		.append( "<h3 class='bar' id='new_1'>new 1</h3>" )
 		.append( "<div class='foo' id='new_1_panel'>new 1</div>" );
 	element.accordion( "refresh" );
-	state( element, 1, 0, 0, 0 );
+	state( assert, element, 1, 0, 0, 0 );
 
 	// Remove all tabs
 	element.find( "h3.bar, div.foo" ).remove();
 	element.accordion( "refresh" );
-	state( element );
-	equal( element.accordion( "option", "active" ), false, "no active accordion panel" );
+	state( assert, element );
+	assert.equal( element.accordion( "option", "active" ), false, "no active accordion panel" );
 
 	// Add panels
 	element
@@ -92,46 +93,46 @@ test( "refresh", function() {
 		.append( "<h3 class='bar' id='new_5'>new 5</h3>" )
 		.append( "<div class='foo' id='new_5_panel'>new 5</div>" );
 	element.accordion( "refresh" );
-	state( element, 1, 0, 0, 0 );
+	state( assert, element, 1, 0, 0, 0 );
 
 	// Activate third tab
 	element.accordion( "option", "active", 2 );
-	state( element, 0, 0, 1, 0 );
+	state( assert, element, 0, 0, 1, 0 );
 
 	// Remove fourth panel, third panel should stay active
 	element.find( "h3.bar" ).eq( 3 ).remove();
 	element.find( "div.foo" ).eq( 3 ).remove();
 	element.accordion( "refresh" );
-	state( element, 0, 0, 1 );
+	state( assert, element, 0, 0, 1 );
 
 	// Remove third (active) panel, second panel should become active
 	element.find( "h3.bar" ).eq( 2 ).remove();
 	element.find( "div.foo" ).eq( 2 ).remove();
 	element.accordion( "refresh" );
-	state( element, 0, 1 );
+	state( assert, element, 0, 1 );
 
 	// Remove first panel, previously active panel (now first) should stay active
 	element.find( "h3.bar" ).eq( 0 ).remove();
 	element.find( "div.foo" ).eq( 0 ).remove();
 	element.accordion( "refresh" );
-	state( element, 1 );
+	state( assert, element, 1 );
 
 	// Collapse all panels
 	element.accordion( "option", {
 		collapsible: true,
 		active: false
 	} );
-	state( element, 0 );
+	state( assert, element, 0 );
 	element.accordion( "refresh" );
-	state( element, 0 );
+	state( assert, element, 0 );
 } );
 
-test( "widget", function() {
-	expect( 2 );
+QUnit.test( "widget", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#list1" ).accordion(),
 		widgetElement = element.accordion( "widget" );
-	equal( widgetElement.length, 1, "one element" );
-	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+	assert.equal( widgetElement.length, 1, "one element" );
+	assert.strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 } );
 
 } );

@@ -1,42 +1,46 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
-	"ui/widgets/button"
-], function( $ ) {
+	"ui/widgets/button",
+	"ui/widgets/spinner"
+], function( QUnit, $ ) {
 
-module( "Controlgroup: methods" );
+QUnit.module( "Controlgroup: methods" );
 
-test( "destroy", function( assert ) {
-	expect( 1 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 1 );
 	assert.domEqual( ".controlgroup", function() {
 		$( ".controlgroup" ).controlgroup().controlgroup( "destroy" );
+		$( "#spinner" ).addClass( "ui-spinner-input" );
 	} );
 } );
 
-test( "disable", function( assert ) {
-	expect( 2 );
+QUnit.test( "disable", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "disable" );
 	assert.lacksClasses( element, "ui-state-disabled",
 		"The widget does not get the disabled class, because we disable each child widget" );
-	strictEqual( element.find( ".ui-state-disabled" ).length, 6,
+	assert.strictEqual( element.find( ".ui-state-disabled" ).length, 9,
 		"Child widgets are disabled" );
 } );
 
-test( "enable", function( assert ) {
-	expect( 2 );
+QUnit.test( "enable", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "enable" );
 	assert.lacksClasses( element, "ui-state-disabled",
 		"ui-state-disabled is not present on widget after enabling" );
-	strictEqual( element.find( "ui-state-disabled" ).length, 0,
+	assert.strictEqual( element.find( "ui-state-disabled" ).length, 0,
 		"Child widgets are disabled" );
 } );
 
 var tests = {
 		"checkboxradio": "<input type='checkbox'>",
 		"selectmenu": "<select><option>foo</option></select>",
-		"button": "<button>button text</button>"
+		"button": "<button>button text</button>",
+		"spinner": "<input class='ui-spinner-input'>"
 	},
 	orientations = {
 		"horizontal": [
@@ -59,16 +63,16 @@ $.each( tests, function( widget, html ) {
 	// Check in both horizontal and vertical orientations
 	$.each( orientations, function( name, classes ) {
 
-		test( "refresh: " + widget + ": " + name, function( assert ) {
-			expect( 41 );
+		QUnit.test( "refresh: " + widget + ": " + name, function( assert ) {
+			assert.expect( 41 );
 
-			var i, control, currentClasses,
+			var i, control, label, currentClasses,
 				controls = [],
 				element = $( "<div>" ).controlgroup( {
 					direction: name
 				} ).appendTo( "body" );
 
-			// checks the elements with in the controlgroup against the expected class list
+			// Checks the elements with in the controlgroup against the expected class list
 			function checkCornerClasses( classList ) {
 				for ( var j = 0; j < 4; j++ ) {
 					if ( classList[ j ] ) {
@@ -108,24 +112,24 @@ $.each( tests, function( widget, html ) {
 
 			// Add a label for each element and then append the element to the control group
 			for ( i = 0; i < 4; i++ ) {
-				control = $( html ).attr( "id", "id" + i )
-					.add( $( "<label>label text</label>" ).clone().attr( "for", "id" + i ) );
+				control = $( html ).attr( "id", "id" + i );
+				label = $( "<label>label text</label>" ).attr( "for", "id" + i );
 
 				controls.push( control );
-				element.append( control );
+				element.append( control, label );
 			}
 
 			// Refresh the controlgroup now that its populated
 			element.controlgroup( "refresh" );
 			for ( i = 0; i < 4; i++ ) {
-				strictEqual( controls[ i ].is( ":ui-" + widget ), true,
+				assert.strictEqual( controls[ i ].is( ":ui-" + widget ), true,
 					name + ": " + widget + " " + i + ": is a " + widget + " widget" );
 			}
 
 			// Check that we have the right classes
 			checkCornerClasses( classes );
 
-			// hide each element and then check its classes
+			// Hide each element and then check its classes
 			iterateHidden( true );
 
 			// Set the exclude option to false so we no longer care about hidden
@@ -135,16 +139,50 @@ $.each( tests, function( widget, html ) {
 			iterateHidden();
 
 			// Disable the first control
+			if ( widget === "spinner" ) {
+				controls[ 0 ].spinner( "disable" );
+			}
 			controls[ 0 ].prop( "disabled", true );
 
 			element.controlgroup( "refresh" );
 
 			assert.hasClasses( controls[ 0 ][ widget ]( "widget" ), "ui-state-disabled" );
 
-			// remove the controlgroup before we start the next set
+			// Remove the controlgroup before we start the next set
 			element.remove();
 		} );
 	} );
+} );
+
+QUnit.test( "Child Classes Option: init", function( assert ) {
+	assert.expect( 1 );
+	var selectmenu = $( "#select-pre" ).selectmenu( {
+		classes: {
+			"ui-selectmenu-button-closed": "test-class"
+		}
+	} );
+	$( ".controlgroup-pre" ).controlgroup();
+	assert.hasClasses( selectmenu.selectmenu( "widget" ), "test-class" );
+} );
+
+QUnit.test( "Child Classes Option: refresh", function( assert ) {
+	assert.expect( 1 );
+	var controlgroup = $( ".controlgroup-refresh" ).controlgroup();
+	var selectmenu = $( "#select-refresh" ).selectmenu( {
+		classes: {
+			"ui-selectmenu-button-closed": "test-class"
+		}
+	} );
+	controlgroup.controlgroup( "refresh" );
+	assert.hasClasses( selectmenu.selectmenu( "widget" ), "test-class" );
+} );
+
+QUnit.test( "Controlgroup Label: refresh", function( assert ) {
+	assert.expect( 1 );
+	var controlgroup = $( ".controlgroup-refresh" ).controlgroup();
+	controlgroup.controlgroup( "refresh" );
+	assert.strictEqual( controlgroup.find( ".ui-controlgroup-label-contents" ).length, 1,
+		"Controlgroup label does not re-wrap on refresh" );
 } );
 
 } );

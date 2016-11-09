@@ -9,7 +9,9 @@
 
 //>>label: Accordion
 //>>group: Widgets
+// jscs:disable maximumLineLength
 //>>description: Displays collapsible content panels for presenting information in a limited amount of space.
+// jscs:enable maximumLineLength
 //>>docs: http://api.jqueryui.com/accordion/
 //>>demos: http://jqueryui.com/accordion/
 //>>css.structure: ../../themes/base/core.css
@@ -239,7 +241,8 @@ return $.widget( "ui.accordion", {
 		this._processPanels();
 
 		// Was collapsed or no panel
-		if ( ( options.active === false && options.collapsible === true ) || !this.headers.length ) {
+		if ( ( options.active === false && options.collapsible === true ) ||
+				!this.headers.length ) {
 			options.active = false;
 			this.active = $();
 

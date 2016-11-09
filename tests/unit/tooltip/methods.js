@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/tooltip"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "tooltip: methods" );
+QUnit.module( "tooltip: methods" );
 
-test( "destroy", function( assert ) {
-	expect( 3 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 3 );
 	var element = $( "#tooltipped1" );
 
 	assert.domEqual( "#tooltipped1", function() {
@@ -20,89 +21,103 @@ test( "destroy", function( assert ) {
 			.tooltip( "open", $.Event( "mouseover", { target: element[ 0 ] } ) )
 			.tooltip( "destroy" );
 	} );
-	equal( $( ".ui-tooltip" ).length, 0 );
+	assert.equal( $( ".ui-tooltip" ).length, 0 );
 } );
 
-test( "open/close", function() {
-	expect( 3 );
+QUnit.test( "open/close", function( assert ) {
+	assert.expect( 3 );
 	$.fx.off = true;
 	var tooltip,
 		element = $( "#tooltipped1" ).tooltip();
-	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
-	ok( tooltip.is( ":visible" ) );
+	assert.ok( tooltip.is( ":visible" ) );
 
 	element.tooltip( "close" );
-	ok( tooltip.is( ":hidden" ) );
+	assert.ok( tooltip.is( ":hidden" ) );
 	$.fx.off = false;
 } );
 
 // #8626 - Calling open() without an event
-test( "open/close with tracking", function() {
-	expect( 3 );
+QUnit.test( "open/close with tracking", function( assert ) {
+	assert.expect( 3 );
 	$.fx.off = true;
 	var tooltip,
 		element = $( "#tooltipped1" ).tooltip( { track: true } );
-	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
-	ok( tooltip.is( ":visible" ) );
+	assert.ok( tooltip.is( ":visible" ) );
 
 	element.tooltip( "close" );
-	ok( tooltip.is( ":hidden" ) );
+	assert.ok( tooltip.is( ":hidden" ) );
 	$.fx.off = false;
 } );
 
-test( "enable/disable", function( assert ) {
-	expect( 11 );
+QUnit.test( "enable/disable", function( assert ) {
+	assert.expect( 11 );
 	$.fx.off = true;
 	var tooltip,
 		element = $( "#tooltipped1" ).tooltip();
-	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
-	ok( tooltip.is( ":visible" ) );
+	assert.ok( tooltip.is( ":visible" ) );
 
 	element.tooltip( "disable" );
-	equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
 
 	assert.lacksClasses( element.tooltip( "widget" ), "ui-state-disabled" );
-	ok( !element.tooltip( "widget" ).attr( "aria-disabled" ), "element doesn't get aria-disabled" );
+	assert.ok( !element.tooltip( "widget" ).attr( "aria-disabled" ), "element doesn't get aria-disabled" );
 	assert.lacksClasses( element.tooltip( "widget" ), "ui-tooltip-disabled" );
-	equal( tooltip.attr( "title" ), null, "title removed on disable" );
+	assert.equal( tooltip.attr( "title" ), null, "title removed on disable" );
 
 	element.tooltip( "open" );
-	equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );
 
 	element.tooltip( "enable" );
-	equal( element.attr( "title" ), "anchortitle", "title restored on enable" );
+	assert.equal( element.attr( "title" ), "anchortitle", "title restored on enable" );
 
 	// #9719 - Title should be preserved after disabling twice
 	element.tooltip( "disable" );
 	element.tooltip( "disable" );
 	element.tooltip( "enable" );
-	equal( element.attr( "title" ), "anchortitle", "title restored on enable after being disabled twice" );
+	assert.equal( element.attr( "title" ), "anchortitle", "title restored on enable after being disabled twice" );
 
 	element.tooltip( "open" );
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
-	ok( tooltip.is( ":visible" ) );
+	assert.ok( tooltip.is( ":visible" ) );
 	$.fx.off = false;
 } );
 
-test( "widget", function() {
-	expect( 2 );
-	var element = $( "#tooltipped1" ).tooltip(),
-		widgetElement = element.tooltip( "widget" );
-	equal( widgetElement.length, 1, "one element" );
-	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+QUnit.test( "enable/disable delegated", function( assert ) {
+	assert.expect( 1 );
+	var element = $( "#qunit-fixture" ).tooltip();
+	var tooltipped = $( "#tooltipped1" );
+
+	element.tooltip( "disable" );
+	element.tooltip( "enable" );
+
+	tooltipped.trigger( "mouseover" );
+	assert.equal( $( ".ui-tooltip" ).length, 1, "open" );
+
+	element.tooltip( "destroy" );
 } );
 
-test( "preserve changes to title attributes on close and destroy", function() {
-	expect( 6 );
+QUnit.test( "widget", function( assert ) {
+	assert.expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip(),
+		widgetElement = element.tooltip( "widget" );
+	assert.equal( widgetElement.length, 1, "one element" );
+	assert.strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+} );
+
+QUnit.test( "preserve changes to title attributes on close and destroy", function( assert ) {
+	assert.expect( 6 );
 	var element = $( "#tooltipped1" ),
 		changed = "changed title text",
 		original = "original title text",
@@ -136,7 +151,7 @@ test( "preserve changes to title attributes on close and destroy", function() {
 			element.removeAttr( "title" );
 		}
 		element.tooltip( test.method );
-		equal( $( "#tooltipped1" ).attr( "title" ), test.expected );
+		assert.equal( $( "#tooltipped1" ).attr( "title" ), test.expected );
 
 	} );
 } );

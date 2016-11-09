@@ -1,44 +1,45 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/data",
 	"ui/escape-selector",
 	"ui/focusable",
 	"ui/tabbable"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "core - selectors" );
+QUnit.module( "core - selectors" );
 
-function isFocusable( selector, msg ) {
-	QUnit.push( $( selector ).is( ":focusable" ), null, null,
+QUnit.assert.isFocusable = function( selector, msg ) {
+	this.push( $( selector ).is( ":focusable" ), null, null,
 		msg + " - selector " + selector + " is focusable" );
-}
+};
 
-function isNotFocusable( selector, msg ) {
-	QUnit.push( $( selector ).length && !$( selector ).is( ":focusable" ), null, null,
+QUnit.assert.isNotFocusable = function( selector, msg ) {
+	this.push( $( selector ).length && !$( selector ).is( ":focusable" ), null, null,
 		msg + " - selector " + selector + " is not focusable" );
-}
+};
 
-function isTabbable( selector, msg ) {
-	QUnit.push( $( selector ).is( ":tabbable" ), null, null,
+QUnit.assert.isTabbable = function( selector, msg ) {
+	this.push( $( selector ).is( ":tabbable" ), null, null,
 		msg + " - selector " + selector + " is tabbable" );
-}
+};
 
-function isNotTabbable( selector, msg ) {
-	QUnit.push( $( selector ).length && !$( selector ).is( ":tabbable" ), null, null,
+QUnit.assert.isNotTabbable = function( selector, msg ) {
+	this.push( $( selector ).length && !$( selector ).is( ":tabbable" ), null, null,
 		msg + " - selector " + selector + " is not tabbable" );
-}
+};
 
-test( "data", function() {
-	expect( 15 );
+QUnit.test( "data", function( assert ) {
+	assert.expect( 15 );
 
 	var element;
 
 	function shouldHaveData( msg ) {
-		ok( element.is( ":data(test)" ), msg );
+		assert.ok( element.is( ":data(test)" ), msg );
 	}
 
 	function shouldNotHaveData( msg ) {
-		ok( !element.is( ":data(test)" ), msg );
+		assert.ok( !element.is( ":data(test)" ), msg );
 	}
 
 	element = $( "<div>" );
@@ -87,193 +88,197 @@ test( "data", function() {
 	shouldHaveData( "data set to function" );
 } );
 
-test( "focusable - visible, enabled elements", function() {
-	expect( 20 );
+QUnit.test( "focusable - visible, enabled elements", function( assert ) {
+	assert.expect( 22 );
 
-	isNotFocusable( "#formNoTabindex", "form" );
-	isFocusable( "#formTabindex", "form with tabindex" );
-	isFocusable( "#visibleAncestor-inputTypeNone", "input, no type" );
-	isFocusable( "#visibleAncestor-inputTypeText", "input, type text" );
-	isFocusable( "#visibleAncestor-inputTypeCheckbox", "input, type checkbox" );
-	isFocusable( "#visibleAncestor-inputTypeRadio", "input, type radio" );
-	isFocusable( "#visibleAncestor-inputTypeButton", "input, type button" );
-	isNotFocusable( "#visibleAncestor-inputTypeHidden", "input, type hidden" );
-	isFocusable( "#visibleAncestor-button", "button" );
-	isFocusable( "#visibleAncestor-select", "select" );
-	isFocusable( "#visibleAncestor-textarea", "textarea" );
-	isFocusable( "#visibleAncestor-object", "object" );
-	isFocusable( "#visibleAncestor-anchorWithHref", "anchor with href" );
-	isNotFocusable( "#visibleAncestor-anchorWithoutHref", "anchor without href" );
-	isNotFocusable( "#visibleAncestor-span", "span" );
-	isNotFocusable( "#visibleAncestor-div", "div" );
-	isFocusable( "#visibleAncestor-spanWithTabindex", "span with tabindex" );
-	isFocusable( "#visibleAncestor-divWithNegativeTabindex", "div with tabindex" );
-	isFocusable( "#nestedVisibilityInheritWithVisibleAncestor",
+	assert.isNotFocusable( "#formNoTabindex", "form" );
+	assert.isFocusable( "#formTabindex", "form with tabindex" );
+	assert.isFocusable( "#enabledFieldset input", "input in enabled fieldset" );
+	assert.isNotFocusable( "#disabledFieldset input", "input in disabled fieldset" );
+	assert.isFocusable( "#visibleAncestor-inputTypeNone", "input, no type" );
+	assert.isFocusable( "#visibleAncestor-inputTypeText", "input, type text" );
+	assert.isFocusable( "#visibleAncestor-inputTypeCheckbox", "input, type checkbox" );
+	assert.isFocusable( "#visibleAncestor-inputTypeRadio", "input, type radio" );
+	assert.isFocusable( "#visibleAncestor-inputTypeButton", "input, type button" );
+	assert.isNotFocusable( "#visibleAncestor-inputTypeHidden", "input, type hidden" );
+	assert.isFocusable( "#visibleAncestor-button", "button" );
+	assert.isFocusable( "#visibleAncestor-select", "select" );
+	assert.isFocusable( "#visibleAncestor-textarea", "textarea" );
+	assert.isFocusable( "#visibleAncestor-object", "object" );
+	assert.isFocusable( "#visibleAncestor-anchorWithHref", "anchor with href" );
+	assert.isNotFocusable( "#visibleAncestor-anchorWithoutHref", "anchor without href" );
+	assert.isNotFocusable( "#visibleAncestor-span", "span" );
+	assert.isNotFocusable( "#visibleAncestor-div", "div" );
+	assert.isFocusable( "#visibleAncestor-spanWithTabindex", "span with tabindex" );
+	assert.isFocusable( "#visibleAncestor-divWithNegativeTabindex", "div with tabindex" );
+	assert.isFocusable( "#nestedVisibilityInheritWithVisibleAncestor",
 			"span, visibility: inherit inside visibility: visible parent" );
-	isFocusable( "#nestedVisibilityInheritWithVisibleAncestor-input",
+	assert.isFocusable( "#nestedVisibilityInheritWithVisibleAncestor-input",
 			"input, visibility: inherit inside visibility: visible parent" );
 } );
 
-test( "focusable - disabled elements", function() {
-	expect( 9 );
+QUnit.test( "focusable - disabled elements", function( assert ) {
+	assert.expect( 9 );
 
-	isNotFocusable( "#disabledElement-inputTypeNone", "input, no type" );
-	isNotFocusable( "#disabledElement-inputTypeText", "input, type text" );
-	isNotFocusable( "#disabledElement-inputTypeCheckbox", "input, type checkbox" );
-	isNotFocusable( "#disabledElement-inputTypeRadio", "input, type radio" );
-	isNotFocusable( "#disabledElement-inputTypeButton", "input, type button" );
-	isNotFocusable( "#disabledElement-inputTypeHidden", "input, type hidden" );
-	isNotFocusable( "#disabledElement-button", "button" );
-	isNotFocusable( "#disabledElement-select", "select" );
-	isNotFocusable( "#disabledElement-textarea", "textarea" );
+	assert.isNotFocusable( "#disabledElement-inputTypeNone", "input, no type" );
+	assert.isNotFocusable( "#disabledElement-inputTypeText", "input, type text" );
+	assert.isNotFocusable( "#disabledElement-inputTypeCheckbox", "input, type checkbox" );
+	assert.isNotFocusable( "#disabledElement-inputTypeRadio", "input, type radio" );
+	assert.isNotFocusable( "#disabledElement-inputTypeButton", "input, type button" );
+	assert.isNotFocusable( "#disabledElement-inputTypeHidden", "input, type hidden" );
+	assert.isNotFocusable( "#disabledElement-button", "button" );
+	assert.isNotFocusable( "#disabledElement-select", "select" );
+	assert.isNotFocusable( "#disabledElement-textarea", "textarea" );
 } );
 
-test( "focusable - hidden styles", function() {
-	expect( 12 );
+QUnit.test( "focusable - hidden styles", function( assert ) {
+	assert.expect( 12 );
 
-	isNotFocusable( "#displayNoneAncestor-input", "input, display: none parent" );
-	isNotFocusable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
+	assert.isNotFocusable( "#displayNoneAncestor-input", "input, display: none parent" );
+	assert.isNotFocusable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
 
-	isNotFocusable( "#visibilityHiddenAncestor-input", "input, visibility: hidden parent" );
-	isNotFocusable( "#visibilityHiddenAncestor-span", "span with tabindex, visibility: hidden parent" );
+	assert.isNotFocusable( "#visibilityHiddenAncestor-input", "input, visibility: hidden parent" );
+	assert.isNotFocusable( "#visibilityHiddenAncestor-span", "span with tabindex, visibility: hidden parent" );
 
-	isFocusable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
-	isFocusable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
+	assert.isFocusable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
+	assert.isFocusable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
 
-	isNotFocusable( "#nestedVisibilityInheritWithHiddenAncestor", "span, visibility: inherit inside visibility: hidden parent" );
-	isNotFocusable( "#nestedVisibilityInheritWithHiddenAncestor-input", "input, visibility: inherit inside visibility: hidden parent" );
+	assert.isNotFocusable( "#nestedVisibilityInheritWithHiddenAncestor", "span, visibility: inherit inside visibility: hidden parent" );
+	assert.isNotFocusable( "#nestedVisibilityInheritWithHiddenAncestor-input", "input, visibility: inherit inside visibility: hidden parent" );
 
-	isNotFocusable( "#displayNone-input", "input, display: none" );
-	isNotFocusable( "#visibilityHidden-input", "input, visibility: hidden" );
+	assert.isNotFocusable( "#displayNone-input", "input, display: none" );
+	assert.isNotFocusable( "#visibilityHidden-input", "input, visibility: hidden" );
 
-	isNotFocusable( "#displayNone-span", "span with tabindex, display: none" );
-	isNotFocusable( "#visibilityHidden-span", "span with tabindex, visibility: hidden" );
+	assert.isNotFocusable( "#displayNone-span", "span with tabindex, display: none" );
+	assert.isNotFocusable( "#visibilityHidden-span", "span with tabindex, visibility: hidden" );
 } );
 
-test( "focusable - natively focusable with various tabindex", function() {
-	expect( 4 );
+QUnit.test( "focusable - natively focusable with various tabindex", function( assert ) {
+	assert.expect( 4 );
 
-	isFocusable( "#inputTabindex0", "input, tabindex 0" );
-	isFocusable( "#inputTabindex10", "input, tabindex 10" );
-	isFocusable( "#inputTabindex-1", "input, tabindex -1" );
-	isFocusable( "#inputTabindex-50", "input, tabindex -50" );
+	assert.isFocusable( "#inputTabindex0", "input, tabindex 0" );
+	assert.isFocusable( "#inputTabindex10", "input, tabindex 10" );
+	assert.isFocusable( "#inputTabindex-1", "input, tabindex -1" );
+	assert.isFocusable( "#inputTabindex-50", "input, tabindex -50" );
 } );
 
-test( "focusable - not natively focusable with various tabindex", function() {
-	expect( 4 );
+QUnit.test( "focusable - not natively focusable with various tabindex", function( assert ) {
+	assert.expect( 4 );
 
-	isFocusable( "#spanTabindex0", "span, tabindex 0" );
-	isFocusable( "#spanTabindex10", "span, tabindex 10" );
-	isFocusable( "#spanTabindex-1", "span, tabindex -1" );
-	isFocusable( "#spanTabindex-50", "span, tabindex -50" );
+	assert.isFocusable( "#spanTabindex0", "span, tabindex 0" );
+	assert.isFocusable( "#spanTabindex10", "span, tabindex 10" );
+	assert.isFocusable( "#spanTabindex-1", "span, tabindex -1" );
+	assert.isFocusable( "#spanTabindex-50", "span, tabindex -50" );
 } );
 
-test( "focusable - area elements", function() {
-	expect( 3 );
+QUnit.test( "focusable - area elements", function( assert ) {
+	assert.expect( 3 );
 
-	isFocusable( "#areaCoordsHref", "coords and href" );
-	isFocusable( "#areaNoCoordsHref", "href but no coords" );
-	isNotFocusable( "#areaNoImg", "not associated with an image" );
+	assert.isFocusable( "#areaCoordsHref", "coords and href" );
+	assert.isFocusable( "#areaNoCoordsHref", "href but no coords" );
+	assert.isNotFocusable( "#areaNoImg", "not associated with an image" );
 } );
 
-test( "focusable - dimensionless parent with overflow", function() {
-	expect( 1 );
+QUnit.test( "focusable - dimensionless parent with overflow", function( assert ) {
+	assert.expect( 1 );
 
-	isFocusable( "#dimensionlessParent", "input" );
+	assert.isFocusable( "#dimensionlessParent", "input" );
 } );
 
-test( "tabbable - visible, enabled elements", function() {
-	expect( 18 );
+QUnit.test( "tabbable - visible, enabled elements", function( assert ) {
+	assert.expect( 20 );
 
-	isNotTabbable( "#formNoTabindex", "form" );
-	isTabbable( "#formTabindex", "form with tabindex" );
-	isTabbable( "#visibleAncestor-inputTypeNone", "input, no type" );
-	isTabbable( "#visibleAncestor-inputTypeText", "input, type text" );
-	isTabbable( "#visibleAncestor-inputTypeCheckbox", "input, type checkbox" );
-	isTabbable( "#visibleAncestor-inputTypeRadio", "input, type radio" );
-	isTabbable( "#visibleAncestor-inputTypeButton", "input, type button" );
-	isNotTabbable( "#visibleAncestor-inputTypeHidden", "input, type hidden" );
-	isTabbable( "#visibleAncestor-button", "button" );
-	isTabbable( "#visibleAncestor-select", "select" );
-	isTabbable( "#visibleAncestor-textarea", "textarea" );
-	isTabbable( "#visibleAncestor-object", "object" );
-	isTabbable( "#visibleAncestor-anchorWithHref", "anchor with href" );
-	isNotTabbable( "#visibleAncestor-anchorWithoutHref", "anchor without href" );
-	isNotTabbable( "#visibleAncestor-span", "span" );
-	isNotTabbable( "#visibleAncestor-div", "div" );
-	isTabbable( "#visibleAncestor-spanWithTabindex", "span with tabindex" );
-	isNotTabbable( "#visibleAncestor-divWithNegativeTabindex", "div with tabindex" );
+	assert.isNotTabbable( "#formNoTabindex", "form" );
+	assert.isTabbable( "#formTabindex", "form with tabindex" );
+	assert.isTabbable( "#enabledFieldset input", "input in enabled fieldset" );
+	assert.isNotTabbable( "#disabledFieldset input", "input in disabled fieldset" );
+	assert.isTabbable( "#visibleAncestor-inputTypeNone", "input, no type" );
+	assert.isTabbable( "#visibleAncestor-inputTypeText", "input, type text" );
+	assert.isTabbable( "#visibleAncestor-inputTypeCheckbox", "input, type checkbox" );
+	assert.isTabbable( "#visibleAncestor-inputTypeRadio", "input, type radio" );
+	assert.isTabbable( "#visibleAncestor-inputTypeButton", "input, type button" );
+	assert.isNotTabbable( "#visibleAncestor-inputTypeHidden", "input, type hidden" );
+	assert.isTabbable( "#visibleAncestor-button", "button" );
+	assert.isTabbable( "#visibleAncestor-select", "select" );
+	assert.isTabbable( "#visibleAncestor-textarea", "textarea" );
+	assert.isTabbable( "#visibleAncestor-object", "object" );
+	assert.isTabbable( "#visibleAncestor-anchorWithHref", "anchor with href" );
+	assert.isNotTabbable( "#visibleAncestor-anchorWithoutHref", "anchor without href" );
+	assert.isNotTabbable( "#visibleAncestor-span", "span" );
+	assert.isNotTabbable( "#visibleAncestor-div", "div" );
+	assert.isTabbable( "#visibleAncestor-spanWithTabindex", "span with tabindex" );
+	assert.isNotTabbable( "#visibleAncestor-divWithNegativeTabindex", "div with tabindex" );
 } );
 
-test( "tabbable - disabled elements", function() {
-	expect( 9 );
+QUnit.test( "tabbable - disabled elements", function( assert ) {
+	assert.expect( 9 );
 
-	isNotTabbable( "#disabledElement-inputTypeNone", "input, no type" );
-	isNotTabbable( "#disabledElement-inputTypeText", "input, type text" );
-	isNotTabbable( "#disabledElement-inputTypeCheckbox", "input, type checkbox" );
-	isNotTabbable( "#disabledElement-inputTypeRadio", "input, type radio" );
-	isNotTabbable( "#disabledElement-inputTypeButton", "input, type button" );
-	isNotTabbable( "#disabledElement-inputTypeHidden", "input, type hidden" );
-	isNotTabbable( "#disabledElement-button", "button" );
-	isNotTabbable( "#disabledElement-select", "select" );
-	isNotTabbable( "#disabledElement-textarea", "textarea" );
+	assert.isNotTabbable( "#disabledElement-inputTypeNone", "input, no type" );
+	assert.isNotTabbable( "#disabledElement-inputTypeText", "input, type text" );
+	assert.isNotTabbable( "#disabledElement-inputTypeCheckbox", "input, type checkbox" );
+	assert.isNotTabbable( "#disabledElement-inputTypeRadio", "input, type radio" );
+	assert.isNotTabbable( "#disabledElement-inputTypeButton", "input, type button" );
+	assert.isNotTabbable( "#disabledElement-inputTypeHidden", "input, type hidden" );
+	assert.isNotTabbable( "#disabledElement-button", "button" );
+	assert.isNotTabbable( "#disabledElement-select", "select" );
+	assert.isNotTabbable( "#disabledElement-textarea", "textarea" );
 } );
 
-test( "tabbable - hidden styles", function() {
-	expect( 10 );
+QUnit.test( "tabbable - hidden styles", function( assert ) {
+	assert.expect( 10 );
 
-	isNotTabbable( "#displayNoneAncestor-input", "input, display: none parent" );
-	isNotTabbable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
+	assert.isNotTabbable( "#displayNoneAncestor-input", "input, display: none parent" );
+	assert.isNotTabbable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
 
-	isNotTabbable( "#visibilityHiddenAncestor-input", "input, visibility: hidden parent" );
-	isNotTabbable( "#visibilityHiddenAncestor-span", "span with tabindex, visibility: hidden parent" );
+	assert.isNotTabbable( "#visibilityHiddenAncestor-input", "input, visibility: hidden parent" );
+	assert.isNotTabbable( "#visibilityHiddenAncestor-span", "span with tabindex, visibility: hidden parent" );
 
-	isTabbable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
-	isTabbable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
+	assert.isTabbable( "#nestedVisibilityOverrideAncestor-input", "input, visibility: visible parent but visibility: hidden grandparent" );
+	assert.isTabbable( "#nestedVisibilityOverrideAncestor-span", "span with tabindex, visibility: visible parent but visibility: hidden grandparent " );
 
-	isNotTabbable( "#displayNone-input", "input, display: none" );
-	isNotTabbable( "#visibilityHidden-input", "input, visibility: hidden" );
+	assert.isNotTabbable( "#displayNone-input", "input, display: none" );
+	assert.isNotTabbable( "#visibilityHidden-input", "input, visibility: hidden" );
 
-	isNotTabbable( "#displayNone-span", "span with tabindex, display: none" );
-	isNotTabbable( "#visibilityHidden-span", "span with tabindex, visibility: hidden" );
+	assert.isNotTabbable( "#displayNone-span", "span with tabindex, display: none" );
+	assert.isNotTabbable( "#visibilityHidden-span", "span with tabindex, visibility: hidden" );
 } );
 
-test( "tabbable -  natively tabbable with various tabindex", function() {
-	expect( 4 );
+QUnit.test( "tabbable -  natively tabbable with various tabindex", function( assert ) {
+	assert.expect( 4 );
 
-	isTabbable( "#inputTabindex0", "input, tabindex 0" );
-	isTabbable( "#inputTabindex10", "input, tabindex 10" );
-	isNotTabbable( "#inputTabindex-1", "input, tabindex -1" );
-	isNotTabbable( "#inputTabindex-50", "input, tabindex -50" );
+	assert.isTabbable( "#inputTabindex0", "input, tabindex 0" );
+	assert.isTabbable( "#inputTabindex10", "input, tabindex 10" );
+	assert.isNotTabbable( "#inputTabindex-1", "input, tabindex -1" );
+	assert.isNotTabbable( "#inputTabindex-50", "input, tabindex -50" );
 } );
 
-test( "tabbable -  not natively tabbable with various tabindex", function() {
-	expect( 4 );
+QUnit.test( "tabbable -  not natively tabbable with various tabindex", function( assert ) {
+	assert.expect( 4 );
 
-	isTabbable( "#spanTabindex0", "span, tabindex 0" );
-	isTabbable( "#spanTabindex10", "span, tabindex 10" );
-	isNotTabbable( "#spanTabindex-1", "span, tabindex -1" );
-	isNotTabbable( "#spanTabindex-50", "span, tabindex -50" );
+	assert.isTabbable( "#spanTabindex0", "span, tabindex 0" );
+	assert.isTabbable( "#spanTabindex10", "span, tabindex 10" );
+	assert.isNotTabbable( "#spanTabindex-1", "span, tabindex -1" );
+	assert.isNotTabbable( "#spanTabindex-50", "span, tabindex -50" );
 } );
 
-test( "tabbable - area elements", function() {
-	expect( 3 );
+QUnit.test( "tabbable - area elements", function( assert ) {
+	assert.expect( 3 );
 
-	isTabbable( "#areaCoordsHref", "coords and href" );
-	isTabbable( "#areaNoCoordsHref", "href but no coords" );
-	isNotTabbable( "#areaNoImg", "not associated with an image" );
+	assert.isTabbable( "#areaCoordsHref", "coords and href" );
+	assert.isTabbable( "#areaNoCoordsHref", "href but no coords" );
+	assert.isNotTabbable( "#areaNoImg", "not associated with an image" );
 } );
 
-test( "tabbable - dimensionless parent with overflow", function() {
-	expect( 1 );
+QUnit.test( "tabbable - dimensionless parent with overflow", function( assert ) {
+	assert.expect( 1 );
 
-	isTabbable( "#dimensionlessParent", "input" );
+	assert.isTabbable( "#dimensionlessParent", "input" );
 } );
 
-test( "escapeSelector", function() {
-	expect( 1 );
+QUnit.test( "escapeSelector", function( assert ) {
+	assert.expect( 1 );
 
-	equal( $( "#" + $.ui.escapeSelector( "weird-['x']-id" ) ).length, 1,
+	assert.equal( $( "#" + $.ui.escapeSelector( "weird-['x']-id" ) ).length, 1,
 		"properly escapes selectors to use as an id" );
 } );
 

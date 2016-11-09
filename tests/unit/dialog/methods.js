@@ -1,53 +1,54 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/dialog"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "dialog: methods", {
-	teardown: function() {
+QUnit.module( "dialog: methods", {
+	afterEach: function() {
 		$( "body>.ui-dialog" ).remove();
 	}
 } );
 
-test( "init", function() {
-	expect( 6 );
+QUnit.test( "init", function( assert ) {
+	assert.expect( 6 );
 
 	$( "<div></div>" ).appendTo( "body" ).dialog().remove();
-	ok( true, ".dialog() called on element" );
+	assert.ok( true, ".dialog() called on element" );
 
 	$( [] ).dialog().remove();
-	ok( true, ".dialog() called on empty collection" );
+	assert.ok( true, ".dialog() called on empty collection" );
 
 	$( "<div></div>" ).dialog().remove();
-	ok( true, ".dialog() called on disconnected DOMElement - never connected" );
+	assert.ok( true, ".dialog() called on disconnected DOMElement - never connected" );
 
 	$( "<div></div>" ).appendTo( "body" ).remove().dialog().remove();
-	ok( true, ".dialog() called on disconnected DOMElement - removed" );
+	assert.ok( true, ".dialog() called on disconnected DOMElement - removed" );
 
 	var element = $( "<div></div>" ).dialog();
 	element.dialog( "option", "foo" );
 	element.remove();
-	ok( true, "arbitrary option getter after init" );
+	assert.ok( true, "arbitrary option getter after init" );
 
 	$( "<div></div>" ).dialog().dialog( "option", "foo", "bar" ).remove();
-	ok( true, "arbitrary option setter after init" );
+	assert.ok( true, "arbitrary option setter after init" );
 } );
 
-test( "destroy", function( assert ) {
-	expect( 17 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 17 );
 
 	var element, element2;
 
 	$( "#dialog1, #form-dialog" ).hide();
 	assert.domEqual( "#dialog1", function() {
 		var dialog = $( "#dialog1" ).dialog().dialog( "destroy" );
-		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
-		equal( dialog.index(), 0 );
+		assert.equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
+		assert.equal( dialog.index(), 0 );
 	} );
 	assert.domEqual( "#form-dialog", function() {
 		var dialog = $( "#form-dialog" ).dialog().dialog( "destroy" );
-		equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
-		equal( dialog.index(), 2 );
+		assert.equal( dialog.parent()[ 0 ], $( "#qunit-fixture" )[ 0 ] );
+		assert.equal( dialog.index(), 2 );
 	} );
 
 	// Ensure dimensions are restored (#8119)
@@ -62,102 +63,103 @@ test( "destroy", function( assert ) {
 
 	// Don't throw errors when destroying a never opened modal dialog (#9004)
 	$( "#dialog1" ).dialog( { autoOpen: false, modal: true } ).dialog( "destroy" );
-	equal( $( ".ui-widget-overlay" ).length, 0, "overlay does not exist" );
-	equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays" );
+	assert.equal( $( ".ui-widget-overlay" ).length, 0, "overlay does not exist" );
+	assert.equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays" );
 
 	element = $( "#dialog1" ).dialog( { modal: true } ),
 	element2 = $( "#dialog2" ).dialog( { modal: true } );
-	equal( $( ".ui-widget-overlay" ).length, 2, "overlays created when dialogs are open" );
-	equal( $( document ).data( "ui-dialog-overlays" ), 2, "ui-dialog-overlays equals the number of open overlays" );
+	assert.equal( $( ".ui-widget-overlay" ).length, 2, "overlays created when dialogs are open" );
+	assert.equal( $( document ).data( "ui-dialog-overlays" ), 2, "ui-dialog-overlays equals the number of open overlays" );
 	element.dialog( "close" );
-	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after closing one dialog" );
-	equal( $( document ).data( "ui-dialog-overlays" ), 1, "ui-dialog-overlays equals the number of open overlays" );
+	assert.equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after closing one dialog" );
+	assert.equal( $( document ).data( "ui-dialog-overlays" ), 1, "ui-dialog-overlays equals the number of open overlays" );
 	element.dialog( "destroy" );
-	equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after destroying one dialog" );
-	equal( $( document ).data( "ui-dialog-overlays" ), 1, "ui-dialog-overlays equals the number of open overlays" );
+	assert.equal( $( ".ui-widget-overlay" ).length, 1, "overlay remains after destroying one dialog" );
+	assert.equal( $( document ).data( "ui-dialog-overlays" ), 1, "ui-dialog-overlays equals the number of open overlays" );
 	element2.dialog( "destroy" );
-	equal( $( ".ui-widget-overlay" ).length, 0, "overlays removed when all dialogs are destoryed" );
-	equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays" );
+	assert.equal( $( ".ui-widget-overlay" ).length, 0, "overlays removed when all dialogs are destoryed" );
+	assert.equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays" );
 } );
 
-asyncTest( "#9000: Dialog leaves broken event handler after close/destroy in certain cases", function() {
-	expect( 1 );
+QUnit.test( "#9000: Dialog leaves broken event handler after close/destroy in certain cases", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 	$( "#dialog1" ).dialog( { modal:true } ).dialog( "close" ).dialog( "destroy" );
 	setTimeout( function() {
 		$( "#favorite-animal" ).trigger( "focus" );
-		ok( true, "close and destroy modal dialog before its really opened" );
-		start();
+		assert.ok( true, "close and destroy modal dialog before its really opened" );
+		ready();
 	} );
 } );
 
-test( "#4980: Destroy should place element back in original DOM position", function() {
-	expect( 2 );
+QUnit.test( "#4980: Destroy should place element back in original DOM position", function( assert ) {
+	assert.expect( 2 );
 	var container = $( "<div id='container'><div id='modal'>Content</div></div>" ),
 		modal = container.find( "#modal" );
 	modal.dialog();
-	ok( !$.contains( container[ 0 ], modal[ 0 ] ), "dialog should move modal element to outside container element" );
+	assert.ok( !$.contains( container[ 0 ], modal[ 0 ] ), "dialog should move modal element to outside container element" );
 	modal.dialog( "destroy" );
-	ok( $.contains( container[ 0 ], modal[ 0 ] ), "dialog(destroy) should place element back in original DOM position" );
+	assert.ok( $.contains( container[ 0 ], modal[ 0 ] ), "dialog(destroy) should place element back in original DOM position" );
 } );
 
-test( "enable/disable disabled", function( assert ) {
-	expect( 3 );
+QUnit.test( "enable/disable disabled", function( assert ) {
+	assert.expect( 3 );
 	var element = $( "<div></div>" ).dialog();
 	element.dialog( "disable" );
-	equal( element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
+	assert.equal( element.dialog( "option", "disabled" ), false, "disable method doesn't do anything" );
 	assert.lacksClasses( element, "ui-dialog-disabled ui-state-disabled", "disable method doesn't add classes" );
-	ok( !element.dialog( "widget" ).attr( "aria-disabled" ), "disable method doesn't add aria-disabled" );
+	assert.ok( !element.dialog( "widget" ).attr( "aria-disabled" ), "disable method doesn't add aria-disabled" );
 } );
 
-test( "close", function() {
-	expect( 3 );
+QUnit.test( "close", function( assert ) {
+	assert.expect( 3 );
 
 	var element,
 		expected = $( "<div></div>" ).dialog(),
 		actual = expected.dialog( "close" );
-	equal( actual, expected, "close is chainable" );
+	assert.equal( actual, expected, "close is chainable" );
 
 	element = $( "<div></div>" ).dialog();
-	ok( element.dialog( "widget" ).is( ":visible" ) && !element.dialog( "widget" ).is( ":hidden" ), "dialog visible before close method called" );
+	assert.ok( element.dialog( "widget" ).is( ":visible" ) && !element.dialog( "widget" ).is( ":hidden" ), "dialog visible before close method called" );
 	element.dialog( "close" );
-	ok( element.dialog( "widget" ).is( ":hidden" ) && !element.dialog( "widget" ).is( ":visible" ), "dialog hidden after close method called" );
+	assert.ok( element.dialog( "widget" ).is( ":hidden" ) && !element.dialog( "widget" ).is( ":visible" ), "dialog hidden after close method called" );
 } );
 
-test( "isOpen", function() {
-	expect( 4 );
+QUnit.test( "isOpen", function( assert ) {
+	assert.expect( 4 );
 
 	var element = $( "<div></div>" ).dialog();
-	equal( element.dialog( "isOpen" ), true, "dialog is open after init" );
+	assert.equal( element.dialog( "isOpen" ), true, "dialog is open after init" );
 	element.dialog( "close" );
-	equal( element.dialog( "isOpen" ), false, "dialog is closed" );
+	assert.equal( element.dialog( "isOpen" ), false, "dialog is closed" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( { autoOpen: false } );
-	equal( element.dialog( "isOpen" ), false, "dialog is closed after init" );
+	assert.equal( element.dialog( "isOpen" ), false, "dialog is closed after init" );
 	element.dialog( "open" );
-	equal( element.dialog( "isOpen" ), true, "dialog is open" );
+	assert.equal( element.dialog( "isOpen" ), true, "dialog is open" );
 	element.remove();
 } );
 
-test( "moveToTop", function() {
-	expect( 5 );
+QUnit.test( "moveToTop", function( assert ) {
+	assert.expect( 5 );
 	function order() {
 		var actual = $( ".ui-dialog" ).map( function() {
 			return +$( this ).css( "z-index" );
 		} ).get();
-		deepEqual( actual, $.makeArray( arguments ) );
+		assert.deepEqual( actual, $.makeArray( arguments ) );
 	}
 	var dialog1, dialog2,
 		focusOn = "dialog1";
 	dialog1 = $( "#dialog1" ).dialog( {
 		focus: function() {
-			equal( focusOn, "dialog1" );
+			assert.equal( focusOn, "dialog1" );
 		}
 	} );
 	focusOn = "dialog2";
 	dialog2 = $( "#dialog2" ).dialog( {
 		focus: function() {
-			equal( focusOn, "dialog2" );
+			assert.equal( focusOn, "dialog2" );
 		}
 	} );
 	order( 100, 101 );
@@ -166,57 +168,58 @@ test( "moveToTop", function() {
 	order( 102, 101 );
 } );
 
-test( "moveToTop: content scroll stays intact", function() {
-	expect( 2 );
+QUnit.test( "moveToTop: content scroll stays intact", function( assert ) {
+	assert.expect( 2 );
 	var otherDialog = $( "#dialog1" ).dialog(),
 		scrollDialog = $( "#form-dialog" ).dialog( {
 			height: 200
 		} );
 	scrollDialog.scrollTop( 50 );
-	equal( scrollDialog.scrollTop(), 50 );
+	assert.equal( scrollDialog.scrollTop(), 50 );
 
 	otherDialog.dialog( "moveToTop" );
-	equal( scrollDialog.scrollTop(), 50 );
+	assert.equal( scrollDialog.scrollTop(), 50 );
 } );
 
-test( "open", function() {
-	expect( 3 );
+QUnit.test( "open", function( assert ) {
+	assert.expect( 3 );
 	var element,
 		expected = $( "<div></div>" ).dialog(),
 		actual = expected.dialog( "open" );
-	equal( actual, expected, "open is chainable" );
+	assert.equal( actual, expected, "open is chainable" );
 
 	element = $( "<div></div>" ).dialog( { autoOpen: false } );
-	ok( element.dialog( "widget" ).is( ":hidden" ) && !element.dialog( "widget" ).is( ":visible" ), "dialog hidden before open method called" );
+	assert.ok( element.dialog( "widget" ).is( ":hidden" ) && !element.dialog( "widget" ).is( ":visible" ), "dialog hidden before open method called" );
 	element.dialog( "open" );
-	ok( element.dialog( "widget" ).is( ":visible" ) && !element.dialog( "widget" ).is( ":hidden" ), "dialog visible after open method called" );
+	assert.ok( element.dialog( "widget" ).is( ":visible" ) && !element.dialog( "widget" ).is( ":hidden" ), "dialog visible after open method called" );
 } );
 
 // http://bugs.jqueryui.com/ticket/6137
-test( "Ensure form elements don't reset when opening a dialog", function() {
-	expect( 2 );
+QUnit.test( "Ensure form elements don't reset when opening a dialog", function( assert ) {
+	assert.expect( 2 );
 
 	var d1 = $( "<form><input type='radio' name='radio' id='a' value='a' checked='checked'></input>" +
 				"<input type='radio' name='radio' id='b' value='b'>b</input></form>" ).appendTo( "body" ).dialog( { autoOpen: false } );
 
 	d1.find( "#b" ).prop( "checked", true );
-	equal( d1.find( "input:checked" ).val(), "b", "checkbox b is checked" );
+	assert.equal( d1.find( "input:checked" ).val(), "b", "checkbox b is checked" );
 
 	d1.dialog( "open" );
-	equal( d1.find( "input:checked" ).val(), "b", "checkbox b is checked" );
+	assert.equal( d1.find( "input:checked" ).val(), "b", "checkbox b is checked" );
 
 	d1.remove();
 } );
 
-asyncTest( "#8958: dialog can be opened while opening", function() {
-	expect( 1 );
+QUnit.test( "#8958: dialog can be opened while opening", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 
 	var element = $( "<div>" ).dialog( {
 		autoOpen: false,
 		modal: true,
 		open: function() {
-			equal( $( ".ui-widget-overlay" ).length, 1 );
-			start();
+			assert.equal( $( ".ui-widget-overlay" ).length, 1 );
+			ready();
 		}
 	} );
 
@@ -244,24 +247,24 @@ asyncTest( "#8958: dialog can be opened while opening", function() {
 		.trigger( "focus" );
 } );
 
-test( "#5531: dialog width should be at least minWidth on creation", function() {
-	expect( 4 );
+QUnit.test( "#5531: dialog width should be at least minWidth on creation", function( assert ) {
+	assert.expect( 4 );
 	var element = $( "<div></div>" ).dialog( {
 			width: 200,
 			minWidth: 300
 		} );
 
-	equal( element.dialog( "option", "width" ), 300, "width is minWidth" );
+	assert.equal( element.dialog( "option", "width" ), 300, "width is minWidth" );
 	element.dialog( "option", "width", 200 );
-	equal( element.dialog( "option", "width" ), 300, "width unchanged when set to < minWidth" );
+	assert.equal( element.dialog( "option", "width" ), 300, "width unchanged when set to < minWidth" );
 	element.dialog( "option", "width", 320 );
-	equal( element.dialog( "option", "width" ), 320, "width changed if set to > minWidth" );
+	assert.equal( element.dialog( "option", "width" ), 320, "width changed if set to > minWidth" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( {
 			minWidth: 300
 		} );
-	ok( element.dialog( "option", "width" ) >=  300, "width is at least 300" );
+	assert.ok( element.dialog( "option", "width" ) >=  300, "width is at least 300" );
 	element.remove();
 
 } );

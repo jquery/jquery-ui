@@ -1,4 +1,5 @@
 define( [
+	"qunit",
 	"jquery",
 	"lib/common",
 	"ui/effect",
@@ -17,31 +18,32 @@ define( [
 	"ui/effects/effect-size",
 	"ui/effects/effect-slide",
 	"ui/effects/effect-transfer"
-], function( $, common ) {
+], function( QUnit, $, common ) {
 
-function present( value, array, message ) {
-	QUnit.push( jQuery.inArray( value, array ) !== -1, value, array, message );
-}
+QUnit.assert.present = function( value, array, message ) {
+	this.push( jQuery.inArray( value, array ) !== -1, value, array, message );
+};
 
-function notPresent( value, array, message ) {
-	QUnit.push( jQuery.inArray( value, array ) === -1, value, array, message );
-}
+QUnit.assert.notPresent = function( value, array, message ) {
+	this.push( jQuery.inArray( value, array ) === -1, value, array, message );
+};
 
-// minDuration is used for "short" animate tests where we are only concerned about the final
-var minDuration = 15,
+// MinDuration is used for "short" animate tests where we are only concerned about the final
+var minDuration = 60,
 
 	// Duration is used for "long" animates where we plan on testing properties during animation
 	duration = 200;
 
-module( "effects.core" );
+QUnit.module( "effects.core" );
 
 // TODO: test all signatures of .show(), .hide(), .toggle().
 // Look at core's signatures and UI's signatures.
-asyncTest( ".hide() with step", function() {
-	expect( 1 );
+QUnit.test( ".hide() with step", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 	var element = $( "#elem" ),
 		step = function() {
-			ok( true, "step callback invoked" );
+			assert.ok( true, "step callback invoked" );
 			step = $.noop;
 		};
 
@@ -49,71 +51,74 @@ asyncTest( ".hide() with step", function() {
 		step: function() {
 			step();
 		},
-		complete: start
+		complete: ready
 	} );
 } );
 
-test( "Immediate Return Conditions", function() {
+QUnit.test( "Immediate Return Conditions", function( assert ) {
 	var hidden = $( "div.hidden" ),
 		count = 0;
-	expect( 3 );
+	assert.expect( 3 );
 	hidden.hide( "blind", function() {
-		equal( ++count, 1, "Hide on hidden returned immediately" );
+		assert.equal( ++count, 1, "Hide on hidden returned immediately" );
 	} ).show().show( "blind", function() {
-		equal( ++count, 2, "Show on shown returned immediately" );
+		assert.equal( ++count, 2, "Show on shown returned immediately" );
 	} );
-	equal( ++count, 3, "Both Functions worked properly" );
+	assert.equal( ++count, 3, "Both Functions worked properly" );
 } );
 
-test( ".hide() with hidden parent", function() {
-	expect( 1 );
+QUnit.test( ".hide() with hidden parent", function( assert ) {
+	assert.expect( 1 );
 	var element = $( "div.hidden" ).children();
 	element.hide( "blind", function() {
-		equal( element.css( "display" ), "none", "display: none" );
+		assert.equal( element.css( "display" ), "none", "display: none" );
 	} );
 } );
 
-asyncTest( "Parse of null for options", function() {
+QUnit.test( "Parse of null for options", function( assert ) {
+	var ready = assert.async();
 	var hidden = $( "div.hidden" ),
 		count = 0;
-	expect( 1 );
+	assert.expect( 1 );
 	hidden.show( "blind", null, 1, function() {
-		equal( ++count, 1, "null for options still works" );
-		start();
+		assert.equal( ++count, 1, "null for options still works" );
+		ready();
 	} );
 } );
 
-test( "removeClass", function() {
-	expect( 3 );
+QUnit.test( "removeClass", function( assert ) {
+	assert.expect( 3 );
 
 	var element = $( "<div>" );
-	equal( "", element[ 0 ].className );
+	assert.equal( "", element[ 0 ].className );
 	element.addClass( "destroyed" );
-	equal( "destroyed", element[ 0 ].className );
+	assert.equal( "destroyed", element[ 0 ].className );
 	element.removeClass();
-	equal( "", element[ 0 ].className );
+	assert.equal( "", element[ 0 ].className );
 } );
 
-module( "effects.core: animateClass" );
+QUnit.module( "effects.core: animateClass" );
 
-asyncTest( "animateClass works with borderStyle", function() {
+QUnit.test( "animateClass works with borderStyle", function( assert ) {
+	var ready = assert.async();
 	var test = $( "div.animateClass" );
-	expect( 3 );
+	assert.expect( 3 );
 	test.toggleClass( "testAddBorder", minDuration, function() {
 		test.toggleClass( "testAddBorder", minDuration, function() {
-			equal( test.css( "borderLeftStyle" ), "none", "None border set" );
-			start();
+			assert.equal( test.css( "borderLeftStyle" ), "none", "None border set" );
+			ready();
 		} );
-		equal( test.css( "borderLeftStyle" ), "solid", "None border not immedately set" );
+		assert.equal( test.css( "borderLeftStyle" ), "solid", "None border not immedately set" );
 	} );
-	equal( test.css( "borderLeftStyle" ), "solid", "Solid border immedately set" );
+	assert.equal( test.css( "borderLeftStyle" ), "solid", "Solid border immedately set" );
 } );
 
-asyncTest( "animateClass works with colors", function() {
+QUnit.test( "animateClass works with colors", function( assert ) {
+	var ready = assert.async();
 	var test = $( "div.animateClass" ),
 		oldStep = jQuery.fx.step.backgroundColor;
 
-	expect( 2 );
+	assert.expect( 2 );
 
 	// We want to catch the first frame of animation
 	jQuery.fx.step.backgroundColor = function( fx ) {
@@ -122,7 +127,7 @@ asyncTest( "animateClass works with colors", function() {
 		// Make sure it has animated somewhere we can detect
 		if ( fx.pos > 255 / 2000 ) {
 			jQuery.fx.step.backgroundColor = oldStep;
-			notPresent( test.css( "backgroundColor" ),
+			assert.notPresent( test.css( "backgroundColor" ),
 				[ "#000000", "#ffffff", "#000", "#fff", "rgb(0, 0, 0)", "rgb(255,255,255)" ],
 				"Color is not endpoints in middle." );
 			test.stop( true, true );
@@ -132,18 +137,20 @@ asyncTest( "animateClass works with colors", function() {
 	test.toggleClass( "testChangeBackground", {
 		duration: 2000,
 		complete: function() {
-			present( test.css( "backgroundColor" ), [ "#ffffff", "#fff", "rgb(255, 255, 255)" ], "Color is final" );
-			start();
+			assert.present( test.css( "backgroundColor" ), [ "#ffffff", "#fff", "rgb(255, 255, 255)" ], "Color is final" );
+			ready();
 		}
 	} );
 } );
 
-asyncTest( "animateClass calls step option", 1, function() {
+QUnit.test( "animateClass calls step option", function( assert ) {
+	assert.expect( 1 );
+	var ready = assert.async();
 	var test = jQuery( "div.animateClass" ),
 		step = function() {
-			ok( true, "Step Function Called" );
+			assert.ok( true, "Step Function Called" );
 			test.stop();
-			start();
+			ready();
 			step = $.noop;
 		};
 	test.toggleClass( "testChangeBackground", {
@@ -153,7 +160,9 @@ asyncTest( "animateClass calls step option", 1, function() {
 	} );
 } );
 
-asyncTest( "animateClass works with children", 3, function() {
+QUnit.test( "animateClass works with children", function( assert ) {
+	assert.expect( 3 );
+	var ready = assert.async();
 	var animatedChild,
 		test = $( "div.animateClass" ),
 		h2 = test.find( "h2" );
@@ -162,55 +171,61 @@ asyncTest( "animateClass works with children", 3, function() {
 		children: true,
 		duration: duration,
 		complete: function() {
-			equal( h2.css( "fontSize" ), "20px", "Text size is final during complete" );
+			assert.equal( h2.css( "fontSize" ), "20px", "Text size is final during complete" );
 			test.toggleClass( "testChildren", {
 				duration: duration,
 				complete: function() {
-					equal( h2.css( "fontSize" ), "10px", "Text size revertted after class removed" );
+					assert.equal( h2.css( "fontSize" ), "10px", "Text size revertted after class removed" );
 
-					start();
+					ready();
 				},
 				step: function( val, fx ) {
 					if ( fx.elem === h2[ 0 ] ) {
-						ok( false, "Error - Animating property on h2" );
+						assert.ok( false, "Error - Animating property on h2" );
 					}
 				}
 			} );
 		},
 		step: function( val, fx ) {
 			if ( fx.prop === "fontSize" && fx.elem === h2[ 0 ] && !animatedChild ) {
-				equal( fx.end, 20, "animating font size on child" );
+				assert.equal( fx.end, 20, "animating font size on child" );
 				animatedChild = true;
 			}
 		}
 	} );
 } );
 
-asyncTest( "animateClass clears style properties when stopped", function() {
+QUnit.test( "animateClass clears style properties when stopped", function( assert ) {
+	var ready = assert.async();
 	var test = $( "div.animateClass" ),
 		style = test[ 0 ].style,
 		orig = style.cssText;
 
-	expect( 2 );
+	assert.expect( 2 );
 
 	test.addClass( "testChangeBackground", duration );
-	notEqual( orig, style.cssText, "cssText is not the same after starting animation" );
+	assert.notEqual( orig, style.cssText, "cssText is not the same after starting animation" );
 
-	test.stop( true, true );
-	equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
-	start();
+	test
+		.stop( true, true )
+		.promise()
+		.then( function() {
+			assert.equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
+			ready();
+		} );
 } );
 
-asyncTest( "animateClass: css and class changes during animation are not lost (#7106)",
+QUnit.test( "animateClass: css and class changes during animation are not lost (#7106)",
 function( assert ) {
-	expect( 2 );
+	var ready = assert.async();
+	assert.expect( 2 );
 	var test = $( "div.ticket7106" );
 
 	// Ensure the class stays and that the css property stays
 	function animationComplete() {
 		assert.hasClasses( test, "testClass", "class change during animateClass was not lost" );
-		equal( test.height(), 100, "css change during animateClass was not lost" );
-		start();
+		assert.equal( test.height(), 100, "css change during animateClass was not lost" );
+		ready();
 	}
 
 	// Add a class and change a style property after starting an animated class
@@ -219,17 +234,17 @@ function( assert ) {
 		.height( 100 );
 } );
 
-test( "createPlaceholder: only created for static or relative elements", function() {
-	expect( 4 );
+QUnit.test( "createPlaceholder: only created for static or relative elements", function( assert ) {
+	assert.expect( 4 );
 
-	ok( $.effects.createPlaceholder( $( ".relative" ) ).length, "placeholder created for relative element" );
-	ok( $.effects.createPlaceholder( $( ".static" ) ).length, "placeholder created for static element" );
-	ok( !$.effects.createPlaceholder( $( ".absolute" ) ), "placeholder not created for absolute element" );
-	ok( !$.effects.createPlaceholder( $( ".fixed" ) ), "placeholder not created for fixed element" );
+	assert.ok( $.effects.createPlaceholder( $( ".relative" ) ).length, "placeholder created for relative element" );
+	assert.ok( $.effects.createPlaceholder( $( ".static" ) ).length, "placeholder created for static element" );
+	assert.ok( !$.effects.createPlaceholder( $( ".absolute" ) ), "placeholder not created for absolute element" );
+	assert.ok( !$.effects.createPlaceholder( $( ".fixed" ) ), "placeholder not created for fixed element" );
 } );
 
-test( "createPlaceholder: preserves layout affecting properties", function() {
-	expect( 7 );
+QUnit.test( "createPlaceholder: preserves layout affecting properties", function( assert ) {
+	assert.expect( 7 );
 
 	var position = 5,
 		element = $( ".relative" ).css( {
@@ -248,20 +263,21 @@ test( "createPlaceholder: preserves layout affecting properties", function() {
 	// Placeholders are only placed to preserve the effect on layout. Considering
 	// top and left do not change layout, they are not preserved, which makes some
 	// of the math simpler in the implementation.
-	deepEqual( before.offset.top - position, placeholder.offset().top, "offset top preserved" );
-	deepEqual( before.offset.left - position, placeholder.offset().left, "offset left preserved" );
-	deepEqual( before.position.top - position, placeholder.position().top, "position top preserved" );
-	deepEqual( before.position.left - position, placeholder.position().left, "position left preserved" );
+	assert.deepEqual( before.offset.top - position, placeholder.offset().top, "offset top preserved" );
+	assert.deepEqual( before.offset.left - position, placeholder.offset().left, "offset left preserved" );
+	assert.deepEqual( before.position.top - position, placeholder.position().top, "position top preserved" );
+	assert.deepEqual( before.position.left - position, placeholder.position().left, "position left preserved" );
 
-	deepEqual( before[ "float" ], placeholder.css( "float" ), "float preserved" );
-	deepEqual( before.outerWidth, placeholder.outerWidth( true ), "width preserved" );
-	deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
+	assert.deepEqual( before[ "float" ], placeholder.css( "float" ), "float preserved" );
+	assert.deepEqual( before.outerWidth, placeholder.outerWidth( true ), "width preserved" );
+	assert.deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
 } );
 
-module( "transfer" );
+QUnit.module( "transfer" );
 
-asyncTest( "transfer() without callback", function() {
-	expect( 0 );
+QUnit.test( "transfer() without callback", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 0 );
 
 	// Verify that the effect works without a callback
 	$( "#elem" ).transfer( {
@@ -269,31 +285,33 @@ asyncTest( "transfer() without callback", function() {
 		duration: 1
 	} );
 	setTimeout( function() {
-		start();
+		ready();
 	}, 25 );
 } );
 
-asyncTest( "transfer() with callback", function() {
-	expect( 1 );
+QUnit.test( "transfer() with callback", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 	$( "#elem" ).transfer( {
 		to: ".animateClass",
 		duration: 1
 	}, function() {
-		ok( true, "callback invoked" );
-		start();
+		assert.ok( true, "callback invoked" );
+		ready();
 	} );
 } );
 
 $.each( $.effects.effect, function( effect ) {
-	module( "effects." + effect );
+	QUnit.module( "effects." + effect );
 
 	common.testJshint( "effects/effect-" + effect );
 
 	if ( effect === "transfer" ) {
 		return;
 	}
-	asyncTest( "show/hide", function() {
-		expect( 12 );
+	QUnit.test( "show/hide", function( assert ) {
+		var ready = assert.async();
+		assert.expect( 12 );
 		var hidden = $( "div.hidden" ),
 			count = 0,
 			test = 0;
@@ -303,7 +321,7 @@ $.each( $.effects.effect, function( effect ) {
 			var point = count;
 			return function( next ) {
 				test++;
-				equal( point, test, "Queue function fired in order" );
+				assert.equal( point, test, "Queue function fired in order" );
 				if ( fn ) {
 					fn();
 				} else {
@@ -314,7 +332,7 @@ $.each( $.effects.effect, function( effect ) {
 
 		function duringTest( fn ) {
 			return function( next ) {
-				setTimeout( fn );
+				setTimeout( fn, minDuration / 2 );
 				next();
 			};
 		}
@@ -322,45 +340,46 @@ $.each( $.effects.effect, function( effect ) {
 		hidden
 			.queue( queueTest() )
 			.queue( duringTest( function() {
-				ok( hidden.is( ":animated" ),
+				assert.ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .show(\"" + effect + "\", time)" );
 			} ) )
 			.show( effect, minDuration, queueTest( function() {
-				equal( hidden.css( "display" ), "block",
+				assert.equal( hidden.css( "display" ), "block",
 					"Hidden is shown after .show(\"" + effect + "\", time)" );
-				ok( !$( ".ui-effects-placeholder" ).length,
+				assert.ok( !$( ".ui-effects-placeholder" ).length,
 					"No placeholder remains after .show(\"" + effect + "\", time)" );
 			} ) )
 			.queue( queueTest() )
 			.queue( duringTest( function() {
-				ok( hidden.is( ":animated" ),
+				assert.ok( hidden.is( ":animated" ),
 					"Hidden is seen as animated during .hide(\"" + effect + "\", time)" );
 			} ) )
 			.hide( effect, minDuration, queueTest( function() {
-				equal( hidden.css( "display" ), "none",
+				assert.equal( hidden.css( "display" ), "none",
 					"Back to hidden after .hide(\"" + effect + "\", time)" );
-				ok( !$( ".ui-effects-placeholder" ).length,
+				assert.ok( !$( ".ui-effects-placeholder" ).length,
 					"No placeholder remains after .hide(\"" + effect + "\", time)" );
 			} ) )
 			.queue( queueTest( function() {
-				deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains" );
-				start();
+				assert.deepEqual( hidden.queue(), [ "inprogress" ], "Only the inprogress sentinel remains" );
+				ready();
 			} ) );
 	} );
 
-	asyncTest( "relative width & height - properties are preserved", function() {
+	QUnit.test( "relative width & height - properties are preserved", function( assert ) {
+		var ready = assert.async();
 		var test = $( "div.relWidth.relHeight" ),
 			width = test.width(), height = test.height(),
 			cssWidth = test[ 0 ].style.width, cssHeight = test[ 0 ].style.height;
 
-		expect( 4 );
+		assert.expect( 4 );
 		test.toggle( effect, minDuration, function() {
-			equal( test[ 0 ].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
-			equal( test[ 0 ].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
-			start();
+			assert.equal( test[ 0 ].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
+			assert.equal( test[ 0 ].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
+			ready();
 		} );
-		equal( test.width(), width, "Width is the same px after animation started" );
-		equal( test.height(), height, "Height is the same px after animation started" );
+		assert.equal( test.width(), width, "Width is the same px after animation started" );
+		assert.equal( test.height(), height, "Height is the same px after animation started" );
 	} );
 } );
 

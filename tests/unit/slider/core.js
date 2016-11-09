@@ -1,7 +1,8 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/slider"
-], function( $ ) {
+], function( QUnit, $ ) {
 
 var element, options;
 
@@ -10,10 +11,10 @@ function handle() {
 }
 
 // Slider Tests
-module( "slider: core" );
+QUnit.module( "slider: core" );
 
-test( "markup structure", function( assert ) {
-	expect( 4 );
+QUnit.test( "markup structure", function( assert ) {
+	assert.expect( 4 );
 	var element = $( "<div>" ).slider( { range: true } ),
 		handle = element.find( "span" ),
 		range = element.find( "div" );
@@ -24,8 +25,20 @@ test( "markup structure", function( assert ) {
 	assert.hasClasses( handle[ 1 ], "ui-slider-handle" );
 } );
 
-test( "keydown HOME on handle sets value to min", function() {
-	expect( 2 );
+QUnit.test( "custom handle", function( assert ) {
+	assert.expect( 3 );
+
+	var element = $( "#slider-custom-handle" ).slider();
+	var customHandle = $( ".custom-handle" );
+	var sliderHandles = element.find( ".ui-slider-handle" );
+
+	assert.equal( sliderHandles.length, 1, "Only one handle" );
+	assert.strictEqual( sliderHandles[ 0 ], customHandle[ 0 ], "Correct handle" );
+	assert.equal( customHandle.attr( "tabIndex" ), 0, "tabIndex" );
+} );
+
+QUnit.test( "keydown HOME on handle sets value to min", function( assert ) {
+	assert.expect( 2 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -38,7 +51,7 @@ test( "keydown HOME on handle sets value to min", function() {
 	element.slider( "value", 0 );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	element.slider( "destroy" );
 
@@ -54,13 +67,13 @@ test( "keydown HOME on handle sets value to min", function() {
 	element.slider( "value", 0 );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-	equal( element.slider( "value" ), options.min ) ;
+	assert.equal( element.slider( "value" ), options.min ) ;
 
 	element.slider( "destroy" );
 } );
 
-test( "keydown END on handle sets value to max", function() {
-	expect( 2 );
+QUnit.test( "keydown END on handle sets value to max", function( assert ) {
+	assert.expect( 2 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -73,7 +86,7 @@ test( "keydown END on handle sets value to max", function() {
 	element.slider( "value", 0 );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-	equal( element.slider( "value" ), options.max ) ;
+	assert.equal( element.slider( "value" ), options.max ) ;
 
 	element.slider( "destroy" );
 
@@ -89,13 +102,13 @@ test( "keydown END on handle sets value to max", function() {
 	element.slider( "value", 0 );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	element.slider( "destroy" );
 } );
 
-test( "keydown PAGE_UP on handle increases value by 1/5 range, not greater than max", function() {
-	expect( 4 );
+QUnit.test( "keydown PAGE_UP on handle increases value by 1/5 range, not greater than max", function( assert ) {
+	assert.expect( 4 );
 	$.each( [ "horizontal", "vertical" ], function( i, orientation ) {
 		element = $( "<div></div>" );
 		options = {
@@ -109,17 +122,17 @@ test( "keydown PAGE_UP on handle increases value by 1/5 range, not greater than 
 		element.slider( "value", 70 );
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( element.slider( "value" ), 90 );
+		assert.equal( element.slider( "value" ), 90 );
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( element.slider( "value" ), 100 );
+		assert.equal( element.slider( "value" ), 100 );
 
 		element.slider( "destroy" );
 	} );
 } );
 
-test( "keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than min", function() {
-	expect( 4 );
+QUnit.test( "keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than min", function( assert ) {
+	assert.expect( 4 );
 	$.each( [ "horizontal", "vertical" ], function( i, orientation ) {
 		element = $( "<div></div>" );
 		options = {
@@ -133,17 +146,17 @@ test( "keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than m
 		element.slider( "value", 30 );
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( element.slider( "value" ), 10 );
+		assert.equal( element.slider( "value" ), 10 );
 
 		handle().simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( element.slider( "value" ), 0 );
+		assert.equal( element.slider( "value" ), 0 );
 
 		element.slider( "destroy" );
 	} );
 } );
 
-test( "keydown UP on handle increases value by step, not greater than max", function() {
-	expect( 4 );
+QUnit.test( "keydown UP on handle increases value by step, not greater than max", function( assert ) {
+	assert.expect( 4 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -156,10 +169,10 @@ test( "keydown UP on handle increases value by step, not greater than max", func
 	element.slider( "value", options.max - options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	element.slider( "destroy" );
 
@@ -175,16 +188,16 @@ test( "keydown UP on handle increases value by step, not greater than max", func
 	element.slider( "value", options.max - options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	element.slider( "destroy" );
 } );
 
-test( "keydown RIGHT on handle increases value by step, not greater than max", function() {
-	expect( 4 );
+QUnit.test( "keydown RIGHT on handle increases value by step, not greater than max", function( assert ) {
+	assert.expect( 4 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -197,10 +210,10 @@ test( "keydown RIGHT on handle increases value by step, not greater than max", f
 	element.slider( "value", options.max - options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	element.slider( "destroy" );
 
@@ -216,16 +229,16 @@ test( "keydown RIGHT on handle increases value by step, not greater than max", f
 	element.slider( "value", options.max - options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equal( element.slider( "value" ), options.max );
+	assert.equal( element.slider( "value" ), options.max );
 
 	element.slider( "destroy" );
 } );
 
-test( "keydown DOWN on handle decreases value by step, not less than min", function() {
-	expect( 4 );
+QUnit.test( "keydown DOWN on handle decreases value by step, not less than min", function( assert ) {
+	assert.expect( 4 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -238,10 +251,10 @@ test( "keydown DOWN on handle decreases value by step, not less than min", funct
 	element.slider( "value", options.min + options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	element.slider( "destroy" );
 
@@ -257,16 +270,16 @@ test( "keydown DOWN on handle decreases value by step, not less than min", funct
 	element.slider( "value", options.min + options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	element.slider( "destroy" );
 } );
 
-test( "keydown LEFT on handle decreases value by step, not less than min", function() {
-	expect( 4 );
+QUnit.test( "keydown LEFT on handle decreases value by step, not less than min", function( assert ) {
+	assert.expect( 4 );
 	element = $( "<div></div>" );
 	options = {
 		max: 5,
@@ -279,10 +292,10 @@ test( "keydown LEFT on handle decreases value by step, not less than min", funct
 	element.slider( "value", options.min + options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	element.slider( "destroy" );
 
@@ -298,10 +311,10 @@ test( "keydown LEFT on handle decreases value by step, not less than min", funct
 	element.slider( "value", options.min + options.step );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equal( element.slider( "value" ), options.min );
+	assert.equal( element.slider( "value" ), options.min );
 
 	element.slider( "destroy" );
 } );

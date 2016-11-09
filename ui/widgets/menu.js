@@ -81,6 +81,7 @@ return $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item": function( event ) {
 				var target = $( event.target );
+				var active = $( $.ui.safeActiveElement( this.document[ 0 ] ) );
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
 					this.select( event );
 
@@ -92,7 +93,8 @@ return $.widget( "ui.menu", {
 					// Open submenu on click
 					if ( target.has( ".ui-menu" ).length ) {
 						this.expand( event );
-					} else if ( !this.element.is( ":focus" ) && $( $.ui.safeActiveElement( this.document[ 0 ] ) ).closest( ".ui-menu" ).length ) {
+					} else if ( !this.element.is( ":focus" ) &&
+							active.closest( ".ui-menu" ).length ) {
 
 						// Redirect focus to the menu
 						this.element.trigger( "focus", [ true ] );
@@ -142,7 +144,11 @@ return $.widget( "ui.menu", {
 			},
 			blur: function( event ) {
 				this._delay( function() {
-					if ( !$.contains( this.element[ 0 ], $.ui.safeActiveElement( this.document[ 0 ] ) ) ) {
+					var notContained = !$.contains(
+						this.element[ 0 ],
+						$.ui.safeActiveElement( this.document[ 0 ] )
+					);
+					if ( notContained ) {
 						this.collapseAll( event );
 					}
 				} );
@@ -230,8 +236,11 @@ return $.widget( "ui.menu", {
 		default:
 			preventDefault = false;
 			prev = this.previousFilter || "";
-			character = String.fromCharCode( event.keyCode );
 			skip = false;
+
+			// Support number pad values
+			character = event.keyCode >= 96 && event.keyCode <= 105 ?
+				( event.keyCode - 96 ).toString() : String.fromCharCode( event.keyCode );
 
 			clearTimeout( this.filterTimer );
 
@@ -434,9 +443,9 @@ return $.widget( "ui.menu", {
 
 		this._removeClass( this.active.children( ".ui-menu-item-wrapper" ),
 			null, "ui-state-active" );
-		this.active = null;
 
 		this._trigger( "blur", event, { item: this.active } );
+		this.active = null;
 	},
 
 	_startOpening: function( submenu ) {
@@ -479,7 +488,8 @@ return $.widget( "ui.menu", {
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
 
-			// If we found no valid submenu ancestor, use the main menu to close all sub menus anyway
+			// If we found no valid submenu ancestor, use the main menu to close all
+			// sub menus anyway
 			if ( !currentMenu.length ) {
 				currentMenu = this.element;
 			}

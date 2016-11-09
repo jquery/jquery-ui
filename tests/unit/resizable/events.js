@@ -1,14 +1,15 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/resizable"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "resizable: events" );
+QUnit.module( "resizable: events" );
 
-test( "start", function() {
+QUnit.test( "start", function( assert ) {
 
-	expect( 5 );
+	assert.expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
@@ -16,23 +17,23 @@ test( "start", function() {
 	$( "#resizable1" ).resizable( {
 		handles: "all",
 		start: function( event, ui ) {
-			equal( ui.size.width, 100, "compare width" );
-			equal( ui.size.height, 100, "compare height" );
-			equal( ui.originalSize.width, 100, "compare original width" );
-			equal( ui.originalSize.height, 100, "compare original height" );
+			assert.equal( ui.size.width, 100, "compare width" );
+			assert.equal( ui.size.height, 100, "compare height" );
+			assert.equal( ui.originalSize.width, 100, "compare original width" );
+			assert.equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
 	} );
 
 	testHelper.drag( handle, 50, 50 );
 
-	equal( count, 1, "start callback should happen exactly once" );
+	assert.equal( count, 1, "start callback should happen exactly once" );
 
 } );
 
-test( "resize", function() {
+QUnit.test( "resize", function( assert ) {
 
-	expect( 9 );
+	assert.expect( 9 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
@@ -41,15 +42,15 @@ test( "resize", function() {
 		handles: "all",
 		resize: function( event, ui ) {
 			if ( count === 0 ) {
-				equal( ui.size.width, 125, "compare width" );
-				equal( ui.size.height, 125, "compare height" );
-				equal( ui.originalSize.width, 100, "compare original width" );
-				equal( ui.originalSize.height, 100, "compare original height" );
+				assert.equal( ui.size.width, 125, "compare width" );
+				assert.equal( ui.size.height, 125, "compare height" );
+				assert.equal( ui.originalSize.width, 100, "compare original width" );
+				assert.equal( ui.originalSize.height, 100, "compare original height" );
 			} else {
-				equal( ui.size.width, 150, "compare width" );
-				equal( ui.size.height, 150, "compare height" );
-				equal( ui.originalSize.width, 100, "compare original width" );
-				equal( ui.originalSize.height, 100, "compare original height" );
+				assert.equal( ui.size.width, 150, "compare width" );
+				assert.equal( ui.size.height, 150, "compare height" );
+				assert.equal( ui.originalSize.width, 100, "compare original width" );
+				assert.equal( ui.originalSize.height, 100, "compare original height" );
 			}
 			count++;
 		}
@@ -57,13 +58,13 @@ test( "resize", function() {
 
 	testHelper.drag( handle, 50, 50 );
 
-	equal( count, 2, "resize callback should happen exactly once per size adjustment" );
+	assert.equal( count, 2, "resize callback should happen exactly once per size adjustment" );
 
 } );
 
-test( "resize (min/max dimensions)", function() {
+QUnit.test( "resize (min/max dimensions)", function( assert ) {
 
-	expect( 5 );
+	assert.expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
@@ -75,23 +76,23 @@ test( "resize (min/max dimensions)", function() {
 		maxWidth: 100,
 		maxHeight: 100,
 		resize: function( event, ui ) {
-			equal( ui.size.width, 60, "compare width" );
-			equal( ui.size.height, 60, "compare height" );
-			equal( ui.originalSize.width, 100, "compare original width" );
-			equal( ui.originalSize.height, 100, "compare original height" );
+			assert.equal( ui.size.width, 60, "compare width" );
+			assert.equal( ui.size.height, 60, "compare height" );
+			assert.equal( ui.originalSize.width, 100, "compare original width" );
+			assert.equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
 	} );
 
 	testHelper.drag( handle, -200, -200 );
 
-	equal( count, 1, "resize callback should happen exactly once per size adjustment" );
+	assert.equal( count, 1, "resize callback should happen exactly once per size adjustment" );
 
 } );
 
-test( "resize (containment)", function() {
+QUnit.test( "resize (containment)", function( assert ) {
 
-	expect( 5 );
+	assert.expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se",
@@ -104,10 +105,10 @@ test( "resize (containment)", function() {
 		handles: "all",
 		containment: container,
 		resize: function( event, ui ) {
-			equal( ui.size.width, 10, "compare width" );
-			equal( ui.size.height, 10, "compare height" );
-			equal( ui.originalSize.width, 100, "compare original width" );
-			equal( ui.originalSize.height, 100, "compare original height" );
+			assert.equal( ui.size.width, 10, "compare width" );
+			assert.equal( ui.size.height, 10, "compare height" );
+			assert.equal( ui.originalSize.width, 100, "compare original width" );
+			assert.equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
 	} );
@@ -118,13 +119,13 @@ test( "resize (containment)", function() {
 	// Prove you can't resize outside containment by dragging southeast corner northwest
 	testHelper.drag( handle, -200, -200 );
 
-	equal( count, 1, "resize callback should happen exactly once per size adjustment" );
+	assert.equal( count, 1, "resize callback should happen exactly once per size adjustment" );
 
 } );
 
-test( "resize (grid)", function() {
+QUnit.test( "resize (grid)", function( assert ) {
 
-	expect( 5 );
+	assert.expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
@@ -133,22 +134,22 @@ test( "resize (grid)", function() {
 		handles: "all",
 		grid: 50,
 		resize: function( event, ui ) {
-			equal( ui.size.width, 150, "compare width" );
-			equal( ui.size.height, 150, "compare height" );
-			equal( ui.originalSize.width, 100, "compare original width" );
-			equal( ui.originalSize.height, 100, "compare original height" );
+			assert.equal( ui.size.width, 150, "compare width" );
+			assert.equal( ui.size.height, 150, "compare height" );
+			assert.equal( ui.originalSize.width, 100, "compare original width" );
+			assert.equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
 	} );
 
 	testHelper.drag( handle, 50, 50 );
 
-	equal( count, 1, "resize callback should happen exactly once per grid-unit size adjustment" );
+	assert.equal( count, 1, "resize callback should happen exactly once per grid-unit size adjustment" );
 
 } );
 
-test( "resize, custom adjustment", function() {
-	expect( 4 );
+QUnit.test( "resize, custom adjustment", function( assert ) {
+	assert.expect( 4 );
 
 	var handle = ".ui-resizable-se",
 		element = $( "#resizable1" ).resizable( {
@@ -162,15 +163,15 @@ test( "resize, custom adjustment", function() {
 
 	testHelper.drag( handle, 50, 50 );
 
-	equal( element.width(), 100, "resize event can control width" );
-	equal( element.height(), 200, "resize event can control height" );
-	equal( element.position().left, 300, "resize event can control left" );
-	equal( element.position().top, 400, "resize event can control top" );
+	assert.equal( element.width(), 100, "resize event can control width" );
+	assert.equal( element.height(), 200, "resize event can control height" );
+	assert.equal( element.position().left, 300, "resize event can control left" );
+	assert.equal( element.position().top, 400, "resize event can control top" );
 } );
 
-test( "stop", function() {
+QUnit.test( "stop", function( assert ) {
 
-	expect( 5 );
+	assert.expect( 5 );
 
 	var count = 0,
 		handle = ".ui-resizable-se";
@@ -178,23 +179,23 @@ test( "stop", function() {
 	$( "#resizable1" ).resizable( {
 		handles: "all",
 		stop: function( event, ui ) {
-			equal( ui.size.width, 150, "compare width" );
-			equal( ui.size.height, 150, "compare height" );
-			equal( ui.originalSize.width, 100, "compare original width" );
-			equal( ui.originalSize.height, 100, "compare original height" );
+			assert.equal( ui.size.width, 150, "compare width" );
+			assert.equal( ui.size.height, 150, "compare height" );
+			assert.equal( ui.originalSize.width, 100, "compare original width" );
+			assert.equal( ui.originalSize.height, 100, "compare original height" );
 			count++;
 		}
 	} );
 
 	testHelper.drag( handle, 50, 50 );
 
-	equal( count, 1, "stop callback should happen exactly once" );
+	assert.equal( count, 1, "stop callback should happen exactly once" );
 
 } );
 
-test( "resize (containment) works with parent with negative offset", function() {
+QUnit.test( "resize (containment) works with parent with negative offset", function( assert ) {
 
-	expect( 1 );
+	assert.expect( 1 );
 
 	var widthBefore, widthAfter,
 		handle = ".ui-resizable-e",
@@ -235,7 +236,7 @@ test( "resize (containment) works with parent with negative offset", function() 
 
 	widthAfter = target.width();
 
-	equal( widthAfter, ( widthBefore + increaseWidthBy ), "resizable width should be increased by the value dragged" );
+	assert.equal( widthAfter, ( widthBefore + increaseWidthBy ), "resizable width should be increased by the value dragged" );
 
 } );
 

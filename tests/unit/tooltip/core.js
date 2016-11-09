@@ -1,83 +1,84 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/tooltip"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "tooltip: core" );
+QUnit.module( "tooltip: core" );
 
-test( "markup structure", function( assert ) {
-	expect( 7 );
+QUnit.test( "markup structure", function( assert ) {
+	assert.expect( 7 );
 	var element = $( "#tooltipped1" ).tooltip(),
 		tooltip = $( ".ui-tooltip" );
 
-	equal( element.attr( "aria-describedby" ), undefined, "no aria-describedby on init" );
-	equal( tooltip.length, 0, "no tooltip on init" );
+	assert.equal( element.attr( "aria-describedby" ), undefined, "no aria-describedby on init" );
+	assert.equal( tooltip.length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
-	equal( tooltip.length, 1, "tooltip exists" );
-	equal( element.attr( "aria-describedby" ), tooltip.attr( "id" ), "aria-describedby" );
+	assert.equal( tooltip.length, 1, "tooltip exists" );
+	assert.equal( element.attr( "aria-describedby" ), tooltip.attr( "id" ), "aria-describedby" );
 	assert.hasClasses( tooltip, "ui-tooltip ui-widget ui-widget-content ui-widget-shadow" );
-	equal( tooltip.length, 1, ".ui-tooltip exists" );
-	equal( tooltip.find( ".ui-tooltip-content" ).length, 1,
+	assert.equal( tooltip.length, 1, ".ui-tooltip exists" );
+	assert.equal( tooltip.find( ".ui-tooltip-content" ).length, 1,
 		".ui-tooltip-content exists" );
 } );
 
-test( "accessibility", function() {
-	expect( 15 );
+QUnit.test( "accessibility", function( assert ) {
+	assert.expect( 15 );
 
 	var tooltipId, tooltip,
 		element = $( "#multiple-describedby" ).tooltip(),
 		liveRegion = element.tooltip( "instance" ).liveRegion;
 
-	equal( liveRegion.find( ">div" ).length, 0 );
-	equal( liveRegion.attr( "role" ), "log" );
-	equal( liveRegion.attr( "aria-live" ), "assertive" );
-	equal( liveRegion.attr( "aria-relevant" ), "additions" );
+	assert.equal( liveRegion.find( ">div" ).length, 0 );
+	assert.equal( liveRegion.attr( "role" ), "log" );
+	assert.equal( liveRegion.attr( "aria-live" ), "assertive" );
+	assert.equal( liveRegion.attr( "aria-relevant" ), "additions" );
 	element.tooltip( "open" );
 	tooltipId = element.data( "ui-tooltip-id" );
 	tooltip = $( "#" + tooltipId );
-	equal( tooltip.attr( "role" ), "tooltip", "role" );
-	equal( element.attr( "aria-describedby" ), "fixture-span " + tooltipId,
+	assert.equal( tooltip.attr( "role" ), "tooltip", "role" );
+	assert.equal( element.attr( "aria-describedby" ), "fixture-span " + tooltipId,
 		"multiple describedby when open" );
 
-	equal( element.attr( "title" ), null, "no title when open" );
-	equal( liveRegion.children().length, 1 );
-	equal( liveRegion.children().last().html(), "..." );
+	assert.equal( element.attr( "title" ), null, "no title when open" );
+	assert.equal( liveRegion.children().length, 1 );
+	assert.equal( liveRegion.children().last().html(), "..." );
 	element.tooltip( "close" );
-	equal( element.attr( "aria-describedby" ), "fixture-span",
+	assert.equal( element.attr( "aria-describedby" ), "fixture-span",
 		"correct describedby when closed" );
-	equal( element.attr( "title" ), "...", "title restored when closed" );
+	assert.equal( element.attr( "title" ), "...", "title restored when closed" );
 
 	element.tooltip( "open" );
-	equal( liveRegion.children().length, 2,
+	assert.equal( liveRegion.children().length, 2,
 		"After the second tooltip show, there should be two children" );
-	equal( liveRegion.children().filter( ":visible" ).length, 1,
+	assert.equal( liveRegion.children().filter( ":visible" ).length, 1,
 		"Only one of the children should be visible" );
-	ok( liveRegion.children().last().is( ":visible" ),
+	assert.ok( liveRegion.children().last().is( ":visible" ),
 		"Only the last child should be visible" );
 	element.tooltip( "close" );
 
 	element.tooltip( "destroy" );
-	equal( liveRegion.parent().length, 0,
+	assert.equal( liveRegion.parent().length, 0,
 		"Tooltip liveregion element should be removed" );
 } );
 
-test( "delegated removal", function() {
-	expect( 2 );
+QUnit.test( "delegated removal", function( assert ) {
+	assert.expect( 2 );
 
 	var container = $( "#contains-tooltipped" ).tooltip(),
 		element = $( "#contained-tooltipped" );
 
 	element.trigger( "mouseover" );
-	equal( $( ".ui-tooltip" ).length, 1 );
+	assert.equal( $( ".ui-tooltip" ).length, 1 );
 
 	container.empty();
-	equal( $( ".ui-tooltip" ).length, 0 );
+	assert.equal( $( ".ui-tooltip" ).length, 0 );
 } );
 
-test( "nested tooltips", function() {
-	expect( 2 );
+QUnit.test( "nested tooltips", function( assert ) {
+	assert.expect( 2 );
 
 	var child = $( "#contained-tooltipped" ),
 		parent = $( "#contains-tooltipped" ).tooltip( {
@@ -86,15 +87,15 @@ test( "nested tooltips", function() {
 		} );
 
 	parent.trigger( "mouseover" );
-	equal( $( ".ui-tooltip:visible" ).text(), "parent" );
+	assert.equal( $( ".ui-tooltip:visible" ).text(), "parent" );
 
 	child.trigger( "mouseover" );
-	equal( $( ".ui-tooltip" ).text(), "child" );
+	assert.equal( $( ".ui-tooltip" ).text(), "child" );
 } );
 
 // #8742
-test( "form containing an input with name title", function() {
-	expect( 4 );
+QUnit.test( "form containing an input with name title", function( assert ) {
+	assert.expect( 4 );
 
 	var form = $( "#tooltip-form" ).tooltip( {
 			show: null,
@@ -102,33 +103,34 @@ test( "form containing an input with name title", function() {
 		} ),
 		input = form.find( "[name=title]" );
 
-	equal( $( ".ui-tooltip" ).length, 0, "no tooltips on init" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "no tooltips on init" );
 
 	input.trigger( "mouseover" );
-	equal( $( ".ui-tooltip" ).length, 1, "tooltip for input" );
+	assert.equal( $( ".ui-tooltip" ).length, 1, "tooltip for input" );
 	input.trigger( "mouseleave" );
-	equal( $( ".ui-tooltip" ).length, 0, "tooltip for input closed" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "tooltip for input closed" );
 
 	form.trigger( "mouseover" );
-	equal( $( ".ui-tooltip" ).length, 0, "no tooltip for form" );
+	assert.equal( $( ".ui-tooltip" ).length, 0, "no tooltip for form" );
 } );
 
-test( "tooltip on .ui-state-disabled element", function() {
-	expect( 2 );
+QUnit.test( "tooltip on .ui-state-disabled element", function( assert ) {
+	assert.expect( 2 );
 
 	var container = $( "#contains-tooltipped" ).tooltip(),
 		element = $( "#contained-tooltipped" ).addClass( "ui-state-disabled" );
 
 	element.trigger( "mouseover" );
-	equal( $( ".ui-tooltip" ).length, 1 );
+	assert.equal( $( ".ui-tooltip" ).length, 1 );
 
 	container.empty();
-	equal( $( ".ui-tooltip" ).length, 0 );
+	assert.equal( $( ".ui-tooltip" ).length, 0 );
 } );
 
 // http://bugs.jqueryui.com/ticket/8740
-asyncTest( "programmatic focus with async content", function() {
-	expect( 2 );
+QUnit.test( "programmatic focus with async content", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip( {
 		content: function( response ) {
 			setTimeout( function() {
@@ -138,11 +140,11 @@ asyncTest( "programmatic focus with async content", function() {
 	} );
 
 	element.on( "tooltipopen", function( event ) {
-		deepEqual( event.originalEvent.type, "focusin" );
+		assert.deepEqual( event.originalEvent.type, "focusin" );
 
 		element.on( "tooltipclose", function( event ) {
-			deepEqual( event.originalEvent.type, "focusout" );
-			start();
+			assert.deepEqual( event.originalEvent.type, "focusout" );
+			ready();
 		} );
 
 		setTimeout( function() {
@@ -153,8 +155,9 @@ asyncTest( "programmatic focus with async content", function() {
 	element.trigger( "focus" );
 } );
 
-asyncTest( "destroy during hide animation; only one close event", function() {
-	expect( 1 );
+QUnit.test( "destroy during hide animation; only one close event", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 
 	var element = $( "#tooltipped1" ).tooltip( {
 		show: false,
@@ -162,20 +165,21 @@ asyncTest( "destroy during hide animation; only one close event", function() {
 	} );
 
 	element.on( "tooltipclose", function() {
-		ok( true, "tooltip closed" );
+		assert.ok( true, "tooltip closed" );
 	} );
 
 	element.tooltip( "open" );
 	element.tooltip( "close" );
 	setTimeout( function() {
 		element.tooltip( "destroy" );
-		start();
+		ready();
 	} );
 } );
 
 // http://bugs.jqueryui.com/ticket/10602
-asyncTest( "multiple active delegated tooltips", function() {
-	expect( 1 );
+QUnit.test( "multiple active delegated tooltips", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 
 	var anchor = $( "#tooltipped1" ),
 		input = anchor.next(),
@@ -209,21 +213,21 @@ asyncTest( "multiple active delegated tooltips", function() {
 
 	function step4() {
 		anchor.simulate( "mouseout" );
-		deepEqual( actions, [
+		assert.deepEqual( actions, [
 			"open:anchortitle",
 			"open:inputtitle",
 			"close:inputtitle",
 			"close:anchortitle"
 		], "Both tooltips open and close" );
-		start();
+		ready();
 	}
 
 	step1();
 } );
 
 // http://bugs.jqueryui.com/ticket/11272
-test( "remove conflicting attributes from live region", function() {
-	expect( 2 );
+QUnit.test( "remove conflicting attributes from live region", function( assert ) {
+	assert.expect( 2 );
 
 	var element = $(
 		"<div id='content'>" +
@@ -237,9 +241,9 @@ test( "remove conflicting attributes from live region", function() {
 		.tooltip( {
 			content: element,
 			open: function() {
-				equal( $( ".ui-helper-hidden-accessible [name]" ).length, 0,
+				assert.equal( $( ".ui-helper-hidden-accessible [name]" ).length, 0,
 					"no name attributes within live region" );
-				equal( $( ".ui-helper-hidden-accessible [id]" ).length, 0,
+				assert.equal( $( ".ui-helper-hidden-accessible [id]" ).length, 0,
 					"no id attributes within live region" );
 			}
 		} )

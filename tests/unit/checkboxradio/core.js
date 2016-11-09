@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/checkboxradio"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "Checkboxradio: core" );
+QUnit.module( "Checkboxradio: core" );
 
-test( "Checkbox - Initial class structure", function( assert ) {
-	expect( 2 );
+QUnit.test( "Checkbox - Initial class structure", function( assert ) {
+	assert.expect( 2 );
 	var input = $( "#check" ),
 		label = $( "label[for=check]" );
 
@@ -15,8 +16,8 @@ test( "Checkbox - Initial class structure", function( assert ) {
 	assert.hasClasses( label, "ui-button ui-widget ui-checkboxradio-label ui-corner-all" );
 } );
 
-test( "Radios - Initial class structure", function( assert ) {
-	expect( 6 );
+QUnit.test( "Radios - Initial class structure", function( assert ) {
+	assert.expect( 6 );
 	var inputs = $( "#radio0 input" ),
 		labels = $( "#radio0 label" );
 
@@ -29,12 +30,13 @@ test( "Radios - Initial class structure", function( assert ) {
 	} );
 } );
 
-asyncTest( "Ensure checked after single click on checkbox label button", function( assert ) {
-	expect( 2 );
+QUnit.test( "Ensure checked after single click on checkbox label button", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 
 	$( "#check2" ).checkboxradio().change( function() {
 		var label = $( this ).checkboxradio( "widget" );
-		ok( this.checked, "checked ok" );
+		assert.ok( this.checked, "checked ok" );
 
 		assert.hasClasses( label, "ui-state-active" );
 	} );
@@ -45,12 +47,12 @@ asyncTest( "Ensure checked after single click on checkbox label button", functio
 	// tracked down, this delay will have to do.
 	setTimeout( function() {
 		$( "#check2" ).checkboxradio( "widget" ).simulate( "click" );
-		start();
+		ready();
 	} );
 } );
 
-test( "Handle form association via form attribute", function( assert ) {
-	expect( 4 );
+QUnit.test( "Handle form association via form attribute", function( assert ) {
+	assert.expect( 4 );
 
 	var radio1 = $( "#crazy-form-1" ).checkboxradio();
 	var radio1Label = radio1.checkboxradio( "widget" );
@@ -58,8 +60,8 @@ test( "Handle form association via form attribute", function( assert ) {
 	var radio2Label = radio2.checkboxradio( "widget" );
 
 	radio2.change( function() {
-		ok( this.checked, "#2 checked" );
-		ok( !radio1[ 0 ].checked, "#1 not checked" );
+		assert.ok( this.checked, "#2 checked" );
+		assert.ok( !radio1[ 0 ].checked, "#1 not checked" );
 
 		assert.hasClasses( radio2Label, "ui-state-active" );
 		assert.lacksClasses( radio1Label, "ui-state-active" );
@@ -68,8 +70,8 @@ test( "Handle form association via form attribute", function( assert ) {
 	radio2Label.simulate( "click" );
 } );
 
-test( "Checkbox creation requires a label, and finds it in all cases", function( assert ) {
-	expect( 7 );
+QUnit.test( "Checkbox creation requires a label, and finds it in all cases", function( assert ) {
+	assert.expect( 7 );
 	var groups = [
 		"<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>",
 		"<span><input type='checkbox' id='t7092b'><label for='t7092b'></label></span>",
@@ -88,8 +90,8 @@ test( "Checkbox creation requires a label, and finds it in all cases", function(
 	} );
 } );
 
-test( "Calling checkboxradio on an unsupported element throws an error", function( assert ) {
-	expect( 2 );
+QUnit.test( "Calling checkboxradio on an unsupported element throws an error", function( assert ) {
+	assert.expect( 2 );
 
 	var errorMessage =
 		"Can't create checkboxradio on element.nodeName=div and element.type=undefined";
@@ -117,8 +119,8 @@ test( "Calling checkboxradio on an unsupported element throws an error", functio
 	);
 } );
 
-test( "Calling checkboxradio on an input with no label throws an error", function( assert ) {
-	expect( 1 );
+QUnit.test( "Calling checkboxradio on an input with no label throws an error", function( assert ) {
+	assert.expect( 1 );
 
 	var errorMessage = "No label found for checkboxradio widget";
 	var error = new Error( errorMessage );

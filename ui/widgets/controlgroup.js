@@ -30,6 +30,7 @@
 		factory( jQuery );
 	}
 }( function( $ ) {
+var controlgroupCornerRegex = /ui-corner-([a-z]){2,6}/g;
 
 return $.widget( "ui.controlgroup", {
 	version: "@VERSION",
@@ -86,7 +87,13 @@ return $.widget( "ui.controlgroup", {
 			if ( widget === "controlgroupLabel" ) {
 				labels = that.element.find( selector );
 				labels.each( function() {
-					$( this ).contents().wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
+					var element = $( this );
+
+					if ( element.children( ".ui-controlgroup-label-contents" ).length ) {
+						return;
+					}
+					element.contents()
+						.wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
 				childWidgets = childWidgets.concat( labels.get() );
@@ -102,19 +109,42 @@ return $.widget( "ui.controlgroup", {
 			// first / last elements until all enhancments are done.
 			if ( that[ "_" + widget + "Options" ] ) {
 				options = that[ "_" + widget + "Options" ]( "middle" );
+			} else {
+				options = { classes: {} };
 			}
 
 			// Find instances of this widget inside controlgroup and init them
 			that.element
-				.find( selector )[ widget ]( options )
+				.find( selector )
 				.each( function() {
 					var element = $( this );
+					var instance = element[ widget ]( "instance" );
+
+					// We need to clone the default options for this type of widget to avoid
+					// polluting the variable options which has a wider scope than a single widget.
+					var instanceOptions = $.widget.extend( {}, options );
+
+					// If the button is the child of a spinner ignore it
+					// TODO: Find a more generic solution
+					if ( widget === "button" && element.parent( ".ui-spinner" ).length ) {
+						return;
+					}
+
+					// Create the widget if it doesn't exist
+					if ( !instance ) {
+						instance = element[ widget ]()[ widget ]( "instance" );
+					}
+					if ( instance ) {
+						instanceOptions.classes =
+							that._resolveClassesValues( instanceOptions.classes, instance );
+					}
+					element[ widget ]( instanceOptions );
 
 					// Store an instance of the controlgroup to be able to reference
 					// from the outermost element for changing options and refresh
 					var widgetElement = element[ widget ]( "widget" );
 					$.data( widgetElement[ 0 ], "ui-controlgroup-data",
-						element[ widget ]( "instance" ) );
+						instance ? instance : element[ widget ]( "instance" ) );
 
 					childWidgets.push( widgetElement[ 0 ] );
 				} );
@@ -135,7 +165,7 @@ return $.widget( "ui.controlgroup", {
 	},
 
 	_updateCornerClass: function( element, position ) {
-		var remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right";
+		var remove = "ui-corner-top ui-corner-bottom ui-corner-left ui-corner-right ui-corner-all";
 		var add = this._buildSimpleOptions( position, "label" ).classes.label;
 
 		this._removeClass( element, null, remove );
@@ -148,9 +178,10 @@ return $.widget( "ui.controlgroup", {
 			classes: {}
 		};
 		result.classes[ key ] = {
-			"middle": null,
+			"middle": "",
 			"first": "ui-corner-" + ( direction ? "top" : "left" ),
-			"last": "ui-corner-" + ( direction ? "bottom" : "right" )
+			"last": "ui-corner-" + ( direction ? "bottom" : "right" ),
+			"only": "ui-corner-all"
 		}[ position ];
 
 		return result;
@@ -179,20 +210,34 @@ return $.widget( "ui.controlgroup", {
 			width: direction ? "auto" : false,
 			classes: {
 				middle: {
-					"ui-selectmenu-button-open": null,
-					"ui-selectmenu-button-closed": null
+					"ui-selectmenu-button-open": "",
+					"ui-selectmenu-button-closed": ""
 				},
 				first: {
 					"ui-selectmenu-button-open": "ui-corner-" + ( direction ? "top" : "tl" ),
 					"ui-selectmenu-button-closed": "ui-corner-" + ( direction ? "top" : "left" )
 				},
 				last: {
-					"ui-selectmenu-button-open": direction ? null : "ui-corner-tr",
+					"ui-selectmenu-button-open": direction ? "" : "ui-corner-tr",
 					"ui-selectmenu-button-closed": "ui-corner-" + ( direction ? "bottom" : "right" )
+				},
+				only: {
+					"ui-selectmenu-button-open": "ui-corner-top",
+					"ui-selectmenu-button-closed": "ui-corner-all"
 				}
 
 			}[ position ]
 		};
+	},
+
+	_resolveClassesValues: function( classes, instance ) {
+		var result = {};
+		$.each( classes, function( key ) {
+			var current = instance.options.classes[ key ] || "";
+			current = $.trim( current.replace( controlgroupCornerRegex, "" ) );
+			result[ key ] = ( current + " " + classes[ key ] ).replace( /\s+/g, " " );
+		} );
+		return result;
 	},
 
 	_setOption: function( key, value ) {
@@ -235,9 +280,11 @@ return $.widget( "ui.controlgroup", {
 				var instance = children[ value ]().data( "ui-controlgroup-data" );
 
 				if ( instance && that[ "_" + instance.widgetName + "Options" ] ) {
-					instance.element[ instance.widgetName ](
-						that[ "_" + instance.widgetName + "Options" ]( value )
+					var options = that[ "_" + instance.widgetName + "Options" ](
+						children.length === 1 ? "only" : value
 					);
+					options.classes = that._resolveClassesValues( options.classes, instance );
+					instance.element[ instance.widgetName ]( options );
 				} else {
 					that._updateCornerClass( children[ value ](), value );
 				}

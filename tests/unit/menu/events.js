@@ -1,21 +1,22 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/menu"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var log = testHelper.log,
 	logOutput = testHelper.logOutput,
 	click = testHelper.click;
 
-module( "menu: events", {
-	setup: function() {
+QUnit.module( "menu: events", {
+	beforeEach: function() {
 		testHelper.clearLog();
 	}
 } );
 
-test( "handle click on menu", function() {
-	expect( 1 );
+QUnit.test( "handle click on menu", function( assert ) {
+	assert.expect( 1 );
 	var element = $( "#menu1" ).menu( {
 		select: function() {
 			log();
@@ -27,11 +28,11 @@ test( "handle click on menu", function() {
 	click( element, "2" );
 	click( element, "3" );
 	click( element, "1" );
-	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
+	assert.equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 } );
 
-test( "handle click on custom item menu", function() {
-	expect( 1 );
+QUnit.test( "handle click on custom item menu", function( assert ) {
+	assert.expect( 1 );
 	var element = $( "#menu5" ).menu( {
 		select: function() {
 			log();
@@ -44,57 +45,64 @@ test( "handle click on custom item menu", function() {
 	click( element, "2" );
 	click( element, "3" );
 	click( element, "1" );
-	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
+	assert.equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 } );
 
-asyncTest( "handle blur", function() {
-	expect( 1 );
+QUnit.test( "handle blur", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 	var blurHandled = false,
+		index = 1,
 		element = $( "#menu1" ).menu( {
-			blur: function( event ) {
+			blur: function( event, ui ) {
 
 				// Ignore duplicate blur event fired by IE
 				if ( !blurHandled ) {
 					blurHandled = true;
-					equal( event.type, "menublur", "blur event.type is 'menublur'" );
+					assert.equal( event.type, "menublur", "blur event.type is 'menublur'" );
+					assert.strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
 				}
 			}
 		} );
 
-	click( element, "1" );
+	click( element, index );
 	setTimeout( function() {
 		element.trigger( "blur" );
 		setTimeout( function() {
-			start();
+			ready();
 		}, 350 );
 	} );
 } );
 
-asyncTest( "handle blur via click outside", function() {
-	expect( 1 );
+QUnit.test( "handle blur via click outside", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 	var blurHandled = false,
+		index = 1,
 		element = $( "#menu1" ).menu( {
-			blur: function( event ) {
+			blur: function( event, ui ) {
 
 				// Ignore duplicate blur event fired by IE
 				if ( !blurHandled ) {
 					blurHandled = true;
-					equal( event.type, "menublur", "blur event.type is 'menublur'" );
+					assert.equal( event.type, "menublur", "blur event.type is 'menublur'" );
+					assert.strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
 				}
 			}
 		} );
 
-	click( element, "1" );
+	click( element, index );
 	setTimeout( function() {
 		$( "<a>", { id: "remove" } ).appendTo( "body" ).trigger( "click" );
 		setTimeout( function() {
-			start();
+			ready();
 		}, 350 );
 	} );
 } );
 
-asyncTest( "handle focus of menu with active item", function() {
-	expect( 1 );
+QUnit.test( "handle focus of menu with active item", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 	var element = $( "#menu1" ).menu( {
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).parent().index() );
@@ -110,14 +118,14 @@ asyncTest( "handle focus of menu with active item", function() {
 		setTimeout( function() {
 			element[ 0 ].focus();
 			setTimeout( function() {
-				equal( logOutput(), "focus,0,1,2,2", "current active item remains active" );
-				start();
+				assert.equal( logOutput(), "focus,0,1,2,2", "current active item remains active" );
+				ready();
 			} );
 		} );
 	} );
 } );
 
-test( "handle mouseenter on nested menu item", function( assert ) {
+QUnit.test( "handle mouseenter on nested menu item", function( assert ) {
 	assert.expect( 8 );
 	$.ui.menu.prototype.delay = 1;
 	var activeItem,
@@ -129,7 +137,7 @@ test( "handle mouseenter on nested menu item", function( assert ) {
 		.menu( "expand" );
 
 	function checkSubmenus() {
-		equal( element.find( "ul[aria-expanded='true']" ).length, 2, "both submenus expanded" );
+		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 2, "both submenus expanded" );
 	}
 	function menumouseenter1() {
 		element.menu( "expand" );
@@ -159,70 +167,73 @@ test( "handle mouseenter on nested menu item", function( assert ) {
 	setTimeout( menumouseenter1, 25 );
 } );
 
-asyncTest( "handle submenu auto collapse: mouseleave, default markup", function() {
-	expect( 4 );
+QUnit.test( "handle submenu auto collapse: mouseleave, default markup", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 	$.ui.menu.prototype.delay = 1;
 	var element = $( "#menu2" ).menu(),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
-		equal( element.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
+		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
 		element.menu( "focus", event, element.find( "li:nth-child(7) li:first" ) );
 		setTimeout( menumouseleave2, 25 );
 	}
 	function menumouseleave2() {
-		equal( element.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 		element.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
-		equal( element.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
 		element.trigger( "mouseleave" );
 		setTimeout( menumouseleave4, 25 );
 	}
 	function menumouseleave4() {
-		equal( element.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 		$.ui.menu.prototype.delay = 300;
-		start();
+		ready();
 	}
 
 	element.find( "li:nth-child(7)" ).trigger( "mouseenter" );
 	setTimeout( menumouseleave1, 25 );
 } );
 
-asyncTest( "handle submenu auto collapse: mouseleave, custom markup", function() {
-	expect( 4 );
+QUnit.test( "handle submenu auto collapse: mouseleave, custom markup", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 	$.ui.menu.prototype.delay = 1;
 	var element = $( "#menu5" ).menu( { menus: ".menu" } ),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
-		equal( element.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
+		assert.equal( element.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
 		element.menu( "focus", event, element.find( ":nth-child(7)" ).find( ".menu" ).eq( 0 ).children().eq( 0 ) );
 		setTimeout( menumouseleave2, 25 );
 	}
 	function menumouseleave2() {
-		equal( element.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+		assert.equal( element.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 		element.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
-		equal( element.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+		assert.equal( element.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
 		element.trigger( "mouseleave" );
 		setTimeout( menumouseleave4, 25 );
 	}
 	function menumouseleave4() {
-		equal( element.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		assert.equal( element.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 		$.ui.menu.prototype.delay = 300;
-		start();
+		ready();
 	}
 
 	element.find( ":nth-child(7)" ).trigger( "mouseenter" );
 	setTimeout( menumouseleave1, 25 );
 } );
 
-asyncTest( "handle keyboard navigation on menu without scroll and without submenus", function() {
-	expect( 12 );
+QUnit.test( "handle keyboard navigation on menu without scroll and without submenus", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 12 );
 	var element = $( "#menu1" ).menu( {
 		select: function( event, ui ) {
 			log( $( ui.item[ 0 ] ).text() );
@@ -237,58 +248,59 @@ asyncTest( "handle keyboard navigation on menu without scroll and without submen
 	setTimeout( function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( logOutput(), "keydown,0,1,2", "Keydown DOWN" );
+		assert.equal( logOutput(), "keydown,0,1,2", "Keydown DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		equal( logOutput(), "keydown,1", "Keydown UP" );
+		assert.equal( logOutput(), "keydown,1", "Keydown UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-		equal( logOutput(), "keydown", "Keydown RIGHT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown RIGHT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,4", "Keydown PAGE_DOWN" );
+		assert.equal( logOutput(), "keydown,4", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown", "Keydown PAGE_DOWN (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown PAGE_DOWN (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
+		assert.equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown", "Keydown PAGE_UP (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown PAGE_UP (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-		equal( logOutput(), "keydown,4", "Keydown END" );
+		assert.equal( logOutput(), "keydown,4", "Keydown END" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-		equal( logOutput(), "keydown,0", "Keydown HOME" );
+		assert.equal( logOutput(), "keydown,0", "Keydown HOME" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equal( logOutput(), "keydown", "Keydown ESCAPE (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown ESCAPE (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equal( logOutput(), "keydown,Aberdeen", "Keydown ENTER" );
+		assert.equal( logOutput(), "keydown,Aberdeen", "Keydown ENTER" );
 
-		start();
+		ready();
 	} );
 } );
 
-asyncTest( "handle keyboard navigation on menu without scroll and with submenus", function() {
-	expect( 16 );
+QUnit.test( "handle keyboard navigation on menu without scroll and with submenus", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 16 );
 	var element = $( "#menu2" ).menu( {
 		select: function( event, ui ) {
 			log( $( ui.item[ 0 ] ).text() );
@@ -302,7 +314,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 	element.one( "menufocus", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
+		assert.equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
 		setTimeout( menukeyboard1 );
 	} );
 	element.trigger( "focus" );
@@ -311,11 +323,11 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		equal( logOutput(), "keydown,1,0", "Keydown UP" );
+		assert.equal( logOutput(), "keydown,1,0", "Keydown UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -325,7 +337,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 
 		setTimeout( function() {
-			equal( logOutput(), "keydown,1,2,3,4,0", "Keydown RIGHT (open submenu)" );
+			assert.equal( logOutput(), "keydown,1,2,3,4,0", "Keydown RIGHT (open submenu)" );
 			setTimeout( menukeyboard2 );
 		} );
 	}
@@ -333,7 +345,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 	function menukeyboard2() {
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown,4", "Keydown LEFT (close submenu)" );
+		assert.equal( logOutput(), "keydown,4", "Keydown LEFT (close submenu)" );
 
 		// Re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
@@ -341,33 +353,33 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 	}
 
 	function menukeyboard3() {
-		log( "keydown", true );
+		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,2", "Keydown PAGE_DOWN" );
+		assert.equal( logOutput(), "keydown,2", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown", "Keydown PAGE_DOWN (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown PAGE_DOWN (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
+		assert.equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown", "Keydown PAGE_UP (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown PAGE_UP (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-		equal( logOutput(), "keydown,2", "Keydown END" );
+		assert.equal( logOutput(), "keydown,2", "Keydown END" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-		equal( logOutput(), "keydown,0", "Keydown HOME" );
+		assert.equal( logOutput(), "keydown,0", "Keydown HOME" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equal( logOutput(), "keydown,4", "Keydown ESCAPE (close submenu)" );
+		assert.equal( logOutput(), "keydown,4", "Keydown ESCAPE (close submenu)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.SPACE } );
@@ -375,11 +387,11 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 	}
 
 	function menukeyboard4() {
-		equal( logOutput(), "keydown,0", "Keydown SPACE (open submenu)" );
+		assert.equal( logOutput(), "keydown,0", "Keydown SPACE (open submenu)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equal( logOutput(), "keydown,4", "Keydown ESCAPE (close submenu)" );
+		assert.equal( logOutput(), "keydown,4", "Keydown ESCAPE (close submenu)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -392,7 +404,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-				equal( logOutput(), "keydown,5,6,0,1,0,2,4,0", "Keydown skip dividers" );
+				assert.equal( logOutput(), "keydown,5,6,0,1,0,2,4,0", "Keydown skip dividers" );
 
 				log( "keydown", true );
 				element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -402,13 +414,14 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 	}
 
 	function menukeyboard6() {
-		equal( logOutput(), "keydown,Ada", "Keydown ENTER (open submenu)" );
-		start();
+		assert.equal( logOutput(), "keydown,Ada", "Keydown ENTER (open submenu)" );
+		ready();
 	}
 } );
 
-asyncTest( "handle keyboard navigation on menu with scroll and without submenus", function() {
-	expect( 14 );
+QUnit.test( "handle keyboard navigation on menu with scroll and without submenus", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 14 );
 	var element = $( "#menu3" ).menu( {
 		select: function( event, ui ) {
 			log( $( ui.item[ 0 ] ).text() );
@@ -423,67 +436,68 @@ asyncTest( "handle keyboard navigation on menu with scroll and without submenus"
 	setTimeout( function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( logOutput(), "keydown,0,1,2", "Keydown DOWN" );
+		assert.equal( logOutput(), "keydown,0,1,2", "Keydown DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		equal( logOutput(), "keydown,1,0", "Keydown UP" );
+		assert.equal( logOutput(), "keydown,1,0", "Keydown UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-		equal( logOutput(), "keydown", "Keydown RIGHT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown RIGHT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
+		assert.equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,34", "Keydown PAGE_DOWN" );
+		assert.equal( logOutput(), "keydown,34", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,17", "Keydown PAGE_UP" );
+		assert.equal( logOutput(), "keydown,17", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
+		assert.equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown", "Keydown PAGE_UP (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown PAGE_UP (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-		equal( logOutput(), "keydown,37", "Keydown END" );
+		assert.equal( logOutput(), "keydown,37", "Keydown END" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown", "Keydown PAGE_DOWN (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown PAGE_DOWN (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-		equal( logOutput(), "keydown,0", "Keydown HOME" );
+		assert.equal( logOutput(), "keydown,0", "Keydown HOME" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equal( logOutput(), "keydown", "Keydown ESCAPE (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown ESCAPE (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equal( logOutput(), "keydown,Aberdeen", "Keydown ENTER" );
+		assert.equal( logOutput(), "keydown,Aberdeen", "Keydown ENTER" );
 
-		start();
+		ready();
 	} );
 } );
 
-asyncTest( "handle keyboard navigation on menu with scroll and with submenus", function() {
-	expect( 14 );
+QUnit.test( "handle keyboard navigation on menu with scroll and with submenus", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 14 );
 	var element = $( "#menu4" ).menu( {
 		select: function( event, ui ) {
 			log( $( ui.item[ 0 ] ).text() );
@@ -497,7 +511,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	element.one( "menufocus", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
+		assert.equal( logOutput(), "keydown,1,2", "Keydown DOWN" );
 		setTimeout( menukeyboard1 );
 	} );
 	element.trigger( "focus" );
@@ -506,18 +520,18 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		equal( logOutput(), "keydown,1,0", "Keydown UP" );
+		assert.equal( logOutput(), "keydown,1,0", "Keydown UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 
 		setTimeout( function() {
-			equal( logOutput(), "keydown,1,0", "Keydown RIGHT (open submenu)" );
+			assert.equal( logOutput(), "keydown,1,0", "Keydown RIGHT (open submenu)" );
 		}, 50 );
 		setTimeout( menukeyboard2, 50 );
 	}
@@ -525,7 +539,7 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	function menukeyboard2() {
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown,1", "Keydown LEFT (close submenu)" );
+		assert.equal( logOutput(), "keydown,1", "Keydown LEFT (close submenu)" );
 
 		// Re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
@@ -535,31 +549,31 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	function menukeyboard3() {
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
+		assert.equal( logOutput(), "keydown,17", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equal( logOutput(), "keydown,27", "Keydown PAGE_DOWN" );
+		assert.equal( logOutput(), "keydown,27", "Keydown PAGE_DOWN" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,10", "Keydown PAGE_UP" );
+		assert.equal( logOutput(), "keydown,10", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
+		assert.equal( logOutput(), "keydown,0", "Keydown PAGE_UP" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-		equal( logOutput(), "keydown,27", "Keydown END" );
+		assert.equal( logOutput(), "keydown,27", "Keydown END" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-		equal( logOutput(), "keydown,0", "Keydown HOME" );
+		assert.equal( logOutput(), "keydown,0", "Keydown HOME" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equal( logOutput(), "keydown,1", "Keydown ESCAPE (close submenu)" );
+		assert.equal( logOutput(), "keydown,1", "Keydown ESCAPE (close submenu)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -567,18 +581,19 @@ asyncTest( "handle keyboard navigation on menu with scroll and with submenus", f
 	}
 
 	function menukeyboard4() {
-		equal( logOutput(), "keydown,0", "Keydown ENTER (open submenu)" );
+		assert.equal( logOutput(), "keydown,0", "Keydown ENTER (open submenu)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equal( logOutput(), "keydown,Aberdeen", "Keydown ENTER (select item)" );
+		assert.equal( logOutput(), "keydown,Aberdeen", "Keydown ENTER (select item)" );
 
-		start();
+		ready();
 	}
 } );
 
-asyncTest( "handle keyboard navigation and mouse click on menu with disabled items", function() {
-	expect( 6 );
+QUnit.test( "handle keyboard navigation and mouse click on menu with disabled items", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 6 );
 	var element = $( "#menu6" ).menu( {
 		select: function( event, ui ) {
 			log( $( ui.item[ 0 ] ).text() );
@@ -592,7 +607,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 	element.one( "menufocus", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equal( logOutput(), "keydown,1", "Keydown focus but not select disabled item" );
+		assert.equal( logOutput(), "keydown,1", "Keydown focus but not select disabled item" );
 		setTimeout( menukeyboard1, 50 );
 	} );
 	element.trigger( "focus" );
@@ -602,34 +617,35 @@ asyncTest( "handle keyboard navigation and mouse click on menu with disabled ite
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( logOutput(), "keydown,2,3,4", "Keydown focus disabled item with submenu" );
+		assert.equal( logOutput(), "keydown,2,3,4", "Keydown focus disabled item with submenu" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
+		assert.equal( logOutput(), "keydown", "Keydown LEFT (no effect)" );
 
 		log( "keydown", true );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 
 		setTimeout( function() {
-			equal( logOutput(), "keydown", "Keydown RIGHT (no effect on disabled sub-menu)" );
+			assert.equal( logOutput(), "keydown", "Keydown RIGHT (no effect on disabled sub-menu)" );
 
 			log( "keydown", true );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 
 			setTimeout( function() {
-				equal( logOutput(), "keydown", "Keydown ENTER (no effect on disabled sub-menu)" );
+				assert.equal( logOutput(), "keydown", "Keydown ENTER (no effect on disabled sub-menu)" );
 				log( "click", true );
 				click( element, "1" );
-				equal( logOutput(), "click", "Click disabled item (no effect)" );
-				start();
+				assert.equal( logOutput(), "click", "Click disabled item (no effect)" );
+				ready();
 			}, 50 );
 		}, 50 );
 	}
 } );
 
-asyncTest( "handle keyboard navigation and mouse click on menu with dividers and group labels", function() {
-	expect( 2 );
+QUnit.test( "handle keyboard navigation and mouse click on menu with dividers and group labels", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 	var element = $( "#menu7" ).menu( {
 		items: "> :not('.ui-menu-group')",
 		select: function( event, ui ) {
@@ -644,7 +660,7 @@ asyncTest( "handle keyboard navigation and mouse click on menu with dividers and
 	element.one( "menufocus", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equal( logOutput(), "keydown,2,Ada", "Keydown skips initial group label" );
+		assert.equal( logOutput(), "keydown,2,Ada", "Keydown skips initial group label" );
 		setTimeout( menukeyboard1, 50 );
 	} );
 	element.trigger( "focus" );
@@ -654,13 +670,14 @@ asyncTest( "handle keyboard navigation and mouse click on menu with dividers and
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( logOutput(), "keydown,3,4,7", "Keydown focus skips divider and group label" );
-		start();
+		assert.equal( logOutput(), "keydown,3,4,7", "Keydown focus skips divider and group label" );
+		ready();
 	}
 } );
 
-asyncTest( "handle keyboard navigation with spelling of menu items", function() {
-	expect( 3 );
+QUnit.test( "handle keyboard navigation with spelling of menu items", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 	var element = $( "#menu2" ).menu( {
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).parent().index() );
@@ -672,18 +689,19 @@ asyncTest( "handle keyboard navigation with spelling of menu items", function() 
 		element.simulate( "keydown", { keyCode: 65 } );
 		element.simulate( "keydown", { keyCode: 68 } );
 		element.simulate( "keydown", { keyCode: 68 } );
-		equal( logOutput(), "keydown,0,1,3", "Keydown focus Addyston by spelling the first 3 letters" );
+		assert.equal( logOutput(), "keydown,0,1,3", "Keydown focus Addyston by spelling the first 3 letters" );
 		element.simulate( "keydown", { keyCode: 68 } );
-		equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
+		assert.equal( logOutput(), "keydown,0,1,3,4", "Keydown focus Delphi by repeating the 'd' again" );
 		element.simulate( "keydown", { keyCode: 83 } );
-		equal( logOutput(), "keydown,0,1,3,4,5", "Keydown focus Saarland ignoring leading space" );
-		start();
+		assert.equal( logOutput(), "keydown,0,1,3,4,5", "Keydown focus Saarland ignoring leading space" );
+		ready();
 	} );
 	element[ 0 ].focus();
 } );
 
-asyncTest( "Keep focus on selected item (see #10644)", function() {
-	expect( 1 );
+QUnit.test( "Keep focus on selected item (see #10644)", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 	var element = $( "#menu2" ).menu( {
 		focus: function( event ) {
 			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).parent().index() );
@@ -697,15 +715,15 @@ asyncTest( "Keep focus on selected item (see #10644)", function() {
 		element.simulate( "keydown", { keyCode: 68 } );
 		element.simulate( "keydown", { keyCode: 89 } );
 		element.simulate( "keydown", { keyCode: 83 } );
-		equal( logOutput(), "keydown,0,1,3,3,3",
+		assert.equal( logOutput(), "keydown,0,1,3,3,3",
 			"Focus stays on 'Addyston', even after other options are eliminated" );
-		start();
+		ready();
 	} );
 	element[ 0 ].focus();
 } );
 
-test( "#9469: Stopping propagation in a select event should not suppress subsequent select events.", function() {
-	expect( 1 );
+QUnit.test( "#9469: Stopping propagation in a select event should not suppress subsequent select events.", function( assert ) {
+	assert.expect( 1 );
 	var element = $( "#menu1" ).menu( {
 		select: function( event ) {
 			log();
@@ -716,23 +734,24 @@ test( "#9469: Stopping propagation in a select event should not suppress subsequ
 	click( element, "1" );
 	click( element, "2" );
 
-	equal( logOutput(), "1,2", "Both select events were not triggered." );
+	assert.equal( logOutput(), "1,2", "Both select events were not triggered." );
 } );
 
-asyncTest( "#10571: When typing in a menu, only menu-items should be focused", function( assert ) {
-	expect( 3 );
+QUnit.test( "#10571: When typing in a menu, only menu-items should be focused", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 
 	var element = $( "#menu8" ).menu( {
 		focus: function( event, ui ) {
-			equal( ui.item.length, 1, "There should only be one match when filtering" );
+			assert.equal( ui.item.length, 1, "There should only be one match when filtering" );
 			assert.hasClasses( ui.item, "ui-menu-item" );
-			equal( ui.item.text(), "-Saarland", "element has correct text" );
+			assert.equal( ui.item.text(), "-Saarland", "element has correct text" );
 		}
 	} );
 
 	setTimeout( function() {
 		element.menu( "widget" ).simulate( "keydown", { keyCode: "-".charCodeAt( 0 ) } );
-		start();
+		ready();
 	} );
 } );
 

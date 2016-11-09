@@ -1,16 +1,17 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/accordion"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var setupTeardown = testHelper.setupTeardown,
 	state = testHelper.state;
 
-module( "accordion: events", setupTeardown() );
+QUnit.module( "accordion: events", setupTeardown() );
 
-test( "create", function() {
-	expect( 10 );
+QUnit.test( "create", function( assert ) {
+	assert.expect( 10 );
 
 	var element = $( "#list1" ),
 		headers = element.children( "h3" ),
@@ -18,10 +19,10 @@ test( "create", function() {
 
 	element.accordion( {
 		create: function( event, ui ) {
-			equal( ui.header.length, 1, "header length" );
-			strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
-			equal( ui.panel.length, 1, "panel length" );
-			strictEqual( ui.panel[ 0 ], contents[ 0 ], "panel" );
+			assert.equal( ui.header.length, 1, "header length" );
+			assert.strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
+			assert.equal( ui.panel.length, 1, "panel length" );
+			assert.strictEqual( ui.panel[ 0 ], contents[ 0 ], "panel" );
 		}
 	} );
 	element.accordion( "destroy" );
@@ -29,10 +30,10 @@ test( "create", function() {
 	element.accordion( {
 		active: 2,
 		create: function( event, ui ) {
-			equal( ui.header.length, 1, "header length" );
-			strictEqual( ui.header[ 0 ], headers[ 2 ], "header" );
-			equal( ui.panel.length, 1, "panel length" );
-			strictEqual( ui.panel[ 0 ], contents[ 2 ], "panel" );
+			assert.equal( ui.header.length, 1, "header length" );
+			assert.strictEqual( ui.header[ 0 ], headers[ 2 ], "header" );
+			assert.equal( ui.panel.length, 1, "panel length" );
+			assert.strictEqual( ui.panel[ 0 ], contents[ 2 ], "panel" );
 		}
 	} );
 	element.accordion( "destroy" );
@@ -41,15 +42,15 @@ test( "create", function() {
 		active: false,
 		collapsible: true,
 		create: function( event, ui ) {
-			equal( ui.header.length, 0, "header length" );
-			equal( ui.panel.length, 0, "panel length" );
+			assert.equal( ui.header.length, 0, "header length" );
+			assert.equal( ui.panel.length, 0, "panel length" );
 		}
 	} );
 	element.accordion( "destroy" );
 } );
 
-test( "beforeActivate", function() {
-	expect( 38 );
+QUnit.test( "beforeActivate", function( assert ) {
+	assert.expect( 38 );
 	var element = $( "#list1" ).accordion( {
 			active: false,
 			collapsible: true
@@ -58,63 +59,63 @@ test( "beforeActivate", function() {
 		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
-		ok( !( "originalEvent" in event ) );
-		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldPanel.length, 0 );
-		equal( ui.newHeader.length, 1 );
-		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
-		equal( ui.newPanel.length, 1 );
-		strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
-		state( element, 0, 0, 0 );
+		assert.ok( !( "originalEvent" in event ) );
+		assert.equal( ui.oldHeader.length, 0 );
+		assert.equal( ui.oldPanel.length, 0 );
+		assert.equal( ui.newHeader.length, 1 );
+		assert.strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
+		assert.equal( ui.newPanel.length, 1 );
+		assert.strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
+		state( assert, element, 0, 0, 0 );
 	} );
 	element.accordion( "option", "active", 0 );
-	state( element, 1, 0, 0 );
+	state( assert, element, 1, 0, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
-		equal( event.originalEvent.type, "click" );
-		equal( ui.oldHeader.length, 1 );
-		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
-		equal( ui.oldPanel.length, 1 );
-		strictEqual( ui.oldPanel[ 0 ], content[ 0 ] );
-		equal( ui.newHeader.length, 1 );
-		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equal( ui.newPanel.length, 1 );
-		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
-		state( element, 1, 0, 0 );
+		assert.equal( event.originalEvent.type, "click" );
+		assert.equal( ui.oldHeader.length, 1 );
+		assert.strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
+		assert.equal( ui.oldPanel.length, 1 );
+		assert.strictEqual( ui.oldPanel[ 0 ], content[ 0 ] );
+		assert.equal( ui.newHeader.length, 1 );
+		assert.strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
+		assert.equal( ui.newPanel.length, 1 );
+		assert.strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
+		state( assert, element, 1, 0, 0 );
 	} );
 	headers.eq( 1 ).trigger( "click" );
-	state( element, 0, 1, 0 );
+	state( assert, element, 0, 1, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
-		ok( !( "originalEvent" in event ) );
-		equal( ui.oldHeader.length, 1 );
-		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
-		equal( ui.oldPanel.length, 1 );
-		strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
-		equal( ui.newHeader.length, 0 );
-		equal( ui.newPanel.length, 0 );
-		state( element, 0, 1, 0 );
+		assert.ok( !( "originalEvent" in event ) );
+		assert.equal( ui.oldHeader.length, 1 );
+		assert.strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
+		assert.equal( ui.oldPanel.length, 1 );
+		assert.strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
+		assert.equal( ui.newHeader.length, 0 );
+		assert.equal( ui.newPanel.length, 0 );
+		state( assert, element, 0, 1, 0 );
 	} );
 	element.accordion( "option", "active", false );
-	state( element, 0, 0, 0 );
+	state( assert, element, 0, 0, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
-		ok( !( "originalEvent" in event ) );
-		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldPanel.length, 0 );
-		equal( ui.newHeader.length, 1 );
-		strictEqual( ui.newHeader[ 0 ], headers[ 2 ] );
-		equal( ui.newPanel.length, 1 );
-		strictEqual( ui.newPanel[ 0 ], content[ 2 ] );
+		assert.ok( !( "originalEvent" in event ) );
+		assert.equal( ui.oldHeader.length, 0 );
+		assert.equal( ui.oldPanel.length, 0 );
+		assert.equal( ui.newHeader.length, 1 );
+		assert.strictEqual( ui.newHeader[ 0 ], headers[ 2 ] );
+		assert.equal( ui.newPanel.length, 1 );
+		assert.strictEqual( ui.newPanel[ 0 ], content[ 2 ] );
 		event.preventDefault();
-		state( element, 0, 0, 0 );
+		state( assert, element, 0, 0, 0 );
 	} );
 	element.accordion( "option", "active", 2 );
-	state( element, 0, 0, 0 );
+	state( assert, element, 0, 0, 0 );
 } );
 
-test( "activate", function() {
-	expect( 21 );
+QUnit.test( "activate", function( assert ) {
+	assert.expect( 21 );
 	var element = $( "#list1" ).accordion( {
 			active: false,
 			collapsible: true
@@ -123,44 +124,44 @@ test( "activate", function() {
 		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionactivate", function( event, ui ) {
-		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldPanel.length, 0 );
-		equal( ui.newHeader.length, 1 );
-		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
-		equal( ui.newPanel.length, 1 );
-		strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
+		assert.equal( ui.oldHeader.length, 0 );
+		assert.equal( ui.oldPanel.length, 0 );
+		assert.equal( ui.newHeader.length, 1 );
+		assert.strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
+		assert.equal( ui.newPanel.length, 1 );
+		assert.strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
 	} );
 	element.accordion( "option", "active", 0 );
 
 	element.one( "accordionactivate", function( event, ui ) {
-		equal( ui.oldHeader.length, 1 );
-		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
-		equal( ui.oldPanel.length, 1 );
-		strictEqual( ui.oldPanel[ 0 ], content[ 0 ] );
-		equal( ui.newHeader.length, 1 );
-		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equal( ui.newPanel.length, 1 );
-		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
+		assert.equal( ui.oldHeader.length, 1 );
+		assert.strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
+		assert.equal( ui.oldPanel.length, 1 );
+		assert.strictEqual( ui.oldPanel[ 0 ], content[ 0 ] );
+		assert.equal( ui.newHeader.length, 1 );
+		assert.strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
+		assert.equal( ui.newPanel.length, 1 );
+		assert.strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
 	} );
 	headers.eq( 1 ).trigger( "click" );
 
 	element.one( "accordionactivate", function( event, ui ) {
-		equal( ui.oldHeader.length, 1 );
-		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
-		equal( ui.oldPanel.length, 1 );
-		strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
-		equal( ui.newHeader.length, 0 );
-		equal( ui.newPanel.length, 0 );
+		assert.equal( ui.oldHeader.length, 1 );
+		assert.strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
+		assert.equal( ui.oldPanel.length, 1 );
+		assert.strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
+		assert.equal( ui.newHeader.length, 0 );
+		assert.equal( ui.newPanel.length, 0 );
 	} );
 	element.accordion( "option", "active", false );
 
 	// Prevent activation
 	element.one( "accordionbeforeactivate", function( event ) {
-		ok( true );
+		assert.ok( true );
 		event.preventDefault();
 	} );
 	element.one( "accordionactivate", function() {
-		ok( false );
+		assert.ok( false );
 	} );
 	element.accordion( "option", "active", 1 );
 } );

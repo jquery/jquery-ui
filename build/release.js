@@ -35,6 +35,14 @@ function replaceAtVersion() {
 	return matches;
 }
 
+function removeExternals ( packager ) {
+	Object.keys( packager.builtFiles ).forEach( function( filepath ) {
+		if ( /^external\//.test( filepath ) ) {
+			delete packager.builtFiles[ filepath ];
+		}
+	} );
+}
+
 function addManifest( packager ) {
 	var output = packager.builtFiles;
 	output.MANIFEST = Object.keys( output ).sort( function( a, b ) {
@@ -52,7 +60,8 @@ function buildCDNPackage( callback ) {
 	var Package = require( "download.jqueryui.com/lib/package-1-12-themes" );
 	var Packager = require( "node-packager" );
 	var jqueryUi = new JqueryUi( path.resolve( "." ) );
-	var target = fs.createWriteStream( "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version + "-cdn.zip" );
+	var target = fs.createWriteStream( "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version +
+		"-cdn.zip" );
 	var packager = new Packager( jqueryUi.files().cache, Package, {
 		components: jqueryUi.components().map( function( component ) {
 			return component.name;
@@ -61,6 +70,7 @@ function buildCDNPackage( callback ) {
 		themeVars: null
 	} );
 	packager.ready.then( function() {
+		removeExternals( packager );
 		addManifest( packager );
 		packager.toZip( target, {
 			basedir: ""
@@ -82,7 +92,8 @@ Release.define( {
 				"August", "September", "October", "November", "December" ],
 			now = new Date();
 		return "<script>{\n\t\"title\": \"jQuery UI " + Release.newVersion + " Changelog\"\n" +
-			"}</script>\n\nReleased on " + monthNames[ now.getMonth() ] + " " + now.getDate() + ", " + now.getFullYear() + "\n\n";
+			"}</script>\n\nReleased on " + monthNames[ now.getMonth() ] + " " + now.getDate() +
+			", " + now.getFullYear() + "\n\n";
 	},
 	generateArtifacts: function( fn ) {
 		var files = replaceAtVersion();

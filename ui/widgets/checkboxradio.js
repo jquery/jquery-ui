@@ -69,10 +69,10 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 		// We need to get the label text but this may also need to make sure it does not contain the
 		// input itself.
-		this.label.contents().not( this.element ).each( function() {
+		this.label.contents().not( this.element[ 0 ] ).each( function() {
 
-			// The label contents could be text, html, or a mix. We concat each element to get a string
-			// representation of the label, without the input as part of it.
+			// The label contents could be text, html, or a mix. We concat each element to get a
+			// string representation of the label, without the input as part of it.
 			that.originalLabel += this.nodeType === 3 ? $( this ).text() : this.outerHTML;
 		} );
 
@@ -115,9 +115,6 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 		if ( checked ) {
 			this._addClass( this.label, "ui-checkboxradio-checked", "ui-state-active" );
-			if ( this.icon ) {
-				this._addClass( this.icon, null, "ui-state-hover" );
-			}
 		}
 
 		this._on( {
@@ -164,7 +161,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 			// Not inside a form, check all inputs that also are not inside a form
 			group = $( nameSelector ).filter( function() {
-				return $( this ).form().length === 0;
+				return $( this )._form().length === 0;
 			} );
 		}
 
@@ -176,11 +173,10 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		this._toggleClass( this.label, "ui-checkboxradio-checked", "ui-state-active", checked );
 
 		if ( this.options.icon && this.type === "checkbox" ) {
-
-			// We add ui-state-highlight to change the icon color
-			this._toggleClass( this.icon, null, "ui-icon-check ui-state-highlight", checked )
+			this._toggleClass( this.icon, null, "ui-icon-check ui-state-checked", checked )
 				._toggleClass( this.icon, null, "ui-icon-blank", !checked );
 		}
+
 		if ( this.type === "radio" ) {
 			this._getRadioGroup()
 				.each( function() {
@@ -233,14 +229,14 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 			}
 
 			if ( this.type === "checkbox" ) {
-				toAdd += checked ? "ui-icon-check ui-state-highlight" : "ui-icon-blank";
+				toAdd += checked ? "ui-icon-check ui-state-checked" : "ui-icon-blank";
 				this._removeClass( this.icon, null, checked ? "ui-icon-blank" : "ui-icon-check" );
 			} else {
 				toAdd += "ui-icon-blank";
 			}
 			this._addClass( this.icon, "ui-checkboxradio-icon", toAdd );
 			if ( !checked ) {
-				this._removeClass( this.icon, null, "ui-icon-check ui-state-highlight" );
+				this._removeClass( this.icon, null, "ui-icon-check ui-state-checked" );
 			}
 			this.icon.prependTo( this.label ).after( this.iconSpace );
 		} else if ( this.icon !== undefined ) {
@@ -253,7 +249,15 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	_updateLabel: function() {
 
 		// Remove the contents of the label ( minus the icon, icon space, and input )
-		this.label.contents().not( this.element.add( this.icon ).add( this.iconSpace ) ).remove();
+		var contents = this.label.contents().not( this.element[ 0 ] );
+		if ( this.icon ) {
+			contents = contents.not( this.icon[ 0 ] );
+		}
+		if ( this.iconSpace ) {
+			contents = contents.not( this.iconSpace[ 0 ] );
+		}
+		contents.remove();
+
 		this.label.append( this.options.label );
 	},
 

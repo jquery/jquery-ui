@@ -1,10 +1,11 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widget"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-test( "$.widget.extend()", function() {
-	expect( 27 );
+QUnit.test( "$.widget.extend()", function( assert ) {
+	assert.expect( 27 );
 
 	var ret, empty, optionsWithLength, optionsWithDate, myKlass, customObject, optionsWithCustomObject, nullUndef,
 		target, recursive, obj, input, output,
@@ -27,86 +28,86 @@ test( "$.widget.extend()", function() {
 		merged2 = { xnumber1: 5, xnumber2: 1, xstring1: "peter", xstring2: "xx", xxx: "newstringx" };
 
 	$.widget.extend( settings, options );
-	deepEqual( settings, merged, "Check if extended: settings must be extended" );
-	deepEqual( options, optionsCopy, "Check if not modified: options must not be modified" );
+	assert.deepEqual( settings, merged, "Check if extended: settings must be extended" );
+	assert.deepEqual( options, optionsCopy, "Check if not modified: options must not be modified" );
 
 	$.widget.extend( deep1, deep2 );
-	deepEqual( deep1.foo, deepmerged.foo, "Check if foo: settings must be extended" );
-	deepEqual( deep2.foo, deep2copy.foo, "Check if not deep2: options must not be modified" );
-	equal( deep1.foo2, document, "Make sure that a deep clone was not attempted on the document" );
+	assert.deepEqual( deep1.foo, deepmerged.foo, "Check if foo: settings must be extended" );
+	assert.deepEqual( deep2.foo, deep2copy.foo, "Check if not deep2: options must not be modified" );
+	assert.equal( deep1.foo2, document, "Make sure that a deep clone was not attempted on the document" );
 
-	strictEqual( $.widget.extend( {}, nestedarray ).arr, arr, "Don't clone arrays" );
-	ok( $.isPlainObject( $.widget.extend( { arr: arr }, { arr: {} } ).arr ), "Cloned object heve to be an plain object" );
+	assert.strictEqual( $.widget.extend( {}, nestedarray ).arr, arr, "Don't clone arrays" );
+	assert.ok( $.isPlainObject( $.widget.extend( { arr: arr }, { arr: {} } ).arr ), "Cloned object heve to be an plain object" );
 
 	empty = {};
 	optionsWithLength = { foo: { length: -1 } };
 	$.widget.extend( empty, optionsWithLength );
-	deepEqual( empty.foo, optionsWithLength.foo, "The length property must copy correctly" );
+	assert.deepEqual( empty.foo, optionsWithLength.foo, "The length property must copy correctly" );
 
 	empty = {};
 	optionsWithDate = { foo: { date: new Date() } };
 	$.widget.extend( empty, optionsWithDate );
-	deepEqual( empty.foo, optionsWithDate.foo, "Dates copy correctly" );
+	assert.deepEqual( empty.foo, optionsWithDate.foo, "Dates copy correctly" );
 
 	myKlass = function() {};
 	customObject = new myKlass();
 	optionsWithCustomObject = { foo: { date: customObject } };
 	empty = {};
 	$.widget.extend( empty, optionsWithCustomObject );
-	strictEqual( empty.foo.date, customObject, "Custom objects copy correctly (no methods)" );
+	assert.strictEqual( empty.foo.date, customObject, "Custom objects copy correctly (no methods)" );
 
 	// Makes the class a little more realistic
 	myKlass.prototype = { someMethod: function() {} };
 	empty = {};
 	$.widget.extend( empty, optionsWithCustomObject );
-	strictEqual( empty.foo.date, customObject, "Custom objects copy correctly" );
+	assert.strictEqual( empty.foo.date, customObject, "Custom objects copy correctly" );
 
 	ret = $.widget.extend( { foo: 4 }, { foo: Number( 5 ) } );
-	equal( ret.foo, 5, "Wrapped numbers copy correctly" );
+	assert.equal( ret.foo, 5, "Wrapped numbers copy correctly" );
 
 	nullUndef = $.widget.extend( {}, options, { xnumber2: null } );
-	strictEqual( nullUndef.xnumber2, null, "Check to make sure null values are copied" );
+	assert.strictEqual( nullUndef.xnumber2, null, "Check to make sure null values are copied" );
 
 	nullUndef = $.widget.extend( {}, options, { xnumber2: undefined } );
-	strictEqual( nullUndef.xnumber2, options.xnumber2, "Check to make sure undefined values are not copied" );
+	assert.strictEqual( nullUndef.xnumber2, options.xnumber2, "Check to make sure undefined values are not copied" );
 
 	nullUndef = $.widget.extend( {}, options, { xnumber0: null } );
-	strictEqual( nullUndef.xnumber0, null, "Check to make sure null values are inserted" );
+	assert.strictEqual( nullUndef.xnumber0, null, "Check to make sure null values are inserted" );
 
 	target = {};
 	recursive = { foo:target, bar:5 };
 	$.widget.extend( target, recursive );
-	deepEqual( target, { foo: {}, bar: 5 }, "Check to make sure a recursive obj doesn't go never-ending loop by not copying it over" );
+	assert.deepEqual( target, { foo: {}, bar: 5 }, "Check to make sure a recursive obj doesn't go never-ending loop by not copying it over" );
 
 	ret = $.widget.extend( { foo: [] }, { foo: [ 0 ] } ); // 1907
-	equal( ret.foo.length, 1, "Check to make sure a value with coersion 'false' copies over when necessary to fix #1907" );
+	assert.equal( ret.foo.length, 1, "Check to make sure a value with coersion 'false' copies over when necessary to fix #1907" );
 
 	ret = $.widget.extend( { foo: "1,2,3" }, { foo: [ 1, 2, 3 ] } );
-	deepEqual( ret.foo, [ 1, 2, 3 ], "Properly extend a string to array." );
+	assert.deepEqual( ret.foo, [ 1, 2, 3 ], "Properly extend a string to array." );
 
 	ret = $.widget.extend( { foo: "1,2,3" }, { foo: { to: "object" } } );
-	deepEqual( ret.foo, { to: "object" }, "Properly extend a string to object." );
+	assert.deepEqual( ret.foo, { to: "object" }, "Properly extend a string to object." );
 
 	ret = $.widget.extend( { foo: "bar" }, { foo: null } );
-	strictEqual( ret.foo, null, "Make sure a null value doesn't crash with deep extend, for #1908" );
+	assert.strictEqual( ret.foo, null, "Make sure a null value doesn't crash with deep extend, for #1908" );
 
 	obj = { foo: null };
 	$.widget.extend( obj, { foo:"notnull" } );
-	equal( obj.foo, "notnull", "Make sure a null value can be overwritten" );
+	assert.equal( obj.foo, "notnull", "Make sure a null value can be overwritten" );
 
 	settings = $.widget.extend( {}, defaults, options1, options2 );
-	deepEqual( settings, merged2, "Check if extended: settings must be extended" );
-	deepEqual( defaults, defaultsCopy, "Check if not modified: options1 must not be modified" );
-	deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
-	deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
+	assert.deepEqual( settings, merged2, "Check if extended: settings must be extended" );
+	assert.deepEqual( defaults, defaultsCopy, "Check if not modified: options1 must not be modified" );
+	assert.deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
+	assert.deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
 
 	input = {
 		key: [ 1, 2, 3 ]
 	};
 	output = $.widget.extend( {}, input );
-	deepEqual( input, output, "don't clone arrays" );
+	assert.deepEqual( input, output, "don't clone arrays" );
 	input.key[ 0 ] = 10;
-	deepEqual( input, output, "don't clone arrays" );
+	assert.deepEqual( input, output, "don't clone arrays" );
 } );
 
 } );

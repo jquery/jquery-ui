@@ -1,13 +1,14 @@
 define( [
+	"qunit",
 	"jquery",
 	"lib/helper",
 	"ui/widgets/accordion"
-], function( $, helper ) {
+], function( QUnit, $, helper ) {
 
 return $.extend( helper, {
-	equalHeight: function( accordion, height ) {
+	equalHeight: function( assert, accordion, height ) {
 		accordion.find( ".ui-accordion-content" ).each( function() {
-			equal( $( this ).outerHeight(), height );
+			assert.equal( $( this ).outerHeight(), height );
 		} );
 	},
 
@@ -23,12 +24,12 @@ return $.extend( helper, {
 		};
 	},
 
-	state: function( accordion ) {
-		var expected = $.makeArray( arguments ).slice( 1 ),
+	state: function( assert, accordion ) {
+		var expected = $.makeArray( arguments ).slice( 2 ),
 			actual = accordion.find( ".ui-accordion-content" ).map( function() {
 				return $( this ).css( "display" ) === "none" ? 0 : 1;
 			} ).get();
-		QUnit.push( QUnit.equiv( actual, expected ), actual, expected );
+		assert.deepEqual( actual, expected );
 	}
 } );
 

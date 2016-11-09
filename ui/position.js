@@ -27,36 +27,15 @@
 	}
 }( function( $ ) {
 ( function() {
-var cachedScrollbarWidth, supportsOffsetFractions,
+var cachedScrollbarWidth,
 	max = Math.max,
 	abs = Math.abs,
-	round = Math.round,
 	rhorizontal = /left|center|right/,
 	rvertical = /top|center|bottom/,
 	roffset = /[\+\-]\d+(\.[\d]+)?%?/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
 	_position = $.fn.position;
-
-// Support: IE <=9 only
-supportsOffsetFractions = function() {
-	var element = $( "<div>" )
-			.css( "position", "absolute" )
-			.appendTo( "body" )
-			.offset( {
-				top: 1.5,
-				left: 1.5
-			} ),
-		support = element.offset().top === 1.5;
-
-	element.remove();
-
-	supportsOffsetFractions = function() {
-		return support;
-	};
-
-	return support;
-};
 
 function getOffsets( offsets, width, height ) {
 	return [
@@ -105,7 +84,9 @@ $.position = {
 			return cachedScrollbarWidth;
 		}
 		var w1, w2,
-			div = $( "<div style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
+			div = $( "<div " +
+				"style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'>" +
+				"<div style='height:100px;width:auto;'></div></div>" ),
 			innerDiv = div.children()[ 0 ];
 
 		$( "body" ).append( div );
@@ -242,8 +223,10 @@ $.fn.position = function( options ) {
 			elemHeight = elem.outerHeight(),
 			marginLeft = parseCss( this, "marginLeft" ),
 			marginTop = parseCss( this, "marginTop" ),
-			collisionWidth = elemWidth + marginLeft + parseCss( this, "marginRight" ) + scrollInfo.width,
-			collisionHeight = elemHeight + marginTop + parseCss( this, "marginBottom" ) + scrollInfo.height,
+			collisionWidth = elemWidth + marginLeft + parseCss( this, "marginRight" ) +
+				scrollInfo.width,
+			collisionHeight = elemHeight + marginTop + parseCss( this, "marginBottom" ) +
+				scrollInfo.height,
 			position = $.extend( {}, basePosition ),
 			myOffset = getOffsets( offsets.my, elem.outerWidth(), elem.outerHeight() );
 
@@ -261,12 +244,6 @@ $.fn.position = function( options ) {
 
 		position.left += myOffset[ 0 ];
 		position.top += myOffset[ 1 ];
-
-		// If the browser doesn't support fractions, then round for consistent results
-		if ( !supportsOffsetFractions() ) {
-			position.left = round( position.left );
-			position.top = round( position.top );
-		}
 
 		collisionPosition = {
 			marginLeft: marginLeft,
@@ -353,7 +330,8 @@ $.ui.position = {
 
 				// Element is initially over the left side of within
 				if ( overLeft > 0 && overRight <= 0 ) {
-					newOverRight = position.left + overLeft + data.collisionWidth - outerWidth - withinOffset;
+					newOverRight = position.left + overLeft + data.collisionWidth - outerWidth -
+						withinOffset;
 					position.left += overLeft - newOverRight;
 
 				// Element is initially over right side of within
@@ -396,7 +374,8 @@ $.ui.position = {
 
 				// Element is initially over the top of within
 				if ( overTop > 0 && overBottom <= 0 ) {
-					newOverBottom = position.top + overTop + data.collisionHeight - outerHeight - withinOffset;
+					newOverBottom = position.top + overTop + data.collisionHeight - outerHeight -
+						withinOffset;
 					position.top += overTop - newOverBottom;
 
 				// Element is initially over bottom of within
@@ -450,12 +429,14 @@ $.ui.position = {
 				newOverLeft;
 
 			if ( overLeft < 0 ) {
-				newOverRight = position.left + myOffset + atOffset + offset + data.collisionWidth - outerWidth - withinOffset;
+				newOverRight = position.left + myOffset + atOffset + offset + data.collisionWidth -
+					outerWidth - withinOffset;
 				if ( newOverRight < 0 || newOverRight < abs( overLeft ) ) {
 					position.left += myOffset + atOffset + offset;
 				}
 			} else if ( overRight > 0 ) {
-				newOverLeft = position.left - data.collisionPosition.marginLeft + myOffset + atOffset + offset - offsetLeft;
+				newOverLeft = position.left - data.collisionPosition.marginLeft + myOffset +
+					atOffset + offset - offsetLeft;
 				if ( newOverLeft > 0 || abs( newOverLeft ) < overRight ) {
 					position.left += myOffset + atOffset + offset;
 				}
@@ -484,12 +465,14 @@ $.ui.position = {
 				newOverTop,
 				newOverBottom;
 			if ( overTop < 0 ) {
-				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight - outerHeight - withinOffset;
+				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight -
+					outerHeight - withinOffset;
 				if ( newOverBottom < 0 || newOverBottom < abs( overTop ) ) {
 					position.top += myOffset + atOffset + offset;
 				}
 			} else if ( overBottom > 0 ) {
-				newOverTop = position.top - data.collisionPosition.marginTop + myOffset + atOffset + offset - offsetTop;
+				newOverTop = position.top - data.collisionPosition.marginTop + myOffset + atOffset +
+					offset - offsetTop;
 				if ( newOverTop > 0 || abs( newOverTop ) < overBottom ) {
 					position.top += myOffset + atOffset + offset;
 				}

@@ -31,7 +31,7 @@ common.testWidget( "draggable", {
 		stack: false,
 		zIndex: false,
 
-		//todo: remove the following option checks when interactions are rewritten:
+		//Todo: remove the following option checks when interactions are rewritten:
 		addClasses: true,
 		delay: 0,
 		distance: 1,

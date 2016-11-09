@@ -1,19 +1,20 @@
 define( [
+	"qunit",
 	"jquery",
 	"lib/helper"
-], function( $, helper ) {
+], function( QUnit, $, helper ) {
 
 return $.extend( helper, {
-	shouldDrop: function() {
+	shouldDrop: function( assert ) {
 
-		// todo: actually implement this
-		ok( true, "missing test - untested code is broken code" );
+		// Todo: actually implement this
+		assert.ok( true, "missing test - untested code is broken code" );
 	},
 
-	shouldNotDrop: function() {
+	shouldNotDrop: function( assert ) {
 
-		// todo: actually implement this
-		ok( true, "missing test - untested code is broken code" );
+		// Todo: actually implement this
+		assert.ok( true, "missing test - untested code is broken code" );
 	}
 } );
 

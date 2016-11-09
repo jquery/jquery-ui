@@ -14,7 +14,7 @@ common.testWidget( "progressbar", {
 		max: 100,
 		value: 0,
 
-		//callbacks
+		//Callbacks
 		change: null,
 		complete: null,
 		create: null

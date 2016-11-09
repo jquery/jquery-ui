@@ -45,7 +45,8 @@ return $.effects.define( "drop", "hide", function( options, done ) {
 
 	$.effects.createPlaceholder( element );
 
-	distance = options.distance || element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
+	distance = options.distance ||
+		element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
 
 	animation[ ref ] = motion + distance;
 

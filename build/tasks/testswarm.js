@@ -4,23 +4,32 @@ module.exports = function( grunt ) {
 
 var versions = {
 		"git": "git",
-		"1.11": "1.11.0 1.11.1 1.11.2 1.11.3",
-		"1.10": "1.10.0 1.10.2",
-		"1.9": "1.9.0 1.9.1",
-		"1.8": "1.8.0 1.8.1 1.8.2 1.8.3",
-		"1.7": "1.7.0 1.7.1 1.7.2"
+		"3.1": "3.1.1",
+		"3.0": "3.0.0",
+		"2.2": "2.2.4",
+		"2.1": "2.1.4",
+		"2.0": "2.0.3",
+		"1.12": "1.12.4",
+		"1.11": "1.11.3",
+		"1.10": "1.10.2",
+		"1.9": "1.9.1",
+		"1.8": "1.8.3",
+		"1.7": "1.7.2"
 	},
 	tests = {
 		"Accordion": "accordion/accordion.html",
 		"Autocomplete": "autocomplete/autocomplete.html",
 		"Button": "button/button.html",
 		"Calendar": "calendar/calendar.html",
+		"Checkboxradio": "checkboxradio/checkboxradio.html",
+		"Controlgroup": "controlgroup/controlgroup.html",
 		"Core": "core/core.html",
 		"Datepicker": "datepicker/datepicker.html",
 		"Dialog": "dialog/dialog.html",
 		"Draggable": "draggable/draggable.html",
 		"Droppable": "droppable/droppable.html",
 		"Effects": "effects/effects.html",
+		"Form Reset Mixin": "form-reset-mixin/form-reset-mixin.html",
 		"Menu": "menu/menu.html",
 		"Position": "position/position.html",
 		"Progressbar": "progressbar/progressbar.html",
@@ -43,12 +52,6 @@ function submit( commit, runs, configFile, extra, done ) {
 		commitUrl = "https://github.com/jquery/jquery-ui/commit/" + commit;
 
 	if ( extra ) {
-
-		// jquery-git doesn't support IE 8.
-		if ( extra === "core git" ) {
-			browserSets = "jquery-ui-future";
-		}
-
 		extra = " (" + extra + ")";
 	}
 

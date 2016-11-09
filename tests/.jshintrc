@@ -18,24 +18,11 @@
 	"jquery": true,
 
 	"globals": {
-		"asyncTest": false,
-		"deepEqual": false,
 		"define": false,
-		"equal": false,
-		"expect": false,
 		"Globalize": false,
-		"module": false,
-		"notEqual": false,
-		"notDeepEqual": false,
-		"notStrictEqual": false,
-		"ok": false,
-		"QUnit": true,
+		"QUnit": false,
 		"require": true,
 		"requirejs": true,
-		"start": false,
-		"strictEqual": false,
-		"stop": false,
-		"test": false,
 		"JSHINT": false
 	}
 }

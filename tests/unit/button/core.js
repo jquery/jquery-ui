@@ -1,23 +1,25 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/safe-active-element",
 	"ui/widgets/button"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "Button: core" );
+QUnit.module( "Button: core" );
 
-asyncTest( "Disabled button loses focus", function() {
-	expect( 2 );
+QUnit.test( "Disabled button loses focus", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 	var element = $( "#button" ).button();
 
 	element.focus();
 	setTimeout( function() {
 
-		equal( element[ 0 ], $.ui.safeActiveElement( document ), "Button is focused" );
+		assert.equal( element[ 0 ], $.ui.safeActiveElement( document ), "Button is focused" );
 
 		element.button( "disable" );
-		notEqual( element[ 0 ], $.ui.safeActiveElement( document ), "Button has had focus removed" );
-		start();
+		assert.notEqual( element[ 0 ], $.ui.safeActiveElement( document ), "Button has had focus removed" );
+		ready();
 	} );
 } );
 

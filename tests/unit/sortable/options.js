@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/sortable"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "sortable: options" );
+QUnit.module( "sortable: options" );
 
 /*
-test("{ appendTo: 'parent' }, default", function() {
+Test("{ appendTo: 'parent' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
@@ -15,16 +16,16 @@ test("{ appendTo: Selector }", function() {
 });
 */
 
-test( "{ axis: false }, default", function() {
-	expect( 2 );
+QUnit.test( "{ axis: false }, default", function( assert ) {
+	assert.expect( 2 );
 
 	var offsetAfter,
 		element = $( "#sortable" ).sortable( {
 			axis: false,
 			change: function() {
 				offsetAfter = item.offset();
-				notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: false" );
-				notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: false" );
+				assert.notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: false" );
+				assert.notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: false" );
 			}
 		} ),
 		item = element.find( "li" ).eq( 0 ),
@@ -37,16 +38,16 @@ test( "{ axis: false }, default", function() {
 	} );
 } );
 
-test( "{ axis: 'x' }", function() {
-	expect( 2 );
+QUnit.test( "{ axis: 'x' }", function( assert ) {
+	assert.expect( 2 );
 
 	var offsetAfter,
 		element = $( "#sortable" ).sortable( {
 			axis: "x",
 			change: function() {
 				offsetAfter = item.offset();
-				notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: x" );
-				equal( offsetAfter.top, offsetBefore.top, "y axis constrained when axis: x" );
+				assert.notEqual( offsetAfter.left, offsetBefore.left, "x axis not constrained when axis: x" );
+				assert.equal( offsetAfter.top, offsetBefore.top, "y axis constrained when axis: x" );
 			}
 		} ),
 		item = element.find( "li" ).eq( 0 ),
@@ -59,16 +60,16 @@ test( "{ axis: 'x' }", function() {
 	} );
 } );
 
-test( "{ axis: 'y' }", function() {
-	expect( 2 );
+QUnit.test( "{ axis: 'y' }", function( assert ) {
+	assert.expect( 2 );
 
 	var offsetAfter,
 		element = $( "#sortable" ).sortable( {
 			axis: "y",
 			change: function() {
 				offsetAfter = item.offset();
-				equal( offsetAfter.left, offsetBefore.left, "x axis constrained when axis: y" );
-				notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: y" );
+				assert.equal( offsetAfter.left, offsetBefore.left, "x axis constrained when axis: y" );
+				assert.notEqual( offsetAfter.top, offsetBefore.top, "y axis not constrained when axis: y" );
 			}
 		} ),
 		item = element.find( "li" ).eq( 0 ),
@@ -81,8 +82,9 @@ test( "{ axis: 'y' }", function() {
 	} );
 } );
 
-asyncTest( "#7415: Incorrect revert animation with axis: 'y'", function() {
-  expect( 2 );
+QUnit.test( "#7415: Incorrect revert animation with axis: 'y'", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 	var expectedLeft,
 		element = $( "#sortable" ).sortable( {
 			axis: "y",
@@ -100,14 +102,14 @@ asyncTest( "#7415: Incorrect revert animation with axis: 'y'", function() {
 
 	setTimeout( function() {
 		var top = parseFloat( item.css( "top" ) );
-		equal( item.css( "left" ), expectedLeft, "left not animated" );
-		ok( top > 0 && top < 300, "top is animated" );
-		start();
+		assert.equal( item.css( "left" ), expectedLeft, "left not animated" );
+		assert.ok( top > 0 && top < 300, "top is animated" );
+		ready();
 	}, 100 );
 } );
 
 /*
-test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
+Test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
@@ -116,8 +118,8 @@ test("{ cancel: Selector }", function() {
 });
 */
 
-test( "#8792: issues with floated items in connected lists", function() {
-	expect( 2 );
+QUnit.test( "#8792: issues with floated items in connected lists", function( assert ) {
+	assert.expect( 2 );
 
 	var element,
 		changeCount = 0;
@@ -142,7 +144,7 @@ test( "#8792: issues with floated items in connected lists", function() {
 		moves: 15
 	} );
 
-	equal( changeCount, 1, "change fired only once (no jitters) when dragging a floated sortable in it's own container" );
+	assert.equal( changeCount, 1, "change fired only once (no jitters) when dragging a floated sortable in it's own container" );
 
 	// Move the first li ( which is now in the second spot )
 	// through the first spot in the second ul to the second spot in the second ul
@@ -151,11 +153,11 @@ test( "#8792: issues with floated items in connected lists", function() {
 		moves: 15
 	} );
 
-	equal( changeCount, 3, "change fired once for each expected change when dragging a floated sortable to a connected container" );
+	assert.equal( changeCount, 3, "change fired once for each expected change when dragging a floated sortable to a connected container" );
 } );
 
-test( "#8301: single axis with connected list", function() {
-	expect( 1 );
+QUnit.test( "#8301: single axis with connected list", function( assert ) {
+	assert.expect( 1 );
 
 	var element = $( "#sortable" ).sortable( {
 		axis: "y",
@@ -169,7 +171,7 @@ test( "#8301: single axis with connected list", function() {
 			tolerance: "pointer",
 			connectWith: "#sortable",
 			receive: function() {
-				ok( true, "connected list received item" );
+				assert.ok( true, "connected list received item" );
 			}
 		} )
 		.insertAfter( element );
@@ -182,7 +184,7 @@ test( "#8301: single axis with connected list", function() {
 } );
 
 /*
-test("{ connectWith: false }, default", function() {
+Test("{ connectWith: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
@@ -253,15 +255,55 @@ test("{ dropOnEmpty: true }, default", function() {
 test("{ dropOnEmpty: false }", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
+*/
 
-test("{ forcePlaceholderSize: false }, default", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+QUnit.test( "{ forcePlaceholderSize: false } table rows", function( assert ) {
+	assert.expect( 1 );
 
-test("{ forcePlaceholderSize: true }", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+	var element = $( "#sortable-table2 tbody" );
 
+	element.sortable( {
+		placeholder: "test",
+		forcePlaceholderSize: false,
+		start: function( event, ui ) {
+			assert.notEqual( ui.placeholder.height(), ui.item.height(),
+				"placeholder is same height as item" );
+		}
+	} );
+
+	// This row has a non-standard height
+	$( "tr", element ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	} );
+} );
+
+QUnit.test( "{ forcePlaceholderSize: true } table rows", function( assert ) {
+	assert.expect( 2 );
+
+	// Table should have the placeholder's height set the same as the row we're dragging
+	var element = $( "#sortable-table2 tbody" );
+
+	element.sortable( {
+		placeholder: "test",
+		forcePlaceholderSize: true,
+		start: function( event, ui ) {
+			assert.equal( ui.placeholder.height(), ui.item.height(),
+				"placeholder is same height as item" );
+		}
+	} );
+
+	// First row has a non-standard height
+	$( "tr", element ).eq( 0 ).simulate( "drag", {
+		dy: 1
+	} );
+
+	// Second row's height is normal
+	$( "tr", element ).eq( 1 ).simulate( "drag", {
+		dy: 1
+	} );
+} );
+
+/*
 test("{ forceHelperSize: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
@@ -327,14 +369,14 @@ test("{ placeholder: false }, default", function() {
 });
 */
 
-test( "{ placeholder: false } img", function() {
-	expect( 3 );
+QUnit.test( "{ placeholder: false } img", function( assert ) {
+	assert.expect( 3 );
 
 	var element = $( "#sortable-images" ).sortable( {
 		start: function( event, ui ) {
-			ok( ui.placeholder.attr( "src" ).indexOf( "images/jqueryui_32x32.png" ) > 0, "placeholder img has correct src" );
-			equal( ui.placeholder.height(), 32, "placeholder has correct height" );
-			equal( ui.placeholder.width(), 32, "placeholder has correct width" );
+			assert.ok( ui.placeholder.attr( "src" ).indexOf( "images/jqueryui_32x32.png" ) > 0, "placeholder img has correct src" );
+			assert.equal( ui.placeholder.height(), 32, "placeholder has correct height" );
+			assert.equal( ui.placeholder.width(), 32, "placeholder has correct width" );
 		}
 	} );
 
@@ -343,8 +385,8 @@ test( "{ placeholder: false } img", function() {
 	} );
 } );
 
-test( "{ placeholder: String }", function( assert ) {
-	expect( 1 );
+QUnit.test( "{ placeholder: String }", function( assert ) {
+	assert.expect( 1 );
 
 	var element = $( "#sortable" ).sortable( {
 		placeholder: "test",
@@ -358,8 +400,8 @@ test( "{ placeholder: String }", function( assert ) {
 	} );
 } );
 
-test( "{ placholder: String } tr", function( assert ) {
-	expect( 4 );
+QUnit.test( "{ placholder: String } tr", function( assert ) {
+	assert.expect( 4 );
 
 	var originalWidths,
 		element = $( "#sortable-table tbody" ).sortable( {
@@ -369,10 +411,10 @@ test( "{ placholder: String } tr", function( assert ) {
 					return $( this ).width();
 				} ).get();
 				assert.hasClasses( ui.placeholder, "test" );
-				deepEqual( currentWidths, originalWidths, "table cells maintian size" );
-				equal( ui.placeholder.children().length, dragRow.children().length,
+				assert.deepEqual( currentWidths, originalWidths, "table cells maintian size" );
+				assert.equal( ui.placeholder.children().length, dragRow.children().length,
 					"placeholder has correct number of cells" );
-				equal( ui.placeholder.children().html(), $( "<span>&#160;</span>" ).html(),
+				assert.equal( ui.placeholder.children().html(), $( "<span>&#160;</span>" ).html(),
 					"placeholder td has content for forced dimensions" );
 			}
 		} ),
@@ -388,8 +430,8 @@ test( "{ placholder: String } tr", function( assert ) {
 	} );
 } );
 
-test( "{ placholder: String } tbody", function() {
-	expect( 6 );
+QUnit.test( "{ placholder: String } tbody", function( assert ) {
+	assert.expect( 6 );
 
 	var originalWidths,
 		element = $( "#sortable-table" ).sortable( {
@@ -398,16 +440,16 @@ test( "{ placholder: String } tbody", function() {
 				var currentWidths = otherBody.children().map( function() {
 					return $( this ).width();
 				} ).get();
-				ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
-				deepEqual( currentWidths, originalWidths, "table cells maintain size" );
-				equal( ui.placeholder.children().length, 1,
+				assert.ok( ui.placeholder.hasClass( "test" ), "placeholder has class" );
+				assert.deepEqual( currentWidths, originalWidths, "table cells maintain size" );
+				assert.equal( ui.placeholder.children().length, 1,
 					"placeholder has one child" );
-				equal( ui.placeholder.children( "tr" ).length, 1,
+				assert.equal( ui.placeholder.children( "tr" ).length, 1,
 					"placeholder's child is tr" );
-				equal( ui.placeholder.find( "> tr" ).children().length,
+				assert.equal( ui.placeholder.find( "> tr" ).children().length,
 					dragBody.find( "> tr:first" ).children().length,
 					"placeholder's tr has correct number of cells" );
-				equal( ui.placeholder.find( "> tr" ).children().html(),
+				assert.equal( ui.placeholder.find( "> tr" ).children().html(),
 					$( "<span>&#160;</span>" ).html(),
 					"placeholder td has content for forced dimensions" );
 			}
@@ -425,7 +467,7 @@ test( "{ placholder: String } tbody", function() {
 } );
 
 /*
-test("{ revert: false }, default", function() {
+Test("{ revert: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 

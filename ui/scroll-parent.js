@@ -33,10 +33,13 @@ return $.fn.scrollParent = function( includeHidden ) {
 			if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
 				return false;
 			}
-			return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) );
+			return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) +
+				parent.css( "overflow-x" ) );
 		} ).eq( 0 );
 
-	return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
+	return position === "fixed" || !scrollParent.length ?
+		$( this[ 0 ].ownerDocument || document ) :
+		scrollParent;
 };
 
 } ) );

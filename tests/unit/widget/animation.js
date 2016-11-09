@@ -1,14 +1,15 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widget"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "widget animation", ( function() {
+QUnit.module( "widget animation", ( function() {
 	var show = $.fn.show,
 		fadeIn = $.fn.fadeIn,
 		slideDown = $.fn.slideDown;
 	return {
-		setup: function() {
+		beforeEach: function() {
 			$.widget( "ui.testWidget", {
 				_create: function() {
 					this.element.hide();
@@ -19,7 +20,7 @@ module( "widget animation", ( function() {
 			} );
 			$.effects = { effect: { testEffect: $.noop } };
 		},
-		teardown: function() {
+		afterEach: function() {
 			delete $.ui.testWidget;
 			delete $.effects.effect.testEffect;
 			$.fn.show = show;
@@ -29,34 +30,36 @@ module( "widget animation", ( function() {
 	};
 }() ) );
 
-asyncTest( "show: null", function() {
-	expect( 4 );
+QUnit.test( "show: null", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 
 	var element = $( "#widget" ).testWidget(),
 		hasRun = false;
 	$.fn.show = function() {
-		ok( true, "show called" );
-		equal( arguments.length, 0, "no args passed to show" );
+		assert.ok( true, "show called" );
+		assert.equal( arguments.length, 0, "no args passed to show" );
 	};
 
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );
 
-asyncTest( "show: true", function() {
-	expect( 4 );
+QUnit.test( "show: true", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 
 	var element = $( "#widget" ).testWidget( {
 			show: true
@@ -64,8 +67,8 @@ asyncTest( "show: true", function() {
 		hasRun = false;
 	$.fn.fadeIn = function( duration, easing, complete ) {
 		return this.queue( function( next ) {
-			strictEqual( duration, undefined, "duration" );
-			strictEqual( easing, undefined, "easing" );
+			assert.strictEqual( duration, undefined, "duration" );
+			assert.strictEqual( easing, undefined, "easing" );
 			complete();
 			next();
 		} );
@@ -74,21 +77,22 @@ asyncTest( "show: true", function() {
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );
 
-asyncTest( "show: number", function() {
-	expect( 4 );
+QUnit.test( "show: number", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 
 	var element = $( "#widget" ).testWidget( {
 		show: 123
@@ -96,8 +100,8 @@ asyncTest( "show: number", function() {
 	hasRun = false;
 	$.fn.fadeIn = function( duration, easing, complete ) {
 		return this.queue( function( next ) {
-			strictEqual( duration, 123, "duration" );
-			strictEqual( easing, undefined, "easing" );
+			assert.strictEqual( duration, 123, "duration" );
+			assert.strictEqual( easing, undefined, "easing" );
 			complete();
 			next();
 		} );
@@ -106,21 +110,22 @@ asyncTest( "show: number", function() {
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );
 
-asyncTest( "show: core animation", function() {
-	expect( 4 );
+QUnit.test( "show: core animation", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 
 	var element = $( "#widget" ).testWidget( {
 		show: "slideDown"
@@ -128,8 +133,8 @@ asyncTest( "show: core animation", function() {
 	hasRun = false;
 	$.fn.slideDown = function( duration, easing, complete ) {
 		return this.queue( function( next ) {
-			strictEqual( duration, undefined, "duration" );
-			strictEqual( easing, undefined, "easing" );
+			assert.strictEqual( duration, undefined, "duration" );
+			assert.strictEqual( easing, undefined, "easing" );
 			complete();
 			next();
 		} );
@@ -138,21 +143,22 @@ asyncTest( "show: core animation", function() {
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );
 
-asyncTest( "show: effect", function() {
-	expect( 5 );
+QUnit.test( "show: effect", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 5 );
 
 	var element = $( "#widget" ).testWidget( {
 		show: "testEffect"
@@ -160,9 +166,9 @@ asyncTest( "show: effect", function() {
 	hasRun = false;
 	$.fn.show = function( options ) {
 		return this.queue( function( next ) {
-			equal( options.effect, "testEffect", "effect" );
-			ok( !( "duration" in options ), "duration" );
-			ok( !( "easing" in options ), "easing" );
+			assert.equal( options.effect, "testEffect", "effect" );
+			assert.ok( !( "duration" in options ), "duration" );
+			assert.ok( !( "easing" in options ), "easing" );
 			options.complete();
 			next();
 		} );
@@ -171,21 +177,22 @@ asyncTest( "show: effect", function() {
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );
 
-asyncTest( "show: object(core animation)", function() {
-	expect( 4 );
+QUnit.test( "show: object(core animation)", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 4 );
 
 	var element = $( "#widget" ).testWidget( {
 		show: {
@@ -197,8 +204,8 @@ asyncTest( "show: object(core animation)", function() {
 	hasRun = false;
 	$.fn.slideDown = function( duration, easing, complete ) {
 		return this.queue( function( next ) {
-			equal( duration, 123, "duration" );
-			equal( easing, "testEasing", "easing" );
+			assert.equal( duration, 123, "duration" );
+			assert.equal( easing, "testEasing", "easing" );
 			complete();
 			next();
 		} );
@@ -207,21 +214,22 @@ asyncTest( "show: object(core animation)", function() {
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );
 
-asyncTest( "show: object(effect)", function() {
-	expect( 3 );
+QUnit.test( "show: object(effect)", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
 
 	var element = $( "#widget" ).testWidget( {
 		show: {
@@ -233,7 +241,7 @@ asyncTest( "show: object(effect)", function() {
 	hasRun = false;
 	$.fn.show = function( options ) {
 		return this.queue( function( next ) {
-			deepEqual( options, {
+			assert.deepEqual( options, {
 				effect: "testEffect",
 				duration: 123,
 				easing: "testEasing",
@@ -247,15 +255,15 @@ asyncTest( "show: object(effect)", function() {
 	element
 		.delay( 50 )
 		.queue( function( next ) {
-			ok( !hasRun, "queue before show" );
+			assert.ok( !hasRun, "queue before show" );
 			next();
 		} )
 		.testWidget( "show", function() {
 			hasRun = true;
 		} )
 		.queue( function( next ) {
-			ok( hasRun, "queue after show" );
-			start();
+			assert.ok( hasRun, "queue after show" );
+			ready();
 			next();
 		} );
 } );

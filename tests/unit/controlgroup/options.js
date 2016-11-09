@@ -1,27 +1,29 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
-	"ui/widgets/button"
-], function( $ ) {
+	"ui/widgets/button",
+	"ui/widgets/spinner"
+], function( QUnit, $ ) {
 
-module( "Controlgroup: options" );
+QUnit.module( "Controlgroup: options" );
 
-test( "disabled", function( assert ) {
-	expect( 4 );
+QUnit.test( "disabled", function( assert ) {
+	assert.expect( 4 );
 	var element = $( ".controlgroup" ).controlgroup().controlgroup( "option", "disabled", true );
 	assert.lacksClasses( element, "ui-state-disabled" );
-	equal( element.find( ".ui-state-disabled" ).length, 6, "Child widgets are disabled" );
+	assert.equal( element.find( ".ui-state-disabled" ).length, 9, "Child widgets are disabled" );
 
 	element.controlgroup( "option", "disabled", false );
 	assert.lacksClasses( element, "ui-state-disabled" );
-	strictEqual( element.find( ".ui-state-disabled" ).length, 0, "Child widgets are not disabled" );
+	assert.strictEqual( element.find( ".ui-state-disabled" ).length, 0, "Child widgets are not disabled" );
 
 } );
 
-test( "items - null", function() {
-	expect( 2 );
+QUnit.test( "items - null", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup( {
 		items: {
 			"button": null,
@@ -30,24 +32,24 @@ test( "items - null", function() {
 		}
 	} );
 
-	strictEqual( element.children( ".ui-button" ).length, 0,
+	assert.strictEqual( element.children( ".ui-button" ).length, 0,
 		"Child widgets are not called when selector is null" );
 
 	element.controlgroup( "option", "items", {
 		"button": "button"
 	} );
-	strictEqual( element.children( ".ui-button" ).length, 2,
+	assert.strictEqual( element.children( ".ui-button" ).length, 2,
 		"Correct child widgets are called when selector is updated" );
 } );
 
-test( "items: custom selector", function() {
-	expect( 1 );
+QUnit.test( "items: custom selector", function( assert ) {
+	assert.expect( 1 );
 	var element = $( ".controlgroup" ).controlgroup( {
 		items: {
 			"button": ".button"
 		}
 	} );
-	strictEqual( element.children( ".ui-button" ).length, 4,
+	assert.strictEqual( element.children( ".ui-button" ).length, 4,
 		"Correct child widgets are called when custom selector used" );
 } );
 
@@ -60,22 +62,22 @@ $.widget( "ui.test", {
 	refresh: $.noop
 } );
 
-test( "items: custom widget", function() {
-	expect( 2 );
+QUnit.test( "items: custom widget", function( assert ) {
+	assert.expect( 2 );
 	var element = $( ".controlgroup" ).controlgroup( {
 		items: {
 			"test": ".test"
 		}
 	} );
 
-	strictEqual( element.children( ".ui-button" ).length, 7,
+	assert.strictEqual( element.children( ".ui-button" ).length, 7,
 		"Correct child widgets are called when custom selector used" );
-	strictEqual( element.children( ".ui-test" ).length, 1,
+	assert.strictEqual( element.children( ".ui-test" ).length, 1,
 		"Custom widget called" );
 } );
 
-test( "onlyVisible", function( assert ) {
-	expect( 4 );
+QUnit.test( "onlyVisible", function( assert ) {
+	assert.expect( 4 );
 	var element = $( ".controlgroup" ).controlgroup( {
 			onlyVisible: false
 		} ),
@@ -91,8 +93,8 @@ test( "onlyVisible", function( assert ) {
 		"onlyVisible: true: First button is hidden second button get corner class" );
 } );
 
-test( "direction", function( assert ) {
-	expect( 6 );
+QUnit.test( "direction", function( assert ) {
+	assert.expect( 6 );
 	var element = $( ".controlgroup" ).controlgroup(),
 		buttons = element.children( ".ui-button" ).filter( ":visible" );
 

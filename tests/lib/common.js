@@ -1,6 +1,7 @@
 define( [
-	"jquery"
-], function( $ ) {
+	"qunit",
+	"jquery" ],
+function( QUnit, $ ) {
 
 var exports = {};
 
@@ -8,39 +9,39 @@ function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
 
 	// Ensure that all defaults have the correct value
-	test( "defined defaults", function() {
+	QUnit.test( "defined defaults", function( assert ) {
 		var count = 0;
 		$.each( defaults, function( key, val ) {
-			expect( ++count );
+			assert.expect( ++count );
 			if ( $.isFunction( val ) ) {
-				ok( $.isFunction( pluginDefaults[ key ] ), key );
+				assert.ok( $.isFunction( pluginDefaults[ key ] ), key );
 				return;
 			}
-			deepEqual( pluginDefaults[ key ], val, key );
+			assert.deepEqual( pluginDefaults[ key ], val, key );
 		} );
 	} );
 
 	// Ensure that all defaults were tested
-	test( "tested defaults", function() {
+	QUnit.test( "tested defaults", function( assert ) {
 		var count = 0;
 		$.each( pluginDefaults, function( key ) {
-			expect( ++count );
-			ok( key in defaults, key );
+			assert.expect( ++count );
+			assert.ok( key in defaults, key );
 		} );
 	} );
 }
 
 function testWidgetOverrides( widget ) {
 	if ( $.uiBackCompat === false ) {
-		test( "$.widget overrides", function() {
-			expect( 4 );
+		QUnit.test( "$.widget overrides", function( assert ) {
+			assert.expect( 4 );
 			$.each( [
 				"_createWidget",
 				"destroy",
 				"option",
 				"_trigger"
 			], function( i, method ) {
-				strictEqual( $.ui[ widget ].prototype[ method ],
+				assert.strictEqual( $.ui[ widget ].prototype[ method ],
 					$.Widget.prototype[ method ], "should not override " + method );
 			} );
 		} );
@@ -48,24 +49,24 @@ function testWidgetOverrides( widget ) {
 }
 
 function testBasicUsage( widget ) {
-	test( "basic usage", function() {
-		expect( 3 );
+	QUnit.test( "basic usage", function( assert ) {
+		assert.expect( 3 );
 
 		var defaultElement = $.ui[ widget ].prototype.defaultElement;
 		$( defaultElement ).appendTo( "body" )[ widget ]().remove();
-		ok( true, "initialized on element" );
+		assert.ok( true, "initialized on element" );
 
 		$( defaultElement )[ widget ]().remove();
-		ok( true, "initialized on disconnected DOMElement - never connected" );
+		assert.ok( true, "initialized on disconnected DOMElement - never connected" );
 
 		// Ensure manipulating removed elements works (#3664)
 		$( defaultElement ).appendTo( "body" ).remove()[ widget ]().remove();
-		ok( true, "initialized on disconnected DOMElement - removed" );
+		assert.ok( true, "initialized on disconnected DOMElement - removed" );
 	} );
 }
 
 exports.testWidget = function( widget, settings ) {
-	module( widget + ": common widget" );
+	QUnit.module( widget + ": common widget" );
 
 	exports.testJshint( "/widgets/" + widget );
 	testWidgetDefaults( widget, settings.defaults );
@@ -73,9 +74,9 @@ exports.testWidget = function( widget, settings ) {
 	if ( !settings.noDefaultElement ) {
 		testBasicUsage( widget );
 	}
-	test( "version", function() {
-		expect( 1 );
-		ok( "version" in $.ui[ widget ].prototype, "version property exists" );
+	QUnit.test( "version", function( assert ) {
+		assert.expect( 1 );
+		assert.ok( "version" in $.ui[ widget ].prototype, "version property exists" );
 	} );
 };
 
@@ -87,9 +88,10 @@ exports.testJshint = function( module ) {
 		return;
 	}
 
-	asyncTest( "JSHint", function() {
+	QUnit.test( "JSHint", function( assert ) {
+		var ready = assert.async();
 		require( [ "jshint" ], function() {
-			expect( 1 );
+			assert.expect( 1 );
 
 			$.when(
 				$.ajax( {
@@ -119,12 +121,12 @@ exports.testJshint = function( module ) {
 						return "[L" + error.line + ":C" + error.character + "] " +
 							error.reason + "\n" + error.evidence + "\n";
 					} ).join( "\n" );
-					ok( passed, errors );
-					start();
+					assert.ok( passed, errors );
+					ready();
 				} )
 				.fail( function( hintError, srcError ) {
-					ok( false, "error loading source: " + ( hintError || srcError ).statusText );
-					start();
+					assert.ok( false, "error loading source: " + ( hintError || srcError ).statusText );
+					ready();
 				} );
 		} );
 	} );

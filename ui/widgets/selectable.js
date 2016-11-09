@@ -57,11 +57,16 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 
 		// Cache selectee children based on filter
 		this.refresh = function() {
+			that.elementPos = $( that.element[ 0 ] ).offset();
 			that.selectees = $( that.options.filter, that.element[ 0 ] );
 			that._addClass( that.selectees, "ui-selectee" );
 			that.selectees.each( function() {
 				var $this = $( this ),
-					pos = $this.offset();
+					selecteeOffset = $this.offset(),
+					pos = {
+						left: selecteeOffset.left - that.elementPos.left,
+						top: selecteeOffset.top - that.elementPos.top
+					};
 				$.data( this, "selectable-item", {
 					element: this,
 					$element: $this,
@@ -94,6 +99,7 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 			options = this.options;
 
 		this.opos = [ event.pageX, event.pageY ];
+		this.elementPos = $( this.element[ 0 ] ).offset();
 
 		if ( this.options.disabled ) {
 			return;
@@ -137,7 +143,8 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 			var doSelect,
 				selectee = $.data( this, "selectable-item" );
 			if ( selectee ) {
-				doSelect = ( !event.metaKey && !event.ctrlKey ) || !selectee.$element.hasClass( "ui-selected" );
+				doSelect = ( !event.metaKey && !event.ctrlKey ) ||
+					!selectee.$element.hasClass( "ui-selected" );
 				that._removeClass( selectee.$element, doSelect ? "ui-unselecting" : "ui-selected" )
 					._addClass( selectee.$element, doSelect ? "ui-selecting" : "ui-unselecting" );
 				selectee.unselecting = !doSelect;
@@ -182,17 +189,25 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 
 		this.selectees.each( function() {
 			var selectee = $.data( this, "selectable-item" ),
-				hit = false;
+				hit = false,
+				offset = {};
 
 			//prevent helper from being selected if appendTo: selectable
 			if ( !selectee || selectee.element === that.element[ 0 ] ) {
 				return;
 			}
 
+			offset.left   = selectee.left   + that.elementPos.left;
+			offset.right  = selectee.right  + that.elementPos.left;
+			offset.top    = selectee.top    + that.elementPos.top;
+			offset.bottom = selectee.bottom + that.elementPos.top;
+
 			if ( options.tolerance === "touch" ) {
-				hit = ( !( selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1 ) );
+				hit = ( !( offset.left > x2 || offset.right < x1 || offset.top > y2 ||
+                    offset.bottom < y1 ) );
 			} else if ( options.tolerance === "fit" ) {
-				hit = ( selectee.left > x1 && selectee.right < x2 && selectee.top > y1 && selectee.bottom < y2 );
+				hit = ( offset.left > x1 && offset.right < x2 && offset.top > y1 &&
+                    offset.bottom < y2 );
 			}
 
 			if ( hit ) {

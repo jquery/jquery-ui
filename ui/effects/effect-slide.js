@@ -42,7 +42,8 @@ return $.effects.define( "slide", "show", function( options, done ) {
 		direction = options.direction || "left",
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
 		positiveMotion = ( direction === "up" || direction === "left" ),
-		distance = options.distance || element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ),
+		distance = options.distance ||
+			element[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ),
 		animation = {};
 
 	$.effects.createPlaceholder( element );

@@ -1,21 +1,22 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/menu"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var log = testHelper.log,
 	logOutput = testHelper.logOutput,
 	click = testHelper.click;
 
-module( "menu: options", {
-	setup: function() {
+QUnit.module( "menu: options", {
+	beforeEach: function() {
 		testHelper.clearLog();
 	}
 } );
 
-test( "{ disabled: true }", function( assert ) {
-	expect( 2 );
+QUnit.test( "{ disabled: true }", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#menu1" ).menu( {
 		disabled: true,
 		select: function() {
@@ -26,11 +27,11 @@ test( "{ disabled: true }", function( assert ) {
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
-	equal( logOutput(), "click,afterclick", "Click order not valid." );
+	assert.equal( logOutput(), "click,afterclick", "Click order not valid." );
 } );
 
-test( "{ disabled: false }", function( assert ) {
-	expect( 2 );
+QUnit.test( "{ disabled: false }", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#menu1" ).menu( {
 		disabled: false,
 		select: function() {
@@ -41,11 +42,11 @@ test( "{ disabled: false }", function( assert ) {
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
-	equal( logOutput(), "click,1,afterclick", "Click order not valid." );
+	assert.equal( logOutput(), "click,1,afterclick", "Click order not valid." );
 } );
 
-test( "{ icons: default }", function( assert ) {
-	expect( 8 );
+QUnit.test( "{ icons: default }", function( assert ) {
+	assert.expect( 8 );
 	var element = $( "#menu2" ).menu();
 	element.find( ".ui-menu-icon" ).each( function() {
 		assert.hasClasses( this, "ui-menu-icon ui-icon ui-icon-caret-1-e" );
@@ -57,8 +58,8 @@ test( "{ icons: default }", function( assert ) {
 	} );
 } );
 
-test( "{ icons: { submenu: 'custom' } }", function( assert ) {
-	expect( 4 );
+QUnit.test( "{ icons: { submenu: 'custom' } }", function( assert ) {
+	assert.expect( 4 );
 	var element = $( "#menu2" ).menu( {
 		icons: {
 			submenu: "custom-class"
@@ -73,51 +74,51 @@ test( "{ icons: { submenu: 'custom' } }", function( assert ) {
 
 // TODO: test position option
 
-test( "{ role: 'menu' } ", function( assert ) {
+QUnit.test( "{ role: 'menu' } ", function( assert ) {
 	var element = $( "#menu1" ).menu(),
 		items = element.find( "li" );
-	expect( 2 + 3 * items.length );
-	equal( element.attr( "role" ), "menu" );
-	ok( items.length > 0, "number of menu items" );
+	assert.expect( 2 + 3 * items.length );
+	assert.equal( element.attr( "role" ), "menu" );
+	assert.ok( items.length > 0, "number of menu items" );
 	items.each( function( item ) {
 		assert.hasClasses( $( this ), "ui-menu-item" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ),
+		assert.equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ),
 			"menuitem", "menu item (" + item + ") role" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
+		assert.equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
 			"tabindex for menu item (" + item + ")" );
 	} );
 } );
 
-test( "{ role: 'listbox' } ", function( assert ) {
+QUnit.test( "{ role: 'listbox' } ", function( assert ) {
 	var element = $( "#menu1" ).menu( {
 			role: "listbox"
 		} ),
 		items = element.find( "li" );
-	expect( 2 + 3 * items.length );
-	equal( element.attr( "role" ), "listbox" );
-	ok( items.length > 0, "number of menu items" );
+	assert.expect( 2 + 3 * items.length );
+	assert.equal( element.attr( "role" ), "listbox" );
+	assert.ok( items.length > 0, "number of menu items" );
 	items.each( function( item ) {
 		assert.hasClasses( $( this ), "ui-menu-item" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), "option",
+		assert.equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), "option",
 			"menu item (" + item + ") role" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
+		assert.equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
 			"tabindex for menu item (" + item + ")" );
 	} );
 } );
 
-test( "{ role: null }", function( assert ) {
+QUnit.test( "{ role: null }", function( assert ) {
 	var element = $( "#menu1" ).menu( {
 			role: null
 		} ),
 		items = element.find( "li" );
-	expect( 2 + 3 * items.length );
-	equal( element.attr( "role" ), null );
-	ok( items.length > 0, "number of menu items" );
+	assert.expect( 2 + 3 * items.length );
+	assert.equal( element.attr( "role" ), null );
+	assert.ok( items.length > 0, "number of menu items" );
 	items.each( function( item ) {
 		assert.hasClasses( $( this ), "ui-menu-item" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), null,
+		assert.equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "role" ), null,
 			"menu item (" + item + ") role" );
-		equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
+		assert.equal( $( this ).find( ".ui-menu-item-wrapper" ).attr( "tabindex" ), "-1",
 			"tabindex for menu item (" + item + ")" );
 	} );
 } );

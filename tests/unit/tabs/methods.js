@@ -1,16 +1,17 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/tabs"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var disabled = testHelper.disabled,
 	state = testHelper.state;
 
-module( "tabs: methods" );
+QUnit.module( "tabs: methods" );
 
-test( "destroy", function( assert ) {
-	expect( 2 );
+QUnit.test( "destroy", function( assert ) {
+	assert.expect( 2 );
 	assert.domEqual( "#tabs1", function() {
 		$( "#tabs1" ).tabs().tabs( "destroy" );
 	} );
@@ -19,15 +20,16 @@ test( "destroy", function( assert ) {
 	} );
 } );
 
-asyncTest( "destroy - ajax", function( assert ) {
-	expect( 1 );
+QUnit.test( "destroy - ajax", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
 	assert.domEqual( "#tabs2", function( done ) {
 		var element = $( "#tabs2" ).tabs( {
 			load: function() {
 				setTimeout( function() {
 					element.tabs( "destroy" );
 					done();
-					start();
+					ready();
 				} );
 			}
 		} );
@@ -35,108 +37,108 @@ asyncTest( "destroy - ajax", function( assert ) {
 	} );
 } );
 
-test( "enable", function() {
-	expect( 8 );
+QUnit.test( "enable", function( assert ) {
+	assert.expect( 8 );
 
 	var element = $( "#tabs1" ).tabs( { disabled: true } );
-	disabled( element, true );
+	disabled( assert, element, true );
 	element.tabs( "enable" );
-	disabled( element, false );
+	disabled( assert, element, false );
 	element.tabs( "destroy" );
 
 	element.tabs( { disabled: [ 0, 1 ] } );
-	disabled( element, [ 0, 1 ] );
+	disabled( assert, element, [ 0, 1 ] );
 	element.tabs( "enable" );
-	disabled( element, false );
+	disabled( assert, element, false );
 } );
 
-test( "enable( index )", function() {
-	expect( 10 );
+QUnit.test( "enable( index )", function( assert ) {
+	assert.expect( 10 );
 
 	var element = $( "#tabs1" ).tabs( { disabled: true } );
-	disabled( element, true );
+	disabled( assert, element, true );
 
 	// fully disabled -> partially disabled
 	element.tabs( "enable", 1 );
-	disabled( element, [ 0, 2 ] );
+	disabled( assert, element, [ 0, 2 ] );
 
 	// partially disabled -> partially disabled
 	element.tabs( "enable", 2 );
-	disabled( element, [ 0 ] );
+	disabled( assert, element, [ 0 ] );
 
 	// already enabled tab, no change
 	element.tabs( "enable", 2 );
-	disabled( element, [ 0 ] );
+	disabled( assert, element, [ 0 ] );
 
 	// partially disabled -> fully enabled
 	element.tabs( "enable", 0 );
-	disabled( element, false );
+	disabled( assert, element, false );
 } );
 
-test( "disable", function() {
-	expect( 8 );
+QUnit.test( "disable", function( assert ) {
+	assert.expect( 8 );
 
 	var element = $( "#tabs1" ).tabs( { disabled: false } );
-	disabled( element, false );
+	disabled( assert, element, false );
 	element.tabs( "disable" );
-	disabled( element, true );
+	disabled( assert, element, true );
 	element.tabs( "destroy" );
 
 	element.tabs( { disabled: [ 0, 1 ] } );
-	disabled( element, [ 0, 1 ] );
+	disabled( assert, element, [ 0, 1 ] );
 	element.tabs( "disable" );
-	disabled( element, true );
+	disabled( assert, element, true );
 } );
 
-test( "disable( index )", function() {
-	expect( 10 );
+QUnit.test( "disable( index )", function( assert ) {
+	assert.expect( 10 );
 
 	var element = $( "#tabs1" ).tabs( { disabled: false } );
-	disabled( element, false );
+	disabled( assert, element, false );
 
 	// fully enabled -> partially disabled
 	element.tabs( "disable", 1 );
-	disabled( element, [ 1 ] );
+	disabled( assert, element, [ 1 ] );
 
 	// partially disabled -> partially disabled
 	element.tabs( "disable", 2 );
-	disabled( element, [ 1, 2 ] );
+	disabled( assert, element, [ 1, 2 ] );
 
 	// already disabled tab, no change
 	element.tabs( "disable", 2 );
-	disabled( element, [ 1, 2 ] );
+	disabled( assert, element, [ 1, 2 ] );
 
 	// partially disabled -> fully disabled
 	element.tabs( "disable", 0 );
-	disabled( element, true );
+	disabled( assert, element, true );
 } );
 
-test( "refresh", function() {
-	expect( 27 );
+QUnit.test( "refresh", function( assert ) {
+	assert.expect( 27 );
 
 	var element = $( "#tabs1" ).tabs();
-	state( element, 1, 0, 0 );
-	disabled( element, false );
+	state( assert, element, 1, 0, 0 );
+	disabled( assert, element, false );
 
 	// Disable tab via markup
 	element.find( ".ui-tabs-nav li" ).eq( 1 ).addClass( "ui-state-disabled" );
 	element.tabs( "refresh" );
-	state( element, 1, 0, 0 );
-	disabled( element, [ 1 ] );
+	state( assert, element, 1, 0, 0 );
+	disabled( assert, element, [ 1 ] );
 
 	// Add remote tab
 	element.find( ".ui-tabs-nav" ).append( "<li id='newTab'><a href='data/test.html'>new</a></li>" );
 	element.tabs( "refresh" );
-	state( element, 1, 0, 0, 0 );
-	disabled( element, [ 1 ] );
-	equal( element.find( "#" + $( "#newTab" ).attr( "aria-controls" ) ).length, 1,
+	state( assert, element, 1, 0, 0, 0 );
+	disabled( assert, element, [ 1 ] );
+	assert.equal( element.find( "#" + $( "#newTab" ).attr( "aria-controls" ) ).length, 1,
 		"panel added for remote tab" );
 
 	// Remove all tabs
 	element.find( ".ui-tabs-nav li, .ui-tabs-panel" ).remove();
 	element.tabs( "refresh" );
-	state( element );
-	equal( element.tabs( "option", "active" ), false, "no active tab" );
+	state( assert, element );
+	assert.equal( element.tabs( "option", "active" ), false, "no active tab" );
 
 	// Add tabs
 	element.find( ".ui-tabs-nav" )
@@ -150,45 +152,45 @@ test( "refresh", function() {
 		.append( "<div id='newTab4'>new 4</div>" )
 		.append( "<div id='newTab5'>new 5</div>" );
 	element.tabs( "refresh" );
-	state( element, 0, 0, 0, 0 );
-	disabled( element, [ 0 ] );
+	state( assert, element, 0, 0, 0, 0 );
+	disabled( assert, element, [ 0 ] );
 
 	// Activate third tab
 	element.tabs( "option", "active", 2 );
-	state( element, 0, 0, 1, 0 );
-	disabled( element, [ 0 ] );
+	state( assert, element, 0, 0, 1, 0 );
+	disabled( assert, element, [ 0 ] );
 
 	// Remove fourth tab, third tab should stay active
 	element.find( ".ui-tabs-nav li" ).eq( 3 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 3 ).remove();
 	element.tabs( "refresh" );
-	state( element, 0, 0, 1 );
-	disabled( element, [ 0 ] );
+	state( assert, element, 0, 0, 1 );
+	disabled( assert, element, [ 0 ] );
 
 	// Remove third (active) tab, second tab should become active
 	element.find( ".ui-tabs-nav li" ).eq( 2 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 2 ).remove();
 	element.tabs( "refresh" );
-	state( element, 0, 1 );
-	disabled( element, [ 0 ] );
+	state( assert, element, 0, 1 );
+	disabled( assert, element, [ 0 ] );
 
 	// Remove first tab, previously active tab (now first) should stay active
 	element.find( ".ui-tabs-nav li" ).eq( 0 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 0 ).remove();
 	element.tabs( "refresh" );
-	state( element, 1 );
-	disabled( element, false );
+	state( assert, element, 1 );
+	disabled( assert, element, false );
 } );
 
-test( "refresh - looping", function() {
-	expect( 6 );
+QUnit.test( "refresh - looping", function( assert ) {
+	assert.expect( 6 );
 
 	var element = $( "#tabs1" ).tabs( {
 		disabled: [ 0 ],
 		active: 1
 	} );
-	state( element, 0, 1, 0 );
-	disabled( element, [ 0 ] );
+	state( assert, element, 0, 1, 0 );
+	disabled( assert, element, [ 0 ] );
 
 	// Remove active, jump to previous
 	// previous is disabled, just back one more
@@ -196,12 +198,13 @@ test( "refresh - looping", function() {
 	// activate last tab
 	element.find( ".ui-tabs-nav li" ).eq( 2 ).remove();
 	element.tabs( "refresh" );
-	state( element, 0, 1 );
-	disabled( element, [ 0 ] );
+	state( assert, element, 0, 1 );
+	disabled( assert, element, [ 0 ] );
 } );
 
-asyncTest( "load", function() {
-	expect( 30 );
+QUnit.test( "load", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 30 );
 
 	var element = $( "#tabs2" ).tabs();
 
@@ -212,12 +215,12 @@ asyncTest( "load", function() {
 			panelId = tab.attr( "aria-controls" ),
 			panel = $( "#" + panelId );
 
-		ok( !( "originalEvent" in event ), "originalEvent" );
-		equal( ui.tab.length, 1, "tab length" );
-		strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
-		equal( ui.panel.length, 1, "panel length" );
-		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
-		state( element, 1, 0, 0, 0, 0 );
+		assert.ok( !( "originalEvent" in event ), "originalEvent" );
+		assert.equal( ui.tab.length, 1, "tab length" );
+		assert.strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+		assert.equal( ui.panel.length, 1, "panel length" );
+		assert.strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+		state( assert, element, 1, 0, 0, 0, 0 );
 	} );
 	element.one( "tabsload", function( event, ui ) {
 
@@ -228,30 +231,30 @@ asyncTest( "load", function() {
 			panelId = tab.attr( "aria-controls" ),
 			panel = $( "#" + panelId );
 
-		ok( !( "originalEvent" in event ), "originalEvent" );
-		equal( uiTab.length, 1, "tab length" );
-		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-		equal( uiPanel.length, 1, "panel length" );
-		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
-		equal( uiPanel.find( "p" ).length, 1, "panel html" );
-		state( element, 1, 0, 0, 0, 0 );
+		assert.ok( !( "originalEvent" in event ), "originalEvent" );
+		assert.equal( uiTab.length, 1, "tab length" );
+		assert.strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+		assert.equal( uiPanel.length, 1, "panel length" );
+		assert.strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
+		assert.equal( uiPanel.find( "p" ).length, 1, "panel html" );
+		state( assert, element, 1, 0, 0, 0, 0 );
 		setTimeout( tabsload1 );
 	} );
 	element.tabs( "load", 3 );
-	state( element, 1, 0, 0, 0, 0 );
+	state( assert, element, 1, 0, 0, 0, 0 );
 
 	function tabsload1() {
 
 		// no need to test details of event (tested in events tests)
 		element.one( "tabsbeforeload", function() {
-			ok( true, "tabsbeforeload invoked" );
+			assert.ok( true, "tabsbeforeload invoked" );
 		} );
 		element.one( "tabsload", function() {
-			ok( true, "tabsload invoked" );
+			assert.ok( true, "tabsload invoked" );
 			setTimeout( tabsload2 );
 		} );
 		element.tabs( "option", "active", 3 );
-		state( element, 0, 0, 0, 1, 0 );
+		state( assert, element, 0, 0, 0, 1, 0 );
 	}
 
 	function tabsload2() {
@@ -262,12 +265,12 @@ asyncTest( "load", function() {
 				panelId = tab.attr( "aria-controls" ),
 				panel = $( "#" + panelId );
 
-			ok( !( "originalEvent" in event ), "originalEvent" );
-			equal( ui.tab.length, 1, "tab length" );
-			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
-			equal( ui.panel.length, 1, "panel length" );
-			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
-			state( element, 0, 0, 0, 1, 0 );
+			assert.ok( !( "originalEvent" in event ), "originalEvent" );
+			assert.equal( ui.tab.length, 1, "tab length" );
+			assert.strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+			assert.equal( ui.panel.length, 1, "panel length" );
+			assert.strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+			state( assert, element, 0, 0, 0, 1, 0 );
 		} );
 		element.one( "tabsload", function( event, ui ) {
 
@@ -278,25 +281,25 @@ asyncTest( "load", function() {
 				panelId = tab.attr( "aria-controls" ),
 				panel = $( "#" + panelId );
 
-			ok( !( "originalEvent" in event ), "originalEvent" );
-			equal( uiTab.length, 1, "tab length" );
-			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-			equal( uiPanel.length, 1, "panel length" );
-			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
-			state( element, 0, 0, 0, 1, 0 );
-			start();
+			assert.ok( !( "originalEvent" in event ), "originalEvent" );
+			assert.equal( uiTab.length, 1, "tab length" );
+			assert.strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+			assert.equal( uiPanel.length, 1, "panel length" );
+			assert.strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
+			state( assert, element, 0, 0, 0, 1, 0 );
+			ready();
 		} );
 		element.tabs( "load", 3 );
-		state( element, 0, 0, 0, 1, 0 );
+		state( assert, element, 0, 0, 0, 1, 0 );
 	}
 } );
 
-test( "widget", function() {
-	expect( 2 );
+QUnit.test( "widget", function( assert ) {
+	assert.expect( 2 );
 	var element = $( "#tabs1" ).tabs(),
 		widgetElement = element.tabs( "widget" );
-	equal( widgetElement.length, 1, "one element" );
-	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+	assert.equal( widgetElement.length, 1, "one element" );
+	assert.strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 } );
 
 } );

@@ -1,20 +1,21 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/spinner"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
 var simulateKeyDownUp = testHelper.simulateKeyDownUp;
 
-module( "spinner: events" );
+QUnit.module( "spinner: events" );
 
-test( "start", function() {
-	expect( 10 );
+QUnit.test( "start", function( assert ) {
+	assert.expect( 10 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldStart( expectation, msg ) {
 		element.spinner( "option", "start", function() {
-			ok( expectation, msg );
+			assert.ok( expectation, msg );
 		} );
 	}
 
@@ -47,13 +48,13 @@ test( "start", function() {
 	element.spinner( "value", 999 );
 } );
 
-test( "spin", function() {
-	expect( 10 );
+QUnit.test( "spin", function( assert ) {
+	assert.expect( 10 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldSpin( expectation, msg ) {
 		element.spinner( "option", "spin", function() {
-			ok( expectation, msg );
+			assert.ok( expectation, msg );
 		} );
 	}
 
@@ -86,13 +87,13 @@ test( "spin", function() {
 	element.spinner( "value", 999 );
 } );
 
-test( "stop", function() {
-	expect( 10 );
+QUnit.test( "stop", function( assert ) {
+	assert.expect( 10 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldStop( expectation, msg ) {
 		element.spinner( "option", "stop", function() {
-			ok( expectation, msg );
+			assert.ok( expectation, msg );
 		} );
 	}
 
@@ -125,13 +126,14 @@ test( "stop", function() {
 	element.spinner( "value", 999 );
 } );
 
-asyncTest( "change", function() {
-	expect( 12 );
+QUnit.test( "change", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 12 );
 	var element = $( "#spin" ).spinner();
 
 	function shouldChange( expectation, msg ) {
 		element.spinner( "option", "change", function() {
-			ok( expectation, msg );
+			assert.ok( expectation, msg );
 		} );
 	}
 
@@ -254,7 +256,7 @@ asyncTest( "change", function() {
 
 		shouldChange( false, "min, value not changed" );
 		element.spinner( "option", "min", 200 );
-		start();
+		ready();
 	}
 
 	setTimeout( step1 );

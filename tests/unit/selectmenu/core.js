@@ -1,12 +1,13 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/selectmenu"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "selectmenu: core" );
+QUnit.module( "selectmenu: core" );
 
-test( "markup structure", function( assert ) {
-	expect( 7 );
+QUnit.test( "markup structure", function( assert ) {
+	assert.expect( 7 );
 
 	var element = $( "#files" ).selectmenu(),
 		button = element.selectmenu( "widget" ),
@@ -24,7 +25,8 @@ test( "markup structure", function( assert ) {
 	assert.strictEqual( icon[ 0 ], button.children()[ 0 ], "Icon is first child of button" );
 } );
 
-asyncTest( "accessibility", function() {
+QUnit.test( "accessibility", function( assert ) {
+	var ready = assert.async();
 	var wrappers, button, menu,
 		element = $( "#speed" ).attr( "title", "A demo title" );
 
@@ -39,43 +41,43 @@ asyncTest( "accessibility", function() {
 	button.simulate( "focus" );
 	wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
-	expect( 13 + wrappers.length * 3 );
+	assert.expect( 13 + wrappers.length * 3 );
 
 	setTimeout( function() {
-		equal( button.attr( "role" ), "combobox", "button role" );
-		equal( button.attr( "aria-haspopup" ), "true", "button aria-haspopup" );
-		equal( button.attr( "aria-expanded" ), "false", "button aria-expanded" );
-		equal( button.attr( "aria-autocomplete" ), "list", "button aria-autocomplete" );
-		equal( button.attr( "aria-owns" ), menu.attr( "id" ), "button aria-owns" );
-		equal(
+		assert.equal( button.attr( "role" ), "combobox", "button role" );
+		assert.equal( button.attr( "aria-haspopup" ), "true", "button aria-haspopup" );
+		assert.equal( button.attr( "aria-expanded" ), "false", "button aria-expanded" );
+		assert.equal( button.attr( "aria-autocomplete" ), "list", "button aria-autocomplete" );
+		assert.equal( button.attr( "aria-owns" ), menu.attr( "id" ), "button aria-owns" );
+		assert.equal(
 			button.attr( "aria-labelledby" ),
 			wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 			"button link aria-labelledby"
 		);
-		equal( button.attr( "tabindex" ), 0, "button link tabindex" );
-		equal( button.attr( "title" ), "A demo title", "button title" );
+		assert.equal( button.attr( "tabindex" ), 0, "button link tabindex" );
+		assert.equal( button.attr( "title" ), "A demo title", "button title" );
 
-		equal( menu.attr( "role" ), "listbox", "menu role" );
-		equal( menu.attr( "aria-labelledby" ), button.attr( "id" ), "menu aria-labelledby" );
-		equal( menu.attr( "aria-hidden" ), "true", "menu aria-hidden" );
-		equal( menu.attr( "tabindex" ), 0, "menu tabindex" );
-		equal(
+		assert.equal( menu.attr( "role" ), "listbox", "menu role" );
+		assert.equal( menu.attr( "aria-labelledby" ), button.attr( "id" ), "menu aria-labelledby" );
+		assert.equal( menu.attr( "aria-hidden" ), "true", "menu aria-hidden" );
+		assert.equal( menu.attr( "tabindex" ), 0, "menu tabindex" );
+		assert.equal(
 			menu.attr( "aria-activedescendant" ),
 			wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 			"menu aria-activedescendant"
 		);
 		$.each( wrappers, function( index ) {
 			var item = $( this );
-			equal( item.attr( "role" ), "option", "menu item #" + index + " role" );
-			equal( item.attr( "tabindex" ), -1, "menu item #" + index + " tabindex" );
-			equal( item.attr( "title" ), "A demo title #" + index, "menu item #" + index + " title" );
+			assert.equal( item.attr( "role" ), "option", "menu item #" + index + " role" );
+			assert.equal( item.attr( "tabindex" ), -1, "menu item #" + index + " tabindex" );
+			assert.equal( item.attr( "title" ), "A demo title #" + index, "menu item #" + index + " title" );
 		} );
-		start();
+		ready();
 	} );
 } );
 
-test( "_renderButtonItem()", function() {
-	expect( 2 );
+QUnit.test( "_renderButtonItem()", function( assert ) {
+	assert.expect( 2 );
 
 	var option,
 		element = $( "#speed" ).selectmenu(),
@@ -92,7 +94,7 @@ test( "_renderButtonItem()", function() {
 
 	element.selectmenu( "refresh" );
 	option = element.find( "option:selected" );
-	equal(
+	assert.equal(
 		$.trim( button.text() ),
 		option.text() + element[ 0 ].selectedIndex,
 		"refresh: button item text"
@@ -101,7 +103,7 @@ test( "_renderButtonItem()", function() {
 	button.trigger( "click" );
 	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
 	option = element.find( "option" ).last();
-	equal(
+	assert.equal(
 		$.trim( button.text() ),
 		option.text() + element[ 0 ].selectedIndex,
 		"click: button item text"
@@ -118,8 +120,9 @@ $.each( [
 		selector: "#files"
 	}
 ], function( i, settings ) {
-	asyncTest( "state synchronization - after keydown on button - " + settings.type, function() {
-		expect( 4 );
+	QUnit.test( "state synchronization - after keydown on button - " + settings.type, function( assert ) {
+		var ready = assert.async();
+		assert.expect( 4 );
 
 		var wrappers,
 			element = $( settings.selector ).selectmenu(),
@@ -135,28 +138,29 @@ $.each( [
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-			equal(
+			assert.equal(
 				menu.attr( "aria-activedescendant" ),
 				wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"menu aria-activedescendant"
 			);
-			equal(
+			assert.equal(
 				button.attr( "aria-activedescendant" ),
 				wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"button aria-activedescendant"
 			);
-			equal(
+			assert.equal(
 				element.find( "option:selected" ).val(),
 				selected.val(),
 				"original select state"
 			);
-			equal( $.trim( button.text() ), selected.text(), "button text" );
-			start();
+			assert.equal( $.trim( button.text() ), selected.text(), "button text" );
+			ready();
 		} );
 	} );
 
-	asyncTest( "state synchronization - after click on item - " + settings.type, function() {
-		expect( 4 );
+	QUnit.test( "state synchronization - after click on item - " + settings.type, function( assert ) {
+		var ready = assert.async();
+		assert.expect( 4 );
 
 		var wrappers,
 			element = $( settings.selector ).selectmenu(),
@@ -170,29 +174,30 @@ $.each( [
 
 			button.trigger( "click" );
 			menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
-			equal(
+			assert.equal(
 				menu.attr( "aria-activedescendant" ),
 				wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"menu aria-activedescendant"
 			);
-			equal(
+			assert.equal(
 				button.attr( "aria-activedescendant" ),
 				wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"button aria-activedescendant"
 			);
-			equal(
+			assert.equal(
 				element.find( "option:selected" ).val(),
 				selected.val(),
 				"original select state"
 			);
-			equal( $.trim( button.text() ), selected.text(), "button text" );
-			start();
+			assert.equal( $.trim( button.text() ), selected.text(), "button text" );
+			ready();
 		}, 1 );
 	} );
 
-	asyncTest( "state synchronization - " +
-			"after focus item and keydown on button - " + settings.type, function() {
-		expect( 4 );
+	QUnit.test( "state synchronization - " +
+			"after focus item and keydown on button - " + settings.type, function( assert ) {
+		var ready = assert.async();
+		assert.expect( 4 );
 
 		var wrappers,
 			element = $( settings.selector ).selectmenu(),
@@ -220,20 +225,21 @@ $.each( [
 			setTimeout( function() {
 				button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 
-				equal( menu.attr( "aria-activedescendant" ), wrappers.eq( 1 ).attr( "id" ),
+				assert.equal( menu.attr( "aria-activedescendant" ), wrappers.eq( 1 ).attr( "id" ),
 					"menu aria-activedescendant" );
-				equal( button.attr( "aria-activedescendant" ), wrappers.eq( 1 ).attr( "id" ),
+				assert.equal( button.attr( "aria-activedescendant" ), wrappers.eq( 1 ).attr( "id" ),
 					"button aria-activedescendant" );
-				equal( element.find( "option:selected" ).val(), options.eq( 1 ).val(),
+				assert.equal( element.find( "option:selected" ).val(), options.eq( 1 ).val(),
 					"original select state" );
-				equal( $.trim( button.text() ), options.eq( 1 ).text(), "button text" );
-				start();
+				assert.equal( $.trim( button.text() ), options.eq( 1 ).text(), "button text" );
+				ready();
 			} );
 		} );
 	} );
 
-	asyncTest( "item looping - " + settings.type, function() {
-		expect( 4 );
+	QUnit.test( "item looping - " + settings.type, function( assert ) {
+		var ready = assert.async();
+		assert.expect( 4 );
 
 		var wrappers,
 			element = $( settings.selector ).selectmenu(),
@@ -246,21 +252,22 @@ $.each( [
 
 			button.trigger( "click" );
 			wrappers.first().simulate( "mouseover" ).trigger( "click" );
-			equal( element[ 0 ].selectedIndex, 0, "First item is selected" );
+			assert.equal( element[ 0 ].selectedIndex, 0, "First item is selected" );
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-			equal( element[ 0 ].selectedIndex, 0, "No looping beyond first item" );
+			assert.equal( element[ 0 ].selectedIndex, 0, "No looping beyond first item" );
 
 			button.trigger( "click" );
 			wrappers.last().simulate( "mouseover" ).trigger( "click" );
-			equal( element[ 0 ].selectedIndex, wrappers.length - 1, "Last item is selected" );
+			assert.equal( element[ 0 ].selectedIndex, wrappers.length - 1, "Last item is selected" );
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-			equal( element[ 0 ].selectedIndex, wrappers.length - 1, "No looping behind last item" );
-			start();
+			assert.equal( element[ 0 ].selectedIndex, wrappers.length - 1, "No looping behind last item" );
+			ready();
 		} );
 	} );
 
-	asyncTest( "item focus and active state - " + settings.type, function() {
-		expect( 4 );
+	QUnit.test( "item focus and active state - " + settings.type, function( assert ) {
+		var ready = assert.async();
+		assert.expect( 4 );
 
 		var wrappers, focusedItem,
 			element = $( settings.selector ).selectmenu(),
@@ -288,21 +295,22 @@ $.each( [
 				button.trigger( "click" );
 				setTimeout( function() {
 					checkItemClasses();
-					start();
+					ready();
 				} );
 			} );
 		} );
 
 		function checkItemClasses() {
 			focusedItem = menu.find( ".ui-menu-item-wrapper.ui-state-active" );
-			equal( focusedItem.length, 1, "only one item has ui-state-focus class" );
-			equal( focusedItem.attr( "id" ), wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
+			assert.equal( focusedItem.length, 1, "only one item has ui-state-focus class" );
+			assert.equal( focusedItem.attr( "id" ), wrappers.eq( element[ 0 ].selectedIndex ).attr( "id" ),
 				"selected item has ui-state-focus class" );
 		}
 	} );
 
-	asyncTest( "empty option - " + settings.type, function( assert ) {
-		expect( 7 );
+	QUnit.test( "empty option - " + settings.type, function( assert ) {
+		var ready = assert.async();
+		assert.expect( 7 );
 
 		var button, menu, wrappers, wrapper,
 			element = $( settings.selector );
@@ -319,36 +327,53 @@ $.each( [
 
 			button.trigger( "click" );
 
-			equal( wrappers.length, element.find( "option" ).length,
+			assert.equal( wrappers.length, element.find( "option" ).length,
 				"correct amount of list elements" );
-			ok( wrapper.outerHeight() > 10, "empty item seems to have reasonable height" );
-			ok( wrapper.attr( "id" ), "empty item has id attribute" );
+			assert.ok( wrapper.outerHeight() > 10, "empty item seems to have reasonable height" );
+			assert.ok( wrapper.attr( "id" ), "empty item has id attribute" );
 			assert.hasClasses( wrapper.parent(), "ui-menu-item" );
 			assert.lacksClasses( wrapper, "ui-menu-divider" );
-			equal( wrapper.attr( "tabindex" ), -1, "empty item has tabindex" );
-			equal( wrapper.attr( "role" ), "option", "empty item has role option" );
+			assert.equal( wrapper.attr( "tabindex" ), -1, "empty item has tabindex" );
+			assert.equal( wrapper.attr( "role" ), "option", "empty item has role option" );
 
-			start();
+			ready();
 		} );
 	} );
 } );
 
-	asyncTest( "Selectmenu should reset when its parent form resets", function() {
-		expect( 2 );
+QUnit.test( "Selectmenu should reset when its parent form resets", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 2 );
 
-		var element = $( "#speed" ).selectmenu(),
-			widget = element.selectmenu( "widget" ),
-			initialValue = element.val(),
-			form = element.closest( "form" );
+	var element = $( "#speed" ).selectmenu(),
+		widget = element.selectmenu( "widget" ),
+		initialValue = element.val(),
+		form = element.closest( "form" );
 
-		element.val( "Slower" );
-		element.selectmenu( "refresh" );
-		equal( $.trim( widget.text() ), "Slower" );
-		form[ 0 ].reset();
-		setTimeout( function() {
-			equal( $.trim( widget.text() ), initialValue );
-			start();
-		} );
+	element.val( "Slower" );
+	element.selectmenu( "refresh" );
+	assert.equal( $.trim( widget.text() ), "Slower" );
+	form[ 0 ].reset();
+	setTimeout( function() {
+		assert.equal( $.trim( widget.text() ), initialValue );
+		ready();
 	} );
+} );
+
+QUnit.test( "Number pad input should change value", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
+
+	var element = $( "#number" ).selectmenu(),
+		button = element.selectmenu( "widget" );
+
+	button.simulate( "focus" );
+	button.simulate( "keydown", { keyCode: 101 } );
+
+	setTimeout( function() {
+		assert.equal( element.val(), 5 );
+		ready();
+	} );
+} );
 
 } );

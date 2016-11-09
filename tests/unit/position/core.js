@@ -1,8 +1,9 @@
 define( [
+	"qunit",
 	"jquery",
 	"lib/common",
 	"ui/position"
-], function( $, common ) {
+], function( QUnit, $, common ) {
 
 var win = $( window ),
 	scrollTopSupport = function() {
@@ -14,16 +15,16 @@ var win = $( window ),
 		return support;
 	};
 
-module( "position", {
-	setup: function() {
+QUnit.module( "position", {
+	beforeEach: function() {
 		win.scrollTop( 0 ).scrollLeft( 0 );
 	}
 } );
 
 common.testJshint( "position" );
 
-test( "my, at, of", function() {
-	expect( 4 );
+QUnit.test( "my, at, of", function( assert ) {
+	assert.expect( 4 );
 
 	$( "#elx" ).position( {
 		my: "left top",
@@ -31,7 +32,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "left top, left top" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "left top, left top" );
 
 	$( "#elx" ).position( {
 		my: "left top",
@@ -39,7 +40,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "left top, left bottom" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "left top, left bottom" );
 
 	$( "#elx" ).position( {
 		my: "left",
@@ -47,7 +48,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 55, left: 50 }, "left, bottom" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 55, left: 50 }, "left, bottom" );
 
 	$( "#elx" ).position( {
 		my: "left foo",
@@ -55,11 +56,11 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 45, left: 50 }, "left foo, bar baz" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 45, left: 50 }, "left foo, bar baz" );
 } );
 
-test( "multiple elements", function() {
-	expect( 3 );
+QUnit.test( "multiple elements", function( assert ) {
+	assert.expect( 3 );
 
 	var elements = $( "#el1, #el2" ),
 		result = elements.position( {
@@ -70,14 +71,14 @@ test( "multiple elements", function() {
 		} ),
 		expected = { top: 10, left: 4 };
 
-	deepEqual( result, elements );
+	assert.deepEqual( result, elements );
 	elements.each( function() {
-		deepEqual( $( this ).offset(), expected );
+		assert.deepEqual( $( this ).offset(), expected );
 	} );
 } );
 
-test( "positions", function() {
-	expect( 18 );
+QUnit.test( "positions", function( assert ) {
+	assert.expect( 18 );
 
 	var offsets = {
 			left: 0,
@@ -100,7 +101,7 @@ test( "positions", function() {
 					of: "#parent",
 					collision: "none"
 				} );
-				deepEqual( el.offset(), {
+				assert.deepEqual( el.offset(), {
 					top: start.top + offsets[ vertical ] * ( my ? -1 : 1 ),
 					left: start.left + offsets[ horizontal ] * ( my ? -1 : 1 )
 				}, "Position via " + QUnit.jsDump.parse( { my: _my, at: _at } ) );
@@ -109,8 +110,8 @@ test( "positions", function() {
 	} );
 } );
 
-test( "of", function() {
-	expect( 9 + ( scrollTopSupport() ? 1 : 0 ) );
+QUnit.test( "of", function( assert ) {
+	assert.expect( 9 + ( scrollTopSupport() ? 1 : 0 ) );
 
 	var event;
 
@@ -120,7 +121,7 @@ test( "of", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "selector" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "selector" );
 
 	$( "#elx" ).position( {
 		my: "left top",
@@ -128,7 +129,7 @@ test( "of", function() {
 		of: $( "#parentx" ),
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "jQuery object" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "jQuery object" );
 
 	$( "#elx" ).position( {
 		my: "left top",
@@ -136,7 +137,7 @@ test( "of", function() {
 		of: $( "#parentx" )[ 0 ],
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "DOM element" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "DOM element" );
 
 	$( "#elx" ).position( {
 		my: "right bottom",
@@ -144,7 +145,7 @@ test( "of", function() {
 		of: document,
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), {
+	assert.deepEqual( $( "#elx" ).offset(), {
 		top: $( document ).height() - 10,
 		left: $( document ).width() - 10
 	}, "document" );
@@ -155,7 +156,7 @@ test( "of", function() {
 		of: $( document ),
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), {
+	assert.deepEqual( $( "#elx" ).offset(), {
 		top: $( document ).height() - 10,
 		left: $( document ).width() - 10
 	}, "document as jQuery object" );
@@ -168,7 +169,7 @@ test( "of", function() {
 		of: window,
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), {
+	assert.deepEqual( $( "#elx" ).offset(), {
 		top: win.height() - 10,
 		left: win.width() - 10
 	}, "window" );
@@ -179,7 +180,7 @@ test( "of", function() {
 		of: win,
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), {
+	assert.deepEqual( $( "#elx" ).offset(), {
 		top: win.height() - 10,
 		left: win.width() - 10
 	}, "window as jQuery object" );
@@ -192,7 +193,7 @@ test( "of", function() {
 			of: window,
 			collision: "none"
 		} );
-		deepEqual( $( "#elx" ).offset(), {
+		assert.deepEqual( $( "#elx" ).offset(), {
 			top: win.height() + 500 - 10,
 			left: win.width() + 200 - 10
 		}, "window, scrolled" );
@@ -206,7 +207,7 @@ test( "of", function() {
 		of: event,
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), {
+	assert.deepEqual( $( "#elx" ).offset(), {
 		top: 300,
 		left: 200
 	}, "event - left top, left top" );
@@ -218,14 +219,14 @@ test( "of", function() {
 		of: event,
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), {
+	assert.deepEqual( $( "#elx" ).offset(), {
 		top: 600,
 		left: 400
 	}, "event - left top, right bottom" );
 } );
 
-test( "offsets", function() {
-	expect( 9 );
+QUnit.test( "offsets", function( assert ) {
+	assert.expect( 9 );
 
 	var offset;
 
@@ -235,7 +236,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 70, left: 50 }, "offsets in at" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 70, left: 50 }, "offsets in at" );
 
 	$( "#elx" ).position( {
 		my: "left+10 top-10",
@@ -243,7 +244,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 50, left: 50 }, "offsets in my" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 50, left: 50 }, "offsets in my" );
 
 	$( "#elx" ).position( {
 		my: "left top",
@@ -251,7 +252,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 58, left: 50 }, "percentage offsets in at" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 58, left: 50 }, "percentage offsets in at" );
 
 	$( "#elx" ).position( {
 		my: "left-30% top+50%",
@@ -259,7 +260,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
 
 	$( "#elx" ).position( {
 		my: "left-30.001% top+50.0%",
@@ -268,8 +269,8 @@ test( "offsets", function() {
 		collision: "none"
 	} );
 	offset = $( "#elx" ).offset();
-	equal( Math.round( offset.top ), 65, "decimal percentage offsets in my" );
-	equal( Math.round( offset.left ), 37, "decimal percentage offsets in my" );
+	assert.equal( Math.round( offset.top ), 65, "decimal percentage offsets in my" );
+	assert.equal( Math.round( offset.left ), 37, "decimal percentage offsets in my" );
 
 	$( "#elx" ).position( {
 		my: "left+10.4 top-10.6",
@@ -278,8 +279,8 @@ test( "offsets", function() {
 		collision: "none"
 	} );
 	offset = $( "#elx" ).offset();
-	equal( Math.round( offset.top ), 49, "decimal offsets in my" );
-	equal( Math.round( offset.left ), 50, "decimal offsets in my" );
+	assert.equal( Math.round( offset.top ), 49, "decimal offsets in my" );
+	assert.equal( Math.round( offset.left ), 50, "decimal offsets in my" );
 
 	$( "#elx" ).position( {
 		my: "left+right top-left",
@@ -287,11 +288,11 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	} );
-	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "invalid offsets" );
+	assert.deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "invalid offsets" );
 } );
 
-test( "using", function() {
-	expect( 10 );
+QUnit.test( "using", function( assert ) {
+	assert.expect( 10 );
 
 	var count = 0,
 		elems = $( "#el1, #el2" ),
@@ -327,47 +328,47 @@ test( "using", function() {
 		at: "center+10 bottom",
 		of: "#parentx",
 		using: function( position, feedback ) {
-			deepEqual( this, elems[ count ], "correct context for call #" + count );
-			deepEqual( position, expectedPosition, "correct position for call #" + count );
-			deepEqual( feedback.element.element[ 0 ], elems[ count ] );
+			assert.deepEqual( this, elems[ count ], "correct context for call #" + count );
+			assert.deepEqual( position, expectedPosition, "correct position for call #" + count );
+			assert.deepEqual( feedback.element.element[ 0 ], elems[ count ] );
 			delete feedback.element.element;
-			deepEqual( feedback, expectedFeedback );
+			assert.deepEqual( feedback, expectedFeedback );
 			count++;
 		}
 	} );
 
 	elems.each( function() {
-		deepEqual( $( this ).offset(), originalPosition, "elements not moved" );
+		assert.deepEqual( $( this ).offset(), originalPosition, "elements not moved" );
 	} );
 } );
 
-function collisionTest( config, result, msg ) {
+function collisionTest( assert, config, result, msg ) {
 	var elem = $( "#elx" ).position( $.extend( {
 		my: "left top",
 		at: "right bottom",
 		of: "#parent"
 	}, config ) );
-	deepEqual( elem.offset(), result, msg );
+	assert.deepEqual( elem.offset(), result, msg );
 }
 
-function collisionTest2( config, result, msg ) {
-	collisionTest( $.extend( {
+function collisionTest2( assert, config, result, msg ) {
+	collisionTest( assert, $.extend( {
 		my: "right bottom",
 		at: "left top"
 	}, config ), result, msg );
 }
 
-test( "collision: fit, no collision", function() {
-	expect( 2 );
+QUnit.test( "collision: fit, no collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "fit"
 	}, {
 		top: 10,
 		left: 10
 	}, "no offset" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "fit",
 		at: "right+2 bottom+3"
 	}, {
@@ -378,17 +379,17 @@ test( "collision: fit, no collision", function() {
 
 // Currently failing in IE8 due to the iframe used by TestSwarm
 if ( !/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() ) ) {
-test( "collision: fit, collision", function() {
-	expect( 2 + ( scrollTopSupport() ? 1 : 0 ) );
+QUnit.test( "collision: fit, collision", function( assert ) {
+	assert.expect( 2 + ( scrollTopSupport() ? 1 : 0 ) );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "fit"
 	}, {
 		top: 0,
 		left: 0
 	}, "no offset" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "fit",
 		at: "left+2 top+3"
 	}, {
@@ -398,7 +399,7 @@ test( "collision: fit, collision", function() {
 
 	if ( scrollTopSupport() ) {
 		win.scrollTop( 300 ).scrollLeft( 200 );
-		collisionTest( {
+		collisionTest( assert, {
 			collision: "fit"
 		}, {
 			top: 300,
@@ -410,17 +411,17 @@ test( "collision: fit, collision", function() {
 } );
 }
 
-test( "collision: flip, no collision", function() {
-	expect( 2 );
+QUnit.test( "collision: flip, no collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "flip"
 	}, {
 		top: 10,
 		left: 10
 	}, "no offset" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "flip",
 		at: "right+2 bottom+3"
 	}, {
@@ -429,17 +430,17 @@ test( "collision: flip, no collision", function() {
 	}, "with offset" );
 } );
 
-test( "collision: flip, collision", function() {
-	expect( 2 );
+QUnit.test( "collision: flip, collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "flip"
 	}, {
 		top: 10,
 		left: 10
 	}, "no offset" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "flip",
 		at: "left+2 top+3"
 	}, {
@@ -448,17 +449,17 @@ test( "collision: flip, collision", function() {
 	}, "with offset" );
 } );
 
-test( "collision: flipfit, no collision", function() {
-	expect( 2 );
+QUnit.test( "collision: flipfit, no collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "flipfit"
 	}, {
 		top: 10,
 		left: 10
 	}, "no offset" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "flipfit",
 		at: "right+2 bottom+3"
 	}, {
@@ -467,17 +468,17 @@ test( "collision: flipfit, no collision", function() {
 	}, "with offset" );
 } );
 
-test( "collision: flipfit, collision", function() {
-	expect( 2 );
+QUnit.test( "collision: flipfit, collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "flipfit"
 	}, {
 		top: 10,
 		left: 10
 	}, "no offset" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "flipfit",
 		at: "left+2 top+3"
 	}, {
@@ -486,17 +487,17 @@ test( "collision: flipfit, collision", function() {
 	}, "with offset" );
 } );
 
-test( "collision: none, no collision", function() {
-	expect( 2 );
+QUnit.test( "collision: none, no collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "none"
 	}, {
 		top: 10,
 		left: 10
 	}, "no offset" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "none",
 		at: "right+2 bottom+3"
 	}, {
@@ -505,17 +506,17 @@ test( "collision: none, no collision", function() {
 	}, "with offset" );
 } );
 
-test( "collision: none, collision", function() {
-	expect( 2 );
+QUnit.test( "collision: none, collision", function( assert ) {
+	assert.expect( 2 );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "none"
 	}, {
 		top: -6,
 		left: -6
 	}, "no offset" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "none",
 		at: "left+2 top+3"
 	}, {
@@ -524,22 +525,22 @@ test( "collision: none, collision", function() {
 	}, "with offset" );
 } );
 
-test( "collision: fit, with margin", function() {
-	expect( 2 );
+QUnit.test( "collision: fit, with margin", function( assert ) {
+	assert.expect( 2 );
 
 	$( "#elx" ).css( {
 		marginTop: 6,
 		marginLeft: 4
 	} );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "fit"
 	}, {
 		top: 10,
 		left: 10
 	}, "right bottom" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "fit"
 	}, {
 		top: 6,
@@ -547,29 +548,29 @@ test( "collision: fit, with margin", function() {
 	}, "left top" );
 } );
 
-test( "collision: flip, with margin", function() {
-	expect( 3 );
+QUnit.test( "collision: flip, with margin", function( assert ) {
+	assert.expect( 3 );
 
 	$( "#elx" ).css( {
 		marginTop: 6,
 		marginLeft: 4
 	} );
 
-	collisionTest( {
+	collisionTest( assert, {
 		collision: "flip"
 	}, {
 		top: 10,
 		left: 10
 	}, "left top" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "flip"
 	}, {
 		top: 10,
 		left: 10
 	}, "right bottom" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		collision: "flip",
 		my: "left top"
 	}, {
@@ -578,17 +579,17 @@ test( "collision: flip, with margin", function() {
 	}, "right bottom" );
 } );
 
-test( "within", function() {
-	expect( 7 );
+QUnit.test( "within", function( assert ) {
+	assert.expect( 7 );
 
-	collisionTest( {
+	collisionTest( assert, {
 		within: document
 	}, {
 		top: 10,
 		left: 10
 	}, "within document" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		within: "#within",
 		collision: "fit"
 	}, {
@@ -596,7 +597,7 @@ test( "within", function() {
 		left: 2
 	}, "fit - right bottom" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		within: "#within",
 		collision: "fit"
 	}, {
@@ -604,7 +605,7 @@ test( "within", function() {
 		left: 0
 	}, "fit - left top" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		within: "#within",
 		collision: "flip"
 	}, {
@@ -612,7 +613,7 @@ test( "within", function() {
 		left: -6
 	}, "flip - right bottom" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		within: "#within",
 		collision: "flip"
 	}, {
@@ -620,7 +621,7 @@ test( "within", function() {
 		left: -6
 	}, "flip - left top" );
 
-	collisionTest( {
+	collisionTest( assert, {
 		within: "#within",
 		collision: "flipfit"
 	}, {
@@ -628,7 +629,7 @@ test( "within", function() {
 		left: 0
 	}, "flipfit - right bottom" );
 
-	collisionTest2( {
+	collisionTest2( assert, {
 		within: "#within",
 		collision: "flipfit"
 	}, {
@@ -637,8 +638,8 @@ test( "within", function() {
 	}, "flipfit - left top" );
 } );
 
-test( "with scrollbars", function() {
-	expect( 4 );
+QUnit.test( "with scrollbars", function( assert ) {
+	assert.expect( 4 );
 
 	$( "#scrollx" ).css( {
 		width: 100,
@@ -647,7 +648,7 @@ test( "with scrollbars", function() {
 		top: 0
 	} );
 
-	collisionTest( {
+	collisionTest( assert, {
 		of: "#scrollx",
 		collision: "fit",
 		within: "#scrollx"
@@ -662,7 +663,7 @@ test( "with scrollbars", function() {
 
 	var scrollbarInfo = $.position.getScrollInfo( $.position.getWithinInfo( $( "#scrollx" ) ) );
 
-	collisionTest( {
+	collisionTest( assert, {
 		of: "#scrollx",
 		collision: "fit",
 		within: "#scrollx"
@@ -675,7 +676,7 @@ test( "with scrollbars", function() {
 		overflow: "auto"
 	} );
 
-	collisionTest( {
+	collisionTest( assert, {
 		of: "#scrollx",
 		collision: "fit",
 		within: "#scrollx"
@@ -688,7 +689,7 @@ test( "with scrollbars", function() {
 		overflow: "auto"
 	} ).append( $( "<div>" ).height( 300 ).width( 300 ) );
 
-	collisionTest( {
+	collisionTest( assert, {
 		of: "#scrollx",
 		collision: "fit",
 		within: "#scrollx"
@@ -698,8 +699,8 @@ test( "with scrollbars", function() {
 	}, "auto, with scroll" );
 } );
 
-test( "fractions", function() {
-	expect( 1 );
+QUnit.test( "fractions", function( assert ) {
+	assert.expect( 1 );
 
 	$( "#fractions-element" ).position( {
 		my: "left top",
@@ -707,11 +708,11 @@ test( "fractions", function() {
 		of: "#fractions-parent",
 		collision: "none"
 	} );
-	deepEqual( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
+	assert.deepEqual( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
 } );
 
-test( "bug #5280: consistent results (avoid fractional values)", function() {
-	expect( 1 );
+QUnit.test( "bug #5280: consistent results (avoid fractional values)", function( assert ) {
+	assert.expect( 1 );
 
 	var wrapper = $( "#bug-5280" ),
 		elem = wrapper.children(),
@@ -727,14 +728,14 @@ test( "bug #5280: consistent results (avoid fractional values)", function() {
 			of: wrapper,
 			collision: "none"
 		} ).offset();
-	deepEqual( offset1, offset2 );
+	assert.deepEqual( offset1, offset2 );
 } );
 
-test( "bug #8710: flip if flipped position fits more", function() {
-	expect( 3 );
+QUnit.test( "bug #8710: flip if flipped position fits more", function( assert ) {
+	assert.expect( 3 );
 
 	// Positions a 10px tall element within 99px height at top 90px.
-	collisionTest( {
+	collisionTest( assert, {
 		within: "#bug-8710-within-smaller",
 		of: "#parentx",
 		collision: "flip",
@@ -745,7 +746,7 @@ test( "bug #8710: flip if flipped position fits more", function() {
 	}, "flip - top fits all" );
 
 	// Positions a 10px tall element within 99px height at top 92px.
-	collisionTest( {
+	collisionTest( assert, {
 		within: "#bug-8710-within-smaller",
 		of: "#parentx",
 		collision: "flip",
@@ -756,7 +757,7 @@ test( "bug #8710: flip if flipped position fits more", function() {
 	}, "flip - top fits more" );
 
 	// Positions a 10px tall element within 101px height at top 92px.
-	collisionTest( {
+	collisionTest( assert, {
 		within: "#bug-8710-within-bigger",
 		of: "#parentx",
 		collision: "flip",
