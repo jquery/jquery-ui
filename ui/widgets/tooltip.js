@@ -452,6 +452,10 @@ $.widget( "ui.tooltip", {
 	},
 
 	_removeTooltip: function( tooltip ) {
+
+		// Clear the interval for delayed tracking tooltips
+		clearInterval( this.delayedShow );
+
 		tooltip.remove();
 		delete this.tooltips[ tooltip.attr( "id" ) ];
 	},
