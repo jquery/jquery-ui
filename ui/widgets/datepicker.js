@@ -40,6 +40,7 @@
 
 var widget = $.widget( "ui.datepicker", {
 	version: "@VERSION",
+	defaultElement: "<input>",
 	options: {
 		appendTo: null,
 		position: {
