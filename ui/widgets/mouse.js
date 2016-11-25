@@ -48,6 +48,9 @@ return $.widget( "ui.mouse", {
 			.on( "mousedown." + this.widgetName, function( event ) {
 				return that._mouseDown( event );
 			} )
+			.on( "touchstart." + this.widgetName, function( event ) {
+				return that._mouseDown( event );
+			} )
 			.on( "click." + this.widgetName, function( event ) {
 				if ( true === $.data( event.target, that.widgetName + ".preventClickEvent" ) ) {
 					$.removeData( event.target, that.widgetName + ".preventClickEvent" );
@@ -66,7 +69,10 @@ return $.widget( "ui.mouse", {
 		if ( this._mouseMoveDelegate ) {
 			this.document
 				.off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-				.off( "mouseup." + this.widgetName, this._mouseUpDelegate );
+				.off( "mouseup." + this.widgetName, this._mouseUpDelegate )
+				.off( "touchmove." + this.widgetName, this._mouseMoveDelegate )
+				.off( "touchend." + this.widgetName, this._mouseUpDelegate )
+				.off( "touchcancel." + this.widgetName, this._mouseUpDelegate );
 		}
 	},
 
@@ -76,6 +82,8 @@ return $.widget( "ui.mouse", {
 		if ( mouseHandled ) {
 			return;
 		}
+
+		event = this._mouseEventFromTouchEvent(event);
 
 		this._mouseMoved = false;
 
@@ -125,15 +133,22 @@ return $.widget( "ui.mouse", {
 
 		this.document
 			.on( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-			.on( "mouseup." + this.widgetName, this._mouseUpDelegate );
+			.on( "mouseup." + this.widgetName, this._mouseUpDelegate )
+			.on( "touchmove." + this.widgetName, this._mouseMoveDelegate )
+			.on( "touchend." + this.widgetName, this._mouseUpDelegate )
+			.on( "touchcancel." + this.widgetName, this._mouseUpDelegate );
 
-		event.preventDefault();
+		if (event.type !== "touchstart") {
+			event.preventDefault();
+		}
 
 		mouseHandled = true;
 		return true;
 	},
 
 	_mouseMove: function( event ) {
+
+		event = this._mouseEventFromTouchEvent(event);
 
 		// Only check for mouseups outside the document if you've moved inside the document
 		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
