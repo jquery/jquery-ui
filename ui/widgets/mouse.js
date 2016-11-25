@@ -83,7 +83,7 @@ return $.widget( "ui.mouse", {
 			return;
 		}
 
-		event = this._mouseEventFromTouchEvent(event);
+		event = this._mouseEventFromTouchEvent( event );
 
 		this._mouseMoved = false;
 
@@ -138,7 +138,7 @@ return $.widget( "ui.mouse", {
 			.on( "touchend." + this.widgetName, this._mouseUpDelegate )
 			.on( "touchcancel." + this.widgetName, this._mouseUpDelegate );
 
-		if (event.type !== "touchstart") {
+		if ( event.type !== "touchstart" ) {
 			event.preventDefault();
 		}
 
@@ -148,7 +148,7 @@ return $.widget( "ui.mouse", {
 
 	_mouseMove: function( event ) {
 
-		event = this._mouseEventFromTouchEvent(event);
+		event = this._mouseEventFromTouchEvent( event );
 
 		// Only check for mouseups outside the document if you've moved inside the document
 		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
@@ -237,24 +237,25 @@ return $.widget( "ui.mouse", {
 	_mouseStop: function( /* event */ ) {},
 	_mouseCapture: function( /* event */ ) { return true; },
 
-	_mouseEventFromTouchEvent: function (event) {
-		if (!/^touch/.test(event.type)) {
+	_mouseEventFromTouchEvent: function ( event ) {
+
+		if ( !/^touch/.test( event.type ) ) {
 			return event;
 		}
 
-		if (event.type === "touchend" || // Do not let the browser simulate mouse events
-			event.type === "touchmove") { // Disable scrolling on containing elements
+		if ( event.type === "touchend" || // Do not let the browser simulate mouse events
+			event.type === "touchmove" ) { // Disable scrolling on containing elements
 			event.preventDefault();
 		}
 
 		var originalEvent = event.originalEvent, touch = this._lastTouch;
-		if (event.type === "touchstart") {
-			touch = originalEvent.touches[0];
+		if ( event.type === "touchstart" ) {
+			touch = originalEvent.touches[ 0 ];
 			this._lastTouchId = touch.identifier;
-		} else if (event.type !== "touchcancel") {
-			for (var i = 0; i < originalEvent.changedTouches.length; i++) {
-				if (originalEvent.changedTouches[i].identifier === this._lastTouchId) {
-					touch = originalEvent.changedTouches[i];
+		} else if ( event.type !== "touchcancel" ) {
+			for ( var i = 0; i < originalEvent.changedTouches.length; i++ ) {
+				if ( originalEvent.changedTouches[ i ].identifier === this._lastTouchId ) {
+					touch = originalEvent.changedTouches[ i ];
 					break;
 				}
 			}
@@ -263,9 +264,9 @@ return $.widget( "ui.mouse", {
 		this._lastTouch = touch;
 
 		var simulatedType = event.type === "touchstart" ? "mousedown" :
-					(event.type === "touchmove" ? "mousemove" : "mouseup");
+					( event.type === "touchmove" ? "mousemove" : "mouseup" );
 
-		var simulatedEvent = document.createEvent("MouseEvents");
+		var simulatedEvent = document.createEvent( "MouseEvents" );
 		simulatedEvent.initMouseEvent(
 			simulatedType,				// type
 			true,						// bubbles
@@ -284,8 +285,8 @@ return $.widget( "ui.mouse", {
 			null						// relatedTarget
 		);
 
-		var newEvent = jQuery.event["fix"](simulatedEvent);
-		newEvent.target = event.type === "touchcancel" ? null : (touch.target || event.target);
+		var newEvent = jQuery.event[ "fix" ]( simulatedEvent );
+		newEvent.target = event.type === "touchcancel" ? null : ( touch.target || event.target );
 		return newEvent;
 	}
 } );
