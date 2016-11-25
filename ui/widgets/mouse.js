@@ -220,7 +220,59 @@ return $.widget( "ui.mouse", {
 	_mouseStart: function( /* event */ ) {},
 	_mouseDrag: function( /* event */ ) {},
 	_mouseStop: function( /* event */ ) {},
-	_mouseCapture: function( /* event */ ) { return true; }
+	_mouseCapture: function( /* event */ ) { return true; },
+
+	_mouseEventFromTouchEvent: function (event) {
+		if (!/^touch/.test(event.type)) {
+			return event;
+		}
+
+		if (event.type === "touchend" || // Do not let the browser simulate mouse events
+			event.type === "touchmove") { // Disable scrolling on containing elements
+			event.preventDefault();
+		}
+
+		var originalEvent = event.originalEvent, touch = this._lastTouch;
+		if (event.type === "touchstart") {
+			touch = originalEvent.touches[0];
+			this._lastTouchId = touch.identifier;
+		} else if (event.type !== "touchcancel") {
+			for (var i = 0; i < originalEvent.changedTouches.length; i++) {
+				if (originalEvent.changedTouches[i].identifier === this._lastTouchId) {
+					touch = originalEvent.changedTouches[i];
+					break;
+				}
+			}
+		}
+
+		this._lastTouch = touch;
+
+		var simulatedType = event.type === "touchstart" ? "mousedown" :
+					(event.type === "touchmove" ? "mousemove" : "mouseup");
+
+		var simulatedEvent = document.createEvent("MouseEvents");
+		simulatedEvent.initMouseEvent(
+			simulatedType,				// type
+			true,						// bubbles
+			true,						// cancelable
+			window,						// view
+			1,							// detail
+			touch.screenX,				// screenX
+			touch.screenY,				// screenY
+			touch.clientX,				// clientX
+			touch.clientY,				// clientY
+			false,						// ctrlKey
+			false,						// altKey
+			false,						// shiftKey
+			false,						// metaKey
+			0,							// button
+			null						// relatedTarget
+		);
+
+		var newEvent = jQuery.event["fix"](simulatedEvent);
+		newEvent.target = event.type === "touchcancel" ? null : (touch.target || event.target);
+		return newEvent;
+	}
 } );
 
 } ) );
