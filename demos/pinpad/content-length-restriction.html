@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Pinpad - Restrict content length</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
+		$( "#pinpad" ).pinpad( {
+		    minLength: 4,
+			maxLength: 6
+		} );
+	</script>
+</head>
+<body>
+
+<input id="pinpad" type="password" title="Click here to insert your PIN">
+
+<div class="demo-description">
+	<p>Restrict the length of the pinpad input content using the <code>minLength</code> and <code>maxLength</code> options.</p>
+</div>
+</body>
+</html>

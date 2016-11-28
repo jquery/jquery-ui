@@ -1,0 +1,31 @@
+/*!
+ * jQuery UI Pinpad @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/pinpad/#theming
+ */
+.ui-pinpad {
+    position: absolute;
+}
+
+.ui-pinpad .ui-pinpad-num-pad,
+.ui-pinpad .ui-pinpad-command-panel {
+    float: left;
+}
+
+.ui-pinpad table {
+    border-collapse: collapse;
+}
+
+.ui-pinpad .ui-pinpad-num-pad table td {
+    text-align: center;
+}
+
+.ui-pinpad .ui-pinpad-key,
+.ui-pinpad .ui-pinpad-command {
+    width: 100%;
+}
