@@ -23,7 +23,12 @@
 		factory( jQuery );
 	}
 } ( function( $ ) {
-return $.extend( $.expr[ ":" ], {
+
+// for compatibility with jQuery < 1.10.0
+if ( !$.expr.pseudos ) {
+	$.expr.pseudos = $.expr[ ":" ];
+}
+return $.extend( jQuery.expr.pseudos, {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo( function( dataName ) {
 			return function( elem ) {

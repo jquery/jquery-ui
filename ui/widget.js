@@ -64,8 +64,13 @@ $.widget = function( name, base, prototype ) {
 		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
 	}
 
+	// for compatibility with jQuery < 1.10.0
+	if ( !$.expr.pseudos ) {
+		$.expr.pseudos = $.expr[ ":" ];
+	}
+
 	// Create selector for plugin
-	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+	$.expr.pseudos[ fullName.toLowerCase() ] = function( elem ) {
 		return !!$.data( elem, fullName );
 	};
 
