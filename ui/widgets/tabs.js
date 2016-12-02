@@ -96,7 +96,12 @@ $.widget( "ui.tabs", {
 		// Take disabling tabs via class attribute from HTML
 		// into account and update option properly.
 		if ( $.isArray( options.disabled ) ) {
-			options.disabled = $.unique( options.disabled.concat(
+
+			// for compatibility with jQuery < 1.12.0
+			if ( !$.uniqueSort ) {
+				$.uniqueSort = $.unique;
+			}
+			options.disabled = $.uniqueSort( options.disabled.concat(
 				$.map( this.tabs.filter( ".ui-state-disabled" ), function( li ) {
 					return that.tabs.index( li );
 				} )

@@ -150,7 +150,11 @@ return $.widget( "ui.controlgroup", {
 				} );
 		} );
 
-		this.childWidgets = $( $.unique( childWidgets ) );
+		// for compatibility with jQuery < 1.12.0
+		if ( !$.uniqueSort ) {
+			$.uniqueSort = $.unique;
+		}
+		this.childWidgets = $( $.uniqueSort( childWidgets ) );
 		this._addClass( this.childWidgets, "ui-controlgroup-item" );
 	},
 
