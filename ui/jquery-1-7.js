@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Support for jQuery core 1.7.x @VERSION
+ * jQuery UI Support for jQuery core 1.7.x and newer @VERSION
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -84,6 +84,18 @@ if ( $.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 			this.prevObject : this.prevObject.filter( selector )
 		);
 	};
+}
+
+// Support: jQuery 1.9.x or older
+// $.expr[ ":" ] is deprecated.
+if ( !$.expr.pseudos ) {
+	$.expr.pseudos = $.expr[ ":" ];
+}
+
+// Support: jQuery 1.11.x or older
+// $.unique has been renamed to $.uniqueSort
+if ( !$.uniqueSort ) {
+	$.uniqueSort = $.unique;
 }
 
 } ) );

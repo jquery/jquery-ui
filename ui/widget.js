@@ -65,7 +65,7 @@ $.widget = function( name, base, prototype ) {
 	}
 
 	// Create selector for plugin
-	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+	$.expr.pseudos[ fullName.toLowerCase() ] = function( elem ) {
 		return !!$.data( elem, fullName );
 	};
 
@@ -517,7 +517,7 @@ $.Widget.prototype = {
 				current = that.classesElementLookup[ classes[ i ] ] || $();
 				if ( options.add ) {
 					bindRemoveEvent();
-					current = $( $.unique( current.get().concat( options.element.get() ) ) );
+					current = $( $.uniqueSort( current.get().concat( options.element.get() ) ) );
 				} else {
 					current = $( current.not( options.element ).get() );
 				}
