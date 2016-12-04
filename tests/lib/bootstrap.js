@@ -5,6 +5,7 @@ requirejs.config( {
 		"globalize": "../../../external/globalize/globalize",
 		"globalize/ja-JP": "../../../external/globalize/globalize.culture.ja-JP",
 		"jquery": jqueryUrl(),
+		"jquery-migrate": migrateUrl(),
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
 		"lib": "../../lib",
@@ -68,6 +69,10 @@ function requireTests( dependencies, noBackCompat ) {
 		dependencies.push( "testswarm" );
 	}
 
+	if ( parseUrl().migrate ) {
+		dependencies.push( "jquery-migrate" );
+	}
+
 	requireModules( dependencies, function( QUnit ) {
 		QUnit.start();
 	} );
@@ -97,6 +102,21 @@ function jqueryUrl() {
 		url = "http://code.jquery.com/jquery-" + version;
 	} else {
 		url = "../../../external/jquery-" + ( version || "1.12.4" ) + "/jquery";
+	}
+
+	return url;
+}
+
+function migrateUrl() {
+	var jqueryVersion = parseUrl().jquery || "1.12.4";
+	var url;
+
+	if ( jqueryVersion === "git" ) {
+		url = "http://code.jquery.com/jquery-migrate-git";
+	} else if ( jqueryVersion[ 0 ] === "3" ) {
+		url = "../../../external/jquery-migrate-3.0.0/jquery-migrate";
+	} else {
+		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
 	}
 
 	return url;
