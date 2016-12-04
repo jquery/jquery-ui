@@ -23,11 +23,6 @@
 		factory( jQuery );
 	}
 } ( function( $ ) {
-
-// for compatibility with jQuery < 1.10.0
-if ( !$.expr.pseudos ) {
-	$.expr.pseudos = $.expr[ ":" ];
-}
 return $.extend( jQuery.expr.pseudos, {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo( function( dataName ) {

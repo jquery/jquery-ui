@@ -73,10 +73,6 @@ function visible( element ) {
 	return visibility !== "hidden";
 }
 
-// for compatibility with jQuery < 1.10.0
-if ( !$.expr.pseudos ) {
-	$.expr.pseudos = $.expr[ ":" ];
-}
 $.extend( $.expr.pseudos, {
 	focusable: function( element ) {
 		return $.ui.focusable( element, $.attr( element, "tabindex" ) != null );
