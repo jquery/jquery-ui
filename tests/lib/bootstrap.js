@@ -1,10 +1,13 @@
 ( function() {
 
+var DEFAULT_JQUERY_VERSION = "1.12.4";
+
 requirejs.config( {
 	paths: {
 		"globalize": "../../../external/globalize/globalize",
 		"globalize/ja-JP": "../../../external/globalize/globalize.culture.ja-JP",
 		"jquery": jqueryUrl(),
+		"jquery-migrate": migrateUrl(),
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"jshint": "../../../external/jshint/jshint",
 		"lib": "../../lib",
@@ -68,6 +71,10 @@ function requireTests( dependencies, noBackCompat ) {
 		dependencies.push( "testswarm" );
 	}
 
+	if ( parseUrl().migrate ) {
+		dependencies.push( "jquery-migrate" );
+	}
+
 	requireModules( dependencies, function( QUnit ) {
 		QUnit.start();
 	} );
@@ -82,21 +89,46 @@ function parseUrl() {
 	var current;
 
 	for ( ; i < length; i++ ) {
-		current = parts[ i ].split( "=" );
-		data[ current[ 0 ] ] = current[ 1 ];
+		if ( parts[ i ].match( "=" ) ) {
+			current = parts[ i ].split( "=" );
+			data[ current[ 0 ] ] = current[ 1 ];
+		} else {
+			data[ parts[ i ] ] = true
+		}
 	}
 
 	return data;
 }
 
 function jqueryUrl() {
-	var version = parseUrl().jquery;
+	var version = parseUrl().jquery || DEFAULT_JQUERY_VERSION;
 	var url;
 
 	if ( version === "git" ) {
 		url = "http://code.jquery.com/jquery-" + version;
 	} else {
-		url = "../../../external/jquery-" + ( version || "1.12.4" ) + "/jquery";
+		url = "../../../external/jquery-" + version + "/jquery";
+	}
+
+	return url;
+}
+
+function migrateUrl() {
+	var jqueryVersion = parseUrl().jquery || DEFAULT_JQUERY_VERSION;
+	var url;
+
+	if ( jqueryVersion === "git" ) {
+		url = "http://code.jquery.com/jquery-migrate-git";
+	} else if ( jqueryVersion[ 0 ] === "3" ) {
+		url = "../../../external/jquery-migrate-3.0.0/jquery-migrate";
+	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {
+		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
+	} else if ( jqueryVersion === "custom" ) {
+		if ( parseUrl().migrate ) {
+			throw new Error ( "Migrate not currently supported for custom build" );
+		}
+	} else {
+		throw new Error( "No migrate version known for jQuery " + jqueryVersion );
 	}
 
 	return url;

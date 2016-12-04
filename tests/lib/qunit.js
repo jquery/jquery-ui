@@ -36,6 +36,11 @@ QUnit.config.urlConfig.push( {
 	tooltip: "Which jQuery Core version to test against"
 } );
 
+QUnit.config.urlConfig.push( {
+	id: "migrate",
+	label: "Enable jquery-migrate"
+} );
+
 QUnit.reset = ( function( reset ) {
 	return function() {
 
