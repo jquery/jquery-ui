@@ -52,6 +52,7 @@ $.widget( "ui.tabs", {
 		heightStyle: "content",
 		hide: null,
 		show: null,
+		forceLocal: false,
 
 		// Callbacks
 		activate: null,
@@ -62,6 +63,9 @@ $.widget( "ui.tabs", {
 
 	_isLocal: ( function() {
 		var rhash = /#.*$/;
+		
+		if( this.options.forceLocal )
+			return true;
 
 		return function( anchor ) {
 			var anchorUrl, locationUrl;
