@@ -111,14 +111,18 @@ var widget = $.widget( "ui.datepicker", {
 			.calendar( $.extend( {}, this.options, {
 				value: this._parse( this.element.val() ),
 				change: function( event ) {
-					that._trigger( "change", event );
+					that._trigger( "change", event, {
+						value: that.calendarInstance.valueAsDate()
+					} );
 				},
 				select: function( event ) {
 					that.element.val( that.calendarInstance.value() );
 					that.close();
 					event.preventDefault();
 					that._focusTrigger();
-					that._trigger( "select", event );
+					that._trigger( "select", event, {
+						value: that.calendarInstance.valueAsDate()
+					} );
 
 					return false;
 				}
@@ -183,7 +187,9 @@ var widget = $.widget( "ui.datepicker", {
 			this.suppressExpandOnFocus = false;
 		},
 		change: function( event ) {
-			this._trigger( "change", event );
+			this._trigger( "change", event, {
+				value: this.calendarInstance.valueAsDate()
+			} );
 		}
 	},
 

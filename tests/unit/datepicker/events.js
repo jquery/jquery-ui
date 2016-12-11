@@ -44,18 +44,19 @@ QUnit.test( "beforeOpen", function( assert ) {
 } );
 
 QUnit.test( "change", function( assert ) {
-	assert.expect( 4 );
+	assert.expect( 6 );
 
 	var shouldFire;
 
 	this.element.datepicker( {
-		change: function( event ) {
+		change: function( event, ui ) {
 			assert.ok( shouldFire, "change event fired" );
 			assert.equal(
 				event.type,
 				"datepickerchange",
 				"change event"
 			);
+			assert.equal( $.type( ui.value ), "date", "value is a date object" );
 		}
 	} );
 
@@ -121,19 +122,20 @@ QUnit.test( "open", function( assert ) {
 
 QUnit.test( "select", function( assert ) {
 	var ready = assert.async();
-	assert.expect( 4 );
+	assert.expect( 6 );
 
 	var message = "",
 		that = this;
 
 	this.element.datepicker( {
-		select: function( event ) {
+		select: function( event, ui ) {
 			assert.ok( true, "select event fired " + message );
 			assert.equal(
 				event.originalEvent.type,
 				"calendarselect",
 				"select originalEvent " + message
 			);
+			assert.equal( $.type( ui.value ), "date", "value is a date object" );
 		}
 	} );
 
