@@ -73,6 +73,7 @@ return $.widget( "ui.calendar", {
 
 		// callbacks
 		change: null,
+		refresh: null,
 		select: null
 	},
 
@@ -595,6 +596,8 @@ return $.widget( "ui.calendar", {
 		this._setActiveDescendant();
 		this._refreshHeaderButtons();
 		this._createButtons();
+
+		this._trigger( "refresh" );
 	},
 
 	_refreshHeaderButtons: function() {

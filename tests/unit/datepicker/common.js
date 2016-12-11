@@ -46,6 +46,7 @@ common.testWidget( "datepicker", {
 		close: null,
 		create: null,
 		open: null,
+		refresh: null,
 		select: null
 	}
 } );

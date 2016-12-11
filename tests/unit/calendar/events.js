@@ -98,4 +98,26 @@ QUnit.test( "select", function( assert ) {
 	step1();
 } );
 
+QUnit.test( "refresh", function( assert ) {
+	assert.expect( 2 );
+
+	var shouldFire;
+
+	this.element.calendar( {
+		refresh: function() {
+			assert.ok( shouldFire, "refresh event fired" );
+		}
+	} );
+
+	shouldFire = true;
+	this.element.find( "button.ui-calendar-next" ).simulate( "click" );
+
+	shouldFire = false;
+	this.element.find( "table button:eq(1)" ).simulate( "click" );
+
+	testHelper.focusGrid( this.element ).simulate( "keydown", { keyCode: $.ui.keyCode.END } );
+	shouldFire = true;
+	testHelper.focusGrid( this.element ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+} );
+
 } );
