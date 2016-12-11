@@ -1,59 +1,60 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/calendar"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "calendar: core", {
-	setup: function() {
+QUnit.module( "calendar: core", {
+	beforeEach: function() {
 		this.element = $( "#calendar" ).calendar();
 		this.widget = this.element.calendar( "widget" );
 	},
-	teardown: function() {
+	afterEach: function() {
 		this.element.calendar( "destroy" );
 	}
 } );
 
-test( "base structure", function( assert ) {
+QUnit.test( "base structure", function( assert ) {
 	assert.expect( 28 );
 
 	var that = this,
 		buttons, header, title, table, thead, week, child, buttonpane;
 
 	function step1() {
-		ok( !that.widget.is( ".ui-calendar-rtl" ), "Structure - not right-to-left" );
-		ok( !that.widget.is( ".ui-calendar-multi" ), "Structure - not multi-month" );
-		equal( that.widget.children().length, 3, "Structure - child count (header, calendar)" );
+		assert.ok( !that.widget.is( ".ui-calendar-rtl" ), "Structure - not right-to-left" );
+		assert.ok( !that.widget.is( ".ui-calendar-multi" ), "Structure - not multi-month" );
+		assert.equal( that.widget.children().length, 3, "Structure - child count (header, calendar)" );
 
 		buttons = that.widget.children( ":first" );
-		ok( buttons.is( "div.ui-calendar-header-buttons" ), "Structure - header button division" );
-		equal( buttons.children().length, 2, "Structure - header buttons child count" );
-		ok( buttons.children( ":first" ).is( ".ui-calendar-prev" ) && buttons.children( ":first" ).html() !== "", "Structure - prev link" );
-		ok( buttons.children( ":last" ).is( ".ui-calendar-next" ) && buttons.children( ":last" ).html() !== "", "Structure - next link" );
+		assert.ok( buttons.is( "div.ui-calendar-header-buttons" ), "Structure - header button division" );
+		assert.equal( buttons.children().length, 2, "Structure - header buttons child count" );
+		assert.ok( buttons.children( ":first" ).is( ".ui-calendar-prev" ) && buttons.children( ":first" ).html() !== "", "Structure - prev link" );
+		assert.ok( buttons.children( ":last" ).is( ".ui-calendar-next" ) && buttons.children( ":last" ).html() !== "", "Structure - next link" );
 
 		header = that.widget.children( ":eq(1)" );
-		ok( header.is( "div.ui-calendar-header" ), "Structure - header division" );
-		equal( header.children().length, 1, "Structure - header child count" );
+		assert.ok( header.is( "div.ui-calendar-header" ), "Structure - header division" );
+		assert.equal( header.children().length, 1, "Structure - header child count" );
 
 		title = header.children( ":last" ).children( ":first" );
-		ok( title.is( "div.ui-calendar-title" ) && title.html() !== "", "Structure - title division" );
-		equal( title.children().length, 2, "Structure - title child count" );
-		ok( title.children( ":first" ).is( "span.ui-calendar-month" ) && title.children( ":first" ).text() !== "", "Structure - month text" );
-		ok( title.children( ":last" ).is( "span.ui-calendar-year" ) && title.children( ":last" ).text() !== "", "Structure - year text" );
+		assert.ok( title.is( "div.ui-calendar-title" ) && title.html() !== "", "Structure - title division" );
+		assert.equal( title.children().length, 2, "Structure - title child count" );
+		assert.ok( title.children( ":first" ).is( "span.ui-calendar-month" ) && title.children( ":first" ).text() !== "", "Structure - month text" );
+		assert.ok( title.children( ":last" ).is( "span.ui-calendar-year" ) && title.children( ":last" ).text() !== "", "Structure - year text" );
 
 		table = that.widget.children( ":eq(2)" );
-		ok( table.is( "table.ui-calendar-calendar" ), "Structure - month table" );
-		ok( table.children( ":first" ).is( "thead" ), "Structure - month table thead" );
+		assert.ok( table.is( "table.ui-calendar-calendar" ), "Structure - month table" );
+		assert.ok( table.children( ":first" ).is( "thead" ), "Structure - month table thead" );
 
 		thead = table.children( ":first" ).children( ":first" );
-		ok( thead.is( "tr" ), "Structure - month table title row" );
-		equal( thead.find( "th" ).length, 7, "Structure - month table title cells" );
-		ok( table.children( ":eq(1)" ).is( "tbody" ), "Structure - month table body" );
-		ok( table.children( ":eq(1)" ).children( "tr" ).length >= 4, "Structure - month table week count" );
+		assert.ok( thead.is( "tr" ), "Structure - month table title row" );
+		assert.equal( thead.find( "th" ).length, 7, "Structure - month table title cells" );
+		assert.ok( table.children( ":eq(1)" ).is( "tbody" ), "Structure - month table body" );
+		assert.ok( table.children( ":eq(1)" ).children( "tr" ).length >= 4, "Structure - month table week count" );
 
 		week = table.children( ":eq(1)" ).children( ":first" );
-		ok( week.is( "tr" ), "Structure - month table week row" );
-		equal( week.children().length, 7, "Structure - week child count" );
+		assert.ok( week.is( "tr" ), "Structure - month table week row" );
+		assert.equal( week.children().length, 7, "Structure - week child count" );
 
 		step2();
 	}
@@ -64,12 +65,12 @@ test( "base structure", function( assert ) {
 			"test button": function() {}
 		} );
 
-		equal( that.widget.children().length, 4, "Structure buttons - child count (header buttons, header, calendar, buttonpane)" );
+		assert.equal( that.widget.children().length, 4, "Structure buttons - child count (header buttons, header, calendar, buttonpane)" );
 
 		buttonpane = that.widget.children( ".ui-calendar-buttonpane" );
-		equal( buttonpane.children( "div.ui-calendar-buttonset" ).length, 1, "Structure buttons - buttonset" );
-		equal( buttonpane.find( "button.ui-button:first" ).text(), "test", "Structure buttons - buttonset" );
-		equal( buttonpane.find( "button.ui-button:eq(1)" ).text(), "test button", "Structure buttons - buttonset" );
+		assert.equal( buttonpane.children( "div.ui-calendar-buttonset" ).length, 1, "Structure buttons - buttonset" );
+		assert.equal( buttonpane.find( "button.ui-button:first" ).text(), "test", "Structure buttons - buttonset" );
+		assert.equal( buttonpane.find( "button.ui-button:eq(1)" ).text(), "test button", "Structure buttons - buttonset" );
 
 		that.element.calendar( "destroy" );
 		step3();
@@ -80,17 +81,17 @@ test( "base structure", function( assert ) {
 		// Multi-month 2
 		that.element.calendar( { numberOfMonths: 2 } );
 
-		ok( that.widget.is( ".ui-calendar-multi" ), "Structure multi [2] - multi-month" );
-		equal( that.widget.children().length, 4, "Structure multi [2] - child count" );
+		assert.ok( that.widget.is( ".ui-calendar-multi" ), "Structure multi [2] - multi-month" );
+		assert.equal( that.widget.children().length, 4, "Structure multi [2] - child count" );
 
 		child = that.widget.children( ":eq(3)" );
-		ok( child.is( "div.ui-calendar-row-break" ), "Structure multi [2] - row break" );
+		assert.ok( child.is( "div.ui-calendar-row-break" ), "Structure multi [2] - row break" );
 	}
 
 	step1();
 } );
 
-test( "Localization", function( assert ) {
+QUnit.test( "Localization", function( assert ) {
 	assert.expect( 10 );
 
 	var that = this,
@@ -108,23 +109,23 @@ test( "Localization", function( assert ) {
 				.calendar( "valueAsDate", date );
 		},
 		testLocalization = function( message ) {
-			equal(
+			assert.equal(
 				that.element.find( ".ui-calendar-month" ).text(),
 				"Januar", message + "titlebar year"
 			);
-			equal(
+			assert.equal(
 				that.element.find( "thead th:first" ).text(),
 				"Mo.", message + "teader first day"
 			);
-			equal(
+			assert.equal(
 				that.element.find( "thead th:last" ).text(),
 				"So.", message + "header last day"
 			);
-			equal(
+			assert.equal(
 				that.element.find( ".ui-calendar-prev" ).text(),
 				"Zurück", message + "header prev"
 			);
-			equal(
+			assert.equal(
 				that.element.find( ".ui-calendar-next" ).text(),
 				"Vor", message + "header next"
 			);
@@ -141,10 +142,11 @@ test( "Localization", function( assert ) {
 	testLocalization( "After init: " );
 } );
 
-asyncTest( "keyboard handling", function( assert ) {
+QUnit.test( "keyboard handling", function( assert ) {
 	assert.expect( 10 );
 
-	var that = this;
+	var ready = assert.async(),
+		that = this;
 
 	function step1() {
 		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
@@ -305,17 +307,18 @@ asyncTest( "keyboard handling", function( assert ) {
 				new Date( 2016, 2 - 1, 29 ),
 				"Keystroke Page Down and leap years"
 			);
-			start();
+			ready();
 		}, 50 );
 	}
 
 	step1();
 } );
 
-asyncTest( "mouse", function( assert ) {
+QUnit.test( "mouse", function( assert ) {
 	assert.expect( 6 );
 
-	var that = this,
+	var ready = assert.async(),
+		that = this,
 		date = new Date();
 
 	function step1() {
@@ -391,7 +394,7 @@ asyncTest( "mouse", function( assert ) {
 			new Date( 2008, 2 - 1, 18 ),
 			"Mouse click - next + min/max"
 		);
-		start();
+		ready();
 	}
 
 	step1();

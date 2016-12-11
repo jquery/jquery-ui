@@ -1,29 +1,30 @@
 define( [
+	"qunit",
 	"jquery",
 	"./helper",
 	"ui/widgets/calendar"
-], function( $, testHelper ) {
+], function( QUnit, $, testHelper ) {
 
-module( "calendar: events", {
-	setup: function() {
+QUnit.module( "calendar: events", {
+	beforeEach: function() {
 		this.element = $( "#calendar" ).calendar();
 	}
 } );
 
-test( "change", function( assert ) {
+QUnit.test( "change", function( assert ) {
 	assert.expect( 6 );
 
 	var shouldFire, eventType;
 
 	this.element.calendar( {
 		change: function( event ) {
-			ok( shouldFire, "change event fired" );
-			equal(
+			assert.ok( shouldFire, "change event fired" );
+			assert.equal(
 				event.type,
 				"calendarchange",
 				"change event"
 			);
-			equal(
+			assert.equal(
 				event.originalEvent.type,
 				eventType,
 				"change originalEvent on calendar button " + eventType
@@ -46,21 +47,22 @@ test( "change", function( assert ) {
 	this.element.find( "tbody button" ).first().simulate( eventType );
 } );
 
-asyncTest( "select", function( assert ) {
+QUnit.test( "select", function( assert ) {
 	assert.expect( 6 );
 
-	var that = this,
+	var ready = assert.async(),
+		that = this,
 		message, eventType;
 
 	this.element.calendar( {
 		select: function( event ) {
-			ok( true, "select event fired " + message );
-			equal(
+			assert.ok( true, "select event fired " + message );
+			assert.equal(
 				event.type,
 				"calendarselect",
 				"select event " + message
 			);
-			equal(
+			assert.equal(
 				event.originalEvent.type,
 				eventType,
 				"select originalEvent " + message
@@ -88,7 +90,7 @@ asyncTest( "select", function( assert ) {
 	function step3() {
 		that.element.calendar( "disable" );
 		that.element.find( "table button:eq(10)" ).simulate( "mousedown" );
-		setTimeout( start, 50 );
+		setTimeout( ready, 50 );
 	}
 
 	step1();
