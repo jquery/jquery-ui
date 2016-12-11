@@ -128,7 +128,9 @@ return $.widget( "ui.calendar", {
 	_select: function( event ) {
 		var oldValue = this.options.value ? this.options.value.getTime() : "";
 
-		this._setOption( "value", new Date( $( event.currentTarget ).data( "ui-calendar-timestamp" ) ) );
+		this._setOption(
+			"value", new Date( $( event.currentTarget ).data( "ui-calendar-timestamp" ) )
+		);
 		this._updateDayElement( "ui-state-active" );
 
 		// Allow datepicker to handle focus
@@ -200,7 +202,9 @@ return $.widget( "ui.calendar", {
 	},
 
 	_needsRefresh: function() {
-		if ( this.date.month() !== this.viewDate.month() || this.date.year() !== this.viewDate.year() ) {
+		if ( this.date.month() !== this.viewDate.month() ||
+			this.date.year() !== this.viewDate.year()
+		) {
 
 			// Check if the needed day is already present in our grid due
 			// to eachDay option changes (eg. other-months demo)
@@ -265,7 +269,9 @@ return $.widget( "ui.calendar", {
 			this._buildMultiplePicker();
 		}
 
-		this._addClass( this.element, "ui-calendar", "ui-widget ui-widget-content ui-helper-clearfix" );
+		this._addClass(
+			this.element, "ui-calendar", "ui-widget ui-widget-content ui-helper-clearfix"
+		);
 
 		this._refreshHeaderButtons();
 		this._createButtonPane();
@@ -293,7 +299,8 @@ return $.widget( "ui.calendar", {
 
 		for ( ; i < months.length; i++ ) {
 
-			// TODO: Shouldn't we pass date as a parameter to build* fns instead of setting this.date?
+			// TODO: Shouldn't we pass date as a parameter to build* fns
+			// instead of setting this.date?
 			this.viewDate = months[ i ];
 			this.gridId = this.id + "-" + i;
 			labelledBy.push( this.gridId + "-title" );
@@ -408,7 +415,8 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildGridHeaderCell: function( day ) {
-		return $( "<th role='columnheader' abbr='" + day.fullname + "' aria-label='" + day.fullname + "'>" +
+		return $( "<th role='columnheader' abbr='" + day.fullname +
+				"' aria-label='" + day.fullname + "'>" +
 			"<span title='" + day.fullname + "'>" + day.shortname + "</span>" +
 		"</th>" );
 	},
@@ -453,7 +461,9 @@ return $.widget( "ui.calendar", {
 			selectable = ( day.selectable && this._isValid( dateObject ) );
 
 		if ( day.render ) {
-			attributes.push( "id='" + this.id + "-" + day.year + "-" + day.month + "-" + day.date + "'" );
+			attributes.push(
+				"id='" + this.id + "-" + day.year + "-" + day.month + "-" + day.date + "'"
+			);
 
 			if ( !selectable ) {
 				attributes.push( "aria-disabled='true'" );
@@ -496,7 +506,8 @@ return $.widget( "ui.calendar", {
 		content = "<button" + attributes + ">" + day.date + "</button>";
 
 		if ( day.today ) {
-			content += "<span class='ui-helper-hidden-accessible'>, " + this._getTranslation( "currentText" ) + "</span>";
+			content += "<span class='ui-helper-hidden-accessible'>, " +
+				this._getTranslation( "currentText" ) + "</span>";
 		}
 
 		return content;
@@ -510,7 +521,9 @@ return $.widget( "ui.calendar", {
 		this.buttonPane = $( "<div>" );
 		this.buttonSet = $( "<div>" ).appendTo( this.buttonPane );
 
-		this._addClass( this.buttonPane, "ui-calendar-buttonpane", "ui-widget-content ui-helper-clearfix" )
+		this._addClass(
+				this.buttonPane, "ui-calendar-buttonpane", "ui-widget-content ui-helper-clearfix"
+			)
 			._addClass( this.buttonSet, "ui-calendar-buttonset" );
 
 		this._createButtons();
