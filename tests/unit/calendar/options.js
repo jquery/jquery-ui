@@ -278,13 +278,10 @@ QUnit.test( "numberOfMonths", function( assert ) {
 
 	var date = new Date( 2015, 8 - 1, 1 );
 
-	// Number of month option does not work after init
-	this.element
-		.calendar( "destroy" )
-		.calendar( {
-			numberOfMonths: 3,
-			value: date
-		} );
+	this.element.calendar( "option", {
+		numberOfMonths: 3,
+		value: date
+	} );
 
 	assert.equal( this.widget.find( ".ui-calendar-group" ).length, 3, "3 calendar grids" );
 	assert.equal(
@@ -304,10 +301,7 @@ QUnit.test( "numberOfMonths", function( assert ) {
 		"After mousedown last month: Last day is Saturday"
 	);
 
-	// Test if using cursor to go to the next / prev month advances three month
-	// Focus doesn't work here so we use an additional mouse down event
-	this.widget.find( "tbody:first td[id]:first button" ).trigger( "mousedown" );
-	$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+	this.widget.find( "button.ui-calendar-prev" ).simulate( "click" );
 	assert.equal( this.widget.find( ".ui-calendar-month:first" ).text(), "May",
 		"After move to previous month: First month is May"
 	);

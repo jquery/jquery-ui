@@ -703,12 +703,16 @@ return $.widget( "ui.calendar", {
 
 	_setOptions: function( options ) {
 		var that = this,
+			create = false,
 			refresh = false,
 			dateAttributes = false;
 
 		$.each( options, function( key, value ) {
 			that._setOption( key, value );
 
+			if ( key === "numberOfMonths" ) {
+				create = true;
+			}
 			if ( key in that.refreshRelatedOptions ) {
 				refresh = true;
 			}
@@ -722,8 +726,16 @@ return $.widget( "ui.calendar", {
 			this.date.setAttributes( this._calendarDateOptions );
 			this.viewDate.setAttributes( this._calendarDateOptions );
 		}
-		if ( refresh ) {
+		if ( create || refresh ) {
 			this.viewDate.setTime( this.date.date().getTime() );
+		}
+		if ( create ) {
+			this.element.empty();
+			this._removeClass( this.element, "ui-calendar-multi" );
+			this._createCalendar();
+			refresh = false;
+		}
+		if ( refresh ) {
 			this.refresh();
 		}
 	},
