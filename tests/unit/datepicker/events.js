@@ -1,30 +1,31 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/datepicker"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "datepicker: events", {
-	setup: function() {
+QUnit.module( "datepicker: events", {
+	beforeEach: function() {
 		this.element = $( "#datepicker" ).datepicker( { show: false, hide: false } );
 		this.widget = this.element.datepicker( "widget" );
 	},
-	teardown: function() {
+	afterEach: function() {
 		this.element.datepicker( "destroy" ).val( "" );
 	}
 } );
 
-test( "beforeOpen", function( assert ) {
+QUnit.test( "beforeOpen", function( assert ) {
 	assert.expect( 3 );
 
 	var that = this;
 
 	this.element.datepicker( {
 		beforeOpen: function() {
-			ok( true, "beforeOpen event fired before open" );
-			ok( that.element.datepicker( "widget" ).is( ":hidden" ), "calendar hidden on beforeOpen" );
+			assert.ok( true, "beforeOpen event fired before open" );
+			assert.ok( that.element.datepicker( "widget" ).is( ":hidden" ), "calendar hidden on beforeOpen" );
 		},
 		open: function() {
-			ok( that.element.datepicker( "widget" ).is( ":visible" ), "calendar open on open" );
+			assert.ok( that.element.datepicker( "widget" ).is( ":visible" ), "calendar open on open" );
 		}
 	} );
 
@@ -36,21 +37,21 @@ test( "beforeOpen", function( assert ) {
 				return false;
 			},
 			open: function() {
-				ok( false, "calendar should not open when openBefore is canceled" );
+				assert.ok( false, "calendar should not open when openBefore is canceled" );
 			}
 		} )
 		.datepicker( "open" );
 } );
 
-test( "change", function( assert ) {
+QUnit.test( "change", function( assert ) {
 	assert.expect( 4 );
 
 	var shouldFire;
 
 	this.element.datepicker( {
 		change: function( event ) {
-			ok( shouldFire, "change event fired" );
-			equal(
+			assert.ok( shouldFire, "change event fired" );
+			assert.equal(
 				event.type,
 				"datepickerchange",
 				"change event"
@@ -71,14 +72,14 @@ test( "change", function( assert ) {
 	this.widget.find( "tbody button" ).eq( 2 ).simulate( "mousedown" );
 } );
 
-test( "close", function( assert ) {
+QUnit.test( "close", function( assert ) {
 	assert.expect( 4 );
 
 	var shouldFire;
 
 	this.element.datepicker( {
 		close: function() {
-			ok( shouldFire, "close event fired" );
+			assert.ok( shouldFire, "close event fired" );
 		}
 	} );
 
@@ -103,22 +104,23 @@ test( "close", function( assert ) {
 	this.widget.find( "tbody tr:first button:first" ).simulate( "mousedown" );
 } );
 
-test( "open", function( assert ) {
+QUnit.test( "open", function( assert ) {
 	assert.expect( 2 );
 
 	var that = this;
 
 	this.element.datepicker( {
 		open: function() {
-			ok( true, "open event fired on open" );
-			ok( that.widget.is( ":visible" ), "calendar open on open" );
+			assert.ok( true, "open event fired on open" );
+			assert.ok( that.widget.is( ":visible" ), "calendar open on open" );
 		}
 	} );
 
 	this.element.datepicker( "open" );
 } );
 
-asyncTest( "select", function( assert ) {
+QUnit.test( "select", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 4 );
 
 	var message = "",
@@ -126,8 +128,8 @@ asyncTest( "select", function( assert ) {
 
 	this.element.datepicker( {
 		select: function( event ) {
-			ok( true, "select event fired " + message );
-			equal(
+			assert.ok( true, "select event fired " + message );
+			assert.equal(
 				event.originalEvent.type,
 				"calendarselect",
 				"select originalEvent " + message
@@ -169,7 +171,7 @@ asyncTest( "select", function( assert ) {
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
 			that.element.datepicker( "close" );
-			start();
+			ready();
 		}, 100 );
 	}
 

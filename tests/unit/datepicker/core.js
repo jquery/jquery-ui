@@ -1,19 +1,20 @@
 define( [
+	"qunit",
 	"jquery",
 	"ui/widgets/datepicker"
-], function( $ ) {
+], function( QUnit, $ ) {
 
-module( "datepicker: core", {
-	setup: function() {
+QUnit.module( "datepicker: core", {
+	beforeEach: function() {
 		this.element = $( "#datepicker" ).datepicker( { show: false, hide: false } );
 		this.widget = this.element.datepicker( "widget" );
 	},
-	teardown: function() {
+	afterEach: function() {
 		this.element.datepicker( "destroy" ).val( "" );
 	}
 } );
 
-test( "input's value determines starting date", function( assert ) {
+QUnit.test( "input's value determines starting date", function( assert ) {
 	assert.expect( 3 );
 
 	this.element = $( "<input>" ).appendTo( "#qunit-fixture" );
@@ -22,12 +23,13 @@ test( "input's value determines starting date", function( assert ) {
 
 	this.element.datepicker( "open" );
 
-	equal( this.widget.find( ".ui-calendar-month" ).html(), "January", "correct month displayed" );
-	equal( this.widget.find( ".ui-calendar-year" ).html(), "2014", "correct year displayed" );
-	equal( this.widget.find( ".ui-state-active" ).html(), "1", "correct day highlighted" );
+	assert.equal( this.widget.find( ".ui-calendar-month" ).html(), "January", "correct month displayed" );
+	assert.equal( this.widget.find( ".ui-calendar-year" ).html(), "2014", "correct year displayed" );
+	assert.equal( this.widget.find( ".ui-state-active" ).html(), "1", "correct day highlighted" );
 } );
 
-asyncTest( "base structure", function( assert ) {
+QUnit.test( "base structure", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 5 );
 
 	var that = this;
@@ -35,46 +37,48 @@ asyncTest( "base structure", function( assert ) {
 	this.element.focus();
 
 	setTimeout( function() {
-		ok( that.widget.is( ":visible" ), "Datepicker visible" );
-		equal( that.widget.children().length, 3, "Child count" );
-		ok( that.widget.is( ".ui-calendar" ), "Class ui-calendar" );
-		ok( that.widget.is( ".ui-datepicker" ), "Class ui-datepicker" );
-		ok( that.widget.is( ".ui-front" ), "Class ui-front" );
+		assert.ok( that.widget.is( ":visible" ), "Datepicker visible" );
+		assert.equal( that.widget.children().length, 3, "Child count" );
+		assert.ok( that.widget.is( ".ui-calendar" ), "Class ui-calendar" );
+		assert.ok( that.widget.is( ".ui-datepicker" ), "Class ui-datepicker" );
+		assert.ok( that.widget.is( ".ui-front" ), "Class ui-front" );
 
 		that.element.datepicker( "close" );
-		start();
+		ready();
 	}, 50 );
 } );
 
-asyncTest( "Keyboard handling: focus", function( assert ) {
+QUnit.test( "Keyboard handling: focus", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 2 );
 
 	var that = this;
 
-	ok( !this.widget.is( ":visible" ), "datepicker closed" );
+	assert.ok( !this.widget.is( ":visible" ), "datepicker closed" );
 
 	this.element.focus();
 	setTimeout( function() {
-		ok( that.widget.is( ":visible" ), "Datepicker opens when receiving focus" );
-		start();
+		assert.ok( that.widget.is( ":visible" ), "Datepicker opens when receiving focus" );
+		ready();
 	}, 100 );
 } );
 
-asyncTest( "Keyboard handling: keystroke up", function( assert ) {
+QUnit.test( "Keyboard handling: keystroke up", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 2 );
 
 	var that = this;
 
-	ok( !this.widget.is( ":visible" ), "datepicker closed" );
+	assert.ok( !this.widget.is( ":visible" ), "datepicker closed" );
 
 	this.element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	setTimeout( function() {
-		ok( that.widget.is( ":visible" ), "Keystroke up opens datepicker" );
-		start();
+		assert.ok( that.widget.is( ":visible" ), "Keystroke up opens datepicker" );
+		ready();
 	}, 100 );
 } );
 
-test( "Keyboard handling: input", function( assert ) {
+QUnit.test( "Keyboard handling: input", function( assert ) {
 	assert.expect( 6 );
 
 	var that = this,
@@ -92,10 +96,10 @@ test( "Keyboard handling: input", function( assert ) {
 	that.element
 		.val( "" )
 		.datepicker( "open" );
-	ok( instance.isOpen, "datepicker is open before escape" );
+	assert.ok( instance.isOpen, "datepicker is open before escape" );
 
 	that.element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-	ok( !instance.isOpen, "escape closes the datepicker" );
+	assert.ok( !instance.isOpen, "escape closes the datepicker" );
 
 	that.element
 		.val( "1/1/14" )
@@ -120,11 +124,12 @@ test( "Keyboard handling: input", function( assert ) {
 } );
 
 // TODO: implement
-test( "ARIA", function() {
-	expect( 0 );
+QUnit.test( "ARIA", function( assert ) {
+	assert.expect( 0 );
 } );
 
-asyncTest( "mouse", function( assert ) {
+QUnit.test( "mouse", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 4 );
 
 	var that = this;
@@ -142,7 +147,7 @@ asyncTest( "mouse", function( assert ) {
 
 		that.element.val( "" ).datepicker( "refresh" );
 		that.element.simulate( "click" );
-		strictEqual( that.element.datepicker( "valueAsDate" ), null, "Mouse click - close" );
+		assert.strictEqual( that.element.datepicker( "valueAsDate" ), null, "Mouse click - close" );
 
 		that.element.val( "4/4/08" ).datepicker( "refresh" ).datepicker( "open" );
 		that.element.simulate( "click" );
@@ -161,7 +166,7 @@ asyncTest( "mouse", function( assert ) {
 			"Mouse click - abandoned"
 		);
 
-		start();
+		ready();
 	}, 100 );
 } );
 
