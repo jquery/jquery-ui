@@ -12,12 +12,12 @@ QUnit.module( "calendar: events", {
 } );
 
 QUnit.test( "change", function( assert ) {
-	assert.expect( 6 );
+	assert.expect( 8 );
 
 	var shouldFire, eventType;
 
 	this.element.calendar( {
-		change: function( event ) {
+		change: function( event, ui ) {
 			assert.ok( shouldFire, "change event fired" );
 			assert.equal(
 				event.type,
@@ -29,6 +29,7 @@ QUnit.test( "change", function( assert ) {
 				eventType,
 				"change originalEvent on calendar button " + eventType
 			);
+			assert.equal( $.type( ui.value ), "date", "value is a date object" );
 		}
 	} );
 
@@ -48,14 +49,14 @@ QUnit.test( "change", function( assert ) {
 } );
 
 QUnit.test( "select", function( assert ) {
-	assert.expect( 6 );
+	assert.expect( 8 );
 
 	var ready = assert.async(),
 		that = this,
 		message, eventType;
 
 	this.element.calendar( {
-		select: function( event ) {
+		select: function( event, ui ) {
 			assert.ok( true, "select event fired " + message );
 			assert.equal(
 				event.type,
@@ -67,6 +68,7 @@ QUnit.test( "select", function( assert ) {
 				eventType,
 				"select originalEvent " + message
 			);
+			assert.equal( $.type( ui.value ), "date", "value is a date object" );
 		}
 	} );
 

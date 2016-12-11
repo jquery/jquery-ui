@@ -134,13 +134,13 @@ return $.widget( "ui.calendar", {
 		this._updateDayElement( "ui-state-active" );
 
 		// Allow datepicker to handle focus
-		if ( this._trigger( "select", event ) !== false ) {
+		if ( this._trigger( "select", event, { value: this.options.value }  ) !== false ) {
 			this.activeDescendant.closest( this.grid ).focus();
 			event.preventDefault();
 		}
 
 		if ( oldValue !== this.options.value.getTime() ) {
-			this._trigger( "change", event );
+			this._trigger( "change", event, { value: this.options.value }  );
 		}
 	},
 
