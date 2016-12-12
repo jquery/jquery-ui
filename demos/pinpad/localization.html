@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href="../../themes/base/all.css">
 	<link rel="stylesheet" href="../demos.css">
 	<script src="../../external/requirejs/require.js"></script>
-	<script src="../bootstrap.js" data-modules="i18n/pinpad-fr i18n/pinpad-it">
-		$( "#pinpad" ).pinpad( $.ui.pinpad.regional[ "en" ] );
+	<script src="../bootstrap.js" data-modules="i18n/pinpad-es i18n/pinpad-fr i18n/pinpad-it">
+		$( "#pinpad" ).pinpad( $.ui.pinpad.regional.fr );
 		$( "#locale" ).on( "change", function() {
 		    $( "#pinpad" ).pinpad( "option", $.ui.pinpad.regional[ this.value ] );
 		} );
@@ -18,8 +18,9 @@
 
 <input id="pinpad" type="text" title="Click here">
 <select id="locale">
-	<option value="en" selected>English</option>
-	<option value="fr">Français</option>
+	<option value="en">English</option>
+	<option value="es">Español</option>
+	<option value="fr" selected>Français</option>
 	<option value="it">Italiano</option>
 </select>
 
