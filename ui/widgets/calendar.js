@@ -456,8 +456,7 @@ return $.widget( "ui.calendar", {
 				"role='gridcell'",
 				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'",
 				"aria-label='" + dayName + ", " + this._format( dateObject ) + "'",
-				"aria-describedby='" + this.gridId + "-month-label'",
-				"aria-hidden='" + true + "'"
+				"aria-describedby='" + this.gridId + "-month-label'"
 			],
 			selectable = ( day.selectable && this._isValid( dateObject ) );
 
