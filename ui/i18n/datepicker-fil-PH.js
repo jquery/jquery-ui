@@ -1,5 +1,5 @@
 /* Filipino/Philippines initialisation for the jQuery UI date picker plugin. */
-/* Written by Marilou A. Ranoy (marilou@ranoy.com) */
+/* Based from en-GB initialisation, revised by Marilou A. Ranoy */
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
