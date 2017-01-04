@@ -1,4 +1,4 @@
-/* Filipino/Philippines initialisation for the jQuery UI date picker plugin. */
+ /* Filipino/Philippines initialisation for the jQuery UI date picker plugin. */
 /* Based from en-GB initialisation, revised by Marilou A. Ranoy */
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -32,6 +32,6 @@ datepicker.regional[ "fil-PH" ] = {
 	yearSuffix: "" };
 datepicker.setDefaults( datepicker.regional[ "fil-PH" ] );
 
-return datepicker.regional["fil-PH"];
+return datepicker.regional[ "fil-PH" ];
 
 } ) );
