@@ -1265,6 +1265,10 @@ $.extend(Datepicker.prototype, {
 			} while (true);
 		}
 
+		if (day === -1) {
+			day = 1;
+		}
+
 		date = this._daylightSavingAdjust(new Date(year, month - 1, day));
 		if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
 			throw "Invalid date"; // E.g. 31/02/00
