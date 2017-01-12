@@ -220,6 +220,16 @@ $.widget( "ui.autocomplete", {
 				role: null
 			} )
 			.hide()
+
+			// Remove menu's tabindex to fix a scrolling problem in IE.
+			// The menu will receive focus when a user clicks the scrollbar,
+			// which will scroll the menu to the active item (by default,
+			// the top item) which makes scrolling down harder than it
+			// ought to be.
+			// You can't tab into the dropdown anyway (blurring the text
+			// input will close the dropdown) so this won't break keyboard
+			// navigation.
+			.attr( "tabindex", "" )
 			.menu( "instance" );
 
 		this._addClass( this.menu.element, "ui-autocomplete", "ui-front" );
@@ -233,17 +243,21 @@ $.widget( "ui.autocomplete", {
 				// so we set a flag to know when we should ignore the blur event
 				this.cancelBlur = true;
 				this._delay( function() {
-					delete this.cancelBlur;
 
-					// Support: IE 8 only
-					// Right clicking a menu item or selecting text from the menu items will
-					// result in focus moving out of the input. However, we've already received
-					// and ignored the blur event because of the cancelBlur flag set above. So
-					// we restore focus to ensure that the menu closes properly based on the user's
-					// next actions.
+					// Support: IE
+					// Right clicking a menu item, selecting text from the menu items, or clicking
+					// the scrollbar will result in focus moving out of the input. However, we've
+					// already received and ignored the blur event because of the cancelBlur flag
+					// set above. So we restore focus to ensure that the menu closes properly based
+					// on the user's next actions.
+					// Note that the focus event can itself raise another blur event, so we need
+					// to delay the removal of the cancelBlur flag.
 					if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
 						this.element.trigger( "focus" );
 					}
+					this._delay( function() {
+						delete this.cancelBlur;
+					} );
 				} );
 			},
 			menufocus: function( event, ui ) {
