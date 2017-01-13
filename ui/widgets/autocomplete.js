@@ -200,11 +200,6 @@ $.widget( "ui.autocomplete", {
 				this.previous = this._value();
 			},
 			blur: function( event ) {
-				if ( this.cancelBlur ) {
-					delete this.cancelBlur;
-					return;
-				}
-
 				clearTimeout( this.searching );
 				this.close( event );
 				this._change( event );
@@ -221,44 +216,23 @@ $.widget( "ui.autocomplete", {
 			} )
 			.hide()
 
-			// Remove menu's tabindex to fix a scrolling problem in IE.
-			// The menu will receive focus when a user clicks the scrollbar,
-			// which will scroll the menu to the active item (by default,
-			// the top item) which makes scrolling down harder than it
-			// ought to be.
-			// You can't tab into the dropdown anyway (blurring the text
-			// input will close the dropdown) so this won't break keyboard
-			// navigation.
-			.attr( "tabindex", "" )
+			// Support: IE 11, Edge
+			// For other browsers, we preventDefault() on the mousedown event
+			// to keep the dropdown from taking focus from the input. This doesn't
+			// work for IE/Edge, causing problems with selection and scrolling (#9638)
+			// Happily, IE and Edge support an "unselectable" attribute that
+			// prevents an element from receiving focus, exactly what we want here.
+			.attr( {
+				"unselectable": "on"
+			} )
 			.menu( "instance" );
 
 		this._addClass( this.menu.element, "ui-autocomplete", "ui-front" );
 		this._on( this.menu.element, {
 			mousedown: function( event ) {
 
-				// prevent moving focus out of the text field
+				// Prevent moving focus out of the text field
 				event.preventDefault();
-
-				// IE doesn't prevent moving focus even with event.preventDefault()
-				// so we set a flag to know when we should ignore the blur event
-				this.cancelBlur = true;
-				this._delay( function() {
-
-					// Support: IE
-					// Right clicking a menu item, selecting text from the menu items, or clicking
-					// the scrollbar will result in focus moving out of the input. However, we've
-					// already received and ignored the blur event because of the cancelBlur flag
-					// set above. So we restore focus to ensure that the menu closes properly based
-					// on the user's next actions.
-					// Note that the focus event can itself raise another blur event, so we need
-					// to delay the removal of the cancelBlur flag.
-					if ( this.element[ 0 ] !== $.ui.safeActiveElement( this.document[ 0 ] ) ) {
-						this.element.trigger( "focus" );
-					}
-					this._delay( function() {
-						delete this.cancelBlur;
-					} );
-				} );
 			},
 			menufocus: function( event, ui ) {
 				var label, item;
