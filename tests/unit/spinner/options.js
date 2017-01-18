@@ -2,8 +2,8 @@ define( [
 	"qunit",
 	"jquery",
 	"ui/widgets/spinner",
-	"globalize",
-	"globalize/ja-JP"
+	"globalize-old",
+	"globalize-old/ja-JP"
 ], function( QUnit, $ ) {
 
 QUnit.module( "spinner: options" );
