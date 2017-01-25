@@ -16,14 +16,14 @@
 	outline: 0;
 }
 .ui-dialog .ui-dialog-titlebar {
-	padding: .4em 1em;
+	padding: .4em 2em .4em 1em;
 	position: relative;
 }
 .ui-dialog .ui-dialog-title {
 	float: left;
 	margin: .1em 0;
 	white-space: nowrap;
-	width: 90%;
+	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
