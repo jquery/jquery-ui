@@ -58,6 +58,9 @@ return $.widget( "ui.dialog", {
 		draggable: true,
 		hide: null,
 		height: "auto",
+		icons: {
+			title: null
+		},
 		maxHeight: null,
 		maxWidth: null,
 		minHeight: 150,
@@ -446,6 +449,8 @@ return $.widget( "ui.dialog", {
 		this._addClass( uiDialogTitle, "ui-dialog-title" );
 		this._title( uiDialogTitle );
 
+		this._titleIcon( this.options.icons.title );
+
 		this.uiDialogTitlebar.prependTo( this.uiDialog );
 
 		this.uiDialog.attr( {
@@ -458,6 +463,20 @@ return $.widget( "ui.dialog", {
 			title.text( this.options.title );
 		} else {
 			title.html( "&#160;" );
+		}
+	},
+
+	_titleIcon: function( icon ) {
+		if ( this.uiDialogTitleIcon ) {
+			this.uiDialogTitleIcon.remove();
+			delete this.uiDialogTitleIcon;
+		}
+
+		if ( icon ) {
+			this.uiDialogTitleIcon = $( "<span>" );
+			this._addClass( this.uiDialogTitleIcon, "ui-dialog-title-icon",
+				"ui-icon " + this.options.icons.title );
+			this.uiDialogTitleIcon.prependTo( this.uiDialogTitlebar );
 		}
 	},
 
@@ -740,6 +759,10 @@ return $.widget( "ui.dialog", {
 			if ( !isDraggable && value ) {
 				this._makeDraggable();
 			}
+		}
+
+		if ( key === "icons" ) {
+			this._titleIcon( value.title );
 		}
 
 		if ( key === "position" ) {

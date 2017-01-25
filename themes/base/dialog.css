@@ -27,6 +27,15 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+.ui-dialog .ui-dialog-title-icon {
+	position: absolute;
+	left: 0.3em;
+	top: 50%;
+	margin-top: -10px;
+}
+.ui-dialog-title-icon + .ui-dialog-title {
+	padding-left: 10px;
+}
 .ui-dialog .ui-dialog-titlebar-close {
 	position: absolute;
 	right: .3em;
