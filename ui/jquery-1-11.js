@@ -25,10 +25,9 @@
 }( function( $ ) {
 
 // Support: jQuery 1.11.x or older
-var versions = $.fn.jquery.split( "." );
-if ( parseInt( versions[ 0 ], 10 ) === 1 && parseInt( versions[ 1 ], 10 ) <= 11 ) {
+if ( !$.uniqueSort ) {
 
-	// $.unique has been renamed to uniqueSort
+	// $.unique has been renamed to $.uniqueSort
 	$.uniqueSort = $.unique;
 }
 

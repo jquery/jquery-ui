@@ -25,10 +25,7 @@
 }( function( $ ) {
 
 // Support: jQuery 1.9.x or older
-var versions = $.fn.jquery.split( "." );
-if ( parseInt( versions[ 0 ], 10 ) === 1 && parseInt( versions[ 1 ], 10 ) <= 9 ) {
-
-	// $.expr [ ":" ] has been renamed to $.expr.pseudos
+if ( !$.expr.pseudos ) {
 	$.expr.pseudos = $.expr[ ":" ];
 }
 
