@@ -43,7 +43,7 @@
 	}
 }( function( $ ) {
 
-$.widget( "ui.dialog", {
+return $.widget( "ui.dialog", {
 	version: "@VERSION",
 	options: {
 		appendTo: "body",
@@ -910,31 +910,5 @@ $.widget( "ui.dialog", {
 		}
 	}
 } );
-
-// DEPRECATED
-// TODO: switch return back to widget declaration at top of file when this is removed
-if ( $.uiBackCompat !== false ) {
-
-	// Backcompat for dialogClass option
-	$.widget( "ui.dialog", $.ui.dialog, {
-		options: {
-			dialogClass: ""
-		},
-		_createWrapper: function() {
-			this._super();
-			this.uiDialog.addClass( this.options.dialogClass );
-		},
-		_setOption: function( key, value ) {
-			if ( key === "dialogClass" ) {
-				this.uiDialog
-					.removeClass( this.options.dialogClass )
-					.addClass( value );
-			}
-			this._superApply( arguments );
-		}
-	} );
-}
-
-return $.ui.dialog;
 
 } ) );
