@@ -93,7 +93,7 @@ function parseUrl() {
 			current = parts[ i ].split( "=" );
 			data[ current[ 0 ] ] = current[ 1 ];
 		} else {
-			data[ parts[ i ] ] = true
+			data[ parts[ i ] ] = true;
 		}
 	}
 
