@@ -408,9 +408,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		//Do scrolling
 		if ( this.options.scroll ) {
-
+			scrolled = this._scroll( event );
 			if ( scrolled !== false ) {
-				scrolled = this._scroll( event );
 				//Regenerate the absolute position used for position checks
 				//positionAbs and lastPositionAbs could be adjusted based on the scrolled delta
 				this.positionAbs = this._convertPositionTo( "absolute" );
