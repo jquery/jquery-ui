@@ -331,9 +331,10 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		this._addClass( this.helper, "ui-sortable-helper" );
 
 		//Move the helper, if needed
-		if (!this.helper.parent().is(this.appendTo)) {
-			this.helper.detach().appendTo(this.appendTo);
-			// update position
+		if ( !this.helper.parent().is( this.appendTo ) ) {
+			this.helper.detach().appendTo( this.appendTo );
+
+			//Update position
 			this.offset.parent = this._getParentOffset();
 		}
 
