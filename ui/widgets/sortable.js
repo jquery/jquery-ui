@@ -214,6 +214,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		//Cache the margins of the original element
 		this._cacheMargins();
 
+		//Get the next scrolling parent
+		this.scrollParent = this.helper.scrollParent();
+
 		//The element's absolute position on the page minus margins
 		this.offset = this.currentItem.offset();
 		this.offset = {
@@ -259,9 +262,6 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		//Create the placeholder
 		this._createPlaceholder();
-
-		//Get the next scrolling parent (based on the placeholder in case the helper is appended)
-		this.scrollParent = this.placeholder.scrollParent();
 
 		//Set a containment if given in the options
 		if ( o.containment ) {
@@ -1086,11 +1086,11 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			this.containers[ innermostIndex ]._trigger( "change", event, this._uiHash( this ) );
 			this.currentContainer = this.containers[ innermostIndex ];
 
+			//Update scrollParent
+			this.scrollParent = this.helper.scrollParent();
+
 			//Update the placeholder
 			this.options.placeholder.update( this.currentContainer, this.placeholder );
-
-			//Update scrollParent
-			this.scrollParent = this.placeholder.scrollParent();
 
 			this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
 			this.containers[ innermostIndex ].containerCache.over = 1;
