@@ -344,6 +344,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		this.originalPageY = event.pageY;
 		this.lastPositionAbs = this.positionAbs = this._convertPositionTo( "absolute" );
 
+		this._mouseDrag( event );
+
 		return true;
 
 	},
