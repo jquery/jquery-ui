@@ -352,52 +352,61 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 	_scroll: function( event ) {
 		var o = this.options,
-			scrolled = false;
+			scrolled = { top: 0, left: 0 };
 
 		if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
 				this.scrollParent[ 0 ].tagName !== "HTML" ) {
 
 			if ( ( this.overflowOffset.top + this.scrollParent[ 0 ].offsetHeight ) -
 					event.pageY < o.scrollSensitivity ) {
-				this.scrollParent[ 0 ].scrollTop =
-					scrolled = this.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
+				scrolled.top = this.scrollParent[ 0 ].scrollTop;
+				this.scrollParent[ 0 ].scrollTop = scrolled.top + o.scrollSpeed;
+				scrolled.top -= this.scrollParent[ 0 ].scrollTop;
 			} else if ( event.pageY - this.overflowOffset.top < o.scrollSensitivity ) {
-				this.scrollParent[ 0 ].scrollTop =
-					scrolled = this.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
+				scrolled.top = this.scrollParent[ 0 ].scrollTop;
+				this.scrollParent[ 0 ].scrollTop = scrolled.top - o.scrollSpeed;
+				scrolled.top += -this.scrollParent[ 0 ].scrollTop;
 			}
 
 			if ( ( this.overflowOffset.left + this.scrollParent[ 0 ].offsetWidth ) -
 					event.pageX < o.scrollSensitivity ) {
-				this.scrollParent[ 0 ].scrollLeft = scrolled =
-					this.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
+				scrolled.left = this.scrollParent[ 0 ].scrollLeft;
+				this.scrollParent[ 0 ].scrollLeft = scroll.left + o.scrollSpeed;
+				scrolled.left -= this.scrollParent[ 0 ].scrollLeft;
 			} else if ( event.pageX - this.overflowOffset.left < o.scrollSensitivity ) {
-				this.scrollParent[ 0 ].scrollLeft = scrolled =
-					this.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
+				scrolled.left = this.scrollParent[ 0 ].scrollLeft;
+				this.scrollParent[ 0 ].scrollLeft = scrolled.left - o.scrollSpeed;
+				scrolled.left = -this.scrollParent[ 0 ].scrollLeft;
 			}
 
 		} else {
 
 			if ( event.pageY - this.document.scrollTop() < o.scrollSensitivity ) {
-				scrolled = this.document.scrollTop( this.document.scrollTop() - o.scrollSpeed );
+				scrolled.top = this.document.scrollTop();
+				this.document.scrollTop( scrolled.top - o.scrollSpeed );
+				scrolled.top += -this.document.scrollTop();
 			} else if ( this.window.height() - ( event.pageY - this.document.scrollTop() ) <
 					o.scrollSensitivity ) {
-				scrolled = this.document.scrollTop( this.document.scrollTop() + o.scrollSpeed );
+				scrolled.top = this.document.scrollTop();
+				this.document.scrollTop( scrolled.top + o.scrollSpeed );
+				scrolled.top -= this.document.scrollTop();
 			}
 
 			if ( event.pageX - this.document.scrollLeft() < o.scrollSensitivity ) {
-				scrolled = this.document.scrollLeft(
-					this.document.scrollLeft() - o.scrollSpeed
-				);
+				scrolled.left = this.document.scrollLeft();
+				this.document.scrollLeft( scrolled.left - o.scrollSpeed );
+				scrolled.left += -this.document.scrollLeft();
 			} else if ( this.window.width() - ( event.pageX - this.document.scrollLeft() ) <
 					o.scrollSensitivity ) {
-				scrolled = this.document.scrollLeft(
-					this.document.scrollLeft() + o.scrollSpeed
-				);
+				scrolled.left = this.document.scrollLeft();
+				this.document.scrollLeft( scrolled.left + o.scrollSpeed );
+				scrolled.left -= this.document.scrollLeft();
 			}
 
 		}
 
-		return scrolled;
+		return scrolled === false ||
+			( ( scrolled.left === 0 ) && ( scrolled.top === 0 ) ) ? false : scrolled;
 	},
 
 	_mouseDrag: function( event ) {
@@ -414,9 +423,13 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			scrolled = this._scroll( event );
 			if ( scrolled !== false ) {
 
-				//Regenerate the absolute position used for position checks
-				//positionAbs and lastPositionAbs could be adjusted based on the scrolled delta
-				this.positionAbs = this._convertPositionTo( "absolute" );
+				//Update all absolute position used for position checks
+				this.positionAbs.top -= scrolled.top;
+				this.lastPositionAbs.top -= scrolled.top;
+				for ( i = this.items.length - 1; i >= 0; i-- ) {
+					this.items[ i ].top -= scrolled.top;
+				}
+
 				if ( $.ui.ddmanager && !o.dropBehaviour ) {
 					$.ui.ddmanager.prepareOffsets( this, event );
 				}
