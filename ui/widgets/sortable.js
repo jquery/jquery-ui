@@ -418,24 +418,6 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		this.position = this._generatePosition( event );
 		this.positionAbs = this._convertPositionTo( "absolute" );
 
-		//Do scrolling
-		if ( this.options.scroll ) {
-			scrolled = this._scroll( event );
-			if ( scrolled !== false ) {
-
-				//Update all absolute position used for position checks
-				this.positionAbs.top -= scrolled.top;
-				this.lastPositionAbs.top -= scrolled.top;
-				for ( i = this.items.length - 1; i >= 0; i-- ) {
-					this.items[ i ].top -= scrolled.top;
-				}
-
-				if ( $.ui.ddmanager && !o.dropBehaviour ) {
-					$.ui.ddmanager.prepareOffsets( this, event );
-				}
-			}
-		}
-
 		//Set the helper position
 		if ( !this.options.axis || this.options.axis !== "y" ) {
 			this.helper[ 0 ].style.left = this.position.left + "px";
@@ -444,55 +426,78 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			this.helper[ 0 ].style.top = this.position.top + "px";
 		}
 
-		//Rearrange
-		for ( i = this.items.length - 1; i >= 0; i-- ) {
-
-			//Cache variables and intersection, continue if no intersection
-			item = this.items[ i ];
-			itemElement = item.item[ 0 ];
-			intersection = this._intersectsWithPointer( item );
-			if ( !intersection ) {
-				continue;
-			}
-
-			// Only put the placeholder inside the current Container, skip all
-			// items from other containers. This works because when moving
-			// an item from one container to another the
-			// currentContainer is switched before the placeholder is moved.
-			//
-			// Without this, moving items in "sub-sortables" can cause
-			// the placeholder to jitter between the outer and inner container.
-			if ( item.instance !== this.currentContainer ) {
-				continue;
-			}
-
-			// Cannot intersect with itself
-			// no useless actions that have been done before
-			// no action if the item moved is the parent of the item checked
-			if ( itemElement !== this.currentItem[ 0 ] &&
-				this.placeholder[ intersection === 1 ? "next" : "prev" ]()[ 0 ] !== itemElement &&
-				!$.contains( this.placeholder[ 0 ], itemElement ) &&
-				( this.options.type === "semi-dynamic" ?
-					!$.contains( this.element[ 0 ], itemElement ) :
-					true
-				)
-			) {
-
-				this.direction = intersection === 1 ? "down" : "up";
-
-				if ( this.options.tolerance === "pointer" || this._intersectsWithSides( item ) ) {
-					this._rearrange( event, item );
-				} else {
-					break;
-				}
-
-				this._trigger( "change", event, this._uiHash() );
-				break;
-			}
-		}
-
 		//Post events to containers
 		this._contactContainers( event );
+
+		if ( this.innermostContainer ) {
+
+			//Do scrolling
+			if ( o.scroll ) {
+				scrolled = this._scroll( event );
+				if ( scrolled !== false ) {
+					this.positionAbs.top -= scrolled.top;
+					this.lastPositionAbs.top -= scrolled.top;
+
+					//Update all absolute positions used position checks
+					for ( i = this.items.length - 1; i >= 0; i-- ) {
+						this.items[ i ].top -= scrolled.top;
+					}
+
+					if ( $.ui.ddmanager && !o.dropBehaviour ) {
+						$.ui.ddmanager.prepareOffsets( this, event );
+					}
+				}
+			}
+
+			//Rearrange
+			for ( i = this.items.length - 1; i >= 0; i-- ) {
+
+				//Cache variables and intersection, continue if no intersection
+				item = this.items[ i ];
+				itemElement = item.item[ 0 ];
+				intersection = this._intersectsWithPointer( item );
+				if ( !intersection ) {
+					continue;
+				}
+
+				// Only put the placeholder inside the current Container, skip all
+				// items from other containers. This works because when moving
+				// an item from one container to another the
+				// currentContainer is switched before the placeholder is moved.
+				//
+				// Without this, moving items in "sub-sortables" can cause
+				// the placeholder to jitter between the outer and inner container.
+				if ( item.instance !== this.currentContainer ) {
+					continue;
+				}
+
+				// Cannot intersect with itself
+				// no useless actions that have been done before
+				// no action if the item moved is the parent of the item checked
+				if ( itemElement !== this.currentItem[ 0 ] &&
+					this.placeholder[ intersection === 1 ?
+					"next" : "prev" ]()[ 0 ] !== itemElement &&
+					!$.contains( this.placeholder[ 0 ], itemElement ) &&
+					( this.options.type === "semi-dynamic" ?
+						!$.contains( this.element[ 0 ], itemElement ) :
+						true
+					)
+				) {
+
+					this.direction = intersection === 1 ? "down" : "up";
+
+					if ( this.options.tolerance === "pointer" ||
+							this._intersectsWithSides( item ) ) {
+						this._rearrange( event, item );
+					} else {
+						break;
+					}
+
+					this._trigger( "change", event, this._uiHash() );
+					break;
+				}
+			}
+		}
 
 		//Interconnect with droppables
 		if ( $.ui.ddmanager ) {
@@ -1036,6 +1041,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		}
 
+		this.innermostContainer = innermostContainer;
+
 		// If no intersecting containers found, return
 		if ( !innermostContainer ) {
 			return;
@@ -1106,6 +1113,12 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 			//Update scrollParent
 			this.scrollParent = this.placeholder.scrollParent();
+
+			//Update overflowOffset
+			if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+					this.scrollParent[ 0 ].tagName !== "HTML" ) {
+				this.overflowOffset = this.scrollParent.offset();
+			}
 
 			this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
 			this.containers[ innermostIndex ].containerCache.over = 1;
