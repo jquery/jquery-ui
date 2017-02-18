@@ -435,12 +435,15 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			if ( o.scroll ) {
 				scrolled = this._scroll( event );
 				if ( scrolled !== false ) {
-					this.positionAbs.top -= scrolled.top;
-					this.lastPositionAbs.top -= scrolled.top;
 
-					//Update all absolute positions used position checks
+					//Update all absolute positions used in position checks
+					this.positionAbs.top -= scrolled.top;
+					this.positionAbs.left -= scrolled.left;
+					this.lastPositionAbs.top -= scrolled.top;
+					this.lastPositionAbs.left -= scrolled.left;
 					for ( i = this.items.length - 1; i >= 0; i-- ) {
 						this.items[ i ].top -= scrolled.top;
+						this.items[ i ].left -= scrolled.left;
 					}
 
 					if ( $.ui.ddmanager && !o.dropBehaviour ) {
