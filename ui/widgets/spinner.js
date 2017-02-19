@@ -140,9 +140,13 @@ $.widget( "ui.spinner", {
 			}
 		},
 		mousewheel: function( event, delta ) {
-			if ( !delta ) {
+			var activeElement = $.ui.safeActiveElement( this.document[ 0 ] );
+			var isActive = this.element[ 0 ] === activeElement;
+
+			if ( !isActive || !delta ) {
 				return;
 			}
+
 			if ( !this.spinning && !this._start( event ) ) {
 				return false;
 			}
