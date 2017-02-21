@@ -400,22 +400,6 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		return scrolled;
 	},
 
-	_refreshItemPositions: function() {
-		var i, item, t, p;
-
-		for ( i = this.items.length - 1; i >= 0; i-- ) {
-			item = this.items[ i ];
-
-			t = this.options.toleranceElement ?
-				$( this.options.toleranceElement, item.item ) :
-				item.item;
-
-			p = t.offset();
-			item.left = p.left;
-			item.top = p.top;
-		}
-	},
-
 	_mouseDrag: function( event ) {
 		var i, item, itemElement, intersection,
 			o = this.options;
@@ -435,14 +419,14 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		//Post events to containers
 		this._contactContainers( event );
 
-		if ( this.innermostContainer ) {
+		if ( this.innermostContainer !== null ) {
 
 			//Do scrolling
 			if ( o.scroll ) {
 				if ( this._scroll( event ) !== false ) {
 
 					//Update item positions used in position checks
-					this._refreshItemPositions();
+					this._refreshItemPositions( true );
 
 					if ( $.ui.ddmanager && !o.dropBehaviour ) {
 						$.ui.ddmanager.prepareOffsets( this, event );
@@ -865,20 +849,14 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 	},
 
-	refreshPositions: function( fast ) {
-
-		// Determine whether items are being displayed horizontally
-		this.floating = this.items.length ?
-			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
-			false;
-
+	_refreshItemPositions: function( fast ) {
 		var i, item, t, p;
 
 		for ( i = this.items.length - 1; i >= 0; i-- ) {
 			item = this.items[ i ];
 
 			//We ignore calculating positions of all connected containers when we're not over them
-			if ( item.instance !== this.currentContainer && this.currentContainer &&
+			if ( this.currentContainer && item.instance !== this.currentContainer &&
 					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
 				continue;
 			}
@@ -896,6 +874,20 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			item.left = p.left;
 			item.top = p.top;
 		}
+	},
+
+	refreshPositions: function( fast ) {
+
+		// Determine whether items are being displayed horizontally
+		this.floating = this.items.length ?
+			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
+			false;
+
+		if ( this.innermostContainer !== null ) {
+			this._refreshItemPositions( fast );
+		}
+
+		var i, p;
 
 		if ( this.options.custom && this.options.custom.refreshContainers ) {
 			this.options.custom.refreshContainers.call( this );
