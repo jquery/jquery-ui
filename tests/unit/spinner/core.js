@@ -162,23 +162,39 @@ QUnit.test( "mouse click on up button, increases value not greater than max", fu
 } );
 
 QUnit.test( "mousewheel on input", function( assert ) {
-	assert.expect( 4 );
+	var ready = assert.async();
+	assert.expect( 5 );
 
 	var element = $( "#spin" ).val( 0 ).spinner( {
 		step: 2
 	} );
 
-	element.trigger( "mousewheel" );
-	assert.equal( element.val(), 0, "mousewheel event without delta does not change value" );
+	element.simulate( "focus" );
+	setTimeout( step1 );
 
-	element.trigger( "mousewheel", 1 );
-	assert.equal( element.val(), 2 );
+	function step1() {
+		element.trigger( "mousewheel" );
+		assert.equal( element.val(), 0, "mousewheel event without delta does not change value" );
 
-	element.trigger( "mousewheel", -0.2 );
-	assert.equal( element.val(), 0 );
+		element.trigger( "mousewheel", 1 );
+		assert.equal( element.val(), 2, "delta 1" );
 
-	element.trigger( "mousewheel", -15 );
-	assert.equal( element.val(), -2 );
+		element.trigger( "mousewheel", -0.2 );
+		assert.equal( element.val(), 0, "delta -0.2" );
+
+		element.trigger( "mousewheel", -15 );
+		assert.equal( element.val(), -2, "delta -15" );
+
+		element.simulate( "blur" );
+		setTimeout( step2 );
+	}
+
+	function step2() {
+		element.trigger( "mousewheel", 1 );
+		assert.equal( element.val(), -2, "mousewheel when not focused" );
+
+		ready();
+	}
 } );
 
 QUnit.test( "reading HTML5 attributes", function( assert ) {
