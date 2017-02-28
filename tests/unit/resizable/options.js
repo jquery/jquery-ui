@@ -434,8 +434,10 @@ QUnit.test( "zIndex, applied to all handles", function( assert ) {
 } );
 
 QUnit.test( "setOption handles", function( assert ) {
-	assert.expect( 15 );
+	assert.expect( 19 );
 
+	// https://bugs.jqueryui.com/ticket/3423
+	// https://bugs.jqueryui.com/ticket/15084
 	var target = $( "<div></div>" ).resizable(),
 		target2 = $( "<div>" +
 					"<div class='ui-resizable-handle ui-resizable-e'></div>" +
@@ -470,6 +472,12 @@ QUnit.test( "setOption handles", function( assert ) {
 
 	target2.resizable( "option", "handles", "e, s, w" );
 	checkHandles( target2, [ "e", "s", "w" ] );
+
+	target.resizable( "destroy" );
+	checkHandles( target, [ ] );
+
+	target2.resizable( "destroy" );
+	checkHandles( target2, [ "e", "w" ] );
 } );
 
 QUnit.test( "alsoResize + containment", function( assert ) {
