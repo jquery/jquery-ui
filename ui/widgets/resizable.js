@@ -187,15 +187,14 @@ $.widget( "ui.resizable", $.ui.mouse, {
 	_destroy: function() {
 
 		this._mouseDestroy();
+		this._addedHandles.remove();
 
 		var wrapper,
 			_destroy = function( exp ) {
 				$( exp )
 					.removeData( "resizable" )
 					.removeData( "ui-resizable" )
-					.off( ".resizable" )
-					.find( ".ui-resizable-handle" )
-						.remove();
+					.off( ".resizable" );
 			};
 
 		// TODO: Unwrap at same DOM position
