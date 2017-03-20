@@ -1,0 +1,24 @@
+.ui-carousel, .ui-carousel ul{
+    margin: 0px;   
+    padding: 0px; 
+    border: none;  
+    outline: 0px;  
+}   
+li.ui-carousel-item{
+    float:left;
+    width:40px;
+}
+.ui-carousel li{
+    overflow:hidden;    
+    list-style-type:none;     
+}
+.ui-carousel li.ui-carousel-cap-1,.ui-carousel li.ui-carousel-cap-2{
+    text-align: center;
+}
+ul.ui-carousel-items{
+    position:relative;
+}
+li.ui-carousel-item > a{
+    width:10%;
+display:block;  
+}
