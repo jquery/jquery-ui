@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Menu - Demo with Autocomplete (no duplicates, no sorting)</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link href="../demos.css" rel="stylesheet" />
+	<style>
+		.ui-menu { width: 200px; position: absolute; }
+		.ui-listbuilder-item-input {background-color:transparent; border:none; outline:none}
+		.ui-listbuilder-input {background-color:transparent; border:none; outline:none}
+
+		.ui-listbuilder{border:1px solid #7F9DB9;background-color:White;}
+		.ui-listbuilder-items{padding:3px 4px 0;margin:0;overflow:hidden;}
+		.ui-listbuilder-item{list-style-type:none;border:1px solid #444444;position:relative;float:left;padding:1px 18px 1px 3px;margin:2px;height:20px;}
+		.ui-listbuilder-item > .ui-icon {float:right; position:absolute; right:2px; top:4px; width:16px; height:16px;}
+	</style>
+	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../../ui/jquery.ui.listbuilder.js"></script>
+	<script type="text/javascript">
+jQuery(function($) {
+	var data = ['one','two','three','four','five','six','seven','eight','nine','ten'];
+	$('#enhance').one('click', function() {
+
+		$('#test2').listbuilder({
+			sortable:true,
+			duplicates:true,
+			onSelect:function(event, ui){
+				$("#log2").prepend("<div>Selected " + ui.item.text() + ", event:" + event.type + ", originalEvent:" + event.originalEvent.type + "</div>");
+				if (event.originalEvent.type == "click"){
+					var menu = $("#test2-menu");
+					if (menu.is(":visible")) {
+						menu.hide();
+						return false;
+					}
+					menu.show().css({top:0, left:0}).position({
+						my: "left top",
+						at: "left bottom",
+						of: ui.item
+					});
+					$(document).one("click", function() {
+						menu.hide();
+					});
+					event.stopPropagation();
+				}
+			}
+		});
+		$("#test2-menu").menu({
+			select: function(event, ui) {
+				$(this).hide();
+				var itemText = $.trim(ui.item.text());
+				$("#log2").prepend("<div>Selected " + itemText + "</div>");
+				var selectedItem = $('#test2').data("listbuilder").selectedItem();
+				if (itemText == "Remove"){						
+					$('#test2').data("listbuilder").remove(selectedItem);
+				}
+				else if (itemText == "Edit item"){
+					$('#test2').data("listbuilder").editItem(selectedItem);
+				}
+				else if (itemText == "Copy"){
+					$('#test2').data("listbuilder").add(selectedItem);
+				}
+			}
+		}).hide();
+			
+		// Toggle the original input fields
+		$('#toggle').attr('disabled', false).bind('click', function() {
+			$('.test:text').toggle();
+		});
+	});
+
+	$('#switcher').themeswitcher();
+});
+	</script>
+	<script type="text/javascript"src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+</head>
+<body>
+	<div id="switcher"></div>
+	<p>Convert a plain text field into a nexul style list builder:</p>	
+	<button id="enhance">Enhance</button>
+	<button id="toggle" disabled="disabled">Toggle Original Input</button>	
+	<hr/>
+	
+	<div class="demo">
+		<label for="test2">numbers:</label>
+		<input id="test2" type="text" value="six, three, zero" class="test" style="width:200px"/>
+		<ul id="test2-menu">
+			<li><a href="#">Edit item</a></li>
+			<li><a href="#">Copy</a></li>
+			<li><a href="#">Remove</a></li>
+		</ul>
+		<div class="ui-widget" style="margin-top:2em; font-family:Arial;font-size:small;">
+			Log:
+			<div id="log2" style="height: 100px; width: 600px; overflow: auto;" class="ui-widget-content"></div>
+		</div>
+	</div><!-- End demo -->
+	<div class="demo-description">
+		<p>A listbuilder with autocomplete with values for spellings of numbers.  The list allows duplicate items and sorting.</p>
+	</div><!-- End demo-description -->
+</body>
+</html>
