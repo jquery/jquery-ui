@@ -376,4 +376,30 @@ QUnit.test( "Number pad input should change value", function( assert ) {
 	} );
 } );
 
+QUnit.test( "Options with hidden attribute should not be rendered", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
+
+	var button, menu, options,
+		element = $( "#speed" );
+
+	element.find( "option" ).eq( 1 ).prop( "hidden", true );
+	element.selectmenu();
+	button = element.selectmenu( "widget" );
+	menu = element.selectmenu( "menuWidget" );
+
+	button.simulate( "focus" );
+	setTimeout( function() {
+		button.trigger( "click" );
+		options = menu.children()
+			.map( function() {
+				return $( this ).text();
+			} )
+			.get();
+		assert.deepEqual( options, [ "Slower", "Medium", "Fast", "Faster" ], "correct elements" );
+
+		ready();
+	} );
+} );
+
 } );
