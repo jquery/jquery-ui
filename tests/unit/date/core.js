@@ -15,14 +15,15 @@ QUnit.test( "Instantiation", function( assert ) {
 	assert.ok( $.ui.date( null, attributes ) instanceof $.ui.date, "instantiation without new" );
 } );
 
-QUnit.test( "Check Sets and Gets", 4, function( assert ) {
+QUnit.test( "Check Sets and Gets", 6, function( assert ) {
 var date = $.ui.date( null, attributes );
-	assert.equal( date.setDay( 15 ).day(), 15, "Set day and retrieve" );
 	assert.equal( date.setFullDate( 2012, 9, 15 ).year(), 2012, "Set full date and retrieve year" );
 	assert.equal( date.month(), 9, "Set full date and retrieve month" );
 	assert.equal( date.day(), 15, "Set full date and retrieve day" );
 
-	// TODO Add setTime test
+	assert.equal( date.setTimestamp( 1490912843735 ).year(), 2017, "Set timestamp and retrieve year" );
+	assert.equal( date.month(), 2, "Set timestamp and retrieve month" );
+	assert.equal( date.day(), 31, "Set timestamp and retrieve day" );
 } );
 
 QUnit.test( "Date Adjustments - Normal Use Cases", 10, function( assert ) {
@@ -119,8 +120,6 @@ QUnit.test( "Clone", 2, function( assert ) {
 } );
 
 QUnit.test( "Days", 1, function( assert ) {
-
-	// TODO Needs work
 	var date = $.ui.date( null, attributes );
 	date.eachDay = function( day ) {
 		if ( day.lead && day.date > 20 ) {
