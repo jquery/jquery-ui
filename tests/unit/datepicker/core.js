@@ -123,9 +123,20 @@ QUnit.test( "Keyboard handling: input", function( assert ) {
 		"Picker updated as user types into input" );
 } );
 
-// TODO: implement
 QUnit.test( "ARIA", function( assert ) {
-	assert.expect( 0 );
+	assert.expect( 4 );
+
+	var widget = this.element.datepicker( "widget" ),
+		id = widget.attr( "id" );
+
+	assert.equal( this.element.attr( "aria-haspopup" ), "true",
+		"Input aria-haspopup attribute" );
+	assert.equal( this.element.attr( "aria-owns" ), id, "ARIA owns attribute" );
+
+	assert.equal( widget.attr( "aria-hidden" ), "true",
+		"Widget ARIA hidden attribute" );
+	assert.equal( widget.attr( "aria-expanded" ), "false",
+		"Widget ARIA expanded attribute" );
 } );
 
 QUnit.test( "mouse", function( assert ) {
