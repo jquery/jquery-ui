@@ -48,19 +48,13 @@ $.extend( $.ui.date.prototype, {
 		this.firstDay = this.attributes.firstDay;
 	},
 
-	// TODO: Same as the underlying Date object's terminology, but still misleading.
-	// TODO: We can use .setTime() instead of new Date and rename to setTimestamp.
-	setTime: function( time ) {
-		this.dateObject = new Date( time );
+	setTimestamp: function( time ) {
+		this.dateObject.setTime( time );
 		return this;
 	},
 
 	setDay: function( day ) {
-		var date = this.dateObject;
-
-		// FIXME: Why not to use .setDate?
-		this.dateObject = new Date( date.getFullYear(), date.getMonth(), day, date.getHours(),
-			date.getMinutes(), date.getSeconds() );
+		this.dateObject.setDate( day );
 		return this;
 	},
 
@@ -156,7 +150,6 @@ $.extend( $.ui.date.prototype, {
 					this.eachDay( day );
 				}
 
-				// TODO use adjust("D", 1)?
 				printDate.setDate( printDate.getDate() + 1 );
 			}
 		}
@@ -188,6 +181,10 @@ $.extend( $.ui.date.prototype, {
 			return "" + date.getFullYear() + date.getMonth() + date.getDate();
 		};
 		return format( this.dateObject ) === format( other );
+	},
+
+	timestamp: function() {
+		return this.dateObject.getTime();
 	},
 
 	date: function() {

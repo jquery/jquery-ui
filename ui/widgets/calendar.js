@@ -196,7 +196,7 @@ return $.widget( "ui.calendar", {
 				( this.date.month() > this.viewDate.month() ? 1 : -1 )
 			);
 		} else {
-			this.viewDate.setTime( this.date.date().getTime() );
+			this.viewDate.setTimestamp( this.date.timestamp() );
 		}
 
 		this.refresh();
@@ -582,7 +582,6 @@ return $.widget( "ui.calendar", {
 		this.labels = this.options.labels;
 
 		// Determine which day grid cell to focus after refresh
-		// TODO: Prevent disabled cells from being focused
 		if ( this.options.numberOfMonths === 1 ) {
 			this.element.find( ".ui-calendar-title" ).replaceWith( this._buildTitle() );
 			this.element.find( ".ui-calendar-calendar" ).replaceWith( this._buildGrid() );
@@ -727,7 +726,7 @@ return $.widget( "ui.calendar", {
 			this.viewDate.setAttributes( this._calendarDateOptions );
 		}
 		if ( create || refresh ) {
-			this.viewDate.setTime( this.date.date().getTime() );
+			this.viewDate.setTimestamp( this.date.timestamp() );
 		}
 		if ( create ) {
 			this.element.empty();
@@ -743,7 +742,7 @@ return $.widget( "ui.calendar", {
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			if ( this._isValid( value ) ) {
-				this.date.setTime( value.getTime() );
+				this.date.setTimestamp( value.getTime() );
 			} else {
 				value = null;
 			}
