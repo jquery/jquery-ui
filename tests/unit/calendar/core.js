@@ -400,4 +400,45 @@ QUnit.test( "mouse", function( assert ) {
 	step1();
 } );
 
+QUnit.test( "ARIA", function( assert ) {
+	assert.expect( 15 );
+
+	var id = this.element.attr( "id" ),
+		headerId = id + "-title",
+		monthLabelId = id + "-month-label",
+		table = this.element.find( "table" );
+
+	assert.equal( this.element.attr( "role" ), "region", "Role attribute" );
+	assert.equal( this.element.attr( "aria-labelledby" ), headerId,
+		"ARIA label attribute" );
+
+	assert.equal( this.element.find( "#" + headerId ).attr( "role" ), "header",
+		"Header role attribute" );
+	assert.equal( this.element.find( "#" + monthLabelId ).attr( "role" ), "alert",
+		"Header month label role attribute" );
+
+	assert.equal( table.attr( "role" ), "grid", "Table role attribute" );
+	assert.equal( table.attr( "aria-readonly" ), "true",
+		"Table ARIA readonly attribute" );
+	assert.equal( table.attr( "aria-labelledby" ), monthLabelId,
+		"Table ARIA labelledby attribute" );
+	assert.equal( table.attr( "tabindex" ), 0, "Table tabindex attribute" );
+
+	assert.equal( table.children( "thead" ).attr( "role" ), "presentation",
+		"Table head role attribute" );
+	assert.equal( table.find( "thead tr" ).attr( "role" ), "row",
+		"Table head row role attribute" );
+	assert.equal( table.find( "thead th" ).first().attr( "role" ), "columnheader",
+		"Table head cell role attribute" );
+
+	assert.equal( table.children( "tbody" ).attr( "role" ), "presentation",
+		"Table body role attribute" );
+	assert.equal( table.find( "tbody tr" ).attr( "role" ), "row",
+		"Table body row role attribute" );
+	assert.equal( table.find( "tbody td" ).first().attr( "role" ), "gridcell",
+		"Table body cell role attribute" );
+	assert.equal( table.find( "tbody td" ).first().attr( "aria-describedby" ),
+		monthLabelId, "Table body cell ARIA describedby attribute" );
+} );
+
 } );
