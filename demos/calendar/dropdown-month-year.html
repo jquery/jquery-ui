@@ -8,10 +8,73 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
-		$( "#calendar" ).calendar({
-			changeMonth: true,
-			changeYear: true
+		$.widget( "ui.calendar", $.ui.calendar, {
+			_buildTitle: function() {
+				var title = $( "<div>", { role: "alert", id: this.gridId + "-month-label" } ),
+					month = this._renderMonthSelect(),
+					year = this._renderYearSelect();
+
+				this._addClass( title, "ui-calendar-title" )
+					._addClass( month, "ui-calendar-month" )
+					._addClass( year, "ui-calendar-year" );
+
+				return title
+						.append( month )
+						.append( " " )
+						.append( year );
+			},
+			_renderMonthSelect: function() {
+				var select = $( "<select>" ),
+					date = this.date.clone(),
+					i = 0,
+					option;
+
+				this._on( select, {
+					change: function() {
+						this._off( select );
+						this.date.setFullDate( this.date.year(), select.val(), this.date.day() );
+						this._updateView();
+					}
+				} );
+
+				for ( ; i < 12; i++ ) {
+					date.setFullDate( select.val(), i, this.date.day() );
+					option = $( "<option>", { val: i, text: date.monthName() } );
+					if ( this.date.month() === i ) {
+						option.prop( "selected", true );
+					}
+					select.append( option );
+				}
+
+				return select;
+			},
+			_renderYearSelect: function() {
+				var current = new Date(),
+					select = $( "<select>" ),
+					i = current.getFullYear(),
+					option;
+
+				this._on( select, {
+					change: function() {
+						this._off( select );
+						this.date.setFullDate( select.val(), this.date.month(), this.date.day() );
+						this._updateView();
+					}
+				} );
+
+				for ( ;i <= current.getFullYear() + 10; i++ ) {
+					option = $( "<option>", { val: i, text: i } );
+					if ( this.date.year() === i ) {
+						option.prop( "selected", true );
+					}
+					select.append( option );
+				}
+
+				return select;
+			}
 		});
+
+		$( "#calendar" ).calendar();
 	</script>
 </head>
 <body>
@@ -19,7 +82,7 @@
 <div id="calendar"></div>
 
 <div class="demo-description">
-<p>Show month and year dropdowns in place of the static month/year header to facilitate navigation through large timeframes.  Add the boolean <code>changeMonth</code> and <code>changeYear</code> options.</p>
+<p>Show month and year dropdowns in place of the static month/year header to facilitate navigation through large timeframes.</p>
 </div>
 </body>
 </html>
