@@ -89,7 +89,7 @@ return $.widget( "ui.calendar", {
 
 	_create: function() {
 		this.id = this.element.uniqueId().attr( "id" );
-		this.gridId = this.id;
+		this._setGridId( this.id );
 		this.labels = this.options.labels;
 		this.buttonClickContext = this.element[ 0 ];
 
@@ -287,7 +287,7 @@ return $.widget( "ui.calendar", {
 
 		this._addClass( header, "ui-calendar-header-first ui-calendar-header-last" );
 		this.element
-			.attr( "aria-labelledby", this.gridId + "-title" )
+			.attr( "aria-labelledby", this._getGridId() + "-title" )
 			.append( header )
 			.append( this._buildGrid() );
 	},
@@ -305,8 +305,8 @@ return $.widget( "ui.calendar", {
 			// TODO: Shouldn't we pass date as a parameter to build* fns
 			// instead of setting this.viewDate?
 			this._setViewDate( months[ i ] );
-			this.gridId = this.id + "-" + i;
-			labelledBy.push( this.gridId + "-title" );
+			this._setGridId( this.id + "-" + i );
+			labelledBy.push( this._getGridId() + "-title" );
 
 			element = $( "<div>" );
 			this._addClass( element, "ui-calendar-group" );
@@ -353,7 +353,7 @@ return $.widget( "ui.calendar", {
 
 	_buildHeader: function() {
 		var header = $( "<div>" ),
-			title = $( "<div>", { role: "header", id: this.gridId + "-title" } ),
+			title = $( "<div>", { role: "header", id: this._getGridId() + "-title" } ),
 			notice = $( "<span>" ).text( ", " + this._getTranslation( "datePickerRole" ) );
 
 		this._addClass( header, "ui-calendar-header", "ui-widget-header ui-helper-clearfix" )
@@ -367,7 +367,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildTitle: function() {
-		var title = $( "<div>", { role: "alert", id: this.gridId + "-month-label" } ),
+		var title = $( "<div>", { role: "alert", id: this._getGridId() + "-month-label" } ),
 			month = this._buildTitleMonth(),
 			year = this._buildTitleYear();
 
@@ -394,7 +394,7 @@ return $.widget( "ui.calendar", {
 			role: "grid",
 			tabindex: 0,
 			"aria-readonly": true,
-			"aria-labelledby": this.gridId + "-month-label",
+			"aria-labelledby": this._getGridId() + "-month-label",
 			"aria-activedescendant": this._getDayId( this._getDate() )
 		} );
 
@@ -466,7 +466,7 @@ return $.widget( "ui.calendar", {
 				"role='gridcell'",
 				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'",
 				"aria-label='" + dayName + ", " + this._format( dateObject ) + "'",
-				"aria-describedby='" + this.gridId + "-month-label'"
+				"aria-describedby='" + this._getGridId() + "-month-label'"
 			],
 			selectable = ( day.selectable && this._isValid( dateObject ) );
 
@@ -664,6 +664,14 @@ return $.widget( "ui.calendar", {
 			"aria-hidden": "true",
 			"aria-expanded": "false"
 		} );
+	},
+
+	_getGridId: function() {
+		return this.gridId;
+	},
+
+	_setGridId: function( id ) {
+		this.gridId = id;
 	},
 
 	_getDate: function() {
