@@ -366,8 +366,8 @@ return $.widget( "ui.calendar", {
 
 	_buildTitle: function() {
 		var title = $( "<div>", { role: "alert", id: this.gridId + "-month-label" } ),
-			month = $( "<span>" ).text( this.viewDate.monthName() ),
-			year = $( "<span>" ).text( this.viewDate.year() );
+			month = this._buildTitleMonth(),
+			year = this._buildTitleYear();
 
 		this._addClass( title, "ui-calendar-title" )
 			._addClass( month, "ui-calendar-month" )
@@ -377,6 +377,14 @@ return $.widget( "ui.calendar", {
 			.append( month )
 			.append( " " )
 			.append( year );
+	},
+
+	_buildTitleMonth: function() {
+		return $( "<span>" ).text( this.viewDate.monthName() );
+	},
+
+	_buildTitleYear: function() {
+		return $( "<span>" ).text( this.viewDate.year() );
 	},
 
 	_buildGrid: function() {

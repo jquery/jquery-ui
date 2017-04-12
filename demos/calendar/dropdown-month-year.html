@@ -9,21 +9,7 @@
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
 		$.widget( "ui.calendar", $.ui.calendar, {
-			_buildTitle: function() {
-				var title = $( "<div>", { role: "alert", id: this.gridId + "-month-label" } ),
-					month = this._renderMonthSelect(),
-					year = this._renderYearSelect();
-
-				this._addClass( title, "ui-calendar-title" )
-					._addClass( month, "ui-calendar-month" )
-					._addClass( year, "ui-calendar-year" );
-
-				return title
-						.append( month )
-						.append( " " )
-						.append( year );
-			},
-			_renderMonthSelect: function() {
+			_buildTitleMonth: function() {
 				var select = $( "<select>" ),
 					date = this.date.clone(),
 					i = 0,
@@ -48,7 +34,7 @@
 
 				return select;
 			},
-			_renderYearSelect: function() {
+			_buildTitleYear: function() {
 				var current = new Date(),
 					select = $( "<select>" ),
 					i = current.getFullYear(),
