@@ -11,22 +11,26 @@
 		$.widget( "ui.calendar", $.ui.calendar, {
 			_buildTitleMonth: function() {
 				var select = $( "<select>" ),
-					date = this.date.clone(),
+					date = this._getDate().clone(),
 					i = 0,
 					option;
 
 				this._on( select, {
 					change: function() {
 						this._off( select );
-						this.date.setFullDate( this.date.year(), select.val(), this.date.day() );
+						this._getDate().setFullDate(
+							this._getDate().year(),
+							select.val(),
+							this._getDate().day()
+						);
 						this._updateView();
 					}
 				} );
 
 				for ( ; i < 12; i++ ) {
-					date.setFullDate( select.val(), i, this.date.day() );
+					date.setFullDate( select.val(), i, this._getDate().day() );
 					option = $( "<option>", { val: i, text: date.monthName() } );
-					if ( this.date.month() === i ) {
+					if ( this._getDate().month() === i ) {
 						option.prop( "selected", true );
 					}
 					select.append( option );
@@ -43,14 +47,18 @@
 				this._on( select, {
 					change: function() {
 						this._off( select );
-						this.date.setFullDate( select.val(), this.date.month(), this.date.day() );
+						this._getDate().setFullDate(
+							select.val(),
+							this._getDate().month(),
+							this._getDate().day()
+						);
 						this._updateView();
 					}
 				} );
 
 				for ( ;i <= current.getFullYear() + 10; i++ ) {
 					option = $( "<option>", { val: i, text: i } );
-					if ( this.date.year() === i ) {
+					if ( this._getDate().year() === i ) {
 						option.prop( "selected", true );
 					}
 					select.append( option );

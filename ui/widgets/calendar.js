@@ -95,19 +95,19 @@ return $.widget( "ui.calendar", {
 
 		this._setLocale( this.options.locale, this.options.dateFormat );
 
-		this.date = new $.ui.date( this.options.value, this._calendarDateOptions );
-		this.viewDate = this.date.clone();
-		this.viewDate.eachDay = this.options.eachDay;
+		this._setDate( new $.ui.date( this.options.value, this._calendarDateOptions ) );
+		this._setViewDate( this._getDate().clone() );
+		this._getViewDate().eachDay = this.options.eachDay;
 
 		this._on( this.element, {
 			"click .ui-calendar-prev": function( event ) {
 				event.preventDefault();
-				this.date.adjust( "M", -this.options.numberOfMonths );
+				this._getDate().adjust( "M", -this.options.numberOfMonths );
 				this._updateView();
 			},
 			"click .ui-calendar-next": function( event ) {
 				event.preventDefault();
-				this.date.adjust( "M", this.options.numberOfMonths );
+				this._getDate().adjust( "M", this.options.numberOfMonths );
 				this._updateView();
 			},
 			"mousedown .ui-calendar-calendar button": "_select",
@@ -155,28 +155,28 @@ return $.widget( "ui.calendar", {
 			);
 			return;
 		case $.ui.keyCode.PAGE_UP:
-			this.date.adjust( pageAltKey ? "Y" : "M", -1 );
+			this._getDate().adjust( pageAltKey ? "Y" : "M", -1 );
 			break;
 		case $.ui.keyCode.PAGE_DOWN:
-			this.date.adjust( pageAltKey ? "Y" : "M", 1 );
+			this._getDate().adjust( pageAltKey ? "Y" : "M", 1 );
 			break;
 		case $.ui.keyCode.END:
-			this.date.setDay( this.date.daysInMonth() );
+			this._getDate().setDay( this._getDate().daysInMonth() );
 			break;
 		case $.ui.keyCode.HOME:
-			this.date.setDay( 1 );
+			this._getDate().setDay( 1 );
 			break;
 		case $.ui.keyCode.LEFT:
-			this.date.adjust( "D", -1 );
+			this._getDate().adjust( "D", -1 );
 			break;
 		case $.ui.keyCode.UP:
-			this.date.adjust( "D", -7 );
+			this._getDate().adjust( "D", -7 );
 			break;
 		case $.ui.keyCode.RIGHT:
-			this.date.adjust( "D", 1 );
+			this._getDate().adjust( "D", 1 );
 			break;
 		case $.ui.keyCode.DOWN:
-			this.date.adjust( "D", 7 );
+			this._getDate().adjust( "D", 7 );
 			break;
 		default:
 			return;
@@ -191,25 +191,27 @@ return $.widget( "ui.calendar", {
 	},
 
 	_updateView: function() {
-		if ( this.options.numberOfMonths > 1 && this.date.year() === this.viewDate.year() ) {
-			this.viewDate.adjust( "M", this.options.numberOfMonths *
-				( this.date.month() > this.viewDate.month() ? 1 : -1 )
+		if ( this.options.numberOfMonths > 1 &&
+			this._getDate().year() === this._getViewDate().year()
+		) {
+			this._getViewDate().adjust( "M", this.options.numberOfMonths *
+				( this._getDate().month() > this._getViewDate().month() ? 1 : -1 )
 			);
 		} else {
-			this.viewDate.setTimestamp( this.date.timestamp() );
+			this._getViewDate().setTimestamp( this._getDate().timestamp() );
 		}
 
 		this.refresh();
 	},
 
 	_needsRefresh: function() {
-		if ( this.date.month() !== this.viewDate.month() ||
-			this.date.year() !== this.viewDate.year()
+		if ( this._getDate().month() !== this._getViewDate().month() ||
+			this._getDate().year() !== this._getViewDate().year()
 		) {
 
 			// Check if the needed day is already present in our grid due
 			// to eachDay option changes (eg. other-months demo)
-			return !this._getDateElement( this._getDayId( this.date ) ).length;
+			return !this._getDateElement( this._getDayId( this._getDate() ) ).length;
 		}
 
 		return false;
@@ -220,7 +222,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_updateDayElement: function( state ) {
-		var id = this._getDayId( this.date ),
+		var id = this._getDayId( this._getDate() ),
 			button = this._getDateElement( id ).children( "button" );
 
 		this.grid.attr( "aria-activedescendant", id );
@@ -293,16 +295,16 @@ return $.widget( "ui.calendar", {
 	_buildMultiplePicker: function() {
 		var element, header,
 			rowBreak = $( "<div>" ),
-			currentDate = this.viewDate,
-			months = this.viewDate.months( this.options.numberOfMonths - 1 ),
+			currentDate = this._getViewDate(),
+			months = this._getViewDate().months( this.options.numberOfMonths - 1 ),
 			labelledBy = [],
 			i = 0;
 
 		for ( ; i < months.length; i++ ) {
 
 			// TODO: Shouldn't we pass date as a parameter to build* fns
-			// instead of setting this.date?
-			this.viewDate = months[ i ];
+			// instead of setting this.viewDate?
+			this._setViewDate( months[ i ] );
 			this.gridId = this.id + "-" + i;
 			labelledBy.push( this.gridId + "-title" );
 
@@ -326,7 +328,7 @@ return $.widget( "ui.calendar", {
 			.attr( "aria-labelledby", labelledBy.join( " " ) )
 			.append( rowBreak );
 
-		this.viewDate = currentDate;
+		this._setViewDate( currentDate );
 	},
 
 	_buildHeaderButtons: function() {
@@ -380,11 +382,11 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildTitleMonth: function() {
-		return $( "<span>" ).text( this.viewDate.monthName() );
+		return $( "<span>" ).text( this._getViewDate().monthName() );
 	},
 
 	_buildTitleYear: function() {
-		return $( "<span>" ).text( this.viewDate.year() );
+		return $( "<span>" ).text( this._getViewDate().year() );
 	},
 
 	_buildGrid: function() {
@@ -393,7 +395,7 @@ return $.widget( "ui.calendar", {
 			tabindex: 0,
 			"aria-readonly": true,
 			"aria-labelledby": this.gridId + "-month-label",
-			"aria-activedescendant": this._getDayId( this.date )
+			"aria-activedescendant": this._getDayId( this._getDate() )
 		} );
 
 		this._addClass( table, "ui-calendar-calendar" );
@@ -408,8 +410,8 @@ return $.widget( "ui.calendar", {
 			week = $( "<th>" ),
 			row = $( "<tr role='row'>" ),
 			i = 0,
-			weekDayLength = this.viewDate.weekdays().length,
-			weekdays = this.viewDate.weekdays();
+			weekDayLength = this._getViewDate().weekdays().length,
+			weekdays = this._getViewDate().weekdays();
 
 		if ( this.options.showWeek ) {
 			this._addClass( week, "ui-calendar-week-col" );
@@ -431,7 +433,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildGridBody: function() {
-		var days = this.viewDate.days(),
+		var days = this._getViewDate().days(),
 			i = 0,
 			rows = "";
 
@@ -492,7 +494,7 @@ return $.widget( "ui.calendar", {
 		var attributes, content,
 			classes = [ "ui-state-default" ];
 
-		if ( day === this.date && selectable ) {
+		if ( day === this._getDate() && selectable ) {
 			classes.push( "ui-state-focus" );
 		}
 		if ( this._isCurrent( day ) ) {
@@ -616,7 +618,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_headerButtonsState: function() {
-		var months = this.viewDate.months( this.options.numberOfMonths - 1 ),
+		var months = this._getViewDate().months( this.options.numberOfMonths - 1 ),
 			i = 0;
 
 		for ( ; i < months.length; i++ ) {
@@ -648,9 +650,9 @@ return $.widget( "ui.calendar", {
 		for ( ; i < this.options.numberOfMonths; i++ ) {
 			this.element.find( ".ui-calendar-title" ).eq( i ).replaceWith( this._buildTitle() );
 			this.element.find( ".ui-calendar-calendar" ).eq( i ).replaceWith( this._buildGrid() );
-			this.viewDate.adjust( "M", 1 );
+			this._getViewDate().adjust( "M", 1 );
 		}
-		this.viewDate.adjust( "M", -this.options.numberOfMonths );
+		this._getViewDate().adjust( "M", -this.options.numberOfMonths );
 	},
 
 	_getTranslation: function( key ) {
@@ -662,6 +664,22 @@ return $.widget( "ui.calendar", {
 			"aria-hidden": "true",
 			"aria-expanded": "false"
 		} );
+	},
+
+	_getDate: function() {
+		return this.date;
+	},
+
+	_setDate: function( date ) {
+		this.date = date;
+	},
+
+	_getViewDate: function() {
+		return this.viewDate;
+	},
+
+	_setViewDate: function( date ) {
+		this.viewDate = date;
 	},
 
 	value: function( value ) {
@@ -730,11 +748,11 @@ return $.widget( "ui.calendar", {
 
 		if ( dateAttributes ) {
 			this._setLocale( this.options.locale, this.options.dateFormat );
-			this.date.setAttributes( this._calendarDateOptions );
-			this.viewDate.setAttributes( this._calendarDateOptions );
+			this._getDate().setAttributes( this._calendarDateOptions );
+			this._getViewDate().setAttributes( this._calendarDateOptions );
 		}
 		if ( create || refresh ) {
-			this.viewDate.setTimestamp( this.date.timestamp() );
+			this._getViewDate().setTimestamp( this._getDate().timestamp() );
 		}
 		if ( create ) {
 			this.element.empty();
@@ -750,7 +768,7 @@ return $.widget( "ui.calendar", {
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			if ( this._isValid( value ) ) {
-				this.date.setTimestamp( value.getTime() );
+				this._getDate().setTimestamp( value.getTime() );
 			} else {
 				value = null;
 			}
@@ -778,7 +796,7 @@ return $.widget( "ui.calendar", {
 		}
 
 		if ( key === "eachDay" ) {
-			this.viewDate.eachDay = value;
+			this._getViewDate().eachDay = value;
 		}
 	}
 } );
