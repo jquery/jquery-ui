@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"../calendar/helper",
 	"ui/widgets/datepicker"
-], function( QUnit, $ ) {
+], function( QUnit, $, testHelper ) {
 
 QUnit.module( "datepicker: options", {
 	beforeEach:  function() {
@@ -55,11 +56,11 @@ QUnit.test( "min / max", function( assert ) {
 	var min, max;
 
 	this.element.datepicker( "option", { min: "10/20/08", max: "10/25/08" } );
-	assert.dateEqual( this.element.datepicker( "option", "min" ), new Date( 2008, 10 - 1, 20 ), "Set min option as string" );
-	assert.dateEqual( this.element.datepicker( "option", "max" ), new Date( 2008, 10 - 1, 25 ), "Set max option as string" );
+	assert.dateEqual( this.element.datepicker( "option", "min" ), testHelper.createDate( 2008, 10 - 1, 20 ), "Set min option as string" );
+	assert.dateEqual( this.element.datepicker( "option", "max" ), testHelper.createDate( 2008, 10 - 1, 25 ), "Set max option as string" );
 
-	min = new Date( 2009, 10 - 1, 20 );
-	max = new Date( 2009, 10 - 1, 25 );
+	min = testHelper.createDate( 2009, 10 - 1, 20 );
+	max = testHelper.createDate( 2009, 10 - 1, 25 );
 	this.element.datepicker( "option", { min: min, max: max } );
 	assert.dateEqual( this.element.datepicker( "option", "min" ), min, "Set min option as date object" );
 	assert.dateEqual( this.element.datepicker( "option", "max" ), max, "Set max option as date object" );
@@ -69,22 +70,22 @@ QUnit.test( "min / max", function( assert ) {
 		.attr( "min", "2010-10-20" )
 		.attr( "max", "2010-10-25" )
 		.datepicker();
-	assert.dateEqual( this.element.datepicker( "option", "min" ), new Date( 2010, 10 - 1, 20 ), "Set min option as attribute" );
-	assert.dateEqual( this.element.datepicker( "option", "max" ), new Date( 2010, 10 - 1, 25 ), "Set max option as attribute" );
+	assert.dateEqual( this.element.datepicker( "option", "min" ), testHelper.createDate( 2010, 10 - 1, 20 ), "Set min option as attribute" );
+	assert.dateEqual( this.element.datepicker( "option", "max" ), testHelper.createDate( 2010, 10 - 1, 25 ), "Set max option as attribute" );
 
-	min = new Date( 2011, 10 - 1, 20 );
-	max = new Date( 2011, 10 - 1, 25 );
+	min = testHelper.createDate( 2011, 10 - 1, 20 );
+	max = testHelper.createDate( 2011, 10 - 1, 25 );
 	this.element
 		.datepicker( "destroy" )
 		.datepicker( { min: min, max: max } );
-	assert.dateEqual( this.element.datepicker( "option", "min" ), new Date( 2011, 10 - 1, 20 ), "Set min option as date object on init" );
-	assert.dateEqual( this.element.datepicker( "option", "max" ), new Date( 2011, 10 - 1, 25 ), "Set max option as date object on init" );
+	assert.dateEqual( this.element.datepicker( "option", "min" ), testHelper.createDate( 2011, 10 - 1, 20 ), "Set min option as date object on init" );
+	assert.dateEqual( this.element.datepicker( "option", "max" ), testHelper.createDate( 2011, 10 - 1, 25 ), "Set max option as date object on init" );
 
 	this.element
 		.datepicker( "destroy" )
 		.datepicker( { min: "10/20/12", max: "10/25/12" } );
-	assert.dateEqual( this.element.datepicker( "option", "min" ), new Date( 2012, 10 - 1, 20 ), "Set min option as string on init" );
-	assert.dateEqual( this.element.datepicker( "option", "max" ), new Date( 2012, 10 - 1, 25 ), "Set max option as string on init" );
+	assert.dateEqual( this.element.datepicker( "option", "min" ), testHelper.createDate( 2012, 10 - 1, 20 ), "Set min option as string on init" );
+	assert.dateEqual( this.element.datepicker( "option", "max" ), testHelper.createDate( 2012, 10 - 1, 25 ), "Set max option as string on init" );
 
 } );
 
@@ -97,8 +98,8 @@ QUnit.test( "Pass-through options", function( assert ) {
 			disabled: true,
 			eachDay: function( day ) { day; },
 			locale: "de",
-			max: new Date( 2000, 0, 1 ),
-			min: new Date( 2000, 0, 2 ),
+			max: testHelper.createDate( 2000, 0, 1 ),
+			min: testHelper.createDate( 2000, 0, 2 ),
 			numberOfMonths: 3,
 			showWeek: true
 		},

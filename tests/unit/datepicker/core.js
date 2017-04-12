@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"../calendar/helper",
 	"ui/widgets/datepicker"
-], function( QUnit, $ ) {
+], function( QUnit, $, testHelper ) {
 
 QUnit.module( "datepicker: core", {
 	beforeEach: function() {
@@ -90,7 +91,7 @@ QUnit.test( "Keyboard handling: input", function( assert ) {
 		.datepicker( "refresh" )
 		.datepicker( "open" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-	assert.dateEqual( that.element.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
+	assert.dateEqual( that.element.datepicker( "valueAsDate" ), testHelper.createDate( 2014, 0, 1 ),
 		"Keystroke enter - preset" );
 
 	that.element
@@ -105,7 +106,7 @@ QUnit.test( "Keyboard handling: input", function( assert ) {
 		.val( "1/1/14" )
 		.datepicker( "open" )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-	assert.dateEqual( that.element.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
+	assert.dateEqual( that.element.datepicker( "valueAsDate" ), testHelper.createDate( 2014, 0, 1 ),
 		"Keystroke esc - preset" );
 
 	that.element
@@ -113,13 +114,13 @@ QUnit.test( "Keyboard handling: input", function( assert ) {
 		.datepicker( "open" )
 		.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP } )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-	assert.dateEqual( that.element.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ),
+	assert.dateEqual( that.element.datepicker( "valueAsDate" ), testHelper.createDate( 2014, 0, 1 ),
 		"Keystroke esc - abandoned" );
 
 	that.element
 		.val( "1/2/14" )
 		.simulate( "keyup" );
-	assert.dateEqual( that.element.datepicker( "valueAsDate" ), new Date( 2014, 0, 2 ),
+	assert.dateEqual( that.element.datepicker( "valueAsDate" ), testHelper.createDate( 2014, 0, 2 ),
 		"Picker updated as user types into input" );
 } );
 
@@ -152,7 +153,7 @@ QUnit.test( "mouse", function( assert ) {
 		$( ".ui-calendar-calendar tbody button:contains(12)", that.widget ).simulate( "mousedown", {} );
 		assert.dateEqual(
 			that.element.datepicker( "valueAsDate" ),
-			new Date( 2008, 4 - 1, 12 ),
+			testHelper.createDate( 2008, 4 - 1, 12 ),
 			"Mouse click - preset"
 		);
 
@@ -164,7 +165,7 @@ QUnit.test( "mouse", function( assert ) {
 		that.element.simulate( "click" );
 		assert.dateEqual(
 			that.element.datepicker( "valueAsDate" ),
-			new Date( 2008, 4 - 1, 4 ),
+			testHelper.createDate( 2008, 4 - 1, 4 ),
 			"Mouse click - close + preset"
 		);
 
@@ -173,7 +174,7 @@ QUnit.test( "mouse", function( assert ) {
 		that.element.simulate( "click" );
 		assert.dateEqual(
 			that.element.datepicker( "valueAsDate" ),
-			new Date( 2008, 4 - 1, 4 ),
+			testHelper.createDate( 2008, 4 - 1, 4 ),
 			"Mouse click - abandoned"
 		);
 

@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"./helper",
 	"ui/widgets/calendar"
-], function( QUnit, $ ) {
+], function( QUnit, $, testHelper ) {
 
 QUnit.module( "calendar: methods", {
 	beforeEach: function() {
@@ -64,15 +65,15 @@ QUnit.test( "valueAsDate", function( assert ) {
 	assert.expect( 11 );
 
 	var minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
-		date1 = new Date( 2008, 6 - 1, 4 ),
+		date1 = testHelper.createDate( 2008, 6 - 1, 4 ),
 		date2;
 
-	this.element.calendar( "valueAsDate", new Date( 2014, 0, 1 ) );
+	this.element.calendar( "valueAsDate", testHelper.createDate( 2014, 0, 1 ) );
 	assert.ok( this.element.find( "button[data-ui-calendar-timestamp]:first" )
 			.hasClass( "ui-state-active" ),
 		"First day marked as selected"
 	);
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), testHelper.createDate( 2014, 0, 1 ), "Getter" );
 
 	this.element.calendar( "destroy" );
 	this.element.calendar();
@@ -82,10 +83,10 @@ QUnit.test( "valueAsDate", function( assert ) {
 	assert.dateEqual( this.element.calendar( "valueAsDate" ), date1, "Set date - 2008-06-04" );
 
 	// With minimum / maximum
-	date1 = new Date( 2008, 1 - 1, 4 );
-	date2 = new Date( 2008, 6 - 1, 4 );
-	minDate = new Date( 2008, 2 - 1, 29 );
-	maxDate = new Date( 2008, 3 - 1, 28 );
+	date1 = testHelper.createDate( 2008, 1 - 1, 4 );
+	date2 = testHelper.createDate( 2008, 6 - 1, 4 );
+	minDate = testHelper.createDate( 2008, 2 - 1, 29 );
+	maxDate = testHelper.createDate( 2008, 3 - 1, 28 );
 
 	this.element
 		.calendar( "option", { min: minDate } )
@@ -133,8 +134,8 @@ QUnit.test( "valueAsDate", function( assert ) {
 		null, "Set date min/max - value > max"
 	);
 
-	dateAndTimeToSet = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
-	dateAndTimeClone = new Date( 2008, 3 - 1, 28, 1, 11, 0 );
+	dateAndTimeToSet = testHelper.createDate( 2008, 3 - 1, 28, 1, 11, 0 );
+	dateAndTimeClone = testHelper.createDate( 2008, 3 - 1, 28, 1, 11, 0 );
 	this.element.calendar( "valueAsDate", dateAndTimeToSet );
 	assert.equal(
 		dateAndTimeToSet.getTime(),

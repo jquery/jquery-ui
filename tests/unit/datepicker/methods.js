@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"../calendar/helper",
 	"ui/widgets/datepicker"
-], function( QUnit, $ ) {
+], function( QUnit, $, testHelper ) {
 
 QUnit.module( "datepicker: methods", {
 	beforeEach: function() {
@@ -90,13 +91,13 @@ QUnit.test( "valueAsDate", function( assert ) {
 
 	assert.strictEqual( this.element.datepicker( "valueAsDate" ), null, "Default" );
 
-	this.element.datepicker( "valueAsDate", new Date( 2014, 0, 1 ) );
+	this.element.datepicker( "valueAsDate", testHelper.createDate( 2014, 0, 1 ) );
 	assert.equal( this.element.val(), "1/1/14", "Input's value set" );
 	assert.ok(
 		this.widget.find( "button[data-ui-calendar-timestamp]" ).eq( 0 ).hasClass( "ui-state-active" ),
 		"First day marked as selected"
 	);
-	assert.dateEqual( this.element.datepicker( "valueAsDate" ), new Date( 2014, 0, 1 ), "Getter" );
+	assert.dateEqual( this.element.datepicker( "valueAsDate" ), testHelper.createDate( 2014, 0, 1 ), "Getter" );
 
 	this.element.val( "a/b/c" );
 	assert.equal( this.element.datepicker( "valueAsDate" ), null, "Invalid dates return null" );

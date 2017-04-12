@@ -95,7 +95,7 @@ QUnit.test( "Localization", function( assert ) {
 	assert.expect( 10 );
 
 	var that = this,
-		date = new Date( 2014, 0, 1 ),
+		date = testHelper.createDate( 2014, 0, 1 ),
 		optionsDe = {
 			locale: "de",
 			labels: {
@@ -149,7 +149,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 		that = this;
 
 	function step1() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper
 			.focusGrid( that.element )
@@ -158,7 +158,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2013, 12 - 1, 31 ),
+				testHelper.createDate( 2013, 12 - 1, 31 ),
 				"Keystroke left to switch to previous day"
 			);
 			that.element.calendar( "destroy" );
@@ -167,7 +167,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step2() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } )
@@ -175,21 +175,21 @@ QUnit.test( "keyboard handling", function( assert ) {
 
 		assert.dateEqual(
 			that.element.calendar( "valueAsDate" ),
-			new Date( 2014, 1 - 1, 2 ),
+			testHelper.createDate( 2014, 1 - 1, 2 ),
 			"Keystroke right to switch to next day"
 		);
 		step3();
 	}
 
 	function step3() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element ).simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2013, 12 - 1, 25 ),
+				testHelper.createDate( 2013, 12 - 1, 25 ),
 				"Keystroke up to move to the previous week"
 			);
 			that.element.calendar( "destroy" );
@@ -198,14 +198,14 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step4() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element ).simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2014, 1 - 1, 8 ),
+				testHelper.createDate( 2014, 1 - 1, 8 ),
 				"Keystroke down to move to the next week"
 			);
 			that.element.calendar( "destroy" );
@@ -214,14 +214,14 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step5() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2013, 12 - 1, 1 ),
+				testHelper.createDate( 2013, 12 - 1, 1 ),
 				"Keystroke Page Up moves date to previous month"
 			);
 			that.element.calendar( "destroy" );
@@ -230,7 +230,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step6() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP, altKey: true } );
@@ -238,7 +238,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2013, 1 - 1, 1 ),
+				testHelper.createDate( 2013, 1 - 1, 1 ),
 				"Keystroke Page Up + ALT moves date to previous year"
 			);
 			that.element.calendar( "destroy" );
@@ -247,14 +247,14 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step7() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2014, 2 - 1, 1 ),
+				testHelper.createDate( 2014, 2 - 1, 1 ),
 				"Keystroke Page Down moves date to next month"
 			);
 			that.element.calendar( "destroy" );
@@ -263,7 +263,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step8() {
-		that.element.calendar( { value: new Date( 2014, 1 - 1, 1 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 1 - 1, 1 ) } );
 
 		testHelper.focusGrid( that.element )
 			.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN, altKey: true } );
@@ -271,7 +271,7 @@ QUnit.test( "keyboard handling", function( assert ) {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2015, 1 - 1, 1 ),
+				testHelper.createDate( 2015, 1 - 1, 1 ),
 				"Keystroke Page Down + ALT moves date to next year"
 			);
 			that.element.calendar( "destroy" );
@@ -281,14 +281,14 @@ QUnit.test( "keyboard handling", function( assert ) {
 
 	// Check for moving to short months
 	function step9() {
-		that.element.calendar( { value: new Date( 2014, 3 - 1, 31 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2014, 3 - 1, 31 ) } );
 
 		testHelper.focusGrid( that.element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2014, 2 - 1, 28 ),
+				testHelper.createDate( 2014, 2 - 1, 28 ),
 				"Keystroke Page Up and short months"
 			);
 			that.element.calendar( "destroy" );
@@ -297,14 +297,14 @@ QUnit.test( "keyboard handling", function( assert ) {
 	}
 
 	function step10() {
-		that.element.calendar( { value: new Date( 2016, 1 - 1, 30 ) } );
+		that.element.calendar( { value: testHelper.createDate( 2016, 1 - 1, 30 ) } );
 
 		testHelper.focusGrid( that.element ).simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		setTimeout( function() {
 			$( document.activeElement ).simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 			assert.dateEqual(
 				that.element.calendar( "valueAsDate" ),
-				new Date( 2016, 2 - 1, 29 ),
+				testHelper.createDate( 2016, 2 - 1, 29 ),
 				"Keystroke Page Down and leap years"
 			);
 			ready();
@@ -319,7 +319,7 @@ QUnit.test( "mouse", function( assert ) {
 
 	var ready = assert.async(),
 		that = this,
-		date = new Date();
+		date = testHelper.createDate();
 
 	function step1() {
 		$( "tbody button:contains(10)", that.element ).simulate( "mousedown" );
@@ -330,30 +330,30 @@ QUnit.test( "mouse", function( assert ) {
 			"Mouse click"
 		);
 
-		that.element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
+		that.element.calendar( "option", "value", testHelper.createDate( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-calendar tbody button:contains(12)", that.element ).simulate( "mousedown" );
 		assert.dateEqual(
 			that.element.calendar( "valueAsDate" ),
-			new Date( 2008, 2 - 1, 12 ),
+			testHelper.createDate( 2008, 2 - 1, 12 ),
 			"Mouse click - preset"
 		);
 
 		// Previous/next
-		that.element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
+		that.element.calendar( "option", "value", testHelper.createDate( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-prev", that.element ).simulate( "click" );
 		$( ".ui-calendar-calendar tbody button:contains(16)", that.element ).simulate( "mousedown" );
 		assert.dateEqual(
 			that.element.calendar( "valueAsDate" ),
-			new Date( 2008, 1 - 1, 16 ),
+			testHelper.createDate( 2008, 1 - 1, 16 ),
 			"Mouse click - previous"
 		);
 
-		that.element.calendar( "option", "value", new Date( 2008, 2 - 1, 4 ) );
+		that.element.calendar( "option", "value", testHelper.createDate( 2008, 2 - 1, 4 ) );
 		$( ".ui-calendar-next", that.element ).simulate( "click" );
 		$( ".ui-calendar-calendar tbody button:contains(18)", that.element ).simulate( "mousedown" );
 		assert.dateEqual(
 			that.element.calendar( "valueAsDate" ),
-			new Date( 2008, 3 - 1, 18 ),
+			testHelper.createDate( 2008, 3 - 1, 18 ),
 			"Mouse click - next"
 		);
 
@@ -364,16 +364,16 @@ QUnit.test( "mouse", function( assert ) {
 	function step2() {
 		that.element.calendar( "destroy" );
 		that.element.calendar( {
-			value: new Date( 2008, 3 - 1, 4 ),
-			min: new Date( 2008, 2 - 1, 2 ),
-			max: new Date( 2008, 2 - 1, 26 )
+			value: testHelper.createDate( 2008, 3 - 1, 4 ),
+			min: testHelper.createDate( 2008, 2 - 1, 2 ),
+			max: testHelper.createDate( 2008, 2 - 1, 26 )
 		} );
 
 		$( ".ui-calendar-prev", that.element ).simulate( "click" );
 		$( "tbody button:contains(16)", that.element ).simulate( "mousedown" );
 		assert.dateEqual(
 			that.element.calendar( "valueAsDate" ),
-			new Date( 2008, 2 - 1, 16 ),
+			testHelper.createDate( 2008, 2 - 1, 16 ),
 			"Mouse click - previous + min/max"
 		);
 		step3();
@@ -382,16 +382,16 @@ QUnit.test( "mouse", function( assert ) {
 	function step3() {
 		that.element.calendar( "destroy" );
 		that.element.calendar( {
-			value: new Date( 2008, 1 - 1, 4 ),
-			min: new Date( 2008, 2 - 1, 2 ),
-			max: new Date( 2008, 2 - 1, 26 )
+			value: testHelper.createDate( 2008, 1 - 1, 4 ),
+			min: testHelper.createDate( 2008, 2 - 1, 2 ),
+			max: testHelper.createDate( 2008, 2 - 1, 26 )
 		} );
 
 		$( ".ui-calendar-next", that.element ).simulate( "click" );
 		$( "tbody button:contains(18)", that.element ).simulate( "mousedown" );
 		assert.dateEqual(
 			that.element.calendar( "valueAsDate" ),
-			new Date( 2008, 2 - 1, 18 ),
+			testHelper.createDate( 2008, 2 - 1, 18 ),
 			"Mouse click - next + min/max"
 		);
 		ready();

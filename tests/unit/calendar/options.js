@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"./helper",
 	"ui/widgets/calendar"
-], function( QUnit, $ ) {
+], function( QUnit, $, testHelper ) {
 
 QUnit.module( "calendar: options", {
 	beforeEach: function() {
@@ -136,7 +137,7 @@ QUnit.test( "eachDay", function( assert ) {
 
 	assert.equal( firstCell.find( "button" ).length, 1, "days are selectable by default" );
 	timestamp = parseInt( firstCell.find( "button" ).attr( "data-ui-calendar-timestamp" ), 10 );
-	assert.equal( new Date( timestamp ).getDate(), 1, "first available day is the 1st by default" );
+	assert.equal( testHelper.createDate( timestamp ).getDate(), 1, "first available day is the 1st by default" );
 
 	// Do not render the 1st of the month
 	this.element.calendar( "option", "eachDay", function( day ) {
@@ -146,7 +147,7 @@ QUnit.test( "eachDay", function( assert ) {
 	} );
 	firstCell = this.widget.find( "td[id]:first" );
 	timestamp = parseInt( firstCell.find( "button" ).attr( "data-ui-calendar-timestamp" ), 10 );
-	assert.equal( new Date( timestamp ).getDate(), 2, "first available day is the 2nd" );
+	assert.equal( testHelper.createDate( timestamp ).getDate(), 2, "first available day is the 2nd" );
 
 	// Display the 1st of the month but make it not selectable.
 	this.element.calendar( "option", "eachDay", function( day ) {
@@ -193,13 +194,13 @@ QUnit.test( "min / max", function( assert ) {
 	// With existing date
 	var prevButton = this.widget.find( ".ui-calendar-prev" ),
 		nextButton = this.widget.find( ".ui-calendar-next" ),
-		minDate = new Date( 2008, 2 - 1, 29 ),
-		maxDate = new Date( 2008, 12 - 1, 7 );
+		minDate = testHelper.createDate( 2008, 2 - 1, 29 ),
+		maxDate = testHelper.createDate( 2008, 12 - 1, 7 );
 
 	this.element
 		.calendar( "option", { min: minDate } )
 		.calendar( "value", "6/4/08" );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), testHelper.createDate( 2008, 6 - 1, 4 ), "Min/max - value > min" );
 
 	this.element
 		.calendar( "option", { min: minDate } )
@@ -210,7 +211,7 @@ QUnit.test( "min / max", function( assert ) {
 		.calendar( "option", { min: null } )
 		.calendar( "value", "6/4/08" )
 		.calendar( "option", { max: maxDate } );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value < max" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), testHelper.createDate( 2008, 6 - 1, 4 ), "Min/max - value < max" );
 
 	this.element
 		.calendar( "option", { max: maxDate } )
@@ -225,7 +226,7 @@ QUnit.test( "min / max", function( assert ) {
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
 		.calendar( "value", "6/4/08" );
-	assert.dateEqual( this.element.calendar( "valueAsDate" ), new Date( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
+	assert.dateEqual( this.element.calendar( "valueAsDate" ), testHelper.createDate( 2008, 6 - 1, 4 ), "Min/max - value > min, < max" );
 
 	this.element
 		.calendar( "option", { min: minDate, max: maxDate } )
@@ -276,7 +277,7 @@ QUnit.test( "min / max", function( assert ) {
 QUnit.test( "numberOfMonths", function( assert ) {
 	assert.expect( 6 );
 
-	var date = new Date( 2015, 8 - 1, 1 );
+	var date = testHelper.createDate( 2015, 8 - 1, 1 );
 
 	this.element.calendar( "option", {
 		numberOfMonths: 3,
@@ -316,15 +317,15 @@ QUnit.test( "numberOfMonths", function( assert ) {
 QUnit.test( "value", function( assert ) {
 	assert.expect( 4 );
 
-	var date = new Date( 2016, 5 - 1, 23 );
+	var date = testHelper.createDate( 2016, 5 - 1, 23 );
 
 	assert.equal( this.element.calendar( "option", "value" ), null, "Initial value" );
 
 	this.element.calendar( "option", "value", date );
 	assert.dateEqual( this.element.calendar( "option", "value" ), date, "Value set" );
 	assert.dateEqual(
-		new Date( this.widget.find( "table button.ui-state-active" ).data( "ui-calendar-timestamp" ) ),
-		new Date( 1463972400000 ),
+		testHelper.createDate( this.widget.find( "table button.ui-state-active" ).data( "ui-calendar-timestamp" ) ),
+		testHelper.createDate( 1463972400000 ),
 		"Active button timestamp"
 	);
 
