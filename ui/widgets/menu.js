@@ -136,7 +136,7 @@ return $.widget( "ui.menu", {
 
 				// If there's already an active item, keep it active
 				// If not, activate the first item
-				var item = this.active || this.element.find( this.options.items ).eq( 0 );
+				var item = this.active || this._menuItems().first();
 
 				if ( !keepActiveItem ) {
 					this.focus( event, item );
@@ -538,11 +538,7 @@ return $.widget( "ui.menu", {
 	},
 
 	expand: function( event ) {
-		var newItem = this.active &&
-			this.active
-				.children( ".ui-menu " )
-					.find( this.options.items )
-						.first();
+		var newItem = this.active && this._menuItems( this.active.children( ".ui-menu" ) ).first();
 
 		if ( newItem && newItem.length ) {
 			this._open( newItem.parent() );
@@ -570,21 +566,27 @@ return $.widget( "ui.menu", {
 		return this.active && !this.active.nextAll( ".ui-menu-item" ).length;
 	},
 
+	_menuItems: function( menu ) {
+		return ( menu || this.element )
+			.find( this.options.items )
+			.filter( ".ui-menu-item" );
+	},
+
 	_move: function( direction, filter, event ) {
 		var next;
 		if ( this.active ) {
 			if ( direction === "first" || direction === "last" ) {
 				next = this.active
 					[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" )
-					.eq( -1 );
+					.last();
 			} else {
 				next = this.active
 					[ direction + "All" ]( ".ui-menu-item" )
-					.eq( 0 );
+					.first();
 			}
 		}
 		if ( !next || !next.length || !this.active ) {
-			next = this.activeMenu.find( this.options.items )[ filter ]();
+			next = this._menuItems( this.activeMenu )[ filter ]();
 		}
 
 		this.focus( event, next );
@@ -610,7 +612,7 @@ return $.widget( "ui.menu", {
 
 			this.focus( event, item );
 		} else {
-			this.focus( event, this.activeMenu.find( this.options.items )
+			this.focus( event, this._menuItems( this.activeMenu )
 				[ !this.active ? "first" : "last" ]() );
 		}
 	},
@@ -634,7 +636,7 @@ return $.widget( "ui.menu", {
 
 			this.focus( event, item );
 		} else {
-			this.focus( event, this.activeMenu.find( this.options.items ).first() );
+			this.focus( event, this._menuItems( this.activeMenu ).first() );
 		}
 	},
 

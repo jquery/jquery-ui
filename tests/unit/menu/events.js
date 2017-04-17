@@ -755,4 +755,26 @@ QUnit.test( "#10571: When typing in a menu, only menu-items should be focused", 
 	} );
 } );
 
+QUnit.test( "#15157: Must not focus menu dividers with the keyboard", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 6 );
+
+	var element = $( "#menu-with-dividers" ).menu( {
+		focus: function( event, ui ) {
+			assert.hasClasses( ui.item, "ui-menu-item", "Should have menu item class" );
+			log( ui.item.text() );
+		}
+	} );
+
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
+	setTimeout( function() {
+		assert.equal( logOutput(), "beginning,middle,end,beginning,end", "Should wrap around items" );
+		ready();
+	} );
+} );
+
 } );
