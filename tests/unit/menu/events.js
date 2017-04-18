@@ -670,7 +670,9 @@ QUnit.test( "handle keyboard navigation and mouse click on menu with dividers an
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		assert.equal( logOutput(), "keydown,3,4,7", "Keydown focus skips divider and group label" );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		assert.equal( logOutput(), "keydown,1,2,3,4,7", "Keydown focus skips divider and group label" );
 		ready();
 	}
 } );
