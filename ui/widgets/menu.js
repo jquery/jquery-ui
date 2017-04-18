@@ -78,6 +78,8 @@ return $.widget( "ui.menu", {
 			// them (focus should always stay on UL during navigation).
 			"mousedown .ui-menu-item": function( event ) {
 				event.preventDefault();
+
+				this._activateItem( event );
 			},
 			"click .ui-menu-item": function( event ) {
 				var target = $( event.target );
@@ -107,29 +109,8 @@ return $.widget( "ui.menu", {
 					}
 				}
 			},
-			"mouseenter .ui-menu-item": function( event ) {
-
-				// Ignore mouse events while typeahead is active, see #10458.
-				// Prevents focusing the wrong item when typeahead causes a scroll while the mouse
-				// is over an item in the menu
-				if ( this.previousFilter ) {
-					return;
-				}
-
-				var actualTarget = $( event.target ).closest( ".ui-menu-item" ),
-					target = $( event.currentTarget );
-
-				// Ignore bubbled events on parent items, see #11641
-				if ( actualTarget[ 0 ] !== target[ 0 ] ) {
-					return;
-				}
-
-				// Remove ui-state-active class from siblings of the newly focused menu item
-				// to avoid a jump caused by adjacent elements both having a class with a border
-				this._removeClass( target.siblings().children( ".ui-state-active" ),
-					null, "ui-state-active" );
-				this.focus( event, target );
-			},
+			"mouseenter .ui-menu-item": "_activateItem",
+			"mousemove .ui-menu-item": "_activateItem",
 			mouseleave: "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
 			focus: function( event, keepActiveItem ) {
@@ -169,6 +150,35 @@ return $.widget( "ui.menu", {
 				this.mouseHandled = false;
 			}
 		} );
+	},
+
+	_activateItem: function( event ) {
+
+		// Ignore mouse events while typeahead is active, see #10458.
+		// Prevents focusing the wrong item when typeahead causes a scroll while the mouse
+		// is over an item in the menu
+		if ( this.previousFilter ) {
+			return;
+		}
+
+		var actualTarget = $( event.target ).closest( ".ui-menu-item" ),
+			target = $( event.currentTarget );
+
+		// Ignore bubbled events on parent items, see #11641
+		if ( actualTarget[ 0 ] !== target[ 0 ] ) {
+			return;
+		}
+
+		// If the item is already active, there's nothing to do
+		if ( target.is( ".ui-state-active" ) ) {
+			return;
+		}
+
+		// Remove ui-state-active class from siblings of the newly focused menu item
+		// to avoid a jump caused by adjacent elements both having a class with a border
+		this._removeClass( target.siblings().children( ".ui-state-active" ),
+			null, "ui-state-active" );
+		this.focus( event, target );
 	},
 
 	_destroy: function() {
