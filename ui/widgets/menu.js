@@ -162,7 +162,7 @@ return $.widget( "ui.menu", {
 		this._on( this.document, {
 			click: function( event ) {
 				if ( this._closeOnDocumentClick( event ) ) {
-					this.collapseAll( event );
+					this.collapseAll( event, true );
 				}
 
 				// Reset the mouseHandled flag
@@ -502,7 +502,7 @@ return $.widget( "ui.menu", {
 			this._removeClass( currentMenu.find( ".ui-state-active" ), null, "ui-state-active" );
 
 			this.activeMenu = currentMenu;
-		}, this.delay );
+		}, all ? 0 : this.delay );
 	},
 
 	// With no arguments, closes the currently active menu - if nothing is active
