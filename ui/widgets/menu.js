@@ -64,6 +64,7 @@ return $.widget( "ui.menu", {
 		// Flag used to prevent firing of the click handler
 		// as the event bubbles up through nested menus
 		this.mouseHandled = false;
+		this.lastMousePosition = { x: null, y: null };
 		this.element
 			.uniqueId()
 			.attr( {
@@ -160,6 +161,17 @@ return $.widget( "ui.menu", {
 		if ( this.previousFilter ) {
 			return;
 		}
+
+		// If the mouse didn't actually move, but the page was scrolled, ignore the event (#9356)
+		if ( event.clientX === this.lastMousePosition.x &&
+				event.clientY === this.lastMousePosition.y ) {
+			return;
+		}
+
+		this.lastMousePosition = {
+			x: event.clientX,
+			y: event.clientY
+		};
 
 		var actualTarget = $( event.target ).closest( ".ui-menu-item" ),
 			target = $( event.currentTarget );
