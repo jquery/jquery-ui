@@ -597,7 +597,10 @@ $.Widget.prototype = {
 			}
 
 			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
-			var eventName = match[ 1 ] + instance.eventNamespace;
+			//var eventName = match[ 1 ] + instance.eventNamespace;
+			var eventName = ( match[1] === instance.widgetEventPrefix ? match[1]
+				: instance.widgetEventPrefix + match[1]).toLowerCase() + instance.eventNamespace;
+			//like _trigger(). The full event type will be generated automatically
 			var selector = match[ 2 ];
 
 			if ( selector ) {
@@ -609,8 +612,17 @@ $.Widget.prototype = {
 	},
 
 	_off: function( element, eventName ) {
-		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
-			this.eventNamespace;
+		var instance = this;
+
+		//eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
+			//this.eventNamespace;
+		eventName = (eventName || "").split( " " );
+		for(var i = 0;i < eventName.length;i++){
+			eventName[i] = instance.widgetEventPrefix + eventName[i] + instance.eventNamespace;
+		}
+		eventName = eventName.join(" ");
+		//like _trigger(). The full event type will be generated automatically
+		
 		element.off( eventName ).off( eventName );
 
 		// Clear the stack to avoid memory leaks (#10056)
