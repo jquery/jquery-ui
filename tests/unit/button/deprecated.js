@@ -194,10 +194,10 @@ QUnit.test( "icon / icons options properly proxied", function( assert ) {
 		"Icons secondary option sets iconPosition option to end on init" );
 } );
 
-QUnit.test("Calling button on a collection of mixed types works correctly", function(assert) {
-	assert.expect(5);
+QUnit.test( "Calling button on a collection of mixed types works correctly", function( assert ) {
+	assert.expect( 5 );
 
-	var group = $(".mixed").children();
+	var group = $( ".mixed" ).children();
 
 	group.button();
 
@@ -207,9 +207,9 @@ QUnit.test("Calling button on a collection of mixed types works correctly", func
 		check: "checkboxradio",
 		input: "button",
 		radio: "checkboxradio"
-	}, function (type, widget) {
-		assert.ok($("#mixed-" + type)[widget]("instance"), type + " is a " + widget);
+	}, function( type, widget ) {
+		assert.ok( $( "#mixed-" + type )[ widget ]( "instance" ), type + " is a " + widget );
 	} );
-});
+} );
 
 } );

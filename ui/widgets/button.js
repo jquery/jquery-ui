@@ -357,7 +357,9 @@ if ( $.uiBackCompat !== false ) {
 					this.each( function() {
 						var methodValue;
 						var type = $( this ).attr( "type" );
-						var name = type !== "checkbox" && type !== "radio" ? "button" : "checkboxradio";
+						var name = type !== "checkbox" && type !== "radio" ?
+							"button" :
+							"checkboxradio";
 						var instance = $.data( this, "ui-" + name );
 
 						if ( options === "instance" ) {
@@ -405,11 +407,11 @@ if ( $.uiBackCompat !== false ) {
 						}
 					} else {
 						if ( name === "button" ) {
-							orig.call( $(this), options );
+							orig.call( $( this ), options );
 							return;
 						}
 
-						$(this).checkboxradio( $.extend({ icon: false }, options) );
+						$( this ).checkboxradio( $.extend( { icon: false }, options ) );
 					}
 				} );
 			}
