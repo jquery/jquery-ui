@@ -197,9 +197,9 @@ QUnit.test( "icon / icons options properly proxied", function( assert ) {
 QUnit.test("Calling button on a collection of mixed types works correctly", function(assert) {
 	assert.expect(5);
 
-	var group = $(".mixed").children()
+	var group = $(".mixed").children();
 
-	group.button()
+	group.button();
 
 	$.each( {
 		anchor: "button",
@@ -210,6 +210,6 @@ QUnit.test("Calling button on a collection of mixed types works correctly", func
 	}, function (type, widget) {
 		assert.ok($("#mixed-" + type)[widget]("instance"), type + " is a " + widget);
 	} );
-})
+});
 
 } );
