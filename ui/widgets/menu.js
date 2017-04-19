@@ -117,7 +117,9 @@ return $.widget( "ui.menu", {
 					return;
 				}
 
-				// If the mouse didn't actually move, but the page was scrolled, ignore the event (#9356)
+				// When the page is scrolled, a mousemove event is triggered because the mouse may
+				// be over a different element now. We don't want page scrolling to cause menu items
+				// to become active, so we need to detect this case and ignore it. (#9356)
 				if ( event.clientX === this.lastMousePosition.x &&
 						event.clientY === this.lastMousePosition.y ) {
 					return;
