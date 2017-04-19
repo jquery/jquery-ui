@@ -18,14 +18,14 @@ QUnit.test( "Calling button on a checkbox input calls checkboxradio widget", fun
 		"Calling button on a checkbox sets the checkboxradio icon option to false" );
 } );
 
-/* QUnit.test( "Calling buttonset calls controlgroup", function( assert ) {
+QUnit.test( "Calling buttonset calls controlgroup", function( assert ) {
 	var controlgroup = $( ".buttonset" );
 
 	assert.expect( 1 );
 	controlgroup.buttonset();
 
 	assert.ok( controlgroup.is( ":ui-controlgroup" ), "Calling buttonset creates controlgroup instance" );
-} ); */
+} );
 
 QUnit.module( "Button (deprecated): methods" );
 
