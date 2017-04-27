@@ -54,7 +54,7 @@
 }
 
 .ui-front {
-	z-index: 100;
+	z-index: 9999;
 }
 
 
