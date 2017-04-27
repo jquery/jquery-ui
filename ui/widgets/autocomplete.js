@@ -88,7 +88,10 @@ $.widget( "ui.autocomplete", {
 		this.isNewMenu = true;
 
 		this._addClass( "ui-autocomplete-input" );
-		this.element.attr( "autocomplete", "off" );
+
+		//Chrome 34+ does not respect "off"
+		//All other browsers seem to accept "false"
+		this.element.attr( "autocomplete", "false" );
 
 		this._on( this.element, {
 			keydown: function( event ) {
