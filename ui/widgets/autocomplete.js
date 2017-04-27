@@ -50,6 +50,8 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		itemLabel:"label",
+		itemValue:"value",
 
 		// Callbacks
 		change: null,
@@ -257,12 +259,12 @@ $.widget( "ui.autocomplete", {
 
 					// use value to match what will end up in the input, if it was a key event
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
-						this._value( item.value );
+						this._value( item[this.options.itemValue] );
 					}
 				}
 
 				// Announce the value in the liveRegion
-				label = ui.item.attr( "aria-label" ) || item.value;
+				label = ui.item.attr( "aria-label" ) || item[this.options.itemLabel] || item[this.options.itemValue];
 				if ( label && $.trim( label ).length ) {
 					this.liveRegion.children().hide();
 					$( "<div>" ).text( label ).appendTo( this.liveRegion );
@@ -287,7 +289,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
-					this._value( item.value );
+					this._value( item[this.options.itemValue] );
 				}
 
 				// reset the term after the select event
@@ -378,7 +380,7 @@ $.widget( "ui.autocomplete", {
 		if ( $.isArray( this.options.source ) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				response( $.ui.autocomplete.filter( array, request.term ) );
+				response( $.ui.autocomplete.filter.apply( that, [array, request.term] ) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -501,19 +503,20 @@ $.widget( "ui.autocomplete", {
 	_normalize: function( items ) {
 
 		// assume all items have the right format when the first item is complete
-		if ( items.length && items[ 0 ].label && items[ 0 ].value ) {
+		var that = this;
+		if ( items.length && items[ 0 ][that.options.itemLabel] && items[ 0 ][that.options.itemValue] ) {
 			return items;
 		}
 		return $.map( items, function( item ) {
 			if ( typeof item === "string" ) {
-				return {
-					label: item,
-					value: item
-				};
+				var result = {};
+				result[that.options.itemLabel] = item;
+				result[that.options.itemValue] = item;
+				return result;
 			}
 			return $.extend( {}, item, {
-				label: item.label || item.value,
-				value: item.value || item.label
+				label: item[that.options.itemLabel] || [that.options.itemValue],
+				value: item[that.options.itemValue] || item[that.options.itemLabel]
 			} );
 		} );
 	},
@@ -565,7 +568,7 @@ $.widget( "ui.autocomplete", {
 
 	_renderItem: function( ul, item ) {
 		return $( "<li>" )
-			.append( $( "<div>" ).text( item.label ) )
+			.append( $( "<div>" ).text( item[this.options.itemLabel] ) )
 			.appendTo( ul );
 	},
 
@@ -628,9 +631,10 @@ $.extend( $.ui.autocomplete, {
 		return value.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" );
 	},
 	filter: function( array, term ) {
+		var that = this;
 		var matcher = new RegExp( $.ui.autocomplete.escapeRegex( term ), "i" );
 		return $.grep( array, function( value ) {
-			return matcher.test( value.label || value.value || value );
+			return matcher.test( value[that.options.itemLabel] || value[that.options.itemValue] || value );
 		} );
 	}
 } );
