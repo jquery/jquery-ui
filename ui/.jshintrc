@@ -18,6 +18,12 @@
 
 	"globals": {
 		"define": false,
-		"Globalize": false
+		"Globalize": false,
+		"require": false,
+		"exports": false,
+		"module": false,
+		"global": false,
+		"self": false,
+		"window": false
 	}
 }

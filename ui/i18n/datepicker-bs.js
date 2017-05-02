@@ -1,14 +1,21 @@
 /* Bosnian i18n for the jQuery UI date picker plugin. */
 /* Written by Kenan Konjo. */
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory( require( "../widgets/datepicker" ) );
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define( [ "../widgets/datepicker" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery.datepicker );
+		// Globals
+		factory( global.jQuery.datepicker );
 	}
 }( function( datepicker ) {
 
@@ -34,4 +41,9 @@ datepicker.setDefaults( datepicker.regional.bs );
 
 return datepicker.regional.bs;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

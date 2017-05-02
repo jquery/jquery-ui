@@ -16,25 +16,34 @@
 //>>css.structure: ../../themes/base/button.css
 //>>css.theme: ../../themes/base/theme.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
 
-		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
+		// CommonJS or Node
+		factory( require( "jquery" ),
 
 			// These are only for backcompat
 			// TODO: Remove after 1.12
-			"./controlgroup",
-			"./checkboxradio",
+			require( "./controlgroup" ), require( "./checkboxradio" ),
 
-			"../keycode",
-			"../widget"
-		], factory );
+			require( "../keycode" ), require( "../widget" ) );
+	} else if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [ "jquery",
+
+			// These are only for backcompat
+			// TODO: Remove after 1.12
+			"./controlgroup", "./checkboxradio",
+
+			"../keycode", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
@@ -442,4 +451,9 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.button;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );
