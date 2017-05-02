@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Selectable @VERSION
+ * jQuery UI Selectable 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -14,25 +14,32 @@
 //>>demos: http://jqueryui.com/selectable/
 //>>css.structure: ../../themes/base/selectable.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "./mouse" ),
+			require( "../version" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
-			"./mouse",
-			"../version",
-			"../widget"
-		], factory );
+		define( [ "jquery", "./mouse", "../version", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
 return $.widget( "ui.selectable", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	options: {
 		appendTo: "body",
 		autoRefresh: true,
@@ -307,4 +314,9 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 
 } );
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

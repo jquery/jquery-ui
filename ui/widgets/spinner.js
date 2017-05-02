@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Spinner @VERSION
+ * jQuery UI Spinner 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -16,8 +16,22 @@
 //>>css.structure: ../../themes/base/spinner.css
 //>>css.theme: ../../themes/base/theme.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "./button" ),
+			require( "../version" ),
+			require( "../keycode" ),
+			require( "../safe-active-element" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define( [
@@ -30,8 +44,8 @@
 		], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
@@ -47,7 +61,7 @@ function spinnerModifier( fn ) {
 }
 
 $.widget( "ui.spinner", {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
@@ -576,4 +590,9 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.spinner;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

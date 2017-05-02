@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Droppable @VERSION
+ * jQuery UI Droppable 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -13,26 +13,33 @@
 //>>docs: http://api.jqueryui.com/droppable/
 //>>demos: http://jqueryui.com/droppable/
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "./draggable" ),
+			require( "./mouse" ),
+			require( "../version" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
-			"./draggable",
-			"./mouse",
-			"../version",
-			"../widget"
-		], factory );
+		define( [ "jquery", "./draggable", "./mouse", "../version", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
 $.widget( "ui.droppable", {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	widgetEventPrefix: "drop",
 	options: {
 		accept: "*",
@@ -494,4 +501,9 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.droppable;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

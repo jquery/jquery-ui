@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Progressbar @VERSION
+ * jQuery UI Progressbar 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -18,24 +18,27 @@
 //>>css.structure: ../../themes/base/progressbar.css
 //>>css.theme: ../../themes/base/theme.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory( require( "jquery" ), require( "../version" ), require( "../widget" ) );
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
-			"../version",
-			"../widget"
-		], factory );
+		define( [ "jquery", "../version", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
 return $.widget( "ui.progressbar", {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	options: {
 		classes: {
 			"ui-progressbar": "ui-corner-all",
@@ -175,4 +178,9 @@ return $.widget( "ui.progressbar", {
 	}
 } );
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Sortable @VERSION
+ * jQuery UI Sortable 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -14,8 +14,23 @@
 //>>demos: http://jqueryui.com/sortable/
 //>>css.structure: ../../themes/base/sortable.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "./mouse" ),
+			require( "../data" ),
+			require( "../ie" ),
+			require( "../scroll-parent" ),
+			require( "../version" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define( [
@@ -29,13 +44,13 @@
 		], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
 return $.widget( "ui.sortable", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
@@ -1603,4 +1618,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 } );
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

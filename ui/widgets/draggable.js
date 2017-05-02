@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Draggable @VERSION
+ * jQuery UI Draggable 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -14,8 +14,25 @@
 //>>demos: http://jqueryui.com/draggable/
 //>>css.structure: ../../themes/base/draggable.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory(
+			require( "jquery" ),
+			require( "./mouse" ),
+			require( "../data" ),
+			require( "../plugin" ),
+			require( "../safe-active-element" ),
+			require( "../safe-blur" ),
+			require( "../scroll-parent" ),
+			require( "../version" ),
+			require( "../widget" )
+		);
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define( [
@@ -31,13 +48,13 @@
 		], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 
 $.widget( "ui.draggable", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	widgetEventPrefix: "drag",
 	options: {
 		addClasses: true,
@@ -1247,4 +1264,9 @@ $.ui.plugin.add( "draggable", "zIndex", {
 
 return $.ui.draggable;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

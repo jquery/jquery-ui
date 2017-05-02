@@ -1,14 +1,21 @@
 /* Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* @author Arturas Paleicikas <arturas@avalon.lt> */
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory( require( "../widgets/datepicker" ) );
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define( [ "../widgets/datepicker" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery.datepicker );
+		// Globals
+		factory( global.jQuery.datepicker );
 	}
 }( function( datepicker ) {
 
@@ -42,4 +49,9 @@ datepicker.setDefaults( datepicker.regional.lt );
 
 return datepicker.regional.lt;
 
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );

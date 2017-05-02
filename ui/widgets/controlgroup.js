@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Controlgroup @VERSION
+ * jQuery UI Controlgroup 1.12.2-pre
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -16,24 +16,28 @@
 //>>css.structure: ../../themes/base/controlgroup.css
 //>>css.theme: ../../themes/base/theme.css
 
-( function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+( function( factory, global ) {
+	if (
+		typeof require === "function" &&
+		typeof exports === "object" &&
+		typeof module === "object" ) {
+
+		// CommonJS or Node
+		factory( require( "jquery" ), require( "../widget" ) );
+	} else if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [
-			"jquery",
-			"../widget"
-		], factory );
+		define( [ "jquery", "../widget" ], factory );
 	} else {
 
-		// Browser globals
-		factory( jQuery );
+		// Globals
+		factory( global.jQuery );
 	}
 }( function( $ ) {
 var controlgroupCornerRegex = /ui-corner-([a-z]){2,6}/g;
 
 return $.widget( "ui.controlgroup", {
-	version: "@VERSION",
+	version: "1.12.2-pre",
 	defaultElement: "<div>",
 	options: {
 		direction: "horizontal",
@@ -295,4 +299,9 @@ return $.widget( "ui.controlgroup", {
 		}
 	}
 } );
-} ) );
+},
+	typeof global !== "undefined" ? global :
+	typeof self !== "undefined" ? self :
+	typeof window !== "undefined" ? window :
+	{}
+) );
