@@ -251,13 +251,13 @@ $.each( [
 			wrappers = menu.find( "li.ui-menu-item .ui-menu-item-wrapper" );
 
 			button.trigger( "click" );
-			wrappers.first().simulate( "mouseover" ).trigger( "click" );
+			wrappers.first().simulate( "mouseover", { clientX: 2, clientY: 2 } ).trigger( "click" );
 			assert.equal( element[ 0 ].selectedIndex, 0, "First item is selected" );
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 			assert.equal( element[ 0 ].selectedIndex, 0, "No looping beyond first item" );
 
 			button.trigger( "click" );
-			wrappers.last().simulate( "mouseover" ).trigger( "click" );
+			wrappers.last().simulate( "mouseover", { clientX: 3, clientY: 3 } ).trigger( "click" );
 			assert.equal( element[ 0 ].selectedIndex, wrappers.length - 1, "Last item is selected" );
 			button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 			assert.equal( element[ 0 ].selectedIndex, wrappers.length - 1, "No looping behind last item" );

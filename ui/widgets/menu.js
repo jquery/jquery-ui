@@ -64,6 +64,7 @@ return $.widget( "ui.menu", {
 		// Flag used to prevent firing of the click handler
 		// as the event bubbles up through nested menus
 		this.mouseHandled = false;
+		this.lastMousePosition = { x: null, y: null };
 		this.element
 			.uniqueId()
 			.attr( {
@@ -115,6 +116,19 @@ return $.widget( "ui.menu", {
 				if ( this.previousFilter ) {
 					return;
 				}
+
+				// When the page is scrolled, a mousemove event is triggered because the mouse may
+				// be over a different element now. We don't want page scrolling to cause menu items
+				// to become active, so we need to detect this case and ignore it. (#9356)
+				if ( event.clientX === this.lastMousePosition.x &&
+						event.clientY === this.lastMousePosition.y ) {
+					return;
+				}
+
+				this.lastMousePosition = {
+					x: event.clientX,
+					y: event.clientY
+				};
 
 				var actualTarget = $( event.target ).closest( ".ui-menu-item" ),
 					target = $( event.currentTarget );
