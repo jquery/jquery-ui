@@ -331,3 +331,4 @@ Peter Dave Hello <hsu@peterdavehello.org>
 Johannes Schäfer <johnschaefer@gmx.de>
 Ville Skyttä <ville.skytta@iki.fi>
 Ryan Oriecuia <ryan.oriecuia@visioncritical.com>
+Robert Brignull <robertbrignull@gmail.com>
