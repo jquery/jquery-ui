@@ -447,7 +447,7 @@ $.widget( "ui.autocomplete", {
 	_response: function() {
 		var index = ++this.requestIndex;
 
-		return $.proxy( function( content ) {
+		return function( content ) {
 			if ( index === this.requestIndex ) {
 				this.__response( content );
 			}
@@ -456,7 +456,7 @@ $.widget( "ui.autocomplete", {
 			if ( !this.pending ) {
 				this._removeClass( "ui-autocomplete-loading" );
 			}
-		}, this );
+		}.bind( this );
 	},
 
 	__response: function( content ) {

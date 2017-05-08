@@ -48,7 +48,7 @@
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
-						source: $.proxy( this, "_source" )
+						source: this._source.bind( this )
 					})
 					.tooltip({
 						classes: {
