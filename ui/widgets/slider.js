@@ -213,6 +213,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
         d = "ui-state-hover";
         if (this.handles.hasClass(d))
         {
+            // #9553
             // determine hovered handle
             while (c < this.handles.length && !this.handles.eq(c).hasClass(d)) {
                 c++;
