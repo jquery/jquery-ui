@@ -69,6 +69,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	numPages: 5,
 
 	_create: function() {
+        var a, b;
+        ////
 		this._keySliding = false;
 		this._mouseSliding = false;
 		this._animateOff = true;
@@ -76,12 +78,21 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._detectOrientation();
 		this._mouseInit();
 		this._calculateNewMax();
-
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
 			"ui-widget ui-widget-content" );
-
+        ////
+        // refine values
+        // default
+        a = this.options.range === true ?
+            [this._valueMin(), this._valueMax()] : [this._valueMin()];
+        // outside
+        if ((b = this.options.values) && jQuery.isArray(b)) {
+            a = this._valueRefined(b, a);
+        }
+        this.options.values = a;
+        ////
+        // refresh slider
 		this._refresh();
-
 		this._animateOff = false;
 	},
 
@@ -382,38 +393,64 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this._value();
 	},
 
-	values: function( index, newValue ) {
-		var vals,
-			newValues,
-			i;
+    values: function(index, val) {
+        var a, b, c;
+        ////
+        // multiple values
+        // return
+        if (!(a = arguments.length)) {
+            return this._values();
+        }
+        // set
+        if (a && jQuery.isArray(arguments[0]))
+        {
+            // refine and store values
+            a = this.options.values;
+            this._valueRefined(arguments[0]).forEach(function(val, index) {
+                a[index] = this._trimAlignValue(val);
+                this._change(null, index);
+            }, this);
+            // refresh
+            this._refreshValue();
+            return;
+        }
+        // single value
+        // prepare
+        index = (index > 0 && index <= 2) ? (0 + index) : 0;
+        // return
+        if (a === 1) {
+            return this._hasMultipleValues() ?
+                this._values(index) :
+                this.value();
+        }
+        // set
+        this.options.values[index] = this._trimAlignValue(val);
+        this._refreshValue();
+        this._change(null, index);
+    },
 
-		if ( arguments.length > 1 ) {
-			this.options.values[ index ] = this._trimAlignValue( newValue );
-			this._refreshValue();
-			this._change( null, index );
-			return;
-		}
-
-		if ( arguments.length ) {
-			if ( $.isArray( arguments[ 0 ] ) ) {
-				vals = this.options.values;
-				newValues = arguments[ 0 ];
-				for ( i = 0; i < vals.length; i += 1 ) {
-					vals[ i ] = this._trimAlignValue( newValues[ i ] );
-					this._change( null, i );
-				}
-				this._refreshValue();
-			} else {
-				if ( this._hasMultipleValues() ) {
-					return this._values( index );
-				} else {
-					return this.value();
-				}
-			}
-		} else {
-			return this._values();
-		}
-	},
+    // issue #3762
+    // returns refined values based on current
+    _valueRefined: function(val, current) {
+        var a, b;
+        ////
+        // prepare current values
+        !current && (current = this.options.values);
+        // sync length
+        a = current.length;
+        b = val.slice(0, a);
+        b.length < a && (b = b.concat(current.slice(b.length)));
+        // refine values
+        a = [this._valueMin(), this._valueMax()];
+        return b.map(function(val, index) {
+            // rise lower border
+            index > 0 && (a[0] = b[index - 1]);
+            // apply filter
+            val < a[0] && (val = a[0]);
+            val > a[1] && (val = a[1]);
+            return val;
+        });
+    },
 
 	_setOption: function( key, value ) {
 		var i,
