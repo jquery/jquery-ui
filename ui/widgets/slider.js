@@ -189,63 +189,79 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseDestroy();
 	},
 
-	_mouseCapture: function( event ) {
-		var position, normValue, distance, closestHandle, index, allowed, offset, mouseOverHandle,
-			that = this,
-			o = this.options;
-
-		if ( o.disabled ) {
-			return false;
-		}
-
-		this.elementSize = {
-			width: this.element.outerWidth(),
-			height: this.element.outerHeight()
-		};
-		this.elementOffset = this.element.offset();
-
-		position = { x: event.pageX, y: event.pageY };
-		normValue = this._normValueFromMouse( position );
-		distance = this._valueMax() - this._valueMin() + 1;
-		this.handles.each( function( i ) {
-			var thisDistance = Math.abs( normValue - that.values( i ) );
-			if ( ( distance > thisDistance ) ||
-				( distance === thisDistance &&
-					( i === that._lastChangedValue || that.values( i ) === o.min ) ) ) {
-				distance = thisDistance;
-				closestHandle = $( this );
-				index = i;
-			}
-		} );
-
-		allowed = this._start( event, index );
-		if ( allowed === false ) {
-			return false;
-		}
-		this._mouseSliding = true;
-
-		this._handleIndex = index;
-
-		this._addClass( closestHandle, null, "ui-state-active" );
-		closestHandle.trigger( "focus" );
-
-		offset = closestHandle.offset();
-		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
-		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
-			top: event.pageY - offset.top -
-				( closestHandle.height() / 2 ) -
-				( parseInt( closestHandle.css( "borderTopWidth" ), 10 ) || 0 ) -
-				( parseInt( closestHandle.css( "borderBottomWidth" ), 10 ) || 0 ) +
-				( parseInt( closestHandle.css( "marginTop" ), 10 ) || 0 )
-		};
-
-		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
-			this._slide( event, index, normValue );
-		}
-		this._animateOff = true;
-		return true;
-	},
+    _mouseCapture: function(event) { // {{{
+        var a, b, c, d;
+        ////
+        // prepare
+        if (this.options.disabled ) {
+            return false;
+        }
+        this.elementSize = {
+            width:  this.element.outerWidth(),
+            height: this.element.outerHeight()
+        };
+        this.elementOffset = this.element.offset();
+        // determine value at pointer position
+        a = this._normValueFromMouse({
+            x: event.pageX,
+            y: event.pageY
+        });
+        // determine maximal distance on the scale
+        b = this._valueMax() - this._valueMin() + 1;
+        // determine nearest handle index
+        c = 0;
+        this.options.values.forEach(function(val, index) {
+            // determine distance
+            d = Math.abs(a - val);
+            // check
+            if (d < b)
+            {
+                // closer distance found
+                b = d;
+                c = index;
+            }
+            else if (Math.abs(d - b) < 0.0001 && val < a)
+            {
+                // it's equal with the previous,
+                // we may switch to current if it can reach the point
+                c = index;
+            }
+        });
+        // start capture
+        if (!this._start(event, c)) {
+            return false;
+        }
+        this._mouseSliding = true;
+        this._handleIndex  = c;
+        // set focus on handle
+        b = this.handles.eq(c);
+        b.trigger("focus");
+        // set style
+        this._addClass(b, null, "ui-state-active");
+        // TODO: rev
+        // ..
+        d = b.offset();
+        this._clickOffset = !$(event.target).parents().addBack().is(".ui-slider-handle") ?
+            {
+                left: 0,
+                top:  0
+            } :
+            {
+                left: event.pageX - d.left - (b.width() / 2),
+                top:  event.pageY - d.top -
+                      (b.height() / 2 ) -
+                      (parseInt(b.css("borderTopWidth" ), 10) || 0) -
+                      (parseInt(b.css("borderBottomWidth"), 10) || 0) +
+                      (parseInt(b.css("marginTop"), 10) || 0)
+            };
+        // slide that handle
+        if (!this.handles.hasClass("ui-state-hover")) {
+            this._slide(event, c, a);
+        }
+        this._animateOff = true;
+        return true;
+    },
+    // }}}
 
 	_mouseStart: function() {
 		return true;
