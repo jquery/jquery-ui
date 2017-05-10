@@ -69,8 +69,22 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	numPages: 5,
 
 	_create: function() {
-        var a, b;
-        ////
+		var a, b;
+
+		// initialize values
+		// default set
+		a = [this._valueMin(), this._valueMax()];
+		// check configuration
+		if ((b = this.options.values) && jQuery.isArray(b))
+		{
+			// determine current values (limit == 2)
+			a = (this.options.range === true || b.length > 1) ?
+				a : a.slice(0, 1);
+			// refine
+			a = this._valueRefined(b, a);
+		}
+		this.options.values = a;
+
 		this._keySliding = false;
 		this._mouseSliding = false;
 		this._animateOff = true;
@@ -80,18 +94,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._calculateNewMax();
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
 			"ui-widget ui-widget-content" );
-        ////
-        // refine values
-        // default
-        a = this.options.range === true ?
-            [this._valueMin(), this._valueMax()] : [this._valueMin()];
-        // outside
-        if ((b = this.options.values) && jQuery.isArray(b)) {
-            a = this._valueRefined(b, a);
-        }
-        this.options.values = a;
-        ////
-        // refresh slider
 		this._refresh();
 		this._animateOff = false;
 	},
@@ -189,76 +191,81 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._mouseDestroy();
 	},
 
-    _mouseCapture: function(event) { // {{{
-        var a, b, c, d;
-        ////
-        // prepare
-        if (this.options.disabled ) {
-            return false;
-        }
-        this.elementSize = {
-            width:  this.element.outerWidth(),
-            height: this.element.outerHeight()
-        };
-        this.elementOffset = this.element.offset();
-        // determine value at pointer position
-        a = this._normValueFromMouse({
-            x: event.pageX,
-            y: event.pageY
-        });
-        // determine maximal distance on the scale
-        b = this._valueMax() - this._valueMin() + 1;
-        // determine handle index
-        c = 0;
-        d = "ui-state-hover";
-        if (this.handles.hasClass(d))
-        {
-            // #9553
-            // determine hovered handle
-            while (c < this.handles.length && !this.handles.eq(c).hasClass(d)) {
-                c++;
-            }
-        }
-        else
-        {
-            // determine nearest handle
-            this.options.values.forEach(function(val, index) {
-                // determine distance
-                d = Math.abs(a - val);
-                // check
-                if (d < b)
-                {
-                    // closer distance found
-                    b = d;
-                    c = index;
-                }
-                else if (Math.abs(d - b) < 0.0001 && val < a)
-                {
-                    // it's equal with the previous,
-                    // we may switch to current if it can reach the point
-                    c = index;
-                }
-            });
-        }
-        // start capture
-        if (!this._start(event, c)) {
-            return false;
-        }
-        this._mouseSliding = true;
-        this._handleIndex  = c;
-        // set focus on handle
-        b = this.handles.eq(c);
-        b.trigger("focus");
-        // set style
-        this._addClass(b, null, "ui-state-active");
-        // slide that handle
-        if (!this.handles.hasClass("ui-state-hover")) {
-            this._slide(event, c, a);
-        }
-        this._animateOff = true;
-        return true;
-    },
-    // }}}
+	_mouseCapture: function(event) {
+		var a, b, c, d;
+
+		// prepare
+		if (this.options.disabled) {
+			return false;
+		}
+		this.elementSize = {
+			width:  this.element.outerWidth(),
+			height: this.element.outerHeight()
+		};
+		this.elementOffset = this.element.offset();
+
+		// determine value at pointer position
+		a = this._normValueFromMouse({
+			x: event.pageX,
+			y: event.pageY
+		});
+
+		// determine maximal distance on the scale
+		b = this._valueMax() - this._valueMin() + 1;
+
+		// determine handle index
+		c = 0;
+		d = "ui-state-hover";
+		if (this.handles.hasClass(d))
+		{
+			// determine hovered handle
+			while (c < this.handles.length && !this.handles.eq(c).hasClass(d)) {
+				c++;
+			}
+		}
+		else
+		{
+			// determine nearest handle
+			this.options.values.forEach(function(val, index) {
+				// determine value distance
+				d = Math.abs(a - val);
+				// check it
+				if (d < b)
+				{
+					// closer distance found
+					b = d;
+					c = index;
+				}
+				else if (Math.abs(d - b) < 0.0001 && val < a)
+				{
+					// it's equal with the previous,
+					// we may switch to current if it can reach the point
+					c = index;
+				}
+			});
+		}
+
+		// start capture
+		if (!this._start(event, c)) {
+			return false;
+		}
+		this._mouseSliding = true;
+		this._handleIndex  = c;
+
+		// set focus on handle
+		b = this.handles.eq(c);
+		b.trigger("focus");
+
+		// set style
+		this._addClass(b, null, "ui-state-active");
+
+		// slide that handle
+		if (!this.handles.hasClass("ui-state-hover")) {
+			this._slide(event, c, a);
+		}
+		this._animateOff = true;
+		return true;
+	},
 
 	_mouseStart: function() {
 		return true;
@@ -297,13 +304,13 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valueTotal,
 			valueMouse;
 
-        if ( this.orientation === "horizontal" ) {
-            pixelTotal = this.elementSize.width;
-            pixelMouse = position.x - this.elementOffset.left;
-        } else {
-            pixelTotal = this.elementSize.height;
-            pixelMouse = position.y - this.elementOffset.top;
-        }
+		if ( this.orientation === "horizontal" ) {
+			pixelTotal = this.elementSize.width;
+			pixelMouse = position.x - this.elementOffset.left;
+		} else {
+			pixelTotal = this.elementSize.height;
+			pixelMouse = position.y - this.elementOffset.top;
+		}
 
 		percentMouse = ( pixelMouse / pixelTotal );
 		if ( percentMouse > 1 ) {
@@ -403,64 +410,66 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return this._value();
 	},
 
-    values: function(index, val) {
-        var a, b, c;
-        ////
-        // multiple values
-        // return
-        if (!(a = arguments.length)) {
-            return this._values();
-        }
-        // set
-        if (a && jQuery.isArray(arguments[0]))
-        {
-            // refine and store values
-            a = this.options.values;
-            this._valueRefined(arguments[0]).forEach(function(val, index) {
-                a[index] = this._trimAlignValue(val);
-                this._change(null, index);
-            }, this);
-            // refresh
-            this._refreshValue();
-            return;
-        }
-        // single value
-        // prepare
-        index = (index > 0 && index <= 2) ? (0 + index) : 0;
-        // return
-        if (a === 1) {
-            return this._hasMultipleValues() ?
-                this._values(index) :
-                this.value();
-        }
-        // set
-        this.options.values[index] = this._trimAlignValue(val);
-        this._refreshValue();
-        this._change(null, index);
-    },
+	values: function(index, val) {
+		var a, b, c;
 
-    // issue #3762
-    // returns refined values based on current
-    _valueRefined: function(val, current) {
-        var a, b;
-        ////
-        // prepare current values
-        !current && (current = this.options.values);
-        // sync length
-        a = current.length;
-        b = val.slice(0, a);
-        b.length < a && (b = b.concat(current.slice(b.length)));
-        // refine values
-        a = [this._valueMin(), this._valueMax()];
-        return b.map(function(val, index) {
-            // rise lower border
-            index > 0 && (a[0] = b[index - 1]);
-            // apply filter
-            val < a[0] && (val = a[0]);
-            val > a[1] && (val = a[1]);
-            return val;
-        });
-    },
+		// multiple values
+		// return
+		if (!(a = arguments.length)) {
+			return this._values();
+		}
+		// set
+		if (a && jQuery.isArray(arguments[0]))
+		{
+			// refine and store values
+			a = this.options.values;
+			this._valueRefined(arguments[0]).forEach(function(val, index) {
+				a[index] = this._trimAlignValue(val);
+				this._change(null, index);
+			}, this);
+			// refresh
+			this._refreshValue();
+			return;
+		}
+
+		// single value
+		// prepare parameter
+		index = (index > 0 && index <= 2) ? (0 + index) : 0;
+		// return
+		if (a === 1) {
+			return this._hasMultipleValues() ?
+				this._values(index) :
+				this.value();
+		}
+		// set
+		this.options.values[index] = this._trimAlignValue(val);
+		this._refreshValue();
+		this._change(null, index);
+	},
+
+	// returns refined values based on current which is always correct
+	_valueRefined: function(val, current) {
+		var a, b;
+
+		// prepare current values
+		!current && (current = this.options.values);
+
+		// sync length
+		a = current.length;
+		b = val.slice(0, a);
+		b.length < a && (b = b.concat(current.slice(b.length)));
+
+		// refine values
+		a = [this._valueMin(), this._valueMax()];
+		return b.map(function(val, index) {
+			// rise lower border
+			index > 0 && (a[0] = b[index - 1]);
+			// apply filter
+			val < a[0] && (val = a[0]);
+			val > a[1] && (val = a[1]);
+			return val;
+		});
+	},
 
 	_setOption: function( key, value ) {
 		var i,

@@ -2,4 +2,3 @@ dist
 bower_components
 node_modules
 .sizecache.json
-*.swp
