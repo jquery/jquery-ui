@@ -27,6 +27,10 @@
 return $.fn.labels = function() {
 	var ancestor, selector, id, labels, ancestors;
 
+	if ( !this.length ) {
+		return this.pushStack( [] );
+	}
+
 	// Check control.labels first
 	if ( this[ 0 ].labels && this[ 0 ].labels.length ) {
 		return this.pushStack( this[ 0 ].labels );
