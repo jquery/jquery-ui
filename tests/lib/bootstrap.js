@@ -172,8 +172,8 @@ function migrateUrl() {
 		}
 	}
 
-	// Load the jQuery 1.7 fixes, if necessary
-	if ( parseFloat( parseUrl().jquery ) === 1.7 ) {
+	// Load the jQuery 1.x fixes, if necessary
+	if ( parseFloat( parseUrl().jquery ) < 2 ) {
 		modules.push( "ui/jquery-1-7" );
 	}
 
