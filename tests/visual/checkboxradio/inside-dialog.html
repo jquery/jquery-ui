@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Checkbox Inside Dialog</title>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="dialog">
+	$(function() {
+		$( "#checkbox" ).checkboxradio();
+		$( "#dialog" ).dialog();
+	});
+	</script>
+</head>
+<body>
+
+<p>WHAT: A modal dialog containing a checkbox.</p>
+<p>EXPECTED: Checkbox icon is correct when checked.</p>
+
+<div id="dialog" title="Dialog containing checkbox">
+	<input type="checkbox" id="checkbox" />
+	<label for="checkbox">Click me</label>
+</div>
+
+</body>
+</html>
