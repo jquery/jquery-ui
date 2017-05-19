@@ -20,6 +20,7 @@
 	overflow: auto;
 	overflow-x: hidden;
 	padding-bottom: 1px;
+	max-height: 20em;
 }
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
 	font-size: 1em;
