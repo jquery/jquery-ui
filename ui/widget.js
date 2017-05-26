@@ -32,7 +32,7 @@ var widgetSlice = Array.prototype.slice;
 $.cleanData = ( function( orig ) {
 	return function( elems ) {
 		var events, elem, i;
-		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
+		for ( i = 0; !!( elem = elems[ i ] ); i++ ) {
 
 			// Only trigger remove when necessary to save time
 			events = $._data( elem, "events" );
