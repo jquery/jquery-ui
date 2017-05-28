@@ -54,6 +54,7 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 		this._addClass( "ui-selectable" );
 
 		this.dragged = false;
+		this.refreshed = false;
 
 		// Cache selectee children based on filter
 		this.refresh = function() {
@@ -80,8 +81,12 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 					unselecting: $this.hasClass( "ui-unselecting" )
 				} );
 			} );
+
+			this.refreshed = true;
 		};
-		this.refresh();
+		if ( this.options.autoRefresh ) {
+			this.refresh();
+		}
 
 		this._mouseInit();
 
@@ -103,6 +108,10 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 
 		if ( this.options.disabled ) {
 			return;
+		}
+
+		if ( !this.refreshed ) {
+			this.refresh();
 		}
 
 		this.selectees = $( options.filter, this.element[ 0 ] );
