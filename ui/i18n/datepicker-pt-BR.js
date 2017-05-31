@@ -31,7 +31,7 @@ datepicker.regional[ "pt-BR" ] = {
 		"Sábado"
 	],
 	dayNamesShort: [ "Dom","Seg","Ter","Qua","Qui","Sex","Sáb" ],
-	dayNamesMin: [ "Dom","Seg","Ter","Qua","Qui","Sex","Sáb" ],
+	dayNamesMin: [ "Do","2a","3a","4a","5a","6a","Sá" ],
 	weekHeader: "Sm",
 	dateFormat: "dd/mm/yy",
 	firstDay: 0,
