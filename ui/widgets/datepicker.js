@@ -121,6 +121,8 @@ function Datepicker() {
 		yearRange: "c-10:c+10", // Range of years to display in drop-down,
 			// either relative to today's year (-nn:+nn), relative to currently displayed year
 			// (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
+		yearOrder: "asc", // asc means ascending order in year select, desc means
+			// descending order in year select
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
 		selectOtherMonths: false, // True to allow selection of dates in other months, false for unselectable
 		showWeek: false, // True to show week of the year, false to not show it
@@ -1844,9 +1846,11 @@ $.extend( Datepicker.prototype, {
 		var inMinYear, inMaxYear, month, years, thisYear, determineYear, year, endYear,
 			changeMonth = this._get( inst, "changeMonth" ),
 			changeYear = this._get( inst, "changeYear" ),
+			yearsAsc = this._get( inst, "yearOrder" ) === "asc",
 			showMonthAfterYear = this._get( inst, "showMonthAfterYear" ),
 			html = "<div class='ui-datepicker-title'>",
-			monthHtml = "";
+			monthHtml = "",
+			yearHtml = "";
 
 		// Month selection
 		if ( secondary || !changeMonth ) {
@@ -1889,14 +1893,19 @@ $.extend( Datepicker.prototype, {
 				endYear = Math.max( year, determineYear( years[ 1 ] || "" ) );
 				year = ( minDate ? Math.max( year, minDate.getFullYear() ) : year );
 				endYear = ( maxDate ? Math.min( endYear, maxDate.getFullYear() ) : endYear );
-				inst.yearshtml += "<select class='ui-datepicker-year' data-handler='selectYear' data-event='change'>";
 				for ( ; year <= endYear; year++ ) {
-					inst.yearshtml += "<option value='" + year + "'" +
+					yearHtml = "<option value='" + year + "'" +
 						( year === drawYear ? " selected='selected'" : "" ) +
 						">" + year + "</option>";
+					if ( yearsAsc ) {
+						inst.yearshtml = inst.yearshtml + yearHtml;
+					} else {
+						inst.yearshtml = yearHtml + inst.yearshtml;
+					}
 				}
-				inst.yearshtml += "</select>";
-
+				inst.yearshtml = "<select class='ui-datepicker-year' data-handler='selectYear' data-event='change'>" +
+					inst.yearshtml +
+					"</select>";
 				html += inst.yearshtml;
 				inst.yearshtml = null;
 			}
