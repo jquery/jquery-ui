@@ -43,7 +43,7 @@
 	}
 }( function( $ ) {
 
-$.widget( "ui.dialog", {
+return $.widget( "ui.dialog", {
 	version: "@VERSION",
 	options: {
 		appendTo: "body",
@@ -58,6 +58,9 @@ $.widget( "ui.dialog", {
 		draggable: true,
 		hide: null,
 		height: "auto",
+		icons: {
+			title: null
+		},
 		maxHeight: null,
 		maxWidth: null,
 		minHeight: 150,
@@ -446,6 +449,8 @@ $.widget( "ui.dialog", {
 		this._addClass( uiDialogTitle, "ui-dialog-title" );
 		this._title( uiDialogTitle );
 
+		this._titleIcon( this.options.icons.title );
+
 		this.uiDialogTitlebar.prependTo( this.uiDialog );
 
 		this.uiDialog.attr( {
@@ -458,6 +463,20 @@ $.widget( "ui.dialog", {
 			title.text( this.options.title );
 		} else {
 			title.html( "&#160;" );
+		}
+	},
+
+	_titleIcon: function( icon ) {
+		if ( this.uiDialogTitleIcon ) {
+			this.uiDialogTitleIcon.remove();
+			delete this.uiDialogTitleIcon;
+		}
+
+		if ( icon ) {
+			this.uiDialogTitleIcon = $( "<span>" );
+			this._addClass( this.uiDialogTitleIcon, "ui-dialog-title-icon",
+				"ui-icon " + this.options.icons.title );
+			this.uiDialogTitleIcon.prependTo( this.uiDialogTitlebar );
 		}
 	},
 
@@ -742,6 +761,10 @@ $.widget( "ui.dialog", {
 			}
 		}
 
+		if ( key === "icons" ) {
+			this._titleIcon( value.title );
+		}
+
 		if ( key === "position" ) {
 			this._position();
 		}
@@ -909,31 +932,5 @@ $.widget( "ui.dialog", {
 		}
 	}
 } );
-
-// DEPRECATED
-// TODO: switch return back to widget declaration at top of file when this is removed
-if ( $.uiBackCompat !== false ) {
-
-	// Backcompat for dialogClass option
-	$.widget( "ui.dialog", $.ui.dialog, {
-		options: {
-			dialogClass: ""
-		},
-		_createWrapper: function() {
-			this._super();
-			this.uiDialog.addClass( this.options.dialogClass );
-		},
-		_setOption: function( key, value ) {
-			if ( key === "dialogClass" ) {
-				this.uiDialog
-					.removeClass( this.options.dialogClass )
-					.addClass( value );
-			}
-			this._superApply( arguments );
-		}
-	} );
-}
-
-return $.ui.dialog;
 
 } ) );

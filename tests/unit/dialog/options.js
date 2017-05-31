@@ -269,6 +269,30 @@ QUnit.test( "height", function( assert ) {
 	element.remove();
 } );
 
+QUnit.test( "icons", function( assert ) {
+	assert.expect( 5 );
+
+	var element = $( "<div></div>" ).dialog( {
+		icons: {
+			title: "ui-icon-disk"
+		}
+	} );
+	var titleBar = element.dialog( "widget" ).find( ".ui-dialog-titlebar" );
+
+	var icon = titleBar.find( ".ui-dialog-title-icon" );
+	assert.equal( 1, icon.length, "title icon exists after init" );
+	assert.hasClasses( icon, "ui-icon-disk", "correct icon after init" );
+
+	element.dialog( "option", "icons.title", null );
+	icon = titleBar.find( ".ui-dialog-title-icon" );
+	assert.equal( 0, icon.length, "title icon removed when null" );
+
+	element.dialog( "option", "icons.title", "ui-icon-gear" );
+	icon = titleBar.find( ".ui-dialog-title-icon" );
+	assert.equal( 1, icon.length, "title icon exists after update" );
+	assert.hasClasses( icon, "ui-icon-gear", "correct icon after update" );
+} );
+
 QUnit.test( "maxHeight", function( assert ) {
 	assert.expect( 3 );
 

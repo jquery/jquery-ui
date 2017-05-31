@@ -18,6 +18,9 @@ common.testWidget( "dialog", {
 		draggable: true,
 		height: "auto",
 		hide: null,
+		icons: {
+			title: null
+		},
 		maxHeight: null,
 		maxWidth: null,
 		minHeight: 150,
