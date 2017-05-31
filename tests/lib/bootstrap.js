@@ -174,7 +174,7 @@ function migrateUrl() {
 
 	// Load the jQuery fixes, if necessary
 	if ( parseFloat( parseUrl().jquery ) < 3 ) {
-		modules.push( "ui/jquery-1-7" );
+		modules.unshift( "ui/jquery-1-7" );
 	}
 
 	requireTests( modules, noBackCompat );
