@@ -33,7 +33,7 @@ datepicker.regional.pt = {
 	dayNamesMin: [ "Dom","Seg","Ter","Qua","Qui","Sex","Sáb" ],
 	weekHeader: "Sem",
 	dateFormat: "dd/mm/yy",
-	firstDay: 0,
+	firstDay: 1,
 	isRTL: false,
 	showMonthAfterYear: false,
 	yearSuffix: "" };
