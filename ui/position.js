@@ -314,6 +314,7 @@ $.fn.position = function( options ) {
 	} );
 };
 
+$.ui = $.ui || {};
 $.ui.position = {
 	fit: {
 		left: function( position, data ) {
