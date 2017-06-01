@@ -134,6 +134,21 @@ function migrateUrl() {
 	return url;
 }
 
+function migrateUrl() {
+	var jqueryVersion = parseUrl().jquery || "1.12.4";
+	var url;
+
+	if ( jqueryVersion === "git" ) {
+		url = "http://code.jquery.com/jquery-migrate-git";
+	} else if ( jqueryVersion[ 0 ] === "3" ) {
+		url = "../../../external/jquery-migrate-3.0.0/jquery-migrate";
+	} else {
+		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
+	}
+
+	return url;
+}
+
 // Load test modules based on data attributes
 // - data-modules: list of test modules to load
 // - data-widget: A widget to load test modules for
