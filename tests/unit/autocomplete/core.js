@@ -429,4 +429,33 @@ QUnit.test( "Close on click outside when focus remains", function( assert ) {
 	} );
 } );
 
+QUnit.test( "Use source label on keyboard navigation (#15130)", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
+	var element = $( "#autocomplete" ).autocomplete( {
+			source: [
+				{ label: "ActionScript", value: 123 },
+				{ label: "AppleScript", value: 456 },
+				{ label: "Javascript", value: 789 }
+			],
+			delay: 0
+		} );
+
+	element.autocomplete( "search", "a" );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	setTimeout( function() {
+		assert.equal( element.val(), "ActionScript", "Keydown input value matches source label" );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		setTimeout( function() {
+			assert.equal( element.val(), "AppleScript", "Keydown input value matches next source label" );
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			setTimeout( function() {
+				assert.equal( element.val(), "Javascript", "Enter key value matches source label" );
+				ready();
+			} );
+		} );
+	} );
+} );
+
 } );

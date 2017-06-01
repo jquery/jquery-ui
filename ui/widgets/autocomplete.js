@@ -253,16 +253,16 @@ $.widget( "ui.autocomplete", {
 				}
 
 				item = ui.item.data( "ui-autocomplete-item" );
+				label = ui.item.attr( "aria-label" ) || item.label || item.value;
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
 
 					// use value to match what will end up in the input, if it was a key event
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
-						this._value( item.value );
+						this._value( label );
 					}
 				}
 
 				// Announce the value in the liveRegion
-				label = ui.item.attr( "aria-label" ) || item.value;
 				if ( label && $.trim( label ).length ) {
 					this.liveRegion.children().hide();
 					$( "<div>" ).text( label ).appendTo( this.liveRegion );
@@ -287,7 +287,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
-					this._value( item.value );
+					this._value( ui.item.attr( "aria-label" ) || item.label || item.value );
 				}
 
 				// reset the term after the select event
