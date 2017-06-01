@@ -64,11 +64,15 @@ $.widget( "ui.tabs", {
 		var rhash = /#.*$/;
 
 		return function( anchor ) {
-			var anchorUrl, locationUrl;
+			var anchorUrl, locationUrl, baseTag;
 
 			anchorUrl = anchor.href.replace( rhash, "" );
-			locationUrl = location.href.replace( rhash, "" );
-
+			baseTag = document.getElementsByTagName("base");
+			if (baseTag.length > 0)
+				locationUrl = baseTag[0].href.replace( rhash, "" );
+			else
+				locationUrl = location.href.replace( rhash, "" );
+			
 			// Decoding may throw an error if the URL isn't UTF-8 (#9518)
 			try {
 				anchorUrl = decodeURIComponent( anchorUrl );
