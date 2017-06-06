@@ -863,6 +863,7 @@ $.extend( Datepicker.prototype, {
 				origyearshtml = inst.yearshtml = null;
 			}, 0 );
 		}
+		inst.drawMonth += this._get( inst, "showCurrentAtPos" );
 	},
 
 	// #6694 - don't focus the input if it's already focused
