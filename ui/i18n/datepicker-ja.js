@@ -17,6 +17,7 @@ datepicker.regional.ja = {
 	prevText: "&#x3C;前",
 	nextText: "次&#x3E;",
 	currentText: "今日",
+	weekHeaderText: "週番号",
 	monthNames: [ "1月","2月","3月","4月","5月","6月",
 	"7月","8月","9月","10月","11月","12月" ],
 	monthNamesShort: [ "1月","2月","3月","4月","5月","6月",

@@ -17,6 +17,7 @@ datepicker.regional[ "zh-TW" ] = {
 	prevText: "&#x3C;上個月",
 	nextText: "下個月&#x3E;",
 	currentText: "今天",
+	weekHeaderText: "週數",
 	monthNames: [ "一月","二月","三月","四月","五月","六月",
 	"七月","八月","九月","十月","十一月","十二月" ],
 	monthNamesShort: [ "一月","二月","三月","四月","五月","六月",

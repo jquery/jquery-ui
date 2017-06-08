@@ -17,6 +17,7 @@ datepicker.regional.tr = {
 	prevText: "&#x3C;geri",
 	nextText: "ileri&#x3e",
 	currentText: "bugün",
+	weekHeaderText: "Hafta numarası",
 	monthNames: [ "Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
 	"Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık" ],
 	monthNamesShort: [ "Oca","Şub","Mar","Nis","May","Haz",

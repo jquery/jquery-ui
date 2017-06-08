@@ -17,6 +17,7 @@ datepicker.regional.lv = {
 	prevText: "Iepr.",
 	nextText: "Nāk.",
 	currentText: "Šodien",
+	weekHeaderText: "Nedēļa numurs",
 	monthNames: [ "Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs",
 	"Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Mai","Jūn",

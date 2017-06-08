@@ -17,6 +17,7 @@ datepicker.regional.sk = {
 	prevText: "&#x3C;Predchádzajúci",
 	nextText: "Nasledujúci&#x3E;",
 	currentText: "Dnes",
+	weekHeaderText: "Číslo týždňa",
 	monthNames: [ "január","február","marec","apríl","máj","jún",
 	"júl","august","september","október","november","december" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Máj","Jún",

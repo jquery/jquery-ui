@@ -19,6 +19,7 @@ datepicker.regional.fr = {
 	prevText: "Précédent",
 	nextText: "Suivant",
 	currentText: "Aujourd'hui",
+	weekHeaderText: "numéro de la semaine",
 	monthNames: [ "janvier", "février", "mars", "avril", "mai", "juin",
 		"juillet", "août", "septembre", "octobre", "novembre", "décembre" ],
 	monthNamesShort: [ "janv.", "févr.", "mars", "avr.", "mai", "juin",

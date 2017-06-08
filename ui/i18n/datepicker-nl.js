@@ -17,6 +17,7 @@ datepicker.regional.nl = {
 	prevText: "←",
 	nextText: "→",
 	currentText: "Vandaag",
+	weekHeaderText: "Wochennummer",
 	monthNames: [ "januari", "februari", "maart", "april", "mei", "juni",
 	"juli", "augustus", "september", "oktober", "november", "december" ],
 	monthNamesShort: [ "jan", "feb", "mrt", "apr", "mei", "jun",

@@ -17,6 +17,7 @@ datepicker.regional.da = {
 	prevText: "&#x3C;Forrige",
 	nextText: "Næste&#x3E;",
 	currentText: "Idag",
+	weekHeaderText: "Uge nummer",
 	monthNames: [ "Januar","Februar","Marts","April","Maj","Juni",
 	"Juli","August","September","Oktober","November","December" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Maj","Jun",

@@ -17,6 +17,7 @@ datepicker.regional.pl = {
 	prevText: "&#x3C;Poprzedni",
 	nextText: "Następny&#x3E;",
 	currentText: "Dziś",
+	weekHeaderText: "Numer tygodnia",
 	monthNames: [ "Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec",
 	"Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień" ],
 	monthNamesShort: [ "Sty","Lu","Mar","Kw","Maj","Cze",

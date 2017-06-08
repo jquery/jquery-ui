@@ -17,6 +17,7 @@ datepicker.regional.vi = {
 	prevText: "&#x3C;Trước",
 	nextText: "Tiếp&#x3E;",
 	currentText: "Hôm nay",
+	weekHeaderText: "Số tuần",
 	monthNames: [ "Tháng Một", "Tháng Hai", "Tháng Ba", "Tháng Tư", "Tháng Năm", "Tháng Sáu",
 	"Tháng Bảy", "Tháng Tám", "Tháng Chín", "Tháng Mười", "Tháng Mười Một", "Tháng Mười Hai" ],
 	monthNamesShort: [ "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",

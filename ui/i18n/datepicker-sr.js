@@ -17,6 +17,7 @@ datepicker.regional.sr = {
 	prevText: "&#x3C;",
 	nextText: "&#x3E;",
 	currentText: "Данас",
+	weekHeaderText: "број седмице",
 	monthNames: [ "Јануар","Фебруар","Март","Април","Мај","Јун",
 	"Јул","Август","Септембар","Октобар","Новембар","Децембар" ],
 	monthNamesShort: [ "Јан","Феб","Мар","Апр","Мај","Јун",

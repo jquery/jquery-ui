@@ -17,6 +17,7 @@ datepicker.regional.tj = {
 	prevText: "&#x3c;Қафо",
 	nextText: "Пеш&#x3e;",
 	currentText: "Имрӯз",
+	weekHeaderText: "",
 	monthNames: [ "Январ","Феврал","Март","Апрел","Май","Июн",
 	"Июл","Август","Сентябр","Октябр","Ноябр","Декабр" ],
 	monthNamesShort: [ "Янв","Фев","Мар","Апр","Май","Июн",

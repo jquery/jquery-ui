@@ -17,6 +17,7 @@ datepicker.regional.de = {
 	prevText: "&#x3C;Zurück",
 	nextText: "Vor&#x3E;",
 	currentText: "Heute",
+	weekHeaderText: "Wochennummer",
 	monthNames: [ "Januar","Februar","März","April","Mai","Juni",
 	"Juli","August","September","Oktober","November","Dezember" ],
 	monthNamesShort: [ "Jan","Feb","Mär","Apr","Mai","Jun",

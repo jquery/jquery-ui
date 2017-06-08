@@ -17,6 +17,7 @@ datepicker.regional.sq = {
 	prevText: "&#x3C;mbrapa",
 	nextText: "Përpara&#x3E;",
 	currentText: "sot",
+	weekHeaderText: "Numri i javës",
 	monthNames: [ "Janar","Shkurt","Mars","Prill","Maj","Qershor",
 	"Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor" ],
 	monthNamesShort: [ "Jan","Shk","Mar","Pri","Maj","Qer",

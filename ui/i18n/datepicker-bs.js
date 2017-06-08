@@ -17,6 +17,7 @@ datepicker.regional.bs = {
 	prevText: "&#x3C;",
 	nextText: "&#x3E;",
 	currentText: "Danas",
+	weekHeaderText: "Broj sedmice",
 	monthNames: [ "Januar","Februar","Mart","April","Maj","Juni",
 	"Juli","August","Septembar","Oktobar","Novembar","Decembar" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Maj","Jun",

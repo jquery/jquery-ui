@@ -18,6 +18,7 @@ datepicker.regional.sl = {
 	prevText: "&#x3C;Prejšnji",
 	nextText: "Naslednji&#x3E;",
 	currentText: "Trenutni",
+	weekHeaderText: "številka tedna",
 	monthNames: [ "Januar","Februar","Marec","April","Maj","Junij",
 	"Julij","Avgust","September","Oktober","November","December" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Maj","Jun",
