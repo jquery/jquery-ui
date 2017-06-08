@@ -17,6 +17,7 @@ datepicker.regional[ "it-CH" ] = {
 	prevText: "&#x3C;Prec",
 	nextText: "Succ&#x3E;",
 	currentText: "Oggi",
+	weekHeaderText: "numero di settimane",
 	monthNames: [ "Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
 		"Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre" ],
 	monthNamesShort: [ "Gen","Feb","Mar","Apr","Mag","Giu",

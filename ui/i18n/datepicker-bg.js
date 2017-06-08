@@ -18,6 +18,7 @@ datepicker.regional.bg = {
 	nextText: "напред&#x3E;",
 	nextBigText: "&#x3E;&#x3E;",
 	currentText: "днес",
+	weekHeaderText: "Номер на седмицата",
 	monthNames: [ "Януари","Февруари","Март","Април","Май","Юни",
 	"Юли","Август","Септември","Октомври","Ноември","Декември" ],
 	monthNamesShort: [ "Яну","Фев","Мар","Апр","Май","Юни",

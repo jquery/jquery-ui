@@ -17,6 +17,7 @@ datepicker.regional.af = {
 	prevText: "Vorige",
 	nextText: "Volgende",
 	currentText: "Vandag",
+	weekHeaderText: "Weeknommer",
 	monthNames: [ "Januarie","Februarie","Maart","April","Mei","Junie",
 	"Julie","Augustus","September","Oktober","November","Desember" ],
 	monthNamesShort: [ "Jan", "Feb", "Mrt", "Apr", "Mei", "Jun",

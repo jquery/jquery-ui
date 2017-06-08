@@ -17,6 +17,7 @@ datepicker.regional.ms = {
 	prevText: "&#x3C;Sebelum",
 	nextText: "Selepas&#x3E;",
 	currentText: "hari ini",
+	weekHeaderText: "nombor minggu",
 	monthNames: [ "Januari","Februari","Mac","April","Mei","Jun",
 	"Julai","Ogos","September","Oktober","November","Disember" ],
 	monthNamesShort: [ "Jan","Feb","Mac","Apr","Mei","Jun",

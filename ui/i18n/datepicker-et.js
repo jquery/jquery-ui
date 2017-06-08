@@ -17,6 +17,7 @@ datepicker.regional.et = {
 	prevText: "Eelnev",
 	nextText: "Järgnev",
 	currentText: "Täna",
+	weekHeaderText: "Nädala number",
 	monthNames: [ "Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni",
 	"Juuli","August","September","Oktoober","November","Detsember" ],
 	monthNamesShort: [ "Jaan", "Veebr", "Märts", "Apr", "Mai", "Juuni",

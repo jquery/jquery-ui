@@ -17,6 +17,7 @@ datepicker.regional.lt = {
 	prevText: "&#x3C;Atgal",
 	nextText: "Pirmyn&#x3E;",
 	currentText: "Šiandien",
+	weekHeaderText: "savaitė numeris",
 	monthNames: [ "Sausis","Vasaris","Kovas","Balandis","Gegužė","Birželis",
 	"Liepa","Rugpjūtis","Rugsėjis","Spalis","Lapkritis","Gruodis" ],
 	monthNamesShort: [ "Sau","Vas","Kov","Bal","Geg","Bir",

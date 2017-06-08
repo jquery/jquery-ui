@@ -16,6 +16,7 @@ datepicker.regional.eu = {
 	prevText: "&#x3C;Aur",
 	nextText: "Hur&#x3E;",
 	currentText: "Gaur",
+	weekHeaderText: "",
 	monthNames: [ "urtarrila","otsaila","martxoa","apirila","maiatza","ekaina",
 		"uztaila","abuztua","iraila","urria","azaroa","abendua" ],
 	monthNamesShort: [ "urt.","ots.","mar.","api.","mai.","eka.",

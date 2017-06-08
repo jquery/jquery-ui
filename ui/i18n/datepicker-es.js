@@ -17,6 +17,7 @@ datepicker.regional.es = {
 	prevText: "&#x3C;Ant",
 	nextText: "Sig&#x3E;",
 	currentText: "Hoy",
+	weekHeaderText: "número de la semana",
 	monthNames: [ "enero","febrero","marzo","abril","mayo","junio",
 	"julio","agosto","septiembre","octubre","noviembre","diciembre" ],
 	monthNamesShort: [ "ene","feb","mar","abr","may","jun",

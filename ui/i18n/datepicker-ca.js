@@ -17,6 +17,7 @@ datepicker.regional.ca = {
 	prevText: "Anterior",
 	nextText: "Següent",
 	currentText: "Avui",
+	weekHeaderText: "",
 	monthNames: [ "gener","febrer","març","abril","maig","juny",
 	"juliol","agost","setembre","octubre","novembre","desembre" ],
 	monthNamesShort: [ "gen","feb","març","abr","maig","juny",

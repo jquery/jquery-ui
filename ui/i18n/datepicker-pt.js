@@ -16,6 +16,7 @@ datepicker.regional.pt = {
 	prevText: "Anterior",
 	nextText: "Seguinte",
 	currentText: "Hoje",
+	weekHeaderText: "Número da semana",
 	monthNames: [ "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
 	"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro" ],
 	monthNamesShort: [ "Jan","Fev","Mar","Abr","Mai","Jun",

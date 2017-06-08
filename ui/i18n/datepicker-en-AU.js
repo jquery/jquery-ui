@@ -17,6 +17,7 @@ datepicker.regional[ "en-AU" ] = {
 	prevText: "Prev",
 	nextText: "Next",
 	currentText: "Today",
+	weekHeaderText: "Week number",
 	monthNames: [ "January","February","March","April","May","June",
 	"July","August","September","October","November","December" ],
 	monthNamesShort: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",

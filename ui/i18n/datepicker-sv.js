@@ -17,6 +17,7 @@ datepicker.regional.sv = {
 	prevText: "&#xAB;Förra",
 	nextText: "Nästa&#xBB;",
 	currentText: "Idag",
+	weekHeaderText: "Vecka nummer",
 	monthNames: [ "januari","februari","mars","april","maj","juni",
 	"juli","augusti","september","oktober","november","december" ],
 	monthNamesShort: [ "jan.","feb.","mars","apr.","maj","juni",

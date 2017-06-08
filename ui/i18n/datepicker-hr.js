@@ -17,6 +17,7 @@ datepicker.regional.hr = {
 	prevText: "&#x3C;",
 	nextText: "&#x3E;",
 	currentText: "Danas",
+	weekHeaderText: "broj tjedan",
 	monthNames: [ "Siječanj","Veljača","Ožujak","Travanj","Svibanj","Lipanj",
 	"Srpanj","Kolovoz","Rujan","Listopad","Studeni","Prosinac" ],
 	monthNamesShort: [ "Sij","Velj","Ožu","Tra","Svi","Lip",

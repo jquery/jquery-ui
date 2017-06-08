@@ -17,6 +17,7 @@ datepicker.regional[ "pt-BR" ] = {
 	prevText: "&#x3C;Anterior",
 	nextText: "Próximo&#x3E;",
 	currentText: "Hoje",
+	weekHeaderText: "",
 	monthNames: [ "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
 	"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro" ],
 	monthNamesShort: [ "Jan","Fev","Mar","Abr","Mai","Jun",

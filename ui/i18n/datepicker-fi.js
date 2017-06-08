@@ -17,6 +17,7 @@ datepicker.regional.fi = {
 	prevText: "&#xAB;Edellinen",
 	nextText: "Seuraava&#xBB;",
 	currentText: "Tänään",
+	weekHeaderText: "viikon numero",
 	monthNames: [ "Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu",
 	"Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu" ],
 	monthNamesShort: [ "Tammi","Helmi","Maalis","Huhti","Touko","Kesä",

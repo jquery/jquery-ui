@@ -18,6 +18,7 @@ datepicker.regional.fa = {
 	prevText: "&#x3C;قبلی",
 	nextText: "بعدی&#x3E;",
 	currentText: "امروز",
+	weekHeaderText: "تعداد هفته",
 	monthNames: [
 		"ژانویه",
 		"فوریه",

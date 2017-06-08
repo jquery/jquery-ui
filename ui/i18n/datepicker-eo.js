@@ -17,6 +17,7 @@ datepicker.regional.eo = {
 	prevText: "&#x3C;Anta",
 	nextText: "Sekv&#x3E;",
 	currentText: "Nuna",
+	weekHeaderText: "semajno nombro",
 	monthNames: [ "Januaro","Februaro","Marto","Aprilo","Majo","Junio",
 	"Julio","Aŭgusto","Septembro","Oktobro","Novembro","Decembro" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Maj","Jun",

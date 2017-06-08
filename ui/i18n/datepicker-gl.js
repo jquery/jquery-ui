@@ -17,6 +17,7 @@ datepicker.regional.gl = {
 	prevText: "&#x3C;Ant",
 	nextText: "Seg&#x3E;",
 	currentText: "Hoxe",
+	weekHeaderText: "número de semana",
 	monthNames: [ "Xaneiro","Febreiro","Marzo","Abril","Maio","Xuño",
 	"Xullo","Agosto","Setembro","Outubro","Novembro","Decembro" ],
 	monthNamesShort: [ "Xan","Feb","Mar","Abr","Mai","Xuñ",

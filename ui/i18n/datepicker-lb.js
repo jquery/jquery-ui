@@ -17,6 +17,7 @@ datepicker.regional.lb = {
 	prevText: "Zréck",
 	nextText: "Weider",
 	currentText: "Haut",
+	weekHeaderText: "Woch Nummer",
 	monthNames: [ "Januar","Februar","Mäerz","Abrëll","Mee","Juni",
 	"Juli","August","September","Oktober","November","Dezember" ],
 	monthNamesShort: [ "Jan", "Feb", "Mäe", "Abr", "Mee", "Jun",

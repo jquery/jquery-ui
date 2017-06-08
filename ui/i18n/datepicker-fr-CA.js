@@ -16,6 +16,7 @@ datepicker.regional[ "fr-CA" ] = {
 	prevText: "Précédent",
 	nextText: "Suivant",
 	currentText: "Aujourd'hui",
+	weekHeaderText: "numéro de la semaine",
 	monthNames: [ "janvier", "février", "mars", "avril", "mai", "juin",
 		"juillet", "août", "septembre", "octobre", "novembre", "décembre" ],
 	monthNamesShort: [ "janv.", "févr.", "mars", "avril", "mai", "juin",

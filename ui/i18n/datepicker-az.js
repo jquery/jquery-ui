@@ -17,6 +17,7 @@ datepicker.regional.az = {
 	prevText: "&#x3C;Geri",
 	nextText: "İrəli&#x3E;",
 	currentText: "Bugün",
+	weekHeaderText: "həftə sayı",
 	monthNames: [ "Yanvar","Fevral","Mart","Aprel","May","İyun",
 	"İyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr" ],
 	monthNamesShort: [ "Yan","Fev","Mar","Apr","May","İyun",

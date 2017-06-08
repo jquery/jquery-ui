@@ -17,6 +17,7 @@ datepicker.regional[ "fr-CH" ] = {
 	prevText: "&#x3C;Préc",
 	nextText: "Suiv&#x3E;",
 	currentText: "Courant",
+	weekHeaderText: "numéro de la semaine",
 	monthNames: [ "janvier", "février", "mars", "avril", "mai", "juin",
 		"juillet", "août", "septembre", "octobre", "novembre", "décembre" ],
 	monthNamesShort: [ "janv.", "févr.", "mars", "avril", "mai", "juin",

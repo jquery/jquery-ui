@@ -20,6 +20,7 @@ datepicker.regional.ro = {
 	prevText: "&#xAB; Luna precedentă",
 	nextText: "Luna următoare &#xBB;",
 	currentText: "Azi",
+	weekHeaderText: "Numărul săptămânii",
 	monthNames: [ "Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie",
 	"Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie" ],
 	monthNamesShort: [ "Ian", "Feb", "Mar", "Apr", "Mai", "Iun",

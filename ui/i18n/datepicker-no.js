@@ -18,6 +18,7 @@ datepicker.regional.no = {
 	prevText: "&#xAB;Forrige",
 	nextText: "Neste&#xBB;",
 	currentText: "I dag",
+	weekHeaderText: "Uke nummer",
 	monthNames: [
 		"januar",
 		"februar",

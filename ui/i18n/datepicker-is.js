@@ -17,6 +17,7 @@ datepicker.regional.is = {
 	prevText: "&#x3C; Fyrri",
 	nextText: "Næsti &#x3E;",
 	currentText: "Í dag",
+	weekHeaderText: "vikunúmer",
 	monthNames: [ "Janúar","Febrúar","Mars","Apríl","Maí","Júní",
 	"Júlí","Ágúst","September","Október","Nóvember","Desember" ],
 	monthNamesShort: [ "Jan","Feb","Mar","Apr","Maí","Jún",
