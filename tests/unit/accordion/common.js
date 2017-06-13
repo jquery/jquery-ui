@@ -21,6 +21,7 @@ common.testWidget( "accordion", {
 			"activeHeader": "ui-icon-triangle-1-s",
 			"header": "ui-icon-triangle-1-e"
 		},
+		textDir: null,
 
 		// Callbacks
 		activate: null,

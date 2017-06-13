@@ -49,7 +49,8 @@ $.widget( "ui.button", {
 		icon: null,
 		iconPosition: "beginning",
 		label: null,
-		showLabel: true
+		showLabel: true,
+		textDir: null
 	},
 
 	_getCreateOptions: function() {
@@ -96,6 +97,14 @@ $.widget( "ui.button", {
 				this.element.html( this.options.label );
 			}
 		}
+
+		if ( this.options.textDir ) {
+			this._applyTextDir( this.element );
+			if ( this.hasTitle ) {
+				this.element.attr( "title", this._applyTextDir( this.element.attr( "title" ) ) );
+			}
+		}
+
 		this._addClass( "ui-button", "ui-widget" );
 		this._setOption( "disabled", this.options.disabled );
 		this._enhance();
@@ -218,6 +227,9 @@ $.widget( "ui.button", {
 			options.showLabel = true;
 		}
 		this._super( options );
+		if ( ( this.options.textDir && options.label ) || options.textDir ) {
+			this._applyTextDir( this.element );
+		}
 	},
 
 	_setOption: function( key, value ) {

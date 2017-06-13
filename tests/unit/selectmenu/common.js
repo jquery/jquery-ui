@@ -19,6 +19,7 @@ common.testWidget( "selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
+		textDir: null,
 		width: false,
 
 		// Callbacks

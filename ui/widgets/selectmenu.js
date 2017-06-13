@@ -60,6 +60,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			collision: "none"
 		},
 		width: false,
+		textDir: null,
 
 		// Callbacks
 		change: null,
@@ -318,6 +319,10 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		var that = this,
 			currentOptgroup = "";
 
+		if ( this.options.textDir ) {
+			ul.css( "text-align", ul.css( "direction" ) === "rtl" ? "right" : "left" );
+		}
+
 		$.each( items, function( index, item ) {
 			var li;
 
@@ -359,6 +364,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 
 	_setText: function( element, value ) {
 		if ( value ) {
+			if ( this.options.textDir ) {
+				value = this._applyTextDir( value );
+			}
 			element.text( value );
 		} else {
 			element.html( "&#160;" );

@@ -50,6 +50,7 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		textDir: null,
 
 		// Callbacks
 		change: null,
@@ -89,6 +90,26 @@ $.widget( "ui.autocomplete", {
 
 		this._addClass( "ui-autocomplete-input" );
 		this.element.attr( "autocomplete", "off" );
+		if ( this.options.textDir ) {
+			var textDir = this._getTextDir( this._value() );
+			this.element.css( "direction", textDir );
+			if ( this.options.textDir === "auto" ) {
+				this.element.css( "text-align", textDir === "rtl" ? "right" : "left" );
+				this._on( this.element, {
+					keyup: function( e ) {
+						var keyCode = $.ui.keyCode;
+						if ( e.keyCode < keyCode.PAGE_UP || e.keyCode >= keyCode.DELETE ) {
+							var textDir = this._getTextDir( this._value() );
+							this.element.css( "direction", textDir )
+								.css( "text-align", textDir === "rtl" ? "right" : "left" );
+						}
+					}
+				} );
+			} else {
+				this.element.css( "text-align",
+					this.element.css( "direction" ) === "rtl" ? "right" : "left" );
+			}
+		}
 
 		this._on( this.element, {
 			keydown: function( event ) {
@@ -288,6 +309,9 @@ $.widget( "ui.autocomplete", {
 
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
 					this._value( item.value );
+					if ( this.options.textDir === "auto" ) {
+						this.element.css( "direction", this._getTextDir( item.value ) );
+					}
 				}
 
 				// reset the term after the select event
@@ -521,6 +545,15 @@ $.widget( "ui.autocomplete", {
 	_suggest: function( items ) {
 		var ul = this.menu.element.empty();
 		this._renderMenu( ul, items );
+
+		if ( this.options.textDir ) {
+			ul.css( "text-align", ul.css( "direction" ) === "rtl" ? "right" : "left" );
+			var that = this;
+			ul.children().each( function( i, li ) {
+				li.style.direction = that._getTextDir( li.textContent );
+			} );
+		}
+
 		this.isNewMenu = true;
 		this.menu.refresh();
 

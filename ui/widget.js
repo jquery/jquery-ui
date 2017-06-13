@@ -697,6 +697,32 @@ $.Widget.prototype = {
 		return !( $.isFunction( callback ) &&
 			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
 			event.isDefaultPrevented() );
+	},
+
+	_getTextDir: function( text ) {
+		if ( this.options.textDir === "auto" ) {
+
+			// Look for first strong (either English or Arabic/Hebrew) character
+			// Resolve text direction accordingly ("rtl" for Arabic/Hebrew, "ltr" otherwise)
+			var matcher = /[A-Za-z\u05d0-\u065f\u066a-\u06ef\u06fa-\u07ff\ufb1d-\ufdff\ufe70-\ufefc]/.exec( text );
+			return ( matcher && ( matcher[ 0 ] > "z" ) ) ? "rtl" : "ltr";
+		}
+		return this.options.textDir;
+	},
+
+	_applyTextDir: function( param ) {
+		if ( typeof param === "string" ) {
+			param = param.replace( /[\u202A\u202B\u202C]/g, "" );
+
+			// Unicode directional characters: 202A and 202B used to enforce text direction
+			// 202C - POP formatter closing directional segment
+			return ( this._getTextDir( param ) === "rtl" ? "\u202B" : "\u202A" ) + param + "\u202C";
+		} else if ( param.jquery ) {
+				var isField = param.is( "input" ) || param.is( "textarea" );
+				param.css( "direction", this._getTextDir( isField ? param.val() : param.text() ) );
+		} else if ( param.nodeType === 1 ) {
+				param.style.direction = this._getTextDir( param.textContent );
+		}
 	}
 };
 

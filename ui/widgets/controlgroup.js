@@ -45,7 +45,8 @@ return $.widget( "ui.controlgroup", {
 			"checkboxradio": "input[type='checkbox'], input[type='radio']",
 			"selectmenu": "select",
 			"spinner": ".ui-spinner-input"
-		}
+		},
+		textDir: null
 	},
 
 	_create: function() {
@@ -92,8 +93,11 @@ return $.widget( "ui.controlgroup", {
 					if ( element.children( ".ui-controlgroup-label-contents" ).length ) {
 						return;
 					}
-					element.contents()
-						.wrapAll( "<span class='ui-controlgroup-label-contents'></span>" );
+					var dir = that.options.textDir ?
+						"dir='" + that._getTextDir( element.text() ) + "' " : "";
+
+					element.contents().wrapAll(
+						"<span " + dir + "class='ui-controlgroup-label-contents'></span>" );
 				} );
 				that._addClass( labels, null, "ui-widget ui-widget-content ui-state-default" );
 				childWidgets = childWidgets.concat( labels.get() );
@@ -137,6 +141,9 @@ return $.widget( "ui.controlgroup", {
 					if ( instance ) {
 						instanceOptions.classes =
 							that._resolveClassesValues( instanceOptions.classes, instance );
+					}
+					if ( that.options.textDir ) {
+						instanceOptions.textDir = that.options.textDir;
 					}
 					element[ widget ]( instanceOptions );
 

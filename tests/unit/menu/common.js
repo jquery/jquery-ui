@@ -17,6 +17,7 @@ common.testWidget( "menu", {
 			at: "right top"
 		},
 		role: "menu",
+		textDir: null,
 
 		// Callbacks
 		blur: null,
