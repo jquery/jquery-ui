@@ -702,8 +702,8 @@ $.Widget.prototype = {
 	_getTextDir: function( text ) {
 		if ( this.options.textDir === "auto" ) {
 
-			// Look for first strong (either English or Arabic/Hebrew) character
-			// Resolve text direction accordingly ("rtl" for Arabic/Hebrew, "ltr" otherwise)
+			// Look for first strong (either English or Arabic/Hebrew) character.
+			// Resolve text direction accordingly ("rtl" for Arabic/Hebrew, "ltr" otherwise).
 			var matcher = /[A-Za-z\u05d0-\u065f\u066a-\u06ef\u06fa-\u07ff\ufb1d-\ufdff\ufe70-\ufefc]/.exec( text );
 			return ( matcher && ( matcher[ 0 ] > "z" ) ) ? "rtl" : "ltr";
 		}
@@ -714,8 +714,8 @@ $.Widget.prototype = {
 		if ( typeof param === "string" ) {
 			param = param.replace( /[\u202A\u202B\u202C]/g, "" );
 
-			// Unicode directional characters: 202A and 202B used to enforce text direction
-			// 202C - POP formatter closing directional segment
+			// Unicode directional characters: 202A and 202B used to enforce text direction.
+			// 202C - POP formatter closing directional segment.
 			return ( this._getTextDir( param ) === "rtl" ? "\u202B" : "\u202A" ) + param + "\u202C";
 		} else if ( param.jquery ) {
 				var isField = param.is( "input" ) || param.is( "textarea" );
