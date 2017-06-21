@@ -578,7 +578,9 @@ $.extend( Datepicker.prototype, {
 		var inst = this._getInst( target );
 		if ( inst ) {
 			this._setDate( inst, date );
-			this._updateDatepicker( inst );
+			if ( inst === this._curInst ) {
+				this._updateDatepicker( inst );
+			}
 			this._updateAlternate( inst );
 		}
 	},
