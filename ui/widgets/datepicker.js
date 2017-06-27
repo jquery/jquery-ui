@@ -149,7 +149,8 @@ function Datepicker() {
 		constrainInput: true, // The input is constrained by the current date format
 		showButtonPanel: false, // True to show button panel, false to not show it
 		autoSize: false, // True to size the input for the date format, false to leave as is
-		disabled: false // The initial disabled state
+		disabled: false, // The initial disabled state
+		buttonGroup: false // eabled for bootstrap 3 btn-group option
 	};
 	$.extend( this._defaults, this.regional[ "" ] );
 	this.regional.en = $.extend( true, {}, this.regional[ "" ] );
@@ -232,7 +233,7 @@ $.extend( Datepicker.prototype, {
 
 	/* Make attachments based on settings. */
 	_attachments: function( input, inst ) {
-		var showOn, buttonText, buttonImage,
+		var showOn, buttonText, buttonImage, buttonGroup,
 			appendText = this._get( inst, "appendText" ),
 			isRTL = this._get( inst, "isRTL" );
 
@@ -257,12 +258,17 @@ $.extend( Datepicker.prototype, {
 		if ( showOn === "button" || showOn === "both" ) { // pop-up date picker when button clicked
 			buttonText = this._get( inst, "buttonText" );
 			buttonImage = this._get( inst, "buttonImage" );
+			buttonGroup = this._get( inst, "buttonGroup" );
 			inst.trigger = $( this._get( inst, "buttonImageOnly" ) ?
-				$( "<img/>" ).addClass( this._triggerClass ).
-					attr( { src: buttonImage, alt: buttonText, title: buttonText } ) :
-				$( "<button type='button'></button>" ).addClass( this._triggerClass ).
-					html( !buttonImage ? buttonText : $( "<img/>" ).attr(
-					{ src:buttonImage, alt:buttonText, title:buttonText } ) ) );
+					$( "<img/>" ).addClass( this._triggerClass ).
+							attr( { src: buttonImage, alt: buttonText, title: buttonText } ) :
+					buttonGroup ?
+							$( "<span class='input-group-btn'></span>" ).
+									html( $( "<button type='button'></button>" ).addClass( this._triggerClass ).addClass( "btn btn-default" ).
+										html( !buttonImage ? buttonText : $( "<img/>" ).attr( { src:buttonImage, alt:buttonText, title:buttonText } ) ) ) :
+							$( "<button type='button'></button>" ).addClass( this._triggerClass ).
+									html( !buttonImage ? buttonText : $( "<img/>" ).
+											attr( { src:buttonImage, alt:buttonText, title:buttonText } ) ) );
 			input[ isRTL ? "before" : "after" ]( inst.trigger );
 			inst.trigger.on( "click", function() {
 				if ( $.datepicker._datepickerShowing && $.datepicker._lastInput === input[ 0 ] ) {
