@@ -263,8 +263,8 @@ $.extend( Datepicker.prototype, {
 					$( "<img/>" ).addClass( this._triggerClass ).
 							attr( { src: buttonImage, alt: buttonText, title: buttonText } ) :
 					buttonGroup ?
-							$( "<span class='input-group-btn'></span>").
-									html( $( "<button type='button'></button>" ).addClass( this._triggerClass ).addClass( 'btn btn-default' ) .
+							$( "<span class='input-group-btn'></span>" ).
+									html( $( "<button type='button'></button>" ).addClass( this._triggerClass ).addClass( "btn btn-default" ).
 										html( !buttonImage ? buttonText : $( "<img/>" ).attr( { src:buttonImage, alt:buttonText, title:buttonText } ) ) ) :
 							$( "<button type='button'></button>" ).addClass( this._triggerClass ).
 									html( !buttonImage ? buttonText : $( "<img/>" ).
