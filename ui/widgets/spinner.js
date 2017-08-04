@@ -361,9 +361,20 @@ $.widget( "ui.spinner", {
 	},
 
 	_precisionOf: function( num ) {
-		var str = num.toString(),
-			decimal = str.indexOf( "." );
-		return decimal === -1 ? 0 : str.length - decimal - 1;
+
+		// Use regex to pull out decimal digits and power in scientific notation
+		var match = num.toString().match( /(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/ );
+		if ( !match ) {
+			return 0;
+		}
+
+		// - digits to right of decimal are kept in match[ 1 ], if any
+		var decimalPlaces = match[ 1 ] ? match[ 1 ].length : 0;
+
+		// - power in scientific notation is kept in match[ 2 ], if any
+		var expPow = match[ 2 ] ? Number( match[ 2 ] ) : 0;
+
+		return Math.max( 0, decimalPlaces - expPow );
 	},
 
 	_adjustValue: function( value ) {
