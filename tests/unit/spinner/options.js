@@ -255,6 +255,26 @@ QUnit.test( "step, 0.7", function( assert ) {
 	assert.equal( element.val(), "0.7", "stepUp" );
 } );
 
+QUnit.test( "step, 1e-7", function( assert ) {
+	assert.expect( 1 );
+	var element = $( "#spin" ).val( 0 ).spinner( {
+		step: 1e-7
+	} );
+
+	element.spinner( "stepUp" );
+	assert.equal( element.val(), "1e-7", "stepUp" );
+} );
+
+QUnit.test( "step, 1e+21", function( assert ) {
+	assert.expect( 1 );
+	var element = $( "#spin" ).val( 0 ).spinner( {
+		step: 1e+21
+	} );
+
+	element.spinner( "stepUp" );
+	assert.equal( element.val(), "1e+21", "stepUp" );
+} );
+
 QUnit.test( "step, string", function( assert ) {
 	assert.expect( 2 );
 	var element = $( "#spin" ).val( 0 ).spinner( {
