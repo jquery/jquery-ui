@@ -265,7 +265,7 @@ QUnit.test( "source, local object array, only labels", function( assert ) {
 		{ label: "java", value: null },
 		{ label: "php", value: null },
 		{ label: "coldfusion", value: "" },
-		{ label: "javascript", value: "" },
+		{ label: "javascript" },
 		{ label: "clojure" }
 	] );
 } );

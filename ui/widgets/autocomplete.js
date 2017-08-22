@@ -513,7 +513,7 @@ $.widget( "ui.autocomplete", {
 			}
 			return $.extend( {}, item, {
 				label: item.label || item.value,
-				value: item.value || item.label
+				value: item.value || item.value === "" ? item.value : item.label
 			} );
 		} );
 	},
