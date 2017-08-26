@@ -48,12 +48,16 @@ QUnit.test( "widget", function( assert ) {
 } );
 
 QUnit.test( "value", function( assert ) {
-	assert.expect( 3 );
+	assert.expect( 4 );
 
 	this.element.calendar( "value", "1/1/14" );
 	assert.ok( this.element.find( "button[data-ui-calendar-timestamp]:first" )
 			.hasClass( "ui-state-active" ),
-		"first day marked as selected"
+		"first day marked as selected (class)"
+	);
+	assert.equal( this.element.find( "button[data-ui-calendar-timestamp]:first" )
+			.attr( "aria-pressed" ), "true",
+		"first day marked as selected (attribute)"
 	);
 	assert.equal( this.element.calendar( "value" ), "1/1/14", "getter" );
 

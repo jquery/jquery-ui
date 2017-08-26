@@ -227,11 +227,13 @@ return $.widget( "ui.calendar", {
 
 		this.grid.attr( "aria-activedescendant", id );
 
-		this._removeClass( this.grid.find( "button." + state ), null, state );
+		this._removeClass(
+			this.grid.find( "button." + state ).attr( "aria-pressed", false ),
+			null,
+			state
+		);
 		this._addClass( button, null, state );
-
-		this.grid.find( "td" ).attr( "aria-selected", false );
-		button.parent( "td" ).attr( "aria-selected", true );
+		button.attr( "aria-pressed", true );
 
 		return button;
 	},
@@ -464,9 +466,7 @@ return $.widget( "ui.calendar", {
 	_buildDayCell: function( day ) {
 		var content = "",
 			dateObject = new Date( day.timestamp ),
-			attributes = [
-				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'"
-			],
+			attributes = [],
 			selectable = ( day.selectable && this._isValid( dateObject ) );
 
 		if ( day.render ) {
@@ -491,12 +491,13 @@ return $.widget( "ui.calendar", {
 
 	_buildDayElement: function( day, selectable ) {
 		var attributes, content,
-			classes = [ "ui-state-default" ];
+			classes = [ "ui-state-default" ],
+			current = this._isCurrent( day );
 
 		if ( day === this._getDate() && selectable ) {
 			classes.push( "ui-state-focus" );
 		}
-		if ( this._isCurrent( day ) ) {
+		if ( current ) {
 			classes.push( "ui-state-active" );
 		}
 		if ( day.today ) {
@@ -509,6 +510,7 @@ return $.widget( "ui.calendar", {
 		attributes = " class='" + classes.join( " " ) + "'";
 		if ( selectable ) {
 			attributes += " tabindex='-1' data-ui-calendar-timestamp='" + day.timestamp + "'";
+			attributes += "aria-pressed='" + ( current ? true : false ) + "'";
 		} else {
 			attributes += " disabled='disabled'";
 		}
