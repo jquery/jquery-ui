@@ -228,7 +228,7 @@ return $.widget( "ui.calendar", {
 		this.grid.attr( "aria-activedescendant", id );
 
 		this._removeClass(
-			this.grid.find( "button." + state ).attr( "aria-pressed", false ),
+			this.grid.find( "button." + state ).removeAttr( "aria-pressed" ),
 			null,
 			state
 		);
@@ -490,7 +490,8 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildDayElement: function( day, selectable ) {
-		var attributes, content,
+		var content,
+			attributes = "",
 			classes = [ "ui-state-default" ],
 			current = this._isCurrent( day );
 
@@ -499,6 +500,7 @@ return $.widget( "ui.calendar", {
 		}
 		if ( current ) {
 			classes.push( "ui-state-active" );
+			attributes += " aria-pressed='true'";
 		}
 		if ( day.today ) {
 			classes.push( "ui-state-highlight" );
@@ -507,10 +509,9 @@ return $.widget( "ui.calendar", {
 			classes.push( day.extraClasses.split( " " ) );
 		}
 
-		attributes = " class='" + classes.join( " " ) + "'";
+		attributes += " class='" + classes.join( " " ) + "'";
 		if ( selectable ) {
 			attributes += " tabindex='-1' data-ui-calendar-timestamp='" + day.timestamp + "'";
-			attributes += "aria-pressed='" + ( current ? true : false ) + "'";
 		} else {
 			attributes += " disabled='disabled'";
 		}
