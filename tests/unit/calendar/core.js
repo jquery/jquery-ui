@@ -401,7 +401,7 @@ QUnit.test( "mouse", function( assert ) {
 } );
 
 QUnit.test( "ARIA", function( assert ) {
-	assert.expect( 12 );
+	assert.expect( 11 );
 
 	var id = this.element.attr( "id" ),
 		headerId = id + "-title",
@@ -431,8 +431,6 @@ QUnit.test( "ARIA", function( assert ) {
 
 	assert.equal( table.children( "tbody" ).attr( "role" ), "presentation",
 		"Table body role attribute" );
-	assert.equal( table.find( "tbody td" ).first().attr( "aria-describedby" ),
-		monthLabelId, "Table body cell ARIA describedby attribute" );
 } );
 
 } );

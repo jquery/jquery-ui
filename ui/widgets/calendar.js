@@ -461,11 +461,8 @@ return $.widget( "ui.calendar", {
 	_buildDayCell: function( day ) {
 		var content = "",
 			dateObject = new Date( day.timestamp ),
-			dayName = this._calendarDateOptions.formatWeekdayFull( dateObject ),
 			attributes = [
-				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'",
-				"aria-label='" + dayName + ", " + this._format( dateObject ) + "'",
-				"aria-describedby='" + this._getGridId() + "-month-label'"
+				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'"
 			],
 			selectable = ( day.selectable && this._isValid( dateObject ) );
 
