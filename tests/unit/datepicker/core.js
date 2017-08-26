@@ -35,7 +35,7 @@ QUnit.test( "base structure", function( assert ) {
 
 	var that = this;
 
-	this.element.focus();
+	this.element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 
 	setTimeout( function() {
 		assert.ok( that.widget.is( ":visible" ), "Datepicker visible" );
@@ -59,7 +59,7 @@ QUnit.test( "Keyboard handling: focus", function( assert ) {
 
 	this.element.focus();
 	setTimeout( function() {
-		assert.ok( that.widget.is( ":visible" ), "Datepicker opens when receiving focus" );
+		assert.ok( !that.widget.is( ":visible" ), "Datepicker keeps closed when receiving focus" );
 		ready();
 	}, 100 );
 } );

@@ -63,7 +63,6 @@ var widget = $.widget( "ui.datepicker", {
 		"icons", "labels", "locale", "max", "min", "numberOfMonths", "showWeek", "refresh" ],
 
 	_create: function() {
-		this.suppressExpandOnFocus = false;
 		this._parse = new Globalize( this.options.locale ).dateParser( this.options.dateFormat );
 
 		if ( $.type( this.options.max ) === "string" ) {
@@ -165,27 +164,12 @@ var widget = $.widget( "ui.datepicker", {
 				this.refresh();
 			}
 		},
-		mousedown: function( event ) {
+		mousedown: function() {
 			if ( this.isOpen ) {
-				this.suppressExpandOnFocus = true;
 				this.close();
 				return;
 			}
-			this.open( event );
 			clearTimeout( this.closeTimer );
-		},
-		focus: function( event ) {
-			if ( !this.suppressExpandOnFocus && !this.isOpen ) {
-				this._delay( function() {
-					this.open( event );
-				} );
-			}
-			this._delay( function() {
-				this.suppressExpandOnFocus = false;
-			}, 100 );
-		},
-		blur: function() {
-			this.suppressExpandOnFocus = false;
 		},
 		change: function( event ) {
 			this._trigger( "change", event, {
@@ -265,7 +249,6 @@ var widget = $.widget( "ui.datepicker", {
 	},
 
 	_focusTrigger: function() {
-		this.suppressExpandOnFocus = true;
 		this.element.focus();
 	},
 
