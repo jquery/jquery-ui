@@ -227,8 +227,13 @@ return $.widget( "ui.calendar", {
 
 		this.grid.attr( "aria-activedescendant", id );
 
-		this._removeClass( this.grid.find( "button." + state ), null, state );
+		this._removeClass(
+			this.grid.find( "button." + state ).removeAttr( "aria-pressed" ),
+			null,
+			state
+		);
 		this._addClass( button, null, state );
+		button.attr( "aria-pressed", true );
 
 		return button;
 	},
@@ -367,7 +372,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildTitle: function() {
-		var title = $( "<div>", { role: "alert", id: this._getGridId() + "-month-label" } ),
+		var title = $( "<div>", { role: "status", id: this._getGridId() + "-month-label" } ),
 			month = this._buildTitleMonth(),
 			year = this._buildTitleYear();
 
@@ -408,7 +413,7 @@ return $.widget( "ui.calendar", {
 	_buildGridHeading: function() {
 		var head = $( "<thead role='presentation'>" ),
 			week = $( "<th>" ),
-			row = $( "<tr role='row'>" ),
+			row = $( "<tr>" ),
 			i = 0,
 			weekDayLength = this._getViewDate().weekdays().length,
 			weekdays = this._getViewDate().weekdays();
@@ -461,13 +466,7 @@ return $.widget( "ui.calendar", {
 	_buildDayCell: function( day ) {
 		var content = "",
 			dateObject = new Date( day.timestamp ),
-			dayName = this._calendarDateOptions.formatWeekdayFull( dateObject ),
-			attributes = [
-				"role='gridcell'",
-				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'",
-				"aria-label='" + dayName + ", " + this._format( dateObject ) + "'",
-				"aria-describedby='" + this._getGridId() + "-month-label'"
-			],
+			attributes = [],
 			selectable = ( day.selectable && this._isValid( dateObject ) );
 
 		if ( day.render ) {
@@ -491,14 +490,17 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildDayElement: function( day, selectable ) {
-		var attributes, content,
-			classes = [ "ui-state-default" ];
+		var content,
+			attributes = "",
+			classes = [ "ui-state-default" ],
+			current = this._isCurrent( day );
 
 		if ( day === this._getDate() && selectable ) {
 			classes.push( "ui-state-focus" );
 		}
-		if ( this._isCurrent( day ) ) {
+		if ( current ) {
 			classes.push( "ui-state-active" );
+			attributes += " aria-pressed='true'";
 		}
 		if ( day.today ) {
 			classes.push( "ui-state-highlight" );
@@ -507,7 +509,7 @@ return $.widget( "ui.calendar", {
 			classes.push( day.extraClasses.split( " " ) );
 		}
 
-		attributes = " class='" + classes.join( " " ) + "'";
+		attributes += " class='" + classes.join( " " ) + "'";
 		if ( selectable ) {
 			attributes += " tabindex='-1' data-ui-calendar-timestamp='" + day.timestamp + "'";
 		} else {
