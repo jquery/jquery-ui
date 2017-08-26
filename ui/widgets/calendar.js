@@ -367,7 +367,7 @@ return $.widget( "ui.calendar", {
 	},
 
 	_buildTitle: function() {
-		var title = $( "<div>", { role: "alert", id: this._getGridId() + "-month-label" } ),
+		var title = $( "<div>", { role: "status", id: this._getGridId() + "-month-label" } ),
 			month = this._buildTitleMonth(),
 			year = this._buildTitleYear();
 

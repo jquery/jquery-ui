@@ -414,7 +414,7 @@ QUnit.test( "ARIA", function( assert ) {
 
 	assert.equal( this.element.find( "#" + headerId ).attr( "role" ), "header",
 		"Header role attribute" );
-	assert.equal( this.element.find( "#" + monthLabelId ).attr( "role" ), "alert",
+	assert.equal( this.element.find( "#" + monthLabelId ).attr( "role" ), "status",
 		"Header month label role attribute" );
 
 	assert.equal( table.attr( "role" ), "grid", "Table role attribute" );
