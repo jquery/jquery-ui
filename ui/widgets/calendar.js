@@ -230,6 +230,9 @@ return $.widget( "ui.calendar", {
 		this._removeClass( this.grid.find( "button." + state ), null, state );
 		this._addClass( button, null, state );
 
+		this.grid.find( "td" ).attr( "aria-selected", false );
+		button.parent( "td" ).attr( "aria-selected", true );
+
 		return button;
 	},
 
