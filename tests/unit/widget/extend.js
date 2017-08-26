@@ -5,7 +5,7 @@ define( [
 ], function( QUnit, $ ) {
 
 QUnit.test( "$.widget.extend()", function( assert ) {
-	assert.expect( 27 );
+	assert.expect( 28 );
 
 	var ret, empty, optionsWithLength, optionsWithDate, myKlass, customObject, optionsWithCustomObject, nullUndef,
 		target, recursive, obj, input, output,
@@ -108,6 +108,11 @@ QUnit.test( "$.widget.extend()", function( assert ) {
 	assert.deepEqual( input, output, "don't clone arrays" );
 	input.key[ 0 ] = 10;
 	assert.deepEqual( input, output, "don't clone arrays" );
+
+	input = Object.create( null );
+	input.foo = "f";
+	output = $.widget.extend( {}, input );
+	assert.deepEqual( input, output, "Object with no prototype" );
 } );
 
 } );

@@ -24,7 +24,7 @@
 	}
 } ( function( $ ) {
 
-return $.extend( $.expr[ ":" ], {
+return $.extend( $.expr.pseudos, {
 	tabbable: function( element ) {
 		var tabIndex = $.attr( element, "tabindex" ),
 			hasTabindex = tabIndex != null;

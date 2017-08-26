@@ -142,7 +142,7 @@ QUnit.test( "uniqueId / removeUniqueId", function( assert ) {
 } );
 
 QUnit.test( "Labels", function( assert ) {
-	assert.expect( 2 );
+	assert.expect( 3 );
 
 	var expected = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ];
 	var dom = $( "#labels-fragment" );
@@ -165,6 +165,8 @@ QUnit.test( "Labels", function( assert ) {
 	// Detach the dom to test on a fragment
 	dom.detach();
 	testLabels( "document fragments" );
+
+	assert.equal( $().labels().length, 0, "No element" );
 } );
 
 ( function() {
