@@ -408,7 +408,7 @@ return $.widget( "ui.calendar", {
 	_buildGridHeading: function() {
 		var head = $( "<thead role='presentation'>" ),
 			week = $( "<th>" ),
-			row = $( "<tr role='row'>" ),
+			row = $( "<tr>" ),
 			i = 0,
 			weekDayLength = this._getViewDate().weekdays().length,
 			weekdays = this._getViewDate().weekdays();
@@ -463,7 +463,6 @@ return $.widget( "ui.calendar", {
 			dateObject = new Date( day.timestamp ),
 			dayName = this._calendarDateOptions.formatWeekdayFull( dateObject ),
 			attributes = [
-				"role='gridcell'",
 				"aria-selected='" + ( this._isCurrent( day ) ? true : false ) + "'",
 				"aria-label='" + dayName + ", " + this._format( dateObject ) + "'",
 				"aria-describedby='" + this._getGridId() + "-month-label'"
