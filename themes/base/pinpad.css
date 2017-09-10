@@ -12,6 +12,11 @@
     position: absolute;
 }
 
+.ui-pinpad-inline {
+	display: inline-block;
+	position: relative;
+}
+
 .ui-pinpad .ui-pinpad-num-pad,
 .ui-pinpad .ui-pinpad-command-panel {
     float: left;

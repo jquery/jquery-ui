@@ -259,7 +259,7 @@
 				inst._addClass( inst.ppDiv, null, "ui-front" );
 				inst._hide( inst.ppDiv, false );
 			} else {
-				container.height( inst.ppDiv.outerHeight() );
+				inst._addClass( inst.ppDiv, "ui-pinpad-inline" );
 			}
 		},
 
