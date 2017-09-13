@@ -35,6 +35,7 @@ var
 		"dialog",
 		"draggable",
 		"menu",
+		"pinpad",
 		"progressbar",
 		"resizable",
 		"selectable",

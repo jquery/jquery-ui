@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Pinpad - Custom command</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="widgets/dialog">
+		var dialog, element;
+
+		dialog = $( "#dialog" ).dialog( {
+		    autoOpen: false,
+			modal: true,
+			buttons: [
+				{
+				    text: "Ok",
+					click: function() {
+						dialog.dialog( "close" );
+					}
+				}
+			],
+
+			close: function() {
+				element.pinpad( "output" ).focus();
+			}
+		} );
+
+		element = $( "#pinpad" ).pinpad( {
+			commands: [
+				{ position: 0, name: "cancel", options: { icon: "ui-icon-close", iconPosition: "end" } },
+				{ position: 1, name: "correct", options: { icon: "ui-icon-caret-1-w", iconPosition: "end" } },
+				{ position: 2, name: "confirm", options: { icon: "ui-icon-radio-off", iconPosition: "end" } },
+				{ position: 3, name: "help", options: { icon: "ui-icon-help", iconPosition: "end" } }
+			],
+			display: {
+				decPoint: ".",
+				cancel: "Cancel",
+				correct: "Correct",
+				confirm: "Confirm",
+				help: "Help"
+			},
+
+			help: function() {
+			    dialog.dialog( "open" );
+			}
+		} );
+	</script>
+</head>
+<body>
+
+<input id="pinpad" type="text" title="Click here">
+
+<div id="dialog" title="Help">
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+</div>
+
+<div class="demo-description">
+	<p>Adding a custom command to the pinpad.</p>
+</div>
+</body>
+</html>

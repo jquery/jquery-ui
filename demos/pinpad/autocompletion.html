@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Pinpad - Autocompletion</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
+		$( "#pinpad" ).pinpad( {
+		    autoComplete: true
+		} );
+	</script>
+</head>
+<body>
+
+<input id="pinpad" type="text" title="Click here" maxlength="5">
+
+<div class="demo-description">
+	<p>Confirm the content of the pinpad input automatically when its value reach the maximum length. Set the <code>autoComplete</code> option to <code>true</code> and set one of <code>maxlength</code> attribute of the pinpad input or <code>maxLength</code> option during pinpad creation.</p>
+</div>
+</body>
+</html>

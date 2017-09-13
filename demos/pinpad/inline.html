@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Pinpad - Display inline</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
+		$( "#pinpad" ).pinpad( {
+		    appendTo: "#container"
+		} );
+	</script>
+</head>
+<body>
+
+<input id="pinpad" type="text" title="Use the pinpad">
+<div id="container"></div>
+
+<div class="demo-description">
+	<p>Display the pinpad embedded in the page instead of in an overlay. Set the <code>appendTo</code> option during the pinpad creation to indicate where to generate the widget.</p>
+</div>
+</body>
+</html>

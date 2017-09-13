@@ -38,6 +38,7 @@ var widgets = [
 	"droppable",
 	"menu",
 	"mouse",
+	"pinpad",
 	"progressbar",
 	"resizable",
 	"selectable",
