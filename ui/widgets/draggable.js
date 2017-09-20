@@ -1086,7 +1086,7 @@ $.ui.plugin.add( "draggable", "snap", {
 		$( o.snap.constructor !== String ? ( o.snap.items || ":data(ui-draggable)" ) : o.snap )
 			.each( function() {
 				var $t = $( this ),
-					$o = $t.offset();
+					$o = i._convertPositionTo( "relative", $t.offset() );
 				if ( this !== i.element[ 0 ] ) {
 					i.snapElements.push( {
 						item: this,
@@ -1102,8 +1102,9 @@ $.ui.plugin.add( "draggable", "snap", {
 		var ts, bs, ls, rs, l, r, t, b, i, first,
 			o = inst.options,
 			d = o.snapTolerance,
-			x1 = ui.offset.left, x2 = x1 + inst.helperProportions.width,
-			y1 = ui.offset.top, y2 = y1 + inst.helperProportions.height;
+                        p = inst._convertPositionTo( "relative", ui.offset ),
+			x1 = p.left, x2 = x1 + inst.helperProportions.width,
+			y1 = p.top, y2 = y1 + inst.helperProportions.height;
 
 		for ( i = inst.snapElements.length - 1; i >= 0; i-- ) {
 
@@ -1133,28 +1134,16 @@ $.ui.plugin.add( "draggable", "snap", {
 				ls = Math.abs( l - x2 ) <= d;
 				rs = Math.abs( r - x1 ) <= d;
 				if ( ts ) {
-					ui.position.top = inst._convertPositionTo( "relative", {
-						top: t - inst.helperProportions.height,
-						left: 0
-					} ).top;
+					ui.position.top = t - inst.helperProportions.height;
 				}
 				if ( bs ) {
-					ui.position.top = inst._convertPositionTo( "relative", {
-						top: b,
-						left: 0
-					} ).top;
+					ui.position.top = b;
 				}
 				if ( ls ) {
-					ui.position.left = inst._convertPositionTo( "relative", {
-						top: 0,
-						left: l - inst.helperProportions.width
-					} ).left;
+					ui.position.left = l - inst.helperProportions.width;
 				}
 				if ( rs ) {
-					ui.position.left = inst._convertPositionTo( "relative", {
-						top: 0,
-						left: r
-					} ).left;
+					ui.position.left = r;
 				}
 			}
 
@@ -1166,28 +1155,16 @@ $.ui.plugin.add( "draggable", "snap", {
 				ls = Math.abs( l - x1 ) <= d;
 				rs = Math.abs( r - x2 ) <= d;
 				if ( ts ) {
-					ui.position.top = inst._convertPositionTo( "relative", {
-						top: t,
-						left: 0
-					} ).top;
+					ui.position.top = t;
 				}
 				if ( bs ) {
-					ui.position.top = inst._convertPositionTo( "relative", {
-						top: b - inst.helperProportions.height,
-						left: 0
-					} ).top;
+					ui.position.top = b - inst.helperProportions.height;
 				}
 				if ( ls ) {
-					ui.position.left = inst._convertPositionTo( "relative", {
-						top: 0,
-						left: l
-					} ).left;
+					ui.position.left = l;
 				}
 				if ( rs ) {
-					ui.position.left = inst._convertPositionTo( "relative", {
-						top: 0,
-						left: r - inst.helperProportions.width
-					} ).left;
+					ui.position.left = r - inst.helperProportions.width;
 				}
 			}
 
