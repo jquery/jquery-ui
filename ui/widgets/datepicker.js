@@ -1172,7 +1172,7 @@ $.extend( Datepicker.prototype, {
 					size = ( match === "@" ? 14 : ( match === "!" ? 20 :
 					( match === "y" && isDoubled ? 4 : ( match === "o" ? 3 : 2 ) ) ) ),
 					minSize = ( match === "y" ? size : 1 ),
-					digits = new RegExp( "^\\d{" + minSize + "," + size + "}" ),
+					digits = ( match === "y" && iValue === 4 ? new RegExp( "\\d{" + minSize + "," + size + "}$" ) : new RegExp( "^\\d{" + minSize + "," + size + "}" ) ),
 					num = value.substring( iValue ).match( digits );
 				if ( !num ) {
 					throw "Missing number at position " + iValue;
