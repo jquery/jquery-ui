@@ -27,7 +27,8 @@ QUnit.test( "events", function( assert ) {
 	assert.expect( 26 );
 	var dateStr, newMonthYear, inp2,
 		inp = testHelper.init( "#inp", { onSelect: callback } ),
-	date = new Date();
+		dp = $( "#ui-datepicker-div" ),
+		date = new Date();
 
 	// OnSelect
 	inp.val( "" ).datepicker( "show" ).
@@ -157,6 +158,37 @@ QUnit.test( "beforeShowDay-getDate", function( assert ) {
 	// Contains non-breaking space
 	assert.equal( $( "div.ui-datepicker-title" ).text(),
 		$( "<span>November&#xa0;2009</span>" ).text(), "After prev clicks" );
+	inp.datepicker( "hide" );
+} );
+
+QUnit.test( "maxDateMultMonths-prevButton", function( assert ) {
+	assert.expect( 3 );
+	var inp = testHelper.init( "#inp", {
+		maxDate: "01/01/2010", numberofMonths: [ 2, 2 ],
+		onChangeMonthYear: callback2
+	} );
+	var dp = $( "#ui-datepicker-div" );
+
+	inp.val( "01/01/2010" ).datepicker( "show" );
+
+	// Contains non-breaking space
+	assert.equal( $( "div.ui-datepicker-title" ).text(),
+
+		// Support: IE <9, jQuery <1.8
+		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
+		$( "<span>January&#xa0;2010</span>" ).text(), "Initial month" );
+	$( "a.ui-datepicker-prev", dp ).trigger( "click" );
+	$( "a.ui-datepicker-prev", dp ).trigger( "click" );
+
+	// Contains non-breaking space
+	assert.equal( $( "div.ui-datepicker-title" ).text(),
+		$( "<span>November&#xa0;2009</span>" ).text(), "After prev clicks" );
+	$( "a.ui-datepicker-next", dp ).trigger( "click" );
+	$( "a.ui-datepicker-next", dp ).trigger( "click" );
+
+	// Contains non-breaking space
+	assert.equal( $( "div.ui-datepicker-title" ).text(),
+		$( "<span>January&#xa0;2010</span>" ).text(), "After next clicks" );
 	inp.datepicker( "hide" );
 } );
 
