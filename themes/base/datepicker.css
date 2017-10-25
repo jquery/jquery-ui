@@ -23,6 +23,7 @@
 	top: 2px;
 	width: 1.8em;
 	height: 1.8em;
+	border: none;
 }
 .ui-datepicker .ui-datepicker-prev-hover,
 .ui-datepicker .ui-datepicker-next-hover {
@@ -79,11 +80,12 @@
 	padding: 1px;
 }
 .ui-datepicker td span,
-.ui-datepicker td a {
+.ui-datepicker td button {
 	display: block;
 	padding: .2em;
 	text-align: right;
 	text-decoration: none;
+	width: 100%;
 }
 .ui-datepicker .ui-datepicker-buttonpane {
 	background-image: none;

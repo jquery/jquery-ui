@@ -54,8 +54,8 @@ QUnit.test( "baseStructure", function( assert ) {
 			header = dp.children( ":first" );
 			assert.ok( header.is( "div.ui-datepicker-header" ), "Structure - header division" );
 			assert.equal( header.children().length, 3, "Structure - header child count" );
-			assert.ok( header.children( ":first" ).is( "a.ui-datepicker-prev" ) && header.children( ":first" ).html() !== "", "Structure - prev link" );
-			assert.ok( header.children( ":eq(1)" ).is( "a.ui-datepicker-next" ) && header.children( ":eq(1)" ).html() !== "", "Structure - next link" );
+			assert.ok( header.children( ":first" ).is( "button.ui-datepicker-prev" ) && header.children( ":first" ).html() !== "", "Structure - prev link" );
+			assert.ok( header.children( ":eq(1)" ).is( "button.ui-datepicker-next" ) && header.children( ":eq(1)" ).html() !== "", "Structure - next link" );
 
 			title = header.children( ":last" );
 			assert.ok( title.is( "div.ui-datepicker-title" ) && title.html() !== "", "Structure - title division" );
@@ -232,8 +232,8 @@ QUnit.test( "customStructure", function( assert ) {
 			header = dp.children( ":first" );
 			assert.ok( header.is( "div.ui-datepicker-header" ), "Structure RTL - header division" );
 			assert.equal( header.children().length, 3, "Structure RTL - header child count" );
-			assert.ok( header.children( ":first" ).is( "a.ui-datepicker-next" ), "Structure RTL - prev link" );
-			assert.ok( header.children( ":eq(1)" ).is( "a.ui-datepicker-prev" ), "Structure RTL - next link" );
+			assert.ok( header.children( ":first" ).is( "button.ui-datepicker-next" ), "Structure RTL - prev link" );
+			assert.ok( header.children( ":eq(1)" ).is( "button.ui-datepicker-prev" ), "Structure RTL - next link" );
 
 			panel = dp.children( ":last" );
 			assert.ok( panel.is( "div.ui-datepicker-buttonpane" ), "Structure RTL - button division" );
@@ -303,7 +303,7 @@ QUnit.test( "customStructure", function( assert ) {
 		testHelper.onFocus( inp, function() {
 			thead = dp.find( ".ui-datepicker-calendar thead tr" );
 			assert.equal( thead.children().length, 7, "Structure read-only first day - thead child count" );
-			assert.equal( thead.find( "a" ).length, 0, "Structure read-only first day - thead links count" );
+			assert.equal( thead.find( "button" ).length, 0, "Structure read-only first day - thead links count" );
 
 			inp.datepicker( "hide" ).datepicker( "destroy" );
 			ready();
@@ -463,11 +463,11 @@ QUnit.test( "mouse", function( assert ) {
 		dp = $( "#ui-datepicker-div" ),
 		date = new Date();
 	inp.val( "" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar tbody a:contains(10)", dp ).simulate( "click", {} );
+	$( ".ui-datepicker-calendar tbody button:contains(10)", dp ).simulate( "click", {} );
 	date.setDate( 10 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Mouse click" );
 	inp.val( "02/04/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar tbody a:contains(12)", dp ).simulate( "click", {} );
+	$( ".ui-datepicker-calendar tbody button:contains(12)", dp ).simulate( "click", {} );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 2 - 1, 12 ),
 		"Mouse click - preset" );
 	inp.val( "02/04/2008" ).datepicker( "show" );
@@ -479,7 +479,7 @@ QUnit.test( "mouse", function( assert ) {
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 2 - 1, 4 ),
 		"Mouse click - close + preset" );
 	inp.val( "02/04/2008" ).datepicker( "show" );
-	$( "a.ui-datepicker-prev", dp ).simulate( "click", {} );
+	$( "button.ui-datepicker-prev", dp ).simulate( "click", {} );
 	$( "button.ui-datepicker-close", dp ).simulate( "click", {} );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 2 - 1, 4 ),
 		"Mouse click - abandoned" );
@@ -487,17 +487,17 @@ QUnit.test( "mouse", function( assert ) {
 	// Current/previous/next
 	inp.val( "02/04/2008" ).datepicker( "option", { showButtonPanel: true } ).datepicker( "show" );
 	$( ".ui-datepicker-current", dp ).simulate( "click", {} );
-	$( ".ui-datepicker-calendar tbody a:contains(14)", dp ).simulate( "click", {} );
+	$( ".ui-datepicker-calendar tbody button:contains(14)", dp ).simulate( "click", {} );
 	date.setDate( 14 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Mouse click - current" );
 	inp.val( "02/04/2008" ).datepicker( "show" );
 	$( ".ui-datepicker-prev", dp ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(16)", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar tbody button:contains(16)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 1 - 1, 16 ),
 		"Mouse click - previous" );
 	inp.val( "02/04/2008" ).datepicker( "show" );
 	$( ".ui-datepicker-next", dp ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(18)", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar tbody button:contains(18)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 3 - 1, 18 ),
 		"Mouse click - next" );
 
@@ -505,12 +505,12 @@ QUnit.test( "mouse", function( assert ) {
 	inp.datepicker( "option", { minDate: new Date( 2008, 2 - 1, 2 ),
 		maxDate: new Date( 2008, 2 - 1, 26 ) } ).val( "02/04/2008" ).datepicker( "show" );
 	$( ".ui-datepicker-prev", dp ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(16)", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar tbody button:contains(16)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 2 - 1, 16 ),
 		"Mouse click - previous + min/max" );
 	inp.val( "02/04/2008" ).datepicker( "show" );
 	$( ".ui-datepicker-next", dp ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(18)", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar tbody button:contains(18)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 2 - 1, 18 ),
 		"Mouse click - next + min/max" );
 
@@ -519,25 +519,25 @@ QUnit.test( "mouse", function( assert ) {
 	dp = $( ".ui-datepicker-inline", inl );
 	date = new Date();
 	inl.datepicker( "setDate", date );
-	$( ".ui-datepicker-calendar tbody a:contains(10)", dp ).simulate( "click", {} );
+	$( ".ui-datepicker-calendar tbody button:contains(10)", dp ).simulate( "click", {} );
 	date.setDate( 10 );
 	testHelper.equalsDate( assert, inl.datepicker( "getDate" ), date, "Mouse click inline" );
 	inl.datepicker( "option", { showButtonPanel: true } ).datepicker( "setDate", new Date( 2008, 2 - 1, 4 ) );
-	$( ".ui-datepicker-calendar tbody a:contains(12)", dp ).simulate( "click", {} );
+	$( ".ui-datepicker-calendar tbody button:contains(12)", dp ).simulate( "click", {} );
 	testHelper.equalsDate( assert, inl.datepicker( "getDate" ), new Date( 2008, 2 - 1, 12 ), "Mouse click inline - preset" );
 	inl.datepicker( "option", { showButtonPanel: true } );
 	$( ".ui-datepicker-current", dp ).simulate( "click", {} );
-	$( ".ui-datepicker-calendar tbody a:contains(14)", dp ).simulate( "click", {} );
+	$( ".ui-datepicker-calendar tbody button:contains(14)", dp ).simulate( "click", {} );
 	date.setDate( 14 );
 	testHelper.equalsDate( assert, inl.datepicker( "getDate" ), date, "Mouse click inline - current" );
 	inl.datepicker( "setDate", new Date( 2008, 2 - 1, 4 ) );
 	$( ".ui-datepicker-prev", dp ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(16)", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar tbody button:contains(16)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inl.datepicker( "getDate" ), new Date( 2008, 1 - 1, 16 ),
 		"Mouse click inline - previous" );
 	inl.datepicker( "setDate", new Date( 2008, 2 - 1, 4 ) );
 	$( ".ui-datepicker-next", dp ).simulate( "click" );
-	$( ".ui-datepicker-calendar tbody a:contains(18)", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar tbody button:contains(18)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inl.datepicker( "getDate" ), new Date( 2008, 3 - 1, 18 ),
 		"Mouse click inline - next" );
 } );
