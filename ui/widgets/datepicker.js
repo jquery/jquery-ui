@@ -1814,8 +1814,9 @@ $.extend( Datepicker.prototype, {
 							( unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<button class='ui-state-default" +
 							( printDate.getTime() === today.getTime() ? " ui-state-highlight" : "" ) +
 							( printDate.getTime() === currentDate.getTime() ? " ui-state-active" : "" ) + // highlight selected day
-							( otherMonth ? " ui-priority-secondary" : "" ) + // distinguish dates from other months
-							"' href='#'>" + printDate.getDate() + "</button>" ) ) + "</td>"; // display selectable date
+							( otherMonth ? " ui-priority-secondary" : "" ) + "' " + // distinguish dates from other months
+							" aria-pressed='" + ( printDate.getTime() === currentDate.getTime() ? "true" : "false" )  + "'>" +
+							printDate.getDate() + "</button>" ) ) + "</td>"; // display selectable date
 						printDate.setDate( printDate.getDate() + 1 );
 						printDate = this._daylightSavingAdjust( printDate );
 					}
