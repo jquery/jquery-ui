@@ -397,52 +397,42 @@ $.ui.ddmanager = {
 		// Run through all droppables and check their positions based on specific tolerance options
 		$.each( $.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
 
-			if ( this.options.disabled || this.greedyChild || !this.visible ) {
+			if ( this.options.disabled || !this.visible ||
+				typeof this.shouldBeOver !== "undefined" ) {
 				return;
 			}
 
-			var parentInstance, scope, parent,
-				intersects = $.ui.intersect( draggable, this, this.options.tolerance, event ),
-				c = !intersects && this.isover ?
-					"isout" :
-					( intersects && !this.isover ? "isover" : null );
-			if ( !c ) {
-				return;
-			}
+			this.shouldBeOver = $.ui.intersect( draggable, this, this.options.tolerance, event );
 
-			if ( this.options.greedy ) {
+			if ( this.options.greedy && this.shouldBeOver ) {
 
-				// find droppable parents with same scope
-				scope = this.options.scope;
-				parent = this.element.parents( ":data(ui-droppable)" ).filter( function() {
-					return $( this ).droppable( "instance" ).options.scope === scope;
+				// cancel isover for droppable parents with the same scope
+				var scope = this.options.scope;
+				this.element.parents( ":data(ui-droppable)" ).each( function() {
+					var parentInstance = $( this ).droppable( "instance" );
+					if ( parentInstance.options.scope === scope ) {
+						parentInstance.shouldBeOver = false;
+					}
 				} );
-
-				if ( parent.length ) {
-					parentInstance = $( parent[ 0 ] ).droppable( "instance" );
-					parentInstance.greedyChild = ( c === "isover" );
-				}
-			}
-
-			// We just moved into a greedy child
-			if ( parentInstance && c === "isover" ) {
-				parentInstance.isover = false;
-				parentInstance.isout = true;
-				parentInstance._out.call( parentInstance, event );
-			}
-
-			this[ c ] = true;
-			this[ c === "isout" ? "isover" : "isout" ] = false;
-			this[ c === "isover" ? "_over" : "_out" ].call( this, event );
-
-			// We just moved out of a greedy child
-			if ( parentInstance && c === "isout" ) {
-				parentInstance.isout = false;
-				parentInstance.isover = true;
-				parentInstance._over.call( parentInstance, event );
 			}
 		} );
 
+		// Run through all droppables and change isover status accordingly
+		$.each( $.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
+			if ( this.options.disabled || !this.visible ) {
+				return;
+			}
+
+			if ( this.shouldBeOver && !this.isover ) {
+				this.isover = true;
+				this._over( event );
+			} else if ( !this.shouldBeOver && this.isover ) {
+				this.isover = false;
+				this._out( event );
+			}
+
+			delete this.shouldBeOver;
+		} );
 	},
 	dragStop: function( draggable, event ) {
 		draggable.element.parentsUntil( "body" ).off( "scroll.droppable" );
