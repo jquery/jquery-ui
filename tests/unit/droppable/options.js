@@ -79,11 +79,48 @@ QUnit.test( "scope", function( assert ) {
 	assert.equal( draggableOffset.left, oldDraggableOffset.left );
 	assert.equal( draggableOffset.top, oldDraggableOffset.top );
 } );
-/*
-Test( "greedy", function() {
-	ok(false, 'missing test - untested code is broken code');
+
+QUnit.test( "greedy", function( assert ) {
+	assert.expect( 2 );
+
+	var droppableOuter = $( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.css( { position: "absolute", top: 0, left: 0, width: 20, height: 20 } )
+		.droppable({
+			drop: function () {
+				assert.notOk(true, "outer droppable should not have drop callback called");
+			},
+			over: function () {
+				assert.notOk(true, "outer droppable should not have over callback called");
+			}
+		});
+
+	var droppableInner = $( "<div />" )
+		.appendTo( droppableOuter )
+		.css( { position: "absolute", top: 10, left: 10, width: 10, height: 10 } )
+		.droppable( {
+			greedy: true,
+			drop: function () {
+				assert.ok(true, "inner droppable should have drop callback called");
+			},
+			over: function () {
+				assert.ok(true, "inner droppable should have over callback called");
+			}
+		} );
+
+	//draggable is fully over inner droppable
+	var draggable = $( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.css( { position: "absolute", top: 12, left: 12, width: 5, height: 5 } )
+		.draggable();
+
+	$( draggable ).simulate( "drag", {
+		dx: 2,
+		dy: 2
+	} );
 });
 
+/*
 test( "hoverClass", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
