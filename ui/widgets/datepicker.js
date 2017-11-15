@@ -1841,7 +1841,7 @@ $.extend( Datepicker.prototype, {
 	_generateMonthYearHeader: function( inst, drawMonth, drawYear, minDate, maxDate,
 			secondary, monthNames, monthNamesShort ) {
 
-		var inMinYear, inMaxYear, month, years, thisYear, determineYear, year, endYear,
+		var inMinYear, inMaxYear, month, years, thisYear, determineYear, year, endYear, firstYear,
 			changeMonth = this._get( inst, "changeMonth" ),
 			changeYear = this._get( inst, "changeYear" ),
 			showMonthAfterYear = this._get( inst, "showMonthAfterYear" ),
@@ -1888,12 +1888,13 @@ $.extend( Datepicker.prototype, {
 				year = determineYear( years[ 0 ] );
 				endYear = Math.max( year, determineYear( years[ 1 ] || "" ) );
 				year = ( minDate ? Math.max( year, minDate.getFullYear() ) : year );
+				firstYear = year;
 				endYear = ( maxDate ? Math.min( endYear, maxDate.getFullYear() ) : endYear );
 				inst.yearshtml += "<select class='ui-datepicker-year' data-handler='selectYear' data-event='change'>";
 				for ( ; year <= endYear; year++ ) {
 					inst.yearshtml += "<option value='" + year + "'" +
 						( year === drawYear ? " selected='selected'" : "" ) +
-						">" + year + "</option>";
+						">" + ((year == firstYear || year == endYear) ? "..." : year) + "</option>";
 				}
 				inst.yearshtml += "</select>";
 
