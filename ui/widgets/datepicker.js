@@ -1894,7 +1894,7 @@ $.extend( Datepicker.prototype, {
 				for ( ; year <= endYear; year++ ) {
 					inst.yearshtml += "<option value='" + year + "'" +
 						( year === drawYear ? " selected='selected'" : "" ) +
-						">" + ( ( year == firstYear || year == endYear ) ? "..." : year ) + "</option>";
+						">" + ( ( year === firstYear || year === endYear ) ? "..." : year ) + "</option>";
 				}
 				inst.yearshtml += "</select>";
 
