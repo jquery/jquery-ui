@@ -12,7 +12,7 @@
 	}
 }( function( datepicker ) {
 
-datepicker.regional[ "kab" ] = {
+datepicker.regional.kab = {
 	closeText: "Immed",
 	prevText: "Uɣal",
 	nextText: "Aẓ",
