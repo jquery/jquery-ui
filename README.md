@@ -28,3 +28,6 @@ For more information, see the [contributing page](CONTRIBUTING.md).
 Run the unit tests manually with appropriate browsers and any local web server. See our [environment setup](CONTRIBUTING.md#environment-minimum-required) and [information on running tests](CONTRIBUTING.md#running-the-tests).
 
 You can also run the unit tests inside phantomjs by [setting up your environment](CONTRIBUTING.md#user-content-environment-recommended-setup).
+
+## jQuery-UI-x
+With minimize and restore button in dialog title, based on jquery-ui.
