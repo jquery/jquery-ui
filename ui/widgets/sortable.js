@@ -1026,6 +1026,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 				// container doesn't intersect. trigger "out" event if necessary
 				if ( this.containers[ i ].containerCache.over ) {
+					if ( this.options.containment ) {
+						this._setContainment();
+					}
 					this.containers[ i ]._trigger( "out", event, this._uiHash( this ) );
 					this.containers[ i ].containerCache.over = 0;
 				}
@@ -1043,6 +1046,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		// Move the item into the container if it's not there already
 		if ( this.containers.length === 1 ) {
 			if ( !this.containers[ innermostIndex ].containerCache.over ) {
+				if ( this.options.containment ) {
+					this._setContainment();
+				}
 				this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
 				this.containers[ innermostIndex ].containerCache.over = 1;
 			}
@@ -1087,6 +1093,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 			if ( this.currentContainer === this.containers[ innermostIndex ] ) {
 				if ( !this.currentContainer.containerCache.over ) {
+					if ( this.options.containment ) {
+						this._setContainment();
+					}
 					this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash() );
 					this.currentContainer.containerCache.over = 1;
 				}
@@ -1112,6 +1121,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				this.overflowOffset = this.scrollParent.offset();
 			}
 
+			if ( this.options.containment ) {
+				this._setContainment();
+			}
 			this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
 			this.containers[ innermostIndex ].containerCache.over = 1;
 		}
