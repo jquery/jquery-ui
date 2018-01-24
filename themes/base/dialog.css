@@ -36,6 +36,24 @@
 	padding: 1px;
 	height: 20px;
 }
+.ui-dialog .ui-dialog-titlebar-minimize {
+	position: absolute;
+	right: 2.1em;
+	top: 50%;
+	width: 20px;
+	margin: -10px 0 0 0;
+	padding: 1px;
+	height: 20px;
+}
+.ui-dialog .ui-dialog-titlebar-restore {
+	position: absolute;
+	right: 3.8em;
+	top: 50%;
+	width: 20px;
+	margin: -10px 0 0 0;
+	padding: 1px;
+	height: 20px;
+}
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;
