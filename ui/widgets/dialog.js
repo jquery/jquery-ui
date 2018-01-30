@@ -458,7 +458,7 @@ $.widget( "ui.dialog", {
                 this.options.restoreWidth = this.options.width;
                 this.options.restoreHeight = this.options.height;
                 this.uiDialog.width(300);
-                this.uiDialog.height(this.uiDialogButtonPane.height);
+                this.uiDialog.height(0);
                 this.element.hide();
                 this.uiDialogButtonPane.hide();
                 this.uiDialogTitlebarRestore.button("enable");
