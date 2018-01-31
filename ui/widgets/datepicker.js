@@ -408,6 +408,7 @@ $.extend( Datepicker.prototype, {
 
 		if ( datepicker_instActive === inst ) {
 			datepicker_instActive = null;
+			this._curInst = null;
 		}
 	},
 
