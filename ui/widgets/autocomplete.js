@@ -389,9 +389,9 @@ $.widget( "ui.autocomplete", {
 				that.xhr = $.ajax( {
 					url: url,
 					xhrFields: {
-				      		withCredentials: true
-				   	},
-				   	crossDomain: true,
+						withCredentials: true
+					},
+					crossDomain: true,
 					data: request,
 					dataType: "json",
 					success: function( data ) {
