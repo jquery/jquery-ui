@@ -1,5 +1,5 @@
 /*
- * Myanmar/ZAWGYI initialisation for the jQuery UI date picker plugin.
+ * Myanmar/UNICODE initialisation for the jQuery UI date picker plugin.
  * Author: Thiha Thit | github/thihathit
 */
 ( function( factory ) {
