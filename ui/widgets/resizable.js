@@ -161,25 +161,23 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 		this._setupHandles();
 
-		if ( o.autoHide ) {
-			$( this.element )
-				.on( "mouseenter", function() {
-					if ( o.disabled ) {
-						return;
-					}
-					that._removeClass( "ui-resizable-autohide" );
-					that._handles.show();
-				} )
-				.on( "mouseleave", function() {
-					if ( o.disabled ) {
-						return;
-					}
-					if ( !that.resizing ) {
-						that._addClass( "ui-resizable-autohide" );
-						that._handles.hide();
-					}
-				} );
-		}
+		$( this.element )
+			.on( "mouseenter", function() {
+				if ( o.disabled || !o.autoHide ) {
+					return;
+				}
+				that._removeClass( "ui-resizable-autohide" );
+				that._handles.show();
+			} )
+			.on( "mouseleave", function() {
+				if ( o.disabled || !o.autoHide ) {
+					return;
+				}
+				if ( !that.resizing ) {
+					that._addClass( "ui-resizable-autohide" );
+					that._handles.hide();
+				}
+			} );
 
 		this._mouseInit();
 	},
