@@ -391,7 +391,6 @@ $.widget( "ui.autocomplete", {
 					xhrFields: {
 						withCredentials: true
 					},
-					crossDomain: true,
 					data: request,
 					dataType: "json",
 					success: function( data ) {
