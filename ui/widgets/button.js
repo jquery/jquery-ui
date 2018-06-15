@@ -238,8 +238,8 @@ $.widget( "ui.button", {
 
 		// Make sure we can't end up with a button that has neither text nor icon
 		if ( key === "showLabel" ) {
-				this._toggleClass( "ui-button-icon-only", null, !value );
-				this._updateTooltip();
+			this._toggleClass( "ui-button-icon-only", null, !value );
+			this._updateTooltip();
 		}
 
 		if ( key === "label" ) {
@@ -255,6 +255,7 @@ $.widget( "ui.button", {
 					this._attachIconSpace( this.options.iconPosition );
 				}
 			}
+			this._updateTooltip();
 		}
 
 		this._super( key, value );
