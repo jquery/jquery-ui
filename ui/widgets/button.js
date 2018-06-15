@@ -255,7 +255,7 @@ $.widget( "ui.button", {
 					this._attachIconSpace( this.options.iconPosition );
 				}
 			}
-			this._updateTooltip();
+			this.element.attr( "title", value );
 		}
 
 		this._super( key, value );
