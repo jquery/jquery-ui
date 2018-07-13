@@ -115,17 +115,21 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 	},
 
 	_setHandleClassName: function() {
-		var that = this;
-		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
-		$.each( this.items, function() {
-			that._addClass(
-				this.instance.options.handle ?
-					this.item.find( this.instance.options.handle ) :
-					this.item,
-				"ui-sortable-handle"
-			);
-		} );
+		if ( !this.options.handle ) {
+			this._removeClass( this.element, "ui-sortable-handle" );
+			this._addClass( null, "ui-sortable-handle" );
+		} else {
+			var that = this;
+			this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
+			$.each( this.items, function() {
+				that._addClass(
+					this.item.find( this.instance.options.handle ),
+					"ui-sortable-handle"
+				);
+			} );
+		}
 	},
+
 
 	_destroy: function() {
 		this._mouseDestroy();
