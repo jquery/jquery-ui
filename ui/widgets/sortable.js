@@ -129,7 +129,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			} );
 		}
 	},
-	
+
 	_destroy: function() {
 		this._mouseDestroy();
 
