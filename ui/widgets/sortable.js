@@ -855,6 +855,10 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		for ( i = this.items.length - 1; i >= 0; i-- ) {
 			item = this.items[ i ];
 
+			if( !$(item.item).is(":visible")) {
+				continue;
+			}
+
 			//We ignore calculating positions of all connected containers when we're not over them
 			if ( this.currentContainer && item.instance !== this.currentContainer &&
 					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
