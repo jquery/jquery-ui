@@ -1059,7 +1059,11 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			floating = innermostContainer.floating || this._isFloating( this.currentItem );
 			posProperty = floating ? "left" : "top";
 			sizeProperty = floating ? "width" : "height";
-			axis = floating ? "pageX" : "pageY";
+			if(this.options.axisType == "page") {
+				axis = floating ? "pageX" : "pageY";
+			} else {
+				axis = floating ? "clientX" : "clientY";
+			}
 
 			for ( j = this.items.length - 1; j >= 0; j-- ) {
 				if ( !$.contains(
@@ -1068,6 +1072,10 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 					continue;
 				}
 				if ( this.items[ j ].item[ 0 ] === this.currentItem[ 0 ] ) {
+					continue;
+				}
+				
+				if(this.options.axisType == "page" && this.items[ j ][ sizeProperty ] === 0) {
 					continue;
 				}
 
