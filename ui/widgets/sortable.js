@@ -855,7 +855,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		for ( i = this.items.length - 1; i >= 0; i-- ) {
 			item = this.items[ i ];
 
-			if( !$(item.item).is(":visible")) {
+			if ( !$( item.item ).is( ":visible" ) ) {
 				continue;
 			}
 
@@ -1059,7 +1059,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			floating = innermostContainer.floating || this._isFloating( this.currentItem );
 			posProperty = floating ? "left" : "top";
 			sizeProperty = floating ? "width" : "height";
-			if(this.options.axisType == "page") {
+			if ( this.options.axisType == "page" ) {
 				axis = floating ? "pageX" : "pageY";
 			} else {
 				axis = floating ? "clientX" : "clientY";
@@ -1074,8 +1074,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				if ( this.items[ j ].item[ 0 ] === this.currentItem[ 0 ] ) {
 					continue;
 				}
-				
-				if(this.options.axisType == "page" && this.items[ j ][ sizeProperty ] === 0) {
+
+				if ( this.options.axisType == "page" && this.items[ j ][ sizeProperty ] === 0 ) {
 					continue;
 				}
 
