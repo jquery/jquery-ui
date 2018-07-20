@@ -1059,7 +1059,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			floating = innermostContainer.floating || this._isFloating( this.currentItem );
 			posProperty = floating ? "left" : "top";
 			sizeProperty = floating ? "width" : "height";
-			if ( this.options.axisType == "page" ) {
+			if ( this.options.axisType === "page" ) {
 				axis = floating ? "pageX" : "pageY";
 			} else {
 				axis = floating ? "clientX" : "clientY";
@@ -1075,7 +1075,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 					continue;
 				}
 
-				if ( this.options.axisType == "page" && this.items[ j ][ sizeProperty ] === 0 ) {
+				if ( this.options.axisType === "page" && this.items[ j ][ sizeProperty ] === 0 ) {
 					continue;
 				}
 
