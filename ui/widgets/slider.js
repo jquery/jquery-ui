@@ -53,6 +53,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		min: 0,
 		orientation: "horizontal",
 		range: false,
+		allowCrossingHandles: false,
 		step: 1,
 		value: 0,
 		values: null,
@@ -330,11 +331,14 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			newValues = this.values();
 
 		if ( this._hasMultipleValues() ) {
-			otherVal = this.values( index ? 0 : 1 );
-			currentValue = this.values( index );
+			if ( !this.options.allowCrossingHandles ) {
+				otherVal = this.values( index ? 0 : 1 );
+				currentValue = this.values( index );
 
-			if ( this.options.values.length === 2 && this.options.range === true ) {
-				newVal =  index === 0 ? Math.min( otherVal, newVal ) : Math.max( otherVal, newVal );
+				if ( this.options.values.length === 2 && this.options.range === true ) {
+					newVal =  index === 0 ? Math.min( otherVal, newVal )
+										  : Math.max( otherVal, newVal );
+				}
 			}
 
 			newValues[ index ] = newVal;
@@ -473,6 +477,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 				this._animateOff = false;
 				break;
 			case "range":
+			case "allowCrossingHandles":
 				this._animateOff = true;
 				this._refresh();
 				this._animateOff = false;
@@ -590,7 +595,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_refreshValue: function() {
-		var lastValPercent, valPercent, value, valueMin, valueMax,
+		var valPercent, value, valueMin, valueMax,
+			rangeStartIndex = 0,
+			rangeStopIndex = 1,
 			oRange = this.options.range,
 			o = this.options,
 			that = this,
@@ -599,34 +606,48 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		if ( this._hasMultipleValues() ) {
 			this.handles.each( function( i ) {
-				valPercent = ( that.values( i ) - that._valueMin() ) / ( that._valueMax() -
-					that._valueMin() ) * 100;
+				if ( that.values( i ) > that.values( rangeStopIndex ) ) {
+					rangeStopIndex = i;
+				}
+				if ( that.values( i ) < that.values( rangeStartIndex ) ) {
+					rangeStartIndex = i;
+				}
+			} );
+			this.handles.each( function( i ) {
+				var valPercentStart;
+				var computeValPercent = function( idx ) {
+					return ( that.values( idx ) - that._valueMin() ) / ( that._valueMax() -
+						that._valueMin() ) * 100;
+				};
+				valPercent = computeValPercent( i );
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 				if ( that.options.range === true ) {
 					if ( that.orientation === "horizontal" ) {
-						if ( i === 0 ) {
+						if ( i === rangeStartIndex ) {
 							that.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( {
 								left: valPercent + "%"
 							}, o.animate );
 						}
-						if ( i === 1 ) {
+						if ( i === rangeStopIndex ) {
+							valPercentStart = computeValPercent( rangeStartIndex );
 							that.range[ animate ? "animate" : "css" ]( {
-								width: ( valPercent - lastValPercent ) + "%"
+								width: Math.abs ( valPercent - valPercentStart ) + "%"
 							}, {
 								queue: false,
 								duration: o.animate
 							} );
 						}
 					} else {
-						if ( i === 0 ) {
+						if ( i === rangeStartIndex ) {
 							that.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( {
 								bottom: ( valPercent ) + "%"
 							}, o.animate );
 						}
-						if ( i === 1 ) {
+						if ( i === rangeStopIndex ) {
+							valPercentStart = computeValPercent( rangeStartIndex );
 							that.range[ animate ? "animate" : "css" ]( {
-								height: ( valPercent - lastValPercent ) + "%"
+								height: Math.abs ( valPercent - valPercentStart ) + "%"
 							}, {
 								queue: false,
 								duration: o.animate
@@ -634,7 +655,6 @@ return $.widget( "ui.slider", $.ui.mouse, {
 						}
 					}
 				}
-				lastValPercent = valPercent;
 			} );
 		} else {
 			value = this.value();
