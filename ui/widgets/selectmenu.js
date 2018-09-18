@@ -494,13 +494,25 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			case $.ui.keyCode.RIGHT:
 				this._move( "next", event );
 				break;
-			case $.ui.keyCode.HOME:
 			case $.ui.keyCode.PAGE_UP:
-				this._move( "first", event );
+                                var menuHeight  = parseInt($(this.menu).css('height'));
+                                var menuItemHeight = parseInt($(this.menuItems[0]).css('height'));
+                                var itensPerPage = parseInt(menuHeight/menuItemHeight);
+                                for(i = 1 ; i < itensPerPage; i++){
+                                    this._move( "prev", event );
+                                }
 				break;
+
 			case $.ui.keyCode.END:
+                                this._move( "last", event );
+                                break;
 			case $.ui.keyCode.PAGE_DOWN:
-				this._move( "last", event );
+                                var menuHeight  = parseInt($(this.menu).css('height'));
+                                var menuItemHeight = parseInt($(this.menuItems[0]).css('height'));
+                                var itensPerPage = parseInt(menuHeight/menuItemHeight);
+                                for(i = 1 ; i < itensPerPage; i++){
+                                    this._move( "next", event );
+                                }
 				break;
 			default:
 				this.menu.trigger( event );
