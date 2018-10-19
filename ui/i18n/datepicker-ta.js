@@ -1,5 +1,14 @@
 /* Tamil (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by S A Sureshkumar (saskumar@live.com). */
+
+/* 
+
+Ticket: #8523 https://bugs.jqueryui.com/ticket/8523 is closed
+
+## Ticket was fixed by M Pitchaimuthu (pitchaimuthu2050 AT GMAIL DOT COM). 
+## English Montha Janaury != Thai month. Tamil Calendar is totally different. So English month should be traslated to tamil only  correct translation. English month corresponding Translations were given
+
+*/
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -17,10 +26,10 @@ datepicker.regional.ta = {
 	prevText: "முன்னையது",
 	nextText: "அடுத்தது",
 	currentText: "இன்று",
-	monthNames: [ "தை","மாசி","பங்குனி","சித்திரை","வைகாசி","ஆனி",
-	"ஆடி","ஆவணி","புரட்டாசி","ஐப்பசி","கார்த்திகை","மார்கழி" ],
-	monthNamesShort: [ "தை","மாசி","பங்","சித்","வைகா","ஆனி",
-	"ஆடி","ஆவ","புர","ஐப்","கார்","மார்" ],
+	monthNames: [ "சனவரி","பிப்ரவரி","மார்ச்சு","ஏப்ரல்","மே","சூன்",
+	"சூலை","ஆகத்து","செப்டம்பர்","அக்டோபர்","நவம்பர்","திசம்பர்" ],
+	monthNamesShort: [ "சன","பிப்","மார்","ஏப்","மே","சூன்",
+	"சூலை","ஆக","செப்","அக்","நவ","திச" ],
 	dayNames: [
 		"ஞாயிற்றுக்கிழமை",
 		"திங்கட்கிழமை",
