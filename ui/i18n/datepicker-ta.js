@@ -49,7 +49,7 @@ datepicker.regional.ta = {
 		"சனி"
 	],
 	dayNamesMin: [ "ஞா","தி","செ","பு","வி","வெ","ச" ],
-	weekHeader: "Не",
+	weekHeader: "வாரம்",
 	dateFormat: "dd/mm/yy",
 	firstDay: 1,
 	isRTL: false,
