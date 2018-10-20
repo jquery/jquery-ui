@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI datepicker_ta - Localize calendar</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="i18n/datepicker_ta-ta">
+		$( "#datepicker_ta" ).datepicker_ta( $.datepicker_ta.regional[ "fr" ] );
+		$( "#locale" ).on( "change", function() {
+			$( "#datepicker_ta" ).datepicker_ta( "option",
+				$.datepicker_ta.regional[ $( this ).val() ] );
+		});
+	</script>
+</head>
+<body>
+
+<p>Date: <input type="text" id="datepicker_ta"/>&nbsp;
+	<select id="locale">
+		<option value="ar">Arabic (&#8235;(&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</option>
+		<option value="zh-TW">Chinese Traditional (&#32321;&#39636;&#20013;&#25991;)</option>
+		<option value="">English</option>
+		<option value="fr" selected="selected">French (Fran&ccedil;ais)</option>
+		<option value="he">Hebrew (&#8235;(&#1506;&#1489;&#1512;&#1497;&#1514;</option>
+		<option value="ta">Tamil (&#2980;&#2990;&#3007;&#2996;&#3021;)</option>
+	</select></p>
+
+<div class="demo-description">
+<p>Localize the datepicker_ta calendar language and format (English / Western formatting is the default).  The datepicker_ta includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
+</div>
+</body>
+</html>
