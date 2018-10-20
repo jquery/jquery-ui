@@ -1,0 +1,185 @@
+/*!
+ * jQuery UI datepicker_ta @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/datepicker_ta/#theming
+ */
+.ui-datepicker_ta {
+	width: 17em;
+	padding: .2em .2em 0;
+	display: none;
+}
+.ui-datepicker_ta .ui-datepicker_ta-header {
+	position: relative;
+	padding: .2em 0;
+}
+.ui-datepicker_ta .ui-datepicker_ta-prev,
+.ui-datepicker_ta .ui-datepicker_ta-next {
+	position: absolute;
+	top: 2px;
+	width: 1.8em;
+	height: 1.8em;
+}
+.ui-datepicker_ta .ui-datepicker_ta-prev-hover,
+.ui-datepicker_ta .ui-datepicker_ta-next-hover {
+	top: 1px;
+}
+.ui-datepicker_ta .ui-datepicker_ta-prev {
+	left: 2px;
+}
+.ui-datepicker_ta .ui-datepicker_ta-next {
+	right: 2px;
+}
+.ui-datepicker_ta .ui-datepicker_ta-prev-hover {
+	left: 1px;
+}
+.ui-datepicker_ta .ui-datepicker_ta-next-hover {
+	right: 1px;
+}
+.ui-datepicker_ta .ui-datepicker_ta-prev span,
+.ui-datepicker_ta .ui-datepicker_ta-next span {
+	display: block;
+	position: absolute;
+	left: 50%;
+	margin-left: -8px;
+	top: 50%;
+	margin-top: -8px;
+}
+.ui-datepicker_ta .ui-datepicker_ta-title {
+	margin: 0 2.3em;
+	line-height: 1.8em;
+	text-align: center;
+}
+.ui-datepicker_ta .ui-datepicker_ta-title select {
+	font-size: 1em;
+	margin: 1px 0;
+}
+.ui-datepicker_ta select.ui-datepicker_ta-month,
+.ui-datepicker_ta select.ui-datepicker_ta-year {
+	width: 45%;
+}
+.ui-datepicker_ta table {
+	width: 100%;
+	font-size: .9em;
+	border-collapse: collapse;
+	margin: 0 0 .4em;
+}
+.ui-datepicker_ta th {
+	padding: .7em .3em;
+	text-align: center;
+	font-weight: bold;
+	border: 0;
+}
+.ui-datepicker_ta td {
+	border: 0;
+	padding: 1px;
+}
+.ui-datepicker_ta td span,
+.ui-datepicker_ta td a {
+	display: block;
+	padding: .2em;
+	text-align: right;
+	text-decoration: none;
+}
+.ui-datepicker_ta .ui-datepicker_ta-buttonpane {
+	background-image: none;
+	margin: .7em 0 0 0;
+	padding: 0 .2em;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 0;
+}
+.ui-datepicker_ta .ui-datepicker_ta-buttonpane button {
+	float: right;
+	margin: .5em .2em .4em;
+	cursor: pointer;
+	padding: .2em .6em .3em .6em;
+	width: auto;
+	overflow: visible;
+}
+.ui-datepicker_ta .ui-datepicker_ta-buttonpane button.ui-datepicker_ta-current {
+	float: left;
+}
+
+/* with multiple calendars */
+.ui-datepicker_ta.ui-datepicker_ta-multi {
+	width: auto;
+}
+.ui-datepicker_ta-multi .ui-datepicker_ta-group {
+	float: left;
+}
+.ui-datepicker_ta-multi .ui-datepicker_ta-group table {
+	width: 95%;
+	margin: 0 auto .4em;
+}
+.ui-datepicker_ta-multi-2 .ui-datepicker_ta-group {
+	width: 50%;
+}
+.ui-datepicker_ta-multi-3 .ui-datepicker_ta-group {
+	width: 33.3%;
+}
+.ui-datepicker_ta-multi-4 .ui-datepicker_ta-group {
+	width: 25%;
+}
+.ui-datepicker_ta-multi .ui-datepicker_ta-group-last .ui-datepicker_ta-header,
+.ui-datepicker_ta-multi .ui-datepicker_ta-group-middle .ui-datepicker_ta-header {
+	border-left-width: 0;
+}
+.ui-datepicker_ta-multi .ui-datepicker_ta-buttonpane {
+	clear: left;
+}
+.ui-datepicker_ta-row-break {
+	clear: both;
+	width: 100%;
+	font-size: 0;
+}
+
+/* RTL support */
+.ui-datepicker_ta-rtl {
+	direction: rtl;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-prev {
+	right: 2px;
+	left: auto;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-next {
+	left: 2px;
+	right: auto;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-prev:hover {
+	right: 1px;
+	left: auto;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-next:hover {
+	left: 1px;
+	right: auto;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-buttonpane {
+	clear: right;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-buttonpane button {
+	float: left;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-buttonpane button.ui-datepicker_ta-current,
+.ui-datepicker_ta-rtl .ui-datepicker_ta-group {
+	float: right;
+}
+.ui-datepicker_ta-rtl .ui-datepicker_ta-group-last .ui-datepicker_ta-header,
+.ui-datepicker_ta-rtl .ui-datepicker_ta-group-middle .ui-datepicker_ta-header {
+	border-right-width: 0;
+	border-left-width: 1px;
+}
+
+/* Icons */
+.ui-datepicker_ta .ui-icon {
+	display: block;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+	left: .5em;
+	top: .3em;
+}
