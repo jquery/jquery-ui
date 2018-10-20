@@ -32,7 +32,7 @@ var widgets = [
 	"button",
 	"checkboxradio",
 	"controlgroup",
-	"datepicker",
+	"datepicker_ta",
 	"dialog",
 	"draggable",
 	"droppable",
