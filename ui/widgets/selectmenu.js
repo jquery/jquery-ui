@@ -455,14 +455,16 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		},
 
 		keydown: function( event ) {
-			var preventDefault = true;
+			var preventDefault = true,
+				menuItemHeight,
+				itensPerPage;
 			var menuHeight = parseInt( $( this.menu ).css( "max-height" ), 10 );
 			if ( this.isOpen ) {
-				var menuItemHeight = parseInt( $( this.menuItems[ 0 ] ).css( "height" ), 10 );
+				menuItemHeight = parseInt( $( this.menuItems[ 0 ] ).css( "height" ), 10 );
 			} else {
-				var menuItemHeight = parseInt( $( this.button[ 0 ] ).css( "height" ), 10 );
+				menuItemHeight = parseInt( $( this.button[ 0 ] ).css( "height" ), 10 );
 			}
-			var itensPerPage = parseInt( menuHeight / menuItemHeight, 10 );
+			itensPerPage = parseInt( menuHeight / menuItemHeight, 10 );
 			switch ( event.keyCode ) {
 			case $.ui.keyCode.TAB:
 			case $.ui.keyCode.ESCAPE:
