@@ -495,8 +495,8 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				this._move( "next", event );
 				break;
 			case $.ui.keyCode.PAGE_UP:
-                                var menuHeight = parseInt( $( this.menu ).css( 'max-height' ) );
-                            	var menuItemHeight = this.isOpen ? parseInt( $( this.menuItems[0] ).css( 'height' ) ) : parseInt( $( this.button[0] ).css( 'height' ) );
+                                var menuHeight = parseInt( $( this.menu ).css( "max-height" ) );
+                            	var menuItemHeight = this.isOpen ? parseInt( $( this.menuItems[0] ).css( "height" ) ) : parseInt( $( this.button[0] ).css( "height" ) );
                             	var itensPerPage = parseInt( menuHeight / menuItemHeight );
                             	for ( i = 1; i < itensPerPage; i++ ) {
                                 	this._move( "prev" , event );
@@ -506,8 +506,8 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
                                 this._move( "last", event );
                                 break;
 			case $.ui.keyCode.PAGE_DOWN:
-                                var menuHeight = parseInt( $( this.menu ).css( 'max-height' ) );
-                            	var menuItemHeight = this.isOpen ? parseInt( $( this.menuItems[0] ).css( 'height' ) ) : parseInt( $( this.button[0] ).css( 'height' ) );
+                                var menuHeight = parseInt( $( this.menu ).css( "max-height" ) );
+                            	var menuItemHeight = this.isOpen ? parseInt( $( this.menuItems[0] ).css( "height" ) ) : parseInt( $( this.button[0] ).css( "height" ) );
                             	var itensPerPage = parseInt( menuHeight / menuItemHeight );
                             	for ( i = 1; i < itensPerPage; i++ ) {
                                 	this._move( "next" , event );
