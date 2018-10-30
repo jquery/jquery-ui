@@ -504,7 +504,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				this._move( "next", event );
 				break;
 			case $.ui.keyCode.PAGE_UP:
-				for ( i = 1; i < itensPerPage; i++ ) {
+				for ( var i = 1; i < itensPerPage; i++ ) {
 					this._move( "prev", event );
 				}
 				break;
@@ -512,7 +512,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
                                 this._move( "last", event );
                                 break;
 			case $.ui.keyCode.PAGE_DOWN:
-				for ( i = 1; i < itensPerPage; i++ ) {
+				for ( var i = 1; i < itensPerPage; i++ ) {
 					this._move( "next", event );
 				}
 				break;
