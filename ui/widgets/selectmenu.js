@@ -503,7 +503,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				}
 				var itensPerPage = parseInt( menuHeight / menuItemHeight );
 				for ( i = 1; i < itensPerPage; i++ ) {
-					this._move( "prev" , event );
+					this._move( "prev", event );
 				}
 				break;
 			case $.ui.keyCode.END:
@@ -518,7 +518,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				}
 				var itensPerPage = parseInt( menuHeight / menuItemHeight );
 				for ( i = 1; i < itensPerPage; i++ ) {
-					this._move( "next" , event );
+					this._move( "next", event );
 				}
 				break;
 			default:
