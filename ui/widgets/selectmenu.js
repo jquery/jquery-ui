@@ -458,7 +458,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			var preventDefault = true,
 				menuItemHeight,
 				itensPerPage,
-			    	i;
+				i;
 			var menuHeight = parseInt( $( this.menu ).css( "max-height" ), 10 );
 			if ( this.isOpen ) {
 				menuItemHeight = parseInt( $( this.menuItems[ 0 ] ).css( "height" ), 10 );
