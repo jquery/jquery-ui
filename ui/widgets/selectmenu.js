@@ -496,9 +496,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				break;
 			case $.ui.keyCode.PAGE_UP:
 				var menuHeight = parseInt( $( this.menu ).css( "max-height" ) );
-				if(this.isOpen){
+				if ( this.isOpen ) {
 					var menuItemHeight = parseInt( $( this.menuItems[ 0 ] ).css( "height" ) );
-				}else{
+				} else {
 					var menuItemHeight = parseInt( $( this.button[ 0 ] ).css( "height" ) );
 				}
 				var itensPerPage = parseInt( menuHeight / menuItemHeight );
@@ -511,9 +511,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
                                 break;
 			case $.ui.keyCode.PAGE_DOWN:
 				var menuHeight = parseInt( $( this.menu ).css( "max-height" ) );
-				if(this.isOpen){
+				if ( this.isOpen ) {
 					var menuItemHeight = parseInt( $( this.menuItems[ 0 ] ).css( "height" ) );
-				}else{
+				} else {
 					var menuItemHeight = parseInt( $( this.button[ 0 ] ).css( "height" ) );
 				}
 				var itensPerPage = parseInt( menuHeight / menuItemHeight );
