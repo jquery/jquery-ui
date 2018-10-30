@@ -457,7 +457,8 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		keydown: function( event ) {
 			var preventDefault = true,
 				menuItemHeight,
-				itensPerPage;
+				itensPerPage,
+			    	i;
 			var menuHeight = parseInt( $( this.menu ).css( "max-height" ), 10 );
 			if ( this.isOpen ) {
 				menuItemHeight = parseInt( $( this.menuItems[ 0 ] ).css( "height" ), 10 );
@@ -504,7 +505,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 				this._move( "next", event );
 				break;
 			case $.ui.keyCode.PAGE_UP:
-				for ( var i = 1; i < itensPerPage; i++ ) {
+				for ( i = 1; i < itensPerPage; i++ ) {
 					this._move( "prev", event );
 				}
 				break;
@@ -512,7 +513,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
                                 this._move( "last", event );
                                 break;
 			case $.ui.keyCode.PAGE_DOWN:
-				for ( var i = 1; i < itensPerPage; i++ ) {
+				for ( i = 1; i < itensPerPage; i++ ) {
 					this._move( "next", event );
 				}
 				break;
