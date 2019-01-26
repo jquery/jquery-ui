@@ -3,6 +3,7 @@ module.exports = function( grunt ) {
 "use strict";
 
 var
+	glob = require( "glob" ),
 
 	// files
 	coreFiles = [
@@ -93,7 +94,7 @@ function mapMinFile( file ) {
 }
 
 function expandFiles( files ) {
-	return grunt.util._.pluck( grunt.file.expandMapping( files ), "src" ).map( function( values ) {
+	return grunt.util._.map( grunt.file.expandMapping( files ), "src" ).map( function( values ) {
 		return values[ 0 ];
 	} );
 }
@@ -133,7 +134,7 @@ function createBanner( files ) {
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\\n' : '' %>" +
 		( files ? "* Includes: " + fileNames.join( ", " ) + "\n" : "" ) +
 		"* Copyright <%= pkg.author.name %>;" +
-		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n";
+		" Licensed <%= _.map(pkg.licenses, 'type').join(', ') %> */\n";
 }
 
 grunt.initConfig( {
@@ -202,9 +203,9 @@ grunt.initConfig( {
 				ignore: [
 				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
 			] },
-			src: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
-				return "!" + file;
-			} ) )
+			src: glob.sync("{demos,tests}/**/*.html", {
+				ignore: htmllintBad
+			} )
 		},
 		bad: {
 			options: {
@@ -212,7 +213,8 @@ grunt.initConfig( {
 					/Start tag seen without seeing a doctype first/,
 					/Element “head” is missing a required instance of child element “title”/,
 					/Element “object” is missing one or more of the following/,
-					/The “codebase” attribute on the “object” element is obsolete/
+					/The “codebase” attribute on the “object” element is obsolete/,
+					/Consider adding a “lang” attribute to the “html” start tag/
 				]
 			},
 			src: htmllintBad
