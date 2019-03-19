@@ -289,7 +289,7 @@ QUnit.test( "maxHeight", function( assert ) {
 } );
 
 QUnit.test( "maxWidth", function( assert ) {
-	assert.expect( 3 );
+	assert.expect( 4 );
 
 	var element = $( "<div></div>" ).dialog( { maxWidth: 200 } );
 		testHelper.drag( element, ".ui-resizable-e", 1000, 1000 );
@@ -304,6 +304,11 @@ QUnit.test( "maxWidth", function( assert ) {
 	element = $( "<div></div>" ).dialog( { maxWidth: 200 } ).dialog( "option", "maxWidth", 300 );
 		testHelper.drag( element, ".ui-resizable-w", -1000, -1000 );
 		assert.close( element.dialog( "widget" ).width(), 300, 1, "maxWidth" );
+	element.remove();
+	
+	element = $( "<div></div>" ).dialog();
+		element.dialog("option", "maxWidth", 250);
+		assert.close( element.dialog( "widget" ).width(), 250, 1, "maxWidth" );
 	element.remove();
 } );
 
