@@ -39,7 +39,7 @@ $.ui.focusable = function( element, hasTabindex ) {
 		return img.length > 0 && img.is( ":visible" );
 	}
 
-	if ( /^(input|select|textarea|button|object|details|summary)$/.test( nodeName ) ) {
+	if ( /^(input|select|textarea|button|object|summary)$/.test( nodeName ) ) {
 		focusableIfVisible = !element.disabled;
 
 		if ( focusableIfVisible ) {
