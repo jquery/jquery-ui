@@ -680,9 +680,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			label: option.text(),
 			optgroup: optgroup.attr( "label" ) || "",
 			disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" ),
-			hidden: optgroup.prop( "hidden" ) || optgroup.css( "display" ) == "none" ||
-                    optgroup.css( "visibility" ) == "hidden" || option.prop( "hidden" ) ||
-                    option.css( "display" ) == "none" || option.css( "visibility" ) == "hidden"
+			hidden: optgroup.prop( "hidden" ) || optgroup.css( "display" ) === "none" ||
+                    optgroup.css( "visibility" ) === "hidden" || option.prop( "hidden" ) ||
+                    option.css( "display" ) === "none" || option.css( "visibility" ) === "hidden"
 		};
 	},
 
