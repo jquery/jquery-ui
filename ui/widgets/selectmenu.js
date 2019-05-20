@@ -352,6 +352,11 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		if ( item.disabled ) {
 			this._addClass( li, null, "ui-state-disabled" );
 		}
+
+		if ( item.hidden ) {
+			this._addClass( li, null, "ui-state-hidden" );
+		}
+
 		this._setText( wrapper, item.label );
 
 		return li.append( wrapper ).appendTo( ul );
@@ -674,7 +679,9 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 			value: option.val(),
 			label: option.text(),
 			optgroup: optgroup.attr( "label" ) || "",
-			disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" )
+			disabled: optgroup.prop( "disabled" ) || option.prop( "disabled" ),
+			hidden: optgroup.prop( "hidden" ) || optgroup.css( "display" ) == "none" || optgroup.css( "visibility" ) == "hidden"
+					|| option.prop( "hidden" ) || option.css( "display" ) == "none" || option.css( "visibility" ) == "hidden"
 		};
 	},
 

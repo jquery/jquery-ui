@@ -65,6 +65,9 @@
 	pointer-events: none;
 }
 
+.ui-state-hidden {
+	display: none;
+}
 
 /* Icons
 ----------------------------------*/
