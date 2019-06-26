@@ -1,3 +1,6 @@
+os:
+  - linux
+  - linux-ppc64le
 sudo: required
 dist: trusty
 language: node_js
