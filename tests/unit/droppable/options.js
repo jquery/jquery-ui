@@ -199,7 +199,7 @@ QUnit.test( "tolerance, pointer", function( assert ) {
 } );
 
 /*
-Test( "tolerance, touch", function() {
+Test( "tolerance, touch, top-left-touch, top-right-touch, bottom-left-touch, bottom-right-touch", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 */
