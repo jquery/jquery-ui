@@ -42,6 +42,7 @@ $.widget( "ui.autocomplete", {
 	options: {
 		appendTo: null,
 		autoFocus: false,
+		alwaysShow: false,
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -464,7 +465,7 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
+		if ( !this.options.disabled && (this.options.alwaysShow || (content && content.length && !this.cancelSearch)) ) {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
