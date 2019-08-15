@@ -297,13 +297,13 @@ $.ui.intersect = ( function() {
 				( x1 < l && x2 > r ) // Surrounded horizontally
 			);
 		case "top-left-touch":
-			return  ( y1 >= t && y1 <= b ) && ( x1 >= l && x1 <= r );
+			return ( y1 >= t && y1 <= b ) && ( x1 >= l && x1 <= r );
 		case "top-right-touch":
-			return  ( y1 >= t && y1 <= b ) && ( x2 >= l && x2 <= r );
+			return ( y1 >= t && y1 <= b ) && ( x2 >= l && x2 <= r );
 		case "bottom-left-touch":
-			return  ( y2 >= t && y2 <= b ) && ( x1 >= l && x1 <= r );
+			return ( y2 >= t && y2 <= b ) && ( x1 >= l && x1 <= r );
 		case "bottom-right-touch":
-			return  ( y2 >= t && y2 <= b ) && ( x2 >= l && x2 <= r );
+			return ( y2 >= t && y2 <= b ) && ( x2 >= l && x2 <= r );
 		default:
 			return false;
 		}
