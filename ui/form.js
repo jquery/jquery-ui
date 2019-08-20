@@ -13,8 +13,9 @@
 // Support: IE8 Only
 // IE8 does not support the form attribute and when it is supplied. It overwrites the form prop
 // with a string, so we need to find the proper form.
+// However since we no longer need to support IE8 we can just return the form attribute.
 return $.fn._form = function() {
-	return typeof this[ 0 ].form === "string" ? this.closest( "form" ) : $( this[ 0 ].form );
+	return $( this[ 0 ].form );
 };
 
 } ) );
