@@ -407,7 +407,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		if ( typeof obj === "string" ) {
 			obj = obj.split( " " );
 		}
-		if ( $.isArray( obj ) ) {
+		if ( Array.isArray( obj ) ) {
 			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
 		}
 		if ( "left" in obj ) {

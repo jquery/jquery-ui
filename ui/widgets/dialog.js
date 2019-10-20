@@ -481,7 +481,7 @@ $.widget( "ui.dialog", {
 		this.uiDialogButtonPane.remove();
 		this.uiButtonSet.empty();
 
-		if ( $.isEmptyObject( buttons ) || ( $.isArray( buttons ) && !buttons.length ) ) {
+		if ( $.isEmptyObject( buttons ) || ( Array.isArray( buttons ) && !buttons.length ) ) {
 			this._removeClass( this.uiDialog, "ui-dialog-buttons" );
 			return;
 		}

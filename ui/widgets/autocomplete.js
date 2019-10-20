@@ -375,7 +375,7 @@ $.widget( "ui.autocomplete", {
 	_initSource: function() {
 		var array, url,
 			that = this;
-		if ( $.isArray( this.options.source ) ) {
+		if ( Array.isArray( this.options.source ) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
 				response( $.ui.autocomplete.filter( array, request.term ) );

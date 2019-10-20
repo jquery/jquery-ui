@@ -95,7 +95,7 @@ $.widget( "ui.tabs", {
 
 		// Take disabling tabs via class attribute from HTML
 		// into account and update option properly.
-		if ( $.isArray( options.disabled ) ) {
+		if ( Array.isArray( options.disabled ) ) {
 			options.disabled = $.uniqueSort( options.disabled.concat(
 				$.map( this.tabs.filter( ".ui-state-disabled" ), function( li ) {
 					return that.tabs.index( li );
@@ -502,7 +502,7 @@ $.widget( "ui.tabs", {
 	_setOptionDisabled: function( disabled ) {
 		var currentItem, li, i;
 
-		if ( $.isArray( disabled ) ) {
+		if ( Array.isArray( disabled ) ) {
 			if ( !disabled.length ) {
 				disabled = false;
 			} else if ( disabled.length === this.anchors.length ) {
@@ -790,7 +790,7 @@ $.widget( "ui.tabs", {
 			disabled = false;
 		} else {
 			index = this._getIndex( index );
-			if ( $.isArray( disabled ) ) {
+			if ( Array.isArray( disabled ) ) {
 				disabled = $.map( disabled, function( num ) {
 					return num !== index ? num : null;
 				} );
@@ -816,7 +816,7 @@ $.widget( "ui.tabs", {
 			if ( $.inArray( index, disabled ) !== -1 ) {
 				return;
 			}
-			if ( $.isArray( disabled ) ) {
+			if ( Array.isArray( disabled ) ) {
 				disabled = $.merge( [ index ], disabled ).sort();
 			} else {
 				disabled = [ index ];
