@@ -13,8 +13,8 @@ function testWidgetDefaults( widget, defaults ) {
 		var count = 0;
 		$.each( defaults, function( key, val ) {
 			assert.expect( ++count );
-			if ( $.isFunction( val ) ) {
-				assert.ok( $.isFunction( pluginDefaults[ key ] ), key );
+			if ( typeof val === "function" ) {
+				assert.ok( typeof pluginDefaults[ key ] === "function", key );
 				return;
 			}
 			assert.deepEqual( pluginDefaults[ key ], val, key );
