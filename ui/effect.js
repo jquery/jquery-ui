@@ -1531,22 +1531,24 @@ $.fn.extend( {
 				width: target.innerWidth()
 			},
 			startPosition = element.offset(),
-			transfer = $( "<div class='ui-effects-transfer'></div>" )
-				.appendTo( "body" )
-				.addClass( options.className )
-				.css( {
-					top: startPosition.top - fixTop,
-					left: startPosition.left - fixLeft,
-					height: element.innerHeight(),
-					width: element.innerWidth(),
-					position: targetFixed ? "fixed" : "absolute"
-				} )
-				.animate( animation, options.duration, options.easing, function() {
-					transfer.remove();
-					if ( typeof done === "function" ) {
-						done();
-					}
-				} );
+			transfer = $( "<div class='ui-effects-transfer'></div>" );
+
+		transfer
+			.appendTo( "body" )
+			.addClass( options.className )
+			.css( {
+				top: startPosition.top - fixTop,
+				left: startPosition.left - fixLeft,
+				height: element.innerHeight(),
+				width: element.innerWidth(),
+				position: targetFixed ? "fixed" : "absolute"
+			} )
+			.animate( animation, options.duration, options.easing, function() {
+				transfer.remove();
+				if ( typeof done === "function" ) {
+					done();
+				}
+			} );
 	}
 } );
 
