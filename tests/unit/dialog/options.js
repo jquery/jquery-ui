@@ -251,21 +251,25 @@ QUnit.test( "height", function( assert ) {
 	assert.expect( 4 );
 
 	var element = $( "<div></div>" ).dialog();
-		assert.equal( element.dialog( "widget" ).outerHeight(), 150, "default height" );
+		assert.ok( Math.abs( element.dialog( "widget" ).outerHeight() - 150) < 0.25,
+			"default height within 0.25 from expected" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( { height: 237 } );
-		assert.equal( element.dialog( "widget" ).outerHeight(), 237, "explicit height" );
+		assert.ok( Math.abs( element.dialog( "widget" ).outerHeight() - 237) < 0.25,
+			"explicit height within 0.25 from expected" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog();
 		element.dialog( "option", "height", 238 );
-		assert.equal( element.dialog( "widget" ).outerHeight(), 238, "explicit height set after init" );
+		assert.ok( Math.abs( element.dialog( "widget" ).outerHeight() - 238) < 0.25,
+			"explicit height set after init within 0.25 from expected" );
 	element.remove();
 
 	element = $( "<div></div>" ).css( "padding", "20px" )
 		.dialog( { height: 240 } );
-		assert.equal( element.dialog( "widget" ).outerHeight(), 240, "explicit height with padding" );
+		assert.ok( Math.abs( element.dialog( "widget" ).outerHeight() - 240) < 0.25,
+			"explicit height with padding within 0.25 from expected" );
 	element.remove();
 } );
 
