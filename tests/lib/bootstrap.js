@@ -105,7 +105,7 @@ function jqueryUrl() {
 	var url;
 
 	if ( version === "git" ) {
-		url = "http://code.jquery.com/jquery-" + version;
+		url = "https://code.jquery.com/jquery-" + version;
 	} else {
 		url = "../../../external/jquery-" + version + "/jquery";
 	}
@@ -118,7 +118,7 @@ function migrateUrl() {
 	var url;
 
 	if ( jqueryVersion === "git" ) {
-		url = "http://code.jquery.com/jquery-migrate-git";
+		url = "https://code.jquery.com/jquery-migrate-git";
 	} else if ( jqueryVersion[ 0 ] === "3" ) {
 		url = "../../../external/jquery-migrate-3.0.0/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {
