@@ -104,7 +104,7 @@ function jqueryUrl() {
 	var version = parseUrl().jquery || DEFAULT_JQUERY_VERSION;
 	var url;
 
-	if ( version === "git" ) {
+	if ( version === "git" || version === "3.x-git" ) {
 		url = "https://code.jquery.com/jquery-" + version;
 	} else {
 		url = "../../../external/jquery-" + version + "/jquery";
