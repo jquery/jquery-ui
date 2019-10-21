@@ -39,6 +39,8 @@ $.effects = {
 	effect: {}
 };
 
+// jscs:disable
+
 /*!
  * jQuery Color Animations v2.1.2
  * https://github.com/jquery/jquery-color
@@ -715,6 +717,8 @@ colors = jQuery.Color.names = {
 };
 
 } )( jQuery );
+
+// jscs:enable
 
 /******************************************************************************/
 /****************************** CLASS ANIMATIONS ******************************/
