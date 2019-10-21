@@ -120,7 +120,7 @@ function migrateUrl() {
 	if ( jqueryVersion === "git" ) {
 		url = "https://code.jquery.com/jquery-migrate-git";
 	} else if ( jqueryVersion[ 0 ] === "3" ) {
-		url = "../../../external/jquery-migrate-3.0.0/jquery-migrate";
+		url = "../../../external/jquery-migrate-3.1.0/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {
 		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
 	} else if ( jqueryVersion === "custom" ) {
