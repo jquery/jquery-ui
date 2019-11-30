@@ -166,7 +166,7 @@ QUnit.test( "buttons - advanced", function( assert ) {
 	buttons = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	assert.equal( buttons.length, 1, "correct number of buttons" );
 	assert.equal( buttons.attr( "id" ), "my-button-id", "correct id" );
-	assert.equal( $.trim( buttons.text() ), "a button", "correct label" );
+	assert.equal( String.prototype.trim.call( buttons.text() ), "a button", "correct label" );
 	assert.hasClasses( buttons, "additional-class" );
 	assert.deepEqual( buttons.button( "option", "icon" ), "ui-icon-cancel" );
 	assert.equal( buttons.button( "option", "showLabel" ), false );
@@ -210,22 +210,22 @@ QUnit.test( "closeText", function( assert ) {
 	assert.expect( 4 );
 
 	var element = $( "<div></div>" ).dialog();
-		assert.equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "Close",
+		assert.equal( String.prototype.trim.call( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "Close",
 			"default close text" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( { closeText: "foo" } );
-		assert.equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "foo",
+		assert.equal( String.prototype.trim.call( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "foo",
 			"closeText on init" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog().dialog( "option", "closeText", "bar" );
-		assert.equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "bar",
+		assert.equal( String.prototype.trim.call( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "bar",
 			"closeText via option method" );
 	element.remove();
 
 	element = $( "<div></div>" ).dialog( { closeText: "<span>foo</span>" } );
-		assert.equal( $.trim( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "<span>foo</span>",
+		assert.equal( String.prototype.trim.call( element.dialog( "widget" ).find( ".ui-dialog-titlebar-close" ).text() ), "<span>foo</span>",
 			"closeText is escaped" );
 	element.remove();
 } );

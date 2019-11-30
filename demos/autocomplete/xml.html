@@ -25,7 +25,8 @@
 				var data = $( "geoname", xmlResponse ).map(function() {
 					return {
 						value: $( "name", this ).text() + ", " +
-							( $.trim( $( "countryName", this ).text() ) || "(unknown country)" ),
+							( String.prototype.trim.call( $( "countryName", this ).text() ) ||
+									"(unknown country)" ),
 						id: $( "geonameId", this ).text()
 					};
 				}).get();

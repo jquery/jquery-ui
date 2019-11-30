@@ -210,7 +210,7 @@ QUnit.test( "animateClass clears style properties when stopped", function( asser
 		.stop( true, true )
 		.promise()
 		.then( function() {
-			assert.equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
+			assert.equal( orig, String.prototype.trim.call( style.cssText ), "cssText is the same after stopping animation midway" );
 			ready();
 		} );
 } );

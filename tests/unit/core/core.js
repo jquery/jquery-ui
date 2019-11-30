@@ -152,8 +152,9 @@ QUnit.test( "Labels", function( assert ) {
 		var found = labels.map( function() {
 
 				// Support: Core 1.9 Only
-				// We use $.trim() because core 1.9.x silently fails when white space is present
-				return $.trim( $( this ).text() );
+				// We use String.prototype.trim because core 1.9.x silently fails
+				// when white space is present
+				return String.prototype.trim.call( $( this ).text() );
 			} ).get();
 
 		assert.deepEqual( found, expected,

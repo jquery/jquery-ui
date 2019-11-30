@@ -689,7 +689,8 @@ return $.widget( "ui.menu", {
 				.filter( ".ui-menu-item" )
 					.filter( function() {
 						return regex.test(
-							$.trim( $( this ).children( ".ui-menu-item-wrapper" ).text() ) );
+							String.prototype.trim.call(
+								$( this ).children( ".ui-menu-item-wrapper" ).text() ) );
 					} );
 	}
 } );

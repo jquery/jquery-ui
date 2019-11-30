@@ -261,7 +261,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			for ( i = 0; i < n.length; i++ ) {
 
-				handle = $.trim( n[ i ] );
+				handle = String.prototype.trim.call( n[ i ] );
 				hname = "ui-resizable-" + handle;
 				axis = $( "<div>" );
 				this._addClass( axis, "ui-resizable-handle " + hname );

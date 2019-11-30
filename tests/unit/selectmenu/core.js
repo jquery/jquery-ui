@@ -95,7 +95,7 @@ QUnit.test( "_renderButtonItem()", function( assert ) {
 	element.selectmenu( "refresh" );
 	option = element.find( "option:selected" );
 	assert.equal(
-		$.trim( button.text() ),
+		String.prototype.trim.call( button.text() ),
 		option.text() + element[ 0 ].selectedIndex,
 		"refresh: button item text"
 	);
@@ -104,7 +104,7 @@ QUnit.test( "_renderButtonItem()", function( assert ) {
 	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
 	option = element.find( "option" ).last();
 	assert.equal(
-		$.trim( button.text() ),
+		String.prototype.trim.call( button.text() ),
 		option.text() + element[ 0 ].selectedIndex,
 		"click: button item text"
 	);
@@ -153,7 +153,7 @@ $.each( [
 				selected.val(),
 				"original select state"
 			);
-			assert.equal( $.trim( button.text() ), selected.text(), "button text" );
+			assert.equal( String.prototype.trim.call( button.text() ), selected.text(), "button text" );
 			ready();
 		} );
 	} );
@@ -189,7 +189,7 @@ $.each( [
 				selected.val(),
 				"original select state"
 			);
-			assert.equal( $.trim( button.text() ), selected.text(), "button text" );
+			assert.equal( String.prototype.trim.call( button.text() ), selected.text(), "button text" );
 			ready();
 		}, 1 );
 	} );
@@ -231,7 +231,7 @@ $.each( [
 					"button aria-activedescendant" );
 				assert.equal( element.find( "option:selected" ).val(), options.eq( 1 ).val(),
 					"original select state" );
-				assert.equal( $.trim( button.text() ), options.eq( 1 ).text(), "button text" );
+				assert.equal( String.prototype.trim.call( button.text() ), options.eq( 1 ).text(), "button text" );
 				ready();
 			} );
 		} );
@@ -352,10 +352,10 @@ QUnit.test( "Selectmenu should reset when its parent form resets", function( ass
 
 	element.val( "Slower" );
 	element.selectmenu( "refresh" );
-	assert.equal( $.trim( widget.text() ), "Slower" );
+	assert.equal( String.prototype.trim.call( widget.text() ), "Slower" );
 	form[ 0 ].reset();
 	setTimeout( function() {
-		assert.equal( $.trim( widget.text() ), initialValue );
+		assert.equal( String.prototype.trim.call( widget.text() ), initialValue );
 		ready();
 	} );
 } );
