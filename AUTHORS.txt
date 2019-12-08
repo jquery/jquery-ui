@@ -312,7 +312,7 @@ Mani Mishra <manimishra902@gmail.com>
 Hannah Methvin <hannahmethvin@gmail.com>
 Leonardo Balter <leonardo.balter@gmail.com>
 Benjamin Albert <benjamin_a5@yahoo.com>
-Michał Gołębiowski <m.goleb@gmail.com>
+Michał Gołębiowski-Owczarek <m.goleb@gmail.com>
 Alyosha Pushak <alyosha.pushak@gmail.com>
 Fahad Ahmad <fahadahmad41@hotmail.com>
 Matt Brundage <github@mattbrundage.com>
