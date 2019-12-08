@@ -7,7 +7,7 @@
 	<script src="../../../external/requirejs/require.js"></script>
 	<script src="../../../demos/bootstrap.js">
 		var start,
-			html = new Array( 500 ).join( $.trim( $( "#template" ).html() ) );
+			html = new Array( 500 ).join( String.prototype.trim.call( $( "#template" ).html() ) );
 		$( html ).appendTo( "body" );
 
 		start = new Date();

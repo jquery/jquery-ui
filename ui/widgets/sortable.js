@@ -756,7 +756,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				for ( j = cur.length - 1; j >= 0; j-- ) {
 					inst = $.data( cur[ j ], this.widgetFullName );
 					if ( inst && inst !== this && !inst.options.disabled ) {
-						queries.push( [ $.isFunction( inst.options.items ) ?
+						queries.push( [ typeof inst.options.items === "function" ?
 							inst.options.items.call( inst.element ) :
 							$( inst.options.items, inst.element )
 								.not( ".ui-sortable-helper" )
@@ -766,7 +766,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			}
 		}
 
-		queries.push( [ $.isFunction( this.options.items ) ?
+		queries.push( [ typeof this.options.items === "function" ?
 			this.options.items
 				.call( this.element, null, { options: this.options, item: this.currentItem } ) :
 			$( this.options.items, this.element )
@@ -806,7 +806,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		var i, j, cur, inst, targetData, _queries, item, queriesLength,
 			items = this.items,
-			queries = [ [ $.isFunction( this.options.items ) ?
+			queries = [ [ typeof this.options.items === "function" ?
 				this.options.items.call( this.element[ 0 ], event, { item: this.currentItem } ) :
 				$( this.options.items, this.element ), this ] ],
 			connectWith = this._connectWith();
@@ -818,7 +818,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				for ( j = cur.length - 1; j >= 0; j-- ) {
 					inst = $.data( cur[ j ], this.widgetFullName );
 					if ( inst && inst !== this && !inst.options.disabled ) {
-						queries.push( [ $.isFunction( inst.options.items ) ?
+						queries.push( [ typeof inst.options.items === "function" ?
 							inst.options.items
 								.call( inst.element[ 0 ], event, { item: this.currentItem } ) :
 							$( inst.options.items, inst.element ), inst ] );
@@ -1121,7 +1121,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 	_createHelper: function( event ) {
 
 		var o = this.options,
-			helper = $.isFunction( o.helper ) ?
+			helper = typeof o.helper === "function" ?
 				$( o.helper.apply( this.element[ 0 ], [ event, this.currentItem ] ) ) :
 				( o.helper === "clone" ? this.currentItem.clone() : this.currentItem );
 
@@ -1155,7 +1155,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		if ( typeof obj === "string" ) {
 			obj = obj.split( " " );
 		}
-		if ( $.isArray( obj ) ) {
+		if ( Array.isArray( obj ) ) {
 			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
 		}
 		if ( "left" in obj ) {

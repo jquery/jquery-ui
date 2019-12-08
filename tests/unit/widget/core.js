@@ -29,7 +29,7 @@ QUnit.test( "widget creation", function( assert ) {
 		};
 
 	$.widget( "ui.testWidget", myPrototype );
-	assert.ok( $.isFunction( $.ui.testWidget ), "constructor was created" );
+	assert.ok( typeof $.ui.testWidget === "function", "constructor was created" );
 	assert.equal( typeof $.ui.testWidget.prototype, "object", "prototype was created" );
 	method = "_create";
 	$.ui.testWidget.prototype._create();
@@ -947,7 +947,7 @@ QUnit.test( "_on() with delegate", function( assert ) {
 			this.element = {
 				on: function( event, handler ) {
 					assert.equal( event, "click.testWidget" + uuid );
-					assert.ok( $.isFunction( handler ) );
+					assert.ok( typeof handler === "function" );
 				},
 				trigger: $.noop
 			};
@@ -956,7 +956,7 @@ QUnit.test( "_on() with delegate", function( assert ) {
 					on: function( event, selector, handler ) {
 						assert.equal( selector, "a" );
 						assert.equal( event, "click.testWidget" + uuid );
-						assert.ok( $.isFunction( handler ) );
+						assert.ok( typeof handler === "function" );
 					}
 				};
 			};
@@ -969,7 +969,7 @@ QUnit.test( "_on() with delegate", function( assert ) {
 					on: function( event, selector, handler ) {
 						assert.equal( selector, "form fieldset > input" );
 						assert.equal( event, "change.testWidget" + uuid );
-						assert.ok( $.isFunction( handler ) );
+						assert.ok( typeof handler === "function" );
 					}
 				};
 			};
@@ -1608,7 +1608,7 @@ QUnit.test( "$.widget.bridge()", function( assert ) {
 
 	$.widget.bridge( "testWidget", TestWidget );
 
-	assert.ok( $.isFunction( $.fn.testWidget ), "jQuery plugin was created" );
+	assert.ok( typeof $.fn.testWidget === "function", "jQuery plugin was created" );
 
 	assert.strictEqual( elem.testWidget( { foo: "bar" } ), elem, "plugin returns original jQuery object" );
 	instance = elem.data( "testWidget" );

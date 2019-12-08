@@ -37,7 +37,9 @@
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js" data-modules="button controlgroup menu effect effect-blind">
 		function notify( input ) {
-			var msg = "Selected " + $.trim( input.data( "tooltip-title" ) || input.text() );
+			var msg = "Selected " +
+					String.prototype.trim.call(
+						input.data( "tooltip-title" ) || input.text() );
 			$( "<div>" )
 				.appendTo( document.body )
 				.text( msg )

@@ -39,6 +39,8 @@ $.effects = {
 	effect: {}
 };
 
+// jscs:disable
+
 /*!
  * jQuery Color Animations v2.1.2
  * https://github.com/jquery/jquery-color
@@ -716,6 +718,8 @@ colors = jQuery.Color.names = {
 
 } )( jQuery );
 
+// jscs:enable
+
 /******************************************************************************/
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
@@ -1290,7 +1294,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	// Catch (effect, callback)
-	if ( $.isFunction( options ) ) {
+	if ( typeof options === "function" ) {
 		callback = options;
 		speed = null;
 		options = {};
@@ -1304,7 +1308,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	// Catch (effect, options, callback)
-	if ( $.isFunction( speed ) ) {
+	if ( typeof speed === "function" ) {
 		callback = speed;
 		speed = null;
 	}
@@ -1338,7 +1342,7 @@ function standardAnimationOption( option ) {
 	}
 
 	// Complete callback
-	if ( $.isFunction( option ) ) {
+	if ( typeof option === "function" ) {
 		return true;
 	}
 
@@ -1383,7 +1387,7 @@ $.fn.extend( {
 					$.effects.saveStyle( el );
 				}
 
-				if ( $.isFunction( next ) ) {
+				if ( typeof next === "function" ) {
 					next();
 				}
 			};
@@ -1418,11 +1422,11 @@ $.fn.extend( {
 			}
 
 			function done() {
-				if ( $.isFunction( complete ) ) {
+				if ( typeof complete === "function" ) {
 					complete.call( elem[ 0 ] );
 				}
 
-				if ( $.isFunction( next ) ) {
+				if ( typeof next === "function" ) {
 					next();
 				}
 			}
@@ -1531,22 +1535,24 @@ $.fn.extend( {
 				width: target.innerWidth()
 			},
 			startPosition = element.offset(),
-			transfer = $( "<div class='ui-effects-transfer'></div>" )
-				.appendTo( "body" )
-				.addClass( options.className )
-				.css( {
-					top: startPosition.top - fixTop,
-					left: startPosition.left - fixLeft,
-					height: element.innerHeight(),
-					width: element.innerWidth(),
-					position: targetFixed ? "fixed" : "absolute"
-				} )
-				.animate( animation, options.duration, options.easing, function() {
-					transfer.remove();
-					if ( $.isFunction( done ) ) {
-						done();
-					}
-				} );
+			transfer = $( "<div class='ui-effects-transfer'></div>" );
+
+		transfer
+			.appendTo( "body" )
+			.addClass( options.className )
+			.css( {
+				top: startPosition.top - fixTop,
+				left: startPosition.left - fixLeft,
+				height: element.innerHeight(),
+				width: element.innerWidth(),
+				position: targetFixed ? "fixed" : "absolute"
+			} )
+			.animate( animation, options.duration, options.easing, function() {
+				transfer.remove();
+				if ( typeof done === "function" ) {
+					done();
+				}
+			} );
 	}
 } );
 

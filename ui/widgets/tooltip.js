@@ -72,7 +72,7 @@ $.widget( "ui.tooltip", {
 		describedby.push( id );
 		elem
 			.data( "ui-tooltip-id", id )
-			.attr( "aria-describedby", $.trim( describedby.join( " " ) ) );
+			.attr( "aria-describedby", String.prototype.trim.call( describedby.join( " " ) ) );
 	},
 
 	_removeDescribedBy: function( elem ) {
@@ -85,7 +85,7 @@ $.widget( "ui.tooltip", {
 		}
 
 		elem.removeData( "ui-tooltip-id" );
-		describedby = $.trim( describedby.join( " " ) );
+		describedby = String.prototype.trim.call( describedby.join( " " ) );
 		if ( describedby ) {
 			elem.attr( "aria-describedby", describedby );
 		} else {
