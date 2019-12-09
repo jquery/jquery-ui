@@ -447,7 +447,7 @@ QUnit.test( "{ placholder: String } tbody", function( assert ) {
 				assert.equal( ui.placeholder.children( "tr" ).length, 1,
 					"placeholder's child is tr" );
 				assert.equal( ui.placeholder.find( "> tr" ).children().length,
-					dragBody.find( "> tr:first" ).children().length,
+					dragBody.find( "> tr" ).first().children().length,
 					"placeholder's tr has correct number of cells" );
 				assert.equal( ui.placeholder.find( "> tr" ).children().html(),
 					$( "<span>&#160;</span>" ).html(),

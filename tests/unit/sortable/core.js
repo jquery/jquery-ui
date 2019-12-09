@@ -24,8 +24,8 @@ QUnit.test( "ui-sortable-handle applied to appropriate element", function( asser
 			.sortable()
 			.appendTo( "#qunit-fixture" );
 
-	assert.hasClasses( el.find( "li:first" ), "ui-sortable-handle" );
-	assert.hasClasses( el.find( "li:last" ), "ui-sortable-handle" );
+	assert.hasClasses( el.find( "li" ).first(), "ui-sortable-handle" );
+	assert.hasClasses( el.find( "li" ).last(), "ui-sortable-handle" );
 
 	el.sortable( "option", "handle", "p" );
 	assert.lacksClasses( el.find( "li" )[ 0 ], "ui-sortable-handle" );

@@ -13,7 +13,7 @@ QUnit.module( "spinner: options" );
 QUnit.test( "icons: default ", function( assert ) {
 	assert.expect( 4 );
 	var element = $( "#spin" ).val( 0 ).spinner();
-	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:first" ),
+	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon" ).first(),
 		"ui-icon ui-icon-triangle-1-n" );
 	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:last" ),
 		"ui-icon ui-icon-triangle-1-s" );
@@ -22,7 +22,7 @@ QUnit.test( "icons: default ", function( assert ) {
 		up: "ui-icon-caret-1-n",
 		down: "ui-icon-caret-1-s"
 	} );
-	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:first" ),
+	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon" ).first(),
 		"ui-icon ui-icon-caret-1-n" );
 	assert.hasClasses( element.spinner( "widget" ).find( ".ui-icon:last" ),
 		"ui-icon ui-icon-caret-1-s" );
@@ -36,7 +36,7 @@ QUnit.test( "icons: custom ", function( assert ) {
 			up: "custom-up"
 		}
 	} ).spinner( "widget" );
-	assert.hasClasses( element.find( ".ui-icon:first" ), "ui-icon custom-up" );
+	assert.hasClasses( element.find( ".ui-icon" ).first(), "ui-icon custom-up" );
 	assert.hasClasses( element.find( ".ui-icon:last" ), "ui-icon custom-down" );
 } );
 

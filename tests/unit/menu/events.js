@@ -176,12 +176,12 @@ QUnit.test( "handle submenu auto collapse: mouseleave, default markup", function
 
 	function menumouseleave1() {
 		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		element.menu( "focus", event, element.find( "li:nth-child(7) li:first" ) );
+		element.menu( "focus", event, element.find( "li:nth-child(7) li" ).first() );
 		setTimeout( menumouseleave2, 25 );
 	}
 	function menumouseleave2() {
 		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-		element.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		element.find( "ul[aria-expanded='true']" ).first().trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
@@ -213,7 +213,7 @@ QUnit.test( "handle submenu auto collapse: mouseleave, custom markup", function(
 	}
 	function menumouseleave2() {
 		assert.equal( element.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-		element.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		element.find( "div[aria-expanded='true']" ).first().trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {

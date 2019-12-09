@@ -62,22 +62,22 @@ QUnit.test( "refresh", function( assert ) {
 QUnit.test( "refresh submenu", function( assert ) {
 	assert.expect( 2 );
 	var element = $( "#menu2" ).menu();
-	assert.equal( element.find( "ul:first .ui-menu-item" ).length, 3 );
+	assert.equal( element.find( "ul" ).first().find( ".ui-menu-item" ).length, 3 );
 	element.find( "ul" ).addBack().append( "<li><a href=\"#\">New Item</a></li>" );
 	element.menu( "refresh" );
-	assert.equal( element.find( "ul:first .ui-menu-item" ).length, 4 );
+	assert.equal( element.find( "ul" ).first().find( ".ui-menu-item" ).length, 4 );
 } );
 
 QUnit.test( "refresh icons (see #9377)", function( assert ) {
 	assert.expect( 3 );
 	var element = $( "#menu1" ).menu();
 	assert.lacksClasses( element, "ui-menu-icons" );
-	element.find( "li:first .ui-menu-item-wrapper" )
+	element.find( "li" ).first().find( ".ui-menu-item-wrapper" )
 		.html( "<span class='ui-icon ui-icon-disk'></span>Save</a>" );
 	element.menu( "refresh" );
 
 	assert.hasClasses( element, "ui-menu-icons" );
-	element.find( "li:first .ui-menu-item-wrapper" ).html( "Save" );
+	element.find( "li" ).first().find( ".ui-menu-item-wrapper" ).html( "Save" );
 	element.menu( "refresh" );
 	assert.lacksClasses( element, "ui-menu-icons" );
 } );
