@@ -51,11 +51,11 @@ QUnit.test( "refresh", function( assert ) {
 	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.append( "<li><a href='#'>test item</a></li>" ).menu( "refresh" );
 	assert.equal( element.find( ".ui-menu-item" ).length, 6, "Incorrect number of menu items" );
-	element.find( ".ui-menu-item:last" ).remove().end().menu( "refresh" );
+	element.find( ".ui-menu-item" ).last().remove().end().end().menu( "refresh" );
 	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 	element.append( "<li>---</li>" ).menu( "refresh" );
 	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
-	element.children( ":last" ).remove().end().menu( "refresh" );
+	element.children().last().remove().end().end().menu( "refresh" );
 	assert.equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 } );
 

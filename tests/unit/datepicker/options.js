@@ -247,15 +247,15 @@ QUnit.test( "otherMonths", function( assert ) {
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
-	assert.ok( pop.find( "td:last *" ).length === 0, "Other months - no content" );
+	assert.ok( pop.find( "td" ).last().find( "*" ).length === 0, "Other months - no content" );
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", true ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(), "311234567891011121314151617181920212223242526272829301234",
 		"Other months - show" );
-	assert.ok( pop.find( "td:last span" ).length === 1, "Other months - span content" );
+	assert.ok( pop.find( "td" ).last().find( "span" ).length === 1, "Other months - span content" );
 	inp.datepicker( "hide" ).datepicker( "option", "selectOtherMonths", true ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(), "311234567891011121314151617181920212223242526272829301234",
 		"Other months - select" );
-	assert.ok( pop.find( "td:last a" ).length === 1, "Other months - link content" );
+	assert.ok( pop.find( "td" ).last().find( "a" ).length === 1, "Other months - link content" );
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", false ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(),
 
@@ -263,7 +263,7 @@ QUnit.test( "otherMonths", function( assert ) {
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
-	assert.ok( pop.find( "td:last *" ).length === 0, "Other months - no content" );
+	assert.ok( pop.find( "td" ).last().find( "*" ).length === 0, "Other months - no content" );
 } );
 
 QUnit.test( "defaultDate", function( assert ) {

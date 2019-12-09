@@ -329,7 +329,7 @@ QUnit.test( "out, with connected sortable", function( assert ) {
 		hash = ui;
 		outCount++;
 	} );
-	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+	$( "#sortable" ).find( "li" ).last().simulate( "drag", {
 		dy: 40
 	} );
 
@@ -357,7 +357,7 @@ QUnit.test( "repeated out & over between connected sortables", function( assert 
 			}
 		}
 	} );
-	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+	$( "#sortable" ).find( "li" ).last().simulate( "drag", {
 		dy: 40
 	} ).simulate( "drag", {
 		dy: -40

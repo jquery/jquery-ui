@@ -306,7 +306,7 @@ QUnit.test( "handle keyboard navigation on menu without scroll and with submenus
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active:last" ).parent().index() );
+			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).last().parent().index() );
 		}
 	} );
 
@@ -427,7 +427,7 @@ QUnit.test( "handle keyboard navigation on menu with scroll and without submenus
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active:last" ).parent().index() );
+			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).last().parent().index() );
 		}
 	} );
 
@@ -503,7 +503,7 @@ QUnit.test( "handle keyboard navigation on menu with scroll and with submenus", 
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active:last" ).parent().index() );
+			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).last().parent().index() );
 		}
 	} );
 
