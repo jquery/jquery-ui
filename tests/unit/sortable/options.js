@@ -136,7 +136,7 @@ QUnit.test( "#8792: issues with floated items in connected lists", function( ass
 		}
 	} );
 
-	element = $( "#qunit-fixture li:eq(0)" );
+	element = $( "#qunit-fixture li" ).eq( 0 );
 
 	// Move the first li to the right of the second li in the first ul
 	element.simulate( "drag", {

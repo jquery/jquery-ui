@@ -55,7 +55,7 @@ QUnit.test( "baseStructure", function( assert ) {
 			assert.ok( header.is( "div.ui-datepicker-header" ), "Structure - header division" );
 			assert.equal( header.children().length, 3, "Structure - header child count" );
 			assert.ok( header.children().first().is( "a.ui-datepicker-prev" ) && header.children().first().html() !== "", "Structure - prev link" );
-			assert.ok( header.children( ":eq(1)" ).is( "a.ui-datepicker-next" ) && header.children( ":eq(1)" ).html() !== "", "Structure - next link" );
+			assert.ok( header.children().eq( 1 ).is( "a.ui-datepicker-next" ) && header.children().eq ( 1 ).html() !== "", "Structure - next link" );
 
 			title = header.children().last();
 			assert.ok( title.is( "div.ui-datepicker-title" ) && title.html() !== "", "Structure - title division" );
@@ -63,17 +63,17 @@ QUnit.test( "baseStructure", function( assert ) {
 			assert.ok( title.children().first().is( "span.ui-datepicker-month" ) && title.children().first().text() !== "", "Structure - month text" );
 			assert.ok( title.children().last().is( "span.ui-datepicker-year" ) && title.children().last().text() !== "", "Structure - year text" );
 
-			table = dp.children( ":eq(1)" );
+			table = dp.children().eq( 1 );
 			assert.ok( table.is( "table.ui-datepicker-calendar" ), "Structure - month table" );
 			assert.ok( table.children().first().is( "thead" ), "Structure - month table thead" );
 
 			thead = table.children().first().children().first();
 			assert.ok( thead.is( "tr" ), "Structure - month table title row" );
 			assert.equal( thead.find( "th" ).length, 7, "Structure - month table title cells" );
-			assert.ok( table.children( ":eq(1)" ).is( "tbody" ), "Structure - month table body" );
-			assert.ok( table.children( ":eq(1)" ).children( "tr" ).length >= 4, "Structure - month table week count" );
+			assert.ok( table.children().eq( 1 ).is( "tbody" ), "Structure - month table body" );
+			assert.ok( table.children().eq( 1 ).children( "tr" ).length >= 4, "Structure - month table week count" );
 
-			week = table.children( ":eq(1)" ).children().first();
+			week = table.children().eq( 1 ).children().first();
 			assert.ok( week.is( "tr" ), "Structure - month table week row" );
 			assert.equal( week.children().length, 7, "Structure - week child count" );
 			assert.ok( week.children().first().is( "td.ui-datepicker-week-end" ), "Structure - month table first day cell" );
@@ -119,10 +119,10 @@ QUnit.test( "baseStructure", function( assert ) {
 			child = dp.children().first();
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-first" ), "Structure multi [2] - first month division" );
 
-			child = dp.children( ":eq(1)" );
+			child = dp.children().eq( 1 );
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-last" ), "Structure multi [2] - second month division" );
 
-			child = dp.children( ":eq(2)" );
+			child = dp.children().eq( 2 );
 			assert.ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2] - row break" );
 			assert.ok( dp.is( ".ui-datepicker-multi-2" ), "Structure multi [2] - multi-2" );
 
@@ -155,19 +155,19 @@ QUnit.test( "baseStructure", function( assert ) {
 			child = dp.children().first();
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-first" ), "Structure multi [2,2] - first month division" );
 
-			child = dp.children( ":eq(1)" );
+			child = dp.children().eq( 1 );
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-last" ), "Structure multi [2,2] - second month division" );
 
-			child = dp.children( ":eq(2)" );
+			child = dp.children().eq( 2 );
 			assert.ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2,2] - row break" );
 
-			child = dp.children( ":eq(3)" );
+			child = dp.children().eq( 3 );
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-first" ), "Structure multi [2,2] - third month division" );
 
-			child = dp.children( ":eq(4)" );
+			child = dp.children().eq( 4 );
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-last" ), "Structure multi [2,2] - fourth month division" );
 
-			child = dp.children( ":eq(5)" );
+			child = dp.children().eq( 5 );
 			assert.ok( child.is( "div.ui-datepicker-row-break" ), "Structure multi [2,2] - row break" );
 
 			inp.datepicker( "hide" ).datepicker( "destroy" );
@@ -185,10 +185,10 @@ QUnit.test( "baseStructure", function( assert ) {
 			assert.ok( header.is( "div.ui-datepicker-header" ), "Structure inline - header division" );
 			assert.equal( header.children().length, 3, "Structure inline - header child count" );
 
-			table = dp.children( ":eq(1)" );
+			table = dp.children().eq( 1 );
 			assert.ok( table.is( "table.ui-datepicker-calendar" ), "Structure inline - month table" );
 			assert.ok( table.children().first().is( "thead" ), "Structure inline - month table thead" );
-			assert.ok( table.children( ":eq(1)" ).is( "tbody" ), "Structure inline - month table body" );
+			assert.ok( table.children().eq( 1 ).is( "tbody" ), "Structure inline - month table body" );
 
 			inl.datepicker( "destroy" );
 
@@ -202,10 +202,10 @@ QUnit.test( "baseStructure", function( assert ) {
 			child = dp.children().first();
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-first" ), "Structure inline multi - first month division" );
 
-			child = dp.children( ":eq(1)" );
+			child = dp.children().eq( 1 );
 			assert.ok( child.is( "div.ui-datepicker-group" ) && child.is( "div.ui-datepicker-group-last" ), "Structure inline multi - second month division" );
 
-			child = dp.children( ":eq(2)" );
+			child = dp.children().eq( 2 );
 			assert.ok( child.is( "div.ui-datepicker-row-break" ), "Structure inline multi - row break" );
 
 			inl.datepicker( "destroy" );
@@ -233,7 +233,7 @@ QUnit.test( "customStructure", function( assert ) {
 			assert.ok( header.is( "div.ui-datepicker-header" ), "Structure RTL - header division" );
 			assert.equal( header.children().length, 3, "Structure RTL - header child count" );
 			assert.ok( header.children().first().is( "a.ui-datepicker-next" ), "Structure RTL - prev link" );
-			assert.ok( header.children( ":eq(1)" ).is( "a.ui-datepicker-prev" ), "Structure RTL - next link" );
+			assert.ok( header.children().eq( 1 ).is( "a.ui-datepicker-prev" ), "Structure RTL - next link" );
 
 			panel = dp.children().last();
 			assert.ok( panel.is( "div.ui-datepicker-buttonpane" ), "Structure RTL - button division" );

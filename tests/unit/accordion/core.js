@@ -39,7 +39,7 @@ $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( typ
 QUnit.test( "handle click on header-descendant", function( assert ) {
 	assert.expect( 1 );
 	var element = $( "#navigation" ).accordion();
-	$( "#navigation h2:eq(1) a" ).trigger( "click" );
+	$( "#navigation h2" ).eq( 1 ).find( "a" ).trigger( "click" );
 	state( assert, element, 0, 1, 0 );
 } );
 

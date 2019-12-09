@@ -87,8 +87,8 @@ QUnit.test( "active menu item styling", function( assert ) {
 	}
 	$.ui.menu.prototype.delay = 0;
 	var element = $( "#menu4" ).menu();
-	var parentItem = element.children( "li:eq(1)" );
-	var childItem = parentItem.find( "li:eq(0)" );
+	var parentItem = element.children( "li" ).eq( 1 );
+	var childItem = parentItem.find( "li" ).eq( 0 );
 	element.menu( "focus", null, parentItem );
 	setTimeout( function() {
 		isActive( parentItem );
