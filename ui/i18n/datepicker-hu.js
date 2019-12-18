@@ -12,10 +12,10 @@
 }( function( datepicker ) {
 
 datepicker.regional.hu = {
-	closeText: "bezár",
-	prevText: "vissza",
-	nextText: "előre",
-	currentText: "ma",
+	closeText: "Bezár",
+	prevText: "Vissza",
+	nextText: "Előre",
+	currentText: "Ma",
 	monthNames: [ "Január", "Február", "Március", "Április", "Május", "Június",
 	"Július", "Augusztus", "Szeptember", "Október", "November", "December" ],
 	monthNamesShort: [ "Jan", "Feb", "Már", "Ápr", "Máj", "Jún",
