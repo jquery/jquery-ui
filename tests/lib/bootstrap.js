@@ -172,8 +172,11 @@ function migrateUrl() {
 		}
 	}
 
+	var jQueryVersion = parseUrl().jquery;
+
 	// Load the jQuery fixes, if necessary
-	if ( parseFloat( parseUrl().jquery ) < 3 ) {
+	if ( !jQueryVersion ||
+		( jQueryVersion.indexOf( "git" ) === -1 && parseFloat( jQueryVersion ) < 4 ) ) {
 		modules.unshift( "ui/jquery-1-7" );
 	}
 

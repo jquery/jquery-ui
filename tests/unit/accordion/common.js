@@ -15,7 +15,9 @@ common.testWidget( "accordion", {
 		collapsible: false,
 		disabled: false,
 		event: "click",
-		header: "> li > :first-child, > :not(li):even",
+		header: function( elem ) {
+			return elem.find( "> li > :first-child" ).add( elem.find( "> :not(li)" ).even() );
+		},
 		heightStyle: "auto",
 		icons: {
 			"activeHeader": "ui-icon-triangle-1-s",
