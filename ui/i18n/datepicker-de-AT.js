@@ -1,5 +1,5 @@
-/* German initialisation for the jQuery UI date picker plugin. */
-/* Written by Milian Wolff (mail@milianw.de). */
+/* Austrian initialisation for the jQuery UI date picker plugin. */
+/* Written by Milian Wolff (mail@milianw.de). adapted by Florian Wegscheider for austrian Jänner/Jän */
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
