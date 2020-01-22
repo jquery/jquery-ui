@@ -24,8 +24,8 @@ QUnit.test( "ui-sortable-handle applied to appropriate element", function( asser
 			.sortable()
 			.appendTo( "#qunit-fixture" );
 
-	assert.hasClasses( el.find( "li:first" ), "ui-sortable-handle" );
-	assert.hasClasses( el.find( "li:last" ), "ui-sortable-handle" );
+	assert.hasClasses( el.find( "li" ).first(), "ui-sortable-handle" );
+	assert.hasClasses( el.find( "li" ).last(), "ui-sortable-handle" );
 
 	el.sortable( "option", "handle", "p" );
 	assert.lacksClasses( el.find( "li" )[ 0 ], "ui-sortable-handle" );
@@ -34,7 +34,7 @@ QUnit.test( "ui-sortable-handle applied to appropriate element", function( asser
 	assert.hasClasses( el.find( "p" )[ 1 ], "ui-sortable-handle" );
 
 	el.append( item ).sortable( "refresh" );
-	assert.hasClasses( el.find( "p:last" ), "ui-sortable-handle" );
+	assert.hasClasses( el.find( "p" ).last(), "ui-sortable-handle" );
 
 	el.sortable( "destroy" );
 	assert.equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );

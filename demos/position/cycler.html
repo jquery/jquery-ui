@@ -49,24 +49,24 @@
 			});
 		}
 
-		left( $( "img:eq(0)" ) );
-		center( $( "img:eq(1)" ) );
-		right( $( "img:eq(2)" ) );
+		left( $( "img" ).eq( 0 ) );
+		center( $( "img" ).eq( 1 ) );
+		right( $( "img" ).eq( 2 ) );
 
 		function animate( to ) {
 			$( this ).stop( true, false ).animate( to );
 		}
 		function next( event ) {
 			event.preventDefault();
-			center( $( "img:eq(2)" ), animate );
-			left( $( "img:eq(1)" ), animate );
-			right( $( "img:eq(0)" ).appendTo( "#container" ) );
+			center( $( "img" ).eq( 2 ), animate );
+			left( $( "img" ).eq( 1 ), animate );
+			right( $( "img" ).eq( 0 ).appendTo( "#container" ) );
 		}
 		function previous( event ) {
 			event.preventDefault();
-			center( $( "img:eq(0)" ), animate );
-			right( $( "img:eq(1)" ), animate );
-			left( $( "img:eq(2)" ).prependTo( "#container" ) );
+			center( $( "img" ).eq( 0 ), animate );
+			right( $( "img" ).eq( 1 ), animate );
+			left( $( "img" ).eq( 2 ).prependTo( "#container" ) );
 		}
 		$( "#previous" ).on( "click", previous );
 		$( "#next" ).on( "click", next );
@@ -76,9 +76,9 @@
 		});
 
 		$( window ).on( "resize", function() {
-			left( $( "img:eq(0)" ), animate );
-			center( $( "img:eq(1)" ), animate );
-			right( $( "img:eq(2)" ), animate );
+			left( $( "img" ).eq( 0 ), animate );
+			center( $( "img" ).eq( 1 ), animate );
+			right( $( "img" ).eq( 2 ), animate );
 		});
 	</script>
 </head>

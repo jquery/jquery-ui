@@ -48,7 +48,9 @@ return $.widget( "ui.accordion", {
 		},
 		collapsible: false,
 		event: "click",
-		header: "> li > :first-child, > :not(li):even",
+		header: function( elem ) {
+			return elem.find( "> li > :first-child" ).add( elem.find( "> :not(li)" ).even() );
+		},
 		heightStyle: "auto",
 		icons: {
 			activeHeader: "ui-icon-triangle-1-s",
@@ -279,7 +281,11 @@ return $.widget( "ui.accordion", {
 		var prevHeaders = this.headers,
 			prevPanels = this.panels;
 
-		this.headers = this.element.find( this.options.header );
+		if ( typeof this.options.header === "function" ) {
+			this.headers = this.options.header( this.element );
+		} else {
+			this.headers = this.element.find( this.options.header );
+		}
 		this._addClass( this.headers, "ui-accordion-header ui-accordion-header-collapsed",
 			"ui-state-default" );
 

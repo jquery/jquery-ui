@@ -136,7 +136,7 @@ QUnit.test( "#8792: issues with floated items in connected lists", function( ass
 		}
 	} );
 
-	element = $( "#qunit-fixture li:eq(0)" );
+	element = $( "#qunit-fixture li" ).eq( 0 );
 
 	// Move the first li to the right of the second li in the first ul
 	element.simulate( "drag", {
@@ -447,7 +447,7 @@ QUnit.test( "{ placholder: String } tbody", function( assert ) {
 				assert.equal( ui.placeholder.children( "tr" ).length, 1,
 					"placeholder's child is tr" );
 				assert.equal( ui.placeholder.find( "> tr" ).children().length,
-					dragBody.find( "> tr:first" ).children().length,
+					dragBody.find( "> tr" ).first().children().length,
 					"placeholder's tr has correct number of cells" );
 				assert.equal( ui.placeholder.find( "> tr" ).children().html(),
 					$( "<span>&#160;</span>" ).html(),

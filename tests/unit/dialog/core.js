@@ -118,7 +118,7 @@ QUnit.test( "focus tabbable", function( assert ) {
 
 	function step1() {
 		checkFocus( "<div><input><input></div>", options, function( done ) {
-			var input = element.find( "input:last" ).trigger( "focus" ).trigger( "blur" );
+			var input = element.find( "input" ).last().trigger( "focus" ).trigger( "blur" );
 			element.dialog( "instance" )._focusTabbable();
 			setTimeout( function() {
 				assert.equal( document.activeElement, input[ 0 ],

@@ -247,15 +247,15 @@ QUnit.test( "otherMonths", function( assert ) {
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
-	assert.ok( pop.find( "td:last *" ).length === 0, "Other months - no content" );
+	assert.ok( pop.find( "td" ).last().find( "*" ).length === 0, "Other months - no content" );
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", true ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(), "311234567891011121314151617181920212223242526272829301234",
 		"Other months - show" );
-	assert.ok( pop.find( "td:last span" ).length === 1, "Other months - span content" );
+	assert.ok( pop.find( "td" ).last().find( "span" ).length === 1, "Other months - span content" );
 	inp.datepicker( "hide" ).datepicker( "option", "selectOtherMonths", true ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(), "311234567891011121314151617181920212223242526272829301234",
 		"Other months - select" );
-	assert.ok( pop.find( "td:last a" ).length === 1, "Other months - link content" );
+	assert.ok( pop.find( "td" ).last().find( "a" ).length === 1, "Other months - link content" );
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", false ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(),
 
@@ -263,7 +263,7 @@ QUnit.test( "otherMonths", function( assert ) {
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
-	assert.ok( pop.find( "td:last *" ).length === 0, "Other months - no content" );
+	assert.ok( pop.find( "td" ).last().find( "*" ).length === 0, "Other months - no content" );
 } );
 
 QUnit.test( "defaultDate", function( assert ) {
@@ -710,82 +710,82 @@ QUnit.test( "daylightSaving", function( assert ) {
 
 	// Australia, Sydney - AM change, southern hemisphere
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 6 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "04/05/2008", "Daylight saving - Australia 04/05/2008" );
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 7 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "04/06/2008", "Daylight saving - Australia 04/06/2008" );
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 8 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "04/07/2008", "Daylight saving - Australia 04/07/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 6 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/04/2008", "Daylight saving - Australia 10/04/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 7 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/05/2008", "Daylight saving - Australia 10/05/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 8 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/06/2008", "Daylight saving - Australia 10/06/2008" );
 
 	// Brasil, Brasilia - midnight change, southern hemisphere
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(20) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 20 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "02/16/2008", "Daylight saving - Brasil 02/16/2008" );
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(21) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 21 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "02/17/2008", "Daylight saving - Brasil 02/17/2008" );
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(22) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 22 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "02/18/2008", "Daylight saving - Brasil 02/18/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(13) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 13 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/11/2008", "Daylight saving - Brasil 10/11/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(14) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 14 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/12/2008", "Daylight saving - Brasil 10/12/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(15) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 15 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/13/2008", "Daylight saving - Brasil 10/13/2008" );
 
 	// Lebanon, Beirut - midnight change, northern hemisphere
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(34) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 34 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/29/2008", "Daylight saving - Lebanon 03/29/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(35) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 35 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/30/2008", "Daylight saving - Lebanon 03/30/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(36) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 36 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/31/2008", "Daylight saving - Lebanon 03/31/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(27) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 27 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/25/2008", "Daylight saving - Lebanon 10/25/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(28) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 28 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/26/2008", "Daylight saving - Lebanon 10/26/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(29) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 29 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/27/2008", "Daylight saving - Lebanon 10/27/2008" );
 
 	// US, Eastern - AM change, northern hemisphere
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(13) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 13 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/08/2008", "Daylight saving - US 03/08/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(14) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 14 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/09/2008", "Daylight saving - US 03/09/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(15) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 15 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/10/2008", "Daylight saving - US 03/10/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 6 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "11/01/2008", "Daylight saving - US 11/01/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 7 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "11/02/2008", "Daylight saving - US 11/02/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 8 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "11/03/2008", "Daylight saving - US 11/03/2008" );
 } );
 
