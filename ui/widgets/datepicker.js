@@ -1151,6 +1151,7 @@ $.extend( Datepicker.prototype, {
 			monthNamesShort = ( settings ? settings.monthNamesShort : null ) || this._defaults.monthNamesShort,
 			monthNames = ( settings ? settings.monthNames : null ) || this._defaults.monthNames,
 			year = -1,
+			isFullYear = false,
 			month = -1,
 			day = -1,
 			doy = -1,
@@ -1172,10 +1173,13 @@ $.extend( Datepicker.prototype, {
 					size = ( match === "@" ? 14 : ( match === "!" ? 20 :
 					( match === "y" && isDoubled ? 4 : ( match === "o" ? 3 : 2 ) ) ) ),
 					minSize = ( match === "y" ? size : 1 ),
-					digits = new RegExp( "^\\d{" + minSize + "," + size + "}" ),
+					digits = new RegExp( "^" + (match === "@" ? "-?" : "") + "\\d{" + minSize + "," + size + "}" ),
 					num = value.substring( iValue ).match( digits );
 				if ( !num ) {
 					throw "Missing number at position " + iValue;
+				}
+				if ( match === "y" ) {
+					isFullYear = isDoubled;
 				}
 				iValue += num[ 0 ].length;
 				return parseInt( num[ 0 ], 10 );
@@ -1243,12 +1247,14 @@ $.extend( Datepicker.prototype, {
 					case "@":
 						date = new Date( getNumber( "@" ) );
 						year = date.getFullYear();
+						isFullYear = true;
 						month = date.getMonth() + 1;
 						day = date.getDate();
 						break;
 					case "!":
 						date = new Date( ( getNumber( "!" ) - this._ticksTo1970 ) / 10000 );
 						year = date.getFullYear();
+						isFullYear = true;
 						month = date.getMonth() + 1;
 						day = date.getDate();
 						break;
@@ -1274,7 +1280,7 @@ $.extend( Datepicker.prototype, {
 
 		if ( year === -1 ) {
 			year = new Date().getFullYear();
-		} else if ( year < 100 ) {
+		} else if ( year < 100 && !isFullYear ) {
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				( year <= shortYearCutoff ? 0 : -100 );
 		}
@@ -1292,7 +1298,7 @@ $.extend( Datepicker.prototype, {
 			} while ( true );
 		}
 
-		date = this._daylightSavingAdjust( new Date( year, month - 1, day ) );
+		date = this._daylightSavingAdjust( this._newDate( year, month - 1, day ) );
 		if ( date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day ) {
 			throw "Invalid date"; // E.g. 31/02/00
 		}
