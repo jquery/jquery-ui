@@ -1066,7 +1066,7 @@ QUnit.test( "Ticket #7244: date parser does not fail when too many numbers are p
 } );
 
 QUnit.test( "formatDate", function( assert ) {
-	assert.expect( 16 );
+	assert.expect( 17 );
 	testHelper.init( "#inp" );
 	var gmtDate, fr, settings;
 	assert.equal( $.datepicker.formatDate( "d m y", new Date( 2001, 2 - 1, 3 ) ),
@@ -1090,6 +1090,8 @@ QUnit.test( "formatDate", function( assert ) {
 	assert.equal( $.datepicker.formatDate( "'day' d 'of' MM (''DD''), yy",
 		new Date( 2001, 2 - 1, 3 ) ), "day 3 of February ('Saturday'), 2001",
 		"Format date 'day' d 'of' MM ('DD'), yy" );
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", $.datepicker._newDate( 999, 2 - 1, 3 ) ),
+		"0999-02-03", "Format ancient date yy-mm-dd");
 	gmtDate = new Date( 2001, 2 - 1, 3 );
 	gmtDate.setMinutes( gmtDate.getMinutes() - gmtDate.getTimezoneOffset() );
 	assert.equal( $.datepicker.formatDate( "@", gmtDate ), "981158400000", "Format date @" );

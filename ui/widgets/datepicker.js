@@ -1409,8 +1409,7 @@ $.extend( Datepicker.prototype, {
 							output += formatName( "M", date.getMonth(), monthNamesShort, monthNames );
 							break;
 						case "y":
-							output += ( lookAhead( "y" ) ? date.getFullYear() :
-								( date.getFullYear() % 100 < 10 ? "0" : "" ) + date.getFullYear() % 100 );
+							output += ( "0000" + date.getFullYear() ).slice( lookAhead( "y" ) ? -4 : -2 );
 							break;
 						case "@":
 							output += date.getTime();
@@ -2023,6 +2022,18 @@ $.extend( Datepicker.prototype, {
 			this._daylightSavingAdjust( new Date( year, month, day ) ) ) :
 			this._daylightSavingAdjust( new Date( inst.currentYear, inst.currentMonth, inst.currentDay ) ) );
 		return this.formatDate( this._get( inst, "dateFormat" ), date, this._getFormatConfig( inst ) );
+	},
+
+	/* Create a Date from a year, month, and day, accounting for years 0-99. */
+	_newDate: function( year, month, day ) {
+		var date = new Date( year, month, day );
+
+		// Offset dates in the incorrect range.  Blindly calling setFullYear(year) would not handle out-of-range
+		// months/days causing the year to shift.
+		if ( year >= 0 && year <= 99 ) {
+			date.setFullYear( date.getFullYear() - 1900 );
+		}
+		return date;
 	}
 } );
 
