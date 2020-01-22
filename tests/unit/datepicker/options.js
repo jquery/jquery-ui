@@ -267,7 +267,7 @@ QUnit.test( "otherMonths", function( assert ) {
 } );
 
 QUnit.test( "defaultDate", function( assert ) {
-	assert.expect( 16 );
+	assert.expect( 18 );
 	var inp = testHelper.init( "#inp" ),
 		date = new Date();
 	inp.val( "" ).datepicker( "show" ).
@@ -350,6 +350,11 @@ QUnit.test( "defaultDate", function( assert ) {
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = new Date( 2007, 7 - 1, 4 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 07/04/2007" );
+	inp.datepicker( "option", { defaultDate: "07/04/0001" } ).
+		datepicker( "hide" ).val( "" ).datepicker( "show" ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	date = $.datepicker._newDate( 1, 7 - 1, 4 );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 07/04/0001" );
 	inp.datepicker( "option", { dateFormat: "yy-mm-dd", defaultDate: "2007-04-02" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -362,6 +367,11 @@ QUnit.test( "defaultDate", function( assert ) {
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 01/26/2007" );
+	date = $.datepicker._newDate( 1, 1 - 1, 26 );
+	inp.datepicker( "option", { defaultDate: date } ).
+		datepicker( "hide" ).val( "" ).datepicker( "show" ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 01/26/0001" );
 } );
 
 QUnit.test( "miscellaneous", function( assert ) {
@@ -537,14 +547,17 @@ QUnit.test( "minMax", function( assert ) {
 } );
 
 QUnit.test( "setDate", function( assert ) {
-	assert.expect( 24 );
+	assert.expect( 26 );
 	var inl, alt, minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		inp = testHelper.init( "#inp" ),
 		date1 = new Date( 2008, 6 - 1, 4 ),
-		date2 = new Date();
+		date2 = new Date(),
+		date3 = $.datepicker._newDate( 1, 4 - 1, 1 );
 	assert.ok( inp.datepicker( "getDate" ) == null, "Set date - default" );
 	inp.datepicker( "setDate", date1 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date1, "Set date - 2008-06-04" );
+	inp.datepicker( "setDate", date3 );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date3, "Set date - 0001-04-01" );
 	date1 = new Date();
 	date1.setDate( date1.getDate() + 7 );
 	inp.datepicker( "setDate", +7 );
@@ -568,6 +581,10 @@ QUnit.test( "setDate", function( assert ) {
 	date1.setDate( date1.getDate() - 21 );
 	inp.datepicker( "setDate", "c -3 w" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date1, "Set date - c -3 w" );
+	date3 = new Date(date1);
+	date3.setFullYear( 1 );
+	inp.datepicker( "setDate", "c " + (1 - date1.getFullYear()) + " y" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date3, "Set date - 0001 relatively" );
 
 	// Inline
 	inl = testHelper.init( "#inl" );
