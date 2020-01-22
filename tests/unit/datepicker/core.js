@@ -39,9 +39,11 @@ QUnit.test( "widget method", function( assert ) {
 
 QUnit.test( "baseStructure", function( assert ) {
 	var ready = assert.async();
-	assert.expect( 58 );
+	assert.expect( 60 );
 	var header, title, table, thead, week, panel, inl, child,
-		inp = testHelper.initNewInput(),
+		inp = testHelper.initNewInput( {
+			defaultDate: $.datepicker._newDate( 1, 2 - 1, 3 )
+		} ),
 		dp = $( "#ui-datepicker-div" );
 
 	function step1() {
@@ -61,7 +63,7 @@ QUnit.test( "baseStructure", function( assert ) {
 			assert.ok( title.is( "div.ui-datepicker-title" ) && title.html() !== "", "Structure - title division" );
 			assert.equal( title.children().length, 2, "Structure - title child count" );
 			assert.ok( title.children().first().is( "span.ui-datepicker-month" ) && title.children().first().text() !== "", "Structure - month text" );
-			assert.ok( title.children().last().is( "span.ui-datepicker-year" ) && title.children().last().text() !== "", "Structure - year text" );
+			assert.ok( title.children().last().is( "span.ui-datepicker-year" ) && title.children().last().text() === "0001", "Structure - year text" );
 
 			table = dp.children().eq( 1 );
 			assert.ok( table.is( "table.ui-datepicker-calendar" ), "Structure - month table" );
@@ -90,12 +92,15 @@ QUnit.test( "baseStructure", function( assert ) {
 		inp = testHelper.initNewInput( {
 			changeMonth: true,
 			changeYear: true,
-			showButtonPanel: true
+			showButtonPanel: true,
+			defaultDate: $.datepicker._newDate( 1, 2 - 1, 3 )
 		} );
 		testHelper.onFocus( inp, function() {
 			title = dp.find( "div.ui-datepicker-title" );
 			assert.ok( title.children().first().is( "select.ui-datepicker-month" ), "Structure - month selector" );
 			assert.ok( title.children().last().is( "select.ui-datepicker-year" ), "Structure - year selector" );
+			assert.equal( title.children().last().children().first().text(), "-9" );
+			assert.equal( title.children().last().children().last().text(), "0011" );
 
 			panel = dp.children().last();
 			assert.ok( panel.is( "div.ui-datepicker-buttonpane" ), "Structure - button panel division" );

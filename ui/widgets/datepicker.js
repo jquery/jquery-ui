@@ -1173,7 +1173,7 @@ $.extend( Datepicker.prototype, {
 					size = ( match === "@" ? 14 : ( match === "!" ? 20 :
 					( match === "y" && isDoubled ? 4 : ( match === "o" ? 3 : 2 ) ) ) ),
 					minSize = ( match === "y" ? size : 1 ),
-					digits = new RegExp( "^" + (match === "@" ? "-?" : "") + "\\d{" + minSize + "," + size + "}" ),
+					digits = new RegExp( "^" + ( match === "@" ? "-?" : "" ) + "\\d{" + minSize + "," + size + "}" ),
 					num = value.substring( iValue ).match( digits );
 				if ( !num ) {
 					throw "Missing number at position " + iValue;
@@ -1415,7 +1415,7 @@ $.extend( Datepicker.prototype, {
 							output += formatName( "M", date.getMonth(), monthNamesShort, monthNames );
 							break;
 						case "y":
-							output += ( "0000" + date.getFullYear() ).slice( lookAhead( "y" ) ? -4 : -2 );
+							output += lookAhead( "y" ) ? this._formatYear( date.getFullYear() ) : ( "00" + date.getFullYear() ).slice( -2 );
 							break;
 						case "@":
 							output += date.getTime();
@@ -1878,7 +1878,7 @@ $.extend( Datepicker.prototype, {
 		if ( !inst.yearshtml ) {
 			inst.yearshtml = "";
 			if ( secondary || !changeYear ) {
-				html += "<span class='ui-datepicker-year'>" + drawYear + "</span>";
+				html += "<span class='ui-datepicker-year'>" + this._formatYear( drawYear ) + "</span>";
 			} else {
 
 				// determine range of years to display
@@ -1898,7 +1898,7 @@ $.extend( Datepicker.prototype, {
 				for ( ; year <= endYear; year++ ) {
 					inst.yearshtml += "<option value='" + year + "'" +
 						( year === drawYear ? " selected='selected'" : "" ) +
-						">" + year + "</option>";
+						">" + this._formatYear( year ) + "</option>";
 				}
 				inst.yearshtml += "</select>";
 
@@ -2040,6 +2040,13 @@ $.extend( Datepicker.prototype, {
 			date.setFullYear( date.getFullYear() - 1900 );
 		}
 		return date;
+	},
+
+	/* Add leading zeros to produce an at-least-four-digit year. */
+	_formatYear: function( year ) {
+		var yearString = "" + year;
+		return year < 0 ? yearString :
+			yearString.length < 4 ? ( "0000" + yearString ).slice( -4 ) : yearString;
 	}
 } );
 

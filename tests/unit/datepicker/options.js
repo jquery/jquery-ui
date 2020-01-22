@@ -581,9 +581,9 @@ QUnit.test( "setDate", function( assert ) {
 	date1.setDate( date1.getDate() - 21 );
 	inp.datepicker( "setDate", "c -3 w" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date1, "Set date - c -3 w" );
-	date3 = new Date(date1);
+	date3 = new Date( date1 );
 	date3.setFullYear( 1 );
-	inp.datepicker( "setDate", "c " + (1 - date1.getFullYear()) + " y" );
+	inp.datepicker( "setDate", "c " + ( 1 - date1.getFullYear() ) + " y" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date3, "Set date - 0001 relatively" );
 
 	// Inline
@@ -1113,7 +1113,7 @@ QUnit.test( "formatDate", function( assert ) {
 		new Date( 2001, 2 - 1, 3 ) ), "day 3 of February ('Saturday'), 2001",
 		"Format date 'day' d 'of' MM ('DD'), yy" );
 	assert.equal( $.datepicker.formatDate( "yy-mm-dd", $.datepicker._newDate( 999, 2 - 1, 3 ) ),
-		"0999-02-03", "Format ancient date yy-mm-dd");
+		"0999-02-03", "Format ancient date yy-mm-dd" );
 	gmtDate = new Date( 2001, 2 - 1, 3 );
 	gmtDate.setMinutes( gmtDate.getMinutes() - gmtDate.getTimezoneOffset() );
 	assert.equal( $.datepicker.formatDate( "@", gmtDate ), "981158400000", "Format date @" );
