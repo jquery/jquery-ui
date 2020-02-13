@@ -1,5 +1,5 @@
 /* Bengali initialisation for the jQuery UI date picker plugin. */
-/* Written by fathma Siddique */
+/* Written by Fathma Siddique */
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
