@@ -12,7 +12,7 @@
 	}
 }( function( datepicker ) {
 
-datepicker.regional[ "bn" ] = {
+datepicker.regional.bn = {
 	closeText: "সমাপ্ত",
 	prevText: "পূর্ববর্তী",
 	nextText: "পরবর্তী",
@@ -30,8 +30,8 @@ datepicker.regional[ "bn" ] = {
 	isRTL: false,
 	showMonthAfterYear: false,
 	yearSuffix: "" };
-datepicker.setDefaults( datepicker.regional[ "bn" ] );
+datepicker.setDefaults( datepicker.regional.bn );
 
-return datepicker.regional[ "bn" ];
+return datepicker.regional.bn;
 
 } ) );
