@@ -1,4 +1,4 @@
-/* Bangla initialisation for the jQuery UI date picker plugin. */
+/* Bengali initialisation for the jQuery UI date picker plugin. */
 /* Written by fathma Siddique */
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
@@ -12,7 +12,7 @@
 	}
 }( function( datepicker ) {
 
-datepicker.regional[ "ban" ] = {
+datepicker.regional[ "bn" ] = {
 	closeText: "সমাপ্ত",
 	prevText: "পূর্ববর্তী",
 	nextText: "পরবর্তী",
@@ -30,8 +30,8 @@ datepicker.regional[ "ban" ] = {
 	isRTL: false,
 	showMonthAfterYear: false,
 	yearSuffix: "" };
-datepicker.setDefaults( datepicker.regional[ "ban" ] );
+datepicker.setDefaults( datepicker.regional[ "bn" ] );
 
-return datepicker.regional[ "ban" ];
+return datepicker.regional[ "bn" ];
 
 } ) );
