@@ -13,24 +13,74 @@
 }( function( datepicker ) {
 
 datepicker.regional.bg = {
-	closeText: "затвори",
-	prevText: "&#x3C;назад",
-	nextText: "напред&#x3E;",
+	closeText: "Затвори",
+	prevText: "&#x3C;Назад",
+	nextText: "Напред&#x3E;",
 	nextBigText: "&#x3E;&#x3E;",
-	currentText: "днес",
-	monthNames: [ "Януари","Февруари","Март","Април","Май","Юни",
-	"Юли","Август","Септември","Октомври","Ноември","Декември" ],
-	monthNamesShort: [ "Яну","Фев","Мар","Апр","Май","Юни",
-	"Юли","Авг","Сеп","Окт","Нов","Дек" ],
-	dayNames: [ "Неделя","Понеделник","Вторник","Сряда","Четвъртък","Петък","Събота" ],
-	dayNamesShort: [ "Нед","Пон","Вто","Сря","Чет","Пет","Съб" ],
-	dayNamesMin: [ "Не","По","Вт","Ср","Че","Пе","Съ" ],
+	currentText: "Днес",
+	monthNames: [
+        "Януари",
+        "Февруари",
+        "Март",
+        "Април",
+        "Май",
+        "Юни",
+	    "Юли",
+        "Август",
+        "Септември",
+        "Октомври",
+        "Ноември",
+        "Декември"
+    ],
+	monthNamesShort: [
+        "Ян.",
+        "Февр.",
+        "Март",
+        "Апр.",
+        "Май",
+        "Юни",
+	    "Юли",
+        "Авг.",
+        "Септ.",
+        "Окт.",
+        "Ноем.",
+        "Дек."
+    ],
+	dayNames: [
+        "Неделя",
+        "Понеделник",
+        "Вторник",
+        "Сряда",
+        "Четвъртък",
+        "Петък",
+        "Събота"
+    ],
+	dayNamesShort: [
+        "Нед.",
+        "Пон.",
+        "Втор.",
+        "Ср.",
+        "Четв.",
+        "Пет.",
+        "Съб."
+    ],
+	dayNamesMin: [
+        "Нд",
+        "Пн",
+        "Вт",
+        "Ср",
+        "Чт",
+        "Пт",
+        "Сб"
+    ],
 	weekHeader: "Wk",
 	dateFormat: "dd.mm.yy",
 	firstDay: 1,
 	isRTL: false,
 	showMonthAfterYear: false,
-	yearSuffix: "" };
+	yearSuffix: "г." 
+};
+
 datepicker.setDefaults( datepicker.regional.bg );
 
 return datepicker.regional.bg;
