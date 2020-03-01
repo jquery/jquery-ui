@@ -142,6 +142,7 @@ function Datepicker() {
 		onSelect: null, // Define a callback function when a date is selected
 		onChangeMonthYear: null, // Define a callback function when the month or year is changed
 		onClose: null, // Define a callback function when the datepicker is closed
+		onUpdateDatepicker: null, // Define a callback function when the datepicker is updated
 		numberOfMonths: 1, // Number of months to show at a time
 		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
@@ -857,7 +858,8 @@ $.extend( Datepicker.prototype, {
 			numMonths = this._getNumberOfMonths( inst ),
 			cols = numMonths[ 1 ],
 			width = 17,
-			activeCell = inst.dpDiv.find( "." + this._dayOverClass + " a" );
+			activeCell = inst.dpDiv.find( "." + this._dayOverClass + " a" ),
+			onUpdateDatepicker = $.datepicker._get( inst, "onUpdateDatepicker" );
 
 		if ( activeCell.length > 0 ) {
 			datepicker_handleMouseover.apply( activeCell.get( 0 ) );
@@ -887,6 +889,10 @@ $.extend( Datepicker.prototype, {
 				}
 				origyearshtml = inst.yearshtml = null;
 			}, 0 );
+		}
+
+		if ( onUpdateDatepicker ) {
+			onUpdateDatepicker.apply( ( inst.input ? inst.input[ 0 ] : null ), [ inst ] );
 		}
 	},
 
