@@ -793,7 +793,9 @@ var beforeShowThis = null,
 	beforeShowInput = null,
 	beforeShowInst = null,
 	beforeShowDayThis = null,
-	beforeShowDayOK = true;
+	beforeShowDayOK = true,
+	onUpdateDatepickerThis = null,
+	onUpdateDatepickerInst = null;
 
 function beforeAll( input, inst ) {
 	beforeShowThis = this;
@@ -810,8 +812,14 @@ function beforeDay( date ) {
 		( date.getDate() % 3 === 0 ? "Divisble by 3" : "" ) ];
 }
 
+function onUpdateDatepicker( inst ) {
+	onUpdateDatepickerThis = this;
+	onUpdateDatepickerInst = inst;
+	inst.dpDiv.append( $( "<div>" ).addClass( "on-update-datepicker-test" ) );
+}
+
 QUnit.test( "callbacks", function( assert ) {
-	assert.expect( 13 );
+	assert.expect( 16 );
 
 	// Before show
 	var dp, day20, day21,
@@ -840,6 +848,14 @@ QUnit.test( "callbacks", function( assert ) {
 	assert.ok( !day20.attr( "title" ), "Before show day - title 20" );
 	assert.ok( day21.attr( "title" ) === "Divisble by 3", "Before show day - title 21" );
 	inp.datepicker( "hide" ).datepicker( "destroy" );
+
+	inp = testHelper.init( "#inp", { onUpdateDatepicker: onUpdateDatepicker } );
+	inst = $.data( inp[ 0 ], "datepicker" );
+	dp = $( "#ui-datepicker-div" );
+	inp.val( "02/04/2008" ).datepicker( "show" );
+	assert.ok( onUpdateDatepickerThis.id === inp[ 0 ].id, "On update datepicker - this OK" );
+	assert.deepEqual( onUpdateDatepickerInst, inst, "On update datepicker - inst OK" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length > 0, "On update datepicker - custom element" );
 } );
 
 QUnit.test( "beforeShowDay - tooltips with quotes", function( assert ) {
