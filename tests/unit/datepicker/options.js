@@ -839,7 +839,7 @@ function onUpdateDatepicker( inst ) {
 }
 
 QUnit.test( "callbacks", function( assert ) {
-	assert.expect( 16 );
+	assert.expect( 18 );
 
 	// Before show
 	var dp, day20, day21,
@@ -875,7 +875,12 @@ QUnit.test( "callbacks", function( assert ) {
 	inp.val( "02/04/2008" ).datepicker( "show" );
 	assert.ok( onUpdateDatepickerThis.id === inp[ 0 ].id, "On update datepicker - this OK" );
 	assert.deepEqual( onUpdateDatepickerInst, inst, "On update datepicker - inst OK" );
-	assert.ok( dp.find( "div.on-update-datepicker-test" ).length > 0, "On update datepicker - custom element" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length === 1, "On update datepicker - custom element" );
+	inp.datepicker( "setDate", "02/05/2008" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length === 1, "On update datepicker - custom element after setDate" );
+	inp.datepicker( "refresh" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length === 1, "On update datepicker - custom element after refresh" );
+	inp.datepicker( "hide" ).datepicker( "destroy" );
 } );
 
 QUnit.test( "beforeShowDay - tooltips with quotes", function( assert ) {
