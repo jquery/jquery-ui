@@ -1,18 +1,27 @@
  /*!
- * jQuery Simulate v1.0.0 - simulate browser mouse and keyboard events
+ * jQuery Simulate v1.1.1 - simulate browser mouse and keyboard events
  * https://github.com/jquery/jquery-simulate
  *
- * Copyright 2012 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * Date: 2014-08-22
+ * Date: 2020-05-06
  */
 
 ;(function( $, undefined ) {
 
 var rkeyEvent = /^key/,
+	rdashAlpha = /-([a-z])/g,
 	rmouseEvent = /^(?:mouse|contextmenu)|click/;
+
+function fcamelCase( _all, letter ) {
+	return letter.toUpperCase();
+}
+
+function camelCase( string ) {
+	return string.replace( rdashAlpha, fcamelCase );
+}
 
 $.fn.simulate = function( type, options ) {
 	return this.each(function() {
@@ -21,7 +30,7 @@ $.fn.simulate = function( type, options ) {
 };
 
 $.simulate = function( elem, type, options ) {
-	var method = $.camelCase( "simulate-" + type );
+	var method = camelCase( "simulate-" + type );
 
 	this.target = elem;
 	this.options = options;
@@ -201,10 +210,10 @@ $.extend( $.simulate.prototype, {
 	},
 
 	dispatchEvent: function( elem, type, event ) {
-		if ( elem[ type ] ) {
-			elem[ type ]();
-		} else if ( elem.dispatchEvent ) {
+		if ( elem.dispatchEvent ) {
 			elem.dispatchEvent( event );
+		} else if ( type === "click" && elem.click && elem.nodeName.toLowerCase() === "input" ) {
+			elem.click();
 		} else if ( elem.fireEvent ) {
 			elem.fireEvent( "on" + type, event );
 		}
@@ -219,7 +228,7 @@ $.extend( $.simulate.prototype, {
 			triggered = true;
 		}
 
-		element.bind( "focus", trigger );
+		element.on( "focus", trigger );
 		element[ 0 ].focus();
 
 		if ( !triggered ) {
@@ -228,7 +237,7 @@ $.extend( $.simulate.prototype, {
 			element.trigger( focusinEvent );
 			element.triggerHandler( "focus" );
 		}
-		element.unbind( "focus", trigger );
+		element.off( "focus", trigger );
 	},
 
 	simulateBlur: function() {
@@ -240,7 +249,7 @@ $.extend( $.simulate.prototype, {
 			triggered = true;
 		}
 
-		element.bind( "blur", trigger );
+		element.on( "blur", trigger );
 		element[ 0 ].blur();
 
 		// blur events are async in IE
@@ -258,7 +267,7 @@ $.extend( $.simulate.prototype, {
 				element.trigger( focusoutEvent );
 				element.triggerHandler( "blur" );
 			}
-			element.unbind( "blur", trigger );
+			element.off( "blur", trigger );
 		}, 1 );
 	}
 });
@@ -295,6 +304,7 @@ $.extend( $.simulate.prototype, {
 	simulateDrag: function() {
 		var i = 0,
 			target = this.target,
+			eventDoc = target.ownerDocument,
 			options = this.options,
 			center = options.handle === "corner" ? findCorner( target ) : findCenter( target ),
 			x = Math.floor( center.x ),
@@ -315,14 +325,14 @@ $.extend( $.simulate.prototype, {
 				clientY: Math.round( y )
 			};
 
-			this.simulateEvent( target.ownerDocument, "mousemove", coord );
+			this.simulateEvent( eventDoc, "mousemove", coord );
 		}
 
-		if ( $.contains( document, target ) ) {
+		if ( $.contains( eventDoc, target ) ) {
 			this.simulateEvent( target, "mouseup", coord );
 			this.simulateEvent( target, "click", coord );
 		} else {
-			this.simulateEvent( document, "mouseup", coord );
+			this.simulateEvent( eventDoc, "mouseup", coord );
 		}
 	}
 });
