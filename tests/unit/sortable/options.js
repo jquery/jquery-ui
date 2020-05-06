@@ -372,7 +372,8 @@ test("{ placeholder: false }, default", function() {
 QUnit.test( "{ placeholder: false } img", function( assert ) {
 	assert.expect( 3 );
 
-	var element = $( "#sortable-images" ).sortable( {
+	var done = assert.async(),
+		element = $( "#sortable-images" ).sortable( {
 		start: function( event, ui ) {
 			assert.ok( ui.placeholder.attr( "src" ).indexOf( "images/jqueryui_32x32.png" ) > 0, "placeholder img has correct src" );
 			assert.equal( ui.placeholder.height(), 32, "placeholder has correct height" );
@@ -380,9 +381,14 @@ QUnit.test( "{ placeholder: false } img", function( assert ) {
 		}
 	} );
 
-	element.find( "img" ).eq( 0 ).simulate( "drag", {
-		dy: 1
-	} );
+	// Give browsers some time to load the image if cache is disabled.
+	// This resolves a frequent issue in Chrome/Safari.
+	setTimeout( function() {
+		element.find( "img" ).eq( 0 ).simulate( "drag", {
+			dy: 1
+		} );
+		done();
+	}, 500 );
 } );
 
 QUnit.test( "{ placeholder: String }", function( assert ) {
