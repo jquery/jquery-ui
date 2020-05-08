@@ -21,6 +21,7 @@
 		define( [
 			"jquery",
 			"./mouse",
+			"../safe-offset",
 			"../version",
 			"../widget"
 		], factory );
@@ -57,7 +58,7 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 
 		// Cache selectee children based on filter
 		this.refresh = function() {
-			that.elementPos = $( that.element[ 0 ] ).offset();
+			that.elementPos = $.ui.__safeOffset__( $( that.element[ 0 ] ) );
 			that.selectees = $( that.options.filter, that.element[ 0 ] );
 			that._addClass( that.selectees, "ui-selectee" );
 			that.selectees.each( function() {

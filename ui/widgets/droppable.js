@@ -21,6 +21,7 @@
 			"jquery",
 			"./draggable",
 			"./mouse",
+			"../safe-offset",
 			"../version",
 			"../widget"
 		], factory );
@@ -341,7 +342,7 @@ $.ui.ddmanager = {
 				m[ i ]._activate.call( m[ i ], event );
 			}
 
-			m[ i ].offset = m[ i ].element.offset();
+			m[ i ].offset = $.ui.__safeOffset__( m[ i ].element );
 			m[ i ].proportions( {
 				width: m[ i ].element[ 0 ].offsetWidth,
 				height: m[ i ].element[ 0 ].offsetHeight

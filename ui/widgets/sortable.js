@@ -23,6 +23,7 @@
 			"./mouse",
 			"../data",
 			"../ie",
+			"../safe-offset",
 			"../scroll-parent",
 			"../version",
 			"../widget"
@@ -94,7 +95,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		this.refresh();
 
 		//Let's determine the parent's offset
-		this.offset = this.element.offset();
+		this.offset = $.ui.__safeOffset__( this.element );
 
 		//Initialize mouse events for interaction
 		this._mouseInit();
@@ -870,7 +871,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				item.height = t.outerHeight();
 			}
 
-			p = t.offset();
+			p = $.ui.__safeOffset__( t );
 			item.left = p.left;
 			item.top = p.top;
 		}
@@ -893,7 +894,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			this.options.custom.refreshContainers.call( this );
 		} else {
 			for ( i = this.containers.length - 1; i >= 0; i-- ) {
-				p = this.containers[ i ].element.offset();
+				p = $.ui.__safeOffset__( this.containers[ i ].element );
 				this.containers[ i ].containerCache.left = p.left;
 				this.containers[ i ].containerCache.top = p.top;
 				this.containers[ i ].containerCache.width =
@@ -1176,7 +1177,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		//Get the offsetParent and cache its position
 		this.offsetParent = this.helper.offsetParent();
-		var po = this.offsetParent.offset();
+		var po = $.ui.__safeOffset__( this.offsetParent );
 
 		// This is a special case where we need to modify a offset calculated on start, since the
 		// following happened:

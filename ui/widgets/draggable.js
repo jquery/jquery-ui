@@ -25,6 +25,7 @@
 			"../plugin",
 			"../safe-active-element",
 			"../safe-blur",
+			"../safe-offset",
 			"../scroll-parent",
 			"../version",
 			"../widget"
@@ -431,7 +432,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	_getParentOffset: function() {
 
 		//Get the offsetParent and cache its position
-		var po = this.offsetParent.offset(),
+		var po = $.ui.__safeOffset__( this.offsetParent ),
 			document = this.document[ 0 ];
 
 		// This is a special case where we need to modify a offset calculated on start, since the
