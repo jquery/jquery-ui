@@ -96,7 +96,7 @@ QUnit.test( "active menu item styling", function( assert ) {
 		setTimeout( function() {
 			isActive( parentItem );
 			isActive( childItem );
-			element.blur();
+			element.trigger( "blur" );
 			setTimeout( function() {
 				isInactive( parentItem );
 				isInactive( childItem );

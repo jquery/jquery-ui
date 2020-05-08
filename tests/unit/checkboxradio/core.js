@@ -34,7 +34,7 @@ QUnit.test( "Ensure checked after single click on checkbox label button", functi
 	var ready = assert.async();
 	assert.expect( 2 );
 
-	$( "#check2" ).checkboxradio().change( function() {
+	$( "#check2" ).checkboxradio().on( "change", function() {
 		var label = $( this ).checkboxradio( "widget" );
 		assert.ok( this.checked, "checked ok" );
 
@@ -59,7 +59,7 @@ QUnit.test( "Handle form association via form attribute", function( assert ) {
 	var radio2 = $( "#crazy-form-2" ).checkboxradio();
 	var radio2Label = radio2.checkboxradio( "widget" );
 
-	radio2.change( function() {
+	radio2.on( "change", function() {
 		assert.ok( this.checked, "#2 checked" );
 		assert.ok( !radio1[ 0 ].checked, "#1 not checked" );
 

@@ -263,7 +263,7 @@ $.widget( "ui.button", {
 			this._toggleClass( null, "ui-state-disabled", value );
 			this.element[ 0 ].disabled = value;
 			if ( value ) {
-				this.element.blur();
+				this.element.trigger( "blur" );
 			}
 		}
 	},

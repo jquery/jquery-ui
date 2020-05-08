@@ -331,7 +331,7 @@ $.widget( "ui.tooltip", {
 					position( positionOption.of );
 					clearInterval( delayedShow );
 				}
-			}, $.fx.interval );
+			}, 13 );
 		}
 
 		this._trigger( "open", event, { tooltip: tooltip } );

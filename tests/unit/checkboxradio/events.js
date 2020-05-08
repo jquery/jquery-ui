@@ -35,7 +35,7 @@ QUnit.test( "Checkbox shows focus when using keyboard navigation", function( ass
 	var check = $( "#check" ).checkboxradio(),
 		label = $( "label[for='check']" );
 	assert.lacksClasses( label, "ui-state-focus" );
-	check.focus();
+	check.trigger( "focus" );
 	setTimeout( function() {
 		assert.hasClasses( label, "ui-state-focus" );
 		ready();
