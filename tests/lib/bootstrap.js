@@ -60,19 +60,22 @@ function requireModules( dependencies, callback, modules ) {
 
 // Load a set of test file along with the required test infrastructure
 function requireTests( dependencies, noBackCompat ) {
-	dependencies = [
+	var preDependencies = [
 		"lib/qunit",
 		noBackCompat ? "jquery-no-back-compat" : "jquery",
 		"jquery-simulate"
-	].concat( dependencies );
+	];
+
+	// Load migrate before test files
+	if ( parseUrl().migrate ) {
+		preDependencies.push( "jquery-migrate" );
+	}
+
+	dependencies = preDependencies.concat( dependencies );
 
 	// Load the TestSwarm injector, if necessary
 	if ( parseUrl().swarmURL ) {
 		dependencies.push( "testswarm" );
-	}
-
-	if ( parseUrl().migrate ) {
-		dependencies.push( "jquery-migrate" );
 	}
 
 	requireModules( dependencies, function( QUnit ) {
