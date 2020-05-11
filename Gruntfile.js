@@ -252,6 +252,17 @@ grunt.initConfig( {
 	},
 
 	bowercopy: {
+		inlineVendors: {
+			options: {
+				clean: true,
+				destPrefix: "ui/vendor"
+			},
+			files: {
+				"jquery-color/jquery.color.js": "jquery-color/dist/jquery.color.js",
+				"jquery-color/LICENSE.txt": "jquery-color/LICENSE.txt"
+			}
+		},
+
 		all: {
 			options: {
 				clean: true,

@@ -12,6 +12,7 @@
 		"jquery": ">=1.6"
 	},
 	"devDependencies": {
+		"jquery-color": "2.2.0",
 		"jquery-mousewheel": "3.1.12",
 		"jquery-simulate": "1.1.1",
 		"jshint": "2.4.4",
