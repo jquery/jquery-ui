@@ -1,11 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
-	"lib/helper",
+	"./helper",
 	"ui/widgets/tooltip"
-], function( QUnit, $, helper ) {
+], function( QUnit, $, testHelper ) {
 
-QUnit.module( "tooltip: core", { afterEach: helper.moduleAfterEach }  );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "tooltip: core", beforeAfterEach() );
 
 QUnit.test( "markup structure", function( assert ) {
 	assert.expect( 7 );

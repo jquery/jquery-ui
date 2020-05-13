@@ -105,6 +105,10 @@ QUnit.test( "#7415: Incorrect revert animation with axis: 'y'", function( assert
 		var top = parseFloat( item.css( "top" ) );
 		assert.equal( item.css( "left" ), expectedLeft, "left not animated" );
 		assert.ok( top > 0 && top < 300, "top is animated" );
+
+		// Cleanup
+		item.stop( true );
+
 		ready();
 	}, 100 );
 } );

@@ -1,11 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
-	"lib/helper",
+	"./helper",
 	"ui/widgets/tooltip"
-], function( QUnit, $, helper ) {
+], function( QUnit, $, testHelper ) {
 
-QUnit.module( "tooltip: (deprecated) options", { afterEach: helper.moduleAfterEach }  );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "tooltip: (deprecated) options", beforeAfterEach() );
 
 QUnit.test( "tooltipClass", function( assert ) {
 	assert.expect( 1 );

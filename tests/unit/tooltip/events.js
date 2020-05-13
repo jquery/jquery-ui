@@ -1,11 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
-	"lib/helper",
+	"./helper",
 	"ui/widgets/tooltip"
-], function( QUnit, $, helper ) {
+], function( QUnit, $, testHelper ) {
 
-QUnit.module( "tooltip: events", { afterEach: helper.moduleAfterEach }  );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "tooltip: events", beforeAfterEach() );
 
 QUnit.test( "programmatic triggers", function( assert ) {
 	assert.expect( 4 );

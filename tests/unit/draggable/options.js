@@ -302,6 +302,9 @@ QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) 
 		dx: dx,
 		dy: dy
 	} );
+
+	// Cleanup
+	element.stop( true );
 } );
 
 QUnit.test( "connectToSortable, dragging clone into sortable", function( assert ) {
