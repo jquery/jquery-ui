@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/progressbar"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "progressbar: events" );
+QUnit.module( "progressbar: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "create", function( assert ) {
 	assert.expect( 1 );

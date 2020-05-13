@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/checkboxradio"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Checkboxradio: methods" );
+QUnit.module( "Checkboxradio: methods", { afterEach: helper.moduleAfterEach }  );
 
 $.each( [ "checkbox", "radio" ], function( index, value ) {
 	QUnit.test( value + ": refresh", function( assert ) {

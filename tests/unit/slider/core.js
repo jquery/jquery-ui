@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/slider"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 var element, options;
 
@@ -11,7 +12,7 @@ function handle() {
 }
 
 // Slider Tests
-QUnit.module( "slider: core" );
+QUnit.module( "slider: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "markup structure", function( assert ) {
 	assert.expect( 4 );

@@ -12,14 +12,15 @@ return $.extend( helper, {
 		} );
 	},
 
-	setupTeardown: function() {
+	beforeAfterEach: function() {
 		var animate = $.ui.accordion.prototype.options.animate;
 		return {
-			setup: function() {
+			beforeEach: function() {
 				$.ui.accordion.prototype.options.animate = false;
 			},
-			teardown: function() {
+			afterEach: function() {
 				$.ui.accordion.prototype.options.animate = animate;
+				return helper.moduleAfterEach.apply( this, arguments );
 			}
 		};
 	},

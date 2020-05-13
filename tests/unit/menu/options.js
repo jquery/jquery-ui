@@ -1,9 +1,10 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/menu"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
 var log = testHelper.log,
 	logOutput = testHelper.logOutput,
@@ -12,7 +13,8 @@ var log = testHelper.log,
 QUnit.module( "menu: options", {
 	beforeEach: function() {
 		testHelper.clearLog();
-	}
+	},
+	afterEach: helper.moduleAfterEach
 } );
 
 QUnit.test( "{ disabled: true }", function( assert ) {

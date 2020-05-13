@@ -1,11 +1,12 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/dialog"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-// TODO add teardown callback to remove dialogs
-QUnit.module( "dialog: core" );
+// TODO add afterEach callback to remove dialogs
+QUnit.module( "dialog: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "markup structure", function( assert ) {
 	assert.expect( 11 );

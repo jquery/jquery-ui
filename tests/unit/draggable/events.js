@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/draggable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 var element;
 
@@ -12,6 +13,7 @@ QUnit.module( "draggable: events", {
 	},
 	afterEach: function() {
 		element.draggable( "destroy" );
+		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
 

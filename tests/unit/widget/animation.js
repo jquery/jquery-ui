@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widget"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 QUnit.module( "widget animation", ( function() {
 	var show = $.fn.show,
@@ -26,6 +27,7 @@ QUnit.module( "widget animation", ( function() {
 			$.fn.show = show;
 			$.fn.fadeIn = fadeIn;
 			$.fn.slideDown = slideDown;
+			return helper.moduleAfterEach.apply( this, arguments );
 		}
 	};
 }() ) );

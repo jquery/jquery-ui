@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/checkboxradio"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Checkboxradio: options" );
+QUnit.module( "Checkboxradio: options", { afterEach: helper.moduleAfterEach }  );
 
 function assertDisabled( checkbox, assert ) {
 	assert.hasClasses( checkbox.checkboxradio( "widget" ), "ui-state-disabled",

@@ -2,8 +2,9 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/position"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
 var win = $( window ),
 	scrollTopSupport = function() {
@@ -18,7 +19,8 @@ var win = $( window ),
 QUnit.module( "position", {
 	beforeEach: function() {
 		win.scrollTop( 0 ).scrollLeft( 0 );
-	}
+	},
+	afterEach: helper.moduleAfterEach
 } );
 
 common.testJshint( "position" );

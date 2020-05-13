@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/checkboxradio"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Checkboxradio: events" );
+QUnit.module( "Checkboxradio: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test(
 	"Resetting a checkbox's form should refresh the visual state of the checkbox",

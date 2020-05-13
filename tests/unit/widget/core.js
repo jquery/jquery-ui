@@ -2,8 +2,9 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/widget"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
 QUnit.module( "widget factory", {
 	afterEach: function() {
@@ -11,6 +12,7 @@ QUnit.module( "widget factory", {
 			delete $.ui.testWidget;
 			delete $.fn.testWidget;
 		}
+		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
 

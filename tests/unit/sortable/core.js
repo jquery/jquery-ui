@@ -1,11 +1,12 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/sortable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "sortable: core" );
+QUnit.module( "sortable: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "#9314: Sortable: Items cannot be dragged directly into bottom position", function( assert ) {
 	assert.expect( 1 );

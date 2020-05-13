@@ -1,14 +1,15 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
 	"ui/widgets/button",
 	"ui/widgets/spinner"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Controlgroup: Core" );
+QUnit.module( "Controlgroup: Core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "selectmenu: open/close corners", function( assert ) {
 	assert.expect( 12 );

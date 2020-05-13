@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/sortable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "sortable: options" );
+QUnit.module( "sortable: options", { afterEach: helper.moduleAfterEach }  );
 
 /*
 Test("{ appendTo: 'parent' }, default", function() {

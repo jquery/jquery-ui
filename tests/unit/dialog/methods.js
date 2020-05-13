@@ -1,12 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/dialog"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 QUnit.module( "dialog: methods", {
 	afterEach: function() {
 		$( "body>.ui-dialog" ).remove();
+		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
 

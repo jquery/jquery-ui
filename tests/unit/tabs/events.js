@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/tabs"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
 var state = testHelper.state;
 
-QUnit.module( "tabs: events" );
+QUnit.module( "tabs: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "create", function( assert ) {
 	assert.expect( 10 );

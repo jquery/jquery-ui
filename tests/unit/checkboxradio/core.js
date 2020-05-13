@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/checkboxradio"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Checkboxradio: core" );
+QUnit.module( "Checkboxradio: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "Checkbox - Initial class structure", function( assert ) {
 	assert.expect( 2 );

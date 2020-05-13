@@ -1,15 +1,16 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/tabs"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
 var disabled = testHelper.disabled,
 	equalHeight = testHelper.equalHeight,
 	state = testHelper.state;
 
-QUnit.module( "tabs: options" );
+QUnit.module( "tabs: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "{ active: default }", function( assert ) {
 	assert.expect( 6 );

@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/slider"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "slider: methods" );
+QUnit.module( "slider: methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "init", function( assert ) {
 	assert.expect( 5 );

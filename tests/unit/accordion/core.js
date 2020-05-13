@@ -5,10 +5,10 @@ define( [
 	"ui/widgets/accordion"
 ], function( QUnit, $, testHelper ) {
 
-var setupTeardown = testHelper.setupTeardown,
+var beforeAfterEach = testHelper.beforeAfterEach,
 	state = testHelper.state;
 
-QUnit.module( "accordion: core", setupTeardown() );
+QUnit.module( "accordion: core", beforeAfterEach() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
 	QUnit.test( "markup structure: " + type, function( assert ) {

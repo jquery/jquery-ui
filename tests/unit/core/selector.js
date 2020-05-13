@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/data",
 	"ui/escape-selector",
 	"ui/focusable",
 	"ui/tabbable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "core - selectors" );
+QUnit.module( "core - selectors", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.assert.isFocusable = function( selector, msg ) {
 	this.push( $( selector ).is( ":focusable" ), null, null,

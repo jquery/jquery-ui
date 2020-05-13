@@ -1,12 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/sortable",
 	"ui/widgets/draggable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "sortable: events" );
+QUnit.module( "sortable: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "start", function( assert ) {
 	assert.expect( 7 );
