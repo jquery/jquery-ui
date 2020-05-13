@@ -2,7 +2,12 @@ define( [
 	"jquery"
 ], function( $ ) {
 
-var exports = {};
+var exports = {},
+
+	// Store the old count so that we only assert on tests that have actually leaked,
+	// instead of asserting every time a test has leaked sometime in the past
+	oldActive = 0,
+	splice = [].splice;
 
 exports.forceScrollableWindow = function( appendTo ) {
 
@@ -26,6 +31,24 @@ exports.onFocus = function( element, onFocus ) {
 	};
 
 	element.on( "focus", fn )[ 0 ].focus();
+};
+
+/**
+ * Ensures that tests have cleaned up properly after themselves. Should be passed as the
+ * afterEach function on all modules' lifecycle object.
+ */
+exports.moduleAfterEach = function( assert ) {
+
+	// Check for (and clean up, if possible) incomplete animations/requests/etc.
+	if ( jQuery.timers && jQuery.timers.length !== 0 ) {
+		assert.equal( jQuery.timers.length, 0, "No timers are still running" );
+		splice.call( jQuery.timers, 0, jQuery.timers.length );
+		jQuery.fx.stop();
+	}
+	if ( jQuery.active !== undefined && jQuery.active !== oldActive ) {
+		assert.equal( jQuery.active, oldActive, "No AJAX requests are still active" );
+		oldActive = jQuery.active;
+	}
 };
 
 return exports;
