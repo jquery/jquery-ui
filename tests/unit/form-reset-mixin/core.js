@@ -2,9 +2,10 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/widget",
 	"ui/form-reset-mixin"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
 QUnit.module( "widget factory", {
 	beforeEach: function() {
@@ -26,6 +27,7 @@ QUnit.module( "widget factory", {
 	afterEach: function() {
 		delete $.ui.testWidget;
 		delete $.fn.testWidget;
+		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
 

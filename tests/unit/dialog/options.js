@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/dialog",
 	"ui/effects/effect-blind",
 	"ui/effects/effect-explode"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "dialog: options" );
+QUnit.module( "dialog: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "appendTo", function( assert ) {
 	assert.expect( 16 );

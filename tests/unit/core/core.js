@@ -2,12 +2,13 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/form",
 	"ui/labels",
 	"ui/unique-id"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
-QUnit.module( "core - jQuery extensions" );
+QUnit.module( "core - jQuery extensions", { afterEach: helper.moduleAfterEach }  );
 
 common.testJshint( "core" );
 

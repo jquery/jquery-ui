@@ -1,10 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
+	"./helper",
 	"ui/widgets/tooltip"
-], function( QUnit, $ ) {
+], function( QUnit, $, testHelper ) {
 
-QUnit.module( "tooltip: options" );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "tooltip: options", beforeAfterEach() );
 
 QUnit.test( "disabled: true", function( assert ) {
 	assert.expect( 1 );

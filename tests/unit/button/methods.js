@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/button"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Button: methods" );
+QUnit.module( "Button: methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "destroy", function( assert ) {
 	assert.expect( 1 );

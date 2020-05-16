@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/draggable",
 	"ui/widgets/droppable",
 	"ui/widgets/sortable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "draggable: options" );
+QUnit.module( "draggable: options", { afterEach: helper.moduleAfterEach }  );
 
 // TODO: This doesn't actually test whether append happened, possibly remove
 QUnit.test( "{ appendTo: 'parent' }, default, no clone", function( assert ) {
@@ -301,6 +302,9 @@ QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) 
 		dx: dx,
 		dy: dy
 	} );
+
+	// Cleanup
+	element.stop( true );
 } );
 
 QUnit.test( "connectToSortable, dragging clone into sortable", function( assert ) {

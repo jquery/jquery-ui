@@ -1,12 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/spinner",
 	"globalize",
 	"globalize/ja-JP"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "spinner: options" );
+QUnit.module( "spinner: options", { afterEach: helper.moduleAfterEach }  );
 
 // Culture is tested after numberFormat, since it depends on numberFormat
 

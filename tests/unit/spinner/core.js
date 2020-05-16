@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/spinner"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
 var simulateKeyDownUp = testHelper.simulateKeyDownUp;
 
-QUnit.module( "spinner: core" );
+QUnit.module( "spinner: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "markup structure", function( assert ) {
 	assert.expect( 6 );

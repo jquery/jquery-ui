@@ -23,6 +23,12 @@ return $.extend( helper, {
 		assert.equal( d1.toString(), d2.toString(), message );
 	},
 
+	beforeAfterEach: function() {
+		return {
+			afterEach: helper.moduleAfterEach
+		};
+	},
+
 	init: function( id, options ) {
 		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
 		return $( id ).datepicker( $.extend( { showAnim: "" }, options || {} ) );

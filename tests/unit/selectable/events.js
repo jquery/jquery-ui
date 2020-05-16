@@ -5,7 +5,7 @@ define( [
 	"ui/widgets/selectable"
 ], function( QUnit, $, testHelpers ) {
 
-QUnit.module( "selectable: events" );
+QUnit.module( "selectable: events", { afterEach: testHelpers.moduleAfterEach }  );
 
 QUnit.test( "start", function( assert ) {
 	assert.expect( 2 );

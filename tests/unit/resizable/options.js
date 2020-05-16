@@ -1,11 +1,12 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/resizable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "resizable: options" );
+QUnit.module( "resizable: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "alsoResize", function( assert ) {
 	assert.expect( 2 );

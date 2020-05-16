@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/dialog"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "dialog (deprecated): options" );
+QUnit.module( "dialog (deprecated): options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "dialogClass", function( assert ) {
 	assert.expect( 5 );

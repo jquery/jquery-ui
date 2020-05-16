@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/autocomplete"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "autocomplete: core" );
+QUnit.module( "autocomplete: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "markup structure", function( assert ) {
 	assert.expect( 2 );

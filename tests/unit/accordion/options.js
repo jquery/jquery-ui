@@ -6,10 +6,10 @@ define( [
 ], function( QUnit, $, testHelper ) {
 
 var equalHeight = testHelper.equalHeight,
-	setupTeardown = testHelper.setupTeardown,
+	beforeAfterEach = testHelper.beforeAfterEach,
 	state = testHelper.state;
 
-QUnit.module( "accordion: options", setupTeardown() );
+QUnit.module( "accordion: options", beforeAfterEach() );
 
 QUnit.test( "{ active: default }", function( assert ) {
 	assert.expect( 2 );

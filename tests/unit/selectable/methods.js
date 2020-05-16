@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/selectable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "selectable: methods" );
+QUnit.module( "selectable: methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "init", function( assert ) {
 	assert.expect( 5 );

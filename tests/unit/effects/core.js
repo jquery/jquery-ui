@@ -2,6 +2,7 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/effect",
 	"ui/effects/effect-blind",
 	"ui/effects/effect-bounce",
@@ -18,7 +19,7 @@ define( [
 	"ui/effects/effect-size",
 	"ui/effects/effect-slide",
 	"ui/effects/effect-transfer"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
 QUnit.assert.present = function( value, array, message ) {
 	this.push( jQuery.inArray( value, array ) !== -1, value, array, message );
@@ -34,7 +35,7 @@ var minDuration = 60,
 	// Duration is used for "long" animates where we plan on testing properties during animation
 	duration = 200;
 
-QUnit.module( "effects.core" );
+QUnit.module( "effects.core", { afterEach: helper.moduleAfterEach }  );
 
 // TODO: test all signatures of .show(), .hide(), .toggle().
 // Look at core's signatures and UI's signatures.
@@ -97,7 +98,7 @@ QUnit.test( "removeClass", function( assert ) {
 	assert.equal( "", element[ 0 ].className );
 } );
 
-QUnit.module( "effects.core: animateClass" );
+QUnit.module( "effects.core: animateClass", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "animateClass works with borderStyle", function( assert ) {
 	var ready = assert.async();
@@ -273,7 +274,7 @@ QUnit.test( "createPlaceholder: preserves layout affecting properties", function
 	assert.deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
 } );
 
-QUnit.module( "transfer" );
+QUnit.module( "transfer", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "transfer() without callback", function( assert ) {
 	var ready = assert.async();

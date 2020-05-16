@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/sortable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "sortable: options" );
+QUnit.module( "sortable: options", { afterEach: helper.moduleAfterEach }  );
 
 /*
 Test("{ appendTo: 'parent' }, default", function() {
@@ -104,6 +105,10 @@ QUnit.test( "#7415: Incorrect revert animation with axis: 'y'", function( assert
 		var top = parseFloat( item.css( "top" ) );
 		assert.equal( item.css( "left" ), expectedLeft, "left not animated" );
 		assert.ok( top > 0 && top < 300, "top is animated" );
+
+		// Cleanup
+		item.stop( true );
+
 		ready();
 	}, 100 );
 } );

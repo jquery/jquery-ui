@@ -1,7 +1,8 @@
 define( [
 	"qunit",
-	"jquery" ],
-function( QUnit, $ ) {
+	"jquery",
+	"lib/helper"
+], function( QUnit, $, helper ) {
 
 var exports = {};
 
@@ -66,7 +67,7 @@ function testBasicUsage( widget ) {
 }
 
 exports.testWidget = function( widget, settings ) {
-	QUnit.module( widget + ": common widget" );
+	QUnit.module( widget + ": common widget", { afterEach: helper.moduleAfterEach } );
 
 	exports.testJshint( "/widgets/" + widget );
 	testWidgetDefaults( widget, settings.defaults );

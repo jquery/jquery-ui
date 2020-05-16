@@ -2,15 +2,17 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-he"
-], function( QUnit, $, common, testHelper ) {
+], function( QUnit, $, common, helper, testHelper ) {
 
 QUnit.module( "datepicker: core", {
 	beforeEach: function() {
 		$( "body" ).trigger( "focus" );
-	}
+	},
+	afterEach: helper.moduleAfterEach
 } );
 
 common.testJshint( "widgets/datepicker" );

@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/draggable",
 	"ui/widgets/droppable",
 	"ui/widgets/resizable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "draggable: core" );
+QUnit.module( "draggable: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "element types", function( assert ) {
 	var typeNames = (

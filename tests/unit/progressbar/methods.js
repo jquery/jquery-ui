@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/progressbar"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "progressbar: methods" );
+QUnit.module( "progressbar: methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "destroy", function( assert ) {
 	assert.expect( 1 );

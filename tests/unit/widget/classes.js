@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widget"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 QUnit.module( "widget factory classes", {
 	beforeEach: function() {
@@ -50,6 +51,7 @@ QUnit.module( "widget factory classes", {
 			_destroy: function() {
 				this.span.remove();
 				this.element.unwrap();
+				return helper.moduleAfterEach.apply( this, arguments );
 			}
 		} );
 	},

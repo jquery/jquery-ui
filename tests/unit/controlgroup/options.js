@@ -1,14 +1,15 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
 	"ui/widgets/button",
 	"ui/widgets/spinner"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Controlgroup: options" );
+QUnit.module( "Controlgroup: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "disabled", function( assert ) {
 	assert.expect( 4 );

@@ -1,13 +1,15 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/selectmenu"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 QUnit.module( "selectmenu: events", {
 	beforeEach: function() {
 		this.element = $( "#speed" );
-	}
+	},
+	afterEach: helper.moduleAfterEach
 } );
 
 QUnit.test( "change", function( assert ) {

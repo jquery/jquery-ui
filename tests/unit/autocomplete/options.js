@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/autocomplete"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "autocomplete: options" );
+QUnit.module( "autocomplete: options", { afterEach: helper.moduleAfterEach }  );
 
 var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby",
 	"python", "c", "scala", "groovy", "haskell", "perl" ];

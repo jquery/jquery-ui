@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/button"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Button (deprecated): core" );
+QUnit.module( "Button (deprecated): core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "Calling button on a checkbox input calls checkboxradio widget", function( assert ) {
 	var checkbox = $( "#checkbox01" );
@@ -27,7 +28,7 @@ QUnit.test( "Calling buttonset calls controlgroup", function( assert ) {
 	assert.ok( controlgroup.is( ":ui-controlgroup" ), "Calling buttonset creates controlgroup instance" );
 } );
 
-QUnit.module( "Button (deprecated): methods" );
+QUnit.module( "Button (deprecated): methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "destroy", function( assert ) {
 	assert.expect( 1 );
@@ -59,7 +60,7 @@ QUnit.test( "refresh: Ensure disabled state is preserved correctly.", function( 
 
 } );
 
-QUnit.module( "button (deprecated): options" );
+QUnit.module( "button (deprecated): options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "Setting items option on buttonset sets the button properties on the items option", function( assert ) {
 	assert.expect( 2 );

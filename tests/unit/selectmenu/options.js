@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/selectmenu"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "selectmenu: options" );
+QUnit.module( "selectmenu: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "appendTo: null", function( assert ) {
 	assert.expect( 1 );

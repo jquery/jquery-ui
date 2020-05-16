@@ -5,7 +5,9 @@ define( [
 	"ui/widgets/datepicker"
 ], function( QUnit, $, testHelper ) {
 
-QUnit.module( "datepicker: methods" );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "datepicker: methods", beforeAfterEach()  );
 
 QUnit.test( "destroy", function( assert ) {
 	assert.expect( 35 );

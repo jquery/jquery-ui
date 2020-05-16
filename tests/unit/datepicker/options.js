@@ -9,7 +9,9 @@ define( [
 	"ui/ie"
 ], function( QUnit, $, testHelper ) {
 
-QUnit.module( "datepicker: options" );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "datepicker: options", beforeAfterEach()  );
 
 QUnit.test( "setDefaults", function( assert ) {
 	assert.expect( 3 );
