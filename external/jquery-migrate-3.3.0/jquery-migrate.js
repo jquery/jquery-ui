@@ -1,12 +1,14 @@
 /*!
- * jQuery Migrate - v3.1.0 - 2019-06-08
+ * jQuery Migrate - v3.3.0 - 2020-05-05T01:57Z
  * Copyright OpenJS Foundation and other contributors
  */
-;( function( factory ) {
+( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define( [ "jquery" ], function ( jQuery ) {
+		define( [ "jquery" ], function( jQuery ) {
 			return factory( jQuery, window );
 		} );
 	} else if ( typeof module === "object" && module.exports ) {
@@ -22,18 +24,16 @@
 } )( function( jQuery, window ) {
 "use strict";
 
-
-jQuery.migrateVersion = "3.1.0";
-
-/* exported jQueryVersionSince, compareVersions */
+jQuery.migrateVersion = "3.3.0";
 
 // Returns 0 if v1 == v2, -1 if v1 < v2, 1 if v1 > v2
 function compareVersions( v1, v2 ) {
-	var rVersionParts = /^(\d+)\.(\d+)\.(\d+)/,
+	var i,
+		rVersionParts = /^(\d+)\.(\d+)\.(\d+)/,
 		v1p = rVersionParts.exec( v1 ) || [ ],
 		v2p = rVersionParts.exec( v2 ) || [ ];
 
-	for ( var i = 1; i <= 3; i++ ) {
+	for ( i = 1; i <= 3; i++ ) {
 		if ( +v1p[ i ] > +v2p[ i ] ) {
 			return 1;
 		}
@@ -47,8 +47,6 @@ function compareVersions( v1, v2 ) {
 function jQueryVersionSince( version ) {
 	return compareVersions( jQuery.fn.jquery, version ) >= 0;
 }
-
-/* exported migrateWarn, migrateWarnFunc, migrateWarnProp */
 
 ( function() {
 
@@ -76,6 +74,9 @@ function jQueryVersionSince( version ) {
 
 var warnedAbout = {};
 
+// By default each warning is only reported once.
+jQuery.migrateDeduplicateWarnings = true;
+
 // List of warnings already given; public read only
 jQuery.migrateWarnings = [];
 
@@ -92,7 +93,7 @@ jQuery.migrateReset = function() {
 
 function migrateWarn( msg ) {
 	var console = window.console;
-	if ( !warnedAbout[ msg ] ) {
+	if ( !jQuery.migrateDeduplicateWarnings || !warnedAbout[ msg ] ) {
 		warnedAbout[ msg ] = true;
 		jQuery.migrateWarnings.push( msg );
 		if ( console && console.warn && !jQuery.migrateMute ) {
@@ -132,12 +133,17 @@ if ( window.document.compatMode === "BackCompat" ) {
 	migrateWarn( "jQuery is not compatible with Quirks Mode" );
 }
 
-
-var oldInit = jQuery.fn.init,
-	oldIsNumeric = jQuery.isNumeric,
+var findProp,
+	class2type = {},
+	oldInit = jQuery.fn.init,
 	oldFind = jQuery.find,
+
 	rattrHashTest = /\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/,
-	rattrHashGlob = /\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/g;
+	rattrHashGlob = /\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/g,
+
+	// Support: Android <=4.0 only
+	// Make sure we trim BOM and NBSP
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 jQuery.fn.init = function( arg1 ) {
 	var args = Array.prototype.slice.call( arguments );
@@ -187,7 +193,6 @@ jQuery.find = function( selector ) {
 };
 
 // Copy properties attached to original jQuery.find method (e.g. .attr, .isXML)
-var findProp;
 for ( findProp in oldFind ) {
 	if ( Object.prototype.hasOwnProperty.call( oldFind, findProp ) ) {
 		jQuery.find[ findProp ] = oldFind[ findProp ];
@@ -195,42 +200,15 @@ for ( findProp in oldFind ) {
 }
 
 // The number of elements contained in the matched element set
-jQuery.fn.size = function() {
-	migrateWarn( "jQuery.fn.size() is deprecated and removed; use the .length property" );
+migrateWarnFunc( jQuery.fn, "size", function() {
 	return this.length;
-};
+},
+"jQuery.fn.size() is deprecated and removed; use the .length property" );
 
-jQuery.parseJSON = function() {
-	migrateWarn( "jQuery.parseJSON is deprecated; use JSON.parse" );
+migrateWarnFunc( jQuery, "parseJSON", function() {
 	return JSON.parse.apply( null, arguments );
-};
-
-jQuery.isNumeric = function( val ) {
-
-	// The jQuery 2.2.3 implementation of isNumeric
-	function isNumeric2( obj ) {
-		var realStringObj = obj && obj.toString();
-		return !jQuery.isArray( obj ) && ( realStringObj - parseFloat( realStringObj ) + 1 ) >= 0;
-	}
-
-	var newValue = oldIsNumeric( val ),
-		oldValue = isNumeric2( val );
-
-	if ( newValue !== oldValue ) {
-		migrateWarn( "jQuery.isNumeric() should not be called on constructed objects" );
-	}
-
-	return oldValue;
-};
-
-if ( jQueryVersionSince( "3.3.0" ) ) {
-	migrateWarnFunc( jQuery, "isWindow",
-		function( obj ) {
-			return obj != null && obj === obj.window;
-		},
-		"jQuery.isWindow() is deprecated"
-	);
-}
+},
+"jQuery.parseJSON is deprecated; use JSON.parse" );
 
 migrateWarnFunc( jQuery, "holdReady", jQuery.holdReady,
 	"jQuery.holdReady is deprecated" );
@@ -244,12 +222,81 @@ migrateWarnProp( jQuery.expr, "filters", jQuery.expr.pseudos,
 migrateWarnProp( jQuery.expr, ":", jQuery.expr.pseudos,
 	"jQuery.expr[':'] is deprecated; use jQuery.expr.pseudos" );
 
+// Prior to jQuery 3.1.1 there were internal refs so we don't warn there
+if ( jQueryVersionSince( "3.1.1" ) ) {
+	migrateWarnFunc( jQuery, "trim", function( text ) {
+		return text == null ?
+			"" :
+			( text + "" ).replace( rtrim, "" );
+	},
+	"jQuery.trim is deprecated; use String.prototype.trim" );
+}
+
 // Prior to jQuery 3.2 there were internal refs so we don't warn there
 if ( jQueryVersionSince( "3.2.0" ) ) {
-	migrateWarnFunc( jQuery, "nodeName", jQuery.nodeName,
+	migrateWarnFunc( jQuery, "nodeName", function( elem, name ) {
+		return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
+	},
 	"jQuery.nodeName is deprecated" );
 }
 
+if ( jQueryVersionSince( "3.3.0" ) ) {
+
+	migrateWarnFunc( jQuery, "isNumeric", function( obj ) {
+
+			// As of jQuery 3.0, isNumeric is limited to
+			// strings and numbers (primitives or objects)
+			// that can be coerced to finite numbers (gh-2662)
+			var type = typeof obj;
+			return ( type === "number" || type === "string" ) &&
+
+				// parseFloat NaNs numeric-cast false positives ("")
+				// ...but misinterprets leading-number strings, e.g. hex literals ("0x...")
+				// subtraction forces infinities to NaN
+				!isNaN( obj - parseFloat( obj ) );
+		},
+		"jQuery.isNumeric() is deprecated"
+	);
+
+	// Populate the class2type map
+	jQuery.each( "Boolean Number String Function Array Date RegExp Object Error Symbol".
+		split( " " ),
+	function( _, name ) {
+		class2type[ "[object " + name + "]" ] = name.toLowerCase();
+	} );
+
+	migrateWarnFunc( jQuery, "type", function( obj ) {
+		if ( obj == null ) {
+			return obj + "";
+		}
+
+		// Support: Android <=2.3 only (functionish RegExp)
+		return typeof obj === "object" || typeof obj === "function" ?
+			class2type[ Object.prototype.toString.call( obj ) ] || "object" :
+			typeof obj;
+	},
+	"jQuery.type is deprecated" );
+
+	migrateWarnFunc( jQuery, "isFunction",
+		function( obj ) {
+			return typeof obj === "function";
+		},
+		"jQuery.isFunction() is deprecated" );
+
+	migrateWarnFunc( jQuery, "isWindow",
+		function( obj ) {
+			return obj != null && obj === obj.window;
+		},
+		"jQuery.isWindow() is deprecated"
+	);
+
+	migrateWarnFunc( jQuery, "isArray", Array.isArray,
+		"jQuery.isArray is deprecated; use Array.isArray"
+	);
+}
+
+// Support jQuery slim which excludes the ajax module
+if ( jQuery.ajax ) {
 
 var oldAjax = jQuery.ajax;
 
@@ -269,6 +316,7 @@ jQuery.ajax = function( ) {
 	return jQXHR;
 };
 
+}
 
 var oldRemoveAttr = jQuery.fn.removeAttr,
 	oldToggleClass = jQuery.fn.toggleClass,
@@ -318,8 +366,38 @@ jQuery.fn.toggleClass = function( state ) {
 	} );
 };
 
+function camelCase( string ) {
+	return string.replace( /-([a-z])/g, function( _, letter ) {
+		return letter.toUpperCase();
+	} );
+}
 
-var internalSwapCall = false;
+var oldFnCss,
+	internalSwapCall = false,
+	ralphaStart = /^[a-z]/,
+
+	// The regex visualized:
+	//
+	//                         /----------\
+	//                        |            |    /-------\
+	//                        |  / Top  \  |   |         |
+	//         /--- Border ---+-| Right  |-+---+- Width -+---\
+	//        |                 | Bottom |                    |
+	//        |                  \ Left /                     |
+	//        |                                               |
+	//        |                              /----------\     |
+	//        |          /-------------\    |            |    |- END
+	//        |         |               |   |  / Top  \  |    |
+	//        |         |  / Margin  \  |   | | Right  | |    |
+	//        |---------+-|           |-+---+-| Bottom |-+----|
+	//        |            \ Padding /         \ Left /       |
+	// BEGIN -|                                               |
+	//        |                /---------\                    |
+	//        |               |           |                   |
+	//        |               |  / Min \  |    / Width  \     |
+	//         \--------------+-|       |-+---|          |---/
+	//                           \ Max /       \ Height /
+	rautoPx = /^(?:Border(?:Top|Right|Bottom|Left)?(?:Width|)|(?:Margin|Padding)?(?:Top|Right|Bottom|Left)?|(?:Min|Max)?(?:Width|Height))$/;
 
 // If this version of jQuery has .swap(), don't false-alarm on internal uses
 if ( jQuery.swap ) {
@@ -363,17 +441,58 @@ jQuery.swap = function( elem, options, callback, args ) {
 	return ret;
 };
 
+if ( jQueryVersionSince( "3.4.0" ) && typeof Proxy !== "undefined" ) {
+
+	jQuery.cssProps = new Proxy( jQuery.cssProps || {}, {
+		set: function() {
+			migrateWarn( "JQMIGRATE: jQuery.cssProps is deprecated" );
+			return Reflect.set.apply( this, arguments );
+		}
+	} );
+}
+
+// Create a dummy jQuery.cssNumber if missing. It won't be used by jQuery but
+// it will prevent code adding new keys to it unconditionally from crashing.
+if ( !jQuery.cssNumber ) {
+	jQuery.cssNumber = {};
+}
+
+function isAutoPx( prop ) {
+
+	// The first test is used to ensure that:
+	// 1. The prop starts with a lowercase letter (as we uppercase it for the second regex).
+	// 2. The prop is not empty.
+	return ralphaStart.test( prop ) &&
+		rautoPx.test( prop[ 0 ].toUpperCase() + prop.slice( 1 ) );
+}
+
+oldFnCss = jQuery.fn.css;
+
+jQuery.fn.css = function( name, value ) {
+	var origThis = this;
+	if ( typeof name !== "string" ) {
+		jQuery.each( name, function( n, v ) {
+			jQuery.fn.css.call( origThis, n, v );
+		} );
+	}
+	if ( typeof value === "number" && !isAutoPx( camelCase( name ) ) ) {
+		migrateWarn( "Use of number-typed values is deprecated in jQuery.fn.css" );
+	}
+
+	return oldFnCss.apply( this, arguments );
+};
+
 var oldData = jQuery.data;
 
 jQuery.data = function( elem, name, value ) {
-	var curData;
+	var curData, sameKeys, key;
 
 	// Name can be an object, and each entry in the object is meant to be set as data
 	if ( name && typeof name === "object" && arguments.length === 2 ) {
 		curData = jQuery.hasData( elem ) && oldData.call( this, elem );
-		var sameKeys = {};
-		for ( var key in name ) {
-			if ( key !== jQuery.camelCase( key ) ) {
+		sameKeys = {};
+		for ( key in name ) {
+			if ( key !== camelCase( key ) ) {
 				migrateWarn( "jQuery.data() always sets/gets camelCased names: " + key );
 				curData[ key ] = name[ key ];
 			} else {
@@ -387,7 +506,7 @@ jQuery.data = function( elem, name, value ) {
 	}
 
 	// If the name is transformed, look for the un-transformed name in the data object
-	if ( name && typeof name === "string" && name !== jQuery.camelCase( name ) ) {
+	if ( name && typeof name === "string" && name !== camelCase( name ) ) {
 		curData = jQuery.hasData( elem ) && oldData.call( this, elem );
 		if ( curData && name in curData ) {
 			migrateWarn( "jQuery.data() always sets/gets camelCased names: " + name );
@@ -401,8 +520,12 @@ jQuery.data = function( elem, name, value ) {
 	return oldData.apply( this, arguments );
 };
 
-var oldTweenRun = jQuery.Tween.prototype.run;
-var linearEasing = function( pct ) {
+// Support jQuery slim which excludes the effects module
+if ( jQuery.fx ) {
+
+var intervalValue, intervalMsg,
+	oldTweenRun = jQuery.Tween.prototype.run,
+	linearEasing = function( pct ) {
 		return pct;
 	};
 
@@ -418,8 +541,8 @@ jQuery.Tween.prototype.run = function( ) {
 	oldTweenRun.apply( this, arguments );
 };
 
-var intervalValue = jQuery.fx.interval || 13,
-	intervalMsg = "jQuery.fx.interval is deprecated";
+intervalValue = jQuery.fx.interval || 13;
+intervalMsg = "jQuery.fx.interval is deprecated";
 
 // Support: IE9, Android <=4.4
 // Avoid false positives on browsers that lack rAF
@@ -439,6 +562,8 @@ if ( window.requestAnimationFrame ) {
 			intervalValue = newValue;
 		}
 	} );
+}
+
 }
 
 var oldLoad = jQuery.fn.load,
@@ -571,28 +696,57 @@ jQuery.fn.extend( {
 	}
 } );
 
+var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
+	origHtmlPrefilter = jQuery.htmlPrefilter,
+	makeMarkup = function( html ) {
+		var doc = window.document.implementation.createHTMLDocument( "" );
+		doc.body.innerHTML = html;
+		return doc.body && doc.body.innerHTML;
+	},
+	warnIfChanged = function( html ) {
+		var changed = html.replace( rxhtmlTag, "<$1></$2>" );
+		if ( changed !== html && makeMarkup( html ) !== makeMarkup( changed ) ) {
+			migrateWarn( "HTML tags must be properly nested and closed: " + html );
+		}
+	};
+
+jQuery.UNSAFE_restoreLegacyHtmlPrefilter = function() {
+	jQuery.htmlPrefilter = function( html ) {
+		warnIfChanged( html );
+		return html.replace( rxhtmlTag, "<$1></$2>" );
+	};
+};
+
+jQuery.htmlPrefilter = function( html ) {
+	warnIfChanged( html );
+	return origHtmlPrefilter( html );
+};
 
 var oldOffset = jQuery.fn.offset;
 
 jQuery.fn.offset = function() {
 	var docElem,
 		elem = this[ 0 ],
-		origin = { top: 0, left: 0 };
+		bogus = { top: 0, left: 0 };
 
 	if ( !elem || !elem.nodeType ) {
 		migrateWarn( "jQuery.fn.offset() requires a valid DOM element" );
-		return origin;
+		return undefined;
 	}
 
 	docElem = ( elem.ownerDocument || window.document ).documentElement;
 	if ( !jQuery.contains( docElem, elem ) ) {
 		migrateWarn( "jQuery.fn.offset() requires an element connected to a document" );
-		return origin;
+		return bogus;
 	}
 
 	return oldOffset.apply( this, arguments );
 };
 
+// Support jQuery slim which excludes the ajax module
+// The jQuery.param patch is about respecting `jQuery.ajaxSettings.traditional`
+// so it doesn't make sense for the slim build.
+if ( jQuery.ajax ) {
 
 var oldParam = jQuery.param;
 
@@ -608,6 +762,8 @@ jQuery.param = function( data, traditional ) {
 	return oldParam.call( this, data, traditional );
 };
 
+}
+
 var oldSelf = jQuery.fn.andSelf || jQuery.fn.addBack;
 
 jQuery.fn.andSelf = function() {
@@ -615,6 +771,8 @@ jQuery.fn.andSelf = function() {
 	return oldSelf.apply( this, arguments );
 };
 
+// Support jQuery slim which excludes the deferred module in jQuery 4.0+
+if ( jQuery.Deferred ) {
 
 var oldDeferred = jQuery.Deferred,
 	tuples = [
@@ -639,14 +797,14 @@ jQuery.Deferred = function( func ) {
 
 		return jQuery.Deferred( function( newDefer ) {
 			jQuery.each( tuples, function( i, tuple ) {
-				var fn = jQuery.isFunction( fns[ i ] ) && fns[ i ];
+				var fn = typeof fns[ i ] === "function" && fns[ i ];
 
 				// Deferred.done(function() { bind to newDefer or newDefer.resolve })
 				// deferred.fail(function() { bind to newDefer or newDefer.reject })
 				// deferred.progress(function() { bind to newDefer or newDefer.notify })
 				deferred[ tuple[ 1 ] ]( function() {
 					var returned = fn && fn.apply( this, arguments );
-					if ( returned && jQuery.isFunction( returned.promise ) ) {
+					if ( returned && typeof returned.promise === "function" ) {
 						returned.promise()
 							.done( newDefer.resolve )
 							.fail( newDefer.reject )
@@ -673,6 +831,8 @@ jQuery.Deferred = function( func ) {
 
 // Preserve handler of uncaught exceptions in promise chains
 jQuery.Deferred.exceptionHook = oldDeferred.exceptionHook;
+
+}
 
 return jQuery;
 } );

@@ -12,8 +12,9 @@
 		"jquery": ">=1.6"
 	},
 	"devDependencies": {
+		"jquery-color": "2.2.0",
 		"jquery-mousewheel": "3.1.12",
-		"jquery-simulate": "1.0.0",
+		"jquery-simulate": "1.1.1",
 		"jshint": "2.4.4",
 		"qunit": "1.18.0",
 		"qunit-assert-classes": "1.0.2",
@@ -67,6 +68,6 @@
 		"jquery-3.4.0": "jquery#3.4.0",
 		"jquery-3.4.1": "jquery#3.4.1",
 		"jquery-migrate-1.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
-		"jquery-migrate-3.0.0": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.0.0.tgz"
+		"jquery-migrate-3.3.0": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.3.0.tgz"
 	}
 }
