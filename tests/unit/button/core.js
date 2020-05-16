@@ -12,7 +12,7 @@ QUnit.test( "Disabled button loses focus", function( assert ) {
 	assert.expect( 2 );
 	var element = $( "#button" ).button();
 
-	element.focus();
+	element.trigger( "focus" );
 	setTimeout( function() {
 
 		assert.equal( element[ 0 ], $.ui.safeActiveElement( document ), "Button is focused" );

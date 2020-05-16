@@ -105,6 +105,8 @@ return $.effects.define( "size", function( options, done ) {
 		to.top = ( original.outerHeight - to.outerHeight ) * baseline.y + pos.top;
 		to.left = ( original.outerWidth - to.outerWidth ) * baseline.x + pos.left;
 	}
+	delete from.outerHeight;
+	delete from.outerWidth;
 	element.css( from );
 
 	// Animate the children if desired

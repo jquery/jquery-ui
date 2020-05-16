@@ -22,7 +22,7 @@
 			stop: function(event, ui) {
 				tabs.tabs( "refresh" );
 				if (previouslyFocused) {
-					ui.item.focus();
+					ui.item.trigger( "focus" );
 				}
 			}
 		});
