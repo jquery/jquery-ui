@@ -177,7 +177,7 @@ function migrateUrl() {
 	// Load the jQuery fixes, if necessary
 	if ( !jQueryVersion ||
 		( jQueryVersion.indexOf( "git" ) === -1 && parseFloat( jQueryVersion ) < 4 ) ) {
-		modules.unshift( "ui/jquery-1-7" );
+		modules.unshift( "ui/jquery-patch" );
 	}
 
 	requireTests( modules, noBackCompat );
