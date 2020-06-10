@@ -135,7 +135,7 @@ QUnit.test( "keyboard support", function( assert ) {
 		setTimeout( step2 );
 	}
 
-	// Support: IE 11 with jQuery 1.7 - 1.8 only
+	// Support: IE 11 with jQuery 1.8 only
 	// All of the setTimeouts() from keydowns aren't necessary with newer jQuery.
 	// Only the explicit focus simulations require them.
 	function step2() {
