@@ -146,12 +146,9 @@ QUnit.test( "animateClass works with colors", function( assert ) {
 
 QUnit.test( "animateClass calls step option", function( assert ) {
 	assert.expect( 1 );
-	var ready = assert.async();
 	var test = jQuery( "div.animateClass" ),
 		step = function() {
 			assert.ok( true, "Step Function Called" );
-			test.stop();
-			ready();
 			step = $.noop;
 		};
 	test.toggleClass( "testChangeBackground", {
@@ -159,6 +156,8 @@ QUnit.test( "animateClass calls step option", function( assert ) {
 			step();
 		}
 	} );
+
+	test.stop( true, true );
 } );
 
 QUnit.test( "animateClass works with children", function( assert ) {
