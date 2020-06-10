@@ -640,7 +640,13 @@ QUnit.test( "within", function( assert ) {
 	}, "flipfit - left top" );
 } );
 
-QUnit.test( "with scrollbars", function( assert ) {
+// jQuery 3.2 incorrectly handle scrollbars in WebKit/Blink-based browsers.
+// This is fixed in version 3.3, see https://github.com/jquery/jquery/issues/3589.
+// As the data here comes from jQuery directly and the changes to fix it
+// are non-trivial: https://github.com/jquery/jquery/pull/3656, just accept
+// that scrollbar data in this jQuery version is inaccurate.
+QUnit[ jQuery.fn.jquery.substring( 0, 4 ) === "3.2." ? "skip" : "test" ](
+	"with scrollbars", function( assert ) {
 	assert.expect( 4 );
 
 	$( "#scrollx" ).css( {
