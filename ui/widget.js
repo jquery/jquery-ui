@@ -590,7 +590,9 @@ $.Widget.prototype = {
 			delegateElement = this.widget();
 		} else {
 			element = delegateElement = $( element );
-			this.bindings = this.bindings.add( element );
+			if ( !this.bindings.find(element).length ) {
+				this.bindings = this.bindings.add( element );
+			}
 		}
 
 		$.each( handlers, function( event, handler ) {
