@@ -142,7 +142,7 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 		var element = $( event.target ).closest( ":data(selectable-item)" );
 		if ( element.length ) {
 			var selectee = element.data( "selectable-item" ),
-				doSelect = ( !event.metaKey && !event.ctrlKey) || 
+				doSelect = ( !event.metaKey && !event.ctrlKey ) ||
 					!selectee.$element.hasClass( "ui-selected" );
 			that._removeClass( selectee.$element, doSelect ? "ui-unselecting" : "ui-selected" )
 				._addClass( selectee.$element, doSelect ? "ui-selecting" : "ui-unselecting" );
@@ -154,11 +154,11 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 			if ( doSelect ) {
 				that._trigger( "selecting", event, {
 					selecting: selectee.element
-				});
+				} );
 			} else {
 				that._trigger( "unselecting", event, {
 					unselecting: selectee.element
-				});
+				} );
 			}
 		}
 
