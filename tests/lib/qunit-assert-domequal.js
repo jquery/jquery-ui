@@ -151,10 +151,12 @@ function extract( selector, message ) {
 				return;
 			}
 
-			// We're going to do a shallow copy of the event list to
-			// avoid mutating internal jQuery structures when removing
-			// extraneous focus/blur handlers.
-			result.events[ eventType ] = result.events[ eventType ].slice();
+			// Only the special internal handlers
+			// have the namespace field set to boolean `false`;
+			// filter them out.
+			result.events[ eventType ] = result.events[ eventType ].filter( function( eventData ) {
+				return eventData.namespace !== false;
+			} );
 
 			eventDataList = result.events[ eventType ];
 			for ( i = eventDataList.length - 1; i > -1; i-- ) {
