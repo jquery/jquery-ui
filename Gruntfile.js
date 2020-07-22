@@ -298,15 +298,6 @@ grunt.initConfig( {
 				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/LICENSE.txt": "jquery-1.x/LICENSE.txt",
 
-				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
-				"jquery-1.7.0/MIT-LICENSE.txt": "jquery-1.7.0/MIT-LICENSE.txt",
-
-				"jquery-1.7.1/jquery.js": "jquery-1.7.1/jquery.js",
-				"jquery-1.7.1/MIT-LICENSE.txt": "jquery-1.7.1/MIT-LICENSE.txt",
-
-				"jquery-1.7.2/jquery.js": "jquery-1.7.2/jquery.js",
-				"jquery-1.7.2/MIT-LICENSE.txt": "jquery-1.7.2/MIT-LICENSE.txt",
-
 				"jquery-1.8.0/jquery.js": "jquery-1.8.0/jquery.js",
 				"jquery-1.8.0/MIT-LICENSE.txt": "jquery-1.8.0/MIT-LICENSE.txt",
 
