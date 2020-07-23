@@ -1,5 +1,5 @@
 /*!
- * jQuery Migrate - v3.3.0 - 2020-05-05T01:57Z
+ * jQuery Migrate - v3.3.1 - 2020-06-25T01:07Z
  * Copyright OpenJS Foundation and other contributors
  */
 ( function( factory ) {
@@ -24,7 +24,7 @@
 } )( function( jQuery, window ) {
 "use strict";
 
-jQuery.migrateVersion = "3.3.0";
+jQuery.migrateVersion = "3.3.1";
 
 // Returns 0 if v1 == v2, -1 if v1 < v2, 1 if v1 > v2
 function compareVersions( v1, v2 ) {
@@ -469,14 +469,19 @@ function isAutoPx( prop ) {
 oldFnCss = jQuery.fn.css;
 
 jQuery.fn.css = function( name, value ) {
-	var origThis = this;
-	if ( typeof name !== "string" ) {
+	var camelName,
+		origThis = this;
+	if ( name && typeof name === "object" && !Array.isArray( name ) ) {
 		jQuery.each( name, function( n, v ) {
 			jQuery.fn.css.call( origThis, n, v );
 		} );
 	}
-	if ( typeof value === "number" && !isAutoPx( camelCase( name ) ) ) {
-		migrateWarn( "Use of number-typed values is deprecated in jQuery.fn.css" );
+	if ( typeof value === "number" ) {
+		camelName = camelCase( name );
+		if ( !isAutoPx( camelName ) && !jQuery.cssNumber[ camelName ] ) {
+			migrateWarn( "Number-typed values are deprecated for jQuery.fn.css( \"" +
+				name + "\", value )" );
+		}
 	}
 
 	return oldFnCss.apply( this, arguments );
@@ -725,19 +730,11 @@ jQuery.htmlPrefilter = function( html ) {
 var oldOffset = jQuery.fn.offset;
 
 jQuery.fn.offset = function() {
-	var docElem,
-		elem = this[ 0 ],
-		bogus = { top: 0, left: 0 };
+	var elem = this[ 0 ];
 
-	if ( !elem || !elem.nodeType ) {
+	if ( elem && ( !elem.nodeType || !elem.getBoundingClientRect ) ) {
 		migrateWarn( "jQuery.fn.offset() requires a valid DOM element" );
-		return undefined;
-	}
-
-	docElem = ( elem.ownerDocument || window.document ).documentElement;
-	if ( !jQuery.contains( docElem, elem ) ) {
-		migrateWarn( "jQuery.fn.offset() requires an element connected to a document" );
-		return bogus;
+		return arguments.length ? this : undefined;
 	}
 
 	return oldOffset.apply( this, arguments );
