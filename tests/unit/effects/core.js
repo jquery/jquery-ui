@@ -378,8 +378,10 @@ $.each( $.effects.effect, function( effect ) {
 			assert.equal( test[ 0 ].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
 			ready();
 		} );
-		assert.equal( test.width(), width, "Width is the same px after animation started" );
-		assert.equal( test.height(), height, "Height is the same px after animation started" );
+		assert.ok( Math.abs( test.width() - width ) / width < 0.05,
+			"Width is close to the value when animation started" );
+		assert.ok( Math.abs( test.height() - height ) / height < 0.05,
+			"Height is close to the value when animation started" );
 	} );
 } );
 
