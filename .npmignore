@@ -1,0 +1,10 @@
+demos
+tests
+.editorconfig
+.jscsrc
+.jshintrc
+.mailmap
+.travis.yml
+Gruntfile.js
+.csslintrc
+.gitattributes
