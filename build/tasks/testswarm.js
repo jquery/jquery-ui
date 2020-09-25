@@ -47,12 +47,18 @@ var versions = {
 		"Widget": "widget/widget.html"
 	};
 
-function submit( commit, runs, configFile, extra, done ) {
+function submit( commit, runs, configFile, browserSets, extra, done ) {
 	var testName,
 		testswarm = require( "testswarm" ),
 		config = grunt.file.readJSON( configFile ).jqueryui,
-		browserSets = config.browserSets,
 		commitUrl = "https://github.com/jquery/jquery-ui/commit/" + commit;
+
+	browserSets = browserSets || config.browserSets;
+	if ( browserSets[ 0 ] === "[" ) {
+
+		// We got an array, parse it
+		browserSets = JSON.parse( browserSets );
+	}
 
 	if ( extra ) {
 		extra = " (" + extra + ")";
@@ -84,23 +90,23 @@ function submit( commit, runs, configFile, extra, done ) {
 		} );
 }
 
-grunt.registerTask( "testswarm", function( commit, configFile ) {
+grunt.registerTask( "testswarm", function( commit, configFile, browserSets ) {
 	var test,
 		latestTests = {};
 	for ( test in tests ) {
 		latestTests[ test ] = tests[ test ] + "?nojshint=true";
 	}
-	submit( commit, latestTests, configFile, "", this.async() );
+	submit( commit, latestTests, configFile, browserSets, "", this.async() );
 } );
 
-grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, minor ) {
+grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, minor, browserSets ) {
 	var allTests = {};
 	versions[ minor ].split( " " ).forEach( function( version ) {
 		for ( var test in tests ) {
 			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
 		}
 	} );
-	submit( commit, allTests, configFile, "core " + minor, this.async() );
+	submit( commit, allTests, configFile, browserSets, "core " + minor, this.async() );
 } );
 
 };
