@@ -133,7 +133,7 @@ QUnit.test( "focusable - disabled elements", function( assert ) {
 } );
 
 QUnit.test( "focusable - hidden styles", function( assert ) {
-	assert.expect( 12 );
+	assert.expect( 15 );
 
 	assert.isNotFocusable( "#displayNoneAncestor-input", "input, display: none parent" );
 	assert.isNotFocusable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
@@ -149,9 +149,13 @@ QUnit.test( "focusable - hidden styles", function( assert ) {
 
 	assert.isNotFocusable( "#displayNone-input", "input, display: none" );
 	assert.isNotFocusable( "#visibilityHidden-input", "input, visibility: hidden" );
+	assert.isNotFocusable( "#visibilityCollapse-input", "input, visibility: collapse" );
 
 	assert.isNotFocusable( "#displayNone-span", "span with tabindex, display: none" );
 	assert.isNotFocusable( "#visibilityHidden-span", "span with tabindex, visibility: hidden" );
+	assert.isNotFocusable( "#visibilityCollapse-span", "span with tabindex, visibility: collapse" );
+
+	assert.isNotFocusable( "#visibilityCollapse-td", "td with tabindex, visibility: collapse" );
 } );
 
 QUnit.test( "focusable - natively focusable with various tabindex", function( assert ) {
