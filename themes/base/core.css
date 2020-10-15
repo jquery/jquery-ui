@@ -50,7 +50,7 @@
 	left: 0;
 	position: absolute;
 	opacity: 0;
-	filter:Alpha(Opacity=0); /* support: IE8 */
+	-ms-filter: "alpha(opacity=0)"; /* support: IE8 */
 }
 
 .ui-front {
