@@ -226,12 +226,12 @@ grunt.initConfig( {
 		} ),
 		options: {
 			puppeteer: {
-					ignoreDefaultArgs: true,
-						args: [
-							"--headless",
-							"--disable-web-security",
-							"--allow-file-access-from-files"
-						]
+				ignoreDefaultArgs: true,
+					args: [
+						"--headless",
+						"--disable-web-security",
+						"--allow-file-access-from-files"
+					]
 			},
 			inject: [
 				require.resolve("grunt-contrib-qunit/chrome/bridge")
