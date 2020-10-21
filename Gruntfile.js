@@ -234,7 +234,7 @@ grunt.initConfig( {
 				]
 			},
 			inject: [
-				require.resolve("grunt-contrib-qunit/chrome/bridge")
+				require.resolve( "grunt-contrib-qunit/chrome/bridge" )
 			],
 			page: {
 				viewportSize: { width: 700, height: 500 }
