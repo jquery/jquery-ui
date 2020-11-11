@@ -5,12 +5,12 @@
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
-	// AMD. Register as an anonymous module.
-	define( [ "../widgets/datepicker" ], factory );
+		// AMD. Register as an anonymous module.
+		define( [ "../widgets/datepicker" ], factory );
 	} else {
 
-	// Browser globals
-	factory( jQuery.datepicker );
+		// Browser globals
+		factory( jQuery.datepicker );
 	}
 }( function( datepicker ) {
 
