@@ -548,18 +548,20 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var max = this.options.max,
 			min = this._valueMin(),
 			step = this.options.step,
-			aboveMin = Math.round( ( max - min ) / step ) * step;
+			aboveMin = Math.floor( ( max - min ) / step ) * step;
 		max = aboveMin + min;
-
-		// Round the max before compare with max from options.
-		max = max.toFixed( this._precision() );
-		var optionMax = this.options.max.toFixed( this._precision() );
+		// Round the max before compare with max from option.
+		max = parseFloat( max.toFixed( this._precision() ) );
+		var optionMax = parseFloat( this.options.max.toFixed( this._precision() ) );
 		if ( max > optionMax ) {
-
-			//If max is not divisible by step, rounding off may increase its value
+			// If max is not divisible by step, rounding off may increase its value
 			max -= step;
 		}
-		this.max = parseFloat( max );
+		// Make sure that max is covered.
+		else if ( max <= (optionMax - step) ) {
+			max += step;
+		}
+		this.max = max;
 	},
 
 	_precision: function() {
