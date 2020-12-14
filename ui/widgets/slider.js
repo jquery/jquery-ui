@@ -558,8 +558,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 			// If max is not divisible by step, rounding off may increase its value
 			max -= step;
-		}
-		else if ( max <= ( optionMax - step ) ) {
+		} else if ( max <= ( optionMax - step ) ) {
 
 			// Make sure that max is covered.
 			max += step;
