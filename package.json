@@ -44,7 +44,9 @@
 		"grunt-git-authors": "3.2.0",
 		"grunt-html": "14.2.0",
 		"grunt-jscs": "2.1.0",
+		"grunt-sass": "^3.1.0",
 		"load-grunt-tasks": "5.1.0",
+		"node-sass": "^5.0.0",
 		"rimraf": "3.0.2",
 		"testswarm": "1.1.2"
 	},
