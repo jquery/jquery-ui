@@ -1,4 +1,6 @@
-module.exports = function( grunt ) {
+var sass = require("node-sass");
+
+module.exports = function (grunt) {
 
 "use strict";
 
@@ -160,8 +162,8 @@ grunt.initConfig( {
 			options: {
 				baseUrl: "./",
 				paths: {
-					jquery: "./external/jquery/jquery",
-					external: "./external/"
+					jquery: "./node_modules/jquery/jquery",
+					external: "./node_modules/"
 				},
 				preserveLicenseComments: false,
 				optimize: "none",
@@ -176,7 +178,6 @@ grunt.initConfig( {
 			}
 		}
 	},
-
 	jscs: {
 		ui: {
 			options: {
@@ -262,217 +263,18 @@ grunt.initConfig( {
 			}
 		}
 	},
-
-	bowercopy: {
-		inlineVendors: {
-			options: {
-				clean: true,
-				destPrefix: "ui/vendor"
-			},
-			files: {
-				"jquery-color/jquery.color.js": "jquery-color/dist/jquery.color.js",
-				"jquery-color/LICENSE.txt": "jquery-color/LICENSE.txt"
-			}
+	sass: {
+		options: {
+			implementation: sass,
+			sourceMap: true
 		},
-
-		all: {
-			options: {
-				clean: true,
-				ignore: [ "jquery" ],
-				destPrefix: "external"
-			},
+		dist: {
 			files: {
-				"qunit/qunit.js": "qunit/qunit/qunit.js",
-				"qunit/qunit.css": "qunit/qunit/qunit.css",
-				"qunit/LICENSE.txt": "qunit/LICENSE.txt",
-
-				"qunit-assert-classes/qunit-assert-classes.js": "qunit-assert-classes/qunit-assert-classes.js",
-				"qunit-assert-classes/LICENSE.txt": "qunit-assert-classes/LICENSE",
-
-				"qunit-assert-close/qunit-assert-close.js": "qunit-assert-close/qunit-assert-close.js",
-				"qunit-assert-close/MIT-LICENSE.txt": "qunit-assert-close/MIT-LICENSE.txt",
-
-				"qunit-composite/qunit-composite.js": "qunit-composite/qunit-composite.js",
-				"qunit-composite/qunit-composite.css": "qunit-composite/qunit-composite.css",
-				"qunit-composite/LICENSE.txt": "qunit-composite/LICENSE.txt",
-
-				"requirejs/require.js": "requirejs/require.js",
-
-				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
-				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
-
-				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
-				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
-
-				"jshint/jshint.js": "jshint/dist/jshint.js",
-				"jshint/LICENSE": "jshint/LICENSE",
-
-				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
-				"jquery/LICENSE.txt": "jquery-1.x/LICENSE.txt",
-
-				"jquery-1.8.0/jquery.js": "jquery-1.8.0/jquery.js",
-				"jquery-1.8.0/MIT-LICENSE.txt": "jquery-1.8.0/MIT-LICENSE.txt",
-
-				"jquery-1.8.1/jquery.js": "jquery-1.8.1/jquery.js",
-				"jquery-1.8.1/MIT-LICENSE.txt": "jquery-1.8.1/MIT-LICENSE.txt",
-
-				"jquery-1.8.2/jquery.js": "jquery-1.8.2/jquery.js",
-				"jquery-1.8.2/MIT-LICENSE.txt": "jquery-1.8.2/MIT-LICENSE.txt",
-
-				"jquery-1.8.3/jquery.js": "jquery-1.8.3/jquery.js",
-				"jquery-1.8.3/MIT-LICENSE.txt": "jquery-1.8.3/MIT-LICENSE.txt",
-
-				"jquery-1.9.0/jquery.js": "jquery-1.9.0/jquery.js",
-				"jquery-1.9.0/MIT-LICENSE.txt": "jquery-1.9.0/MIT-LICENSE.txt",
-
-				"jquery-1.9.1/jquery.js": "jquery-1.9.1/jquery.js",
-				"jquery-1.9.1/MIT-LICENSE.txt": "jquery-1.9.1/MIT-LICENSE.txt",
-
-				"jquery-1.10.0/jquery.js": "jquery-1.10.0/jquery.js",
-				"jquery-1.10.0/MIT-LICENSE.txt": "jquery-1.10.0/MIT-LICENSE.txt",
-
-				"jquery-1.10.1/jquery.js": "jquery-1.10.1/jquery.js",
-				"jquery-1.10.1/MIT-LICENSE.txt": "jquery-1.10.1/MIT-LICENSE.txt",
-
-				"jquery-1.10.2/jquery.js": "jquery-1.10.2/jquery.js",
-				"jquery-1.10.2/MIT-LICENSE.txt": "jquery-1.10.2/MIT-LICENSE.txt",
-
-				"jquery-1.11.0/jquery.js": "jquery-1.11.0/dist/jquery.js",
-				"jquery-1.11.0/MIT-LICENSE.txt": "jquery-1.11.0/MIT-LICENSE.txt",
-
-				"jquery-1.11.1/jquery.js": "jquery-1.11.1/dist/jquery.js",
-				"jquery-1.11.1/MIT-LICENSE.txt": "jquery-1.11.1/MIT-LICENSE.txt",
-
-				"jquery-1.11.2/jquery.js": "jquery-1.11.2/dist/jquery.js",
-				"jquery-1.11.2/MIT-LICENSE.txt": "jquery-1.11.2/MIT-LICENSE.txt",
-
-				"jquery-1.11.3/jquery.js": "jquery-1.11.3/dist/jquery.js",
-				"jquery-1.11.3/MIT-LICENSE.txt": "jquery-1.11.3/MIT-LICENSE.txt",
-
-				"jquery-1.12.0/jquery.js": "jquery-1.12.0/dist/jquery.js",
-				"jquery-1.12.0/LICENSE.txt": "jquery-1.12.0/LICENSE.txt",
-
-				"jquery-1.12.1/jquery.js": "jquery-1.12.1/dist/jquery.js",
-				"jquery-1.12.1/LICENSE.txt": "jquery-1.12.1/LICENSE.txt",
-
-				"jquery-1.12.2/jquery.js": "jquery-1.12.2/dist/jquery.js",
-				"jquery-1.12.2/LICENSE.txt": "jquery-1.12.2/LICENSE.txt",
-
-				"jquery-1.12.3/jquery.js": "jquery-1.12.3/dist/jquery.js",
-				"jquery-1.12.3/LICENSE.txt": "jquery-1.12.3/LICENSE.txt",
-
-				"jquery-1.12.4/jquery.js": "jquery-1.12.4/dist/jquery.js",
-				"jquery-1.12.4/LICENSE.txt": "jquery-1.12.4/LICENSE.txt",
-
-				"jquery-2.0.0/jquery.js": "jquery-2.0.0/jquery.js",
-				"jquery-2.0.0/MIT-LICENSE.txt": "jquery-2.0.0/MIT-LICENSE.txt",
-
-				"jquery-2.0.1/jquery.js": "jquery-2.0.1/jquery.js",
-				"jquery-2.0.1/MIT-LICENSE.txt": "jquery-2.0.1/MIT-LICENSE.txt",
-
-				"jquery-2.0.2/jquery.js": "jquery-2.0.2/jquery.js",
-				"jquery-2.0.2/MIT-LICENSE.txt": "jquery-2.0.2/MIT-LICENSE.txt",
-
-				"jquery-2.0.3/jquery.js": "jquery-2.0.3/jquery.js",
-				"jquery-2.0.3/MIT-LICENSE.txt": "jquery-2.0.3/MIT-LICENSE.txt",
-
-				"jquery-2.1.0/jquery.js": "jquery-2.1.0/dist/jquery.js",
-				"jquery-2.1.0/MIT-LICENSE.txt": "jquery-2.1.0/MIT-LICENSE.txt",
-
-				"jquery-2.1.1/jquery.js": "jquery-2.1.1/dist/jquery.js",
-				"jquery-2.1.1/MIT-LICENSE.txt": "jquery-2.1.1/MIT-LICENSE.txt",
-
-				"jquery-2.1.2/jquery.js": "jquery-2.1.2/dist/jquery.js",
-				"jquery-2.1.2/MIT-LICENSE.txt": "jquery-2.1.2/MIT-LICENSE.txt",
-
-				"jquery-2.1.3/jquery.js": "jquery-2.1.3/dist/jquery.js",
-				"jquery-2.1.3/MIT-LICENSE.txt": "jquery-2.1.3/MIT-LICENSE.txt",
-
-				"jquery-2.1.4/jquery.js": "jquery-2.1.4/dist/jquery.js",
-				"jquery-2.1.4/MIT-LICENSE.txt": "jquery-2.1.4/MIT-LICENSE.txt",
-
-				"jquery-2.2.0/jquery.js": "jquery-2.2.0/dist/jquery.js",
-				"jquery-2.2.0/LICENSE.txt": "jquery-2.2.0/LICENSE.txt",
-
-				"jquery-2.2.1/jquery.js": "jquery-2.2.1/dist/jquery.js",
-				"jquery-2.2.1/LICENSE.txt": "jquery-2.2.1/LICENSE.txt",
-
-				"jquery-2.2.2/jquery.js": "jquery-2.2.2/dist/jquery.js",
-				"jquery-2.2.2/LICENSE.txt": "jquery-2.2.2/LICENSE.txt",
-
-				"jquery-2.2.3/jquery.js": "jquery-2.2.3/dist/jquery.js",
-				"jquery-2.2.3/LICENSE.txt": "jquery-2.2.3/LICENSE.txt",
-
-				"jquery-2.2.4/jquery.js": "jquery-2.2.4/dist/jquery.js",
-				"jquery-2.2.4/LICENSE.txt": "jquery-2.2.4/LICENSE.txt",
-
-				"jquery-3.0.0/jquery.js": "jquery-3.0.0/dist/jquery.js",
-				"jquery-3.0.0/LICENSE.txt": "jquery-3.0.0/LICENSE.txt",
-
-				"jquery-3.1.0/jquery.js": "jquery-3.1.0/dist/jquery.js",
-				"jquery-3.1.0/LICENSE.txt": "jquery-3.1.0/LICENSE.txt",
-
-				"jquery-3.1.1/jquery.js": "jquery-3.1.1/dist/jquery.js",
-				"jquery-3.1.1/LICENSE.txt": "jquery-3.1.1/LICENSE.txt",
-
-				"jquery-3.2.0/jquery.js": "jquery-3.2.0/dist/jquery.js",
-				"jquery-3.2.0/LICENSE.txt": "jquery-3.2.0/LICENSE.txt",
-
-				"jquery-3.2.1/jquery.js": "jquery-3.2.1/dist/jquery.js",
-				"jquery-3.2.1/LICENSE.txt": "jquery-3.2.1/LICENSE.txt",
-
-				"jquery-3.3.0/jquery.js": "jquery-3.3.0/dist/jquery.js",
-				"jquery-3.3.0/LICENSE.txt": "jquery-3.3.0/LICENSE.txt",
-
-				"jquery-3.3.1/jquery.js": "jquery-3.3.1/dist/jquery.js",
-				"jquery-3.3.1/LICENSE.txt": "jquery-3.3.1/LICENSE.txt",
-
-				"jquery-3.4.0/jquery.js": "jquery-3.4.0/dist/jquery.js",
-				"jquery-3.4.0/LICENSE.txt": "jquery-3.4.0/LICENSE.txt",
-
-				"jquery-3.4.1/jquery.js": "jquery-3.4.1/dist/jquery.js",
-				"jquery-3.4.1/LICENSE.txt": "jquery-3.4.1/LICENSE.txt",
-
-				"jquery-3.5.0/jquery.js": "jquery-3.5.0/dist/jquery.js",
-				"jquery-3.5.0/LICENSE.txt": "jquery-3.5.0/LICENSE.txt",
-
-				"jquery-3.5.1/jquery.js": "jquery-3.5.1/dist/jquery.js",
-				"jquery-3.5.1/LICENSE.txt": "jquery-3.5.1/LICENSE.txt",
-
-				"jquery-migrate-1.4.1/jquery-migrate.js": "jquery-migrate-1.4.1/dist/jquery-migrate.js",
-				"jquery-migrate-1.4.1/LICENSE.txt": "jquery-migrate-1.4.1/LICENSE.txt",
-
-				"jquery-migrate-3.3.1/jquery-migrate.js": "jquery-migrate-3.3.1/dist/jquery-migrate.js",
-				"jquery-migrate-3.3.1/LICENSE.txt": "jquery-migrate-3.3.1/LICENSE.txt"
+				"base.css": "base.scss",
+				"theme.css": "theme.scss",
+				"all.css": "all.scss"
 			}
 		}
-	},
-
-	authors: {
-		prior: [
-			"Paul Bakaus <paul.bakaus@gmail.com>",
-			"Richard Worth <rdworth@gmail.com>",
-			"Yehuda Katz <wycats@gmail.com>",
-			"Sean Catchpole <sean@sunsean.com>",
-			"John Resig <jeresig@gmail.com>",
-			"Tane Piper <piper.tane@gmail.com>",
-			"Dmitri Gaskin <dmitrig01@gmail.com>",
-			"Klaus Hartl <klaus.hartl@gmail.com>",
-			"Stefan Petre <stefan.petre@gmail.com>",
-			"Gilles van den Hoven <gilles@webunity.nl>",
-			"Micheil Bryan Smith <micheil@brandedcode.com>",
-			"Jörn Zaefferer <joern.zaefferer@gmail.com>",
-			"Marc Grabanski <m@marcgrabanski.com>",
-			"Keith Wood <kbwood@iinet.com.au>",
-			"Brandon Aaron <brandon.aaron@gmail.com>",
-			"Scott González <scott.gonzalez@gmail.com>",
-			"Eduardo Lundgren <eduardolundgren@gmail.com>",
-			"Aaron Eisenberger <aaronchi@gmail.com>",
-			"Joan Piedra <theneojp@gmail.com>",
-			"Bruno Basto <b.basto@gmail.com>",
-			"Remy Sharp <remy@leftlogic.com>",
-			"Bohdan Ganicky <bohdan.ganicky@gmail.com>"
-		]
 	}
 } );
 
