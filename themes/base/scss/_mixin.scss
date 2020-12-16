@@ -1,0 +1,19 @@
+@mixin opacity($value: 1) {
+	$IEValue: $value*100;
+	opacity: $value;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+$IEValue+")";
+	filter: alpha(opacity=$IEValue);
+}
+
+@mixin box-shadow($top: 0, $left: 0, $blur: 0, $color: #232323, $inset: false) {
+	@if $inset {
+		-webkit-box-shadow: inset $top $left $blur $color;
+		-moz-box-shadow: inset $top $left $blur $color;
+		box-shadow: inset $top $left $blur $color;
+	}
+	@else {
+		-webkit-box-shadow: $top $left $blur $color;
+		-moz-box-shadow: $top $left $blur $color;
+		box-shadow: $top $left $blur $color;
+	}
+}
