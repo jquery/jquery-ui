@@ -1,9 +1,9 @@
 {
-	"name": "jquery-ui",
+	"name": "@moodysanalytics/jquery-ui",
 	"title": "jQuery UI",
 	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
 	"version": "1.13.0-pre",
-	"homepage": "http://jqueryui.com",
+	"homepage": "https://github.com/moodysanalytics/jquery-ui",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
 		"url": "https://github.com/jquery/jquery-ui/blob/master/AUTHORS.txt"
@@ -11,36 +11,16 @@
 	"main": "ui/widget.js",
 	"maintainers": [
 		{
-			"name": "Jörn Zaefferer",
-			"email": "joern.zaefferer@gmail.com",
-			"url": "http://bassistance.de"
-		},
-		{
-			"name": "Mike Sherov",
-			"email": "mike.sherov@gmail.com",
-			"url": "http://mike.sherov.com"
-		},
-		{
-			"name": "TJ VanToll",
-			"email": "tj.vantoll@gmail.com",
-			"url": "http://tjvantoll.com"
-		},
-		{
-			"name": "Felix Nagel",
-			"email": "info@felixnagel.com",
-			"url": "http://www.felixnagel.com"
-		},
-		{
-			"name": "Alex Schmitz",
-			"email": "arschmitz@gmail.com",
-			"url": "https://github.com/arschmitz"
+			"name": "Eric Miller",
+			"email": "eric.miller@moodys.com",
+			"url": "https://github.com/pseudoninja"
 		}
 	],
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/jquery/jquery-ui.git"
+		"url": "git://github.com/moodysanalytics/jquery-ui.git"
 	},
-	"bugs": "https://bugs.jqueryui.com/",
+	"bugs": "https://github.com/moodysanalytics/jquery-ui/issues",
 	"license": "MIT",
 	"scripts": {
 		"test": "grunt"
