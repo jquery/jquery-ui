@@ -1,7 +1,23 @@
 {
     "extends": "eslint:recommended",
     "env": {
-        "browser": true,
-        "node": true
+        "amd": true,
+        "browser": true
+    },
+    "globals": {
+        "jQuery": true,
+        "process": true,
+        "module": true,
+        "Buffer": true,
+        "Globalize": true
+    },
+    "rules":{
+        "no-redeclare": 0,
+        "no-empty": 1,
+        "no-useless-escape": 1,
+        "no-mixed-spaces-and-tabs": 1,
+        "no-unexpected-multiline": 1,
+        "no-constant-condition": 1,
+        "no-shadow-restricted-names": 1
     }
 }
