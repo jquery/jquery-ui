@@ -162,7 +162,7 @@ module.exports = function (grunt) {
 				options: {
 					baseUrl: "./",
 					paths: {
-						jquery: "./node_modules/jquery/jquery",
+						jquery: "./node_modules/jquery/dist/jquery",
 						external: "./node_modules/"
 					},
 					preserveLicenseComments: false,
@@ -266,14 +266,13 @@ module.exports = function (grunt) {
 		},
 		sass: {
 			options: {
-				implementation: sass,
-				sourceMap: true
+				implementation: sass
 			},
 			dist: {
 				files: {
-					"theme/base/base.css": "theme/base/scss/base.scss",
-					"theme/base/theme.css": "theme/base/scss/theme.scss",
-					"theme/base/all.css": "theme/base/scss/all.scss"
+					"themes/base/all.css": "themes/base/scss/all.scss",
+					"themes/base/base.css": "themes/base/scss/base.scss",
+					"themes/base/theme.css": "themes/base/scss/theme.scss"
 				}
 			}
 		}

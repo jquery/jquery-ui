@@ -2,3 +2,4 @@ bower_components
 node_modules
 .sizecache.json
 .vs
+dist
