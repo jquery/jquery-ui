@@ -295,7 +295,7 @@ module.exports = function (grunt) {
 	grunt.registerTask("jenkins", ["default"]);
 	grunt.registerTask("lint", ["asciilint", "jshint", "jscs", "csslint", "htmllint"]);
 	grunt.registerTask("test", ["qunit"]);
-	grunt.registerTask("build", ["sass", "concat","minify"]);
+	grunt.registerTask("build", ["sass", "concat"]);
 	grunt.registerTask("sizer", ["requirejs:js", "uglify:main", "compare_size:all"]);
 	grunt.registerTask("sizer_all", ["requirejs:js", "uglify", "compare_size"]);
 
