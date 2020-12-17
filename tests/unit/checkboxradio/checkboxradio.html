@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Checkboxradio Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core button checkboxradio"></script>
+	<script src="../../lib/bootstrap.js" data-widget="button"></script>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+<div id="radio0">
+	<input type="radio" id="radio01" name="radio" checked="checked"><label for="radio01">Choice 1</label>
+	<input type="radio" id="radio02" name="radio"><label for="radio02">Choice 2</label>
+	<input type="radio" id="radio03" name="radio"><label for="radio03">Choice 3</label>
+</div>
+<form id="form1">
+	<div id="radio1">
+		<input type="radio" id="radio11" name="radio"><label for="radio11">Choice 1</label>
+		<input type="radio" id="radio12" name="radio"><label for="radio12">Choice 2</label>
+		<input type="radio" id="radio13" name="radio" checked="checked"><label for="radio13">Choice 3</label>
+	</div>
+</form>
+<form id="form2">
+	<div id="radio2">
+		<input type="radio" id="radio21" name="radio"><label for="radio21">Choice 1</label>
+		<input type="radio" id="radio22" name="radio"><label for="radio22">Choice 2</label>
+		<input type="radio" id="radio23" name="radio" checked="checked"><label for="radio23">Choice 3</label>
+	</div>
+</form>
+<form>
+	<div id="radio3">
+		<input type="radio" id="radio31" name="data['Page']['parse']"><label for="radio31">Choice 1</label>
+		<input type="radio" id="radio32" name="data['Page']['parse']" checked="checked"><label for="radio32">Choice 2</label>
+		<input type="radio" id="radio33" name="data['Page']['parse']"><label for="radio33">Choice 3</label>
+	</div>
+</form>
+
+<input type="checkbox" id="check"><label for="check">Toggle</label>
+<input type="checkbox" id="check2"><label for="check2">Checkbox</label>
+<label for="checkbox-method-refresh" id="checkbox-method-refresh-label">checkbox refresh</label>
+<input type="checkbox" id="checkbox-method-refresh"/>
+<label for="checkbox-method-destroy" class="bar" id="checkbox-method-destroy-label">checkbox refresh</label>
+<input type="checkbox" class="foo" id="checkbox-method-destroy"/>
+<label for="checkbox-method-disable">checkbox refresh</label>
+<input type="checkbox" class="foo" id="checkbox-method-disable"/>
+
+<label for="radio-method-refresh" id="radio-method-refresh-label">radio refresh</label>
+<input type="radio" id="radio-method-refresh"/>
+<label for="radio-method-destroy" class="bar" id="radio-method-destroy-label">radio refresh</label>
+<input type="radio" class="foo" id="radio-method-destroy"/>
+<label for="radio-method-disable">radio refresh</label>
+<input type="radio" class="foo" id="radio-method-disable"/>
+
+<label for="checkbox-option-disabled">checkbox disabled</label>
+<input type="checkbox" class="foo" id="checkbox-option-disabled"/>
+<label for="checkbox-option-icon">checkbox icon</label>
+<input type="checkbox" class="foo" id="checkbox-option-icon"/>
+<label for="checkbox-option-label">checkbox label<input type="checkbox" class="foo" id="checkbox-option-label"/></label>
+<label>
+	<input type="checkbox" id="label-with-no-for"/>
+</label>
+
+<form id="form3"></form>
+<input type="radio" name="crazy-form" id="crazy-form-1" form="form3" checked="checked">
+<label for="crazy-form-1">Choice 1</label>
+<input type="radio" name="crazy-form" id="crazy-form-2" form="form3">
+<label for="crazy-form-2">Choice 2</label>
+
+</div>
+</body>
+</html>

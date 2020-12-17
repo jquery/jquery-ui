@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Effects Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js"></script>
+	<script src="../../lib/bootstrap.js" data-modules="core scale">
+	</script>
+	<style>
+	#qunit-fixture {
+		width: 1000px;
+		height: 1000px;
+	}
+	.hidden {
+		display: none;
+	}
+	.test {
+		background: #000;
+		border: 0;
+		width: 100px;
+		height: 100px;
+	}
+	.testAddBorder {
+		border: 10px solid #000;
+	}
+	.testChildren,
+	.testChangeBackground {
+		background: #fff;
+	}
+	.test h2 {
+		font-size: 10px;
+	}
+	.testChildren h2 {
+		font-size: 20px;
+	}
+
+	.relWidth {
+		width: 50%;
+	}
+
+	.relHeight {
+		height: 50%;
+	}
+
+	.testScale {
+		border: 5px solid #000;
+		padding: 5px;
+		margin: 5px;
+		width: 50px;
+		height: 50px;
+	}
+
+	.ticket7106 {
+		width: 50px;
+		height: 50px;
+	}
+	.ticket7106.animate {
+		width: 100px;
+	}
+
+	.relative {
+		position: relative;
+		top: 0px;
+		left: 0px;
+	}
+	.absolute {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
+	.fixed {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+	}
+	.static {
+		position: static;
+	}
+
+	</style>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<div id="elem" class="test"></div>
+	<div class="hidden test">
+		<div>.</div>
+	</div>
+	<div class="animateClass test">
+		<h2>Child Element Test</h2>
+	</div>
+	<div class="relWidth relHeight testAddBorder">
+		<h2>Slide with relative width</h2>
+	</div>
+	<div class="testScale"></div>
+	<div class="ticket7106"></div>
+	<div class="relative"></div>
+	<div class="absolute"></div>
+	<div class="fixed"></div>
+	<div class="static"></div>
+</div>
+</body>
+</html>

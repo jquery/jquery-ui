@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Effects Test Suite</title>
+	<link rel="stylesheet" href="effects.css">
+	<style>
+	#inputbox {
+		background: green;
+	}
+	#selectbox {
+		background: red;
+	}
+	#divbox {
+		background: yellow;
+	}
+	#inputbox_abs {
+		background: orange;
+		position: absolute;
+		top: 500px;
+		left: 300px;
+	}
+	#divbox_abs {
+		background: purple;
+		position: absolute;
+		top: 500px;
+		left: 500px;
+	}
+	div.shake {
+		background: lightblue;
+	}
+
+	.margin {
+		margin: 3px;
+	}
+	.border {
+		border: 1px solid black;
+	}
+	.padding {
+		padding: 10px;
+	}
+	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="effect-shake" data-composite="true">
+		$( "#btn" ).on( "click", function() {
+			$( ".shake" ).effect( "shake", {
+				duration: +$( "#duration" ).val(),
+				mode: "toggle"
+			});
+		});
+	</script>
+</head>
+<body>
+
+<p>WHAT: A set of elements with various box-model properties, using the shake effect to toggle.</p>
+<p>EXPECTED: When clicking "Toggle", all elements should not change dimension nor position, aside from the expected shake animation, which should take the number of milliseconds specified to complete. At the end of the animation, all elements should hide.</p>
+<p>EXPECTED: Clicking "Toggle" a second time reverses the animation, first showing all elements at their original dimensions, and restoring them to their original state.</p>
+
+<button id="btn">Toggle</button>
+<input id="duration" value="1000">
+<div id="divbox">
+	<div class="shake margin">test</div>
+	<div class="shake border">test</div>
+	<div class="shake padding margin">test</div>
+</div>
+<div id="inputbox" class="margin">
+	<div class="shake margin">test</div>
+	<div class="shake margin border">test</div>
+	<div class="shake padding">test</div>
+	<input type="text" class="shake">
+</div>
+<div id="selectbox">
+	<div class="shake">test</div>
+	<div class="shake">test</div>
+	<div class="shake">test</div>
+	<select class="shake">
+		<option value="a">a</option>
+		<option value="abcdef">abcdef</option>
+	</select>
+</div>
+<div id="inputbox_abs" class="margin">
+	<div class="shake margin">test</div>
+	<div class="shake margin border">test</div>
+	<div class="shake padding">test</div>
+	<input type="text" class="shake">
+</div>
+<div id="divbox_abs" class="margin">
+	<div class="shake margin">test</div>
+	<div class="shake margin border">test</div>
+	<div class="shake padding">test</div>
+</div>
+
+</body>
+</html>

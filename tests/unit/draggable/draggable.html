@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Draggable Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core"></script>
+	<script src="../../lib/bootstrap.js" data-widget="draggable"></script>
+	<style>
+	#main {
+		width: 1000px;
+		height: 1000px;
+		overflow: scroll;
+		overflow-x: scroll;
+		overflow-y: scroll;
+		position: relative;
+		left: 0;
+		top: 0;
+	}
+	#main-forceScrollable {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 1100px;
+		height: 1100px;
+	}
+	#scrollParent {
+		width: 1200px;
+		height: 1200px;
+		position: relative;
+		left: 0;
+		top: 0;
+		overflow: hidden;
+		overflow-x: hidden;
+		overflow-y: hidden;
+	}
+	#scrollParent-forceScrollable {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 1300px;
+		height: 1300px;
+	}
+	/* See #9077 */
+	#draggable3, #draggable4 {
+		z-index: 100;
+	}
+	.sortable {
+		position: relative;
+		top: 800px;
+		left: 10px;
+		width: 300px;
+		padding: 0;
+		margin: 0;
+		border: 0;
+	}
+	.sortable li {
+		height: 100px;
+		padding: 0;
+		margin: 0;
+		border: 0;
+		list-style: none;
+		display: inline-block;
+	}
+	</style>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<div id="scrollParent">
+		<div id="main">
+			<div id="draggable1" style="background: green; width: 200px; height: 100px; position: relative; top: 0; left: 0;">Relative</div>
+			<div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span><em>Absolute</em></span></div>
+			<div id="droppable" style="background: green; width: 200px; height: 100px; position: absolute; top: 110px; left: 110px;"><span>Absolute</span></div>
+			<div id="main-forceScrollable"></div>
+		</div>
+		<div id="scrollParent-forceScrollable"></div>
+	</div>
+	<div style="width: 1px; height: 1000px;"></div>
+	<div style="position: absolute; width: 1px; height: 2000px;"></div>
+	<ul id="sortable" class="sortable">
+		<li id="draggableSortable">Item 0</li>
+		<li id="draggableSortable2">Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+	</ul>
+	<ul id="sortable2" class="sortable">
+		<li id="draggableSortableClone" class="sortable2Item">Item 0</li>
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+	</ul>
+</div>
+
+</body>
+</html>

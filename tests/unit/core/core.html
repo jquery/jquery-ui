@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Core Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js"></script>
+	<script src="../../lib/bootstrap.js" data-modules="core selector"></script>
+	<style>
+	.zindex {
+		z-index: 100;
+	}
+	.absolute {
+		position: absolute;
+	}
+	</style>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+<img src="../../images/jqueryui_32x32.png" usemap="#mymap" width="10" height="10" alt="">
+<map name="mymap">
+	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref" alt="">
+	<area href="foo.html" id="areaNoCoordsHref" alt="">
+</map>
+<map name="mymap2">
+	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg" alt="">
+</map>
+
+<form id="formNoTabindex">
+	<input>
+</form>
+
+<form id="formTabindex" tabindex="1">
+	<input>
+</form>
+
+<form>
+	<fieldset id="enabledFieldset">
+		<input>
+	</fieldset>
+	<fieldset id="disabledFieldset" disabled="disabled">
+		<input>
+	</fieldset>
+</form>
+
+<div>
+	<input id="visibleAncestor-inputTypeNone">
+	<input type="text" id="visibleAncestor-inputTypeText">
+	<input type="checkbox" id="visibleAncestor-inputTypeCheckbox">
+	<input type="radio" id="visibleAncestor-inputTypeRadio">
+	<input type="button" id="visibleAncestor-inputTypeButton" value="visibleAncestor-inputTypeButton">
+	<input type="hidden" id="visibleAncestor-inputTypeHidden">
+	<button id="visibleAncestor-button">x</button>
+	<select id="visibleAncestor-select">
+		<option>option</option>
+	</select>
+	<textarea id="visibleAncestor-textarea">x</textarea>
+	<object id="visibleAncestor-object" codebase="about:blank">xxx</object>
+	<a href="#" id="visibleAncestor-anchorWithHref">anchor</a>
+	<a id="visibleAncestor-anchorWithoutHref">anchor</a>
+	<span id="visibleAncestor-span">x</span>
+	<div id="visibleAncestor-div">x</div>
+	<span id="visibleAncestor-spanWithTabindex" tabindex="1">x</span>
+	<div id="visibleAncestor-divWithNegativeTabindex" tabindex="-1">x</div>
+</div>
+
+<div>
+	<input id="disabledElement-inputTypeNone" disabled="disabled">
+	<input type="text" id="disabledElement-inputTypeText" disabled="disabled">
+	<input type="checkbox" id="disabledElement-inputTypeCheckbox" disabled="disabled">
+	<input type="radio" id="disabledElement-inputTypeRadio" disabled="disabled">
+	<input type="button" id="disabledElement-inputTypeButton" disabled="disabled" value="disabledElement-inputTypeButton">
+	<input type="hidden" id="disabledElement-inputTypeHidden" disabled="disabled">
+	<button id="disabledElement-button" disabled="disabled"></button>
+	<select id="disabledElement-select" disabled="disabled"></select>
+	<textarea id="disabledElement-textarea" disabled="disabled"></textarea>
+</div>
+
+<div>
+	<div id="displayNoneAncestor" style="display: none;">
+		<input id="displayNoneAncestor-input">
+		<span tabindex="1" id="displayNoneAncestor-span">.</span>
+	</div>
+
+	<div id="visibilityHiddenAncestor" style="visibility: hidden;">
+		<input id="visibilityHiddenAncestor-input">
+		<span tabindex="1" id="visibilityHiddenAncestor-span">.</span>
+
+		<span id="nestedVisibilityOverrideAncestor" style="visibility: visible;">
+			<input id="nestedVisibilityOverrideAncestor-input">
+			<span tabindex="1" id="nestedVisibilityOverrideAncestor-span">.</span>
+		</span>
+
+		<span tabIndex="1" id="nestedVisibilityInheritWithHiddenAncestor"
+			style="visibility: inherit;">.</span>
+		<input id="nestedVisibilityInheritWithHiddenAncestor-input" style="visibility: inherit;">
+	</div>
+
+	<div id="visibilityVisibleAncestor" style="visibility: visible;">
+		<span tabIndex="1" id="nestedVisibilityInheritWithVisibleAncestor"
+			style="visibility: inherit;">.</span>
+		<input id="nestedVisibilityInheritWithVisibleAncestor-input" style="visibility: inherit;">
+	</div>
+
+	<span tabindex="1" id="displayNone-span" style="display: none;">.</span>
+	<span tabindex="1" id="visibilityHidden-span" style="visibility: hidden;">.</span>
+	<span tabindex="1" id="visibilityCollapse-span" style="visibility: collapse;">.</span>
+
+	<input id="displayNone-input" style="display: none;">
+	<input id="visibilityHidden-input" style="visibility: hidden;">
+	<input id="visibilityCollapse-input" style="visibility: collapse;">
+
+	<table>
+		<tr>
+			<td tabindex="1" id="visibilityCollapse-td" style="visibility: collapse;">.</td>
+		</tr>
+	</table>
+</div>
+
+<div>
+	<input id="inputTabindex0" tabindex="0">
+	<input id="inputTabindex10" tabindex="10">
+	<input id="inputTabindex-1" tabindex="-1">
+	<input id="inputTabindex-50" tabindex="-50">
+
+	<span id="spanTabindex0" tabindex="0">.</span>
+	<span id="spanTabindex10" tabindex="10">.</span>
+	<span id="spanTabindex-1" tabindex="-1">.</span>
+	<span id="spanTabindex-50" tabindex="-50">.</span>
+</div>
+
+<div style="width: 0; height: 0;">
+	<input id="dimensionlessParent">
+	<input id="dimensionlessParent-dimensionless" style="height: 0; width: 0;">
+</div>
+
+<div id="dimensions" style="float: left; height: 50px; width: 100px; margin: 1px 12px 11px 2px; border-style: solid; border-width: 3px 14px 13px 4px; padding: 5px 16px 15px 6px;"></div>
+
+<div id="labels-fragment">
+	<label for="test">1</label>
+	<div>
+		<div>
+			<form>
+				<label for="test">2</label>
+				<label>3
+					<input id="test">
+				</label>
+				<label for="test">4</label>
+			</form>
+			<label for="test">5</label>
+		</div>
+		<div>
+			<div>
+				<form>
+					<label for="test">6</label>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div>
+			<form>
+				<label for="test">7</label>
+				<label>
+				</label>
+				<label for="test">8</label>
+			</form>
+			<label for="test">9</label>
+		</div>
+		<div>
+			<div>
+				<form>
+					<input id="test-2">
+					<label for="test">10</label>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="weird-['x']-id"></div>
+</div>
+
+<!-- This is intentionally outside the test fixture. We don't want this
+markup to be removed and reinserted between tests, as it will remove saved
+refrences in the tests. -->
+<div id="form-test">
+	<input id="body:_implicit_form">
+	<input id="body:_explicit_form" form="form-1">
+	<form id="form-1">
+		<input id="form-1:_implicit_form">
+		<input id="form-1:_explicit_form" form="form-1">
+	</form>
+	<form id="form-2">
+		<input id="form-2:_implicit_form">
+		<input id="form-2:_explicit_form_other_form" form="form-1">
+	</form>
+</div>
+<div id="form-test-detached">
+	<input id="fragment:_implicit_form">
+
+	<!-- Support: Chrome > 33
+	When an input with a form attribute is inside a fragment, and not contained by any form,
+	the form property returns the proper form. However resetting the form does not reset the
+	input. The following input is commented out to stop the test from failing in this case.
+	<input id="fragment:_explicit_form" form="form-3">
+	-->
+	<form id="form-3">
+		<input id="form-3:_implicit_form">
+		<input id="form-3:_explicit_form" form="form-3">
+	</form>
+	<form id="form-4">
+		<input id="form-4:_implicit_form">
+		<input id="form-4:_explicit_form_other_form" form="form-3">
+	</form>
+</div>
+</body>
+</html>

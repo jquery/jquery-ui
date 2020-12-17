@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Slider Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../lib/css.js" data-modules="core slider"></script>
+	<script src="../../lib/bootstrap.js" data-widget="slider"></script>
+	<style>
+	#slider2.ui-slider-horizontal {
+		height: 12px;
+		width: 500px;
+	}
+	#slider2.ui-slider-vertical {
+		width: 12px;
+		height: 500px;
+	}
+	</style>
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+<div id="slider1"></div>
+<div id="slider2"></div>
+<div id="slider-custom-handle">
+	<div class="ui-slider-handle custom-handle"></div>
+</div>
+
+</div>
+</body>
+</html>

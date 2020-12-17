@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery UI Slider - Range slider</title>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<style>
+		#wrapper {
+			font-family: Arial;
+			width: 500px;
+			margin: 20px auto;
+		}
+	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js">
+		var el = $( "#slider" ).slider({
+			range: true,
+			min: 0,
+			max: 100,
+			values: [ 0, 50 ]
+		});
+
+		$( "#set-max-values" ).on( "click", function() {
+			el.slider( "option", { values: [ 100, 100 ] } );
+		});
+
+		$( "#set-min-values" ).on( "click", function() {
+			el.slider( "option", { values: [ 0, 0 ] } );
+		});
+	</script>
+</head>
+<body>
+<div id="wrapper">
+	<h1>Range Slider</h1>
+	<h3>When set both values of range slider to the maximum, slider should not lock</h3>
+	<div id="slider"></div>
+	<br>
+	<button id="set-max-values">set values to max</button>
+	<button id="set-min-values">set values to min</button>
+</div>
+</body>
+</html>

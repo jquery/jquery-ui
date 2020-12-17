@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Compound Visual Test: Draggable and Resizable block element</title>
+	<link rel="stylesheet" href="../visual.css">
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<style>
+	.draggable {
+		margin: 0.5em;
+		padding: 0.5em;
+	}
+	.absolute {
+		color: red;
+		position: absolute !important;
+	}
+	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js" data-modules="draggable resizable"
+		data-composite="true">
+		$( ".draggable" )
+			.addClass( "ui-widget ui-widget-header ui-corner-all" )
+			.draggable({
+				revert: "invalid"
+			})
+			.resizable({
+				minHeight: 13,
+				handles: "s"
+			});
+		$( ".draggable" ).last().addClass( "absolute" );
+	</script>
+</head>
+<body>
+
+<p>WHAT: Three draggable and resizable elements, with only a bottom handle. Last one (red color) is absolutely positioned.</p>
+<p>EXPECTED: Each element can be dragged and resized. The first two stay with their relative positioning (induced by draggable). The last one can be resized despite the absolute positioning.</p>
+
+<div id="first">
+	<div class="draggable">Draggable 1-1</div>
+	<div class="draggable">Draggable 1-2</div>
+	<div class="draggable">Draggable 1-3</div>
+</div>
+
+</body>
+</html>

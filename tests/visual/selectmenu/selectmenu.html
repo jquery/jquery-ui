@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Selectmenu Visual Test: Default</title>
+	<link rel="stylesheet" href="../../../themes/base/all.css">
+	<style>
+		fieldset { border: 0; }
+		label { display: block; }
+		select { width: 200px; }
+
+		.ui-selectmenu-button  { display: block; margin-bottom: 1em;}
+
+		/* width */
+		.width-menu { width: 196px; }
+	</style>
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js">
+		var log = $("#log"),
+			index = 0,
+			text;
+
+		function logger( event, ui ) {
+			text = "#" + index++ + " " + event.type.replace("selectmenu","");
+			if ( ui.item ) {
+				text += ": " + ui.item.index + " => " + ui.item.label;
+			}
+			$( "<p>" ).text( text ).prependTo( "#log" );
+		}
+
+		/* events */
+		var eventsSelectmenu = $('#control select').selectmenu({
+			open: logger,
+			close: logger,
+			focus : logger,
+			select: logger,
+			change: logger
+		});
+		eventsSelectmenu.show();
+
+		$("#destroy").on( "click", function() {
+			eventsSelectmenu.selectmenu("destroy");
+			return false;
+		});
+
+		$("#refresh_add").on( "click", function() {
+			eventsSelectmenu.append('<option value="fastsound">Speed of light</option>');
+			eventsSelectmenu.selectmenu("refresh");
+			return false;
+		});
+
+		$("#refresh_selected").on( "click", function() {
+			eventsSelectmenu[0].selectedIndex = 0;
+			eventsSelectmenu.selectmenu("refresh");
+			return false;
+		});
+
+		$("#refresh").on( "click", function() {
+			eventsSelectmenu.selectmenu("refresh");
+			return false;
+		});
+
+		$("#open").on( "click", function() {
+			eventsSelectmenu.selectmenu("open");
+			return false;
+		});
+
+		$("#close").on( "click", function() {
+			eventsSelectmenu.selectmenu("close");
+			return false;
+		});
+
+		/* disabled */
+		$('#disabled1, #disabled2, #disabled3').selectmenu();
+		var disabled4 = $('#disabled4').selectmenu();
+
+		$("#disable_select").on("click", function() {
+			if (disable_select) {
+				disable_select = false;
+				disabled4.selectmenu("disable");
+			} else {
+				disable_select = true;
+				disabled4.removeAttr("disabled");
+			}
+			disabled4.selectmenu("refresh");
+			return false;
+		});
+
+		$("#disable_option").on("click", function() {
+			if (disable_option) {
+				disable_option = false;
+				disabled4.find( "option" ).eq( 0 ).attr("disabled", "disabled");
+			} else {
+				disable_option = true;
+				disabled4.find( "option" ).eq( 0 ).removeAttr("disabled");
+			}
+			disabled4.selectmenu("refresh");
+			return false;
+		});
+
+		$("#disable_optgroup").on("click", function() {
+			if (disable_optgroup) {
+				disable_optgroup = false;
+				disabled4.find( "optgroup" ).eq( 0 ).attr("disabled", "disabled");
+			} else {
+				disable_optgroup = true;
+				disabled4.find( "optgroup" ).eq( 0 ).removeAttr("disabled");
+			}
+			disabled4.selectmenu("refresh");
+			return false;
+		});
+
+		/* empty */
+		$(".empty select").selectmenu();
+
+		/* width */
+		$("#width_auto1, #width_auto2").selectmenu();
+
+		$("#width_js1, #width_js2").selectmenu({
+			width: 200
+		});
+
+		var widthMenu = $("#width_menu").selectmenu();
+		widthMenu.selectmenu("menuWidget").addClass("width-menu");
+
+	</script>
+</head>
+<body>
+
+<div id="control">
+	<h2>Event logging tests</h2>
+	<form action="#">
+		<button id="open">Open</button>
+		<button id="close">Close</button>
+		<button id="refresh_add">Add item</button>
+		<button id="refresh_selected">Change to first item</button>
+		<button id="refresh">Refresh</button>
+		<button id="destroy">Destroy</button>
+		<fieldset>
+			<select>
+				<option value="Slower">Slower</option>
+				<option value="Slow">Slow</option>
+				<option value="Medium" selected="selected">Medium</option>
+				<option value="Fast">Fast</option>
+				<option value="Faster">Faster</option>
+			</select>
+		</fieldset>
+	</form>
+</div>
+
+<form action="#">
+	<h2>Disabled tests</h2>
+	<fieldset>
+		<label for="disabled1">Disabled select</label>
+		<select disabled="disabled" name="disabled1" id="disabled1">
+			<option value="Slower">Slower</option>
+			<option value="Slow">Slow</option>
+			<option value="Medium" selected="selected">Medium</option>
+			<option value="Fast">Fast</option>
+			<option value="Faster">Faster</option>
+		</select>
+
+		<label for="disabled2">Disabled options</label>
+		<select name="disabled2" id="disabled2">
+			<option value="1" disabled="disabled">1</option>
+			<option value="2" selected="selected">2</option>
+			<option value="3">3</option>
+			<option disabled="disabled" value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option disabled="disabled" value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option disabled="disabled" value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+			<option disabled="disabled" value="14">14</option>
+			<option disabled="disabled" value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+		</select>
+
+		<label for="disabled3">Disabled optgroup</label>
+		<select name="disabled3" id="disabled3">
+			<optgroup disabled="disabled" label="Scripts">
+				<option value="jquery">jQuery.js</option>
+				<option value="jqueryui">ui.jQuery.js</option>
+			</optgroup>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
+		</select>
+
+		<label for="disabled4">Disable specific element and refresh selectmenu on button click</label>
+		<select name="disabled4" id="disabled4">
+			<optgroup label="Scripts">
+				<option value="jquery">jQuery.js</option>
+				<option value="jqueryui">ui.jQuery.js</option>
+			</optgroup>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
+		</select>
+		<button id="disable_select">Toggle disable select</button>
+		<button id="disable_option">Toggle disable option</button>
+		<button id="disable_optgroup">Toggle disable optgroup</button>
+	</fieldset>
+
+	<h2>Empty tests</h2>
+	<fieldset class="empty">
+		<label for="empty1">Select with no option elements</label>
+		<select name="empty1" id="empty1"></select>
+
+		<label for="empty2">Select with one empty option element</label>
+		<select name="empty2" id="empty2">
+			<option value="" label="empty"></option>
+		</select>
+
+		<label for="empty3">Select with some empty option elements</label>
+		<select name="empty3" id="empty3">
+			<option value="1">1</option>
+			<option value="2" selected="selected">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="" label="empty"></option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="" label="empty"></option>
+			<option value="9">9</option>
+		</select>
+
+		<label for="empty4">Select with empty optgroup</label>
+		<select id="empty4" name="empty4" class="empty4">
+			<optgroup label="Scripts"></optgroup>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
+		</select>
+	</fieldset>
+
+	<h2>Width tests</h2>
+	<fieldset>
+		<label for="width_auto1">Width auto</label>
+		<select name="width_auto1" id="width_auto1" style="width: auto;">
+			<option>Width test 1</option>
+			<option>Width test 2</option>
+			<option>Width test 3</option>
+		</select>
+
+		<label for="width_auto2">Width auto with long option</label>
+		<select name="width_auto2" id="width_auto2" style="width: auto;">
+			<option>Width test 1</option>
+			<option>Width test 2</option>
+			<option>Width test 3 Width test 3 Width test 3</option>
+		</select>
+
+		<label for="width_js1">Width set by JS</label>
+		<select name="width_js1" id="width_js1">
+			<option>Width test 1</option>
+			<option>Width test 2</option>
+			<option>Width test 3</option>
+		</select>
+
+		<label for="width_js2">Width set by JS with long option</label>
+		<select name="width_js2" id="width_js2">
+			<option>Width test 1</option>
+			<option>Width test 2</option>
+			<option>Width test 3 Width test 3 Width test 3</option>
+		</select>
+
+		<label for="width_menu">Width set by JS with long option</label>
+		<select name="width_menu" id="width_menu">
+			<option>Width test 1</option>
+			<option>Width test 2</option>
+			<option>Width test 3 Width test 3 Width test 3</option>
+		</select>
+	</fieldset>
+</form>
+
+<div style="position: absolute; top: 1em; right: 1em;">
+	Log:
+	<div id="log" style="height: 400px; width: 300px; overflow: auto; border: 1px solid #000;"></div>
+</div>
+
+</body>
+</html>
