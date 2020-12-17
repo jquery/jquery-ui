@@ -29,25 +29,7 @@ module.exports = function (grunt) {
 		allI18nFiles = expandFiles("ui/i18n/*.js"),
 
 		cssFiles = [
-			"core",
-			"accordion",
-			"autocomplete",
-			"button",
-			"checkboxradio",
-			"controlgroup",
-			"datepicker",
-			"dialog",
-			"draggable",
-			"menu",
-			"progressbar",
-			"resizable",
-			"selectable",
-			"selectmenu",
-			"sortable",
-			"slider",
-			"spinner",
-			"tabs",
-			"tooltip",
+			"base",
 			"theme"
 		].map(function (component) {
 			return "themes/base/" + component + ".css";
@@ -310,10 +292,10 @@ module.exports = function (grunt) {
 
 	grunt.registerTask("default", ["requirejs", "test", "build"]);
 
-	grunt.registerTask("jenkins", ["default", "concat"]);
+	grunt.registerTask("jenkins", ["default"]);
 	grunt.registerTask("lint", ["asciilint", "jshint", "jscs", "csslint", "htmllint"]);
 	grunt.registerTask("test", ["qunit"]);
-	grunt.registerTask("build", ["sass"]);
+	grunt.registerTask("build", ["sass", "concat","minify"]);
 	grunt.registerTask("sizer", ["requirejs:js", "uglify:main", "compare_size:all"]);
 	grunt.registerTask("sizer_all", ["requirejs:js", "uglify", "compare_size"]);
 
