@@ -1,0 +1,142 @@
+// Color Pallate
+$white: #FFFFFF !default;
+$black: #000000 !default;
+
+$gray-975: #F6F6F6 !default;
+$gray-950: #EFEFEF !default;
+$gray-900: #DDDDDD !default;
+$gray-800: #C5C5C5 !default;
+$gray-700: #ACACAC !default;
+$gray-600: #999999 !default;
+$gray-500: #757575 !default;
+$gray-400: #545454 !default;
+$gray-300: #4A4A4A !default;
+$gray-200: #333333 !default;
+$gray-100: #232323 !default;
+
+$blue: #007fff !default;
+$blue-light: #5e9ed6 !default;
+$blue-dark: #003eff !default;
+
+$yellow: #dad55e !default;
+$yellow-light: #fffa90 !default;
+$yellow-dark: #777620 !default;
+
+$red-light: #fddfdf !default;
+$red: #f1a899 !default;
+$red-dark: #5f3f3f !default;
+
+
+// Theme
+$theme-primary: $blue !default;
+$theme-error: $red !default;
+$theme-warning: $yellow !default;
+
+// Base
+$font-family: Arial, Helvetica, sans-serif !default;
+$font-size: 1em !default;
+$border-color: $gray-800 !default;
+$border-style: solid !default;
+$border-size: 1px !default;
+$color: $gray-100 !default;
+
+$border-radius: 3px !default;
+$border-top-left-radius: $border-radius !default;
+$border-top-right-radius: $border-radius !default;
+$border-bottom-left-radius: $border-radius !default;
+$border-bottom-right-radius: $border-radius !default;
+
+
+$ui-widget-font-family: $font-family !default;
+$ui-widget-font-size: $font-size !default;
+
+$ui-widget-input-font-family: $ui-widget-font-family !default;
+$ui-widget-input-font-size: $ui-widget-font-size !default;
+
+$ui-widget-ui-widget-content-border-size: $border-size !default;
+$ui-widget-ui-widget-content-border-style: $border-style !default;
+$ui-widget-ui-widget-content-border-color: $border-color !default;
+
+$ui-widget-content-border-size: $border-size !default;
+$ui-widget-content-border-style: $border-style !default;
+$ui-widget-content-border-color: $gray-900 !default;
+$ui-widget-content-background-color: $white !default;
+$ui-widget-content-color: $color !default;
+
+$ui-widget-content-a-color: $color !default;
+
+$ui-widget-header-border-size: $border-size !default;
+$ui-widget-header-border-style: $border-style !default;
+$ui-widget-header-border-color: $gray-900 !default;
+$ui-widget-header-background: $gray-950 !default;
+$ui-widget-header-color: $gray-200 !default;
+
+$ui-widget-header-a-color: $ui-widget-header-color !default;
+
+// Default State
+$state-default-border-size: $border-size !default;
+$state-default-border-style: $border-style !default;
+$state-default-border-color: $gray-800 !default;
+$state-default-background: $gray-975 !default;
+$state-default-font-weight: normal !default;
+$state-default-color: $gray-300 !default;
+$state-default-hover-color: $state-default-color !default;
+
+// Hover State
+$state-hover-border-size: $state-default-border-size !default;
+$state-hover-border-style: $state-default-border-style !default;
+$state-hover-border-color: $state-default-border-color !default;
+$state-hover-background: $gray-950 !default;
+$state-hover-font-weight: $state-default-font-weight !default;
+$state-hover-color: $gray-100 !default;
+$state-hover-hover-color: $state-hover-color !default;
+
+// Active State
+$state-active-border-size: $state-default-border-size !default;
+$state-active-border-style: $state-default-border-style !default;
+$state-active-border-color: $blue-dark !default;
+$state-active-background: $blue !default;
+$state-active-font-weight: $state-default-font-weight !default;
+$state-active-color: $white !default;
+$state-active-hover-color: $state-hover-color !default;
+
+$ui-visual-focus-box-shadow-color: $blue-light !default;
+
+$ui-icon-background-border-color: $gray-900 !default;
+$ui-icon-background-background-color: $white !default;
+
+// Highlight
+$state-highlight-border-size: $state-default-border-size !default;
+$state-highlight-border-style: $state-default-border-style !default;
+$state-highlight-border-color: $yellow !default;
+$state-highlight-background: $yellow-light !default;
+$state-highlight-color: $yellow-dark !default;
+$state-highlight-a-color: $state-highlight-color !default;
+
+// Error
+$state-error-border-size: $state-default-border-size !default;
+$state-error-border-style: $state-default-border-style !default;
+$state-error-border-color: $red !default;
+$state-error-background: $red-light !default;
+$state-error-color: $red-dark !default;
+$state-error-a-color: $state-error-color !default;
+
+// Error Text
+$state-error-text-color: $state-error-color !default;
+
+// Disabled
+$state-disabled-opacity: .35 !default;
+
+// Priority
+$priority-primary-font-weight: bold !default;
+
+$priority-secondary-opacity: .7 !default;
+$priority-secondary-font-weight: normal !default;
+
+// Overlay
+$ui-widget-overlay-background: $gray-700 !default;
+$ui-widget-overlay-opacity: .3;
+$ui-widget-shadow-top: 0 !default;
+$ui-widget-shadow-left: 0 !default;
+$ui-widget-shadow-blur: 5px !default;
+$ui-widget-shadow-color: $gray-400 !default;
