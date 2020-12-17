@@ -290,7 +290,7 @@ module.exports = function (grunt) {
 		});
 	});
 
-	grunt.registerTask("default", ["requirejs", "test", "build"]);
+	grunt.registerTask("default", ["requirejs", "build"]);
 
 	grunt.registerTask("jenkins", ["default"]);
 	grunt.registerTask("lint", ["asciilint", "jshint", "jscs", "csslint", "htmllint"]);
