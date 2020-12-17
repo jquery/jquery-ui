@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Controlgroup - Split Button</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	.ui-button-icon-only.demo-splitbutton-select {
+		width: 1em;
+	}
+	</style>
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js" data-modules="button checkboxradio selectmenu">
+		$( "select" ).selectmenu({
+			classes: {
+				"ui-selectmenu-button": "ui-button-icon-only demo-splitbutton-select"
+			},
+			change: function(){
+				$( ".output" ).append( "<li>" + this.value + "</li>" );
+			}
+		});
+		$( ".controlgroup" ).controlgroup();
+		$( "button" ).click(function() {
+			$( ".output" ).append( "<li>Running Last Action...</li>" );
+		});
+	</script>
+</head>
+<body>
+<div class="widget">
+	<h1>Split button</h1>
+	<div class="controlgroup">
+		<button>Run last option</button>
+		<select>
+			<option>Open...</option>
+			<option>Save</option>
+			<option>Delete</option>
+		</select>
+	</div>
+	<br/>
+	<h3>Output:</h3>
+	<ul class="output"></ul>
+</div>
+<div class="demo-description">
+	<p>A controlgroup creating a split button, by combining a button and a selectmenu. We adjust the classes option on the selectmenu to show only the icon</p>
+</div>
+</body>
+</html>

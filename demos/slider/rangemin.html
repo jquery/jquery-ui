@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Slider - Range with fixed minimum</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
+		$( "#slider-range-min" ).slider({
+			range: "min",
+			value: 37,
+			min: 1,
+			max: 700,
+			slide: function( event, ui ) {
+				$( "#amount" ).val( "$" + ui.value );
+			}
+		});
+		$( "#amount" ).val( "$" + $( "#slider-range-min" ).slider( "value" ) );
+	</script>
+</head>
+<body>
+
+<p>
+	<label for="amount">Maximum price:</label>
+	<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;" />
+</p>
+
+<div id="slider-range-min"></div>
+
+<div class="demo-description">
+<p>Fix the minimum value of the range slider so that the user can only select a maximum.  Set the <code>range</code> option to "min."</p>
+</div>
+</body>
+</html>

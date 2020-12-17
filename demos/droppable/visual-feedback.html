@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery UI Droppable - Visual feedback</title>
+	<link rel="stylesheet" href="../../themes/base/all.css">
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	#draggable, #draggable2 { width: 90px; height: 90px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
+	#droppable, #droppable2 { width: 120px; height: 120px; padding: 0.5em; float: left; margin: 10px; }
+	h3 { clear: left; }
+	</style>
+	<script src="../../external/requirejs/require.js"></script>
+	<script src="../bootstrap.js">
+		$( "#draggable" ).draggable();
+		$( "#droppable" ).droppable({
+			classes: {
+				"ui-droppable-hover": "ui-state-hover"
+			},
+			drop: function( event, ui ) {
+				$( this )
+					.addClass( "ui-state-highlight" )
+					.find( "p" )
+						.html( "Dropped!" );
+			}
+		});
+
+		$( "#draggable2" ).draggable();
+		$( "#droppable2" ).droppable({
+			accept: "#draggable2",
+			classes: {
+				"ui-droppable-active": "ui-state-default"
+			},
+			drop: function( event, ui ) {
+				$( this )
+					.addClass( "ui-state-highlight" )
+					.find( "p" )
+						.html( "Dropped!" );
+			}
+		});
+	</script>
+</head>
+<body>
+
+<h3>Feedback on hover:</h3>
+
+<div id="draggable" class="ui-widget-content">
+	<p>Drag me to my target</p>
+</div>
+
+<div id="droppable" class="ui-widget-header">
+	<p>Drop here</p>
+</div>
+
+<h3>Feedback on activating draggable:</h3>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>Drag me to my target</p>
+</div>
+
+<div id="droppable2" class="ui-widget-header">
+	<p>Drop here</p>
+</div>
+
+<div class="demo-description">
+<p>Change the droppable's appearance on hover, or when the droppable is active (an acceptable draggable is dropped on it).  Set the values of the <code>ui-droppable-hover</code> or <code>ui-droppable-active</code> properties on the <code>classes</code> option to specify the respective classes.</p>
+</div>
+</body>
+</html>
