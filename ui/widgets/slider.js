@@ -556,8 +556,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		max = parseFloat( max.toFixed( this._precision() ) );
 		var optionMax = parseFloat( this.options.max.toFixed( this._precision() ) );
 
-		if ( this.options.includeMax) {
-			if (max < optionMax ) {
+		if ( this.options.includeMax ) {
+			if ( max < optionMax ) {
 
 				// If max is not divisible by step and max from options
 				// should be covered, add one more step.
