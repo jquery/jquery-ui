@@ -50,6 +50,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		},
 		distance: 0,
 		max: 100,
+		includeMax: false,
 		min: 0,
 		orientation: "horizontal",
 		range: false,
@@ -554,15 +555,20 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		// Round the max before compare with max from option.
 		max = parseFloat( max.toFixed( this._precision() ) );
 		var optionMax = parseFloat( this.options.max.toFixed( this._precision() ) );
-		if ( max > optionMax ) {
+
+		if ( this.options.includeMax) {
+			if (max < optionMax ) {
+
+				// If max is not divisible by step and max from options
+				// should be covered, add one more step.
+				max += step;
+			}
+		} else if ( max > optionMax ) {
 
 			// If max is not divisible by step, rounding off may increase its value
 			max -= step;
-		} else if ( max <= ( optionMax - step ) ) {
-
-			// Make sure that max is covered.
-			max += step;
 		}
+
 		this.max = max;
 	},
 
