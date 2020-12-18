@@ -549,7 +549,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var max = this.options.max,
 			min = this._valueMin(),
 			step = this.options.step,
-			aboveMin = Math.floor( ( max - min ) / step ) * step;
+			aboveMin = Math.round( ( max - min ) / step ) * step;
 		max = aboveMin + min;
 
 		// Round the max before compare with max from option.
