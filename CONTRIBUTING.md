@@ -53,10 +53,10 @@ cd jquery-ui
 git remote add upstream git://github.com/jquery/jquery-ui.git
 ```
 
-* Get in the habit of pulling in the "upstream" master to stay up to date as jQuery UI receives new commits.
+* Get in the habit of pulling in the "upstream" main branch to stay up to date as jQuery UI receives new commits.
 
 ```bash
-git pull upstream master
+git pull upstream main
 ```
 
 ### Environment: Recommended Setup
