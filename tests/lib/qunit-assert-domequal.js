@@ -145,34 +145,35 @@ function extract( selector, message ) {
 	// data comparisons in tests.
 	// See https://github.com/jquery/jquery/issues/4496
 	if ( result.events && jQueryVersionSince( "3.4.0" ) ) {
-		var i, eventDataList, eventData;
 		$.each( [ "focus", "blur" ], function( index, eventType ) {
 			if ( !result.events[ eventType ] ) {
 				return;
 			}
 
-			// Only the special internal handlers
-			// have the namespace field set to boolean `false`;
-			// filter them out.
-			result.events[ eventType ] = result.events[ eventType ].filter( function( eventData ) {
-				return eventData.namespace !== false;
-			} );
+			// Filter special jQuery focus-related handlers out.
+			result.events[ eventType ] = result.events[ eventType ]
+				.filter( function( eventData ) {
+					var handlerBody = eventData.handler.toString().replace(
+						/^[^{]+\{[\s\n]*((?:.|\n)*?)\s*;?\s*\}[^}]*$/,
+						"$1"
+					);
 
-			eventDataList = result.events[ eventType ];
-			for ( i = eventDataList.length - 1; i > -1; i-- ) {
-				eventData = eventDataList[ i ];
+					// Only these special jQuery internal handlers
+					// have the `namespace` field set to `false`;
+					// all other events use a string value, possibly
+					// an empty string if no namespace was set.
+					return eventData.namespace !== false &&
 
-				// Only these special jQuery internal handlers
-				// have the `namespace` field set to `false`;
-				// all other events use a string value, possibly
-				// an empty string if no namespace was set.
-				if ( eventData.namespace === false ) {
-					eventDataList.splice( i, 1 );
-				}
-			}
+						// If a focus event was triggered without adding a handler first,
+						// jQuery attaches an empty handler at the beginning of a trigger
+						// call. Ignore this handler as well; it's a function with just
+						// `return true;` in the body.
+						// Handle the minified version as well.
+						handlerBody !== "return true" && handlerBody !== "return!0";
+				} );
 
 			// Remove empty eventData collections to follow jQuery behavior.
-			if ( !eventDataList.length ) {
+			if ( !result.events[ eventType ].length ) {
 				delete result.events[ eventType ];
 			}
 		} );
