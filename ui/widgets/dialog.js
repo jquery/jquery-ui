@@ -325,22 +325,23 @@ $.widget( "ui.dialog", {
 		hasFocus.eq( 0 ).trigger( "focus" );
 	},
 
-	_keepFocus: function( event ) {
-		function checkFocus() {
-			var activeElement = $.ui.safeActiveElement( this.document[ 0 ] ),
-				isActive = this.uiDialog[ 0 ] === activeElement ||
-					$.contains( this.uiDialog[ 0 ], activeElement );
-			if ( !isActive ) {
-				this._focusTabbable();
-			}
+	_restoreTabbableFocus: function() {
+		var activeElement = $.ui.safeActiveElement( this.document[ 0 ] ),
+			isActive = this.uiDialog[ 0 ] === activeElement ||
+				$.contains( this.uiDialog[ 0 ], activeElement );
+		if ( !isActive ) {
+			this._focusTabbable();
 		}
+	},
+
+	_keepFocus: function( event ) {
 		event.preventDefault();
-		checkFocus.call( this );
+		this._restoreTabbableFocus();
 
 		// support: IE
 		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
 		// so we check again later
-		this._delay( checkFocus );
+		this._delay( this._restoreTabbableFocus );
 	},
 
 	_createWrapper: function() {
@@ -853,6 +854,8 @@ $.widget( "ui.dialog", {
 			return;
 		}
 
+		var jqMinor = $.fn.jquery.substring( 0, 4 );
+
 		// We use a delay in case the overlay is created from an
 		// event that we're going to be cancelling (#2804)
 		var isOpening = true;
@@ -874,6 +877,15 @@ $.widget( "ui.dialog", {
 				if ( !instance._allowInteraction( event ) ) {
 					event.preventDefault();
 					instance._focusTabbable();
+
+					// Support: jQuery >=3.4 <3.6 only
+					// Focus re-triggering in jQuery 3.4/3.5 makes the original element
+					// have its focus event propagated last, breaking the re-targeting.
+					// Trigger focus in a delay in addition if needed to avoid the issue
+					// See https://github.com/jquery/jquery/issues/4382
+					if ( jqMinor === "3.4." || jqMinor === "3.5." ) {
+						instance._delay( instance._restoreTabbableFocus );
+					}
 				}
 			}.bind( this ) );
 		}
