@@ -286,14 +286,24 @@ QUnit.test( "{ forcePlaceholderSize: true } table rows", function( assert ) {
 	assert.expect( 2 );
 
 	// Table should have the placeholder's height set the same as the row we're dragging
-	var element = $( "#sortable-table2 tbody" );
+	var element = $( "#sortable-table2 tbody" ),
+		jqMinor = $.fn.jquery.substring( 0, 4 );
 
 	element.sortable( {
 		placeholder: "test",
 		forcePlaceholderSize: true,
 		start: function( event, ui ) {
-			assert.equal( ui.placeholder.height(), ui.item.height(),
-				"placeholder is same height as item" );
+
+			// Support: IE 11+, Edge <79 only
+			// In IE & Edge Legacy these values may differ a little
+			// when jQuery >=3.0 <3.2 is used.
+			if ( jqMinor === "3.0." || jqMinor === "3.1." ) {
+				assert.ok( Math.abs( ui.placeholder.height() - ui.item.height() ) < 0.25,
+					"placeholder height is within 0.25 px of item's" );
+			} else {
+				assert.equal( ui.placeholder.height(), ui.item.height(),
+					"placeholder is same height as item" );
+			}
 		}
 	} );
 
