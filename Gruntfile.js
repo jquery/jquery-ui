@@ -227,19 +227,6 @@ grunt.initConfig( {
 			}
 		}
 	},
-	jshint: {
-		options: {
-			jshintrc: true
-		},
-		all: [
-			"ui/*.js",
-			"Gruntfile.js",
-			"build/**/*.js",
-			"tests/unit/**/*.js",
-			"tests/lib/**/*.js",
-			"demos/**/*.js"
-		]
-	},
 	csslint: {
 		base_theme: {
 			src: "themes/base/*.css",
@@ -289,9 +276,6 @@ grunt.initConfig( {
 
 				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
 				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
-
-				"jshint/jshint.js": "jshint/dist/jshint.js",
-				"jshint/LICENSE": "jshint/LICENSE",
 
 				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/LICENSE.txt": "jquery-1.x/LICENSE.txt",
@@ -494,7 +478,7 @@ grunt.registerTask( "update-authors", function() {
 
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
 grunt.registerTask( "jenkins", [ "default", "concat" ] );
-grunt.registerTask( "lint", [ "asciilint", "jshint", "eslint", "csslint", "htmllint" ] );
+grunt.registerTask( "lint", [ "asciilint", "eslint", "csslint", "htmllint" ] );
 grunt.registerTask( "test", [ "qunit" ] );
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );
