@@ -66,7 +66,8 @@
 		"jquery-3.4.1": "jquery#3.4.1",
 		"jquery-3.5.0": "jquery#3.5.0",
 		"jquery-3.5.1": "jquery#3.5.1",
+		"jquery-3.6.0": "jquery#3.6.0",
 		"jquery-migrate-1.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
-		"jquery-migrate-3.3.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.3.1.tgz"
+		"jquery-migrate-3.3.2": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.3.2.tgz"
 	}
 }
