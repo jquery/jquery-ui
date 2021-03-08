@@ -1469,7 +1469,7 @@ QUnit.test( "zIndex, default, switching after initialization", function( assert 
 } );
 
 QUnit.test( "iframeFix", function( assert ) {
-	assert.expect( 5 );
+	assert.expect( 6 );
 
 	var element = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable( { iframeFix: true } ),
 		element2 = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable( { iframeFix: ".iframe" } ),
@@ -1485,14 +1485,22 @@ QUnit.test( "iframeFix", function( assert ) {
 	} );
 
 	element.one( "drag", function() {
-		var div = $( this ).children().not( "iframe" );
+		var divOffset, iframeOffset,
+			div = $( this ).children().not( "iframe" );
 
 		// http://bugs.jqueryui.com/ticket/9671
 		// iframeFix doesn't handle iframes that move
 		assert.equal( div.length, 1, "blocking div added as sibling" );
 		assert.equal( div.outerWidth(), iframe.outerWidth(), "blocking div is wide enough" );
 		assert.equal( div.outerHeight(), iframe.outerHeight(), "blocking div is tall enough" );
-		assert.deepEqual( div.offset(), iframe.offset(), "blocking div is tall enough" );
+
+		divOffset = div.offset();
+		iframeOffset = iframe.offset();
+
+		// Support: Edge <79 only
+		// In Edge Legacy these values differ a little.
+		assert.ok( Math.abs( divOffset.top - iframeOffset.top ) < 0.25, "Check top within 0.25 of expected" );
+		assert.ok( Math.abs( divOffset.left - iframeOffset.left ) < 0.25, "Check left within 0.25 of expected" );
 	} );
 
 	element.simulate( "drag", {
