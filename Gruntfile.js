@@ -214,7 +214,8 @@ grunt.initConfig( {
 					/Element “head” is missing a required instance of child element “title”/,
 					/Element “object” is missing one or more of the following/,
 					/The “codebase” attribute on the “object” element is obsolete/,
-					/Consider adding a “lang” attribute to the “html” start tag/
+					/Consider adding a “lang” attribute to the “html” start tag/,
+					/This document appears to be written in .*. Consider adding “lang=".*"” (or variant) to the “html” start tag/
 				]
 			},
 			src: htmllintBad
