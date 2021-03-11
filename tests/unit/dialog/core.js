@@ -120,12 +120,32 @@ QUnit.test( "focus tabbable", function( assert ) {
 	function step1() {
 		checkFocus( "<div><input><input></div>", options, function( done ) {
 			var input = element.find( "input" ).last().trigger( "focus" ).trigger( "blur" );
-			element.dialog( "instance" )._focusTabbable();
-			setTimeout( function() {
-				assert.equal( document.activeElement, input[ 0 ],
-					"1. an element that was focused previously." );
-				done();
-			} );
+
+			// Support: IE 11+
+			// In IE in jQuery 3.4+ a sequence:
+			// $( inputNode ).trigger( "focus" ).trigger( "blur" ).trigger( "focus" )
+			// doesn't end up with a focused input. See:
+			// https://github.com/jquery/jquery/issues/4856
+			// However, in this test we only want to check that the last focused
+			// input receives the focus back when `_focusTabbable()` is called
+			// which in reality doesn't happen so quickly so let's avoid the issue
+			// by waiting a bit.
+			if ( document.documentMode ) {
+				setTimeout( function() {
+					focusTabbableAndAssert();
+				}, 500 );
+			} else {
+				focusTabbableAndAssert();
+			}
+
+			function focusTabbableAndAssert() {
+				element.dialog( "instance" )._focusTabbable();
+				setTimeout( function() {
+					assert.equal( document.activeElement, input[ 0 ],
+						"1. an element that was focused previously." );
+					done();
+				} );
+			}
 		}, step2 );
 	}
 
