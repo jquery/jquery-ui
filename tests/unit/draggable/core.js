@@ -96,17 +96,11 @@ QUnit.test( "#8269: Removing draggable element on drop", function( assert ) {
 		}
 	} );
 
-	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
-	if ( testHelper.unreliableContains ) {
-		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-	} else {
-		element.simulate( "drag", {
-			handle: "corner",
-			x: dropOffset.left,
-			y: dropOffset.top
-		} );
-	}
+	element.simulate( "drag", {
+		handle: "corner",
+		x: dropOffset.left,
+		y: dropOffset.top
+	} );
 } );
 
 // https://bugs.jqueryui.com/ticket/7778

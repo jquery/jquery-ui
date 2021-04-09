@@ -11,13 +11,6 @@ return $.extend( helper, {
 	// TODO: remove the unreliable offset hacks
 	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
 
-	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
-
-	unreliableContains: ( function() {
-		var element = $( "<div>" );
-		return $.contains( element[ 0 ].ownerDocument, element[ 0 ] );
-	} )(),
-
 	testDragPosition: function( assert, el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
 

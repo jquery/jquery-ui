@@ -525,20 +525,17 @@ QUnit.test( "alsoResize + multiple selection", function( assert ) {
 
 	testHelper.drag( ".ui-resizable-se", 400, 400 );
 
-	// Support: IE <=11+, jQuery 3.0 - 3.1 only
-	// IE sizing under jQuery 3.0 & 3.1 has a small delta compared to expected values.
-	// This delta is small so accept it.
-	assert.close( element.width(), 300, 0.01,
+	assert.strictEqual( element.width(), 300,
 		"resizable constrained width at containment edge" );
-	assert.close( element.height(), 200, 0.01,
+	assert.strictEqual( element.height(), 200,
 		"resizable constrained height at containment edge" );
-	assert.close( other1.width(), 250, 0.01,
+	assert.strictEqual( other1.width(), 250,
 		"alsoResize o1 constrained width at containment edge" );
-	assert.close( other1.height(), 150, 0.01,
+	assert.strictEqual( other1.height(), 150,
 		"alsoResize o1 constrained height at containment edge" );
-	assert.close( other2.width(), 250, 0.01,
+	assert.strictEqual( other2.width(), 250,
 		"alsoResize o2 constrained width at containment edge" );
-	assert.close( other2.height(), 150, 0.01,
+	assert.strictEqual( other2.height(), 150,
 		"alsoResize o2 constrained height at containment edge" );
 } );
 

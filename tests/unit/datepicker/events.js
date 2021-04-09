@@ -148,7 +148,6 @@ QUnit.test( "beforeShowDay-getDate", function( assert ) {
 	// Contains non-breaking space
 	assert.equal( $( "div.ui-datepicker-title" ).text(),
 
-		// Support: IE <9, jQuery <1.8
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>January&#xa0;2010</span>" ).text(), "Initial month" );
 	$( "a.ui-datepicker-next", dp ).trigger( "click" );

@@ -695,15 +695,10 @@ QUnit.test( "#6889: Cursor doesn't revert to pre-dragging state after revert act
 		} ),
 		expected = getCursor();
 
-	if ( testHelper.unreliableContains ) {
-		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-	} else {
-		element.simulate( "drag", {
-			dx: -1,
-			dy: -1
-		} );
-	}
+	element.simulate( "drag", {
+		dx: -1,
+		dy: -1
+	} );
 } );
 
 QUnit.test( "cursor, default, switching after initialization", function( assert ) {
@@ -1357,16 +1352,8 @@ QUnit.test( "#8459: element can snap to an element that was removed during drag"
 		moves: 1
 	} );
 
-	// Support: Opera 12.10, Safari 5.1, jQuery <1.8
-	if ( testHelper.unreliableContains ) {
-		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
-	} else {
-
-		// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
-		assert.close( element.offset().left, newX, 1, "doesn't snap to a removed element" );
-		assert.close( element.offset().top, newY, 1, "doesn't snap to a removed element" );
-	}
+	assert.strictEqual( element.offset().left, newX, "doesn't snap to a removed element" );
+	assert.strictEqual( element.offset().top, newY, "doesn't snap to a removed element" );
 } );
 
 QUnit.test( "#8165: Snapping large rectangles to small rectangles doesn't snap properly", function( assert ) {

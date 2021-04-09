@@ -246,7 +246,6 @@ QUnit.test( "otherMonths", function( assert ) {
 	inp.val( "06/01/2009" ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(),
 
-		// Support: IE <9, jQuery <1.8
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
@@ -262,7 +261,6 @@ QUnit.test( "otherMonths", function( assert ) {
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", false ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(),
 
-		// Support: IE <9, jQuery <1.8
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
