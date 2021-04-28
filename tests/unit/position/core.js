@@ -113,7 +113,9 @@ QUnit.test( "positions", function( assert ) {
 } );
 
 QUnit.test( "of", function( assert ) {
-	assert.expect( 9 + ( scrollTopSupport() ? 1 : 0 ) );
+	assert.expect( 10 + ( scrollTopSupport() ? 1 : 0 ) );
+
+	var done = assert.async();
 
 	var event;
 
@@ -225,6 +227,21 @@ QUnit.test( "of", function( assert ) {
 		top: 600,
 		left: 400
 	}, "event - left top, right bottom" );
+
+	try {
+		$( "#elx" ).position( {
+			my: "left top",
+			at: "right bottom",
+			of: "<img onerror='window.globalOf=true' src='/404' />",
+			collision: "none"
+		} );
+	} catch ( e ) {}
+
+	setTimeout( function() {
+		assert.equal( window.globalOf, undefined, "of treated as a selector" );
+		delete window.globalOf;
+		done();
+	}, 500 );
 } );
 
 QUnit.test( "offsets", function( assert ) {
@@ -334,6 +351,7 @@ QUnit.test( "using", function( assert ) {
 			assert.deepEqual( position, expectedPosition, "correct position for call #" + count );
 			assert.deepEqual( feedback.element.element[ 0 ], elems[ count ] );
 			delete feedback.element.element;
+			delete feedback.target.element.prevObject;
 			assert.deepEqual( feedback, expectedFeedback );
 			count++;
 		}
