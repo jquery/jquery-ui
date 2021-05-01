@@ -510,7 +510,7 @@ grunt.registerTask( "update-authors", function() {
 	} );
 } );
 
-grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
+grunt.registerTask( "default", [ "lint", "esmify", "requirejs", "test" ] );
 grunt.registerTask( "jenkins", [ "default", "concat" ] );
 grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ] );
 grunt.registerTask( "test", [ "qunit" ] );
