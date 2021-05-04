@@ -623,8 +623,10 @@ QUnit.test( "setDate", function( assert ) {
 } );
 
 QUnit.test( "altField", function( assert ) {
-	assert.expect( 10 );
-	var inp = testHelper.init( "#inp" ),
+	assert.expect( 11 );
+
+	var done = assert.async(),
+		inp = testHelper.init( "#inp" ),
 		alt = $( "#alt" );
 
 	// No alternate field set
@@ -664,6 +666,22 @@ QUnit.test( "altField", function( assert ) {
 	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.END } );
 	assert.equal( inp.val(), "", "Alt field - dp - ctrl+end" );
 	assert.equal( alt.val(), "", "Alt field - alt - ctrl+end" );
+
+	// HTML instead of selector
+	alt.val( "" );
+	try {
+		inp.datepicker( "option", {
+			altField: "<img onerror='window.globalAltField=true' src='/404' />",
+			altFormat: "yy-mm-dd"
+		} ).val( "06/04/2008" ).datepicker( "show" );
+		inp.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	} catch ( e ) {}
+
+	setTimeout( function() {
+		assert.equal( window.globalAltField, undefined, "altField treated as a selector" );
+		delete window.globalAltField;
+		done();
+	}, 500 );
 } );
 
 QUnit.test( "autoSize", function( assert ) {
