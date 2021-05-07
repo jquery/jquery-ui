@@ -240,8 +240,8 @@ $.extend( Datepicker.prototype, {
 			inst.append.remove();
 		}
 		if ( appendText ) {
-			inst.append = $( "<span></span>" )
-				.attr( "class", this._appendClass )
+			inst.append = $( "<span>" )
+				.addClass( this._appendClass )
 				.text( appendText );
 			input[ isRTL ? "before" : "after" ]( inst.append );
 		}
@@ -261,7 +261,7 @@ $.extend( Datepicker.prototype, {
 			buttonImage = this._get( inst, "buttonImage" );
 
 			if ( this._get( inst, "buttonImageOnly" ) ) {
-				inst.trigger = $( "<img/>" )
+				inst.trigger = $( "<img>" )
 					.addClass( this._triggerClass )
 					.attr( {
 						src: buttonImage,
@@ -269,11 +269,11 @@ $.extend( Datepicker.prototype, {
 						title: buttonText
 					} );
 			} else {
-				inst.trigger = $( "<button type='button'></button>" )
+				inst.trigger = $( "<button type='button'>" )
 					.addClass( this._triggerClass );
 				if ( buttonImage ) {
 					inst.trigger.html(
-						$( "<img/>" )
+						$( "<img>" )
 							.attr( {
 								src: buttonImage,
 								alt: buttonText,
@@ -1726,7 +1726,7 @@ $.extend( Datepicker.prototype, {
 			this._getFormatConfig( inst ) ) );
 
 		if ( this._canAdjustMonth( inst, -1, drawYear, drawMonth ) ) {
-			prev = $( "<a></a>" )
+			prev = $( "<a>" )
 				.attr( {
 					"class": "ui-datepicker-prev ui-corner-all",
 					"data-handler": "prev",
@@ -1735,21 +1735,21 @@ $.extend( Datepicker.prototype, {
 				} )
 				.append(
 					$( "<span>" )
-						.attr( "class", "ui-icon ui-icon-circle-triangle-" +
+						.addClass( "ui-icon ui-icon-circle-triangle-" +
 							( isRTL ? "e" : "w" ) )
 						.text( prevText )
 				)[ 0 ].outerHTML;
 		} else if ( hideIfNoPrevNext ) {
 			prev = "";
 		} else {
-			prev = $( "<a></a>" )
+			prev = $( "<a>" )
 				.attr( {
 					"class": "ui-datepicker-prev ui-corner-all ui-state-disabled",
 					title: prevText
 				} )
 				.append(
 					$( "<span>" )
-						.attr( "class", "ui-icon ui-icon-circle-triangle-" +
+						.addClass( "ui-icon ui-icon-circle-triangle-" +
 							( isRTL ? "e" : "w" ) )
 						.text( prevText )
 				)[ 0 ].outerHTML;
@@ -1761,7 +1761,7 @@ $.extend( Datepicker.prototype, {
 			this._getFormatConfig( inst ) ) );
 
 		if ( this._canAdjustMonth( inst, +1, drawYear, drawMonth ) ) {
-			next = $( "<a></a>" )
+			next = $( "<a>" )
 				.attr( {
 					"class": "ui-datepicker-next ui-corner-all",
 					"data-handler": "next",
@@ -1770,14 +1770,14 @@ $.extend( Datepicker.prototype, {
 				} )
 				.append(
 					$( "<span>" )
-						.attr( "class", "ui-icon ui-icon-circle-triangle-" +
+						.addClass( "ui-icon ui-icon-circle-triangle-" +
 							( isRTL ? "w" : "e" ) )
 						.text( nextText )
 				)[ 0 ].outerHTML;
 		} else if ( hideIfNoPrevNext ) {
 			next = "";
 		} else {
-			next = $( "<a></a>" )
+			next = $( "<a>" )
 				.attr( {
 					"class": "ui-datepicker-next ui-corner-all ui-state-disabled",
 					title: nextText
@@ -1797,7 +1797,7 @@ $.extend( Datepicker.prototype, {
 
 		controls = "";
 		if ( !inst.inline ) {
-			controls = $( "<button></button>" )
+			controls = $( "<button>" )
 				.attr( {
 					type: "button",
 					"class": "ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all",
@@ -1812,7 +1812,7 @@ $.extend( Datepicker.prototype, {
 			buttonPanel = $( "<div class='ui-datepicker-buttonpane ui-widget-content'>" )
 				.append( isRTL ? controls : "" )
 				.append( this._isInRange( inst, gotoDate ) ?
-					$( "<button></button>" )
+					$( "<button>" )
 						.attr( {
 							type: "button",
 							"class": "ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all",
