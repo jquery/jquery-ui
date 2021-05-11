@@ -1171,4 +1171,55 @@ QUnit.test( "Ticket 7602: Stop datepicker from appearing with beforeShow event h
 	inp.datepicker( "destroy" );
 } );
 
+QUnit.test( "Ticket #15284: escaping text parameters", function( assert ) {
+	assert.expect( 7 );
+
+	var done = assert.async();
+
+	var qf = $( "#qunit-fixture" );
+
+	window.uiGlobalXss = [];
+
+	var inp = testHelper.init( "#inp", {
+		showButtonPanel: true,
+		showOn: "both",
+		prevText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'prevText XSS' ] )</script>",
+		nextText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'nextText XSS' ] )</script>",
+		currentText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'currentText XSS' ] )</script>",
+		closeText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'closeText XSS' ] )</script>",
+		buttonText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'buttonText XSS' ] )</script>",
+		appendText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'appendText XSS' ] )</script>"
+	} );
+
+	var dp = $( "#ui-datepicker-div" );
+
+	testHelper.onFocus( inp, function() {
+		assert.equal( dp.find( ".ui-datepicker-prev" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'prevText XSS' ] )</script>",
+			"prevText escaped" );
+		assert.equal( dp.find( ".ui-datepicker-next" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'nextText XSS' ] )</script>",
+			"nextText escaped" );
+		assert.equal( dp.find( ".ui-datepicker-current" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'currentText XSS' ] )</script>",
+			"currentText escaped" );
+		assert.equal( dp.find( ".ui-datepicker-close" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'closeText XSS' ] )</script>",
+			"closeText escaped" );
+
+		assert.equal( qf.find( ".ui-datepicker-trigger" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'buttonText XSS' ] )</script>",
+			"buttonText escaped" );
+		assert.equal( qf.find( ".ui-datepicker-append" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'appendText XSS' ] )</script>",
+			"appendText escaped" );
+
+		assert.deepEqual( window.uiGlobalXss, [], "No XSS" );
+
+		delete window.uiGlobalXss;
+		inp.datepicker( "hide" ).datepicker( "destroy" );
+		done();
+	} );
+} );
+
 } );
