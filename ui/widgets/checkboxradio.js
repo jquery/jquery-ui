@@ -23,7 +23,6 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
-			"../escape-selector",
 			"../form-reset-mixin",
 			"../labels",
 			"../widget"
@@ -149,7 +148,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	_getRadioGroup: function() {
 		var group;
 		var name = this.element[ 0 ].name;
-		var nameSelector = "input[name='" + $.ui.escapeSelector( name ) + "']";
+		var nameSelector = "input[name='" + $.escapeSelector( name ) + "']";
 
 		if ( !name ) {
 			return $( [] );
