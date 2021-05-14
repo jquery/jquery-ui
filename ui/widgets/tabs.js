@@ -22,7 +22,6 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
-			"../escape-selector",
 			"../keycode",
 			"../safe-active-element",
 			"../unique-id",
@@ -733,7 +732,7 @@ $.widget( "ui.tabs", {
 		// meta-function to give users option to provide a href string instead of a numerical index.
 		if ( typeof index === "string" ) {
 			index = this.anchors.index( this.anchors.filter( "[href$='" +
-				$.ui.escapeSelector( index ) + "']" ) );
+				$.escapeSelector( index ) + "']" ) );
 		}
 
 		return index;

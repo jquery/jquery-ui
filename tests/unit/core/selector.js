@@ -3,7 +3,6 @@ define( [
 	"jquery",
 	"lib/helper",
 	"ui/data",
-	"ui/escape-selector",
 	"ui/focusable",
 	"ui/tabbable"
 ], function( QUnit, $, helper ) {
@@ -278,13 +277,6 @@ QUnit.test( "tabbable - dimensionless parent with overflow", function( assert ) 
 	assert.expect( 1 );
 
 	assert.isTabbable( "#dimensionlessParent", "input" );
-} );
-
-QUnit.test( "escapeSelector", function( assert ) {
-	assert.expect( 1 );
-
-	assert.equal( $( "#" + $.ui.escapeSelector( "weird-['x']-id" ) ).length, 1,
-		"properly escapes selectors to use as an id" );
 } );
 
 } );
