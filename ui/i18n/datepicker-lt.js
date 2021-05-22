@@ -10,17 +10,17 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.lt = {
 	closeText: "Uždaryti",
 	prevText: "&#x3C;Atgal",
 	nextText: "Pirmyn&#x3E;",
 	currentText: "Šiandien",
-	monthNames: [ "Sausis","Vasaris","Kovas","Balandis","Gegužė","Birželis",
-	"Liepa","Rugpjūtis","Rugsėjis","Spalis","Lapkritis","Gruodis" ],
-	monthNamesShort: [ "Sau","Vas","Kov","Bal","Geg","Bir",
-	"Lie","Rugp","Rugs","Spa","Lap","Gru" ],
+	monthNames: [ "Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis",
+	"Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis" ],
+	monthNamesShort: [ "Sau", "Vas", "Kov", "Bal", "Geg", "Bir",
+	"Lie", "Rugp", "Rugs", "Spa", "Lap", "Gru" ],
 	dayNames: [
 		"sekmadienis",
 		"pirmadienis",
@@ -30,8 +30,8 @@ datepicker.regional.lt = {
 		"penktadienis",
 		"šeštadienis"
 	],
-	dayNamesShort: [ "sek","pir","ant","tre","ket","pen","šeš" ],
-	dayNamesMin: [ "Se","Pr","An","Tr","Ke","Pe","Še" ],
+	dayNamesShort: [ "sek", "pir", "ant", "tre", "ket", "pen", "šeš" ],
+	dayNamesMin: [ "Se", "Pr", "An", "Tr", "Ke", "Pe", "Še" ],
 	weekHeader: "SAV",
 	dateFormat: "yy-mm-dd",
 	firstDay: 1,
@@ -42,4 +42,4 @@ datepicker.setDefaults( datepicker.regional.lt );
 
 return datepicker.regional.lt;
 
-} ) );
+} );

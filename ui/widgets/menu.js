@@ -34,7 +34,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -707,4 +707,4 @@ return $.widget( "ui.menu", {
 	}
 } );
 
-} ) );
+} );

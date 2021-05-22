@@ -10,7 +10,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional[ "fr-CH" ] = {
 	closeText: "Fermer",
@@ -34,4 +34,4 @@ datepicker.setDefaults( datepicker.regional[ "fr-CH" ] );
 
 return datepicker.regional[ "fr-CH" ];
 
-} ) );
+} );

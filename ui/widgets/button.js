@@ -36,7 +36,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.button", {
 	version: "@VERSION",
@@ -443,4 +443,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.button;
 
-} ) );
+} );

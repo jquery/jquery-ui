@@ -30,7 +30,7 @@ QUnit.module( "widget animation", ( function() {
 			return helper.moduleAfterEach.apply( this, arguments );
 		}
 	};
-}() ) );
+} )()  );
 
 QUnit.test( "show: null", function( assert ) {
 	var ready = assert.async();

@@ -34,7 +34,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.autocomplete", {
 	version: "@VERSION",
@@ -667,4 +667,4 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 
 return $.ui.autocomplete;
 
-} ) );
+} );

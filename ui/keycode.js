@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 return $.ui.keyCode = {
 	BACKSPACE: 8,
 	COMMA: 188,
@@ -42,4 +42,4 @@ return $.ui.keyCode = {
 	UP: 38
 };
 
-} ) );
+} );

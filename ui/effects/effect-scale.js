@@ -28,7 +28,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "scale", function( options, done ) {
 
@@ -53,4 +53,4 @@ return $.effects.define( "scale", function( options, done ) {
 	$.effects.effect.size.call( this, newOptions, done );
 } );
 
-} ) );
+} );

@@ -10,17 +10,17 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.is = {
 	closeText: "Loka",
 	prevText: "&#x3C; Fyrri",
 	nextText: "Næsti &#x3E;",
 	currentText: "Í dag",
-	monthNames: [ "Janúar","Febrúar","Mars","Apríl","Maí","Júní",
-	"Júlí","Ágúst","September","Október","Nóvember","Desember" ],
-	monthNamesShort: [ "Jan","Feb","Mar","Apr","Maí","Jún",
-	"Júl","Ágú","Sep","Okt","Nóv","Des" ],
+	monthNames: [ "Janúar", "Febrúar", "Mars", "Apríl", "Maí", "Júní",
+	"Júlí", "Ágúst", "September", "Október", "Nóvember", "Desember" ],
+	monthNamesShort: [ "Jan", "Feb", "Mar", "Apr", "Maí", "Jún",
+	"Júl", "Ágú", "Sep", "Okt", "Nóv", "Des" ],
 	dayNames: [
 		"Sunnudagur",
 		"Mánudagur",
@@ -30,8 +30,8 @@ datepicker.regional.is = {
 		"Föstudagur",
 		"Laugardagur"
 	],
-	dayNamesShort: [ "Sun","Mán","Þri","Mið","Fim","Fös","Lau" ],
-	dayNamesMin: [ "Su","Má","Þr","Mi","Fi","Fö","La" ],
+	dayNamesShort: [ "Sun", "Mán", "Þri", "Mið", "Fim", "Fös", "Lau" ],
+	dayNamesMin: [ "Su", "Má", "Þr", "Mi", "Fi", "Fö", "La" ],
 	weekHeader: "Vika",
 	dateFormat: "dd.mm.yy",
 	firstDay: 0,
@@ -42,4 +42,4 @@ datepicker.setDefaults( datepicker.regional.is );
 
 return datepicker.regional.is;
 
-} ) );
+} );

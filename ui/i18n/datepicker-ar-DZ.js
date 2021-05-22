@@ -13,7 +13,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional[ "ar-DZ" ] = {
 	closeText: "إغلاق",
@@ -21,7 +21,7 @@ datepicker.regional[ "ar-DZ" ] = {
 	nextText: "التالي&#x3E;",
 	currentText: "اليوم",
 	monthNames: [ "جانفي", "فيفري", "مارس", "أفريل", "ماي", "جوان",
-	"جويلية", "أوت", "سبتمبر","أكتوبر", "نوفمبر", "ديسمبر" ],
+	"جويلية", "أوت", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر" ],
 	monthNamesShort: [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ],
 	dayNames: [ "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت" ],
 	dayNamesShort: [ "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت" ],
@@ -36,4 +36,4 @@ datepicker.setDefaults( datepicker.regional[ "ar-DZ" ] );
 
 return datepicker.regional[ "ar-DZ" ];
 
-} ) );
+} );

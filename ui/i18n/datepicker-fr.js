@@ -12,7 +12,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.fr = {
 	closeText: "Fermer",
@@ -25,7 +25,7 @@ datepicker.regional.fr = {
 		"juil.", "août", "sept.", "oct.", "nov.", "déc." ],
 	dayNames: [ "dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi" ],
 	dayNamesShort: [ "dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam." ],
-	dayNamesMin: [ "D","L","M","M","J","V","S" ],
+	dayNamesMin: [ "D", "L", "M", "M", "J", "V", "S" ],
 	weekHeader: "Sem.",
 	dateFormat: "dd/mm/yy",
 	firstDay: 1,
@@ -36,4 +36,4 @@ datepicker.setDefaults( datepicker.regional.fr );
 
 return datepicker.regional.fr;
 
-} ) );
+} );

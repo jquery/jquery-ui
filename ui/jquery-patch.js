@@ -13,6 +13,8 @@
 //>>description: Support version 1.8.x and newer of jQuery core
 
 ( function( factory ) {
+"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -22,7 +24,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 // Support: jQuery 1.9.x or older
 // $.expr[ ":" ] is deprecated.
@@ -83,4 +86,4 @@ if ( !$.fn.even || !$.fn.odd ) {
 	} );
 }
 
-} ) );
+} );

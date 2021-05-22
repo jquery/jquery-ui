@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 return $.fn.scrollParent = function( includeHidden ) {
 	var position = this.css( "position" ),
@@ -42,4 +42,4 @@ return $.fn.scrollParent = function( includeHidden ) {
 		scrollParent;
 };
 
-} ) );
+} );

@@ -23,8 +23,6 @@ QUnit.module( "position", {
 	afterEach: helper.moduleAfterEach
 } );
 
-common.testJshint( "position" );
-
 QUnit.test( "my, at, of", function( assert ) {
 	assert.expect( 4 );
 

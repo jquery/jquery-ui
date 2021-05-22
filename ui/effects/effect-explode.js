@@ -9,9 +9,9 @@
 
 //>>label: Explode Effect
 //>>group: Effects
-// jscs:disable maximumLineLength
+/* eslint-disable max-len */
 //>>description: Explodes an element in all directions into n pieces. Implodes an element to its original wholeness.
-// jscs:enable maximumLineLength
+/* eslint-enable max-len */
 //>>docs: http://api.jqueryui.com/explode-effect/
 //>>demos: http://jqueryui.com/effect/
 
@@ -29,7 +29,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "explode", "hide", function( options, done ) {
 
@@ -108,4 +108,4 @@ return $.effects.define( "explode", "hide", function( options, done ) {
 	}
 } );
 
-} ) );
+} );

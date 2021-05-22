@@ -33,4 +33,4 @@ window.testAllVersions = function( widget ) {
 		} ) );
 };
 
-}() );
+} )();

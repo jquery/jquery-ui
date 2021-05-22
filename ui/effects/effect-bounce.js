@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "bounce", function( options, done ) {
 	var upAnim, downAnim, refValue,
@@ -107,4 +107,4 @@ return $.effects.define( "bounce", function( options, done ) {
 	$.effects.unshift( element, queuelen, anims + 1 );
 } );
 
-} ) );
+} );

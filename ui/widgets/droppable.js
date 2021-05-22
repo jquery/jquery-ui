@@ -29,7 +29,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.droppable", {
 	version: "@VERSION",
@@ -206,7 +206,8 @@ $.widget( "ui.droppable", {
 					)
 				) {
 					childrenIntersection = true;
-					return false; }
+					return false;
+				}
 			} );
 		if ( childrenIntersection ) {
 			return false;
@@ -494,4 +495,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.droppable;
 
-} ) );
+} );

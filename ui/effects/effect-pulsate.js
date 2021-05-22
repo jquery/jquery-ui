@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "pulsate", "show", function( options, done ) {
 	var element = $( this ),
@@ -61,4 +61,4 @@ return $.effects.define( "pulsate", "show", function( options, done ) {
 	$.effects.unshift( element, queuelen, anims + 1 );
 } );
 
-} ) );
+} );

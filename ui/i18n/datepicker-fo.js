@@ -10,17 +10,17 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.fo = {
 	closeText: "Lat aftur",
 	prevText: "&#x3C;Fyrra",
 	nextText: "Næsta&#x3E;",
 	currentText: "Í dag",
-	monthNames: [ "Januar","Februar","Mars","Apríl","Mei","Juni",
-	"Juli","August","September","Oktober","November","Desember" ],
-	monthNamesShort: [ "Jan","Feb","Mar","Apr","Mei","Jun",
-	"Jul","Aug","Sep","Okt","Nov","Des" ],
+	monthNames: [ "Januar", "Februar", "Mars", "Apríl", "Mei", "Juni",
+	"Juli", "August", "September", "Oktober", "November", "Desember" ],
+	monthNamesShort: [ "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+	"Jul", "Aug", "Sep", "Okt", "Nov", "Des" ],
 	dayNames: [
 		"Sunnudagur",
 		"Mánadagur",
@@ -30,8 +30,8 @@ datepicker.regional.fo = {
 		"Fríggjadagur",
 		"Leyardagur"
 	],
-	dayNamesShort: [ "Sun","Mán","Týs","Mik","Hós","Frí","Ley" ],
-	dayNamesMin: [ "Su","Má","Tý","Mi","Hó","Fr","Le" ],
+	dayNamesShort: [ "Sun", "Mán", "Týs", "Mik", "Hós", "Frí", "Ley" ],
+	dayNamesMin: [ "Su", "Má", "Tý", "Mi", "Hó", "Fr", "Le" ],
 	weekHeader: "Vk",
 	dateFormat: "dd-mm-yy",
 	firstDay: 1,
@@ -42,4 +42,4 @@ datepicker.setDefaults( datepicker.regional.fo );
 
 return datepicker.regional.fo;
 
-} ) );
+} );

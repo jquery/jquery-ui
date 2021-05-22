@@ -41,7 +41,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.dialog", {
 	version: "@VERSION",
@@ -948,4 +948,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.dialog;
 
-} ) );
+} );

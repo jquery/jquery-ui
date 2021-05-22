@@ -32,7 +32,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.widget( "ui.slider", $.ui.mouse, {
 	version: "@VERSION",
@@ -749,4 +749,4 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	}
 } );
 
-} ) );
+} );

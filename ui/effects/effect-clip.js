@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "clip", "hide", function( options, done ) {
 	var start,
@@ -62,4 +62,4 @@ return $.effects.define( "clip", "hide", function( options, done ) {
 
 } );
 
-} ) );
+} );

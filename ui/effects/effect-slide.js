@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "slide", "show", function( options, done ) {
 	var startClip, startRef,
@@ -73,4 +73,4 @@ return $.effects.define( "slide", "show", function( options, done ) {
 	} );
 } );
 
-} ) );
+} );

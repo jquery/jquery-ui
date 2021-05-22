@@ -10,7 +10,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.ka = {
 	closeText: "დახურვა",
@@ -31,10 +31,10 @@ datepicker.regional.ka = {
 		"ნოემბერი",
 		"დეკემბერი"
 	],
-	monthNamesShort: [ "იან","თებ","მარ","აპრ","მაი","ივნ", "ივლ","აგვ","სექ","ოქტ","ნოე","დეკ" ],
-	dayNames: [ "კვირა","ორშაბათი","სამშაბათი","ოთხშაბათი","ხუთშაბათი","პარასკევი","შაბათი" ],
-	dayNamesShort: [ "კვ","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ" ],
-	dayNamesMin: [ "კვ","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ" ],
+	monthNamesShort: [ "იან", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ" ],
+	dayNames: [ "კვირა", "ორშაბათი", "სამშაბათი", "ოთხშაბათი", "ხუთშაბათი", "პარასკევი", "შაბათი" ],
+	dayNamesShort: [ "კვ", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ" ],
+	dayNamesMin: [ "კვ", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ" ],
 	weekHeader: "კვირა",
 	dateFormat: "dd-mm-yy",
 	firstDay: 1,
@@ -45,4 +45,4 @@ datepicker.setDefaults( datepicker.regional.ka );
 
 return datepicker.regional.ka;
 
-} ) );
+} );

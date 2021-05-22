@@ -32,7 +32,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 	version: "@VERSION",
@@ -279,4 +279,4 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 return $.ui.checkboxradio;
 
-} ) );
+} );

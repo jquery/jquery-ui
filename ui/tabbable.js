@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 return $.extend( $.expr.pseudos, {
 	tabbable: function( element ) {
@@ -32,4 +32,4 @@ return $.extend( $.expr.pseudos, {
 	}
 } );
 
-} ) );
+} );

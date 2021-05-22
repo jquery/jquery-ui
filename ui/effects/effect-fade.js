@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "fade", "toggle", function( options, done ) {
 	var show = options.mode === "show";
@@ -44,4 +44,4 @@ return $.effects.define( "fade", "toggle", function( options, done ) {
 		} );
 } );
 
-} ) );
+} );

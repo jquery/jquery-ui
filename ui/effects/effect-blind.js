@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "blind", "hide", function( options, done ) {
 	var map = {
@@ -67,4 +67,4 @@ return $.effects.define( "blind", "hide", function( options, done ) {
 	} );
 } );
 
-} ) );
+} );

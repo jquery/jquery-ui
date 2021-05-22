@@ -53,7 +53,9 @@ QUnit.test( "enable", function( assert ) {
 
 	el.selectable( {
 		disabled: true,
-		start: function() { fired = true; }
+		start: function() {
+			fired = true;
+		}
 	} );
 	el.simulate( "drag", {
 		dx: 20,

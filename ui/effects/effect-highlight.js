@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "highlight", "show", function( options, done ) {
 	var element = $( this ),
@@ -54,4 +54,4 @@ return $.effects.define( "highlight", "show", function( options, done ) {
 		} );
 } );
 
-} ) );
+} );

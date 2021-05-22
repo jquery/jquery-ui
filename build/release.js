@@ -35,7 +35,7 @@ function replaceAtVersion() {
 	return matches;
 }
 
-function removeExternals ( packager ) {
+function removeExternals( packager ) {
 	Object.keys( packager.builtFiles ).forEach( function( filepath ) {
 		if ( /^external\//.test( filepath ) ) {
 			delete packager.builtFiles[ filepath ];

@@ -95,7 +95,7 @@ grunt.registerTask( "testswarm", function( commit, configFile, browserSets ) {
 	var test,
 		latestTests = {};
 	for ( test in tests ) {
-		latestTests[ test ] = tests[ test ] + "?nojshint=true";
+		latestTests[ test ] = tests[ test ];
 	}
 	submit( commit, latestTests, configFile, browserSets, "", this.async() );
 } );
@@ -104,7 +104,7 @@ grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, mino
 	var allTests = {};
 	versions[ minor ].split( " " ).forEach( function( version ) {
 		for ( var test in tests ) {
-			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
+			allTests[ test + "-" + version ] = tests[ test ] + "?jquery=" + version;
 		}
 	} );
 	submit( commit, allTests, configFile, browserSets, "core " + minor, this.async() );

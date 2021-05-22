@@ -23,7 +23,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 return $.fn.extend( {
 	disableSelection: ( function() {
@@ -43,4 +43,4 @@ return $.fn.extend( {
 	}
 } );
 
-} ) );
+} );

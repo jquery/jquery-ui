@@ -10,8 +10,6 @@ define( [
 
 QUnit.module( "core - jQuery extensions", { afterEach: helper.moduleAfterEach }  );
 
-common.testJshint( "core" );
-
 QUnit.test( "innerWidth - getter", function( assert ) {
 	assert.expect( 2 );
 	var el = $( "#dimensions" );

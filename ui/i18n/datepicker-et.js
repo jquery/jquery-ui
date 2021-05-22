@@ -10,15 +10,15 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.et = {
 	closeText: "Sulge",
 	prevText: "Eelnev",
 	nextText: "Järgnev",
 	currentText: "Täna",
-	monthNames: [ "Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni",
-	"Juuli","August","September","Oktoober","November","Detsember" ],
+	monthNames: [ "Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni",
+	"Juuli", "August", "September", "Oktoober", "November", "Detsember" ],
 	monthNamesShort: [ "Jaan", "Veebr", "Märts", "Apr", "Mai", "Juuni",
 	"Juuli", "Aug", "Sept", "Okt", "Nov", "Dets" ],
 	dayNames: [
@@ -31,7 +31,7 @@ datepicker.regional.et = {
 		"Laupäev"
 	],
 	dayNamesShort: [ "Pühap", "Esmasp", "Teisip", "Kolmap", "Neljap", "Reede", "Laup" ],
-	dayNamesMin: [ "P","E","T","K","N","R","L" ],
+	dayNamesMin: [ "P", "E", "T", "K", "N", "R", "L" ],
 	weekHeader: "näd",
 	dateFormat: "dd.mm.yy",
 	firstDay: 1,
@@ -42,4 +42,4 @@ datepicker.setDefaults( datepicker.regional.et );
 
 return datepicker.regional.et;
 
-} ) );
+} );

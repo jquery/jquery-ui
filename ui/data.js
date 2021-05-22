@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 return $.extend( $.expr.pseudos, {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo( function( dataName ) {
@@ -36,4 +36,4 @@ return $.extend( $.expr.pseudos, {
 			return !!$.data( elem, match[ 3 ] );
 		}
 } );
-} ) );
+} );

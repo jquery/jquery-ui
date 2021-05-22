@@ -8,7 +8,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 // $.ui.plugin is deprecated. Use $.widget() extensions instead.
 return $.ui.plugin = {
@@ -41,4 +41,4 @@ return $.ui.plugin = {
 	}
 };
 
-} ) );
+} );

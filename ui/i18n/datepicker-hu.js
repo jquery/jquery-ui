@@ -9,7 +9,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.hu = {
 	closeText: "Bezár",
@@ -33,4 +33,4 @@ datepicker.setDefaults( datepicker.regional.hu );
 
 return datepicker.regional.hu;
 
-} ) );
+} );

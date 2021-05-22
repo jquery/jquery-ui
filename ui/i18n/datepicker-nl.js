@@ -10,7 +10,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.nl = {
 	closeText: "Sluiten",
@@ -34,4 +34,4 @@ datepicker.setDefaults( datepicker.regional.nl );
 
 return datepicker.regional.nl;
 
-} ) );
+} );

@@ -26,7 +26,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.ui.formResetMixin = {
 	_formResetHandler: function() {
@@ -74,4 +74,4 @@ return $.ui.formResetMixin = {
 	}
 };
 
-} ) );
+} );

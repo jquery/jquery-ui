@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "fold", "hide", function( options, done ) {
 
@@ -86,4 +86,4 @@ return $.effects.define( "fold", "hide", function( options, done ) {
 	$.effects.unshift( element, queuelen, 4 );
 } );
 
-} ) );
+} );

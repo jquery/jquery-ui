@@ -25,7 +25,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 ( function() {
 var cachedScrollbarWidth,
 	max = Math.max,
@@ -504,4 +504,4 @@ $.ui.position = {
 
 return $.ui.position;
 
-} ) );
+} );

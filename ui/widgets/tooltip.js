@@ -33,7 +33,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.tooltip", {
 	version: "@VERSION",
@@ -518,4 +518,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.tooltip;
 
-} ) );
+} );

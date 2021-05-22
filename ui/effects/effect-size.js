@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "size", function( options, done ) {
 
@@ -190,4 +190,4 @@ return $.effects.define( "size", function( options, done ) {
 
 } );
 
-} ) );
+} );

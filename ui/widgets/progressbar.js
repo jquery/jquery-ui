@@ -9,9 +9,9 @@
 
 //>>label: Progressbar
 //>>group: Widgets
-// jscs:disable maximumLineLength
+/* eslint-disable max-len */
 //>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
-// jscs:enable maximumLineLength
+/* eslint-enable max-len */
 //>>docs: http://api.jqueryui.com/progressbar/
 //>>demos: http://jqueryui.com/progressbar/
 //>>css.structure: ../../themes/base/core.css
@@ -32,7 +32,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.widget( "ui.progressbar", {
 	version: "@VERSION",
@@ -175,4 +175,4 @@ return $.widget( "ui.progressbar", {
 	}
 } );
 
-} ) );
+} );

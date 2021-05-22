@@ -10,7 +10,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.vi = {
 	closeText: "Đóng",
@@ -34,4 +34,4 @@ datepicker.setDefaults( datepicker.regional.vi );
 
 return datepicker.regional.vi;
 
-} ) );
+} );

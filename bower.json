@@ -15,7 +15,6 @@
 		"jquery-color": "2.2.0",
 		"jquery-mousewheel": "3.1.12",
 		"jquery-simulate": "1.1.1",
-		"jshint": "2.4.4",
 		"qunit": "1.18.0",
 		"qunit-assert-classes": "1.0.2",
 		"qunit-assert-close": "JamesMGreene/qunit-assert-close#v1.1.1",

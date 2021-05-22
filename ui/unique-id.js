@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 return $.fn.extend( {
 	uniqueId: ( function() {
@@ -46,4 +46,4 @@ return $.fn.extend( {
 	}
 } );
 
-} ) );
+} );

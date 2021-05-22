@@ -103,7 +103,7 @@ QUnit.test( "content: async callback loses focus before load", function( assert 
 } );
 
 QUnit.test( "content: change while open", function( assert ) {
-	assert.expect( 2 ) ;
+	assert.expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip( {
 		content: function() {
 			return "old";

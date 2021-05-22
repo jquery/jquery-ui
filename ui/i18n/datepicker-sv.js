@@ -10,20 +10,20 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.sv = {
 	closeText: "Stäng",
 	prevText: "&#xAB;Förra",
 	nextText: "Nästa&#xBB;",
 	currentText: "Idag",
-	monthNames: [ "januari","februari","mars","april","maj","juni",
-	"juli","augusti","september","oktober","november","december" ],
-	monthNamesShort: [ "jan.","feb.","mars","apr.","maj","juni",
-	"juli","aug.","sep.","okt.","nov.","dec." ],
-	dayNamesShort: [ "sön","mån","tis","ons","tor","fre","lör" ],
-	dayNames: [ "söndag","måndag","tisdag","onsdag","torsdag","fredag","lördag" ],
-	dayNamesMin: [ "sö","må","ti","on","to","fr","lö" ],
+	monthNames: [ "januari", "februari", "mars", "april", "maj", "juni",
+	"juli", "augusti", "september", "oktober", "november", "december" ],
+	monthNamesShort: [ "jan.", "feb.", "mars", "apr.", "maj", "juni",
+	"juli", "aug.", "sep.", "okt.", "nov.", "dec." ],
+	dayNamesShort: [ "sön", "mån", "tis", "ons", "tor", "fre", "lör" ],
+	dayNames: [ "söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag" ],
+	dayNamesMin: [ "sö", "må", "ti", "on", "to", "fr", "lö" ],
 	weekHeader: "Ve",
 	dateFormat: "yy-mm-dd",
 	firstDay: 1,
@@ -34,4 +34,4 @@ datepicker.setDefaults( datepicker.regional.sv );
 
 return datepicker.regional.sv;
 
-} ) );
+} );

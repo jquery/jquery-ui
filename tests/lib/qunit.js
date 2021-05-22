@@ -11,12 +11,6 @@ QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;
 
 QUnit.config.urlConfig.push( {
-	id: "nojshint",
-	label: "Skip JSHint",
-	tooltip: "Skip running JSHint, e.g., within TestSwarm, where Jenkins runs it already"
-} );
-
-QUnit.config.urlConfig.push( {
 	id: "jquery",
 	label: "jQuery version",
 	value: [

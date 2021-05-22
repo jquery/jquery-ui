@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 var effect;
 if ( $.uiBackCompat !== false ) {
@@ -37,4 +37,4 @@ if ( $.uiBackCompat !== false ) {
 }
 return effect;
 
-} ) );
+} );

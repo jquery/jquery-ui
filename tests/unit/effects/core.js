@@ -268,7 +268,7 @@ QUnit.test( "createPlaceholder: preserves layout affecting properties", function
 	assert.deepEqual( before.position.top - position, placeholder.position().top, "position top preserved" );
 	assert.deepEqual( before.position.left - position, placeholder.position().left, "position left preserved" );
 
-	assert.deepEqual( before[ "float" ], placeholder.css( "float" ), "float preserved" );
+	assert.deepEqual( before.float, placeholder.css( "float" ), "float preserved" );
 	assert.deepEqual( before.outerWidth, placeholder.outerWidth( true ), "width preserved" );
 	assert.deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
 } );
@@ -303,8 +303,6 @@ QUnit.test( "transfer() with callback", function( assert ) {
 
 $.each( $.effects.effect, function( effect ) {
 	QUnit.module( "effects." + effect );
-
-	common.testJshint( "effects/effect-" + effect );
 
 	if ( effect === "transfer" ) {
 		return;

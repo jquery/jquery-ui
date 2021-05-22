@@ -31,8 +31,6 @@ QUnit.module( "widget factory", {
 	}
 } );
 
-common.testJshint( "form-reset-mixin" );
-
 QUnit.test( "form reset", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 2 );

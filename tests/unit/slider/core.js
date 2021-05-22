@@ -68,7 +68,7 @@ QUnit.test( "keydown HOME on handle sets value to min", function( assert ) {
 	element.slider( "value", 0 );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-	assert.equal( element.slider( "value" ), options.min ) ;
+	assert.equal( element.slider( "value" ), options.min );
 
 	element.slider( "destroy" );
 } );
@@ -87,7 +87,7 @@ QUnit.test( "keydown END on handle sets value to max", function( assert ) {
 	element.slider( "value", 0 );
 
 	handle().simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-	assert.equal( element.slider( "value" ), options.max ) ;
+	assert.equal( element.slider( "value" ), options.max );
 
 	element.slider( "destroy" );
 

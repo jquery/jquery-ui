@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 // Selectors
 $.ui.focusable = function( element, hasTabindex ) {
@@ -81,4 +81,4 @@ $.extend( $.expr.pseudos, {
 
 return $.ui.focusable;
 
-} ) );
+} );

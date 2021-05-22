@@ -16,8 +16,6 @@ QUnit.module( "widget factory", {
 	}
 } );
 
-common.testJshint( "widget" );
-
 QUnit.test( "widget creation", function( assert ) {
 	assert.expect( 5 );
 	var method,
@@ -1443,7 +1441,7 @@ QUnit.test( "._trigger() - instance as element", function( assert ) {
 				.trigger( "remove" );
 		} );
 	} );
-}() );
+} )();
 
 QUnit.test( "redefine", function( assert ) {
 	assert.expect( 4 );

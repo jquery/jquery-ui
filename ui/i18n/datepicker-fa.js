@@ -11,7 +11,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.fa = {
 	closeText: "بستن",
@@ -32,7 +32,7 @@ datepicker.regional.fa = {
 		"نوامبر",
 		"دسامبر"
 	],
-	monthNamesShort: [ "1","2","3","4","5","6","7","8","9","10","11","12" ],
+	monthNamesShort: [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" ],
 	dayNames: [
 		"يکشنبه",
 		"دوشنبه",
@@ -70,4 +70,4 @@ datepicker.setDefaults( datepicker.regional.fa );
 
 return datepicker.regional.fa;
 
-} ) );
+} );

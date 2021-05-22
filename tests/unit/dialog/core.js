@@ -209,8 +209,7 @@ QUnit.test( "focus tabbable", function( assert ) {
 			function( done ) {
 				var inputs = element.find( "input"
 					);
-				assert.equal
-				( document.activeElement, inputs[ 1 ],  "Focus starts on second input" );
+				assert.equal( document.activeElement, inputs[ 1 ],  "Focus starts on second input" );
 				inputs.last().simulate( "keydown", { keyCode: $.ui.keyCode.TAB } );
 				setTimeout( function() {
 					assert.equal( document.activeElement, inputs[ 0 ],
@@ -275,7 +274,7 @@ QUnit.test( "#9048: multiple modal dialogs opened and closed in different order"
 	function( assert )  {
 	var ready = assert.async();
 	assert.expect( 1 );
-	$( "#dialog1, #dialog2" ).dialog( { autoOpen: false, modal:true } );
+	$( "#dialog1, #dialog2" ).dialog( { autoOpen: false, modal: true } );
 	$( "#dialog1" ).dialog( "open" );
 	$( "#dialog2" ).dialog( "open" );
 	$( "#dialog1" ).dialog( "close" );
@@ -311,9 +310,7 @@ QUnit.test( "interaction between overlay and other dialogs", function( assert ) 
 	// Wait for the modal to init
 	setTimeout( function() {
 
-		second.
-		testWidget
-		( "open" );
+		second.testWidget( "open" );
 
 		// Simulate user  tabbing  from address bar to an element outside the dialog
 		$( "#favorite-animal" ).trigger( "focus" );

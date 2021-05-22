@@ -10,7 +10,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.nn = {
 	closeText: "Lukk",
@@ -31,10 +31,10 @@ datepicker.regional.nn = {
 		"november",
 		"desember"
 	],
-	monthNamesShort: [ "jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des" ],
-	dayNamesShort: [ "sun","mån","tys","ons","tor","fre","lau" ],
-	dayNames: [ "sundag","måndag","tysdag","onsdag","torsdag","fredag","laurdag" ],
-	dayNamesMin: [ "su","må","ty","on","to","fr","la" ],
+	monthNamesShort: [ "jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des" ],
+	dayNamesShort: [ "sun", "mån", "tys", "ons", "tor", "fre", "lau" ],
+	dayNames: [ "sundag", "måndag", "tysdag", "onsdag", "torsdag", "fredag", "laurdag" ],
+	dayNamesMin: [ "su", "må", "ty", "on", "to", "fr", "la" ],
 	weekHeader: "Veke",
 	dateFormat: "dd.mm.yy",
 	firstDay: 1,
@@ -46,4 +46,4 @@ datepicker.setDefaults( datepicker.regional.nn );
 
 return datepicker.regional.nn;
 
-} ) );
+} );

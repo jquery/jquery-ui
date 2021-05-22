@@ -33,7 +33,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 function spinnerModifier( fn ) {
 	return function() {
@@ -576,4 +576,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.spinner;
 
-} ) );
+} );

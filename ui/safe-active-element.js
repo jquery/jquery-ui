@@ -8,7 +8,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 return $.ui.safeActiveElement = function( document ) {
 	var activeElement;
 
@@ -37,4 +37,4 @@ return $.ui.safeActiveElement = function( document ) {
 	return activeElement;
 };
 
-} ) );
+} );

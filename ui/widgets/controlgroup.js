@@ -29,7 +29,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 var controlgroupCornerRegex = /ui-corner-([a-z]){2,6}/g;
 
 return $.widget( "ui.controlgroup", {
@@ -295,4 +295,4 @@ return $.widget( "ui.controlgroup", {
 		}
 	}
 } );
-} ) );
+} );

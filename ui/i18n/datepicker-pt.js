@@ -9,17 +9,17 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.pt = {
 	closeText: "Fechar",
 	prevText: "Anterior",
 	nextText: "Seguinte",
 	currentText: "Hoje",
-	monthNames: [ "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-	"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro" ],
-	monthNamesShort: [ "Jan","Fev","Mar","Abr","Mai","Jun",
-	"Jul","Ago","Set","Out","Nov","Dez" ],
+	monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+	"Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
+	monthNamesShort: [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+	"Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
 	dayNames: [
 		"Domingo",
 		"Segunda-feira",
@@ -29,8 +29,8 @@ datepicker.regional.pt = {
 		"Sexta-feira",
 		"Sábado"
 	],
-	dayNamesShort: [ "Dom","Seg","Ter","Qua","Qui","Sex","Sáb" ],
-	dayNamesMin: [ "Dom","Seg","Ter","Qua","Qui","Sex","Sáb" ],
+	dayNamesShort: [ "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb" ],
+	dayNamesMin: [ "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb" ],
 	weekHeader: "Sem",
 	dateFormat: "dd/mm/yy",
 	firstDay: 1,
@@ -41,4 +41,4 @@ datepicker.setDefaults( datepicker.regional.pt );
 
 return datepicker.regional.pt;
 
-} ) );
+} );

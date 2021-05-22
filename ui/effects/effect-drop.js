@@ -27,7 +27,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.effects.define( "drop", "hide", function( options, done ) {
 
@@ -66,4 +66,4 @@ return $.effects.define( "drop", "hide", function( options, done ) {
 	} );
 } );
 
-} ) );
+} );

@@ -33,7 +33,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.tabs", {
 	version: "@VERSION",
@@ -919,4 +919,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.tabs;
 
-} ) );
+} );

@@ -10,7 +10,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.rm = {
 	closeText: "Serrar",
@@ -45,9 +45,9 @@ datepicker.regional.rm = {
 		"Nov",
 		"Dec"
 	],
-	dayNames: [ "Dumengia","Glindesdi","Mardi","Mesemna","Gievgia","Venderdi","Sonda" ],
-	dayNamesShort: [ "Dum","Gli","Mar","Mes","Gie","Ven","Som" ],
-	dayNamesMin: [ "Du","Gl","Ma","Me","Gi","Ve","So" ],
+	dayNames: [ "Dumengia", "Glindesdi", "Mardi", "Mesemna", "Gievgia", "Venderdi", "Sonda" ],
+	dayNamesShort: [ "Dum", "Gli", "Mar", "Mes", "Gie", "Ven", "Som" ],
+	dayNamesMin: [ "Du", "Gl", "Ma", "Me", "Gi", "Ve", "So" ],
 	weekHeader: "emna",
 	dateFormat: "dd/mm/yy",
 	firstDay: 1,
@@ -58,4 +58,4 @@ datepicker.setDefaults( datepicker.regional.rm );
 
 return datepicker.regional.rm;
 
-} ) );
+} );

@@ -32,7 +32,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 return $.widget( "ui.sortable", $.ui.mouse, {
 	version: "@VERSION",
@@ -695,8 +695,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		horizontalDirection = this.dragDirection.horizontal;
 
 		return this.floating ?
-			( ( horizontalDirection === "right" || verticalDirection === "down" ) ? 2 : 1 )
-			: ( verticalDirection && ( verticalDirection === "down" ? 2 : 1 ) );
+			( ( horizontalDirection === "right" || verticalDirection === "down" ) ? 2 : 1 ) :
+			( verticalDirection && ( verticalDirection === "down" ? 2 : 1 ) );
 
 	},
 
@@ -1603,4 +1603,4 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 } );
 
-} ) );
+} );

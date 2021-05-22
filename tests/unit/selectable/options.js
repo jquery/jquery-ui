@@ -13,7 +13,9 @@ QUnit.test( "autoRefresh", function( assert ) {
 	var actual = 0,
 		el = $( "#selectable1" ),
 		sel = $( "*", el ),
-		selected = function() { actual += 1; };
+		selected = function() {
+			actual += 1;
+		};
 
 	el = $( "#selectable1" ).selectable( { autoRefresh: false,	selected: selected } );
 	sel.hide();
@@ -51,7 +53,9 @@ QUnit.test( "filter", function( assert ) {
 	var actual = 0,
 		el = $( "#selectable1" ),
 		sel = $( "*", el ),
-		selected = function() { actual += 1; };
+		selected = function() {
+			actual += 1;
+		};
 
 	el = $( "#selectable1" ).selectable( { filter: ".special", selected: selected } );
 	el.simulate( "drag", {

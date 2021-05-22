@@ -34,7 +34,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
 
 $.widget( "ui.draggable", $.ui.mouse, {
 	version: "@VERSION",
@@ -1216,7 +1216,9 @@ $.ui.plugin.add( "draggable", "stack", {
 					( parseInt( $( b ).css( "zIndex" ), 10 ) || 0 );
 			} );
 
-		if ( !group.length ) { return; }
+		if ( !group.length ) {
+			return;
+		}
 
 		min = parseInt( $( group[ 0 ] ).css( "zIndex" ), 10 ) || 0;
 		$( group ).each( function( i ) {
@@ -1247,4 +1249,4 @@ $.ui.plugin.add( "draggable", "zIndex", {
 
 return $.ui.draggable;
 
-} ) );
+} );

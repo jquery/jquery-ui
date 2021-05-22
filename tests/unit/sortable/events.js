@@ -183,7 +183,9 @@ QUnit.test( "#4752: link event firing on sortable with connect list", function( 
 	assert.expect( 10 );
 
 	var fired = {},
-		hasFired = function( type ) { return ( type in fired ) && ( true === fired[ type ] ); };
+		hasFired = function( type ) {
+			return ( type in fired ) && ( true === fired[ type ] );
+		};
 
 	$( "#sortable" ).clone().attr( "id", "sortable2" ).insertAfter( "#sortable" );
 

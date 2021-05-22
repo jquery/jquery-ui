@@ -13,7 +13,7 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
 
 datepicker.regional.ar = {
 	closeText: "إغلاق",
@@ -36,4 +36,4 @@ datepicker.setDefaults( datepicker.regional.ar );
 
 return datepicker.regional.ar;
 
-} ) );
+} );

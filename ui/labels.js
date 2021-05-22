@@ -22,7 +22,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 return $.fn.labels = function() {
 	var ancestor, selector, id, labels, ancestors;
@@ -63,4 +63,4 @@ return $.fn.labels = function() {
 	return this.pushStack( labels );
 };
 
-} ) );
+} );

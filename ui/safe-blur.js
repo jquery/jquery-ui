@@ -8,7 +8,7 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 return $.ui.safeBlur = function( element ) {
 
 	// Support: IE9 - 10 only
@@ -18,4 +18,4 @@ return $.ui.safeBlur = function( element ) {
 	}
 };
 
-} ) );
+} );

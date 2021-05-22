@@ -8,10 +8,10 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
 
 $.ui = $.ui || {};
 
 return $.ui.version = "@VERSION";
 
-} ) );
+} );
