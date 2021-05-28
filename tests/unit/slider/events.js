@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/slider"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "slider: events" );
+QUnit.module( "slider: events", { afterEach: helper.moduleAfterEach }  );
 
 //Specs from http://wiki.jqueryui.com/Slider#specs
 //"change callback: triggers when the slider has stopped moving and has a new

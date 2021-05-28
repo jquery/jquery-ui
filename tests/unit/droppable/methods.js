@@ -1,11 +1,12 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/droppable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "droppable: methods" );
+QUnit.module( "droppable: methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "init", function( assert ) {
 	assert.expect( 5 );

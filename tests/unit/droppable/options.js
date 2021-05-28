@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/droppable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "droppable: options" );
+QUnit.module( "droppable: options", { afterEach: helper.moduleAfterEach }  );
 
 /*
 Test( "{ accept '*' }, default ", function() {

@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/draggable",
 	"ui/widgets/droppable",
 	"ui/widgets/sortable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "draggable: options" );
+QUnit.module( "draggable: options", { afterEach: helper.moduleAfterEach }  );
 
 // TODO: This doesn't actually test whether append happened, possibly remove
 QUnit.test( "{ appendTo: 'parent' }, default, no clone", function( assert ) {
@@ -252,9 +253,9 @@ QUnit.test( "cancelement, default, switching after initialization", function( as
 } );
 
 QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) {
-	assert.expect( 4 );
+	assert.expect( 5 );
 
-	var sortItem, dragHelper,
+	var sortItem, dragHelper, result,
 		element = $( "#draggableSortable" ).draggable( {
 			scroll: false,
 			connectToSortable: "#sortable"
@@ -280,7 +281,12 @@ QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) 
 
 		// http://bugs.jqueryui.com/ticket/8809
 		// Position issue when connected to sortable
-		assert.deepEqual( ui.helper.offset(), offsetExpected, "draggable offset is correct" );
+		result = ui.helper.offset();
+
+		// Support: Chrome <=45 - 73+
+		// In recent Chrome these values differ a little.
+		assert.ok( Math.abs( result.top - offsetExpected.top ) < 0.25, "draggable offset is within 0.25 of expected" );
+		assert.ok( Math.abs( result.left - offsetExpected.left ) < 0.25, "draggable offset is within 0.25 of expected" );
 
 		// Http://bugs.jqueryui.com/ticket/7734
 		// HTML IDs are removed when dragging to a Sortable
@@ -296,6 +302,9 @@ QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) 
 		dx: dx,
 		dy: dy
 	} );
+
+	// Cleanup
+	element.stop( true );
 } );
 
 QUnit.test( "connectToSortable, dragging clone into sortable", function( assert ) {
@@ -1460,7 +1469,7 @@ QUnit.test( "zIndex, default, switching after initialization", function( assert 
 } );
 
 QUnit.test( "iframeFix", function( assert ) {
-	assert.expect( 5 );
+	assert.expect( 6 );
 
 	var element = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable( { iframeFix: true } ),
 		element2 = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable( { iframeFix: ".iframe" } ),
@@ -1476,14 +1485,22 @@ QUnit.test( "iframeFix", function( assert ) {
 	} );
 
 	element.one( "drag", function() {
-		var div = $( this ).children().not( "iframe" );
+		var divOffset, iframeOffset,
+			div = $( this ).children().not( "iframe" );
 
 		// http://bugs.jqueryui.com/ticket/9671
 		// iframeFix doesn't handle iframes that move
 		assert.equal( div.length, 1, "blocking div added as sibling" );
 		assert.equal( div.outerWidth(), iframe.outerWidth(), "blocking div is wide enough" );
 		assert.equal( div.outerHeight(), iframe.outerHeight(), "blocking div is tall enough" );
-		assert.deepEqual( div.offset(), iframe.offset(), "blocking div is tall enough" );
+
+		divOffset = div.offset();
+		iframeOffset = iframe.offset();
+
+		// Support: Edge <79 only
+		// In Edge Legacy these values differ a little.
+		assert.ok( Math.abs( divOffset.top - iframeOffset.top ) < 0.25, "Check top within 0.25 of expected" );
+		assert.ok( Math.abs( divOffset.left - iframeOffset.left ) < 0.25, "Check left within 0.25 of expected" );
 	} );
 
 	element.simulate( "drag", {

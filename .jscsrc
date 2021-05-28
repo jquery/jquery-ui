@@ -8,5 +8,11 @@
 	"es3": true,
 
 	// We want to output all errors
-	"maxErrors": 1000000
+	"maxErrors": 1000000,
+
+	"excludeFiles": [
+		"dist/**/*",
+		"external/**/*",
+		"ui/vendor/**/*"
+	]
 }

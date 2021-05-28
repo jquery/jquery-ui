@@ -1,7 +1,8 @@
 define( [
 	"qunit",
-	"jquery" ],
-function( QUnit, $ ) {
+	"jquery",
+	"lib/helper"
+], function( QUnit, $, helper ) {
 
 var exports = {};
 
@@ -13,8 +14,8 @@ function testWidgetDefaults( widget, defaults ) {
 		var count = 0;
 		$.each( defaults, function( key, val ) {
 			assert.expect( ++count );
-			if ( $.isFunction( val ) ) {
-				assert.ok( $.isFunction( pluginDefaults[ key ] ), key );
+			if ( typeof val === "function" ) {
+				assert.ok( typeof pluginDefaults[ key ] === "function", key );
 				return;
 			}
 			assert.deepEqual( pluginDefaults[ key ], val, key );
@@ -66,7 +67,7 @@ function testBasicUsage( widget ) {
 }
 
 exports.testWidget = function( widget, settings ) {
-	QUnit.module( widget + ": common widget" );
+	QUnit.module( widget + ": common widget", { afterEach: helper.moduleAfterEach } );
 
 	exports.testJshint( "/widgets/" + widget );
 	testWidgetDefaults( widget, settings.defaults );

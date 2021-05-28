@@ -5,10 +5,10 @@ define( [
 	"ui/widgets/accordion"
 ], function( QUnit, $, testHelper ) {
 
-var setupTeardown = testHelper.setupTeardown,
+var beforeAfterEach = testHelper.beforeAfterEach,
 	state = testHelper.state;
 
-QUnit.module( "accordion: core", setupTeardown() );
+QUnit.module( "accordion: core", beforeAfterEach() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
 	QUnit.test( "markup structure: " + type, function( assert ) {
@@ -39,7 +39,7 @@ $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( typ
 QUnit.test( "handle click on header-descendant", function( assert ) {
 	assert.expect( 1 );
 	var element = $( "#navigation" ).accordion();
-	$( "#navigation h2:eq(1) a" ).trigger( "click" );
+	$( "#navigation h2" ).eq( 1 ).find( "a" ).trigger( "click" );
 	state( assert, element, 0, 1, 0 );
 } );
 
@@ -135,7 +135,7 @@ QUnit.test( "keyboard support", function( assert ) {
 		setTimeout( step2 );
 	}
 
-	// Support: IE 11 with jQuery 1.7 - 1.8 only
+	// Support: IE 11 with jQuery 1.8 only
 	// All of the setTimeouts() from keydowns aren't necessary with newer jQuery.
 	// Only the explicit focus simulations require them.
 	function step2() {

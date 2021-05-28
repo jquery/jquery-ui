@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/slider"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 var element, options;
 
@@ -10,7 +11,7 @@ function handle() {
 	return element.find( ".ui-slider-handle" );
 }
 
-QUnit.module( "slider: options" );
+QUnit.module( "slider: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "disabled", function( assert ) {
 	assert.expect( 8 );

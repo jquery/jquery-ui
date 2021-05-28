@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/effects/effect-scale"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "effect.scale: Scale" );
+QUnit.module( "effect.scale: Scale", { afterEach: helper.moduleAfterEach }  );
 
 function run( position, v, h, vo, ho ) {
 	var desc = "End Position Correct: " + position + " (" + v + "," + h + ") - origin: (" + vo + "," + ho + ")";

@@ -9,7 +9,7 @@ define( [
 	"./ie",
 	"./keycode",
 	"./labels",
-	"./jquery-1-7",
+	"./jquery-patch.js",
 	"./plugin",
 	"./safe-active-element",
 	"./safe-blur",

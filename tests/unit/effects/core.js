@@ -2,6 +2,7 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/effect",
 	"ui/effects/effect-blind",
 	"ui/effects/effect-bounce",
@@ -18,7 +19,7 @@ define( [
 	"ui/effects/effect-size",
 	"ui/effects/effect-slide",
 	"ui/effects/effect-transfer"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
 QUnit.assert.present = function( value, array, message ) {
 	this.push( jQuery.inArray( value, array ) !== -1, value, array, message );
@@ -34,7 +35,7 @@ var minDuration = 60,
 	// Duration is used for "long" animates where we plan on testing properties during animation
 	duration = 200;
 
-QUnit.module( "effects.core" );
+QUnit.module( "effects.core", { afterEach: helper.moduleAfterEach }  );
 
 // TODO: test all signatures of .show(), .hide(), .toggle().
 // Look at core's signatures and UI's signatures.
@@ -97,7 +98,7 @@ QUnit.test( "removeClass", function( assert ) {
 	assert.equal( "", element[ 0 ].className );
 } );
 
-QUnit.module( "effects.core: animateClass" );
+QUnit.module( "effects.core: animateClass", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "animateClass works with borderStyle", function( assert ) {
 	var ready = assert.async();
@@ -145,12 +146,9 @@ QUnit.test( "animateClass works with colors", function( assert ) {
 
 QUnit.test( "animateClass calls step option", function( assert ) {
 	assert.expect( 1 );
-	var ready = assert.async();
 	var test = jQuery( "div.animateClass" ),
 		step = function() {
 			assert.ok( true, "Step Function Called" );
-			test.stop();
-			ready();
 			step = $.noop;
 		};
 	test.toggleClass( "testChangeBackground", {
@@ -158,6 +156,8 @@ QUnit.test( "animateClass calls step option", function( assert ) {
 			step();
 		}
 	} );
+
+	test.stop( true, true );
 } );
 
 QUnit.test( "animateClass works with children", function( assert ) {
@@ -210,7 +210,7 @@ QUnit.test( "animateClass clears style properties when stopped", function( asser
 		.stop( true, true )
 		.promise()
 		.then( function() {
-			assert.equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
+			assert.equal( orig, String.prototype.trim.call( style.cssText ), "cssText is the same after stopping animation midway" );
 			ready();
 		} );
 } );
@@ -273,7 +273,7 @@ QUnit.test( "createPlaceholder: preserves layout affecting properties", function
 	assert.deepEqual( before.outerHeight, placeholder.outerHeight( true ), "height preserved" );
 } );
 
-QUnit.module( "transfer" );
+QUnit.module( "transfer", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "transfer() without callback", function( assert ) {
 	var ready = assert.async();
@@ -378,8 +378,10 @@ $.each( $.effects.effect, function( effect ) {
 			assert.equal( test[ 0 ].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
 			ready();
 		} );
-		assert.equal( test.width(), width, "Width is the same px after animation started" );
-		assert.equal( test.height(), height, "Height is the same px after animation started" );
+		assert.ok( Math.abs( test.width() - width ) / width < 0.05,
+			"Width is close to the value when animation started" );
+		assert.ok( Math.abs( test.height() - height ) / height < 0.05,
+			"Height is close to the value when animation started" );
 	} );
 } );
 

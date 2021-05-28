@@ -9,7 +9,9 @@ define( [
 	"ui/ie"
 ], function( QUnit, $, testHelper ) {
 
-QUnit.module( "datepicker: options" );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "datepicker: options", beforeAfterEach()  );
 
 QUnit.test( "setDefaults", function( assert ) {
 	assert.expect( 3 );
@@ -247,15 +249,15 @@ QUnit.test( "otherMonths", function( assert ) {
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
-	assert.ok( pop.find( "td:last *" ).length === 0, "Other months - no content" );
+	assert.ok( pop.find( "td" ).last().find( "*" ).length === 0, "Other months - no content" );
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", true ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(), "311234567891011121314151617181920212223242526272829301234",
 		"Other months - show" );
-	assert.ok( pop.find( "td:last span" ).length === 1, "Other months - span content" );
+	assert.ok( pop.find( "td" ).last().find( "span" ).length === 1, "Other months - span content" );
 	inp.datepicker( "hide" ).datepicker( "option", "selectOtherMonths", true ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(), "311234567891011121314151617181920212223242526272829301234",
 		"Other months - select" );
-	assert.ok( pop.find( "td:last a" ).length === 1, "Other months - link content" );
+	assert.ok( pop.find( "td" ).last().find( "a" ).length === 1, "Other months - link content" );
 	inp.datepicker( "hide" ).datepicker( "option", "showOtherMonths", false ).datepicker( "show" );
 	assert.equal( pop.find( "tbody" ).text(),
 
@@ -263,7 +265,7 @@ QUnit.test( "otherMonths", function( assert ) {
 		// In IE7/8 with jQuery <1.8, encoded spaces behave in strange ways
 		$( "<span>\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0</span>" ).text(),
 		"Other months - none" );
-	assert.ok( pop.find( "td:last *" ).length === 0, "Other months - no content" );
+	assert.ok( pop.find( "td" ).last().find( "*" ).length === 0, "Other months - no content" );
 } );
 
 QUnit.test( "defaultDate", function( assert ) {
@@ -621,8 +623,10 @@ QUnit.test( "setDate", function( assert ) {
 } );
 
 QUnit.test( "altField", function( assert ) {
-	assert.expect( 10 );
-	var inp = testHelper.init( "#inp" ),
+	assert.expect( 11 );
+
+	var done = assert.async(),
+		inp = testHelper.init( "#inp" ),
 		alt = $( "#alt" );
 
 	// No alternate field set
@@ -662,6 +666,22 @@ QUnit.test( "altField", function( assert ) {
 	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.END } );
 	assert.equal( inp.val(), "", "Alt field - dp - ctrl+end" );
 	assert.equal( alt.val(), "", "Alt field - alt - ctrl+end" );
+
+	// HTML instead of selector
+	alt.val( "" );
+	try {
+		inp.datepicker( "option", {
+			altField: "<img onerror='window.globalAltField=true' src='/404' />",
+			altFormat: "yy-mm-dd"
+		} ).val( "06/04/2008" ).datepicker( "show" );
+		inp.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	} catch ( e ) {}
+
+	setTimeout( function() {
+		assert.equal( window.globalAltField, undefined, "altField treated as a selector" );
+		delete window.globalAltField;
+		done();
+	}, 500 );
 } );
 
 QUnit.test( "autoSize", function( assert ) {
@@ -710,82 +730,82 @@ QUnit.test( "daylightSaving", function( assert ) {
 
 	// Australia, Sydney - AM change, southern hemisphere
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 6 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "04/05/2008", "Daylight saving - Australia 04/05/2008" );
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 7 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "04/06/2008", "Daylight saving - Australia 04/06/2008" );
 	inp.val( "04/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 8 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "04/07/2008", "Daylight saving - Australia 04/07/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 6 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/04/2008", "Daylight saving - Australia 10/04/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 7 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/05/2008", "Daylight saving - Australia 10/05/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 8 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/06/2008", "Daylight saving - Australia 10/06/2008" );
 
 	// Brasil, Brasilia - midnight change, southern hemisphere
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(20) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 20 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "02/16/2008", "Daylight saving - Brasil 02/16/2008" );
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(21) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 21 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "02/17/2008", "Daylight saving - Brasil 02/17/2008" );
 	inp.val( "02/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(22) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 22 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "02/18/2008", "Daylight saving - Brasil 02/18/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(13) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 13 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/11/2008", "Daylight saving - Brasil 10/11/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(14) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 14 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/12/2008", "Daylight saving - Brasil 10/12/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(15) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 15 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/13/2008", "Daylight saving - Brasil 10/13/2008" );
 
 	// Lebanon, Beirut - midnight change, northern hemisphere
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(34) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 34 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/29/2008", "Daylight saving - Lebanon 03/29/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(35) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 35 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/30/2008", "Daylight saving - Lebanon 03/30/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(36) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 36 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/31/2008", "Daylight saving - Lebanon 03/31/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(27) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 27 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/25/2008", "Daylight saving - Lebanon 10/25/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(28) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 28 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/26/2008", "Daylight saving - Lebanon 10/26/2008" );
 	inp.val( "10/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(29) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 29 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "10/27/2008", "Daylight saving - Lebanon 10/27/2008" );
 
 	// US, Eastern - AM change, northern hemisphere
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(13) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 13 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/08/2008", "Daylight saving - US 03/08/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(14) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 14 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/09/2008", "Daylight saving - US 03/09/2008" );
 	inp.val( "03/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(15) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 15 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "03/10/2008", "Daylight saving - US 03/10/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(6) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 6 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "11/01/2008", "Daylight saving - US 11/01/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(7) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 7 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "11/02/2008", "Daylight saving - US 11/02/2008" );
 	inp.val( "11/01/2008" ).datepicker( "show" );
-	$( ".ui-datepicker-calendar td:eq(8) a", dp ).simulate( "click" );
+	$( ".ui-datepicker-calendar td", dp ).eq( 8 ).find( "a" ).simulate( "click" );
 	assert.equal( inp.val(), "11/03/2008", "Daylight saving - US 11/03/2008" );
 } );
 
@@ -793,7 +813,9 @@ var beforeShowThis = null,
 	beforeShowInput = null,
 	beforeShowInst = null,
 	beforeShowDayThis = null,
-	beforeShowDayOK = true;
+	beforeShowDayOK = true,
+	onUpdateDatepickerThis = null,
+	onUpdateDatepickerInst = null;
 
 function beforeAll( input, inst ) {
 	beforeShowThis = this;
@@ -810,8 +832,14 @@ function beforeDay( date ) {
 		( date.getDate() % 3 === 0 ? "Divisble by 3" : "" ) ];
 }
 
+function onUpdateDatepicker( inst ) {
+	onUpdateDatepickerThis = this;
+	onUpdateDatepickerInst = inst;
+	inst.dpDiv.append( $( "<div>" ).addClass( "on-update-datepicker-test" ) );
+}
+
 QUnit.test( "callbacks", function( assert ) {
-	assert.expect( 13 );
+	assert.expect( 18 );
 
 	// Before show
 	var dp, day20, day21,
@@ -839,6 +867,19 @@ QUnit.test( "callbacks", function( assert ) {
 	assert.ok( !day21.is( ".day10" ), "Before show day - CSS 21" );
 	assert.ok( !day20.attr( "title" ), "Before show day - title 20" );
 	assert.ok( day21.attr( "title" ) === "Divisble by 3", "Before show day - title 21" );
+	inp.datepicker( "hide" ).datepicker( "destroy" );
+
+	inp = testHelper.init( "#inp", { onUpdateDatepicker: onUpdateDatepicker } );
+	inst = $.data( inp[ 0 ], "datepicker" );
+	dp = $( "#ui-datepicker-div" );
+	inp.val( "02/04/2008" ).datepicker( "show" );
+	assert.ok( onUpdateDatepickerThis.id === inp[ 0 ].id, "On update datepicker - this OK" );
+	assert.deepEqual( onUpdateDatepickerInst, inst, "On update datepicker - inst OK" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length === 1, "On update datepicker - custom element" );
+	inp.datepicker( "setDate", "02/05/2008" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length === 1, "On update datepicker - custom element after setDate" );
+	inp.datepicker( "refresh" );
+	assert.ok( dp.find( "div.on-update-datepicker-test" ).length === 1, "On update datepicker - custom element after refresh" );
 	inp.datepicker( "hide" ).datepicker( "destroy" );
 } );
 
@@ -1149,6 +1190,57 @@ QUnit.test( "Ticket 7602: Stop datepicker from appearing with beforeShow event h
 	inp.datepicker( "show" );
 	assert.equal( dp.css( "display" ), "none", "beforeShow returns false" );
 	inp.datepicker( "destroy" );
+} );
+
+QUnit.test( "Ticket #15284: escaping text parameters", function( assert ) {
+	assert.expect( 7 );
+
+	var done = assert.async();
+
+	var qf = $( "#qunit-fixture" );
+
+	window.uiGlobalXss = [];
+
+	var inp = testHelper.init( "#inp", {
+		showButtonPanel: true,
+		showOn: "both",
+		prevText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'prevText XSS' ] )</script>",
+		nextText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'nextText XSS' ] )</script>",
+		currentText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'currentText XSS' ] )</script>",
+		closeText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'closeText XSS' ] )</script>",
+		buttonText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'buttonText XSS' ] )</script>",
+		appendText: "<script>uiGlobalXss = uiGlobalXss.concat( [ 'appendText XSS' ] )</script>"
+	} );
+
+	var dp = $( "#ui-datepicker-div" );
+
+	testHelper.onFocus( inp, function() {
+		assert.equal( dp.find( ".ui-datepicker-prev" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'prevText XSS' ] )</script>",
+			"prevText escaped" );
+		assert.equal( dp.find( ".ui-datepicker-next" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'nextText XSS' ] )</script>",
+			"nextText escaped" );
+		assert.equal( dp.find( ".ui-datepicker-current" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'currentText XSS' ] )</script>",
+			"currentText escaped" );
+		assert.equal( dp.find( ".ui-datepicker-close" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'closeText XSS' ] )</script>",
+			"closeText escaped" );
+
+		assert.equal( qf.find( ".ui-datepicker-trigger" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'buttonText XSS' ] )</script>",
+			"buttonText escaped" );
+		assert.equal( qf.find( ".ui-datepicker-append" ).text().trim(),
+			"<script>uiGlobalXss = uiGlobalXss.concat( [ 'appendText XSS' ] )</script>",
+			"appendText escaped" );
+
+		assert.deepEqual( window.uiGlobalXss, [], "No XSS" );
+
+		delete window.uiGlobalXss;
+		inp.datepicker( "hide" ).datepicker( "destroy" );
+		done();
+	} );
 } );
 
 } );

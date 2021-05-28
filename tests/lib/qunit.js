@@ -20,7 +20,6 @@ QUnit.config.urlConfig.push( {
 	id: "jquery",
 	label: "jQuery version",
 	value: [
-		"1.7.0", "1.7.1", "1.7.2",
 		"1.8.0", "1.8.1", "1.8.2", "1.8.3",
 		"1.9.0", "1.9.1",
 		"1.10.0", "1.10.1", "1.10.2",
@@ -31,7 +30,12 @@ QUnit.config.urlConfig.push( {
 		"2.2.0", "2.2.1", "2.2.2", "2.2.3", "2.2.4",
 		"3.0.0",
 		"3.1.0", "3.1.1",
-		"git", "custom"
+		"3.2.0", "3.2.1",
+		"3.3.0", "3.3.1",
+		"3.4.0", "3.4.1",
+		"3.5.0", "3.5.1",
+		"3.6.0",
+		"3.x-git", "git", "custom"
 	],
 	tooltip: "Which jQuery Core version to test against"
 } );

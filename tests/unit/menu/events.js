@@ -1,9 +1,10 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/menu"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
 var log = testHelper.log,
 	logOutput = testHelper.logOutput,
@@ -12,7 +13,8 @@ var log = testHelper.log,
 QUnit.module( "menu: events", {
 	beforeEach: function() {
 		testHelper.clearLog();
-	}
+	},
+	afterEach: helper.moduleAfterEach
 } );
 
 QUnit.test( "handle click on menu", function( assert ) {
@@ -176,12 +178,12 @@ QUnit.test( "handle submenu auto collapse: mouseleave, default markup", function
 
 	function menumouseleave1() {
 		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		element.menu( "focus", event, element.find( "li:nth-child(7) li:first" ) );
+		element.menu( "focus", event, element.find( "li:nth-child(7) li" ).first() );
 		setTimeout( menumouseleave2, 25 );
 	}
 	function menumouseleave2() {
 		assert.equal( element.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-		element.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		element.find( "ul[aria-expanded='true']" ).first().trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
@@ -213,7 +215,7 @@ QUnit.test( "handle submenu auto collapse: mouseleave, custom markup", function(
 	}
 	function menumouseleave2() {
 		assert.equal( element.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-		element.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		element.find( "div[aria-expanded='true']" ).first().trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 25 );
 	}
 	function menumouseleave3() {
@@ -306,7 +308,7 @@ QUnit.test( "handle keyboard navigation on menu without scroll and with submenus
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active:last" ).parent().index() );
+			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).last().parent().index() );
 		}
 	} );
 
@@ -427,7 +429,7 @@ QUnit.test( "handle keyboard navigation on menu with scroll and without submenus
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active:last" ).parent().index() );
+			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).last().parent().index() );
 		}
 	} );
 
@@ -503,7 +505,7 @@ QUnit.test( "handle keyboard navigation on menu with scroll and with submenus", 
 			log( $( ui.item[ 0 ] ).text() );
 		},
 		focus: function( event ) {
-			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active:last" ).parent().index() );
+			log( $( event.target ).find( ".ui-menu-item-wrapper.ui-state-active" ).last().parent().index() );
 		}
 	} );
 

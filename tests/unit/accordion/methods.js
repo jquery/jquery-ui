@@ -6,10 +6,10 @@ define( [
 ], function( QUnit, $, testHelper ) {
 
 var equalHeight = testHelper.equalHeight,
-	setupTeardown = testHelper.setupTeardown,
+	beforeAfterEach = testHelper.beforeAfterEach,
 	state = testHelper.state;
 
-QUnit.module( "accordion: methods", setupTeardown() );
+QUnit.module( "accordion: methods", beforeAfterEach() );
 
 QUnit.test( "destroy", function( assert ) {
 	assert.expect( 1 );

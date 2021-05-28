@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/checkboxradio"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Checkboxradio: events" );
+QUnit.module( "Checkboxradio: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test(
 	"Resetting a checkbox's form should refresh the visual state of the checkbox",
@@ -35,7 +36,7 @@ QUnit.test( "Checkbox shows focus when using keyboard navigation", function( ass
 	var check = $( "#check" ).checkboxradio(),
 		label = $( "label[for='check']" );
 	assert.lacksClasses( label, "ui-state-focus" );
-	check.focus();
+	check.trigger( "focus" );
 	setTimeout( function() {
 		assert.hasClasses( label, "ui-state-focus" );
 		ready();

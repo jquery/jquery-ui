@@ -2,8 +2,9 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/common",
+	"lib/helper",
 	"ui/position"
-], function( QUnit, $, common ) {
+], function( QUnit, $, common, helper ) {
 
 var win = $( window ),
 	scrollTopSupport = function() {
@@ -18,7 +19,8 @@ var win = $( window ),
 QUnit.module( "position", {
 	beforeEach: function() {
 		win.scrollTop( 0 ).scrollLeft( 0 );
-	}
+	},
+	afterEach: helper.moduleAfterEach
 } );
 
 common.testJshint( "position" );
@@ -111,7 +113,9 @@ QUnit.test( "positions", function( assert ) {
 } );
 
 QUnit.test( "of", function( assert ) {
-	assert.expect( 9 + ( scrollTopSupport() ? 1 : 0 ) );
+	assert.expect( 10 + ( scrollTopSupport() ? 1 : 0 ) );
+
+	var done = assert.async();
 
 	var event;
 
@@ -223,6 +227,21 @@ QUnit.test( "of", function( assert ) {
 		top: 600,
 		left: 400
 	}, "event - left top, right bottom" );
+
+	try {
+		$( "#elx" ).position( {
+			my: "left top",
+			at: "right bottom",
+			of: "<img onerror='window.globalOf=true' src='/404' />",
+			collision: "none"
+		} );
+	} catch ( e ) {}
+
+	setTimeout( function() {
+		assert.equal( window.globalOf, undefined, "of treated as a selector" );
+		delete window.globalOf;
+		done();
+	}, 500 );
 } );
 
 QUnit.test( "offsets", function( assert ) {
@@ -332,6 +351,7 @@ QUnit.test( "using", function( assert ) {
 			assert.deepEqual( position, expectedPosition, "correct position for call #" + count );
 			assert.deepEqual( feedback.element.element[ 0 ], elems[ count ] );
 			delete feedback.element.element;
+			delete feedback.target.element.prevObject;
 			assert.deepEqual( feedback, expectedFeedback );
 			count++;
 		}
@@ -638,7 +658,13 @@ QUnit.test( "within", function( assert ) {
 	}, "flipfit - left top" );
 } );
 
-QUnit.test( "with scrollbars", function( assert ) {
+// jQuery 3.2 incorrectly handle scrollbars in WebKit/Blink-based browsers.
+// This is fixed in version 3.3, see https://github.com/jquery/jquery/issues/3589.
+// As the data here comes from jQuery directly and the changes to fix it
+// are non-trivial: https://github.com/jquery/jquery/pull/3656, just accept
+// that scrollbar data in this jQuery version is inaccurate.
+QUnit[ jQuery.fn.jquery.substring( 0, 4 ) === "3.2." ? "skip" : "test" ](
+	"with scrollbars", function( assert ) {
 	assert.expect( 4 );
 
 	$( "#scrollx" ).css( {

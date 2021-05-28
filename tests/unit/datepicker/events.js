@@ -5,7 +5,9 @@ define( [
 	"ui/widgets/datepicker"
 ], function( QUnit, $, testHelper ) {
 
-QUnit.module( "datepicker: events" );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "datepicker: events", beforeAfterEach() );
 
 var selectedThis = null,
 selectedDate = null,

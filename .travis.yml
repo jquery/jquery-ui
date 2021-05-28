@@ -1,5 +1,13 @@
-sudo: required
-dist: trusty
-language: node_js
-node_js:
-  - "6"
+dist: bionic
+language: java
+jdk:
+  - openjdk8
+env:
+  - NODE_VERSION="10"
+  - NODE_VERSION="14"
+install:
+  - nvm install "$NODE_VERSION"
+  - npm install
+script:
+  - nvm use "$NODE_VERSION"
+  - npm test

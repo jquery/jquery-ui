@@ -1,13 +1,14 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/tabs"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
 var state = testHelper.state;
 
-QUnit.module( "tabs: core" );
+QUnit.module( "tabs: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "markup structure", function( assert ) {
 	assert.expect( 20 );
@@ -186,7 +187,13 @@ QUnit.test( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER",
 		} ),
 		tabs = element.find( ".ui-tabs-nav li" ),
 		panels = element.find( ".ui-tabs-panel" ),
-		keyCode = $.ui.keyCode;
+		keyCode = $.ui.keyCode,
+
+		// Support: IE 11 with jQuery 1.8.
+		// In IE with jQuery 1.8 focusout may not happen immediately so some checks
+		// need to be done later.
+		isFocusoutImmediate = !( document.documentMode &&
+			jQuery.fn.jquery.indexOf( "1.8." ) === 0 );
 
 	element.tabs( "instance" ).delay = 1;
 
@@ -201,7 +208,9 @@ QUnit.test( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER",
 
 		tabs.eq( 0 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
 		assert.hasClasses( tabs.eq( 1 ), "ui-state-focus", "DOWN moves focus to next tab" );
-		assert.lacksClasses( tabs.eq( 0 ), "ui-state-focus", "first tab is no longer focused" );
+		if ( isFocusoutImmediate ) {
+			assert.lacksClasses( tabs.eq( 0 ), "ui-state-focus", "first tab is no longer focused" );
+		}
 		assert.equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "second tab has aria-selected=true" );
 		assert.equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		assert.ok( panels.eq( 1 ).is( ":hidden" ), "second panel is still hidden" );
@@ -246,6 +255,9 @@ QUnit.test( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER",
 
 	// Left, home, space
 	function step2() {
+		if ( !isFocusoutImmediate ) {
+			assert.lacksClasses( tabs.eq( 0 ), "ui-state-focus", "first tab is no longer focused" );
+		}
 		assert.equal( tabs.eq( 2 ).attr( "aria-selected" ), "true", "third tab has aria-selected=true" );
 		assert.equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "first tab has aria-selected=false" );
 		assert.ok( panels.eq( 2 ).is( ":visible" ), "third panel is visible" );

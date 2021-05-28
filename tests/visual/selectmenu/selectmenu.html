@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>Selectmenu Visual Test: Default</title>
@@ -89,10 +89,10 @@
 		$("#disable_option").on("click", function() {
 			if (disable_option) {
 				disable_option = false;
-				disabled4.find("option:eq(0)").attr("disabled", "disabled");
+				disabled4.find( "option" ).eq( 0 ).attr("disabled", "disabled");
 			} else {
 				disable_option = true;
-				disabled4.find("option:eq(0)").removeAttr("disabled");
+				disabled4.find( "option" ).eq( 0 ).removeAttr("disabled");
 			}
 			disabled4.selectmenu("refresh");
 			return false;
@@ -101,10 +101,10 @@
 		$("#disable_optgroup").on("click", function() {
 			if (disable_optgroup) {
 				disable_optgroup = false;
-				disabled4.find("optgroup:eq(0)").attr("disabled", "disabled");
+				disabled4.find( "optgroup" ).eq( 0 ).attr("disabled", "disabled");
 			} else {
 				disable_optgroup = true;
-				disabled4.find("optgroup:eq(0)").removeAttr("disabled");
+				disabled4.find( "optgroup" ).eq( 0 ).removeAttr("disabled");
 			}
 			disabled4.selectmenu("refresh");
 			return false;

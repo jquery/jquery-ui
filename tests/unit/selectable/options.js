@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/selectable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "selectable: options" );
+QUnit.module( "selectable: options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "autoRefresh", function( assert ) {
 	assert.expect( 3 );

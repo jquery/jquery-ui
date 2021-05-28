@@ -1,13 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/data",
-	"ui/escape-selector",
 	"ui/focusable",
 	"ui/tabbable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "core - selectors" );
+QUnit.module( "core - selectors", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.assert.isFocusable = function( selector, msg ) {
 	this.push( $( selector ).is( ":focusable" ), null, null,
@@ -132,7 +132,7 @@ QUnit.test( "focusable - disabled elements", function( assert ) {
 } );
 
 QUnit.test( "focusable - hidden styles", function( assert ) {
-	assert.expect( 12 );
+	assert.expect( 15 );
 
 	assert.isNotFocusable( "#displayNoneAncestor-input", "input, display: none parent" );
 	assert.isNotFocusable( "#displayNoneAncestor-span", "span with tabindex, display: none parent" );
@@ -148,9 +148,13 @@ QUnit.test( "focusable - hidden styles", function( assert ) {
 
 	assert.isNotFocusable( "#displayNone-input", "input, display: none" );
 	assert.isNotFocusable( "#visibilityHidden-input", "input, visibility: hidden" );
+	assert.isNotFocusable( "#visibilityCollapse-input", "input, visibility: collapse" );
 
 	assert.isNotFocusable( "#displayNone-span", "span with tabindex, display: none" );
 	assert.isNotFocusable( "#visibilityHidden-span", "span with tabindex, visibility: hidden" );
+	assert.isNotFocusable( "#visibilityCollapse-span", "span with tabindex, visibility: collapse" );
+
+	assert.isNotFocusable( "#visibilityCollapse-td", "td with tabindex, visibility: collapse" );
 } );
 
 QUnit.test( "focusable - natively focusable with various tabindex", function( assert ) {
@@ -273,13 +277,6 @@ QUnit.test( "tabbable - dimensionless parent with overflow", function( assert ) 
 	assert.expect( 1 );
 
 	assert.isTabbable( "#dimensionlessParent", "input" );
-} );
-
-QUnit.test( "escapeSelector", function( assert ) {
-	assert.expect( 1 );
-
-	assert.equal( $( "#" + $.ui.escapeSelector( "weird-['x']-id" ) ).length, 1,
-		"properly escapes selectors to use as an id" );
 } );
 
 } );

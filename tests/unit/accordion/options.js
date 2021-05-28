@@ -6,10 +6,10 @@ define( [
 ], function( QUnit, $, testHelper ) {
 
 var equalHeight = testHelper.equalHeight,
-	setupTeardown = testHelper.setupTeardown,
+	beforeAfterEach = testHelper.beforeAfterEach,
 	state = testHelper.state;
 
-QUnit.module( "accordion: options", setupTeardown() );
+QUnit.module( "accordion: options", beforeAfterEach() );
 
 QUnit.test( "{ active: default }", function( assert ) {
 	assert.expect( 2 );
@@ -376,18 +376,34 @@ QUnit.test( "{ event: custom }", function( assert ) {
 QUnit.test( "{ header: default }", function( assert ) {
 	assert.expect( 2 );
 
-	// Default: > li > :first-child,> :not(li):even
-	// > :not(li):even
+	// Default: elem.find( "> li > :first-child" ).add( elem.find( "> :not(li)" ).even() )
+	// elem.find( "> :not(li)" ).even()
 	state( assert, $( "#list1" ).accordion(), 1, 0, 0 );
 
 	// > li > :first-child
 	state( assert, $( "#navigation" ).accordion(), 1, 0, 0 );
 } );
 
-QUnit.test( "{ header: custom }", function( assert ) {
+QUnit.test( "{ header: customString }", function( assert ) {
 	assert.expect( 6 );
 	var element = $( "#navigationWrapper" ).accordion( {
 		header: "h2"
+	} );
+	element.find( "h2" ).each( function() {
+		assert.hasClasses( this, "ui-accordion-header" );
+	} );
+	assert.equal( element.find( ".ui-accordion-header" ).length, 3 );
+	state( assert, element, 1, 0, 0 );
+	element.accordion( "option", "active", 2 );
+	state( assert, element, 0, 0, 1 );
+} );
+
+QUnit.test( "{ header: customFunction }", function( assert ) {
+	assert.expect( 6 );
+	var element = $( "#navigationWrapper" ).accordion( {
+		header: function( elem ) {
+			return elem.find( "h2" );
+		}
 	} );
 	element.find( "h2" ).each( function() {
 		assert.hasClasses( this, "ui-accordion-header" );

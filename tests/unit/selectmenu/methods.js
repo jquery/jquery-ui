@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/selectmenu"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "selectmenu: methods" );
+QUnit.module( "selectmenu: methods", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "destroy", function( assert ) {
 	assert.expect( 1 );
@@ -83,21 +84,21 @@ QUnit.test( "refresh - change selected option", function( assert ) {
 	var element = $( "#speed" ).selectmenu(),
 		button = element.selectmenu( "widget" );
 
-	assert.equal( $.trim( button.text() ), "Medium", "button text after init" );
+	assert.equal( String.prototype.trim.call( button.text() ), "Medium", "button text after init" );
 
 	button.simulate( "focus" );
 
 	setTimeout( function() {
-		assert.equal( $.trim( button.text() ), "Medium", "button text after focus" );
+		assert.equal( String.prototype.trim.call( button.text() ), "Medium", "button text after focus" );
 
 		element[ 0 ].selectedIndex = 0;
 		element.selectmenu( "refresh" );
-		assert.equal( $.trim( button.text() ), "Slower", "button text after changing selected option" );
+		assert.equal( String.prototype.trim.call( button.text() ), "Slower", "button text after changing selected option" );
 
 		element.find( "option" ).prop( "selected", false );
 		element.append( "<option selected value=\"selected_option\">Selected option</option>" );
 		element.selectmenu( "refresh" );
-		assert.equal( $.trim( button.text() ), "Selected option", "button text after adding selected option" );
+		assert.equal( String.prototype.trim.call( button.text() ), "Selected option", "button text after adding selected option" );
 
 		ready();
 	} );

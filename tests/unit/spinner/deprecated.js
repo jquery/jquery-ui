@@ -1,8 +1,9 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/spinner"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
 var originalSpinner = $.ui.spinner.prototype;
 QUnit.module( "spinner: deprecated", {
@@ -26,6 +27,7 @@ QUnit.module( "spinner: deprecated", {
 
 	afterEach: function() {
 		$.ui.spinner.prototype = originalSpinner;
+		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
 

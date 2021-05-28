@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/dialog"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "dialog (deprecated): options" );
+QUnit.module( "dialog (deprecated): options", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "dialogClass", function( assert ) {
 	assert.expect( 5 );
@@ -50,7 +51,7 @@ QUnit.test( "buttons - deprecated options", function( assert ) {
 	buttons = element.dialog( "widget" ).find( ".ui-dialog-buttonpane button" );
 	assert.equal( buttons.length, 1, "correct number of buttons" );
 	assert.equal( buttons.attr( "id" ), "my-button-id", "correct id" );
-	assert.equal( $.trim( buttons.text() ), "a button", "correct label" );
+	assert.equal( String.prototype.trim.call( buttons.text() ), "a button", "correct label" );
 	assert.hasClasses( buttons, "additional-class" );
 	assert.deepEqual( buttons.button( "option", "icon" ), "ui-icon-cancel" );
 	assert.equal( buttons.button( "option", "showLabel" ), false );

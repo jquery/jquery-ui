@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/droppable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "droppable: events" );
+QUnit.module( "droppable: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "droppable destruction/recreation on drop event", function( assert ) {
 	assert.expect( 1 );

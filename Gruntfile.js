@@ -3,6 +3,8 @@ module.exports = function( grunt ) {
 "use strict";
 
 var
+	glob = require( "glob" ),
+
 	// files
 	coreFiles = [
 		"core.js",
@@ -16,11 +18,11 @@ var
 		"effect.js"
 	],
 
-	uiFiles = coreFiles.map(function( file ) {
+	uiFiles = coreFiles.map( function( file ) {
 		return "ui/" + file;
-	}).concat( expandFiles( "ui/**/*.js" ).filter(function( file ) {
+	} ).concat( expandFiles( "ui/**/*.js" ).filter( function( file ) {
 		return coreFiles.indexOf( file.substring( 3 ) ) === -1;
-	}) ),
+	} ) ),
 
 	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
 
@@ -45,9 +47,9 @@ var
 		"tabs",
 		"tooltip",
 		"theme"
-	].map(function( component ) {
+	].map( function( component ) {
 		return "themes/base/" + component + ".css";
-	}),
+	} ),
 
 	// minified files
 	minify = {
@@ -92,12 +94,12 @@ function mapMinFile( file ) {
 }
 
 function expandFiles( files ) {
-	return grunt.util._.pluck( grunt.file.expandMapping( files ), "src" ).map(function( values ) {
+	return grunt.util._.map( grunt.file.expandMapping( files ), "src" ).map( function( values ) {
 		return values[ 0 ];
-	});
+	} );
 }
 
-uiFiles.concat( allI18nFiles ).forEach(function( file ) {
+uiFiles.concat( allI18nFiles ).forEach( function( file ) {
 	minify[ file ] = {
 		options: {
 			banner: createBanner()
@@ -105,15 +107,17 @@ uiFiles.concat( allI18nFiles ).forEach(function( file ) {
 		files: {}
 	};
 	minify[ file ].files[ mapMinFile( file ) ] = file;
-});
+} );
 
-uiFiles.forEach(function( file ) {
+uiFiles.forEach( function( file ) {
+
 	// TODO this doesn't do anything until https://github.com/rwldrn/grunt-compare-size/issues/13
 	compareFiles[ file ] = [ file, mapMinFile( file ) ];
-});
+} );
 
 // grunt plugins
 require( "load-grunt-tasks" )( grunt );
+
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 
@@ -122,17 +126,18 @@ function stripDirectory( file ) {
 }
 
 function createBanner( files ) {
+
 	// strip folders
 	var fileNames = files && files.map( stripDirectory );
 	return "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - " +
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\\n' : '' %>" +
-		(files ? "* Includes: " + fileNames.join(", ") + "\n" : "") +
+		( files ? "* Includes: " + fileNames.join( ", " ) + "\n" : "" ) +
 		"* Copyright <%= pkg.author.name %>;" +
-		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n";
+		" Licensed <%= _.map(pkg.licenses, 'type').join(', ') %> */\n";
 }
 
-grunt.initConfig({
+grunt.initConfig( {
 	pkg: grunt.file.readJSON( "package.json" ),
 	files: {
 		dist: "<%= pkg.name %>-<%= pkg.version %>"
@@ -166,7 +171,7 @@ grunt.initConfig({
 				include: expandFiles( [ "ui/**/*.js", "!ui/core.js", "!ui/i18n/*" ] ),
 				out: "dist/jquery-ui.js",
 				wrap: {
-					start: createBanner( uiFiles ),
+					start: createBanner( uiFiles )
 				}
 			}
 		}
@@ -198,9 +203,9 @@ grunt.initConfig({
 				ignore: [
 				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
 			] },
-			src: [ "demos/**/*.html", "tests/**/*.html" ].concat( htmllintBad.map( function( file ) {
-				return "!" + file;
-			} ) )
+			src: glob.sync("{demos,tests}/**/*.html", {
+				ignore: htmllintBad
+			} )
 		},
 		bad: {
 			options: {
@@ -208,18 +213,30 @@ grunt.initConfig({
 					/Start tag seen without seeing a doctype first/,
 					/Element “head” is missing a required instance of child element “title”/,
 					/Element “object” is missing one or more of the following/,
-					/The “codebase” attribute on the “object” element is obsolete/
+					/The “codebase” attribute on the “object” element is obsolete/,
+					/Consider adding a “lang” attribute to the “html” start tag/,
+					/This document appears to be written in .*. Consider adding “lang=".*"” \(or variant\) to the “html” start tag/
 				]
 			},
 			src: htmllintBad
 		}
 	},
 	qunit: {
-		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter(function( file ) {
+		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter( function( file ) {
 			return !( /(all|index|test)\.html$/ ).test( file );
-		}),
+		} ),
 		options: {
-			inject: false,
+			puppeteer: {
+				ignoreDefaultArgs: true,
+				args: [
+					"--headless",
+					"--disable-web-security",
+					"--allow-file-access-from-files"
+				]
+			},
+			inject: [
+				require.resolve( "grunt-contrib-qunit/chrome/bridge" )
+			],
 			page: {
 				viewportSize: { width: 700, height: 500 }
 			}
@@ -248,6 +265,17 @@ grunt.initConfig({
 	},
 
 	bowercopy: {
+		inlineVendors: {
+			options: {
+				clean: true,
+				destPrefix: "ui/vendor"
+			},
+			files: {
+				"jquery-color/jquery.color.js": "jquery-color/dist/jquery.color.js",
+				"jquery-color/LICENSE.txt": "jquery-color/LICENSE.txt"
+			}
+		},
+
 		all: {
 			options: {
 				clean: true,
@@ -282,15 +310,6 @@ grunt.initConfig({
 
 				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/LICENSE.txt": "jquery-1.x/LICENSE.txt",
-
-				"jquery-1.7.0/jquery.js": "jquery-1.7.0/jquery.js",
-				"jquery-1.7.0/MIT-LICENSE.txt": "jquery-1.7.0/MIT-LICENSE.txt",
-
-				"jquery-1.7.1/jquery.js": "jquery-1.7.1/jquery.js",
-				"jquery-1.7.1/MIT-LICENSE.txt": "jquery-1.7.1/MIT-LICENSE.txt",
-
-				"jquery-1.7.2/jquery.js": "jquery-1.7.2/jquery.js",
-				"jquery-1.7.2/MIT-LICENSE.txt": "jquery-1.7.2/MIT-LICENSE.txt",
 
 				"jquery-1.8.0/jquery.js": "jquery-1.8.0/jquery.js",
 				"jquery-1.8.0/MIT-LICENSE.txt": "jquery-1.8.0/MIT-LICENSE.txt",
@@ -397,11 +416,38 @@ grunt.initConfig({
 				"jquery-3.1.1/jquery.js": "jquery-3.1.1/dist/jquery.js",
 				"jquery-3.1.1/LICENSE.txt": "jquery-3.1.1/LICENSE.txt",
 
+				"jquery-3.2.0/jquery.js": "jquery-3.2.0/dist/jquery.js",
+				"jquery-3.2.0/LICENSE.txt": "jquery-3.2.0/LICENSE.txt",
+
+				"jquery-3.2.1/jquery.js": "jquery-3.2.1/dist/jquery.js",
+				"jquery-3.2.1/LICENSE.txt": "jquery-3.2.1/LICENSE.txt",
+
+				"jquery-3.3.0/jquery.js": "jquery-3.3.0/dist/jquery.js",
+				"jquery-3.3.0/LICENSE.txt": "jquery-3.3.0/LICENSE.txt",
+
+				"jquery-3.3.1/jquery.js": "jquery-3.3.1/dist/jquery.js",
+				"jquery-3.3.1/LICENSE.txt": "jquery-3.3.1/LICENSE.txt",
+
+				"jquery-3.4.0/jquery.js": "jquery-3.4.0/dist/jquery.js",
+				"jquery-3.4.0/LICENSE.txt": "jquery-3.4.0/LICENSE.txt",
+
+				"jquery-3.4.1/jquery.js": "jquery-3.4.1/dist/jquery.js",
+				"jquery-3.4.1/LICENSE.txt": "jquery-3.4.1/LICENSE.txt",
+
+				"jquery-3.5.0/jquery.js": "jquery-3.5.0/dist/jquery.js",
+				"jquery-3.5.0/LICENSE.txt": "jquery-3.5.0/LICENSE.txt",
+
+				"jquery-3.5.1/jquery.js": "jquery-3.5.1/dist/jquery.js",
+				"jquery-3.5.1/LICENSE.txt": "jquery-3.5.1/LICENSE.txt",
+
+				"jquery-3.6.0/jquery.js": "jquery-3.6.0/dist/jquery.js",
+				"jquery-3.6.0/LICENSE.txt": "jquery-3.6.0/LICENSE.txt",
+
 				"jquery-migrate-1.4.1/jquery-migrate.js": "jquery-migrate-1.4.1/dist/jquery-migrate.js",
 				"jquery-migrate-1.4.1/LICENSE.txt": "jquery-migrate-1.4.1/LICENSE.txt",
 
-				"jquery-migrate-3.0.0/jquery-migrate.js": "jquery-migrate-3.0.0/dist/jquery-migrate.js",
-				"jquery-migrate-3.0.0/LICENSE.txt": "jquery-migrate-3.0.0/LICENSE.txt"
+				"jquery-migrate-3.3.2/jquery-migrate.js": "jquery-migrate-3.3.2/dist/jquery-migrate.js",
+				"jquery-migrate-3.3.2/LICENSE.txt": "jquery-migrate-3.3.2/LICENSE.txt"
 			}
 		}
 	},
@@ -432,13 +478,13 @@ grunt.initConfig({
 			"Bohdan Ganicky <bohdan.ganicky@gmail.com>"
 		]
 	}
-});
+} );
 
 grunt.registerTask( "update-authors", function() {
 	var getAuthors = require( "grunt-git-authors" ).getAuthors,
 		done = this.async();
 
-	getAuthors({
+	getAuthors( {
 		priorAuthors: grunt.config( "authors.prior" )
 	}, function( error, authors ) {
 		if ( error ) {
@@ -446,7 +492,7 @@ grunt.registerTask( "update-authors", function() {
 			return done( false );
 		}
 
-		authors = authors.map(function( author ) {
+		authors = authors.map( function( author ) {
 			if ( author.match( /^Jacek Jędrzejewski </ ) ) {
 				return "Jacek Jędrzejewski (http://jacek.jedrzejewski.name)";
 			} else if ( author.match( /^Pawel Maruszczyk </ ) ) {
@@ -454,21 +500,21 @@ grunt.registerTask( "update-authors", function() {
 			} else {
 				return author;
 			}
-		});
+		} );
 
 		grunt.file.write( "AUTHORS.txt",
 			"Authors ordered by first contribution\n" +
 			"A list of current team members is available at http://jqueryui.com/about\n\n" +
 			authors.join( "\n" ) + "\n" );
 		done();
-	});
-});
+	} );
+} );
 
-grunt.registerTask( "default", [ "lint", "requirejs", "test" ]);
-grunt.registerTask( "jenkins", [ "default", "concat" ]);
-grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ]);
-grunt.registerTask( "test", [ "qunit" ]);
-grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ]);
-grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ]);
+grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
+grunt.registerTask( "jenkins", [ "default", "concat" ] );
+grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ] );
+grunt.registerTask( "test", [ "qunit" ] );
+grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
+grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );
 
 };

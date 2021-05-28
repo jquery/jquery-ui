@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/checkboxradio"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Checkboxradio: core" );
+QUnit.module( "Checkboxradio: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "Checkbox - Initial class structure", function( assert ) {
 	assert.expect( 2 );
@@ -34,7 +35,7 @@ QUnit.test( "Ensure checked after single click on checkbox label button", functi
 	var ready = assert.async();
 	assert.expect( 2 );
 
-	$( "#check2" ).checkboxradio().change( function() {
+	$( "#check2" ).checkboxradio().on( "change", function() {
 		var label = $( this ).checkboxradio( "widget" );
 		assert.ok( this.checked, "checked ok" );
 
@@ -59,7 +60,7 @@ QUnit.test( "Handle form association via form attribute", function( assert ) {
 	var radio2 = $( "#crazy-form-2" ).checkboxradio();
 	var radio2Label = radio2.checkboxradio( "widget" );
 
-	radio2.change( function() {
+	radio2.on( "change", function() {
 		assert.ok( this.checked, "#2 checked" );
 		assert.ok( !radio1[ 0 ].checked, "#1 not checked" );
 
@@ -93,28 +94,25 @@ QUnit.test( "Checkbox creation requires a label, and finds it in all cases", fun
 QUnit.test( "Calling checkboxradio on an unsupported element throws an error", function( assert ) {
 	assert.expect( 2 );
 
-	var errorMessage =
-		"Can't create checkboxradio on element.nodeName=div and element.type=undefined";
-	var error = new Error( errorMessage );
+	var error = new Error(
+		"Can't create checkboxradio on element.nodeName=div and element.type=undefined"
+	);
 	assert.raises(
 		function() {
 			$( "<div>" ).checkboxradio();
 		},
-
-		// Support: jQuery 1.7.0 only
-		$.fn.jquery === "1.7" ? errorMessage : error,
+		error,
 		"Proper error thrown"
 	);
 
-	errorMessage = "Can't create checkboxradio on element.nodeName=input and element.type=button";
-	error = new Error( errorMessage );
+	error = new Error(
+		"Can't create checkboxradio on element.nodeName=input and element.type=button"
+	);
 	assert.raises(
 		function() {
 			$( "<input type='button'>" ).checkboxradio();
 		},
-
-		// Support: jQuery 1.7.0 only
-		$.fn.jquery === "1.7" ? errorMessage : error,
+		error,
 		"Proper error thrown"
 	);
 } );
@@ -122,15 +120,12 @@ QUnit.test( "Calling checkboxradio on an unsupported element throws an error", f
 QUnit.test( "Calling checkboxradio on an input with no label throws an error", function( assert ) {
 	assert.expect( 1 );
 
-	var errorMessage = "No label found for checkboxradio widget";
-	var error = new Error( errorMessage );
+	var error = new Error( "No label found for checkboxradio widget" );
 	assert.raises(
 		function() {
 			$( "<input type='checkbox'>" ).checkboxradio();
 		},
-
-		// Support: jQuery 1.7.0 only
-		$.fn.jquery === "1.7" ? errorMessage : error,
+		error,
 		"Proper error thrown"
 	);
 } );

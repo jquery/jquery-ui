@@ -14,7 +14,7 @@ return $.extend( helper, {
 		if ( message === undefined ) {
 			message = lastItem;
 		}
-		log.push( $.trim( message ) );
+		log.push( String.prototype.trim.call( message ) );
 	},
 
 	logOutput: function() {
@@ -27,7 +27,8 @@ return $.extend( helper, {
 
 	click: function( menu, item ) {
 		lastItem = item;
-		menu.children( ":eq(" + item + ")" )
+		menu.children()
+			.eq( item )
 			.children( ".ui-menu-item-wrapper" )
 			.trigger( "click" );
 	}

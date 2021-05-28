@@ -1,14 +1,15 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/controlgroup",
 	"ui/widgets/checkboxradio",
 	"ui/widgets/selectmenu",
 	"ui/widgets/button",
 	"ui/widgets/spinner"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Controlgroup: Core" );
+QUnit.module( "Controlgroup: Core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "selectmenu: open/close corners", function( assert ) {
 	assert.expect( 12 );
@@ -161,12 +162,12 @@ QUnit.test( "Single controlgroup button - vertical", function( assert ) {
 } );
 
 QUnit.module( "Controlgroup: Non-empty class key", {
-	setup: function() {
+	beforeEach: function() {
 		this.classKey = $.ui.selectmenu.prototype.options.classes[ "ui-selectmenu-button-closed" ];
 		$.ui.selectmenu.prototype.options.classes[ "ui-selectmenu-button-closed" ] =
 			"something-custom";
 	},
-	teardown: function() {
+	afterEach: function() {
 		$.ui.selectmenu.prototype.options.classes[ "ui-selectmenu-button-closed" ] = this.classKey;
 	}
 } );

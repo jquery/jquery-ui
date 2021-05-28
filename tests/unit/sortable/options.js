@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/sortable"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "sortable: options" );
+QUnit.module( "sortable: options", { afterEach: helper.moduleAfterEach }  );
 
 /*
 Test("{ appendTo: 'parent' }, default", function() {
@@ -104,6 +105,10 @@ QUnit.test( "#7415: Incorrect revert animation with axis: 'y'", function( assert
 		var top = parseFloat( item.css( "top" ) );
 		assert.equal( item.css( "left" ), expectedLeft, "left not animated" );
 		assert.ok( top > 0 && top < 300, "top is animated" );
+
+		// Cleanup
+		item.stop( true );
+
 		ready();
 	}, 100 );
 } );
@@ -136,7 +141,7 @@ QUnit.test( "#8792: issues with floated items in connected lists", function( ass
 		}
 	} );
 
-	element = $( "#qunit-fixture li:eq(0)" );
+	element = $( "#qunit-fixture li" ).eq( 0 );
 
 	// Move the first li to the right of the second li in the first ul
 	element.simulate( "drag", {
@@ -281,14 +286,24 @@ QUnit.test( "{ forcePlaceholderSize: true } table rows", function( assert ) {
 	assert.expect( 2 );
 
 	// Table should have the placeholder's height set the same as the row we're dragging
-	var element = $( "#sortable-table2 tbody" );
+	var element = $( "#sortable-table2 tbody" ),
+		jqMinor = $.fn.jquery.substring( 0, 4 );
 
 	element.sortable( {
 		placeholder: "test",
 		forcePlaceholderSize: true,
 		start: function( event, ui ) {
-			assert.equal( ui.placeholder.height(), ui.item.height(),
-				"placeholder is same height as item" );
+
+			// Support: IE 11+, Edge <79 only
+			// In IE & Edge Legacy these values may differ a little
+			// when jQuery >=3.0 <3.2 is used.
+			if ( jqMinor === "3.0." || jqMinor === "3.1." ) {
+				assert.ok( Math.abs( ui.placeholder.height() - ui.item.height() ) < 0.25,
+					"placeholder height is within 0.25 px of item's" );
+			} else {
+				assert.equal( ui.placeholder.height(), ui.item.height(),
+					"placeholder is same height as item" );
+			}
 		}
 	} );
 
@@ -372,7 +387,8 @@ test("{ placeholder: false }, default", function() {
 QUnit.test( "{ placeholder: false } img", function( assert ) {
 	assert.expect( 3 );
 
-	var element = $( "#sortable-images" ).sortable( {
+	var done = assert.async(),
+		element = $( "#sortable-images" ).sortable( {
 		start: function( event, ui ) {
 			assert.ok( ui.placeholder.attr( "src" ).indexOf( "images/jqueryui_32x32.png" ) > 0, "placeholder img has correct src" );
 			assert.equal( ui.placeholder.height(), 32, "placeholder has correct height" );
@@ -380,9 +396,14 @@ QUnit.test( "{ placeholder: false } img", function( assert ) {
 		}
 	} );
 
-	element.find( "img" ).eq( 0 ).simulate( "drag", {
-		dy: 1
-	} );
+	// Give browsers some time to load the image if cache is disabled.
+	// This resolves a frequent issue in Chrome/Safari.
+	setTimeout( function() {
+		element.find( "img" ).eq( 0 ).simulate( "drag", {
+			dy: 1
+		} );
+		done();
+	}, 500 );
 } );
 
 QUnit.test( "{ placeholder: String }", function( assert ) {
@@ -447,7 +468,7 @@ QUnit.test( "{ placholder: String } tbody", function( assert ) {
 				assert.equal( ui.placeholder.children( "tr" ).length, 1,
 					"placeholder's child is tr" );
 				assert.equal( ui.placeholder.find( "> tr" ).children().length,
-					dragBody.find( "> tr:first" ).children().length,
+					dragBody.find( "> tr" ).first().children().length,
 					"placeholder's tr has correct number of cells" );
 				assert.equal( ui.placeholder.find( "> tr" ).children().html(),
 					$( "<span>&#160;</span>" ).html(),

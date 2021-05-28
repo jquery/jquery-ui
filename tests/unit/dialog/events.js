@@ -5,7 +5,7 @@ define( [
 	"ui/widgets/dialog"
 ], function( QUnit, $, testHelper ) {
 
-QUnit.module( "dialog: events" );
+QUnit.module( "dialog: events", { afterEach: testHelper.moduleAfterEach }  );
 
 QUnit.test( "open", function( assert ) {
 	assert.expect( 13 );

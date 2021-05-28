@@ -1,11 +1,12 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/droppable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "droppable: core" );
+QUnit.module( "droppable: core", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "element types", function( assert ) {
 	var typeNames = ( "p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form" +

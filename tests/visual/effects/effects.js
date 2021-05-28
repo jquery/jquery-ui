@@ -86,7 +86,7 @@ effect( "#slideRight", "slide", { direction: "right" } );
 $( "#transfer" ).on( "click", function() {
 	$( this )
 		.addClass( "current" )
-		.effect( "transfer", { to: "div:eq(0)" }, 1000, function() {
+		.effect( "transfer", { to: $( "div" ).eq( 0 ) }, 1000, function() {
 			$( this ).removeClass( "current" );
 		} );
 } );

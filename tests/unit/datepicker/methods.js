@@ -5,12 +5,23 @@ define( [
 	"ui/widgets/datepicker"
 ], function( QUnit, $, testHelper ) {
 
-QUnit.module( "datepicker: methods" );
+var beforeAfterEach = testHelper.beforeAfterEach;
+
+QUnit.module( "datepicker: methods", beforeAfterEach()  );
 
 QUnit.test( "destroy", function( assert ) {
-	assert.expect( 33 );
+	assert.expect( 35 );
 	var inl,
-		inp = testHelper.init( "#inp" );
+		inp = testHelper.init( "#inp" ),
+		dp = $( "#ui-datepicker-div" );
+
+	// Destroy and clear active reference
+	inp.datepicker( "show" );
+	assert.equal( dp.css( "display" ), "block", "Datepicker - visible" );
+	inp.datepicker( "hide" ).datepicker( "destroy" );
+	assert.ok( $.datepicker._curInst == null, "Datepicker - destroyed and cleared reference" );
+
+	inp = testHelper.init( "#inp" );
 	assert.ok( inp.is( ".hasDatepicker" ), "Default - marker class set" );
 	assert.ok( $.data( inp[ 0 ], testHelper.PROP_NAME ), "Default - instance present" );
 	assert.ok( inp.next().is( "#alt" ), "Default - button absent" );

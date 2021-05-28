@@ -5,10 +5,10 @@ define( [
 	"ui/widgets/accordion"
 ], function( QUnit, $, testHelper ) {
 
-var setupTeardown = testHelper.setupTeardown,
+var beforeAfterEach = testHelper.beforeAfterEach,
 	state = testHelper.state;
 
-QUnit.module( "accordion: events", setupTeardown() );
+QUnit.module( "accordion: events", beforeAfterEach() );
 
 QUnit.test( "create", function( assert ) {
 	assert.expect( 10 );

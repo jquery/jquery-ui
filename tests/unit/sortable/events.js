@@ -1,12 +1,13 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"./helper",
 	"ui/widgets/sortable",
 	"ui/widgets/draggable"
-], function( QUnit, $, testHelper ) {
+], function( QUnit, $, helper, testHelper ) {
 
-QUnit.module( "sortable: events" );
+QUnit.module( "sortable: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "start", function( assert ) {
 	assert.expect( 7 );
@@ -16,7 +17,7 @@ QUnit.test( "start", function( assert ) {
 		start: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 10
 	} );
 
@@ -39,7 +40,7 @@ QUnit.test( "sort", function( assert ) {
 		sort: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 10
 	} );
 
@@ -61,7 +62,7 @@ QUnit.test( "change", function( assert ) {
 		change: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dx: 1,
 		dy: 1
 	} );
@@ -72,7 +73,7 @@ QUnit.test( "change", function( assert ) {
 		change: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 22
 	} );
 
@@ -94,7 +95,7 @@ QUnit.test( "beforeStop", function( assert ) {
 		beforeStop: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 20
 	} );
 
@@ -116,7 +117,7 @@ QUnit.test( "stop", function( assert ) {
 		stop: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 20
 	} );
 
@@ -138,7 +139,7 @@ QUnit.test( "update", function( assert ) {
 		update: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dx: 1,
 		dy: 1
 	} );
@@ -149,7 +150,7 @@ QUnit.test( "update", function( assert ) {
 		update: function( e, ui ) {
 			hash = ui;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 22
 	} );
 
@@ -203,13 +204,13 @@ QUnit.test( "#4752: link event firing on sortable with connect list", function( 
 		fired.click = true;
 	} );
 
-	$( "#sortable li:eq(0)" ).simulate( "click" );
+	$( "#sortable li" ).eq( 0 ).simulate( "click" );
 	assert.ok( !hasFired( "change" ), "Click only, change event should not have fired" );
 	assert.ok( hasFired( "click" ), "Click event should have fired" );
 
 	// Drag an item within the first list
 	fired = {};
-	$( "#sortable li:eq(0)" ).simulate( "drag", { dx: 0, dy: 40 } );
+	$( "#sortable li" ).eq( 0 ).simulate( "drag", { dx: 0, dy: 40 } );
 	assert.ok( hasFired( "change" ), "40px drag, change event should have fired" );
 	assert.ok( !hasFired( "receive" ), "Receive event should not have fired" );
 	assert.ok( !hasFired( "remove" ), "Remove event should not have fired" );
@@ -217,7 +218,7 @@ QUnit.test( "#4752: link event firing on sortable with connect list", function( 
 
 	// Drag an item from the first list to the second, connected list
 	fired = {};
-	$( "#sortable li:eq(0)" ).simulate( "drag", { dx: 0, dy: 150 } );
+	$( "#sortable li" ).eq( 0 ).simulate( "drag", { dx: 0, dy: 150 } );
 	assert.ok( hasFired( "change" ), "150px drag, change event should have fired" );
 	assert.ok( hasFired( "receive" ), "Receive event should have fired" );
 	assert.ok( hasFired( "remove" ), "Remove event should have fired" );
@@ -245,7 +246,7 @@ QUnit.test( "over", function( assert ) {
 			hash = ui;
 			overCount++;
 		}
-	} ).find( "li:eq(0)" ).simulate( "drag", {
+	} ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 20
 	} );
 
@@ -301,7 +302,7 @@ QUnit.test( "over, with connected sortable", function( assert ) {
 		hash = ui;
 		overCount++;
 	} );
-	$( "#sortable" ).find( "li:eq(0)" ).simulate( "drag", {
+	$( "#sortable" ).find( "li" ).eq( 0 ).simulate( "drag", {
 		dy: 102
 	} );
 
@@ -329,7 +330,7 @@ QUnit.test( "out, with connected sortable", function( assert ) {
 		hash = ui;
 		outCount++;
 	} );
-	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+	$( "#sortable" ).find( "li" ).last().simulate( "drag", {
 		dy: 40
 	} );
 
@@ -357,7 +358,7 @@ QUnit.test( "repeated out & over between connected sortables", function( assert 
 			}
 		}
 	} );
-	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+	$( "#sortable" ).find( "li" ).last().simulate( "drag", {
 		dy: 40
 	} ).simulate( "drag", {
 		dy: -40

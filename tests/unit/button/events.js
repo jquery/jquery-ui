@@ -1,10 +1,11 @@
 define( [
 	"qunit",
 	"jquery",
+	"lib/helper",
 	"ui/widgets/button"
-], function( QUnit, $ ) {
+], function( QUnit, $, helper ) {
 
-QUnit.module( "Button: events" );
+QUnit.module( "Button: events", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.test( "Anchor recieves click event when spacebar is pressed", function( assert ) {
 	var ready = assert.async();
