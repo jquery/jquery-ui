@@ -1,3 +1,6 @@
+# jQuery-UI-x
+jQuery UI with minimize and restore button in dialog title.
+
 # [jQuery UI](http://jqueryui.com/) - Interactions and Widgets for the web
 
 jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of jQuery. Whether you're building highly interactive web applications, or you just need to add a date picker to a form control, jQuery UI is the perfect choice.
@@ -28,6 +31,3 @@ For more information, see the [contributing page](CONTRIBUTING.md).
 Run the unit tests manually with appropriate browsers and any local web server. See our [environment setup](CONTRIBUTING.md#environment-minimum-required) and [information on running tests](CONTRIBUTING.md#running-the-tests).
 
 You can also run the unit tests inside phantomjs by [setting up your environment](CONTRIBUTING.md#user-content-environment-recommended-setup).
-
-## jQuery-UI-x
-With minimize and restore button in dialog title, based on jquery-ui.
