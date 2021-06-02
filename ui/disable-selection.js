@@ -14,6 +14,8 @@
 
 // This file is deprecated
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,6 +26,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 return $.fn.extend( {
 	disableSelection: ( function() {

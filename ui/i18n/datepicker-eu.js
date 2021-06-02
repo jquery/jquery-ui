@@ -1,5 +1,7 @@
 /* Karrikas-ek itzulia (karrikas@karrikas.com) */
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -10,6 +12,7 @@
 		factory( jQuery.datepicker );
 	}
 } )( function( datepicker ) {
+"use strict";
 
 datepicker.regional.eu = {
 	closeText: "Egina",

@@ -3,6 +3,7 @@ define( [
 	"jquery",
 	"lib/helper"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 var exports = {};
 

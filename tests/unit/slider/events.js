@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/slider"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "slider: events", { afterEach: helper.moduleAfterEach }  );
 

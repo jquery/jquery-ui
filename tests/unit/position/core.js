@@ -5,6 +5,7 @@ define( [
 	"lib/helper",
 	"ui/position"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 var win = $( window ),
 	scrollTopSupport = function() {

@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/tabs"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 var disabled = testHelper.disabled,
 	state = testHelper.state;

@@ -15,6 +15,8 @@
 //>>css.structure: ../../themes/base/draggable.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -35,6 +37,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 $.widget( "ui.draggable", $.ui.mouse, {
 	version: "@VERSION",

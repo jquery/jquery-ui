@@ -13,6 +13,8 @@
 //>>docs: http://api.jqueryui.com/mouse/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -28,6 +30,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 var mouseHandled = false;
 $( document ).on( "mouseup", function() {

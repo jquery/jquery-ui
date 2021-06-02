@@ -1,6 +1,8 @@
 /* Hebrew initialisation for the UI Datepicker extension. */
 /* Written by Amir Hardon (ahardon at gmail dot com). */
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -11,6 +13,7 @@
 		factory( jQuery.datepicker );
 	}
 } )( function( datepicker ) {
+"use strict";
 
 datepicker.regional.he = {
 	closeText: "סגור",

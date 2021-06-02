@@ -6,6 +6,7 @@ define( [
 	"ui/widgets/sortable",
 	"ui/widgets/draggable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "sortable: events", { afterEach: helper.moduleAfterEach }  );
 

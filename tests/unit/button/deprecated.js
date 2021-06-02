@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/button"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "Button (deprecated): core", { afterEach: helper.moduleAfterEach }  );
 

@@ -16,6 +16,8 @@
 //>>demos: http://jqueryui.com/position/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -26,6 +28,8 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
+
 ( function() {
 var cachedScrollbarWidth,
 	max = Math.max,

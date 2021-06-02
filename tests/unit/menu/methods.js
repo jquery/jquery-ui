@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/menu"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 var log = testHelper.log,
 	logOutput = testHelper.logOutput,

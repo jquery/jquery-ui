@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/droppable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "droppable: methods", { afterEach: helper.moduleAfterEach }  );
 

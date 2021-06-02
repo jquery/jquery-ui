@@ -6,6 +6,7 @@ define( [
 	"ui/focusable",
 	"ui/tabbable"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "core - selectors", { afterEach: helper.moduleAfterEach }  );
 

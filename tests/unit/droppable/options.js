@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/droppable"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "droppable: options", { afterEach: helper.moduleAfterEach }  );
 

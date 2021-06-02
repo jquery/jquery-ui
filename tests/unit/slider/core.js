@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/slider"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 var element, options;
 

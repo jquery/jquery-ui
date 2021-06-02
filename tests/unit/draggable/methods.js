@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/draggable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 var element;
 

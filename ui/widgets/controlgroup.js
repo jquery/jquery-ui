@@ -17,6 +17,8 @@
 //>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -30,6 +32,8 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
+
 var controlgroupCornerRegex = /ui-corner-([a-z]){2,6}/g;
 
 return $.widget( "ui.controlgroup", {

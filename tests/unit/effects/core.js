@@ -20,6 +20,7 @@ define( [
 	"ui/effects/effect-slide",
 	"ui/effects/effect-transfer"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 QUnit.assert.present = function( value, array, message ) {
 	this.push( jQuery.inArray( value, array ) !== -1, value, array, message );

@@ -13,6 +13,8 @@
 //>>docs: http://api.jqueryui.com/data-selector/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -23,6 +25,8 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
+
 return $.extend( $.expr.pseudos, {
 	data: $.expr.createPseudo ?
 		$.expr.createPseudo( function( dataName ) {

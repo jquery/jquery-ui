@@ -8,6 +8,7 @@ define( [
 	"ui/i18n/datepicker-zh-CN",
 	"ui/ie"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 var beforeAfterEach = testHelper.beforeAfterEach;
 

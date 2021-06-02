@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/dialog"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "dialog: methods", {
 	afterEach: function() {

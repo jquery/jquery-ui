@@ -1,6 +1,6 @@
-module.exports = function( grunt ) {
-
 "use strict";
+
+module.exports = function( grunt ) {
 
 grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );

@@ -2,6 +2,8 @@
 /* Javad Mowlanezhad -- jmowla@gmail.com */
 /* Jalali calendar should supported soon! (Its implemented but I have to test it) */
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -12,6 +14,7 @@
 		factory( jQuery.datepicker );
 	}
 } )( function( datepicker ) {
+"use strict";
 
 datepicker.regional.fa = {
 	closeText: "بستن",

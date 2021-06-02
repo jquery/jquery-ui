@@ -17,6 +17,8 @@
 //>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -37,6 +39,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 $.widget( "ui.button", {
 	version: "@VERSION",

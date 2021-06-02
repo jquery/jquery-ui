@@ -10,14 +10,13 @@
 	},
 
 	"rules": {
-//		"strict": [ "error", "function" ]
+		"strict": [ "error", "function" ],
 
 		// The following rule is relaxed due to too many violations:
 		"no-unused-vars": [ "error", { "vars": "all", "args": "after-used" } ],
 
 		// Too many violations:
-		"max-len": "off",
-		"strict": "off"
+		"max-len": "off"
 	},
 
 	"globals": {

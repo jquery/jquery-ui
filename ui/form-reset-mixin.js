@@ -13,6 +13,8 @@
 //>>docs: http://api.jqueryui.com/form-reset-mixin/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -27,6 +29,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 return $.ui.formResetMixin = {
 	_formResetHandler: function() {

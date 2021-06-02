@@ -1,6 +1,8 @@
 /* Korean initialisation for the jQuery calendar extension. */
 /* Written by DaeKwon Kang (ncrash.dk@gmail.com), Edited by Genie and Myeongjin Lee. */
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -11,6 +13,7 @@
 		factory( jQuery.datepicker );
 	}
 } )( function( datepicker ) {
+"use strict";
 
 datepicker.regional.ko = {
 	closeText: "닫기",

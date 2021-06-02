@@ -14,6 +14,8 @@
 //>>demos: http://jqueryui.com/effect/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -28,6 +30,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 return $.effects.define( "clip", "hide", function( options, done ) {
 	var start,

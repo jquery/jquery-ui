@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/sortable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "sortable: methods", { afterEach: helper.moduleAfterEach }  );
 

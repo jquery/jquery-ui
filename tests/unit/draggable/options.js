@@ -7,6 +7,7 @@ define( [
 	"ui/widgets/droppable",
 	"ui/widgets/sortable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "draggable: options", { afterEach: helper.moduleAfterEach }  );
 

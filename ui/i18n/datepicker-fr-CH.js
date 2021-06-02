@@ -1,6 +1,8 @@
 /* Swiss-French initialisation for the jQuery UI date picker plugin. */
 /* Written Martin Voelkle (martin.voelkle@e-tc.ch). */
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -11,6 +13,7 @@
 		factory( jQuery.datepicker );
 	}
 } )( function( datepicker ) {
+"use strict";
 
 datepicker.regional[ "fr-CH" ] = {
 	closeText: "Fermer",

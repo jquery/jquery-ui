@@ -7,6 +7,7 @@ define( [
 	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-he"
 ], function( QUnit, $, common, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "datepicker: core", {
 	beforeEach: function() {

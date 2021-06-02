@@ -1,4 +1,5 @@
 ( function() {
+"use strict";
 
 var DEFAULT_JQUERY_VERSION = "1.12.4";
 

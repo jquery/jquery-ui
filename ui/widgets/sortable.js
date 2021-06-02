@@ -15,6 +15,8 @@
 //>>css.structure: ../../themes/base/sortable.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -33,6 +35,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 return $.widget( "ui.sortable", $.ui.mouse, {
 	version: "@VERSION",
@@ -239,7 +242,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		this.cssPosition = this.helper.css( "position" );
 
 		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
-		( o.cursorAt && this._adjustOffsetFromHelper( o.cursorAt ) );
+		if ( o.cursorAt ) {
+			this._adjustOffsetFromHelper( o.cursorAt );
+		}
 
 		//Cache the former DOM position
 		this.domPosition = {
@@ -1093,9 +1098,11 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				return;
 			}
 
-			itemWithLeastDistance ?
-				this._rearrange( event, itemWithLeastDistance, null, true ) :
+			if ( itemWithLeastDistance ) {
+				this._rearrange( event, itemWithLeastDistance, null, true );
+			} else {
 				this._rearrange( event, null, this.containers[ innermostIndex ].element, true );
+			}
 			this._trigger( "change", event, this._uiHash() );
 			this.containers[ innermostIndex ]._trigger( "change", event, this._uiHash( this ) );
 			this.currentContainer = this.containers[ innermostIndex ];
@@ -1435,9 +1442,12 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 	_rearrange: function( event, i, a, hardRefresh ) {
 
-		a ? a[ 0 ].appendChild( this.placeholder[ 0 ] ) :
+		if ( a ) {
+			a[ 0 ].appendChild( this.placeholder[ 0 ] );
+		} else {
 			i.item[ 0 ].parentNode.insertBefore( this.placeholder[ 0 ],
 				( this.direction === "down" ? i.item[ 0 ] : i.item[ 0 ].nextSibling ) );
+		}
 
 		//Various things done here to improve the performance:
 		// 1. we create a setTimeout, that calls refreshPositions

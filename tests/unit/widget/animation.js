@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widget"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "widget animation", ( function() {
 	var show = $.fn.show,

@@ -1,3 +1,5 @@
+"use strict";
+
 var shell = require( "shelljs" );
 var Release = {
 	define: function( props ) {

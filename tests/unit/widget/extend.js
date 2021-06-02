@@ -3,6 +3,7 @@ define( [
 	"jquery",
 	"ui/widget"
 ], function( QUnit, $ ) {
+"use strict";
 
 QUnit.test( "$.widget.extend()", function( assert ) {
 	assert.expect( 28 );

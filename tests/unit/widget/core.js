@@ -5,6 +5,7 @@ define( [
 	"lib/helper",
 	"ui/widget"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 QUnit.module( "widget factory", {
 	afterEach: function() {

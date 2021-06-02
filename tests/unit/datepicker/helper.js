@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/datepicker"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 return $.extend( helper, {
 	addMonths: function( date, offset ) {

@@ -14,6 +14,8 @@
 //>>demos: http://jqueryui.com/widget/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -24,6 +26,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 var widgetUuid = 0;
 var widgetHasOwnProperty = Array.prototype.hasOwnProperty;

@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/effects/effect-scale"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "effect.scale: Scale", { afterEach: helper.moduleAfterEach }  );
 

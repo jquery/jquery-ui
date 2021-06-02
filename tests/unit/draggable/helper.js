@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/draggable"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 return $.extend( helper, {
 

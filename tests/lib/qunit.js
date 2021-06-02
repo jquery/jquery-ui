@@ -6,6 +6,7 @@ define( [
 	"lib/qunit-assert-domequal",
 	"phantom-bridge"
 ], function( QUnit, $ ) {
+"use strict";
 
 QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;

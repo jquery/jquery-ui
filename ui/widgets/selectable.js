@@ -15,6 +15,8 @@
 //>>css.structure: ../../themes/base/selectable.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -30,6 +32,7 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
 
 return $.widget( "ui.selectable", $.ui.mouse, {
 	version: "@VERSION",

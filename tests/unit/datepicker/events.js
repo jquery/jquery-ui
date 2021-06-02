@@ -4,6 +4,7 @@ define( [
 	"./helper",
 	"ui/widgets/datepicker"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 var beforeAfterEach = testHelper.beforeAfterEach;
 

@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/dialog"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 // TODO add afterEach callback to remove dialogs
 QUnit.module( "dialog: core", { afterEach: helper.moduleAfterEach }  );

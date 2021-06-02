@@ -7,6 +7,7 @@ define( [
 	"ui/effects/effect-blind",
 	"ui/effects/effect-explode"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "dialog: options", { afterEach: helper.moduleAfterEach }  );
 

@@ -7,6 +7,7 @@ define( [
 	"ui/widgets/droppable",
 	"ui/widgets/resizable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "draggable: core", { afterEach: helper.moduleAfterEach }  );
 

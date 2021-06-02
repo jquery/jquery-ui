@@ -1,4 +1,6 @@
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -9,6 +11,8 @@
 		factory( jQuery );
 	}
 } )( function( $ ) {
+"use strict";
+
 return $.ui.safeActiveElement = function( document ) {
 	var activeElement;
 

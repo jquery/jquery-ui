@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/autocomplete"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "autocomplete: core", { afterEach: helper.moduleAfterEach }  );
 
