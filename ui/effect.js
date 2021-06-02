@@ -342,6 +342,7 @@ if ( $.uiBackCompat !== false ) {
 			// Firefox incorrectly exposes anonymous content
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
 			try {
+				// eslint-disable-next-line no-unused-expressions
 				active.id;
 			} catch ( e ) {
 				active = document.body;

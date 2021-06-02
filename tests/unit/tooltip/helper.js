@@ -14,10 +14,8 @@ define( [
 						timers = jQuery.timers;
 
 					jQuery.fx.stop();
-					var x = false;
 
 					for ( index = timers.length; index--; ) {
-						x = true;
 						timer = timers[ index ];
 						timer.anim.stop();
 						timers.splice( index, 1 );

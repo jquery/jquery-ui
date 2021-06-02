@@ -62,7 +62,7 @@ QUnit.test( "enable", function( assert ) {
 	assert.equal( el.droppable( "option", "disabled" ), false, "disabled option setter" );
 	testHelper.shouldDrop( assert );
 
-	expected = $( "<div></div>" ).droppable(),
+	expected = $( "<div></div>" ).droppable();
 	actual = expected.droppable( "enable" );
 	assert.equal( actual, expected, "enable is chainable" );
 } );

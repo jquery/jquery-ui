@@ -69,7 +69,7 @@ QUnit.test( "destroy", function( assert ) {
 	assert.equal( $( ".ui-widget-overlay" ).length, 0, "overlay does not exist" );
 	assert.equal( $( document ).data( "ui-dialog-overlays" ), undefined, "ui-dialog-overlays equals the number of open overlays" );
 
-	element = $( "#dialog1" ).dialog( { modal: true } ),
+	element = $( "#dialog1" ).dialog( { modal: true } );
 	element2 = $( "#dialog2" ).dialog( { modal: true } );
 	assert.equal( $( ".ui-widget-overlay" ).length, 2, "overlays created when dialogs are open" );
 	assert.equal( $( document ).data( "ui-dialog-overlays" ), 2, "ui-dialog-overlays equals the number of open overlays" );

@@ -619,7 +619,7 @@ $.widget( "ui.autocomplete", {
 		var editable = element.prop( "contentEditable" );
 
 		if ( editable === "inherit" ) {
-		  return this._isContentEditable( element.parent() );
+			return this._isContentEditable( element.parent() );
 		}
 
 		return editable === "true";

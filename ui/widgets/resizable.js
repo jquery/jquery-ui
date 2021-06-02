@@ -779,7 +779,9 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_propagate: function( n, event ) {
 		$.ui.plugin.call( this, n, [ event, this.ui() ] );
-		( n !== "resize" && this._trigger( n, event, this.ui() ) );
+		if ( n !== "resize" ) {
+			this._trigger( n, event, this.ui() );
+		}
 	},
 
 	plugins: {},

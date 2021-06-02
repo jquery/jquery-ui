@@ -83,7 +83,9 @@ $.widget( "ui.droppable", {
 
 		this._addToManager( o.scope );
 
-		o.addClasses && this._addClass( "ui-droppable" );
+		if ( o.addClasses ) {
+			this._addClass( "ui-droppable" );
+		}
 
 	},
 

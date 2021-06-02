@@ -1,5 +1,6 @@
 /* globals window, document */
 ( function() {
+"use strict";
 
 // Find the script element
 var scripts = document.getElementsByTagName( "script" );

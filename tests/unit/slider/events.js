@@ -125,16 +125,16 @@ QUnit.test( "mouse based interaction part two: when handles overlap", function( 
 			start: function( event, ui ) {
 				assert.equal( handles.index( ui.handle ), 0, "leftmost handle activated when overlapping at maximum" );
 			}
-		} ),
-		handles = element.find( ".ui-slider-handle" );
+		} );
+	handles = element.find( ".ui-slider-handle" );
 	handles.eq( 0 ).simulate( "drag", { dx: -10 } );
 	element.slider( "destroy" );
 
 	element = $( "#slider1" )
 		.slider( {
 			values: [ 19, 20 ]
-		} ),
-		handles = element.find( ".ui-slider-handle" );
+		} );
+	handles = element.find( ".ui-slider-handle" );
 	handles.eq( 0 ).simulate( "drag", { dx: 10 } );
 	element.one( "slidestart", function( event, ui ) {
 		assert.equal( handles.index( ui.handle ), 0, "left handle activated if left was moved last" );
@@ -145,8 +145,8 @@ QUnit.test( "mouse based interaction part two: when handles overlap", function( 
 	element = $( "#slider1" )
 		.slider( {
 			values: [ 19, 20 ]
-		} ),
-		handles = element.find( ".ui-slider-handle" );
+		} );
+	handles = element.find( ".ui-slider-handle" );
 	handles.eq( 1 ).simulate( "drag", { dx: -10 } );
 	element.one( "slidestart", function( event, ui ) {
 		assert.equal( handles.index( ui.handle ), 1, "right handle activated if right was moved last (#3467)" );
@@ -159,8 +159,8 @@ QUnit.test( "mouse based interaction part two: when handles overlap", function( 
 			min: 0,
 			max: 100,
 			values: [ 0, 50 ]
-		} ),
-		handles = element.find( ".ui-slider-handle" );
+		} );
+	handles = element.find( ".ui-slider-handle" );
 
 	element.slider( "option", { values: [ 100, 100 ] } );
 	handles.eq( 0 ).simulate( "drag", { dx: -10 } );

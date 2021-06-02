@@ -63,7 +63,7 @@ QUnit.test( "enable", function( assert ) {
 
 	testHelper.sort( assert, $( "li", el )[ 0 ], 0, 44, 2, ".sortable('option', 'disabled', false)" );
 
-	expected = $( "<div></div>" ).sortable(),
+	expected = $( "<div></div>" ).sortable();
 	actual = expected.sortable( "enable" );
 	assert.equal( actual, expected, "enable is chainable" );
 } );
