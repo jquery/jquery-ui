@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widget"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "widget animation", ( function() {
 	var show = $.fn.show,
@@ -30,7 +31,7 @@ QUnit.module( "widget animation", ( function() {
 			return helper.moduleAfterEach.apply( this, arguments );
 		}
 	};
-}() ) );
+} )()  );
 
 QUnit.test( "show: null", function( assert ) {
 	var ready = assert.async();

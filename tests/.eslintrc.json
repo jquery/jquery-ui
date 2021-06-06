@@ -1,0 +1,26 @@
+{
+	"parserOptions": {
+		"ecmaVersion": 5
+	},
+
+	"env": {
+		"browser": true,
+		"jquery": true,
+		"node": false
+	},
+
+	"rules": {
+		// Too many violations:
+		"max-len": "off",
+		"no-unused-vars": "off",
+		"strict": "off" // ideally, `[ "error", "function" ]`
+	},
+
+	"globals": {
+		"define": false,
+		"Globalize": false,
+		"QUnit": false,
+		"require": true,
+		"requirejs": true
+	}
+}

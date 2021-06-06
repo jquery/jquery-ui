@@ -1,6 +1,6 @@
-module.exports = function( grunt ) {
-
 "use strict";
+
+module.exports = function( grunt ) {
 
 var
 	glob = require( "glob" ),
@@ -177,25 +177,6 @@ grunt.initConfig( {
 		}
 	},
 
-	jscs: {
-		ui: {
-			options: {
-				config: true
-			},
-			files: {
-				src: [ "demos/**/*.js", "build/**/*.js", "ui/**/*.js" ]
-			}
-		},
-		tests: {
-			options: {
-				config: true,
-				maximumLineLength: null
-			},
-			files: {
-				src: [ "tests/**/*.js" ]
-			}
-		}
-	},
 	uglify: minify,
 	htmllint: {
 		good: {
@@ -203,7 +184,7 @@ grunt.initConfig( {
 				ignore: [
 				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
 			] },
-			src: glob.sync("{demos,tests}/**/*.html", {
+			src: glob.sync( "{demos,tests}/**/*.html", {
 				ignore: htmllintBad
 			} )
 		},
@@ -242,12 +223,10 @@ grunt.initConfig( {
 			}
 		}
 	},
-	jshint: {
-		options: {
-			jshintrc: true
-		},
+	eslint: {
 		all: [
-			"ui/*.js",
+			"ui/**/*.js",
+			"!ui/vendor/**/*.js",
 			"Gruntfile.js",
 			"build/**/*.js",
 			"tests/unit/**/*.js",
@@ -287,10 +266,12 @@ grunt.initConfig( {
 				"qunit/qunit.css": "qunit/qunit/qunit.css",
 				"qunit/LICENSE.txt": "qunit/LICENSE.txt",
 
-				"qunit-assert-classes/qunit-assert-classes.js": "qunit-assert-classes/qunit-assert-classes.js",
+				"qunit-assert-classes/qunit-assert-classes.js":
+					"qunit-assert-classes/qunit-assert-classes.js",
 				"qunit-assert-classes/LICENSE.txt": "qunit-assert-classes/LICENSE",
 
-				"qunit-assert-close/qunit-assert-close.js": "qunit-assert-close/qunit-assert-close.js",
+				"qunit-assert-close/qunit-assert-close.js":
+					"qunit-assert-close/qunit-assert-close.js",
 				"qunit-assert-close/MIT-LICENSE.txt": "qunit-assert-close/MIT-LICENSE.txt",
 
 				"qunit-composite/qunit-composite.js": "qunit-composite/qunit-composite.js",
@@ -304,9 +285,6 @@ grunt.initConfig( {
 
 				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
 				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
-
-				"jshint/jshint.js": "jshint/dist/jshint.js",
-				"jshint/LICENSE": "jshint/LICENSE",
 
 				"jquery/jquery.js": "jquery-1.x/dist/jquery.js",
 				"jquery/LICENSE.txt": "jquery-1.x/LICENSE.txt",
@@ -443,10 +421,12 @@ grunt.initConfig( {
 				"jquery-3.6.0/jquery.js": "jquery-3.6.0/dist/jquery.js",
 				"jquery-3.6.0/LICENSE.txt": "jquery-3.6.0/LICENSE.txt",
 
-				"jquery-migrate-1.4.1/jquery-migrate.js": "jquery-migrate-1.4.1/dist/jquery-migrate.js",
+				"jquery-migrate-1.4.1/jquery-migrate.js":
+					"jquery-migrate-1.4.1/dist/jquery-migrate.js",
 				"jquery-migrate-1.4.1/LICENSE.txt": "jquery-migrate-1.4.1/LICENSE.txt",
 
-				"jquery-migrate-3.3.2/jquery-migrate.js": "jquery-migrate-3.3.2/dist/jquery-migrate.js",
+				"jquery-migrate-3.3.2/jquery-migrate.js":
+					"jquery-migrate-3.3.2/dist/jquery-migrate.js",
 				"jquery-migrate-3.3.2/LICENSE.txt": "jquery-migrate-3.3.2/LICENSE.txt"
 			}
 		}
@@ -512,7 +492,7 @@ grunt.registerTask( "update-authors", function() {
 
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
 grunt.registerTask( "jenkins", [ "default", "concat" ] );
-grunt.registerTask( "lint", [ "asciilint", "jshint", "jscs", "csslint", "htmllint" ] );
+grunt.registerTask( "lint", [ "asciilint", "eslint", "csslint", "htmllint" ] );
 grunt.registerTask( "test", [ "qunit" ] );
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );

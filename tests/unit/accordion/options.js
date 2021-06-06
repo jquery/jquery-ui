@@ -4,6 +4,7 @@ define( [
 	"./helper",
 	"ui/widgets/accordion"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 var equalHeight = testHelper.equalHeight,
 	beforeAfterEach = testHelper.beforeAfterEach,

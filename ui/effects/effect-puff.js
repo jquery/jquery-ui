@@ -14,6 +14,8 @@
 //>>demos: http://jqueryui.com/effect/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -28,7 +30,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 return $.effects.define( "puff", "hide", function( options, done ) {
 	var newOptions = $.extend( true, {}, options, {
@@ -39,4 +42,4 @@ return $.effects.define( "puff", "hide", function( options, done ) {
 	$.effects.effect.scale.call( this, newOptions, done );
 } );
 
-} ) );
+} );

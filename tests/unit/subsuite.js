@@ -1,4 +1,5 @@
 ( function() {
+"use strict";
 
 var versions = [
 		"1.8.0", "1.8.1", "1.8.2", "1.8.3",
@@ -33,4 +34,4 @@ window.testAllVersions = function( widget ) {
 		} ) );
 };
 
-}() );
+} )();

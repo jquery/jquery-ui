@@ -8,6 +8,7 @@ define( [
 	"ui/i18n/datepicker-zh-CN",
 	"ui/ie"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 var beforeAfterEach = testHelper.beforeAfterEach;
 
@@ -902,7 +903,7 @@ QUnit.test( "localisation", function( assert ) {
 	assert.expect( 24 );
 	var dp, month, day, date,
 		inp = testHelper.init( "#inp", $.datepicker.regional.fr );
-	inp.datepicker( "option", { dateFormat: "DD, d MM yy", showButtonPanel:true, changeMonth:true, changeYear:true } ).val( "" ).datepicker( "show" );
+	inp.datepicker( "option", { dateFormat: "DD, d MM yy", showButtonPanel: true, changeMonth: true, changeYear: true } ).val( "" ).datepicker( "show" );
 	dp = $( "#ui-datepicker-div" );
 	assert.equal( $( ".ui-datepicker-close", dp ).text(), "Fermer", "Localisation - close" );
 	$( ".ui-datepicker-close", dp ).simulate( "mouseover" );
@@ -1039,50 +1040,85 @@ QUnit.test( "parseDateErrors", function( assert ) {
 		try {
 			expr();
 			assert.ok( false, "Parsed error " + value );
-		}
-		catch ( e ) {
+		} catch ( e ) {
 			assert.equal( e, error, "Parsed error " + value );
 		}
 	}
-	expectError( function() { $.datepicker.parseDate( null, "Sat 2 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( null, "Sat 2 01" );
+	},
 		"Sat 2 01", "Invalid arguments" );
-	expectError( function() { $.datepicker.parseDate( "d m y", null ); },
+	expectError( function() {
+		$.datepicker.parseDate( "d m y", null );
+	},
 		"null", "Invalid arguments" );
-	expectError( function() { $.datepicker.parseDate( "d m y", "Sat 2 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "d m y", "Sat 2 01" );
+	},
 		"Sat 2 01 - d m y", "Missing number at position 0" );
-	expectError( function() { $.datepicker.parseDate( "dd mm yy", "Sat 2 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "dd mm yy", "Sat 2 01" );
+	},
 		"Sat 2 01 - dd mm yy", "Missing number at position 0" );
-	expectError( function() { $.datepicker.parseDate( "d m y", "3 Feb 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "d m y", "3 Feb 01" );
+	},
 		"3 Feb 01 - d m y", "Missing number at position 2" );
-	expectError( function() { $.datepicker.parseDate( "dd mm yy", "3 Feb 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "dd mm yy", "3 Feb 01" );
+	},
 		"3 Feb 01 - dd mm yy", "Missing number at position 2" );
-	expectError( function() { $.datepicker.parseDate( "mm dd yy", "2 1 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "mm dd yy", "2 1 01" );
+	},
 		"2 1 01 - dd mm yy", "Missing number at position 4" );
-	expectError( function() { $.datepicker.parseDate( "d m y", "3 2 AD01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "d m y", "3 2 AD01" );
+	},
 		"3 2 AD01 - d m y", "Missing number at position 4" );
-	expectError( function() { $.datepicker.parseDate( "d m yy", "3 2 AD01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "d m yy", "3 2 AD01" );
+	},
 		"3 2 AD01 - dd mm yy", "Missing number at position 4" );
-	expectError( function() { $.datepicker.parseDate( "y-o", "01-D01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "y-o", "01-D01" );
+	},
 		"2001-D01 - y-o", "Missing number at position 3" );
-	expectError( function() { $.datepicker.parseDate( "yy-oo", "2001-D01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "yy-oo", "2001-D01" );
+	},
 		"2001-D01 - yy-oo", "Missing number at position 5" );
-	expectError( function() { $.datepicker.parseDate( "D d M y", "D7 3 Feb 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "D d M y", "D7 3 Feb 01" );
+	},
 		"D7 3 Feb 01 - D d M y", "Unknown name at position 0" );
-	expectError( function() { $.datepicker.parseDate( "D d M y", "Sat 3 M2 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "D d M y", "Sat 3 M2 01" );
+	},
 		"Sat 3 M2 01 - D d M y", "Unknown name at position 6" );
-	expectError( function() { $.datepicker.parseDate( "DD, MM d, yy", "Saturday- Feb 3, 2001" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "DD, MM d, yy", "Saturday- Feb 3, 2001" );
+	},
 		"Saturday- Feb 3, 2001 - DD, MM d, yy", "Unexpected literal at position 8" );
-	expectError( function() { $.datepicker.parseDate( "'day' d 'of' MM (''DD''), yy",
-		"day 3 of February (\"Saturday\"), 2001" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "'day' d 'of' MM (''DD''), yy",
+			"day 3 of February (\"Saturday\"), 2001" );
+	},
 		"day 3 of Mon2 ('Day7'), 2001", "Unexpected literal at position 19" );
-	expectError( function() { $.datepicker.parseDate( "d m y", "29 2 01" ); },
+	expectError( function() {
+		$.datepicker.parseDate( "d m y", "29 2 01" );
+	},
 		"29 2 01 - d m y", "Invalid date" );
 	fr = $.datepicker.regional.fr;
 	settings = { dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames };
-	expectError( function() { $.datepicker.parseDate( "D d M y", "Mon 9 Avr 01", settings ); },
+	expectError( function() {
+		$.datepicker.parseDate( "D d M y", "Mon 9 Avr 01", settings );
+	},
 		"Mon 9 Avr 01 - D d M y", "Unknown name at position 0" );
-	expectError( function() { $.datepicker.parseDate( "D d M y", "Lun. 9 Apr 01", settings ); },
+	expectError( function() {
+		$.datepicker.parseDate( "D d M y", "Lun. 9 Apr 01", settings );
+	},
 		"Lun. 9 Apr 01 - D d M y", "Unknown name at position 7" );
 } );
 
@@ -1092,7 +1128,7 @@ QUnit.test( "Ticket #7244: date parser does not fail when too many numbers are p
 	try {
 		date = $.datepicker.parseDate( "dd/mm/yy", "18/04/19881" );
 		assert.ok( false, "Did not properly detect an invalid date" );
-	}catch ( e ) {
+	} catch ( e ) {
 		assert.ok( "invalid date detected" );
 	}
 

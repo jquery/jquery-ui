@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/menu"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "menu: core", { afterEach: helper.moduleAfterEach }  );
 

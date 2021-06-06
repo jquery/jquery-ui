@@ -3,6 +3,7 @@ define( [
 	"jquery",
 	"ui/widget"
 ], function( QUnit, $ ) {
+"use strict";
 
 QUnit.test( "$.widget.extend()", function( assert ) {
 	assert.expect( 28 );
@@ -75,7 +76,7 @@ QUnit.test( "$.widget.extend()", function( assert ) {
 	assert.strictEqual( nullUndef.xnumber0, null, "Check to make sure null values are inserted" );
 
 	target = {};
-	recursive = { foo:target, bar:5 };
+	recursive = { foo: target, bar: 5 };
 	$.widget.extend( target, recursive );
 	assert.deepEqual( target, { foo: {}, bar: 5 }, "Check to make sure a recursive obj doesn't go never-ending loop by not copying it over" );
 
@@ -92,7 +93,7 @@ QUnit.test( "$.widget.extend()", function( assert ) {
 	assert.strictEqual( ret.foo, null, "Make sure a null value doesn't crash with deep extend, for #1908" );
 
 	obj = { foo: null };
-	$.widget.extend( obj, { foo:"notnull" } );
+	$.widget.extend( obj, { foo: "notnull" } );
 	assert.equal( obj.foo, "notnull", "Make sure a null value can be overwritten" );
 
 	settings = $.widget.extend( {}, defaults, options1, options2 );

@@ -6,6 +6,7 @@ define( [
 	"globalize",
 	"globalize/ja-JP"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "spinner: options", { afterEach: helper.moduleAfterEach }  );
 

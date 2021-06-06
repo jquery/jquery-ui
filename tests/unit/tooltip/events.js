@@ -4,6 +4,7 @@ define( [
 	"./helper",
 	"ui/widgets/tooltip"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 var beforeAfterEach = testHelper.beforeAfterEach;
 

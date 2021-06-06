@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/spinner"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 var originalSpinner = $.ui.spinner.prototype;
 QUnit.module( "spinner: deprecated", {

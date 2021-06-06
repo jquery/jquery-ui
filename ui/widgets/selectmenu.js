@@ -9,9 +9,9 @@
 
 //>>label: Selectmenu
 //>>group: Widgets
-// jscs:disable maximumLineLength
+/* eslint-disable max-len */
 //>>description: Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.
-// jscs:enable maximumLineLength
+/* eslint-enable max-len */
 //>>docs: http://api.jqueryui.com/selectmenu/
 //>>demos: http://jqueryui.com/selectmenu/
 //>>css.structure: ../../themes/base/core.css
@@ -19,6 +19,8 @@
 //>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -38,7 +40,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	version: "@VERSION",
@@ -687,4 +690,4 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	}
 } ] );
 
-} ) );
+} );

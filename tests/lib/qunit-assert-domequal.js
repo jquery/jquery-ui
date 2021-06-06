@@ -8,6 +8,7 @@ define( [
 	"qunit",
 	"jquery"
 ], function( QUnit, $ ) {
+"use strict";
 
 var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 

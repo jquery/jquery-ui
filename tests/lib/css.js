@@ -1,4 +1,5 @@
 ( function() {
+"use strict";
 
 function includeStyle( url ) {
 	document.write( "<link rel='stylesheet' href='../../../" + url + "'>" );

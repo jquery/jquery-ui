@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/spinner"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 var simulateKeyDownUp = testHelper.simulateKeyDownUp;
 

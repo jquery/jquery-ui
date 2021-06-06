@@ -1,5 +1,7 @@
 // This file is deprecated in 1.12.0 to be removed in 1.13
 ( function() {
+"use strict";
+
 define( [
 	"jquery",
 	"./data",

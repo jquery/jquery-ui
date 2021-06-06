@@ -13,6 +13,8 @@
 //>>docs: http://api.jqueryui.com/focusable-selector/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -22,7 +24,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-} ( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 // Selectors
 $.ui.focusable = function( element, hasTabindex ) {
@@ -81,4 +84,4 @@ $.extend( $.expr.pseudos, {
 
 return $.ui.focusable;
 
-} ) );
+} );

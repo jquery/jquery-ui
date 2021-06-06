@@ -4,6 +4,7 @@ define( [
 	"./helper",
 	"ui/widgets/dialog"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 QUnit.module( "dialog: events", { afterEach: testHelper.moduleAfterEach }  );
 

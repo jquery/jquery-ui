@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/selectmenu"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "selectmenu: methods", { afterEach: helper.moduleAfterEach }  );
 

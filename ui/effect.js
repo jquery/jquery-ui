@@ -9,13 +9,15 @@
 
 //>>label: Effects Core
 //>>group: Effects
-// jscs:disable maximumLineLength
+/* eslint-disable max-len */
 //>>description: Extends the internal jQuery effects. Includes morphing and easing. Required by all other effects.
-// jscs:enable maximumLineLength
+/* eslint-enable max-len */
 //>>docs: http://api.jqueryui.com/category/effects-core/
 //>>demos: http://jqueryui.com/effect/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -29,7 +31,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 var dataSpace = "ui-effects-",
 	dataSpaceStyle = "ui-effects-style",
@@ -339,6 +342,7 @@ if ( $.uiBackCompat !== false ) {
 			// Firefox incorrectly exposes anonymous content
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
 			try {
+				// eslint-disable-next-line no-unused-expressions
 				active.id;
 			} catch ( e ) {
 				active = document.body;
@@ -967,4 +971,4 @@ $.each( baseEasings, function( name, easeIn ) {
 
 return $.effects;
 
-} ) );
+} );

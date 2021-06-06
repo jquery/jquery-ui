@@ -8,6 +8,7 @@ define( [
 	"ui/widgets/button",
 	"ui/widgets/spinner"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "Controlgroup: Core", { afterEach: helper.moduleAfterEach }  );
 

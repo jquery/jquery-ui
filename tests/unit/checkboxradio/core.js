@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/checkboxradio"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "Checkboxradio: core", { afterEach: helper.moduleAfterEach }  );
 

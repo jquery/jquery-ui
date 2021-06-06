@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/effects/effect-scale"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "effect.scale: Scale", { afterEach: helper.moduleAfterEach }  );
 
@@ -34,8 +35,20 @@ function run( position, v, h, vo, ho ) {
 
 		css[ h ] = 33;
 		css[ v ] = 33;
-		target[ h ] = h === ho ? css[ h ] : ho === "center" ? css[ h ] - 35 : css[ h ] - 70;
-		target[ v ] = v === vo ? css[ v ] : vo === "middle" ? css[ v ] - 35 : css[ v ] - 70;
+		if ( h === ho ) {
+			target[ h ] = css[ h ];
+		} else if ( ho === "center" ) {
+			target[ h ] = css[ h ] - 35;
+		} else {
+			target[ h ] = css[ h ] - 70;
+		}
+		if ( v === vo ) {
+			target[ v ] = css[ v ];
+		} else if ( vo === "middle" ) {
+			target[ v ] = css[ v ] - 35;
+		} else {
+			target[ v ] = css[ v ] - 70;
+		}
 		if ( relative && h === "right" ) {
 			target[ h ] += 70;
 		}
@@ -51,6 +64,7 @@ function suite( position ) {
 	run( position, "top", "left", "top", "left" );
 	run( position, "top", "left", "middle", "center" );
 	run( position, "top", "left", "bottom", "right" );
+
 	/* Firefox is currently not capable of supporting detection of bottom and right....
 	run( position, "bottom", "right", "top", "left" );
 	run( position, "bottom", "right", "middle", "center" );

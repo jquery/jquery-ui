@@ -1,0 +1,38 @@
+{
+	"parserOptions": {
+		"ecmaVersion": 5
+	},
+
+	"env": {
+		"browser": true,
+		"jquery": true,
+		"node": false
+	},
+
+	"rules": {
+		"strict": [ "error", "function" ],
+
+		// The following rule is relaxed due to too many violations:
+		"no-unused-vars": [ "error", { "vars": "all", "args": "after-used" } ],
+
+		// Too many violations:
+		"camelcase": "off",
+		"no-nested-ternary": "off"
+	},
+
+	"globals": {
+		"define": false,
+		"Globalize": false
+	},
+
+	"overrides": [
+		{
+			"files": [ "i18n/**/*.js" ],
+			"rules": {
+
+				// We want to keep all the strings in separate single lines
+				"max-len": "off"
+			}
+		}
+	]
+}

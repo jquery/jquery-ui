@@ -5,6 +5,7 @@ define( [
 	"lib/helper",
 	"ui/position"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 var win = $( window ),
 	scrollTopSupport = function() {
@@ -22,8 +23,6 @@ QUnit.module( "position", {
 	},
 	afterEach: helper.moduleAfterEach
 } );
-
-common.testJshint( "position" );
 
 QUnit.test( "my, at, of", function( assert ) {
 	assert.expect( 4 );

@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/droppable"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "droppable: options", { afterEach: helper.moduleAfterEach }  );
 
@@ -80,6 +81,7 @@ QUnit.test( "scope", function( assert ) {
 	assert.equal( draggableOffset.left, oldDraggableOffset.left );
 	assert.equal( draggableOffset.top, oldDraggableOffset.top );
 } );
+
 /*
 Test( "greedy", function() {
 	ok(false, 'missing test - untested code is broken code');

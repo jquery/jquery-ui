@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/accordion"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 return $.extend( helper, {
 	equalHeight: function( assert, accordion, height ) {
