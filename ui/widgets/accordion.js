@@ -9,9 +9,9 @@
 
 //>>label: Accordion
 //>>group: Widgets
-// jscs:disable maximumLineLength
+/* eslint-disable max-len */
 //>>description: Displays collapsible content panels for presenting information in a limited amount of space.
-// jscs:enable maximumLineLength
+/* eslint-enable max-len */
 //>>docs: http://api.jqueryui.com/accordion/
 //>>demos: http://jqueryui.com/accordion/
 //>>css.structure: ../../themes/base/core.css
@@ -19,6 +19,8 @@
 //>>css.theme: ../../themes/base/theme.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -34,7 +36,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 return $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -616,4 +619,4 @@ return $.widget( "ui.accordion", {
 	}
 } );
 
-} ) );
+} );

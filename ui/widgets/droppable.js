@@ -14,6 +14,8 @@
 //>>demos: http://jqueryui.com/droppable/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -29,7 +31,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 $.widget( "ui.droppable", {
 	version: "@VERSION",
@@ -80,7 +83,9 @@ $.widget( "ui.droppable", {
 
 		this._addToManager( o.scope );
 
-		o.addClasses && this._addClass( "ui-droppable" );
+		if ( o.addClasses ) {
+			this._addClass( "ui-droppable" );
+		}
 
 	},
 
@@ -206,7 +211,8 @@ $.widget( "ui.droppable", {
 					)
 				) {
 					childrenIntersection = true;
-					return false; }
+					return false;
+				}
 			} );
 		if ( childrenIntersection ) {
 			return false;
@@ -494,4 +500,4 @@ if ( $.uiBackCompat !== false ) {
 
 return $.ui.droppable;
 
-} ) );
+} );

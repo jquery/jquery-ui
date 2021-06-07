@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/slider"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 var element, options;
 
@@ -147,7 +148,7 @@ QUnit.test( "orientation", function( assert ) {
 	assert.equal( element.find( ".ui-slider-handle" )[ 0 ].style.bottom, "", "CSS bottom reset" );
 	assert.equal( handle()[ 0 ].style.left, percentVal + "%", "horizontal slider handle is positioned with left: %" );
 
-	element.slider( "destroy" ) ;
+	element.slider( "destroy" );
 
 	options = {
 		max: 2,

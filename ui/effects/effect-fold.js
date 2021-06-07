@@ -14,6 +14,8 @@
 //>>demos: http://jqueryui.com/effect/
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -27,7 +29,8 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
 
 return $.effects.define( "fold", "hide", function( options, done ) {
 
@@ -86,4 +89,4 @@ return $.effects.define( "fold", "hide", function( options, done ) {
 	$.effects.unshift( element, queuelen, 4 );
 } );
 
-} ) );
+} );

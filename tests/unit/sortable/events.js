@@ -6,6 +6,7 @@ define( [
 	"ui/widgets/sortable",
 	"ui/widgets/draggable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "sortable: events", { afterEach: helper.moduleAfterEach }  );
 
@@ -183,7 +184,9 @@ QUnit.test( "#4752: link event firing on sortable with connect list", function( 
 	assert.expect( 10 );
 
 	var fired = {},
-		hasFired = function( type ) { return ( type in fired ) && ( true === fired[ type ] ); };
+		hasFired = function( type ) {
+			return ( type in fired ) && ( true === fired[ type ] );
+		};
 
 	$( "#sortable" ).clone().attr( "id", "sortable2" ).insertAfter( "#sortable" );
 

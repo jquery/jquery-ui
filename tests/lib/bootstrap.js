@@ -1,4 +1,5 @@
 ( function() {
+"use strict";
 
 var DEFAULT_JQUERY_VERSION = "1.12.4";
 
@@ -9,7 +10,6 @@ requirejs.config( {
 		"jquery": jqueryUrl(),
 		"jquery-migrate": migrateUrl(),
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
-		"jshint": "../../../external/jshint/jshint",
 		"lib": "../../lib",
 		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
@@ -128,7 +128,7 @@ function migrateUrl() {
 		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
 	} else if ( jqueryVersion === "custom" ) {
 		if ( parseUrl().migrate ) {
-			throw new Error ( "Migrate not currently supported for custom build" );
+			throw new Error( "Migrate not currently supported for custom build" );
 		}
 	} else {
 		throw new Error( "No migrate version known for jQuery " + jqueryVersion );

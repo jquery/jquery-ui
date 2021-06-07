@@ -7,10 +7,9 @@ define( [
 	"ui/labels",
 	"ui/unique-id"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 QUnit.module( "core - jQuery extensions", { afterEach: helper.moduleAfterEach }  );
-
-common.testJshint( "core" );
 
 QUnit.test( "innerWidth - getter", function( assert ) {
 	assert.expect( 2 );

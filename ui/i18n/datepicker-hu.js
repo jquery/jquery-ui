@@ -1,5 +1,7 @@
 /* Hungarian initialisation for the jQuery UI date picker plugin. */
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -9,7 +11,8 @@
 		// Browser globals
 		factory( jQuery.datepicker );
 	}
-}( function( datepicker ) {
+} )( function( datepicker ) {
+"use strict";
 
 datepicker.regional.hu = {
 	closeText: "Bezár",
@@ -33,4 +36,4 @@ datepicker.setDefaults( datepicker.regional.hu );
 
 return datepicker.regional.hu;
 
-} ) );
+} );

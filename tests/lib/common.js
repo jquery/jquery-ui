@@ -3,6 +3,7 @@ define( [
 	"jquery",
 	"lib/helper"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 var exports = {};
 
@@ -69,7 +70,6 @@ function testBasicUsage( widget ) {
 exports.testWidget = function( widget, settings ) {
 	QUnit.module( widget + ": common widget", { afterEach: helper.moduleAfterEach } );
 
-	exports.testJshint( "/widgets/" + widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	if ( !settings.noDefaultElement ) {
@@ -78,58 +78,6 @@ exports.testWidget = function( widget, settings ) {
 	QUnit.test( "version", function( assert ) {
 		assert.expect( 1 );
 		assert.ok( "version" in $.ui[ widget ].prototype, "version property exists" );
-	} );
-};
-
-exports.testJshint = function( module ) {
-
-	// Function.prototype.bind check is needed because JSHint doesn't work in ES3 browsers anymore
-	// https://github.com/jshint/jshint/issues/1384
-	if ( QUnit.urlParams.nojshint || !Function.prototype.bind ) {
-		return;
-	}
-
-	QUnit.test( "JSHint", function( assert ) {
-		var ready = assert.async();
-		require( [ "jshint" ], function() {
-			assert.expect( 1 );
-
-			$.when(
-				$.ajax( {
-					url: "../../../ui/.jshintrc",
-					dataType: "json"
-				} ),
-				$.ajax( {
-					url: "../../../ui/" + module + ".js",
-					dataType: "text"
-				} )
-			)
-				.done( function( hintArgs, srcArgs ) {
-					var globals, passed, errors,
-						jshintrc = hintArgs[ 0 ],
-						source = srcArgs[ 0 ];
-
-					globals = jshintrc.globals || {};
-					delete jshintrc.globals;
-					passed = JSHINT( source, jshintrc, globals );
-					errors = $.map( JSHINT.errors, function( error ) {
-
-						// JSHINT may report null if there are too many errors
-						if ( !error ) {
-							return;
-						}
-
-						return "[L" + error.line + ":C" + error.character + "] " +
-							error.reason + "\n" + error.evidence + "\n";
-					} ).join( "\n" );
-					assert.ok( passed, errors );
-					ready();
-				} )
-				.fail( function( hintError, srcError ) {
-					assert.ok( false, "error loading source: " + ( hintError || srcError ).statusText );
-					ready();
-				} );
-		} );
 	} );
 };
 

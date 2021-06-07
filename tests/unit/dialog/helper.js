@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/dialog"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 return $.extend( helper, {
 	drag: function( element, handle, dx, dy ) {

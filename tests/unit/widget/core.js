@@ -5,6 +5,7 @@ define( [
 	"lib/helper",
 	"ui/widget"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 QUnit.module( "widget factory", {
 	afterEach: function() {
@@ -15,8 +16,6 @@ QUnit.module( "widget factory", {
 		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
-
-common.testJshint( "widget" );
 
 QUnit.test( "widget creation", function( assert ) {
 	assert.expect( 5 );
@@ -1443,7 +1442,7 @@ QUnit.test( "._trigger() - instance as element", function( assert ) {
 				.trigger( "remove" );
 		} );
 	} );
-}() );
+} )();
 
 QUnit.test( "redefine", function( assert ) {
 	assert.expect( 4 );

@@ -7,6 +7,7 @@ define( [
 	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-he"
 ], function( QUnit, $, common, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "datepicker: core", {
 	beforeEach: function() {
@@ -14,8 +15,6 @@ QUnit.module( "datepicker: core", {
 	},
 	afterEach: helper.moduleAfterEach
 } );
-
-common.testJshint( "widgets/datepicker" );
 
 QUnit.test( "initialization - Reinitialization after body had been emptied.", function( assert ) {
 	assert.expect( 1 );
@@ -57,7 +56,7 @@ QUnit.test( "baseStructure", function( assert ) {
 			assert.ok( header.is( "div.ui-datepicker-header" ), "Structure - header division" );
 			assert.equal( header.children().length, 3, "Structure - header child count" );
 			assert.ok( header.children().first().is( "a.ui-datepicker-prev" ) && header.children().first().html() !== "", "Structure - prev link" );
-			assert.ok( header.children().eq( 1 ).is( "a.ui-datepicker-next" ) && header.children().eq ( 1 ).html() !== "", "Structure - next link" );
+			assert.ok( header.children().eq( 1 ).is( "a.ui-datepicker-next" ) && header.children().eq( 1 ).html() !== "", "Structure - next link" );
 
 			title = header.children().last();
 			assert.ok( title.is( "div.ui-datepicker-title" ) && title.html() !== "", "Structure - title division" );

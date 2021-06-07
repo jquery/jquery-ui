@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/resizable"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "resizable: methods", { afterEach: helper.moduleAfterEach }  );
 

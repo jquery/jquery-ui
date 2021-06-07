@@ -6,6 +6,7 @@ define( [
 	"ui/widget",
 	"ui/form-reset-mixin"
 ], function( QUnit, $, common, helper ) {
+"use strict";
 
 QUnit.module( "widget factory", {
 	beforeEach: function() {
@@ -30,8 +31,6 @@ QUnit.module( "widget factory", {
 		return helper.moduleAfterEach.apply( this, arguments );
 	}
 } );
-
-common.testJshint( "form-reset-mixin" );
 
 QUnit.test( "form reset", function( assert ) {
 	var ready = assert.async();

@@ -5,6 +5,7 @@ define( [
 	"ui/safe-active-element",
 	"ui/widgets/button"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "Button: core", { afterEach: helper.moduleAfterEach }  );
 

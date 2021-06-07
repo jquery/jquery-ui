@@ -4,6 +4,7 @@ define( [
 	"./helper",
 	"ui/widgets/datepicker"
 ], function( QUnit, $, testHelper ) {
+"use strict";
 
 var beforeAfterEach = testHelper.beforeAfterEach;
 
@@ -136,8 +137,12 @@ QUnit.test( "events", function( assert ) {
 
 QUnit.test( "beforeShowDay-getDate", function( assert ) {
 	assert.expect( 3 );
-	var inp = testHelper.init( "#inp", { beforeShowDay: function() { inp.datepicker( "getDate" ); return [ true, "" ]; } } ),
-		dp = $( "#ui-datepicker-div" );
+	var inp = testHelper.init( "#inp", {
+		beforeShowDay: function() {
+			inp.datepicker( "getDate" ); return [ true, "" ];
+		}
+	} );
+	var dp = $( "#ui-datepicker-div" );
 	inp.val( "01/01/2010" ).datepicker( "show" );
 
 	// Contains non-breaking space

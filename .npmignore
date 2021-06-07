@@ -1,8 +1,8 @@
 demos
 tests
 .editorconfig
-.jscsrc
-.jshintrc
+.eslintrc.json
+.eslintignore
 .mailmap
 .travis.yml
 Gruntfile.js

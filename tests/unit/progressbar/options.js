@@ -4,6 +4,7 @@ define( [
 	"lib/helper",
 	"ui/widgets/progressbar"
 ], function( QUnit, $, helper ) {
+"use strict";
 
 QUnit.module( "progressbar: options", { afterEach: helper.moduleAfterEach }  );
 

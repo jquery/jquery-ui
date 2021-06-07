@@ -5,6 +5,7 @@ define( [
 	"./helper",
 	"ui/widgets/droppable"
 ], function( QUnit, $, helper, testHelper ) {
+"use strict";
 
 QUnit.module( "droppable: core", { afterEach: helper.moduleAfterEach }  );
 
@@ -20,7 +21,9 @@ QUnit.test( "element types", function( assert ) {
 		var typeName = typeNames[ i ],
 			el = $( document.createElement( typeName ) ).appendTo( "body" );
 
-		( typeName === "table" && el.append( "<tr><td>content</td></tr>" ) );
+		if ( typeName === "table" ) {
+			el.append( "<tr><td>content</td></tr>" );
+		}
 		el.droppable();
 		testHelper.shouldDrop( assert );
 		el.droppable( "destroy" );
