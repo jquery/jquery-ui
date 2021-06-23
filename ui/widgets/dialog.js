@@ -253,7 +253,7 @@ $.widget( "ui.dialog", {
 			zIndexMax = Math.max.apply( null, zIndices );
 
 		if ( zIndexMax >= +this.uiDialog.css( "z-index" ) ) {
-			this.uiDialog.css( "z-index", zIndexMax + 1 );
+			this.uiDialog.css( "z-index", (zIndexMax + 1).toString() );
 			moved = true;
 		}
 
@@ -284,7 +284,7 @@ $.widget( "ui.dialog", {
 		// opening. The overlay shouldn't move after the dialog is open so that
 		// modeless dialogs opened after the modal dialog stack properly.
 		if ( this.overlay ) {
-			this.overlay.css( "z-index", this.uiDialog.css( "z-index" ) - 1 );
+			this.overlay.css( "z-index", (this.uiDialog.css( "z-index" ) - 1).toString() );
 		}
 
 		this._show( this.uiDialog, this.options.show, function() {
