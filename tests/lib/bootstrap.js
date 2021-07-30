@@ -1,7 +1,7 @@
 ( function() {
 "use strict";
 
-var DEFAULT_JQUERY_VERSION = "1.12.4";
+var DEFAULT_JQUERY_VERSION = "3.6.0";
 
 requirejs.config( {
 	paths: {
