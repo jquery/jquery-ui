@@ -59,8 +59,21 @@ function addManifest( packager ) {
 function buildCDNPackage( callback ) {
 	console.log( "Building CDN package" );
 	var JqueryUi = require( "download.jqueryui.com/lib/jquery-ui" );
-	var Package = require( "download.jqueryui.com/lib/package-1-12-themes" );
+	var PackageWithoutThemes = require( "download.jqueryui.com/lib/package-1-12" );
+	var PackageOfThemes = require( "download.jqueryui.com/lib/package-1-12-themes" );
 	var Packager = require( "node-packager" );
+
+	// PackageOfThemes doesn't contain JS files, PackageWithoutThemes doesn't contain themes;
+	// we need both.
+	function Package() {
+
+		// PackageOfThemes invokes PackageWithoutThemes's constructor in its own so we don't
+		// need to do it by ourselves; we just need to handle prototypes that way.
+		PackageOfThemes.apply( this, arguments );
+	}
+
+	Object.assign( Package.prototype, PackageWithoutThemes.prototype, PackageOfThemes.prototype );
+
 	var jqueryUi = new JqueryUi( path.resolve( "." ) );
 	var target = fs.createWriteStream( "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version +
 		"-cdn.zip" );
