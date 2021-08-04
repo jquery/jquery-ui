@@ -1,4 +1,5 @@
 demos
+/dist/cdn
 tests
 .editorconfig
 .eslintrc.json
