@@ -37,7 +37,7 @@ script( Release );
 
 // Ignores actual version installed, should be good enough for a test
 if ( shell.exec( "npm ls --depth 0 | grep download.jqueryui.com" ).code === 1 ) {
-	shell.exec( "npm install " + script.dependencies.join( " " ) );
+	shell.exec( "npm install --no-save " + script.dependencies.join( " " ) );
 }
 
 // If AUTHORS.txt is outdated, this will update it
