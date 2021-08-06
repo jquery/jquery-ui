@@ -1,6 +1,6 @@
 /* eslint-disable max-len, camelcase */
 /*!
- * jQuery UI Datepicker @VERSION
+ * jQuery UI Datepicker 1.13.0-alpha.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -36,7 +36,7 @@
 } )( function( $ ) {
 "use strict";
 
-$.extend( $.ui, { datepicker: { version: "@VERSION" } } );
+$.extend( $.ui, { datepicker: { version: "1.13.0-alpha.1" } } );
 
 var datepicker_instActive;
 
@@ -2233,7 +2233,7 @@ $.fn.datepicker = function( options ) {
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
-$.datepicker.version = "@VERSION";
+$.datepicker.version = "1.13.0-alpha.1";
 
 return $.datepicker;
 
