@@ -84,18 +84,22 @@ function buildCDNPackage( callback ) {
 		jqueryUi: jqueryUi,
 		themeVars: null
 	} );
-	packager.ready.then( function() {
-		removeExternals( packager );
-		addManifest( packager );
-		packager.toZip( target, {
-			basedir: ""
-		}, function( error ) {
-			if ( error ) {
-				Release.abort( "Failed to zip CDN package", error );
-			}
-			callback();
+	packager.ready
+		.then( function() {
+			removeExternals( packager );
+			addManifest( packager );
+			packager.toZip( target, {
+				basedir: ""
+			}, function( error ) {
+				if ( error ) {
+					Release.abort( "Failed to zip the CDN package", error );
+				}
+				callback();
+			} );
+		} )
+		.catch( function( error ) {
+			Release.abort( "Failed to create the CDN package", error );
 		} );
-	} );
 }
 
 Release.define( {
