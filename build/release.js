@@ -59,8 +59,21 @@ function addManifest( packager ) {
 function buildCDNPackage( callback ) {
 	console.log( "Building CDN package" );
 	var JqueryUi = require( "download.jqueryui.com/lib/jquery-ui" );
-	var Package = require( "download.jqueryui.com/lib/package-1-12-themes" );
+	var PackageWithoutThemes = require( "download.jqueryui.com/lib/package-1-13" );
+	var PackageOfThemes = require( "download.jqueryui.com/lib/package-1-13-themes" );
 	var Packager = require( "node-packager" );
+
+	// PackageOfThemes doesn't contain JS files, PackageWithoutThemes doesn't contain themes;
+	// we need both.
+	function Package() {
+
+		// PackageOfThemes invokes PackageWithoutThemes's constructor in its own so we don't
+		// need to do it by ourselves; we just need to handle prototypes that way.
+		PackageOfThemes.apply( this, arguments );
+	}
+
+	Object.assign( Package.prototype, PackageWithoutThemes.prototype, PackageOfThemes.prototype );
+
 	var jqueryUi = new JqueryUi( path.resolve( "." ) );
 	var target = fs.createWriteStream( "../" + jqueryUi.pkg.name + "-" + jqueryUi.pkg.version +
 		"-cdn.zip" );
@@ -71,18 +84,22 @@ function buildCDNPackage( callback ) {
 		jqueryUi: jqueryUi,
 		themeVars: null
 	} );
-	packager.ready.then( function() {
-		removeExternals( packager );
-		addManifest( packager );
-		packager.toZip( target, {
-			basedir: ""
-		}, function( error ) {
-			if ( error ) {
-				Release.abort( "Failed to zip CDN package", error );
-			}
-			callback();
+	packager.ready
+		.then( function() {
+			removeExternals( packager );
+			addManifest( packager );
+			packager.toZip( target, {
+				basedir: ""
+			}, function( error ) {
+				if ( error ) {
+					Release.abort( "Failed to zip the CDN package", error );
+				}
+				callback();
+			} );
+		} )
+		.catch( function( error ) {
+			Release.abort( "Failed to create the CDN package", error );
 		} );
-	} );
 }
 
 Release.define( {
@@ -123,7 +140,7 @@ Release.define( {
 };
 
 module.exports.dependencies = [
-	"download.jqueryui.com@2.1.2",
+	"download.jqueryui.com@2.2.1",
 	"node-packager@0.0.6",
-	"shelljs@0.2.6"
+	"shelljs@0.8.4"
 ];
