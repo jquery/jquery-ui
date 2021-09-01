@@ -12,10 +12,6 @@ There are a number of ways to get involved with the development of jQuery UI. Ev
 
 This is the best way to contribute to jQuery UI. Please read through the full guide detailing [How to Report Bugs](http://contribute.jquery.org/bug-reports/).
 
-### Weekly Meetings
-
-Every week (unless otherwise noted) the jQuery UI team has a meeting to discuss the progress of current work and to bring forward possible new blockers for discussion. The meeting is held on [IRC](http://irc.jquery.org) in the #jquery-meeting channel at [Noon EST](http://www.timeanddate.com/worldclock/fixedtime.html?month=1&day=17&year=2011&hour=12&min=0&sec=0&p1=43) on Wednesdays. Meeting notes are posted on http://meetings.jquery.org/category/ui/ after each meeting.
-
 ## Tips for Getting Started
 
 ### Environment: Minimum Required
