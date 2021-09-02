@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Autocomplete @VERSION
+ * jQuery UI Autocomplete 1.13.0-rc.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -40,7 +40,7 @@
 "use strict";
 
 $.widget( "ui.autocomplete", {
-	version: "@VERSION",
+	version: "1.13.0-rc.1",
 	defaultElement: "<input>",
 	options: {
 		appendTo: null,

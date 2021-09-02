@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Selectmenu @VERSION
+ * jQuery UI Selectmenu 1.13.0-rc.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -44,7 +44,7 @@
 "use strict";
 
 return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
-	version: "@VERSION",
+	version: "1.13.0-rc.1",
 	defaultElement: "<select>",
 	options: {
 		appendTo: null,
