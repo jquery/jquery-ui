@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Unique ID @VERSION
+ * jQuery UI Unique ID 1.13.0-rc.2
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
