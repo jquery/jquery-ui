@@ -23,6 +23,7 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
+			"./jquery-var-for-color",
 			"./vendor/jquery-color/jquery.color",
 			"./version"
 		], factory );
@@ -36,11 +37,7 @@
 
 var dataSpace = "ui-effects-",
 	dataSpaceStyle = "ui-effects-style",
-	dataSpaceAnimated = "ui-effects-animated",
-
-	// Create a local jQuery because jQuery Color relies on it and the
-	// global may not exist with AMD and a custom build (#10199)
-	jQuery = $;
+	dataSpaceAnimated = "ui-effects-animated";
 
 $.effects = {
 	effect: {}
