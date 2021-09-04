@@ -23,6 +23,7 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
+			"./jquery-var-for-color",
 			"./vendor/jquery-color/jquery.color",
 			"./version"
 		], factory );
@@ -36,11 +37,7 @@
 
 var dataSpace = "ui-effects-",
 	dataSpaceStyle = "ui-effects-style",
-	dataSpaceAnimated = "ui-effects-animated",
-
-	// Create a local jQuery because jQuery Color relies on it and the
-	// global may not exist with AMD and a custom build (#10199)
-	jQuery = $;
+	dataSpaceAnimated = "ui-effects-animated";
 
 $.effects = {
 	effect: {}
@@ -704,7 +701,7 @@ $.fn.extend( {
 				// as the .show() below destroys the initial state
 				modes.push( normalizedMode );
 
-				// See $.uiBackCompat inside of run() for removal of defaultMode in 1.13
+				// See $.uiBackCompat inside of run() for removal of defaultMode in 1.14
 				if ( defaultMode && ( normalizedMode === "show" ||
 						( normalizedMode === defaultMode && normalizedMode === "hide" ) ) ) {
 					el.show();

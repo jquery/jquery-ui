@@ -241,7 +241,7 @@ $.widget( "ui.droppable", {
 	},
 
 	// Extension points just to make backcompat sane and avoid duplicating logic
-	// TODO: Remove in 1.13 along with call to it below
+	// TODO: Remove in 1.14 along with call to it below
 	_addHoverClass: function() {
 		this._addClass( "ui-droppable-hover" );
 	},
