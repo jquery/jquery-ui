@@ -81,7 +81,7 @@ document.documentElement.className = "demo-loading";
 require.config( {
 	baseUrl: window.location.pathname.indexOf( "demos/" ) !== -1 ? "../../ui" : "../../../ui",
 	paths: {
-		jquery: "../external/jquery/jquery",
+		jquery: "../external/jquery-3.6.0/jquery",
 		external: "../external/"
 	},
 	shim: {
