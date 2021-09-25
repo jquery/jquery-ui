@@ -1,5 +1,5 @@
 /*!
- * jQuery UI :data @VERSION
+ * jQuery UI :data 1.13.0-rc.3
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
