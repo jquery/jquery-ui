@@ -15,7 +15,7 @@ requirejs.config( {
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
-		"testswarm": "http://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
+		"testswarm": "https://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
 		"ui": "../../../ui"
 	},
 	shim: {
