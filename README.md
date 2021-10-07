@@ -4,7 +4,7 @@ jQuery UI is a curated set of user interface interactions, effects, widgets, and
 
 If you want to use jQuery UI, go to [jqueryui.com](http://jqueryui.com) to get started, [jqueryui.com/demos/](http://jqueryui.com/demos/) for demos, [api.jqueryui.com](http://api.jqueryui.com/) for API documentation, or the [Using jQuery UI Forum](http://forum.jquery.com/using-jquery-ui) for discussions and questions.
 
-If you want to report a bug/issue, please visit [bugs.jqueryui.com](http://bugs.jqueryui.com).
+If you want to report a bug/issue, please visit [the GitHub issues page](https://github.com/jquery/jquery-ui/issues). Archive of older bug reports is kept for historical reasons in read-only mode at [bugs.jqueryui.com](http://bugs.jqueryui.com). If any of them still matters to you, please open a bug about it on GitHub, linking to the legacy [bugs.jqueryui.com](http://bugs.jqueryui.com) issue for context.
 
 If you are interested in helping develop jQuery UI, you are in the right place.
 To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui) or [#jqueryui-dev on irc.freenode.net](http://irc.jquery.org/).
