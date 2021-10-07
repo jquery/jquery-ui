@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Tabs @VERSION
+ * jQuery UI Tabs 1.13.0
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -39,7 +39,7 @@
 "use strict";
 
 $.widget( "ui.tabs", {
-	version: "@VERSION",
+	version: "1.13.0",
 	delay: 300,
 	options: {
 		active: null,

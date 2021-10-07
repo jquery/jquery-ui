@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Draggable @VERSION
+ * jQuery UI Draggable 1.13.0
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -40,7 +40,7 @@
 "use strict";
 
 $.widget( "ui.draggable", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.13.0",
 	widgetEventPrefix: "drag",
 	options: {
 		addClasses: true,

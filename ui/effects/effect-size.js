@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Size @VERSION
+ * jQuery UI Effects Size 1.13.0
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
