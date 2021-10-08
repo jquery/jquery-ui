@@ -104,8 +104,7 @@ function buildCDNPackage( callback ) {
 
 Release.define( {
 	npmPublish: true,
-	issueTracker: "trac",
-	contributorReportId: 22,
+	issueTracker: "github",
 	changelogShell: function() {
 		var monthNames = [ "January", "February", "March", "April", "May", "June", "July",
 				"August", "September", "October", "November", "December" ],
@@ -140,7 +139,7 @@ Release.define( {
 };
 
 module.exports.dependencies = [
-	"download.jqueryui.com@2.2.4",
+	"download.jqueryui.com@2.2.7",
 	"node-packager@0.0.6",
 	"shelljs@0.8.4"
 ];

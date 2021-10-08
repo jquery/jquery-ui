@@ -1,7 +1,7 @@
 ( function() {
 "use strict";
 
-var DEFAULT_JQUERY_VERSION = "1.12.4";
+var DEFAULT_JQUERY_VERSION = "3.6.0";
 
 requirejs.config( {
 	paths: {
@@ -15,7 +15,7 @@ requirejs.config( {
 		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
-		"testswarm": "http://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
+		"testswarm": "https://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
 		"ui": "../../../ui"
 	},
 	shim: {
@@ -108,7 +108,7 @@ function jqueryUrl() {
 	var url;
 
 	if ( version === "git" || version === "3.x-git" ) {
-		url = "https://code.jquery.com/jquery-" + version;
+		url = "https://releases.jquery.com/git/jquery-" + version;
 	} else {
 		url = "../../../external/jquery-" + version + "/jquery";
 	}
@@ -121,7 +121,7 @@ function migrateUrl() {
 	var url;
 
 	if ( jqueryVersion === "git" ) {
-		url = "https://code.jquery.com/jquery-migrate-git";
+		url = "https://releases.jquery.com/git/jquery-migrate-git";
 	} else if ( jqueryVersion[ 0 ] === "3" ) {
 		url = "../../../external/jquery-migrate-3.3.2/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {

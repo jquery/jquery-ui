@@ -2,7 +2,7 @@
 	"name": "jquery-ui",
 	"title": "jQuery UI",
 	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
-	"version": "1.13.0-pre",
+	"version": "1.13.1-pre",
 	"homepage": "http://jqueryui.com",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
@@ -40,7 +40,9 @@
 		"type": "git",
 		"url": "git://github.com/jquery/jquery-ui.git"
 	},
-	"bugs": "https://bugs.jqueryui.com/",
+	"bugs": {
+		"url": "https://github.com/jquery/jquery-ui/issues"
+	},
 	"license": "MIT",
 	"scripts": {
 		"test": "grunt"
