@@ -352,9 +352,9 @@ $.widget( "ui.tooltip", {
 		// tooltips will handle this in destroy.
 		if ( target[ 0 ] !== this.element[ 0 ] ) {
 			events.remove = function() {
-				var theTarget = this._find( target );
-				if ( theTarget !== null ) {
-					this._removeTooltip( theTarget.tooltip );
+				var targetElement = this._find( target );
+				if ( targetElement !== null ) {
+					this._removeTooltip( targetElement.tooltip );
 				}
 			};
 		}
