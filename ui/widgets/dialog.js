@@ -447,51 +447,55 @@ $.widget( "ui.dialog", {
 				this.close( event );
 			}
 		} );
-        
-        this.uiDialogTitlebarMinimize = $( "<button type='button'></button>" )
-            .button( {
-                label: $( "<a>" ).text( this.options.minimizeText ).html(),
-                icon: "ui-icon ui-icon-minimize",
-                showLabel: false
-            } )
-            .appendTo( this.uiDialogTitlebar );
-        this._addClass( this.uiDialogTitlebarMinimize, "ui-dialog-titlebar-minimize" );
-        this._on( this.uiDialogTitlebarMinimize, {
-            click: function( event ) {
-                event.preventDefault();
-                this.options.restoreWidth = this.options.width;
-                this.options.restoreHeight = this.options.height;
-                this.uiDialog.width(300);
-                this.uiDialog.height(0);
-                this.element.hide();
-                this.uiDialogButtonPane.hide();
-                this.uiDialogTitlebarRestore.button("enable");
-                this.uiDialogTitlebarMinimize.button( "disable" );
-            }
-        } );
-        this.uiDialogTitlebarRestore = $( "<button type='button'></button>" )
-            .button( {
-                label: $( "<a>" ).text( this.options.restoreText ).html(),
-                icon: "ui-icon ui-icon-restore",
-                showLabel: false
-            } )
-            .appendTo( this.uiDialogTitlebar );
-        this._addClass( this.uiDialogTitlebarRestore, "ui-dialog-titlebar-restore" );
-        this._on( this.uiDialogTitlebarRestore, {
-            click: function( event ) {
-                event.preventDefault();
-                if(this.options.restoreWidth != undefined && this.options.restoreWidth != null && this.options.restoreWidth != "")
-                    this.uiDialog.width(this.options.restoreWidth);
-                if(this.options.restoreHeight != undefined && this.options.restoreHeight != null && this.options.restoreHeight != "")
-                    this.uiDialog.height(this.options.restoreHeight);
-                this.element.show();
-                this.uiDialogButtonPane.show();
-                this.uiDialogTitlebarMinimize.button( "enable" );
-                this.uiDialogTitlebarRestore.button( "disable" );
-            }
-        } );
-        this.uiDialogTitlebarRestore.button( "disable" );
-    
+
+		this.uiDialogTitlebarMinimize = $( "<button type='button'></button>" )
+			.button( {
+				label: $( "<a>" ).text( this.options.minimizeText ).html(),
+				icon: "ui-icon ui-icon-minimize",
+				showLabel: false
+			} )
+			.appendTo( this.uiDialogTitlebar );
+		this._addClass( this.uiDialogTitlebarMinimize, "ui-dialog-titlebar-minimize" );
+		this._on( this.uiDialogTitlebarMinimize, {
+			click: function( event ) {
+				event.preventDefault();
+				this.options.restoreWidth = this.options.width;
+				this.options.restoreHeight = this.options.height;
+				this.uiDialog.width( this.uiDialogTitlebar.outerWidth() > 300 ? 300 : this.uiDialogTitlebar.outerWidth() );
+				this.uiDialog.height( this.uiDialogTitlebar.outerHeight() );
+				this.element.hide();
+				this.uiDialogButtonPane.hide();
+				this.uiDialogTitlebarRestore.button( "enable" );
+				this.uiDialogTitlebarMinimize.button( "disable" );
+			}
+		} );
+		this.uiDialogTitlebarRestore = $( "<button type='button'></button>" )
+			.button( {
+				label: $( "<a>" ).text( this.options.restoreText ).html(),
+				icon: "ui-icon ui-icon-restore",
+				showLabel: false
+			} )
+			.appendTo( this.uiDialogTitlebar );
+		this._addClass( this.uiDialogTitlebarRestore, "ui-dialog-titlebar-restore" );
+		this._on( this.uiDialogTitlebarRestore, {
+			click: function( event ) {
+				event.preventDefault();
+				if ( this.options.restoreWidth !== undefined &&
+					this.options.restoreWidth !== null && this.options.restoreWidth !== "" ) {
+					this.uiDialog.width( this.options.restoreWidth );
+				}
+				if ( this.options.restoreHeight !== undefined &&
+					this.options.restoreHeight !== null && this.options.restoreHeight !== "" ) {
+					this.uiDialog.height( this.options.restoreHeight );
+				}
+				this.element.show();
+				this.uiDialogButtonPane.show();
+				this.uiDialogTitlebarMinimize.button( "enable" );
+				this.uiDialogTitlebarRestore.button( "disable" );
+			}
+		} );
+		this.uiDialogTitlebarRestore.button( "disable" );
+
 		uiDialogTitle = $( "<span>" ).uniqueId().prependTo( this.uiDialogTitlebar );
 		this._addClass( uiDialogTitle, "ui-dialog-title" );
 		this._title( uiDialogTitle );
