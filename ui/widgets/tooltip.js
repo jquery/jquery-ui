@@ -353,7 +353,7 @@ $.widget( "ui.tooltip", {
 		if ( target[ 0 ] !== this.element[ 0 ] ) {
 			events.remove = function() {
 				var targetElement = this._find( target );
-				if ( targetElement !== null ) {
+				if ( targetElement ) {
 					this._removeTooltip( targetElement.tooltip );
 				}
 			};
