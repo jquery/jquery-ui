@@ -1,5 +1,7 @@
 # jQuery-UI-x
-jQuery UI with minimize and restore button in dialog title.
+My jQuery UI with minimize and restore button in dialog title.
+
+The PR: https://github.com/jquery/jquery-ui/pull/1967
 
 # [jQuery UI](http://jqueryui.com/) - Interactions and Widgets for the web
 
