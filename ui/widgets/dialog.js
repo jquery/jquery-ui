@@ -463,7 +463,9 @@ $.widget( "ui.dialog", {
 					event.preventDefault();
 					this.options.restoreWidth = this.options.width;
 					this.options.restoreHeight = this.options.height;
-					this.uiDialog.width( this.uiDialogTitlebar.outerWidth() > 300 ? 300 : this.uiDialogTitlebar.outerWidth() );
+					this.uiDialog.width( this.uiDialogTitlebar.outerWidth() > 300 ?
+                        300 :
+                        this.uiDialogTitlebar.outerWidth() );
 					this.uiDialog.height( this.uiDialogTitlebar.outerHeight() );
 					this.element.hide();
 					this.uiDialogButtonPane.hide();
@@ -483,11 +485,13 @@ $.widget( "ui.dialog", {
 				click: function( event ) {
 					event.preventDefault();
 					if ( this.options.restoreWidth !== undefined &&
-						this.options.restoreWidth !== null && this.options.restoreWidth !== "" ) {
+						this.options.restoreWidth !== null &&
+                        this.options.restoreWidth !== "" ) {
 						this.uiDialog.width( this.options.restoreWidth );
 					}
 					if ( this.options.restoreHeight !== undefined &&
-						this.options.restoreHeight !== null && this.options.restoreHeight !== "" ) {
+						this.options.restoreHeight !== null &&
+                        this.options.restoreHeight !== "" ) {
 						this.uiDialog.height( this.options.restoreHeight );
 					}
 					this.element.show();
