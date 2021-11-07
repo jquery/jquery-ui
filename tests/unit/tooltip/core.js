@@ -254,7 +254,7 @@ QUnit.test( "remove conflicting attributes from live region", function( assert )
 		.tooltip( "open" );
 } );
 
-// #1990
+// gh-1990
 QUnit.test( "widget and tooltip regression from 1.12.1", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 1 );
