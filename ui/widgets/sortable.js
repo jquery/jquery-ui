@@ -1033,8 +1033,6 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		}
 
-		this.innermostContainer = innermostContainer;
-
 		// If no intersecting containers found, return
 		if ( !innermostContainer ) {
 			return;
