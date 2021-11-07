@@ -73,9 +73,18 @@ QUnit.test( "drag & drop works with a zero-height container", function( assert )
 	}
 
 	function step2() {
-		assert.equal( el.find( "li" ).eq( 0 ).text(), "Item 2" );
-		assert.equal( el.find( "li" ).eq( 1 ).text(), "Item 1" );
-		assert.equal( el.find( "li" ).eq( 2 ).text(), "Item 3" );
+		el.find( "li" ).eq( 2 ).simulate( "drag", {
+			dx: 1,
+			dy: 1,
+			moves: 3
+		} );
+		setTimeout( step3 );
+	}
+
+	function step3() {
+		assert.equal( el.find( "li" ).eq( 0 ).text(), "Item 3" );
+		assert.equal( el.find( "li" ).eq( 1 ).text(), "Item 2" );
+		assert.equal( el.find( "li" ).eq( 2 ).text(), "Item 1" );
 		ready();
 	}
 
