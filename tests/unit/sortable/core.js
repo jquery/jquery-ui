@@ -42,4 +42,44 @@ QUnit.test( "ui-sortable-handle applied to appropriate element", function( asser
 	assert.equal( el.find( ".ui-sortable-handle" ).length, 0, "class name removed on destroy" );
 } );
 
+// gh-1998
+QUnit.test( "drag & drop works with a zero-height container", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 3 );
+
+	var el = $( "<ul>\n" +
+		"	<style>" +
+		"		.list-item-gh-1998 {\n" +
+		"			float: left;\n" +
+		"			display: block;\n" +
+		"			width: 100px;\n" +
+		"			height: 100px;\n" +
+		"		}\n" +
+		"	</style>\n" +
+		"	<li class='list-item-gh-1998'>Item 1</li>\n" +
+		"	<li class='list-item-gh-1998'>Item 2</li>\n" +
+		"	<li class='list-item-gh-1998'>Item 3</li>\n" +
+		"</ul>" )
+		.sortable()
+		.appendTo( "#qunit-fixture" );
+
+	function step1() {
+		el.find( "li" ).eq( 0 ).simulate( "drag", {
+			dx: 150,
+			dy: 1,
+			moves: 3
+		} );
+		setTimeout( step2 );
+	}
+
+	function step2() {
+		assert.equal( el.find( "li" ).eq( 0 ).text(), "Item 2" );
+		assert.equal( el.find( "li" ).eq( 1 ).text(), "Item 1" );
+		assert.equal( el.find( "li" ).eq( 2 ).text(), "Item 3" );
+		ready();
+	}
+
+	step1();
+} );
+
 } );
