@@ -885,9 +885,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
 			false;
 
-		if ( this.innermostContainer !== null ) {
-			this._refreshItemPositions( fast );
-		}
+		this._refreshItemPositions( fast );
 
 		var i, p;
 

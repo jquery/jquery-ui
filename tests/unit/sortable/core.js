@@ -47,8 +47,12 @@ QUnit.test( "drag & drop works with a zero-height container", function( assert )
 	var ready = assert.async();
 	assert.expect( 3 );
 
-	var el = $( "<ul>\n" +
+	var el = $( "<ul class='list-gh-1998'>\n" +
 		"	<style>" +
+		"		.list-gh-1998 {\n" +
+		"			margin: 0;\n" +
+		"			padding: 0;\n" +
+		"		}\n" +
 		"		.list-item-gh-1998 {\n" +
 		"			float: left;\n" +
 		"			display: block;\n" +
@@ -65,8 +69,8 @@ QUnit.test( "drag & drop works with a zero-height container", function( assert )
 
 	function step1() {
 		el.find( "li" ).eq( 0 ).simulate( "drag", {
-			dx: 150,
-			dy: 1,
+			dx: 100,
+			dy: 3,
 			moves: 3
 		} );
 		setTimeout( step2 );
@@ -74,8 +78,8 @@ QUnit.test( "drag & drop works with a zero-height container", function( assert )
 
 	function step2() {
 		el.find( "li" ).eq( 2 ).simulate( "drag", {
-			dx: 1,
-			dy: 1,
+			dx: -200,
+			dy: -3,
 			moves: 3
 		} );
 		setTimeout( step3 );
