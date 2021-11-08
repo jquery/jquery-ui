@@ -255,7 +255,7 @@ QUnit.test( "remove conflicting attributes from live region", function( assert )
 } );
 
 // gh-1990
-QUnit.test( "widget and tooltip regression from 1.12.1", function( assert ) {
+QUnit.test( "don't crash on empty tooltip content", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 1 );
 
@@ -317,7 +317,7 @@ QUnit.test( "widget and tooltip regression from 1.12.1", function( assert ) {
 			"close:anchortitle",
 			"open:anchortitle",
 			"close:anchortitle"
-		], "The tooltip open and close" );
+		], "Tooltip opens and closes without crashing" );
 		ready();
 	}
 
