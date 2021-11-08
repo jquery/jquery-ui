@@ -254,4 +254,74 @@ QUnit.test( "remove conflicting attributes from live region", function( assert )
 		.tooltip( "open" );
 } );
 
+// gh-1990
+QUnit.test( "don't crash on empty tooltip content", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 1 );
+
+	var anchor = $( "#tooltipped1" ),
+		input = anchor.next(),
+		actions = [];
+
+	$( document ).tooltip( {
+			show: false,
+			hide: false,
+			content: function() {
+				var title = $( this ).attr( "title" );
+				if ( title === "inputtitle" ) {
+					return "";
+				}
+				return title;
+			},
+			open: function( event, ui ) {
+				actions.push( "open:" + ui.tooltip.text() );
+			},
+			close: function( event, ui ) {
+				actions.push( "close:" + ui.tooltip.text() );
+			}
+		} );
+
+	function step1() {
+		anchor.simulate( "mouseover" );
+		setTimeout( step2 );
+	}
+
+	function step2() {
+		anchor.simulate( "mouseout" );
+		setTimeout( step3 );
+	}
+
+	function step3() {
+		input.simulate( "focus" );
+		setTimeout( step4 );
+	}
+
+	function step4() {
+		input.simulate( "blur" );
+		setTimeout( step5 );
+	}
+
+	function step5() {
+		anchor.simulate( "mouseover" );
+		setTimeout( step6 );
+	}
+
+	function step6() {
+		anchor.simulate( "mouseout" );
+		setTimeout( step7 );
+	}
+
+	function step7() {
+		assert.deepEqual( actions, [
+			"open:anchortitle",
+			"close:anchortitle",
+			"open:anchortitle",
+			"close:anchortitle"
+		], "Tooltip opens and closes without crashing" );
+		ready();
+	}
+
+	step1();
+} );
+
 } );
