@@ -92,6 +92,18 @@ QUnit.test( "element normalization", function( assert ) {
 	$.ui.testWidget();
 } );
 
+QUnit.test( "contextless construction", function( assert ) {
+	assert.expect( 1 );
+	var testWidget,
+		elem = $( "<div>" );
+
+	$.widget( "ui.testWidget", {} );
+	testWidget = $.ui.testWidget;
+
+	testWidget( {}, elem );
+	assert.ok( true, "No crash" );
+} );
+
 QUnit.test( "custom selector expression", function( assert ) {
 	assert.expect( 1 );
 	var elem = $( "<div>" ).appendTo( "#qunit-fixture" );
