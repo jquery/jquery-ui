@@ -490,6 +490,7 @@ grunt.registerTask( "update-authors", function() {
 	} );
 } );
 
+// Keep this task list in sync with the testing steps in our GitHub action test workflow file!
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
 grunt.registerTask( "jenkins", [ "default", "concat" ] );
 grunt.registerTask( "lint", [ "asciilint", "eslint", "csslint", "htmllint" ] );
