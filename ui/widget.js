@@ -77,7 +77,7 @@ $.widget = function( name, base, prototype ) {
 	constructor = $[ namespace ][ name ] = function( options, element ) {
 
 		// Allow instantiation without "new" keyword
-		if ( !this || !this._createWidget ) {
+		if ( !this._createWidget ) {
 			return new constructor( options, element );
 		}
 
