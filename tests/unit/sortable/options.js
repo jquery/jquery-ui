@@ -488,6 +488,63 @@ QUnit.test( "{ placholder: String } tbody", function( assert ) {
 	} );
 } );
 
+// gh-2001
+// Sortable: Draggable items moved into a sortable had incorrect position
+QUnit.test( "{ connectToSortable: Selector } positioning (gh-2001)", function( assert ) {
+	assert.expect( 1 );
+
+	// Code from jQuery Simulate with minor modifications.
+	function findCenter( elem ) {
+		var offset,
+			document = $( elem[ 0 ].ownerDocument );
+		offset = elem.offset();
+
+		return {
+			x: Math.floor( offset.left + elem.outerWidth() / 2 - document.scrollLeft() ),
+			y: Math.floor( offset.top + elem.outerHeight() / 2 - document.scrollTop( ) )
+		};
+	}
+
+	var sortableElem = $( "#sortable" );
+
+	sortableElem.css( "position", "relative" );
+
+	var item = $( "<div></div>" )
+		.text( "6" )
+		.insertBefore( "#sortable" );
+
+	// Padding
+	$( "<div></div>" )
+		.css( {
+			width: "100px",
+			height: "100px"
+		} )
+		.insertBefore( "#sortable" );
+
+	item.draggable( {
+		connectToSortable: "#sortable"
+	} );
+	sortableElem.sortable();
+
+	// Simulate a drag without a drop.
+	var center = findCenter( item );
+	item.simulate( "mousedown", {
+		clientX: center.x,
+		clientY: center.y
+	} );
+	item.simulate( "mousemove", {
+		clientX: center.x,
+		clientY: center.y + 60
+	} );
+	item.simulate( "mousemove", {
+		clientX: center.x,
+		clientY: center.y + 120
+	} );
+
+	assert.ok( item.offset().top > sortableElem.children().eq( 0 ).offset().top,
+		"Draggable offset correct after moving into a sortable" );
+} );
+
 /*
 Test("{ revert: false }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
