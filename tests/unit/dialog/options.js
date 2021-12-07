@@ -579,9 +579,13 @@ QUnit.test( "Dialog can't break out containment", function( assert ) {
 		offsetAfter,
 		expected = box.offset();
 		
- 	testHelper.drag( element, '.ui-dialog-titlebar', -200, -200);  // try to move out
+	testHelper.drag( element, '.ui-dialog-titlebar', -200, -200);  // try to move out
 	offsetAfter = dlg.offset(); // should be the same 
 	assert.deepEqual( offsetAfter, expected, "compare offset" );
+	setTimeout( function() {
+		element.dialog( "close" );
+		box.remove();
+	}, 100 );
 } );
 	
 } );
