@@ -269,9 +269,10 @@ $.widget( "ui.autocomplete", {
 				label = ui.item.attr( "aria-label" ) || item.value;
 				if ( label && String.prototype.trim.call( label ).length ) {
 					clearTimeout( this.liveRegionTimer );
-					this.liveRegionTimer = setTimeout(() => {
-						this.liveRegion.html($( "<div>" ).text( label ));
-					}, 400);
+					var that = this;
+					this.liveRegionTimer = setTimeout( function() {
+						that.liveRegion.html( $( "<div>" ).text( label ) );
+					}, 400 );
 				}
 			},
 			menuselect: function( event, ui ) {
@@ -667,9 +668,10 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 			message = this.options.messages.noResults;
 		}
 		clearTimeout( this.liveRegionTimer );
-		this.liveRegionTimer = setTimeout(() => {
-			this.liveRegion.html($( "<div>" ).text( message ));
-		}, 400);
+		var that = this;
+		this.liveRegionTimer = setTimeout( function() {
+			that.liveRegion.html( $( "<div>" ).text( message ) );
+		}, 400 );
 	}
 } );
 
