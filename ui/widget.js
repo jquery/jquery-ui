@@ -13,6 +13,8 @@
 //>>docs: http://api.jqueryui.com/jQuery.widget/
 //>>demos: http://jqueryui.com/widget/
 
+// Tiny change to trigger a valid PR!
+
 ( function( factory ) {
 	"use strict";
 
