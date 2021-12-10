@@ -272,7 +272,7 @@ $.widget( "ui.autocomplete", {
 					var that = this;
 					this.liveRegionTimer = setTimeout( function() {
 						that.liveRegion.html( $( "<div>" ).text( label ) );
-					}, 400 );
+					}, 100 );
 				}
 			},
 			menuselect: function( event, ui ) {
@@ -671,7 +671,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		var that = this;
 		this.liveRegionTimer = setTimeout( function() {
 			that.liveRegion.html( $( "<div>" ).text( message ) );
-		}, 400 );
+		}, 100 );
 	}
 } );
 

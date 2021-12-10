@@ -345,11 +345,11 @@ QUnit.test( "ARIA", function( assert ) {
 						assert.equal( liveRegion.parent().length, 0,
 							"The liveRegion should be detached after destroy" );
 						ready();
-					}, 500 );
-				}, 500 );
-			}, 500 );
-		}, 500 );
-	}, 500 );
+					}, 110 );
+				}, 110 );
+			}, 110 );
+		}, 110 );
+	}, 110 );
 } );
 
 QUnit.test( "ARIA, aria-label announcement", function( assert ) {
@@ -374,7 +374,7 @@ QUnit.test( "ARIA, aria-label announcement", function( assert ) {
 		assert.equal( liveRegion.children().filter( ":visible" ).text(), "People : anders andersson",
 			"Live region changed on keydown to announce the highlighted value's aria-label attribute" );
 		ready();
-	}, 500 );
+	}, 110 );
 } );
 
 QUnit.test( "ARIA, init on detached input", function( assert ) {
