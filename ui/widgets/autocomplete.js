@@ -270,7 +270,7 @@ $.widget( "ui.autocomplete", {
 				if ( label && String.prototype.trim.call( label ).length ) {
 					clearTimeout( this.liveRegionTimer );
 					var that = this;
-					this.liveRegionTimer = setTimeout( function() {
+					this.liveRegionTimer = this._delay( function() {
 						that.liveRegion.html( $( "<div>" ).text( label ) );
 					}, 100 );
 				}
@@ -669,7 +669,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		}
 		clearTimeout( this.liveRegionTimer );
 		var that = this;
-		this.liveRegionTimer = setTimeout( function() {
+		this.liveRegionTimer = this._delay( function() {
 			that.liveRegion.html( $( "<div>" ).text( message ) );
 		}, 100 );
 	}
