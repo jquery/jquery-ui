@@ -1,0 +1,59 @@
+name: Grunt tests
+
+on: [push, pull_request]
+
+jobs:
+  grunt:
+    name: Grunt based tests with Node.js ${{ matrix.node-version }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-npm-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-npm-
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+            ${{ runner.os }}-node-
+            ${{ runner.os }}-
+
+      - name: Install npm dependencies
+        run: npm install
+
+      #  Keep these steps in sync with the default command tasks in our Gruntfile!
+      - name: Run lint
+        run: node_modules/.bin/grunt lint
+
+      - name: Run RequireJS
+        run: node_modules/.bin/grunt requirejs
+
+      - name: Run Qunit
+        run: node_modules/.bin/grunt test
+
+  valid:
+    name: Build & tests
+
+    needs: grunt
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Grunt based tests passed
+        run: echo "✅"
