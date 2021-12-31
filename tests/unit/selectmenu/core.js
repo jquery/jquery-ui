@@ -404,4 +404,34 @@ QUnit.test( "Options with hidden attribute should not be rendered", function( as
 	} );
 } );
 
+QUnit.test( "extra listeners created after selection (trac-15078, trac-15152)", function( assert ) {
+	assert.expect( 3 );
+
+	var origRemoveListenersCount;
+	var element = $( "#speed" ).selectmenu();
+	var menu = element.selectmenu( "widget" );
+
+	element.val( "Slow" );
+	element.selectmenu( "refresh" );
+	origRemoveListenersCount = jQuery._data( menu[ 0 ], "events" ).remove.length;
+
+	element.val( "Fast" );
+	element.selectmenu( "refresh" );
+	assert.equal( jQuery._data( menu[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
+
+	element.val( "Faster" );
+	element.selectmenu( "refresh" );
+	assert.equal( jQuery._data( menu[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
+
+	element.val( "Slow" );
+	element.selectmenu( "refresh" );
+	assert.equal( jQuery._data( menu[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
+} );
+
 } );

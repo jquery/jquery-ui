@@ -675,4 +675,56 @@ QUnit.test( "#4033 - IE expands hash to full url and misinterprets tab as ajax",
 	state( assert, element, 1 );
 } );
 
+
+QUnit.test( "extra listeners created when tabs are added/removed (trac-15136)", function( assert ) {
+	assert.expect( 3 );
+
+	var origRemoveListenersCount;
+	var element = $( "#tabs1" ).tabs();
+	var tabCounter = 10;
+
+	function addTab() {
+		var label = "Tab " + tabCounter;
+		var id = "tabs-" + tabCounter;
+		var li = $(
+			"<li>" +
+			"	<a href='#" + id + "'>" + label + "</a> " +
+			"	<span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span>" +
+			"</li>"
+		);
+		var tabContentHtml = "Tab " + tabCounter + " content.";
+
+		element.find( ".ui-tabs-nav" ).append( li );
+		element.append( "<div id='" + id + "'><p>" + tabContentHtml + "</p></div>" );
+		element.tabs( "refresh" );
+		tabCounter++;
+	}
+
+	function removeLastTab() {
+		element.find( ".ui-icon-close" ).last().trigger( "click" );
+	}
+
+	origRemoveListenersCount = jQuery._data( element[ 0 ], "events" ).remove.length;
+
+	addTab();
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after adding a new tab" );
+
+	addTab();
+	addTab();
+	addTab();
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after adding multiple tabs" );
+
+	removeLastTab();
+	removeLastTab();
+	removeLastTab();
+	removeLastTab();
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after removing all the extra tabs" );
+} );
+
 } );
