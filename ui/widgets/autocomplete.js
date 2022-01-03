@@ -269,9 +269,8 @@ $.widget( "ui.autocomplete", {
 				label = ui.item.attr( "aria-label" ) || item.value;
 				if ( label && String.prototype.trim.call( label ).length ) {
 					clearTimeout( this.liveRegionTimer );
-					var that = this;
 					this.liveRegionTimer = this._delay( function() {
-						that.liveRegion.html( $( "<div>" ).text( label ) );
+						this.liveRegion.html( $( "<div>" ).text( label ) );
 					}, 100 );
 				}
 			},
@@ -668,9 +667,8 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 			message = this.options.messages.noResults;
 		}
 		clearTimeout( this.liveRegionTimer );
-		var that = this;
 		this.liveRegionTimer = this._delay( function() {
-			that.liveRegion.html( $( "<div>" ).text( message ) );
+			this.liveRegion.html( $( "<div>" ).text( message ) );
 		}, 100 );
 	}
 } );
