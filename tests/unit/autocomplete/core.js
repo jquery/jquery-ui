@@ -443,4 +443,27 @@ QUnit.test( "Close on click outside when focus remains", function( assert ) {
 	} );
 } );
 
+QUnit.test( "extra listeners created during typing (trac-15082, trac-15095)", function( assert ) {
+	assert.expect( 2 );
+
+	var origRemoveListenersCount;
+	var element = $( "#autocomplete" ).autocomplete( {
+		source: [ "java", "javascript" ],
+		delay: 0
+	} );
+
+	element.val( "j" ).autocomplete( "search", "j" );
+	origRemoveListenersCount = jQuery._data( element[ 0 ], "events" ).remove.length;
+
+	element.val( "ja" ).autocomplete( "search", "ja" );
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
+
+	element.val( "jav" ).autocomplete( "search", "jav" );
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
+} );
+
 } );
