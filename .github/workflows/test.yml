@@ -47,4 +47,13 @@ jobs:
       - name: Run Qunit
         run: node_modules/.bin/grunt test
 
+  valid:
+    name: Build & tests
 
+    needs: grunt
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Grunt based tests passed
+        run: echo "✅"

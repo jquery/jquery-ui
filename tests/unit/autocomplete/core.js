@@ -293,6 +293,7 @@ QUnit.test( "simultaneous searches (#9334)", function( assert ) {
 } );
 
 QUnit.test( "ARIA", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 13 );
 	var element = $( "#autocomplete" ).autocomplete( {
 			source: [ "java", "javascript" ]
@@ -308,43 +309,51 @@ QUnit.test( "ARIA", function( assert ) {
 		"Live region's role attribute must be status" );
 
 	element.autocomplete( "search", "j" );
-	assert.equal( liveRegion.children().first().text(),
-		"2 results are available, use up and down arrow keys to navigate.",
-		"Live region for multiple values" );
+	setTimeout( function() {
+		assert.equal( liveRegion.children().first().text(),
+			"2 results are available, use up and down arrow keys to navigate.",
+			"Live region for multiple values" );
 
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	assert.equal( liveRegion.children().filter( ":visible" ).text(), "java",
-		"Live region changed on keydown to announce the highlighted value" );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		setTimeout( function() {
+			assert.equal( liveRegion.children().filter( ":visible" ).text(), "java",
+				"Live region changed on keydown to announce the highlighted value" );
 
-	element.one( "autocompletefocus", function( event ) {
-		event.preventDefault();
-	} );
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	assert.equal( liveRegion.children().filter( ":visible" ).text(), "javascript",
-		"Live region updated when default focus is prevented" );
-
-	element.autocomplete( "search", "javas" );
-	assert.equal( liveRegion.children().filter( ":visible" ).text(),
-		"1 result is available, use up and down arrow keys to navigate.",
-		"Live region for one value" );
-
-	element.autocomplete( "search", "z" );
-	assert.equal( liveRegion.children().filter( ":visible" ).text(), "No search results.",
-		"Live region for no values" );
-
-	assert.equal( liveRegion.children().length, 5,
-		"Should be five children in the live region after the above" );
-	assert.equal( liveRegion.children().filter( ":visible" ).length, 1,
-		"Only one should be still visible" );
-	assert.ok( liveRegion.children().filter( ":visible" )[ 0 ] === liveRegion.children().last()[ 0 ],
-		"The last one should be the visible one" );
-
-	element.autocomplete( "destroy" );
-	assert.equal( liveRegion.parent().length, 0,
-		"The liveRegion should be detached after destroy" );
+			element.one( "autocompletefocus", function( event ) {
+				event.preventDefault();
+			} );
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+			setTimeout( function() {
+				assert.equal( liveRegion.children().filter( ":visible" ).text(), "javascript",
+					"Live region updated when default focus is prevented" );
+				element.autocomplete( "search", "javas" );
+				setTimeout( function() {
+					assert.equal( liveRegion.children().filter( ":visible" ).text(),
+						"1 result is available, use up and down arrow keys to navigate.",
+						"Live region for one value" );
+					element.autocomplete( "search", "z" );
+					setTimeout( function() {
+						assert.equal( liveRegion.children().filter( ":visible" ).text(), "No search results.",
+							"Live region for no values" );
+						assert.equal( liveRegion.children().length, 1,
+							"Should be one child in the live region after the above" );
+						assert.equal( liveRegion.children().filter( ":visible" ).length, 1,
+							"Only one should be still visible" );
+						assert.ok( liveRegion.children().filter( ":visible" )[ 0 ] === liveRegion.children().last()[ 0 ],
+							"The last one should be the visible one" );
+						element.autocomplete( "destroy" );
+						assert.equal( liveRegion.parent().length, 0,
+							"The liveRegion should be detached after destroy" );
+						ready();
+					}, 110 );
+				}, 110 );
+			}, 110 );
+		}, 110 );
+	}, 110 );
 } );
 
 QUnit.test( "ARIA, aria-label announcement", function( assert ) {
+	var ready = assert.async();
 	assert.expect( 1 );
 	$.widget( "custom.catcomplete", $.ui.autocomplete, {
 		_renderMenu: function( ul, items ) {
@@ -361,8 +370,11 @@ QUnit.test( "ARIA, aria-label announcement", function( assert ) {
 		liveRegion = element.catcomplete( "instance" ).liveRegion;
 	element.catcomplete( "search", "a" );
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	assert.equal( liveRegion.children().filter( ":visible" ).text(), "People : anders andersson",
-		"Live region changed on keydown to announce the highlighted value's aria-label attribute" );
+	setTimeout( function() {
+		assert.equal( liveRegion.children().filter( ":visible" ).text(), "People : anders andersson",
+			"Live region changed on keydown to announce the highlighted value's aria-label attribute" );
+		ready();
+	}, 110 );
 } );
 
 QUnit.test( "ARIA, init on detached input", function( assert ) {
@@ -429,6 +441,29 @@ QUnit.test( "Close on click outside when focus remains", function( assert ) {
 			ready();
 		} );
 	} );
+} );
+
+QUnit.test( "extra listeners created during typing (trac-15082, trac-15095)", function( assert ) {
+	assert.expect( 2 );
+
+	var origRemoveListenersCount;
+	var element = $( "#autocomplete" ).autocomplete( {
+		source: [ "java", "javascript" ],
+		delay: 0
+	} );
+
+	element.val( "j" ).autocomplete( "search", "j" );
+	origRemoveListenersCount = jQuery._data( element[ 0 ], "events" ).remove.length;
+
+	element.val( "ja" ).autocomplete( "search", "ja" );
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
+
+	element.val( "jav" ).autocomplete( "search", "jav" );
+	assert.equal( jQuery._data( element[ 0 ], "events" ).remove.length,
+		origRemoveListenersCount,
+		"No extra listeners after typing multiple letters" );
 } );
 
 } );
