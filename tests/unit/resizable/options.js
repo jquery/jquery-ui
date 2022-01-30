@@ -532,4 +532,30 @@ QUnit.test( "alsoResize + multiple selection", function( assert ) {
 	assert.equal( other2.height(), 150, "alsoResize o2 constrained height at containment edge" );
 } );
 
+QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
+	assert.expect( 4 );
+
+	var other = $( "<div>" )
+			.css( {
+				width: 50,
+				height: 50,
+				padding: 10,
+				border: 5
+			} )
+			.appendTo( "body" ),
+		element = $( "#resizable1" ).resizable( {
+			alsoResize: other
+		} ),
+		handle = ".ui-resizable-se";
+
+	$("*").css("box-sizing", "border-box");
+
+	testHelper.drag( handle, 80, 80 );
+
+	assert.equal( element.width(), 180, "resizable width" );
+	assert.equal( parseFloat( other.css( "width" ) ), 130, "alsoResize width" );
+	assert.equal( element.height(), 180, "resizable height" );
+	assert.equal( parseFloat( other.css( "height" ) ), 130, "alsoResize height" );
+} );
+
 } );
