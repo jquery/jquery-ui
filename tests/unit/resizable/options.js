@@ -548,7 +548,7 @@ QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
 		} ),
 		handle = ".ui-resizable-se";
 
-	$("*").css("box-sizing", "border-box");
+	$( "*" ).css( "box-sizing", "border-box" );
 
 	testHelper.drag( handle, 80, 80 );
 
