@@ -17,8 +17,8 @@
 
 datepicker.regional.nn = {
 	closeText: "Lukk",
-	prevText: "&#xAB;Førre",
-	nextText: "Neste&#xBB;",
+	prevText: "Førre",
+	nextText: "Neste",
 	currentText: "I dag",
 	monthNames: [
 		"januar",

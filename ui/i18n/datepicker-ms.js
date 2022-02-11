@@ -17,8 +17,8 @@
 
 datepicker.regional.ms = {
 	closeText: "Tutup",
-	prevText: "&#x3C;Sebelum",
-	nextText: "Selepas&#x3E;",
+	prevText: "Sebelum",
+	nextText: "Selepas",
 	currentText: "hari ini",
 	monthNames: [ "Januari", "Februari", "Mac", "April", "Mei", "Jun",
 	"Julai", "Ogos", "September", "Oktober", "November", "Disember" ],
