@@ -18,8 +18,8 @@
 
 datepicker.regional[ "de-AT" ] = {
 	closeText: "Schließen",
-	prevText: "&#x3C;Zurück",
-	nextText: "Vor&#x3E;",
+	prevText: "Zurück",
+	nextText: "Vor",
 	currentText: "Heute",
 	monthNames: [ "Jänner", "Februar", "März", "April", "Mai", "Juni",
 	"Juli", "August", "September", "Oktober", "November", "Dezember" ],
