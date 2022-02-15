@@ -18,7 +18,7 @@
 datepicker.regional.tr = {
 	closeText: "kapat",
 	prevText: "geri",
-	nextText: "ileri&#x3e",
+	nextText: "ileri",
 	currentText: "bugün",
 	monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
 	"Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
