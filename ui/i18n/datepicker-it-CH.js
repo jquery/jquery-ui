@@ -17,8 +17,8 @@
 
 datepicker.regional[ "it-CH" ] = {
 	closeText: "Chiudi",
-	prevText: "&#x3C;Prec",
-	nextText: "Succ&#x3E;",
+	prevText: "Prec",
+	nextText: "Succ",
 	currentText: "Oggi",
 	monthNames: [ "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
 		"Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre" ],

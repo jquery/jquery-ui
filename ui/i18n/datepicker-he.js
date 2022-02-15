@@ -17,8 +17,8 @@
 
 datepicker.regional.he = {
 	closeText: "סגור",
-	prevText: "&#x3C;הקודם",
-	nextText: "הבא&#x3E;",
+	prevText: "הקודם",
+	nextText: "הבא",
 	currentText: "היום",
 	monthNames: [ "ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
 	"יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר" ],

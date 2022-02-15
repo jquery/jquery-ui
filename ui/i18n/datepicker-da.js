@@ -17,8 +17,8 @@
 
 datepicker.regional.da = {
 	closeText: "Luk",
-	prevText: "&#x3C;Forrige",
-	nextText: "Næste&#x3E;",
+	prevText: "Forrige",
+	nextText: "Næste",
 	currentText: "I dag",
 	monthNames: [ "Januar", "Februar", "Marts", "April", "Maj", "Juni",
 	"Juli", "August", "September", "Oktober", "November", "December" ],

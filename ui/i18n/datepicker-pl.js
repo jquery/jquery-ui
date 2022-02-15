@@ -17,8 +17,8 @@
 
 datepicker.regional.pl = {
 	closeText: "Zamknij",
-	prevText: "&#x3C;Poprzedni",
-	nextText: "Następny&#x3E;",
+	prevText: "Poprzedni",
+	nextText: "Następny",
 	currentText: "Dziś",
 	monthNames: [ "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
 	"Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień" ],

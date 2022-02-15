@@ -17,8 +17,8 @@
 
 datepicker.regional.az = {
 	closeText: "Bağla",
-	prevText: "&#x3C;Geri",
-	nextText: "İrəli&#x3E;",
+	prevText: "Geri",
+	nextText: "İrəli",
 	currentText: "Bugün",
 	monthNames: [ "Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun",
 	"İyul", "Avqust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr" ],

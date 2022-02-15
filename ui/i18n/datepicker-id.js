@@ -17,8 +17,8 @@
 
 datepicker.regional.id = {
 	closeText: "Tutup",
-	prevText: "&#x3C;mundur",
-	nextText: "maju&#x3E;",
+	prevText: "mundur",
+	nextText: "maju",
 	currentText: "hari ini",
 	monthNames: [ "Januari", "Februari", "Maret", "April", "Mei", "Juni",
 	"Juli", "Agustus", "September", "Oktober", "Nopember", "Desember" ],

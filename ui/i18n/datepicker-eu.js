@@ -16,8 +16,8 @@
 
 datepicker.regional.eu = {
 	closeText: "Egina",
-	prevText: "&#x3C;Aur",
-	nextText: "Hur&#x3E;",
+	prevText: "Aur",
+	nextText: "Hur",
 	currentText: "Gaur",
 	monthNames: [ "urtarrila", "otsaila", "martxoa", "apirila", "maiatza", "ekaina",
 		"uztaila", "abuztua", "iraila", "urria", "azaroa", "abendua" ],

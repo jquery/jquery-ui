@@ -17,8 +17,8 @@
 
 datepicker.regional.bg = {
 	closeText: "затвори",
-	prevText: "&#x3C;назад",
-	nextText: "напред&#x3E;",
+	prevText: "назад",
+	nextText: "напред",
 	nextBigText: "&#x3E;&#x3E;",
 	currentText: "днес",
 	monthNames: [ "Януари", "Февруари", "Март", "Април", "Май", "Юни",
