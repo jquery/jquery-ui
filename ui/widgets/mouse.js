@@ -73,6 +73,11 @@ return $.widget( "ui.mouse", {
 		}
 	},
 
+	/**
+	 *
+	 * @param {MouseEvent & { originalEvent: MouseEvent }} event
+	 * @returns {boolean}
+	 */
 	_mouseDown: function( event ) {
 
 		// don't let more than one widget handle mouseStart
@@ -89,13 +94,15 @@ return $.widget( "ui.mouse", {
 
 		this._mouseDownEvent = event;
 
+		let [ first = event.target ] = 'composedPath' in event.originalEvent && event.originalEvent.composedPath() || []
+
 		var that = this,
 			btnIsLeft = ( event.which === 1 ),
 
 			// event.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
-			elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ?
-				$( event.target ).closest( this.options.cancel ).length : false );
+			elIsCancel = ( typeof this.options.cancel === "string" && first.nodeName ?
+				$( first ).closest( this.options.cancel ).length : false );
 		if ( !btnIsLeft || elIsCancel || !this._mouseCapture( event ) ) {
 			return true;
 		}
