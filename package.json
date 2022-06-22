@@ -54,7 +54,7 @@
 		"commitplease": "3.2.0",
 		"eslint-config-jquery": "3.0.0",
 		"glob": "7.2.0",
-		"grunt": "1.4.1",
+		"grunt": "1.5.3",
 		"grunt-bowercopy": "1.2.5",
 		"grunt-cli": "1.4.3",
 		"grunt-compare-size": "0.4.2",
