@@ -94,7 +94,10 @@ return $.widget( "ui.mouse", {
 
 		this._mouseDownEvent = event;
 
-		let [ first = event.target ] = 'composedPath' in event.originalEvent && event.originalEvent.composedPath() || []
+		var first = (
+			event.originalEvent && event.originalEvent.composedPath ?
+			event.originalEvent.composedPath() : [ ]
+		)[ 0 ] || event.target;
 
 		var that = this,
 			btnIsLeft = ( event.which === 1 ),
