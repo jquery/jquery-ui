@@ -12,9 +12,9 @@ To discuss development with team members and the community, visit the [Developin
 
 ## For Contributors
 
-If you want to help and provide a patch for a bugfix or new feature, please take
+If you want to help and provide a patch for a bug fix or new feature, please take
 a few minutes and look at [our Getting Involved guide](http://wiki.jqueryui.com/w/page/35263114/Getting-Involved).
-In particular check out the [Coding standards](http://wiki.jqueryui.com/w/page/12137737/Coding-standards)
+In particular, check out the [Coding standards](http://wiki.jqueryui.com/w/page/12137737/Coding-standards)
 and [Commit Message Style Guide](http://contribute.jquery.org/commits-and-pull-requests/#commit-guidelines).
 
 In general, fork the project, create a branch for a specific change and send a
