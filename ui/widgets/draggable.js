@@ -786,6 +786,11 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 			if ( sortable && !sortable.options.disabled ) {
 				draggable.sortables.push( sortable );
 
+				// fix iframe draggable, the sortable and draggable have different document.
+				if(sortable.document != draggable.document) {
+					sortable.outerDocument = draggable.document;
+				}
+
 				// RefreshPositions is called at drag start to refresh the containerCache
 				// which is used in drag. This ensures it's initialized and synchronized
 				// with any changes that might have happened on the page since initialization.
@@ -834,6 +839,9 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 
 				sortable._trigger( "deactivate", event, uiSortable );
 			}
+
+			// fix iframe drag
+			sortable.outerDocument = null;
 		} );
 	},
 	drag: function( event, ui, draggable ) {
@@ -926,6 +934,10 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					// a relative position, while sortable is always absolute, which the dragged
 					// element has now become. (#8809)
 					ui.position = sortable.position;
+
+					// fix iframe drag helper offset issue
+					ui.position.left = ui.position.left - sortable._outerOffset.left;
+					ui.position.top = ui.position.top - sortable._outerOffset.top;
 				}
 			} else {
 

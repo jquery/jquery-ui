@@ -41,6 +41,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 	version: "@VERSION",
 	widgetEventPrefix: "sort",
 	ready: false,
+	outerDocument: null,
 	options: {
 		appendTo: "parent",
 		axis: false,
@@ -93,6 +94,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		this.containerCache = {};
 		this._addClass( "ui-sortable" );
 
+		this._cacheOuterOffset();
+
 		//Get the items
 		this.refresh();
 
@@ -128,6 +131,23 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 				"ui-sortable-handle"
 			);
 		} );
+	},
+
+	_cacheOuterOffset: function() {
+		this._outerOffset = { top: 0, left: 0 };
+		if( this.outerDocument ) {
+			var currentIframe = null;
+			var currentDocument = this.document;
+			this.outerDocument.find("iframe").each(function(i,n) {
+				if(n.contentDocument == currentDocument[0]) {
+					currentIframe = n;
+				}
+			});
+			if( currentIframe ) {
+				this._outerOffset = $(currentIframe).offset();
+			}
+		}
+		return this._outerOffset;
 	},
 
 	_destroy: function() {
@@ -898,8 +918,14 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		if ( this.options.custom && this.options.custom.refreshContainers ) {
 			this.options.custom.refreshContainers.call( this );
 		} else {
+			var outerOffset = this._cacheOuterOffset();
 			for ( i = this.containers.length - 1; i >= 0; i-- ) {
 				p = this.containers[ i ].element.offset();
+
+				// fix the iframe offset issue
+				p.left = p.left + outerOffset.left;
+				p.top = p.top + outerOffset.top;
+
 				this.containers[ i ].containerCache.left = p.left;
 				this.containers[ i ].containerCache.top = p.top;
 				this.containers[ i ].containerCache.width =
