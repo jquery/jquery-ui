@@ -17,8 +17,8 @@
 
 datepicker.regional[ "sr-SR" ] = {
 	closeText: "Zatvori",
-	prevText: "",
-	nextText: "",
+	prevText: "Prethodno",
+	nextText: "Sljedeći",
 	currentText: "Danas",
 	monthNames: [ "Januar", "Februar", "Mart", "April", "Maj", "Jun",
 	"Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar" ],

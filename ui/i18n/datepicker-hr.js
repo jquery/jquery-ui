@@ -17,8 +17,8 @@
 
 datepicker.regional.hr = {
 	closeText: "Zatvori",
-	prevText: "",
-	nextText: "",
+	prevText: "Prethodno",
+	nextText: "Sljedeći",
 	currentText: "Danas",
 	monthNames: [ "Siječanj", "Veljača", "Ožujak", "Travanj", "Svibanj", "Lipanj",
 	"Srpanj", "Kolovoz", "Rujan", "Listopad", "Studeni", "Prosinac" ],
