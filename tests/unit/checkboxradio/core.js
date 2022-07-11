@@ -131,4 +131,41 @@ QUnit.test( "Calling checkboxradio on an input with no label throws an error", f
 	);
 } );
 
+QUnit.test( "Inheriting label from initial HTML", function( assert ) {
+	var tests = [
+		{
+			id: "label-with-no-for-with-html",
+			expectedLabel: "<strong>Hi</strong>, <em>I'm a label</em>"
+		},
+		{
+			id: "label-with-no-for-with-text",
+			expectedLabel: "Hi, I'm a label"
+		},
+		{
+			id: "label-with-no-for-with-html-like-text",
+			expectedLabel: "&lt;em&gt;Hi, I'm a label&lt;/em&gt;"
+		}
+	];
+
+	assert.expect( tests.length );
+
+	tests.forEach( function( testData ) {
+		var id = testData.id;
+		var expectedLabel = testData.expectedLabel;
+		var inputElem = $( "#" + id );
+		var labelElem = inputElem.parent();
+
+		inputElem.checkboxradio( { icon: false } );
+
+		var labelWithoutInput = labelElem.clone();
+		labelWithoutInput.find( "input" ).remove();
+
+		assert.strictEqual(
+			labelWithoutInput.html().trim(),
+			expectedLabel.trim(),
+			"Label correct [" + id + "]"
+		);
+	} );
+} );
+
 } );
