@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Transfer @VERSION
+ * jQuery UI Effects Transfer 1.13.2
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors

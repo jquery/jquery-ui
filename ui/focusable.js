@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Focusable @VERSION
+ * jQuery UI Focusable 1.13.2
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
