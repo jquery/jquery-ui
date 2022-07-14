@@ -365,3 +365,6 @@ Patrick McKay <patrick.mckay@vumc.org>
 c-lambert <58025159+c-lambert@users.noreply.github.com>
 Josep Sanz <josepsanzcamp@gmail.com>
 Ben Mullins <benm@umich.edu>
+Christian Oliff <christianoliff@pm.me>
+dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Adam Lidén Hällgren <adamlh92@gmail.com>

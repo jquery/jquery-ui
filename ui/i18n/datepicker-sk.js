@@ -17,8 +17,8 @@
 
 datepicker.regional.sk = {
 	closeText: "Zavrieť",
-	prevText: "&#x3C;Predchádzajúci",
-	nextText: "Nasledujúci&#x3E;",
+	prevText: "Predchádzajúci",
+	nextText: "Nasledujúci",
 	currentText: "Dnes",
 	monthNames: [ "január", "február", "marec", "apríl", "máj", "jún",
 	"júl", "august", "september", "október", "november", "december" ],

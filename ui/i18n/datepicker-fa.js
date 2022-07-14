@@ -18,8 +18,8 @@
 
 datepicker.regional.fa = {
 	closeText: "بستن",
-	prevText: "&#x3C;قبلی",
-	nextText: "بعدی&#x3E;",
+	prevText: "قبلی",
+	nextText: "بعدی",
 	currentText: "امروز",
 	monthNames: [
 		"ژانویه",
