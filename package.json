@@ -5,7 +5,7 @@
 	"version": "1.13.3-pre",
 	"homepage": "http://jqueryui.com",
 	"author": {
-		"name": "jQuery Foundation and other contributors",
+		"name": "OpenJS Foundation and other contributors",
 		"url": "https://github.com/jquery/jquery-ui/blob/main/AUTHORS.txt"
 	},
 	"main": "ui/widget.js",
