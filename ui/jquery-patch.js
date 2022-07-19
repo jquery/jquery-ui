@@ -2,7 +2,7 @@
  * jQuery UI Support for jQuery core 1.8.x and newer @VERSION
  * http://jqueryui.com
  *
- * Copyright jQuery Foundation and other contributors
+ * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
