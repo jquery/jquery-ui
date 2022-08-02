@@ -18,8 +18,8 @@
 
 datepicker.regional.sl = {
 	closeText: "Zapri",
-	prevText: "&#x3C;Prejšnji",
-	nextText: "Naslednji&#x3E;",
+	prevText: "Prejšnji",
+	nextText: "Naslednji",
 	currentText: "Trenutni",
 	monthNames: [ "Januar", "Februar", "Marec", "April", "Maj", "Junij",
 	"Julij", "Avgust", "September", "Oktober", "November", "December" ],

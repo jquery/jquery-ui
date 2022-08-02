@@ -20,8 +20,8 @@
 
 datepicker.regional[ "ar-DZ" ] = {
 	closeText: "إغلاق",
-	prevText: "&#x3C;السابق",
-	nextText: "التالي&#x3E;",
+	prevText: "السابق",
+	nextText: "التالي",
 	currentText: "اليوم",
 	monthNames: [ "جانفي", "فيفري", "مارس", "أفريل", "ماي", "جوان",
 	"جويلية", "أوت", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر" ],

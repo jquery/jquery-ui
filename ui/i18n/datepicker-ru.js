@@ -17,8 +17,8 @@
 
 datepicker.regional.ru = {
 	closeText: "Закрыть",
-	prevText: "&#x3C;Пред",
-	nextText: "След&#x3E;",
+	prevText: "Пред",
+	nextText: "След",
 	currentText: "Сегодня",
 	monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
 	"Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],

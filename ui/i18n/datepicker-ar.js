@@ -20,8 +20,8 @@
 
 datepicker.regional.ar = {
 	closeText: "إغلاق",
-	prevText: "&#x3C;السابق",
-	nextText: "التالي&#x3E;",
+	prevText: "السابق",
+	nextText: "التالي",
 	currentText: "اليوم",
 	monthNames: [ "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
 	"يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر" ],

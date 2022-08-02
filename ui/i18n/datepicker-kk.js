@@ -17,8 +17,8 @@
 
 datepicker.regional.kk = {
 	closeText: "Жабу",
-	prevText: "&#x3C;Алдыңғы",
-	nextText: "Келесі&#x3E;",
+	prevText: "Алдыңғы",
+	nextText: "Келесі",
 	currentText: "Бүгін",
 	monthNames: [ "Қаңтар", "Ақпан", "Наурыз", "Сәуір", "Мамыр", "Маусым",
 	"Шілде", "Тамыз", "Қыркүйек", "Қазан", "Қараша", "Желтоқсан" ],

@@ -96,4 +96,42 @@ QUnit.test( "Input wrapped in a label preserved on refresh", function( assert ) 
 	assert.strictEqual( input.parent()[ 0 ], element[ 0 ], "Input preserved" );
 } );
 
+QUnit.test( "Initial text label not turned to HTML on refresh", function( assert ) {
+	var tests = [
+		{
+			id: "label-with-no-for-with-html",
+			expectedLabel: "<strong>Hi</strong>, <em>I'm a label</em>"
+		},
+		{
+			id: "label-with-no-for-with-text",
+			expectedLabel: "Hi, I'm a label"
+		},
+		{
+			id: "label-with-no-for-with-html-like-text",
+			expectedLabel: "&lt;em&gt;Hi, I'm a label&lt;/em&gt;"
+		}
+	];
+
+	assert.expect( tests.length );
+
+	tests.forEach( function( testData ) {
+		var id = testData.id;
+		var expectedLabel = testData.expectedLabel;
+		var inputElem = $( "#" + id );
+		var labelElem = inputElem.parent();
+
+		inputElem.checkboxradio( { icon: false } );
+		inputElem.checkboxradio( "refresh" );
+
+		var labelWithoutInput = labelElem.clone();
+		labelWithoutInput.find( "input" ).remove();
+
+		assert.strictEqual(
+			labelWithoutInput.html().trim(),
+			expectedLabel.trim(),
+			"Label correct [" + id + "]"
+		);
+	} );
+} );
+
 } );

@@ -17,8 +17,8 @@
 
 datepicker.regional.sq = {
 	closeText: "mbylle",
-	prevText: "&#x3C;mbrapa",
-	nextText: "Përpara&#x3E;",
+	prevText: "mbrapa",
+	nextText: "Përpara",
 	currentText: "sot",
 	monthNames: [ "Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor",
 	"Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor" ],
