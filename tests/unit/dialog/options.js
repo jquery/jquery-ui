@@ -571,8 +571,8 @@ QUnit.test( "Open followed by close during show effect", function( assert ) {
 
 QUnit.test( "Dialog can't break out containment", function( assert ) {
 	assert.expect( 1 );
-	var box = $( '<div id="xxx"></div>' ).css( {
-			height: '500px',border: '0px', margin:'0px', width:'500px', position: 'absolute', bottom: '0px', right: '0px', left: '50px', top: '50px'
+	var box = $( '<div></div>' ).css( {
+			height: "500px", border: "0px", margin: "0px", width: "500px", position: "absolute", bottom: "0px", right: "0px", left: "50px", top: "50px"
 		} ).appendTo( "body" ),
 		element = $( "<div>X</div>" ).dialog( { containment: box, position: { at: "left top", of: box } } ), // open on left top corner
 		dlg = element.dialog( "widget" ),
