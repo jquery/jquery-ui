@@ -621,7 +621,7 @@ $.Widget.prototype = {
 					handler.guid || handlerProxy.guid || $.guid++;
 			}
 
-			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
+			var match = event.match( /^([\w:.-]*)\s+(.*)$/ );
 			var eventName = match[ 1 ] + instance.eventNamespace;
 			var selector = match[ 2 ];
 
