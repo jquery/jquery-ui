@@ -538,7 +538,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 		if ( this.size.width !== this.prevSize.width ) {
 			props.width = this.size.width + "px";
-			this.helper.width( this.size.width );
+			this.helper.width( props.width );
 		}
 		if ( this.size.height !== this.prevSize.height ) {
 			props.height = this.size.height + "px";
