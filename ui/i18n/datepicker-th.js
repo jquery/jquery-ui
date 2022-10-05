@@ -17,8 +17,8 @@
 
 datepicker.regional.th = {
 	closeText: "ปิด",
-	prevText: "&#xAB;&#xA0;ย้อน",
-	nextText: "ถัดไป&#xA0;&#xBB;",
+	prevText: "ย้อน",
+	nextText: "ถัดไป",
 	currentText: "วันนี้",
 	monthNames: [ "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
 	"กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ],

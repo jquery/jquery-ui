@@ -9,7 +9,7 @@
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
 		$( ".widget input[type=submit], .widget a, .widget button" ).button();
-		$( "button, input, a" ).click( function( event ) {
+		$( "button, input, a" ).on( "click", function( event ) {
 			event.preventDefault();
 		} );
 	</script>

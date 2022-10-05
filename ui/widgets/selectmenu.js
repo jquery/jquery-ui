@@ -2,7 +2,7 @@
  * jQuery UI Selectmenu @VERSION
  * http://jqueryui.com
  *
- * Copyright jQuery Foundation and other contributors
+ * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  */
@@ -417,7 +417,7 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 		// Support: IE
 		// Setting the text selection kills the button focus in IE, but
 		// restoring the focus doesn't kill the selection.
-		this.button.focus();
+		this.button.trigger( "focus" );
 	},
 
 	_documentClick: {

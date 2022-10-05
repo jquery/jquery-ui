@@ -24,7 +24,7 @@
 				checkboxes.checkboxradio( "option", option, value );
 			}
 		});
-		$( ".controls > button" ).click( function() {
+		$( ".controls > button" ).on( "click", function() {
 			if ( this.id !== "create" ) {
 				checkboxes.checkboxradio( this.id );
 			} else {
