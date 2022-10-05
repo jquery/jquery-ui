@@ -542,7 +542,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		}
 		if ( this.size.height !== this.prevSize.height ) {
 			props.height = this.size.height + "px";
-			this.helper.height( this.size.height );
+			this.helper.height( props.height );
 		}
 
 		return props;
