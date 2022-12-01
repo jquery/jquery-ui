@@ -2,6 +2,9 @@ name: Grunt tests
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   grunt:
     name: Grunt based tests with Node.js ${{ matrix.node-version }}
