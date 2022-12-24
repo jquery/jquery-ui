@@ -303,49 +303,49 @@ QUnit.test( "defaultDate", function( assert ) {
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date.setDate( date.getDate() - 1 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date -1d" );
-	inp.datepicker( "option", { defaultDate: "+3D" } ).
+	inp.datepicker( "option", { defaultDate: "+3d" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date.setDate( date.getDate() + 4 );
-	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +3D" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +3d" );
 	inp.datepicker( "option", { defaultDate: " -2 w " } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = new Date();
 	date.setDate( date.getDate() - 14 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date -2 w" );
-	inp.datepicker( "option", { defaultDate: "+1 W" } ).
+	inp.datepicker( "option", { defaultDate: "+1 w" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date.setDate( date.getDate() + 21 );
-	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +1 W" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +1 w" );
 	inp.datepicker( "option", { defaultDate: " -1 m " } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = testHelper.addMonths( new Date(), -1 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date -1 m" );
-	inp.datepicker( "option", { defaultDate: "+2M" } ).
+	inp.datepicker( "option", { defaultDate: "+2m" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = testHelper.addMonths( new Date(), 2 );
-	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +2M" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +2m" );
 	inp.datepicker( "option", { defaultDate: "-2y" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = new Date();
 	date.setFullYear( date.getFullYear() - 2 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date -2y" );
-	inp.datepicker( "option", { defaultDate: "+1 Y " } ).
+	inp.datepicker( "option", { defaultDate: "+1 y " } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date.setFullYear( date.getFullYear() + 3 );
-	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +1 Y" );
-	inp.datepicker( "option", { defaultDate: "+1M +10d" } ).
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +1 y" );
+	inp.datepicker( "option", { defaultDate: "+1m +10d" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = testHelper.addMonths( new Date(), 1 );
 	date.setDate( date.getDate() + 10 );
-	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +1M +10d" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date +1m +10d" );
 
 	// String date values
 	inp.datepicker( "option", { defaultDate: "07/04/2007" } ).
@@ -486,19 +486,19 @@ QUnit.test( "minMax", function( assert ) {
 	// Relative dates
 	date = new Date();
 	date.setDate( date.getDate() - 7 );
-	inp.datepicker( "option", { minDate: "-1w", maxDate: "+1 M +10 D " } ).
+	inp.datepicker( "option", { minDate: "-1w", maxDate: "+1 m +10 d " } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" );
 	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP } ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date,
-		"Min/max - -1w, +1 M +10 D - ctrl+pgup" );
+		"Min/max - -1w, +1 m +10 d - ctrl+pgup" );
 	date = testHelper.addMonths( new Date(), 1 );
 	date.setDate( date.getDate() + 10 );
 	inp.val( "" ).datepicker( "show" );
 	inp.simulate( "keydown", { ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN } ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date,
-		"Min/max - -1w, +1 M +10 D - ctrl+pgdn" );
+		"Min/max - -1w, +1 m +10 d - ctrl+pgdn" );
 
 	// With existing date
 	inp = testHelper.init( "#inp" );
@@ -524,7 +524,7 @@ QUnit.test( "minMax", function( assert ) {
 
 	inp.val( "" ).datepicker( "option", {
 		minDate: new Date( 1900, 0, 1 ),
-		maxDate: "-7Y",
+		maxDate: "-7y",
 		yearRange: "1900:-7"
 	} );
 	assert.ok( dp.find( ".ui-datepicker-next" ).hasClass( "ui-state-disabled" ), "Year Range Test - relative - next button disabled" );
