@@ -421,13 +421,22 @@ grunt.initConfig( {
 				"jquery-3.6.0/jquery.js": "jquery-3.6.0/dist/jquery.js",
 				"jquery-3.6.0/LICENSE.txt": "jquery-3.6.0/LICENSE.txt",
 
+				"jquery-3.6.1/jquery.js": "jquery-3.6.1/dist/jquery.js",
+				"jquery-3.6.1/LICENSE.txt": "jquery-3.6.1/LICENSE.txt",
+
+				"jquery-3.6.2/jquery.js": "jquery-3.6.2/dist/jquery.js",
+				"jquery-3.6.2/LICENSE.txt": "jquery-3.6.2/LICENSE.txt",
+
+				"jquery-3.6.3/jquery.js": "jquery-3.6.3/dist/jquery.js",
+				"jquery-3.6.3/LICENSE.txt": "jquery-3.6.3/LICENSE.txt",
+
 				"jquery-migrate-1.4.1/jquery-migrate.js":
 					"jquery-migrate-1.4.1/dist/jquery-migrate.js",
 				"jquery-migrate-1.4.1/LICENSE.txt": "jquery-migrate-1.4.1/LICENSE.txt",
 
-				"jquery-migrate-3.3.2/jquery-migrate.js":
-					"jquery-migrate-3.3.2/dist/jquery-migrate.js",
-				"jquery-migrate-3.3.2/LICENSE.txt": "jquery-migrate-3.3.2/LICENSE.txt"
+				"jquery-migrate-3.4.0/jquery-migrate.js":
+					"jquery-migrate-3.4.0/dist/jquery-migrate.js",
+				"jquery-migrate-3.4.0/LICENSE.txt": "jquery-migrate-3.4.0/LICENSE.txt"
 			}
 		}
 	},

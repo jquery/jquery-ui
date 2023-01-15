@@ -39,7 +39,7 @@
 		"jquery-1.12.2": "jquery#1.12.2",
 		"jquery-1.12.3": "jquery#1.12.3",
 		"jquery-1.12.4": "jquery#1.12.4",
-		"jquery-3.x": "jquery#3.6.0",
+		"jquery-3.x": "jquery#3.6.3",
 		"jquery-2.0.0": "jquery#2.0.0",
 		"jquery-2.0.1": "jquery#2.0.1",
 		"jquery-2.0.2": "jquery#2.0.2",
@@ -66,7 +66,10 @@
 		"jquery-3.5.0": "jquery#3.5.0",
 		"jquery-3.5.1": "jquery#3.5.1",
 		"jquery-3.6.0": "jquery#3.6.0",
+		"jquery-3.6.1": "jquery#3.6.1",
+		"jquery-3.6.2": "jquery#3.6.2",
+		"jquery-3.6.3": "jquery#3.6.3",
 		"jquery-migrate-1.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
-		"jquery-migrate-3.3.2": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.3.2.tgz"
+		"jquery-migrate-3.4.0": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.4.0.tgz"
 	}
 }
