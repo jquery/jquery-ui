@@ -105,7 +105,7 @@ QUnit.test( "positions", function( assert ) {
 				assert.deepEqual( el.offset(), {
 					top: start.top + offsets[ vertical ] * ( my ? -1 : 1 ),
 					left: start.left + offsets[ horizontal ] * ( my ? -1 : 1 )
-				}, "Position via " + QUnit.jsDump.parse( { my: _my, at: _at } ) );
+				}, "Position via " + QUnit.dump.parse( { my: _my, at: _at } ) );
 			} );
 		} );
 	} );
