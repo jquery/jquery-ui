@@ -182,8 +182,10 @@ grunt.initConfig( {
 		good: {
 			options: {
 				ignore: [
-				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
-			] },
+					/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/,
+					/This document appears to be written in .*. Consider using “lang=".*"” \(or variant\) instead/
+				]
+			},
 			src: [
 				"{demos,tests}/**/*.html",
 				...htmllintBad.map( pattern => `!${ pattern }` )
@@ -197,7 +199,7 @@ grunt.initConfig( {
 					/Element “object” is missing one or more of the following/,
 					/The “codebase” attribute on the “object” element is obsolete/,
 					/Consider adding a “lang” attribute to the “html” start tag/,
-					/This document appears to be written in .*. Consider adding “lang=".*"” \(or variant\) to the “html” start tag/
+					/This document appears to be written in .*. Consider (?:adding|using) “lang=".*"” \(or variant\)/
 				]
 			},
 			src: htmllintBad

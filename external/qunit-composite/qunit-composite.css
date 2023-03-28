@@ -11,3 +11,37 @@
 
     background: #fff;
 }
+
+#qunit-testsuites {
+    margin: 0;
+    padding: 0.5em 1.0em;
+    font-family: "Helvetica Neue Light","HelveticaNeue-Light","Helvetica Neue",Calibri,Helvetica,Arial,sans-serif;
+    font-size: small;
+    background-color: #d2e0e6;
+    border-bottom: 1px solid #fff;
+}
+
+#qunit-testsuites a {
+    color: #00c;
+    text-decoration: none;
+}
+
+#qunit-testsuites a:hover {
+    text-decoration: underline;
+}
+
+#qunit-testsuites > li {
+    display: inline-block;
+}
+
+#qunit-testsuites > li:first-child::before {
+    content: "Suites: ";
+}
+
+#qunit-testsuites > li + li::before {
+    content: "|\a0";
+}
+
+#qunit-testsuites > li::after {
+    content: "\a0";
+}
