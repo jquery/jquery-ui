@@ -53,7 +53,6 @@
 	"devDependencies": {
 		"commitplease": "3.2.0",
 		"eslint-config-jquery": "3.0.0",
-		"glob": "7.2.0",
 		"grunt": "1.5.3",
 		"grunt-bowercopy": "1.2.5",
 		"grunt-cli": "1.4.3",
