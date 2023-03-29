@@ -2,92 +2,98 @@
 
 module.exports = function( grunt ) {
 
-var
-	glob = require( "glob" ),
+// files
+const coreFiles = [
+	"core.js",
+	"widget.js",
+	"widgets/mouse.js",
+	"widgets/draggable.js",
+	"widgets/droppable.js",
+	"widgets/resizable.js",
+	"widgets/selectable.js",
+	"widgets/sortable.js",
+	"effect.js"
+];
 
-	// files
-	coreFiles = [
-		"core.js",
-		"widget.js",
-		"widgets/mouse.js",
-		"widgets/draggable.js",
-		"widgets/droppable.js",
-		"widgets/resizable.js",
-		"widgets/selectable.js",
-		"widgets/sortable.js",
-		"effect.js"
-	],
+const uiFiles = coreFiles.map( function( file ) {
+	return "ui/" + file;
+} ).concat( expandFiles( "ui/**/*.js" ).filter( function( file ) {
+	return coreFiles.indexOf( file.substring( 3 ) ) === -1;
+} ) );
 
-	uiFiles = coreFiles.map( function( file ) {
-		return "ui/" + file;
-	} ).concat( expandFiles( "ui/**/*.js" ).filter( function( file ) {
-		return coreFiles.indexOf( file.substring( 3 ) ) === -1;
-	} ) ),
+const allI18nFiles = expandFiles( "ui/i18n/*.js" );
 
-	allI18nFiles = expandFiles( "ui/i18n/*.js" ),
+const cssFiles = [
+	"core",
+	"accordion",
+	"autocomplete",
+	"button",
+	"checkboxradio",
+	"controlgroup",
+	"datepicker",
+	"dialog",
+	"draggable",
+	"menu",
+	"progressbar",
+	"resizable",
+	"selectable",
+	"selectmenu",
+	"sortable",
+	"slider",
+	"spinner",
+	"tabs",
+	"tooltip",
+	"theme"
+].map( function( component ) {
+	return "themes/base/" + component + ".css";
+} );
 
-	cssFiles = [
-		"core",
-		"accordion",
-		"autocomplete",
-		"button",
-		"checkboxradio",
-		"controlgroup",
-		"datepicker",
-		"dialog",
-		"draggable",
-		"menu",
-		"progressbar",
-		"resizable",
-		"selectable",
-		"selectmenu",
-		"sortable",
-		"slider",
-		"spinner",
-		"tabs",
-		"tooltip",
-		"theme"
-	].map( function( component ) {
-		return "themes/base/" + component + ".css";
-	} ),
-
-	// minified files
-	minify = {
+// minified files
+const minify = {
+	options: {
+		preserveComments: false
+	},
+	main: {
 		options: {
-			preserveComments: false
+			banner: createBanner( uiFiles )
 		},
-		main: {
-			options: {
-				banner: createBanner( uiFiles )
-			},
-			files: {
-				"dist/jquery-ui.min.js": "dist/jquery-ui.js"
-			}
-		},
-		i18n: {
-			options: {
-				banner: createBanner( allI18nFiles )
-			},
-			files: {
-				"dist/i18n/jquery-ui-i18n.min.js": "dist/i18n/jquery-ui-i18n.js"
-			}
+		files: {
+			"dist/jquery-ui.min.js": "dist/jquery-ui.js"
 		}
 	},
+	i18n: {
+		options: {
+			banner: createBanner( allI18nFiles )
+		},
+		files: {
+			"dist/i18n/jquery-ui-i18n.min.js": "dist/i18n/jquery-ui-i18n.js"
+		}
+	}
+};
 
-	compareFiles = {
-		all: [
-			"dist/jquery-ui.js",
-			"dist/jquery-ui.min.js"
-		]
-	},
-	component = grunt.option( "component" ) || "**",
+const compareFiles = {
+	all: [
+		"dist/jquery-ui.js",
+		"dist/jquery-ui.min.js"
+	]
+};
+const component = grunt.option( "component" ) || "**";
 
-	htmllintBad = [
-		"demos/tabs/ajax/content*.html",
-		"demos/tooltip/ajax/content*.html",
-		"tests/unit/core/core.html",
-		"tests/unit/tabs/data/test.html"
-	];
+const htmllintBad = [
+	"demos/tabs/ajax/content*.html",
+	"demos/tooltip/ajax/content*.html",
+	"tests/unit/core/core.html",
+	"tests/unit/tabs/data/test.html"
+];
+
+const nodeV16OrNewer = !/^v1[0-5]\./.test( process.version );
+
+// Support: Node.js <16
+// Skip running tasks that dropped support for Node.js 10-15
+// in this Node version.
+function runIfNewNode( task ) {
+	return nodeV16OrNewer ? task : "print_old_node_message:" + task;
+}
 
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /ui\//, "minified/" );
@@ -115,12 +121,6 @@ uiFiles.forEach( function( file ) {
 	compareFiles[ file ] = [ file, mapMinFile( file ) ];
 } );
 
-// grunt plugins
-require( "load-grunt-tasks" )( grunt );
-
-// local testswarm and build tasks
-grunt.loadTasks( "build/tasks" );
-
 function stripDirectory( file ) {
 	return file.replace( /.+\/(.+?)>?$/, "$1" );
 }
@@ -128,7 +128,7 @@ function stripDirectory( file ) {
 function createBanner( files ) {
 
 	// strip folders
-	var fileNames = files && files.map( stripDirectory );
+	const fileNames = files && files.map( stripDirectory );
 	return "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - " +
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\\n' : '' %>" +
@@ -184,9 +184,10 @@ grunt.initConfig( {
 				ignore: [
 				/The text content of element “script” was not in the required format: Expected space, tab, newline, or slash but found “.” instead/
 			] },
-			src: glob.sync( "{demos,tests}/**/*.html", {
-				ignore: htmllintBad
-			} )
+			src: [
+				"{demos,tests}/**/*.html",
+				...htmllintBad.map( pattern => `!${ pattern }` )
+			]
 		},
 		bad: {
 			options: {
@@ -469,9 +470,22 @@ grunt.initConfig( {
 	}
 } );
 
+// grunt plugins
+require( "load-grunt-tasks" )( grunt, {
+	pattern: nodeV16OrNewer ? [ "grunt-*" ] : [
+		"grunt-*",
+		"!grunt-contrib-qunit",
+		"!grunt-eslint",
+		"!grunt-html"
+	]
+} );
+
+// local testswarm and build tasks
+grunt.loadTasks( "build/tasks" );
+
 grunt.registerTask( "update-authors", function() {
-	var getAuthors = require( "grunt-git-authors" ).getAuthors,
-		done = this.async();
+	const getAuthors = require( "grunt-git-authors" ).getAuthors;
+	const done = this.async();
 
 	getAuthors( {
 		priorAuthors: grunt.config( "authors.prior" )
@@ -499,11 +513,21 @@ grunt.registerTask( "update-authors", function() {
 	} );
 } );
 
+grunt.registerTask( "print_old_node_message", ( ...args ) => {
+	const task = args.join( ":" );
+	grunt.log.writeln( "Old Node.js detected, running the task \"" + task + "\" skipped..." );
+} );
+
 // Keep this task list in sync with the testing steps in our GitHub action test workflow file!
 grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
 grunt.registerTask( "jenkins", [ "default", "concat" ] );
-grunt.registerTask( "lint", [ "asciilint", "eslint", "csslint", "htmllint" ] );
-grunt.registerTask( "test", [ "qunit" ] );
+grunt.registerTask( "lint", [
+	"asciilint",
+	runIfNewNode( "eslint" ),
+	"csslint",
+	runIfNewNode( "htmllint" )
+] );
+grunt.registerTask( "test", [ runIfNewNode( "qunit" ) ] );
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );
 

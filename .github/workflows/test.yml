@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        # Node.js 10 is required by jQuery infra
+        node-version: [10.x, 16.x, 18.x]
 
     steps:
       - uses: actions/checkout@v3
