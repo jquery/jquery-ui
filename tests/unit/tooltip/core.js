@@ -26,6 +26,8 @@ QUnit.test( "markup structure", function( assert ) {
 	assert.equal( tooltip.length, 1, ".ui-tooltip exists" );
 	assert.equal( tooltip.find( ".ui-tooltip-content" ).length, 1,
 		".ui-tooltip-content exists" );
+
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "accessibility", function( assert ) {
@@ -95,6 +97,8 @@ QUnit.test( "nested tooltips", function( assert ) {
 
 	child.trigger( "mouseover" );
 	assert.equal( $( ".ui-tooltip" ).text(), "child" );
+
+	parent.tooltip( "destroy" );
 } );
 
 // #8742
@@ -148,6 +152,7 @@ QUnit.test( "programmatic focus with async content", function( assert ) {
 
 		element.on( "tooltipclose", function( event ) {
 			assert.deepEqual( event.originalEvent.type, "focusout" );
+			element.tooltip( "destroy" );
 			ready();
 		} );
 
@@ -249,6 +254,7 @@ QUnit.test( "remove conflicting attributes from live region", function( assert )
 					"no name attributes within live region" );
 				assert.equal( $( ".ui-helper-hidden-accessible [id]" ).length, 0,
 					"no id attributes within live region" );
+				$( "#tooltipped1" ).tooltip( "destroy" );
 			}
 		} )
 		.tooltip( "open" );
