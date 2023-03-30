@@ -12,16 +12,18 @@ QUnit.module( "tooltip: options", beforeAfterEach() );
 
 QUnit.test( "disabled: true", function( assert ) {
 	assert.expect( 1 );
-	$( "#tooltipped1" ).tooltip( {
+	var element = $( "#tooltipped1" ).tooltip( {
 		disabled: true
 	} ).tooltip( "open" );
 	assert.equal( $( ".ui-tooltip" ).length, 0 );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "content: default", function( assert ) {
 	assert.expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
 	assert.deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "anchortitle" );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "content: default; HTML escaping", function( assert ) {
@@ -36,6 +38,7 @@ QUnit.test( "content: default; HTML escaping", function( assert ) {
 	assert.equal( $.ui.tooltip.hacked, false, "script did not execute" );
 	assert.deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), scriptText,
 		"correct tooltip text" );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "content: return string", function( assert ) {
@@ -46,6 +49,7 @@ QUnit.test( "content: return string", function( assert ) {
 		}
 	} ).tooltip( "open" );
 	assert.deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring" );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "content: return jQuery", function( assert ) {
@@ -59,6 +63,7 @@ QUnit.test( "content: return jQuery", function( assert ) {
 	assert.deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring" );
 	assert.equal( liveRegion.children().last().html().toLowerCase(), "<div>cu<b>s</b>tomstring</div>",
 		"The accessibility live region will strip the ids but keep the structure" );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "content: sync + async callback", function( assert ) {
@@ -72,6 +77,8 @@ QUnit.test( "content: sync + async callback", function( assert ) {
 				response( "customstring2" );
 				setTimeout( function() {
 					assert.deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring2" );
+
+					element.tooltip( "destroy" );
 					ready();
 				}, 13 );
 			}, 13 );
@@ -94,6 +101,8 @@ QUnit.test( "content: async callback loses focus before load", function( assert 
 					setTimeout( function() {
 						assert.ok( !$( "#" + element.data( "ui-tooltip-id" ) ).is( ":visible" ),
 							"Tooltip should not display" );
+
+						element.tooltip( "destroy" );
 						ready();
 					} );
 				} );
@@ -117,6 +126,8 @@ QUnit.test( "content: change while open", function( assert ) {
 			return "new";
 		} );
 		assert.equal( ui.tooltip.text(), "new", "updated content" );
+
+		element.tooltip( "destroy" );
 	} );
 
 	element.tooltip( "open" );
@@ -129,7 +140,7 @@ QUnit.test( "content: string", function( assert ) {
 		open: function( event, ui ) {
 			assert.equal( ui.tooltip.text(), "just a string" );
 		}
-	} ).tooltip( "open" );
+	} ).tooltip( "open" ).tooltip( "destroy" );
 } );
 
 QUnit.test( "content: element", function( assert ) {
@@ -141,7 +152,7 @@ QUnit.test( "content: element", function( assert ) {
 		open: function( event, ui ) {
 			assert.equal( ui.tooltip.children().html().toLowerCase(), content );
 		}
-	} ).tooltip( "open" );
+	} ).tooltip( "open" ).tooltip( "destroy" );
 } );
 
 QUnit.test( "content: jQuery", function( assert ) {
@@ -153,7 +164,7 @@ QUnit.test( "content: jQuery", function( assert ) {
 		open: function( event, ui ) {
 			assert.equal( ui.tooltip.children().html().toLowerCase(), content );
 		}
-	} ).tooltip( "open" );
+	} ).tooltip( "open" ).tooltip( "destroy" );
 } );
 
 QUnit.test( "items", function( assert ) {
@@ -217,14 +228,17 @@ QUnit.test( "track + show delay", function( assert ) {
 		topVal + offsetVal, 0.5,
 		"top position"
 	);
+
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "track and programmatic focus", function( assert ) {
 	assert.expect( 1 );
-	$( "#qunit-fixture div input" ).tooltip( {
+	var element = $( "#qunit-fixture div input" ).tooltip( {
 		track: true
 	} ).trigger( "focus" );
 	assert.equal( "inputtitle", $( ".ui-tooltip" ).text() );
+	element.tooltip( "destroy" );
 } );
 
 } );

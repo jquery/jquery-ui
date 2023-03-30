@@ -96,6 +96,8 @@ QUnit.test( "enable/disable", function( assert ) {
 	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
 	assert.ok( tooltip.is( ":visible" ) );
 	$.fx.off = false;
+
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "enable/disable delegated", function( assert ) {
@@ -118,6 +120,8 @@ QUnit.test( "widget", function( assert ) {
 		widgetElement = element.tooltip( "widget" );
 	assert.equal( widgetElement.length, 1, "one element" );
 	assert.strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "preserve changes to title attributes on close and destroy", function( assert ) {
