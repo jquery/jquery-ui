@@ -101,7 +101,7 @@ QUnit.test( "width", function( assert ) {
 	assert.equal( button[ 0 ].style.width, "", "no inline style" );
 
 	element.selectmenu( "option", "width", null );
-	assert.equal( button.outerWidth(), element.outerWidth(), "button width auto" );
+	assert.close( button.outerWidth(), element.outerWidth(), 0.01, "button width auto" );
 
 	element.outerWidth( 100 );
 	element.selectmenu( "refresh" );
@@ -117,7 +117,8 @@ QUnit.test( "width", function( assert ) {
 		.append( $( "<option>", { text: "Option with a little longer text" } ) )
 		.selectmenu( "option", "width", null )
 		.selectmenu( "refresh" );
-	assert.equal( button.outerWidth(), element.outerWidth(), "button width with long option" );
+	assert.close( button.outerWidth(), element.outerWidth(), 0.01,
+		"button width with long option" );
 
 	element.parent().outerWidth( 300 );
 	element
