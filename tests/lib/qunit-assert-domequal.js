@@ -15,11 +15,16 @@ var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 	var assert = this;
 
 	// Get current state prior to modifier
-	var expected = extract( selector, message );
+	var expected = extract( assert, selector, message );
 
 	function done() {
-		var actual = extract( selector, message );
-		assert.push( QUnit.equiv( actual, expected ), actual, expected, message );
+		var actual = extract( assert, selector, message );
+		assert.pushResult( {
+			result: QUnit.equiv( actual, expected ),
+			actual: actual,
+			expected: expected,
+			message: message
+		} );
 	}
 
 	// Run modifier (async or sync), then compare state via done()
@@ -116,11 +121,15 @@ function jQueryVersionSince( version ) {
 	return compareVersions( $.fn.jquery, version ) >= 0;
 }
 
-function extract( selector, message ) {
+function extract( assert, selector, message ) {
 	var elem = $( selector );
 	if ( !elem.length ) {
-		QUnit.push( false, null, null,
-			"domEqual failed, can't extract " + selector + ", message was: " + message );
+		assert.pushResult( {
+			result: false,
+			actual: null,
+			expected: null,
+			message: "domEqual failed, can't extract " + selector + ", message was: " + message
+		} );
 		return;
 	}
 
@@ -190,7 +199,7 @@ function extract( selector, message ) {
 	children = elem.children();
 	if ( children.length ) {
 		result.children = elem.children().map( function() {
-			return extract( $( this ) );
+			return extract( assert, $( this ) );
 		} ).get();
 	} else {
 		result.text = elem.text();

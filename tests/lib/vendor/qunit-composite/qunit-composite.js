@@ -1,6 +1,9 @@
 /**
  * QUnit Composite
  *
+ * With custom modifications - all are marked with
+ * a "Custom modification" comment.
+ *
  * https://github.com/JamesMGreene/qunit-composite
  *
  * Copyright jQuery Foundation and other contributors
@@ -93,7 +96,12 @@ function initIframe() {
 			// Pass all test details through to the main page
 			var message = ( moduleName ? moduleName + ": " : "" ) + testName + ": " + ( data.message || ( data.result ? "okay" : "failed" ) );
 			suiteAssert.expect( ++count );
-			suiteAssert.push( data.result, data.actual, data.expected, message );
+			suiteAssert.pushResult( {
+				result: data.result,
+				actual: data.actual,
+				expected: data.expected,
+				message: message
+			} );
 		});
 
 		// Continue the outer test when the iframe's test is done

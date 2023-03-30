@@ -11,23 +11,39 @@ define( [
 QUnit.module( "core - selectors", { afterEach: helper.moduleAfterEach }  );
 
 QUnit.assert.isFocusable = function( selector, msg ) {
-	this.push( $( selector ).is( ":focusable" ), null, null,
-		msg + " - selector " + selector + " is focusable" );
+	this.pushResult( {
+		result: $( selector ).is( ":focusable" ),
+		actual: null,
+		expected: null,
+		message: msg + " - selector " + selector + " is focusable"
+	} );
 };
 
 QUnit.assert.isNotFocusable = function( selector, msg ) {
-	this.push( $( selector ).length && !$( selector ).is( ":focusable" ), null, null,
-		msg + " - selector " + selector + " is not focusable" );
+	this.pushResult( {
+		result: $( selector ).length && !$( selector ).is( ":focusable" ),
+		actual: null,
+		expected: null,
+		message: msg + " - selector " + selector + " is not focusable"
+	} );
 };
 
 QUnit.assert.isTabbable = function( selector, msg ) {
-	this.push( $( selector ).is( ":tabbable" ), null, null,
-		msg + " - selector " + selector + " is tabbable" );
+	this.pushResult( {
+		result: $( selector ).is( ":tabbable" ),
+		actual: null,
+		expected: null,
+		message: msg + " - selector " + selector + " is tabbable"
+	} );
 };
 
 QUnit.assert.isNotTabbable = function( selector, msg ) {
-	this.push( $( selector ).length && !$( selector ).is( ":tabbable" ), null, null,
-		msg + " - selector " + selector + " is not tabbable" );
+	this.pushResult( {
+		result: $( selector ).length && !$( selector ).is( ":tabbable" ),
+		actual: null,
+		expected: null,
+		message: msg + " - selector " + selector + " is not tabbable"
+	} );
 };
 
 QUnit.test( "data", function( assert ) {

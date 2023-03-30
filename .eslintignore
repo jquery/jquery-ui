@@ -1,3 +1,4 @@
 dist/**/*
 external/**/*
+tests/lib/vendor/**/*
 ui/vendor/**/*

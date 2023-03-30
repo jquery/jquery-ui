@@ -1,3 +1,5 @@
+//  With custom modifications - all are marked with
+//  a "Custom modification" comment.
 (function(factory) {
 
   // NOTE:
@@ -12,11 +14,10 @@
   else if (typeof module !== "undefined" && module && module.exports && typeof require === "function") {
     module.exports = factory(require("qunitjs"));
   }
-  // For CommonJS with `exports`, but without `module.exports`, like Rhino
-  else if (typeof exports !== "undefined" && exports && typeof require === "function") {
-    var qunit = require("qunitjs");
-    qunit.extend(exports, factory(qunit));
-  }
+
+  // Custom modification: remove the non-Node.js CommonJS part due to its
+  // usage of QUnit.extend.
+  //
   // For browser globals
   else {
     factory(QUnit);
@@ -75,7 +76,13 @@
 
     message = message || (actual + " should be within " + maxDifference + " (inclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff));
 
-    pushContext.push(result, actual, expected, message);
+    // Custom modification: push -> pushResult
+    pushContext.pushResult({
+      result: result,
+      actual: actual,
+      expected: expected,
+      message: message
+    });
   }
 
 
@@ -109,7 +116,13 @@
     }
     message = message || (actual + " should be within " + maxPercentDifference + "% (inclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff + "%"));
 
-    pushContext.push(result, actual, expected, message);
+    // Custom modification: push -> pushResult
+    pushContext.pushResult({
+      result: result,
+      actual: actual,
+      expected: expected,
+      message: message
+    });
   };
 
 
@@ -131,7 +144,13 @@
 
     message = message || (actual + " should not be within " + minDifference + " (exclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff));
 
-    pushContext.push(result, actual, expected, message);
+    // Custom modification: push -> pushResult
+    pushContext.pushResult({
+      result: result,
+      actual: actual,
+      expected: expected,
+      message: message
+    });
   }
 
 
@@ -165,10 +184,16 @@
     }
     message = message || (actual + " should not be within " + minPercentDifference + "% (exclusive) of " + expected + (result ? "" : ". Actual: " + actualDiff + "%"));
 
-    pushContext.push(result, actual, expected, message);
+    // Custom modification: push -> pushResult
+    pushContext.pushResult({
+      result: result,
+      actual: actual,
+      expected: expected,
+      message: message
+    });
   };
 
-
+  var key;
   var api = {
     close: close,
     notClose: notClose,
@@ -176,7 +201,9 @@
     notClosePercent: notClose.percent
   };
 
-  QUnit.extend(QUnit.assert, api);
+  for (key in api) {
+    QUnit.assert[key] = api[key];
+  }
 
   return api;
 }));

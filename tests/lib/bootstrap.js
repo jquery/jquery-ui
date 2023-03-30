@@ -12,8 +12,8 @@ requirejs.config( {
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"lib": "../../lib",
 		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
-		"qunit-assert-classes": "../../../external/qunit-assert-classes/qunit-assert-classes",
-		"qunit-assert-close": "../../../external/qunit-assert-close/qunit-assert-close",
+		"qunit-assert-classes": "../../lib/vendor/qunit-assert-classes/qunit-assert-classes",
+		"qunit-assert-close": "../../lib/vendor/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
 		"testswarm": "https://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
 		"ui": "../../../ui"
