@@ -209,15 +209,18 @@ grunt.initConfig( {
 		} ),
 		options: {
 			puppeteer: {
-				ignoreDefaultArgs: true,
 				args: [
-					"--headless",
-					"--disable-web-security",
 					"--allow-file-access-from-files"
 				]
 			},
 			inject: [
-				require.resolve( "grunt-contrib-qunit/chrome/bridge" )
+				require.resolve(
+					"./tests/lib/grunt-contrib-qunit-bridges/bridge-wrapper.js.intro"
+				),
+				require.resolve( "grunt-contrib-qunit/chrome/bridge" ),
+				require.resolve(
+					"./tests/lib/grunt-contrib-qunit-bridges/bridge-wrapper.js.outro"
+				)
 			],
 			page: {
 				viewportSize: { width: 700, height: 500 }
