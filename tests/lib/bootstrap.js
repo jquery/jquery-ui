@@ -1,7 +1,7 @@
 ( function() {
 "use strict";
 
-var DEFAULT_JQUERY_VERSION = "3.6.3";
+var DEFAULT_JQUERY_VERSION = "3.6.4";
 
 requirejs.config( {
 	paths: {
@@ -123,7 +123,7 @@ function migrateUrl() {
 	if ( jqueryVersion === "git" ) {
 		url = "https://releases.jquery.com/git/jquery-migrate-git";
 	} else if ( jqueryVersion[ 0 ] === "3" ) {
-		url = "../../../external/jquery-migrate-3.4.0/jquery-migrate";
+		url = "../../../external/jquery-migrate-3.4.1/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {
 		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
 	} else if ( jqueryVersion === "custom" ) {
