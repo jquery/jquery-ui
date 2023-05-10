@@ -214,7 +214,7 @@ QUnit.test( "Ensure form elements don't reset when opening a dialog", function( 
 } );
 
 QUnit.test( "#8958: dialog can be opened while opening", function( assert ) {
-	var ready = assert.async();
+	var ready = assert.async( 3 );
 	assert.expect( 1 );
 
 	var element = $( "<div>" ).dialog( {
@@ -227,7 +227,7 @@ QUnit.test( "#8958: dialog can be opened while opening", function( assert ) {
 	} );
 
 	// Support: IE8
-	// For some reason the #favorite-color input doesn't get focus if we don't
+	// For some reason the #favorite-animal input doesn't get focus if we don't
 	// focus the body first, causing the test to hang.
 	$( "body" ).trigger( "focus" );
 
@@ -238,6 +238,7 @@ QUnit.test( "#8958: dialog can be opened while opening", function( assert ) {
 		// the dialog to gain focus, thus blurring the input.
 		.on( "focus", function() {
 			element.dialog( "open" );
+			ready();
 		} )
 
 		// When the input blurs, the dialog is in the process of opening. We
@@ -246,6 +247,12 @@ QUnit.test( "#8958: dialog can be opened while opening", function( assert ) {
 		// being opened.
 		.on( "blur", function() {
 			element.dialog( "open" );
+
+			// Detach the handlers to avoid firing them outside of this
+			// test logic; this may affect other tests.
+			$( this ).off( "focus blur" );
+
+			ready();
 		} )
 		.trigger( "focus" );
 } );
