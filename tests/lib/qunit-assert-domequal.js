@@ -38,6 +38,7 @@ var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 
 domEqual.properties = [
 	"disabled",
+	"nodeName",
 	"readOnly"
 ];
 
@@ -59,7 +60,6 @@ domEqual.attributes = [
 	"class",
 	"href",
 	"id",
-	"nodeName",
 	"role",
 	"tabIndex",
 	"title"
@@ -76,23 +76,26 @@ function getElementStyles( elem ) {
 	var style = elem.ownerDocument.defaultView ?
 		elem.ownerDocument.defaultView.getComputedStyle( elem, null ) :
 		elem.currentStyle;
-	var key, len;
+	var key, camelKey;
+	var len = style.length;
 
-	if ( style && style.length && style[ 0 ] && style[ style[ 0 ] ] ) {
-		len = style.length;
-		while ( len-- ) {
-			key = style[ len ];
-			if ( typeof style[ key ] === "string" ) {
-				styles[ camelCase( key ) ] = style[ key ];
-			}
+	while ( len-- ) {
+		key = style[ len ];
+		camelKey = camelCase( key );
+
+		// Support: IE <=11+
+		// In IE, `option` elements may have different initial `option` colors.
+		// They may initially all be transparent, but later the selected
+		// option gets a blue background with white text; ignore it.
+		if ( document.documentMode && elem.nodeName.toLowerCase() === "option" && (
+			camelKey === "color" ||
+				camelKey.indexOf( "Color" ) === camelKey.length - "Color".length
+		) ) {
+			continue;
 		}
 
-	// Support: Opera, IE <9
-	} else {
-		for ( key in style ) {
-			if ( typeof style[ key ] === "string" ) {
-				styles[ key ] = style[ key ];
-			}
+		if ( typeof style[ key ] === "string" ) {
+			styles[ camelKey ] = style[ key ];
 		}
 	}
 
