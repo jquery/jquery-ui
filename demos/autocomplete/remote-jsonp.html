@@ -21,7 +21,7 @@
 		$( "#birds" ).autocomplete({
 			source: function( request, response ) {
 				$.ajax( {
-					url: "search.php",
+					url: "search.json",
 					dataType: "jsonp",
 					data: {
 						term: request.term
@@ -37,6 +37,7 @@
 			}
 		} );
 	</script>
+	<script src="../search.js"></script>
 </head>
 <body>
 

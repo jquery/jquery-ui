@@ -30,7 +30,7 @@
 			})
 			.autocomplete({
 				source: function( request, response ) {
-					$.getJSON( "search.php", {
+					$.getJSON( "search.json", {
 						term: extractLast( request.term )
 					}, response );
 				},
@@ -58,6 +58,7 @@
 				}
 			});
 	</script>
+	<script src="../search.js"></script>
 </head>
 <body>
 
