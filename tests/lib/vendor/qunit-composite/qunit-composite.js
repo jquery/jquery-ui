@@ -1,5 +1,8 @@
 /**
- * QUnit Composite v1.0.5-pre
+ * QUnit Composite
+ *
+ * With custom modifications - all are marked with
+ * a "Custom modification" comment.
  *
  * https://github.com/JamesMGreene/qunit-composite
  *
@@ -14,7 +17,7 @@
 		factory( QUnit );
 	}
 }(function( QUnit ) {
-var iframe, hasBound,
+var iframe, hasBound, resumeTests, suiteAssert,
 	modules = 1,
 	executingComposite = false;
 
@@ -48,7 +51,9 @@ function runSuite( suite ) {
 		path = suite;
 	}
 
-	QUnit.asyncTest( suite, function() {
+	QUnit.test( suite, function( assert ) {
+		resumeTests = assert.async();
+		suiteAssert = assert;
 		iframe.setAttribute( "src", path );
 		// QUnit.start is called from the child iframe's QUnit.done hook.
 	});
@@ -90,12 +95,19 @@ function initIframe() {
 			}
 			// Pass all test details through to the main page
 			var message = ( moduleName ? moduleName + ": " : "" ) + testName + ": " + ( data.message || ( data.result ? "okay" : "failed" ) );
-			expect( ++count );
-			QUnit.push( data.result, data.actual, data.expected, message );
+			suiteAssert.expect( ++count );
+			suiteAssert.pushResult( {
+				result: data.result,
+				actual: data.actual,
+				expected: data.expected,
+				message: message
+			} );
 		});
 
 		// Continue the outer test when the iframe's test is done
-		iframeWin.QUnit.done( QUnit.start );
+		iframeWin.QUnit.done(function() {
+			resumeTests();
+		});
 	}
 
 	iframe = document.createElement( "iframe" );
@@ -105,6 +117,41 @@ function initIframe() {
 	addEvent( iframe, "load", onIframeLoad );
 
 	iframeWin = iframe.contentWindow;
+}
+
+function appendSuitesToHeader( suites ) {
+	var i, suitesLen, suite, path, name, suitesEl, testResultEl,
+		newSuiteListItemEl, newSuiteLinkEl;
+
+	suitesEl = document.getElementById("qunit-testsuites");
+
+	if (!suitesEl) {
+		testResultEl = document.getElementById("qunit-testresult");
+
+		if (!testResultEl) {
+			// QUnit has not been set up yet. Defer until QUnit is ready.
+			QUnit.begin(function () {
+				appendSuitesToHeader(suites);
+			});
+			return;
+		}
+
+		suitesEl = document.createElement("ul");
+		suitesEl.id = "qunit-testsuites";
+		testResultEl.parentNode.insertBefore(suitesEl, testResultEl);
+	}
+
+	for (i = 0, suitesLen = suites.length; i < suitesLen; ++i) {
+		suite = suites[i];
+		newSuiteLinkEl = document.createElement("a");
+		newSuiteLinkEl.innerHTML = suite.name || suite;
+		newSuiteLinkEl.href = suite.path || suite;
+
+		newSuiteListItemEl = document.createElement("li");
+		newSuiteListItemEl.appendChild(newSuiteLinkEl);
+
+		suitesEl.appendChild(newSuiteListItemEl);
+	}
 }
 
 /**
@@ -122,6 +169,8 @@ QUnit.testSuites = function( name, suites ) {
 	}
 	suitesLen = suites.length;
 
+	appendSuitesToHeader(suites);
+
 	if ( !hasBound ) {
 		hasBound = true;
 		QUnit.begin( initIframe );
@@ -138,7 +187,7 @@ QUnit.testSuites = function( name, suites ) {
 	}
 
 	QUnit.module( name, {
-		setup: function () {
+		beforeEach: function () {
 			executingComposite = true;
 		}
 	});
@@ -154,16 +203,8 @@ QUnit.testDone(function( data ) {
 	}
 
 	var i, len,
-		testId = data.testId || QUnit.config.current.testId || data.testNumber || QUnit.config.current.testNumber,
-		current = testId ?
-			(
-				// QUnit @^1.16.0
-				document.getElementById( "qunit-test-output-" + testId ) ||
-				// QUnit @1.15.x
-				document.getElementById( "qunit-test-output" + testId )
-			) :
-			// QUnit @<1.15.0
-			document.getElementById( QUnit.config.current.id ),
+		testId = data.testId,
+		current = document.getElementById( "qunit-test-output-" + testId ),
 		children = current && current.children,
 		src = iframe.src;
 

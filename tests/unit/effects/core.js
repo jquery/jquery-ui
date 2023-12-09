@@ -23,11 +23,21 @@ define( [
 "use strict";
 
 QUnit.assert.present = function( value, array, message ) {
-	this.push( jQuery.inArray( value, array ) !== -1, value, array, message );
+	this.pushResult( {
+		result: jQuery.inArray( value, array ) !== -1,
+		actual: value,
+		expected: array,
+		message: message
+	} );
 };
 
 QUnit.assert.notPresent = function( value, array, message ) {
-	this.push( jQuery.inArray( value, array ) === -1, value, array, message );
+	this.pushResult( {
+		result: jQuery.inArray( value, array ) === -1,
+		actual: value,
+		expected: array,
+		message: message
+	} );
 };
 
 // MinDuration is used for "short" animate tests where we are only concerned about the final

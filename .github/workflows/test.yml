@@ -2,6 +2,9 @@ name: Grunt tests
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   grunt:
     name: Grunt based tests with Node.js ${{ matrix.node-version }}
@@ -9,19 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        # Node.js 10 is required by jQuery infra
+        node-version: [10.x, 18.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Get npm cache directory
         id: npm-cache-dir
         run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+          echo "dir=\"$(npm config get cache)\"" >> $GITHUB_OUTPUT
 
       - name: Cache npm dependencies
         uses: actions/cache@v3

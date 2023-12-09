@@ -15,11 +15,16 @@ var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 	var assert = this;
 
 	// Get current state prior to modifier
-	var expected = extract( selector, message );
+	var expected = extract( assert, selector, message );
 
 	function done() {
-		var actual = extract( selector, message );
-		assert.push( QUnit.equiv( actual, expected ), actual, expected, message );
+		var actual = extract( assert, selector, message );
+		assert.pushResult( {
+			result: QUnit.equiv( actual, expected ),
+			actual: actual,
+			expected: expected,
+			message: message
+		} );
 	}
 
 	// Run modifier (async or sync), then compare state via done()
@@ -33,6 +38,7 @@ var domEqual = QUnit.assert.domEqual = function( selector, modifier, message ) {
 
 domEqual.properties = [
 	"disabled",
+	"nodeName",
 	"readOnly"
 ];
 
@@ -54,7 +60,6 @@ domEqual.attributes = [
 	"class",
 	"href",
 	"id",
-	"nodeName",
 	"role",
 	"tabIndex",
 	"title"
@@ -71,23 +76,26 @@ function getElementStyles( elem ) {
 	var style = elem.ownerDocument.defaultView ?
 		elem.ownerDocument.defaultView.getComputedStyle( elem, null ) :
 		elem.currentStyle;
-	var key, len;
+	var key, camelKey;
+	var len = style.length;
 
-	if ( style && style.length && style[ 0 ] && style[ style[ 0 ] ] ) {
-		len = style.length;
-		while ( len-- ) {
-			key = style[ len ];
-			if ( typeof style[ key ] === "string" ) {
-				styles[ camelCase( key ) ] = style[ key ];
-			}
+	while ( len-- ) {
+		key = style[ len ];
+		camelKey = camelCase( key );
+
+		// Support: IE <=11+
+		// In IE, `option` elements may have different initial `option` colors.
+		// They may initially all be transparent, but later the selected
+		// option gets a blue background with white text; ignore it.
+		if ( document.documentMode && elem.nodeName.toLowerCase() === "option" && (
+			camelKey === "color" ||
+				camelKey.indexOf( "Color" ) === camelKey.length - "Color".length
+		) ) {
+			continue;
 		}
 
-	// Support: Opera, IE <9
-	} else {
-		for ( key in style ) {
-			if ( typeof style[ key ] === "string" ) {
-				styles[ key ] = style[ key ];
-			}
+		if ( typeof style[ key ] === "string" ) {
+			styles[ camelKey ] = style[ key ];
 		}
 	}
 
@@ -116,11 +124,15 @@ function jQueryVersionSince( version ) {
 	return compareVersions( $.fn.jquery, version ) >= 0;
 }
 
-function extract( selector, message ) {
+function extract( assert, selector, message ) {
 	var elem = $( selector );
 	if ( !elem.length ) {
-		QUnit.push( false, null, null,
-			"domEqual failed, can't extract " + selector + ", message was: " + message );
+		assert.pushResult( {
+			result: false,
+			actual: null,
+			expected: null,
+			message: "domEqual failed, can't extract " + selector + ", message was: " + message
+		} );
 		return;
 	}
 
@@ -190,7 +202,7 @@ function extract( selector, message ) {
 	children = elem.children();
 	if ( children.length ) {
 		result.children = elem.children().map( function() {
-			return extract( $( this ) );
+			return extract( assert, $( this ) );
 		} ).get();
 	} else {
 		result.text = elem.text();

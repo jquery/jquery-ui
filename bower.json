@@ -15,10 +15,7 @@
 		"jquery-color": "2.2.0",
 		"jquery-mousewheel": "3.1.12",
 		"jquery-simulate": "1.1.1",
-		"qunit": "1.18.0",
-		"qunit-assert-classes": "1.0.2",
-		"qunit-assert-close": "JamesMGreene/qunit-assert-close#v1.1.1",
-		"qunit-composite": "JamesMGreene/qunit-composite#v1.1.0",
+		"qunit": "2.19.4",
 		"requirejs": "2.1.14",
 
 		"jquery-1.8.0": "jquery#1.8.0",
@@ -39,7 +36,7 @@
 		"jquery-1.12.2": "jquery#1.12.2",
 		"jquery-1.12.3": "jquery#1.12.3",
 		"jquery-1.12.4": "jquery#1.12.4",
-		"jquery-3.x": "jquery#3.6.0",
+		"jquery-3.x": "jquery#3.7.0",
 		"jquery-2.0.0": "jquery#2.0.0",
 		"jquery-2.0.1": "jquery#2.0.1",
 		"jquery-2.0.2": "jquery#2.0.2",
@@ -66,7 +63,12 @@
 		"jquery-3.5.0": "jquery#3.5.0",
 		"jquery-3.5.1": "jquery#3.5.1",
 		"jquery-3.6.0": "jquery#3.6.0",
+		"jquery-3.6.1": "jquery#3.6.1",
+		"jquery-3.6.2": "jquery#3.6.2",
+		"jquery-3.6.3": "jquery#3.6.3",
+		"jquery-3.6.4": "jquery#3.6.4",
+		"jquery-3.7.0": "jquery#3.7.0",
 		"jquery-migrate-1.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
-		"jquery-migrate-3.3.2": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.3.2.tgz"
+		"jquery-migrate-3.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.4.1.tgz"
 	}
 }

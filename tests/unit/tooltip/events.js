@@ -28,6 +28,7 @@ QUnit.test( "programmatic triggers", function( assert ) {
 		assert.strictEqual( ui.tooltip[ 0 ], tooltip[ 0 ], "ui.tooltip" );
 	} );
 	element.tooltip( "close" );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "mouse events", function( assert ) {
@@ -44,6 +45,7 @@ QUnit.test( "mouse events", function( assert ) {
 	} );
 	element.trigger( "focusout" );
 	element.trigger( "mouseleave" );
+	element.tooltip( "destroy" );
 } );
 
 QUnit.test( "focus events", function( assert ) {
@@ -60,6 +62,7 @@ QUnit.test( "focus events", function( assert ) {
 	} );
 	element.trigger( "mouseleave" );
 	element.trigger( "focusout" );
+	element.tooltip( "destroy" );
 } );
 
 } );

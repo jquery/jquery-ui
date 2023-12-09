@@ -1,0 +1,20 @@
+// The bridge in `node_modules/grunt-contrib-qunit/chrome/bridge.js` is injected
+// into every iframe, even an empty one injected during QUnit tests. The bridge,
+// in turn, requires QUnit to be present on the page, throwing errors otherwise.
+// To workaround that, add another wrapper which detects a missing QUnit and skips
+// the whole logic.
+
+( function ( factory ) {
+	if ( typeof define === 'function' && define.amd ) {
+		require( [ 'qunit' ], factory );
+	} else {
+		factory( window.QUnit );
+	}
+} )( function( QUnit ) {
+
+if ( !QUnit ) {
+
+	// No QUnit => possibly an empty iframe injected in tests; ignore.
+	return;
+}
+

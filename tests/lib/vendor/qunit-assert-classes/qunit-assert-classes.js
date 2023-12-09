@@ -1,3 +1,5 @@
+//  With custom modifications - all are marked with
+//  a "Custom modification" comment.
 ( function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
@@ -73,14 +75,22 @@
 		return message + ( classes.length > 1 ? "es" : "" );
 	}
 
-	QUnit.extend( QUnit.assert, {
+	// Custom modification: removing QUnit.extend
+	var key;
+	var qunitAssertExtensions = {
 		hasClasses: function( element, classes, message ) {
 			var classArray = splitClasses( classes ),
 				results = check( element, classArray );
 
 			message = message || pluralize( "Element must have class", classArray );
 
-			this.push( !results.missing.length, results.found.join( " " ), classes, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: !results.missing.length,
+				actual: results.found.join( " " ),
+				expected: classes,
+				message: message
+			} );
 		},
 		lacksClasses: function( element, classes, message ) {
 			var classArray = splitClasses( classes ),
@@ -88,7 +98,13 @@
 
 			message = message || pluralize( "Element must not have class", classArray );
 
-			this.push( !results.found.length, results.found.join( " " ), classes, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: !results.found.length,
+				actual: results.found.join( " " ),
+				expected: classes,
+				message: message
+			} );
 		},
 		hasClassesStrict: function( element, classes, message ) {
 			var result,
@@ -101,49 +117,91 @@
 				splitClasses( results.element.getAttribute( "class" ) ).length ===
 				results.found.length;
 
-			this.push( result, results.found.join( " " ), classes, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: result,
+				actual: results.found.join( " " ),
+				expected: classes,
+				message: message
+			} );
 		},
 		hasClassRegex: function( element, regex, message ) {
 			var results = check( element, regex );
 
 			message = message || "Element must have class matching " + regex;
 
-			this.push( !!results.found.length, results.found.join( " " ), regex, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: !!results.found.length,
+				actual: results.found.join( " " ),
+				expected: regex,
+				message: message
+			} );
 		},
 		lacksClassRegex: function( element, regex, message ) {
 			var results = check( element, regex );
 
 			message = message || "Element must not have class matching " + regex;
 
-			this.push( results.missing.length, results.missing.join( " " ), regex, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: results.missing.length,
+				actual: results.missing.join( " " ),
+				expected: regex,
+				message: message
+			} );
 		},
 		hasClassStart: function( element, partialClass, message ) {
 			var results = check( element, new RegExp( "^" + partialClass ) );
 
 			message = message || "Element must have class starting with " + partialClass;
 
-			this.push( results.found.length, results.found.join( " " ), partialClass, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: results.found.length,
+				actual: results.found.join( " " ),
+				expected: partialClass,
+				message: message
+			} );
 		},
 		lacksClassStart: function( element, partialClass, message ) {
 			var results = check( element, new RegExp( "^" + partialClass ) );
 
 			message = message || "Element must not have class starting with " + partialClass;
 
-			this.push( results.missing.length, results.missing.join( " " ), partialClass, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: results.missing.length,
+				actual: results.missing.join( " " ),
+				expected: partialClass,
+				message: message
+			} );
 		},
 		hasClassPartial: function( element, partialClass, message ) {
 			var results = check( element, new RegExp( partialClass ) );
 
 			message = message || "Element must have class containing '" + partialClass + "'";
 
-			this.push( results.found.length, results.found.join( " " ), partialClass, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: results.found.length,
+				actual: results.found.join( " " ),
+				expected: partialClass,
+				message: message
+			} );
 		},
 		lacksClassPartial: function( element, partialClass, message ) {
 			var results = check( element, new RegExp( partialClass ) );
 
 			message = message || "Element must not have class containing '" + partialClass + "'";
 
-			this.push( results.missing.length, results.missing.join( " " ), partialClass, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: results.missing.length,
+				actual: results.missing.join( " " ),
+				expected: partialClass,
+				message: message
+			} );
 		},
 		lacksAllClasses: function( element, message ) {
 			element = element.jquery ? element[ 0 ] : element;
@@ -153,7 +211,13 @@
 
 			message = message || "Element must not have any classes";
 
-			this.push( !classes.length, !classes.length, true, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: !classes.length,
+				actual: !classes.length,
+				expected: true,
+				message: message
+			} );
 		},
 		hasSomeClass: function( element, message ) {
 			element = element.jquery ? element[ 0 ] : element;
@@ -163,7 +227,19 @@
 
 			message = message || "Element must have a class";
 
-			this.push( classes.length, classes.length, true, message );
+			// Custom modification: push -> pushResult
+			this.pushResult( {
+				result: classes.length,
+				actual: classes.length,
+				expected: true,
+				message: message
+			} );
 		}
-	});
+	};
+
+	// Custom modification: removing QUnit.extend
+	for ( key in qunitAssertExtensions ) {
+		QUnit.assert[ key ] = qunitAssertExtensions[ key ];
+	}
+
 } ) );

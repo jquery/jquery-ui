@@ -16,6 +16,8 @@ QUnit.test( "tooltipClass", function( assert ) {
 		tooltipClass: "custom"
 	} ).tooltip( "open" );
 	assert.hasClasses( $( "#" + element.data( "ui-tooltip-id" ) ), "custom" );
+
+	element.tooltip( "destroy" );
 } );
 
 } );
