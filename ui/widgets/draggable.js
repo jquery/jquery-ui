@@ -208,14 +208,14 @@ $.widget( "ui.draggable", $.ui.mouse, {
 			this._adjustOffsetFromHelper( o.cursorAt );
 		}
 
-		//Set a containment if given in the options
-		this._setContainment();
-
 		//Trigger event + callbacks
 		if ( this._trigger( "start", event ) === false ) {
 			this._clear();
 			return false;
 		}
+
+		//Set a containment if given in the options
+		this._setContainment();
 
 		//Recache the helper size
 		this._cacheHelperProportions();
