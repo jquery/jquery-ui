@@ -8,10 +8,27 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js">
+		var jqAjax = $.ajax;
+		$.ajax = function( options ) {
+			var jqXHR = jqAjax.apply( this, arguments );
+			if ( !/slow.html/.test( options && options.url ) ) {
+				return jqXHR;
+			}
+			return jqXHR
+				.then(function( result ) {
+					return $.Deferred( function( d ) {
+						setTimeout( function() {
+							d.resolve( result );
+						}, 1000 );
+					});
+				})
+				.promise({ abort: jqXHR.abort });
+		}
 		$( "#tabs" ).tabs({
 			beforeLoad: function( event, ui ) {
-				ui.jqXHR.fail(function() {
+				ui.jqXHR.fail( function( e ) {
 					ui.panel.html(
+						( e && e.statusText ? "Error " + e.status + ": " + e.statusText + ". \n" : "" ) +
 						"Couldn't load this tab. We'd try to fix this as soon as possible " +
 						"if this weren't a demo." );
 				});
@@ -26,8 +43,8 @@
 		<li><a href="#tabs-1">Preloaded</a></li>
 		<li><a href="ajax/content1.html">Tab 1</a></li>
 		<li><a href="ajax/content2.html">Tab 2</a></li>
-		<li><a href="ajax/content3-slow.php">Tab 3 (slow)</a></li>
-		<li><a href="ajax/content4-broken.php">Tab 4 (broken)</a></li>
+		<li><a href="ajax/content3-slow.html">Tab 3 (slow)</a></li>
+		<li><a href="ajax/content4-error.html">Tab 4 (error)</a></li>
 	</ul>
 	<div id="tabs-1">
 		<p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
@@ -36,7 +53,7 @@
 
 <div class="demo-description">
 <p>Fetch external content via Ajax for the tabs by setting an href value in the tab links.</p>
-<p>Tabs 3 and 4 demonstrate slow-loading and broken AJAX tabs, and how to handle serverside errors in those cases. Note: These two require a webserver to interpret PHP. They won't work from the filesystem.</p>
+<p>Tabs 3 and 4 demonstrate handling of pages that are slow-loading or have server-side HTTP status errors.</p>
 </div>
 </body>
 </html>
