@@ -19,13 +19,14 @@
 		}
 
 		$( "#birds" ).autocomplete({
-			source: "search.php",
+			source: "search.json",
 			minLength: 2,
 			select: function( event, ui ) {
 				log( "Selected: " + ui.item.value + " aka " + ui.item.id );
 			}
 		});
 	</script>
+	<script src="../search.js"></script>
 </head>
 <body>
 
