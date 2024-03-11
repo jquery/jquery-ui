@@ -2208,7 +2208,12 @@ $.fn.datepicker = function( options ) {
 
 	/* Append datepicker main container to body if not exist. */
 	if ( $( "#" + $.datepicker._mainDivId ).length === 0 ) {
-		$( "body" ).append( $.datepicker.dpDiv );
+		if ( options[ "container" ] && $( options[ "container" ] ).length ) {
+			$( options[ "container" ] ).append( $.datepicker.dpDiv );
+		}
+		else {
+			$( "body" ).append( $.datepicker.dpDiv );
+		}
 	}
 
 	var otherArgs = Array.prototype.slice.call( arguments, 1 );
