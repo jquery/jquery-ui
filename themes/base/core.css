@@ -16,13 +16,15 @@
 }
 .ui-helper-hidden-accessible {
 	border: 0;
-	clip: rect(0 0 0 0);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
 	padding: 0;
-	position: absolute;
+	margin: 0;
+	position: absolute !important;
+	height: 1px;
 	width: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 .ui-helper-reset {
 	margin: 0;
