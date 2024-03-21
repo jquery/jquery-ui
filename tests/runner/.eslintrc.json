@@ -1,0 +1,39 @@
+{
+	"root": true,
+
+	"extends": "jquery",
+
+	"overrides": [
+		{
+			"files": ["**/*"],
+			"env": {
+				"node": true
+			},
+			"globals": {
+				"fetch": false,
+				"Promise": false
+			},
+			"parserOptions": {
+				"ecmaVersion": 2022,
+				"sourceType": "module"
+			}
+		},
+		{
+			"files": ["./listeners.js"],
+			"env": {
+				"browser": true
+			},
+			"globals": {
+				"QUnit": false,
+				"Symbol": false
+			},
+			"parserOptions": {
+				"ecmaVersion": 5,
+				"sourceType": "script"
+			},
+			"rules": {
+				"strict": ["error", "function"]
+			}
+		}
+	]
+}
