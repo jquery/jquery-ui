@@ -41,7 +41,8 @@ QUnit.test( "enable / disable", function( assert ) {
 
 	element.selectmenu( "disable" );
 	assert.ok( element.selectmenu( "option", "disabled" ), "disable: widget option" );
-	assert.equal( element.attr( "disabled" ), "disabled", "disable: native select disabled" );
+	assert.ok( [ "disabled", "" ].indexOf( element.attr( "disabled" ) ) !== -1,
+		"disable: native select disabled" );
 	assert.equal( button.attr( "aria-disabled" ), "true", "disable: button ARIA" );
 	assert.equal( button.attr( "tabindex" ), -1, "disable: button tabindex" );
 	assert.equal( menu.attr( "aria-disabled" ), "true", "disable: menu ARIA" );
