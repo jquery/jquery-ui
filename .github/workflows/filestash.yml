@@ -3,7 +3,7 @@ name: Filestash
 on:
   push:
     branches:
-      - test
+      - main
 
 permissions:
   contents: read # to fetch code (actions/checkout)
@@ -47,5 +47,5 @@ jobs:
 
       - name: Upload to Filestash
         run: |
-          rsync -v --dry-run dist/jquery-ui.js filestash@"${{ secrets.FILESTASH_SERVER }}":ui/jquery-ui-git.js
-          rsync -v --dry-run dist/jquery-ui.css filestash@"${{ secrets.FILESTASH_SERVER }}":ui/jquery-ui-git.css
+          rsync dist/jquery-ui.js filestash@"${{ secrets.FILESTASH_SERVER }}":ui/jquery-ui-git.js
+          rsync dist/jquery-ui.css filestash@"${{ secrets.FILESTASH_SERVER }}":ui/jquery-ui-git.css
