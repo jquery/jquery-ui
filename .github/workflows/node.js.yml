@@ -6,17 +6,18 @@ on:
     branches-ignore: "dependabot/**"
   # Once a week every Monday
   schedule:
-    - cron: "0 0 * * 1"
+    - cron: "42 1 * * 1"
 
 permissions:
   contents: read
+
+env:
+  NODE_VERSION: 20.x
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     name: ${{ matrix.BROWSER }} - jQuery ${{ matrix.JQUERY }}
-    env:
-      NODE_VERSION: 20.x
     strategy:
       fail-fast: false
       matrix:
@@ -60,8 +61,6 @@ jobs:
   edge:
     runs-on: windows-latest
     name: edge - jQuery ${{ matrix.JQUERY }}
-    env:
-      NODE_VERSION: 20.x
     strategy:
       fail-fast: false
       matrix:
@@ -100,8 +99,6 @@ jobs:
   safari:
     runs-on: macos-latest
     name: safari - jQuery ${{ matrix.JQUERY }}
-    env:
-      NODE_VERSION: 20.x
     strategy:
       fail-fast: false
       matrix:

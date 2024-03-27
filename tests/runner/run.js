@@ -18,10 +18,10 @@ export async function run( {
 	browser: browserNames = [],
 	concurrency,
 	debug,
-	jquery: jquerys = [],
 	headless,
+	jquery: jquerys = [],
+	migrate,
 	suite: suites = [],
-	runId,
 	verbose
 } ) {
 	if ( !browserNames.length ) {
@@ -44,11 +44,6 @@ export async function run( {
 
 	// Convert browser names to browser objects
 	let browsers = browserNames.map( ( b ) => ( { browser: b } ) );
-
-	// A unique identifier for this run
-	if ( !runId ) {
-		runId = generateHash( `${ Date.now() }-${ suites.join( ":" ) }` );
-	}
 
 	// Create the test app and
 	// hook it up to the reporter
@@ -153,10 +148,11 @@ export async function run( {
 
 		for ( const jquery of jquerys ) {
 			const reportId = generateHash( `${ suite } ${ fullBrowser }` );
-			reports[ reportId ] = { browser, headless, jquery, suite };
+			reports[ reportId ] = { browser, headless, jquery, migrate, suite };
 
 			const url = buildTestUrl( suite, {
 				jquery,
+				migrate,
 				port,
 				reportId
 			} );
@@ -165,8 +161,8 @@ export async function run( {
 				debug,
 				headless,
 				jquery,
+				migrate,
 				reportId,
-				runId,
 				suite,
 				verbose
 			};
@@ -182,7 +178,6 @@ export async function run( {
 	}
 
 	try {
-		console.log( `Starting Run ${ runId }...` );
 		await runAll( { concurrency, verbose } );
 	} catch ( error ) {
 		console.error( error );

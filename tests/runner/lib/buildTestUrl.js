@@ -1,4 +1,4 @@
-export function buildTestUrl( suite, { jquery, port, reportId } ) {
+export function buildTestUrl( suite, { jquery, migrate, port, reportId } ) {
 	if ( !port ) {
 		throw new Error( "No port specified." );
 	}
@@ -7,6 +7,10 @@ export function buildTestUrl( suite, { jquery, port, reportId } ) {
 
 	if ( jquery ) {
 		query.append( "jquery", jquery );
+	}
+
+	if ( migrate ) {
+		query.append( "migrate", "true" );
 	}
 
 	if ( reportId ) {

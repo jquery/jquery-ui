@@ -11,7 +11,8 @@
 			},
 			"globals": {
 				"fetch": false,
-				"Promise": false
+				"Promise": false,
+				"require": false
 			},
 			"parserOptions": {
 				"ecmaVersion": 2022,
@@ -21,7 +22,8 @@
 		{
 			"files": ["./listeners.js"],
 			"env": {
-				"browser": true
+				"browser": true,
+				"node": false
 			},
 			"globals": {
 				"QUnit": false,

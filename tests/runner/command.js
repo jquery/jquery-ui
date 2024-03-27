@@ -29,6 +29,12 @@ const argv = yargs( process.argv.slice( 2 ) )
 			"Pass multiple versions by repeating the option.",
 		default: [ "3.7.1" ]
 	} )
+	.option( "migrate", {
+		type: "boolean",
+		description:
+			"Run tests with jQuery Migrate enabled.",
+		default: false
+	} )
 	.option( "browser", {
 		alias: "b",
 		type: "array",
@@ -56,10 +62,6 @@ const argv = yargs( process.argv.slice( 2 ) )
 		alias: "c",
 		type: "number",
 		description: "Run tests in parallel in multiple browsers. Defaults to 8."
-	} )
-	.option( "run-id", {
-		type: "string",
-		description: "A unique identifier for this run."
 	} )
 	.option( "verbose", {
 		alias: "v",

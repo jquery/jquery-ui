@@ -114,12 +114,13 @@ export function reportTest( test, reportId, { browser, headless } ) {
 	}
 }
 
-export function reportEnd( result, reportId, { browser, headless, jquery, suite } ) {
+export function reportEnd( result, reportId, { browser, headless, jquery, migrate, suite } ) {
 	const fullBrowser = getBrowserString( browser, headless );
 	console.log(
 		`\n\nTests finished in ${ prettyMs( result.runtime ) } ` +
 			`for ${ chalk.yellow( suite ) } ` +
 			`and jQuery ${ chalk.yellow( jquery ) } ` +
+			( migrate ? `with ${ chalk.yellow( "jQuery Migrate enabled " ) }` : "" ) +
 			`in ${ chalk.yellow( fullBrowser ) } (${ chalk.bold( reportId ) })...`
 	);
 	console.log(
