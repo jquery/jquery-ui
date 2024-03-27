@@ -95,7 +95,8 @@ $.widget( "ui.dialog", {
 		open: null,
 		resize: null,
 		resizeStart: null,
-		resizeStop: null
+		resizeStop: null,
+		containment: "document"
 	},
 
 	sizeRelatedOptions: {
@@ -547,7 +548,7 @@ $.widget( "ui.dialog", {
 		this.uiDialog.draggable( {
 			cancel: ".ui-dialog-content, .ui-dialog-titlebar-close",
 			handle: ".ui-dialog-titlebar",
-			containment: "document",
+			containment: options.containment,
 			start: function( event, ui ) {
 				that._addClass( $( this ), "ui-dialog-dragging" );
 				that._blockFrames();
