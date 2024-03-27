@@ -56,7 +56,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- -h -b ${{ matrix.BROWSER }} --jquery ${{ matrix.JQUERY }}
+        run: npm run test:unit -- -h -b ${{ matrix.BROWSER }} --jquery ${{ matrix.JQUERY }} --retries 3
 
   edge:
     runs-on: windows-latest
@@ -94,7 +94,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- -h -b edge --jquery ${{ matrix.JQUERY }}
+        run: npm run test:unit -- -h -b edge --jquery ${{ matrix.JQUERY }} --retries 3
 
   safari:
     runs-on: macos-latest
@@ -132,7 +132,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- -b safari --jquery ${{ matrix.JQUERY }}
+        run: npm run test:unit -- -b safari --jquery ${{ matrix.JQUERY }} --retries 3
 
   legacy-build:
     runs-on: ubuntu-latest

@@ -58,6 +58,11 @@ const argv = yargs( process.argv.slice( 2 ) )
 			"Leave the browser open for debugging. Cannot be used with --headless.",
 		conflicts: [ "headless" ]
 	} )
+	.option( "retries", {
+		alias: "r",
+		type: "number",
+		description: "Number of times to retry failed tests."
+	} )
 	.option( "concurrency", {
 		alias: "c",
 		type: "number",

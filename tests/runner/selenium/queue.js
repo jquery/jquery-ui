@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { getBrowserString } from "../lib/getBrowserString.js";
 import {
 	checkLastTouches,
@@ -34,11 +35,30 @@ export function getNextBrowserTest( reportId ) {
 	}
 }
 
+export function retryTest( reportId, maxRetries ) {
+	if ( !maxRetries ) {
+		return;
+	}
+	const test = queue.find( ( test ) => test.id === reportId );
+	if ( test ) {
+		test.retries++;
+		if ( test.retries <= maxRetries ) {
+			console.log(
+				`\nRetrying test ${ reportId } for ${ chalk.yellow( test.options.suite ) }...${
+					test.retries
+				}`
+			);
+			return test;
+		}
+	}
+}
+
 export function addRun( url, browser, options ) {
 	queue.push( {
 		browser,
 		fullBrowser: getBrowserString( browser ),
 		id: options.reportId,
+		retries: 0,
 		url,
 		options,
 		running: false

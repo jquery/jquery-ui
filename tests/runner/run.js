@@ -7,7 +7,7 @@ import { generateHash } from "./lib/generateHash.js";
 import { getBrowserString } from "./lib/getBrowserString.js";
 import { suites as allSuites } from "./suites.js";
 import { cleanupAllBrowsers, touchBrowser } from "./selenium/browsers.js";
-import { addRun, getNextBrowserTest, runAll } from "./selenium/queue.js";
+import { addRun, getNextBrowserTest, retryTest, runAll } from "./selenium/queue.js";
 
 const EXIT_HOOK_WAIT_TIMEOUT = 60 * 1000;
 
@@ -21,6 +21,7 @@ export async function run( {
 	headless,
 	jquery: jquerys = [],
 	migrate,
+	retries = 0,
 	suite: suites = [],
 	verbose
 } ) {
@@ -88,6 +89,13 @@ export async function run( {
 
 				// Handle failure
 				if ( failed ) {
+					const retry = retryTest( reportId, retries );
+
+					// Retry if retryTest returns a test
+					if ( retry ) {
+						return retry;
+					}
+
 					errorMessages.push( ...Object.values( pendingErrors[ reportId ] ) );
 				}
 
