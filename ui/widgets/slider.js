@@ -198,17 +198,31 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
-		distance = this._valueMax() - this._valueMin() + 1;
-		this.handles.each( function( i ) {
-			var thisDistance = Math.abs( normValue - that.values( i ) );
-			if ( ( distance > thisDistance ) ||
-				( distance === thisDistance &&
-					( i === that._lastChangedValue || that.values( i ) === o.min ) ) ) {
-				distance = thisDistance;
-				closestHandle = $( this );
-				index = i;
+
+		if ( this.options.range === true && this.values( 0 ) === this.values( 1 ) ) {
+			if ( this.values( 0 ) === this._valueMin() ) {
+				index = 1;
+			} else if ( this.values( 0 ) === this._valueMax() ) {
+				index = 0;
+			} else {
+				index = normValue === this.values( 0 ) ?
+					this._lastChangedValue :
+					Number( normValue > this.values( 0 ) );
 			}
-		} );
+			closestHandle = $( this.handles[ index ] );
+		} else {
+			distance = this._valueMax() - this._valueMin() + 1;
+			this.handles.each( function( i ) {
+				var thisDistance = Math.abs( normValue - that.values( i ) );
+				if ( ( distance > thisDistance ) ||
+					( distance === thisDistance &&
+						( i === that._lastChangedValue || that.values( i ) === o.min ) ) ) {
+					distance = thisDistance;
+					closestHandle = $( this );
+					index = i;
+				}
+			} );
+		}
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
