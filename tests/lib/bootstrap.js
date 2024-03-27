@@ -1,7 +1,7 @@
 ( function() {
 "use strict";
 
-var DEFAULT_JQUERY_VERSION = "3.7.0";
+var DEFAULT_JQUERY_VERSION = "3.7.1";
 
 requirejs.config( {
 	paths: {
@@ -11,7 +11,6 @@ requirejs.config( {
 		"jquery-migrate": migrateUrl(),
 		"jquery-simulate": "../../../external/jquery-simulate/jquery.simulate",
 		"lib": "../../lib",
-		"phantom-bridge": "../../../node_modules/grunt-contrib-qunit/phantomjs/bridge",
 		"qunit-assert-classes": "../../lib/vendor/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../lib/vendor/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
@@ -32,11 +31,6 @@ define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
 
 	return $;
 } );
-
-// Create a dummy bridge if we're not actually testing in PhantomJS
-if ( !/PhantomJS/.test( navigator.userAgent ) ) {
-	define( "phantom-bridge", function() {} );
-}
 
 // Load all modules in series
 function requireModules( dependencies, callback, modules ) {

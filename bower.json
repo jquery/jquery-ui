@@ -17,7 +17,6 @@
 		"jquery-simulate": "1.1.1",
 		"qunit": "2.19.4",
 		"requirejs": "2.1.14",
-
 		"jquery-1.8.0": "jquery#1.8.0",
 		"jquery-1.8.1": "jquery#1.8.1",
 		"jquery-1.8.2": "jquery#1.8.2",
@@ -68,6 +67,7 @@
 		"jquery-3.6.3": "jquery#3.6.3",
 		"jquery-3.6.4": "jquery#3.6.4",
 		"jquery-3.7.0": "jquery#3.7.0",
+		"jquery-3.7.1": "jquery#3.7.1",
 		"jquery-migrate-1.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
 		"jquery-migrate-3.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.4.1.tgz"
 	}

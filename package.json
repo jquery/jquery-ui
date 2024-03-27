@@ -45,21 +45,29 @@
 	},
 	"license": "MIT",
 	"scripts": {
-		"test": "grunt"
+		"build": "grunt build",
+		"lint": "grunt lint",
+		"test:server": "node tests/runner/server.js",
+		"test:unit": "node tests/runner/command.js",
+		"test": "grunt && npm run test:unit -- -h"
 	},
 	"dependencies": {
 		"jquery": ">=1.8.0 <4.0.0"
 	},
 	"devDependencies": {
+		"body-parser": "1.20.2",
 		"commitplease": "3.2.0",
-		"eslint-config-jquery": "3.0.0",
+		"diff": "5.2.0",
+		"eslint-config-jquery": "3.0.2",
+		"exit-hook": "4.0.0",
+		"express": "4.19.1",
+		"express-body-parser-error-handler": "1.0.7",
 		"grunt": "1.6.1",
 		"grunt-bowercopy": "1.2.5",
 		"grunt-cli": "1.4.3",
 		"grunt-compare-size": "0.4.2",
 		"grunt-contrib-concat": "2.1.0",
 		"grunt-contrib-csslint": "2.0.0",
-		"grunt-contrib-qunit": "7.0.0",
 		"grunt-contrib-requirejs": "1.0.0",
 		"grunt-contrib-uglify": "5.2.2",
 		"grunt-eslint": "24.0.1",
@@ -67,7 +75,9 @@
 		"grunt-html": "16.0.0",
 		"load-grunt-tasks": "5.1.0",
 		"rimraf": "4.4.1",
-		"testswarm": "1.1.2"
+		"selenium-webdriver": "4.18.1",
+		"testswarm": "1.1.2",
+		"yargs": "17.7.2"
 	},
 	"keywords": []
 }

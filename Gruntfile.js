@@ -77,7 +77,6 @@ const compareFiles = {
 		"dist/jquery-ui.min.js"
 	]
 };
-const component = grunt.option( "component" ) || "**";
 
 const htmllintBad = [
 	"demos/tabs/ajax/content*.html",
@@ -203,30 +202,6 @@ grunt.initConfig( {
 				]
 			},
 			src: htmllintBad
-		}
-	},
-	qunit: {
-		files: expandFiles( "tests/unit/" + component + "/*.html" ).filter( function( file ) {
-			return !( /(all|index|test)\.html$/ ).test( file );
-		} ),
-		options: {
-			puppeteer: {
-				args: [
-					"--allow-file-access-from-files"
-				]
-			},
-			inject: [
-				require.resolve(
-					"./tests/lib/grunt-contrib-qunit-bridges/bridge-wrapper.js.intro"
-				),
-				require.resolve( "grunt-contrib-qunit/chrome/bridge" ),
-				require.resolve(
-					"./tests/lib/grunt-contrib-qunit-bridges/bridge-wrapper.js.outro"
-				)
-			],
-			page: {
-				viewportSize: { width: 700, height: 500 }
-			}
 		}
 	},
 	eslint: {
@@ -430,6 +405,9 @@ grunt.initConfig( {
 				"jquery-3.7.0/jquery.js": "jquery-3.7.0/dist/jquery.js",
 				"jquery-3.7.0/LICENSE.txt": "jquery-3.7.0/LICENSE.txt",
 
+				"jquery-3.7.1/jquery.js": "jquery-3.7.1/dist/jquery.js",
+				"jquery-3.7.1/LICENSE.txt": "jquery-3.7.1/LICENSE.txt",
+
 				"jquery-migrate-1.4.1/jquery-migrate.js":
 					"jquery-migrate-1.4.1/dist/jquery-migrate.js",
 				"jquery-migrate-1.4.1/LICENSE.txt": "jquery-migrate-1.4.1/LICENSE.txt",
@@ -473,13 +451,12 @@ grunt.initConfig( {
 require( "load-grunt-tasks" )( grunt, {
 	pattern: nodeV16OrNewer ? [ "grunt-*" ] : [
 		"grunt-*",
-		"!grunt-contrib-qunit",
 		"!grunt-eslint",
 		"!grunt-html"
 	]
 } );
 
-// local testswarm and build tasks
+// local tasks
 grunt.loadTasks( "build/tasks" );
 
 grunt.registerTask( "update-authors", function() {
@@ -518,15 +495,15 @@ grunt.registerTask( "print_old_node_message", ( ...args ) => {
 } );
 
 // Keep this task list in sync with the testing steps in our GitHub action test workflow file!
-grunt.registerTask( "default", [ "lint", "requirejs", "test" ] );
-grunt.registerTask( "jenkins", [ "default", "concat" ] );
 grunt.registerTask( "lint", [
 	"asciilint",
 	runIfNewNode( "eslint" ),
 	"csslint",
 	runIfNewNode( "htmllint" )
 ] );
-grunt.registerTask( "test", [ runIfNewNode( "qunit" ) ] );
+grunt.registerTask( "build", [ "requirejs", "concat" ] );
+grunt.registerTask( "default", [ "lint", "build" ] );
+grunt.registerTask( "jenkins", [ "build" ] );
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );
 

@@ -77,7 +77,7 @@ The tests require a local web server and the samples contain some PHP, so a PHP 
 
 ### Running the Tests
 
-To lint the JavaScript, HTML, and CSS, as well as run a smoke test in PhantomJS, run the full test suite through npm:
+To lint the JavaScript, HTML, and CSS, as well as run the full test suite in Headless Chrome:
 
 ```bash
 npm test

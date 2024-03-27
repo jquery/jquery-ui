@@ -1,0 +1,163 @@
+name: Node
+
+on:
+  pull_request:
+  push:
+    branches-ignore: "dependabot/**"
+  # Once a week every Monday
+  schedule:
+    - cron: "42 1 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 20.x
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.BROWSER }} - jQuery ${{ matrix.JQUERY }}
+    strategy:
+      fail-fast: false
+      matrix:
+        BROWSER: [chrome, firefox]
+        JQUERY:
+          - "git"
+          - "3.x-git"
+          - "3.7.1"
+          - "2.2.4"
+          - "1.12.4"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:unit -- -h -b ${{ matrix.BROWSER }} --jquery ${{ matrix.JQUERY }} --retries 3
+
+  edge:
+    runs-on: windows-latest
+    name: edge - jQuery ${{ matrix.JQUERY }}
+    strategy:
+      fail-fast: false
+      matrix:
+        JQUERY:
+          - "git"
+          - "3.x-git"
+          - "3.7.1"
+          - "2.2.4"
+          - "1.12.4"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:unit -- -h -b edge --jquery ${{ matrix.JQUERY }} --retries 3
+
+  safari:
+    runs-on: macos-latest
+    name: safari - jQuery ${{ matrix.JQUERY }}
+    strategy:
+      fail-fast: false
+      matrix:
+        JQUERY:
+          - "git"
+          - "3.x-git"
+          - "3.7.1"
+          - "2.2.4"
+          - "1.12.4"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:unit -- -b safari --jquery ${{ matrix.JQUERY }} --retries 3
+
+  legacy-build:
+    runs-on: ubuntu-latest
+    name: Build on Node 10.x
+    env:
+      NODE_VERSION: 10.x
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
