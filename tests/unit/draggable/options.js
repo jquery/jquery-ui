@@ -1018,7 +1018,7 @@ QUnit.test( "opacity, default, switching after initialization", function( assert
 } );
 
 QUnit.test( "revert and revertDuration", function( assert ) {
-	var ready = assert.async();
+	var ready = assert.async( 2 );
 	assert.expect( 7 );
 
 	var element = $( "#draggable2" ).draggable( {
@@ -1035,7 +1035,7 @@ QUnit.test( "revert and revertDuration", function( assert ) {
 
 	$( "#draggable2" ).draggable( "option", {
 		revert: true,
-		revertDuration: 200,
+		revertDuration: 300,
 		stop: function() {
 			ready();
 		}
@@ -1045,6 +1045,7 @@ QUnit.test( "revert and revertDuration", function( assert ) {
 	testHelper.move( element, 50, 50 );
 	setTimeout( function() {
 		assert.ok( $( "#draggable2" ).is( ":animated" ), "revert: true with revertDuration should animate" );
+		ready();
 	} );
 } );
 
