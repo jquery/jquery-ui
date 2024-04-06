@@ -12,7 +12,8 @@
 			"globals": {
 				"fetch": false,
 				"Promise": false,
-				"require": false
+				"require": false,
+				"Set": false
 			},
 			"parserOptions": {
 				"ecmaVersion": 2022,
