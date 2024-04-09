@@ -7,12 +7,8 @@
 		{
 			"files": ["**/*"],
 			"env": {
+				"es6": true,
 				"node": true
-			},
-			"globals": {
-				"fetch": false,
-				"Promise": false,
-				"require": false
 			},
 			"parserOptions": {
 				"ecmaVersion": 2022,
@@ -27,7 +23,8 @@
 			},
 			"globals": {
 				"QUnit": false,
-				"Symbol": false
+				"Symbol": false,
+				"require": false
 			},
 			"parserOptions": {
 				"ecmaVersion": 5,

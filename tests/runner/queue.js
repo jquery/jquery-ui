@@ -1,8 +1,9 @@
 import chalk from "chalk";
-import { getBrowserString } from "../lib/getBrowserString.js";
+import { getBrowserString } from "./lib/getBrowserString.js";
 import {
 	checkLastTouches,
 	createBrowserWorker,
+	restartBrowser,
 	setBrowserWorkerUrl
 } from "./browsers.js";
 
@@ -44,23 +45,44 @@ export function retryTest( reportId, maxRetries ) {
 		test.retries++;
 		if ( test.retries <= maxRetries ) {
 			console.log(
-				`\nRetrying test ${ reportId } for ${ chalk.yellow( test.options.suite ) }...${
-					test.retries
-				}`
+				`\nRetrying test ${ reportId } for ${ chalk.yellow(
+					test.options.suite
+				) }...${ test.retries }`
 			);
 			return test;
 		}
 	}
 }
 
+export async function hardRetryTest( reportId, maxHardRetries ) {
+	if ( !maxHardRetries ) {
+		return false;
+	}
+	const test = queue.find( ( test ) => test.id === reportId );
+	if ( test ) {
+		test.hardRetries++;
+		if ( test.hardRetries <= maxHardRetries ) {
+			console.log(
+				`\nHard retrying test ${ reportId } for ${ chalk.yellow(
+					test.options.suite
+				) }...${ test.hardRetries }`
+			);
+			await restartBrowser( test.browser );
+			return true;
+		}
+	}
+	return false;
+}
+
 export function addRun( url, browser, options ) {
 	queue.push( {
 		browser,
 		fullBrowser: getBrowserString( browser ),
+		hardRetries: 0,
 		id: options.reportId,
-		retries: 0,
 		url,
 		options,
+		retries: 0,
 		running: false
 	} );
 }

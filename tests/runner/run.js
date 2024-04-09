@@ -1,13 +1,22 @@
 import chalk from "chalk";
 import { asyncExitHook, gracefulExit } from "exit-hook";
+import { getLatestBrowser } from "./browserstack/api.js";
+import { buildBrowserFromString } from "./browserstack/buildBrowserFromString.js";
+import { localTunnel } from "./browserstack/local.js";
 import { reportEnd, reportTest } from "./reporter.js";
 import { createTestServer } from "./createTestServer.js";
 import { buildTestUrl } from "./lib/buildTestUrl.js";
 import { generateHash } from "./lib/generateHash.js";
 import { getBrowserString } from "./lib/getBrowserString.js";
-import { suites as allSuites } from "./suites.js";
-import { cleanupAllBrowsers, touchBrowser } from "./selenium/browsers.js";
-import { addRun, getNextBrowserTest, retryTest, runAll } from "./selenium/queue.js";
+import { suites as allSuites } from "./flags/suites.js";
+import { cleanupAllBrowsers, touchBrowser } from "./browsers.js";
+import {
+	addRun,
+	getNextBrowserTest,
+	hardRetryTest,
+	retryTest,
+	runAll
+} from "./queue.js";
 
 const EXIT_HOOK_WAIT_TIMEOUT = 60 * 1000;
 
@@ -16,12 +25,15 @@ const EXIT_HOOK_WAIT_TIMEOUT = 60 * 1000;
  */
 export async function run( {
 	browser: browserNames = [],
+	browserstack,
 	concurrency,
 	debug,
+	hardRetries,
 	headless,
 	jquery: jquerys = [],
 	migrate,
 	retries = 0,
+	runId,
 	suite: suites = [],
 	verbose
 } ) {
@@ -40,11 +52,25 @@ export async function run( {
 		);
 	}
 
+	if ( verbose ) {
+		console.log( browserstack ? "Running in BrowserStack." : "Running locally." );
+	}
+
 	const errorMessages = [];
 	const pendingErrors = {};
 
 	// Convert browser names to browser objects
 	let browsers = browserNames.map( ( b ) => ( { browser: b } ) );
+	const tunnelId = generateHash(
+		`${ Date.now() }-${ suites.join( ":" ) }-${ ( browserstack || [] )
+			.concat( browserNames )
+			.join( ":" ) }`
+	);
+
+	// A unique identifier for this run
+	if ( !runId ) {
+		runId = tunnelId;
+	}
 
 	// Create the test app and
 	// hook it up to the reporter
@@ -96,6 +122,10 @@ export async function run( {
 						return retry;
 					}
 
+					// Return early if hardRetryTest returns true
+					if ( await hardRetryTest( reportId, hardRetries ) ) {
+						return;
+					}
 					errorMessages.push( ...Object.values( pendingErrors[ reportId ] ) );
 				}
 
@@ -143,22 +173,84 @@ export async function run( {
 		} );
 	}
 
+	async function cleanup() {
+		console.log( "Cleaning up..." );
+
+		await cleanupAllBrowsers( { verbose } );
+
+		if ( tunnel ) {
+			await tunnel.stop();
+			if ( verbose ) {
+				console.log( "Stopped BrowserStackLocal." );
+			}
+		}
+	}
+
 	asyncExitHook(
 		async() => {
-			await cleanupAllBrowsers( { verbose } );
+			await cleanup();
 			await stopServer();
 		},
 		{ wait: EXIT_HOOK_WAIT_TIMEOUT }
 	);
 
+	// Start up BrowserStackLocal
+	let tunnel;
+	if ( browserstack ) {
+		if ( headless ) {
+			console.warn(
+				chalk.italic(
+					"BrowserStack does not support headless mode. Running in normal mode."
+				)
+			);
+			headless = false;
+		}
+
+		// Convert browserstack to browser objects.
+		// If browserstack is an empty array, fall back
+		// to the browsers array.
+		if ( browserstack.length ) {
+			browsers = browserstack.map( ( b ) => {
+				if ( !b ) {
+					return browsers[ 0 ];
+				}
+				return buildBrowserFromString( b );
+			} );
+		}
+
+		// Fill out browser defaults
+		browsers = await Promise.all(
+			browsers.map( async( browser ) => {
+
+				// Avoid undici connect timeout errors
+				await new Promise( ( resolve ) => setTimeout( resolve, 100 ) );
+
+				const latestMatch = await getLatestBrowser( browser );
+				if ( !latestMatch ) {
+					console.error(
+						chalk.red( `Browser not found: ${ getBrowserString( browser ) }.` )
+					);
+					gracefulExit( 1 );
+				}
+				return latestMatch;
+			} )
+		);
+
+		tunnel = await localTunnel( tunnelId );
+		if ( verbose ) {
+			console.log( "Started BrowserStackLocal." );
+		}
+	}
+
 	function queueRuns( suite, browser ) {
 		const fullBrowser = getBrowserString( browser, headless );
 
 		for ( const jquery of jquerys ) {
-			const reportId = generateHash( `${ suite } ${ fullBrowser }` );
+			const reportId = generateHash( `${ suite } ${ jquery } ${ fullBrowser }` );
 			reports[ reportId ] = { browser, headless, jquery, migrate, suite };
 
 			const url = buildTestUrl( suite, {
+				browserstack,
 				jquery,
 				migrate,
 				port,
@@ -166,12 +258,16 @@ export async function run( {
 			} );
 
 			const options = {
+				browserstack,
+				concurrency,
 				debug,
 				headless,
 				jquery,
 				migrate,
 				reportId,
+				runId,
 				suite,
+				tunnelId,
 				verbose
 			};
 
@@ -181,12 +277,13 @@ export async function run( {
 
 	for ( const browser of browsers ) {
 		for ( const suite of suites ) {
-			queueRuns( suite, browser );
+			queueRuns( [ suite ], browser );
 		}
 	}
 
 	try {
-		await runAll( { concurrency, verbose } );
+		console.log( `Starting Run ${ runId }...` );
+		await runAll();
 	} catch ( error ) {
 		console.error( error );
 		if ( !debug ) {
@@ -213,7 +310,7 @@ export async function run( {
 			}
 			console.log( chalk.green( "All tests passed!" ) );
 
-			if ( !debug ) {
+			if ( !debug || browserstack ) {
 				gracefulExit( 0 );
 			}
 		} else {
@@ -224,7 +321,14 @@ export async function run( {
 
 			if ( debug ) {
 				console.log();
-				console.log( "Leaving browsers open for debugging." );
+				if ( browserstack ) {
+					console.log( "Leaving browsers with failures open for debugging." );
+					console.log(
+						"View running sessions at https://automate.browserstack.com/dashboard/v2/"
+					);
+				} else {
+					console.log( "Leaving browsers open for debugging." );
+				}
 				console.log( "Press Ctrl+C to exit." );
 			} else {
 				gracefulExit( 1 );

@@ -1,7 +1,7 @@
 import chalk from "chalk";
+import * as Diff from "diff";
 import { getBrowserString } from "./lib/getBrowserString.js";
 import { prettyMs } from "./lib/prettyMs.js";
-import * as Diff from "diff";
 
 function serializeForDiff( value ) {
 
