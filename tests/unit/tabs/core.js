@@ -180,7 +180,13 @@ QUnit.test( "accessibility - ajax", function( assert ) {
 	} );
 } );
 
-QUnit.test( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function( assert ) {
+QUnit[
+
+	// Support: IE 11+, jQuery 3.6 only
+	// jQuery 3.6 has issues with focus handling in IE which breaks this test.
+	// The issues were fixed in jQuery 3.7, so we just accept them here.
+	jQuery.fn.jquery.indexOf( "3.6." ) === 0 && document.documentMode ? "skip" : "test"
+]( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 92 );
 	var element = $( "#tabs1" ).tabs( {
