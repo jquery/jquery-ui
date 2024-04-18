@@ -19,5 +19,9 @@ define( [
 	"./tabbable",
 	"./unique-id",
 	"./version"
-] );
+], function() {
+
+	// here define an empty function to let r.js(the bundler of require.js) to
+	// generate an independent entry in the generated bundle file.
+} );
 } )();
