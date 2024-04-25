@@ -4,7 +4,7 @@ Welcome! Thanks for your interest in contributing to jQuery UI. Most of our info
 
 You may also want to take a look at our [commit & pull request guide](http://contribute.jquery.org/commits-and-pull-requests/) and [style guides](http://contribute.jquery.org/style-guide/) for instructions on how to maintain your fork and submit your code. Before we can merge any pull request, we'll also need you to sign our [contributor license agreement](http://contribute.jquery.org/cla).
 
-You can find us on [IRC](http://irc.jquery.org), specifically in #jqueryui-dev should you have any questions. If you've never contributed to open source before, we've put together [a short guide with tips, tricks, and ideas on getting started](http://contribute.jquery.org/open-source/). For other forms of discussion and support, please see the [jQuery UI support center](http://jqueryui.com/support/).
+You can find us on [IRC](http://irc.jquery.org), specifically in #jqueryui-dev should you have any questions. If you've never contributed to open source before, we've put together [a short guide with tips, tricks, and ideas on getting started](http://contribute.jquery.org/open-source/). For other forms of discussion and support, please see the [jQuery UI support center](https://jqueryui.com/support/).
 
 ## Getting Involved
 
@@ -85,4 +85,4 @@ npm test
 
 To run the tests for a specific plugin in your browser, open the appropriate file from the `/tests/unit/` directory, for example: `http://localhost/tests/unit/accordion/accordion.html`. The domain will be dependent on your local server configuration; if there is a port, be sure to include it.
 
-Ideally you would test in all of our [supported browsers](http://jqueryui.com/browser-support/), but if you don't have all of these browsers available, that's ok.
+Ideally you would test in all of our [supported browsers](https://jqueryui.com/browser-support/), but if you don't have all of these browsers available, that's ok.

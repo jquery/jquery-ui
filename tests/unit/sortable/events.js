@@ -263,7 +263,7 @@ QUnit.test( "over", function( assert ) {
 	assert.equal( overCount, 1, "over fires only once" );
 } );
 
-// http://bugs.jqueryui.com/ticket/9335
+// https://bugs.jqueryui.com/ticket/9335
 // Sortable: over & out events does not consistently fire
 QUnit.test( "over, fires with draggable connected to sortable", function( assert ) {
 	assert.expect( 3 );

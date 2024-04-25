@@ -135,7 +135,7 @@ QUnit.test( "tooltip on .ui-state-disabled element", function( assert ) {
 	assert.equal( $( ".ui-tooltip" ).length, 0 );
 } );
 
-// http://bugs.jqueryui.com/ticket/8740
+// https://bugs.jqueryui.com/ticket/8740
 QUnit.test( "programmatic focus with async content", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 2 );
@@ -185,7 +185,7 @@ QUnit.test( "destroy during hide animation; only one close event", function( ass
 	} );
 } );
 
-// http://bugs.jqueryui.com/ticket/10602
+// https://bugs.jqueryui.com/ticket/10602
 QUnit.test( "multiple active delegated tooltips", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 1 );
@@ -234,7 +234,7 @@ QUnit.test( "multiple active delegated tooltips", function( assert ) {
 	step1();
 } );
 
-// http://bugs.jqueryui.com/ticket/11272
+// https://bugs.jqueryui.com/ticket/11272
 QUnit.test( "remove conflicting attributes from live region", function( assert ) {
 	assert.expect( 2 );
 

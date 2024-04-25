@@ -87,7 +87,7 @@ QUnit.test( "content: sync + async callback", function( assert ) {
 	} ).tooltip( "open" );
 } );
 
-// http://bugs.jqueryui.com/ticket/8740
+// https://bugs.jqueryui.com/ticket/8740
 QUnit.test( "content: async callback loses focus before load", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 1 );

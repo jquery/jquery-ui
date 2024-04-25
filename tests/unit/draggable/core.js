@@ -109,7 +109,7 @@ QUnit.test( "#8269: Removing draggable element on drop", function( assert ) {
 	}
 } );
 
-// http://bugs.jqueryui.com/ticket/7778
+// https://bugs.jqueryui.com/ticket/7778
 // drag element breaks in IE8 when its content is replaced onmousedown
 QUnit.test( "Stray mousemove after mousedown still drags", function( assert ) {
 	assert.expect( 2 );
@@ -186,11 +186,11 @@ QUnit.test( "scroll offset with fixed ancestors", function( assert ) {
 	var startValue = 300,
 		element = $( "#draggable1" )
 
-			// http://bugs.jqueryui.com/ticket/5009
+			// https://bugs.jqueryui.com/ticket/5009
 			// scroll not working with parent's position fixed
 			.wrap( "<div id='wrapper' />" )
 
-			// http://bugs.jqueryui.com/ticket/9612
+			// https://bugs.jqueryui.com/ticket/9612
 			// abspos elements inside of fixed elements moving away from the mouse when scrolling
 			.wrap( "<div id='wrapper2' />" )
 			.draggable( {
@@ -221,7 +221,7 @@ $( [ "hidden", "auto", "scroll" ] ).each( function() {
 	var overflow = this;
 
 	// Http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
-	// http://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
+	// https://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
 	QUnit.test( "position in scrollable parent with overflow: " + overflow, function( assert ) {
 		assert.expect( 2 );
 

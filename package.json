@@ -3,7 +3,7 @@
 	"title": "jQuery UI",
 	"description": "A curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library.",
 	"version": "1.13.3-pre",
-	"homepage": "http://jqueryui.com",
+	"homepage": "https://jqueryui.com",
 	"author": {
 		"name": "OpenJS Foundation and other contributors",
 		"url": "https://github.com/jquery/jquery-ui/blob/main/AUTHORS.txt"

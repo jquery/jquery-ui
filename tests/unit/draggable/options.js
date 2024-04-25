@@ -280,7 +280,7 @@ QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) 
 
 	$( element ).one( "dragstop", function( event, ui ) {
 
-		// http://bugs.jqueryui.com/ticket/8809
+		// https://bugs.jqueryui.com/ticket/8809
 		// Position issue when connected to sortable
 		result = ui.helper.offset();
 
@@ -324,7 +324,7 @@ QUnit.test( "connectToSortable, dragging clone into sortable", function( assert 
 	$( sortable ).one( "sort", function( event, ui ) {
 		offsetPlaceholder = ui.placeholder.offset();
 
-		// http://bugs.jqueryui.com/ticket/8809
+		// https://bugs.jqueryui.com/ticket/8809
 		// Position issue when connected to sortable
 		assert.deepEqual( ui.helper.offset(), offsetSortable, "sortable offset is correct" );
 		assert.notDeepEqual( ui.helper.offset(), offsetPlaceholder, "offset not equal to placeholder" );
@@ -332,7 +332,7 @@ QUnit.test( "connectToSortable, dragging clone into sortable", function( assert 
 
 	$( sortable ).one( "sortstop", function( event, ui ) {
 
-		// http://bugs.jqueryui.com/ticket/9675
+		// https://bugs.jqueryui.com/ticket/9675
 		// Animation issue with revert and connectToSortable
 		assert.deepEqual( ui.item.offset(), offsetPlaceholder, "offset eventually equals placeholder" );
 		ready();
@@ -571,7 +571,7 @@ QUnit.test( "containment, account for border", function( assert ) {
 		"The draggable should be to the right of its parent's right border" );
 } );
 
-// http://bugs.jqueryui.com/ticket/7016
+// https://bugs.jqueryui.com/ticket/7016
 // draggable can be pulled out of containment in Chrome and IE8
 QUnit.test( "containment, element cant be pulled out of container", function( assert ) {
 	assert.expect( 1 );
@@ -898,7 +898,7 @@ QUnit.test( "helper, default, switching after initialization", function( assert 
 	testHelper.shouldMove( assert, element, "helper: original" );
 } );
 
-// http://bugs.jqueryui.com/ticket/9446
+// https://bugs.jqueryui.com/ticket/9446
 // Draggable: helper function cannot emulate default behavior
 QUnit.test( "helper, function returning original element", function( assert ) {
 	assert.expect( 1 );
@@ -1490,7 +1490,7 @@ QUnit.test( "iframeFix", function( assert ) {
 		var divOffset, iframeOffset,
 			div = $( this ).children().not( "iframe" );
 
-		// http://bugs.jqueryui.com/ticket/9671
+		// https://bugs.jqueryui.com/ticket/9671
 		// iframeFix doesn't handle iframes that move
 		assert.equal( div.length, 1, "blocking div added as sibling" );
 		assert.equal( div.outerWidth(), iframe.outerWidth(), "blocking div is wide enough" );

@@ -483,7 +483,7 @@ grunt.registerTask( "update-authors", function() {
 
 		grunt.file.write( "AUTHORS.txt",
 			"Authors ordered by first contribution\n" +
-			"A list of current team members is available at http://jqueryui.com/about\n\n" +
+			"A list of current team members is available at https://jqueryui.com/about\n\n" +
 			authors.join( "\n" ) + "\n" );
 		done();
 	} );

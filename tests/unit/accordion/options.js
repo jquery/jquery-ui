@@ -50,7 +50,7 @@ QUnit.test( "{ active: false }", function( assert ) {
 	assert.strictEqual( element.accordion( "option", "active" ), 0 );
 } );
 
-// http://bugs.jqueryui.com/ticket/11938
+// https://bugs.jqueryui.com/ticket/11938
 QUnit.test( "{ active: false, collapsible: true }", function( assert ) {
 	assert.expect( 1 );
 	var element = $( "#collapsible" ).accordion(),
