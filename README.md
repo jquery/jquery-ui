@@ -1,3 +1,9 @@
+# jQuery-UI-x
+
+jQuery UI with minimize/restore button for dialog widget.
+
+The PR: https://github.com/jquery/jquery-ui/pull/1967
+
 # [jQuery UI](http://jqueryui.com/) - Interactions and Widgets for the web
 
 _**Note:** jQuery UI is in maintenance-only mode. Please read [the project status blog post](https://blog.jqueryui.com/2021/10/jquery-maintainers-update-and-transition-jquery-ui-as-part-of-overall-modernization-efforts/) for more information._
