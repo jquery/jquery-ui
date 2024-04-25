@@ -8,8 +8,8 @@ define( [
 
 QUnit.module( "slider: events", { afterEach: helper.moduleAfterEach }  );
 
-//Specs from http://wiki.jqueryui.com/Slider#specs
-//"change callback: triggers when the slider has stopped moving and has a new
+// Specs from https://wiki.jqueryui.com/Slider#specs
+// "change callback: triggers when the slider has stopped moving and has a new
 // value (even if same as previous value), via mouse(mouseup) or keyboard(keyup)
 // or value method/option"
 QUnit.test( "mouse based interaction", function( assert ) {

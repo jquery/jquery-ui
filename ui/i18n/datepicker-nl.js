@@ -1,5 +1,5 @@
 /* Dutch (UTF-8) initialisation for the jQuery UI date picker plugin. */
-/* Written by Mathias Bynens <http://mathiasbynens.be/> */
+/* Written by Mathias Bynens <https://mathiasbynens.be/> */
 ( function( factory ) {
 	"use strict";
 

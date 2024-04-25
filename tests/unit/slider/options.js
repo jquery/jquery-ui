@@ -205,7 +205,7 @@ QUnit.test( "orientation", function( assert ) {
 	element.slider( "destroy" );
 } );
 
-//spec: http://wiki.jqueryui.com/Slider#specs
+// spec: https://wiki.jqueryui.com/Slider#specs
 // value option/method: the value option is not restricted by min/max/step.
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 QUnit.test( "step", function( assert ) {
