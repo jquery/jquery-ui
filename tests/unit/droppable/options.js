@@ -118,7 +118,7 @@ QUnit.test( "tolerance, intersect", function( assert ) {
 			height: 10,
 			position: "absolute",
 
-			// Http://bugs.jqueryui.com/ticket/6876
+			// https://bugs.jqueryui.com/ticket/6876
 			// Droppable: droppable region is offset by draggables margin
 			marginTop: 3,
 			marginLeft: 3
@@ -187,7 +187,7 @@ QUnit.test( "tolerance, pointer", function( assert ) {
 		} );
 	} );
 
-	// Http://bugs.jqueryui.com/ticket/4977 - tolerance, pointer - bug when pointer outside draggable
+	// https://bugs.jqueryui.com/ticket/4977 - tolerance, pointer - bug when pointer outside draggable
 	draggable.css( { top: 0, left: 0 } ).draggable( "option", "axis", "x" );
 	droppable.css( { top: 15, left: 15 } );
 

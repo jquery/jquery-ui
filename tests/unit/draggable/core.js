@@ -220,7 +220,7 @@ QUnit.test( "scroll offset with fixed ancestors", function( assert ) {
 $( [ "hidden", "auto", "scroll" ] ).each( function() {
 	var overflow = this;
 
-	// Http://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
+	// https://bugs.jqueryui.com/ticket/9379 - position bug in scrollable div
 	// https://bugs.jqueryui.com/ticket/10147 - Wrong position in a parent with "overflow: hidden"
 	QUnit.test( "position in scrollable parent with overflow: " + overflow, function( assert ) {
 		assert.expect( 2 );
@@ -306,13 +306,13 @@ QUnit.test( "blur behavior - handle is main element", function( assert ) {
 
 		testHelper.move( focusElement, 1, 1 );
 
-		// Http://bugs.jqueryui.com/ticket/10527
+		// https://bugs.jqueryui.com/ticket/10527
 		// Draggable: Can't select option in modal dialog (IE8)
 		assert.strictEqual( document.activeElement, focusElement.get( 0 ), "test element is focused after mousing down on itself" );
 
 		testHelper.move( element, 50, 50 );
 
-		// Http://bugs.jqueryui.com/ticket/4261
+		// https://bugs.jqueryui.com/ticket/4261
 		// active element should blur when mousing down on a draggable
 		assert.notStrictEqual( document.activeElement, focusElement.get( 0 ), "test element is no longer focused after mousing down on a draggable" );
 		ready();

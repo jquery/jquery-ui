@@ -289,12 +289,12 @@ QUnit.test( "connectToSortable, dragging out of a sortable", function( assert ) 
 		assert.ok( Math.abs( result.top - offsetExpected.top ) < 0.25, "draggable offset is within 0.25 of expected" );
 		assert.ok( Math.abs( result.left - offsetExpected.left ) < 0.25, "draggable offset is within 0.25 of expected" );
 
-		// Http://bugs.jqueryui.com/ticket/7734
+		// https://bugs.jqueryui.com/ticket/7734
 		// HTML IDs are removed when dragging to a Sortable
 		assert.equal( sortItem[ 0 ], dragHelper[ 0 ], "both have the same helper" );
 		assert.equal( sortItem.attr( "id" ), dragHelper.attr( "id" ), "both have the same id" );
 
-		// Http://bugs.jqueryui.com/ticket/9481
+		// https://bugs.jqueryui.com/ticket/9481
 		// connectToSortable causes sortable revert to fail on second attempt
 		assert.equal( sortable.sortable( "option", "revert" ), 100, "sortable revert behavior is preserved" );
 	} );
@@ -374,7 +374,7 @@ QUnit.test( "connectToSortable, dragging multiple elements in and out of sortabl
 		moves: 10
 	} );
 
-	// Http://bugs.jqueryui.com/ticket/9675
+	// https://bugs.jqueryui.com/ticket/9675
 	// Animation issue with revert and connectToSortable
 	sortable.one( "sortstop", function( event, ui ) {
 		assert.ok( !$.contains( document, ui.placeholder[ 0 ] ), "placeholder was removed" );
@@ -436,7 +436,7 @@ QUnit.test( "connectToSortable, dragging through a sortable", function( assert )
 		sortable = $( "#sortable2" ).sortable(),
 		sortableOffset = sortable.offset();
 
-	// Http://bugs.jqueryui.com/ticket/10669
+	// https://bugs.jqueryui.com/ticket/10669
 	// Draggable: Position issue with connectToSortable
 	draggable.one( "dragstop", function() {
 		assert.equal( draggable.parent().attr( "id" ), "sortable", "restored draggable to original parent" );
@@ -1212,7 +1212,7 @@ QUnit.test( "snap, snapMode, and snapTolerance", function( assert ) {
 		} ),
 		element2 = $( "#draggable2" ).draggable();
 
-	// Http://bugs.jqueryui.com/ticket/9724
+	// https://bugs.jqueryui.com/ticket/9724
 	// Draggable: Snapping coordinates thrown off by margin on draggable
 	element.css( "margin", "3px" );
 
