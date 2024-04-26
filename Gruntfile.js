@@ -473,7 +473,7 @@ grunt.registerTask( "update-authors", function() {
 
 		authors = authors.map( function( author ) {
 			if ( author.match( /^Jacek Jędrzejewski </ ) ) {
-				return "Jacek Jędrzejewski (http://jacek.jedrzejewski.name)";
+				return "Jacek Jędrzejewski (https://jacek.jedrzejewski.name)";
 			} else if ( author.match( /^Pawel Maruszczyk </ ) ) {
 				return "Pawel Maruszczyk (http://hrabstwo.net)";
 			} else {
@@ -483,7 +483,7 @@ grunt.registerTask( "update-authors", function() {
 
 		grunt.file.write( "AUTHORS.txt",
 			"Authors ordered by first contribution\n" +
-			"A list of current team members is available at http://jqueryui.com/about\n\n" +
+			"A list of current team members is available at https://jqueryui.com/about\n\n" +
 			authors.join( "\n" ) + "\n" );
 		done();
 	} );

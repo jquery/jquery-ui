@@ -1,17 +1,17 @@
 /*!
  * jQuery UI Effects Blind @VERSION
- * http://jqueryui.com
+ * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
- * http://jquery.org/license
+ * https://jquery.org/license
  */
 
 //>>label: Blind Effect
 //>>group: Effects
 //>>description: Blinds the element.
-//>>docs: http://api.jqueryui.com/blind-effect/
-//>>demos: http://jqueryui.com/effect/
+//>>docs: https://api.jqueryui.com/blind-effect/
+//>>demos: https://jqueryui.com/effect/
 
 ( function( factory ) {
 	"use strict";

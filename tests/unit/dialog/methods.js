@@ -197,7 +197,7 @@ QUnit.test( "open", function( assert ) {
 	assert.ok( element.dialog( "widget" ).is( ":visible" ) && !element.dialog( "widget" ).is( ":hidden" ), "dialog visible after open method called" );
 } );
 
-// http://bugs.jqueryui.com/ticket/6137
+// https://bugs.jqueryui.com/ticket/6137
 QUnit.test( "Ensure form elements don't reset when opening a dialog", function( assert ) {
 	assert.expect( 2 );
 

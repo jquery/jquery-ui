@@ -1,17 +1,17 @@
 /*!
  * jQuery UI Effects Size @VERSION
- * http://jqueryui.com
+ * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
- * http://jquery.org/license
+ * https://jquery.org/license
  */
 
 //>>label: Size Effect
 //>>group: Effects
 //>>description: Resize an element to a specified width and height.
-//>>docs: http://api.jqueryui.com/size-effect/
-//>>demos: http://jqueryui.com/effect/
+//>>docs: https://api.jqueryui.com/size-effect/
+//>>demos: https://jqueryui.com/effect/
 
 ( function( factory ) {
 	"use strict";

@@ -124,7 +124,7 @@ QUnit.test( "stopping the stop callback", function( assert ) {
 	assert.ok( element.draggable( "instance" ).helper, "the clone should not be deleted if the stop callback is stopped" );
 } );
 
-// http://bugs.jqueryui.com/ticket/6884
+// https://bugs.jqueryui.com/ticket/6884
 // Draggable: ui.offset.left differs between the "start" and "drag" hooks
 QUnit.test( "position and offset in hash is consistent between start, drag, and stop", function( assert ) {
 	assert.expect( 4 );

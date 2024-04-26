@@ -1,17 +1,17 @@
 /*!
  * jQuery UI Widget @VERSION
- * http://jqueryui.com
+ * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
- * http://jquery.org/license
+ * https://jquery.org/license
  */
 
 //>>label: Widget
 //>>group: Core
 //>>description: Provides a factory for creating stateful widgets with a common API.
-//>>docs: http://api.jqueryui.com/jQuery.widget/
-//>>demos: http://jqueryui.com/widget/
+//>>docs: https://api.jqueryui.com/jQuery.widget/
+//>>demos: https://jqueryui.com/widget/
 
 ( function( factory ) {
 	"use strict";

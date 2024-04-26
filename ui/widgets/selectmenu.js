@@ -1,10 +1,10 @@
 /*!
  * jQuery UI Selectmenu @VERSION
- * http://jqueryui.com
+ * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
- * http://jquery.org/license
+ * https://jquery.org/license
  */
 
 //>>label: Selectmenu
@@ -12,8 +12,8 @@
 /* eslint-disable max-len */
 //>>description: Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.
 /* eslint-enable max-len */
-//>>docs: http://api.jqueryui.com/selectmenu/
-//>>demos: http://jqueryui.com/selectmenu/
+//>>docs: https://api.jqueryui.com/selectmenu/
+//>>demos: https://jqueryui.com/selectmenu/
 //>>css.structure: ../../themes/base/core.css
 //>>css.structure: ../../themes/base/selectmenu.css, ../../themes/base/button.css
 //>>css.theme: ../../themes/base/theme.css

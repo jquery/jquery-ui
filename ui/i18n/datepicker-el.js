@@ -1,5 +1,5 @@
 /* Greek (el) initialisation for the jQuery UI date picker plugin. */
-/* Written by Alex Cicovic (http://www.alexcicovic.com) */
+/* Written by Alex Cicovic (https://alexcicovic.com) */
 ( function( factory ) {
 	"use strict";
 

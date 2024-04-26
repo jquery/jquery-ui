@@ -1,16 +1,16 @@
 /*!
  * jQuery UI Keycode @VERSION
- * http://jqueryui.com
+ * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license.
- * http://jquery.org/license
+ * https://jquery.org/license
  */
 
 //>>label: Keycode
 //>>group: Core
 //>>description: Provide keycodes as keynames
-//>>docs: http://api.jqueryui.com/jQuery.ui.keyCode/
+//>>docs: https://api.jqueryui.com/jQuery.ui.keyCode/
 
 ( function( factory ) {
 	"use strict";
