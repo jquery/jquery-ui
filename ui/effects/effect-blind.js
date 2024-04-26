@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Blind @VERSION
+ * jQuery UI Effects Blind 1.13.3
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects @VERSION
+ * jQuery UI Effects 1.13.3
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -402,7 +402,7 @@ if ( $.uiBackCompat !== false ) {
 }
 
 $.extend( $.effects, {
-	version: "@VERSION",
+	version: "1.13.3",
 
 	define: function( name, mode, effect ) {
 		if ( !effect ) {

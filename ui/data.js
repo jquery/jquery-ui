@@ -1,5 +1,5 @@
 /*!
- * jQuery UI :data @VERSION
+ * jQuery UI :data 1.13.3
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors

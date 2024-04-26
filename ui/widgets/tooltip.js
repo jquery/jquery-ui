@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Tooltip @VERSION
+ * jQuery UI Tooltip 1.13.3
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -39,7 +39,7 @@
 "use strict";
 
 $.widget( "ui.tooltip", {
-	version: "@VERSION",
+	version: "1.13.3",
 	options: {
 		classes: {
 			"ui-tooltip": "ui-corner-all ui-widget-shadow"

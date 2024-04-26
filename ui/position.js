@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Position @VERSION
+ * jQuery UI Position 1.13.3
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors

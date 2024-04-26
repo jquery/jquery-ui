@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Support for jQuery core 1.8.x and newer @VERSION
+ * jQuery UI Support for jQuery core 1.8.x and newer 1.13.3
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
