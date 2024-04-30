@@ -226,11 +226,6 @@ QUnit.test( "#8958: dialog can be opened while opening", function( assert ) {
 		}
 	} );
 
-	// Support: IE8
-	// For some reason the #favorite-animal input doesn't get focus if we don't
-	// focus the body first, causing the test to hang.
-	$( "body" ).trigger( "focus" );
-
 	$( "#favorite-animal" )
 
 		// We focus the input to start the test. Once it receives focus, the

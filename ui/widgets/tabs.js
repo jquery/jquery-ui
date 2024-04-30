@@ -25,7 +25,6 @@
 		define( [
 			"jquery",
 			"../keycode",
-			"../safe-active-element",
 			"../unique-id",
 			"../version",
 			"../widget"
@@ -171,7 +170,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabKeydown: function( event ) {
-		var focusedTab = $( $.ui.safeActiveElement( this.document[ 0 ] ) ).closest( "li" ),
+		var focusedTab = $( this.document[ 0 ].activeElement ).closest( "li" ),
 			selectedIndex = this.tabs.index( focusedTab ),
 			goingForward = true;
 
@@ -407,18 +406,6 @@ $.widget( "ui.tabs", {
 			.on( "mousedown" + this.eventNamespace, "> li", function( event ) {
 				if ( $( this ).is( ".ui-state-disabled" ) ) {
 					event.preventDefault();
-				}
-			} )
-
-			// Support: IE <9
-			// Preventing the default action in mousedown doesn't prevent IE
-			// from focusing the element, so if the anchor gets focused, blur.
-			// We don't have to worry about focusing the previously focused
-			// element since clicking on a non-focusable element should focus
-			// the body anyway.
-			.on( "focus" + this.eventNamespace, ".ui-tabs-anchor", function() {
-				if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
-					this.blur();
 				}
 			} );
 
@@ -877,10 +864,7 @@ $.widget( "ui.tabs", {
 	_ajaxSettings: function( anchor, event, eventData ) {
 		var that = this;
 		return {
-
-			// Support: IE <11 only
-			// Strip any hash that exists to prevent errors with the Ajax request
-			url: anchor.attr( "href" ).replace( /#.*$/, "" ),
+			url: anchor.attr( "href" ),
 			beforeSend: function( jqXHR, settings ) {
 				return that._trigger( "beforeLoad", event,
 					$.extend( { jqXHR: jqXHR, ajaxSettings: settings }, eventData ) );

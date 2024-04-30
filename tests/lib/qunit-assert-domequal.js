@@ -83,17 +83,6 @@ function getElementStyles( elem ) {
 		key = style[ len ];
 		camelKey = camelCase( key );
 
-		// Support: IE <=11+
-		// In IE, `option` elements may have different initial `option` colors.
-		// They may initially all be transparent, but later the selected
-		// option gets a blue background with white text; ignore it.
-		if ( document.documentMode && elem.nodeName.toLowerCase() === "option" && (
-			camelKey === "color" ||
-				camelKey.indexOf( "Color" ) === camelKey.length - "Color".length
-		) ) {
-			continue;
-		}
-
 		if ( typeof style[ key ] === "string" ) {
 			styles[ camelKey ] = style[ key ];
 		}

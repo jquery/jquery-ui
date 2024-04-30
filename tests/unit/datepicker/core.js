@@ -311,9 +311,6 @@ QUnit.test( "customStructure", function( assert ) {
 		} );
 	}
 
-	// TODO: figure out why this setTimeout is needed in IE,
-	// it only is necessary when the previous baseStructure tests runs first
-	// Support: IE
 	setTimeout( step1 );
 } );
 

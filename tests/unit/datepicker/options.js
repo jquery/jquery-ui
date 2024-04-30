@@ -5,8 +5,7 @@ define( [
 	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-fr",
 	"ui/i18n/datepicker-he",
-	"ui/i18n/datepicker-zh-CN",
-	"ui/ie"
+	"ui/i18n/datepicker-zh-CN"
 ], function( QUnit, $, testHelper ) {
 "use strict";
 
@@ -97,147 +96,131 @@ QUnit.test( "change", function( assert ) {
 	assert.equal( $.datepicker._defaults.showOn, "focus", "Retain default showOn" );
 } );
 
-( function() {
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf( "swarmURL=" ) + 9 ) );
+QUnit.test( "invocation", function( assert ) {
+	var ready = assert.async();
+	var button, image,
+		body = $( "body" );
 
-	// TODO: This test occassionally fails in IE in TestSwarm
-	if ( $.ui.ie && url && url.indexOf( "http" ) === 0 ) {
-		return;
+	assert.expect( 29 );
+
+	function step0() {
+		var inp = testHelper.initNewInput(),
+			dp = $( "#ui-datepicker-div" );
+
+		button = inp.siblings( "button" );
+		assert.ok( button.length === 0, "Focus - button absent" );
+		image = inp.siblings( "img" );
+		assert.ok( image.length === 0, "Focus - image absent" );
+
+		testHelper.onFocus( inp, function() {
+			assert.ok( dp.is( ":visible" ), "Focus - rendered on focus" );
+			inp.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+			assert.ok( !dp.is( ":visible" ), "Focus - hidden on exit" );
+			step1();
+		} );
 	}
 
-	QUnit.test( "invocation", function( assert ) {
-		var ready = assert.async();
-		var button, image,
-			isOldIE = $.ui.ie && ( !document.documentMode || document.documentMode < 9 ),
-			body = $( "body" );
+	function step1() {
 
-		assert.expect( isOldIE ? 25 : 29 );
+		var inp = testHelper.initNewInput(),
+			dp = $( "#ui-datepicker-div" );
 
-		function step0() {
-			var inp = testHelper.initNewInput(),
-				dp = $( "#ui-datepicker-div" );
+		testHelper.onFocus( inp, function() {
+			assert.ok( dp.is( ":visible" ), "Focus - rendered on focus" );
+			body.simulate( "mousedown", {} );
+			assert.ok( !dp.is( ":visible" ), "Focus - hidden on external click" );
+			inp.datepicker( "hide" ).datepicker( "destroy" );
 
-			button = inp.siblings( "button" );
-			assert.ok( button.length === 0, "Focus - button absent" );
-			image = inp.siblings( "img" );
-			assert.ok( image.length === 0, "Focus - image absent" );
+			step2();
+		} );
+	}
 
-			testHelper.onFocus( inp, function() {
-				assert.ok( dp.is( ":visible" ), "Focus - rendered on focus" );
-				inp.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-				assert.ok( !dp.is( ":visible" ), "Focus - hidden on exit" );
-				step1();
-			} );
-		}
+	function step2() {
+		var inp = testHelper.initNewInput( {
+				showOn: "button",
+				buttonText: "Popup"
+			} ),
+			dp = $( "#ui-datepicker-div" );
 
-		function step1() {
+		assert.ok( !dp.is( ":visible" ), "Button - initially hidden" );
+		button = inp.siblings( "button" );
+		image = inp.siblings( "img" );
+		assert.ok( button.length === 1, "Button - button present" );
+		assert.ok( image.length === 0, "Button - image absent" );
+		assert.equal( button.text(), "Popup", "Button - button text" );
 
-			var inp = testHelper.initNewInput(),
-				dp = $( "#ui-datepicker-div" );
+		testHelper.onFocus( inp, function() {
+			assert.ok( !dp.is( ":visible" ), "Button - not rendered on focus" );
+			button.trigger( "click" );
+			assert.ok( dp.is( ":visible" ), "Button - rendered on button click" );
+			button.trigger( "click" );
+			assert.ok( !dp.is( ":visible" ), "Button - hidden on second button click" );
+			inp.datepicker( "hide" ).datepicker( "destroy" );
 
-			testHelper.onFocus( inp, function() {
-				assert.ok( dp.is( ":visible" ), "Focus - rendered on focus" );
-				body.simulate( "mousedown", {} );
-				assert.ok( !dp.is( ":visible" ), "Focus - hidden on external click" );
-				inp.datepicker( "hide" ).datepicker( "destroy" );
+			step3();
+		} );
+	}
 
-				step2();
-			} );
-		}
+	function step3() {
+		var inp = testHelper.initNewInput( {
+				showOn: "button",
+				buttonImageOnly: true,
+				buttonImage: "images/calendar.gif",
+				buttonText: "Cal"
+			} ),
+			dp = $( "#ui-datepicker-div" );
 
-		function step2() {
-			var inp = testHelper.initNewInput( {
-					showOn: "button",
-					buttonText: "Popup"
-				} ),
-				dp = $( "#ui-datepicker-div" );
+		assert.ok( !dp.is( ":visible" ), "Image button - initially hidden" );
+		button = inp.siblings( "button" );
+		assert.ok( button.length === 0, "Image button - button absent" );
+		image = inp.siblings( "img" );
+		assert.ok( image.length === 1, "Image button - image present" );
+		assert.ok( /images\/calendar\.gif$/.test( image.attr( "src" ) ), "Image button - image source" );
+		assert.equal( image.attr( "title" ), "Cal", "Image button - image text" );
 
-			assert.ok( !dp.is( ":visible" ), "Button - initially hidden" );
-			button = inp.siblings( "button" );
-			image = inp.siblings( "img" );
-			assert.ok( button.length === 1, "Button - button present" );
-			assert.ok( image.length === 0, "Button - image absent" );
-			assert.equal( button.text(), "Popup", "Button - button text" );
+		testHelper.onFocus( inp, function() {
+			assert.ok( !dp.is( ":visible" ), "Image button - not rendered on focus" );
+			image.trigger( "click" );
+			assert.ok( dp.is( ":visible" ), "Image button - rendered on image click" );
+			image.trigger( "click" );
+			assert.ok( !dp.is( ":visible" ), "Image button - hidden on second image click" );
+			inp.datepicker( "hide" ).datepicker( "destroy" );
 
-			testHelper.onFocus( inp, function() {
-				assert.ok( !dp.is( ":visible" ), "Button - not rendered on focus" );
-				button.trigger( "click" );
-				assert.ok( dp.is( ":visible" ), "Button - rendered on button click" );
-				button.trigger( "click" );
-				assert.ok( !dp.is( ":visible" ), "Button - hidden on second button click" );
-				inp.datepicker( "hide" ).datepicker( "destroy" );
+			step4();
+		} );
+	}
 
-				step3();
-			} );
-		}
+	function step4() {
+		var inp = testHelper.initNewInput( {
+				showOn: "both",
+				buttonImage: "images/calendar.gif"
+			} ),
+			dp = $( "#ui-datepicker-div" );
 
-		function step3() {
-			var inp = testHelper.initNewInput( {
-					showOn: "button",
-					buttonImageOnly: true,
-					buttonImage: "images/calendar.gif",
-					buttonText: "Cal"
-				} ),
-				dp = $( "#ui-datepicker-div" );
+		assert.ok( !dp.is( ":visible" ), "Both - initially hidden" );
+		button = inp.siblings( "button" );
+		assert.ok( button.length === 1, "Both - button present" );
+		image = inp.siblings( "img" );
+		assert.ok( image.length === 0, "Both - image absent" );
+		image = button.children( "img" );
+		assert.ok( image.length === 1, "Both - button image present" );
 
-			assert.ok( !dp.is( ":visible" ), "Image button - initially hidden" );
-			button = inp.siblings( "button" );
-			assert.ok( button.length === 0, "Image button - button absent" );
-			image = inp.siblings( "img" );
-			assert.ok( image.length === 1, "Image button - image present" );
-			assert.ok( /images\/calendar\.gif$/.test( image.attr( "src" ) ), "Image button - image source" );
-			assert.equal( image.attr( "title" ), "Cal", "Image button - image text" );
+		testHelper.onFocus( inp, function() {
+			assert.ok( dp.is( ":visible" ), "Both - rendered on focus" );
+			body.simulate( "mousedown", {} );
+			assert.ok( !dp.is( ":visible" ), "Both - hidden on external click" );
+			button.trigger( "click" );
+			assert.ok( dp.is( ":visible" ), "Both - rendered on button click" );
+			button.trigger( "click" );
+			assert.ok( !dp.is( ":visible" ), "Both - hidden on second button click" );
+			inp.datepicker( "hide" ).datepicker( "destroy" );
 
-			testHelper.onFocus( inp, function() {
-				assert.ok( !dp.is( ":visible" ), "Image button - not rendered on focus" );
-				image.trigger( "click" );
-				assert.ok( dp.is( ":visible" ), "Image button - rendered on image click" );
-				image.trigger( "click" );
-				assert.ok( !dp.is( ":visible" ), "Image button - hidden on second image click" );
-				inp.datepicker( "hide" ).datepicker( "destroy" );
+			ready();
+		} );
+	}
 
-				step4();
-			} );
-		}
-
-		function step4() {
-			var inp = testHelper.initNewInput( {
-					showOn: "both",
-					buttonImage: "images/calendar.gif"
-				} ),
-				dp = $( "#ui-datepicker-div" );
-
-			assert.ok( !dp.is( ":visible" ), "Both - initially hidden" );
-			button = inp.siblings( "button" );
-			assert.ok( button.length === 1, "Both - button present" );
-			image = inp.siblings( "img" );
-			assert.ok( image.length === 0, "Both - image absent" );
-			image = button.children( "img" );
-			assert.ok( image.length === 1, "Both - button image present" );
-
-			// TODO: This test occasionally fails to focus in IE8 in BrowserStack
-			if ( !isOldIE ) {
-				testHelper.onFocus( inp, function() {
-					assert.ok( dp.is( ":visible" ), "Both - rendered on focus" );
-					body.simulate( "mousedown", {} );
-					assert.ok( !dp.is( ":visible" ), "Both - hidden on external click" );
-					button.trigger( "click" );
-					assert.ok( dp.is( ":visible" ), "Both - rendered on button click" );
-					button.trigger( "click" );
-					assert.ok( !dp.is( ":visible" ), "Both - hidden on second button click" );
-					inp.datepicker( "hide" ).datepicker( "destroy" );
-
-					ready();
-				} );
-			} else {
-				ready();
-			}
-		}
-
-		step0();
-	} );
-} )();
+	step0();
+} );
 
 QUnit.test( "otherMonths", function( assert ) {
 	assert.expect( 8 );

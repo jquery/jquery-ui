@@ -2,9 +2,7 @@
 ( function() {
 "use strict";
 
-// Find the script element
-var scripts = document.getElementsByTagName( "script" );
-var script = scripts[ scripts.length - 1 ];
+var script = document.currentScript;
 
 // Read the modules
 var modules = script.getAttribute( "data-modules" );

@@ -149,9 +149,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			};
 
 			this.element.css( margins );
-			this.originalElement.css( "margin", 0 );
 
-			// support: Safari
+			// Support: Safari
 			// Prevent Safari textarea resize
 			this.originalResizeStyle = this.originalElement.css( "resize" );
 			this.originalElement.css( "resize", "none" );
@@ -161,10 +160,6 @@ $.widget( "ui.resizable", $.ui.mouse, {
 				zoom: 1,
 				display: "block"
 			} ) );
-
-			// Support: IE9
-			// avoid IE jump (hard set the margin)
-			this.originalElement.css( margins );
 
 			this._proportionallyResize();
 		}

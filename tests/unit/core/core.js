@@ -3,7 +3,6 @@ define( [
 	"jquery",
 	"lib/common",
 	"lib/helper",
-	"ui/form",
 	"ui/labels",
 	"ui/unique-id"
 ], function( QUnit, $, common, helper ) {
@@ -150,10 +149,6 @@ QUnit.test( "Labels", function( assert ) {
 	function testLabels( testType ) {
 		var labels = dom.find( "#test" ).labels();
 		var found = labels.map( function() {
-
-				// Support: Core 1.9 Only
-				// We use String.prototype.trim because core 1.9.x silently fails
-				// when white space is present
 				return String.prototype.trim.call( $( this ).text() );
 			} ).get();
 
@@ -183,7 +178,7 @@ QUnit.test( "Labels", function( assert ) {
 			QUnit.test( name + this.id.replace( /_/g, " " ), function( assert ) {
 				var ready = assert.async();
 				assert.expect( 1 );
-				var form = input._form();
+				var form = $( input.prop( "form" ) );
 
 				// If input has a form the value should reset to "" if not it should be "changed"
 				var value = form.length ? "" : "changed";

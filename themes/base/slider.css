@@ -18,7 +18,6 @@
 	width: 1.2em;
 	height: 1.2em;
 	cursor: pointer;
-	-ms-touch-action: none;
 	touch-action: none;
 }
 .ui-slider .ui-slider-range {
@@ -28,12 +27,6 @@
 	display: block;
 	border: 0;
 	background-position: 0 0;
-}
-
-/* support: IE8 - See #6727 */
-.ui-slider.ui-state-disabled .ui-slider-handle,
-.ui-slider.ui-state-disabled .ui-slider-range {
-	filter: inherit;
 }
 
 .ui-slider-horizontal {

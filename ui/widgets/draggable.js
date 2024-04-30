@@ -25,8 +25,6 @@
 			"./mouse",
 			"../data",
 			"../plugin",
-			"../safe-active-element",
-			"../safe-blur",
 			"../scroll-parent",
 			"../version",
 			"../widget"
@@ -147,7 +145,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 	},
 
 	_blurActiveElement: function( event ) {
-		var activeElement = $.ui.safeActiveElement( this.document[ 0 ] ),
+		var activeElement = this.document[ 0 ].activeElement,
 			target = $( event.target );
 
 		// Don't blur if the event occurred on an element that is within
@@ -158,7 +156,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 		}
 
 		// Blur any element that currently has focus, see #4261
-		$.ui.safeBlur( activeElement );
+		$( activeElement ).trigger( "blur" );
 	},
 
 	_mouseStart: function( event ) {

@@ -172,18 +172,13 @@ a.ui-button:active,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary {
 	opacity: .7;
-	-ms-filter: "alpha(opacity=70)"; /* support: IE8 */
 	font-weight: normal;
 }
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
 	opacity: .35;
-	-ms-filter: "alpha(opacity=35)"; /* support: IE8 */
 	background-image: none;
-}
-.ui-state-disabled .ui-icon {
-	-ms-filter: "alpha(opacity=35)"; /* support: IE8 - See #6059 */
 }
 
 /* Icons
@@ -438,9 +433,7 @@ a.ui-button:active,
 .ui-widget-overlay {
 	background: #aaaaaa/*{bgColorOverlay}*/ /*{bgImgUrlOverlay}*/ /*{bgOverlayXPos}*/ /*{bgOverlayYPos}*/ /*{bgOverlayRepeat}*/;
 	opacity: .3/*{opacityOverlay}*/;
-	-ms-filter: "alpha(opacity=30)"/*{opacityFilterOverlay}*/; /* support: IE8 */
 }
 .ui-widget-shadow {
-	-webkit-box-shadow: 0/*{offsetLeftShadow}*/ 0/*{offsetTopShadow}*/ 5px/*{thicknessShadow}*/ #666666/*{bgColorShadow}*/;
 	box-shadow: 0/*{offsetLeftShadow}*/ 0/*{offsetTopShadow}*/ 5px/*{thicknessShadow}*/ #666666/*{bgColorShadow}*/;
 }

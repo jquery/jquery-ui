@@ -8,9 +8,6 @@ define( [
 
 return $.extend( helper, {
 
-	// TODO: remove the unreliable offset hacks
-	unreliableOffset: $.ui.ie && ( !document.documentMode || document.documentMode < 8 ) ? 2 : 0,
-
 	testDragPosition: function( assert, el, dx, dy, expectedDX, expectedDY, msg ) {
 		msg = msg ? msg + "." : "";
 

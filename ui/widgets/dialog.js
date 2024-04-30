@@ -31,8 +31,6 @@
 			"../focusable",
 			"../keycode",
 			"../position",
-			"../safe-active-element",
-			"../safe-blur",
 			"../tabbable",
 			"../unique-id",
 			"../version",
@@ -229,7 +227,7 @@ $.widget( "ui.dialog", {
 			// Hiding a focused element doesn't trigger blur in WebKit
 			// so in case we have nothing to focus on, explicitly blur the active element
 			// https://bugs.webkit.org/show_bug.cgi?id=47182
-			$.ui.safeBlur( $.ui.safeActiveElement( this.document[ 0 ] ) );
+			$( this.document[ 0 ].activeElement ).trigger( "blur" );
 		}
 
 		this._hide( this.uiDialog, this.options.hide, function() {
@@ -273,7 +271,7 @@ $.widget( "ui.dialog", {
 		}
 
 		this._isOpen = true;
-		this.opener = $( $.ui.safeActiveElement( this.document[ 0 ] ) );
+		this.opener = $( this.document[ 0 ].activeElement );
 
 		this._size();
 		this._position();
@@ -329,7 +327,7 @@ $.widget( "ui.dialog", {
 	},
 
 	_restoreTabbableFocus: function() {
-		var activeElement = $.ui.safeActiveElement( this.document[ 0 ] ),
+		var activeElement = this.document[ 0 ].activeElement,
 			isActive = this.uiDialog[ 0 ] === activeElement ||
 				$.contains( this.uiDialog[ 0 ], activeElement );
 		if ( !isActive ) {
@@ -340,11 +338,6 @@ $.widget( "ui.dialog", {
 	_keepFocus: function( event ) {
 		event.preventDefault();
 		this._restoreTabbableFocus();
-
-		// support: IE
-		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
-		// so we check again later
-		this._delay( this._restoreTabbableFocus );
 	},
 
 	_createWrapper: function() {
@@ -427,9 +420,6 @@ $.widget( "ui.dialog", {
 			}
 		} );
 
-		// Support: IE
-		// Use type="button" to prevent enter keypresses in textboxes from closing the
-		// dialog in IE (#9312)
 		this.uiDialogTitlebarClose = $( "<button type='button'></button>" )
 			.button( {
 				label: $( "<a>" ).text( this.options.closeText ).html(),

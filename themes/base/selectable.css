@@ -7,7 +7,6 @@
  * https://jquery.org/license
  */
 .ui-selectable {
-	-ms-touch-action: none;
 	touch-action: none;
 }
 .ui-selectable-helper {

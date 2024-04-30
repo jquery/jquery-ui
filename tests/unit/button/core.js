@@ -2,7 +2,6 @@ define( [
 	"qunit",
 	"jquery",
 	"lib/helper",
-	"ui/safe-active-element",
 	"ui/widgets/button"
 ], function( QUnit, $, helper ) {
 "use strict";
@@ -17,10 +16,10 @@ QUnit.test( "Disabled button loses focus", function( assert ) {
 	element.trigger( "focus" );
 	setTimeout( function() {
 
-		assert.equal( element[ 0 ], $.ui.safeActiveElement( document ), "Button is focused" );
+		assert.equal( element[ 0 ], document.activeElement, "Button is focused" );
 
 		element.button( "disable" );
-		assert.notEqual( element[ 0 ], $.ui.safeActiveElement( document ), "Button has had focus removed" );
+		assert.notEqual( element[ 0 ], document.activeElement, "Button has had focus removed" );
 		ready();
 	} );
 } );

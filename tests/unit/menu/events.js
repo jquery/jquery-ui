@@ -54,17 +54,11 @@ QUnit.test( "handle click on custom item menu", function( assert ) {
 QUnit.test( "handle blur", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 2 );
-	var blurHandled = false,
-		index = 1,
+	var index = 1,
 		element = $( "#menu1" ).menu( {
 			blur: function( event, ui ) {
-
-				// Ignore duplicate blur event fired by IE
-				if ( !blurHandled ) {
-					blurHandled = true;
-					assert.equal( event.type, "menublur", "blur event.type is 'menublur'" );
-					assert.strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
-				}
+				assert.equal( event.type, "menublur", "blur event.type is 'menublur'" );
+				assert.strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
 			}
 		} );
 
@@ -80,17 +74,11 @@ QUnit.test( "handle blur", function( assert ) {
 QUnit.test( "handle blur via click outside", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 2 );
-	var blurHandled = false,
-		index = 1,
+	var index = 1,
 		element = $( "#menu1" ).menu( {
 			blur: function( event, ui ) {
-
-				// Ignore duplicate blur event fired by IE
-				if ( !blurHandled ) {
-					blurHandled = true;
-					assert.equal( event.type, "menublur", "blur event.type is 'menublur'" );
-					assert.strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
-				}
+				assert.equal( event.type, "menublur", "blur event.type is 'menublur'" );
+				assert.strictEqual( ui.item[ 0 ], element.children()[ index ], "ui.item" );
 			}
 		} );
 

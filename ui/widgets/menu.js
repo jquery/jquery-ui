@@ -26,7 +26,6 @@
 			"jquery",
 			"../keycode",
 			"../position",
-			"../safe-active-element",
 			"../unique-id",
 			"../version",
 			"../widget"
@@ -87,7 +86,7 @@ return $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item": function( event ) {
 				var target = $( event.target );
-				var active = $( $.ui.safeActiveElement( this.document[ 0 ] ) );
+				var active = $( this.document[ 0 ].activeElement );
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
 					this.select( event );
 
@@ -131,7 +130,7 @@ return $.widget( "ui.menu", {
 				this._delay( function() {
 					var notContained = !$.contains(
 						this.element[ 0 ],
-						$.ui.safeActiveElement( this.document[ 0 ] )
+						this.document[ 0 ].activeElement
 					);
 					if ( notContained ) {
 						this.collapseAll( event );

@@ -293,9 +293,7 @@ QUnit.test( "._getCreateOptions()", function( assert ) {
 
 			assert.deepEqual( superOptions, {}, "Base implementation returns empty object" );
 
-			// Support: IE8
-			// Strict equality fails when comparing this.window in ie8
-			assert.equal( this.window[ 0 ], window, "this.window is properly defined" );
+			assert.strictEqual( this.window[ 0 ], window, "this.window is properly defined" );
 			assert.strictEqual( this.document[ 0 ], document, "this.document is properly defined" );
 
 			return {

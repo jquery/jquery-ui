@@ -743,11 +743,11 @@ QUnit.test( "cursorAt", function( assert ) {
 							assert.equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
 							assert.equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
 						} else if ( testData.cursorAt.right ) {
-							assert.equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - testHelper.unreliableOffset, testName + " " + position + " left" );
-							assert.equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - testHelper.unreliableOffset, testName + " " + position + " top" );
+							assert.equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x, testName + " " + position + " left" );
+							assert.equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y, testName + " " + position + " top" );
 						} else {
-							assert.equal( event.clientX - ui.offset.left, testData.x + testHelper.unreliableOffset, testName + " " + position + " left" );
-							assert.equal( event.clientY - ui.offset.top, testData.y + testHelper.unreliableOffset, testName + " " + position + " top" );
+							assert.equal( event.clientX - ui.offset.left, testData.x, testName + " " + position + " left" );
+							assert.equal( event.clientY - ui.offset.top, testData.y, testName + " " + position + " top" );
 						}
 					}
 			} );
@@ -785,11 +785,11 @@ QUnit.test( "cursorAt, switching after initialization", function( assert ) {
 							assert.equal( ui.position.left - ui.originalPosition.left, deltaX, testName + " " + position + " left" );
 							assert.equal( ui.position.top - ui.originalPosition.top, deltaY, testName + " " + position + " top" );
 						} else if ( testData.cursorAt.right ) {
-							assert.equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x - testHelper.unreliableOffset, testName + " " + position + " left" );
-							assert.equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y - testHelper.unreliableOffset, testName + " " + position + " top" );
+							assert.equal( ui.helper.width() - ( event.clientX - ui.offset.left ), testData.x, testName + " " + position + " left" );
+							assert.equal( ui.helper.height() - ( event.clientY - ui.offset.top ), testData.y, testName + " " + position + " top" );
 						} else {
-							assert.equal( event.clientX - ui.offset.left, testData.x + testHelper.unreliableOffset, testName + " " + position + " left" );
-							assert.equal( event.clientY - ui.offset.top, testData.y + testHelper.unreliableOffset, testName + " " + position + " top" );
+							assert.equal( event.clientX - ui.offset.left, testData.x, testName + " " + position + " left" );
+							assert.equal( event.clientY - ui.offset.top, testData.y, testName + " " + position + " top" );
 						}
 					}
 			} );
@@ -1136,15 +1136,6 @@ QUnit.test( "scroll ignores containers that are overflow: hidden", function( ass
 		dy: 1300
 	} );
 
-	// IE8 natively scrolls when dragging an element inside a overflow:hidden
-	// container, so skip this test if native scroll occurs.
-	// Support: IE <9
-	if ( scrollParent.scrollTop() > 0 ) {
-		assert.ok( true, "overflow:hidden container natively scrolls" );
-		assert.ok( true, "overflow:hidden container natively scrolls" );
-		return;
-	}
-
 	element.css( { top: 0, left: 0 } ).draggable( "option", "scroll", true );
 
 	element.simulate( "drag", {
@@ -1458,7 +1449,7 @@ QUnit.test( "zIndex, default, switching after initialization", function( assert 
 } );
 
 QUnit.test( "iframeFix", function( assert ) {
-	assert.expect( 6 );
+	assert.expect( 5 );
 
 	var element = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable( { iframeFix: true } ),
 		element2 = $( "<div>" ).appendTo( "#qunit-fixture" ).draggable( { iframeFix: ".iframe" } ),
@@ -1474,8 +1465,7 @@ QUnit.test( "iframeFix", function( assert ) {
 	} );
 
 	element.one( "drag", function() {
-		var divOffset, iframeOffset,
-			div = $( this ).children().not( "iframe" );
+		var div = $( this ).children().not( "iframe" );
 
 		// https://bugs.jqueryui.com/ticket/9671
 		// iframeFix doesn't handle iframes that move
@@ -1483,13 +1473,7 @@ QUnit.test( "iframeFix", function( assert ) {
 		assert.equal( div.outerWidth(), iframe.outerWidth(), "blocking div is wide enough" );
 		assert.equal( div.outerHeight(), iframe.outerHeight(), "blocking div is tall enough" );
 
-		divOffset = div.offset();
-		iframeOffset = iframe.offset();
-
-		// Support: Edge <79 only
-		// In Edge Legacy these values differ a little.
-		assert.ok( Math.abs( divOffset.top - iframeOffset.top ) < 0.25, "Check top within 0.25 of expected" );
-		assert.ok( Math.abs( divOffset.left - iframeOffset.left ) < 0.25, "Check left within 0.25 of expected" );
+		assert.deepEqual( div.offset(), iframe.offset(), "blocking div is tall enough" );
 	} );
 
 	element.simulate( "drag", {

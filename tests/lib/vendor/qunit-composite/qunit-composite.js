@@ -35,9 +35,6 @@ function addEvent( elem, type, fn ) {
 	if ( elem.addEventListener ) {
 		// Standards-based browsers
 		elem.addEventListener( type, fn, false );
-	} else if ( elem.attachEvent ) {
-		// support: IE <9
-		elem.attachEvent( "on" + type, fn );
 	}
 }
 

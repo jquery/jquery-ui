@@ -187,13 +187,7 @@ return $.widget( "ui.accordion", {
 		this._super( value );
 
 		this.element.attr( "aria-disabled", value );
-
-		// Support: IE8 Only
-		// #5332 / #6059 - opacity doesn't cascade to positioned elements in IE
-		// so we need to add the disabled class to the headers and panels
 		this._toggleClass( null, "ui-state-disabled", !!value );
-		this._toggleClass( this.headers.add( this.headers.next() ), null, "ui-state-disabled",
-			!!value );
 	},
 
 	_keydown: function( event ) {
@@ -611,10 +605,6 @@ return $.widget( "ui.accordion", {
 		this._removeClass( prev, "ui-accordion-header-active" )
 			._addClass( prev, "ui-accordion-header-collapsed" );
 
-		// Work around for rendering bug in IE (#5421)
-		if ( toHide.length ) {
-			toHide.parent()[ 0 ].className = toHide.parent()[ 0 ].className;
-		}
 		this._trigger( "activate", null, data );
 	}
 } );

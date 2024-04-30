@@ -24,7 +24,6 @@
 			"jquery",
 			"./mouse",
 			"../data",
-			"../ie",
 			"../scroll-parent",
 			"../version",
 			"../widget"
@@ -275,10 +274,6 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 		if ( o.cursor && o.cursor !== "auto" ) { // cursor option
 			body = this.document.find( "body" );
-
-			// Support: IE
-			this.storedCursor = body.css( "cursor" );
-			body.css( "cursor", o.cursor );
 
 			this.storedStylesheet =
 				$( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
@@ -1197,11 +1192,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 			po.top += this.scrollParent.scrollTop();
 		}
 
-		// This needs to be actually done for all browsers, since pageX/pageY includes this
-		// information with an ugly IE fix
-		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ||
-				( this.offsetParent[ 0 ].tagName &&
-				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && $.ui.ie ) ) {
+		// This needs to be actually done for all browsers, since pageX/pageY includes
+		// this information.
+		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ) {
 			po = { top: 0, left: 0 };
 		}
 
@@ -1549,8 +1542,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if ( this.storedCursor ) {
-			this.document.find( "body" ).css( "cursor", this.storedCursor );
+		if ( this.storedStylesheet ) {
 			this.storedStylesheet.remove();
 		}
 		if ( this._storedOpacity ) {

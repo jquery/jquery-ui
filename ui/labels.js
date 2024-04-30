@@ -39,9 +39,8 @@ return $.fn.labels = function() {
 		return this.pushStack( this[ 0 ].labels );
 	}
 
-	// Support: IE <= 11, FF <= 37, Android <= 2.3 only
-	// Above browsers do not support control.labels. Everything below is to support them
-	// as well as document fragments. control.labels does not work on document fragments
+	// If `control.labels` is empty - e.g. inside of document fragments - find
+	// the labels manually
 	labels = this.eq( 0 ).parents( "label" );
 
 	// Look for the label based on the id

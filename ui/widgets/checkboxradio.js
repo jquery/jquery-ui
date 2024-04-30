@@ -168,7 +168,7 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 			// Not inside a form, check all inputs that also are not inside a form
 			group = $( nameSelector ).filter( function() {
-				return $( this )._form().length === 0;
+				return $( $( this ).prop( "form" ) ).length === 0;
 			} );
 		}
 

@@ -13,7 +13,6 @@
 	position: absolute;
 	font-size: 0.1px;
 	display: block;
-	-ms-touch-action: none;
 	touch-action: none;
 }
 .ui-resizable-disabled .ui-resizable-handle,

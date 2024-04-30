@@ -18,12 +18,7 @@
 	vertical-align: middle;
 	text-align: center;
 	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
-
-	/* Support: IE <= 11 */
-	overflow: visible;
 }
 
 .ui-button,
@@ -74,7 +69,7 @@ input.ui-button.ui-icon-notext .ui-icon {
 }
 
 /* workarounds */
-/* Support: Firefox 5 - 40 */
+/* Support: Firefox 5 - 125+ */
 input.ui-button::-moz-focus-inner,
 button.ui-button::-moz-focus-inner {
 	border: 0;
