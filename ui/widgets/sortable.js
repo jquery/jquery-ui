@@ -275,7 +275,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		if ( o.cursor && o.cursor !== "auto" ) { // cursor option
 			body = this.document.find( "body" );
 
-			this.storedStylesheet =
+			this._storedStylesheet =
 				$( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
 		}
 
@@ -1542,8 +1542,9 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if ( this.storedStylesheet ) {
-			this.storedStylesheet.remove();
+		if ( this._storedStylesheet ) {
+			this._storedStylesheet.remove();
+			this._storedStylesheet = null;
 		}
 		if ( this._storedOpacity ) {
 			this.helper.css( "opacity", this._storedOpacity );
