@@ -2,6 +2,8 @@
 
 module.exports = function( grunt ) {
 
+const gzip = require( "gzip-js" );
+
 // files
 const coreFiles = [
 	"core.js",
@@ -75,7 +77,15 @@ const compareFiles = {
 	all: [
 		"dist/jquery-ui.js",
 		"dist/jquery-ui.min.js"
-	]
+	],
+	options: {
+		compress: {
+			gz: function( contents ) {
+				return gzip.zip( contents, {} ).length;
+			}
+		},
+		cache: "build/.sizecache.json"
+	}
 };
 
 const htmllintBad = [
@@ -115,8 +125,6 @@ uiFiles.concat( allI18nFiles ).forEach( function( file ) {
 } );
 
 uiFiles.forEach( function( file ) {
-
-	// TODO this doesn't do anything until https://github.com/rwldrn/grunt-compare-size/issues/13
 	compareFiles[ file ] = [ file, mapMinFile( file ) ];
 } );
 

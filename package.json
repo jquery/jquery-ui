@@ -74,6 +74,7 @@
 		"grunt-eslint": "24.0.1",
 		"grunt-git-authors": "3.2.0",
 		"grunt-html": "16.0.0",
+		"gzip-js": "0.3.2",
 		"load-grunt-tasks": "5.1.0",
 		"rimraf": "4.4.1",
 		"selenium-webdriver": "4.18.1",
