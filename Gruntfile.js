@@ -4,7 +4,6 @@ module.exports = function( grunt ) {
 
 // files
 const coreFiles = [
-	"core.js",
 	"widget.js",
 	"widgets/mouse.js",
 	"widgets/draggable.js",
@@ -167,7 +166,7 @@ grunt.initConfig( {
 				findNestedDependencies: true,
 				skipModuleInsertion: true,
 				exclude: [ "jquery" ],
-				include: expandFiles( [ "ui/**/*.js", "!ui/core.js", "!ui/i18n/*" ] ),
+				include: expandFiles( [ "ui/**/*.js", "!ui/i18n/*" ] ),
 				out: "dist/jquery-ui.js",
 				wrap: {
 					start: createBanner( uiFiles )

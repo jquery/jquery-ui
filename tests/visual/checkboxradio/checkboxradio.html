@@ -4,13 +4,8 @@
 	<meta charset="utf-8">
 	<title>jQuery UI - Checkboxes</title>
 	<link rel="stylesheet" href="../../../themes/base/all.css">
-	<script src="../../../external/jquery/jquery.js"></script>
-	<script src="../../../ui/core.js"></script>
-	<script src="../../../ui/widget.js"></script>
-	<script src="../../../ui/button.js"></script>
-	<script src="../../../ui/checkboxradio.js"></script>
-	<script>
-	$(function() {
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../demos/bootstrap.js">
 		var checkboxes = $( "form input" ).checkboxradio();
 
 		$( ".controls input, .controls select" ).on( "change keyup", function() {
@@ -23,15 +18,14 @@
 			if ( option != "label" || value !== "" ) {
 				checkboxes.checkboxradio( "option", option, value );
 			}
-		});
+		} );
 		$( ".controls > button" ).on( "click", function() {
 			if ( this.id !== "create" ) {
 				checkboxes.checkboxradio( this.id );
 			} else {
 				checkboxes.checkboxradio();
 			}
-		});
-	});
+		} );
 	</script>
 	<style>
 	#format { margin-top: 2em; }
