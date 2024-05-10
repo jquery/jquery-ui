@@ -52,7 +52,17 @@ return $.widget( "ui.accordion", {
 		collapsible: false,
 		event: "click",
 		header: function( elem ) {
-			return elem.find( "> li > :first-child" ).add( elem.find( "> :not(li)" ).even() );
+			return elem
+				.find( "> li > :first-child" )
+				.add(
+					elem.find( "> :not(li)" )
+
+						// Support: jQuery <3.5 only
+						// We could use `.even()` but that's unavailable in older jQuery.
+						.filter( function( i ) {
+							return i % 2 === 0;
+						} )
+				);
 		},
 		heightStyle: "auto",
 		icons: {

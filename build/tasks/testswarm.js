@@ -35,6 +35,7 @@ var versions = {
 		"Droppable": "droppable/droppable.html",
 		"Effects": "effects/effects.html",
 		"Form Reset Mixin": "form-reset-mixin/form-reset-mixin.html",
+		"jQuery Patch": "jquery-patch/jquery-patch.html",
 		"Menu": "menu/menu.html",
 		"Position": "position/position.html",
 		"Progressbar": "progressbar/progressbar.html",

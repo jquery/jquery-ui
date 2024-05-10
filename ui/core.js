@@ -9,7 +9,6 @@ define( [
 	"./focusable",
 	"./keycode",
 	"./labels",
-	"./jquery-patch",
 	"./plugin",
 	"./scroll-parent",
 	"./tabbable",

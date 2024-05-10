@@ -171,14 +171,6 @@ function migrateUrl() {
 		}
 	}
 
-	var jQueryVersion = parseUrl().jquery;
-
-	// Load the jQuery fixes, if necessary
-	if ( !jQueryVersion ||
-		( jQueryVersion.indexOf( "git" ) === -1 && parseFloat( jQueryVersion ) < 4 ) ) {
-		modules.unshift( "ui/jquery-patch" );
-	}
-
 	requireTests( modules, { backCompat: backCompat } );
 } )();
 

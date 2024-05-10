@@ -11,6 +11,7 @@ export const suites = [
 	"droppable",
 	"effects",
 	"form-reset-mixin",
+	"jquery-patch",
 	"menu",
 	"position",
 	"progressbar",
