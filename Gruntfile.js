@@ -84,15 +84,6 @@ const htmllintBad = [
 	"tests/unit/tabs/data/test.html"
 ];
 
-const nodeV16OrNewer = !/^v1[0-5]\./.test( process.version );
-
-// Support: Node.js <16
-// Skip running tasks that dropped support for Node.js 10-15
-// in this Node version.
-function runIfNewNode( task ) {
-	return nodeV16OrNewer ? task : "print_old_node_message:" + task;
-}
-
 function mapMinFile( file ) {
 	return "dist/" + file.replace( /ui\//, "minified/" );
 }
@@ -357,13 +348,7 @@ grunt.initConfig( {
 } );
 
 // grunt plugins
-require( "load-grunt-tasks" )( grunt, {
-	pattern: nodeV16OrNewer ? [ "grunt-*" ] : [
-		"grunt-*",
-		"!grunt-eslint",
-		"!grunt-html"
-	]
-} );
+require( "load-grunt-tasks" )( grunt );
 
 // local tasks
 grunt.loadTasks( "build/tasks" );
@@ -406,9 +391,9 @@ grunt.registerTask( "print_old_node_message", ( ...args ) => {
 // Keep this task list in sync with the testing steps in our GitHub action test workflow file!
 grunt.registerTask( "lint", [
 	"asciilint",
-	runIfNewNode( "eslint" ),
+	"eslint",
 	"csslint",
-	runIfNewNode( "htmllint" )
+	"htmllint"
 ] );
 grunt.registerTask( "build", [ "requirejs", "concat" ] );
 grunt.registerTask( "default", [ "lint", "build" ] );
