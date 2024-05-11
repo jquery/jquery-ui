@@ -72,7 +72,7 @@ The tests require a local web server and the samples contain some PHP, so a PHP 
   * Windows: [WAMP download](https://www.wampserver.com/en/)
   * Mac: [MAMP download](https://www.mamp.info/en/mac/)
   * Linux: [Setting up LAMP](https://www.linux.com/learn/tutorials/288158-easy-lamp-server-installation)
-  * [Mongoose (most platforms)](https://code.google.com/archive/p/mongoose/)
+  * [Mongoose (most platforms)](https://mongoose.ws/)
   * [http-server](https://www.npmjs.com/package/http-server)
 
 ### Running the Tests
