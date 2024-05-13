@@ -8,7 +8,7 @@ define( [
 ], function( QUnit, $, common, helper ) {
 "use strict";
 
-QUnit.module( "widget factory", {
+QUnit.module( "form-reset-mixin", {
 	beforeEach: function() {
 		$.widget( "ui.testWidget", [ $.ui.formResetMixin, {
 			_create: function() {
