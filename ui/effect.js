@@ -273,7 +273,7 @@ if ( $.expr && $.expr.pseudos && $.expr.pseudos.animated ) {
 	} )( $.expr.pseudos.animated );
 }
 
-if ( $.uiBackCompat !== false ) {
+if ( $.uiBackCompat === true ) {
 	$.extend( $.effects, {
 
 		// Saves a set of properties in a data storage
@@ -759,7 +759,7 @@ $.fn.extend( {
 			// as toggle can be either show or hide depending on element state
 			args.mode = modes.shift();
 
-			if ( $.uiBackCompat !== false && !defaultMode ) {
+			if ( $.uiBackCompat === true && !defaultMode ) {
 				if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
 
 					// Call the core method to track "olddisplay" properly

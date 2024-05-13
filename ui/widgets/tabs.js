@@ -909,7 +909,7 @@ $.widget( "ui.tabs", {
 
 // DEPRECATED
 // TODO: Switch return back to widget declaration at top of file when this is removed
-if ( $.uiBackCompat !== false ) {
+if ( $.uiBackCompat === true ) {
 
 	// Backcompat for ui-tab class (now ui-tabs-tab)
 	$.widget( "ui.tabs", $.ui.tabs, {

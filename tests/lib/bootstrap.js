@@ -25,9 +25,9 @@ requirejs.config( {
 	}
 } );
 
-// Create a module that disables back compat for UI modules
-define( "jquery-no-back-compat", [ "jquery" ], function( $ ) {
-	$.uiBackCompat = false;
+// Create a module that enables back compat for UI modules
+define( "jquery-back-compat", [ "jquery" ], function( $ ) {
+	$.uiBackCompat = true;
 
 	return $;
 } );
@@ -53,10 +53,12 @@ function requireModules( dependencies, callback, modules ) {
 }
 
 // Load a set of test file along with the required test infrastructure
-function requireTests( dependencies, noBackCompat ) {
-	var preDependencies = [
+function requireTests( dependencies, options ) {
+
+	var backCompat = !!( options && options.backCompat ),
+		preDependencies = [
 		"lib/qunit",
-		noBackCompat ? "jquery-no-back-compat" : "jquery",
+		backCompat ? "jquery-back-compat" : "jquery",
 		"jquery-simulate"
 	];
 
@@ -136,7 +138,7 @@ function migrateUrl() {
 // - data-widget: A widget to load test modules for
 //   - Automatically loads common, core, events, methods, and options
 // - data-deprecated: Loads the deprecated test modules for a widget
-// - data-no-back-compat: Set $.uiBackCompat to false
+// - data-back-compat: Set $.uiBackCompat to `true`
 ( function() {
 
 	// Find the script element
@@ -154,7 +156,7 @@ function migrateUrl() {
 	}
 	var widget = script.getAttribute( "data-widget" );
 	var deprecated = !!script.getAttribute( "data-deprecated" );
-	var noBackCompat = !!script.getAttribute( "data-no-back-compat" );
+	var backCompat = !!script.getAttribute( "data-back-compat" );
 
 	if ( widget ) {
 		modules = modules.concat( [
@@ -177,7 +179,7 @@ function migrateUrl() {
 		modules.unshift( "ui/jquery-patch" );
 	}
 
-	requireTests( modules, noBackCompat );
+	requireTests( modules, { backCompat: backCompat } );
 } )();
 
 } )();

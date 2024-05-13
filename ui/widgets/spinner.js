@@ -554,7 +554,7 @@ $.widget( "ui.spinner", {
 
 // DEPRECATED
 // TODO: switch return back to widget declaration at top of file when this is removed
-if ( $.uiBackCompat !== false ) {
+if ( $.uiBackCompat === true ) {
 
 	// Backcompat for spinner html extension points
 	$.widget( "ui.spinner", $.ui.spinner, {

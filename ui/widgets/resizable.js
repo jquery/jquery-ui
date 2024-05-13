@@ -1113,7 +1113,7 @@ $.ui.plugin.add( "resizable", "ghost", {
 
 		// DEPRECATED
 		// TODO: remove after 1.12
-		if ( $.uiBackCompat !== false && typeof that.options.ghost === "string" ) {
+		if ( $.uiBackCompat === true && typeof that.options.ghost === "string" ) {
 
 			// Ghost option
 			that.ghost.addClass( this.options.ghost );

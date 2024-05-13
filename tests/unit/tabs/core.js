@@ -29,9 +29,9 @@ QUnit.test( "markup structure", function( assert ) {
 	assert.hasClasses( tabs[ 2 ], "ui-tabs-tab" );
 
 	// DEPRECATED
-	assert.hasClasses( tabs[ 0 ], "ui-tab" );
-	assert.hasClasses( tabs[ 1 ], "ui-tab" );
-	assert.hasClasses( tabs[ 2 ], "ui-tab" );
+	assert.lacksClasses( tabs[ 0 ], "ui-tab" );
+	assert.lacksClasses( tabs[ 1 ], "ui-tab" );
+	assert.lacksClasses( tabs[ 2 ], "ui-tab" );
 
 	assert.equal( tabs.length, 3, "There are exactly three tabs" );
 	assert.hasClasses( anchors[ 0 ], "ui-tabs-anchor" );

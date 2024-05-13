@@ -505,7 +505,7 @@ $.widget( "ui.tooltip", {
 
 // DEPRECATED
 // TODO: Switch return back to widget declaration at top of file when this is removed
-if ( $.uiBackCompat !== false ) {
+if ( $.uiBackCompat === true ) {
 
 	// Backcompat for tooltipClass option
 	$.widget( "ui.tooltip", $.ui.tooltip, {
