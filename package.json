@@ -52,7 +52,7 @@
 		"test": "grunt && npm run test:unit -- -h"
 	},
 	"dependencies": {
-		"jquery": ">=1.8.0 <4.0.0"
+		"jquery": ">=1.12.0 <5.0.0"
 	},
 	"devDependencies": {
 		"body-parser": "1.20.2",
