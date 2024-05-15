@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Keycode @VERSION
+ * jQuery UI Keycode 1.14.0-beta.1
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors

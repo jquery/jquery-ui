@@ -40,5 +40,6 @@
 		"jquery-3.7.1": "jquery#3.7.1",
 		"jquery-migrate-1.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
 		"jquery-migrate-3.4.1": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.4.1.tgz"
-	}
+	},
+	"version": "1.14.0-beta.1"
 }

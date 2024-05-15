@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Sortable @VERSION
+ * jQuery UI Sortable 1.14.0-beta.1
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -37,7 +37,7 @@
 "use strict";
 
 return $.widget( "ui.sortable", $.ui.mouse, {
-	version: "@VERSION",
+	version: "1.14.0-beta.1",
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
