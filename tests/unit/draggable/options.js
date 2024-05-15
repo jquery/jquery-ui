@@ -1173,9 +1173,7 @@ QUnit.test( "#6817: auto scroll goes double distance when dragging", function( a
 			scroll: true,
 			stop: function( e, ui ) {
 				assert.equal( ui.offset.top, newY, "offset of item matches pointer position after scroll" );
-
-				// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
-				assert.close( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
+				assert.equal( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
 			}
 		} ),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
@@ -1231,9 +1229,8 @@ QUnit.test( "snap, snapMode, and snapTolerance", function( assert ) {
 		moves: 1
 	} );
 
-	// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
-	assert.close( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
-	assert.close( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
+	assert.equal( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
+	assert.equal( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
 
 	newX += 3;
 
@@ -1362,10 +1359,8 @@ QUnit.test( "#8459: element can snap to an element that was removed during drag"
 		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 		assert.ok( true, "Opera <12.14 and Safari <6.0 report wrong values for $.contains in jQuery < 1.8" );
 	} else {
-
-		// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
-		assert.close( element.offset().left, newX, 1, "doesn't snap to a removed element" );
-		assert.close( element.offset().top, newY, 1, "doesn't snap to a removed element" );
+		assert.equal( element.offset().left, newX, 1, "doesn't snap to a removed element" );
+		assert.equal( element.offset().top, newY, 1, "doesn't snap to a removed element" );
 	}
 } );
 
