@@ -12,7 +12,7 @@
 		"jquery": ">=1.8.0 <4.0.0"
 	},
 	"devDependencies": {
-		"jquery-color": "2.2.0",
+		"jquery-color": "3.0.0",
 		"jquery-mousewheel": "3.1.12",
 		"jquery-simulate": "1.1.1",
 		"qunit": "2.19.4",
