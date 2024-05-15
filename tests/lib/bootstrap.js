@@ -14,14 +14,12 @@ requirejs.config( {
 		"qunit-assert-classes": "../../lib/vendor/qunit-assert-classes/qunit-assert-classes",
 		"qunit-assert-close": "../../lib/vendor/qunit-assert-close/qunit-assert-close",
 		"qunit": "../../../external/qunit/qunit",
-		"testswarm": "https://swarm.jquery.org/js/inject.js?" + ( new Date() ).getTime(),
 		"ui": "../../../ui"
 	},
 	shim: {
 		"globalize/ja-JP": [ "globalize" ],
 		"jquery-simulate": [ "jquery" ],
-		"qunit-assert-close": [ "qunit" ],
-		"testswarm": [ "qunit" ]
+		"qunit-assert-close": [ "qunit" ]
 	}
 } );
 
@@ -68,11 +66,6 @@ function requireTests( dependencies, options ) {
 	}
 
 	dependencies = preDependencies.concat( dependencies );
-
-	// Load the TestSwarm injector, if necessary
-	if ( parseUrl().swarmURL ) {
-		dependencies.push( "testswarm" );
-	}
 
 	requireModules( dependencies, function( QUnit ) {
 		QUnit.start();

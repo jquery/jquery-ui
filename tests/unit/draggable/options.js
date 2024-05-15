@@ -1159,9 +1159,7 @@ QUnit.test( "#6817: auto scroll goes double distance when dragging", function( a
 			scroll: true,
 			stop: function( e, ui ) {
 				assert.equal( ui.offset.top, newY, "offset of item matches pointer position after scroll" );
-
-				// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
-				assert.close( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
+				assert.equal( ui.offset.top - offsetBefore.top, distance, 1, "offset of item only moves expected distance after scroll" );
 			}
 		} ),
 		scrollSensitivity = element.draggable( "option", "scrollSensitivity" ),
@@ -1217,9 +1215,8 @@ QUnit.test( "snap, snapMode, and snapTolerance", function( assert ) {
 		moves: 1
 	} );
 
-	// TODO: fix IE8 testswarm IFRAME positioning bug so assert.close can be turned back to equal
-	assert.close( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
-	assert.close( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
+	assert.equal( element.offset().left, newX, 1, "doesn't snap outside the snapTolerance" );
+	assert.equal( element.offset().top, newY, 1, "doesn't snap outside the snapTolerance" );
 
 	newX += 3;
 

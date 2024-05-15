@@ -397,7 +397,6 @@ grunt.registerTask( "lint", [
 ] );
 grunt.registerTask( "build", [ "requirejs", "concat" ] );
 grunt.registerTask( "default", [ "lint", "build" ] );
-grunt.registerTask( "jenkins", [ "build" ] );
 grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );
 
