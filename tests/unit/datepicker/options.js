@@ -98,14 +98,6 @@ QUnit.test( "change", function( assert ) {
 } );
 
 ( function() {
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf( "swarmURL=" ) + 9 ) );
-
-	// TODO: This test occassionally fails in IE in TestSwarm
-	if ( $.ui.ie && url && url.indexOf( "http" ) === 0 ) {
-		return;
-	}
-
 	QUnit.test( "invocation", function( assert ) {
 		var ready = assert.async();
 		var button, image,
