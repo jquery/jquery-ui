@@ -2,7 +2,7 @@
 
 module.exports = function( grunt ) {
 
-const gzip = require( "gzip-js" );
+const { gzipSync } = require( "node:zlib" );
 
 // files
 const coreFiles = [
@@ -81,7 +81,7 @@ const compareFiles = {
 	options: {
 		compress: {
 			gz: function( contents ) {
-				return gzip.zip( contents, {} ).length;
+				return gzipSync( contents ).length;
 			}
 		},
 		cache: "build/.sizecache.json"
