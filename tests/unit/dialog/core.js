@@ -70,7 +70,7 @@ QUnit.test( "title id", function( assert ) {
 } );
 
 QUnit.test( "ARIA", function( assert ) {
-	assert.expect( 4 );
+	assert.expect( 5 );
 
 	var element = $( "<div>" ).dialog(),
 		wrapper = element.dialog( "widget" );
