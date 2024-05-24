@@ -347,7 +347,8 @@ $.widget( "ui.dialog", {
 
 				// Setting tabIndex makes the div focusable
 				tabIndex: -1,
-				role: "dialog"
+				role: "dialog",
+				"aria-modal": "true"
 			} )
 			.appendTo( this._appendTo() );
 
