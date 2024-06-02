@@ -1,0 +1,73 @@
+name: Browserstack
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: browserstack
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      NODE_VERSION: 20.x
+    name: |
+      ${{ matrix.BROWSER }} | ${{ matrix.JQUERYS.name }}
+    concurrency:
+      group: ${{ matrix.BROWSER }}-${{ matrix.JQUERYS.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        BROWSER:
+          - 'Chrome_latest'
+          - 'Chrome_latest-1'
+          - 'Edge_18'
+          - 'Edge_latest'
+          - 'Edge_latest-1'
+          - 'Firefox_latest'
+          - 'Firefox_latest-1'
+          - 'IE_11'
+          - 'Opera_latest'
+          - 'Opera_latest-1'
+          - 'Safari_latest'
+          - 'Safari_latest-1'
+        JQUERYS:
+          - versions: --jquery 3.x-git --jquery git
+            name: jQuery git
+          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 3.5.1 --jquery 3.4.1 --jquery 3.3.1 --jquery 3.2.1 --jquery 3.1.1 --jquery 3.0.0
+            name: jQuery 3.x
+          - versions: --jquery 2.2.4 --jquery 2.1.4 --jquery 2.0.3
+            name: jQuery 2.x
+          - versions: --jquery 1.12.4 --jquery 1.11.3 --jquery 1.10.2 --jquery 1.9.1 --jquery 1.8.3
+            name: jQuery 1.x
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-npm-lock-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build jQuery UI
+        run: npm run build
+
+      - name: Run tests
+        run: |
+          npm run test:unit -- -v \
+            --browserstack "${{ matrix.BROWSER }}" \
+            ${{ matrix.JQUERYS.versions }} \
+            --run-id ${{ github.run_id }} \
+            --retries 3 --hard-retries 1
