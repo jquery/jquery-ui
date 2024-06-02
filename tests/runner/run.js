@@ -277,7 +277,7 @@ export async function run( {
 
 	for ( const browser of browsers ) {
 		for ( const suite of suites ) {
-			queueRuns( [ suite ], browser );
+			queueRuns( suite, browser );
 		}
 	}
 

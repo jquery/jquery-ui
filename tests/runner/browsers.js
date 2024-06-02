@@ -29,7 +29,7 @@ const workers = Object.create( null );
 const ACKNOWLEDGE_INTERVAL = 1000;
 const ACKNOWLEDGE_TIMEOUT = 60 * 1000 * 5;
 
-const MAX_WORKER_RESTARTS = 5;
+const MAX_WORKER_RESTARTS = 3;
 
 // No report after the time limit
 // should refresh the worker
@@ -64,7 +64,7 @@ export async function createBrowserWorker( url, browser, options, restarts = 0 )
 		worker = await createWorker( {
 			...browser,
 			url: encodeURI( url ),
-			project: "jquery",
+			project: "jquery-ui",
 			build: `Run ${ runId }`,
 
 			// This is the maximum timeout allowed
