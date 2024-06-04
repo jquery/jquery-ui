@@ -17,18 +17,17 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    name: ${{ matrix.BROWSER }} - jQuery ${{ matrix.JQUERY }}
+    name: |
+      ${{ matrix.BROWSER }} | ${{ matrix.JQUERYS.name }}
     strategy:
       fail-fast: false
       matrix:
         BROWSER: [chrome, firefox]
-        JQUERY:
-          - "git"
-          - "3.x-git"
-          - "3.7.1"
-          - "3.6.4"
-          - "2.2.4"
-          - "1.12.4"
+        JQUERYS:
+          - versions: --jquery git --jquery 3.x-git
+            name: jQuery git
+          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 2.2.4 --jquery 1.12.4
+            name: jQuery stable
 
     steps:
       - name: Checkout
@@ -57,21 +56,23 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- -h -b ${{ matrix.BROWSER }} --jquery ${{ matrix.JQUERY }} --retries 3
+        run: |
+          npm run test:unit -- -h -b ${{ matrix.BROWSER }} \
+            ${{ matrix.JQUERYS.versions }} \
+            --retries 3 --hard-retries 1
 
   edge:
     runs-on: windows-latest
-    name: edge - jQuery ${{ matrix.JQUERY }}
+    name: |
+      edge | ${{ matrix.JQUERYS.name }}
     strategy:
       fail-fast: false
       matrix:
-        JQUERY:
-          - "git"
-          - "3.x-git"
-          - "3.7.1"
-          - "3.6.4"
-          - "2.2.4"
-          - "1.12.4"
+        JQUERYS:
+          - versions: --jquery git --jquery 3.x-git
+            name: jQuery git
+          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 2.2.4 --jquery 1.12.4
+            name: jQuery stable
     steps:
       - name: Checkout
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -96,21 +97,23 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- -h -b edge --jquery ${{ matrix.JQUERY }} --retries 3
+        run: |
+          npm run test:unit -- -h -b edge `
+            ${{ matrix.JQUERYS.versions }} `
+            --retries 3 --hard-retries 1
 
   safari:
     runs-on: macos-latest
-    name: safari - jQuery ${{ matrix.JQUERY }}
+    name: |
+      safari | ${{ matrix.JQUERYS.name }}
     strategy:
       fail-fast: false
       matrix:
-        JQUERY:
-          - "git"
-          - "3.x-git"
-          - "3.7.1"
-          - "3.6.4"
-          - "2.2.4"
-          - "1.12.4"
+        JQUERYS:
+          - versions: --jquery git --jquery 3.x-git
+            name: jQuery git
+          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 2.2.4 --jquery 1.12.4
+            name: jQuery stable
     steps:
       - name: Checkout
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -135,4 +138,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- -b safari --jquery ${{ matrix.JQUERY }} --retries 3
+        run: |
+          npm run test:unit -- -b safari \
+            ${{ matrix.JQUERYS.versions }} \
+            --retries 3 --hard-retries 1
