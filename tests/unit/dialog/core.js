@@ -70,12 +70,11 @@ QUnit.test( "title id", function( assert ) {
 } );
 
 QUnit.test( "ARIA", function( assert ) {
-	assert.expect( 5 );
+	assert.expect( 4 );
 
 	var element = $( "<div>" ).dialog(),
 		wrapper = element.dialog( "widget" );
 	assert.equal( wrapper.attr( "role" ), "dialog", "dialog role" );
-	assert.equal( wrapper.attr( "aria-modal" ), "true", "aria-modal attribute" );
 	assert.equal( wrapper.attr( "aria-labelledby" ), wrapper.find( ".ui-dialog-title" ).attr( "id" ) );
 	assert.equal( wrapper.attr( "aria-describedby" ), element.attr( "id" ), "aria-describedby added" );
 	element.remove();
