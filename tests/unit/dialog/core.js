@@ -84,6 +84,26 @@ QUnit.test( "ARIA", function( assert ) {
 	element.remove();
 } );
 
+QUnit.test( "aria-modal", function( assert ) {
+	assert.expect( 3 );
+
+	var element = $( "<div>" ).dialog(),
+		wrapper = element.dialog( "option", "modal", true  );
+		assert.equal( wrapper.attr( "aria-modal" ), "true", "aria-modal attribute set to true" );
+	element.remove();
+
+	var element = $( "<div>" ).dialog(),
+		wrapper = element.dialog( "option", "modal", false );
+		assert.equal( wrapper.attr( "aria-modal" ), "false", "aria-modal attribute set to false" );
+	element.remove();
+
+	var element = $( "<div>" ).dialog();
+		assert.equal( element.dialog( "widget" ).attr( "aria-describedby" ), null, "no aria-modal attribute added" );
+	element.remove();
+
+} );
+
+
 QUnit.test( "widget method", function( assert ) {
 	assert.expect( 1 );
 	var dialog = $( "<div>" ).appendTo( "#qunit-fixture" ).dialog();
