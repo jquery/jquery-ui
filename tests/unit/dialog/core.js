@@ -87,17 +87,17 @@ QUnit.test( "ARIA", function( assert ) {
 QUnit.test( "aria-modal", function( assert ) {
 	assert.expect( 3 );
 
-	var element = $( "<div>" ).dialog( "option", "modal", true ),
+	var element = $( "<div>" ).dialog( "options", "modal", true ),
 		wrapper = element.dialog( "widget" );
 	assert.equal( wrapper.attr( "aria-modal" ), "true", "aria-modal attribute set to true" );
 	element.remove();
 
-	var element = $( "<div>" ).dialog( "option", "modal", false ),
+	var element = $( "<div>" ).dialog( "options", "modal", false ),
 		wrapper = element.dialog( "widget" );
 	assert.equal( wrapper.attr( "aria-modal" ), "false", "aria-modal attribute set to false" );
 	element.remove();
 
-	var element = $( "<div>" ).dialog( "option", "modal", null ),
+	var element = $( "<div>" ).dialog( "options", "modal", null ),
 		wrapper = element.dialog( "widget" );
 	assert.equal( wrapper.attr( "aria-modal" ), null, "no aria-modal attribute added" );
 	element.remove();
