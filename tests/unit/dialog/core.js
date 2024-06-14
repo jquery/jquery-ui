@@ -84,6 +84,39 @@ QUnit.test( "ARIA", function( assert ) {
 	element.remove();
 } );
 
+QUnit.test( "aria-modal", function( assert ) {
+	assert.expect( 9 );
+
+	var element, wrapper;
+
+	element = $( "<div>" ).dialog( { modal: true } );
+	wrapper = element.dialog( "widget" );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.dialog( "option", "modal", false );
+	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
+	element.dialog( "option", "modal", true );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.remove();
+
+	element = $( "<div>" ).dialog( { modal: false } );
+	wrapper = element.dialog( "widget" );
+	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
+	element.dialog( "option", "modal", true );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.dialog( "option", "modal", false );
+	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
+	element.remove();
+
+	element = $( "<div>" ).dialog();
+	wrapper = element.dialog( "widget" );
+	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option not set, aria-modal attribute not added" );
+	element.dialog( "option", "modal", true );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.dialog( "option", "modal", false );
+	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
+	element.remove();
+} );
+
 QUnit.test( "widget method", function( assert ) {
 	assert.expect( 1 );
 	var dialog = $( "<div>" ).appendTo( "#qunit-fixture" ).dialog();

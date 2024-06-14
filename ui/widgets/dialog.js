@@ -347,7 +347,8 @@ $.widget( "ui.dialog", {
 
 				// Setting tabIndex makes the div focusable
 				tabIndex: -1,
-				role: "dialog"
+				role: "dialog",
+				"aria-modal": this.options.modal ? "true" : null
 			} )
 			.appendTo( this._appendTo() );
 
@@ -761,6 +762,10 @@ $.widget( "ui.dialog", {
 
 		if ( key === "title" ) {
 			this._title( this.uiDialogTitlebar.find( ".ui-dialog-title" ) );
+		}
+
+		if ( key === "modal" ) {
+			uiDialog.attr( "aria-modal", value ? "true" : null );
 		}
 	},
 
