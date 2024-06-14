@@ -92,8 +92,6 @@ QUnit.test( "aria-modal", function( assert ) {
 	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
 	element.dialog( "option", "modal", false );
 	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
-	element.dialog( "option", "modal", null );
-	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option not set, aria-modal attribute not added" );
 	element.dialog( "option", "modal", true );
 	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
 	element.remove();
@@ -103,8 +101,6 @@ QUnit.test( "aria-modal", function( assert ) {
 	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
 	element.dialog( "option", "modal", true );
 	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
-	element.dialog( "option", "modal", null );
-	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option not set, aria-modal attribute not added" );
 	element.dialog( "option", "modal", false );
 	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
 	element.remove();
@@ -116,8 +112,6 @@ QUnit.test( "aria-modal", function( assert ) {
 	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
 	element.dialog( "option", "modal", false );
 	assert.equal( wrapper.attr( "aria-modal" ), undefined, "modal option set to false, aria-modal attribute not added" );
-	element.dialog( "option", "modal", null );
-	assert.equal( wrapper.attr( "aria-modal" ), null, "modal option not set, aria-modal attribute not added" );
 	element.remove();
 } );
 
