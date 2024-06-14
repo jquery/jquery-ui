@@ -763,6 +763,10 @@ $.widget( "ui.dialog", {
 		if ( key === "title" ) {
 			this._title( this.uiDialogTitlebar.find( ".ui-dialog-title" ) );
 		}
+
+		if ( key === "modal" ) {
+			uiDialog.attr( "aria-modal", value ? "true" : null );
+		}
 	},
 
 	_size: function() {
