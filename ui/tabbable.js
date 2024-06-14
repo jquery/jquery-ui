@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Tabbable @VERSION
+ * jQuery UI Tabbable 1.14.0-beta.2
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
