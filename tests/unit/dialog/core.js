@@ -85,24 +85,41 @@ QUnit.test( "ARIA", function( assert ) {
 } );
 
 QUnit.test( "aria-modal", function( assert ) {
-	assert.expect( 3 );
+	assert.expect( 12 );
 
-	var element = $( "<div>" ).dialog( "options", "modal", true ),
+	var element = $( "<div>" ).dialog( { modal: true } ),
 		wrapper = element.dialog( "widget" );
-	assert.equal( wrapper.attr( "aria-modal" ), "true", "aria-modal attribute set to true" );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.dialog( "option", "modal", false );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option set to false, aria-modal attribute not added" );
+	element.dialog( "option", "modal", null );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option not set, aria-modal attribute not added" );
+	element.dialog( "option", "modal", true );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
 	element.remove();
 
-	var element = $( "<div>" ).dialog( "options", "modal", false ),
+	var element = $( "<div>" ).dialog( { modal: false } ),
 		wrapper = element.dialog( "widget" );
-	assert.equal( wrapper.attr( "aria-modal" ), "false", "aria-modal attribute set to false" );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option set to false, aria-modal attribute not added" );
+	element.dialog( "option", "modal", true );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.dialog( "option", "modal", null );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option not set, aria-modal attribute not added" );
+	element.dialog( "option", "modal", false );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option set to false, aria-modal attribute not added" );
 	element.remove();
 
-	var element = $( "<div>" ).dialog( "options", "modal", null ),
+	var element = $( "<div>" ).dialog(),
 		wrapper = element.dialog( "widget" );
-	assert.equal( wrapper.attr( "aria-modal" ), null, "no aria-modal attribute added" );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option not set, aria-modal attribute not added" );
+	element.dialog( "option", "modal", true );
+	assert.equal( wrapper.attr( "aria-modal" ), "true", "modal option set to true, aria-modal attribute added" );
+	element.dialog( "option", "modal", false );
+	assert.ok( !wrapper.attr( "aria-modal" ), "modal option set to false, aria-modal attribute not added" );
+	element.dialog( "option", "modal", null );
+	assert.equal( wrapper.attr( "aria-modal" ), null, "modal option not set, aria-modal attribute not added" );
 	element.remove();
 } );
-
 
 QUnit.test( "widget method", function( assert ) {
 	assert.expect( 1 );
