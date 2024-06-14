@@ -87,7 +87,7 @@ QUnit.test( "ARIA", function( assert ) {
 QUnit.test( "aria-modal", function( assert ) {
 	assert.expect( 9 );
 
-var element, wrapper;
+	var element, wrapper;
 
 	element = $( "<div>" ).dialog( { modal: true } );
 	wrapper = element.dialog( "widget" );
