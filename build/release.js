@@ -59,8 +59,8 @@ function addManifest( packager ) {
 function buildCDNPackage( callback ) {
 	console.log( "Building CDN package" );
 	var JqueryUi = require( "download.jqueryui.com/lib/jquery-ui" );
-	var PackageWithoutThemes = require( "download.jqueryui.com/lib/package-1-13" );
-	var PackageOfThemes = require( "download.jqueryui.com/lib/package-1-13-themes" );
+	var PackageWithoutThemes = require( "download.jqueryui.com/lib/package" );
+	var PackageOfThemes = require( "download.jqueryui.com/lib/package-themes" );
 	var Packager = require( "node-packager" );
 
 	// PackageOfThemes doesn't contain JS files, PackageWithoutThemes doesn't contain themes;
