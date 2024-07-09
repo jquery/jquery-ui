@@ -423,6 +423,7 @@ $.extend( Datepicker.prototype, {
 
 		nodeName = target.nodeName.toLowerCase();
 		$.removeData( target, "datepicker" );
+		$.datepicker._hideDatepicker();
 		if ( nodeName === "input" ) {
 			inst.append.remove();
 			inst.trigger.remove();
