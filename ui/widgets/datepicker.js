@@ -423,7 +423,6 @@ $.extend( Datepicker.prototype, {
 
 		nodeName = target.nodeName.toLowerCase();
 		$.removeData( target, "datepicker" );
-		$.datepicker._hideDatepicker();
 		if ( nodeName === "input" ) {
 			inst.append.remove();
 			inst.trigger.remove();
@@ -436,9 +435,11 @@ $.extend( Datepicker.prototype, {
 			$target.removeClass( this.markerClassName ).empty();
 		}
 
+		inst.dpDiv.remove();
 		if ( datepicker_instActive === inst ) {
 			datepicker_instActive = null;
 			this._curInst = null;
+			this.dpDiv = null;
 		}
 	},
 
