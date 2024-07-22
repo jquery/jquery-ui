@@ -434,12 +434,10 @@ $.extend( Datepicker.prototype, {
 		} else if ( nodeName === "div" || nodeName === "span" ) {
 			$target.removeClass( this.markerClassName ).empty();
 		}
-
-		inst.dpDiv.remove();
+		$.datepicker._hideDatepicker();
 		if ( datepicker_instActive === inst ) {
 			datepicker_instActive = null;
 			this._curInst = null;
-			this.dpDiv = null;
 		}
 	},
 
