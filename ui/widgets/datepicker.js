@@ -434,6 +434,7 @@ $.extend( Datepicker.prototype, {
 		} else if ( nodeName === "div" || nodeName === "span" ) {
 			$target.removeClass( this.markerClassName ).empty();
 		}
+
 		$.datepicker._hideDatepicker();
 		if ( datepicker_instActive === inst ) {
 			datepicker_instActive = null;
