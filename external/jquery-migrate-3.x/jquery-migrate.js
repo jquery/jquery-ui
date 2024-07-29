@@ -1,5 +1,5 @@
 /*!
- * jQuery Migrate - v3.4.1 - 2023-02-23T15:31Z
+ * jQuery Migrate - v3.5.2 - 2024-07-17T22:31Z
  * Copyright OpenJS Foundation and other contributors
  */
 ( function( factory ) {
@@ -24,7 +24,7 @@
 } )( function( jQuery, window ) {
 "use strict";
 
-jQuery.migrateVersion = "3.4.1";
+jQuery.migrateVersion = "3.5.2";
 
 // Returns 0 if v1 == v2, -1 if v1 < v2, 1 if v1 > v2
 function compareVersions( v1, v2 ) {
@@ -84,26 +84,26 @@ jQuery.migrateIsPatchEnabled = function( patchCode ) {
 
 ( function() {
 
-	// Support: IE9 only
-	// IE9 only creates console object when dev tools are first opened
-	// IE9 console is a host object, callable but doesn't have .apply()
-	if ( !window.console || !window.console.log ) {
-		return;
-	}
+// Support: IE9 only
+// IE9 only creates console object when dev tools are first opened
+// IE9 console is a host object, callable but doesn't have .apply()
+if ( !window.console || !window.console.log ) {
+	return;
+}
 
-	// Need jQuery 3.x-4.x and no older Migrate loaded
-	if ( !jQuery || !jQueryVersionSince( "3.0.0" ) ||
-			jQueryVersionSince( "5.0.0" ) ) {
-		window.console.log( "JQMIGRATE: jQuery 3.x-4.x REQUIRED" );
-	}
-	if ( jQuery.migrateWarnings ) {
-		window.console.log( "JQMIGRATE: Migrate plugin loaded multiple times" );
-	}
+// Need jQuery 3.x-4.x and no older Migrate loaded
+if ( !jQuery || !jQueryVersionSince( "3.0.0" ) ||
+		jQueryVersionSince( "5.0.0" ) ) {
+	window.console.log( "JQMIGRATE: jQuery 3.x-4.x REQUIRED" );
+}
+if ( jQuery.migrateWarnings ) {
+	window.console.log( "JQMIGRATE: Migrate plugin loaded multiple times" );
+}
 
-	// Show a message on the console so devs know we're active
-	window.console.log( "JQMIGRATE: Migrate is installed" +
-		( jQuery.migrateMute ? "" : " with logging active" ) +
-		", version " + jQuery.migrateVersion );
+// Show a message on the console so devs know we're active
+window.console.log( "JQMIGRATE: Migrate is installed" +
+	( jQuery.migrateMute ? "" : " with logging active" ) +
+	", version " + jQuery.migrateVersion );
 
 } )();
 
@@ -320,7 +320,8 @@ if ( jQueryVersionSince( "3.2.0" ) ) {
 
 if ( jQueryVersionSince( "3.3.0" ) ) {
 
-	migratePatchAndWarnFunc( jQuery, "isNumeric", function( obj ) {
+	migratePatchAndWarnFunc( jQuery, "isNumeric",
+		function( obj ) {
 
 			// As of jQuery 3.0, isNumeric is limited to
 			// strings and numbers (primitives or objects)
@@ -417,6 +418,7 @@ if ( !jQueryVersionSince( "4.0.0" ) ) {
 
 var oldRemoveAttr = jQuery.fn.removeAttr,
 	oldToggleClass = jQuery.fn.toggleClass,
+	rbooleans = /^(?:checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped)$/i,
 	rmatchNonSpace = /\S+/g;
 
 migratePatchFunc( jQuery.fn, "removeAttr", function( name ) {
@@ -424,7 +426,7 @@ migratePatchFunc( jQuery.fn, "removeAttr", function( name ) {
 		patchNeeded = false;
 
 	jQuery.each( name.match( rmatchNonSpace ), function( _i, attr ) {
-		if ( jQuery.expr.match.bool.test( attr ) ) {
+		if ( rbooleans.test( attr ) ) {
 
 			// Only warn if at least a single node had the property set to
 			// something else than `false`. Otherwise, this Migrate patch
@@ -472,8 +474,8 @@ migratePatchFunc( jQuery.fn, "toggleClass", function( state ) {
 		if ( this.setAttribute ) {
 			this.setAttribute( "class",
 				className || state === false ?
-				"" :
-				jQuery.data( this, "__className__" ) || ""
+					"" :
+					jQuery.data( this, "__className__" ) || ""
 			);
 		}
 	} );
@@ -564,7 +566,7 @@ if ( jQueryVersionSince( "3.4.0" ) && typeof Proxy !== "undefined" ) {
 }
 
 // In jQuery >=4 where jQuery.cssNumber is missing fill it with the latest 3.x version:
-// https://github.com/jquery/jquery/blob/3.6.0/src/css.js#L212-L233
+// https://github.com/jquery/jquery/blob/3.7.1/src/css.js#L216-L246
 // This way, number values for the CSS properties below won't start triggering
 // Migrate warnings when jQuery gets updated to >=4.0.0 (gh-438).
 if ( jQueryVersionSince( "4.0.0" ) ) {
@@ -573,8 +575,9 @@ if ( jQueryVersionSince( "4.0.0" ) ) {
 	// in a `jQuery.fn.css` patch and this usage shouldn't warn.
 	internalCssNumber = {
 		animationIterationCount: true,
+		aspectRatio: true,
+		borderImageSlice: true,
 		columnCount: true,
-		fillOpacity: true,
 		flexGrow: true,
 		flexShrink: true,
 		fontWeight: true,
@@ -589,9 +592,17 @@ if ( jQueryVersionSince( "4.0.0" ) ) {
 		opacity: true,
 		order: true,
 		orphans: true,
+		scale: true,
 		widows: true,
 		zIndex: true,
-		zoom: true
+		zoom: true,
+
+		// SVG-related
+		fillOpacity: true,
+		floodOpacity: true,
+		stopOpacity: true,
+		strokeMiterlimit: true,
+		strokeOpacity: true
 	};
 
 	if ( typeof Proxy !== "undefined" ) {
@@ -837,16 +848,16 @@ jQuery.each( [ "load", "unload", "error" ], function( _, name ) {
 jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
 	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
 	"change select submit keydown keypress keyup contextmenu" ).split( " " ),
-	function( _i, name ) {
+function( _i, name ) {
 
 	// Handle event binding
 	migratePatchAndWarnFunc( jQuery.fn, name, function( data, fn ) {
 		return arguments.length > 0 ?
 			this.on( name, null, data, fn ) :
 			this.trigger( name );
-		},
-		"shorthand-deprecated-v3",
-		"jQuery.fn." + name + "() event shorthand is deprecated" );
+	},
+	"shorthand-deprecated-v3",
+	"jQuery.fn." + name + "() event shorthand is deprecated" );
 } );
 
 // Trigger "ready" event only once, on document ready
@@ -898,9 +909,11 @@ var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\
  * Deprecated, please use `jQuery.migrateDisablePatches( "self-closed-tags" )` instead.
  * @deprecated
  */
-jQuery.UNSAFE_restoreLegacyHtmlPrefilter = function() {
+migratePatchAndWarnFunc( jQuery, "UNSAFE_restoreLegacyHtmlPrefilter", function() {
 	jQuery.migrateEnablePatches( "self-closed-tags" );
-};
+}, "legacy-self-closed-tags",
+"jQuery.UNSAFE_restoreLegacyHtmlPrefilter deprecated; use " +
+	"`jQuery.migrateEnablePatches( \"self-closed-tags\" )`" );
 
 migratePatchFunc( jQuery, "htmlPrefilter", function( html ) {
 	warnIfChanged( html );
