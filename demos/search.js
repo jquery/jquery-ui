@@ -1,5 +1,18 @@
-require( [ "jquery", ], function( $ ) {
+( function( factory ) {
 	"use strict";
+
+	if ( typeof define === "function" && define.amd ) {
+
+		// Fetch jQuery as an AMD dependency
+		require( [ "jquery" ], factory );
+	} else {
+
+		// Use the jQuery browser global
+		factory( jQuery );
+	}
+} )( function( $ ) {
+	"use strict";
+
 	var database = {
 		"Great Bittern" : "Botaurus stellaris",
 		"Little Grebe" : "Tachybaptus ruficollis",
