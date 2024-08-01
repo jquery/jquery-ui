@@ -117,6 +117,16 @@ QUnit.test( "aria-modal", function( assert ) {
 	element.remove();
 } );
 
+QUnit.test( "ui dialog title tagname", function( assert ) {
+	assert.expect( 1 );
+
+	var element, wrapper;
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: "h2" } );
+	wrapper = document.querySelector( ".ui-dialog-title" );
+	assert.equal( wrapper.tagName(), "h2", "The dialog title element is h2" );
+} );
+
 QUnit.test( "widget method", function( assert ) {
 	assert.expect( 1 );
 	var dialog = $( "<div>" ).appendTo( "#qunit-fixture" ).dialog();
