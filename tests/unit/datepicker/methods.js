@@ -23,7 +23,7 @@ QUnit.test( "destroy", function( assert ) {
 	assert.ok( $.datepicker._curInst == null, "Datepicker - destroyed and cleared reference" );
 	assert.equal( dp.css( "display" ), "none", "Datepicker - absent" );
 
-	// Destroy Without Hiding
+	// Destroy without manual hiding (ensure datepicker is hidden after calling destroy)
 	inp = testHelper.init( "#inp" );
 	inp.datepicker( "show" );
 	assert.equal( dp.css( "display" ), "block", "Datepicker - visible" );
