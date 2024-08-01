@@ -439,8 +439,7 @@ $.widget( "ui.dialog", {
 		} );
 
 		uiDialogTitle = $( "<" + this.options.uiDialogTitleTagName + ">" )
-		.uniqueId()
-		.prependTo( this.uiDialogTitlebar );
+			.uniqueId().prependTo( this.uiDialogTitlebar );
 		this._addClass( uiDialogTitle, "ui-dialog-title" );
 		this._title( uiDialogTitle );
 
