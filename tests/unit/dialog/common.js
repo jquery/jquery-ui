@@ -33,6 +33,7 @@ common.testWidget( "dialog", {
 		resizable: true,
 		show: null,
 		title: null,
+		uiDialogTitleTagName: "<span>",
 		width: 300,
 
 		// Callbacks
