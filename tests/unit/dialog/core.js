@@ -124,7 +124,7 @@ QUnit.test( "ui dialog title tagname", function( assert ) {
 
 	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: "<h2>" } );
 	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
-	assert.equal ( nodeName, "h2", "The dialog title element is h2" );
+	assert.equal( nodeName, "h2", "The dialog title element is h2" );
 } );
 
 QUnit.test( "widget method", function( assert ) {
