@@ -120,11 +120,11 @@ QUnit.test( "aria-modal", function( assert ) {
 QUnit.test( "ui dialog title tagname", function( assert ) {
 	assert.expect( 1 );
 
-	var element, wrapper;
+	var element, nodeName;
 
 	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: "<h2>" } );
-	wrapper = document.querySelector( ".ui-dialog-title" );
-	assert.equal( wrapper.tagName, "h2", "The dialog title element is h2" );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get(0).nodeName.toLowerCase()
+	assert.equal (nodeName, "h2", "The dialog title element is h2" );
 } );
 
 QUnit.test( "widget method", function( assert ) {
