@@ -81,7 +81,7 @@ $.widget( "ui.dialog", {
 		resizable: true,
 		show: null,
 		title: null,
-		uiDialogTitleTagName: "<span>",
+		uiDialogTitleHeadingLevel: 0,
 		width: 300,
 
 		// Callbacks
@@ -438,8 +438,12 @@ $.widget( "ui.dialog", {
 			}
 		} );
 
-		uiDialogTitle = $( this.options.uiDialogTitleTagName )
-			.uniqueId().prependTo( this.uiDialogTitlebar );
+		var uiDialogHeadingLevel = Number.isInteger( this.options.uiDialogTitleHeadingLevel )
+			&& this.options.uiDialogTitleHeadingLevel > 0
+			&& this.options.uiDialogTitleHeadingLevel <= 6
+			? "h" + this.options.uiDialogTitleHeadingLevel : "span";
+
+		uiDialogTitle = $( "<" + uiDialogHeadingLevel + ">" ).uniqueId().prependTo( this.uiDialogTitlebar );
 		this._addClass( uiDialogTitle, "ui-dialog-title" );
 		this._title( uiDialogTitle );
 
