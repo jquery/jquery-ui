@@ -118,7 +118,7 @@ QUnit.test( "aria-modal", function( assert ) {
 } );
 
 QUnit.test( "ui dialog title heading level", function( assert ) {
-	assert.expect( 7 );
+	assert.expect( 8 );
 
 	var element, nodeName;
 
@@ -147,6 +147,10 @@ QUnit.test( "ui dialog title heading level", function( assert ) {
 	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
 
 	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: 2.3 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: "foo" } );
 	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
 	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
 } );
