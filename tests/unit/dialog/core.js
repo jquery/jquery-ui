@@ -117,14 +117,38 @@ QUnit.test( "aria-modal", function( assert ) {
 	element.remove();
 } );
 
-QUnit.test( "ui dialog title tagname", function( assert ) {
-	assert.expect( 1 );
+QUnit.test( "ui dialog title heading level", function( assert ) {
+	assert.expect( 7 );
 
 	var element, nodeName;
 
-	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: "<h2>" } );
+	element = $( "<div>" ).dialog( { modal: true } );
 	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
-	assert.equal( nodeName, "h2", "The dialog title element is h2" );
+	assert.equal( nodeName, "span", "The dialog title element is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: 0 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "The dialog title element is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: 1 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "h1", "The dialog title element is h1" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: 6 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "h6", "The dialog title element is h6" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: 9 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "The dialog title element is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: -9 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "The dialog title element is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleTagName: 2.3 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "The dialog title element is span" );
 } );
 
 QUnit.test( "widget method", function( assert ) {
