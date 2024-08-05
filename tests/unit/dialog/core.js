@@ -117,6 +117,44 @@ QUnit.test( "aria-modal", function( assert ) {
 	element.remove();
 } );
 
+QUnit.test( "ui dialog title heading level", function( assert ) {
+	assert.expect( 8 );
+
+	var element, nodeName;
+
+	element = $( "<div>" ).dialog( { modal: true } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: 0 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: 1 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "h1", "Element wrapping the dialog title is h1" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: 6 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "h6", "Element wrapping the dialog title is h6" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: 9 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: -9 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: 2.3 } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+
+	element = $( "<div>" ).dialog( { modal: true, uiDialogTitleHeadingLevel: "foo" } );
+	nodeName = element.dialog( "widget" ).find( ".ui-dialog-title" ).get( 0 ).nodeName.toLowerCase();
+	assert.equal( nodeName, "span", "Element wrapping the dialog title is span" );
+} );
+
 QUnit.test( "widget method", function( assert ) {
 	assert.expect( 1 );
 	var dialog = $( "<div>" ).appendTo( "#qunit-fixture" ).dialog();

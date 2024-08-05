@@ -34,6 +34,7 @@ common.testWidget( "dialog", {
 		resizable: true,
 		show: null,
 		title: null,
+		uiDialogTitleHeadingLevel: 0,
 		width: 300,
 
 		// Callbacks
