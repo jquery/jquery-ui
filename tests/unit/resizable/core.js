@@ -244,4 +244,57 @@ QUnit.test( "nested resizable", function( assert ) {
 	outer.remove();
 } );
 
+QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( assert ) {
+	assert.expect( 2 );
+
+	var elementContent = $( "<div>" )
+			.css( {
+				width: 50,
+				height: 200,
+				padding: 10,
+				border: 5,
+				borderStyle: "solid"
+			} )
+			.appendTo( "#resizable1" ),
+	element = $( "#resizable1" ).css( { overflow: "auto" } ).resizable(),
+	handle = ".ui-resizable-se";
+
+	$( "*" ).css( "box-sizing", "border-box" );
+
+	testHelper.drag( handle, 10, 10 );
+	assert.equal( element.width(), 110, "element width" );
+	assert.equal( element.height(), 110, "element height" );
+
+	elementContent.remove();
+} );
+
+QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( assert ) {
+	assert.expect( 2 );
+
+	var elementContent = $( "<div>" )
+			.css( {
+				width: 50,
+				height: 200,
+				padding: 10,
+				border: 5,
+				borderStyle: "solid"
+			} )
+			.appendTo( "#resizable1" ),
+	element = $( "#resizable1" ).css( { overflow: "auto" } ).resizable(),
+	handle = ".ui-resizable-se";
+
+	$( "*" ).css( "box-sizing", "content-box" );
+
+	// In some browsers scrollbar may change element size (when "box-sizing: content-box")
+	var widthBefore = element.innerWidth();
+	var heightBefore = element.innerHeight();
+
+	testHelper.drag( handle, 10, 10 );
+
+	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 10, "element width" );
+	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 10, "element height" );
+
+	elementContent.remove();
+} );
+
 } );

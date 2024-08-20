@@ -384,18 +384,12 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		this.size = this._helper ? {
 				width: this.helper.width(),
 				height: this.helper.height()
-			} : {
-				width: el.width(),
-				height: el.height()
-			};
+			} : this._calculateAdjustedElementDimensions( el );
 
 		this.originalSize = this._helper ? {
 				width: el.outerWidth(),
 				height: el.outerHeight()
-			} : {
-				width: el.width(),
-				height: el.height()
-			};
+			} : this._calculateAdjustedElementDimensions( el );
 
 		this.sizeDiff = {
 			width: el.outerWidth() - el.width(),
@@ -687,6 +681,21 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		return {
 			height: widths[ 0 ] + widths[ 2 ],
 			width: widths[ 1 ] + widths[ 3 ]
+		};
+	},
+
+	_calculateAdjustedElementDimensions: function( element ) {
+		if ( !( /content-box/ ).test( element.css( "box-sizing" ) ) ) {
+			return {
+				height: parseFloat( element.css( "height" ) ),
+				width: parseFloat( element.css( "width" ) )
+			};
+		}
+
+		var outerDimensions = this._getPaddingPlusBorderDimensions( element );
+		return {
+			height: element[ 0 ].getBoundingClientRect().height - outerDimensions.height,
+			width: element[ 0 ].getBoundingClientRect().width - outerDimensions.width
 		};
 	},
 
@@ -1045,8 +1054,11 @@ $.ui.plugin.add( "resizable", "alsoResize", {
 
 		$( o.alsoResize ).each( function() {
 			var el = $( this );
+
+			var elSize = that._calculateAdjustedElementDimensions( el );
+
 			el.data( "ui-resizable-alsoresize", {
-				width: parseFloat( el.css( "width" ) ), height: parseFloat( el.css( "height" ) ),
+				width: elSize.width, height: elSize.height,
 				left: parseFloat( el.css( "left" ) ), top: parseFloat( el.css( "top" ) )
 			} );
 		} );

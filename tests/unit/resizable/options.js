@@ -565,4 +565,62 @@ QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
 	assert.equal( parseFloat( other.css( "height" ) ), 130, "alsoResize height" );
 } );
 
+QUnit.test( "alsoResize with scrollbars and box-sizing: border-box", function( assert ) {
+	assert.expect( 4 );
+
+	var other = $( "<div>" )
+			.css( {
+				width: 150,
+				height: 150,
+				padding: 10,
+				border: 5,
+				borderStyle: "solid",
+				overflow: "scroll"
+			} )
+			.appendTo( "body" ),
+		element = $( "#resizable1" ).resizable( {
+			alsoResize: other
+		} ),
+		handle = ".ui-resizable-se";
+
+
+	$( "*" ).css( "box-sizing", "border-box" );
+	testHelper.drag( handle, 80, 80 );
+
+	assert.equal( element.width(), 180, "resizable width" );
+	assert.equal( parseFloat( other.css( "width" ) ), 230, "alsoResize width" );
+	assert.equal( element.height(), 180, "resizable height" );
+	assert.equal( parseFloat( other.css( "height" ) ), 230, "alsoResize height" );
+} );
+
+QUnit.test( "alsoResize with scrollbars and box-sizing: content-box", function( assert ) {
+	assert.expect( 4 );
+
+	var other = $( "<div>" )
+			.css( {
+				width: 150,
+				height: 150,
+				overflow: "scroll"
+			} )
+			.appendTo( "body" ),
+		element = $( "#resizable1" ).resizable( {
+			alsoResize: other
+		} ),
+		handle = ".ui-resizable-se";
+
+	$( "*" ).css( "box-sizing", "content-box" );
+
+	// In some browsers scrollbar may change element size.
+	var widthBefore = other.innerWidth();
+	var heightBefore = other.innerHeight();
+
+	testHelper.drag( handle, 80, 80 );
+
+	assert.equal( element.width(), 180, "resizable width" );
+	assert.equal( parseFloat( other.innerWidth() ), widthBefore + 80, "alsoResize width" );
+	assert.equal( element.height(), 180, "resizable height" );
+	assert.equal( parseFloat( other.innerHeight() ), heightBefore + 80, "alsoResize height" );
+} );
+
+
 } );
