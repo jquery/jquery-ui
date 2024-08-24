@@ -568,49 +568,56 @@ QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
 QUnit.test( "alsoResize with scrollbars and box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
 
+	var style = $( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "head" );
+
 	var other = $( "<div>" )
 			.css( {
-				width: 150,
-				height: 150,
-				padding: 10,
-				border: 5,
+				width: "150px",
+				height: "150px",
+				padding: "10px",
+				border: "5px",
 				borderStyle: "solid",
+				margin: "25px",
 				overflow: "scroll"
 			} )
-			.appendTo( "body" ),
+			.appendTo( "#qunit-fixture" ),
 		element = $( "#resizable1" ).resizable( {
 			alsoResize: other
 		} ),
 		handle = ".ui-resizable-se";
 
-
-	$( "*" ).css( "box-sizing", "border-box" );
 	testHelper.drag( handle, 80, 80 );
 
 	assert.equal( element.width(), 180, "resizable width" );
 	assert.equal( parseFloat( other.css( "width" ) ), 230, "alsoResize width" );
 	assert.equal( element.height(), 180, "resizable height" );
 	assert.equal( parseFloat( other.css( "height" ) ), 230, "alsoResize height" );
+
+	style.remove();
 } );
 
 QUnit.test( "alsoResize with scrollbars and box-sizing: content-box", function( assert ) {
 	assert.expect( 4 );
 
+	var style = $( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "head" );
+
 	var other = $( "<div>" )
 			.css( {
-				width: 150,
-				height: 150,
+				width: "150px",
+				height: "150px",
+				padding: "10px",
+				border: "5px",
+				borderStyle: "solid",
+				margin: "20px",
 				overflow: "scroll"
 			} )
-			.appendTo( "body" ),
+			.appendTo( "#qunit-fixture" ),
 		element = $( "#resizable1" ).resizable( {
 			alsoResize: other
 		} ),
 		handle = ".ui-resizable-se";
 
-	$( "*" ).css( "box-sizing", "content-box" );
-
-	// In some browsers scrollbar may change element size.
+	// In some browsers scrollbar may change element computed size.
 	var widthBefore = other.innerWidth();
 	var heightBefore = other.innerHeight();
 
@@ -620,6 +627,8 @@ QUnit.test( "alsoResize with scrollbars and box-sizing: content-box", function( 
 	assert.equal( parseFloat( other.innerWidth() ), widthBefore + 80, "alsoResize width" );
 	assert.equal( element.height(), 180, "resizable height" );
 	assert.equal( parseFloat( other.innerHeight() ), heightBefore + 80, "alsoResize height" );
+
+	style.remove();
 } );
 
 
