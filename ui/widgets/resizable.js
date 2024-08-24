@@ -80,8 +80,12 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_hasScroll: function( el, a ) {
 
-		if ( $( el ).css( "overflow" ) === "hidden" ) {
+		var overflow = $( el ).css( "overflow" );
+		if ( overflow === "hidden" ) {
 			return false;
+		}
+		if ( overflow === "scroll" ) {
+			return true;
 		}
 
 		var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
@@ -381,15 +385,26 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		this.offset = this.helper.offset();
 		this.position = { left: curleft, top: curtop };
 
+		var calculatedSize = undefined;
+		if ( !this._helper ) {
+			calculatedSize = this._calculateAdjustedElementDimensions( el );
+		}
+
 		this.size = this._helper ? {
 				width: this.helper.width(),
 				height: this.helper.height()
-			} : this._calculateAdjustedElementDimensions( el );
+			} : {
+				width: calculatedSize.width,
+				height: calculatedSize.height
+			};
 
 		this.originalSize = this._helper ? {
 				width: el.outerWidth(),
 				height: el.outerHeight()
-			} : this._calculateAdjustedElementDimensions( el );
+			} : {
+				width: calculatedSize.width,
+				height: calculatedSize.height
+			};
 
 		this.sizeDiff = {
 			width: el.outerWidth() - el.width(),
@@ -685,18 +700,42 @@ $.widget( "ui.resizable", $.ui.mouse, {
 	},
 
 	_calculateAdjustedElementDimensions: function( element ) {
-		if ( !( /content-box/ ).test( element.css( "box-sizing" ) ) ) {
-			return {
-				height: parseFloat( element.css( "height" ) ),
-				width: parseFloat( element.css( "width" ) )
-			};
+		var ce = element.get( 0 );
+
+		if ( element.css( "box-sizing" ) !== "content-box" ||
+			( !this._hasScroll( ce ) && !this._hasScroll( ce, "left" ) ) ) {
+				return {
+					height: parseFloat( element.css( "height" ) ),
+					width: parseFloat( element.css( "width" ) )
+				};
 		}
 
-		var outerDimensions = this._getPaddingPlusBorderDimensions( element );
+		// Check if CSS inline styles are set and use those (usually from previous resizes)
+		var elWidth = ce.style.width === "" ? "" : parseFloat( ce.style.width );
+		var elHeight = ce.style.height === "" ? "" : parseFloat( ce.style.height );
+
+		if ( elWidth === "" ) {
+			elWidth = this._getElementSizeWithoutOverflow( element, "width" );
+		}
+		if ( elHeight === "" ) {
+			elHeight = this._getElementSizeWithoutOverflow( element, "height" );
+		}
+
 		return {
-			height: element[ 0 ].getBoundingClientRect().height - outerDimensions.height,
-			width: element[ 0 ].getBoundingClientRect().width - outerDimensions.width
+			height: elHeight,
+			width: elWidth
 		};
+	},
+
+	_getElementSizeWithoutOverflow: function( element, sizeProperty ) {
+		var overflowProperty = sizeProperty === "width" ? "overflow-y" : "overflow-x";
+
+		var origOverflow = element.css( overflowProperty );
+		element.css( overflowProperty, "hidden" );
+		var elSize = parseFloat( element.css( sizeProperty ) );
+		element.css( overflowProperty, origOverflow );
+
+		return elSize;
 	},
 
 	_proportionallyResize: function() {
