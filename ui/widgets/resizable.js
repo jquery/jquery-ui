@@ -711,15 +711,16 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		}
 
 		// Check if CSS inline styles are set and use those (usually from previous resizes)
-		var elWidth = ce.style.width === "" ? "" : parseFloat( ce.style.width );
-		var elHeight = ce.style.height === "" ? "" : parseFloat( ce.style.height );
+		var elWidth = parseFloat( ce.style.width );
+		var elHeight = parseFloat( ce.style.height );
 
-		if ( elWidth === "" ) {
-			elWidth = this._getElementSizeWithoutOverflow( element, "width" );
-		}
-		if ( elHeight === "" ) {
-			elHeight = this._getElementSizeWithoutOverflow( element, "height" );
-		}
+		var paddingBorder = this._getPaddingPlusBorderDimensions( element );
+		elWidth = isNaN( elWidth ) ?
+			this._getElementTheoreticalSize( element, paddingBorder, "width" ) :
+			elWidth;
+		elHeight = isNaN( elHeight ) ?
+			this._getElementTheoreticalSize( element, paddingBorder, "height" ) :
+			elHeight;
 
 		return {
 			height: elHeight,
@@ -727,15 +728,19 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		};
 	},
 
-	_getElementSizeWithoutOverflow: function( element, sizeProperty ) {
-		var overflowProperty = sizeProperty === "width" ? "overflow-y" : "overflow-x";
+	_getElementTheoreticalSize: function( element, extraSize, dimension ) {
 
-		var origOverflow = element.css( overflowProperty );
-		element.css( overflowProperty, "hidden" );
-		var elSize = parseFloat( element.css( sizeProperty ) );
-		element.css( overflowProperty, origOverflow );
+		// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border
+		var size = Math.max( 0, Math.ceil(
+			element.get( 0 )[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+			extraSize[ dimension ] -
+			0.5
 
-		return elSize;
+		// If offsetWidth/offsetHeight is unknown, then we can't determine theoretical size.
+		// Use an explicit zero to avoid NaN (gh-3964)
+		) ) || 0;
+
+		return size;
 	},
 
 	_proportionallyResize: function() {
