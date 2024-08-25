@@ -247,7 +247,7 @@ QUnit.test( "nested resizable", function( assert ) {
 QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
 
-	var style = $( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "head" );
+	$( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "#qunit-fixture" );
 
 	//Both scrollbars
 	var elementContent = $( "<div>" )
@@ -272,14 +272,12 @@ QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( as
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( element.width(), 120, "element width (only vertical scrollbar)" );
 	assert.equal( element.height(), 120, "element height (only vertical scrollbar)" );
-
-	style.remove();
 } );
 
 QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( assert ) {
 	assert.expect( 4 );
 
-	var style = $( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "head" );
+	$( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "#qunit-fixture" );
 
 	//Both scrollbars
 	var elementContent = $( "<div>" )
@@ -309,14 +307,12 @@ QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( a
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 20, "element width (only vertical scrollbar)" );
 	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 20, "element height (only vertical scrollbar)" );
-
-	style.remove();
 } );
 
 QUnit.test( "Resizable with scrollbars, a transform and box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
 
-	var style = $( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "head" );
+	$( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "#qunit-fixture" );
 
 	//Both scrollbars
 	var elementContent = $( "<div>" )
@@ -341,14 +337,12 @@ QUnit.test( "Resizable with scrollbars, a transform and box-sizing: border-box",
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( element.width(), 120, "element width (only vertical scrollbar)" );
 	assert.equal( element.height(), 120, "element height (only vertical scrollbar)" );
-
-	style.remove();
 } );
 
 QUnit.test( "Resizable with scrollbars, a transform and box-sizing: content-box", function( assert ) {
 	assert.expect( 4 );
 
-	var style = $( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "head" );
+	$( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "#qunit-fixture" );
 
 	//Both scrollbars
 	var elementContent = $( "<div>" )
@@ -378,8 +372,6 @@ QUnit.test( "Resizable with scrollbars, a transform and box-sizing: content-box"
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 20, "element width (only vertical scrollbar)" );
 	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 20, "element height (only vertical scrollbar)" );
-
-	style.remove();
 } );
 
 } );
