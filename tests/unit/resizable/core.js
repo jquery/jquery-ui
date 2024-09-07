@@ -249,7 +249,7 @@ QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( as
 
 	$( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "#qunit-fixture" );
 
-	//Both scrollbars
+	// Both scrollbars
 	var elementContent = $( "<div>" )
 			.css( {
 				width: "200px",
@@ -260,14 +260,14 @@ QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( as
 				margin: "20px"
 			} )
 			.appendTo( "#resizable1" ),
-	element = $( "#resizable1" ).css( "overflow", "auto" ).resizable(),
-	handle = ".ui-resizable-se";
+		element = $( "#resizable1" ).css( "overflow", "auto" ).resizable(),
+		handle = ".ui-resizable-se";
 
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( element.width(), 110, "element width (both scrollbars)" );
 	assert.equal( element.height(), 110, "element height (both scrollbars)" );
 
-	//Single (vertical) scrollbar.
+	// Single (vertical) scrollbar.
 	elementContent.css( "width", "50px" );
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( element.width(), 120, "element width (only vertical scrollbar)" );
@@ -279,8 +279,9 @@ QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( a
 
 	$( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "#qunit-fixture" );
 
-	//Both scrollbars
-	var elementContent = $( "<div>" )
+	// Both scrollbars
+	var widthBefore, heightBefore,
+		elementContent = $( "<div>" )
 			.css( {
 				width: "200px",
 				height: "200px",
@@ -290,18 +291,18 @@ QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( a
 				margin: "20px"
 			} )
 			.appendTo( "#resizable1" ),
-	element = $( "#resizable1" ).css( "overflow", "auto" ).resizable(),
-	handle = ".ui-resizable-se";
+		element = $( "#resizable1" ).css( "overflow", "auto" ).resizable(),
+		handle = ".ui-resizable-se";
 
 	// In some browsers scrollbar may change element size (when "box-sizing: content-box")
-	var widthBefore = element.innerWidth();
-	var heightBefore = element.innerHeight();
+	widthBefore = element.innerWidth();
+	heightBefore = element.innerHeight();
 
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 10, "element width (both scrollbars)" );
 	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 10, "element height (both scrollbars)" );
 
-	//Single (vertical) scrollbar.
+	// Single (vertical) scrollbar.
 	elementContent.css( "width", "50px" );
 
 	testHelper.drag( handle, 10, 10 );
@@ -314,7 +315,7 @@ QUnit.test( "Resizable with scrollbars, a transform and box-sizing: border-box",
 
 	$( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "#qunit-fixture" );
 
-	//Both scrollbars
+	// Both scrollbars
 	var elementContent = $( "<div>" )
 		.css( {
 			width: "200px",
@@ -325,14 +326,14 @@ QUnit.test( "Resizable with scrollbars, a transform and box-sizing: border-box",
 			margin: "20px"
 		} )
 		.appendTo( "#resizable1" ),
-	element = $( "#resizable1" ).css( { overflow: "auto", transform: "scale(1.5)" } ).resizable(),
-	handle = ".ui-resizable-se";
+		element = $( "#resizable1" ).css( { overflow: "auto", transform: "scale(1.5)" } ).resizable(),
+		handle = ".ui-resizable-se";
 
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( element.width(), 110, "element width (both scrollbars)" );
 	assert.equal( element.height(), 110, "element height (both scrollbars)" );
 
-	//Single (vertical) scrollbar.
+	// Single (vertical) scrollbar.
 	elementContent.css( "width", "50px" );
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( element.width(), 120, "element width (only vertical scrollbar)" );
@@ -344,29 +345,30 @@ QUnit.test( "Resizable with scrollbars, a transform and box-sizing: content-box"
 
 	$( "<style> * { box-sizing: content-box; } </style>" ).appendTo( "#qunit-fixture" );
 
-	//Both scrollbars
-	var elementContent = $( "<div>" )
-		.css( {
-			width: "200px",
-			height: "200px",
-			padding: "10px",
-			border: "5px",
-			borderStyle: "solid",
-			margin: "20px"
-		} )
-		.appendTo( "#resizable1" ),
-	element = $( "#resizable1" ).css( { overflow: "auto", transform: "scale(1.5)" } ).resizable(),
-	handle = ".ui-resizable-se";
+	// Both scrollbars
+	var widthBefore, heightBefore,
+		elementContent = $( "<div>" )
+			.css( {
+				width: "200px",
+				height: "200px",
+				padding: "10px",
+				border: "5px",
+				borderStyle: "solid",
+				margin: "20px"
+			} )
+			.appendTo( "#resizable1" ),
+		element = $( "#resizable1" ).css( { overflow: "auto", transform: "scale(1.5)" } ).resizable(),
+		handle = ".ui-resizable-se";
 
 	// In some browsers scrollbar may change element size (when "box-sizing: content-box")
-	var widthBefore = element.innerWidth();
-	var heightBefore = element.innerHeight();
+	widthBefore = element.innerWidth();
+	heightBefore = element.innerHeight();
 
 	testHelper.drag( handle, 10, 10 );
 	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 10, "element width (both scrollbars)" );
 	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 10, "element height (both scrollbars)" );
 
-	//Single (vertical) scrollbar.
+	// Single (vertical) scrollbar.
 	elementContent.css( "width", "50px" );
 
 	testHelper.drag( handle, 10, 10 );

@@ -80,7 +80,10 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_hasScroll: function( el, a ) {
 
-		var overflow = $( el ).css( "overflow" );
+		var scroll,
+			has = false,
+			overflow = $( el ).css( "overflow" );
+
 		if ( overflow === "hidden" ) {
 			return false;
 		}
@@ -88,8 +91,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			return true;
 		}
 
-		var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
-			has = false;
+		scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop";
 
 		if ( el[ scroll ] > 0 ) {
 			return true;
@@ -366,7 +368,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_mouseStart: function( event ) {
 
-		var curleft, curtop, cursor,
+		var curleft, curtop, cursor, calculatedSize,
 			o = this.options,
 			el = this.element;
 
@@ -385,7 +387,6 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		this.offset = this.helper.offset();
 		this.position = { left: curleft, top: curtop };
 
-		var calculatedSize = undefined;
 		if ( !this._helper ) {
 			calculatedSize = this._calculateAdjustedElementDimensions( el );
 		}
@@ -700,7 +701,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 	},
 
 	_calculateAdjustedElementDimensions: function( element ) {
-		var ce = element.get( 0 );
+		var elWidth, elHeight, paddingBorder,
+			ce = element.get( 0 );
 
 		if ( element.css( "box-sizing" ) !== "content-box" ||
 			( !this._hasScroll( ce ) && !this._hasScroll( ce, "left" ) ) ) {
@@ -711,10 +713,10 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		}
 
 		// Check if CSS inline styles are set and use those (usually from previous resizes)
-		var elWidth = parseFloat( ce.style.width );
-		var elHeight = parseFloat( ce.style.height );
+		elWidth = parseFloat( ce.style.width );
+		elHeight = parseFloat( ce.style.height );
 
-		var paddingBorder = this._getPaddingPlusBorderDimensions( element );
+		paddingBorder = this._getPaddingPlusBorderDimensions( element );
 		elWidth = isNaN( elWidth ) ?
 			this._getElementTheoreticalSize( element, paddingBorder, "width" ) :
 			elWidth;
@@ -737,7 +739,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			0.5
 
 		// If offsetWidth/offsetHeight is unknown, then we can't determine theoretical size.
-		// Use an explicit zero to avoid NaN (gh-3964)
+		// Use an explicit zero to avoid NaN.
+		// See https://github.com/jquery/jquery/issues/3964
 		) ) || 0;
 
 		return size;
@@ -1097,9 +1100,8 @@ $.ui.plugin.add( "resizable", "alsoResize", {
 			o = that.options;
 
 		$( o.alsoResize ).each( function() {
-			var el = $( this );
-
-			var elSize = that._calculateAdjustedElementDimensions( el );
+			var el = $( this ),
+				elSize = that._calculateAdjustedElementDimensions( el );
 
 			el.data( "ui-resizable-alsoresize", {
 				width: elSize.width, height: elSize.height,
