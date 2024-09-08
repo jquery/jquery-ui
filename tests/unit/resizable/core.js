@@ -246,28 +246,40 @@ QUnit.test( "nested resizable", function( assert ) {
 
 QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
-	testResizableWithBoxSizing( assert, true, false );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: true,
+		applyScaleTransform: false
+	} );
 } );
 
 QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( assert ) {
 	assert.expect( 4 );
-	testResizableWithBoxSizing( assert, false, false );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: false,
+		applyScaleTransform: false
+	} );
 } );
 
 QUnit.test( "Resizable with scrollbars, a transform and box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
-	testResizableWithBoxSizing( assert, true, true );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: true,
+		applyScaleTransform: true
+	} );
 } );
 
 QUnit.test( "Resizable with scrollbars, a transform and box-sizing: content-box", function( assert ) {
 	assert.expect( 4 );
-	testResizableWithBoxSizing( assert, false, true );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: false,
+		applyScaleTransform: true
+	} );
 } );
 
-function testResizableWithBoxSizing( assert, isBorderBox, applyScaleTransform ) {
+function testResizableWithBoxSizing( assert, options ) {
 	var widthBefore, heightBefore,
-		cssBoxSizing = isBorderBox ? "border-box" : "content-box",
-		cssTrasform = applyScaleTransform ? "scale(1.5)" : "",
+		cssBoxSizing = options.isBorderBox ? "border-box" : "content-box",
+		cssTransform = options.applyScaleTransform ? "scale(1.5)" : "",
 		elementContent = $( "<div>" )
 			.css( {
 				width: "200px",
@@ -278,7 +290,7 @@ function testResizableWithBoxSizing( assert, isBorderBox, applyScaleTransform ) 
 				margin: "20px"
 			} )
 			.appendTo( "#resizable1" ),
-		element = $( "#resizable1" ).css( { overflow: "auto", transform: cssTrasform } ).resizable(),
+		element = $( "#resizable1" ).css( { overflow: "auto", transform: cssTransform } ).resizable(),
 		handle = ".ui-resizable-se";
 
 	$( "<style> * { box-sizing: " + cssBoxSizing + "; } </style>" ).appendTo( "#qunit-fixture" );

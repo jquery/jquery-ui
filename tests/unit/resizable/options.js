@@ -568,17 +568,21 @@ QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
 
 QUnit.test( "alsoResize with scrollbars and box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
-	testAlsoResizeWithBoxSizing( assert, true );
+	testAlsoResizeWithBoxSizing( assert, {
+		isBorderBox: true
+	} );
 } );
 
 QUnit.test( "alsoResize with scrollbars and box-sizing: content-box", function( assert ) {
 	assert.expect( 4 );
-	testAlsoResizeWithBoxSizing( assert, false );
+	testAlsoResizeWithBoxSizing( assert, {
+		isBorderBox: false
+	} );
 } );
 
-function testAlsoResizeWithBoxSizing( assert, isBorderBox ) {
+function testAlsoResizeWithBoxSizing( assert, options ) {
 	var widthBefore, heightBefore,
-		cssBoxSizing = isBorderBox ? "border-box" : "content-box",
+		cssBoxSizing = options.isBorderBox ? "border-box" : "content-box",
 		other = $( "<div>" )
 			.css( {
 				width: "150px",
