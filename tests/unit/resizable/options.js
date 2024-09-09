@@ -542,20 +542,21 @@ QUnit.test( "alsoResize + multiple selection", function( assert ) {
 QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
 	assert.expect( 4 );
 
+	$( "<style> * { box-sizing: border-box; } </style>" ).appendTo( "#qunit-fixture" );
+
 	var other = $( "<div>" )
 			.css( {
-				width: 50,
-				height: 50,
-				padding: 10,
-				border: 5
+				width: "50px",
+				height: "50px",
+				padding: "10px",
+				border: "5px",
+				borderStyle: "solid"
 			} )
-			.appendTo( "body" ),
+			.appendTo( "#qunit-fixture" ),
 		element = $( "#resizable1" ).resizable( {
 			alsoResize: other
 		} ),
 		handle = ".ui-resizable-se";
-
-	$( "*" ).css( "box-sizing", "border-box" );
 
 	testHelper.drag( handle, 80, 80 );
 
@@ -564,5 +565,52 @@ QUnit.test( "alsoResize with box-sizing: border-box", function( assert ) {
 	assert.equal( element.height(), 180, "resizable height" );
 	assert.equal( parseFloat( other.css( "height" ) ), 130, "alsoResize height" );
 } );
+
+QUnit.test( "alsoResize with scrollbars and box-sizing: border-box", function( assert ) {
+	assert.expect( 4 );
+	testAlsoResizeWithBoxSizing( assert, {
+		isBorderBox: true
+	} );
+} );
+
+QUnit.test( "alsoResize with scrollbars and box-sizing: content-box", function( assert ) {
+	assert.expect( 4 );
+	testAlsoResizeWithBoxSizing( assert, {
+		isBorderBox: false
+	} );
+} );
+
+function testAlsoResizeWithBoxSizing( assert, options ) {
+	var widthBefore, heightBefore,
+		cssBoxSizing = options.isBorderBox ? "border-box" : "content-box",
+		other = $( "<div>" )
+			.css( {
+				width: "150px",
+				height: "150px",
+				padding: "10px",
+				border: "5px",
+				borderStyle: "solid",
+				margin: "20px",
+				overflow: "scroll"
+			} )
+			.appendTo( "#qunit-fixture" ),
+		element = $( "#resizable1" ).resizable( {
+			alsoResize: other
+		} ),
+		handle = ".ui-resizable-se";
+
+	$( "<style> * { box-sizing: " + cssBoxSizing + "; } </style>" ).appendTo( "#qunit-fixture" );
+
+	// In some browsers scrollbar may change element computed size.
+	widthBefore = other.innerWidth();
+	heightBefore = other.innerHeight();
+
+	testHelper.drag( handle, 80, 80 );
+
+	assert.equal( element.width(), 180, "resizable width" );
+	assert.equal( parseFloat( other.innerWidth() ), widthBefore + 80, "alsoResize width" );
+	assert.equal( element.height(), 180, "resizable height" );
+	assert.equal( parseFloat( other.innerHeight() ), heightBefore + 80, "alsoResize height" );
+}
 
 } );

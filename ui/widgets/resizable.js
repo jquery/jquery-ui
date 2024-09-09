@@ -80,12 +80,18 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_hasScroll: function( el, a ) {
 
-		if ( $( el ).css( "overflow" ) === "hidden" ) {
+		var scroll,
+			has = false,
+			overflow = $( el ).css( "overflow" );
+
+		if ( overflow === "hidden" ) {
 			return false;
 		}
+		if ( overflow === "scroll" ) {
+			return true;
+		}
 
-		var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
-			has = false;
+		scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop";
 
 		if ( el[ scroll ] > 0 ) {
 			return true;
@@ -362,7 +368,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_mouseStart: function( event ) {
 
-		var curleft, curtop, cursor,
+		var curleft, curtop, cursor, calculatedSize,
 			o = this.options,
 			el = this.element;
 
@@ -381,20 +387,24 @@ $.widget( "ui.resizable", $.ui.mouse, {
 		this.offset = this.helper.offset();
 		this.position = { left: curleft, top: curtop };
 
+		if ( !this._helper ) {
+			calculatedSize = this._calculateAdjustedElementDimensions( el );
+		}
+
 		this.size = this._helper ? {
 				width: this.helper.width(),
 				height: this.helper.height()
 			} : {
-				width: el.width(),
-				height: el.height()
+				width: calculatedSize.width,
+				height: calculatedSize.height
 			};
 
 		this.originalSize = this._helper ? {
 				width: el.outerWidth(),
 				height: el.outerHeight()
 			} : {
-				width: el.width(),
-				height: el.height()
+				width: calculatedSize.width,
+				height: calculatedSize.height
 			};
 
 		this.sizeDiff = {
@@ -688,6 +698,52 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			height: widths[ 0 ] + widths[ 2 ],
 			width: widths[ 1 ] + widths[ 3 ]
 		};
+	},
+
+	_calculateAdjustedElementDimensions: function( element ) {
+		var elWidth, elHeight, paddingBorder,
+			ce = element.get( 0 );
+
+		if ( element.css( "box-sizing" ) !== "content-box" ||
+			( !this._hasScroll( ce ) && !this._hasScroll( ce, "left" ) ) ) {
+				return {
+					height: parseFloat( element.css( "height" ) ),
+					width: parseFloat( element.css( "width" ) )
+				};
+		}
+
+		// Check if CSS inline styles are set and use those (usually from previous resizes)
+		elWidth = parseFloat( ce.style.width );
+		elHeight = parseFloat( ce.style.height );
+
+		paddingBorder = this._getPaddingPlusBorderDimensions( element );
+		elWidth = isNaN( elWidth ) ?
+			this._getElementTheoreticalSize( element, paddingBorder, "width" ) :
+			elWidth;
+		elHeight = isNaN( elHeight ) ?
+			this._getElementTheoreticalSize( element, paddingBorder, "height" ) :
+			elHeight;
+
+		return {
+			height: elHeight,
+			width: elWidth
+		};
+	},
+
+	_getElementTheoreticalSize: function( element, extraSize, dimension ) {
+
+		// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border
+		var size = Math.max( 0, Math.ceil(
+			element.get( 0 )[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+			extraSize[ dimension ] -
+			0.5
+
+		// If offsetWidth/offsetHeight is unknown, then we can't determine theoretical size.
+		// Use an explicit zero to avoid NaN.
+		// See https://github.com/jquery/jquery/issues/3964
+		) ) || 0;
+
+		return size;
 	},
 
 	_proportionallyResize: function() {
@@ -1044,9 +1100,11 @@ $.ui.plugin.add( "resizable", "alsoResize", {
 			o = that.options;
 
 		$( o.alsoResize ).each( function() {
-			var el = $( this );
+			var el = $( this ),
+				elSize = that._calculateAdjustedElementDimensions( el );
+
 			el.data( "ui-resizable-alsoresize", {
-				width: parseFloat( el.css( "width" ) ), height: parseFloat( el.css( "height" ) ),
+				width: elSize.width, height: elSize.height,
 				left: parseFloat( el.css( "left" ) ), top: parseFloat( el.css( "top" ) )
 			} );
 		} );

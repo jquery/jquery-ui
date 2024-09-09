@@ -244,4 +244,72 @@ QUnit.test( "nested resizable", function( assert ) {
 	outer.remove();
 } );
 
+QUnit.test( "Resizable with scrollbars and box-sizing: border-box", function( assert ) {
+	assert.expect( 4 );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: true,
+		applyScaleTransform: false
+	} );
+} );
+
+QUnit.test( "Resizable with scrollbars and box-sizing: content-box", function( assert ) {
+	assert.expect( 4 );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: false,
+		applyScaleTransform: false
+	} );
+} );
+
+QUnit.test( "Resizable with scrollbars, a transform and box-sizing: border-box", function( assert ) {
+	assert.expect( 4 );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: true,
+		applyScaleTransform: true
+	} );
+} );
+
+QUnit.test( "Resizable with scrollbars, a transform and box-sizing: content-box", function( assert ) {
+	assert.expect( 4 );
+	testResizableWithBoxSizing( assert, {
+		isBorderBox: false,
+		applyScaleTransform: true
+	} );
+} );
+
+function testResizableWithBoxSizing( assert, options ) {
+	var widthBefore, heightBefore,
+		cssBoxSizing = options.isBorderBox ? "border-box" : "content-box",
+		cssTransform = options.applyScaleTransform ? "scale(1.5)" : "",
+		elementContent = $( "<div>" )
+			.css( {
+				width: "200px",
+				height: "200px",
+				padding: "10px",
+				border: "5px",
+				borderStyle: "solid",
+				margin: "20px"
+			} )
+			.appendTo( "#resizable1" ),
+		element = $( "#resizable1" ).css( { overflow: "auto", transform: cssTransform } ).resizable(),
+		handle = ".ui-resizable-se";
+
+	$( "<style> * { box-sizing: " + cssBoxSizing + "; } </style>" ).appendTo( "#qunit-fixture" );
+
+	// In some browsers scrollbar may change element size (when "box-sizing: content-box")
+	widthBefore = element.innerWidth();
+	heightBefore = element.innerHeight();
+
+	// Both scrollbars
+	testHelper.drag( handle, 10, 10 );
+	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 10, "element width (both scrollbars)" );
+	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 10, "element height (both scrollbars)" );
+
+	// Single (vertical) scrollbar.
+	elementContent.css( "width", "50px" );
+
+	testHelper.drag( handle, 10, 10 );
+	assert.equal( parseFloat( element.innerWidth() ), widthBefore + 20, "element width (only vertical scrollbar)" );
+	assert.equal( parseFloat( element.innerHeight() ), heightBefore + 20, "element height (only vertical scrollbar)" );
+}
+
 } );
