@@ -83,14 +83,6 @@ effect( "#slideUp", "slide", { direction: "up" } );
 effect( "#slideLeft", "slide", { direction: "left" } );
 effect( "#slideRight", "slide", { direction: "right" } );
 
-$( "#transfer" ).on( "click", function() {
-	$( this )
-		.addClass( "current" )
-		.effect( "transfer", { to: $( "div" ).eq( 0 ) }, 1000, function() {
-			$( this ).removeClass( "current" );
-		} );
-} );
-
 $( "#addClass" ).on( "click", function() {
 	$( this ).addClass( "current", duration, function() {
 		$( this ).removeClass( "current" );

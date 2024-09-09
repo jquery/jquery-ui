@@ -11,7 +11,6 @@
 		#button { padding: .5em 1em; text-decoration: none; }
 		#effect { width: 240px; height: 170px; padding: 0.4em; position: relative; }
 		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
-		.ui-effects-transfer { border: 2px dotted gray; }
 	</style>
 	<script src="../../external/requirejs/require.js"></script>
 	<script src="../bootstrap.js" data-modules="effects-all">
@@ -25,8 +24,6 @@
 			// some effects have required parameters
 			if ( selectedEffect === "scale" ) {
 				options = { percent: 50 };
-			} else if ( selectedEffect === "transfer" ) {
-				options = { to: "#button", className: "ui-effects-transfer" };
 			} else if ( selectedEffect === "size" ) {
 				options = { to: { width: 200, height: 60 } };
 			}
@@ -75,7 +72,6 @@
 	<option value="shake">Shake</option>
 	<option value="size">Size</option>
 	<option value="slide">Slide</option>
-	<option value="transfer">Transfer</option>
 </select>
 
 <button id="button" class="ui-state-default ui-corner-all">Run Effect</button>
