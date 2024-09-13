@@ -15,6 +15,7 @@
 	display: none;
 }
 .ui-helper-hidden-accessible {
+	position: absolute;
 	pointer-events: none;
         opacity: 0;
 	white-space: nowrap;
