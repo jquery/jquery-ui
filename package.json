@@ -55,7 +55,7 @@
 		"jquery": ">=1.12.0 <5.0.0"
 	},
 	"devDependencies": {
-		"body-parser": "1.20.2",
+		"body-parser": "1.20.3",
 		"browserstack-local": "1.5.5",
 		"commitplease": "3.2.0",
 		"diff": "5.2.0",
