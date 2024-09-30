@@ -63,10 +63,8 @@
 
 		$( "button" ).each(function() {
 			var button = $( this ).button({
-				icons: {
-					primary: $( this ).data( "icon" )
-				},
-				text: !!$( this ).attr( "title" )
+				icon: $( this ).data( "icon" ),
+				showLabel: !!$( this ).attr( "title" )
 			});
 			button.not( ".menu" ).on( "click", function() {
 				notify( button );
