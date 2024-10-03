@@ -1106,7 +1106,7 @@ $.extend( Datepicker.prototype, {
 		if ( onSelect ) {
 			onSelect.apply( ( inst.input ? inst.input[ 0 ] : null ), [ dateStr, inst ] );  // trigger custom callback
 		} else if ( inst.input ) {
-			inst.input.trigger( "change" ); // fire the change event
+			inst.input.trigger( "input" ).trigger( "change" ); // fire the input and change events
 		}
 
 		if ( inst.inline ) {
