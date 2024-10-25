@@ -22,7 +22,7 @@ export async function createTestServer( report ) {
 	} );
 
 	// Add a script tag to HTML pages to load the QUnit listeners
-	app.use( /\/tests\/unit\/([^/]+)\/\1\.html$/, async( req, res ) => {
+	app.use( /\/tests\/unit\/([a-zA-Z0-9_-]+)\/\1\.html$/, async( req, res ) => {
 		const html = await readFile(
 			`tests/unit/${ req.params[ 0 ] }/${ req.params[ 0 ] }.html`,
 			"utf8"
