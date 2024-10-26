@@ -58,8 +58,7 @@ return $.extend( helper, {
 		var expected = $.makeArray( arguments ).slice( 2 ),
 			actual = tabs.find( ".ui-tabs-nav li" ).map( function() {
 				var tab = $( this ),
-					panel = $( $.ui.tabs.prototype._sanitizeSelector(
-						"#" + tab.attr( "aria-controls" ) ) ),
+					panel = $( "#" + CSS.escape( tab.attr( "aria-controls" ) ) ),
 					tabIsActive = tab.hasClass( "ui-state-active" ),
 					panelIsActive = panel.css( "display" ) !== "none";
 

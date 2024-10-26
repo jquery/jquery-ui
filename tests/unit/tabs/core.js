@@ -84,6 +84,37 @@ QUnit.test( "non-tab list items", function( assert ) {
 		"first actual tab is active" );
 } );
 
+QUnit.test( "ID escaping backslashes", function( assert ) {
+	assert.expect( 5 );
+
+	location.hash = "#fragment\b-2";
+
+	var element = $( "#tabs1" )
+		.find( "a[href='#fragment-2']" )
+			.attr( "href", "#fragment\b-2" )
+		.end()
+		.find( "#fragment-2" )
+			.attr( "id", "fragment\b-2" )
+		.end()
+		.tabs();
+	var tabs = element.find( ".ui-tabs-nav li" );
+	var anchors = tabs.find( ".ui-tabs-anchor" );
+	var panels = element.find( ".ui-tabs-panel" );
+
+	assert.strictEqual( element.tabs( "option", "active" ), 1,
+		"should set the active option" );
+
+	assert.strictEqual( anchors.length, 3, "should decorate all anchors" );
+	assert.strictEqual( panels.length, 3, "should decorate all panels" );
+
+	assert.strictEqual( panels.eq( 1 ).attr( "aria-labelledby" ), anchors.eq( 1 ).attr( "id" ),
+		"panel 2 aria-labelledby equals anchor 2 id" );
+	assert.strictEqual( tabs.eq( 1 ).attr( "aria-controls" ), "fragment\b-2",
+		"tab 2 aria-controls" );
+
+	location.hash = "";
+} );
+
 QUnit.test( "aria-controls", function( assert ) {
 	assert.expect( 7 );
 	var element = $( "#tabs1" ).tabs(),
