@@ -242,6 +242,28 @@ QUnit.test( "error handling", function( assert ) {
 	$.error = error;
 } );
 
+QUnit.test( "Prototype pollution", function( assert ) {
+	assert.expect( 3 );
+
+	var elem = $( "<div>" );
+
+	$.widget( "ui.testWidget", {} );
+
+	elem.testWidget();
+
+	try {
+		$.widget( "ui.__proto__", {} );
+	} catch ( _e ) {}
+	try {
+		$.widget( "ui.constructor", {} );
+	} catch ( _e ) {}
+
+	assert.strictEqual( Object.getPrototypeOf( $.ui ), Object.prototype,
+		"$.ui constructor not modified" );
+	assert.ok( $.ui instanceof Object, "$.ui is an Object instance" );
+	assert.notOk( $.ui instanceof Function, "$.ui is not a Function instance" );
+} );
+
 QUnit.test( "merge multiple option arguments", function( assert ) {
 	assert.expect( 1 );
 	$.widget( "ui.testWidget", {
