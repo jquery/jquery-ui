@@ -3,7 +3,7 @@
 module.exports = function( grunt ) {
 
 grunt.registerTask( "clean", function() {
-	require( "rimraf" ).sync( "dist" );
+	require( "rimraf" ).rimrafSync( "dist" );
 } );
 
 grunt.registerTask( "asciilint", function() {
