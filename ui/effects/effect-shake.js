@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Shake @VERSION
+ * jQuery UI Effects Shake 1.14.1
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors

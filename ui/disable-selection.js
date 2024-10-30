@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Disable Selection @VERSION
+ * jQuery UI Disable Selection 1.14.1
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
