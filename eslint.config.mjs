@@ -62,6 +62,7 @@ export default [
 			ecmaVersion: 5,
 			sourceType: "script",
 			globals: {
+				...globals.es2015,
 				...globals.browser,
 				...globals.jquery,
 				define: false,
@@ -142,6 +143,7 @@ export default [
 			ecmaVersion: 5,
 			sourceType: "script",
 			globals: {
+				...globals.es2015,
 				...globals.browser,
 				...globals.jquery,
 				define: false,
