@@ -26,8 +26,12 @@
 			height = 100;
 
 		$.each( $.easing, function( name, impl ) {
+			// Skip _default property
+			if ( typeof impl !== "function" ) {
+				return;
+			}
 			var graph = $( "<div>" ).addClass( "graph" ).appendTo( "#graphs" ),
-				text = $( "<div>" ).text( ++i + ". " + name ).appendTo( graph ),
+				text = $( "<div>" ).text( name ).css({ fontSize: "13px", textAlign: "center", whiteSpace: "nowrap" }).appendTo( graph ),
 				wrap = $( "<div>" ).appendTo( graph ).css( 'overflow', 'hidden' ),
 				canvas = $( "<canvas>" ).appendTo( wrap )[ 0 ];
 
