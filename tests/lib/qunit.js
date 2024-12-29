@@ -13,8 +13,6 @@ QUnit.config.requireExpects = true;
 QUnit.config.urlConfig.push( {
 	id: "jquery",
 	label: "jQuery version",
-
-	// Keep in sync with tests/runner/jquery.js
 	value: [
 		"1.12.4",
 		"2.2.4",

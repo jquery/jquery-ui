@@ -18,15 +18,15 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     name: |
-      ${{ matrix.BROWSER }} | ${{ matrix.JQUERYS.name }}
+      ${{ matrix.BROWSER }} | ${{ matrix.CONFIGS.name }}
     strategy:
       fail-fast: false
       matrix:
         BROWSER: [chrome, firefox]
-        JQUERYS:
-          - versions: --jquery git --jquery 3.x-git
+        CONFIGS:
+          - config: jtr-git.yml
             name: jQuery git
-          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 2.2.4 --jquery 1.12.4
+          - config: jtr-stable.yml
             name: jQuery stable
 
     steps:
@@ -58,20 +58,19 @@ jobs:
       - name: Test
         run: |
           npm run test:unit -- -h -b ${{ matrix.BROWSER }} \
-            ${{ matrix.JQUERYS.versions }} \
-            --retries 3 --hard-retries 1
+            ${{ matrix.CONFIGS.config }} \
 
   edge:
     runs-on: windows-latest
     name: |
-      edge | ${{ matrix.JQUERYS.name }}
+      edge | ${{ matrix.CONFIGS.name }}
     strategy:
       fail-fast: false
       matrix:
-        JQUERYS:
-          - versions: --jquery git --jquery 3.x-git
+        CONFIGS:
+          - config: jtr-git.yml
             name: jQuery git
-          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 2.2.4 --jquery 1.12.4
+          - config: jtr-stable.yml
             name: jQuery stable
     steps:
       - name: Checkout
@@ -99,20 +98,19 @@ jobs:
       - name: Test
         run: |
           npm run test:unit -- -h -b edge `
-            ${{ matrix.JQUERYS.versions }} `
-            --retries 3 --hard-retries 1
+            ${{ matrix.CONFIGS.config }}
 
   safari:
     runs-on: macos-latest
     name: |
-      safari | ${{ matrix.JQUERYS.name }}
+      safari | ${{ matrix.CONFIGS.name }}
     strategy:
       fail-fast: false
       matrix:
-        JQUERYS:
-          - versions: --jquery git --jquery 3.x-git
+        CONFIGS:
+          - config: jtr-git.yml
             name: jQuery git
-          - versions: --jquery 3.7.1 --jquery 3.6.4 --jquery 2.2.4 --jquery 1.12.4
+          - config: jtr-stable.yml
             name: jQuery stable
     steps:
       - name: Checkout
@@ -140,5 +138,4 @@ jobs:
       - name: Test
         run: |
           npm run test:unit -- -b safari \
-            ${{ matrix.JQUERYS.versions }} \
-            --retries 3 --hard-retries 1
+            ${{ matrix.CONFIGS.config }}
