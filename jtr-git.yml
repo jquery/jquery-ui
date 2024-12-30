@@ -29,7 +29,7 @@ test-urls:
   - tooltip/tooltip.html
   - widget/widget.html
 
-flags:
+runs:
   jquery:
     - git
     - 3.x-git

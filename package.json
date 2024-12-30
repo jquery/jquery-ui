@@ -47,8 +47,8 @@
 	"scripts": {
 		"build": "grunt build",
 		"lint": "grunt lint",
-		"test:server": "jtr serve -c jtr.yml",
-		"test:unit": "jtr run -c jtr.yml",
+		"test:server": "jtr serve",
+		"test:unit": "jtr run",
 		"test": "grunt && npm run test:unit -- -h"
 	},
 	"dependencies": {

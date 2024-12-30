@@ -58,7 +58,7 @@ jobs:
       - name: Test
         run: |
           npm run test:unit -- -h -b ${{ matrix.BROWSER }} \
-            ${{ matrix.CONFIGS.config }} \
+            -c ${{ matrix.CONFIGS.config }} \
 
   edge:
     runs-on: windows-latest
@@ -98,7 +98,7 @@ jobs:
       - name: Test
         run: |
           npm run test:unit -- -h -b edge `
-            ${{ matrix.CONFIGS.config }}
+            -c ${{ matrix.CONFIGS.config }}
 
   safari:
     runs-on: macos-latest
@@ -138,4 +138,4 @@ jobs:
       - name: Test
         run: |
           npm run test:unit -- -b safari \
-            ${{ matrix.CONFIGS.config }}
+            -c ${{ matrix.CONFIGS.config }}

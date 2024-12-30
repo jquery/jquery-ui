@@ -29,8 +29,8 @@ test-urls:
   - tooltip/tooltip.html
   - widget/widget.html
 
-flags:
-	jquery:
+runs:
+  jquery:
     - 3.7.1
     - 3.6.4
     - 2.2.4
