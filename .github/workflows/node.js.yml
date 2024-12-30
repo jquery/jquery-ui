@@ -57,7 +57,8 @@ jobs:
 
       - name: Test
         run: |
-          npm run test:unit -- -h -b ${{ matrix.BROWSER }} \
+          npm run test:unit -- \
+            --headless -b ${{ matrix.BROWSER }} \
             -c ${{ matrix.CONFIGS.config }} \
 
   edge:
@@ -97,7 +98,8 @@ jobs:
 
       - name: Test
         run: |
-          npm run test:unit -- -h -b edge `
+          npm run test:unit -- `
+            --headless -b edge `
             -c ${{ matrix.CONFIGS.config }}
 
   safari:
