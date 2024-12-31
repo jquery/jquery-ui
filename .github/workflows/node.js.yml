@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: 22.x
+  NODE_VERSION: 20.x
 
 jobs:
   build-and-test:
@@ -71,8 +71,8 @@ jobs:
         CONFIGS:
           - config: jtr-git.yml
             name: jQuery git
-          # - config: jtr-stable.yml
-          #   name: jQuery stable
+          - config: jtr-stable.yml
+            name: jQuery stable
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -96,11 +96,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Debug with SSH
-        uses: mxschmitt/action-tmate@v3
-
-      # - name: Test
-      #   run: npm run test:unit -- --headless -b edge -c ${{ matrix.CONFIGS.config }}
+      - name: Test
+        run: npm run test:unit -- --headless -b edge -c ${{ matrix.CONFIGS.config }}
 
   safari:
     runs-on: macos-latest
