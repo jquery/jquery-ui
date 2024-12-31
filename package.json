@@ -67,7 +67,7 @@
 		"grunt-eslint": "24.0.1",
 		"grunt-git-authors": "3.2.0",
 		"grunt-html": "17.1.0",
-		"jquery-test-runner": "file:../jquery-test-runner",
+		"jquery-test-runner": "github:timmywil/jquery-test-runner#f812ccae",
 		"load-grunt-tasks": "5.1.0",
 		"rimraf": "6.0.1"
 	},
