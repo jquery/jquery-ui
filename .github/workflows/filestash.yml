@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: filestash
     env:
-      NODE_VERSION: 20.x
+      NODE_VERSION: 22.x
     name: Update Filestash
     steps:
       - name: Checkout
