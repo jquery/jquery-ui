@@ -97,10 +97,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: |
-          npm run test:unit -- `
-            --headless -b edge `
-            -c ${{ matrix.CONFIGS.config }}
+        run: npm run test:unit -- --headless -b edge -c ${{ matrix.CONFIGS.config }}
 
   safari:
     runs-on: macos-latest
@@ -138,6 +135,4 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: |
-          npm run test:unit -- -b safari \
-            -c ${{ matrix.CONFIGS.config }}
+        run: npm run test:unit -- -b safari -c ${{ matrix.CONFIGS.config }}
