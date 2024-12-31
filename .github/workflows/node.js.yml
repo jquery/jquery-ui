@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: 20.x
+  NODE_VERSION: 22.x
 
 jobs:
   build-and-test:
@@ -59,7 +59,7 @@ jobs:
         run: |
           npm run test:unit -- \
             --headless -b ${{ matrix.BROWSER }} \
-            -c ${{ matrix.CONFIGS.config }} \
+            -c ${{ matrix.CONFIGS.config }}
 
   edge:
     runs-on: windows-latest
@@ -97,7 +97,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test:unit -- --headless -b edge -c ${{ matrix.CONFIGS.config }}
+        run: npm run test:unit --headless -b edge -c ${{ matrix.CONFIGS.config }}
 
   safari:
     runs-on: macos-latest
