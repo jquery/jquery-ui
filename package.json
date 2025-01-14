@@ -47,22 +47,16 @@
 	"scripts": {
 		"build": "grunt build",
 		"lint": "grunt lint",
-		"test:server": "node tests/runner/server.js",
-		"test:unit": "node tests/runner/command.js",
-		"test": "grunt && npm run test:unit -- -h"
+		"test:server": "jtr serve",
+		"test:unit": "jtr",
+		"test": "grunt && npm run test:unit -- --headless"
 	},
 	"dependencies": {
 		"jquery": ">=1.12.0 <5.0.0"
 	},
 	"devDependencies": {
-		"body-parser": "1.20.3",
-		"browserstack-local": "1.5.5",
 		"commitplease": "3.2.0",
-		"diff": "5.2.0",
 		"eslint-config-jquery": "3.0.2",
-		"exit-hook": "4.0.0",
-		"express": "4.21.1",
-		"express-body-parser-error-handler": "1.0.7",
 		"grunt": "1.6.1",
 		"grunt-bowercopy": "1.2.5",
 		"grunt-compare-size": "0.4.2",
@@ -73,10 +67,9 @@
 		"grunt-eslint": "24.0.1",
 		"grunt-git-authors": "3.2.0",
 		"grunt-html": "17.1.0",
+		"jquery-test-runner": "0.2.1",
 		"load-grunt-tasks": "5.1.0",
-		"rimraf": "6.0.1",
-		"selenium-webdriver": "4.26.0",
-		"yargs": "17.7.2"
+		"rimraf": "6.0.1"
 	},
 	"keywords": []
 }

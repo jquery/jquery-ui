@@ -1,0 +1,30 @@
+version: 1
+
+base-url: /tests/unit/
+
+test-urls:
+  - accordion/accordion.html
+  - autocomplete/autocomplete.html
+  - button/button.html
+  - checkboxradio/checkboxradio.html
+  - controlgroup/controlgroup.html
+  - core/core.html
+  - datepicker/datepicker.html
+  - dialog/dialog.html
+  - draggable/draggable.html
+  - droppable/droppable.html
+  - effects/effects.html
+  - form-reset-mixin/form-reset-mixin.html
+  - jquery-patch/jquery-patch.html
+  - menu/menu.html
+  - position/position.html
+  - progressbar/progressbar.html
+  - resizable/resizable.html
+  - selectable/selectable.html
+  - selectmenu/selectmenu.html
+  - slider/slider.html
+  - sortable/sortable.html
+  - spinner/spinner.html
+  - tabs/tabs.html
+  - tooltip/tooltip.html
+  - widget/widget.html
