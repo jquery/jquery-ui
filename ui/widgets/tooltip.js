@@ -61,6 +61,7 @@ $.widget( "ui.tooltip", {
 		},
 		show: true,
 		track: false,
+		textDir: null,
 
 		// Callbacks
 		close: null,
@@ -260,6 +261,9 @@ $.widget( "ui.tooltip", {
 		tooltipData = this._find( target );
 		if ( tooltipData ) {
 			tooltipData.tooltip.find( ".ui-tooltip-content" ).html( content );
+			if ( this.options.textDir ) {
+				this._applyTextDir( tooltipData.tooltip.find( ".ui-tooltip-content" ) );
+			}
 			return;
 		}
 
@@ -282,6 +286,10 @@ $.widget( "ui.tooltip", {
 		tooltip = tooltipData.tooltip;
 		this._addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
+
+		if ( this.options.textDir ) {
+			this._applyTextDir( tooltip.find( ".ui-tooltip-content" ) );
+		}
 
 		// Support: Voiceover on OS X, JAWS on IE <= 9
 		// JAWS announces deletions even when aria-relevant="additions"
