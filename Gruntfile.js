@@ -51,9 +51,6 @@ const cssFiles = [
 
 // minified files
 const minify = {
-	options: {
-		preserveComments: false
-	},
 	main: {
 		options: {
 			banner: createBanner( uiFiles )
@@ -174,7 +171,7 @@ grunt.initConfig( {
 		}
 	},
 
-	uglify: minify,
+	minify,
 	htmllint: {
 		good: {
 			options: {
@@ -403,9 +400,9 @@ grunt.registerTask( "lint", [
 	"csslint",
 	"htmllint"
 ] );
-grunt.registerTask( "build", [ "requirejs", "concat" ] );
+grunt.registerTask( "build", [ "requirejs", "concat", "minify:main" ] );
 grunt.registerTask( "default", [ "lint", "build" ] );
-grunt.registerTask( "sizer", [ "requirejs:js", "uglify:main", "compare_size:all" ] );
-grunt.registerTask( "sizer_all", [ "requirejs:js", "uglify", "compare_size" ] );
+grunt.registerTask( "sizer", [ "requirejs:js", "minify:main", "compare_size:all" ] );
+grunt.registerTask( "sizer_all", [ "requirejs:js", "minify", "compare_size" ] );
 
 };
