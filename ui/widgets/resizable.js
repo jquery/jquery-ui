@@ -104,7 +104,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			el[ scroll ] = 1;
 			has = ( el[ scroll ] > 0 );
 			el[ scroll ] = 0;
-		} catch ( e ) {
+		} catch ( _e ) {
 
 			// `el` might be a string, then setting `scroll` will throw
 			// an error in strict mode; ignore it.

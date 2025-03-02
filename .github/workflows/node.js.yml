@@ -49,11 +49,12 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Lint
-        run: npm run lint
-
       - name: Build
         run: npm run build
+
+      # Lint must happen after build as we lint generated files.
+      - name: Lint
+        run: npm run lint
 
       - name: Test
         run: |
