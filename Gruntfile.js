@@ -204,9 +204,12 @@ grunt.initConfig( {
 			"ui/**/*.js",
 			"!ui/vendor/**/*.js",
 			"Gruntfile.js",
+			"dist/jquery-ui.js",
+			"dist/jquery-ui.min.js",
 			"build/**/*.js",
 			"tests/unit/**/*.js",
 			"tests/lib/**/*.js",
+			"!tests/lib/vendor/**/*.js",
 			"demos/**/*.js"
 		]
 	},
@@ -401,7 +404,7 @@ grunt.registerTask( "lint", [
 	"htmllint"
 ] );
 grunt.registerTask( "build", [ "requirejs", "concat", "minify:main" ] );
-grunt.registerTask( "default", [ "lint", "build" ] );
+grunt.registerTask( "default", [ "build", "lint" ] );
 grunt.registerTask( "sizer", [ "requirejs:js", "minify:main", "compare_size:all" ] );
 grunt.registerTask( "sizer_all", [ "requirejs:js", "minify", "compare_size" ] );
 

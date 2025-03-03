@@ -9,9 +9,7 @@
 
 //>>label: Accordion
 //>>group: Widgets
-/* eslint-disable max-len */
 //>>description: Displays collapsible content panels for presenting information in a limited amount of space.
-/* eslint-enable max-len */
 //>>docs: https://api.jqueryui.com/accordion/
 //>>demos: https://jqueryui.com/accordion/
 //>>css.structure: ../../themes/base/core.css

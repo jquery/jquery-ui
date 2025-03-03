@@ -73,10 +73,10 @@ $.widget( "ui.tabs", {
 			// Decoding may throw an error if the URL isn't UTF-8 (#9518)
 			try {
 				anchorUrl = decodeURIComponent( anchorUrl );
-			} catch ( error ) {}
+			} catch ( _error ) {}
 			try {
 				locationUrl = decodeURIComponent( locationUrl );
-			} catch ( error ) {}
+			} catch ( _error ) {}
 
 			return anchor.hash.length > 1 && anchorUrl === locationUrl;
 		};

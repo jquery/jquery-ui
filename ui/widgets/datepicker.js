@@ -1,4 +1,4 @@
-/* eslint-disable max-len, camelcase */
+/* eslint-disable max-len */
 /*!
  * jQuery UI Datepicker @VERSION
  * https://jqueryui.com
@@ -535,7 +535,7 @@ $.extend( Datepicker.prototype, {
 	_getInst: function( target ) {
 		try {
 			return $.data( target, "datepicker" );
-		} catch ( err ) {
+		} catch ( _err ) {
 			throw "Missing instance data for this datepicker";
 		}
 	},
@@ -768,7 +768,7 @@ $.extend( Datepicker.prototype, {
 					$.datepicker._updateAlternate( inst );
 					$.datepicker._updateDatepicker( inst );
 				}
-			} catch ( err ) {
+			} catch ( _err ) {
 			}
 		}
 		return true;
@@ -1540,7 +1540,7 @@ $.extend( Datepicker.prototype, {
 
 		try {
 			date = this.parseDate( dateFormat, dates, settings ) || defaultDate;
-		} catch ( event ) {
+		} catch ( _err ) {
 			dates = ( noDefault ? "" : dates );
 		}
 		inst.selectedDay = date.getDate();
@@ -1569,7 +1569,7 @@ $.extend( Datepicker.prototype, {
 				try {
 					return $.datepicker.parseDate( $.datepicker._get( inst, "dateFormat" ),
 						offset, $.datepicker._getFormatConfig( inst ) );
-				} catch ( e ) {
+				} catch ( _e ) {
 
 					// Ignore
 				}

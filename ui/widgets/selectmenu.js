@@ -9,9 +9,7 @@
 
 //>>label: Selectmenu
 //>>group: Widgets
-/* eslint-disable max-len */
 //>>description: Duplicates and extends the functionality of a native HTML select element, allowing it to be customizable in behavior and appearance far beyond the limitations of a native select.
-/* eslint-enable max-len */
 //>>docs: https://api.jqueryui.com/selectmenu/
 //>>demos: https://jqueryui.com/selectmenu/
 //>>css.structure: ../../themes/base/core.css

@@ -9,9 +9,7 @@
 
 //>>label: Progressbar
 //>>group: Widgets
-/* eslint-disable max-len */
 //>>description: Displays a status indicator for loading state, standard percentage, and other progress indicators.
-/* eslint-enable max-len */
 //>>docs: https://api.jqueryui.com/progressbar/
 //>>demos: https://jqueryui.com/progressbar/
 //>>css.structure: ../../themes/base/core.css
