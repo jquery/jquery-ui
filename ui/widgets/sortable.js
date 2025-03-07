@@ -1178,6 +1178,12 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		//Get the offsetParent and cache its position
 		this.offsetParent = this.helper.offsetParent();
 		var po = this.offsetParent.offset();
+		var scroll = this.cssPosition === "absolute" &&
+			!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+			$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+				this.offsetParent :
+				this.scrollParent,
+			scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
 
 		// This is a special case where we need to modify a offset calculated on start, since the
 		// following happened:
@@ -1186,8 +1192,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't
 		// the document, which means that the scroll is included in the initial calculation of the
 		// offset of the parent, and never recalculated upon drag
-		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
+		if ( !scrollIsRootNode ) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
