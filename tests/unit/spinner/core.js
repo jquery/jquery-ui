@@ -163,7 +163,47 @@ QUnit.test( "mouse click on up button, increases value not greater than max", fu
 	assert.equal( element.val(), 0 );
 } );
 
-QUnit.test( "mousewheel on input", function( assert ) {
+QUnit.test( "wheel on input", function( assert ) {
+	var ready = assert.async();
+	assert.expect( 5 );
+
+	var element = $( "#spin" ).val( 0 ).spinner( {
+		step: 2
+	} );
+
+	element.simulate( "focus" );
+	setTimeout( step1 );
+
+	function getWheelEvent( deltaY ) {
+		return jQuery.Event( new WheelEvent( "wheel", { deltaY: deltaY } ) );
+	}
+
+	function step1() {
+		element.trigger( getWheelEvent() );
+		assert.equal( element.val(), 0, "wheel event without delta does not change value" );
+
+		element.trigger( getWheelEvent( -1 ) );
+		assert.equal( element.val(), 2, "delta -1" );
+
+		element.trigger( getWheelEvent( 0.2 ) );
+		assert.equal( element.val(), 0, "delta 0.2" );
+
+		element.trigger( getWheelEvent( 15 ) );
+		assert.equal( element.val(), -2, "delta 15" );
+
+		element.simulate( "blur" );
+		setTimeout( step2 );
+	}
+
+	function step2() {
+		element.trigger( "wheel", -1 );
+		assert.equal( element.val(), -2, "wheel when not focused" );
+
+		ready();
+	}
+} );
+
+QUnit.test( "mousewheel on input (DEPRECATED)", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 5 );
 
