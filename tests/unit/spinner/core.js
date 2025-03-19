@@ -239,105 +239,19 @@ QUnit.test( "mousewheel on input (DEPRECATED)", function( assert ) {
 	}
 } );
 
-QUnit.test( "wheel & mousewheel conflicts", function( assert ) {
-	var ready = assert.async();
-	assert.expect( 5 );
-
-	var iframe = $( "<iframe />" ).appendTo( "#qunit-fixture" ),
-		iframeDoc = ( iframe[ 0 ].contentWindow || iframe[ 0 ].contentDocument ).document;
-
-	window.iframeCallback = function( values ) {
-		window.iframeCallback = undefined;
+helper.testIframe(
+	"wheel & mousewheel conflicts",
+	"mousewheel-wheel.html",
+	function( assert, jQuery, window, document, values ) {
+		assert.expect( 5 );
 
 		assert.equal( values[ 0 ], 0, "wheel event without delta does not change value" );
 		assert.equal( values[ 1 ], 2, "delta -1" );
 		assert.equal( values[ 2 ], 0, "delta 0.2" );
 		assert.equal( values[ 3 ], -2, "delta 15" );
 		assert.equal( values[ 4 ], -2, "wheel when not focused" );
-
-		ready();
-	};
-
-	function runTest() {
-		var values = [],
-			element = $( "#spin" ).val( 0 ).spinner( {
-				step: 2
-			} );
-
-		element.focus();
-		setTimeout( step1 );
-
-		function dispatchWheelEvent( elem, deltaY ) {
-			elem[ 0 ].dispatchEvent( new WheelEvent( "wheel", {
-				deltaY: deltaY
-			} ) );
-		}
-
-		function step1() {
-			dispatchWheelEvent( element );
-			values.push( element.val() );
-
-			dispatchWheelEvent( element, -1 );
-			values.push( element.val() );
-
-			dispatchWheelEvent( element, 0.2 );
-			values.push( element.val() );
-
-			dispatchWheelEvent( element, 15 );
-			values.push( element.val() );
-
-			element.blur();
-			setTimeout( step2 );
-		}
-
-		function step2() {
-			dispatchWheelEvent( element, -1 );
-			values.push( element.val() );
-
-			window.parent.iframeCallback( values );
-		}
 	}
-
-	iframeDoc.write( "" +
-		"<!doctype html>\n" +
-		"<html lang='en'>\n" +
-		"<head>\n" +
-		"	<meta charset='utf-8'>\n" +
-		"	<title>jQuery UI Spinner Test Suite</title>\n" +
-		"\n" +
-		"	<script src='../../../external/requirejs/require.js'></script>\n" +
-		"	<script src='../../../external/jquery/jquery.js'></script>\n" +
-		"	<script src='../../lib/css.js' data-modules='core button spinner'></script>\n" +
-		"</head>\n" +
-		"<body>\n" +
-		"\n" +
-		"<div id='qunit'></div>\n" +
-		"<div id='qunit-fixture'>\n" +
-		"\n" +
-		"<input id='spin' class='foo'>\n" +
-		"<input id='spin2' value='2'>\n" +
-		"\n" +
-		"</div>\n" +
-		"<script>\n" +
-		"	" + runTest + "\n" +
-		"	requirejs.config( {\n" +
-		"	paths: {\n" +
-		"		'jquery-mousewheel': '../../../external/jquery-mousewheel/jquery.mousewheel',\n" +
-		"		'ui': '../../../ui'\n" +
-		"	},\n" +
-		"} );\n" +
-		"	require( [\n" +
-		"		'jquery-mousewheel',\n" +
-		"		'ui/widgets/spinner'\n" +
-		"	], function() {\n" +
-		"		runTest();\n" +
-		"	} );\n" +
-		"</script>\n" +
-		"</body>\n" +
-		"</html>\n" +
-		"" );
-	iframeDoc.close();
-} );
+);
 
 QUnit.test( "reading HTML5 attributes", function( assert ) {
 	assert.expect( 6 );

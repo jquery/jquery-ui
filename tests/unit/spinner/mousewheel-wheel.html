@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Spinner Test Suite</title>
+
+	<script src="../../../external/requirejs/require.js"></script>
+	<script src="../../../external/jquery/jquery.js"></script>
+	<script src="../../lib/css.js" data-modules="core button spinner theme"></script>
+	<script src="../../lib/testIframe.js"></script>
+</head>
+<body>
+
+<input id="spin" class="foo">
+
+<script>
+	function runTest() {
+		var values = [],
+			element = $( "#spin" ).val( 0 ).spinner( {
+				step: 2
+			} );
+
+		element.focus();
+		setTimeout( step1 );
+
+		function dispatchWheelEvent( elem, deltaY ) {
+			elem[ 0 ].dispatchEvent( new WheelEvent( "wheel", {
+				deltaY: deltaY
+			} ) );
+		}
+
+		function step1() {
+			dispatchWheelEvent( element );
+			values.push( element.val() );
+
+			dispatchWheelEvent( element, -1 );
+			values.push( element.val() );
+
+			dispatchWheelEvent( element, 0.2 );
+			values.push( element.val() );
+
+			dispatchWheelEvent( element, 15 );
+			values.push( element.val() );
+
+			element.blur();
+			setTimeout( step2 );
+		}
+
+		function step2() {
+			dispatchWheelEvent( element, -1 );
+			values.push( element.val() );
+
+			startIframeTest( values );
+		}
+	}
+
+	requirejs.config( {
+		paths: {
+			"jquery-mousewheel": "../../../external/jquery-mousewheel/jquery.mousewheel",
+			"ui": "../../../ui"
+		},
+	} );
+
+	require( [
+		"jquery-mousewheel",
+		"ui/widgets/spinner"
+	], function() {
+		runTest();
+	} );
+</script>
+</body>
+</html>

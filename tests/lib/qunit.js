@@ -7,6 +7,8 @@ define( [
 ], function( QUnit, $ ) {
 "use strict";
 
+var ajaxSettings = $.ajaxSettings;
+
 QUnit.config.autostart = false;
 QUnit.config.requireExpects = true;
 
@@ -34,16 +36,21 @@ QUnit.config.urlConfig.push( {
 	label: "Enable jquery-migrate"
 } );
 
-QUnit.reset = ( function( reset ) {
-	return function() {
+QUnit.testDone( function() {
 
-		// Ensure jQuery events and data on the fixture are properly removed
-		$( "#qunit-fixture" ).empty();
+	// Ensure jQuery events and data on the fixture are properly removed
+	$( "#qunit-fixture" ).empty();
 
-		// Let QUnit reset the fixture
-		reset.apply( this, arguments );
-	};
-} )( QUnit.reset );
+	// Remove the iframe fixture
+	$( "#qunit-fixture-iframe" ).remove();
+
+	// Reset internal $ state
+	if ( ajaxSettings ) {
+		$.ajaxSettings = $.extend( true, {}, ajaxSettings );
+	} else {
+		delete $.ajaxSettings;
+	}
+} );
 
 return QUnit;
 

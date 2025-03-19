@@ -51,6 +51,65 @@ exports.moduleAfterEach = function( assert ) {
 	}
 };
 
+exports.testIframe = function( title, fileName, func, wrapper, iframeStyles ) {
+	if ( !wrapper ) {
+		wrapper = QUnit.test;
+	}
+	wrapper.call( QUnit, title, function( assert ) {
+		var done = assert.async(),
+			$iframe = jQuery( "<iframe></iframe>" )
+				.css( {
+					position: "absolute",
+					top: "0",
+					left: "-600px",
+					width: "500px",
+					zIndex: 1,
+					background: "white"
+				} )
+				.attr( { id: "qunit-fixture-iframe", src: fileName } );
+
+		// Add other iframe styles
+		if ( iframeStyles ) {
+			$iframe.css( iframeStyles );
+		}
+
+		// Test iframes are expected to invoke this via startIframeTest
+		// (cf. iframeTest.js)
+		window.iframeCallback = function() {
+			var args = Array.prototype.slice.call( arguments );
+
+			args.unshift( assert );
+
+			setTimeout( function() {
+				var result;
+
+				this.iframeCallback = undefined;
+
+				result = func.apply( this, args );
+
+				function finish() {
+					func = function() {};
+					$iframe.remove();
+					done();
+				}
+
+				// Wait for promises returned by `func`.
+				if ( result && result.then ) {
+					result.then( finish );
+				} else {
+					finish();
+				}
+			} );
+		};
+
+		// Attach iframe to the body for visibility-dependent code.
+		// It will be removed by either the above code, or the testDone
+		// callback in qunit.js.
+		$iframe.prependTo( document.body );
+	} );
+};
+window.iframeCallback = undefined;
+
 return exports;
 
 } );
