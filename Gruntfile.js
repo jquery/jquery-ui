@@ -247,6 +247,9 @@ grunt.initConfig( {
 
 				"requirejs/require.js": "requirejs/require.js",
 
+				"jquery-mousewheel/jquery.mousewheel.js": "jquery-mousewheel/jquery.mousewheel.js",
+				"jquery-mousewheel/LICENSE.txt": "jquery-mousewheel/LICENSE.txt",
+
 				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
 				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
 

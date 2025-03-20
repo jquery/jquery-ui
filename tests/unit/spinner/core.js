@@ -239,6 +239,20 @@ QUnit.test( "mousewheel on input (DEPRECATED)", function( assert ) {
 	}
 } );
 
+helper.testIframe(
+	"wheel & mousewheel conflicts",
+	"mousewheel-wheel.html",
+	function( assert, jQuery, window, document, values ) {
+		assert.expect( 5 );
+
+		assert.equal( values[ 0 ], 0, "wheel event without delta does not change value" );
+		assert.equal( values[ 1 ], 2, "delta -1" );
+		assert.equal( values[ 2 ], 0, "delta 0.2" );
+		assert.equal( values[ 3 ], -2, "delta 15" );
+		assert.equal( values[ 4 ], -2, "wheel when not focused" );
+	}
+);
+
 QUnit.test( "reading HTML5 attributes", function( assert ) {
 	assert.expect( 6 );
 	var markup = "<input type='number' min='-100' max='100' value='5' step='2'>",

@@ -164,6 +164,13 @@ $.widget( "ui.spinner", {
 		// event. The `delta` parameter is provided by the jQuery Mousewheel
 		// plugin if one is loaded.
 		mousewheel: function( event, delta ) {
+			if ( !event.isTrigger ) {
+
+				// If this is not a trigger call, the `wheel` handler will
+				// fire as well, let's not duplicate it.
+				return;
+			}
+
 			var wheelEvent = $.Event( event );
 			wheelEvent.type = "wheel";
 			if ( delta ) {
