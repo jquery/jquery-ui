@@ -61,26 +61,19 @@ $.widget( "ui.tabs", {
 		load: null
 	},
 
-	_isLocal: ( function() {
-		var rhash = /#.*$/;
+	_isLocal: function( anchor ) {
+		var anchorUrl = new URL( anchor.href ),
+			locationUrl = new URL( location.href );
 
-		return function( anchor ) {
-			var anchorUrl, locationUrl;
+		return anchor.hash.length > 1 &&
 
-			anchorUrl = anchor.href.replace( rhash, "" );
-			locationUrl = location.href.replace( rhash, "" );
-
-			// Decoding may throw an error if the URL isn't UTF-8 (#9518)
-			try {
-				anchorUrl = decodeURIComponent( anchorUrl );
-			} catch ( _error ) {}
-			try {
-				locationUrl = decodeURIComponent( locationUrl );
-			} catch ( _error ) {}
-
-			return anchor.hash.length > 1 && anchorUrl === locationUrl;
-		};
-	} )(),
+			// `href` may contain a hash but also username & password;
+			// we want to ignore them, so we check the three fields
+			// below instead.
+			anchorUrl.origin === locationUrl.origin &&
+			anchorUrl.pathname === locationUrl.pathname &&
+			anchorUrl.search === locationUrl.search;
+	},
 
 	_create: function() {
 		var that = this,

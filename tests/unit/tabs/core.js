@@ -747,4 +747,30 @@ QUnit.test( "extra listeners created when tabs are added/removed (trac-15136)", 
 		"No extra listeners after removing all the extra tabs" );
 } );
 
+QUnit.test( "URL-based auth with local tabs (gh-2213)", function( assert ) {
+	assert.expect( 1 );
+
+	var origAjax = $.ajax,
+		element = $( "#tabs1" ),
+		anchor = element.find( "a[href='#fragment-3']" ),
+		url = new URL( anchor.prop( "href" ) );
+
+	try {
+		$.ajax = function() {
+			throw new Error( "Unexpected AJAX call; all tabs are local!" );
+		};
+
+		anchor.attr( "href", url.protocol + "//username:password@" + url.host +
+			url.pathname + url.search + url.hash );
+
+		element.tabs();
+		anchor.trigger( "click" );
+
+		assert.strictEqual( element.tabs( "option", "active" ), 2,
+			"should set the active option" );
+	} finally {
+		$.ajax = origAjax;
+	}
+} );
+
 } );
