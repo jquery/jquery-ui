@@ -114,18 +114,31 @@ $.widget( "ui.tabs", {
 	_initialActive: function() {
 		var active = this.options.active,
 			collapsible = this.options.collapsible,
-			locationHashDecoded = decodeURIComponent( location.hash.substring( 1 ) );
+			locationHash = location.hash.substring( 1 ),
+			locationHashDecoded = decodeURIComponent( locationHash );
 
 		if ( active === null ) {
 
 			// check the fragment identifier in the URL
-			if ( locationHashDecoded ) {
+			if ( locationHash ) {
 				this.tabs.each( function( i, tab ) {
-					if ( $( tab ).attr( "aria-controls" ) === locationHashDecoded ) {
+					if ( $( tab ).attr( "aria-controls" ) === locationHash ) {
 						active = i;
 						return false;
 					}
 				} );
+
+				// If not found, decode the hash & try again.
+				// See the comment in `_processTabs` under the `_isLocal` check
+				// for more information.
+				if ( active === null ) {
+					this.tabs.each( function( i, tab ) {
+						if ( $( tab ).attr( "aria-controls" ) === locationHashDecoded ) {
+							active = i;
+							return false;
+						}
+					} );
+				}
 			}
 
 			// Check for a tab marked active via a class
@@ -423,9 +436,24 @@ $.widget( "ui.tabs", {
 
 			// Inline tab
 			if ( that._isLocal( anchor ) ) {
-				selector = decodeURIComponent( anchor.hash );
+
+				// The "scrolling to a fragment" section of the HTML spec:
+				// https://html.spec.whatwg.org/#scrolling-to-a-fragment
+				// uses a concept of document's indicated part:
+				// https://html.spec.whatwg.org/#the-indicated-part-of-the-document
+				// Slightly below there's an algorithm to compute the indicated
+				// part:
+				// https://html.spec.whatwg.org/#the-indicated-part-of-the-document
+				// First, the algorithm tries the hash as-is, without decoding.
+				// Then, if one is not found, the same is attempted with a decoded
+				// hash. Replicate this logic.
+				selector = anchor.hash;
 				panelId = selector.substring( 1 );
 				panel = that.element.find( "#" + CSS.escape( panelId ) );
+				if ( !panel.length ) {
+					panelId = decodeURIComponent( panelId );
+					panel = that.element.find( "#" + CSS.escape( panelId ) );
+				}
 
 			// remote tab
 			} else {
