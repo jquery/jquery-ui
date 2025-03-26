@@ -773,4 +773,55 @@ QUnit.test( "URL-based auth with local tabs (gh-2213)", function( assert ) {
 	}
 } );
 
+( function() {
+	function getVerifyTab( assert, element ) {
+		return function verifyTab( index ) {
+			assert.strictEqual(
+				element.tabs( "option", "active" ),
+				index,
+				"should set the active option to " + index );
+			assert.strictEqual(
+				element.find( "[role='tabpanel']:visible" ).text().trim(),
+				"Tab " + ( index + 1 ),
+				"should set the panel to 'Tab " + ( index + 1 ) + "'" );
+		};
+	}
+
+	QUnit.test( "href encoding/decoding (gh-2344)", function( assert ) {
+		assert.expect( 12 );
+
+		location.hash = "#tabs-2";
+
+		var i,
+			element = $( "#tabs10" ).tabs(),
+			tabLinks = element.find( "> ul a" ),
+			verifyTab = getVerifyTab( assert, element );
+
+		for ( i = 0; i < tabLinks.length; i++ ) {
+			tabLinks.eq( i ).trigger( "click" );
+			verifyTab( i );
+		}
+
+		location.hash = "";
+	} );
+
+	QUnit.test( "href encoding/decoding on init (gh-2344)", function( assert ) {
+		assert.expect( 12 );
+
+		var i,
+			element = $( "#tabs10" ),
+			tabLinks = element.find( "> ul a" ),
+			verifyTab = getVerifyTab( assert, element );
+
+		for ( i = 0; i < tabLinks.length; i++ ) {
+			location.hash = tabLinks.eq( i ).attr( "href" );
+			element.tabs();
+			verifyTab( i );
+			element.tabs( "destroy" );
+		}
+
+		location.hash = "";
+	} );
+} )();
+
 } );
