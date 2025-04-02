@@ -540,4 +540,83 @@ QUnit.test( "mouse", function( assert ) {
 		"Mouse click inline - next" );
 } );
 
+QUnit.test( "position", function( assert ) {
+	assert.expect( 4 );
+
+	var $container = $( "#qunit-fixture" ),
+		$modal = $container.children('div'),
+		$inputOne = testHelper.init( "#inp" ),
+		$inputTwo = testHelper.init( "#alt" );
+
+	// Undo the weird positioning on the container
+	$container.css({
+		position: "static",
+		top: 0,
+		left: 0,
+		height: "5000px",
+	});
+
+	// Position the modal in the middle of the screen
+	$modal.css({
+		display: "none", // Initially must be hidden
+		position: "fixed",
+		"overflow": "hidden auto",
+		top: "50%",
+		left: "50%",
+		right: "auto",
+		width: "500px",
+		height: "500px",
+		marginTop: "-100px",
+		marginLeft: "-100px"
+	});
+
+	// Add an internal wrapper around all the children nodes
+	$modal.wrapInner(`<div id="relative-wrapper" style="position: relative"></div>`)
+	var $wrapper = $modal.children('#relative-wrapper');
+	$wrapper.prepend(`<div style="height: 300px;"></div>`);
+
+	// Wrap inputs with a container
+	$inputOne.wrap(`<div id="input-one-container" style="height: 200px;"></div>`);
+	$inputTwo.wrap(`<div id="input-two-container" style="height: 200px;"></div>`);
+
+	assert.ok( $modal.is(":hidden"), "Modal is hidden" );
+
+	// Set the page scroll position way down the page
+	var done = assert.async();
+	$(document).ready(function() {
+		$(window).scrollTop(2000);
+
+		// Disable the scrollbar
+		$('body').css('overflow', 'hidden');
+
+		// Now show the wrapper with the input
+		$modal.show();
+
+		// Initialize datepickers
+		$modal.find('input').datepicker();
+
+		setTimeout(() => {
+			$("#input-one-container").hide();
+			$("#input-two-container").css("padding-top", "100px");
+
+			var $inputTwo = $("#input-two-container").find("input");
+
+			$inputTwo.focus();
+			assert.ok( $("#ui-datepicker-div").is(":visible"), "Datepicker is visible" );
+			done();
+
+			// Get the top position of the input and compare it to the datepicker to ensure they're
+			// both positioned correctly
+			var inputTop = $inputTwo.offset().top;
+			var dpTop = $("#ui-datepicker-div").offset().top;
+			assert.ok( Math.abs(inputTop - dpTop) < 25, "Datepicker is positioned correctly" );
+
+			// It should also be left aligned with the input
+			var inputLeft = $inputTwo.offset().left;
+			var dpLeft = $("#ui-datepicker-div").offset().left;
+			assert.ok( Math.abs(inputLeft - dpLeft) < 5, "Datepicker is left aligned with the input" );
+		}, 200);
+	});
+} );
+
 } );
