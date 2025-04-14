@@ -21,6 +21,7 @@ common.testWidget( "autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		textDir: null,
 
 		// Callbacks
 		change: null,
