@@ -78,6 +78,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
+		this._setupTouchEvents();
 		this._calculateNewMax();
 
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
@@ -302,6 +303,51 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		valueMouse = this._valueMin() + percentMouse * valueTotal;
 
 		return this._trimAlignValue( valueMouse );
+	},
+
+	_setupTouchEvents: function() {
+		var that = this;
+
+		that.element
+			.on( 'touchstart.slider', function( event ) {
+				if ( ! event.cancelable ) {
+					return;
+				}
+
+				var touch = event.originalEvent.touches[0];
+				that._mouseCapture({
+					pageX: touch.pageX,
+					pageY: touch.pageY,
+					target: touch.target
+				});
+
+				event.preventDefault();
+			})
+			.on( 'touchmove.slider', function( event ) {
+				if ( ! that._mouseSliding || ! event.cancelable ) {
+					return;
+				}
+
+				var touch = event.originalEvent.touches[0];
+
+				that._mouseDrag({
+					pageX: touch.pageX,
+					pageY: touch.pageY,
+					target: touch.target
+				});
+
+				// Prevent page scrolling
+				event.preventDefault();
+				event.stopPropagation();
+			})
+			.on( 'touchend.slider', function( event ) {
+				if ( ! that._mouseSliding || ! event.cancelable ) {
+					return;
+				}
+
+				that._mouseStop( event );
+				event.preventDefault();
+			});
 	},
 
 	_uiHash: function( index, value, values ) {
