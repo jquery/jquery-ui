@@ -816,7 +816,7 @@ $.extend( Datepicker.prototype, {
 		}
 		if ( !$.datepicker._pos ) { // position below input
 			$.datepicker._pos = $.datepicker._findPos( input );
-			$.datepicker._pos[ 1 ] += input.offsetHeight; // add the height
+			$.datepicker._pos[ 1 ] += inst.input.outerHeight(); // add the height
 		}
 
 		isFixed = false;
