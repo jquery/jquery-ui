@@ -309,45 +309,45 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		var that = this;
 
 		that.element
-			.on( 'touchstart.slider', function( event ) {
-				if ( ! event.cancelable ) {
+			.on( "touchstart.slider", function( event ) {
+				if ( !event.cancelable ) {
 					return;
 				}
 
-				var touch = event.originalEvent.touches[0];
-				that._mouseCapture({
+				var touch = event.originalEvent.touches[ 0 ];
+				that._mouseCapture( {
 					pageX: touch.pageX,
 					pageY: touch.pageY,
 					target: touch.target
-				});
+				} );
 
 				event.preventDefault();
-			})
-			.on( 'touchmove.slider', function( event ) {
-				if ( ! that._mouseSliding || ! event.cancelable ) {
+			} )
+			.on( "touchmove.slider", function( event ) {
+				if ( !that._mouseSliding || !event.cancelable ) {
 					return;
 				}
 
-				var touch = event.originalEvent.touches[0];
+				var touch = event.originalEvent.touches[ 0 ];
 
-				that._mouseDrag({
+				that._mouseDrag( {
 					pageX: touch.pageX,
 					pageY: touch.pageY,
 					target: touch.target
-				});
+				} );
 
 				// Prevent page scrolling
 				event.preventDefault();
 				event.stopPropagation();
-			})
-			.on( 'touchend.slider', function( event ) {
-				if ( ! that._mouseSliding || ! event.cancelable ) {
+			} )
+			.on( "touchend.slider", function( event ) {
+				if ( !that._mouseSliding || !event.cancelable ) {
 					return;
 				}
 
 				that._mouseStop( event );
 				event.preventDefault();
-			});
+			} );
 	},
 
 	_uiHash: function( index, value, values ) {
