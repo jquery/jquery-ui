@@ -44,7 +44,7 @@ QUnit.test( "enable / disable", function( assert ) {
 
 	// Migrate 4.x warns about reading boolean attributes when their
 	// value is not their lowercase name - but that's what happens
-	// wheh setting the `disabled` property to `true` first; the attribute
+	// when setting the `disabled` property to `true` first; the attribute
 	// is then set to an empty string. Avoid the warning by temporarily
 	// disabling the patch.
 	// In real apps it's discouraged to mix `.prop()` & `.attr()` usage
