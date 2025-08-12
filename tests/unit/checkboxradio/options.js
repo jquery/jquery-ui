@@ -97,7 +97,7 @@ QUnit.test( "icon - default unchecked", function( assert ) {
 } );
 
 QUnit.test( "icon - default checked", function( assert ) {
-	var checkbox = $( "#checkbox-option-icon" ).attr( "checked", true );
+	var checkbox = $( "#checkbox-option-icon" ).attr( "checked", "checked" );
 
 	assert.expect( 2 );
 

@@ -41,8 +41,25 @@ QUnit.test( "enable / disable", function( assert ) {
 
 	element.selectmenu( "disable" );
 	assert.ok( element.selectmenu( "option", "disabled" ), "disable: widget option" );
-	assert.ok( [ "disabled", "" ].indexOf( element.attr( "disabled" ) ) !== -1,
-		"disable: native select disabled" );
+
+	// Migrate 4.x warns about reading boolean attributes when their
+	// value is not their lowercase name - but that's what happens
+	// when setting the `disabled` property to `true` first; the attribute
+	// is then set to an empty string. Avoid the warning by temporarily
+	// disabling the patch.
+	// In real apps it's discouraged to mix `.prop()` & `.attr()` usage
+	// for reflected property-attribute pairs.
+	if ( $.migrateDisablePatches ) {
+		$.migrateDisablePatches( "boolean-attributes" );
+	}
+	assert.ok(
+		[ "disabled", "" ].indexOf( element.attr( "disabled" ) ) !== -1,
+		"disable: native select disabled"
+	);
+	if ( $.migrateEnablePatches ) {
+		$.migrateEnablePatches( "boolean-attributes" );
+	}
+
 	assert.equal( button.attr( "aria-disabled" ), "true", "disable: button ARIA" );
 	assert.equal( button.attr( "tabindex" ), -1, "disable: button tabindex" );
 	assert.equal( menu.attr( "aria-disabled" ), "true", "disable: menu ARIA" );
