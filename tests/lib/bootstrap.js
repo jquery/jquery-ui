@@ -111,6 +111,8 @@ function migrateUrl() {
 
 	if ( jqueryVersion === "git" ) {
 		url = "https://releases.jquery.com/git/jquery-migrate-git";
+	} else if ( jqueryVersion[ 0 ] === "4" ) {
+		url = "../../../external/jquery-migrate-4.x/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "3" ) {
 		url = "../../../external/jquery-migrate-3.x/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {
