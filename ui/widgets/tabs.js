@@ -176,7 +176,8 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabKeydown: function( event ) {
-		var focusedTab = $( this.document[ 0 ].activeElement ).closest( "li" ),
+		var focusedAnchor = $( this.document[ 0 ].activeElement ).closest( "a" ),
+			focusedTab = focusedAnchor.closest( "li" ),
 			selectedIndex = this.tabs.index( focusedTab ),
 			goingForward = true;
 
@@ -202,14 +203,12 @@ $.widget( "ui.tabs", {
 			break;
 		case $.ui.keyCode.SPACE:
 
-			// Activate only, no collapsing
 			event.preventDefault();
 			clearTimeout( this.activating );
 			this._activate( selectedIndex );
 			return;
 		case $.ui.keyCode.ENTER:
 
-			// Toggle (cancel delayed activation, allow collapsing)
 			event.preventDefault();
 			clearTimeout( this.activating );
 
@@ -228,11 +227,8 @@ $.widget( "ui.tabs", {
 		// Navigating with control/command key will prevent automatic activation
 		if ( !event.ctrlKey && !event.metaKey ) {
 
-			// Update aria-selected immediately so that AT think the tab is already selected.
-			// Otherwise AT may confuse the user by stating that they need to activate the tab,
-			// but the tab will already be activated by the time the announcement finishes.
-			focusedTab.attr( "aria-selected", "false" );
-			this.tabs.eq( selectedIndex ).attr( "aria-selected", "true" );
+			focusedAnchor.attr( "aria-selected", "false" );
+			this.anchors.eq( selectedIndex ).attr( "aria-selected", "true" );
 
 			this.activating = this._delay( function() {
 				this.option( "active", selectedIndex );
@@ -286,7 +282,7 @@ $.widget( "ui.tabs", {
 
 	_focusNextTab: function( index, goingForward ) {
 		index = this._findNextTab( index, goingForward );
-		this.tabs.eq( index ).trigger( "focus" );
+		this.anchors.eq( index ).trigger( "focus" );
 		return index;
 	},
 
@@ -413,8 +409,7 @@ $.widget( "ui.tabs", {
 
 		this.tabs = this.tablist.find( "> li:has(a[href])" )
 			.attr( {
-				role: "tab",
-				tabIndex: -1
+				role: "presentation"
 			} );
 		this._addClass( this.tabs, "ui-tabs-tab", "ui-state-default" );
 
@@ -422,6 +417,7 @@ $.widget( "ui.tabs", {
 			return $( "a", this )[ 0 ];
 		} )
 			.attr( {
+				role: "tab",
 				tabIndex: -1
 			} );
 		this._addClass( this.anchors, "ui-tabs-anchor" );
@@ -437,16 +433,6 @@ $.widget( "ui.tabs", {
 			// Inline tab
 			if ( that._isLocal( anchor ) ) {
 
-				// The "scrolling to a fragment" section of the HTML spec:
-				// https://html.spec.whatwg.org/#scrolling-to-a-fragment
-				// uses a concept of document's indicated part:
-				// https://html.spec.whatwg.org/#the-indicated-part-of-the-document
-				// Slightly below there's an algorithm to compute the indicated
-				// part:
-				// https://html.spec.whatwg.org/#the-indicated-part-of-the-document
-				// First, the algorithm tries the hash as-is, without decoding.
-				// Then, if one is not found, the same is attempted with a decoded
-				// hash. Replicate this logic.
 				selector = anchor.hash;
 				panelId = selector.substring( 1 );
 				panel = that.element.find( "#" + CSS.escape( panelId ) );
@@ -455,11 +441,8 @@ $.widget( "ui.tabs", {
 					panel = that.element.find( "#" + CSS.escape( panelId ) );
 				}
 
-			// remote tab
 			} else {
 
-				// If the tab doesn't already have aria-controls,
-				// generate an id by using a throw-away element
 				panelId = tab.attr( "aria-controls" ) || $( {} ).uniqueId()[ 0 ].id;
 				selector = "#" + panelId;
 				panel = that.element.find( selector );
@@ -554,7 +537,7 @@ $.widget( "ui.tabs", {
 		this._on( this.tabs, { keydown: "_tabKeydown" } );
 		this._on( this.panels, { keydown: "_panelKeydown" } );
 
-		this._focusable( this.tabs );
+		this._focusable( this.anchors );
 		this._hoverable( this.tabs );
 	},
 
