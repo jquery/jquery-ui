@@ -51,8 +51,8 @@
 		"test:unit": "jtr",
 		"test": "grunt && npm run test:unit -- --headless"
 	},
-	"dependencies": {
-		"jquery": ">=1.12.0 <5.0.0"
+	"peerDependencies": {
+		"jquery": ">=1.12 <2 || >=2.2 <5.0.0"
 	},
 	"devDependencies": {
 		"@swc/core": "1.11.5",
@@ -68,6 +68,7 @@
 		"grunt-eslint": "25.0.0",
 		"grunt-git-authors": "3.2.0",
 		"grunt-html": "17.1.0",
+		"jquery": "^3.7.1",
 		"jquery-test-runner": "0.2.5",
 		"load-grunt-tasks": "5.1.0",
 		"rimraf": "6.0.1"
