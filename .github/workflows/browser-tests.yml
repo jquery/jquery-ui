@@ -1,0 +1,117 @@
+name: Browser Tests
+
+on:
+  pull_request:
+  push:
+    branches-ignore: "dependabot/**"
+  # Once a week every Monday
+  schedule:
+    - cron: "42 1 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22.x
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: |
+      ${{ matrix.BROWSER }} | ${{ matrix.CONFIGS.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        BROWSER: [chrome, firefox]
+        CONFIGS:
+          - config: jtr-git.yml
+            name: jQuery git
+          - config: jtr-stable.yml
+            name: jQuery stable
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: |
+          npm run test:unit -- \
+            --headless -b ${{ matrix.BROWSER }} \
+            -c ${{ matrix.CONFIGS.config }}
+
+  edge:
+    runs-on: windows-latest
+    name: |
+      edge | ${{ matrix.CONFIGS.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        CONFIGS:
+          - config: jtr-git.yml
+            name: jQuery git
+          - config: jtr-stable.yml
+            name: jQuery stable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:unit -- --headless -b edge -c ${{ matrix.CONFIGS.config }}
+
+  safari:
+    runs-on: macos-latest
+    name: |
+      safari | ${{ matrix.CONFIGS.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        CONFIGS:
+          - config: jtr-git.yml
+            name: jQuery git
+          - config: jtr-stable.yml
+            name: jQuery stable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:unit -- -b safari -c ${{ matrix.CONFIGS.config }}
