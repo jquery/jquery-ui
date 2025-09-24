@@ -36,7 +36,7 @@ $( document ).on( "pointerup", function() {
 	pointerHandled = false;
 } );
 
-return $.widget( "ui.mouse", {
+return $.widget( "ui.pointer", {
 	version: "@VERSION",
 	options: {
 		cancel: "input, textarea, button, select, option",
