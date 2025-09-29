@@ -8,6 +8,7 @@ const { gzipSync } = require( "node:zlib" );
 const coreFiles = [
 	"widget.js",
 	"widgets/mouse.js",
+	"widgets/pointer.js",
 	"widgets/draggable.js",
 	"widgets/droppable.js",
 	"widgets/resizable.js",
