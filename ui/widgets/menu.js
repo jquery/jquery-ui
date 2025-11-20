@@ -53,6 +53,7 @@ return $.widget( "ui.menu", {
 			at: "right top"
 		},
 		role: "menu",
+		textDir: null,
 
 		// Callbacks
 		blur: null,
@@ -371,6 +372,16 @@ return $.widget( "ui.menu", {
 		// If the active item has been removed, blur the menu
 		if ( this.active && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
 			this.blur();
+		}
+		if ( this.options.textDir ) {
+			menus.each( function() {
+				var item = $( this );
+				item.css( "text-align", item.css( "direction" ) === "rtl" ? "right" : "left" );
+			} );
+
+			items.each( function() {
+				that._applyTextDir( this );
+			} );
 		}
 	},
 

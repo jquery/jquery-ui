@@ -18,6 +18,7 @@ common.testWidget( "button", {
 		label: null,
 		showLabel: true,
 		text: true,
+		textDir: null,
 
 		// Callbacks
 		create: null
