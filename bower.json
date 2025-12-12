@@ -40,7 +40,7 @@
 		"jquery-3.7.1": "jquery#3.7.1",
 		"jquery-4.0.0-rc.1": "jquery#4.0.0-rc.1",
 		"jquery-migrate-1.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
-		"jquery-migrate-3.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.5.2.tgz",
+		"jquery-migrate-3.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.6.0.tgz",
 		"jquery-migrate-4.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-4.0.0-beta.1.tgz"
 	}
 }
