@@ -134,11 +134,11 @@ $.widget( "ui.resizable", $.ui.mouse, {
 				$( "<div class='ui-wrapper'></div>" ).css( {
 					overflow: "hidden",
 					position: this.element.css( "position" ),
-					width: this.element.outerWidth(),
-					height: this.element.outerHeight(),
 					top: this.element.css( "top" ),
 					left: this.element.css( "left" )
 				} )
+					.outerWidth( this.element.outerWidth() )
+					.outerHeight( this.element.outerHeight() )
 			);
 
 			this.element = this.element.parent().data(
@@ -159,7 +159,9 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			// Support: Safari
 			// Prevent Safari textarea resize
 			this.originalResizeStyle = this.originalElement.css( "resize" );
-			this.originalElement.css( "resize", "none" );
+			this.originalElement
+				.css( "resize", "none" )
+				.css( "margin", 0 );
 
 			this._proportionallyResizeElements.push( this.originalElement.css( {
 				position: "static",
@@ -214,11 +216,12 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			wrapper = this.element;
 			this.originalElement.css( {
 				position: wrapper.css( "position" ),
-				width: wrapper.outerWidth(),
-				height: wrapper.outerHeight(),
 				top: wrapper.css( "top" ),
 				left: wrapper.css( "left" )
-			} ).insertAfter( wrapper );
+			} )
+				.outerWidth( wrapper.outerWidth() )
+				.outerHeight( wrapper.outerHeight() )
+				.insertAfter( wrapper );
 			wrapper.remove();
 		}
 
