@@ -1,12 +1,12 @@
 /*!
- * jQuery JavaScript Library v4.0.0-rc.1
+ * jQuery JavaScript Library v4.0.0
  * https://jquery.com/
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.com/license/
  *
- * Date: 2025-08-11T16:40Z
+ * Date: 2026-01-18T00:20Z
  */
 ( function( global, factory ) {
 
@@ -116,7 +116,7 @@ function DOMEval( code, node, doc ) {
 	}
 }
 
-var version = "4.0.0-rc.1",
+var version = "4.0.0",
 
 	rhtmlSuffix = /HTML$/i,
 
@@ -530,54 +530,20 @@ var whitespace = "[\\x20\\t\\r\\n\\f]";
 
 var isIE = document$1.documentMode;
 
-// Support: Chrome 105 - 111 only, Safari 15.4 - 16.3 only
-// Make sure the `:has()` argument is parsed unforgivingly.
-// We include `*` in the test to detect buggy implementations that are
-// _selectively_ forgiving (specifically when the list includes at least
-// one valid selector).
-// Note that we treat complete lack of support for `:has()` as if it were
-// spec-compliant support, which is fine because use of `:has()` in such
-// environments will fail in the qSA path and fall back to jQuery traversal
-// anyway.
-try {
-	document$1.querySelector( ":has(*,:jqfake)" );
-	support.cssHas = false;
-} catch ( e ) {
-	support.cssHas = true;
-}
+var rbuggyQSA = isIE && new RegExp(
 
-// Build QSA regex.
-// Regex strategy adopted from Diego Perini.
-var rbuggyQSA = [];
+	// Support: IE 9 - 11+
+	// IE's :disabled selector does not pick up the children of disabled fieldsets
+	":enabled|:disabled|" +
 
-if ( isIE ) {
-	rbuggyQSA.push(
+	// Support: IE 11+
+	// IE 11 doesn't find elements on a `[name='']` query in some cases.
+	// Adding a temporary attribute to the document before the selection works
+	// around the issue.
+	"\\[" + whitespace + "*name" + whitespace + "*=" +
+	whitespace + "*(?:''|\"\")"
 
-		// Support: IE 9 - 11+
-		// IE's :disabled selector does not pick up the children of disabled fieldsets
-		":enabled",
-		":disabled",
-
-		// Support: IE 11+
-		// IE 11 doesn't find elements on a `[name='']` query in some cases.
-		// Adding a temporary attribute to the document before the selection works
-		// around the issue.
-		"\\[" + whitespace + "*name" + whitespace + "*=" +
-			whitespace + "*(?:''|\"\")"
-	);
-}
-
-if ( !support.cssHas ) {
-
-	// Our regular `try-catch` mechanism fails to detect natively-unsupported
-	// pseudo-classes inside `:has()` (such as `:has(:contains("Foo"))`)
-	// in browsers that parse the `:has()` argument as a forgiving selector list.
-	// https://drafts.csswg.org/selectors/#relational now requires the argument
-	// to be parsed unforgivingly, but browsers have not yet fully adjusted.
-	rbuggyQSA.push( ":has" );
-}
-
-rbuggyQSA = rbuggyQSA.length && new RegExp( rbuggyQSA.join( "|" ) );
+);
 
 var rtrimCSS = new RegExp(
 	"^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$",

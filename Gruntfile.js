@@ -316,8 +316,8 @@ grunt.initConfig( {
 				"jquery-3.7.1/jquery.js": "jquery-3.7.1/dist/jquery.js",
 				"jquery-3.7.1/LICENSE.txt": "jquery-3.7.1/LICENSE.txt",
 
-				"jquery-4.0.0-rc.1/jquery.js": "jquery-4.0.0-rc.1/dist/jquery.js",
-				"jquery-4.0.0-rc.1/LICENSE.txt": "jquery-4.0.0-rc.1/LICENSE.txt",
+				"jquery-4.0.0/jquery.js": "jquery-4.0.0/dist/jquery.js",
+				"jquery-4.0.0/LICENSE.txt": "jquery-4.0.0/LICENSE.txt",
 
 				"jquery-migrate-1.x/jquery-migrate.js":
 					"jquery-migrate-1.x/dist/jquery-migrate.js",

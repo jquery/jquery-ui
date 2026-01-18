@@ -1,5 +1,5 @@
 /*!
- * jQuery Migrate - v4.0.0-beta.1 - 2025-08-11T21:16Z
+ * jQuery Migrate - v4.0.1 - 2026-01-18T00:35Z
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.com/license/
@@ -26,7 +26,7 @@
 } )( function( jQuery, window ) {
 "use strict";
 
-jQuery.migrateVersion = "4.0.0-beta.1";
+jQuery.migrateVersion = "4.0.1";
 
 // Returns 0 if v1 == v2, -1 if v1 < v2, 1 if v1 > v2
 function compareVersions( v1, v2 ) {
@@ -55,7 +55,7 @@ function jQueryVersionSince( version ) {
 var disabledPatches = Object.create( null );
 
 // Don't apply patches for specified codes. Helpful for code bases
-// where some Migrate warnings have been addressed and it's desirable
+// where some Migrate warnings have been addressed, and it's desirable
 // to avoid needless patches or false positives.
 jQuery.migrateDisablePatches = function() {
 	var i;
@@ -260,6 +260,10 @@ var arr = [],
 	splice = arr.splice,
 	class2type = {},
 
+	// Matches dashed string for camelizing
+	rmsPrefix = /^-ms-/,
+	rdashAlpha = /-([a-z])/g,
+
 	// Require that the "whitespace run" starts from a non-whitespace
 	// to avoid O(N^2) behavior when the engine would try matching "\s+$" at each space position.
 	rtrim = /^[\s\uFEFF\xA0]+|([^\s\uFEFF\xA0])[\s\uFEFF\xA0]+$/g;
@@ -336,6 +340,26 @@ migratePatchAndWarnFunc( jQuery, "isWindow",
 		return obj != null && obj === obj.window;
 	}, "isWindow",
 	"jQuery.isWindow() is removed"
+);
+
+migratePatchAndWarnFunc( jQuery, "now", Date.now, "now",
+	"jQuery.now() is removed; use Date.now()"
+);
+
+// Used by camelCase as callback to replace()
+function fcamelCase( _all, letter ) {
+	return letter.toUpperCase();
+}
+
+migratePatchAndWarnFunc( jQuery, "camelCase",
+	function( string ) {
+
+		// Convert dashed to camelCase; used by the css and data modules
+		// Support: IE <=9 - 11, Edge 12 - 15
+		// Microsoft forgot to hump their vendor prefix (trac-9572)
+		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
+	}, "camelCase",
+	"jQuery.camelCase() is removed"
 );
 
 // Bind a function to a context, optionally partially applying any
@@ -652,7 +676,7 @@ migratePatchFunc( jQuery.fn, "toggleClass", function( state ) {
 
 		// If the element has a class name or if we're passed `false`,
 		// then remove the whole classname (if there was one, the above saved it).
-		// Otherwise bring back whatever was previously saved (if anything),
+		// Otherwise, bring back whatever was previously saved (if anything),
 		// falling back to the empty string if nothing was stored.
 		if ( this.setAttribute ) {
 			this.setAttribute( "class",
