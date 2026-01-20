@@ -67,6 +67,8 @@
 					// add placeholder to get the comma-and-space at the end
 					terms.push( "" );
 					this.value = terms.join( ", " );
+					// scroll input viewport to as far right as possible
+					this.selectionStart = this.selectionEnd = this.value.length;
 					return false;
 				}
 			});
