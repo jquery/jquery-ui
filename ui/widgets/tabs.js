@@ -53,6 +53,7 @@ $.widget( "ui.tabs", {
 		heightStyle: "content",
 		hide: null,
 		show: null,
+		textDir: null,
 
 		// Callbacks
 		activate: null,
@@ -373,6 +374,13 @@ $.widget( "ui.tabs", {
 			.attr( {
 				"aria-hidden": "true"
 			} );
+
+		if ( this.options.textDir ) {
+			var that = this;
+			this.tabs.each( function( i, tab ) {
+				that._applyTextDir( $( tab ).find( ".ui-tabs-anchor" ) );
+			} );
+		}
 
 		// Make sure one tab is in the tab order
 		if ( !this.active.length ) {

@@ -20,6 +20,7 @@ common.testWidget( "controlgroup", {
 			"controlgroupLabel": ".ui-controlgroup-label"
 		},
 		onlyVisible: true,
+		textDir: null,
 
 		// Callbacks
 		create: null
