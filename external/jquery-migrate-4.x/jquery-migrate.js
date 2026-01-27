@@ -1,5 +1,5 @@
 /*!
- * jQuery Migrate - v4.0.1 - 2026-01-18T00:35Z
+ * jQuery Migrate - v4.0.2 - 2026-01-21T12:38Z
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.com/license/
@@ -26,7 +26,7 @@
 } )( function( jQuery, window ) {
 "use strict";
 
-jQuery.migrateVersion = "4.0.1";
+jQuery.migrateVersion = "4.0.2";
 
 // Returns 0 if v1 == v2, -1 if v1 < v2, 1 if v1 > v2
 function compareVersions( v1, v2 ) {

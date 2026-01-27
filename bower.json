@@ -41,6 +41,6 @@
 		"jquery-4.0.0": "jquery#4.0.0",
 		"jquery-migrate-1.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-1.4.1.tgz",
 		"jquery-migrate-3.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.6.0.tgz",
-		"jquery-migrate-4.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-4.0.1.tgz"
+		"jquery-migrate-4.x": "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-4.0.2.tgz"
 	}
 }
