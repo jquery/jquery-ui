@@ -130,12 +130,7 @@ return $.widget( "ui.pointer", {
 
 	_pointerMove: function( event ) {
 		if ( this._pointerMoved && event.buttons === 0 ) {
-			if ( event.altKey || event.ctrlKey ||
-					event.metaKey || event.shiftKey ) {
-				this.ignoreMissingButtons = true;
-			} else if ( !this.ignoreMissingButtons ) {
 				return this._pointerUp( event );
-			}
 		}
 
 		if ( event.buttons || event.button ) {
@@ -180,7 +175,6 @@ return $.widget( "ui.pointer", {
 			delete this._pointerDelayTimer;
 		}
 
-		this.ignoreMissingButtons = false;
 		pointerHandled = false;
 		event.preventDefault();
 	},
