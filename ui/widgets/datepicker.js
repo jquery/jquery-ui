@@ -235,6 +235,22 @@ $.extend( Datepicker.prototype, {
 		if ( inst.settings.disabled ) {
 			this._disableDatepicker( target );
 		}
+
+		// Support: jQuery 4.0.0+
+		// jQuery 4.0+ follows native focus events order, meaning that `focusin`
+		// is fired after `focus`. As delegated `focus` is implemented in jQuery
+		// via `focusin`, `focus` handlers attached during a delegated `focus`
+		// handler will not fire until the second time the field receives focus.
+		// This is what the `_attachments` method does. To account for that, show
+		// the datepicker if input is already focused. `_showDatepicker` checks
+		// if the datepicker is already open, so it's not a problem that it
+		// fires again as a `focus` handler in jQuery <4.
+		//
+		// Note that the fact such an initialization worked inside of delegated
+		// focus handlers was a result of an implementation detail in jQuery. If
+		// a regular `focus` handler was used to initialize the datepicker, neither
+		// jQuery 4.0 nor 3.x would show the datepicker without the call below.
+		this._showDatepickerIfFocused( input );
 	},
 
 	/* Make attachments based on settings. */
@@ -594,6 +610,7 @@ $.extend( Datepicker.prototype, {
 			this._setDate( inst, date );
 			this._updateAlternate( inst );
 			this._updateDatepicker( inst );
+			this._showDatepickerIfFocused( target );
 		}
 	},
 
@@ -859,6 +876,12 @@ $.extend( Datepicker.prototype, {
 			}
 
 			$.datepicker._curInst = inst;
+		}
+	},
+
+	_showDatepickerIfFocused: function( input ) {
+		if ( input.length && input.is( ":focus" ) ) {
+			this._showDatepicker( input[ 0 ] );
 		}
 	},
 

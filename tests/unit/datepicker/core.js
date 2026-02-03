@@ -29,7 +29,7 @@ QUnit.test( "initialization - Reinitialization after body had been emptied.", fu
 QUnit.test( "widget method - empty collection", function( assert ) {
 	assert.expect( 1 );
 	$( "#nonExist" ).datepicker(); // Should create nothing
-	assert.ok( !$( "#ui-datepicker-div" ).length, "Non init on empty collection" );
+	assert.strictEqual( $( "#ui-datepicker-div" ).length, 0, "Non init on empty collection" );
 } );
 
 QUnit.test( "widget method", function( assert ) {
@@ -538,6 +538,42 @@ QUnit.test( "mouse", function( assert ) {
 	$( ".ui-datepicker-calendar tbody a:contains(18)", dp ).simulate( "click" );
 	testHelper.equalsDate( assert, inl.datepicker( "getDate" ), new Date( 2008, 3 - 1, 18 ),
 		"Mouse click inline - next" );
+} );
+
+QUnit.test( "initialized on focus is immediately shown (gh-2385)", function( assert ) {
+	assert.expect( 2 );
+
+	var dp, dp2, inp, inp2, parent;
+
+	try {
+		inp = $( "#inp" );
+		parent = inp.parent();
+		parent.on( "focus", "#inp:not(.hasDatepicker)", function() {
+			testHelper.init( "#inp" );
+			dp = $( "#ui-datepicker-div" );
+		} );
+		inp.trigger( "focus" );
+		assert.equal( dp.css( "display" ), "block",
+			"Datepicker - visible (delegated focus)" );
+	} finally {
+		inp.datepicker( "destroy" );
+	}
+
+	try {
+		inp2 = $( "#inp2" );
+		inp2.on( "focus", function() {
+			if ( $( this ).hasClass( "hasDatepicker" ) ) {
+				return;
+			}
+			testHelper.init( "#inp2" );
+			dp2 = $( "#ui-datepicker-div" );
+		} );
+		inp2.trigger( "focus" );
+		assert.equal( dp2.css( "display" ), "block",
+			"Datepicker - visible (regular focus)" );
+	} finally {
+		inp2.datepicker( "destroy" );
+	}
 } );
 
 } );
