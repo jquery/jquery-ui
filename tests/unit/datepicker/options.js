@@ -1260,4 +1260,53 @@ QUnit.test( "Ticket #15284: escaping text parameters", function( assert ) {
 	} );
 } );
 
+QUnit.test( "Ticket #7098: Broken handling of four digit years before year 100", function( assert ) {
+	assert.expect( 123 );
+
+	var year = null,
+		someDate = null,
+		parsedHDate = null,
+		inp = testHelper.init( "#inp", {
+			changeMonth: true,
+			changeYear: true,
+			shortYearCutoff: 0,
+			yearRange: "0:2100"
+		} );
+
+	someDate = $.datepicker._createDate( 0, 1, 29 );
+	assert.equal( someDate.getFullYear(), 0, "creates Date object for 0000-02-29" );
+	assert.equal( someDate.getMonth(), 1,    "creates Date object for 0000-02-29" );
+	assert.equal( someDate.getDate(), 29,    "creates Date object for 0000-02-29" );
+
+	for ( year = 0; year < 100; year++ ) { // loop 100
+		parsedHDate = $.datepicker.parseDate( "yy-m-d", ( year < 10 ? "000" : "00" ) + year + "-10-23", { shortYearCutoff: 0 } );
+		someDate = new Date( year, 2 - 1, 3 );
+		someDate.setFullYear( year );
+		assert.equal(
+			someDate.getFullYear(), parsedHDate.getFullYear(),
+			"parseDate returns date object with the correct year"
+		);
+	}
+
+	for ( year = 1; year < 100; year += 10 ) { // loop 10
+		someDate = new Date( year, 2, 3 );
+		someDate.setFullYear( year );
+		inp.datepicker( "option", "defaultDate", someDate );
+		inp.datepicker( "show" );
+		$( "td[data-handler='selectDay'] a" ).first().click();
+		inp.datepicker( "show" );
+		assert.equal(
+			$( ".ui-datepicker-year option:selected" ).val(),
+			someDate.getFullYear(),
+			"Selected year stays the same as the default"
+		);
+		inp.datepicker( "hide" );
+		assert.ok(
+			inp.val().indexOf( someDate.getFullYear() ) !== -1,
+			"inp val has the default/selected year"
+		);
+		inp.datepicker( "setDate", null );
+	}
+} );
+
 } );
