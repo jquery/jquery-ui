@@ -8,7 +8,7 @@ define( [
 
 return $.extend( helper, {
 	addMonths: function( date, offset ) {
-		var maxDay = 32 - new Date( date.getFullYear(), date.getMonth() + offset, 32 ).getDate();
+		var maxDay = 32 - $.datepicker._createDate( date.getFullYear(), date.getMonth() + offset, 32 ).getDate();
 		date.setDate( Math.min( date.getDate(), maxDay ) );
 		date.setMonth( date.getMonth() + offset );
 		return date;
@@ -19,8 +19,8 @@ return $.extend( helper, {
 			assert.ok( false, message + " - missing date" );
 			return;
 		}
-		d1 = new Date( d1.getFullYear(), d1.getMonth(), d1.getDate() );
-		d2 = new Date( d2.getFullYear(), d2.getMonth(), d2.getDate() );
+		d1 = $.datepicker._createDate( d1.getFullYear(), d1.getMonth(), d1.getDate() );
+		d2 = $.datepicker._createDate( d2.getFullYear(), d2.getMonth(), d2.getDate() );
 		assert.equal( d1.toString(), d2.toString(), message );
 	},
 
