@@ -117,19 +117,19 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 	},
 
 	_setHandleClassName: function() {
-		var that = this;
 		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
 		$.each( this.items, function() {
-			that._addClass(
-				this.instance.options.handle ?
-					this.item.find( this.instance.options.handle ) :
-					this.item,
-				"ui-sortable-handle"
-			);
+
+			// We use addClass() here, instead of _addClass(), because it is much faster.
+			( this.instance.options.handle ?
+				this.item.find( this.instance.options.handle ) :
+				this.item
+			).addClass( "ui-sortable-handle" );
 		} );
 	},
 
 	_destroy: function() {
+		this.element.find( ".ui-sortable-handle" ).removeClass( "ui-sortable-handle" );
 		this._mouseDestroy();
 
 		for ( var i = this.items.length - 1; i >= 0; i-- ) {
