@@ -1220,6 +1220,8 @@ $.extend( Datepicker.prototype, {
 			day = -1,
 			doy = -1,
 			literal = false,
+			length = -1,
+			isFromFullYear = false,
 			date,
 
 			// Check whether a format character is doubled
@@ -1242,7 +1244,8 @@ $.extend( Datepicker.prototype, {
 				if ( !num ) {
 					throw "Missing number at position " + iValue;
 				}
-				iValue += num[ 0 ].length;
+				length = num[ 0 ].length;
+				iValue += length;
 				return parseInt( num[ 0 ], 10 );
 			},
 
@@ -1304,18 +1307,21 @@ $.extend( Datepicker.prototype, {
 						break;
 					case "y":
 						year = getNumber( "y" );
+						isFromFullYear = length === 4;
 						break;
 					case "@":
 						date = new Date( getNumber( "@" ) );
 						year = date.getFullYear();
 						month = date.getMonth() + 1;
 						day = date.getDate();
+						isFromFullYear = true;
 						break;
 					case "!":
 						date = new Date( ( getNumber( "!" ) - this._ticksTo1970 ) / 10000 );
 						year = date.getFullYear();
 						month = date.getMonth() + 1;
 						day = date.getDate();
+						isFromFullYear = true;
 						break;
 					case "'":
 						if ( lookAhead( "'" ) ) {
@@ -1339,7 +1345,7 @@ $.extend( Datepicker.prototype, {
 
 		if ( year === -1 ) {
 			year = new Date().getFullYear();
-		} else if ( year < 100 ) {
+		} else if ( year < 100 && !isFromFullYear ) {
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				( year <= shortYearCutoff ? 0 : -100 );
 		}
@@ -2174,9 +2180,16 @@ $.extend( Datepicker.prototype, {
 		return this.formatDate( this._get( inst, "dateFormat" ), date, this._getFormatConfig( inst ) );
 	},
 
-	/** Create a date object */
+	/** Create a date object with the correct year for years 0 through 99 */
 	_createDate: function( year, month, day ) {
-		return new Date( year, month, day );
+		var dateObject = new Date( year, month, day );
+		if ( year >= 0 && year < 100 ) {
+			dateObject.setDate( 1 );
+			dateObject.setFullYear( year );
+			dateObject.setMonth( month );
+			dateObject.setDate( day );
+		}
+		return dateObject;
 	}
 } );
 
