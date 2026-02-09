@@ -253,8 +253,8 @@ grunt.initConfig( {
 				"jquery-simulate/jquery.simulate.js": "jquery-simulate/jquery.simulate.js",
 				"jquery-simulate/LICENSE.txt": "jquery-simulate/LICENSE.txt",
 
-				"jquery/jquery.js": "jquery-3.x/dist/jquery.js",
-				"jquery/LICENSE.txt": "jquery-3.x/LICENSE.txt",
+				"jquery/jquery.js": "jquery/dist/jquery.js",
+				"jquery/LICENSE.txt": "jquery/LICENSE.txt",
 
 				"jquery-1.12.4/jquery.js": "jquery-1.12.4/dist/jquery.js",
 				"jquery-1.12.4/LICENSE.txt": "jquery-1.12.4/LICENSE.txt",
