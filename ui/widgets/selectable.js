@@ -142,31 +142,28 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 			}
 		} );
 
-		$( event.target ).parents().addBack().each( function() {
-			var doSelect,
-				selectee = $.data( this, "selectable-item" );
-			if ( selectee ) {
+		var element = $( event.target ).closest( ":data(selectable-item)" );
+		if ( element.length ) {
+			var selectee = element.data( "selectable-item" ),
 				doSelect = ( !event.metaKey && !event.ctrlKey ) ||
 					!selectee.$element.hasClass( "ui-selected" );
-				that._removeClass( selectee.$element, doSelect ? "ui-unselecting" : "ui-selected" )
-					._addClass( selectee.$element, doSelect ? "ui-selecting" : "ui-unselecting" );
-				selectee.unselecting = !doSelect;
-				selectee.selecting = doSelect;
-				selectee.selected = doSelect;
+			that._removeClass( selectee.$element, doSelect ? "ui-unselecting" : "ui-selected" )
+				._addClass( selectee.$element, doSelect ? "ui-selecting" : "ui-unselecting" );
+			selectee.unselecting = !doSelect;
+			selectee.selecting = doSelect;
+			selectee.selected = doSelect;
 
-				// selectable (UN)SELECTING callback
-				if ( doSelect ) {
-					that._trigger( "selecting", event, {
-						selecting: selectee.element
-					} );
-				} else {
-					that._trigger( "unselecting", event, {
-						unselecting: selectee.element
-					} );
-				}
-				return false;
+			// selectable (UN)SELECTING callback
+			if ( doSelect ) {
+				that._trigger( "selecting", event, {
+					selecting: selectee.element
+				} );
+			} else {
+				that._trigger( "unselecting", event, {
+					unselecting: selectee.element
+				} );
 			}
-		} );
+		}
 
 	},
 
