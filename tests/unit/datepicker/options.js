@@ -251,7 +251,7 @@ QUnit.test( "otherMonths", function( assert ) {
 } );
 
 QUnit.test( "defaultDate", function( assert ) {
-	assert.expect( 16 );
+	assert.expect( 18 );
 	var inp = testHelper.init( "#inp" ),
 		date = new Date();
 	inp.val( "" ).datepicker( "show" ).
@@ -334,6 +334,11 @@ QUnit.test( "defaultDate", function( assert ) {
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	date = new Date( 2007, 7 - 1, 4 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 07/04/2007" );
+	inp.datepicker( "option", { defaultDate: "07/04/0001" } ).
+		datepicker( "hide" ).val( "" ).datepicker( "show" ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+	date = $.datepicker._newDate( 1, 7 - 1, 4 );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 07/04/0001" );
 	inp.datepicker( "option", { dateFormat: "yy-mm-dd", defaultDate: "2007-04-02" } ).
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -346,6 +351,11 @@ QUnit.test( "defaultDate", function( assert ) {
 		datepicker( "hide" ).val( "" ).datepicker( "show" ).
 		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 01/26/2007" );
+	date = $.datepicker._newDate( 1, 1 - 1, 26 );
+	inp.datepicker( "option", { defaultDate: date } ).
+		datepicker( "hide" ).val( "" ).datepicker( "show" ).
+		simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date, "Default date 01/26/0001" );
 } );
 
 QUnit.test( "miscellaneous", function( assert ) {
@@ -521,14 +531,17 @@ QUnit.test( "minMax", function( assert ) {
 } );
 
 QUnit.test( "setDate", function( assert ) {
-	assert.expect( 24 );
+	assert.expect( 26 );
 	var inl, alt, minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		inp = testHelper.init( "#inp" ),
 		date1 = new Date( 2008, 6 - 1, 4 ),
-		date2 = new Date();
+		date2 = new Date(),
+		date3 = $.datepicker._newDate( 1, 4 - 1, 1 );
 	assert.ok( inp.datepicker( "getDate" ) == null, "Set date - default" );
 	inp.datepicker( "setDate", date1 );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date1, "Set date - 2008-06-04" );
+	inp.datepicker( "setDate", date3 );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date3, "Set date - 0001-04-01" );
 	date1 = new Date();
 	date1.setDate( date1.getDate() + 7 );
 	inp.datepicker( "setDate", +7 );
@@ -552,6 +565,10 @@ QUnit.test( "setDate", function( assert ) {
 	date1.setDate( date1.getDate() - 21 );
 	inp.datepicker( "setDate", "c -3 w" );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date1, "Set date - c -3 w" );
+	date3 = new Date( date1 );
+	date3.setFullYear( 1 );
+	inp.datepicker( "setDate", "c " + ( 1 - date1.getFullYear() ) + " y" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), date3, "Set date - 0001 relatively" );
 
 	// Inline
 	inl = testHelper.init( "#inl" );
@@ -949,7 +966,7 @@ QUnit.test( "iso8601Week", function( assert ) {
 } );
 
 QUnit.test( "parseDate", function( assert ) {
-	assert.expect( 26 );
+	assert.expect( 29 );
 	testHelper.init( "#inp" );
 	var currentYear, gmtDate, fr, settings, zh;
 	assert.ok( $.datepicker.parseDate( "d m y", "" ) == null, "Parse date empty" );
@@ -976,6 +993,8 @@ QUnit.test( "parseDate", function( assert ) {
 	testHelper.equalsDate( assert, $.datepicker.parseDate( "'day' d 'of' MM (''DD''), yy",
 		"day 3 of February ('Saturday'), 2001" ), new Date( 2001, 2 - 1, 3 ),
 		"Parse date 'day' d 'of' MM (''DD''), yy" );
+	testHelper.equalsDate( assert, $.datepicker.parseDate( "yy-mm-dd", "0001-02-03" ),
+		$.datepicker._newDate( 1, 2 - 1, 3 ), "Parse ancient date yy-mm-dd" );
 	currentYear = new Date().getFullYear();
 	testHelper.equalsDate( assert, $.datepicker.parseDate( "y-m-d", ( currentYear - 2000 ) + "-02-03" ),
 			new Date( currentYear, 2 - 1, 3 ), "Parse date y-m-d - default cutuff" );
@@ -995,6 +1014,9 @@ QUnit.test( "parseDate", function( assert ) {
 	gmtDate.setMinutes( gmtDate.getMinutes() - gmtDate.getTimezoneOffset() );
 	testHelper.equalsDate( assert, $.datepicker.parseDate( "@", "981158400000" ), gmtDate, "Parse date @" );
 	testHelper.equalsDate( assert, $.datepicker.parseDate( "!", "631167552000000000" ), gmtDate, "Parse date !" );
+	gmtDate = $.datepicker._newDate( 1, 2 - 1, 3 );
+	testHelper.equalsDate( assert, $.datepicker.parseDate( "@", "-62132724000000" ), gmtDate, "Parse ancient date @" );
+	testHelper.equalsDate( assert, $.datepicker.parseDate( "!", "28728000000000" ), gmtDate, "Parse ancient date !" );
 
 	fr = $.datepicker.regional.fr;
 	settings = { dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
@@ -1124,7 +1146,7 @@ QUnit.test( "Ticket #7244: date parser does not fail when too many numbers are p
 } );
 
 QUnit.test( "formatDate", function( assert ) {
-	assert.expect( 16 );
+	assert.expect( 17 );
 	testHelper.init( "#inp" );
 	var gmtDate, fr, settings;
 	assert.equal( $.datepicker.formatDate( "d m y", new Date( 2001, 2 - 1, 3 ) ),
@@ -1148,6 +1170,8 @@ QUnit.test( "formatDate", function( assert ) {
 	assert.equal( $.datepicker.formatDate( "'day' d 'of' MM (''DD''), yy",
 		new Date( 2001, 2 - 1, 3 ) ), "day 3 of February ('Saturday'), 2001",
 		"Format date 'day' d 'of' MM ('DD'), yy" );
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", $.datepicker._newDate( 999, 2 - 1, 3 ) ),
+		"0999-02-03", "Format ancient date yy-mm-dd" );
 	gmtDate = new Date( 2001, 2 - 1, 3 );
 	gmtDate.setMinutes( gmtDate.getMinutes() - gmtDate.getTimezoneOffset() );
 	assert.equal( $.datepicker.formatDate( "@", gmtDate ), "981158400000", "Format date @" );
