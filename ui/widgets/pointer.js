@@ -58,7 +58,7 @@ return $.widget( "ui.pointer", {
 				}
 			} );
 
-		this.started = false;
+		this._pointerStarted = false;
 	},
 
 	_pointerDestroy: function() {
