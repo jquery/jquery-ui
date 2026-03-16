@@ -41,6 +41,30 @@ var cachedScrollbarWidth,
 	rpercent = /%$/,
 	_position = $.fn.position;
 
+function getZoomFactor( element ) {
+	var zoom = 1;
+	if ( element && element.currentCSSZoom !== undefined ) {
+		zoom = element.currentCSSZoom;
+	} else if ( element && element.ownerDocument ) {
+		var doc = element.ownerDocument.documentElement;
+		if ( doc.currentCSSZoom !== undefined ) {
+			zoom = doc.currentCSSZoom;
+		}
+	}
+	return zoom;
+}
+
+function normalizeOffset( offset, element ) {
+	var zoom = getZoomFactor( element );
+	if ( zoom !== 1 && offset ) {
+		return {
+			top: offset.top / zoom,
+			left: offset.left / zoom
+		};
+	}
+	return offset;
+}
+
 function getOffsets( offsets, width, height ) {
 	return [
 		parseFloat( offsets[ 0 ] ) * ( rpercent.test( offsets[ 0 ] ) ? width / 100 : 1 ),
@@ -82,7 +106,7 @@ function getDimensions( elem ) {
 	return {
 		width: elem.outerWidth(),
 		height: elem.outerHeight(),
-		offset: elem.offset()
+		offset: normalizeOffset( elem.offset(), raw )
 	};
 }
 
@@ -134,7 +158,9 @@ $.position = {
 			element: withinElement,
 			isWindow: isElemWindow,
 			isDocument: isDocument,
-			offset: hasOffset ? $( element ).offset() : { left: 0, top: 0 },
+			offset: hasOffset ?
+				normalizeOffset( $( element ).offset(), element ) :
+				{ left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
 			width: withinElement.outerWidth(),
