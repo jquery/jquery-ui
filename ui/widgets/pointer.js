@@ -32,7 +32,7 @@
 "use strict";
 
 var pointerHandled = false;
-$( document ).on( "pointerup", function() {
+$( document ).on( "pointerup pointercancel", function() {
 	pointerHandled = false;
 } );
 
@@ -66,7 +66,8 @@ return $.widget( "ui.pointer", {
 		if ( this._pointerMoveDelegate ) {
 			this.document
 				.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
-				.off( "pointerup." + this.widgetName, this._pointerUpDelegate );
+				.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
+				.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
 		}
 	},
 
@@ -117,10 +118,14 @@ return $.widget( "ui.pointer", {
 		this._pointerUpDelegate = function( event ) {
 			return that._pointerUp( event );
 		};
+		this._pointerCancelDelegate = function( event ) {
+			return that._pointerCancel( event );
+		};
 
 		this.document
 			.on( "pointermove." + this.widgetName, this._pointerMoveDelegate )
-			.on( "pointerup." + this.widgetName, this._pointerUpDelegate );
+			.on( "pointerup." + this.widgetName, this._pointerUpDelegate )
+			.on( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
 
 		event.preventDefault();
 
@@ -158,7 +163,8 @@ return $.widget( "ui.pointer", {
 	_pointerUp: function( event ) {
 		this.document
 			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
-			.off( "pointerup." + this.widgetName, this._pointerUpDelegate );
+			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
+			.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
 
 		if ( this._pointerStarted ) {
 			this._pointerStarted = false;
@@ -179,6 +185,29 @@ return $.widget( "ui.pointer", {
 		event.preventDefault();
 	},
 
+	// pointercancel fires when the browser takes over pointer control (e.g. scroll
+	// gesture, orientation change, stylus palm rejection). Unlike pointerup, it is
+	// not cancelable, so we skip preventDefault() and click-prevention data, but we
+	// still need to tear down all listeners and stop any active drag.
+	_pointerCancel: function( event ) {
+		this.document
+			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
+			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
+			.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
+
+		if ( this._pointerStarted ) {
+			this._pointerStarted = false;
+			this._pointerCancel( event );
+		}
+
+		if ( this._pointerDelayTimer ) {
+			clearTimeout( this._pointerDelayTimer );
+			delete this._pointerDelayTimer;
+		}
+
+		pointerHandled = false;
+	},
+
 	_pointerDistanceMet: function( event ) {
 		return ( Math.max(
 				Math.abs( this._pointerDownEvent.pageX - event.pageX ),
@@ -195,6 +224,10 @@ return $.widget( "ui.pointer", {
 	_pointerStart: function( /* event */ ) {},
 	_pointerDrag: function( /* event */ ) {},
 	_pointerStop: function( /* event */ ) {},
+	// _pointerStop by default so existing subwidgets need no changes.
+	_pointerCancel: function( event ) {
+		this._pointerStop( event );
+	},
 	_pointerCapture: function( /* event */ ) {
 		return true;
 	}
