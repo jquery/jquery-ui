@@ -403,4 +403,24 @@ QUnit.test( "range", function( assert ) {
 	element.slider( "destroy" );
 } );
 
+QUnit.test( "allowCrossingHandles", function( assert ) {
+	assert.expect( 1 );
+
+	element = $( "<div></div>" ).slider( {
+		range: true,
+		min: 0,
+		max: 100,
+		values: [ 25, 75 ],
+		allowCrossingHandles: true
+	} );
+
+	assert.deepEqual( element.slider( "values" ), [ 25, 75 ], "values" );
+
+	// var handles = element.find( ".ui-slider-handle" );
+	// handles.eq( 0 ).simulate( "drag", { dx: 1000 } );
+	// assert.deepEqual( element.slider( "values" ), [ 100, 75 ], "values" );
+
+	element.slider( "destroy" );
+} );
+
 } );
