@@ -13,6 +13,7 @@ common.testWidget( "button", {
 		iconPosition: "beginning",
 		label: null,
 		showLabel: true,
+		textDir: null,
 
 		// Callbacks
 		create: null

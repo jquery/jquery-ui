@@ -18,6 +18,7 @@ common.testWidget( "tabs", {
 		heightStyle: "content",
 		hide: null,
 		show: null,
+		textDir: null,
 
 		// Callbacks
 		activate: null,

@@ -13,6 +13,7 @@ common.testWidget( "checkboxradio", {
 		disabled: null,
 		icon: true,
 		label: null,
+		textDir: null,
 
 		// Callbacks
 		create: null
