@@ -112,7 +112,7 @@ return $.widget( "ui.pointer", {
 		}
 
 		if ( this._pointerDistanceMet( event ) && this._pointerDelayMet( event ) ) {
-			this._pointerStarted = ( this._pointerStart( event ) !== false );
+			this._pointerStarted = ( this._pointerStart( this._pointerDownEvent, event ) !== false );
 			if ( !this._pointerStarted ) {
 				event.preventDefault();
 				return true;
@@ -130,7 +130,7 @@ return $.widget( "ui.pointer", {
 			return that._pointerUp( event );
 		};
 		this._pointerCancelDelegate = function( event ) {
-			return that._pointerCancel( event );
+			return that._handlePointerCancel( event );
 		};
 
 		this.document
@@ -201,7 +201,7 @@ return $.widget( "ui.pointer", {
 	// gesture, orientation change, stylus palm rejection). Unlike pointerup, it is
 	// not cancelable, so we skip preventDefault() and click-prevention data, but we
 	// still need to tear down all listeners and stop any active drag.
-	_pointerCancel: function( event ) {
+	_handlePointerCancel: function( event ) {
 		this.document
 			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
 			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
@@ -236,6 +236,9 @@ return $.widget( "ui.pointer", {
 	_pointerStart: function( /* event */ ) {},
 	_pointerDrag: function( /* event */ ) {},
 	_pointerStop: function( /* event */ ) {},
+	_pointerCancel: function( event ) {
+		this._pointerStop( event );
+	},
 	_pointerCapture: function( /* event */ ) {
 		return true;
 	}
