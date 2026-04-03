@@ -69,6 +69,14 @@ return $.widget( "ui.pointer", {
 				.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
 				.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
 		}
+
+		if ( this._pointerDelayTimer ) {
+			clearTimeout( this._pointerDelayTimer );
+			delete this._pointerDelayTimer;
+		}
+
+		this._pointerStarted = false;
+		pointerHandled = false;
 	},
 
 	_pointerDown: function( event ) {
@@ -82,8 +90,6 @@ return $.widget( "ui.pointer", {
 			this._pointerUp( event );
 		}
 
-		this._pointerDownEvent = event;
-
 		var that = this,
 			btnIsLeft = event.button === 0,
 			elIsCancel = typeof this.options.cancel === "string" ?
@@ -93,8 +99,13 @@ return $.widget( "ui.pointer", {
 			return true;
 		}
 
+		this._pointerDownEvent = event;
+
 		this.pointerDelayMet = !this.options.delay;
 		if ( !this.pointerDelayMet ) {
+			if ( this._pointerDelayTimer ) {
+				clearTimeout( this._pointerDelayTimer );
+			}
 			this._pointerDelayTimer = setTimeout( function() {
 				that.pointerDelayMet = true;
 			}, this.options.delay );
@@ -144,7 +155,8 @@ return $.widget( "ui.pointer", {
 
 		if ( this._pointerStarted ) {
 			this._pointerDrag( event );
-			return event.preventDefault();
+			event.preventDefault();
+			return false;
 		}
 
 		if ( this._pointerDistanceMet( event ) && this._pointerDelayMet( event ) ) {
@@ -224,10 +236,6 @@ return $.widget( "ui.pointer", {
 	_pointerStart: function( /* event */ ) {},
 	_pointerDrag: function( /* event */ ) {},
 	_pointerStop: function( /* event */ ) {},
-	// _pointerStop by default so existing subwidgets need no changes.
-	_pointerCancel: function( event ) {
-		this._pointerStop( event );
-	},
 	_pointerCapture: function( /* event */ ) {
 		return true;
 	}
