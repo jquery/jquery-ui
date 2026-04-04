@@ -31,10 +31,6 @@
 } )( function( $ ) {
 "use strict";
 
-var pointerHandled = false;
-$( document ).on( "pointerup pointercancel", function() {
-	pointerHandled = false;
-} );
 
 return $.widget( "ui.pointer", {
 	version: "@VERSION",
@@ -43,6 +39,7 @@ return $.widget( "ui.pointer", {
 		distance: 1,
 		delay: 0
 	},
+
 	_pointerInit: function() {
 		var that = this;
 
@@ -76,11 +73,11 @@ return $.widget( "ui.pointer", {
 		}
 
 		this._pointerStarted = false;
-		pointerHandled = false;
 	},
 
 	_pointerDown: function( event ) {
-		if ( pointerHandled ) {
+		// Ignore any pointer that isn't the primary one (e.g. extra fingers).
+		if ( !event.isPrimary ) {
 			return;
 		}
 
@@ -139,14 +136,17 @@ return $.widget( "ui.pointer", {
 			.on( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
 
 		event.preventDefault();
-
-		pointerHandled = true;
 		return true;
 	},
 
 	_pointerMove: function( event ) {
+		// Document-level listeners fire for all pointers; ignore non-primary ones.
+		if ( !event.isPrimary ) {
+			return;
+		}
+
 		if ( this._pointerMoved && event.buttons === 0 ) {
-				return this._pointerUp( event );
+			return this._pointerUp( event );
 		}
 
 		if ( event.buttons || event.button ) {
@@ -173,6 +173,11 @@ return $.widget( "ui.pointer", {
 	},
 
 	_pointerUp: function( event ) {
+		// Document-level listeners fire for all pointers; ignore non-primary ones.
+		if ( !event.isPrimary ) {
+			return;
+		}
+
 		this.document
 			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
 			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
@@ -193,15 +198,15 @@ return $.widget( "ui.pointer", {
 			delete this._pointerDelayTimer;
 		}
 
-		pointerHandled = false;
 		event.preventDefault();
 	},
 
-	// pointercancel fires when the browser takes over pointer control (e.g. scroll
-	// gesture, orientation change, stylus palm rejection). Unlike pointerup, it is
-	// not cancelable, so we skip preventDefault() and click-prevention data, but we
-	// still need to tear down all listeners and stop any active drag.
 	_handlePointerCancel: function( event ) {
+		// Document-level listeners fire for all pointers; ignore non-primary ones.
+		if ( !event.isPrimary ) {
+			return;
+		}
+
 		this.document
 			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
 			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
@@ -216,8 +221,6 @@ return $.widget( "ui.pointer", {
 			clearTimeout( this._pointerDelayTimer );
 			delete this._pointerDelayTimer;
 		}
-
-		pointerHandled = false;
 	},
 
 	_pointerDistanceMet: function( event ) {
