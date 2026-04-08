@@ -76,7 +76,7 @@ return $.widget( "ui.pointer", {
 	},
 
 	_pointerDown: function( event ) {
-		
+
 		// Ignore any pointer that isn't the primary one (e.g. extra fingers).
 		if ( !event.isPrimary ) {
 			return;
@@ -141,7 +141,7 @@ return $.widget( "ui.pointer", {
 	},
 
 	_pointerMove: function( event ) {
-		
+
 		// Document-level listeners fire for all pointers; ignore non-primary ones.
 		if ( !event.isPrimary ) {
 			return;
@@ -175,7 +175,7 @@ return $.widget( "ui.pointer", {
 	},
 
 	_pointerUp: function( event ) {
-		
+
 		// Document-level listeners fire for all pointers; ignore non-primary ones.
 		if ( !event.isPrimary ) {
 			return;
@@ -205,7 +205,7 @@ return $.widget( "ui.pointer", {
 	},
 
 	_handlePointerCancel: function( event ) {
-		
+
 		// Document-level listeners fire for all pointers; ignore non-primary ones.
 		if ( !event.isPrimary ) {
 			return;
