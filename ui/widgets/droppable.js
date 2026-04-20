@@ -426,7 +426,9 @@ $.ui.ddmanager = {
 
 				if ( parent.length ) {
 					parentInstance = $( parent[ 0 ] ).droppable( "instance" );
-					parentInstance.greedyChild = ( c === "isover" );
+					parentInstance.greedyChild =
+						( typeof parentInstance.movedIntoGreedyChildInthisLoop !== "undefined" ) ||
+						( c === "isover" );
 				}
 			}
 
@@ -434,18 +436,18 @@ $.ui.ddmanager = {
 			if ( parentInstance && c === "isover" ) {
 				parentInstance.isover = false;
 				parentInstance.isout = true;
+				parentInstance.movedIntoGreedyChildInthisLoop = true;
 				parentInstance._out.call( parentInstance, event );
 			}
 
 			this[ c ] = true;
 			this[ c === "isout" ? "isover" : "isout" ] = false;
 			this[ c === "isover" ? "_over" : "_out" ].call( this, event );
+		} );
 
-			// We just moved out of a greedy child
-			if ( parentInstance && c === "isout" ) {
-				parentInstance.isout = false;
-				parentInstance.isover = true;
-				parentInstance._over.call( parentInstance, event );
+		$.each( $.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
+			if ( typeof this.movedIntoGreedyChildInthisLoop !== "undefined" ) {
+				delete this.movedIntoGreedyChildInthisLoop;
 			}
 		} );
 
