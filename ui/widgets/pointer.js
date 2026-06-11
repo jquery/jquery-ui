@@ -60,11 +60,9 @@ return $.widget( "ui.pointer", {
 
 	_pointerDestroy: function() {
 		this.element.off( "." + this.widgetName );
-		if ( this._pointerMoveDelegate ) {
-			this.document
-				.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
-				.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
-				.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
+		if ( this._pointerId !== undefined ) {
+			this._releasePointerCapture( this._pointerId );
+			delete this._pointerId;
 		}
 
 		if ( this._pointerDelayTimer ) {
@@ -131,7 +129,14 @@ return $.widget( "ui.pointer", {
 			return that._handlePointerCancel( event );
 		};
 
-		this.document
+		// Capture the pointer so that all subsequent events for it are
+		// retargeted to the element, even when the pointer leaves it. This
+		// mimics the touch model (events fire where the interaction started)
+		// and removes the need for document-level listeners.
+		this._pointerId = event.pointerId;
+		this.element[ 0 ].setPointerCapture( event.pointerId );
+
+		this.element
 			.on( "pointermove." + this.widgetName, this._pointerMoveDelegate )
 			.on( "pointerup." + this.widgetName, this._pointerUpDelegate )
 			.on( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
@@ -142,7 +147,8 @@ return $.widget( "ui.pointer", {
 
 	_pointerMove: function( event ) {
 
-		// Document-level listeners fire for all pointers; ignore non-primary ones.
+		// The element receives events for every pointer over it, not just
+		// the captured one; ignore non-primary pointers.
 		if ( !event.isPrimary ) {
 			return;
 		}
@@ -176,15 +182,19 @@ return $.widget( "ui.pointer", {
 
 	_pointerUp: function( event ) {
 
-		// Document-level listeners fire for all pointers; ignore non-primary ones.
+		// The element receives events for every pointer over it, not just
+		// the captured one; ignore non-primary pointers.
 		if ( !event.isPrimary ) {
 			return;
 		}
 
-		this.document
+		this.element
 			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
 			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
 			.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
+
+		this._releasePointerCapture( event.pointerId );
+		delete this._pointerId;
 
 		if ( this._pointerStarted ) {
 			this._pointerStarted = false;
@@ -206,15 +216,19 @@ return $.widget( "ui.pointer", {
 
 	_handlePointerCancel: function( event ) {
 
-		// Document-level listeners fire for all pointers; ignore non-primary ones.
+		// The element receives events for every pointer over it, not just
+		// the captured one; ignore non-primary pointers.
 		if ( !event.isPrimary ) {
 			return;
 		}
 
-		this.document
+		this.element
 			.off( "pointermove." + this.widgetName, this._pointerMoveDelegate )
 			.off( "pointerup." + this.widgetName, this._pointerUpDelegate )
 			.off( "pointercancel." + this.widgetName, this._pointerCancelDelegate );
+
+		this._releasePointerCapture( event.pointerId );
+		delete this._pointerId;
 
 		if ( this._pointerStarted ) {
 			this._pointerStarted = false;
@@ -237,6 +251,16 @@ return $.widget( "ui.pointer", {
 
 	_pointerDelayMet: function( /* event */ ) {
 		return this.pointerDelayMet;
+	},
+
+	_releasePointerCapture: function( pointerId ) {
+		var elem = this.element[ 0 ];
+
+		// The capture is released implicitly on pointerup/pointercancel,
+		// so only release it explicitly if it is still active.
+		if ( elem && elem.hasPointerCapture( pointerId ) ) {
+			elem.releasePointerCapture( pointerId );
+		}
 	},
 
 	// These are placeholder methods, to be overriden by extending plugin
