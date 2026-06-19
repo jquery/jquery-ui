@@ -27,7 +27,7 @@ datepicker.regional.it = {
 	dayNames: [ "Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato" ],
 	dayNamesShort: [ "Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab" ],
 	dayNamesMin: [ "Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa" ],
-	weekHeader: "Sm",
+	weekHeader: "#",
 	dateFormat: "dd/mm/yy",
 	firstDay: 1,
 	isRTL: false,
