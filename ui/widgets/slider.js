@@ -24,7 +24,7 @@
 		// AMD. Register as an anonymous module.
 		define( [
 			"jquery",
-			"./mouse",
+			"./pointer",
 			"../keycode",
 			"../version",
 			"../widget"
@@ -37,7 +37,7 @@
 } )( function( $ ) {
 "use strict";
 
-return $.widget( "ui.slider", $.ui.mouse, {
+return $.widget( "ui.slider", $.ui.pointer, {
 	version: "@VERSION",
 	widgetEventPrefix: "slide",
 
@@ -73,11 +73,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 
 	_create: function() {
 		this._keySliding = false;
-		this._mouseSliding = false;
+		this._pointerSliding = false;
 		this._animateOff = true;
 		this._handleIndex = null;
 		this._detectOrientation();
-		this._mouseInit();
+		this._pointerInit();
 		this._calculateNewMax();
 
 		this._addClass( "ui-slider ui-slider-" + this.orientation,
@@ -178,11 +178,11 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			this.range.remove();
 		}
 
-		this._mouseDestroy();
+		this._pointerDestroy();
 	},
 
-	_mouseCapture: function( event ) {
-		var position, normValue, distance, closestHandle, index, allowed, offset, mouseOverHandle,
+	_pointerCapture: function( event ) {
+		var position, normValue, distance, closestHandle, index, allowed, offset, pointerOverHandle,
 			that = this,
 			o = this.options;
 
@@ -197,7 +197,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this.elementOffset = this.element.offset();
 
 		position = { x: event.pageX, y: event.pageY };
-		normValue = this._normValueFromMouse( position );
+		normValue = this._normValueFromPointer( position );
 		distance = this._valueMax() - this._valueMin() + 1;
 		this.handles.each( function( i ) {
 			var thisDistance = Math.abs( normValue - that.values( i ) );
@@ -214,7 +214,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		if ( allowed === false ) {
 			return false;
 		}
-		this._mouseSliding = true;
+		this._pointerSliding = true;
 
 		this._handleIndex = index;
 
@@ -222,8 +222,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		closestHandle.trigger( "focus" );
 
 		offset = closestHandle.offset();
-		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
-		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
+		pointerOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
+		this._clickOffset = pointerOverHandle ? { left: 0, top: 0 } : {
 			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
 			top: event.pageY - offset.top -
 				( closestHandle.height() / 2 ) -
@@ -239,22 +239,22 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		return true;
 	},
 
-	_mouseStart: function() {
+	_pointerStart: function() {
 		return true;
 	},
 
-	_mouseDrag: function( event ) {
+	_pointerDrag: function( event ) {
 		var position = { x: event.pageX, y: event.pageY },
-			normValue = this._normValueFromMouse( position );
+			normValue = this._normValueFromPointer( position );
 
 		this._slide( event, this._handleIndex, normValue );
 
 		return false;
 	},
 
-	_mouseStop: function( event ) {
+	_pointerStop: function( event ) {
 		this._removeClass( this.handles, null, "ui-state-active" );
-		this._mouseSliding = false;
+		this._pointerSliding = false;
 
 		this._stop( event, this._handleIndex );
 		this._change( event, this._handleIndex );
@@ -270,38 +270,38 @@ return $.widget( "ui.slider", $.ui.mouse, {
 		this.orientation = ( this.options.orientation === "vertical" ) ? "vertical" : "horizontal";
 	},
 
-	_normValueFromMouse: function( position ) {
+	_normValueFromPointer: function( position ) {
 		var pixelTotal,
-			pixelMouse,
-			percentMouse,
+			pixelPointer,
+			percentPointer,
 			valueTotal,
-			valueMouse;
+			valuePointer;
 
 		if ( this.orientation === "horizontal" ) {
 			pixelTotal = this.elementSize.width;
-			pixelMouse = position.x - this.elementOffset.left -
+			pixelPointer = position.x - this.elementOffset.left -
 				( this._clickOffset ? this._clickOffset.left : 0 );
 		} else {
 			pixelTotal = this.elementSize.height;
-			pixelMouse = position.y - this.elementOffset.top -
+			pixelPointer = position.y - this.elementOffset.top -
 				( this._clickOffset ? this._clickOffset.top : 0 );
 		}
 
-		percentMouse = ( pixelMouse / pixelTotal );
-		if ( percentMouse > 1 ) {
-			percentMouse = 1;
+		percentPointer = ( pixelPointer / pixelTotal );
+		if ( percentPointer > 1 ) {
+			percentPointer = 1;
 		}
-		if ( percentMouse < 0 ) {
-			percentMouse = 0;
+		if ( percentPointer < 0 ) {
+			percentPointer = 0;
 		}
 		if ( this.orientation === "vertical" ) {
-			percentMouse = 1 - percentMouse;
+			percentPointer = 1 - percentPointer;
 		}
 
 		valueTotal = this._valueMax() - this._valueMin();
-		valueMouse = this._valueMin() + percentMouse * valueTotal;
+		valuePointer = this._valueMin() + percentPointer * valueTotal;
 
-		return this._trimAlignValue( valueMouse );
+		return this._trimAlignValue( valuePointer );
 	},
 
 	_uiHash: function( index, value, values ) {
@@ -366,7 +366,7 @@ return $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_change: function( event, index ) {
-		if ( !this._keySliding && !this._mouseSliding ) {
+		if ( !this._keySliding && !this._pointerSliding ) {
 
 			//store the last changed value index for reference when handles overlap
 			this._lastChangedValue = index;
