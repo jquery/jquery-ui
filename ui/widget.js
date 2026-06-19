@@ -301,10 +301,10 @@ $.Widget.prototype = {
 		this.uuid = widgetUuid++;
 		this.eventNamespace = "." + this.widgetName + this.uuid;
 
-		this.bindings = $();
+		this.bindings = new Set();
 		this.hoverable = $();
 		this.focusable = $();
-		this.classesElementLookup = {};
+		this.classesElementLookup = Object.create( null );
 
 		if ( element !== this ) {
 			$.data( element, this.widgetFullName, this );
@@ -355,7 +355,7 @@ $.Widget.prototype = {
 
 		this._destroy();
 		$.each( this.classesElementLookup, function( key, value ) {
-			that._removeClass( value, key );
+			that._removeClass( $( Array.from( value ) ), key );
 		} );
 
 		// We can probably remove the unbind calls in 2.0
@@ -368,7 +368,7 @@ $.Widget.prototype = {
 			.removeAttr( "aria-disabled" );
 
 		// Clean up events and states
-		this.bindings.off( this.eventNamespace );
+		$( Array.from( this.bindings ) ).off( this.eventNamespace );
 	},
 
 	_destroy: $.noop,
@@ -450,16 +450,12 @@ $.Widget.prototype = {
 			currentElements = this.classesElementLookup[ classKey ];
 			if ( value[ classKey ] === this.options.classes[ classKey ] ||
 					!currentElements ||
-					!currentElements.length ) {
+					!currentElements.size ) {
 				continue;
 			}
 
-			// We are doing this to create a new jQuery object because the _removeClass() call
-			// on the next line is going to destroy the reference to the current elements being
-			// tracked. We need to save a copy of this collection so that we can add the new classes
-			// below.
-			elements = $( currentElements.get() );
-			this._removeClass( currentElements, classKey );
+			elements = $( Array.from( currentElements ) );
+			this._removeClass( elements, classKey );
 
 			// We don't use _addClass() here, because that uses this.options.classes
 			// for generating the string of classes. We want to use the value passed in from
@@ -509,7 +505,7 @@ $.Widget.prototype = {
 					return elements;
 				} )
 					.some( function( elements ) {
-						return elements.is( element );
+						return elements.has( element );
 					} );
 
 				if ( !isTracked ) {
@@ -525,12 +521,24 @@ $.Widget.prototype = {
 		function processClassString( classes, checkOption ) {
 			var current, i;
 			for ( i = 0; i < classes.length; i++ ) {
-				current = that.classesElementLookup[ classes[ i ] ] || $();
+				current = that.classesElementLookup[ classes[ i ] ] || new Set();
 				if ( options.add ) {
 					bindRemoveEvent();
-					current = $( $.uniqueSort( current.get().concat( options.element.get() ) ) );
+
+					// This function is invoked synchronously, so the reference
+					// to `current` is not an issue.
+					// eslint-disable-next-line no-loop-func
+					$.each( options.element, function( _i, node ) {
+						current.add( node );
+					} );
 				} else {
-					current = $( current.not( options.element ).get() );
+
+					// This function is invoked synchronously, so the reference
+					// to `current` is not an issue.
+					// eslint-disable-next-line no-loop-func
+					$.each( options.element, function( _i, node ) {
+						current.delete( node );
+					} );
 				}
 				that.classesElementLookup[ classes[ i ] ] = current;
 				full.push( classes[ i ] );
@@ -553,9 +561,7 @@ $.Widget.prototype = {
 	_untrackClassesElement: function( event ) {
 		var that = this;
 		$.each( that.classesElementLookup, function( key, value ) {
-			if ( $.inArray( event.target, value ) !== -1 ) {
-				that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
-			}
+			value.delete( event.target );
 		} );
 
 		this._off( $( event.target ) );
@@ -583,6 +589,7 @@ $.Widget.prototype = {
 	},
 
 	_on: function( suppressDisabledCheck, element, handlers ) {
+		var i;
 		var delegateElement;
 		var instance = this;
 
@@ -600,7 +607,11 @@ $.Widget.prototype = {
 			delegateElement = this.widget();
 		} else {
 			element = delegateElement = $( element );
-			this.bindings = this.bindings.add( element );
+			for ( i = 0; i < element.length; i++ ) {
+				$.each( element, function( _i, node ) {
+					instance.bindings.add( node );
+				} );
+			}
 		}
 
 		$.each( handlers, function( event, handler ) {
@@ -637,12 +648,17 @@ $.Widget.prototype = {
 	},
 
 	_off: function( element, eventName ) {
+		var that = this;
+
 		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
 			this.eventNamespace;
 		element.off( eventName );
 
+		$.each( element, function( _i, node ) {
+			that.bindings.delete( node );
+		} );
+
 		// Clear the stack to avoid memory leaks (#10056)
-		this.bindings = $( this.bindings.not( element ).get() );
 		this.focusable = $( this.focusable.not( element ).get() );
 		this.hoverable = $( this.hoverable.not( element ).get() );
 	},
