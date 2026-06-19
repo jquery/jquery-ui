@@ -1419,6 +1419,7 @@ $.extend( Datepicker.prototype, {
 			dayNames = ( settings ? settings.dayNames : null ) || this._defaults.dayNames,
 			monthNamesShort = ( settings ? settings.monthNamesShort : null ) || this._defaults.monthNamesShort,
 			monthNames = ( settings ? settings.monthNames : null ) || this._defaults.monthNames,
+			year,
 
 			// Check whether a format character is doubled
 			lookAhead = function( match ) {
@@ -1474,8 +1475,10 @@ $.extend( Datepicker.prototype, {
 							output += formatName( "M", date.getMonth(), monthNamesShort, monthNames );
 							break;
 						case "y":
-							output += ( lookAhead( "y" ) ? date.getFullYear() :
-								( date.getFullYear() % 100 < 10 ? "0" : "" ) + date.getFullYear() % 100 );
+							year = date.getFullYear();
+							output += ( lookAhead( "y" ) ?
+								( year >= 0 && year < 1000 ? ( year < 10 ? "000" : year < 100 ? "00" : "0" ) : "" ) + year :
+								( year % 100 < 10 ? "0" : "" ) + year % 100 );
 							break;
 						case "@":
 							output += date.getTime();
