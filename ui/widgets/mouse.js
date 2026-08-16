@@ -58,7 +58,7 @@ return $.widget( "ui.mouse", {
 				}
 			} );
 
-		this.started = false;
+		this._mouseStarted = false;
 	},
 
 	// TODO: make sure destroying one instance of mouse doesn't mess with
