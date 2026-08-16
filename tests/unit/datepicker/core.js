@@ -455,7 +455,7 @@ QUnit.test( "keystrokes", function( assert ) {
 } );
 
 QUnit.test( "mouse", function( assert ) {
-	assert.expect( 15 );
+	assert.expect( 16 );
 	var inl,
 		inp = testHelper.init( "#inp" ),
 		dp = $( "#ui-datepicker-div" ),
@@ -481,6 +481,13 @@ QUnit.test( "mouse", function( assert ) {
 	$( "button.ui-datepicker-close", dp ).simulate( "click", {} );
 	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 2008, 2 - 1, 4 ),
 		"Mouse click - abandoned" );
+	inp.datepicker( "hide" );
+
+	inp.val( "02/24/0999" ).datepicker( "show" );
+	$( ".ui-datepicker-calendar tbody a:contains(15)", dp ).simulate( "click", {} );
+	inp.datepicker( "show" );
+	testHelper.equalsDate( assert, inp.datepicker( "getDate" ), new Date( 999, 2 - 1, 15 ), "Mouse click inline - preset year 999" );
+	inp.datepicker( "hide" );
 
 	// Current/previous/next
 	inp.val( "02/04/2008" ).datepicker( "option", { showButtonPanel: true } ).datepicker( "show" );

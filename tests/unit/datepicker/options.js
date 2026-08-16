@@ -1124,7 +1124,7 @@ QUnit.test( "Ticket #7244: date parser does not fail when too many numbers are p
 } );
 
 QUnit.test( "formatDate", function( assert ) {
-	assert.expect( 16 );
+	assert.expect( 21 );
 	testHelper.init( "#inp" );
 	var gmtDate, fr, settings;
 	assert.equal( $.datepicker.formatDate( "d m y", new Date( 2001, 2 - 1, 3 ) ),
@@ -1164,6 +1164,14 @@ QUnit.test( "formatDate", function( assert ) {
 	assert.equal( $.datepicker.formatDate( "'jour' d 'de' MM (''DD''), yy",
 		new Date( 2001, 4 - 1, 9 ), settings ), "jour 9 de avril ('lundi'), 2001",
 		"Format date 'jour' d 'de' MM (''DD''), yy with settings" );
+
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", new Date( 100, 0, 1 ) ), "0100-01-01" );
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", new Date( 999, 0, 1 ) ), "0999-01-01" );
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", new Date( 1000, 0, 1 ) ), "1000-01-01" );
+
+	// -1 and 100000 will not be parsed correctly, but can be selected
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", new Date( -1, 0, 1 ) ), "-1-01-01" );
+	assert.equal( $.datepicker.formatDate( "yy-mm-dd", new Date( 10000, 0, 1 ) ), "10000-01-01" );
 } );
 
 // TODO: Fix this test so it isn't mysteriously flaky in Browserstack on certain OS/Browser combos
