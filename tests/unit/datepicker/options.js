@@ -5,6 +5,7 @@ define( [
 	"ui/widgets/datepicker",
 	"ui/i18n/datepicker-fr",
 	"ui/i18n/datepicker-he",
+	"ui/i18n/datepicker-mn",
 	"ui/i18n/datepicker-zh-CN"
 ], function( QUnit, $, testHelper ) {
 "use strict";
@@ -949,9 +950,9 @@ QUnit.test( "iso8601Week", function( assert ) {
 } );
 
 QUnit.test( "parseDate", function( assert ) {
-	assert.expect( 26 );
+	assert.expect( 27 );
 	testHelper.init( "#inp" );
-	var currentYear, gmtDate, fr, settings, zh;
+	var currentYear, gmtDate, fr, mn, settings, zh;
 	assert.ok( $.datepicker.parseDate( "d m y", "" ) == null, "Parse date empty" );
 	testHelper.equalsDate( assert, $.datepicker.parseDate( "d m y", "3 2 01" ),
 		new Date( 2001, 2 - 1, 3 ), "Parse date d m y" );
@@ -1011,6 +1012,10 @@ QUnit.test( "parseDate", function( assert ) {
 	zh = $.datepicker.regional[ "zh-CN" ];
 	testHelper.equalsDate( assert, $.datepicker.parseDate( "yy M d", "2011 十一月 22", zh ),
 		new Date( 2011, 11 - 1, 22 ), "Parse date yy M d with zh-CN" );
+
+	mn = $.datepicker.regional.mn;
+	testHelper.equalsDate( assert, $.datepicker.parseDate( "yy MM d", "2011 Арваннэгдүгээр сар 22", mn ),
+		new Date( 2011, 11 - 1, 22 ), "Parse date yy MM d with mn" );
 } );
 
 QUnit.test( "parseDateErrors", function( assert ) {
