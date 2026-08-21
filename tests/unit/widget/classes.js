@@ -155,27 +155,27 @@ QUnit.test( "Classes elements are untracked as they are removed from the DOM", f
 	var widget = $( "#widget" ).classesWidget();
 	var instance = widget.classesWidget( "instance" );
 
-	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].length, 3,
+	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].size, 3,
 		"Widget is tracking 3 ui-classes-span elements" );
-	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].length, 3,
+	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].size, 3,
 		"Widget is tracking 3 ui-core-span-null elements" );
-	assert.equal( instance.classesElementLookup[ "ui-core-span" ].length, 3,
+	assert.equal( instance.classesElementLookup[ "ui-core-span" ].size, 3,
 		"Widget is tracking 3 ui-core-span elements" );
 
 	widget.find( "span" ).eq( 0 ).remove();
-	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].length, 2,
+	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].size, 2,
 		"After removing 1 span from dom 2 ui-classes-span elements are tracked" );
-	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].length, 2,
+	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].size, 2,
 		"After removing 1 span from dom 2 ui-core-span-null elements are tracked" );
-	assert.equal( instance.classesElementLookup[ "ui-core-span" ].length, 2,
+	assert.equal( instance.classesElementLookup[ "ui-core-span" ].size, 2,
 		"After removing 1 span from dom 2 ui-core-span elements are tracked" );
 
 	widget.find( "span" ).remove();
-	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].length, 0,
+	assert.equal( instance.classesElementLookup[ "ui-classes-span" ].size, 0,
 		"No ui-classes-span elements are tracked after removing all spans" );
-	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].length, 0,
+	assert.equal( instance.classesElementLookup[ "ui-core-span-null" ].size, 0,
 		"No ui-core-span-null elements are tracked after removing all spans" );
-	assert.equal( instance.classesElementLookup[ "ui-core-span" ].length, 0,
+	assert.equal( instance.classesElementLookup[ "ui-core-span" ].size, 0,
 		"No ui-core-span elements are tracked after removing all spans" );
 } );
 
