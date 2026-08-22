@@ -22,6 +22,7 @@ common.testWidget( "slider", {
 		step: 1,
 		value: 0,
 		values: null,
+		allowCrossingHandles: false,
 
 		// Callbacks
 		create: null,
