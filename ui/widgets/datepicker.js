@@ -1216,6 +1216,7 @@ $.extend( Datepicker.prototype, {
 			monthNamesShort = ( settings ? settings.monthNamesShort : null ) || this._defaults.monthNamesShort,
 			monthNames = ( settings ? settings.monthNames : null ) || this._defaults.monthNames,
 			year = -1,
+			isFullYear = false,
 			month = -1,
 			day = -1,
 			doy = -1,
@@ -1237,10 +1238,13 @@ $.extend( Datepicker.prototype, {
 					size = ( match === "@" ? 14 : ( match === "!" ? 20 :
 					( match === "y" && isDoubled ? 4 : ( match === "o" ? 3 : 2 ) ) ) ),
 					minSize = ( match === "y" ? size : 1 ),
-					digits = new RegExp( "^\\d{" + minSize + "," + size + "}" ),
+					digits = new RegExp( "^" + ( match === "@" ? "-?" : "" ) + "\\d{" + minSize + "," + size + "}" ),
 					num = value.substring( iValue ).match( digits );
 				if ( !num ) {
 					throw "Missing number at position " + iValue;
+				}
+				if ( match === "y" ) {
+					isFullYear = isDoubled;
 				}
 				iValue += num[ 0 ].length;
 				return parseInt( num[ 0 ], 10 );
@@ -1308,12 +1312,14 @@ $.extend( Datepicker.prototype, {
 					case "@":
 						date = new Date( getNumber( "@" ) );
 						year = date.getFullYear();
+						isFullYear = true;
 						month = date.getMonth() + 1;
 						day = date.getDate();
 						break;
 					case "!":
 						date = new Date( ( getNumber( "!" ) - this._ticksTo1970 ) / 10000 );
 						year = date.getFullYear();
+						isFullYear = true;
 						month = date.getMonth() + 1;
 						day = date.getDate();
 						break;
@@ -1339,7 +1345,7 @@ $.extend( Datepicker.prototype, {
 
 		if ( year === -1 ) {
 			year = new Date().getFullYear();
-		} else if ( year < 100 ) {
+		} else if ( year < 100 && !isFullYear ) {
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				( year <= shortYearCutoff ? 0 : -100 );
 		}
@@ -1357,7 +1363,7 @@ $.extend( Datepicker.prototype, {
 			} while ( true );
 		}
 
-		date = this._daylightSavingAdjust( new Date( year, month - 1, day ) );
+		date = this._daylightSavingAdjust( this._newDate( year, month - 1, day ) );
 		if ( date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day ) {
 			throw "Invalid date"; // E.g. 31/02/00
 		}
@@ -1465,7 +1471,7 @@ $.extend( Datepicker.prototype, {
 							break;
 						case "o":
 							output += formatNumber( "o",
-								Math.round( ( new Date( date.getFullYear(), date.getMonth(), date.getDate() ).getTime() - new Date( date.getFullYear(), 0, 0 ).getTime() ) / 86400000 ), 3 );
+								Math.round( ( this._newDate( date.getFullYear(), date.getMonth(), date.getDate() ).getTime() - this._newDate( date.getFullYear(), 0, 0 ).getTime() ) / 86400000 ), 3 );
 							break;
 						case "m":
 							output += formatNumber( "m", date.getMonth() + 1, 2 );
@@ -1474,8 +1480,7 @@ $.extend( Datepicker.prototype, {
 							output += formatName( "M", date.getMonth(), monthNamesShort, monthNames );
 							break;
 						case "y":
-							output += ( lookAhead( "y" ) ? date.getFullYear() :
-								( date.getFullYear() % 100 < 10 ? "0" : "" ) + date.getFullYear() % 100 );
+							output += lookAhead( "y" ) ? this._formatYear( date.getFullYear() ) : ( "00" + date.getFullYear() ).slice( -2 );
 							break;
 						case "@":
 							output += date.getTime();
@@ -1622,7 +1627,7 @@ $.extend( Datepicker.prototype, {
 					}
 					matches = pattern.exec( offset );
 				}
-				return new Date( year, month, day );
+				return $.datepicker._newDate( year, month, day );
 			},
 			newDate = ( date == null || date === "" ? defaultDate : ( typeof date === "string" ? offsetString( date ) :
 				( typeof date === "number" ? ( isNaN( date ) ? defaultDate : offsetNumeric( date ) ) : new Date( date.getTime() ) ) ) );
@@ -1674,7 +1679,7 @@ $.extend( Datepicker.prototype, {
 	/* Retrieve the date(s) directly. */
 	_getDate: function( inst ) {
 		var startDate = ( !inst.currentYear || ( inst.input && inst.input.val() === "" ) ? null :
-			this._daylightSavingAdjust( new Date(
+			this._daylightSavingAdjust( this._newDate(
 			inst.currentYear, inst.currentMonth, inst.currentDay ) ) );
 			return startDate;
 	},
@@ -1726,7 +1731,7 @@ $.extend( Datepicker.prototype, {
 			printDate, dRow, tbody, daySettings, otherMonth, unselectable,
 			tempDate = new Date(),
 			today = this._daylightSavingAdjust(
-				new Date( tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() ) ), // clear time
+				this._newDate( tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() ) ), // clear time
 			isRTL = this._get( inst, "isRTL" ),
 			showButtonPanel = this._get( inst, "showButtonPanel" ),
 			hideIfNoPrevNext = this._get( inst, "hideIfNoPrevNext" ),
@@ -1736,7 +1741,7 @@ $.extend( Datepicker.prototype, {
 			stepMonths = this._get( inst, "stepMonths" ),
 			isMultiMonth = ( numMonths[ 0 ] !== 1 || numMonths[ 1 ] !== 1 ),
 			currentDate = this._daylightSavingAdjust( ( !inst.currentDay ? new Date( 9999, 9, 9 ) :
-				new Date( inst.currentYear, inst.currentMonth, inst.currentDay ) ) ),
+				this._newDate( inst.currentYear, inst.currentMonth, inst.currentDay ) ) ),
 			minDate = this._getMinMaxDate( inst, "min" ),
 			maxDate = this._getMinMaxDate( inst, "max" ),
 			drawMonth = inst.drawMonth - showCurrentAtPos,
@@ -1747,10 +1752,10 @@ $.extend( Datepicker.prototype, {
 			drawYear--;
 		}
 		if ( maxDate ) {
-			maxDraw = this._daylightSavingAdjust( new Date( maxDate.getFullYear(),
+			maxDraw = this._daylightSavingAdjust( this._newDate( maxDate.getFullYear(),
 				maxDate.getMonth() - ( numMonths[ 0 ] * numMonths[ 1 ] ) + 1, maxDate.getDate() ) );
 			maxDraw = ( minDate && maxDraw < minDate ? minDate : maxDraw );
-			while ( this._daylightSavingAdjust( new Date( drawYear, drawMonth, 1 ) ) > maxDraw ) {
+			while ( this._daylightSavingAdjust( this._newDate( drawYear, drawMonth, 1 ) ) > maxDraw ) {
 				drawMonth--;
 				if ( drawMonth < 0 ) {
 					drawMonth = 11;
@@ -1763,7 +1768,7 @@ $.extend( Datepicker.prototype, {
 
 		prevText = this._get( inst, "prevText" );
 		prevText = ( !navigationAsDateFormat ? prevText : this.formatDate( prevText,
-			this._daylightSavingAdjust( new Date( drawYear, drawMonth - stepMonths, 1 ) ),
+			this._daylightSavingAdjust( this._newDate( drawYear, drawMonth - stepMonths, 1 ) ),
 			this._getFormatConfig( inst ) ) );
 
 		if ( this._canAdjustMonth( inst, -1, drawYear, drawMonth ) ) {
@@ -1798,7 +1803,7 @@ $.extend( Datepicker.prototype, {
 
 		nextText = this._get( inst, "nextText" );
 		nextText = ( !navigationAsDateFormat ? nextText : this.formatDate( nextText,
-			this._daylightSavingAdjust( new Date( drawYear, drawMonth + stepMonths, 1 ) ),
+			this._daylightSavingAdjust( this._newDate( drawYear, drawMonth + stepMonths, 1 ) ),
 			this._getFormatConfig( inst ) ) );
 
 		if ( this._canAdjustMonth( inst, +1, drawYear, drawMonth ) ) {
@@ -1883,7 +1888,7 @@ $.extend( Datepicker.prototype, {
 			group = "";
 			this.maxRows = 4;
 			for ( col = 0; col < numMonths[ 1 ]; col++ ) {
-				selectedDate = this._daylightSavingAdjust( new Date( drawYear, drawMonth, inst.selectedDay ) );
+				selectedDate = this._daylightSavingAdjust( this._newDate( drawYear, drawMonth, inst.selectedDay ) );
 				cornerClass = " ui-corner-all";
 				calender = "";
 				if ( isMultiMonth ) {
@@ -1921,7 +1926,7 @@ $.extend( Datepicker.prototype, {
 				curRows = Math.ceil( ( leadDays + daysInMonth ) / 7 ); // calculate the number of rows to generate
 				numRows = ( isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows ); //If multiple months, use the higher number of rows (see #7043)
 				this.maxRows = numRows;
-				printDate = this._daylightSavingAdjust( new Date( drawYear, drawMonth, 1 - leadDays ) );
+				printDate = this._daylightSavingAdjust( this._newDate( drawYear, drawMonth, 1 - leadDays ) );
 				for ( dRow = 0; dRow < numRows; dRow++ ) { // create date picker rows
 					calender += "<tr>";
 					tbody = ( !showWeek ? "" : "<td class='ui-datepicker-week-col'>" +
@@ -2013,7 +2018,7 @@ $.extend( Datepicker.prototype, {
 		if ( !inst.yearshtml ) {
 			inst.yearshtml = "";
 			if ( secondary || !changeYear ) {
-				html += "<span class='ui-datepicker-year'>" + drawYear + "</span>";
+				html += "<span class='ui-datepicker-year'>" + this._formatYear( drawYear ) + "</span>";
 			} else {
 
 				// determine range of years to display
@@ -2033,7 +2038,7 @@ $.extend( Datepicker.prototype, {
 				for ( ; year <= endYear; year++ ) {
 					inst.yearshtml += "<option value='" + year + "'" +
 						( year === drawYear ? " selected='selected'" : "" ) +
-						">" + year + "</option>";
+						">" + this._formatYear( year ) + "</option>";
 				}
 				inst.yearshtml += "</select>";
 
@@ -2055,7 +2060,7 @@ $.extend( Datepicker.prototype, {
 		var year = inst.selectedYear + ( period === "Y" ? offset : 0 ),
 			month = inst.selectedMonth + ( period === "M" ? offset : 0 ),
 			day = Math.min( inst.selectedDay, this._getDaysInMonth( year, month ) ) + ( period === "D" ? offset : 0 ),
-			date = this._restrictMinMax( inst, this._daylightSavingAdjust( new Date( year, month, day ) ) );
+			date = this._restrictMinMax( inst, this._daylightSavingAdjust( this._newDate( year, month, day ) ) );
 
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
@@ -2095,18 +2100,18 @@ $.extend( Datepicker.prototype, {
 
 	/* Find the number of days in a given month. */
 	_getDaysInMonth: function( year, month ) {
-		return 32 - this._daylightSavingAdjust( new Date( year, month, 32 ) ).getDate();
+		return 32 - this._daylightSavingAdjust( this._newDate( year, month, 32 ) ).getDate();
 	},
 
 	/* Find the day of the week of the first of a month. */
 	_getFirstDayOfMonth: function( year, month ) {
-		return new Date( year, month, 1 ).getDay();
+		return this._newDate( year, month, 1 ).getDay();
 	},
 
 	/* Determines if we should allow a "next/prev" month display change. */
 	_canAdjustMonth: function( inst, offset, curYear, curMonth ) {
 		var numMonths = this._getNumberOfMonths( inst ),
-			date = this._daylightSavingAdjust( new Date( curYear,
+			date = this._daylightSavingAdjust( this._newDate( curYear,
 			curMonth + ( offset < 0 ? offset : numMonths[ 0 ] * numMonths[ 1 ] ), 1 ) );
 
 		if ( offset < 0 ) {
@@ -2160,9 +2165,28 @@ $.extend( Datepicker.prototype, {
 			inst.currentYear = inst.selectedYear;
 		}
 		var date = ( day ? ( typeof day === "object" ? day :
-			this._daylightSavingAdjust( new Date( year, month, day ) ) ) :
-			this._daylightSavingAdjust( new Date( inst.currentYear, inst.currentMonth, inst.currentDay ) ) );
+			this._daylightSavingAdjust( this._newDate( year, month, day ) ) ) :
+			this._daylightSavingAdjust( this._newDate( inst.currentYear, inst.currentMonth, inst.currentDay ) ) );
 		return this.formatDate( this._get( inst, "dateFormat" ), date, this._getFormatConfig( inst ) );
+	},
+
+	/* Create a Date from a year, month, and day, accounting for years 0-99. */
+	_newDate: function( year, month, day ) {
+		var date = new Date( year, month, day );
+
+		// Offset dates in the incorrect range.  Blindly calling setFullYear(year) would not handle out-of-range
+		// months/days causing the year to shift.
+		if ( year >= 0 && year <= 99 ) {
+			date.setFullYear( date.getFullYear() - 1900 );
+		}
+		return date;
+	},
+
+	/* Add leading zeros to produce an at-least-four-digit year. */
+	_formatYear: function( year ) {
+		var yearString = "" + year;
+		return year < 0 ? yearString :
+			yearString.length < 4 ? ( "0000" + yearString ).slice( -4 ) : yearString;
 	}
 } );
 
