@@ -67,6 +67,7 @@ return $.widget( "ui.accordion", {
 			activeHeader: "ui-icon-triangle-1-s",
 			header: "ui-icon-triangle-1-e"
 		},
+		textDir: null,
 
 		// Callbacks
 		activate: null,
@@ -315,6 +316,13 @@ return $.widget( "ui.accordion", {
 			._removeClass( this.active, "ui-accordion-header-collapsed" );
 		this._addClass( this.active.next(), "ui-accordion-content-active" );
 		this.active.next().show();
+
+		if ( this.options.textDir ) {
+			var that = this;
+			this.headers.each( function( i, header ) {
+				header.textContent = that._applyTextDir( header.textContent );
+			} );
+		}
 
 		this.headers
 			.attr( "role", "tab" )

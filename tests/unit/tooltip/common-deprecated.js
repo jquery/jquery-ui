@@ -18,6 +18,7 @@ common.testWidget( "tooltip", {
 			collision: "flipfit flip"
 		},
 		show: true,
+		textDir: null,
 		tooltipClass: null,
 		track: false,
 

@@ -46,7 +46,8 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		classes: {
 			"ui-checkboxradio-label": "ui-corner-all",
 			"ui-checkboxradio-icon": "ui-corner-all"
-		}
+		},
+		textDir: null
 	},
 
 	_getCreateOptions: function() {
@@ -110,6 +111,13 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 
 		if ( this.type === "radio" ) {
 			this._addClass( this.label, "ui-checkboxradio-radio-label" );
+		}
+
+		if ( this.options.textDir ) {
+			var markup = $.parseHTML( this.options.label );
+			if ( markup && markup.length === 1 && markup[ 0 ].nodeType === 3 ) {
+				this.options.label = this._applyTextDir( this.options.label );
+			}
 		}
 
 		if ( this.options.label && this.options.label !== this.originalLabel ) {
@@ -214,6 +222,13 @@ $.widget( "ui.checkboxradio", [ $.ui.formResetMixin, {
 		}
 
 		this._super( key, value );
+
+		if ( this.options.textDir && ( key === "label" || key === "textDir" ) ) {
+			var markup = $.parseHTML( this.options.label );
+			if ( markup && markup.length === 1 && markup[ 0 ].nodeType === 3 ) {
+				this.options.label = this._applyTextDir( this.options.label );
+			}
+		}
 
 		if ( key === "disabled" ) {
 			this._toggleClass( this.label, null, "ui-state-disabled", value );
