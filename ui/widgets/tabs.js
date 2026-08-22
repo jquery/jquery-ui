@@ -411,19 +411,19 @@ $.widget( "ui.tabs", {
 				}
 			} );
 
-		this.tabs = this.tablist.find( "> li:has(a[href])" )
+		this.tabs = this.tablist.find( "> li:has(a[href]) > a" )
 			.attr( {
 				role: "tab",
-				tabIndex: -1
+				tabindex: -1
 			} );
 		this._addClass( this.tabs, "ui-tabs-tab", "ui-state-default" );
-
-		this.anchors = this.tabs.map( function() {
-			return $( "a", this )[ 0 ];
-		} )
+		this.tablist.find( "> li:has(a[href])" )
 			.attr( {
-				tabIndex: -1
+				role: "presentation"
 			} );
+
+		this.anchors = this.tabs;
+		this._addClass( this.tabs, "ui-tabs-tab", "ui-state-default" );
 		this._addClass( this.anchors, "ui-tabs-anchor" );
 
 		this.panels = $();
@@ -431,7 +431,7 @@ $.widget( "ui.tabs", {
 		this.anchors.each( function( i, anchor ) {
 			var selector, panel, panelId,
 				anchorId = $( anchor ).uniqueId().attr( "id" ),
-				tab = $( anchor ).closest( "li" ),
+				tab = $( anchor ),
 				originalAriaControls = tab.attr( "aria-controls" );
 
 			// Inline tab
@@ -597,7 +597,7 @@ $.widget( "ui.tabs", {
 		var options = this.options,
 			active = this.active,
 			anchor = $( event.currentTarget ),
-			tab = anchor.closest( "li" ),
+			tab = anchor,
 			clickedIsActive = tab[ 0 ] === active[ 0 ],
 			collapsing = clickedIsActive && options.collapsible,
 			toShow = collapsing ? $() : this._getPanelForTab( tab ),
@@ -658,7 +658,7 @@ $.widget( "ui.tabs", {
 		}
 
 		function show() {
-			that._addClass( eventData.newTab.closest( "li" ), "ui-tabs-active", "ui-state-active" );
+			that._addClass( eventData.newTab, "ui-tabs-active", "ui-state-active" );
 
 			if ( toShow.length && that.options.show ) {
 				that._show( toShow, that.options.show, complete );
@@ -671,12 +671,12 @@ $.widget( "ui.tabs", {
 		// Start out by hiding, then showing, then completing
 		if ( toHide.length && this.options.hide ) {
 			this._hide( toHide, this.options.hide, function() {
-				that._removeClass( eventData.oldTab.closest( "li" ),
+				that._removeClass( eventData.oldTab,
 					"ui-tabs-active", "ui-state-active" );
 				show();
 			} );
 		} else {
-			this._removeClass( eventData.oldTab.closest( "li" ),
+			this._removeClass( eventData.oldTab,
 				"ui-tabs-active", "ui-state-active" );
 			toHide.hide();
 			show();
@@ -835,7 +835,7 @@ $.widget( "ui.tabs", {
 		index = this._getIndex( index );
 		var that = this,
 			tab = this.tabs.eq( index ),
-			anchor = tab.find( ".ui-tabs-anchor" ),
+			anchor = tab,
 			panel = this._getPanelForTab( tab ),
 			eventData = {
 				tab: tab,
@@ -911,3 +911,4 @@ if ( $.uiBackCompat === true ) {
 return $.ui.tabs;
 
 } );
+
