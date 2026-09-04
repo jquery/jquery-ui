@@ -368,7 +368,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 	_mouseStart: function( event ) {
 
-		var curleft, curtop, cursor, calculatedSize,
+		var curleft, curtop, cursor, calculatedSize, paddingBorder,
 			o = this.options,
 			el = this.element;
 
@@ -389,6 +389,13 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 		if ( !this._helper ) {
 			calculatedSize = this._calculateAdjustedElementDimensions( el );
+
+			// border-box elements' computed width & height include padding & border.
+			if ( el.css( "box-sizing" ) !== "content-box" ) {
+				paddingBorder = this._getPaddingPlusBorderDimensions( el );
+				calculatedSize.width -= paddingBorder.width;
+				calculatedSize.height -= paddingBorder.height;
+			}
 		}
 
 		this.size = this._helper ? {
