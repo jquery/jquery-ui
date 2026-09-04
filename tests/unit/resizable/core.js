@@ -276,6 +276,30 @@ QUnit.test( "Resizable with scrollbars, a transform and box-sizing: content-box"
 	} );
 } );
 
+QUnit.test( "Resizable with box-sizing: border-box and a padding", function( assert ) {
+	assert.expect( 4 );
+
+	var element = $( "#resizable1" )
+			.css( {
+				boxSizing: "border-box",
+				padding: "10px",
+				border: "5px",
+				borderStyle: "solid"
+			} )
+			.resizable(),
+		widthBefore = element.outerWidth(),
+		heightBefore = element.outerHeight(),
+		handle = ".ui-resizable-se";
+
+	testHelper.drag( handle, 10, 10 );
+	assert.equal( element.outerWidth(), widthBefore + 10, "element width after the first resize" );
+	assert.equal( element.outerHeight(), heightBefore + 10, "element height after the first resize" );
+
+	testHelper.drag( handle, 10, 10 );
+	assert.equal( element.outerWidth(), widthBefore + 20, "element width after the second resize" );
+	assert.equal( element.outerHeight(), heightBefore + 20, "element height after the second resize" );
+} );
+
 function testResizableWithBoxSizing( assert, options ) {
 	var widthBefore, heightBefore,
 		cssBoxSizing = options.isBorderBox ? "border-box" : "content-box",
