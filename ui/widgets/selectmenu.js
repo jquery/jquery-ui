@@ -503,6 +503,11 @@ return $.widget( "ui.selectmenu", [ $.ui.formResetMixin, {
 	_select: function( item, event ) {
 		var oldIndex = this.element[ 0 ].selectedIndex;
 
+		if ( this.element.is( ":disabled" ) ) {
+			this.close( event );
+			return;
+		}
+
 		// Change native select element
 		this.element[ 0 ].selectedIndex = item.index;
 		this.buttonItem.replaceWith( this.buttonItem = this._renderButtonItem( item ) );
