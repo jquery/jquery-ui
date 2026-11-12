@@ -114,6 +114,28 @@ QUnit.test( "open", function( assert ) {
 	this.element.selectmenu( "open" );
 } );
 
+QUnit.test( "Disabling the native select while open prevents selection", function( assert ) {
+	var element = this.element.selectmenu( {
+			select: function() {
+				assert.step( "select" );
+			},
+			change: function() {
+				assert.step( "change" );
+			}
+		} ),
+		value = element.val(),
+		menu = element.selectmenu( "menuWidget" );
+
+	assert.expect( 2 );
+
+	element.selectmenu( "open" );
+	element.prop( "disabled", true );
+	menu.find( "li" ).last().simulate( "mouseover" ).trigger( "click" );
+
+	assert.strictEqual( element.val(), value, "native select value is unchanged" );
+	assert.verifySteps( [], "no selection or change events" );
+} );
+
 QUnit.test( "select", function( assert ) {
 	var ready = assert.async();
 	assert.expect( 3 );
