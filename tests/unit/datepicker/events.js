@@ -166,4 +166,28 @@ QUnit.test( "beforeShowDay-getDate", function( assert ) {
 	inp.datepicker( "hide" );
 } );
 
+QUnit.test( "Disabling the input while open prevents date selection", function( assert ) {
+	var selected = 0,
+		inp = testHelper.init( "#inp", {
+			onSelect: function() {
+				selected++;
+			}
+		} ).val( "05/05/2027" ).datepicker( "show" ),
+		day = $( "#ui-datepicker-div td[data-handler='selectDay'] a" ).filter( function() {
+			return $( this ).text() === "12";
+		} );
+
+	assert.expect( 4 );
+
+	inp.prop( "disabled", true );
+	day.trigger( "click" );
+	assert.strictEqual( inp.val(), "05/05/2027", "The value is preserved" );
+	assert.strictEqual( selected, 0, "No selection callback runs" );
+
+	inp.prop( "disabled", false );
+	day.trigger( "click" );
+	assert.strictEqual( inp.val(), "05/12/2027", "Selection resumes when enabled" );
+	assert.strictEqual( selected, 1, "The selection callback runs once" );
+} );
+
 } );
