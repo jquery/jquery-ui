@@ -535,6 +535,9 @@ $.extend( Datepicker.prototype, {
 		if ( !target ) {
 			return false;
 		}
+		if ( $( target ).is( ":disabled" ) ) {
+			return true;
+		}
 		for ( var i = 0; i < this._disabledInputs.length; i++ ) {
 			if ( this._disabledInputs[ i ] === target ) {
 				return true;
